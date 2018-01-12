@@ -1,31 +1,31 @@
 <template>
   <div id="organizationId">
     <el-dialog title="选人" :visible.sync="dialogFormVisible" width="785px" center>
-
-
      <div class="content">
        <div class="content_left" @click="inputFocus">
-         <div>
-           <el-tag :key="tag" v-for="tag in selectMember" closable :disable-transitions="false" @close="handleClose(tag)">
-             {{tag}}
-           </el-tag>
-
-           <input placeholder="搜索企业联系人" id="search" v-model="keywords" @keyup="searchInfo($event)">
-
-           <div class="select_list scroll_bar" v-if="false">
-             <ul>
-               <li v-for="item in 10">
-                 <div class="head">
-                   <img src="" alt="">
-                 </div>
-                 <div class="infoBox">
-                   <div class="info">张琳</div>
-                   <div class="info">研发部（前端）</div>
-                 </div>
-               </li>
-             </ul>
-           </div>
-         </div>
+           <el-select id="search"
+             v-model="selectMember"
+             multiple
+             filterable
+             remote
+             reserve-keyword
+             placeholder="搜索企业联系人"
+             :remote-method="remoteMethod"
+             :loading="loading">
+             <el-option
+               v-for="item in searchItems"
+               :key="item.value"
+               :label="item.label"
+               :value="item.value">
+               <div class="head">
+                 <img src="../../assets/images/head.jpg" :class="selectMember.indexOf(item.label)>-1?'':'gray'">
+               </div>
+               <div class="infoBox">
+                 <div class="info">{{item.label}}</div>
+                 <div class="info">{{item.value}}</div>
+               </div>
+             </el-option>
+           </el-select>
        </div>
        <div class="content_right">
           <div class="box">
@@ -41,14 +41,13 @@
               <div class="box-body scroll_bar">
                 <ul class="organizeList">
                   <li v-for="item in 10" @click="selectStaff(item)">
-                     <div class="head">
-                       <img src="" alt="">
-
+                    <div class="head">
+                      <img src="../../assets/images/head.jpg" alt="">
                        <!--对号-->
-                       <span class="el-icon-check"></span>
+                      <span class="el-icon-check" v-if="item>4"></span>
                        <!--遮罩-->
-                       <span class="shade"></span>
-                     </div>
+                      <span class="shade" v-if="item>4"></span>
+                    </div>
                     <div class="infoBox">
                       <div class="info">张琳</div>
                       <div class="info">研发部（前端）</div>
@@ -76,17 +75,34 @@
       return {
         dialogFormVisible: false,
         formLabelWidth: '120px',
-        selectMember: [],
-        keywords:'',    //  关键字搜索
         buttonStatus :true,
-        searchList:[{
-          name : '张琳',
-        },{
-          name : '小飞'
-        }
-
-        ],  // 搜索列表
+        searchItems: [],    //搜索到人员
+        selectMember: [],
+        list: [],
+        loading: false,
+        states: ["Alabama", "Alaska", "Arizona",
+          "Arkansas", "California", "Colorado",
+          "Connecticut", "Delaware", "Florida",
+          "Georgia", "Hawaii", "Idaho", "Illinois",
+          "Indiana", "Iowa", "Kansas", "Kentucky",
+          "Louisiana", "Maine", "Maryland",
+          "Massachusetts", "Michigan", "Minnesota",
+          "Mississippi", "Missouri", "Montana",
+          "Nebraska", "Nevada", "New Hampshire",
+          "New Jersey", "New Mexico", "New York",
+          "North Carolina", "North Dakota", "Ohio",
+          "Oklahoma", "Oregon", "Pennsylvania",
+          "Rhode Island", "South Carolina",
+          "South Dakota", "Tennessee", "Texas",
+          "Utah", "Vermont", "Virginia",
+          "Washington", "West Virginia", "Wisconsin",
+          "Wyoming"]
       }
+    },
+    mounted() {
+      this.list = this.states.map(item => {
+        return { value: item, label: item };
+      });
     },
     watch:{
       FormVisible(val){
@@ -98,40 +114,32 @@
         }
       },
       selectMember(val){
-          if(val.length){
-            this.buttonStatus = false
-          }else {
-            this.buttonStatus = true
-          }
+          this.buttonStatus = !val.length;
       }
     },
     methods:{
-      handleClose(tag) {  //删除tag
-        this.selectMember.splice(this.selectMember.indexOf(tag), 1);
+      remoteMethod(query) {
+        if (query !== '') {
+          this.loading = true;
+          setTimeout(() => {
+            this.loading = false;
+            this.searchItems = this.list.filter(item => {
+              return item.label.toLowerCase()
+                  .indexOf(query.toLowerCase()) > -1;
+            });
+          }, 200);
+        } else {
+          this.searchItems = [];
+        }
       },
       inputFocus(){
           let _input = document.getElementById('search');
           _input.focus();
       },
-      searchInfo(e){  //关键词搜索事件
-        if (this.keywords !== '') {
-          if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') {
-            this.$http.get('http://test.v2.api.boss.lejias.cn/index/profile/searchStaff/keywords/' + this.keywords).then((res) => {
-              if (res.data.code === '90010') {
-                this.searchList = res.data.data;
-                console.log(this.searchList)
-              } else {
-                this.searchList = [];
-              }
-            })
-          }
-        } else {
-          this.searchList = [];
-        }
-      },
 
       selectStaff(item){
-          this.selectMember.push('张琳')
+          let index = this.selectMember.indexOf(item);
+          index>-1?this.selectMember.splice(index,1):this.selectMember.push(item);
       },
     }
   }
@@ -139,6 +147,50 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
+  .gray {
+    -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
+    filter: grayscale(100%);
+  }
+  .el-select-dropdown{
+    .el-select-dropdown__wrap{
+      max-height: 402px;
+      ul {
+        li.el-select-dropdown__item{
+          height: 50px;
+          display: flex;
+          align-items: center;
+          .head{
+            font-size: 12px;
+            float: left;
+            height: 35px;
+            width: 35px;
+            border-radius: 50%;
+            margin-right: 5px;
+            position: relative;
+            img{
+              height: 35px;
+              width: 35px;
+              border-radius: 50%;
+            }
+          }
+          .infoBox{
+            height: 36px;
+            .info{
+              height: 20px;
+              line-height: 20px;
+              font-size: 15px;
+              &:last-child{
+                font-size: 12px;
+                height: 16px;
+                line-height: 16px;
+                color: #999;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
   #organizationId{
     .el-dialog__wrapper{
       .el-dialog{
@@ -169,73 +221,10 @@
               &:hover{
                 border-color: #83c7ff;
               }
-              div{
-                .el-tag{
-                  margin: 5px 0 5px 5px;
-                  cursor: pointer;
-                  .tag_span{
-                    display: inline-block;
-                    padding: 0 10px;
-                  }
-                }
-                input{
-                  border: 0;
-                  outline: 0;
-                  box-sizing: border-box;
-                  min-width: 70px;
-                  height: 30px;
-                  padding: 4px 4px;
-                  font-size: 13px;
-                }
-                .select_list{
-                  width: 438px;
-                  height:395px;
-                  box-sizing: border-box;
-                  border: 1px solid #83c7ff;
-                  border-bottom: none;
-                  overflow: auto;
-                  ul{
-                    padding: 0;
-                    li{
-                      padding: 5px 20px;
-                      box-sizing: border-box;
-                      cursor: pointer;
-                      &:hover{
-                        background: rgb(223, 237, 250);;
-                      }
-                      list-style-type: none;
-                      height: 50px;
-                      .head{
-                        font-size: 12px;
-                        float: left;
-                        height: 35px;
-                        width: 35px;
-                        border-radius: 50%;
-                        background: #ff65ed;
-                        margin:4px 5px 0 0;
-                        position: relative;
-                        img{
-                          height: 35px;
-                          width: 35px;
-                          border-radius: 50%;
-                          background: #ff65ed;
-                          vertical-align: text-top;
-                        }
-                      }
-                      .infoBox{
-                        float: left;
-                        .info{
-                          height: 20px;
-                          font-size: 15px;
-                          &:last-child{
-                            font-size: 12px;
-                            height: 16px;
-                            color: #999;
-                          }
-                        }
-                      }
-                    }
-                  }
+              .el-select {
+                display: block;
+                .el-input__inner {
+                  border: none;
                 }
               }
             }
@@ -282,15 +271,12 @@
                         height: 35px;
                         width: 35px;
                         border-radius: 50%;
-                        background: #ff65ed;
                         margin:4px 5px 0 0;
                         position: relative;
                         img{
                           height: 35px;
                           width: 35px;
                           border-radius: 50%;
-                          background: #ff65ed;
-                          vertical-align: text-top;
                         }
                         .el-icon-check{
                           color: #ffffff;

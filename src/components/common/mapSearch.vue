@@ -131,11 +131,11 @@
   #mapSearchId{
     .el-dialog__wrapper{
       .el-dialog{
-        .el-dialog__header{
-          .el-dialog__title{
-            font-size: 16px;
-          }
-        }
+        /*.el-dialog__header{*/
+          /*.el-dialog__title{*/
+            /*font-size: 16px;*/
+          /*}*/
+        /*}*/
         .el-dialog__body{
           .content{
             .filter-container{

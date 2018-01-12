@@ -76,8 +76,8 @@
       .el-tag{
         margin-right: 3px;
         cursor: pointer;
-        height: 40px;
-        line-height: 40px;
+        height:35px;
+        line-height: 35px;
         border-radius: 4px 4px 0 0;
         border-bottom: -1px;
         .tag_span{

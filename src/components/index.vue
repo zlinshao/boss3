@@ -12,13 +12,19 @@
      </div>
      <div class="right">
         <div class="countdown">
-          <i class="el-icon-time"></i>
+          <el-tooltip class="item" effect="dark" content="锁屏" placement="bottom">
+            <i class="el-icon-time" @click="lockScreen"></i>
+          </el-tooltip>
+
           {{Countdown}}s
         </div>
         <div class="message">
-          <i class="el-icon-bell"></i>
-          消息
+          <el-badge is-dot class="item">
+            <i class="el-icon-bell"></i>
+            消息
+          </el-badge>
         </div>
+
         <div class="guide">
           <i class="el-icon-warning"></i>
           使用指南
@@ -44,7 +50,7 @@
    <div class="contentBox" :class="isCollapse? 'hideSidebar' : ''">
      <el-container>
        <div class="aside">
-         <el-menu :default-active="$route.path" class="el-menu-vertical-demo"
+         <el-menu :default-active="$route.path" class="el-menu-vertical-demo" unique-opened
                   :collapse="isCollapse" @open="handleOpen" @close="handleClose" router
                   background-color="#6a8dfb" text-color="#fff" active-text-color="#ffd04b">
            <template v-for="(item,index) in $router.options.routes">
@@ -66,26 +72,25 @@
                      <i :class="child.icon"></i>
                      <span>{{child.name}}</span>
                    </template>
-                   <el-menu-item v-for="last in child.children" :index="last.path" class="developBack" :key="last.path">
+                   <el-menu-item v-for="last in child.children" :index="last.path" :key="last.path">
                      {{last.name}}
                    </el-menu-item>
                  </el-submenu>
                  <!--二级菜单-->
-                 <el-menu-item v-if="!child.children" :index="child.path" class="developBack" :key="child.path">
+                 <el-menu-item v-if="!child.children" :index="child.path" :key="child.path">
                    <i :class="child.icon"></i>
                    <span>{{child.name}}</span>
                  </el-menu-item>
                </template>
              </el-submenu>
-
-
-
            </template>
          </el-menu>
        </div>
        <el-main>
          <TagsView></TagsView>
-         <router-view></router-view>
+         <div style="padding: 10px;background: #fff">
+           <router-view></router-view>
+         </div>
        </el-main>
      </el-container>
    </div>
@@ -101,7 +106,7 @@
     data(){
       return{
         isCollapse:false,
-        Countdown:6000,  //倒计时
+        Countdown:999999999,  //倒计时
         screenStatus : false,
       }
     },
@@ -114,8 +119,8 @@
       }
     },
     methods: {
-      handleOpen(key, keyPath) {},
-      handleClose(key, keyPath) {},
+      handleOpen(key, keyPath) { console.log(key);},
+      handleClose(key, keyPath) { console.log(keyPath);},
       clickScreen(){
         this.screenStatus = true;
       },
@@ -139,13 +144,20 @@
           });
           Cookies.set('locking', '1');
         }).catch((data) => {
-          this.Countdown = 6000;
+          this.Countdown = 99999999999;
           this.countTime();
           this.screenStatus = false;
         })
       },
       changeCollapse(){
         this.isCollapse = !this.isCollapse
+      },
+      lockScreen(){
+        Cookies.set('last_page_path', this.$route.path); // 本地存储锁屏之前打开的页面以便解锁后打开
+        setTimeout(() => {
+          this.$router.push({path: '/lock'});
+        });
+        Cookies.set('locking', '1');
       }
     }
   }
@@ -160,7 +172,7 @@
       position: fixed;
       top: 0;
       left: 0;
-      z-index: 9999;
+      z-index: 66;
       display: flex;
       .left{
         width: 50%;
@@ -242,12 +254,12 @@
     }
 
     .contentBox{
-      margin-top: 80px;
       .el-container{
         .aside{
           position: fixed;
           top: 80px;
-          z-index: 9999;
+          height: 100%;
+          z-index: 66;
           .developBack{
             background: #405597 !important;
           }
@@ -255,29 +267,26 @@
             i{
               color: #fff !important;
             }
-            .el-submenu{
-
-            }
-          }
-          .el-menu-vertical-demo:not(.el-menu--collapse) {
-            width: 240px;
-            min-height: 850px;
           }
           .el-menu--collapse {
             width: 64px;
-            height: 850px;
+            height: 100%;
+          }
+          .el-menu-vertical-demo:not(.el-menu--collapse) {
+            width: 240px;
+            min-height: 100%;
           }
         }
         .el-main {
+          margin-top: 80px;
           padding: 10px 20px;
           margin-left: 240px;
-
+          transition: margin-left .4s;
         }
       }
     }
     .hideSidebar{
       .el-main {
-        padding: 10px 20px;
         margin-left: 64px !important;
       }
     }

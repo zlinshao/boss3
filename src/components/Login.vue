@@ -214,7 +214,7 @@
   .backgroundImg {
     width: 100vw;
     height:100vh;
-    background: #409EFF ;
+    /*background: #409EFF;*/
     position: relative;
     .login-container {
       position: absolute;
@@ -229,7 +229,6 @@
       width: 350px;
       padding: 35px 35px 15px 35px;
       background: #fff;
-      opacity: .8;
       border: 1px solid #eaeaea;
       box-shadow: 0 0 25px #cac6c6;
       .title {

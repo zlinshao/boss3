@@ -22,7 +22,7 @@
 
 <script>
   import echarts from 'echarts'
-  import echartTheme from 'echarts/theme/walden'
+  import echartTheme from 'echarts/theme/macarons'
   export default {
     data() {
       return {
@@ -40,7 +40,7 @@
     },
     methods: {
       drawColumnChart() {
-        this.chartColumn = echarts.init(document.getElementById('chartColumn'),'walden');
+        this.chartColumn = echarts.init(document.getElementById('chartColumn'),'macarons');
         this.chartColumn.setOption({
           title: { text: 'Column Chart' },
           tooltip: {},
@@ -56,7 +56,7 @@
         });
       },
       drawBarChart() {
-        this.chartBar = echarts.init(document.getElementById('chartBar'),'walden');
+        this.chartBar = echarts.init(document.getElementById('chartBar'),'macarons');
         this.chartBar.setOption({
           title: {
             text: 'Bar Chart',
@@ -100,7 +100,7 @@
         });
       },
       drawLineChart() {
-        this.chartLine = echarts.init(document.getElementById('chartLine'),'walden');
+        this.chartLine = echarts.init(document.getElementById('chartLine'),'macarons');
         this.chartLine.setOption({
           title: {
             text: 'Line Chart'
@@ -148,7 +148,7 @@
         });
       },
       drawPieChart() {
-        this.chartPie = echarts.init(document.getElementById('chartPie'),'walden');
+        this.chartPie = echarts.init(document.getElementById('chartPie'),'macarons');
         this.chartPie.setOption({
           title: {
             text: 'Pie Chart',

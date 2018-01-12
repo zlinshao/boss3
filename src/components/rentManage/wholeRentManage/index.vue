@@ -19,12 +19,8 @@
             <div><i class="el-icon-setting"></i>&nbsp;设置</div>
           </div>
         </div>
-
         <div class="filter">
           <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">
-            <el-form-item label="编号">
-              <el-input v-model="formInline.name" placeholder="编号"></el-input>
-            </el-form-item>
             <el-form-item label="店面">
               <el-select v-model="formInline.house" clearable placeholder="请选择">
                 <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -44,27 +40,25 @@
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-button type="info">未租</el-button>
+              <el-input v-model="formInline.name" placeholder="搜索">
+                <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
+              </el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="warning">高级</el-button>
+              <el-button type="text">高级</el-button>
             </el-form-item>
-            <el-form-item>
+            <el-form-item style="float: right">
               <el-button type="success">导出房源</el-button>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" class="search">
-                <i class="el-icon-search"></i>&nbsp;查询
-              </el-button>
             </el-form-item>
           </el-form>
         </div>
-
         <div class="main">
           <div class="myHouse">
             <div class="myTable">
               <el-table
                 :data="tableData"
+                @row-click="clickTable"
+                @row-contextmenu = 'menuClick'
                 style="width: 100%">
                 <el-table-column
                   prop="date"
@@ -161,7 +155,7 @@
               </div>
             </div>
           </div>
-          <div class="myDetail">
+          <div class="myDetail" >
             <el-tabs type="border-card">
               <el-tab-pane label="房东信息">
                 <div class="content"></div>
@@ -278,13 +272,19 @@
               }],
             }
         },
+
         methods:{
-          tableRowClassName({row, rowIndex}){},
           handleSizeChange(val) {
             console.log(`每页 ${val} 条`);
           },
           handleCurrentChange(val) {
             console.log(`当前页: ${val}`);
+          },
+          clickTable(row, event, column){
+              console.log(row, event, column)
+          },
+          menuClick(row, event){
+              console.log(row,  event)
           }
         }
     }
@@ -295,7 +295,6 @@
   #container{
     background: #fff;
     .tool{
-      padding: 6px 12px;
       border-bottom: 1px solid #eee;
       display: flex;
       justify-content : space-between;
@@ -316,13 +315,9 @@
       }
     }
     .filter{
-      padding: 10px 12px 0 12px;
-      .search{
-        margin-left: 20px;
-      }
+      padding-top: 10px;
     }
     .main{
-      padding: 0 12px 20px 12px;
       font-size: 12px;
       .myHouse{
         border: 1px solid #dfe6fb;
@@ -387,6 +382,7 @@
         }
       }
       .myDetail{
+        margin-bottom: 15px;
         .el-tabs{
           border: 1px solid #d4f0de;
           .el-tabs__header{
@@ -396,7 +392,7 @@
             padding: 0;
             .el-tab-pane{
               .content{
-                height: 100px;
+                min-height: 100px;
               }
               .remarks{
                 padding: 8px;

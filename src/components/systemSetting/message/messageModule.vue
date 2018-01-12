@@ -10,7 +10,9 @@
             <el-button type="primary"  @click="openMapModule">
               <i class="el-icon-plus"></i>地图
             </el-button>
-
+            <el-button type="primary"  @click="openContractModule">
+              <i class="el-icon-plus"></i>合同
+            </el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -49,14 +51,16 @@
     </div>
     <AddModule :FormVisible="dialogFormVisible" @close="closeModule"></AddModule>
     <MapModule :FormVisible="mapFormVisible" @close="closeMapModule"></MapModule>
+    <ContractAdd :FormVisible="contractFormVisible" @close="closeContractModule"></ContractAdd>
   </div>
 </template>
 
 <script>
   import AddModule from '../../common/organization.vue'
   import MapModule from '../../common/mapSearch.vue'
+  import ContractAdd from './conponents/contractDelay.vue'
   export default {
-    components:{AddModule,MapModule},
+    components:{AddModule,MapModule,ContractAdd},
     data() {
       return {
         tableData: [
@@ -160,6 +164,7 @@
         loading : true,
         dialogFormVisible : false,
         mapFormVisible : false,
+        contractFormVisible:false,
       }
     },
     mounted(){
@@ -197,6 +202,12 @@
       },
       closeMapModule(){
         this.mapFormVisible = false
+      },
+      openContractModule(){
+        this.contractFormVisible = true
+      },
+      closeContractModule(){
+        this.contractFormVisible = false
       }
     }
   }
