@@ -149,7 +149,6 @@
 
 <style lang="scss">
   .expand{
-    width:100%;
     height:100%;
     overflow:hidden;
     >div{
@@ -159,8 +158,7 @@
     }
     .expand-tree{
       border:none;
-      margin-top:10px;
-
+      background: #fbfbfb;
       .is-current{
         overflow:hidden;
         >.el-tree-node__content{

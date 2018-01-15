@@ -293,10 +293,10 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
   #container{
-    background: #fff;
     .tool{
       border-bottom: 1px solid #eee;
       display: flex;
+      padding-bottom: 10px;
       justify-content : space-between;
       .tool_right{
         display: flex;

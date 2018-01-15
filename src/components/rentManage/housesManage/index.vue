@@ -1,10 +1,5 @@
 <template>
-    <div>
-      <span class="el-icons-fa-bell"></span>
-      <span class="el-icons-fa-print"></span>
-      <span class="el-icons-fa-print"></span>
-      <span class="el-icon-error"></span>
-    </div>
+    <h1>this is region</h1>
 </template>
 
 <script>

@@ -19,6 +19,10 @@ import MessageModule from '../components/systemSetting/message/messageModule.vue
 
 //租赁管理
 import WholeRentManage from '../components/rentManage/wholeRentManage/index.vue'
+import ContractManage from '../components/rentManage/contractManage/index.vue'
+import ClientManage from '../components/rentManage/clientManage/index.vue'
+import HousesManage from '../components/rentManage/housesManage/index.vue'
+import RepairManage from '../components/rentManage/repairManage/index.vue'
 
 //右键
 import ContextMenu from '../components/contextMenu/index.vue'
@@ -33,6 +37,11 @@ import Portals from '../components/OAWork/portals/index.vue'
 import Property from '../components/OAWork/property/index.vue'
 import Vote from '../components/OAWork/vote/index.vue'
 import ContractClaim from '../components/OAWork/contractClaim/index.vue'
+
+//人资管理
+import StaffManage from '../components/humanResource/staffManage/index.vue'
+import Organization from '../components/humanResource/organization/index.vue'
+import Achievement from '../components/humanResource/achievement/index.vue'
 
 Vue.use(Router)
 
@@ -66,8 +75,32 @@ export default new Router({
     {
       path: '/',
       component: Index,
+      name: '租赁管理',
+      icon:'el-icons-fa-home',
+      children: [
+        { path: '/wholeRentManage', component: WholeRentManage, name: '整租管理',},
+        { path: '/housesManage', component: HousesManage, name: '房屋管理',},
+        { path: '/clientManage', component: ClientManage, name: '客户管理',},
+        { path: '/contractManage', component: ContractManage, name: '合同管理',},
+        { path: '/repairManage', component: RepairManage, name: '维修管理',}
+      ]
+    },
+    {
+      path: '/',
+      component: Index,
+      name: '人资管理',
+      icon:'el-icons-fa-sitemap',
+      children: [
+        { path: '/staffManage', component: StaffManage, name: '员工管理',},
+        { path: '/organization', component: Organization, name: '组织架构',},
+        { path: '/achievement', component: Achievement, name: '业绩工资',},
+      ]
+    },
+    {
+      path: '/',
+      component: Index,
       name: 'OA办公',
-      icon:'el-icon-document',
+      icon:'el-icons-fa-clipboard',
       children: [
         { path: '/communication', component: Communication, name: '通讯管理',},
         { path: '/programme', component: Programme, name: '日程管理',},
@@ -85,6 +118,9 @@ export default new Router({
       name: '系统设置',
       icon:'el-icon-setting',
       children: [
+        { path: '/loginRecord', component: LoginRecord,name: '登陆日志',},
+        { path: '/userDictionary', component: UserDictionary, name: '用户字典',},
+
         { path: '/recycle',
           component: Recycle,
           icon:'el-icon-delete',
@@ -102,18 +138,6 @@ export default new Router({
             { path: '/message/messageModule',component: MessageModule, name: '短信模板'},
           ]
         },
-        { path: '/loginRecord', component: LoginRecord,name: '登陆日志',},
-        { path: '/userDictionary', component: UserDictionary, name: '用户字典',},
-      ]
-    },
-
-    {
-      path: '/',
-      component: Index,
-      name: '租赁管理',
-      icon:'el-icon-document',
-      children: [
-        { path: '/wholeRentManage', component: WholeRentManage, name: '整租管理',},
       ]
     },
 

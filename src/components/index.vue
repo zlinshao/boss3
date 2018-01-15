@@ -4,7 +4,7 @@
      <div class="left">
        <div class="logo">
          <div class="boss">BOSS</div>
-         <div class="el-icon-menu" @click="changeCollapse"></div>
+         <div class="el-icons-fa-bars" @click="changeCollapse"></div>
        </div>
        <div class="slogan">
          <img src="../assets/slogan.png" alt="">
@@ -20,7 +20,7 @@
         </div>
         <div class="message">
           <el-badge is-dot class="item">
-            <i class="el-icon-bell"></i>
+            <i class="el-icons-fa-comments-o"></i>
             消息
           </el-badge>
         </div>
@@ -67,7 +67,7 @@
                </template>
                <template v-for="(child,key) in item.children">
                  <!--三级菜单-->
-                 <el-submenu :index="key+''" v-if="child.children">
+                 <el-submenu :index="child.path" v-if="child.children">
                    <template slot="title">
                      <i :class="child.icon"></i>
                      <span>{{child.name}}</span>
@@ -98,7 +98,7 @@
 </template>
 
 <script>
-  import Cookies from 'js-cookie';
+  import Cookies from 'js-cookie'
   import TagsView from './tagsView.vue'
   export default {
     name: 'Index',
@@ -106,7 +106,7 @@
     data(){
       return{
         isCollapse:false,
-        Countdown:999999999,  //倒计时
+        Countdown:999999,  //倒计时
         screenStatus : false,
       }
     },
@@ -120,7 +120,7 @@
     },
     methods: {
       handleOpen(key, keyPath) { console.log(key);},
-      handleClose(key, keyPath) { console.log(keyPath);},
+      handleClose(key, keyPath) { console.log(key);},
       clickScreen(){
         this.screenStatus = true;
       },
@@ -144,7 +144,7 @@
           });
           Cookies.set('locking', '1');
         }).catch((data) => {
-          this.Countdown = 99999999999;
+          this.Countdown = 999999;
           this.countTime();
           this.screenStatus = false;
         })
@@ -191,8 +191,8 @@
             color: #6a8dfb;
             margin-left: 50px;
           }
-          .el-icon-menu{
-            font-size: 28px;
+          .el-icons-fa-bars{
+            font-size: 24px;
             color: #4f5aa2;
             margin-right: 25px;
             cursor: pointer;
@@ -260,6 +260,13 @@
           top: 80px;
           height: 100%;
           z-index: 66;
+          [class^="el-icons-fa"], [class*=" el-icons-fa"]{
+            vertical-align: middle;
+            margin-right: 5px;
+            width: 24px;
+            text-align: center;
+            font-size: 18px;
+          }
           .developBack{
             background: #405597 !important;
           }
