@@ -13,6 +13,9 @@
             <el-button type="primary"  @click="openContractModule">
               <i class="el-icon-plus"></i>合同
             </el-button>
+            <el-button type="primary"  @click="openMessageModule">
+              <i class="el-icon-plus"></i>新建短信模板
+            </el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -52,6 +55,7 @@
     <AddModule :FormVisible="dialogFormVisible" @close="closeModule"></AddModule>
     <MapModule :FormVisible="mapFormVisible" @close="closeMapModule"></MapModule>
     <ContractAdd :FormVisible="contractFormVisible" @close="closeContractModule"></ContractAdd>
+    <AddMessageModule></AddMessageModule>
   </div>
 </template>
 
@@ -59,8 +63,9 @@
   import AddModule from '../../common/organization.vue'
   import MapModule from '../../common/mapSearch.vue'
   import ContractAdd from './conponents/contractDelay.vue'
+  import AddMessageModule from './conponents/addMessageModule.vue'
   export default {
-    components:{AddModule,MapModule,ContractAdd},
+    components:{AddModule,MapModule,ContractAdd,AddMessageModule},
     data() {
       return {
         tableData: [
@@ -208,6 +213,9 @@
       },
       closeContractModule(){
         this.contractFormVisible = false
+      },
+      openMessageModule(){
+
       }
     }
   }

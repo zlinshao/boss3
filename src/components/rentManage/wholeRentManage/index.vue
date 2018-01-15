@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div @click="show=false" @contextmenu="closeMenu">
       <div id="container">
         <div class="tool">
           <div class="tool_left">
@@ -54,11 +54,11 @@
         </div>
         <div class="main">
           <div class="myHouse">
-            <div class="myTable">
+            <div class="myTable" @contextmenu="houseHeadMenu($event)">
               <el-table
                 :data="tableData"
                 @row-click="clickTable"
-                @row-contextmenu = 'menuClick'
+                @row-contextmenu = 'houseMenu'
                 style="width: 100%">
                 <el-table-column
                   prop="date"
@@ -105,10 +105,11 @@
               </div>
             </div>
           </div>
-          <div class="myAddress">
-            <div class="myTable">
+          <div class="myClient">
+            <div class="myTable" @contextmenu="houseHeadMenu($event)">
               <el-table
                 :data="tableData1"
+                @row-contextmenu = 'clientMenu'
                 style="width: 100%">
                 <el-table-column
                   prop="date"
@@ -155,8 +156,8 @@
               </div>
             </div>
           </div>
-          <div class="myDetail" >
-            <el-tabs type="border-card">
+          <div class="myDetail" @contextmenu="detailMenu($event)">
+            <el-tabs type="border-card" >
               <el-tab-pane label="房东信息">
                 <div class="content"></div>
                 <div class="remarks">备注：</div>
@@ -180,69 +181,70 @@
           </div>
         </div>
       </div>
+      <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'"
+                 :list="lists" :show="show" @clickOperate="clickEvent">
+      </RightMenu>
     </div>
 </template>
 
 <script>
+  import RightMenu from '../../common/contextMenu/rightMenu.vue'
     export default {
         name: 'hello',
+        components: {RightMenu},
         data () {
             return {
+              rightMenuX: 0,
+              rightMenuY: 0,
+              show: false,
+              lists: [],
+
               formInline:{
                 name:'',
                 house:''
               },
               tableData: [
-                  {
+                {
                 date: '2016-05-03',
                 name: '王小虎',
                 province: '上海',
                 city: '普陀区',
                 address: '上海市普陀区金沙江路 1518 弄',
                 zip: 200333
-              }, {
+                },
+                {
                 date: '2016-05-02',
                 name: '王小虎',
                 province: '上海',
                 city: '普陀区',
                 address: '上海市普陀区金沙江路 1518 弄',
                 zip: 200333
-              }, {
+                },
+                {
                 date: '2016-05-04',
                 name: '王小虎',
                 province: '上海',
                 city: '普陀区',
                 address: '上海市普陀区金沙江路 1518 弄',
                 zip: 200333
-              }, {
+                },
+                {
                 date: '2016-05-01',
                 name: '王小虎',
                 province: '上海',
                 city: '普陀区',
                 address: '上海市普陀区金沙江路 1518 弄',
                 zip: 200333
-              }, {
-                date: '2016-05-08',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1518 弄',
-                zip: 200333
-              }, {
-                date: '2016-05-06',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1518 弄',
-                zip: 200333
-              }, {
-                date: '2016-05-07',
-                name: '王小虎',
-                province: '上海',
-                city: '普陀区',
-                address: '上海市普陀区金沙江路 1518 弄',
-                zip: 200333
-              }],
+                },
+                {
+                  date: '2016-05-01',
+                  name: '王小虎',
+                  province: '上海',
+                  city: '普陀区',
+                  address: '上海市普陀区金沙江路 1518 弄',
+                  zip: 200333
+                }
+              ],
               tableData1: [
                 {
                   date: '2016-05-03',
@@ -251,7 +253,24 @@
                   city: '普陀区',
                   address: '上海市普陀区金沙江路 1518 弄',
                   zip: 200333
-                }],
+                },
+                {
+                  date: '2016-05-03',
+                  name: '王小虎',
+                  province: '上海',
+                  city: '普陀区',
+                  address: '上海市普陀区金沙江路 1518 弄',
+                  zip: 200333
+                },
+                {
+                  date: '2016-05-03',
+                  name: '王小虎',
+                  province: '上海',
+                  city: '普陀区',
+                  address: '上海市普陀区金沙江路 1518 弄',
+                  zip: 200333
+                }
+              ],
               currentPage: 1,
               options: [
                   {
@@ -283,8 +302,116 @@
           clickTable(row, event, column){
               console.log(row, event, column)
           },
-          menuClick(row, event){
-              console.log(row,  event)
+          //房屋右键
+          houseMenu(row, event){
+            this.lists = [
+              {clickIndex: 1, headIcon: 'el-icons-fa-home', tailIcon: 'el-icon-arrow-right',label: '房源管理',
+                children: [
+                  {clickIndex: 5, label: '编辑房源信息',},
+                  {clickIndex: 6, label: '编辑房东信息',},
+                  {clickIndex: 6, label: '编辑合同信息',}
+                ]
+              },
+              {clickIndex: 1, headIcon: 'el-icons-fa-pencil-square-o',tailIcon: 'el-icon-arrow-right', label: '合同续约/延期',
+                children: [
+                  {clickIndex: 5, label: '续约',},
+                  {clickIndex: 6, label: '延期',}
+                ]
+              },
+              {clickIndex: 1, headIcon: 'el-icons-fa-reply', label: '房东退房',},
+//              {clickIndex: 1, headIcon: 'el-icon-document', label: '房东合同',},
+              {clickIndex: 1, headIcon: 'el-icons-fa-folder-o',tailIcon: 'el-icon-arrow-right', label: '其他',
+                children: [
+                  {clickIndex: 5, label: '转到合租',},
+                  {clickIndex: 6, label: '添加跟进',}
+                ]
+              },
+              {clickIndex: 1, headIcon: 'el-icons-fa-cny', label: '房东欠款',},
+              {clickIndex: 1, headIcon: 'el-icons-fa-inbox',tailIcon: 'el-icon-arrow-right', label: '物品增减',
+                children: [
+                  {clickIndex: 5, label: '物品搬出',},
+                  {clickIndex: 6, label: '物品增进',}
+                ]
+              },
+              {clickIndex: 1, headIcon: 'el-icons-fa-gear', label: '维修记录',},
+//              {clickIndex: 1, headIcon: 'el-icons-fa-user', label: '黑名单',},
+              {clickIndex: 4, headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
+              {clickIndex: 1, headIcon: 'el-icons-fa-plus-circle', label: '对比',},
+            ];
+            this.contextMenuParam(event);
+          },
+          //合同表头右键
+          houseHeadMenu(e){
+            this.lists = [
+              {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
+            ];
+            this.contextMenuParam(event);
+          },
+
+          //详情表头右键
+          detailMenu(e){
+            if(e.target.className.indexOf('el-tabs__item')>-1){
+              this.lists = [
+                {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
+              ];
+              this.contextMenuParam(event);
+            }
+          },
+
+          //右键回调时间
+          clickEvent (index) {
+            console.log('click ' +  index)
+          },
+          //关闭右键菜单
+          closeMenu(){
+            this.show = false;
+          },
+          //租客右键
+          clientMenu(row, event){
+              console.log(row)
+            this.lists = [
+              {clickIndex: 1, headIcon: 'el-icons-fa-user', tailIcon: 'el-icon-arrow-right',label: '租客管理',
+                children: [
+                  {clickIndex: 5, label: '登记租客信息',},
+                  {clickIndex: 6, label: '修改租客信息',},
+                ]
+              },
+              {clickIndex: 1, headIcon: 'el-icons-fa-pencil-square-o',tailIcon: 'el-icon-arrow-right', label: '租客续约/延期',
+                children: [
+                  {clickIndex: 5, label: '续约',},
+                  {clickIndex: 6, label: '延期',}
+                ]
+              },
+              {clickIndex: 1, headIcon: 'el-icons-fa-home',tailIcon: 'el-icon-arrow-right', label: '退房/调房',
+                children: [
+                  {clickIndex: 5, label: '租客退房',},
+                  {clickIndex: 6, label: '租客调房',}
+                ]
+              },
+//              {clickIndex: 1, headIcon: 'el-icon-document', label: '房东合同',},
+              {clickIndex: 1, headIcon: 'el-icons-fa-refresh', label: '转租',},
+              {clickIndex: 1, headIcon: 'el-icons-fa-cny', label: '租客欠款',},
+              {clickIndex: 1, headIcon: 'el-icons-fa-gear', label: '报修记录',},
+//              {clickIndex: 1, headIcon: 'el-icons-fa-user', label: '黑名单',},
+              {clickIndex: 4, headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
+              {clickIndex: 1, headIcon: 'el-icons-fa-plus-circle', label: '对比',},
+              {clickIndex: 1, headIcon: 'el-icons-fa-plus', label: '添加跟进',},
+            ];
+            this.contextMenuParam(event);
+          },
+
+          //右键参数
+          contextMenuParam(event){
+            //param: user right param
+            let e = event||window.event;	//support firefox contextmenu
+            this.show = false;
+            this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+            this.rightMenuY = e.clientY + document.documentElement.scrollTop  - document.documentElement.clientTop;
+            event.preventDefault();
+            event.stopPropagation();
+            this.$nextTick(() => {
+              this.show = true
+            })
           }
         }
     }
@@ -350,7 +477,7 @@
           }
         }
       }
-      .myAddress{
+      .myClient{
         border: 1px solid #d4f0de;
         margin-bottom: 20px;
         box-shadow: 0 2px 4px 0 rgba(0,0,0,.12), 0 0 6px 0 rgba(0,0,0,.04);

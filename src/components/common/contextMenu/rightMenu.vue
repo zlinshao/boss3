@@ -1,6 +1,6 @@
 <template>
 	<transition name='fade'>
-		<ul class="menu-ui" :style="{left:startX.replace(/[^0-9]/ig,'')>innerWidth-200?innerWidth-200+'px':startX,top:startY}"
+		<ul class="menu-ui" :style="{left:startX.replace(/[^0-9]/ig,'')>innerWidth-150?innerWidth-150+'px':startX,top:startY}"
         v-if="show" @contextmenu="rightMenuClick($event)">
 			<li v-for="(item, index) in list" @mouseover="showIndex=index" @mouseleave="showIndex=-1" :key="index">
 				<a :class="item['divide'] ? 'divide':''" @click="emitClickEvent($event, item)" @contextmenu="emitClickEvent($event, item)">
@@ -38,7 +38,7 @@
     },
     computed:{
       isOverflowX(){
-          return this.startX.replace(/[^0-9]/ig,'')>this.innerWidth-400
+          return this.startX.replace(/[^0-9]/ig,'')>this.innerWidth-300
       }
     },
     methods: {
@@ -71,9 +71,9 @@
 	.menu-ui {
 		position: absolute;
 		background: white;
-		width: 200px;
+		width: 150px;
 		display: list-item;
-		box-shadow: 0 0 1px 0 rgba(10, 27, 49, 0.8);
+    box-shadow: 0 0 1px 0 #6a8dfb;
 		list-style: none;
 		padding: 13px 0;
 		z-index: 1000;
@@ -94,7 +94,7 @@
 		padding: 0 10px;
 		height: 26px;
 		line-height: 26px;
-		color: #333;
+		color: #222;
 	}
 
 	.divide {
@@ -102,11 +102,11 @@
 	}
 
 	li:hover {
-		background-color: #ddd;
+		background-color: #6a8dfb;
 	}
 
 	li:hover > a > span {
-		color: #6a8dfb;
+		color: #ffffff;
 	}
 	a > span {
 		padding-left: 20px;
@@ -122,11 +122,15 @@
 
 	.head-icon {
 		position: absolute;
-		left: 10px;
+    left: 10px;
+    line-height: 26px;
+    color: #bfcbfa;
 	}
 
 	.tail-icon {
 		position: relative;
 		float: right;
+    line-height: 26px;
+    color: #bfcbfa;
 	}
 </style>

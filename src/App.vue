@@ -1,12 +1,17 @@
 <template>
-  <div id="app">
+  <div id="app" @contextmenu="prevent($event)">
     <router-view></router-view>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  methods:{
+    prevent(e){
+        e.preventDefault();
+    }
+  }
 }
 </script>
 

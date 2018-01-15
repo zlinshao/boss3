@@ -30,17 +30,18 @@
           使用指南
         </div>
         <div class="personInfo">
-          <div class="head"><img src="../assets/images/head.png"></div>
+          <div class="head"><img src="../assets/images/head.jpg"></div>
           <el-dropdown trigger="click">
               <span class="el-dropdown-link">
                 解兆飞<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>黄金糕</el-dropdown-item>
-              <el-dropdown-item>狮子头</el-dropdown-item>
-              <el-dropdown-item>螺蛳粉</el-dropdown-item>
-              <el-dropdown-item>双皮奶</el-dropdown-item>
-              <el-dropdown-item>蚵仔煎</el-dropdown-item>
+              <el-dropdown-item><i class="el-icon-menu" style="margin-right: 5px"></i>个人主页</el-dropdown-item>
+              <el-dropdown-item><i class="el-icons-fa-sitemap" style="margin-right: 5px"></i>部门主页</el-dropdown-item>
+              <el-dropdown-item><i class="el-icons-fa-edit" style="margin-right: 5px"></i>考勤自助</el-dropdown-item>
+              <el-dropdown-item><i class="el-icons-fa-edit" style="margin-right: 5px"></i>签到自助</el-dropdown-item>
+              <el-dropdown-item><i class="el-icons-fa-unlock-alt" style="margin-right: 5px"></i>锁屏密码</el-dropdown-item>
+              <el-dropdown-item><i class="el-icons-fa-dot-circle-o" style="margin-right: 5px"></i>安全退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -67,17 +68,17 @@
                </template>
                <template v-for="(child,key) in item.children">
                  <!--三级菜单-->
-                 <el-submenu :index="child.path" v-if="child.children">
+                 <el-submenu :index="child.path" v-if="child.children" style="padding-left: 14px">
                    <template slot="title">
                      <i :class="child.icon"></i>
                      <span>{{child.name}}</span>
                    </template>
-                   <el-menu-item v-for="last in child.children" :index="last.path" :key="last.path">
+                   <el-menu-item v-for="last in child.children" :index="last.path" :key="last.path"  style="padding-left: 74px">
                      {{last.name}}
                    </el-menu-item>
                  </el-submenu>
                  <!--二级菜单-->
-                 <el-menu-item v-if="!child.children" :index="child.path" :key="child.path">
+                 <el-menu-item v-if="!child.children" :index="child.path" :key="child.path" style="padding-left: 54px">
                    <i :class="child.icon"></i>
                    <span>{{child.name}}</span>
                  </el-menu-item>

@@ -16,6 +16,11 @@ import UserDictionary from '../components/systemSetting/userDictionary/index.vue
 import Message from '../components/systemSetting/message/index.vue'                 //短信
 import MessageList from '../components/systemSetting/message/messageList.vue'                 //短信
 import MessageModule from '../components/systemSetting/message/messageModule.vue'                 //短信
+import RoleManage from '../components/systemSetting/roleManage/index.vue'
+import PowerManage from '../components/systemSetting/powerManage/index.vue'
+import VillageManage from '../components/systemSetting/villageManage/index.vue'
+import ExportManage from '../components/systemSetting/exportManage/index.vue'
+
 
 //租赁管理
 import WholeRentManage from '../components/rentManage/wholeRentManage/index.vue'
@@ -25,7 +30,7 @@ import HousesManage from '../components/rentManage/housesManage/index.vue'
 import RepairManage from '../components/rentManage/repairManage/index.vue'
 
 //右键
-import ContextMenu from '../components/contextMenu/index.vue'
+import ContextMenu from '../components/common/contextMenu/index.vue'
 
 import CommonComponent from '../components/commonComponent/index.vue'                     //通用组件
 //OA办公
@@ -118,8 +123,6 @@ export default new Router({
       name: '系统设置',
       icon:'el-icon-setting',
       children: [
-        { path: '/loginRecord', component: LoginRecord,name: '登陆日志',},
-        { path: '/userDictionary', component: UserDictionary, name: '用户字典',},
 
         { path: '/recycle',
           component: Recycle,
@@ -138,6 +141,12 @@ export default new Router({
             { path: '/message/messageModule',component: MessageModule, name: '短信模板'},
           ]
         },
+        { path: '/loginRecord', component: LoginRecord,name: '登陆日志',},
+        { path: '/userDictionary', component: UserDictionary, name: '用户字典',},
+        { path: '/roleManage', component: RoleManage, name: '角色管理',},
+        { path: '/powerManage', component: PowerManage, name: '权限管理',},
+        { path: '/villageManage', component: VillageManage, name: '小区管理',},
+        { path: '/exportManage', component: ExportManage, name: '导出管理',},
       ]
     },
 
