@@ -24,13 +24,11 @@ import ExportManage from '../components/systemSetting/exportManage/index.vue'
 
 //租赁管理
 import WholeRentManage from '../components/rentManage/wholeRentManage/index.vue'
+import JointRentManage from '../components/rentManage/jointRentManage/index.vue'
 import ContractManage from '../components/rentManage/contractManage/index.vue'
 import ClientManage from '../components/rentManage/clientManage/index.vue'
 import HousesManage from '../components/rentManage/housesManage/index.vue'
 import RepairManage from '../components/rentManage/repairManage/index.vue'
-
-//右键
-import ContextMenu from '../components/common/contextMenu/index.vue'
 
 import CommonComponent from '../components/commonComponent/index.vue'                     //通用组件
 //OA办公
@@ -73,7 +71,6 @@ export default new Router({
       name: 'Index',
       children: [
         { path: '/main', component: Main, name: '主页',icon:'el-icon-menu'},
-        { path: '/contextMenu', component: ContextMenu, name: '右键测试',icon:'el-icon-view'},
         { path: '/commonComponent', component: CommonComponent, name: '通用组件',icon:'el-icon-goods'},
       ]
     },
@@ -84,6 +81,7 @@ export default new Router({
       icon:'el-icons-fa-home',
       children: [
         { path: '/wholeRentManage', component: WholeRentManage, name: '整租管理',},
+        { path: '/jointRentManage', component: JointRentManage, name: '合租管理',},
         { path: '/housesManage', component: HousesManage, name: '房屋管理',},
         { path: '/clientManage', component: ClientManage, name: '客户管理',},
         { path: '/contractManage', component: ContractManage, name: '合同管理',},

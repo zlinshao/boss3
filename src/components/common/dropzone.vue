@@ -20,52 +20,9 @@
         type: String,
         required: true
       },
-
-      defaultMsg: {
-        type: String,
-        default: '上传图片'
-      },
-      acceptedFiles: {
-        type: String
-      },
-      thumbnailHeight: {
-        type: Number,
-        default: 120
-      },
-      thumbnailWidth: {
-        type: Number,
-        default: 120
-      },
-      showRemoveLink: {
-        type: Boolean,
-        default: true
-      },
-      maxFilesize: {
-        type: Number,
-        default: 20
-      },
-      maxFiles: {
-        type: Number,
-        default: 60
-      },
-      resizeWidth:{
-        type: Number,
-        default: 1000
-      },
-      autoProcessQueue: {
-        type: Boolean,
-        default: true
-      },
-      useCustomDropzoneOptions: {
-        type: Boolean,
-        default: false
-      },
       defaultImg: {
         default: false
       },
-      couldPaste: {
-        default: false
-      }
     },
     data() {
       return {
@@ -77,17 +34,14 @@
       const element = document.getElementById(this.id);
       const vm = this;
       this.dropzone = new Dropzone(element, {
-        clickable: true,
-        thumbnailWidth: this.thumbnailWidth,
-        thumbnailHeight: this.thumbnailHeight,
-        maxFiles: this.maxFiles,
-        maxFilesize: this.maxFilesize,
-        resizeWidth: this.resizeWidth,
+        maxFiles: 60,
+        maxFilesize: 20,
+        resizeWidth: 1000,
         dictRemoveFile: '删除',
-        addRemoveLinks: this.showRemoveLink,
-        acceptedFiles: this.acceptedFiles,
-        autoProcessQueue: this.autoProcessQueue,
-        dictDefaultMessage: '<i style="margin-top: 3em;display: inline-block" class="material-icons">' + this.defaultMsg + '</i><br>Drop files here to upload',
+        dictCancelUpload:'取消上传',
+        addRemoveLinks: true,
+        acceptedFiles: '',
+        dictDefaultMessage: '<i style="margin-top: 3em;display: inline-block" class="material-icons">' + '上传图片' + '</i><br>Drop files here to upload',
         init() {
           this.on('success', file => {
             vm.$emit('dropzone-success', file, vm.dropzone.element)
@@ -103,7 +57,11 @@
           });
           this.on('successmultiple', (file, error, xhr) => {
             vm.$emit('dropzone-successmultiple', file, error, xhr)
-          })
+          });
+          this.on("queuecomplete", function (file) {
+            vm.$emit('complete','ok');
+            //上传完成后触发的方法
+          });
         }
       })
     },
@@ -150,8 +108,9 @@
 </script>
 
 <style scoped lang="scss">
+
   .dropzone {
-    border: 1px solid #E5E5E5;
+    border: 2px dashed #6a8dfb;
     font-family: 'Roboto', sans-serif;
     color: #fff;
     transition: background-color .2s linear;

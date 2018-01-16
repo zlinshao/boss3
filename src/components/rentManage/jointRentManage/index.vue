@@ -1,6 +1,6 @@
 <template>
     <div @click="show=false" @contextmenu="closeMenu">
-      <div id="wholeRentContainer">
+      <div id="jointRentContainer">
         <div class="tool">
           <div class="tool_left">
             <el-button type="primary" size="mini">
@@ -15,7 +15,7 @@
           </div>
 
           <div class="tool_right">
-            <div @click="openInstruction"><i class="el-icon-date"></i>&nbsp;使用说明</div>
+            <!--<div><i class="el-icon-date"></i>&nbsp;使用说明</div>-->
             <div><i class="el-icon-setting"></i>&nbsp;设置</div>
           </div>
         </div>
@@ -110,7 +110,7 @@
               <el-table
                 :data="tableData1"
                 @row-contextmenu = 'clientMenu'
-                style="width: 100%">
+                style="width: 100%;">
                 <el-table-column
                   prop="date"
                   label="日期">
@@ -182,16 +182,16 @@
         </div>
       </div>
       <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperate="clickEvent"></RightMenu>
-      <Instruction :instructionDialog="instructionDialog" @close="closeInstruction"></Instruction>
+      <!--<Instruction :instructionDialog="instructionDialog" @close="closeInstruction"></Instruction>-->
     </div>
 </template>
 
 <script>
   import RightMenu from '../../common/contextMenu/rightMenu.vue'
-  import Instruction from './components/instruction.vue'
+//  import Instruction from './components/instruction.vue'
     export default {
         name: 'hello',
-        components: {RightMenu,Instruction},
+        components: {RightMenu},
         data () {
             return {
               rightMenuX: 0,
@@ -418,19 +418,19 @@
           },
 
           //说明书
-          openInstruction(){
-              this.instructionDialog = true
-          },
-          closeInstruction(){
-            this.instructionDialog = false
-          }
+//          openInstruction(){
+//              this.instructionDialog = true
+//          },
+//          closeInstruction(){
+//            this.instructionDialog = false
+//          }
         }
     }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-  #wholeRentContainer{
+  #jointRentContainer{
     .tool{
       border-bottom: 1px solid #eee;
       display: flex;
@@ -444,7 +444,7 @@
           text-align: center;
           cursor: pointer;
           &:first-child{
-            border-right: 1px solid #ccc;
+            /*border-right: 1px solid #ccc;*/
           }
           i{
             color: #409EFF;

@@ -30,8 +30,14 @@ export default {
     #app {
       height: 100%;
     }
+    a{
+      text-decoration: none;
+      color: #787a7e;
+    }
     ol, ul {
       list-style: none;
+      padding: 0;
+      margin: 0;
     }
     .el-pagination{
       span,li,.el-input{

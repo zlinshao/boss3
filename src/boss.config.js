@@ -10,9 +10,3 @@ globalConfig = {
   urlName: '',                                                        //用户名
 };
 
-function indexOf(val) {
-  for (let i = 0; i < this.length; i++) {
-    if (this[i] === val) return i;
-  }
-  return -1;
-}

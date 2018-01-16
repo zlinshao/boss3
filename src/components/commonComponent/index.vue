@@ -37,12 +37,17 @@
         <el-button>Light</el-button>
       </el-tooltip>
     </div>
-
+    <DIV>
+      <DropZone @dropzone-removedFile="dropzoneR" @dropzone-success="dropzoneS" @complete="dropzoneALL"
+                id="myVueDropzone" url="https://httpbin.org/post"></DropZone>
+    </DIV>
   </div>
 </template>
 
 <script>
+  import DropZone from '../common/dropzone.vue'
   export default {
+    components:{DropZone},
     methods: {
       openMessage() {
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
@@ -110,6 +115,17 @@
           title: '错误',
           message: '这是一条错误的提示消息'
         });
+      },
+      dropzoneS(file) {
+        console.log(file)
+        this.$message({ message: '上传成功', type: 'success' })
+      },
+      dropzoneR(file) {
+        console.log(file)
+        this.$message({ message: '删除成功', type: 'success' })
+      },
+      dropzoneALL(val){
+          alert(val)
       }
     }
   }

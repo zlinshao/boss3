@@ -36,12 +36,24 @@
                 解兆飞<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item><i class="el-icon-menu" style="margin-right: 5px"></i>个人主页</el-dropdown-item>
-              <el-dropdown-item><i class="el-icons-fa-sitemap" style="margin-right: 5px"></i>部门主页</el-dropdown-item>
-              <el-dropdown-item><i class="el-icons-fa-edit" style="margin-right: 5px"></i>考勤自助</el-dropdown-item>
-              <el-dropdown-item><i class="el-icons-fa-edit" style="margin-right: 5px"></i>签到自助</el-dropdown-item>
-              <el-dropdown-item><i class="el-icons-fa-unlock-alt" style="margin-right: 5px"></i>锁屏密码</el-dropdown-item>
-              <el-dropdown-item><i class="el-icons-fa-dot-circle-o" style="margin-right: 5px"></i>安全退出</el-dropdown-item>
+              <el-dropdown-item>
+                <i class="el-icon-menu" style="margin-right: 5px"></i>个人主页
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <i class="el-icons-fa-sitemap" style="margin-right: 5px"></i>部门主页
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <i class="el-icons-fa-edit" style="margin-right: 5px"></i>考勤自助
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <i class="el-icon-location" style="margin-right: 5px"></i>签到自助
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <i class="el-icons-fa-unlock-alt" style="margin-right: 5px"></i>锁屏密码
+              </el-dropdown-item>
+              <el-dropdown-item>
+                <i class="el-icons-fa-dot-circle-o" style="margin-right: 5px"></i>安全退出
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -50,7 +62,7 @@
 
    <div class="contentBox" :class="isCollapse? 'hideSidebar' : ''">
      <el-container>
-       <div class="aside">
+       <div class="aside scroll_bar">
          <el-menu :default-active="$route.path" class="el-menu-vertical-demo" unique-opened
                   :collapse="isCollapse" @open="handleOpen" @close="handleClose" router
                   background-color="#6a8dfb" text-color="#fff" active-text-color="#ffd04b">
@@ -260,7 +272,8 @@
           position: fixed;
           top: 80px;
           height: 100%;
-          z-index: 66;
+          z-index: 56;
+
           [class^="el-icons-fa"], [class*=" el-icons-fa"]{
             vertical-align: middle;
             margin-right: 5px;
