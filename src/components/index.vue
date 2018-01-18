@@ -31,7 +31,7 @@
         </div>
         <div class="personInfo">
           <div class="head"><img src="../assets/images/head.jpg"></div>
-          <el-dropdown trigger="click">
+          <el-dropdown>
               <span class="el-dropdown-link">
                 解兆飞<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
@@ -261,6 +261,7 @@
             margin-left: 20px;
             font-size: 15px;
             cursor: pointer;
+
           }
         }
       }
@@ -302,7 +303,7 @@
           margin-top: 80px;
           padding: 10px 20px;
           margin-left: 240px;
-          transition: margin-left .4s;
+          /*transition: margin-left .4s;*/
         }
       }
     }

@@ -9,9 +9,6 @@
           <el-button type="success" size="mini">
             <i class="el-icon-tickets"></i>&nbsp;功能说明
           </el-button>
-          <el-button type="info" size="mini">
-            <i class="el-icon-tickets"></i>&nbsp;查看备份
-          </el-button>
         </div>
 
         <div class="tool_right">
@@ -162,24 +159,29 @@
                     <td></td>
                   </tr>
                 </table>
-                <table class="houseImg">
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
-                </table>
               </div>
               <div class="remarks">备注：</div>
             </el-tab-pane>
-            <el-tab-pane label="租客信息">租客信息</el-tab-pane>
+            <el-tab-pane label="跟进记录">
+              <el-table
+                :data="tableData"
+                @row-click="clickTable"
+                @row-contextmenu='houseMenu'
+                style="width: 100%">
+                <el-table-column
+                  prop="name"
+                  label="跟进人">
+                </el-table-column>
+                <el-table-column
+                  prop="date"
+                  label="跟进时间">
+                </el-table-column>
+                <el-table-column
+                  prop="province"
+                  label="跟进记录">
+                </el-table-column>
+              </el-table>
+            </el-tab-pane>
           </el-tabs>
         </div>
       </div>
@@ -423,50 +425,38 @@
                 padding: 10px;
                 min-height: 100px;
                 .houseList {
+                  width: 100%;
                   border-collapse: collapse;
-                  display: inline-block;
                   tr {
                     td {
                       border: 1px solid #ebeef5;
-                      padding: 6px 0;
+                      padding: 8px 0;
                       color: #606266;
                       text-align: center;
                       &:nth-child(1) {
-                        width: 60px;
+                        width: 8%;
                       }
                       &:nth-child(2) {
-                        width: 200px;
+                        width: 12%;
                       }
                       &:nth-child(3) {
-                        width: 60px;
+                        width: 8%;
                       }
                       &:nth-child(4) {
-                        width: 160px;
+                        width: 12%;
                       }
                       &:nth-child(5) {
-                        width: 60px;
+                        width: 8%;
                       }
                       &:nth-child(6) {
-                        width: 160px;
+                        width: 12%;
                       }
                       &:nth-child(7) {
-                        width: 260px;
+                        width: 40%;
                         text-align: left;
                         vertical-align: top;
-                        padding-left: 5px
+                        padding-left: 8px
                       }
-                    }
-                  }
-                }
-                .houseImg{
-                  border-collapse: collapse;
-                  display: inline-block;
-                  tr{
-                    td{
-                      width: 148px;
-                      height: 84px;
-                      border: 1px solid #ebeef5;
-                      /*background: #efefef;*/
                     }
                   }
                 }

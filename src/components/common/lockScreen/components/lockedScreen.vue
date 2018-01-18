@@ -51,7 +51,6 @@
 <style scoped lang="scss">
 
   #locking{
-    background: #409EFF;
     opacity: .7;
     div.input{
       .el-input-group{

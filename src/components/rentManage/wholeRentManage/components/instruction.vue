@@ -15,7 +15,7 @@
               <li>07、如何设置定价？</li>
             </ul>
             <ul class="instruct_ul">
-              <li class="step_basic">基本操作</li>
+              <li class="step_basic">技巧介绍</li>
               <li>01、如何登记房源？</li>
               <li>02、如何登记租客？</li>
               <li>03、租客如何退房？</li>
@@ -25,7 +25,7 @@
               <li>07、如何设置定价？</li>
             </ul>
             <ul class="instruct_ul">
-              <li class="step_basic">基本操作</li>
+              <li class="step_basic">功能介绍</li>
               <li>01、如何登记房源？</li>
               <li>02、如何登记租客？</li>
               <li>03、租客如何退房？</li>
@@ -45,7 +45,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="instructionDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="instructionDialogVisible = false">确 定</el-button>
+        <el-button size="small" type="primary" @click="instructionDialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -71,12 +71,11 @@
     }
   };
 </script>
-<style lang="scss">
+<style lang="scss" scoped="">
   #instruction{
     .el-dialog__wrapper{
       .el-dialog{
         .el-dialog__body{
-          padding: 10px 20px;
           .instruct_main{
             .instruct_right{
               height: 550px;
@@ -84,19 +83,24 @@
               .instruct_ul{
                 li{
                   cursor: pointer;
-                  padding: 1px 0;
+                  padding: 2px 0;
                   font-size: 12px;
                   &:hover{
-                    background: #ddd;
+                    background: #eee;
                     color: #ee508f;
                   }
                 }
                 .step_basic{
-                  background: #409EFF;
+                  background: linear-gradient(to right, #409EFF , #24d5ff);
                   padding: 5px 0;
+                  margin-bottom: 5px;
                   color: #ffffff;
                   font-size: 14px;
                   text-align: center;
+                  &:hover{
+                    background: linear-gradient(to right, #409EFF , #24d5ff);
+                    color: #ffffff;
+                  }
                 }
               }
             }

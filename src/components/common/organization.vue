@@ -146,14 +146,13 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss">
+<style lang="scss" scoped="">
   .gray {
     -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
     filter: grayscale(100%);
   }
   .el-select-dropdown{
     .el-select-dropdown__wrap{
-      max-height: 402px;
       ul {
         li.el-select-dropdown__item{
           height: 50px;
@@ -191,6 +190,7 @@
       }
     }
   }
+
   #organizationId{
     .el-dialog__wrapper{
       .el-dialog{
@@ -204,8 +204,9 @@
         .el-dialog__body{
           padding: 15px;
           background: #F8F8F8;
-          height: 460px;
           .content{
+            height: 442px;
+            background: #F8F8F8;
             font-size: 0;
             .content_left{
               font-size: 14px;
@@ -221,12 +222,7 @@
               &:hover{
                 border-color: #83c7ff;
               }
-              .el-select {
-                display: block;
-                .el-input__inner {
-                  border: none;
-                }
-              }
+
             }
             .content_right{
               font-size: 14px;
