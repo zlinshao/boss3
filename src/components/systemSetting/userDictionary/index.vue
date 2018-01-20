@@ -1,21 +1,35 @@
 <template>
-  <div >
-    <div class="expand">
-      <!--<el-button @click="handleAddTop">添加顶级节点</el-button>-->
-      <el-tree ref="expandMenuList" class="expand-tree"
-               v-if="isLoadingTree"
-               :data="setTree"
-               node-key="id"
-               highlight-current
-               show-checkbox
-               accordion
-               check-strictly
-               :props="defaultProps"
-               :expand-on-click-node="false"
-               :render-content="renderContent"
-               @check-change = 'handleNodeClick'
-               @node-click="handleNodeClick">
-      </el-tree>
+  <div id="dictionary">
+    <div class="dic_content">
+      <el-row :gutter="20">
+        <el-col :span="6">
+          <div class="dictionary_left">
+            <div class="dictionary_top">
+              <span>用户字典</span>
+              <el-button size="mini" type="primary" style="text-align: right">使用指南</el-button>
+            </div>
+            <el-tree ref="expandMenuList" class="expand-tree"
+                     v-if="isLoadingTree"
+                     :data="setTree"
+                     node-key="id"
+                     highlight-current
+                     show-checkbox
+                     accordion
+                     check-strictly
+                     :props="defaultProps"
+                     :expand-on-click-node="false"
+                     :render-content="renderContent"
+                     @check-change = 'handleNodeClick'
+                     @node-click="handleNodeClick">
+            </el-tree>
+          </div>
+        </el-col>
+        <el-col :span="18">
+          <div class="dictionary_right"></div>
+        </el-col>
+      </el-row>
+
+        <!--<el-button @click="handleAddTop">添加顶级节点</el-button>-->
     </div>
   </div>
 </template>
@@ -148,57 +162,52 @@
 </script>
 
 <style lang="scss">
-  .expand{
-    height:100%;
-    overflow:hidden;
-    >div{
-      padding:20px;
-      width:50%;
-      max-width:400px;
-    }
-    .expand-tree{
-      border:none;
-      background: #fbfbfb;
-      .is-current{
-        overflow:hidden;
-        >.el-tree-node__content{
-          .tree-btn{
-            display: block;
+  #dictionary{
+    height: 100%;
+    .dic_content{
+      .dictionary_left{
+        border: 1px solid #dfe6fb;
+        border-radius: 5px;
+        .dictionary_top{
+          padding: 10px;
+          background: #dfe6fb;
+          display: flex;
+          justify-content: space-between;
+        }
+        .expand-tree{
+          .is-current{
+            overflow:hidden;
+            >.el-tree-node__content{
+              .tree-btn{
+                display: block;
+              }
+              .tree-label{
+                font-weight:600;
+                white-space:normal;
+              }
+            }
           }
-          .tree-label{
-            font-weight:600;
-            white-space:normal;
+
+          .el-tree-node{
+            &:hover{
+              overflow:hidden;
+            }
+          }
+
+          .el-tree-node__content{
+            height: 30px;
+            &:hover .tree-btn{
+              display:inline-block;
+            }
           }
         }
       }
 
-      .el-tree-node{
-        &:hover{
-          overflow:hidden;
-        }
-      }
-
-      .el-tree-node__content{
-        height: 30px;
-        &:hover .tree-btn{
-          display:inline-block;
-        }
+      .dictionary_right{
+        border: 1px solid #dfe6fb;
+        border-radius: 5px;
+        height: 708px;
       }
     }
   }
-
-  /*.expand-tree .el-tree-node.is-current,*/
-  /*.expand-tree .el-tree-node:hover{*/
-    /*overflow:hidden;*/
-  /*}*/
-  /*.expand-tree .is-current>.el-tree-node__content .tree-btn,*/
-  /*.expand-tree .el-tree-node__content:hover .tree-btn{*/
-    /*display:inline-block;*/
-  /*}*/
-  /*.expand-tree .is-current>.el-tree-node__content .tree-label{*/
-    /*font-weight:600;*/
-    /*white-space:normal;*/
-  /*}*/
-
-
 </style>

@@ -2,7 +2,7 @@
   <div id="advancedSearch">
     <el-dialog title="高级搜索" :visible.sync="advancedDialogVisible" width="40%">
       <div>
-        <el-form :inline="true" size="small" :model="formInline" class="demo-form-inline">
+        <el-form :inline="true" size="mini" :model="formInline" class="demo-form-inline">
           <el-row :gutter="0">
             <el-col :span="6">
               <el-form-item>
@@ -66,23 +66,7 @@
     }
   };
 </script>
-<style lang="scss">
-  #advancedSearch{
-    .el-dialog__wrapper{
-      .el-dialog{
-        .el-dialog__header{
-          border-bottom: 1px solid #eee;
-          .el-dialog__title{
-            color: #409EFF;
-            line-height: 0;
-            font-size: 16px;
-          }
-        }
-        .el-dialog__body{
-          padding: 15px;
-        }
-      }
-    }
-  }
+<style scoped="" lang="scss">
+
 
 </style>

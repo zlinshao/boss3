@@ -3,7 +3,7 @@
     <el-dialog title="选人" :visible.sync="dialogFormVisible" width="785px" center>
      <div class="content">
        <div class="content_left" @click="inputFocus">
-           <el-select id="search"
+           <el-select id="search" size="small"
              v-model="selectMember"
              multiple
              filterable
@@ -194,19 +194,9 @@
   #organizationId{
     .el-dialog__wrapper{
       .el-dialog{
-        .el-dialog__header{
-          padding: 15px 0;
-          .el-dialog__title{
-            font-size: 16px;
-          }
-        }
-
         .el-dialog__body{
-          padding: 15px;
-          background: #F8F8F8;
           .content{
             height: 442px;
-            background: #F8F8F8;
             font-size: 0;
             .content_left{
               font-size: 14px;
@@ -314,7 +304,6 @@
           }
         }
         .el-dialog__footer{
-          padding: 10px 15px 15px;
           .dialog-footer{
             .el-button{
               padding: 10px 20px;

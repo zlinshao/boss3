@@ -2,6 +2,7 @@
   .el-dialog{
     .el-dialog__header{
       border-bottom: 1px solid #eee;
+      padding: 15px;
       .el-dialog__title{
         color: #409EFF;
         line-height: 0;
@@ -10,15 +11,50 @@
     }
     .el-dialog__body{
       padding: 15px;
+      font-size: 12px !important;
       .el-form{
         .el-form-item--small.el-form-item {
           margin-bottom: 18px;
         }
       }
+      .title{
+        color: #409EFF;
+        opacity: .7;
+      }
+
+      .el-input,.el-select ,.el-date-editor {
+        width: 100%;
+      }
+
+      .describe_border{
+        padding: 15px 10px;
+        border: 1px solid #dfe6fb;
+        border-radius: 5px;
+        margin-bottom: 15px;
+      }
+
+      .form_border{
+        padding: 18px 10px 0 10px;
+        margin-bottom: 15px;
+        border: 1px solid #dfe6fb;
+        border-radius: 5px;
+      }
+      .table_border{
+        font-size: 12px;
+        margin-bottom: 15px;
+        border: 1px solid rgba(64,158,255,.12);
+        box-shadow: 0 2px 4px 0 rgba(64,158,255,.12), 0 0 6px 0 rgba(64,158,255,.04);
+      }
     }
   }
 }
 #organizationId{
+  .el-dialog__body{
+    background: #F8F8F8 !important;
+  }
+  .el-dialog__footer{
+    padding: 15px ;
+  }
   .el-select {
     display: block;
     .el-input__inner {
@@ -29,7 +65,7 @@
 
 .el-select-dropdown{
   .el-select-dropdown__wrap{
-    max-height: 402px;
+    max-height: 410px;
   }
 }
 .el-table {
@@ -52,3 +88,9 @@
     }
   }
 }
+
+.el-form-item__label{
+  font-size: 12px !important;
+}
+
+

@@ -1,21 +1,47 @@
 .el-dialog__wrapper .el-dialog .el-dialog__header {
-  border-bottom: 1px solid #eee; }
+  border-bottom: 1px solid #eee;
+  padding: 15px; }
   .el-dialog__wrapper .el-dialog .el-dialog__header .el-dialog__title {
     color: #409EFF;
     line-height: 0;
     font-size: 16px; }
 .el-dialog__wrapper .el-dialog .el-dialog__body {
-  padding: 15px; }
+  padding: 15px;
+  font-size: 12px !important; }
   .el-dialog__wrapper .el-dialog .el-dialog__body .el-form .el-form-item--small.el-form-item {
     margin-bottom: 18px; }
+  .el-dialog__wrapper .el-dialog .el-dialog__body .title {
+    color: #409EFF;
+    opacity: .7; }
+  .el-dialog__wrapper .el-dialog .el-dialog__body .el-input, .el-dialog__wrapper .el-dialog .el-dialog__body .el-select, .el-dialog__wrapper .el-dialog .el-dialog__body .el-date-editor {
+    width: 100%; }
+  .el-dialog__wrapper .el-dialog .el-dialog__body .describe_border {
+    padding: 15px 10px;
+    border: 1px solid #dfe6fb;
+    border-radius: 5px;
+    margin-bottom: 15px; }
+  .el-dialog__wrapper .el-dialog .el-dialog__body .form_border {
+    padding: 18px 10px 0 10px;
+    margin-bottom: 15px;
+    border: 1px solid #dfe6fb;
+    border-radius: 5px; }
+  .el-dialog__wrapper .el-dialog .el-dialog__body .table_border {
+    font-size: 12px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(64, 158, 255, 0.12);
+    box-shadow: 0 2px 4px 0 rgba(64, 158, 255, 0.12), 0 0 6px 0 rgba(64, 158, 255, 0.04); }
 
+#organizationId .el-dialog__body {
+  background: #F8F8F8 !important; }
+#organizationId .el-dialog__footer {
+  padding: 15px; }
 #organizationId .el-select {
   display: block; }
   #organizationId .el-select .el-input__inner {
     border: none; }
 
 .el-select-dropdown .el-select-dropdown__wrap {
-  max-height: 402px; }
+  max-height: 410px; }
 
 .el-table th {
   background-color: #dfe6fb !important; }
@@ -25,5 +51,8 @@
 
 .greenTable .el-table th {
   background-color: #d4f0de !important; }
+
+.el-form-item__label {
+  font-size: 12px !important; }
 
 /*# sourceMappingURL=reset.css.map */

@@ -57,7 +57,7 @@
               if (latestView) {
                 this.$router.push(latestView.path)
               } else {
-                this.$router.push('/')
+                this.$router.push('/main')
               }
             }
           })

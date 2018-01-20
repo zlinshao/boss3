@@ -54,31 +54,6 @@
     }
   };
 </script>
-<style lang="scss">
-  #back_up{
-    .el-dialog__wrapper{
-      .el-dialog{
-        .el-dialog__header{
-          border-bottom: 1px solid #eee;
-          .el-dialog__title{
-            color: #409EFF;
-            line-height: 0;
-            font-size: 16px;
-          }
-        }
-        .el-dialog__body{
-          padding: 15px;
-          >div{
-            border: 1px solid #dfe6fb;
-            .el-table{
-              th{
-                background-color: #dfe6fb;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
+<style lang="scss" scoped="">
 
 </style>

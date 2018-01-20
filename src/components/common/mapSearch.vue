@@ -3,7 +3,7 @@
     <el-dialog title="地图" :visible.sync="mapFormVisible" width="785px" :before-close="closeDialog">
       <div class="content">
         <div class="filter-container">
-          <el-form :inline="true" class="demo-form-inline">
+          <el-form :inline="true" size="mini" class="demo-form-inline">
             <el-form-item>
               <el-select v-model="chooseCity" placeholder="请选择城市">
                 <el-option label="南京市" value="南京市"></el-option>
@@ -46,8 +46,8 @@
       </div>
 
       <div slot="footer" class="dialog-footer">
-        <el-button @click="closeDialog">取 消</el-button>
-        <el-button type="primary" @click="closeDialog('yes')">确 定</el-button>
+        <el-button size="small" @click="closeDialog">取 消</el-button>
+        <el-button size="small" type="primary" @click="closeDialog('yes')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -131,11 +131,6 @@
   #mapSearchId{
     .el-dialog__wrapper{
       .el-dialog{
-        /*.el-dialog__header{*/
-          /*.el-dialog__title{*/
-            /*font-size: 16px;*/
-          /*}*/
-        /*}*/
         .el-dialog__body{
           .content{
             .filter-container{

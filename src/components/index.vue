@@ -1,16 +1,16 @@
 <template>
- <div id="index" @click="clickScreen">
-   <div class="navBar">
-     <div class="left">
-       <div class="logo">
-         <div class="boss">BOSS</div>
-         <div class="el-icons-fa-bars" @click="changeCollapse"></div>
-       </div>
-       <div class="slogan">
-         <img src="../assets/slogan.png" alt="">
-       </div>
-     </div>
-     <div class="right">
+  <div id="index" @click="clickScreen">
+    <div class="navBar">
+      <div class="left">
+        <div class="logo">
+          <div class="boss">BOSS</div>
+          <div class="el-icons-fa-bars" @click="changeCollapse"></div>
+        </div>
+        <div class="slogan">
+          <img src="../assets/slogan.png" alt="">
+        </div>
+      </div>
+      <div class="right">
         <div class="countdown">
           <el-tooltip class="item" effect="dark" content="锁屏" placement="bottom">
             <i class="el-icon-time" @click="lockScreen"></i>
@@ -57,57 +57,57 @@
             </el-dropdown-menu>
           </el-dropdown>
         </div>
-     </div>
-   </div>
+      </div>
+    </div>
 
-   <div class="contentBox" :class="isCollapse? 'hideSidebar' : ''">
-     <el-container>
-       <div class="aside scroll_bar">
-         <el-menu :default-active="$route.path" class="el-menu-vertical-demo" unique-opened
-                  :collapse="isCollapse" @open="handleOpen" @close="handleClose" router
-                  background-color="#6a8dfb" text-color="#fff" active-text-color="#ffd04b">
-           <template v-for="(item,index) in $router.options.routes">
-             <!--一级菜单-->
-             <el-menu-item  v-if="item.hidden" v-for="child in item.children" :index="child.path" :key="child.path">
-               <i :class="child.icon"></i>
-               <span slot="title"> {{child.name}}</span>
-             </el-menu-item>
+    <div class="contentBox" :class="isCollapse? 'hideSidebar' : ''">
+      <el-container>
+        <div class="aside scroll_bar">
+          <el-menu :default-active="$route.path" class="el-menu-vertical-demo" unique-opened
+                   :collapse="isCollapse" @open="handleOpen" @close="handleClose" router
+                   background-color="#6a8dfb" text-color="#fff" active-text-color="#ffd04b">
+            <template v-for="(item,index) in $router.options.routes">
+              <!--一级菜单-->
+              <el-menu-item  v-if="item.hidden" v-for="child in item.children" :index="child.path" :key="child.path">
+                <i :class="child.icon"></i>
+                <span slot="title"> {{child.name}}</span>
+              </el-menu-item>
 
-             <el-submenu :index="index+''" v-if="!item.hidden">
-               <template slot="title">
-                 <i :class="item.icon"></i>
-                 <span>{{item.name}}</span>
-               </template>
-               <template v-for="(child,key) in item.children">
-                 <!--三级菜单-->
-                 <el-submenu :index="child.path" v-if="child.children" style="padding-left: 14px">
-                   <template slot="title">
-                     <i :class="child.icon"></i>
-                     <span>{{child.name}}</span>
-                   </template>
-                   <el-menu-item v-for="last in child.children" :index="last.path" :key="last.path"  style="padding-left: 74px">
-                     {{last.name}}
-                   </el-menu-item>
-                 </el-submenu>
-                 <!--二级菜单-->
-                 <el-menu-item v-if="!child.children" :index="child.path" :key="child.path" style="padding-left: 54px">
-                   <i :class="child.icon"></i>
-                   <span>{{child.name}}</span>
-                 </el-menu-item>
-               </template>
-             </el-submenu>
-           </template>
-         </el-menu>
-       </div>
-       <el-main>
-         <TagsView></TagsView>
-         <div style="padding: 10px;background: #fff">
-           <router-view></router-view>
-         </div>
-       </el-main>
-     </el-container>
-   </div>
- </div>
+              <el-submenu :index="index+''" v-if="!item.hidden">
+                <template slot="title">
+                  <i :class="item.icon"></i>
+                  <span>{{item.name}}</span>
+                </template>
+                <template v-for="(child,key) in item.children">
+                  <!--三级菜单-->
+                  <el-submenu :index="child.path" v-if="child.children" style="padding-left: 14px">
+                    <template slot="title">
+                      <i :class="child.icon"></i>
+                      <span>{{child.name}}</span>
+                    </template>
+                    <el-menu-item v-for="last in child.children" :index="last.path" :key="last.path"  style="padding-left: 74px">
+                      {{last.name}}
+                    </el-menu-item>
+                  </el-submenu>
+                  <!--二级菜单-->
+                  <el-menu-item v-if="!child.children" :index="child.path" :key="child.path" style="padding-left: 54px">
+                    <i :class="child.icon"></i>
+                    <span>{{child.name}}</span>
+                  </el-menu-item>
+                </template>
+              </el-submenu>
+            </template>
+          </el-menu>
+        </div>
+        <el-main>
+          <TagsView></TagsView>
+          <div style="padding: 10px;background: #fff">
+            <router-view></router-view>
+          </div>
+        </el-main>
+      </el-container>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -124,7 +124,7 @@
       }
     },
     mounted(){
-        this.countTime();
+      this.countTime();
     },
     computed: {
       visitedViews() {
