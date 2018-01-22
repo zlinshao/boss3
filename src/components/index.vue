@@ -274,7 +274,7 @@
           top: 80px;
           height: 100%;
           z-index: 56;
-
+          overflow: auto;
           [class^="el-icons-fa"], [class*=" el-icons-fa"]{
             vertical-align: middle;
             margin-right: 5px;

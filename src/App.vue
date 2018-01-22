@@ -59,7 +59,7 @@ export default {
       }
     }
     &::-webkit-scrollbar {
-      width: 6px;
+      width: 4px;
     }
 
     &::-webkit-scrollbar-button {
@@ -69,12 +69,10 @@ export default {
 
     &::-webkit-scrollbar-track {
       background: #eee;
-      border-radius: 3px;
     }
 
     &::-webkit-scrollbar-thumb {
       background: #6a8dfb;
-      border-radius: 3px;
     }
   }
   .scroll_bar{

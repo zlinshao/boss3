@@ -80,7 +80,7 @@
 
   .dropzone {
     border: 1px solid #dcdfe6;
-    min-height: 40px;
+    min-height: 32px;
     border-radius: 4px;
     color: #fff;
     transition: background-color .2s linear;
@@ -88,23 +88,6 @@
     &:hover {
       background-color: #ffffff;
     }
-    /*.dz-image {*/
-      /*img {*/
-        /*width: 100%;*/
-        /*height: 100%;*/
-      /*}*/
-    /*}*/
-    /*input[name='file'] {*/
-      /*display: none;*/
-    /*}*/
-    /*.dz-preview{*/
-      /*&:hover .dz-image img {*/
-        /*transform: none;*/
-        /*-webkit-filter: none;*/
-        /*width: 100%;*/
-        /*height: 100%;*/
-      /*}*/
-    /*}*/
   }
 
 </style>
