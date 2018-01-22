@@ -770,6 +770,7 @@
     <AddHouseResources :addHouseResourcesDialog="addHouseResourcesDialog" @close="closeAddHouseResources"></AddHouseResources>
     <Repayment :repaymentDialog="repaymentDialog" @close="closeRepayment"></Repayment>
     <ReturnVisit :returnVisitDialog="returnVisitDialog" @close="closeReturnVisit"></ReturnVisit>
+    <TopForm :topFormSetDialog="topFormSetDialog" @close="closeTopForm"></TopForm>
   </div>
 </template>
 
@@ -796,6 +797,7 @@
   import AddHouseResources from '../components/addHouseResources.vue' //登记房源
   import Repayment from '../components/rentRepayment.vue'
   import ReturnVisit from '../components/returnVisit.vue'   //查看回访
+  import TopForm from '../components/topFormSet.vue'
 
   export default {
     name: 'hello',
@@ -821,7 +823,8 @@
       SendMessage,
       AddHouseResources,
       Repayment,
-      ReturnVisit
+      ReturnVisit,
+      TopForm
     },
     data () {
       return {
@@ -852,6 +855,7 @@
         addHouseResourcesDialog:false,  //登记房源
         repaymentDialog:false,        //还款
         returnVisitDialog:false,      //查看回访
+        topFormSetDialog:false,       //选择列
 
         formInline: {
           name: '',
@@ -1076,7 +1080,7 @@
       //合同表头右键
       houseHeadMenu(e){
         this.lists = [
-          {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
+          {clickIndex: 'topFormSetDialog', headIcon: 'el-icons-fa-home', label: '选择列选项',},
         ];
         this.contextMenuParam(event);
       },
@@ -1214,6 +1218,9 @@
           case 'switchToJoint':     //转到合租
             this.switchToJoint();
             break;
+          case 'topFormSetDialog':     //转到合租
+            this.topFormSetDialog = true;
+            break;
         }
 
       },
@@ -1296,6 +1303,9 @@
       },
       closeReturnVisit(){
         this.returnVisitDialog = false;
+      },
+      closeTopForm(){
+        this.topFormSetDialog = false;
       }
     }
   }
