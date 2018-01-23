@@ -1,15 +1,17 @@
 <template>
-  <div>
+  <div @click="show=false" @contextmenu="show=false">
     <div class="filter">
       <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">
-        <el-form-item label="选择部门">
+        <el-form-item label="选择领取人">
+          <el-input readonly="" @focus="openOrganizationModal('staff')" placeholder="点击选择"></el-input>
+        </el-form-item>
+        <el-form-item label="选择领取部门">
           <el-input readonly="" @focus="openOrganizationModal('department')" placeholder="点击选择"></el-input>
         </el-form-item>
-        <el-form-item label="合同分类">
-          <el-select clearable v-model="formInline.region" placeholder="请选择合同分类">
-            <el-option label="领取" value="shanghai"></el-option>
-            <el-option label="作废" value="beijing"></el-option>
-            <el-option label="上缴" value="beijing"></el-option>
+        <el-form-item label="选择状态">
+          <el-select v-model="formInline.region" placeholder="请选择状态">
+            <el-option label="区域一" value="shanghai"></el-option>
+            <el-option label="区域二" value="beijing"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -27,47 +29,51 @@
       <div class="blueTable">
         <el-table
           :data="tableData"
-          @row-dblclick = 'showContractDetail'
+          @row-contextmenu='openContextMenu'
           style="width: 100%">
           <el-table-column
             prop="date"
-            label="部门">
+            label="名称">
           </el-table-column>
           <el-table-column
             prop="name"
-            label="姓名">
+            label="单位">
           </el-table-column>
           <el-table-column
             prop="name"
-            label="剩余合同书（收）">
+            label="数量">
           </el-table-column>
           <el-table-column
             prop="name"
-            label="剩余合同书（租）">
+            label="规格">
           </el-table-column>
           <el-table-column
             prop="name"
-            label="已领取合同数（收）">
+            label="颜色">
           </el-table-column>
           <el-table-column
             prop="name"
-            label="已领取合同数（租）">
+            label="品牌">
           </el-table-column>
           <el-table-column
             prop="name"
-            label="已作废合同数（收）">
+            label="单价">
           </el-table-column>
           <el-table-column
             prop="name"
-            label="已作废合同数（租）">
+            label="入库时间">
           </el-table-column>
           <el-table-column
             prop="name"
-            label="已上缴合同数（收）">
+            label="库存数量">
           </el-table-column>
           <el-table-column
             prop="name"
-            label="已上缴合同数（租）">
+            label="库存金额">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="备注">
           </el-table-column>
         </el-table>
       </div>
@@ -85,20 +91,29 @@
         </div>
       </div>
     </div>
+    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+               @clickOperate="clickEvent"></RightMenu>
+
+    <AddSupplies :isReverse="isReverse" :addSuppliesDialog="addSuppliesDialog" @close="closeAddSupplies"></AddSupplies>
 
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
-    <Contact :contractDialog="contractDialog" @close="closeContract"></Contact>
   </div>
 </template>
 
 <script>
-  import Organization from '../../common/organization.vue'
-  import Contact from './components/contractDetail.vue'
+  import RightMenu from '../../../common/contextMenu/rightMenu.vue'    //右键
+  import AddSupplies from '../components/addSupplies.vue'
+  import Organization from '../../../common/organization.vue'
 
   export default {
-    components:{Organization,Contact},
+    components:{RightMenu,AddSupplies,Organization},
     data () {
       return {
+        rightMenuX: 0,
+        rightMenuY: 0,
+        show: false,
+        lists: [],
+        /***********/
         formInline:{},
         tableData: [
           {
@@ -143,8 +158,9 @@
           }
         ],
         currentPage: 1,
+        addSuppliesDialog:false,
+        isReverse: false,
         organizationDialog:false,
-        contractDialog: false,  //合同详情
       }
     },
     methods:{
@@ -154,18 +170,57 @@
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
       },
-
+      clickTable(row, event, column){
+        console.log(row, event, column)
+      },
+      openContextMenu(row, event){
+        this.lists=[
+          {clickIndex: 'reverseSuppliesDialog', headIcon: 'el-icon-edit', label: '修改信息',},
+          {clickIndex: 'reverseSuppliesDialog', headIcon: 'el-icons-fa-hdd-o', label: '物品领取',},
+          {clickIndex: 'reverseSuppliesDialog', headIcon: 'el-icons-fa-mail-reply', label: '物品借用',},
+          {clickIndex: 'reverseSuppliesDialog', headIcon: 'el-icons-fa-mail-forward', label: '物品归还',},
+//          {clickIndex: 'reverseSuppliesDialog', headIcon: 'el-icon-circle-close-outline', label: '添加备注',},
+          {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',},
+        ];
+        let e = event || window.event;	//support firefox contextmenu
+        this.show = false;
+        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true
+        })
+      },
+      //右键回调时间
+      clickEvent (index) {
+        this.openModal(index);
+      },
       openOrganizationModal(){
         this.organizationDialog = true
       },
+      deleteInfo(){
+        this.$confirm('删除后不可恢复, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      },
+      closeAddSupplies(){
+        this.addSuppliesDialog = false;
+      },
       closeOrganization(){
         this.organizationDialog = false;
-      },
-      showContractDetail(){   //显示合同详情
-          this.contractDialog = true
-      },
-      closeContract(){
-          this.contractDialog = false;
       }
     }
 

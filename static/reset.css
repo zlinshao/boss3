@@ -55,4 +55,16 @@
 .el-form-item__label {
   font-size: 12px !important; }
 
+.tool {
+  border-bottom: 1px solid #eee;
+  display: flex;
+  padding-bottom: 10px;
+  justify-content: space-between; }
+  .tool .tool_right {
+    display: flex;
+    align-items: center; }
+
+.filter {
+  padding-top: 10px; }
+
 /*# sourceMappingURL=reset.css.map */

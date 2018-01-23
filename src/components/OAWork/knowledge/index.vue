@@ -281,6 +281,7 @@
 <style lang="scss">
     .main{
       .dictionary_left{
+        /*height: 100%;*/
         border: 1px solid #dfe6fb;
         border-radius: 5px;
         .dictionary_top{
