@@ -1,16 +1,18 @@
 <template>
-    <h1>this is region</h1>
+  <div id="property">
+    <router-view></router-view>
+  </div>
 </template>
 
 <script>
-    export default {
-        name: 'hello',
-        data () {
-            return {
-                msg: 'Welcome to Your Vue.js App'
-            }
-        }
+  export default {
+    name: 'property',
+    data () {
+      return {
+
+      }
     }
+  }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

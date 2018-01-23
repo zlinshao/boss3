@@ -1,6 +1,6 @@
 <template>
   <div id="organizationId">
-    <el-dialog title="选人" :visible.sync="dialogFormVisible" width="785px" center>
+    <el-dialog title="选人" :visible.sync="organizationVisible" width="785px" center>
      <div class="content">
        <div class="content_left" @click="inputFocus">
            <el-select id="search" size="small"
@@ -61,8 +61,8 @@
      </div>
 
       <div slot="footer" class="dialog-footer">
-        <!--<el-button @click="dialogFormVisible = false">取 消</el-button>-->
-        <el-button type="primary" :disabled="buttonStatus" @click="dialogFormVisible = false">确 定</el-button>
+        <!--<el-button @click="organizationVisible = false">取 消</el-button>-->
+        <el-button type="primary" :disabled="buttonStatus" @click="organizationVisible = false">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -70,10 +70,10 @@
 
 <script>
   export default {
-    props:['FormVisible'],
+    props:['organizationDialog'],
     data () {
       return {
-        dialogFormVisible: false,
+        organizationVisible: false,
         formLabelWidth: '120px',
         buttonStatus :true,
         searchItems: [],    //搜索到人员
@@ -105,10 +105,10 @@
       });
     },
     watch:{
-      FormVisible(val){
-        this.dialogFormVisible = val
+      organizationDialog(val){
+        this.organizationVisible = val
       },
-      dialogFormVisible(val){
+      organizationVisible(val){
         if(!val){
           this.$emit('close')
         }

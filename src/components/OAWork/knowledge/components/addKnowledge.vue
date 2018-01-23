@@ -1,12 +1,27 @@
 <template>
   <div>
-    <el-dialog title="制度上传" :visible.sync="addInstitutionDialogVisible" width="40%">
+    <el-dialog title="制度上传" :visible.sync="addKnowledgeDialogVisible" width="40%">
       <div>
         <el-form size="small" label-width="100px" :modal="formInline">
           <el-row>
             <el-col :span="22">
               <el-form-item label="标题" required>
                 <el-input placeholder="请输入内容"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="11">
+              <el-form-item label="作者" required>
+                <el-input placeholder="请输入内容"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="11">
+              <el-form-item label="知识类型" required>
+                <el-select v-model="formInline.region" placeholder="请选择活动区域">
+                  <el-option label="区域一" value="shanghai"></el-option>
+                  <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
@@ -36,8 +51,8 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="addInstitutionDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="addInstitutionDialogVisible = false">确 定</el-button>
+        <el-button size="small" @click="addKnowledgeDialogVisible = false">取 消</el-button>
+        <el-button size="small" type="primary" @click="addKnowledgeDialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
@@ -48,11 +63,11 @@
   import Organization from '../../../common/organization.vue'
   import DropZone from '../../../common/dropzone.vue'
   export default {
-    props:['addInstitutionDialog'],
+    props:['addKnowledgeDialog'],
     components:{Organization,DropZone},
     data() {
       return {
-        addInstitutionDialogVisible:false,
+        addKnowledgeDialogVisible:false,
         organizationDialog: false,
         formInline: {region:''},
         tableData:[],
@@ -60,10 +75,10 @@
       };
     },
     watch:{
-      addInstitutionDialog(val){
-        this.addInstitutionDialogVisible = val
+      addKnowledgeDialog(val){
+        this.addKnowledgeDialogVisible = val
       },
-      addInstitutionDialogVisible(val){
+      addKnowledgeDialogVisible(val){
         if(!val){
           this.$emit('close')
         }

@@ -37,9 +37,14 @@ import Programme from '../components/OAWork/programme/index.vue'
 import Knowledge from '../components/OAWork/knowledge/index.vue'
 import Institution from '../components/OAWork/institution/index.vue'
 import Portals from '../components/OAWork/portals/index.vue'
-import Property from '../components/OAWork/property/index.vue'
 import Vote from '../components/OAWork/vote/index.vue'
 import ContractClaim from '../components/OAWork/contractClaim/index.vue'
+import Property from '../components/OAWork/property/index.vue'
+import SuppliesUse from '../components/OAWork/property/items/officeSuppliesUse.vue'
+import SuppliesGather from '../components/OAWork/property/officeSuppliesGather/ officeSuppliesGather.vue'
+import CapitalChange from '../components/OAWork/property/items/capitalAssetsChange.vue'
+import CapitalGather from '../components/OAWork/property/items/capitalAssetsGather.vue'
+
 
 //人资管理
 import StaffManage from '../components/humanResource/staffManage/index.vue'
@@ -105,11 +110,19 @@ export default new Router({
       name: 'OA办公',
       icon:'el-icons-fa-clipboard',
       children: [
+        { path: '/property', component: Property, icon:'el-icons-fa-money',name: '资产管理',
+          children:[
+            { path: '/property/suppliesUse',component: SuppliesUse, name: '办公用品申领'},
+            { path: '/property/suppliesGather',component: SuppliesGather, name: '办公用品汇总'},
+            { path: '/property/capitalChange',component: CapitalChange, name: '固定资产异动'},
+            { path: '/property/capitalGather',component: CapitalGather, name: '固定资产汇总'},
+          ]
+        },
+
         { path: '/communication', component: Communication, name: '通讯管理',},
         { path: '/programme', component: Programme, name: '日程管理',},
         { path: '/knowledge', component: Knowledge, name: '知识管理',},
         { path: '/institution', component: Institution, name: '制度管理',},
-        { path: '/property', component: Property, name: '资产管理',},
         { path: '/portals', component: Portals, name: '门户管理',},
         { path: '/vote', component: Vote, name: '投票管理',},
         { path: '/contractClaim', component: ContractClaim, name: '合同认领',},

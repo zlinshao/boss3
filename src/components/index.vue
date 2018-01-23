@@ -64,7 +64,7 @@
       <el-container>
         <div class="aside scroll_bar">
           <el-menu :default-active="$route.path" class="el-menu-vertical-demo" unique-opened
-                   :collapse="isCollapse" @open="handleOpen" @close="handleClose" router
+                   :collapse="isCollapse" router
                    background-color="#6a8dfb" text-color="#fff" active-text-color="#ffd04b">
             <template v-for="(item,index) in $router.options.routes">
               <!--一级菜单-->
@@ -132,8 +132,6 @@
       }
     },
     methods: {
-      handleOpen(key, keyPath) { console.log(key);},
-      handleClose(key, keyPath) { console.log(key);},
       clickScreen(){
         this.screenStatus = true;
       },
@@ -178,6 +176,7 @@
 
 <style lang="scss">
   #index{
+    min-height: 100%;
     .navBar{
       width: 100%;
       height: 80px;
@@ -274,7 +273,7 @@
           top: 80px;
           height: 100%;
           z-index: 56;
-
+          overflow: auto;
           [class^="el-icons-fa"], [class*=" el-icons-fa"]{
             vertical-align: middle;
             margin-right: 5px;

@@ -15,7 +15,7 @@
             </el-input>
           </el-form-item>
           <el-form-item style="float: right">
-            <el-button type="success" @click="addInstitution">点击上传</el-button>
+            <el-button type="primary" @click="addInstitution">点击上传</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -24,7 +24,6 @@
           <div class="blueTable">
             <el-table
               :data="tableData"
-              @row-click="clickTable"
               style="width: 100%">
               <el-table-column
                 prop="date"
@@ -34,9 +33,14 @@
                 prop="name"
                 label="部门">
               </el-table-column>
-              <el-table-column
-                prop="province"
-                label="省份">
+              <el-table-column label="操作">
+                <template slot-scope="scope">
+                  <el-button size="mini" type="text">
+                    <i class="el-icon-delete"></i>
+                    <i class="el-icons-fa-cloud-download"></i>
+                    <i class="el-icon-edit-outline"></i>
+                  </el-button>
+                </template>
               </el-table-column>
             </el-table>
           </div>
@@ -56,24 +60,18 @@
         </div>
       </div>
     </div>
-    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-               @clickOperate="clickEvent"></RightMenu>
+
     <AddInstitution :addInstitutionDialog="addInstitutionDialog" @close="closeAddInstitution"></AddInstitution>
   </div>
 </template>
 
 <script>
-  import RightMenu from '../../common/contextMenu/rightMenu.vue'
   import AddInstitution from './components/addInstitution.vue'
   export default {
     name: 'hello',
-    components: {RightMenu,AddInstitution},
+    components: {AddInstitution},
     data () {
       return {
-        rightMenuX: 0,
-        rightMenuY: 0,
-        show: false,
-        lists: [],
         /***********/
         addInstitutionDialog:false,
         formInline: {

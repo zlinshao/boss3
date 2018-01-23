@@ -125,7 +125,7 @@
         this.$message({ message: '删除成功', type: 'success' })
       },
       dropzoneALL(val){
-          alert(val)
+
       }
     }
   }
