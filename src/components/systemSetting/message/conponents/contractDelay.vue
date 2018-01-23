@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="收货地址" :visible.sync="dialogFormVisible" :modal="false" width="50%">
+    <el-dialog title="收货地址" :visible.sync="dialogFormVisible" :modal="true" width="50%">
       <el-tabs @tab-click="handleClick" v-model="activeName">
         <el-tab-pane label="用户管理" name="first">
           <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" size="small" class="demo-ruleForm">

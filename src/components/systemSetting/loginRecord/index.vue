@@ -1,225 +1,96 @@
 <template>
-  <div >
-    <div>
-      <div class="filter-container">
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
-          <el-form-item label="登录人 ">
-            <el-input v-model="formInline.user" placeholder="审批人"></el-input>
-          </el-form-item>
-          <el-form-item label="登陆时间">
+  <div>
+    <div class="filter">
+      <el-form :inline="true" ref="form" :model="sizeForm" label-width="80px" size="mini">
+        <el-form-item label="登陆时间">
+          <div class="block">
             <el-date-picker
-              v-model="dateValue"
+              v-model="sizeForm.date"
               type="daterange"
+              align="right"
               unlink-panels
               range-separator="至"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
               :picker-options="pickerOptions">
             </el-date-picker>
-          </el-form-item>
-
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-
-      <el-table
-        :data="tableData"
-        @selection-change="handleSelectionChange"
-        style="width: 100%">
-        <el-table-column
-          type="selection"
-          width="55">
-        </el-table-column>
-        <el-table-column
-          prop="date"
-          label="日期"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="name"
-          label="姓名"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="address"
-          label="地址">
-        </el-table-column>
-        <el-table-column label="进度条">
-          <template slot-scope="scope">
-            <el-progress :stroke-width="8" :percentage="50"></el-progress>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作">
-          <template slot-scope="scope">
-            <el-button
-              size="mini"
-              @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-
-      <div class="block">
-        <el-pagination
-          background
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[100, 200, 300, 400]"
-          :page-size="100"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="400">
-        </el-pagination>
-      </div>
+          </div>
+        </el-form-item>
+        <el-form-item label="登陆人">
+          <el-input v-model="sizeForm.staff_name" @focus="openModule" placeholder="请选择登陆人" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="登陆部门">
+          <el-input v-model="sizeForm.department_name" @focus="openModule" placeholder="请选择登陆部门" readonly></el-input>
+        </el-form-item>
+      </el-form>
     </div>
+
+    <el-table
+      :data="tableData"
+      style="width: 100%">
+      <el-table-column
+        prop="date"
+        label="登陆时间"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="登陆人"
+        width="180">
+      </el-table-column>
+      <el-table-column
+        prop="department"
+        label="部门">
+      </el-table-column>
+      <el-table-column
+        prop="corporate"
+        label="公司名称">
+      </el-table-column>
+      <el-table-column
+        prop="contents"
+        label="内容">
+      </el-table-column>
+      <el-table-column
+        prop="area"
+        label="登陆区域">
+      </el-table-column>
+      <el-table-column
+        prop="loginIP"
+        label="登陆IP">
+      </el-table-column>
+    </el-table>
+
+    <div class="block pages">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[20, 100, 200, 300, 400]"
+        :page-size="20"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="400">
+      </el-pagination>
+    </div>
+
+    <!--组织架构-->
+    <AddModule :FormVisible="module" @close="closeModule"></AddModule>
   </div>
 </template>
 
 <script>
+  import AddModule from '../../common/organization.vue'
+
   export default {
+    components: {AddModule},
     data() {
       return {
-        tableData: [
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }
-        ],
-        formInline: {
-          user: '',
-          region: '',
-          status:false,
+        currentPage: 1,       //分页
+        module: false,        //组织架构状态
+        sizeForm: {
+          staff_name: '',
+          department_name: '',
+          date: '',
         },
-        currentPage: 1,
-
-
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -247,37 +118,57 @@
             }
           }]
         },
-        dateValue: '',
-        loading : true,
-      }
-    },
-    mounted(){
-      this.getDate();
+        tableData: [
+          {
+            date: '2016-05-02',
+            name: '王小虎',
+            department: '研发部',
+            corporate: '公司名称',
+            contents: '仿佛回到是开发合理的萨芬了',
+            area: '江苏  南京',
+            loginIP: '192.163.1.1',
+          }, {
+            date: '2016-05-02',
+            name: '王小虎',
+            department: '研发部',
+            corporate: '公司名称',
+            contents: '仿佛回到是开发合理的萨芬了',
+            area: '江苏  南京',
+            loginIP: '192.163.1.1',
+          }, {
+            date: '2016-05-02',
+            name: '王小虎',
+            department: '研发部',
+            corporate: '公司名称',
+            contents: '仿佛回到是开发合理的萨芬了',
+            area: '江苏  南京',
+            loginIP: '192.163.1.1',
+          }, {
+            date: '2016-05-02',
+            name: '王小虎',
+            department: '研发部',
+            corporate: '公司名称',
+            contents: '仿佛回到是开发合理的萨芬了',
+            area: '江苏  南京',
+            loginIP: '192.163.1.1',
+          },
+        ],
+      };
     },
     methods: {
-      handleSelectionChange(val){
-          console.log(val)
+      // 登陆人
+      openModule() {
+        this.module = true;
       },
-      handleEdit(index, row) {
-        console.log(index, row);
-      },
-      onSubmit() {
-        console.log('submit!');
+      // 登陆人
+      closeModule() {
+        this.module = false;
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
-      },
-      getDate(){
-        new Promise((resolve,reject) => {
-          setTimeout(() => {
-            this.loading = false;
-            resolve('随便什么数据');
-          },2000)
-        }).then(function (data) {
-        })
       }
     }
   }
@@ -285,15 +176,14 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-  .filter-container{
-    padding: 20px 0 0 10px;
-    background: #ffffff;
-    margin-bottom: 10px;
-    .el-button{
-      padding: 10px 20px;
-    }
+  .filter {
+    margin-top: 10px;
   }
-  .block{
-    margin-top: 30px;
+
+  .block.pages {
+    display: flex;
+    display: -webkit-flex;
+    justify-content: flex-end;
+    margin: 20px 0 10px;
   }
 </style>

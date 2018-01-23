@@ -1,12 +1,8 @@
 <template>
-  <div >
+  <div>
     <div>
-      <div class="filter-container">
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
-          <el-form-item label="发送人">
-            <el-input v-model="formInline.user" placeholder="审批人"></el-input>
-          </el-form-item>
-
+      <div class="filter">
+        <el-form :inline="true" :model="formInline" class="demo-form-inline" size="mini">
           <el-form-item label="发送时间">
             <el-date-picker
               v-model="dateValue"
@@ -19,11 +15,10 @@
             </el-date-picker>
           </el-form-item>
 
-          <el-form-item>
-            <el-tooltip content="Top center" placement="top">
-              <el-button>Dark</el-button>
-            </el-tooltip>
+          <el-form-item label="发送人">
+            <el-input v-model="formInline.user" placeholder="发送人"></el-input>
           </el-form-item>
+
           <el-form-item>
             <el-button type="primary" @click="onSubmit">查询</el-button>
           </el-form-item>
@@ -32,39 +27,44 @@
 
 
       <el-table :data="tableData"
-        style="width: 100%">
+                style="width: 100%">
         <el-table-column
           prop="date"
-          label="日期"
+          label="短信生成时间"
           width="180">
         </el-table-column>
         <el-table-column
           prop="name"
-          label="姓名"
+          label="发送人"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="address"
-          label="地址">
+          prop="mobile"
+          label="接收人手机">
         </el-table-column>
         <el-table-column
-          prop="title"
-          label="title">
+          prop="types"
+          label="类型">
+        </el-table-column>
+        <el-table-column
+          prop="fruit"
+          label="结果">
         </el-table-column>
       </el-table>
 
-      <div class="block">
+      <div class="block pages">
         <el-pagination
-          background
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
-          :page-sizes="[10, 20, 30, 40]"
-          :page-size="10"
+          :page-sizes="[20, 100, 200, 300, 400]"
+          :page-size="20"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="40">
+          :total="400">
         </el-pagination>
       </div>
+
+
     </div>
   </div>
 </template>
@@ -77,76 +77,51 @@
           {
             date: '2016-05-02',
             name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            title:'这是一个title'
-          },
-          {
+            mobile: '18052111111',
+            types: '离职提醒',
+            fruit: '成功',
+          },  {
             date: '2016-05-02',
             name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            title:'这是一个title'
-          },
-          {
+            mobile: '18052111111',
+            types: '离职提醒',
+            fruit: '成功',
+          },  {
             date: '2016-05-02',
             name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            title:'这是一个title'
-          },
-          {
+            mobile: '18052111111',
+            types: '离职提醒',
+            fruit: '成功',
+          },  {
             date: '2016-05-02',
             name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            title:'这是一个title'
-          },
-          {
+            mobile: '18052111111',
+            types: '离职提醒',
+            fruit: '成功',
+          },  {
             date: '2016-05-02',
             name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            title:'这是一个title'
-          },
-          {
+            mobile: '18052111111',
+            types: '离职提醒',
+            fruit: '成功',
+          },  {
             date: '2016-05-02',
             name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            title:'这是一个title'
-          },
-          {
+            mobile: '18052111111',
+            types: '离职提醒',
+            fruit: '成功',
+          },  {
             date: '2016-05-02',
             name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            title:'这是一个title'
+            mobile: '18052111111',
+            types: '离职提醒',
+            fruit: '成功',
           },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            title:'这是一个title'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄'
-          }
         ],
         formInline: {
           user: '',
           region: '',
-          status:false,
+          status: false,
         },
         currentPage: 1,
 
@@ -160,7 +135,7 @@
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
               picker.$emit('pick', [start, end]);
             }
-          },{
+          }, {
             text: '未来一周',
             onClick(picker) {
               const start = new Date();
@@ -168,7 +143,7 @@
               end.setTime(start.getTime() + 3600 * 1000 * 24 * 7);
               picker.$emit('pick', [start, end]);
             },
-          },{
+          }, {
             text: '最近一个月',
             onClick(picker) {
               const end = new Date();
@@ -176,7 +151,7 @@
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
               picker.$emit('pick', [start, end]);
             }
-          },{
+          }, {
             text: '未来一个月',
             onClick(picker) {
               const start = new Date();
@@ -192,7 +167,7 @@
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
               picker.$emit('pick', [start, end]);
             },
-          },{
+          }, {
             text: '最近三个月',
             onClick(picker) {
               const start = new Date();
@@ -203,10 +178,10 @@
           }]
         },
         dateValue: [],
-        loading : true,
+        loading: true,
       }
     },
-    mounted(){
+    mounted() {
       this.getDate();
     },
     methods: {
@@ -219,13 +194,13 @@
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
       },
-      getDate(){
-        new Promise((resolve,reject) => {
+      getDate() {
+        new Promise((resolve, reject) => {
           setTimeout(() => {
             this.loading = false;
-            console.log('执行完成')
+            console.log('执行完成');
             resolve('随便什么数据');
-          },2000)
+          }, 2000)
         }).then(function (data) {
           console.log(data)
         })
@@ -236,15 +211,14 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-  .filter-container{
-    padding: 20px 0 0 10px;
-    background: #ffffff;
-    margin-bottom: 10px;
-    .el-button{
-      padding: 10px 20px;
-    }
+  .filter {
+    margin-top: 10px;
   }
-  .block{
-    margin-top: 30px;
+
+  .block.pages {
+    display: flex;
+    display: -webkit-flex;
+    justify-content: flex-end;
+    margin: 20px 0 12px;
   }
 </style>
