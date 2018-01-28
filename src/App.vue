@@ -75,6 +75,7 @@ export default {
       background: #6a8dfb;
     }
   }
+
   .scroll_bar{
     &::-webkit-scrollbar {
       width: 4px;
@@ -86,11 +87,13 @@ export default {
     }
 
     &::-webkit-scrollbar-track {
-      background: #eee;
+      background: #e4e7ed;
     }
 
     &::-webkit-scrollbar-thumb {
-      background: #bbb;
+      background: #c5cce2;
     }
   }
+
+
 </style>

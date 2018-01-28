@@ -99,6 +99,7 @@
             </template>
           </el-menu>
         </div>
+
         <el-main>
           <TagsView></TagsView>
           <div style="padding: 10px;background: #fff">
@@ -112,7 +113,7 @@
 
 <script>
   import Cookies from 'js-cookie'
-  import TagsView from './tagsView.vue'
+  import TagsView from './common/tagsView.vue'
   export default {
     name: 'Index',
     components:{TagsView},
