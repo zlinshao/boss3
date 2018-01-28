@@ -8,7 +8,7 @@
             <el-option v-for="(key,index) in values" :label="key" :value="index + 1" :key="index"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item>
+        <el-form-item label="补齐时间">
           <div class="block">
             <el-date-picker
               v-model="form.dates"
@@ -31,13 +31,6 @@
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="form.subject" placeholder="请选择科目" readonly>
-            <template slot="append">
-              <div style="cursor: pointer;" @click="close_">清空</div>
-            </template>
-          </el-input>
-        </el-form-item>
-        <el-form-item>
           <el-autocomplete
             class="inline-input"
             v-model="state" clearable
@@ -48,248 +41,284 @@
             <el-button slot="append" icon="el-icon-search"></el-button>
           </el-autocomplete>
         </el-form-item>
+
         <el-form-item>
-          <el-button type="primary" size="mini">导出</el-button>
+          <el-button type="text" @click="filterModule = true">
+            <i class="el-icon-plus"></i>&nbsp;高级筛选
+          </el-button>
         </el-form-item>
+
+        <!--刷新-->
         <el-form-item>
           <el-button type="primary"><i class="el-icon-refresh"></i></el-button>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" size="mini"><i class="el-icon-plus"></i>&nbsp;新增应付款项</el-button>
-        </el-form-item>
+
+        <el-dropdown @command="leadingOut">
+          <el-button type="primary" size="mini">
+            导hhd出<i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="collect">应收</el-dropdown-item>
+            <el-dropdown-item command="rent">应付</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+
+        <el-dropdown trigger="click" @command="newAdd">
+          <el-button type="primary" size="mini">
+            新增<i class="el-icon-arrow-down el-icon--right"></i>
+          </el-button>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="collect">应收</el-dropdown-item>
+            <el-dropdown-item command="rent">应付</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </el-form>
     </div>
-    <el-table
-      :data="tableData"
-      width="100%"
-      @row-contextmenu="houseMenu">
-      <el-table-column
-        label="第一次付款时间"
-        prop="date">
-      </el-table-column>
-      <el-table-column
-        label="第一次付款时间"
-        prop="date">
-      </el-table-column>
-      <el-table-column
-        label="合同时间周期"
-        prop="date">
-      </el-table-column>
-      <el-table-column
-        label="付款时间"
-        prop="date">
-      </el-table-column>
-      <el-table-column
-        label="付款时间"
-        prop="date">
-      </el-table-column>
-      <el-table-column
-        label="付款时间"
-        prop="date">
-      </el-table-column>
-      <el-table-column
-        label="付款时间"
-        prop="date">
-      </el-table-column>
-      <el-table-column
-        label="付款时间"
-        prop="date">
-      </el-table-column>
-      <el-table-column
-        label="付款时间"
-        prop="date">
-      </el-table-column>
-      <el-table-column
-        label="客户姓名"
-        prop="name">
-      </el-table-column>
-      <el-table-column
-        label="手机号"
-        prop="mobile"
-        width="100px">
-      </el-table-column>
-      <el-table-column
-        label="支出科目"
-        prop="subject">
-      </el-table-column>
-      <el-table-column
-        label="应付金额"
-        prop="payMoney">
-      </el-table-column>
-      <el-table-column
-        label="实付金额"
-        prop="payableMoney">
-      </el-table-column>
-      <el-table-column
-        label="剩余款项"
-        prop="remainder">
-      </el-table-column>
-      <el-table-column
-        label="补齐时间"
-        prop="polishing">
-      </el-table-column>
-      <el-table-column
-        label="状态"
-        prop="status">
-        <template slot-scope="scope">
-          <el-button v-if="scope.row.status == 1" class="btn btn1" size="mini">待入账</el-button>
-          <el-button v-if="scope.row.status == 2" class="btn btn2" size="mini">待结清</el-button>
-          <el-button v-if="scope.row.status == 3" class="btn btn3" size="mini">已结清</el-button>
-          <el-button v-if="scope.row.status == 4" class="btn btn4" size="mini">已超额</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="备注"
-        prop="remark">
-      </el-table-column>
-    </el-table>
+    <!--应收-->
+    <div class="border_table">
+      <el-table
+        :data="collectData"
+        width="100%"
+        @cell-dblclick="dblCollect"
+        @row-contextmenu="collectMenu">
+        <el-table-column
+          label="收款时间"
+          prop="date">
+        </el-table-column>
+        <el-table-column
+          label="客户姓名"
+          prop="name">
+        </el-table-column>
+        <el-table-column
+          label="手机号"
+          prop="mobile"
+          width="100px">
+        </el-table-column>
+        <el-table-column
+          label="收入科目"
+          prop="subject">
+        </el-table-column>
+        <el-table-column
+          label="应收金额"
+          prop="collectMoney">
+        </el-table-column>
+        <el-table-column
+          label="实收金额"
+          prop="receivedMoney">
+        </el-table-column>
+        <el-table-column
+          label="剩余款项"
+          prop="remainder">
+        </el-table-column>
+        <el-table-column
+          label="补齐时间"
+          prop="polishing">
+        </el-table-column>
+        <el-table-column
+          label="租房月数"
+          prop="months">
+        </el-table-column>
+        <el-table-column
+          label="付款方式"
+          prop="payWay">
+        </el-table-column>
+        <el-table-column
+          label="月单价"
+          prop="unitPrice">
+        </el-table-column>
+        <el-table-column
+          label="合同时间周期"
+          prop="contractPeriod"
+          width="100px">
+        </el-table-column>
+        <el-table-column
+          label="状态"
+          prop="status">
+          <template slot-scope="scope">
+            <el-button v-if="scope.row.status == 1" class="btn btn1" size="mini">待入账</el-button>
+            <el-button v-if="scope.row.status == 2" class="btn btn2" size="mini">待结清</el-button>
+            <el-button v-if="scope.row.status == 3" class="btn btn3" size="mini">已结清</el-button>
+            <el-button v-if="scope.row.status == 4" class="btn btn4" size="mini">已超额</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="备注"
+          prop="remark">
+        </el-table-column>
+        <el-table-column
+          label="开单人"
+          prop="staff_name">
+        </el-table-column>
+        <el-table-column
+          label="部门"
+          prop="department_name">
+        </el-table-column>
+      </el-table>
 
-    <div class="block pages collect">
-      <div>
+      <div class="block pages">
+        <div>
         <span>
           应收金额(元)：<span style="color: #78cd51;">4630988.50</span>
         </span>&nbsp;&nbsp;&nbsp;&nbsp;
-        <span>
+          <span>
           实收金额(元)：<span style="color: #f66;">129773.64</span>
         </span>&nbsp;&nbsp;&nbsp;&nbsp;
-        <span>
-          剩余款项(元)：<span style="color: #ff9a02;">4501414.86</span>
-        </span>
-      </div>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[20, 100, 200, 300, 400]"
-        :page-size="20"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="400">
-      </el-pagination>
-    </div>
-
-    <el-table
-      :data="tableData"
-      width="100%"
-      @row-contextmenu="houseMenu">
-      <el-table-column
-        label="第一次付款时间"
-        prop="date">
-      </el-table-column>
-      <el-table-column
-        label="第一次付款时间"
-        prop="date">
-      </el-table-column>
-      <el-table-column
-        label="合同时间周期"
-        prop="date">
-      </el-table-column>
-      <el-table-column
-        label="付款时间"
-        prop="date">
-      </el-table-column>
-      <el-table-column
-        label="付款时间"
-        prop="date">
-      </el-table-column>
-      <el-table-column
-        label="付款时间"
-        prop="date">
-      </el-table-column>
-      <el-table-column
-        label="付款时间"
-        prop="date">
-      </el-table-column>
-      <el-table-column
-        label="付款时间"
-        prop="date">
-      </el-table-column>
-      <el-table-column
-        label="付款时间"
-        prop="date">
-      </el-table-column>
-      <el-table-column
-        label="客户姓名"
-        prop="name">
-      </el-table-column>
-      <el-table-column
-        label="手机号"
-        prop="mobile"
-        width="100px">
-      </el-table-column>
-      <el-table-column
-        label="支出科目"
-        prop="subject">
-      </el-table-column>
-      <el-table-column
-        label="应付金额"
-        prop="payMoney">
-      </el-table-column>
-      <el-table-column
-        label="实付金额"
-        prop="payableMoney">
-      </el-table-column>
-      <el-table-column
-        label="剩余款项"
-        prop="remainder">
-      </el-table-column>
-      <el-table-column
-        label="补齐时间"
-        prop="polishing">
-      </el-table-column>
-      <el-table-column
-        label="状态"
-        prop="status">
-        <template slot-scope="scope">
-          <el-button v-if="scope.row.status == 1" class="btn btn1" size="mini">待入账</el-button>
-          <el-button v-if="scope.row.status == 2" class="btn btn2" size="mini">待结清</el-button>
-          <el-button v-if="scope.row.status == 3" class="btn btn3" size="mini">已结清</el-button>
-          <el-button v-if="scope.row.status == 4" class="btn btn4" size="mini">已超额</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column
-        label="备注"
-        prop="remark">
-      </el-table-column>
-    </el-table>
-
-    <div class="block pages pay">
-      <div>
           <span>
+          剩余款项(元)：<span style="color: #ff9a02;">4501414.86</span>
+        </span>&nbsp;&nbsp;&nbsp;&nbsp;
+          <span>
+          今日到期：1
+        </span>
+        </div>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[20, 100, 200, 300, 400]"
+          :page-size="20"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="400">
+        </el-pagination>
+      </div>
+    </div>
+    <!--应付-->
+    <div class="border_table greenTable">
+      <el-table
+        :data="payData"
+        width="100%"
+        @row-contextmenu="payMenu">
+        <el-table-column
+          label="付款时间"
+          prop="date">
+        </el-table-column>
+        <el-table-column
+          label="客户姓名"
+          prop="name">
+        </el-table-column>
+        <el-table-column
+          label="手机号"
+          prop="mobile"
+          width="100px">
+        </el-table-column>
+        <el-table-column
+          label="支出科目"
+          prop="subject">
+        </el-table-column>
+        <el-table-column
+          label="应付金额"
+          prop="payMoney">
+        </el-table-column>
+        <el-table-column
+          label="实付金额"
+          prop="payableMoney">
+        </el-table-column>
+        <el-table-column
+          label="剩余款项"
+          prop="remainder">
+        </el-table-column>
+        <el-table-column
+          label="补齐时间"
+          prop="polishing">
+        </el-table-column>
+        <el-table-column
+          label="收房月数"
+          prop="months">
+        </el-table-column>
+        <el-table-column
+          label="付款方式"
+          prop="payWay">
+        </el-table-column>
+        <el-table-column
+          label="月单价"
+          prop="unitPrice">
+        </el-table-column>
+        <el-table-column
+          label="第一次付款时间"
+          prop="firstDate">
+        </el-table-column>
+        <el-table-column
+          label="第二次付款时间"
+          prop="secondDate">
+        </el-table-column>
+        <el-table-column
+          label="合同时间周期"
+          prop="contractPeriod"
+          width="90px">
+        </el-table-column>
+        <el-table-column
+          label="状态"
+          prop="status">
+          <template slot-scope="scope">
+            <el-button v-if="scope.row.status == 1" class="btn btn1" size="mini">待入账</el-button>
+            <el-button v-if="scope.row.status == 2" class="btn btn2" size="mini">待结清</el-button>
+            <el-button v-if="scope.row.status == 3" class="btn btn3" size="mini">已结清</el-button>
+            <el-button v-if="scope.row.status == 4" class="btn btn4" size="mini">已超额</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="备注"
+          prop="remark">
+        </el-table-column>
+        <el-table-column
+          label="开单人"
+          prop="staff_name">
+        </el-table-column>
+        <el-table-column
+          label="部门"
+          prop="department_name">
+        </el-table-column>
+      </el-table>
+
+      <div class="block pages">
+        <div>
+        <span>
           应付金额(元)：<span style="color: #78cd51;">16038533.20</span>
         </span>&nbsp;&nbsp;&nbsp;&nbsp;
-        <span>
+          <span>
           实付金额(元)：<span style="color: #f66;">14615.62</span>
         </span>&nbsp;&nbsp;&nbsp;&nbsp;
-        <span>
+          <span>
           剩余款项(元)：<span style="color: #ff9a02;">16034710.58</span>
+        </span>&nbsp;&nbsp;&nbsp;&nbsp;
+          <span>
+          今日到期：1
         </span>
+        </div>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[20, 100, 200, 300, 400]"
+          :page-size="20"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="400">
+        </el-pagination>
       </div>
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[20, 100, 200, 300, 400]"
-        :page-size="20"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="400">
-      </el-pagination>
     </div>
-
     <!--右键-->
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
 
     <!--组织架构-->
     <organization :organizationDialog="organizeVisible" @close="closeOrganize"></organization>
+
+    <!--高级筛选-->
+    <FilterModule :module="filterModule" @close="closeFilter"></FilterModule>
+
+    <!--新增-->
+    <ChargeModule :module="chargeVisible" @close="closeCharge" :title="titles"></ChargeModule>
   </div>
 </template>
 
 <script>
   import organization from '../../common/organization.vue'
   import RightMenu from '../../common/contextMenu/rightMenu.vue'    //右键
+  import FilterModule from './advancedFilter'
+  import ChargeModule from './chargeModule'
+
   export default {
     name: "index",
-    components: {organization, RightMenu},
+    components: {organization, RightMenu, FilterModule, ChargeModule},
     data() {
       return {
         rightMenuX: 0,
@@ -297,7 +326,10 @@
         show: false,
         lists: [],
 
+        titles: '',
         currentPage: 1,
+        chargeVisible: false,
+        filterModule: false,
         organizeVisible: false,
         values: ['待入账', '待结清', '已结清', '已超额',],
         form: {
@@ -306,7 +338,6 @@
           dates: '',
           subject: '',
           keywords: '',
-          leadingOut: '',
         },
         pickerOptions: {
           shortcuts: [{
@@ -335,7 +366,28 @@
             }
           }]
         },
-        tableData: [
+        collectData: [
+          {
+            date: '1990-01-01',
+            name: '废话肯定是1-1-1-11-1',
+            mobile: '15251830468',
+            subject: '押金',
+            collectMoney: '11111',
+            receivedMoney: '22222',
+            remainder: '44555',
+            polishing: '2018-01-01',
+            months: '12',
+            payWay: '第1期押1付12 1200',
+            unitPrice: '22222',
+            contractPeriod: '2017-03-15~2022-03-15',
+            staff_name: '范德萨发',
+            department_name: '乐伽商业管理有限公司',
+            status: 1,
+            details: '刘梦/2017-03-15~2022-03-15/第1年月付3100,第2年月付3100,第3年月付3300,第4年月付3400,第5年月付3500/顾庆伟',
+            remark: '放大开始JFK撒粉卡',
+          },
+        ],
+        payData: [
           {
             date: '1990-01-01',
             name: '废话肯定是1-1-1-11-1',
@@ -345,55 +397,15 @@
             payableMoney: '22222',
             remainder: '44555',
             polishing: '2018-01-01',
-            status: 1,
-            details: '刘梦/2017-03-15~2022-03-15/第1年月付3100,第2年月付3100,第3年月付3300,第4年月付3400,第5年月付3500/顾庆伟',
-            remark: '放大开始JFK撒粉卡',
-          }, {
-            date: '1990-01-01',
-            name: '废话肯定是1-1-1-11-1',
-            mobile: '15251830468',
-            subject: '押金',
-            payMoney: '11111',
-            payableMoney: '22222',
-            remainder: '44555',
-            polishing: '2018-01-01',
+            months: '12',
+            payWay: '月付',
+            unitPrice: '22222',
+            firstDate: '1990-01-01',
+            secondDate: '1990-01-01',
+            contractPeriod: '2017-03-15~2022-03-15',
+            staff_name: '范德萨发',
+            department_name: '乐伽商业管理有限公司',
             status: 2,
-            details: '刘梦/2017-03-15~2022-03-15/第1年月付3100,第2年月付3100,第3年月付3300,第4年月付3400,第5年月付3500/顾庆伟',
-            remark: '放大开始JFK撒粉卡',
-          }, {
-            date: '1990-01-01',
-            name: '废话肯定是1-1-1-11-1',
-            mobile: '15251830468',
-            subject: '押金',
-            payMoney: '11111',
-            payableMoney: '22222',
-            remainder: '44555',
-            polishing: '2018-01-01',
-            status: 3,
-            details: '刘梦/2017-03-15~2022-03-15/第1年月付3100,第2年月付3100,第3年月付3300,第4年月付3400,第5年月付3500/顾庆伟',
-            remark: '放大开始JFK撒粉卡',
-          }, {
-            date: '1990-01-01',
-            name: '废话肯定是1-1-1-11-1',
-            mobile: '15251830468',
-            subject: '押金',
-            payMoney: '11111',
-            payableMoney: '22222',
-            remainder: '44555',
-            polishing: '2018-01-01',
-            status: 4,
-            details: '刘梦/2017-03-15~2022-03-15/第1年月付3100,第2年月付3100,第3年月付3300,第4年月付3400,第5年月付3500/顾庆伟',
-            remark: '放大开始JFK撒粉卡',
-          }, {
-            date: '1990-01-01',
-            name: '废话肯定是1-1-1-11-1',
-            mobile: '15251830468',
-            subject: '押金',
-            payMoney: '11111',
-            payableMoney: '22222',
-            remainder: '44555',
-            polishing: '2018-01-01',
-            status: 4,
             details: '刘梦/2017-03-15~2022-03-15/第1年月付3100,第2年月付3100,第3年月付3300,第4年月付3400,第5年月付3500/顾庆伟',
             remark: '放大开始JFK撒粉卡',
           },
@@ -408,6 +420,27 @@
     },
     watch: {},
     methods: {
+      // 导出
+      leadingOut(val) {
+        console.log(val);
+      },
+      // 新增
+      newAdd(val) {
+        console.log(val);
+        if (val === 'collect') {
+          this.chargeVisible = true;
+          this.titles = val;
+        } else {
+          this.chargeVisible = true;
+          this.titles = val;
+        }
+      },
+      closeFilter() {
+        this.filterModule = false;
+      },
+      closeCharge() {
+        this.chargeVisible = false;
+      },
       querySearch(queryString, cb) {
         let restaurants = this.restaurants;
         let results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
@@ -424,72 +457,54 @@
       },
       loadAll() {
         return [
-          { "value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号" },
-          { "value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号" },
-          { "value": "新旺角茶餐厅", "address": "上海市普陀区真北路988号创邑金沙谷6号楼113" },
-          { "value": "泷千家(天山西路店)", "address": "天山西路438号" },
-          { "value": "胖仙女纸杯蛋糕（上海凌空店）", "address": "上海市长宁区金钟路968号1幢18号楼一层商铺18-101" },
-          { "value": "贡茶", "address": "上海市长宁区金钟路633号" },
-          { "value": "豪大大香鸡排超级奶爸", "address": "上海市嘉定区曹安公路曹安路1685号" },
-          { "value": "茶芝兰（奶茶，手抓饼）", "address": "上海市普陀区同普路1435号" },
-          { "value": "十二泷町", "address": "上海市北翟路1444弄81号B幢-107" },
-          { "value": "星移浓缩咖啡", "address": "上海市嘉定区新郁路817号" },
-          { "value": "阿姨奶茶/豪大大", "address": "嘉定区曹安路1611号" },
-          { "value": "新麦甜四季甜品炸鸡", "address": "嘉定区曹安公路2383弄55号" },
-          { "value": "Monica摩托主题咖啡店", "address": "嘉定区江桥镇曹安公路2409号1F，2383弄62号1F" },
-          { "value": "浮生若茶（凌空soho店）", "address": "上海长宁区金钟路968号9号楼地下一层" },
-          { "value": "NONO JUICE  鲜榨果汁", "address": "上海市长宁区天山西路119号" },
-          { "value": "CoCo都可(北新泾店）", "address": "上海市长宁区仙霞西路" },
-          { "value": "快乐柠檬（神州智慧店）", "address": "上海市长宁区天山西路567号1层R117号店铺" },
-          { "value": "Merci Paul cafe", "address": "上海市普陀区光复西路丹巴路28弄6号楼819" },
-          { "value": "猫山王（西郊百联店）", "address": "上海市长宁区仙霞西路88号第一层G05-F01-1-306" },
-          { "value": "枪会山", "address": "上海市普陀区棕榈路" },
-          { "value": "纵食", "address": "元丰天山花园(东门) 双流路267号" },
-          { "value": "钱记", "address": "上海市长宁区天山西路" },
-          { "value": "壹杯加", "address": "上海市长宁区通协路" },
-          { "value": "唦哇嘀咖", "address": "上海市长宁区新泾镇金钟路999号2幢（B幢）第01层第1-02A单元" },
-          { "value": "爱茜茜里(西郊百联)", "address": "长宁区仙霞西路88号1305室" },
-          { "value": "爱茜茜里(近铁广场)", "address": "上海市普陀区真北路818号近铁城市广场北区地下二楼N-B2-O2-C商铺" },
-          { "value": "鲜果榨汁（金沙江路和美广店）", "address": "普陀区金沙江路2239号金沙和美广场B1-10-6" },
-          { "value": "开心丽果（缤谷店）", "address": "上海市长宁区威宁路天山路341号" },
-          { "value": "超级鸡车（丰庄路店）", "address": "上海市嘉定区丰庄路240号" },
-          { "value": "妙生活果园（北新泾店）", "address": "长宁区新渔路144号" },
-          { "value": "香宜度麻辣香锅", "address": "长宁区淞虹路148号" },
-          { "value": "凡仔汉堡（老真北路店）", "address": "上海市普陀区老真北路160号" },
-          { "value": "港式小铺", "address": "上海市长宁区金钟路968号15楼15-105室" },
-          { "value": "蜀香源麻辣香锅（剑河路店）", "address": "剑河路443-1" },
-          { "value": "北京饺子馆", "address": "长宁区北新泾街道天山西路490-1号" },
-          { "value": "饭典*新简餐（凌空SOHO店）", "address": "上海市长宁区金钟路968号9号楼地下一层9-83室" },
-          { "value": "焦耳·川式快餐（金钟路店）", "address": "上海市金钟路633号地下一层甲部" },
-          { "value": "动力鸡车", "address": "长宁区仙霞西路299弄3号101B" },
-          { "value": "浏阳蒸菜", "address": "天山西路430号" },
-          { "value": "四海游龙（天山西路店）", "address": "上海市长宁区天山西路" },
-          { "value": "樱花食堂（凌空店）", "address": "上海市长宁区金钟路968号15楼15-105室" },
-          { "value": "壹分米客家传统调制米粉(天山店)", "address": "天山西路428号" },
-          { "value": "福荣祥烧腊（平溪路店）", "address": "上海市长宁区协和路福泉路255弄57-73号" },
-          { "value": "速记黄焖鸡米饭", "address": "上海市长宁区北新泾街道金钟路180号1层01号摊位" },
-          { "value": "红辣椒麻辣烫", "address": "上海市长宁区天山西路492号" },
-          { "value": "(小杨生煎)西郊百联餐厅", "address": "长宁区仙霞西路88号百联2楼" },
-          { "value": "阳阳麻辣烫", "address": "天山西路389号" },
-          { "value": "南拳妈妈龙虾盖浇饭", "address": "普陀区金沙江路1699号鑫乐惠美食广场A13" }
-        ];
+          {"value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号"},
+          {"value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号"},
+          {"value": "新旺角茶餐厅", "address": "上海市普陀区真北路988号创邑金沙谷6号楼113"},
+          {"value": "泷千家(天山西路店)", "address": "天山西路438号"},
+          {"value": "胖仙女纸杯蛋糕（上海凌空店）", "address": "上海市长宁区金钟"},
+          {"value": "贡茶", "address": "上海市长宁区金钟路633号"},
+          {"value": "豪大大香鸡排超级奶爸", "address": "上海市嘉定区曹安公路曹安路1685号"},
+          {"value": "茶芝兰（奶茶，手抓饼）", "address": "上海市普陀区同普路1435号"},
+          {"value": "十二泷町", "address": "上海市北翟路1444弄81号B幢-107"},
+          {"value": "星移浓缩咖啡", "address": "上海市嘉定区新郁路817号"},
+          {"value": "阿姨奶茶/豪大大", "address": "嘉定区曹安路1611号"},
+        ]
       },
 
       // 部门员工筛选
       openOrganize() {
-        this.organizeVisible = true
+        this.organizeVisible = true;
       },
       // 部门员工筛选
       closeOrganize() {
-        this.organizeVisible = false
+        this.organizeVisible = false;
       },
       close_() {
         console.log(1);
       },
-      // 右键
-      houseMenu(row, event) {
+      // 双击 收
+      dblCollect(row, column, cell, event) {
+        // console.log(row);
+        // console.log(column);
+        // console.log(cell);
+        // console.log(event);
+        console.log(window.location.href);
+        let urls = window.location.href + '/roomChargeDetail';
+        window.open(urls, "_blank", 'width=' + (window.screen.availWidth - 10) + ',height=' + (window.screen.availHeight - 30) + ',top=0 ,left=0, resizable=yes, status=yes, menubar=no, scrollbars=yes');
+      },
+      // 右键 收
+      collectMenu(row, event) {
         this.lists = [
-          {clickIndex: 'payWay', headIcon: 'el-icon-edit-outline', label: '应付入账',},
+          {clickIndex: 'collectWay', headIcon: 'el-icon-edit-outline', label: '应收入账',},
+          {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',},
+        ];
+        this.contextMenuParam(event);
+      },
+
+      // 右键 租
+      payMenu(row, event) {
+        this.lists = [
+          {clickIndex: 'rentWay', headIcon: 'el-icon-edit-outline', label: '应付入账',},
           {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',},
         ];
         this.contextMenuParam(event);
@@ -499,8 +514,14 @@
         if (val === 'delete') {
           console.log(val);
           this.openDelete();
-        } else {
-          this.openVillage();
+        }
+        if (val === 'collectWay') {
+          this.titles = 'collect';
+          this.chargeVisible = true;
+        }
+        if (val === 'rentWay') {
+          this.titles = 'rent';
+          this.chargeVisible = true;
         }
       },
       //关闭右键菜单
@@ -572,15 +593,21 @@
       background-color: #F04D3D;
     }
 
-    .block.pages.collect {
-      margin-bottom: 24px;
-    }
-
-    .block.pages.collect, .block.pages.pay {
+    .block.pages {
       display: -webkit-flex;
       display: flex;
       justify-content: space-between;
       align-items: center;
+    }
+
+    .border_table {
+      box-shadow: 0 0 10px 0 #bbb;
+      padding: 8px;
+      border-radius: 3px;
+      margin-bottom: 24px;
+    }
+    .el-table th {
+      background: blue;
     }
   }
 </style>
