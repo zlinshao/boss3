@@ -107,6 +107,53 @@
   padding-top: 10px;
 }
 
+#rentingDetail{
+  .el-form-item__label{
+    color: #bcbcbd;
+  }
+  .el-step__head.is-process {
+    color: #58d788;
+    border-color: #58d788;
+  }
+  .el-step__title.is-process {
+    font-weight: 700;
+    color: #58d788;
+  }
+  .el-tabs--border-card>.el-tabs__header {
+    background-color: #eef3fc;
+    border-bottom: 1px solid #eef3fc;
+  }
+}
+
+
+.expand-tree{
+  .is-current{
+    overflow:hidden;
+    >.el-tree-node__content{
+      .tree-btn{
+        display: block;
+      }
+      .tree-label{
+        font-weight:600;
+        white-space:normal;
+      }
+    }
+  }
+
+  .el-tree-node{
+    &:hover{
+      overflow:hidden;
+    }
+  }
+
+  .el-tree-node__content{
+    height: 30px;
+    &:hover .tree-btn{
+      display:inline-block;
+    }
+  }
+}
+
 .block.pages {
   display: flex;
   display: -webkit-flex;

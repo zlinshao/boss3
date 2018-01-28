@@ -18,15 +18,15 @@ Vue.use(Boss);
 Vue.use(ElementUI);
 Vue.use(VueRouter);
 Vue.use(Vuex);
-Vue.use(Cookies)
+Vue.use(Cookies);
 Vue.prototype.$http = axios;
 
 Vue.config.productionTip = false;
 
-// const routes = new VueRouter({
+// const router = new VueRouter({
 //   mode: 'history',
 //   router
-// })
+// });
 
 
 

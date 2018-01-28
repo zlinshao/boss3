@@ -57,7 +57,9 @@ import StaffManage from '../components/humanResource/staffManage/index.vue'
 import Organization from '../components/humanResource/organization/index.vue'
 import Achievement from '../components/humanResource/achievement/index.vue'
 
-Vue.use(Router);
+import RentingDetail from '../components/rentManage/rentingDetail.vue'
+
+Vue.use(Router)
 
 export default new Router({
   routes: [
@@ -71,6 +73,13 @@ export default new Router({
     {
       path: '/lock',
       component: Lock,
+      name: '',
+      hidden: true
+    },
+
+    {
+      path: '/rentingDetail',
+      component: RentingDetail,
       name: '',
       hidden: true
     },
@@ -118,7 +127,7 @@ export default new Router({
       name: '人资管理',
       icon:'el-icons-fa-sitemap',
       children: [
-        { path: '/staffManage', component: StaffManage, name: '员工管理',},
+        { path: '/staffManage', component: StaffManage, name: '用户管理',},
         { path: '/organization', component: Organization, name: '组织架构',},
         { path: '/achievement', component: Achievement, name: '业绩工资',},
       ]

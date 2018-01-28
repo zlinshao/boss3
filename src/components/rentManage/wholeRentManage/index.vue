@@ -56,7 +56,7 @@
           <div class="blueTable" @contextmenu="houseHeadMenu($event)">
             <el-table
               :data="collectData"
-              @row-click="clickTable"
+              @row-dblclick="dblClickTable"
               @row-contextmenu='houseMenu'
               style="width: 100%">
               <el-table-column
@@ -661,7 +661,7 @@
                 </el-table-column>
               </el-table>
             </el-tab-pane>
-            <el-tab-pane label="其他记录">
+            <el-tab-pane label="资料备忘">
               <el-table
                 :data="rentingData"
                 @row-click="clickTable"
@@ -690,6 +690,92 @@
                 <el-table-column
                   prop="price"
                   label="部门">
+                </el-table-column>
+              </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="回访记录">
+              <el-table
+                :data="rentingData"
+                @row-click="clickTable"
+                style="width: 100%">
+                <el-table-column
+                  prop="contract_num"
+                  label="服务态度">
+                </el-table-column>
+                <el-table-column
+                  prop="address"
+                  label="回访人">
+                </el-table-column>
+                <el-table-column
+                  prop="house_type"
+                  label="回访时间">
+                </el-table-column>
+                <el-table-column
+                  prop="deposit"
+                  label="回访状态">
+                </el-table-column>
+              </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="跟进记录">
+              <el-table
+                :data="rentingData"
+                @row-click="clickTable"
+                style="width: 100%">
+                <el-table-column
+                  prop="contract_num"
+                  label="跟进时间">
+                </el-table-column>
+                <el-table-column
+                  prop="address"
+                  label="录入时间">
+                </el-table-column>
+                <el-table-column
+                  prop="house_type"
+                  label="跟进方式">
+                </el-table-column>
+                <el-table-column
+                  prop="deposit"
+                  label="身份">
+                </el-table-column>
+                <el-table-column
+                  prop="contract_num"
+                  label="事件类型">
+                </el-table-column>
+                <el-table-column
+                  prop="address"
+                  label="时间等级">
+                </el-table-column>
+                <el-table-column
+                  prop="house_type"
+                  label="具体时间">
+                </el-table-column>
+                <el-table-column
+                  prop="deposit"
+                  label="预计完成时间">
+                </el-table-column>
+                <el-table-column
+                  prop="contract_num"
+                  label="跟进结果">
+                </el-table-column>
+                <el-table-column
+                  prop="address"
+                  label="认责人">
+                </el-table-column>
+                <el-table-column
+                  prop="house_type"
+                  label="时间转交">
+                </el-table-column>
+                <el-table-column
+                  prop="deposit"
+                  label="上传图片">
+                </el-table-column>
+                <el-table-column
+                  prop="house_type"
+                  label="上传录音">
+                </el-table-column>
+                <el-table-column
+                  prop="deposit"
+                  label="录入人">
                 </el-table-column>
               </el-table>
             </el-tab-pane>
@@ -738,7 +824,7 @@
                 <el-table-column
                   label="维修结果">
                   <template slot-scope="scope">
-                    <el-button @click="openModalDialog('returnVisitDialog')" size="mini" type="text">查看</el-button>
+                    <a href="javacript:;" style="color: #409EFF" @click="openModalDialog('returnVisitDialog')">查看</a>
                   </template>
                 </el-table-column>
               </el-table>
@@ -1095,7 +1181,10 @@
           this.contextMenuParam(event);
         }
       },
-
+      dblClickTable(row, event){   //双击
+        const {href} = this.$router.resolve({path: '/rentingDetail',query:{id:'1'}});
+        window.open(href,'_blank','width=1920,height=1080');
+      },
       //右键回调时间
       clickEvent (index) {
         this.openModalDialog(index);
