@@ -3,81 +3,46 @@
     <div class="filter">
       <el-form :inline="true" :model="form" size="mini" label-width="80px">
         <el-form-item>
-          <el-select v-model="form.houseType">
-            <el-option label="房屋类型" value=""></el-option>
-            <el-option v-for="(key,index) in houseValues" :label="key" :value="index + 1" :key="index"></el-option>
+          <el-select v-model="form.belongTo" size="mini" clearable>
+            <el-option label="所有归属" value=""></el-option>
+            <el-option v-for="(key,index) in belongValue" :label="key" :value="index + 1" :key="index"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-select v-model="form.markYears">
-            <el-option label="建造年限" value=""></el-option>
-            <el-option v-for="(key,index) in yearValues" :label="key" :value="index + 1" :key="index"></el-option>
+          <el-select v-model="form.subjectType" size="mini" clearable>
+            <el-option label="所有类型" value=""></el-option>
+            <el-option v-for="(key,index) in typeValue" :label="key" :value="index + 1" :key="index"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-select v-model="form.province">
-            <el-option label="省份" value=""></el-option>
-            <el-option v-for="(key,index) in provinceValues" :label="key" :value="index + 1" :key="index"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-select v-model="form.city" clearable>
-            <el-option label="市" value=""></el-option>
-            <el-option v-for="(key,index) in cityValues" :label="key" :value="index + 1" :key="index"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-select v-model="form.county" clearable>
-            <el-option label="区/县" value=""></el-option>
-            <el-option v-for="(key,index) in countyValues" :label="key" :value="index + 1" :key="index"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-select v-model="form.area" clearable>
-            <el-option label="区域" value=""></el-option>
-            <el-option v-for="(key,index) in areaValues" :label="key" :value="index + 1" :key="index"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-input placeholder="小区名称/地址/位置" v-model="form.keyWords">
+          <el-input v-model="form.keyWords" placeholder="房屋地址/租房人">
             <el-button slot="append" icon="el-icon-search"></el-button>
           </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="close_">重置</el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="openVillage"><i class="el-icon-plus"></i>&nbsp;新增小区</el-button>
+          <el-button type="primary" @click="openSubject"><i class="el-icon-plus"></i>&nbsp;新增科目</el-button>
         </el-form-item>
       </el-form>
     </div>
     <el-table
       :data="tableData"
-      style="width: 100%;"
-      @row-contextmenu='houseMenu'>
+      width="100%"
+      @row-contextmenu="houseMenu">
       <el-table-column
-        prop="name"
-        label="小区名称">
+        label="归属"
+        prop="name">
       </el-table-column>
       <el-table-column
-        prop="address"
-        label="地址">
+        label="项目"
+        prop="address">
       </el-table-column>
       <el-table-column
-        prop="otherName"
-        label="小区别名">
+        label="类型"
+        prop="otherName">
       </el-table-column>
       <el-table-column
-        prop="houseType"
-        label="房屋类型">
-      </el-table-column>
-      <el-table-column
-        prop="markYear"
-        label="建造年限">
-      </el-table-column>
-      <el-table-column
-        prop="building"
-        label="房屋栋数">
+        label="备注"
+        prop="houseType">
       </el-table-column>
     </el-table>
 
@@ -96,91 +61,72 @@
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
 
-    <VillageModule :module="addVisible" @close="closeVillage"></VillageModule>
+  <SubjectModule :FormVisible="addSubjectModule" @close="closeSubject"></SubjectModule>
   </div>
 </template>
 
 <script>
   import RightMenu from '../../common/contextMenu/rightMenu.vue'    //右键
-  import VillageModule from './villageModule'
-
+  import SubjectModule from './subjectModule'
   export default {
-    name: 'hello',
-    components: {RightMenu, VillageModule},
+    name: "index",
+    components: {RightMenu,SubjectModule},
     data() {
       return {
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
         lists: [],
-
         currentPage: 1,
-        addVisible: false,
+
+        addSubjectModule: false,
         form: {
-          houseType: '',
-          markYears: '',
-          province: '',
-          city: '',
-          county: '',
-          area: '',
+          belongTo: '',
+          subjectType: '',
           keyWords: '',
         },
-        houseValues: ['住宅', '公寓', '酒店公寓', '商住两用', '平方', '别墅', '其他'],
-        yearValues: ['1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990'],
-        provinceValues: ['江苏省', '浙江省'],
-        cityValues: ['南京', '杭州'],
-        countyValues: ['下沙区', '鼓楼区'],
-        areaValues: ['高沙', '鼓楼'],
-
+        belongValue: ['收房', '租房'],
+        typeValue: ['收入', '支出'],
         tableData: [
           {
             name: '王小虎',
             address: '上海市普陀区金沙江路 1518 弄',
             otherName: '发的沙发沙发沙发',
             houseType: '住宅',
-            markYear: '1991',
-            building: '38栋',
           }, {
             name: '王小虎',
             address: '上海市普陀区金沙江路 1518 弄',
             otherName: '发的沙发沙发沙发',
             houseType: '住宅',
-            markYear: '1991',
-            building: '38栋',
           }, {
             name: '王小虎',
             address: '上海市普陀区金沙江路 1518 弄',
             otherName: '发的沙发沙发沙发',
             houseType: '住宅',
-            markYear: '1991',
-            building: '38栋',
           }, {
             name: '王小虎',
             address: '上海市普陀区金沙江路 1518 弄',
             otherName: '广是广泛大概高手高手',
             houseType: '住宅',
-            markYear: '1991',
-            building: '38栋',
           },
         ]
       }
     },
+    mounted() {
+    },
+    watch: {},
     methods: {
-      // 重置
-      close_() {
-        console.log(1)
+      openSubject() {
+        this.addSubjectModule = true;
+      },
+      closeSubject() {
+        this.addSubjectModule = false;
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
-      },
-      openVillage() {
-        this.addVisible = true;
-      },
-      closeVillage() {
-        this.addVisible = false;
       },
       // 右键
       houseMenu(row, event) {
@@ -196,7 +142,7 @@
           console.log(val);
           this.openDelete();
         } else {
-          this.openVillage();
+          this.openSubject();
         }
       },
       //关闭右键菜单
@@ -233,11 +179,10 @@
           });
         });
       }
-    }
+    },
   }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 
 </style>

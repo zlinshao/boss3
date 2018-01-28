@@ -3,7 +3,7 @@
     <div class="filter">
       <el-form class="demo-form-inline" size="small">
         <el-form-item>
-          <el-button type="primary" style="float: right;" @click="onSubmit">新&nbsp;增</el-button>
+          <el-button type="primary" style="float: right;" @click="onSubmit"><i class="el-icon-plus"></i>&nbsp;新&nbsp;增</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -47,7 +47,7 @@
       </el-table-column>
     </el-table>
 
-    <ReviseRole :FormVisible="roleModule" :name="title" @close="closeEdit"></ReviseRole>
+    <ReviseRole :module="roleModule" :name="title" @close="closeEdit"></ReviseRole>
   </div>
 </template>
 

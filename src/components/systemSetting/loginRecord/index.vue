@@ -73,7 +73,7 @@
     </div>
 
     <!--组织架构-->
-    <AddModule :FormVisible="module" @close="closeModule"></AddModule>
+    <AddModule :organizationDialog="module" @close="closeModule"></AddModule>
   </div>
 </template>
 
@@ -175,15 +175,6 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-  .filter {
-    margin-top: 10px;
-  }
+<style lang="scss">
 
-  .block.pages {
-    display: flex;
-    display: -webkit-flex;
-    justify-content: flex-end;
-    margin: 20px 0 10px;
-  }
 </style>

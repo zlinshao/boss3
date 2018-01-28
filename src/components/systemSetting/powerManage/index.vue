@@ -3,7 +3,7 @@
     <div class="filter">
       <el-form class="demo-form-inline" size="small">
         <el-form-item>
-          <el-button type="primary" style="float: right;" @click="onSubmit">新&nbsp;增</el-button>
+          <el-button type="primary" style="float: right;" @click="onSubmit"><i class="el-icon-plus"></i>&nbsp;新&nbsp;增</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -31,7 +31,7 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            @click="handleEdit(scope.$index, scope.row)">编辑
+            @click="handleEdit(scope.$index, scope.rw)">编辑
           </el-button>
           <el-button
             size="mini"
@@ -42,7 +42,7 @@
       </el-table-column>
     </el-table>
 
-    <RevisePower :FormVisible="powerModule" :name="title" @close="closeEdit"></RevisePower>
+    <RevisePower :module="powerModule" :name="title" @close="closeEdit"></RevisePower>
   </div>
 </template>
 

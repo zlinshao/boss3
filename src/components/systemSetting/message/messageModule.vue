@@ -1,7 +1,7 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
-    <div class="filter filter-container">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline" size="mini">
+    <div class="filter">
+      <el-form :inline="true" ref="formInline" :model="formInline" class="demo-form-inline" size="mini">
 
         <el-form-item label="业务类型">
           <el-input v-model="formInline.department_name" @focus="openDepartment" placeholder="请选择类型"
@@ -13,6 +13,7 @@
             <i class="el-icon-plus"></i>&nbsp;新建短信模板
           </el-button>
         </el-form-item>
+
       </el-form>
     </div>
 
@@ -74,25 +75,25 @@
                @clickOperate="clickEvent"></RightMenu>
 
     <!--组织架构-->
-    <AddModule :FormVisible="departmentVisible" @close="closeDepartment"></AddModule>
+    <AddModule :organizationDialog="departmentVisible" @close="closeDepartment"></AddModule>
 
     <!--新增/修改短信模板-->
-    <AddMessageModule :FormVisible="messageModule" :messageName="messageName"
-                      @close="closeMessageModule"></AddMessageModule>
+    <MessageModule :module="messageModule" :messageName="messageName"
+                      @close="closeMessageModule"></MessageModule>
 
     <!--修改短信名称-->
-    <ReviseName :FormVisible="reviseMessage" @close="closeReName"></ReviseName>
+    <ReviseName :module="reviseMessage" @close="closeReName"></ReviseName>
   </div>
 </template>
 
 <script>
   import RightMenu from '../../common/contextMenu/rightMenu.vue'    //右键
   import AddModule from '../../common/organization.vue'
-  import AddMessageModule from './conponents/addMessageModule.vue'
+  import MessageModule from './conponents/messageModule.vue'
   import ReviseName from './conponents/reviseName.vue'
 
   export default {
-    components: {AddModule, AddMessageModule, RightMenu, ReviseName},
+    components: {AddModule, MessageModule, RightMenu, ReviseName},
     data() {
       return {
         rightMenuX: 0,
@@ -284,19 +285,6 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-  .filter-container {
-    margin-top: 10px;
-  }
+<style lang="scss">
 
-  .block {
-    margin-top: 20px;
-  }
-
-  .block.pages {
-    display: flex;
-    display: -webkit-flex;
-    justify-content: flex-end;
-    margin: 20px 0 10px;
-  }
 </style>

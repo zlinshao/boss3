@@ -67,4 +67,10 @@
 .filter {
   padding-top: 10px; }
 
+.block.pages {
+  display: flex;
+  display: -webkit-flex;
+  justify-content: flex-end;
+  margin: 20px 0 10px; }
+
 /*# sourceMappingURL=reset.css.map */

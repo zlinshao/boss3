@@ -8,7 +8,7 @@ import Main from '../components/main.vue'
 import Lock from '../components/common/lockScreen/components/lockedScreen.vue'
 
 import Recycle from '../components/systemSetting/recycleBin/index.vue'  //回收站
-import ContractRecycle from '../components/systemSetting/recycleBin/contratRecycle.vue'
+import ContractMould from '../components/systemSetting/contractMould/index.vue'  //合同模板
 
 import LoginRecord from '../components/systemSetting/loginRecord/index.vue'       // 操作记录
 import UserDictionary from '../components/systemSetting/userDictionary/index.vue'
@@ -21,6 +21,12 @@ import PowerManage from '../components/systemSetting/powerManage/index.vue'
 import VillageManage from '../components/systemSetting/villageManage/index.vue'
 import ExportManage from '../components/systemSetting/exportManage/index.vue'
 
+// 财务账本
+import AccountManage from '../components/finance/accountManage/index'           //账户管理
+import SubjectManage from '../components/finance/subjectManage/index'           //科目管理
+import RoomCharge from '../components/finance/roomCharge/index'                 //房租总汇
+import OtherSum from '../components/finance/otherSum/index'                     //剩余款项总汇
+import IncomeFlow from '../components/finance/incomeFlow/index'                 //收支流水
 
 //租赁管理
 import WholeRentManage from '../components/rentManage/wholeRentManage/index.vue'
@@ -51,7 +57,7 @@ import StaffManage from '../components/humanResource/staffManage/index.vue'
 import Organization from '../components/humanResource/organization/index.vue'
 import Achievement from '../components/humanResource/achievement/index.vue'
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
@@ -91,6 +97,19 @@ export default new Router({
         { path: '/clientManage', component: ClientManage, name: '客户管理',},
         { path: '/contractManage', component: ContractManage, name: '合同管理',},
         { path: '/repairManage', component: RepairManage, name: '维修管理',}
+      ]
+    },
+    {
+      path: '/',
+      component: Index,
+      name: '财务账本',
+      icon:'el-icon-tickets',
+      children: [
+        { path: '/accountManage', component: AccountManage, name: '账户管理',},
+        { path: '/subjectManage', component: SubjectManage, name: '科目管理',},
+        { path: '/roomCharge', component: RoomCharge, name: '房租款项总汇',},
+        { path: '/otherSum', component: OtherSum, name: '剩余款项总汇',},
+        { path: '/incomeFlow', component: IncomeFlow, name: '收支流水',},
       ]
     },
     {
@@ -139,9 +158,11 @@ export default new Router({
           component: Recycle,
           icon:'el-icon-delete',
           name: '回收站',
-          children:[
-            { path: '/recycle/contractRecycle',component: ContractRecycle, name: '回收合同'},
-          ]
+        },
+        { path: '/contractMould',
+          component: ContractMould,
+          icon:'el-icon-document',
+          name: '合同模板',
         },
         { path: '/message',
           component: Message,

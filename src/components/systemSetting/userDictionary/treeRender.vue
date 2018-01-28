@@ -26,17 +26,17 @@
 		props: ['NODE', 'DATA', 'STORE', 'maxExpandId'],
 		methods: {
 			nodeAdd(s,d,n){//新增
-				this.$emit('nodeAdd',s,d,n)
+				this.$emit('nodeAdd',s,d,n);
 			},
 			nodeEdit(s,d,n){//编辑
 				d.isEdit = true;
 				this.$nextTick(() => {
-					this.$refs['treeInput'+d.id].$refs.input.focus()
-				})
-				this.$emit('nodeEdit',s,d,n)
+					this.$refs['treeInput'+d.id].$refs.input.focus();
+				});
+				this.$emit('nodeEdit',s,d,n);
 			},
 			nodeDel(s,d,n){//删除
-				this.$emit('nodeDel',s,d,n)
+				this.$emit('nodeDel',s,d,n);
 			},
 			nodeEditPass(s,d,n){//编辑完成
 				d.isEdit = false;

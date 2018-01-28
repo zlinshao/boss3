@@ -1,7 +1,7 @@
 <template>
   <div class="messageModule">
-    <el-dialog :title="messageName" :visible.sync="dialogFormVisible" width="40%">
-      <el-form :model="form" label-width="80px">
+    <el-dialog :title="messageName" :visible.sync="dialogFormVisible" width="30%">
+      <el-form :model="form" label-width="80px" size="mini">
         <el-row>
           <el-col :span="12">
             <el-form-item label="所属模块">
@@ -14,28 +14,23 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="模块名称">
-              <el-input v-model="form.moduleName"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="模板内容">
-              <el-input type="textarea" v-model="form.moduleContent"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
+
+        <el-form-item label="模块名称">
+          <el-input v-model="form.moduleName"></el-input>
+        </el-form-item>
+
+        <el-form-item label="模板内容">
+          <el-input type="textarea" v-model="form.moduleContent"></el-input>
+        </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取&nbsp;消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确&nbsp;定</el-button>
+        <el-button size="small" @click="dialogFormVisible = false">取&nbsp;消</el-button>
+        <el-button size="small" type="primary" @click="dialogFormVisible = false">确&nbsp;定</el-button>
       </div>
     </el-dialog>
 
-    <AddModule :FormVisible="module" @close="closeModule"></AddModule>
+    <AddModule :organizationDialog="module" @close="closeModule"></AddModule>
   </div>
 </template>
 
@@ -44,7 +39,7 @@
 
   export default {
     components: {AddModule},
-    props: ['FormVisible','messageName'],
+    props: ['module', 'messageName'],
     name: 'hello',
     data() {
       return {
@@ -59,7 +54,7 @@
       }
     },
     watch: {
-      FormVisible(val) {
+      module(val) {
         this.dialogFormVisible = val
       },
       dialogFormVisible(val) {

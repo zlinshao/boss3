@@ -42,44 +42,44 @@
     name: 'tree',
     data(){
       return{
-        maxExpandId: api.maxExpandId,//新增节点开始id
-        non_maxExpandId: api.maxExpandId,//新增节点开始id(不更改)
-        isLoadingTree: false,//是否加载节点树
-        setTree: api.treelist,//节点树数据
+        maxExpandId: api.maxExpandId,       //新增节点开始id
+        non_maxExpandId: api.maxExpandId,   //新增节点开始id(不更改)
+        isLoadingTree: false,               //是否加载节点树
+        setTree: api.treelist,              //节点树数据
         defaultProps: {
           children: 'children',
           label: 'name'
         },
-        defaultExpandKeys: [],//默认展开节点列表
+        defaultExpandKeys: [],              //默认展开节点列表
       }
     },
     mounted(){
-      this.initExpand()
+      this.initExpand();
     },
     methods: {
       initExpand(){
         this.setTree.map((a) => {
-          this.defaultExpandKeys.push(a.id)
+          this.defaultExpandKeys.push(a.id);
         });
         this.isLoadingTree = true;
       },
-      handleNodeClick(d,n,s){//点击节点
-         console.log(d,n,s)
-        d.isEdit = false;//放弃编辑状态
+      handleNodeClick(d,n,s){                 //点击节点
+         console.log(d,n,s);
+        d.isEdit = false;                     //放弃编辑状态
       },
-      renderContent(h,{node,data,store}){//加载节点
+      renderContent(h,{node,data,store}){     //加载节点
         let that = this;
         return h(TreeRender,{
           props: {
             DATA: data,
             NODE: node,
             STORE: store,
-            maxExpandId: that.non_maxExpandId
+            maxExpandId: that.non_maxExpandId,
           },
           on: {
             nodeAdd: ((s,d,n) => that.handleAdd(s,d,n)),
             nodeEdit: ((s,d,n) => that.handleEdit(s,d,n)),
-            nodeDel: ((s,d,n) => that.handleDelete(s,d,n))
+            nodeDel: ((s,d,n) => that.handleDelete(s,d,n)),
           }
         });
       },
@@ -89,10 +89,10 @@
           name: '新增节点',
           pid: '',
           isEdit: false,
-          children: []
+          children: [],
         })
       },
-      handleAdd(s,d,n){//增加节点
+      handleAdd(s,d,n){       //增加节点
         console.log(s);
         console.log(d);
         console.log(n);
@@ -106,17 +106,17 @@
           name: '新增节点',
           pid: d.id,
           isEdit: false,
-          children: []
+          children: [],
         });
         //展开节点
         if(!n.expanded){
           n.expanded = true;
         }
       },
-      handleEdit(s,d,n){//编辑节点
+      handleEdit(s,d,n){        //编辑节点
         console.log(s,d,n)
       },
-      handleDelete(s,d,n){//删除节点
+      handleDelete(s,d,n){      //删除节点
         console.log(s,d,n);
         let that = this;
         //有子级不删除
@@ -126,9 +126,9 @@
         }else{
           //新增节点直接删除，否则要询问是否删除
           let delNode = () => {
-            let list = n.parent.data.children || n.parent.data,//节点同级数据
-              _index = 99999;//要删除的index
-            /*if(!n.parent.data.children){//删除顶级节点，无children
+            let list = n.parent.data.children || n.parent.data,   //节点同级数据
+              _index = 99999;                                     //要删除的index
+            /*if(!n.parent.data.children){                        //删除顶级节点，无children
              list = n.parent.data
              }*/
             list.map((c,i) => {
@@ -152,7 +152,7 @@
             })
           };
           //判断是否新增
-          d.id > this.non_maxExpandId ? delNode() : isDel()
+          d.id > this.non_maxExpandId ? delNode() : isDel();
 
         }
       },

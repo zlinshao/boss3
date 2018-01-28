@@ -2,22 +2,22 @@
   <div class="reviseRole">
     <el-dialog :title="name" :visible.sync="dialogVisible" width="40%">
       <div class="scroll_bar">
-        <el-form :model="form">
+        <el-form :model="form" label-width="80px" size="mini">
           <el-row>
             <el-col :span="22">
-              <el-form-item label="描述" :label-width="formLabelWidth">
+              <el-form-item label="描述">
                 <el-input v-model="form.name" auto-complete="off" placeholder="描述"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="11">
-              <el-form-item label="模块" :label-width="formLabelWidth">
+              <el-form-item label="模块">
                 <el-input v-model="form.module" auto-complete="off" placeholder="模块"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="11">
-              <el-form-item label="子模块" :label-width="formLabelWidth">
+              <el-form-item label="子模块">
                 <el-input v-model="form.childModule" auto-complete="off" placeholder="子模块"></el-input>
               </el-form-item>
             </el-col>
@@ -30,8 +30,8 @@
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取&nbsp;消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确&nbsp;定</el-button>
+        <el-button size="small" @click="dialogVisible = false">取&nbsp;消</el-button>
+        <el-button size="small" type="primary" @click="dialogVisible = false">确&nbsp;定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -40,7 +40,7 @@
 <script>
   export default {
     name: "revise-role",
-    props: ['FormVisible','name'],
+    props: ['module','name'],
     data() {
       return {
         radio: 1,
@@ -50,13 +50,12 @@
           module: '',
           childModule: '',
         },
-        formLabelWidth: '80px'
       }
     },
     mounted() {
     },
     watch: {
-      FormVisible(val) {
+      module(val) {
         this.dialogVisible = val;
       },
       dialogVisible(val) {

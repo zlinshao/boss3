@@ -20,7 +20,7 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">查询</el-button>
+            <el-button type="primary" @click="onSubmit"><i class="el-icon-search"></i>&nbsp;查询</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -63,8 +63,6 @@
           :total="400">
         </el-pagination>
       </div>
-
-
     </div>
   </div>
 </template>
@@ -210,15 +208,6 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-  .filter {
-    margin-top: 10px;
-  }
+<style lang="scss">
 
-  .block.pages {
-    display: flex;
-    display: -webkit-flex;
-    justify-content: flex-end;
-    margin: 20px 0 12px;
-  }
 </style>

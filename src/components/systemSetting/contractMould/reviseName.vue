@@ -1,17 +1,14 @@
 <template>
   <div>
-    <el-dialog
-      title="修改短信名称"
-      :visible.sync="dialogVisible"
-      width="30%">
+    <el-dialog title="修改合同名称" :visible.aync="dialogVisible" width="30%">
+      <el-form :model="form" size="mini" label-width="80px">
 
-      <el-form size="mini" :model="form" label-width="80px">
-
-        <el-form-item label="原短信名称">
-          <el-input v-model="form.oldName"></el-input>
+        <el-form-item label="原合同名称">
+          <el-input v-model="form.oldName" placeholder="请输入原合同名称"></el-input>
         </el-form-item>
-        <el-form-item label="新短信名称">
-          <el-input v-model="form.newName"></el-input>
+
+        <el-form-item label="新合同名称">
+          <el-input v-model="form.newName" placeholder="请输入新合同名称"></el-input>
         </el-form-item>
 
         <el-row>
@@ -35,11 +32,10 @@
           </el-col>
         </el-row>
       </el-form>
-
-      <span slot="footer" class="dialog-footer">
-          <el-button size="small" @click="dialogVisible = false">取 消</el-button>
-          <el-button size="small" type="primary" @click="dialogVisible = false">确 定</el-button>
-        </span>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="small" @click="dialogVisible = false">取&nbsp;消</el-button>
+        <el-button size="small" type="primary" @click="dialogVisible = false">确&nbsp;定</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -51,10 +47,11 @@
     data() {
       return {
         dialogVisible: false,
-        formWidth: '80px',
         form: {
           oldName: '',
           newName: '',
+          date: '',
+          personal: '',
           operateDate: '',
           operateName: '孟笑',
         },
@@ -64,13 +61,13 @@
     },
     watch: {
       module(val) {
-        this.dialogVisible = val
+        this.dialogVisible = val;
       },
       dialogVisible(val) {
         if (!val) {
-          this.$emit('close')
+          this.$emit('close');
         }
-      },
+      }
     },
     methods: {},
   }
