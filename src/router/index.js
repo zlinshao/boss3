@@ -25,7 +25,6 @@ import ExportManage from '../components/systemSetting/exportManage/index.vue'
 import AccountManage from '../components/finance/accountManage/index'                 //账户管理
 import SubjectManage from '../components/finance/subjectManage/index'                 //科目管理
 import RoomCharge from '../components/finance/roomCharge/index'                       //房租总汇
-import RoomChargeDetail from '../components/finance/roomCharge/roomChargeDetail'      //房租总汇
 import OtherSum from '../components/finance/otherSum/index'                           //剩余款项总汇
 import IncomeFlow from '../components/finance/incomeFlow/index'                       //收支流水
 
@@ -109,6 +108,7 @@ export default new Router({
         { path: '/repairManage', component: RepairManage, name: '维修管理',}
       ]
     },
+
     {
       path: '/',
       component: Index,

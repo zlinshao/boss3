@@ -8,53 +8,57 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-table
-      :data="tableData"
-      style="width: 100%">
+    <el-dialog title="补齐时间修改" :visible.sync="dialogVisible" width="40%">
+      <el-table
+        :data="tableData"
+        style="width: 100%">
 
-      <el-table-column
-        prop="id"
-        label="ID"
-        width="88px;">
-      </el-table-column>
+        <el-table-column
+          prop="id"
+          label="ID"
+          width="88px;">
+        </el-table-column>
 
-      <el-table-column
-        prop="name"
-        label="规则名">
-      </el-table-column>
+        <el-table-column
+          prop="name"
+          label="规则名">
+        </el-table-column>
 
-      <el-table-column
-        prop="describe"
-        label="描述">
-      </el-table-column>
+        <el-table-column
+          prop="describe"
+          label="描述">
+        </el-table-column>
 
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            @click="handleEdit(scope.$index, scope.rw)">编辑
-          </el-button>
-          <el-button
-            size="mini"
-            type="danger"
-            @click="openDelete(scope.$index, scope.row)">删除
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <RevisePower :module="powerModule" :name="title" @close="closeEdit"></RevisePower>
+        <el-table-column label="操作">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              @click="handleEdit(scope.$index, scope.rw)">编辑
+            </el-button>
+            <el-button
+              size="mini"
+              type="danger"
+              @click="openDelete(scope.$index, scope.row)">删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="small" @click="dialogVisible = false">取&nbsp;消</el-button>
+        <el-button size="small" type="primary" @click="dialogVisible = false">确&nbsp;定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-  import RevisePower from './revisePower.vue'
-
   export default {
-    components: {RevisePower},
-    name: 'hello',
+    name: "remarks",
+    props: ['module'],
     data() {
       return {
+        dialogVisible: false,
+        powerModule: false,
         tableData: [
           {
             id: 1,
@@ -82,8 +86,18 @@
             describe: '发挥到了萨菲航空斯大林饭卡上的',
           },
         ],
-        powerModule: false,
-        title: '',
+      }
+    },
+    mounted() {
+    },
+    watch: {
+      module(val) {
+        this.dialogVisible = val;
+      },
+      dialogVisible(val) {
+        if (!val) {
+          this.$emit('close');
+        }
       }
     },
     methods: {
@@ -123,11 +137,10 @@
           });
         });
       }
-    }
+    },
   }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style scoped lang="scss">
 
 </style>

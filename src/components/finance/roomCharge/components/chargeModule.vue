@@ -27,7 +27,7 @@
                     placeholder="请填写详情"></el-input>
         </el-form-item>
 
-        <el-row v-if="title === 'collect'">
+        <el-row v-if="title === 'collectWay'">
           <el-col :span="12">
             <el-form-item label="收入科目">
               <el-input v-model="form.subject" placeholder="请选择科目" readonly></el-input>
@@ -39,7 +39,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <div v-if="title === 'rent'">
+        <div v-if="title === 'rentWay'">
           <el-row>
             <el-col :span="12">
               <el-form-item label="支出科目">
@@ -138,9 +138,8 @@
     },
     watch: {
       title(val) {
-        console.log(val);
         this.close_();
-        if (val === 'collect') {
+        if (val === 'collectWay') {
           this.titles = '新增应收入账';
           this.dateLabel = '收款时间';
           this.payNameLabel = '收款人员';
