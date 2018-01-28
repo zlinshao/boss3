@@ -24,11 +24,11 @@
         <el-form-item label="备注">
           <el-input type="textarea" :autosize="{minRows: 2, maxRows: 4}" placeholder="请填写备注"></el-input>
         </el-form-item>
-        <div slot="footer" class="dialog-footer">
-          <el-button size="small" @click="dialogVisible = false">取&nbsp;消</el-button>
-          <el-button size="small" type="primary" @click="dialogVisible = false">确&nbsp;定</el-button>
-        </div>
       </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="small" @click="dialogVisible = false">取&nbsp;消</el-button>
+        <el-button size="small" type="primary" @click="dialogVisible = false">确&nbsp;定</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
