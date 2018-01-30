@@ -1,5 +1,5 @@
 <template>
-  <div id="statistics">
+  <div id="periodicTable">
     <el-form :inline="true" size="mini" style="margin: 10px 0;border-bottom: 1px solid #EBEEF5">
       <el-button v-for="(key,index) in tabs" :class="{'btn': isActive === index}"
                  @click="onSubmit(index)" size="mini" :key="index">{{key}}
@@ -9,12 +9,6 @@
     <div class="filter">
       <el-form :inline="true" :model="form" size="mini" label-width="80px">
         <el-form-item>
-          <el-select v-model="form.status" clearable size="mini">
-            <el-option label="款项状态" value=""></el-option>
-            <el-option v-for="(key,index) in values" :label="key" :value="index + 1" :key="index"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="补齐时间">
           <div class="block">
             <el-date-picker
               v-model="form.dates"
@@ -53,8 +47,7 @@
               导出<i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="one">月报表</el-dropdown-item>
-              <el-dropdown-item command="tow">日报表</el-dropdown-item>
+              <el-dropdown-item v-for="(key,index) in tabs" :command="index + 1" :key="index">{{key}}</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </el-form-item>
@@ -63,53 +56,185 @@
 
     <el-table
       v-if="isActive == 0"
-      :data="tableData0"
-      width="100%"
-      @row-dblclick="collectDetail">
+      :data="tableData"
+      width="100%">
       <el-table-column
-        label="ID"
+        label="名称"
         prop="id">
       </el-table-column>
       <el-table-column
-        label="描述"
+        label="收房(套)"
         prop="describe">
       </el-table-column>
       <el-table-column
-        label="模块"
+        label="租房(套)"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="实际业绩"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="溢出业绩"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="所属部门"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="备注"
         prop="module">
       </el-table-column>
     </el-table>
 
     <el-table
       v-if="isActive == 1"
-      :data="tableData1"
-      width="100%"
-      @row-dblclick="payDetail">
+      :data="tableData"
+      width="100%">
       <el-table-column
-        label="ID"
+        label="名称"
         prop="id">
       </el-table-column>
       <el-table-column
-        label="描述"
+        label="收房(套)"
         prop="describe">
       </el-table-column>
       <el-table-column
-        label="模块"
+        label="租房(套)"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="实际业绩"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="溢出业绩"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="所属部门"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="备注"
         prop="module">
       </el-table-column>
     </el-table>
 
-    <!--<div class="block pages">-->
-    <!--<el-pagination-->
-    <!--@size-change="handleSizeChange"-->
-    <!--@current-change="handleCurrentChange"-->
-    <!--:current-page="currentPage"-->
-    <!--:page-sizes="[20, 100, 200, 300, 400]"-->
-    <!--:page-size="20"-->
-    <!--layout="total, sizes, prev, pager, next, jumper"-->
-    <!--:total="400">-->
-    <!--</el-pagination>-->
-    <!--</div>-->
+    <el-table
+      v-if="isActive == 2"
+      :data="tableData"
+      width="100%">
+      <el-table-column
+        label="名称"
+        prop="id">
+      </el-table-column>
+      <el-table-column
+        label="收房(套)"
+        prop="describe">
+      </el-table-column>
+      <el-table-column
+        label="租房(套)"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="实际业绩"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="溢出业绩"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="所属部门"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="备注"
+        prop="module">
+      </el-table-column>
+    </el-table>
+
+    <el-table
+      v-if="isActive == 3"
+      :data="tableData"
+      width="100%">
+      <el-table-column
+        label="名称"
+        prop="id">
+      </el-table-column>
+      <el-table-column
+        label="收房(套)"
+        prop="describe">
+      </el-table-column>
+      <el-table-column
+        label="租房(套)"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="实际业绩"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="溢出业绩"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="所属部门"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="备注"
+        prop="module">
+      </el-table-column>
+    </el-table>
+
+    <el-table
+      v-if="isActive == 4"
+      :data="tableData"
+      width="100%">
+      <el-table-column
+        label="名称"
+        prop="id">
+      </el-table-column>
+      <el-table-column
+        label="收房(套)"
+        prop="describe">
+      </el-table-column>
+      <el-table-column
+        label="租房(套)"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="实际业绩"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="溢出业绩"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="所属部门"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="备注"
+        prop="module">
+      </el-table-column>
+    </el-table>
+
+    <div class="block pages">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[20, 100, 200, 300, 400]"
+        :page-size="20"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="400">
+      </el-pagination>
+    </div>
 
     <!--组织架构-->
     <organization :organizationDialog="organizeVisible" @close="closeOrganize"></organization>
@@ -121,17 +246,16 @@
 
 
   export default {
-    name: 'statistics',
+    name: 'index',
     components: {organization},
     data() {
       return {
-        // currentPage: 1,
-        values: ['待入账', '待结清', '已结清', '已超额'],
+        tabs: ['个人', '组', '区', '城市', '公司'],
+        isActive: 0,
+        currentPage: 1,
         form: {
-          status: '',
           organize: '',
           dates: '',
-          subject: '',
           keywords: '',
         },
         organizeVisible: false,
@@ -163,29 +287,16 @@
             }
           }]
         },
-        tabs: ['月报表', '日报表'],
-        isActive: 0,
 
-        tableData0: [
+        tableData: [
           {
             id: 1,
-            describe: '1发挥到了萨菲航空斯大林饭卡上的',
+            describe: '1发发的挥到',
             module: '1Manger',
           }, {
             id: 2,
-            describe: '1发挥到了萨菲航空斯大林饭卡上的',
+            describe: '2放大范德萨',
             module: '1Manger',
-          },
-        ],
-        tableData1: [
-          {
-            id: 1,
-            describe: '2发挥到了萨菲航空斯大林饭卡上的',
-            module: '2Manger',
-          }, {
-            id: 2,
-            describe: '2发挥到了萨菲航空斯大林饭卡上的',
-            module: '2Manger',
           },
         ],
         restaurants: [],
@@ -194,25 +305,8 @@
     },
     mounted() {
       this.restaurants = this.loadAll();
-      // console.log(this.$router.resolve({path:'/statistics/staticDetail',query:{detail: 'collect'}}))
     },
     methods: {
-      // 双击
-      collectDetail(row) {
-        if (row.id === 1) {
-          let urls = window.location.href + '/staticDetail?detail=collect';
-          this.newOpen(urls);
-        } else {
-          let urls = window.location.href + '/staticDetail?detail=rent';
-          this.newOpen(urls);
-        }
-      },
-      newOpen(url) {
-        window.open(url, '_blank', 'width=' + (window.screen.availWidth - 10) + ',height=' + (window.screen.availHeight - 30) + ',top=0,left=0,resizable=yes,status=yes,menubar=no,scrollbars=yes');
-      },
-      payDetail(row) {
-        console.log(row);
-      },
       // 部门员工筛选
       openOrganize() {
         this.organizeVisible = true;
@@ -265,12 +359,12 @@
       leadingOut(val) {
         console.log(val);
       },
-      // handleSizeChange(val) {
-      //   console.log(`每页 ${val} 条`);
-      // },
-      // handleCurrentChange(val) {
-      //   console.log(`当前页: ${val}`);
-      // },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
     }
   }
 </script>
