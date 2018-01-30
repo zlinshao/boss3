@@ -8,7 +8,7 @@
                 组织架构
               </div>
               <div>
-                <el-button style="color: #ffffff" type="text">使用指南</el-button>
+                <el-button size="mini">使用指南</el-button>
               </div>
             </div>
             <div id="dragTree">
@@ -33,24 +33,28 @@
               <div>乐伽商业管理有限公司</div>
 
               <div @click="sortDepartment">
-                <el-button v-if="!isDepartment" style="color: #ffffff" type="text">部门排序</el-button>
+                <el-button size="mini">部门排序</el-button>
                 <!--<el-button v-if="isDepartment" style="color: #ffffff" type="text">取消排序</el-button>-->
               </div>
             </div>
 
             <div id="sortTable" v-show="isDepartment">
+              <div class="ul_header">
+                <span style="margin-right: 15px">上下移动部门调整位置</span>
+                <el-button type="text" size="mini" @click="isDepartment = !isDepartment">取消</el-button>
+                <el-button type="text" size="mini" @click="confirmSave">保存</el-button>
+              </div>
               <ul>
-                <li>研发部</li>
-                <li>客服部</li>
-                <li>市场部</li>
-                <li>财务部</li>
-                <li>人力资源部</li>
-                <li>人事部</li>
-                <li>行政部</li>
+                <li><span class="el-icons-fa-bars" style="margin-right: 10px"></span>研发部（18人）</li>
+                <li><span class="el-icons-fa-bars" style="margin-right: 10px"></span>客服部（10人）</li>
+                <li><span class="el-icons-fa-bars" style="margin-right: 10px"></span>市场部（230人）</li>
+                <li><span class="el-icons-fa-bars" style="margin-right: 10px"></span>财务部（9人）</li>
+                <li><span class="el-icons-fa-bars" style="margin-right: 10px"></span>人力资源部（12人）</li>
+                <li><span class="el-icons-fa-bars" style="margin-right: 10px"></span>人事部（5人）</li>
+                <li><span class="el-icons-fa-bars" style="margin-right: 10px"></span>行政部（8人）</li>
               </ul>
               <div style="margin: 10px;display: flex;justify-content: flex-end">
-                <el-button type="primary" size="mini" @click="isDepartment = !isDepartment">取消排序</el-button>
-                <el-button type="primary" size="mini">确定排序</el-button>
+
               </div>
             </div>
             <div  v-show="!isDepartment">
@@ -274,6 +278,25 @@
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
       },
+
+      //确定排序
+      confirmSave(){
+        this.$confirm('您确定保存吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '保存成功!'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消保存'
+          });
+        });
+      }
     }
 
   }
@@ -300,10 +323,21 @@
       #sortTable{
         user-select: none;
         padding: 10px;
+        .ul_header{
+          background: #ecf5ff;
+          cursor: default;
+          padding: 8px;
+          border-bottom: 1px solid #ebeef5;
+          text-align: center;
+          &:hover{
+            background: #ecf5ff;
+          }
+        }
         li{
           padding: 8px;
           background: #ffffff;
           border-bottom: 1px solid #ebeef5;
+          cursor: move;
           &:hover{
             background: #f5f7fa;
           }

@@ -62,9 +62,9 @@
 
     <div class="contentBox" :class="isCollapse? 'hideSidebar' : ''">
       <el-container>
-        <div class="aside scroll_bar">
-          <el-menu :default-active="$route.path" class="el-menu-vertical-demo" unique-opened
-                   :collapse="isCollapse" router
+        <div class="aside">
+          <el-menu :default-active="$route.path" class="el-menu-vertical-demo" unique-opened :defaultOpeneds=defaultArray
+                   :collapse="isCollapse" router @open="handleOpen" @close="handleClose"
                    background-color="#6a8dfb" text-color="#fff" active-text-color="#ffd04b">
             <template v-for="(item,index) in $router.options.routes">
               <!--一级菜单-->
@@ -73,7 +73,7 @@
                 <span slot="title"> {{child.name}}</span>
               </el-menu-item>
 
-              <el-submenu :index="index+''" v-if="!item.hidden">
+              <el-submenu :index="item.name+''" v-if="!item.hidden">
                 <template slot="title">
                   <i :class="item.icon"></i>
                   <span>{{item.name}}</span>
@@ -122,6 +122,7 @@
         isCollapse:false,
         Countdown:999999,  //倒计时
         screenStatus : false,
+        defaultArray:[],
       }
     },
     mounted(){
@@ -133,6 +134,35 @@
       }
     },
     methods: {
+      handleOpen(key, keyPath) {
+        console.log(key, keyPath);
+        if(key === '财务账本'){
+          this.defaultArray = [];
+          this.$prompt('请输入密码', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+//          inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
+//          inputErrorMessage: '邮箱格式不正确'
+          }).then(({ value }) => {
+//          this.$message({
+//            type: 'success',
+//            message: '你的密码是: ' + value
+//          });
+            if(Number(value) === 6666){
+              this.defaultArray = [key];
+            }
+          }).catch(() => {
+//          this.$message({
+//            type: 'info',
+//            message: '取消输入'
+//          });
+            this.defaultArray = [];
+          });
+        }
+      },
+      handleClose(key, keyPath) {
+        console.log(key, keyPath);
+      },
       clickScreen(){
         this.screenStatus = true;
       },
@@ -177,7 +207,7 @@
 
 <style lang="scss">
   #index{
-    min-height: 100%;
+    /*min-height: 100%;*/
     .navBar{
       width: 100%;
       height: 80px;
@@ -274,7 +304,7 @@
           top: 80px;
           height: 100%;
           z-index: 56;
-          overflow: auto;
+          /*overflow: auto;*/
           [class^="el-icons-fa"], [class*=" el-icons-fa"]{
             vertical-align: middle;
             margin-right: 5px;

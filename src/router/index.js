@@ -22,11 +22,11 @@ import VillageManage from '../components/systemSetting/villageManage/index.vue'
 import ExportManage from '../components/systemSetting/exportManage/index.vue'
 
 // 财务账本
-import AccountManage from '../components/finance/accountManage/index'           //账户管理
-import SubjectManage from '../components/finance/subjectManage/index'           //科目管理
-import RoomCharge from '../components/finance/roomCharge/index'                 //房租总汇
-import OtherSum from '../components/finance/otherSum/index'                     //剩余款项总汇
-import IncomeFlow from '../components/finance/incomeFlow/index'                 //收支流水
+import AccountManage from '../components/finance/accountManage/index.vue'           //账户管理
+import SubjectManage from '../components/finance/subjectManage/index.vue'           //科目管理
+import RoomCharge from '../components/finance/roomCharge/index.vue'                 //房租总汇
+import OtherSum from '../components/finance/otherSum/index.vue'                     //剩余款项总汇
+import IncomeFlow from '../components/finance/incomeFlow/index.vue'                 //收支流水
 
 //租赁管理
 import WholeRentManage from '../components/rentManage/wholeRentManage/index.vue'

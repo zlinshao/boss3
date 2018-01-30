@@ -30,12 +30,23 @@
       watch: {
         $route() {
           this.addViewTags()
-        }
-      },
+          }
+        },
       methods:{
         addViewTags() {
           const route = this.generateRoute();
+
+          let isExist = this.visitedViews.some((item) => {
+             return route.name === item.name;
+          });
           if (!route) {
+            return false
+          }else if(this.visitedViews.length>9 && !isExist){
+            this.$notify({
+              title: '警告',
+              message: '您最多打开十个标签页，请先关闭其他标签页',
+              type: 'warning'
+            });
             return false
           }
           this.$store.dispatch('addVisitedViews', route)
