@@ -94,6 +94,23 @@ export default {
       background: #c5cce2;
     }
   }
+  .el-table__body-wrapper.is-scroll-right {
+    &::-webkit-scrollbar {
+      width: 4px;
+    }
 
+    &::-webkit-scrollbar-button {
+      height: 0;
+      background-color: #eee;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #e4e7ed;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #c5cce2;
+    }
+  }
 
 </style>

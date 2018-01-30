@@ -17,9 +17,10 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-table v-if="isActive == 0"
-              :data="tableData0"
-              width="100%">
+    <el-table
+      v-if="isActive == 0"
+      :data="tableData0"
+      width="100%">
       <el-table-column
         label="ID"
         prop="id">
@@ -34,9 +35,10 @@
       </el-table-column>
     </el-table>
 
-    <el-table v-if="isActive == 1"
-              :data="tableData1"
-              width="100%">
+    <el-table
+      v-if="isActive == 1"
+      :data="tableData1"
+      width="100%">
       <el-table-column
         label="ID"
         prop="id">

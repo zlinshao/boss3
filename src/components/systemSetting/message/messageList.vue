@@ -16,7 +16,11 @@
           </el-form-item>
 
           <el-form-item label="发送人">
-            <el-input v-model="formInline.user" placeholder="发送人"></el-input>
+            <el-input v-model="formInline.user" @focus="openDepartment" placeholder="发送人" readonly></el-input>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button type="primary">重置</el-button>
           </el-form-item>
 
           <el-form-item>
@@ -24,7 +28,6 @@
           </el-form-item>
         </el-form>
       </div>
-
 
       <el-table :data="tableData"
                 style="width: 100%">
@@ -64,13 +67,20 @@
         </el-pagination>
       </div>
     </div>
+
+    <!--组织架构-->
+    <AddModule :organizationDialog="departmentVisible" @close="closeDepartment"></AddModule>
   </div>
 </template>
 
 <script>
+  import AddModule from '../../common/organization.vue'
   export default {
+    name: 'message-list',
+    components: {AddModule},
     data() {
       return {
+        departmentVisible: false,
         tableData: [
           {
             date: '2016-05-02',
@@ -183,6 +193,12 @@
       this.getDate();
     },
     methods: {
+      openDepartment() {
+        this.departmentVisible = true
+      },
+      closeDepartment() {
+        this.departmentVisible = false
+      },
       onSubmit() {
         console.log('submit!');
       },

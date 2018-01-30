@@ -7,26 +7,30 @@ import Index from '../components/index.vue'
 import Main from '../components/main.vue'
 import Lock from '../components/common/lockScreen/components/lockedScreen.vue'
 
-import Recycle from '../components/systemSetting/recycleBin/index.vue'  //回收站
-import ContractMould from '../components/systemSetting/contractMould/index.vue'  //合同模板
+import Recycle from '../components/systemSetting/recycleBin/index.vue'                //回收站
+import ContractMould from '../components/systemSetting/contractMould/index.vue'       //合同模板
 
-import LoginRecord from '../components/systemSetting/loginRecord/index.vue'       // 操作记录
+import LoginRecord from '../components/systemSetting/loginRecord/index.vue'           //操作记录
 import UserDictionary from '../components/systemSetting/userDictionary/index.vue'
 
-import Message from '../components/systemSetting/message/index.vue'                 //短信
-import MessageList from '../components/systemSetting/message/messageList.vue'                 //短信
-import MessageModule from '../components/systemSetting/message/messageModule.vue'                 //短信
+import Message from '../components/systemSetting/message/index.vue'                   //短信
+import MessageList from '../components/systemSetting/message/messageList.vue'         //短信
+import MessageModule from '../components/systemSetting/message/messageModule.vue'     //短信
 import RoleManage from '../components/systemSetting/roleManage/index.vue'
 import PowerManage from '../components/systemSetting/powerManage/index.vue'
 import VillageManage from '../components/systemSetting/villageManage/index.vue'
 import ExportManage from '../components/systemSetting/exportManage/index.vue'
 
 // 财务账本
-import AccountManage from '../components/finance/accountManage/index.vue'           //账户管理
-import SubjectManage from '../components/finance/subjectManage/index.vue'           //科目管理
-import RoomCharge from '../components/finance/roomCharge/index.vue'                 //房租总汇
-import OtherSum from '../components/finance/otherSum/index.vue'                     //剩余款项总汇
-import IncomeFlow from '../components/finance/incomeFlow/index.vue'                 //收支流水
+import AccountManage from '../components/finance/accountManage/index'                 //账户管理
+import SubjectManage from '../components/finance/subjectManage/index'                 //科目管理
+import RoomCharge from '../components/finance/roomCharge/index'                       //房租总汇
+import OtherSum from '../components/finance/otherSum/index'                           //剩余款项总汇
+import BudgetManage from '../components/finance/budgetManage/index'                   //预算管理
+import Statistics from '../components/finance/statistics/index'                       //统计
+import StaticDetail from '../components/finance/statistics/components/staticDetail'   //统计详情
+import EndPayment from '../components/finance/endPayment/index'                       //尾款报备
+import IncomeFlow from '../components/finance/incomeFlow/index'                       //收支流水
 
 //租赁管理
 import WholeRentManage from '../components/rentManage/wholeRentManage/index.vue'
@@ -59,7 +63,7 @@ import Achievement from '../components/humanResource/achievement/index.vue'
 
 import RentingDetail from '../components/rentManage/rentingDetail.vue'
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
@@ -108,6 +112,7 @@ export default new Router({
         { path: '/repairManage', component: RepairManage, name: '维修管理',}
       ]
     },
+
     {
       path: '/',
       component: Index,
@@ -117,10 +122,21 @@ export default new Router({
         { path: '/accountManage', component: AccountManage, name: '账户管理',},
         { path: '/subjectManage', component: SubjectManage, name: '科目管理',},
         { path: '/roomCharge', component: RoomCharge, name: '房租款项总汇',},
-        { path: '/otherSum', component: OtherSum, name: '剩余款项总汇',},
+        { path: '/otherSum', component: OtherSum, name: '其余款项总汇',},
+        { path: '/statistics', component: Statistics, name: '统计',},
+        { path: '/budgetManage', component: BudgetManage, name: '预算管理',},
+        { path: '/endPayment', component: EndPayment, name: '尾款报备',},
         { path: '/incomeFlow', component: IncomeFlow, name: '收支流水',},
       ]
     },
+    {
+      path: '/statistics/staticDetail',
+      component: StaticDetail,
+      name: '',
+      hidden: true
+    },
+
+
     {
       path: '/',
       component: Index,

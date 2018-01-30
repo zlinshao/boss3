@@ -26,7 +26,7 @@
           <el-input v-model="form.organize" @focus="openOrganize" placeholder="请选择部门/员工"
                     readonly>
             <template slot="append">
-              <div style="cursor: pointer;" @click="close_">清空</div>
+              <div style="cursor: pointer;" @click="close_subject">清空</div>
             </template>
           </el-input>
         </el-form-item>
@@ -42,12 +42,6 @@
           </el-autocomplete>
         </el-form-item>
 
-        <el-form-item>
-          <el-button type="text" @click="filterModule = true">
-            <i class="el-icon-plus"></i>&nbsp;高级筛选
-          </el-button>
-        </el-form-item>
-
         <!--刷新-->
         <el-form-item>
           <el-button type="primary"><i class="el-icon-refresh"></i></el-button>
@@ -58,18 +52,8 @@
             导出<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="collect">应收</el-dropdown-item>
-            <el-dropdown-item command="rent">应付</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-
-        <el-dropdown trigger="click" @command="newAdd">
-          <el-button type="primary" size="mini">
-            新增<i class="el-icon-arrow-down el-icon--right"></i>
-          </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="collect">应收</el-dropdown-item>
-            <el-dropdown-item command="rent">应付</el-dropdown-item>
+            <el-dropdown-item command="one">已签约</el-dropdown-item>
+            <el-dropdown-item command="tow">未签约</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
 
@@ -79,80 +63,77 @@
           </el-button>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="all">汇总</el-dropdown-item>
-            <el-dropdown-item command="collect">应收</el-dropdown-item>
-            <el-dropdown-item command="rent">应付</el-dropdown-item>
+            <el-dropdown-item command="one">已签约</el-dropdown-item>
+            <el-dropdown-item command="tow">未签约</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-form>
     </div>
-    <!--应收-->
-    <div class="border_table" v-show="lookType === 'all' || lookType === 'collect'">
+
+    <div class="border_table" v-show="lookType === 'all' || lookType === 'one'">
       <el-table
-        :data="collectData"
+        :data="payData"
         width="100%"
-        @cell-dblclick="dblCollect"
-        @row-contextmenu="collectMenu">
+        @row-contextmenu="payMenu">
         <el-table-column
-          label="收款时间"
+          label="喜报时间"
           prop="date"
           width="90px">
         </el-table-column>
         <el-table-column
-          label="客户姓名"
+          label="租房状态"
           prop="name">
         </el-table-column>
         <el-table-column
-          label="手机号"
+          label="地址"
           prop="mobile"
           width="100px">
         </el-table-column>
         <el-table-column
-          label="收入科目"
+          label="房型"
           prop="subject">
         </el-table-column>
         <el-table-column
-          label="应收金额"
-          prop="collectMoney">
+          label="租房月数"
+          prop="payMoney">
         </el-table-column>
         <el-table-column
-          label="实收金额"
-          prop="receivedMoney">
+          label="付款方式"
+          prop="payableMoney">
         </el-table-column>
         <el-table-column
-          label="剩余款项"
+          label="定金"
           prop="remainder">
         </el-table-column>
         <el-table-column
-          label="补齐时间"
+          label="月单价"
           prop="polishing"
           width="90px">
         </el-table-column>
         <el-table-column
-          label="租房月数"
+          label="本期房租期数"
           prop="months">
         </el-table-column>
         <el-table-column
-          label="付款方式"
+          label="本期应收"
           prop="payWay">
         </el-table-column>
         <el-table-column
-          label="月单价"
+          label="本次已收金额"
           prop="unitPrice">
         </el-table-column>
         <el-table-column
-          label="合同时间周期"
-          prop="contractPeriod"
-          width="100px">
+          label="本期已收"
+          prop="firstDate">
         </el-table-column>
         <el-table-column
-          label="状态"
-          prop="status">
-          <template slot-scope="scope">
-            <el-button v-if="scope.row.status == 1" class="btn btn1" size="mini">待入账</el-button>
-            <el-button v-if="scope.row.status == 2" class="btn btn2" size="mini">待结清</el-button>
-            <el-button v-if="scope.row.status == 3" class="btn btn3" size="mini">已结清</el-button>
-            <el-button v-if="scope.row.status == 4" class="btn btn4" size="mini">已超额</el-button>
-          </template>
+          label="本期剩余"
+          prop="secondDate">
+        </el-table-column>
+        <el-table-column
+          label="补齐时间"
+          prop="contractPeriod"
+          width="90px">
         </el-table-column>
         <el-table-column
           label="备注"
@@ -169,20 +150,6 @@
       </el-table>
 
       <div class="block pages">
-        <div>
-        <span>
-          应收金额(元)：<span style="color: #78cd51;">4630988.50</span>
-        </span>&nbsp;&nbsp;&nbsp;&nbsp;
-          <span>
-          实收金额(元)：<span style="color: #f66;">129773.64</span>
-        </span>&nbsp;&nbsp;&nbsp;&nbsp;
-          <span>
-          剩余款项(元)：<span style="color: #ff9a02;">4501414.86</span>
-        </span>&nbsp;&nbsp;&nbsp;&nbsp;
-          <span>
-          今日到期：1
-        </span>
-        </div>
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -195,81 +162,70 @@
       </div>
     </div>
 
-    <!--应付-->
-    <div class="border_table greenTable" v-show="lookType === 'all' || lookType === 'rent'">
+    <div class="border_table greenTable" v-show="lookType === 'all' || lookType === 'tow'">
       <el-table
         :data="payData"
         width="100%"
         @row-contextmenu="payMenu">
         <el-table-column
-          label="付款时间"
+          label="喜报时间"
           prop="date"
           width="90px">
         </el-table-column>
         <el-table-column
-          label="客户姓名"
+          label="租房状态"
           prop="name">
         </el-table-column>
         <el-table-column
-          label="手机号"
+          label="地址"
           prop="mobile"
           width="100px">
         </el-table-column>
         <el-table-column
-          label="支出科目"
+          label="房型"
           prop="subject">
         </el-table-column>
         <el-table-column
-          label="应付金额"
+          label="租房月数"
           prop="payMoney">
         </el-table-column>
         <el-table-column
-          label="实付金额"
+          label="付款方式"
           prop="payableMoney">
         </el-table-column>
         <el-table-column
-          label="剩余款项"
+          label="定金"
           prop="remainder">
         </el-table-column>
         <el-table-column
-          label="补齐时间"
+          label="月单价"
           prop="polishing"
           width="90px">
         </el-table-column>
         <el-table-column
-          label="收房月数"
+          label="本期房租期数"
           prop="months">
         </el-table-column>
         <el-table-column
-          label="付款方式"
+          label="本期应收"
           prop="payWay">
         </el-table-column>
         <el-table-column
-          label="月单价"
+          label="本次已收金额"
           prop="unitPrice">
         </el-table-column>
         <el-table-column
-          label="第一次付款时间"
+          label="本期已收"
           prop="firstDate">
         </el-table-column>
         <el-table-column
-          label="第二次付款时间"
+          label="本期剩余"
           prop="secondDate">
         </el-table-column>
         <el-table-column
-          label="合同时间周期"
+          label="补齐时间"
           prop="contractPeriod"
           width="90px">
-        </el-table-column>
-        <el-table-column
-          label="状态"
-          prop="status">
-          <template slot-scope="scope">
-            <el-button v-if="scope.row.status == 1" class="btn btn1" size="mini">待入账</el-button>
-            <el-button v-if="scope.row.status == 2" class="btn btn2" size="mini">待结清</el-button>
-            <el-button v-if="scope.row.status == 3" class="btn btn3" size="mini">已结清</el-button>
-            <el-button v-if="scope.row.status == 4" class="btn btn4" size="mini">已超额</el-button>
-          </template>
         </el-table-column>
         <el-table-column
           label="备注"
@@ -286,20 +242,6 @@
       </el-table>
 
       <div class="block pages">
-        <div>
-        <span>
-          应付金额(元)：<span style="color: #78cd51;">16038533.20</span>
-        </span>&nbsp;&nbsp;&nbsp;&nbsp;
-          <span>
-          实付金额(元)：<span style="color: #f66;">14615.62</span>
-        </span>&nbsp;&nbsp;&nbsp;&nbsp;
-          <span>
-          剩余款项(元)：<span style="color: #ff9a02;">16034710.58</span>
-        </span>&nbsp;&nbsp;&nbsp;&nbsp;
-          <span>
-          今日到期：1
-        </span>
-        </div>
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -319,18 +261,6 @@
     <!--组织架构-->
     <organization :organizationDialog="organizeVisible" @close="closeOrganize"></organization>
 
-    <!--高级筛选-->
-    <FilterModule :module="filterModule" @close="closeFilter"></FilterModule>
-
-    <!--新增-->
-    <ChargeModule :module="chargeVisible" @close="closeCharge" :title="titles"></ChargeModule>
-
-    <!--编辑付款/收款时间-->
-    <ReviseTime :module="payTimeVisible" :date="payTimes" @close="closePayTime" :title="titles"></ReviseTime>
-
-    <!--编辑补齐时间-->
-    <PolishTime :module="polishTimeVisible" :date="polishTime" @close="closePolishTime"></PolishTime>
-
     <Remarks :module="remarkVisible" @close="closeRemark"></Remarks>
   </div>
 </template>
@@ -338,15 +268,11 @@
 <script>
   import organization from '../../common/organization.vue'
   import RightMenu from '../../common/contextMenu/rightMenu.vue'    //右键
-  import FilterModule from './components/advancedFilter'
-  import ChargeModule from './components/chargeModule'
-  import ReviseTime from './components/reviseTime'
-  import PolishTime from './components/polishTime'
   import Remarks from '../../common/remarks'
 
   export default {
     name: "index",
-    components: {organization, RightMenu, FilterModule, ChargeModule, ReviseTime, PolishTime, Remarks},
+    components: {organization, RightMenu, Remarks},
     data() {
       return {
         rightMenuX: 0,
@@ -357,17 +283,10 @@
         lookType: 'all',
         pageNumber: 5,
 
-        payTimes: [],
-        polishTime: '',
-        titles: '',
         currentPage: 1,
-        remarkVisible: false,
-        payTimeVisible: false,
-        polishTimeVisible: false,
-        chargeVisible: false,
-        filterModule: false,
         organizeVisible: false,
-        values: ['待入账', '待结清', '已结清', '已超额',],
+        remarkVisible: false,
+        values: ['待入账', '待结清', '已结清', '已超额'],
         form: {
           status: '',
           organize: '',
@@ -446,7 +365,6 @@
             remark: '放大开始JFK撒粉卡',
           },
         ],
-
         restaurants: [],
         state: ''
       }
@@ -460,17 +378,7 @@
       leadingOut(val) {
         console.log(val);
       },
-      // 新增
-      newAdd(val) {
-        console.log(val);
-        if (val === 'collect') {
-          this.chargeVisible = true;
-          this.titles = val;
-        } else {
-          this.chargeVisible = true;
-          this.titles = val;
-        }
-      },
+
       // 查看应收/应付
       lookStatus(val) {
         this.lookType = val;
@@ -482,9 +390,6 @@
       },
       closeFilter() {
         this.filterModule = false;
-      },
-      closeCharge() {
-        this.chargeVisible = false;
       },
       querySearch(queryString, cb) {
         let restaurants = this.restaurants;
@@ -524,7 +429,8 @@
       closeOrganize() {
         this.organizeVisible = false;
       },
-      close_() {
+      // 清空部门
+      close_subject() {
         console.log(1);
       },
       // 双击 收
@@ -537,73 +443,26 @@
       // 右键 收
       collectMenu(row, event) {
         this.lists = [
-          {clickIndex: 'collectWay', headIcon: 'el-icon-edit-outline', label: '应收入账',},
-          {clickIndex: 'collectRemark', headIcon: 'el-icon-edit', label: '备注',},
-          {
-            clickIndex: '', headIcon: 'el-icon-date', tailIcon: 'el-icon-arrow-right', label: '收款时间',
-            children: [
-              {clickIndex: 'reviseCollect', label: '编辑',},
-              {clickIndex: 'lookCollect', label: '查看',}
-            ]
-          },
-          {clickIndex: 'collectPolish', headIcon: 'el-icon-date', label: '修改补齐时间',},
-          {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',},
+          {clickIndex: 'oneRemark', headIcon: 'el-icon-edit', label: '备注',},
         ];
         this.contextMenuParam(event);
       },
       // 右键 租
       payMenu(row, event) {
         this.lists = [
-          {clickIndex: 'rentWay', headIcon: 'el-icon-edit-outline', label: '应付入账',},
-          {clickIndex: 'payRemark', headIcon: 'el-icon-edit', label: '备注',},
-          {
-            clickIndex: '', headIcon: 'el-icon-date', tailIcon: 'el-icon-arrow-right', label: '付款时间',
-            children: [
-              {clickIndex: 'revisePay', label: '编辑',},
-              {clickIndex: 'lookPay', label: '查看',}
-            ]
-          },
-          {clickIndex: 'payPolish', headIcon: 'el-icon-date', label: '修改补齐时间',},
-          {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',},
+          {clickIndex: 'towRemark', headIcon: 'el-icon-edit', label: '备注',},
         ];
         this.contextMenuParam(event);
       },
       // 右键回调
       clickEvent(val) {
-        this.titles = val;
-        if (val === 'delete') {
-          console.log(val);
-          this.openDelete();
-        }
-        if (val === 'collectWay') {
-          this.chargeVisible = true;
-        }
-        if (val === 'rentWay') {
-          this.chargeVisible = true;
-        }
-        if (val === 'revisePay' || val === 'reviseCollect') {
-          this.payTimeVisible = true;
-          this.payTimes = ['1990-01-01', '1990-02-01', '1990-03-01', '1990-04-01', '1990-06-01', '1990-06-01'];
-        }
-        if (val === 'lookPay' || val === 'lookCollect') {
-          this.payTimeVisible = true;
-          this.payTimes = ['1992-01-01', '1992-02-01', '1992-03-01', '1992-04-01', '1992-06-01', '1992-06-01'];
-        }
-        if (val === 'collectPolish' || val === 'payPolish') {
-          this.polishTimeVisible = true;
-          this.polishTime = '1992-01-01';
-        }
-        if (val === 'collectRemark' || val === 'payRemark') {
+        if (val === 'oneRemark' || val === 'towRemark') {
           this.remarkVisible = true;
         }
       },
       // 关闭付款/收款时间
       closePayTime() {
         this.payTimeVisible = false;
-      },
-      // 关闭补齐时间
-      closePolishTime() {
-        this.polishTimeVisible = false;
       },
       closeRemark() {
         this.remarkVisible = false;
@@ -623,24 +482,6 @@
         this.$nextTick(() => {
           this.show = true
         })
-      },
-      // 删除
-      openDelete() {
-        this.$confirm('此操作将删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -675,13 +516,6 @@
 
     .btn4 {
       background-color: #F04D3D;
-    }
-
-    .block.pages {
-      display: -webkit-flex;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
 
     .border_table {

@@ -3,7 +3,8 @@
     <div class="filter">
       <el-form class="demo-form-inline" size="small">
         <el-form-item>
-          <el-button type="primary" style="float: right;" @click="onSubmit"><i class="el-icon-plus"></i>&nbsp;新&nbsp;增</el-button>
+          <el-button type="primary" style="float: right;" @click="onSubmit"><i class="el-icon-plus"></i>&nbsp;新&nbsp;增
+          </el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -48,36 +49,39 @@
 
 <script>
   import RevisePower from './revisePower.vue'
+
   export default {
     components: {RevisePower},
     name: 'hello',
     data() {
       return {
-        tableData: [{
-          id: 1,
-          name: 'Conference/conferenceRead_scan',
-          describe: '发挥到了萨菲航空斯大林饭卡上的',
-        },{
-          id: 2,
-          name: 'Conference/conferenceRead_scan',
-          describe: '发挥到了萨菲航空斯大林饭卡上的',
-        },{
-          id: 3,
-          name: 'Conference/conferenceRead_scan',
-          describe: '发挥到了萨菲航空斯大林饭卡上的',
-        },{
-          id: 4,
-          name: 'Conference/conferenceRead_scan',
-          describe: '发挥到了萨菲航空斯大林饭卡上的',
-        },{
-          id: 5,
-          name: 'Conference/conferenceRead_scan',
-          describe: '发挥到了萨菲航空斯大林饭卡上的',
-        },{
-          id: 6,
-          name: 'Conference/conferenceRead_scan',
-          describe: '发挥到了萨菲航空斯大林饭卡上的',
-        },],
+        tableData: [
+          {
+            id: 1,
+            name: 'Conference/conferenceRead_scan',
+            describe: '发挥到了萨菲航空斯大林饭卡上的',
+          }, {
+            id: 2,
+            name: 'Conference/conferenceRead_scan',
+            describe: '发挥到了萨菲航空斯大林饭卡上的',
+          }, {
+            id: 3,
+            name: 'Conference/conferenceRead_scan',
+            describe: '发挥到了萨菲航空斯大林饭卡上的',
+          }, {
+            id: 4,
+            name: 'Conference/conferenceRead_scan',
+            describe: '发挥到了萨菲航空斯大林饭卡上的',
+          }, {
+            id: 5,
+            name: 'Conference/conferenceRead_scan',
+            describe: '发挥到了萨菲航空斯大林饭卡上的',
+          }, {
+            id: 6,
+            name: 'Conference/conferenceRead_scan',
+            describe: '发挥到了萨菲航空斯大林饭卡上的',
+          },
+        ],
         powerModule: false,
         title: '',
       }
