@@ -1,5 +1,6 @@
 <template>
   <div id="periodicTable">
+    <input type="datetime-local">
     <div class="filter">
       <el-form :inline="true" :model="form" size="mini" label-width="80px">
         <el-form-item>
@@ -8,7 +9,7 @@
             <el-option v-for="(key,index) in values" :label="key" :value="index + 1" :key="index"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="补齐时间">
+        <el-form-item>
           <div class="block">
             <el-date-picker
               v-model="form.dates"
@@ -40,6 +41,24 @@
             @select="handleSelect">
             <el-button slot="append" icon="el-icon-search"></el-button>
           </el-autocomplete>
+        </el-form-item>
+        <el-form-item>
+          <el-select
+            @remove-tag="remChange"
+            @change="checkChange"
+            v-model="form.checkValue"
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            placeholder="请选择文章标签">
+            <el-option
+              v-for="item in options"
+              :key="item.label"
+              :label="item.label"
+              :value="item.label">
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button type="primary">导出</el-button>
@@ -138,7 +157,16 @@
           dates: '',
           subject: '',
           keywords: '',
+          checkValue: [],
         },
+
+        options: [
+          {label: '双方业绩为零'},
+          {label: '已充公'},
+          {label: '二次出租'},
+          {label: '鸡腿包'}
+        ],
+
         organizeVisible: false,
 
         pickerOptions: {
@@ -168,8 +196,6 @@
             }
           }]
         },
-        tabs: ['月报表', '日报表'],
-        isActive: 0,
 
         tableData: [
           {
@@ -191,6 +217,12 @@
       this.restaurants = this.loadAll();
     },
     methods: {
+      checkChange(val) {
+        console.log(val);
+      },
+      remChange(val) {
+        console.log(val);
+      },
       // 部门员工筛选
       openOrganize() {
         this.organizeVisible = true;
