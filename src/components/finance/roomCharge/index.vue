@@ -330,6 +330,8 @@
 
     <!--编辑补齐时间-->
     <PolishTime :module="polishTimeVisible" :date="polishTime" @close="closePolishTime"></PolishTime>
+
+    <Remarks :module="remarkVisible" @close="closeRemark"></Remarks>
   </div>
 </template>
 
@@ -340,10 +342,11 @@
   import ChargeModule from './components/chargeModule'
   import ReviseTime from './components/reviseTime'
   import PolishTime from './components/polishTime'
+  import Remarks from '../../common/remarks'
 
   export default {
     name: "index",
-    components: {organization, RightMenu, FilterModule, ChargeModule, ReviseTime, PolishTime},
+    components: {organization, RightMenu, FilterModule, ChargeModule, ReviseTime, PolishTime, Remarks},
     data() {
       return {
         rightMenuX: 0,
@@ -358,6 +361,7 @@
         polishTime: '',
         titles: '',
         currentPage: 1,
+        remarkVisible: false,
         payTimeVisible: false,
         polishTimeVisible: false,
         chargeVisible: false,
@@ -581,13 +585,16 @@
           this.payTimeVisible = true;
           this.payTimes = ['1990-01-01', '1990-02-01', '1990-03-01', '1990-04-01', '1990-06-01', '1990-06-01'];
         }
-        if (val === 'lookPay' || val === 'reviseCollect') {
+        if (val === 'lookPay' || val === 'lookCollect') {
           this.payTimeVisible = true;
           this.payTimes = ['1992-01-01', '1992-02-01', '1992-03-01', '1992-04-01', '1992-06-01', '1992-06-01'];
         }
         if (val === 'collectPolish' || val === 'payPolish') {
           this.polishTimeVisible = true;
           this.polishTime = '1992-01-01';
+        }
+        if (val === 'collectRemark' || val === 'payRemark') {
+          this.remarkVisible = true;
         }
       },
       // 关闭付款/收款时间
@@ -597,6 +604,9 @@
       // 关闭补齐时间
       closePolishTime() {
         this.polishTimeVisible = false;
+      },
+      closeRemark() {
+        this.remarkVisible = false;
       },
       //关闭右键菜单
       closeMenu() {
@@ -679,9 +689,6 @@
       padding: 8px;
       border-radius: 3px;
       margin-bottom: 24px;
-    }
-    .el-table th {
-      background: blue;
     }
   }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="reviseRole">
+  <div id="reviseRole">
     <el-dialog :title="name" :visible.sync="dialogVisible" width="40%">
       <div class="scroll_bar">
         <el-form :model="form" label-width="80px" size="mini">
@@ -69,7 +69,7 @@
 </script>
 
 <style lang="scss">
-  .reviseRole {
+  #reviseRole {
     .el-dialog__wrapper {
       .el-dialog {
         .el-dialog__body {
