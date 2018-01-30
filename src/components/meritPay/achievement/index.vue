@@ -1,6 +1,5 @@
 <template>
   <div id="periodicTable">
-    <input type="datetime-local">
     <div class="filter">
       <el-form :inline="true" :model="form" size="mini" label-width="80px">
         <el-form-item>
