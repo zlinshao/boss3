@@ -99,4 +99,38 @@
   justify-content: flex-end;
   margin: 20px 0 10px; }
 
+.__vev_calendar-wrapper .events-wrapper {
+  background-color: #6a8dfb !important; }
+
+.__vev_calendar-wrapper .cal-wrapper .cal-body .dates .item.selected-day .is-event {
+  background-color: #6a8dfb !important; }
+
+.__vev_calendar-wrapper .cal-wrapper .cal-body .dates .item .is-event {
+  border: 1px solid #6a8dfb !important; }
+
+.__vev_calendar-wrapper .cal-wrapper .cal-body .dates .item .is-today {
+  background-color: #6a8dfb !important; }
+
+@media screen and (min-width: 768px) {
+  .__vev_calendar-wrapper .cal-wrapper {
+    width: 100% !important;
+    padding: 0 !important; } }
+.__vev_calendar-wrapper .events-wrapper {
+  display: none; }
+
+.__vev_calendar-wrapper .cal-wrapper .cal-header {
+  color: #6a8dfb !important;
+  border-bottom: 1px solid #e5e5e5; }
+
+.__vev_calendar-wrapper .icon {
+  color: #6a8dfb !important; }
+
+.__vev_calendar-wrapper .cal-wrapper .cal-body .weeks .item {
+  line-height: 50px;
+  float: left;
+  width: 14.285%;
+  color: #76e79e; }
+  .__vev_calendar-wrapper .cal-wrapper .cal-body .weeks .item:first-child, .__vev_calendar-wrapper .cal-wrapper .cal-body .weeks .item:last-child {
+    color: #fb4699; }
+
 /*# sourceMappingURL=reset.css.map */

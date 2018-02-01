@@ -14,7 +14,7 @@
           </el-button>
         </div>
 
-        <div class="tool_right">
+        <div class="tool_right"  @click="openModalDialog('settingDialog')">
           <div><i class="el-icon-setting"></i>&nbsp;设置</div>
         </div>
       </div>
@@ -857,6 +857,7 @@
     <Repayment :repaymentDialog="repaymentDialog" @close="closeRepayment"></Repayment>
     <ReturnVisit :returnVisitDialog="returnVisitDialog" @close="closeReturnVisit"></ReturnVisit>
     <TopForm :topFormSetDialog="topFormSetDialog" @close="closeTopForm"></TopForm>
+    <Setting :settingDialog="settingDialog" @close="closeSetting"></Setting>
   </div>
 </template>
 
@@ -883,7 +884,8 @@
   import AddHouseResources from '../components/addHouseResources.vue' //登记房源
   import Repayment from '../components/rentRepayment.vue'
   import ReturnVisit from '../components/returnVisit.vue'   //查看回访
-  import TopForm from '../components/topFormSet.vue'
+  import TopForm from '../components/topFormSet.vue'    //表头列表
+  import Setting from './components/setting.vue'
 
   export default {
     name: 'hello',
@@ -910,7 +912,8 @@
       AddHouseResources,
       Repayment,
       ReturnVisit,
-      TopForm
+      TopForm,
+      Setting
     },
     data () {
       return {
@@ -942,6 +945,7 @@
         repaymentDialog:false,        //还款
         returnVisitDialog:false,      //查看回访
         topFormSetDialog:false,       //选择列
+        settingDialog : false,        //设置
 
         formInline: {
           name: '',
@@ -1113,8 +1117,6 @@
             value: '选项5',
             label: '北京烤鸭'
           }],
-
-
       }
     },
 
@@ -1133,7 +1135,7 @@
         this.lists = [
           {clickIndex: 'addHouseResourcesDialog', headIcon: 'el-icons-fa-home', label: '修改房源',},
           {
-            clickIndex: '', headIcon: 'el-icons-fa-pencil-square-o', tailIcon: 'el-icon-arrow-right', label: '合同续约/延期',
+            clickIndex: '', headIcon: 'el-icons-fa-pencil-square-o', tailIcon: 'el-icon-arrow-right', label: '房东续约/延期',
             children: [
               {clickIndex: 'ownerRenewDialog', label: '续约',},
               {clickIndex: 'ownerDelayDialog', label: '延期',}
@@ -1310,6 +1312,9 @@
           case 'topFormSetDialog':     //转到合租
             this.topFormSetDialog = true;
             break;
+          case 'settingDialog':     //转到合租
+            this.settingDialog = true;
+            break;
         }
 
       },
@@ -1395,6 +1400,9 @@
       },
       closeTopForm(){
         this.topFormSetDialog = false;
+      },
+      closeSetting(){
+          this.settingDialog = false;
       }
     }
   }

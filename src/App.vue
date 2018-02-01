@@ -27,6 +27,7 @@ export default {
     color: #787a7e;
     font-size: 14px;
     background-color: #f4f3f6;
+    overflow-x: hidden;
     #app {
       height: 100%;
     }
