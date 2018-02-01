@@ -333,6 +333,7 @@
           margin-top: 80px;
           padding: 10px 20px;
           margin-left: 240px;
+          overflow-x: hidden;
           /*transition: margin-left .4s;*/
         }
       }

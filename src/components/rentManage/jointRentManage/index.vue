@@ -871,7 +871,7 @@
     <Repayment :repaymentDialog="repaymentDialog" @close="closeRepayment"></Repayment>
     <ReturnVisit :returnVisitDialog="returnVisitDialog" @close="closeReturnVisit"></ReturnVisit>
     <TopForm :topFormSetDialog="topFormSetDialog" @close="closeTopForm"></TopForm>
-    <TopForm :distributionDialog="distributionDialog" @close="closeDistribution"></TopForm>
+    <Distribution :distributionDialog="distributionDialog" @close="closeDistribution"></Distribution>
   </div>
 </template>
 
@@ -898,6 +898,7 @@
   import Repayment from '../components/rentRepayment.vue'
   import ReturnVisit from '../components/returnVisit.vue'   //查看回访
   import TopForm from '../components/topFormSet.vue'
+  import Distribution from '../components/distribution.vue'
 
   export default {
     name: 'hello',
@@ -923,7 +924,8 @@
       AddHouseResources,
       Repayment,
       ReturnVisit,
-      TopForm
+      TopForm,
+      Distribution
     },
     data () {
       return {
@@ -1326,7 +1328,7 @@
             this.topFormSetDialog = true;
             break;
           case 'distributionDialog':     //房间分配
-            this.topFormSetDialog = true;
+            this.distributionDialog = true;
             break;
         }
 
