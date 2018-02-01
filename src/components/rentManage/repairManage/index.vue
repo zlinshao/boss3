@@ -117,7 +117,7 @@
 </template>
 
 <script>
-  import RightMenu from '../../common/contextMenu/rightMenu.vue'
+  import RightMenu from '../../common/rightMenu.vue'
   //  import Instruction from './components/instruction.vue'
   export default {
     name: 'hello',

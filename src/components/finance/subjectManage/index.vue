@@ -66,7 +66,7 @@
 </template>
 
 <script>
-  import RightMenu from '../../common/contextMenu/rightMenu.vue'    //右键
+  import RightMenu from '../../common/rightMenu.vue'    //右键
   import SubjectModule from './subjectModule'
   export default {
     name: "index",
