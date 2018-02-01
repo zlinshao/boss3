@@ -66,6 +66,10 @@
 
 .filter {
   padding-top: 10px; }
+  .filter .el-select .el-input {
+    width: 110px; }
+  .filter .el-input-group__prepend {
+    background-color: #fff !important; }
 
 #rentingDetail .el-form-item__label {
   color: #bcbcbd; }

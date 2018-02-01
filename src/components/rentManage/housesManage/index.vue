@@ -1,30 +1,45 @@
-<template>
+ <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="houseContainer">
-      <div class="tool">
-        <div class="tool_left">
-          <el-button type="primary" size="mini">
-            <i class="el-icon-document"></i>&nbsp;登记房源
-          </el-button>
-          <el-button type="success" size="mini">
-            <i class="el-icon-tickets"></i>&nbsp;功能说明
-          </el-button>
-        </div>
-
-        <div class="tool_right">
-          <!--<div><i class="el-icon-date"></i>&nbsp;使用说明</div>-->
-          <div><i class="el-icon-setting"></i>&nbsp;设置</div>
-        </div>
-      </div>
       <div class="filter">
         <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">
-          <el-form-item label="性质">
+          <el-form-item label="房屋类型">
             <el-select v-model="formInline.house" clearable placeholder="请选择">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="店面">
+          <el-form-item label="房型">
+            <el-select v-model="formInline.house" clearable placeholder="请选择">
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="装修">
+            <el-select v-model="formInline.house" clearable placeholder="请选择">
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="参考价格">
+            <el-select v-model="formInline.house" clearable placeholder="请选择">
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="房屋特色">
+            <el-select v-model="formInline.house" clearable placeholder="请选择">
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="房屋状态">
+            <el-select v-model="formInline.house" clearable placeholder="请选择">
+              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="房屋所属">
             <el-select v-model="formInline.house" clearable placeholder="请选择">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
@@ -36,15 +51,15 @@
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="text">高级</el-button>
+            <el-checkbox label="显示本组" name="type"></el-checkbox>
           </el-form-item>
-          <el-form-item style="float: right">
-            <el-button type="success">导出房源</el-button>
-          </el-form-item>
+          <!--<el-form-item style="float: right">-->
+            <!--<el-button type="success">导出房源</el-button>-->
+          <!--</el-form-item>-->
         </el-form>
       </div>
       <div class="main">
-        <div class="myHouse">
+        <div class="tableBox">
           <div class="myTable" @contextmenu="houseHeadMenu($event)">
             <el-table
               :data="tableData"
@@ -52,36 +67,56 @@
               @row-contextmenu='houseMenu'
               style="width: 100%">
               <el-table-column
-                prop="date"
-                label="日期">
-              </el-table-column>
-              <el-table-column
                 prop="name"
-                label="姓名">
-              </el-table-column>
-              <el-table-column
-                prop="province"
-                label="省份">
-              </el-table-column>
-              <el-table-column
-                prop="city"
-                label="市区">
-              </el-table-column>
-              <el-table-column
-                prop="address"
                 label="地址">
               </el-table-column>
               <el-table-column
-                prop="zip"
-                label="邮编">
+                prop="date"
+                label="房型">
+              </el-table-column>
+              <el-table-column
+                prop="province"
+                label="面积">
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="装修">
+              </el-table-column>
+              <el-table-column
+                prop="date"
+                label="房屋特色">
+              </el-table-column>
+              <el-table-column
+                prop="province"
+                label="参考租金">
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="剩余空置期（天）">
+              </el-table-column>
+              <el-table-column
+                prop="date"
+                label="房屋状态">
+              </el-table-column>
+              <el-table-column
+                prop="province"
+                label="房屋所属">
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="所属部门">
+              </el-table-column>
+              <el-table-column
+                prop="date"
+                label="负责人">
+              </el-table-column>
+              <el-table-column
+                prop="province"
+                label="置顶">
               </el-table-column>
             </el-table>
           </div>
           <div class="tableBottom">
-            <div class="right">
-              <div>未租房源 <span>5&nbsp;套</span></div>
-              <div>已定 <span>0&nbsp;套</span></div>
-            </div>
 
             <div class="left">
               <el-pagination
@@ -160,27 +195,28 @@
                   </tr>
                 </table>
               </div>
-              <div class="remarks">备注：</div>
             </el-tab-pane>
             <el-tab-pane label="跟进记录">
-              <el-table
-                :data="tableData"
-                @row-click="clickTable"
-                @row-contextmenu='houseMenu'
-                style="width: 100%">
-                <el-table-column
-                  prop="name"
-                  label="跟进人">
-                </el-table-column>
-                <el-table-column
-                  prop="date"
-                  label="跟进时间">
-                </el-table-column>
-                <el-table-column
-                  prop="province"
-                  label="跟进记录">
-                </el-table-column>
-              </el-table>
+              <div>
+                <el-table
+                  :data="tableData"
+                  @row-click="clickTable"
+                  @row-contextmenu='houseMenu'>
+                  <el-table-column
+                    prop="name"
+                    label="跟进人">
+                  </el-table-column>
+                  <el-table-column
+                    prop="date"
+                    label="跟进时间">
+                  </el-table-column>
+                  <el-table-column
+                    prop="province"
+                    label="跟进记录">
+                  </el-table-column>
+                </el-table>
+              </div>
+
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -193,7 +229,7 @@
 </template>
 
 <script>
-  import RightMenu from '../../common/contextMenu/rightMenu.vue'
+  import RightMenu from '../../common/rightMenu.vue'
   //  import Instruction from './components/instruction.vue'
   export default {
     name: 'hello',
@@ -288,12 +324,7 @@
       //房屋右键
       houseMenu(row, event){
         this.lists = [
-          {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '房源修改',},
-          {clickIndex: 1, headIcon: 'el-icon-circle-plus', label: '添加跟进',},
-          {clickIndex: 1, headIcon: 'el-icon-edit-outline', label: '修改看房',},
-          {clickIndex: 1, headIcon: 'el-icon-edit', label: '修改回访',},
-          {clickIndex: 4, headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
-          {clickIndex: 1, headIcon: 'el-icon-error', label: '删除房源',},
+          {clickIndex: 'stick', headIcon: 'el-icons-fa-arrow-up', label: '置顶',},
         ];
         this.contextMenuParam(event);
       },
@@ -318,7 +349,25 @@
 
       //右键回调时间
       clickEvent (index) {
-        console.log('click ' + index)
+        switch (index){
+          case 'stick' :
+            this.$confirm('您确定将其置顶吗', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$message({
+                type: 'success',
+                message: '置顶成功!'
+              });
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消置顶'
+              });
+            });
+            break;
+        }
       },
       //关闭右键菜单
       closeMenu(){
@@ -338,48 +387,16 @@
           this.show = true
         })
       },
-
-      //说明书
-//          openInstruction(){
-//              this.instructionDialog = true
-//          },
-//          closeInstruction(){
-//            this.instructionDialog = false
-//          }
     }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss">
+<style lang="scss" scoped="">
   #houseContainer {
-    .tool {
-      border-bottom: 1px solid #eee;
-      display: flex;
-      padding-bottom: 10px;
-      justify-content: space-between;
-      .tool_right {
-        display: flex;
-        align-items: center;
-        div {
-          width: 100px;
-          text-align: center;
-          cursor: pointer;
-          &:first-child {
-            /*border-right: 1px solid #ccc;*/
-          }
-          i {
-            color: #409EFF;
-          }
-        }
-      }
-    }
-    .filter {
-      padding-top: 10px;
-    }
     .main {
       font-size: 12px;
-      .myHouse {
+      .tableBox {
         border: 1px solid #dfe6fb;
         margin-bottom: 20px;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .12), 0 0 6px 0 rgba(0, 0, 0, .04);
@@ -393,7 +410,7 @@
         .tableBottom {
           padding: 8px;
           display: flex;
-          justify-content: space-between;
+          justify-content: flex-end;
           .right {
             display: flex;
             align-items: center;
@@ -415,14 +432,9 @@
         margin-bottom: 15px;
         .el-tabs {
           border: 1px solid #d4f0de;
-          .el-tabs__header {
-            background-color: #d4f0de;
-          }
           .el-tabs__content {
-            padding: 0;
             .el-tab-pane {
               .content {
-                padding: 10px;
                 min-height: 100px;
                 .houseList {
                   width: 100%;
@@ -460,10 +472,6 @@
                     }
                   }
                 }
-              }
-              .remarks {
-                padding: 8px;
-                border-top: 1px solid #efefef;
               }
             }
           }

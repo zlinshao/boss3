@@ -337,7 +337,7 @@
 
 <script>
   import organization from '../../common/organization.vue'
-  import RightMenu from '../../common/contextMenu/rightMenu.vue'    //右键
+  import RightMenu from '../../common/rightMenu.vue'    //右键
   import FilterModule from './components/advancedFilter'
   import ChargeModule from './components/chargeModule'
   import ReviseTime from './components/reviseTime'

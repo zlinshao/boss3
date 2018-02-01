@@ -7,7 +7,7 @@
           <div class="el-icons-fa-bars" @click="changeCollapse"></div>
         </div>
         <div class="slogan">
-          <img src="../assets/slogan.png" alt="">
+          <img src="../assets/images/slogan.png" alt="">
         </div>
       </div>
       <div class="right">

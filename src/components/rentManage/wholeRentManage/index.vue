@@ -862,7 +862,7 @@
 </template>
 
 <script>
-  import RightMenu from '../../common/contextMenu/rightMenu.vue'    //右键
+  import RightMenu from '../../common/rightMenu.vue'    //右键
   import Instruction from './components/instruction.vue'            //使用说明
   import BackUp from '../components/back-up.vue'                    //备份
   import Advanced from '../components/advancedSearch.vue'           //高级搜索

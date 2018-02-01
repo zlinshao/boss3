@@ -22,7 +22,6 @@
                 <span style="border-left: 4px solid #6a8dfb;"></span>日历
               </div>
               <div class="calendar">
-
                 <vue-event-calendar :events="demoEvents" @day-changed="handleDayChanged"
                                     @month-changed="handleMonthChanged"></vue-event-calendar>
               </div>
@@ -34,13 +33,13 @@
               <div class="longHuBang">
                 <div class="item_list scroll_bar">
                   <div v-for="item in 7">
-                    <div style="margin-right: 10px;color:#6a8dfb">{{item}}</div>
-                    <div>
-                      <img src="../assets/images/head.jpg" style="width: 40px;height: 40px;border-radius: 50%;" alt="">
+                    <div class="longLuOrder">{{item}}</div>
+                    <div class="longHuPic">
+                      <img src="../assets/images/head.jpg" alt="">
                     </div>
-                    <div style="font-weight: 600;margin:0 20px 0 30px;">陆宣羽</div>
+                    <div class="longHuName">陆宣羽</div>
                     <div>南京一区 - 百万一组</div>
-                    <div style="flex-grow: 1;text-align: right;margin-right: 10px;color:#6a8dfb">212.222.00元</div>
+                    <div class="achievement">212.222.00元</div>
                   </div>
                 </div>
               </div>
@@ -48,16 +47,16 @@
           </div>
         </el-col>
         <el-col :span="8">
-          <div class="leJiaHistory">
+          <div class="leJiaHistory hover_pic">
             <img src="../assets/images/发展.png" alt="">
           </div>
 
           <div class="system">
-            <div class="talent">
+            <div class="talent hover_pic">
               <img src="../assets/images/人才.png" alt="">
             </div>
 
-            <div class="manage">
+            <div class="manage hover_pic">
               <img src="../assets/images/管理.png" alt="">
             </div>
           </div>
@@ -72,7 +71,7 @@
               </div>
               <div class="newEntrants_content">
                 <div class="newEntrants_info">
-                  <div style="font-weight: 600;margin-right: 20px">陆宣羽</div>
+                  <div style="font-weight:bold;color:#747576;margin-right: 20px">陆宣羽</div>
                   <div>南京一区 - 百万一组</div>
                   <div style="flex-grow: 1;text-align: right;margin-right: 10px">2018-01-31</div>
                 </div>
@@ -86,10 +85,10 @@
             <span style="border-left: 4px solid #6a8dfb;"></span>新闻中心
           </div>
           <div class="newsCenter scroll_bar">
-            <div class="newTitle" style="color: #666">
-                <a href="javascript:;">乐伽新闻</a>
-                <a href="javascript:;">乐伽新闻</a>
-                <a href="javascript:;">乐伽新闻</a>
+            <div class="newTitle" @click.stop="selectNewsType($event)">
+              <a href="javascript:;" style="color: #6a8dfb">乐伽新闻</a>
+              <a href="javascript:;">员工风采</a>
+              <a href="javascript:;">热门导读</a>
             </div>
 
             <div class="newsContent">
@@ -124,8 +123,13 @@
           date: `${today.getFullYear()}/${today.getMonth() === 11 ? 1 : today.getMonth() + 2}/06`,
           title: 'Title-3',
           desc: 'description'
-        }]
+        }],
+
+        weeks:['日','一','二','三','四','五','六']
       }
+    },
+    mounted(){
+        this.changeLanguage();
     },
     methods: {
       handleDayChanged (data) {
@@ -133,6 +137,19 @@
       },
       handleMonthChanged (data) {
         console.log('month-changed', data)
+      },
+      //切换新闻中心标题
+      selectNewsType(e){
+        for (let i = 0; i < e.target.parentNode.children.length; i++) {
+          e.target.parentNode.children[i].style.color = '#666';
+        }
+        e.target.style.color = '#6a8dfb';
+      },
+      //日历变成中文
+      changeLanguage(){
+        for(let i=1;i<8;i++){
+          document.querySelectorAll('.weeks>span:nth-child('+ i +')')[0].innerHTML=this.weeks[i-1]
+        }
       }
     }
   }
@@ -142,7 +159,32 @@
   #main {
     width: 100%;
     overflow: hidden;
+
+    @font-face{
+      font-family:Impact;//////字体名称
+      src:url(../assets/font/impact-2.ttf);  ////字体路径
+    }
+    .scroll_bar {
+      &::-webkit-scrollbar-button {
+        height: 20px;
+        background-color: #ffffff;
+      }
+    }
     .container {
+      .hover_pic {
+        overflow: hidden;
+        border: 1px solid #dfe6fb;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);
+        img {
+          transition: all .5s;
+
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+      }
+
       .banner {
         margin-bottom: 30px;
         .banner_pic {
@@ -172,7 +214,6 @@
       }
       .mainContent {
         width: 100%;
-
         .calendar {
           margin-bottom: 10px;
           border-radius: 5px;
@@ -188,22 +229,91 @@
           box-sizing: border-box;
           box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);
           height: 433px;
-          .scroll_bar {
-            &::-webkit-scrollbar-button {
-              height: 30px;
-              background-color: #ffffff;
-            }
-          }
           .item_list {
             overflow: auto;
             height: 100%;
             > div {
-              height: 60px;
+              font-family: 'Impact', sans-serif;
+              height: 70px;
               border-bottom: 1px solid #e4e4e4;
               display: flex;
               align-items: center;
               &:last-child {
                 border-bottom: none;
+              }
+              .longLuOrder {
+                color: #6a8dfb;
+                margin-right: 20px;
+              }
+              .achievement {
+                flex-grow: 1;
+                text-align: right;
+                margin-right: 10px;
+                color: #6a8dfb
+              }
+              .longHuPic {
+                width: 48px;
+                height: 62px;
+                text-align: center;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                >img {
+                  width: 40px;
+                  height: 40px;
+                  border-radius: 50%;
+                }
+
+              }
+              .longHuName {
+                font-weight: bold;
+                color: #747576;
+                margin: 0 20px 0 30px;
+              }
+              &:nth-child(1) {
+                .longLuOrder, .achievement {
+                  color: #ffc95f;
+                }
+                .longHuPic {
+                  background: url("../assets/images/longhu_1.png") no-repeat;
+                  background-size: 100% ;
+                  position: relative;
+                  >img {
+                    position: absolute;
+                    top: 15px;
+                    left: 4px;
+                  }
+                }
+              }
+              &:nth-child(2) {
+                .longLuOrder, .achievement {
+                  color: #fb4699;
+                }
+                .longHuPic {
+                  background: url("../assets/images/longhu_2.png") no-repeat;
+                  background-size: 100% ;
+                  position: relative;
+                  >img {
+                    position: absolute;
+                    top: 15px;
+                    left: 4px;
+                  }
+                }
+              }
+              &:nth-child(3) {
+                .longLuOrder, .achievement {
+                  color: #58d788;
+                }
+                .longHuPic {
+                  background: url("../assets/images/longhu_3.png") no-repeat;
+                  background-size: 100% ;
+                  position: relative;
+                  >img {
+                    position: absolute;
+                    top: 15px;
+                    left: 4px;
+                  }
+                }
               }
             }
           }
@@ -218,7 +328,6 @@
         img {
           width: 100%;
           height: 100%;
-          box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);
         }
       }
       .system {
@@ -237,7 +346,6 @@
         img {
           width: 100%;
           height: 100%;
-          box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);
         }
       }
 
@@ -259,51 +367,53 @@
           border-bottom: 1px solid #e4e4e4;
           padding: 20px 10px 10px 10px;
           box-sizing: border-box;
-          .newHeader{
+          .newHeader {
             img {
               width: 50px;
               height: 50px;
               border-radius: 10px;
             }
           }
-          .newEntrants_content{
+          .newEntrants_content {
             flex-grow: 1;
-            padding: 0 0 0 30px ;
+            padding: 0 0 0 30px;
           }
-          .newEntrants_info{
+          .newEntrants_info {
             display: flex;
             align-items: center;
             margin-bottom: 5px;
           }
-          .newEntrants_intro{
-
+          .newEntrants_intro {
+            font-size: 12px;
           }
         }
       }
 
-      .newsCenter{
-        .newTitle{
+      .newsCenter {
+        .newTitle {
+          color: #666;
           padding: 20px 10px 10px 20px;
-          a{
+          a {
             margin-right: 10px;
-            &:hover{
+            &:hover {
               color: #6a8dfb;
             }
           }
         }
-        .newsContent{
+        .newsContent {
           padding: 5px 10px 0 20px;
           display: flex;
-          div{
-            img{
+          div {
+            img {
               width: 160px;
               height: 110px;
               border-radius: 5px;
             }
           }
-          .news_words{
+          .news_words {
             flex-grow: 1;
             margin-left: 10px;
+            font-size: 12px;
           }
         }
       }

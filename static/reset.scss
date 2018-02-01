@@ -68,6 +68,7 @@
     max-height: 410px;
   }
 }
+
 .el-table {
   th {
     background-color: #dfe6fb !important;
@@ -105,6 +106,12 @@
 }
 .filter {
   padding-top: 10px;
+  .el-select .el-input {
+    width: 110px;
+  }
+  .el-input-group__prepend {
+    background-color: #fff !important;
+  }
 }
 
 #rentingDetail{
@@ -154,6 +161,7 @@
   }
 }
 
+
 .block.pages {
   display: flex;
   display: -webkit-flex;
@@ -162,7 +170,7 @@
 }
 
 
-
+//日历
 .__vev_calendar-wrapper .events-wrapper {
   background-color: #6a8dfb !important;
 }
