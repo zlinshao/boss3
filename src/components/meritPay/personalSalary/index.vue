@@ -311,7 +311,7 @@
 </template>
 
 <script>
-  import RightMenu from '../../common/contextMenu/rightMenu.vue'    //右键
+  import RightMenu from '../../common/rightMenu.vue'    //右键
   import Remarks from '../../common/remarks.vue'
   import Freeze from './components/freeze.vue'
   import Badge from './components/badge.vue'
