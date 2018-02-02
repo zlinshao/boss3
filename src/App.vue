@@ -5,14 +5,14 @@
 </template>
 
 <script>
-export default {
-  name: 'app',
-  methods:{
-    prevent(e){
+  export default {
+    name: 'app',
+    methods: {
+      prevent(e) {
         e.preventDefault();
+      }
     }
   }
-}
 </script>
 
 <style lang="scss">
@@ -21,7 +21,7 @@ export default {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #787a7e;
@@ -31,7 +31,7 @@ export default {
     #app {
       height: 100%;
     }
-    a{
+    a {
       text-decoration: none;
       color: #787a7e;
     }
@@ -40,21 +40,21 @@ export default {
       padding: 0;
       margin: 0;
     }
-    .el-pagination{
-      span,li,.el-input{
+    .el-pagination {
+      span, li, .el-input {
         font-size: 12px !important;
       }
     }
 
-    .el-table{
-      th,td{
+    .el-table {
+      th, td {
         padding: 6px 0;
         font-size: 12px;
       }
     }
-    .el-tabs{
-      .el-tabs__header{
-        .el-tabs__item{
+    .el-tabs {
+      .el-tabs__header {
+        .el-tabs__item {
           font-size: 12px;
         }
       }
@@ -77,9 +77,10 @@ export default {
     }
   }
 
-  .scroll_bar{
+  .scroll_bar {
     &::-webkit-scrollbar {
       width: 4px;
+      height: 6px;
     }
 
     &::-webkit-scrollbar-button {
@@ -95,9 +96,11 @@ export default {
       background: #c5cce2;
     }
   }
-  .el-table__body-wrapper.is-scroll-right {
+
+  .el-table__body-wrapper.is-scroll-right, .el-table__body-wrapper.is-scroll-left, .el-table__body-wrapper.is-scroll-middle {
     &::-webkit-scrollbar {
       width: 4px;
+      height: 5px;
     }
 
     &::-webkit-scrollbar-button {

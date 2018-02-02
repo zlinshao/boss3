@@ -75,7 +75,6 @@
     max-height: 410px;
   }
 }
-
 .el-table {
   th {
     background-color: #dfe6fb !important;
@@ -165,6 +164,18 @@
     &:hover .tree-btn{
       display:inline-block;
     }
+  }
+}
+
+.topTabs{
+  $color: #409EFF;
+  .btn {
+    background-color: $color !important;
+    border-color: $color !important;
+    color: #FFFFFF !important;
+    /*<!-- -webkit-box-shadow: 0 2px 15px 0 $color;-->*/
+    /*<!-- -moz-box-shadow: 0 2px 15px 0 $color;-->*/
+    /*<!--box-shadow: 0 2px 15px 0 $color;-->*/
   }
 }
 

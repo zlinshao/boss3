@@ -103,6 +103,14 @@
   .expand-tree .el-tree-node__content:hover .tree-btn {
     display: inline-block; }
 
+.topTabs .btn {
+  background-color: #409EFF !important;
+  border-color: #409EFF !important;
+  color: #FFFFFF !important;
+  /*<!-- -webkit-box-shadow: 0 2px 15px 0 $color;-->*/
+  /*<!-- -moz-box-shadow: 0 2px 15px 0 $color;-->*/
+  /*<!--box-shadow: 0 2px 15px 0 $color;-->*/ }
+
 .block.pages {
   display: flex;
   display: -webkit-flex;

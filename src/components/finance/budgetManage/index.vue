@@ -41,6 +41,18 @@
         label="结果">
       </el-table-column>
     </el-table>
+
+    <div class="block pages">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[20, 100, 200, 300, 400]"
+        :page-size="20"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="400">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -49,6 +61,7 @@
     name: "index",
     data() {
       return {
+        currentPage: 1,
         form: {
           dates: '',
         },
@@ -153,7 +166,14 @@
     mounted() {
     },
     watch: {},
-    methods: {},
+    methods: {
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
+    },
   }
 </script>
 
