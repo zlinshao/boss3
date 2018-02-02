@@ -1,12 +1,15 @@
 <template>
-  <div id="systemSetting">
-    <el-form :inline="true" size="mini" style="margin: 10px 0;">
-      <el-button v-for="(key,index) in tabs" :class="{'btn': isActive === index}"
-                 @click="onSubmit(index)" size="mini" :key="index">{{key}}
-      </el-button>
-    </el-form>
+  <div id="recycleBin">
+    <div class="topTabs">
+      <el-form :inline="true" size="mini" style="margin: 10px 0;">
+        <el-button v-for="(key,index) in tabs" :class="{'btn': isActive === index}"
+                   @click="onSubmit(index)" size="mini" :key="index">{{key}}
+        </el-button>
+      </el-form>
+    </div>
+
     <div class="filter" v-if="isActive == 1">
-      <el-form :inline="true" size="mini">
+      <el-form :inline="true" :model="form" size="mini" label-width="80px">
         <el-form-item label="物业地址">
           <el-input v-model="form.address"></el-input>
         </el-form-item>
@@ -69,7 +72,7 @@
 
 <script>
   export default {
-    name: 'systemSetting',
+    name: 'recycle-bin',
     data() {
       return {
         currentPage: 1,
@@ -129,16 +132,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-  #systemSetting {
-    $color: #409EFF;
-    .btn {
-      background-color: $color;
-      border-color: $color;
-      color: #FFFFFF;
-      margin-bottom: 10px;
-      /*<!-- -webkit-box-shadow: 0 2px 15px 0 $color;-->*/
-      /*<!-- -moz-box-shadow: 0 2px 15px 0 $color;-->*/
-      /*<!--box-shadow: 0 2px 15px 0 $color;-->*/
-    }
+  #recycleBin {
+
   }
 </style>

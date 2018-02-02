@@ -4,11 +4,17 @@
       <el-form :inline="true" :model="form" size="mini" label-width="80px">
         <el-form-item>
           <el-select v-model="form.status" clearable size="mini">
-            <el-option label="款项状态" value=""></el-option>
-            <el-option v-for="(key,index) in values" :label="key" :value="index + 1" :key="index"></el-option>
+            <el-option label="标记筛选" value=""></el-option>
+            <el-option v-for="(key,index) in badgeValue" :label="key" :value="index + 1" :key="index"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="补齐时间">
+        <el-form-item>
+          <el-select v-model="form.status" clearable size="mini">
+            <el-option label="收房状态" value=""></el-option>
+            <el-option v-for="(key,index) in collectValue" :label="key" :value="index + 1" :key="index"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
           <div class="block">
             <el-date-picker
               v-model="form.dates"
@@ -48,33 +54,14 @@
         </el-form-item>
 
         <el-form-item>
-          <el-dropdown @command="leadingOut">
-            <el-button type="primary" size="mini">
-              导出<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="one">已签约</el-dropdown-item>
-              <el-dropdown-item command="tow">未签约</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-
-          <el-dropdown trigger="click" @command="lookStatus">
-            <el-button type="primary" size="mini">
-              汇总<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="all">汇总</el-dropdown-item>
-              <el-dropdown-item command="one">已签约</el-dropdown-item>
-              <el-dropdown-item command="tow">未签约</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+          <el-button type="primary" size="mini">导出</el-button>
         </el-form-item>
       </el-form>
     </div>
 
-    <div class="border_table" v-show="lookType === 'all' || lookType === 'one'">
+    <div class="border_table">
       <el-table
-        :data="payData"
+        :data="tableData"
         width="100%"
         @row-contextmenu="payMenu">
         <el-table-column
@@ -156,100 +143,8 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
-          :page-sizes="[pageNumber]"
-          :page-size="pageNumber"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="400">
-        </el-pagination>
-      </div>
-    </div>
-
-    <div class="border_table greenTable" v-show="lookType === 'all' || lookType === 'tow'">
-      <el-table
-        :data="payData"
-        width="100%"
-        @row-contextmenu="payMenu">
-        <el-table-column
-          label="喜报时间"
-          prop="date"
-          width="90px">
-        </el-table-column>
-        <el-table-column
-          label="租房状态"
-          prop="name">
-        </el-table-column>
-        <el-table-column
-          label="地址"
-          prop="mobile"
-          width="100px">
-        </el-table-column>
-        <el-table-column
-          label="房型"
-          prop="subject">
-        </el-table-column>
-        <el-table-column
-          label="租房月数"
-          prop="payMoney">
-        </el-table-column>
-        <el-table-column
-          label="付款方式"
-          prop="payableMoney">
-        </el-table-column>
-        <el-table-column
-          label="定金"
-          prop="remainder">
-        </el-table-column>
-        <el-table-column
-          label="月单价"
-          prop="polishing"
-          width="90px">
-        </el-table-column>
-        <el-table-column
-          label="本期房租期数"
-          prop="months">
-        </el-table-column>
-        <el-table-column
-          label="本期应收"
-          prop="payWay">
-        </el-table-column>
-        <el-table-column
-          label="本次已收金额"
-          prop="unitPrice">
-        </el-table-column>
-        <el-table-column
-          label="本期已收"
-          prop="firstDate">
-        </el-table-column>
-        <el-table-column
-          label="本期剩余"
-          prop="secondDate">
-        </el-table-column>
-        <el-table-column
-          label="补齐时间"
-          prop="contractPeriod"
-          width="90px">
-        </el-table-column>
-        <el-table-column
-          label="备注"
-          prop="remark">
-        </el-table-column>
-        <el-table-column
-          label="开单人"
-          prop="staff_name">
-        </el-table-column>
-        <el-table-column
-          label="部门"
-          prop="department_name">
-        </el-table-column>
-      </el-table>
-
-      <div class="block pages">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[pageNumber]"
-          :page-size="pageNumber"
+          :page-sizes="[20, 100, 200, 300, 400]"
+          :page-size="20"
           layout="total, sizes, prev, pager, next, jumper"
           :total="400">
         </el-pagination>
@@ -269,7 +164,7 @@
 
 <script>
   import organization from '../../common/organization.vue'
-  import RightMenu from '../../common/rightMenu.vue'    //右键
+  import RightMenu from '../../common/contextMenu/rightMenu.vue'    //右键
   import Remarks from '../../common/remarks'
 
   export default {
@@ -282,13 +177,11 @@
         show: false,
         lists: [],
 
-        lookType: 'all',
-        pageNumber: 5,
-
         currentPage: 1,
         organizeVisible: false,
         remarkVisible: false,
-        values: ['待入账', '待结清', '已结清', '已超额'],
+        badgeValue: ['炸单', '充公', '款项'],
+        collectValue: ['收房', '续约'],
         form: {
           status: '',
           organize: '',
@@ -323,28 +216,7 @@
             }
           }]
         },
-        collectData: [
-          {
-            date: '1990-01-01',
-            name: '废话肯定是1-1-1-11-1',
-            mobile: '15251830468',
-            subject: '押金',
-            collectMoney: '11111',
-            receivedMoney: '22222',
-            remainder: '44555',
-            polishing: '2018-01-01',
-            months: '12',
-            payWay: '第1期押1付12 1200',
-            unitPrice: '22222',
-            contractPeriod: '2017-03-15~2022-03-15',
-            staff_name: '范德萨发',
-            department_name: '乐伽商业管理有限公司',
-            status: 1,
-            details: '刘梦/2017-03-15~2022-03-15/第1年月付3100,第2年月付3100,第3年月付3300,第4年月付3400,第5年月付3500/顾庆伟',
-            remark: '放大开始JFK撒粉卡',
-          },
-        ],
-        payData: [
+        tableData: [
           {
             date: '1990-01-01',
             name: '废话肯定是1-1-1-11-1',
@@ -367,6 +239,7 @@
             remark: '放大开始JFK撒粉卡',
           },
         ],
+
         restaurants: [],
         state: ''
       }
@@ -381,15 +254,6 @@
         console.log(val);
       },
 
-      // 查看应收/应付
-      lookStatus(val) {
-        this.lookType = val;
-        if (val === 'all') {
-          this.pageNumber = 5;
-        } else {
-          this.pageNumber = 12;
-        }
-      },
       closeFilter() {
         this.filterModule = false;
       },

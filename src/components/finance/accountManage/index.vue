@@ -25,6 +25,7 @@
     </div>
     <el-table
       :data="tableData"
+      width="100%"
       @row-contextmenu="houseMenu">
       <el-table-column
         label="账户名称"

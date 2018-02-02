@@ -286,16 +286,5 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-  #statistics {
-    $color: #409EFF;
-    .btn {
-      background-color: $color;
-      border-color: $color;
-      color: #FFFFFF;
-      margin-bottom: 10px;
-      /*<!-- -webkit-box-shadow: 0 2px 15px 0 $color;-->*/
-      /*<!-- -moz-box-shadow: 0 2px 15px 0 $color;-->*/
-      /*<!--box-shadow: 0 2px 15px 0 $color;-->*/
-    }
-  }
+
 </style>

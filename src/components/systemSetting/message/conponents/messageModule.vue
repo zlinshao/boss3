@@ -30,7 +30,7 @@
       </div>
     </el-dialog>
 
-    <AddModule :organizationDialog="module" @close="closeModule"></AddModule>
+    <AddModule :organizationDialog="dialogVisible" @close="closeModule"></AddModule>
   </div>
 </template>
 
@@ -43,7 +43,7 @@
     name: 'hello',
     data() {
       return {
-        module: false,
+        dialogVisible: false,
         dialogFormVisible: false,
         form: {
           allModule: '',            //所属模块
@@ -66,15 +66,15 @@
     methods: {
       // 所属模块
       openAllModule() {
-        this.module = true;
+        this.dialogVisible = true;
       },
       // 子模块
       openChildModule() {
-        this.module = true;
+        this.dialogVisible = true;
       },
 
       closeModule() {
-        this.module = false;
+        this.dialogVisible = false;
       }
     }
   }
