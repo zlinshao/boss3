@@ -20,6 +20,13 @@
       .title{
         color: #409EFF;
         opacity: .7;
+        &:before{
+          border-radius: 2px;
+          margin-right: 5px;
+          background: #409EFF;
+          border-left: 1px solid #409EFF;
+          content: '|';
+        }
       }
 
       .el-input,.el-select ,.el-date-editor {
@@ -169,22 +176,50 @@
   margin: 20px 0 10px;
 }
 
+@font-face{
+  font-family:Impact;
+  src:url(../src/assets/font/impact-2.ttf);
+}
 
 //日历
-.__vev_calendar-wrapper .events-wrapper {
-  background-color: #6a8dfb !important;
-}
-
-.__vev_calendar-wrapper .cal-wrapper .cal-body .dates .item.selected-day .is-event {
-  background-color: #6a8dfb !important;
-}
-
-.__vev_calendar-wrapper .cal-wrapper .cal-body .dates .item .is-event {
-  border: 1px solid #6a8dfb !important;
-}
-
-.__vev_calendar-wrapper .cal-wrapper .cal-body .dates .item .is-today {
-  background-color: #6a8dfb !important;
+.__vev_calendar-wrapper {
+  .icon {
+    color: #6a8dfb !important;
+  }
+  .events-wrapper {
+    background-color: #6a8dfb !important;
+    display: none;
+  }
+  .cal-wrapper {
+    .cal-header {
+      color :#6a8dfb !important;
+      border-bottom: 1px solid #e5e5e5;
+      font-family: 'Impact', sans-serif;
+    }
+    .cal-body{
+      .weeks .item {
+        color: #76e79e;
+        font-weight: bold;
+        &:first-child,&:last-child{
+          color:#fb4699;
+        }
+      }
+      .dates{
+        .item{
+          cursor: pointer !important;
+          .is-event,.is-today {
+            border: 1px solid #6a8dfb !important;
+          }
+          .is-today {
+            background-color: #6a8dfb !important;
+          }
+        }
+        .item.selected-day .is-event {
+          background-color: #6a8dfb !important;
+        }
+      }
+    }
+  }
 }
 
 @media screen and (min-width: 768px){
@@ -195,24 +230,3 @@
 }
 
 
-.__vev_calendar-wrapper .events-wrapper{
-  display: none;
-}
-.__vev_calendar-wrapper .cal-wrapper .cal-header {
-  color :#6a8dfb !important;
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.__vev_calendar-wrapper .icon {
-  color: #6a8dfb !important;
-}
-
-.__vev_calendar-wrapper .cal-wrapper .cal-body .weeks .item {
-  line-height: 50px;
-  float: left;
-  width: 14.285%;
-  color: #76e79e;
-  &:first-child,&:last-child{
-    color:#fb4699;
-  }
-}

@@ -162,6 +162,8 @@
           </el-form>
         </div>
 
+        <div style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;"></div>
+
         <div class="ownerInfo">
           <el-form size="small" label-width="180px">
             <el-row>
@@ -223,6 +225,8 @@
             </el-row>
           </el-form>
         </div>
+
+        <div style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;"></div>
 
         <div class="contractInfo">
           <el-form size="small" label-width="180px">
@@ -468,6 +472,8 @@
           </el-form>
         </div>
 
+        <div style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;"></div>
+
         <div class="financialInfo">
           <el-form size="small" label-width="180px">
             <el-row>
@@ -531,6 +537,8 @@
           </el-form>
         </div>
 
+        <div style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;"></div>
+
         <div class="returnVisitInfo">
           <el-form size="small" label-width="180px">
             <el-row>
@@ -559,6 +567,8 @@
             </el-row>
           </el-form>
         </div>
+
+        <div style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;"></div>
 
         <div class="operateHistoryInfo">
           <el-form size="small" label-width="180px" >
@@ -650,7 +660,7 @@
 
     @media screen and (min-width: 1280px) {
       .stepLine {
-        height: 75%;
+        height: 70%;
         position: fixed;
         top: 150px;
         left: 10%;
@@ -729,7 +739,7 @@
       margin: 50px auto;
       padding: 0 50px;
       > div {
-        margin-bottom: 90px;
+        /*margin-bottom: 90px;*/
         &:last-child {
           margin-bottom: 0;
         }

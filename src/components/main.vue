@@ -107,7 +107,7 @@
 </template>
 
 <script>
-  let today = new Date()
+  let today = new Date();
   export default {
     name: 'app',
     data () {
@@ -115,14 +115,15 @@
         demoEvents: [{
           date: `${today.getFullYear()}/${today.getMonth() + 1}/15`,
           title: 'Title-1',
-          desc: 'longlonglong description'
+          content: '今天张琳死了'
         }, {
           date: `${today.getFullYear()}/${today.getMonth() + 1}/24`,
-          title: 'Title-2'
+          title: 'Title-2',
+          content: '今天解兆飞也死了'
         }, {
           date: `${today.getFullYear()}/${today.getMonth() === 11 ? 1 : today.getMonth() + 2}/06`,
           title: 'Title-3',
-          desc: 'description'
+          content: '今天李巧俊生孩子'
         }],
 
         weeks:['日','一','二','三','四','五','六']
@@ -133,10 +134,10 @@
     },
     methods: {
       handleDayChanged (data) {
-        console.log('date-changed', data)
+        console.log(data)
       },
       handleMonthChanged (data) {
-        console.log('month-changed', data)
+        console.log(data)
       },
       //切换新闻中心标题
       selectNewsType(e){
@@ -178,7 +179,6 @@
         box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);
         img {
           transition: all .5s;
-
           &:hover {
             transform: scale(1.1);
           }
@@ -262,6 +262,10 @@
                   width: 40px;
                   height: 40px;
                   border-radius: 50%;
+                  transition: all .5s;
+                  &:hover {
+                    transform: scale(1.1);
+                  }
                 }
 
               }
@@ -362,16 +366,25 @@
 
       .newEntrants {
         > div {
-          display: flex;
+          display: -webkit-box;
           height: 100px;
           border-bottom: 1px solid #e4e4e4;
           padding: 20px 10px 10px 10px;
           box-sizing: border-box;
           .newHeader {
+            width: 50px;
+            height: 50px;
+            box-sizing: border-box;
+            border-radius: 10px;
+            overflow: hidden;
             img {
               width: 50px;
               height: 50px;
               border-radius: 10px;
+              transition: all .5s;
+              &:hover {
+                transform: scale(1.1);
+              }
             }
           }
           .newEntrants_content {

@@ -22,19 +22,18 @@ import VillageManage from '../components/systemSetting/villageManage/index.vue'
 import ExportManage from '../components/systemSetting/exportManage/index.vue'
 
 // 财务账本
-import AccountManage from '../components/finance/accountManage/index'                 //账户管理
-import SubjectManage from '../components/finance/subjectManage/index'                 //科目管理
-import RoomCharge from '../components/finance/roomCharge/index'                       //房租总汇
-import OtherSum from '../components/finance/otherSum/index'                           //剩余款项总汇
-import BudgetManage from '../components/finance/budgetManage/index'                   //预算管理
-import Statistics from '../components/finance/statistics/index'                       //统计
-import StaticDetail from '../components/finance/statistics/components/staticDetail'   //统计详情
-import EndPayment from '../components/finance/endPayment/index'                       //尾款报备
-import IncomeFlow from '../components/finance/incomeFlow/index'                       //收支流水
-
+import AccountManage from '../components/finance/accountManage/index.vue'                 //账户管理
+import SubjectManage from '../components/finance/subjectManage/index.vue'                 //科目管理
+import RoomCharge from '../components/finance/roomCharge/index.vue'                       //房租总汇
+import OtherSum from '../components/finance/otherSum/index.vue'                           //剩余款项总汇
+import BudgetManage from '../components/finance/budgetManage/index.vue'                   //预算管理
+import Statistics from '../components/finance/statistics/index.vue'                       //统计
+import StaticDetail from '../components/finance/statistics/components/staticDetail.vue'   //统计详情
+import EndPayment from '../components/finance/endPayment/index.vue'                       //尾款报备
+import IncomeFlow from '../components/finance/incomeFlow/index.vue'                       //收支流水index.vue
 // 业绩工资
-import PeriodicTable from '../components/meritPay/periodicTable/index'
-import Achievement from '../components/meritPay/achievement/index'
+import PeriodicTable from '../components/meritPay/periodicTable/index.vue'
+import Achievement from '../components/meritPay/achievement/index.vue'
 
 
 //租赁管理
@@ -45,7 +44,6 @@ import ClientManage from '../components/rentManage/clientManage/index.vue'
 import HousesManage from '../components/rentManage/housesManage/index.vue'
 import RepairManage from '../components/rentManage/repairManage/index.vue'
 
-import CommonComponent from '../components/commonComponent/index.vue'                     //通用组件
 //OA办公
 import Communication from '../components/OAWork/communication/index.vue'
 import Programme from '../components/OAWork/programme/index.vue'
@@ -100,7 +98,6 @@ export default new Router({
       name: 'Index',
       children: [
         {path: '/main', component: Main, name: '主页', icon: 'el-icon-menu'},
-        {path: '/commonComponent', component: CommonComponent, name: '通用组件', icon: 'el-icon-goods'},
       ]
     },
     {
@@ -114,7 +111,7 @@ export default new Router({
         {path: '/housesManage', component: HousesManage, name: '房屋管理',},
         {path: '/clientManage', component: ClientManage, name: '客户管理',},
         {path: '/contractManage', component: ContractManage, name: '合同管理',},
-        {path: '/repairManage', component: RepairManage, name: '维修管理',}
+        // {path: '/repairManage', component: RepairManage, name: '维修管理',}
       ]
     },
 
@@ -185,7 +182,7 @@ export default new Router({
         {path: '/institution', component: Institution, name: '制度管理',},
         {path: '/portals', component: Portals, name: '门户管理',},
         {path: '/vote', component: Vote, name: '投票管理',},
-        {path: '/contractClaim', component: ContractClaim, name: '合同认领',},
+        {path: '/contractClaim', component: ContractClaim, name: '合同',},
       ]
     },
     {

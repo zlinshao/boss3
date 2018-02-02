@@ -1149,7 +1149,7 @@
         this.lists = [
           {clickIndex: 'addHouseResourcesDialog', headIcon: 'el-icons-fa-home', label: '修改房源',},
           {
-            clickIndex: '', headIcon: 'el-icons-fa-pencil-square-o', tailIcon: 'el-icon-arrow-right', label: '合同续约/延期',
+            clickIndex: '', headIcon: 'el-icons-fa-pencil-square-o', tailIcon: 'el-icon-arrow-right', label: '房东续约/延期',
             children: [
               {clickIndex: 'ownerRenewDialog', label: '续约',},
               {clickIndex: 'ownerDelayDialog', label: '延期',}

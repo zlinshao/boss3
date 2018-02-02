@@ -20,7 +20,7 @@
         </div>
         <div class="message">
           <el-badge is-dot class="item">
-            <i class="el-icons-fa-comments-o"></i>
+            <i class="el-icons-fa-comment-o"></i>
             消息
           </el-badge>
         </div>

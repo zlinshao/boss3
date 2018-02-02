@@ -3,34 +3,29 @@
     <div id="clientContainer">
       <div class="tool">
         <div class="tool_left">
-          <el-button type="primary" size="mini">
-            <i class="el-icon-document"></i>&nbsp;登记合同
+          <el-button size="mini">
+            <i class="el-icon-document"></i>&nbsp;收房合同
           </el-button>
-          <el-button type="success" size="mini">
-            <i class="el-icon-tickets"></i>&nbsp;功能说明
+          <el-button size="mini">
+            <i class="el-icon-document"></i>&nbsp;租房合同
           </el-button>
-        </div>
-
-        <div class="tool_right">
-          <!--<div><i class="el-icon-date"></i>&nbsp;使用说明</div>-->
-          <div><i class="el-icon-setting"></i>&nbsp;设置</div>
         </div>
       </div>
       <div class="filter">
         <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">
-          <el-form-item label="性质">
+          <el-form-item label="合同状态">
             <el-select v-model="formInline.house" clearable placeholder="请选择">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="店面">
+          <el-form-item label="回访状态">
             <el-select v-model="formInline.house" clearable placeholder="请选择">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="统计日期">
+          <el-form-item label="合同日期">
             <el-date-picker
               v-model="statisticDate"
               type="daterange"
@@ -43,12 +38,14 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item>
-            <el-input v-model="formInline.name" placeholder="搜索">
-              <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
+            <el-input v-model="formInline.name" @focus="selectDep" readonly placeholder="选择部门">
+              <el-button slot="append" type="primary">清空</el-button>
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="text">高级</el-button>
+            <el-input v-model="formInline.name" placeholder="搜索">
+              <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
+            </el-input>
           </el-form-item>
           <el-form-item style="float: right">
             <el-button type="success">导出合同</el-button>
@@ -65,19 +62,15 @@
               style="width: 100%">
               <el-table-column
                 prop="date"
-                label="日期">
+                label="合同编号">
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="姓名">
+                label="上传时间">
               </el-table-column>
               <el-table-column
                 prop="province"
-                label="省份">
-              </el-table-column>
-              <el-table-column
-                prop="city"
-                label="市区">
+                label="业主姓名">
               </el-table-column>
               <el-table-column
                 prop="address"
@@ -85,16 +78,43 @@
               </el-table-column>
               <el-table-column
                 prop="zip"
-                label="邮编">
+                label="手机号码">
+              </el-table-column>
+              <el-table-column
+                prop="date"
+                label="合同到期时间">
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="资料补齐时间">
+              </el-table-column>
+              <el-table-column
+                prop="province"
+                label="过期情况">
+              </el-table-column>
+              <el-table-column
+                prop="city"
+                label="回访情况">
+              </el-table-column>
+              <el-table-column
+                prop="date"
+                label="开单人">
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="负责人">
+              </el-table-column>
+              <el-table-column
+                prop="province"
+                label="部门">
+              </el-table-column>
+              <el-table-column
+                prop="city"
+                label="审核状态">
               </el-table-column>
             </el-table>
           </div>
           <div class="tableBottom">
-            <div class="right">
-              <div>未租房源 <span>5&nbsp;套</span></div>
-              <div>已定 <span>0&nbsp;套</span></div>
-            </div>
-
             <div class="left">
               <el-pagination
                 @size-change="handleSizeChange"
@@ -112,16 +132,17 @@
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
-    <!--<Instruction :instructionDialog="instructionDialog" @close="closeInstruction"></Instruction>-->
+
+    <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
   </div>
 </template>
 
 <script>
   import RightMenu from '../../common/rightMenu.vue'
-  //  import Instruction from './components/instruction.vue'
+  import Organization from '../../common/organization.vue'
   export default {
     name: 'hello',
-    components: {RightMenu},
+    components: {RightMenu,Organization},
     data () {
       return {
         rightMenuX: 0,
@@ -208,7 +229,7 @@
           }],
 
         //模态框
-        instructionDialog: false,
+        organizationDialog: false,
       }
     },
 
@@ -225,12 +246,10 @@
       //房屋右键
       houseMenu(row, event){
         this.lists = [
-          {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '房源修改',},
-          {clickIndex: 1, headIcon: 'el-icon-circle-plus', label: '添加跟进',},
-          {clickIndex: 1, headIcon: 'el-icon-edit-outline', label: '修改看房',},
-          {clickIndex: 1, headIcon: 'el-icon-edit', label: '修改回访',},
-          {clickIndex: 4, headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
-          {clickIndex: 1, headIcon: 'el-icon-error', label: '删除房源',},
+          {clickIndex: 'stick', headIcon: 'el-icons-fa-arrow-up', label: '置顶',},
+          {clickIndex: 'cancel', headIcon: 'el-icons-fa-scissors', label: '作废',},
+          {clickIndex: '', headIcon: 'el-icons-fa-eye', label: '查看回访记录',},
+          {clickIndex: '', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
         ];
         this.contextMenuParam(event);
       },
@@ -244,7 +263,42 @@
 
       //右键回调时间
       clickEvent (index) {
-        console.log('click ' + index)
+        switch (index){
+          case 'stick' :
+            this.$confirm('您确定将其置顶吗', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$message({
+                type: 'success',
+                message: '置顶成功!'
+              });
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消置顶'
+              });
+            });
+            break;
+          case 'cancel':
+            this.$confirm('您确定将其作废吗', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$message({
+                type: 'success',
+                message: '作废成功!'
+              });
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消作废'
+              });
+            });
+            break;
+        }
       },
       //关闭右键菜单
       closeMenu(){
@@ -265,13 +319,13 @@
         })
       },
 
-      //说明书
-//          openInstruction(){
-//              this.instructionDialog = true
-//          },
-//          closeInstruction(){
-//            this.instructionDialog = false
-//          }
+      selectDep(){
+          console.log(1)
+          this.organizationDialog = true
+      },
+      closeOrganization(){
+        this.organizationDialog = false
+      }
     }
   }
 </script>
@@ -319,7 +373,7 @@
         .tableBottom {
           padding: 8px;
           display: flex;
-          justify-content: space-between;
+          justify-content: flex-end;
           .right {
             display: flex;
             align-items: center;

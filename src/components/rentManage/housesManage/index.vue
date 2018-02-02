@@ -3,47 +3,52 @@
     <div id="houseContainer">
       <div class="filter">
         <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">
-          <el-form-item label="房屋类型">
-            <el-select v-model="formInline.house" clearable placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="房型">
-            <el-select v-model="formInline.house" clearable placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="装修">
-            <el-select v-model="formInline.house" clearable placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="参考价格">
-            <el-select v-model="formInline.house" clearable placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="房屋特色">
-            <el-select v-model="formInline.house" clearable placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
+          <!--<el-form-item label="房屋类型">-->
+            <!--<el-select v-model="formInline.house" clearable placeholder="请选择">-->
+              <!--<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">-->
+              <!--</el-option>-->
+            <!--</el-select>-->
+          <!--</el-form-item>-->
+          <!--<el-form-item label="房型">-->
+            <!--<el-select v-model="formInline.house" clearable placeholder="请选择">-->
+              <!--<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">-->
+              <!--</el-option>-->
+            <!--</el-select>-->
+          <!--</el-form-item>-->
+          <!--<el-form-item label="装修">-->
+            <!--<el-select v-model="formInline.house" clearable placeholder="请选择">-->
+              <!--<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">-->
+              <!--</el-option>-->
+            <!--</el-select>-->
+          <!--</el-form-item>-->
+          <!--<el-form-item label="参考价格">-->
+            <!--<el-select v-model="formInline.house" clearable placeholder="请选择">-->
+              <!--<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">-->
+              <!--</el-option>-->
+            <!--</el-select>-->
+          <!--</el-form-item>-->
+          <!--<el-form-item label="房屋特色">-->
+            <!--<el-select v-model="formInline.house" clearable placeholder="请选择">-->
+              <!--<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">-->
+              <!--</el-option>-->
+            <!--</el-select>-->
+          <!--</el-form-item>-->
           <el-form-item label="房屋状态">
             <el-select v-model="formInline.house" clearable placeholder="请选择">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="房屋所属">
+          <el-form-item label="认领状态">
             <el-select v-model="formInline.house" clearable placeholder="请选择">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-input readonly="" @focus="openOrganizationModal" v-model="formInline.ss" placeholder="点击选择部门">
+              <el-button slot="append" type="primary">清空</el-button>
+            </el-input>
           </el-form-item>
           <el-form-item>
             <el-input v-model="formInline.name" placeholder="搜索">
@@ -53,19 +58,22 @@
           <el-form-item>
             <el-checkbox label="显示本组" name="type"></el-checkbox>
           </el-form-item>
-          <!--<el-form-item style="float: right">-->
-            <!--<el-button type="success">导出房源</el-button>-->
-          <!--</el-form-item>-->
+          <el-form-item style="float: right">
+            <el-button type="primary" @click="openOrganizationModal('dispatch')">分配</el-button>
+          </el-form-item>
         </el-form>
       </div>
       <div class="main">
         <div class="tableBox">
-          <div class="myTable" @contextmenu="houseHeadMenu($event)">
+          <div class="myTable">
             <el-table
               :data="tableData"
               @row-click="clickTable"
-              @row-contextmenu='houseMenu'
               style="width: 100%">
+              <el-table-column
+                type="selection"
+                width="55">
+              </el-table-column>
               <el-table-column
                 prop="name"
                 label="地址">
@@ -114,6 +122,10 @@
                 prop="province"
                 label="置顶">
               </el-table-column>
+              <el-table-column
+                prop="province"
+                label="认领状态">
+              </el-table-column>
             </el-table>
           </div>
           <div class="tableBottom">
@@ -131,7 +143,7 @@
             </div>
           </div>
         </div>
-        <div class="myDetail" @contextmenu="detailMenu($event)">
+        <div class="myDetail">
           <el-tabs type="border-card">
             <el-tab-pane label="房源信息">
               <div class="content">
@@ -200,8 +212,7 @@
               <div>
                 <el-table
                   :data="tableData"
-                  @row-click="clickTable"
-                  @row-contextmenu='houseMenu'>
+                  @row-click="clickTable">
                   <el-table-column
                     prop="name"
                     label="跟进人">
@@ -224,16 +235,16 @@
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
-    <!--<Instruction :instructionDialog="instructionDialog" @close="closeInstruction"></Instruction>-->
+    <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
   </div>
 </template>
 
 <script>
   import RightMenu from '../../common/rightMenu.vue'
-  //  import Instruction from './components/instruction.vue'
+  import Organization from '../../common/organization.vue'
   export default {
     name: 'hello',
-    components: {RightMenu},
+    components: {RightMenu,Organization},
     data () {
       return {
         rightMenuX: 0,
@@ -307,7 +318,7 @@
           }],
 
         //模态框
-        instructionDialog: false,
+        organizationDialog: false,
       }
     },
 
@@ -325,6 +336,7 @@
       houseMenu(row, event){
         this.lists = [
           {clickIndex: 'stick', headIcon: 'el-icons-fa-arrow-up', label: '置顶',},
+          {clickIndex: 'dispatch', headIcon: 'el-icon-menu', label: '分配',},
         ];
         this.contextMenuParam(event);
       },
@@ -334,17 +346,6 @@
           {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
         ];
         this.contextMenuParam(event);
-      },
-
-      //详情表头右键
-      detailMenu(e){
-          console.log(e.target.className)
-        if (e.target.className.indexOf('el-tabs') > -1) {
-          this.lists = [
-            {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
-          ];
-          this.contextMenuParam(event);
-        }
       },
 
       //右键回调时间
@@ -386,6 +387,13 @@
         this.$nextTick(() => {
           this.show = true
         })
+      },
+
+      openOrganizationModal(type){
+        this.organizationDialog = true;
+      },
+      closeOrganization(){
+        this.organizationDialog = false;
       },
     }
   }
