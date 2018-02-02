@@ -23,10 +23,13 @@
           </div>
         </el-form-item>
         <el-form-item>
-          <el-input v-model="form.organize" @focus="openOrganize" placeholder="请选择部门/员工"
-                    readonly>
-            <template slot="append">
-              <div style="cursor: pointer;" @click="close_subject">清空</div>
+          <el-input
+            v-model="form.organize"
+            @focus="openOrganize"
+            placeholder="请选择部门/员工"
+            readonly>
+            <template slot="append" style="cursor: pointer;">
+              <div @click="close_subject">清空</div>
             </template>
           </el-input>
         </el-form-item>
