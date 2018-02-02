@@ -154,6 +154,19 @@
   }
 }
 
+.topTabs{
+  $color: #409EFF;
+  .btn {
+    background-color: $color !important;
+    border-color: $color !important;
+    color: #FFFFFF !important;
+    /*<!-- -webkit-box-shadow: 0 2px 15px 0 $color;-->*/
+    /*<!-- -moz-box-shadow: 0 2px 15px 0 $color;-->*/
+    /*<!--box-shadow: 0 2px 15px 0 $color;-->*/
+  }
+}
+
+
 .block.pages {
   display: flex;
   display: -webkit-flex;

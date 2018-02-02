@@ -21,6 +21,12 @@ import PowerManage from '../components/systemSetting/powerManage/index.vue'
 import VillageManage from '../components/systemSetting/villageManage/index.vue'
 import ExportManage from '../components/systemSetting/exportManage/index.vue'
 
+//喜报管理
+import CollectBulletin from '../components/bulletin/collectBulletin/index.vue'            //收房喜报
+import RentBulletin from '../components/bulletin/rentBulletin/index.vue'                  //租房喜报
+import FinalBalance from '../components/bulletin/finalBalance/index.vue'                  //尾款报备
+import SpecialBalance from '../components/bulletin/specialBalance/index.vue'              //特殊情况报备
+
 // 财务账本
 import AccountManage from '../components/finance/accountManage/index'                 //账户管理
 import SubjectManage from '../components/finance/subjectManage/index'                 //科目管理
@@ -35,6 +41,7 @@ import IncomeFlow from '../components/finance/incomeFlow/index'                 
 // 业绩工资
 import PeriodicTable from '../components/meritPay/periodicTable/index'
 import Achievement from '../components/meritPay/achievement/index'
+import PersonalSalary from '../components/meritPay/personalSalary/index'
 
 
 //租赁管理
@@ -134,6 +141,19 @@ export default new Router({
         {path: '/incomeFlow', component: IncomeFlow, name: '收支流水',},
       ]
     },
+
+    {
+      path: '/',
+      component: Index,
+      name: '喜报管理',
+      icon: 'el-icons-fa-money',
+      children: [
+        {path: '/collectBulletin', component: CollectBulletin, name: '收房喜报',},
+        {path: '/rentBulletin', component: RentBulletin, name: '租房喜报',},
+        {path: '/specialBalance', component: SpecialBalance, name: '特殊情况报备',},
+      ]
+    },
+
     {
       path: '/statistics/staticDetail',
       component: StaticDetail,
@@ -149,6 +169,7 @@ export default new Router({
       children: [
         {path: '/periodicTable', component: PeriodicTable, name: '周期表',},
         {path: '/achievement', component: Achievement, name: '业绩',},
+        {path: '/personalSalary', component: PersonalSalary, name: '工资',},
       ]
     },
 

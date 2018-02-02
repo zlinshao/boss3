@@ -1,10 +1,12 @@
 <template>
   <div id="statistics">
-    <el-form :inline="true" size="mini" style="margin: 10px 0;border-bottom: 1px solid #EBEEF5">
-      <el-button v-for="(key,index) in tabs" :class="{'btn': isActive === index}"
-                 @click="onSubmit(index)" size="mini" :key="index">{{key}}
-      </el-button>
-    </el-form>
+    <div class="topTabs">
+      <el-form :inline="true" size="mini" style="margin: 10px 0;">
+        <el-button v-for="(key,index) in tabs" :class="{'btn': isActive === index}"
+                   @click="onSubmit(index)" size="mini" :key="index">{{key}}
+        </el-button>
+      </el-form>
+    </div>
 
     <div class="filter">
       <el-form :inline="true" :model="form" size="mini" label-width="80px">
@@ -67,15 +69,15 @@
       width="100%"
       @row-dblclick="collectDetail">
       <el-table-column
-        label="ID"
+        label="月份"
         prop="id">
       </el-table-column>
       <el-table-column
-        label="描述"
+        label="合同应收"
         prop="describe">
       </el-table-column>
       <el-table-column
-        label="模块"
+        label="合同应付"
         prop="module">
       </el-table-column>
     </el-table>
@@ -83,18 +85,41 @@
     <el-table
       v-if="isActive == 1"
       :data="tableData1"
-      width="100%"
-      @row-dblclick="payDetail">
+      width="100%">
       <el-table-column
-        label="ID"
+        label="时间"
         prop="id">
       </el-table-column>
       <el-table-column
-        label="描述"
+        label="房租收入"
         prop="describe">
       </el-table-column>
       <el-table-column
-        label="模块"
+        label="押金收入"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="房租支出"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="中介费支出"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="押金支出"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="其他支出"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="总房数量"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="空置房数"
         prop="module">
       </el-table-column>
     </el-table>
@@ -278,15 +303,6 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
   #statistics {
-    $color: #409EFF;
-    .btn {
-      background-color: $color;
-      border-color: $color;
-      color: #FFFFFF;
-      margin-bottom: 10px;
-      /*<!-- -webkit-box-shadow: 0 2px 15px 0 $color;-->*/
-      /*<!-- -moz-box-shadow: 0 2px 15px 0 $color;-->*/
-      /*<!--box-shadow: 0 2px 15px 0 $color;-->*/
-    }
+
   }
 </style>
