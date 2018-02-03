@@ -286,6 +286,12 @@
       border-radius: $n;
     }
 
+    @mixin border_radius($n) {
+      -webkit-border-radius: $n;
+      -moz-border-radius: $n;
+      border-radius: $n;
+    }
+
     @mixin box_shadow($n) {
       -webkit-box-shadow: 0 0 16px 0 $n;
       -moz-box-shadow: 0 0 16px 0 $n;
@@ -396,225 +402,223 @@
       }
     }
 
-    #index {
-      /*min-height: 100%;*/
-      .navBar {
-        width: 100%;
-        height: 66px;
-        background: #fff;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 66;
+    .navBar {
+      width: 100%;
+      height: 66px;
+      background: #fff;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 66;
+      display: flex;
+      .left {
+        width: 50%;
+        height: 100%;
         display: flex;
-        .left {
-          width: 50%;
+        align-items: center;
+        .logo {
+          width: 210px;
           height: 100%;
+          border-right: 1px solid #e6e6e6;
           display: flex;
           align-items: center;
-          .logo {
-            width: 210px;
-            height: 100%;
-            border-right: 1px solid #e6e6e6;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            .boss {
-              font-size: 26px;
-              color: #6a8dfb;
-              margin-left: 50px;
-            }
-            .el-icons-fa-bars {
-              font-size: 24px;
-              color: #4f5aa2;
-              margin-right: 25px;
-              cursor: pointer;
-            }
-
+          justify-content: space-between;
+          .boss {
+            font-size: 26px;
+            color: #6a8dfb;
+            margin-left: 50px;
           }
-          .slogan {
-            margin-left: 30px;
+          .el-icons-fa-bars {
+            font-size: 24px;
+            color: #4f5aa2;
+            margin-right: 25px;
+            cursor: pointer;
+          }
+
+        }
+        .slogan {
+          margin-left: 30px;
+        }
+      }
+      .right {
+        width: 50%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        div {
+          display: flex;
+          align-items: center;
+          font-size: 16px;
+        }
+        .countdown, .message, .guide {
+          width: 120px;
+          cursor: pointer;
+          justify-content: center;
+          border-left: 1px solid #e6e6e6;
+          i {
+            margin-right: 10px;
+            font-size: 20px;
+            color: #409EFF;
           }
         }
-        .right {
-          width: 50%;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          justify-content: flex-end;
-          div {
+        .message {
+          .gladBulletin {
+            width: 490px;
+            height: 320px;
+            position: absolute;
+            top: 80px;
+            left: -170px;
+            background: #f9f8fb;
+            border-radius: 10px;
             display: flex;
-            align-items: center;
-            font-size: 16px;
-          }
-          .countdown, .message, .guide {
-            width: 120px;
-            cursor: pointer;
-            justify-content: center;
-            border-left: 1px solid #e6e6e6;
-            i {
-              margin-right: 10px;
-              font-size: 20px;
-              color: #409EFF;
+            flex-wrap: wrap;
+            align-content: space-between;
+            background-size: 100% 100%;
+            .gladTop {
+              width: 100%;
+              height: 82px;
+              background: url("../assets/images/xibaotop.png") no-repeat;
+              background-size: 100%;
             }
-          }
-          .message {
-            .gladBulletin {
-              width: 490px;
-              height: 320px;
-              position: absolute;
-              top: 80px;
-              left: -170px;
-              background: #f9f8fb;
-              border-radius: 10px;
-              display: flex;
-              flex-wrap: wrap;
-              align-content: space-between;
-              background-size: 100% 100%;
-              .gladTop {
+            .gladContent {
+              width: 100%;
+              height: 150px;
+              display: block;
+              overflow: visible;
+              padding: 0 20px;
+              .title {
+                height: 50px;
                 width: 100%;
-                height: 82px;
-                background: url("../assets/images/xibaotop.png") no-repeat;
-                background-size: 100%;
-              }
-              .gladContent {
-                width: 100%;
-                height: 150px;
-                display: block;
-                overflow: visible;
-                padding: 0 20px;
-                .title {
-                  height: 50px;
-                  width: 100%;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  .words {
-                    margin: 0 2px;
-                    font-size: 20px;
-                    font-weight: bold;
-                    color: #d046f1;
-                  }
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                .words {
+                  margin: 0 2px;
+                  font-size: 20px;
+                  font-weight: bold;
+                  color: #d046f1;
                 }
-                .glad_card {
-                  height: 140px;
-                  border-top: 2px solid #6a8dfb;
-                  border-radius: 5px;
-                  background: #fff;
-                  position: relative;
-                  z-index: 10;
-                  display: flex;
-                  .glad_card_head {
-                    height: 100%;
-                    padding: 0 10px;
-                    img {
-                      width: 100px;
-                      height: 100px;
-                      border-radius: 5px
-                    }
-                  }
-                  .glad_card_info {
+              }
+              .glad_card {
+                height: 140px;
+                border-top: 2px solid #6a8dfb;
+                border-radius: 5px;
+                background: #fff;
+                position: relative;
+                z-index: 10;
+                display: flex;
+                .glad_card_head {
+                  height: 100%;
+                  padding: 0 10px;
+                  img {
+                    width: 100px;
                     height: 100px;
-                    flex-grow: 1;
-                    display: flex;
-                    flex-wrap: wrap;
-                    align-items: flex-start;
+                    border-radius: 5px
                   }
                 }
-              }
-              .gladBottom {
-                width: 100%;
-                height: 83px;
-                background: url("../assets/images/xibaobottom.png") no-repeat;
-                background-size: 100%;
+                .glad_card_info {
+                  height: 100px;
+                  flex-grow: 1;
+                  display: flex;
+                  flex-wrap: wrap;
+                  align-items: flex-start;
+                }
               }
             }
-            .gladBackground {
-              position: absolute;
-              width: 628px;
-              height: 403px;
-              top: 35px;
-              left: -225px;
-              background: url("../assets/images/xiabobeijing.png") no-repeat;
-              background-size: 100% 100%;
-              z-index: 100;
+            .gladBottom {
+              width: 100%;
+              height: 83px;
+              background: url("../assets/images/xibaobottom.png") no-repeat;
+              background-size: 100%;
             }
           }
-          .countdown {
-            border: none;
+          .gladBackground {
+            position: absolute;
+            width: 628px;
+            height: 403px;
+            top: 35px;
+            left: -225px;
+            background: url("../assets/images/xiabobeijing.png") no-repeat;
+            background-size: 100% 100%;
+            z-index: 100;
           }
-          .guide {
-            width: 150px;
-          }
-          .personInfo {
-            height: 100%;
-            width: 200px;
-            .head {
+        }
+        .countdown {
+          border: none;
+        }
+        .guide {
+          width: 150px;
+        }
+        .personInfo {
+          height: 100%;
+          width: 200px;
+          .head {
+            width: 40px;
+            height: 40px;
+            padding: 0 0 0 25px;
+            img {
               width: 40px;
               height: 40px;
-              padding: 0 0 0 25px;
-              img {
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-              }
+              border-radius: 50%;
             }
-            .el-dropdown {
-              margin-left: 20px;
-              font-size: 15px;
-              cursor: pointer;
+          }
+          .el-dropdown {
+            margin-left: 20px;
+            font-size: 15px;
+            cursor: pointer;
 
-            }
           }
-        }
-      }
-
-      .contentBox {
-        .el-container {
-          .aside {
-            position: fixed;
-            top: 66px;
-            height: 100%;
-            z-index: 56;
-            overflow: auto;
-            [class^="el-icons-fa"], [class*=" el-icons-fa"] {
-              vertical-align: middle;
-              margin-right: 5px;
-              width: 24px;
-              text-align: center;
-              font-size: 18px;
-            }
-            .developBack {
-              background: #405597 !important;
-            }
-            .el-menu {
-              i {
-                color: #fff !important;
-              }
-            }
-            .el-menu--collapse {
-              width: 64px;
-              height: 100%;
-            }
-            .el-menu-vertical-demo:not(.el-menu--collapse) {
-              width: 240px;
-              min-height: 100%;
-            }
-          }
-          .el-main {
-            margin-top: 80px;
-            padding: 10px 20px;
-            margin-left: 240px;
-            overflow-x: hidden;
-            /*transition: margin-left .4s;*/
-          }
-        }
-      }
-      .hideSidebar {
-        .el-main {
-          margin-left: 64px !important;
         }
       }
     }
+
+    .contentBox {
+      .el-container {
+        .aside {
+          position: fixed;
+          top: 66px;
+          height: 100%;
+          z-index: 56;
+          overflow: auto;
+          [class^="el-icons-fa"], [class*=" el-icons-fa"] {
+            vertical-align: middle;
+            margin-right: 5px;
+            width: 24px;
+            text-align: center;
+            font-size: 18px;
+          }
+          .developBack {
+            background: #405597 !important;
+          }
+          .el-menu {
+            i {
+              color: #fff !important;
+            }
+          }
+          .el-menu--collapse {
+            width: 64px;
+            height: 100%;
+          }
+          .el-menu-vertical-demo:not(.el-menu--collapse) {
+            width: 210px;
+            min-height: 100%;
+          }
+        }
+        .el-main {
+          margin-top: 80px;
+          padding: 10px 20px;
+          margin-left: 240px;
+          overflow-x: hidden;
+          /*transition: margin-left .4s;*/
+        }
+      }
+    }
+    .hideSidebar {
+      .el-main {
+        margin-left: 64px !important;
+      }
+    }
   }
+
 </style>
