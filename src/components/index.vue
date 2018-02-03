@@ -175,10 +175,11 @@
 <script>
   import Cookies from 'js-cookie'
   import TagsView from './common/tagsView.vue'
+
   export default {
     name: 'Index',
     components: {TagsView},
-    data(){
+    data() {
       return {
         isCollapse: false,
         Countdown: 999999,  //倒计时
@@ -186,7 +187,7 @@
         defaultArray: [],
       }
     },
-    mounted(){
+    mounted() {
       this.countTime();
     },
     computed: {
@@ -195,7 +196,7 @@
       }
     },
     watch: {
-      isCollapse(val){
+      isCollapse(val) {
         document.getElementById('isCollapse').style.overflow = val ? 'visible' : 'auto';
       }
     },
@@ -229,10 +230,10 @@
       handleClose(key, keyPath) {
         console.log(key, keyPath);
       },
-      clickScreen(){
+      clickScreen() {
         this.screenStatus = true;
       },
-      countTime(){
+      countTime() {
         new Promise((resolve, reject) => {
           let interval = setInterval(() => {
             this.Countdown--;
@@ -257,10 +258,10 @@
           this.screenStatus = false;
         })
       },
-      changeCollapse(){
+      changeCollapse() {
         this.isCollapse = !this.isCollapse
       },
-      lockScreen(){
+      lockScreen() {
         Cookies.set('last_page_path', this.$route.path); // 本地存储锁屏之前打开的页面以便解锁后打开
         setTimeout(() => {
           this.$router.push({path: '/lock'});
@@ -274,345 +275,346 @@
 <style lang="scss">
   #index {
 
-    .isCollapse{
+    .isCollapse {
       padding: 0 20px;
     }
-    .isCollapse_logo{
+    .isCollapse_logo {
       width: 64px !important;
     }
-  @mixin border_radius($n) {
-    -webkit-border-radius: $n;
-    -moz-border-radius: $n;
-    border-radius: $n;
-  }
+    @mixin border_radius($n) {
+      -webkit-border-radius: $n;
+      -moz-border-radius: $n;
+      border-radius: $n;
+    }
 
-  @mixin box_shadow($n) {
-    -webkit-box-shadow: 0 0 16px 0 $n;
-    -moz-box-shadow: 0 0 16px 0 $n;
-    box-shadow: 0 0 16px 0 $n;
-  }
+    @mixin box_shadow($n) {
+      -webkit-box-shadow: 0 0 16px 0 $n;
+      -moz-box-shadow: 0 0 16px 0 $n;
+      box-shadow: 0 0 16px 0 $n;
+    }
 
-  @mixin box_sizing {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-  }
+    @mixin box_sizing {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
 
-  .personal {
-    width: 200px;
-    padding: 10px;
-    .personalList {
-      float: left;
-      @include box_sizing;
-      @include border_radius(6px);
-      padding: 0;
-      width: 80px;
-      height: 80px;
-      margin: 10px 10px 0;
-      color: #7394FB;
-      @include box_shadow(#dddddd);
-      .el-dropdown-menu__item {
-        line-height: 0;
-      }
-      div {
-        font-size: 12px;
-        height: 27px;
-        line-height: 27px;
-      }
-      p {
+    .personal {
+      width: 200px;
+      padding: 10px;
+      .personalList {
+        float: left;
         @include box_sizing;
-        margin: 0 auto;
-        height: 50px;
-        text-align: center;
-        padding-top: 10px;
-        i {
-          font-size: 30px;
+        @include border_radius(6px);
+        padding: 0;
+        width: 80px;
+        height: 80px;
+        margin: 10px 10px 0;
+        color: #7394FB;
+        @include box_shadow(#dddddd);
+        .el-dropdown-menu__item {
+          line-height: 0;
         }
-      }
-      div {
-        text-align: center;
-      }
-    }
-    .personalList:nth-of-type(1) {
-      border-top: 3px solid #6A8DFB;
-      p {
-        color: #6A8DFB;
-      }
-    }
-    .personalList:nth-of-type(2) {
-      border-top: 3px solid #58D788;
-      p {
-        color: #58D788;
-      }
-    }
-    .personalList:nth-of-type(3) {
-      border-top: 3px solid #FB4699;
-      p {
-        color: #FB4699;
-      }
-    }
-    .personalList:nth-of-type(4) {
-      border-top: 3px solid #C0C4CC;
-      p {
-        color: #C0C4CC;
-      }
-    }
-    .personalList:nth-of-type(5) {
-      border-top: 3px solid #58D788;
-      p {
-        color: #58D788;
-      }
-    }
-    .personalList:nth-of-type(6) {
-      border-top: 3px solid #6A8DFB;
-      p {
-        color: #6A8DFB;
-      }
-    }
-    .personalList:hover {
-      border-top-color: #409EFF;
-      background: #409EFF;
-      color: #ffffff;
-      @include box_shadow(#6A8DFB);
-      div {
-        font-size: 12px;
-        height: 30px;
-        line-height: 30px;
-      }
-      p {
-        color: #ffffff;
-      }
-    }
-    .detrusion {
-      float: left;
-      width: 180px;
-      margin: 20px 10px 10px;
-      background: #409EFF;
-      padding: 0;
-      text-align: center;
-      color: #ffffff;
-      @include box_shadow(#6A8DFB);
-      @include border_radius(6px);
-    }
-  }
-
-  #index {
-    /*min-height: 100%;*/
-    .navBar {
-      width: 100%;
-      height: 66px;
-      background: #fff;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 66;
-      display: flex;
-      .left {
-        width: 50%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        .logo {
-          width: 210px;
-          height: 100%;
-          border-right: 1px solid #e6e6e6;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          .boss {
-            font-size: 26px;
-            color: #6a8dfb;
-            margin-left: 50px;
-          }
-          .el-icons-fa-bars {
-            font-size: 24px;
-            color: #4f5aa2;
-            margin-right: 25px;
-            cursor: pointer;
-          }
-
-        }
-        .slogan {
-          margin-left: 30px;
-        }
-      }
-      .right {
-        width: 50%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
         div {
-          display: flex;
-          align-items: center;
-          font-size: 16px;
+          font-size: 12px;
+          height: 27px;
+          line-height: 27px;
         }
-        .countdown, .message, .guide {
-          width: 120px;
-          cursor: pointer;
-          justify-content: center;
-          border-left: 1px solid #e6e6e6;
+        p {
+          @include box_sizing;
+          margin: 0 auto;
+          height: 50px;
+          text-align: center;
+          padding-top: 10px;
           i {
-            margin-right: 10px;
-            font-size: 20px;
-            color: #409EFF;
+            font-size: 30px;
           }
         }
-        .message {
-          .gladBulletin {
-            width: 490px;
-            height: 320px;
-            position: absolute;
-            top: 80px;
-            left: -170px;
-            background: #f9f8fb;
-            border-radius: 10px;
+        div {
+          text-align: center;
+        }
+      }
+      .personalList:nth-of-type(1) {
+        border-top: 3px solid #6A8DFB;
+        p {
+          color: #6A8DFB;
+        }
+      }
+      .personalList:nth-of-type(2) {
+        border-top: 3px solid #58D788;
+        p {
+          color: #58D788;
+        }
+      }
+      .personalList:nth-of-type(3) {
+        border-top: 3px solid #FB4699;
+        p {
+          color: #FB4699;
+        }
+      }
+      .personalList:nth-of-type(4) {
+        border-top: 3px solid #C0C4CC;
+        p {
+          color: #C0C4CC;
+        }
+      }
+      .personalList:nth-of-type(5) {
+        border-top: 3px solid #58D788;
+        p {
+          color: #58D788;
+        }
+      }
+      .personalList:nth-of-type(6) {
+        border-top: 3px solid #6A8DFB;
+        p {
+          color: #6A8DFB;
+        }
+      }
+      .personalList:hover {
+        border-top-color: #409EFF;
+        background: #409EFF;
+        color: #ffffff;
+        @include box_shadow(#6A8DFB);
+        div {
+          font-size: 12px;
+          height: 30px;
+          line-height: 30px;
+        }
+        p {
+          color: #ffffff;
+        }
+      }
+      .detrusion {
+        float: left;
+        width: 180px;
+        margin: 20px 10px 10px;
+        background: #409EFF;
+        padding: 0;
+        text-align: center;
+        color: #ffffff;
+        @include box_shadow(#6A8DFB);
+        @include border_radius(6px);
+      }
+    }
+
+    #index {
+      /*min-height: 100%;*/
+      .navBar {
+        width: 100%;
+        height: 66px;
+        background: #fff;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 66;
+        display: flex;
+        .left {
+          width: 50%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          .logo {
+            width: 210px;
+            height: 100%;
+            border-right: 1px solid #e6e6e6;
             display: flex;
-            flex-wrap: wrap;
-            align-content: space-between;
-            background-size: 100% 100%;
-            .gladTop {
-              width: 100%;
-              height: 82px;
-              background: url("../assets/images/xibaotop.png") no-repeat;
-              background-size: 100%;
+            align-items: center;
+            justify-content: space-between;
+            .boss {
+              font-size: 26px;
+              color: #6a8dfb;
+              margin-left: 50px;
             }
-            .gladContent {
-              width: 100%;
-              height: 150px;
-              display: block;
-              overflow: visible;
-              padding: 0 20px;
-              .title {
-                height: 50px;
+            .el-icons-fa-bars {
+              font-size: 24px;
+              color: #4f5aa2;
+              margin-right: 25px;
+              cursor: pointer;
+            }
+
+          }
+          .slogan {
+            margin-left: 30px;
+          }
+        }
+        .right {
+          width: 50%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          div {
+            display: flex;
+            align-items: center;
+            font-size: 16px;
+          }
+          .countdown, .message, .guide {
+            width: 120px;
+            cursor: pointer;
+            justify-content: center;
+            border-left: 1px solid #e6e6e6;
+            i {
+              margin-right: 10px;
+              font-size: 20px;
+              color: #409EFF;
+            }
+          }
+          .message {
+            .gladBulletin {
+              width: 490px;
+              height: 320px;
+              position: absolute;
+              top: 80px;
+              left: -170px;
+              background: #f9f8fb;
+              border-radius: 10px;
+              display: flex;
+              flex-wrap: wrap;
+              align-content: space-between;
+              background-size: 100% 100%;
+              .gladTop {
                 width: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                .words {
-                  margin: 0 2px;
-                  font-size: 20px;
-                  font-weight: bold;
-                  color: #d046f1;
-                }
+                height: 82px;
+                background: url("../assets/images/xibaotop.png") no-repeat;
+                background-size: 100%;
               }
-              .glad_card {
-                height: 140px;
-                border-top: 2px solid #6a8dfb;
-                border-radius: 5px;
-                background: #fff;
-                position: relative;
-                z-index: 10;
-                display: flex;
-                .glad_card_head {
-                  height: 100%;
-                  padding: 0 10px;
-                  img {
-                    width: 100px;
-                    height: 100px;
-                    border-radius: 5px
+              .gladContent {
+                width: 100%;
+                height: 150px;
+                display: block;
+                overflow: visible;
+                padding: 0 20px;
+                .title {
+                  height: 50px;
+                  width: 100%;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  .words {
+                    margin: 0 2px;
+                    font-size: 20px;
+                    font-weight: bold;
+                    color: #d046f1;
                   }
                 }
-                .glad_card_info {
-                  height: 100px;
-                  flex-grow: 1;
+                .glad_card {
+                  height: 140px;
+                  border-top: 2px solid #6a8dfb;
+                  border-radius: 5px;
+                  background: #fff;
+                  position: relative;
+                  z-index: 10;
                   display: flex;
-                  flex-wrap: wrap;
-                  align-items: flex-start;
+                  .glad_card_head {
+                    height: 100%;
+                    padding: 0 10px;
+                    img {
+                      width: 100px;
+                      height: 100px;
+                      border-radius: 5px
+                    }
+                  }
+                  .glad_card_info {
+                    height: 100px;
+                    flex-grow: 1;
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: flex-start;
+                  }
                 }
               }
+              .gladBottom {
+                width: 100%;
+                height: 83px;
+                background: url("../assets/images/xibaobottom.png") no-repeat;
+                background-size: 100%;
+              }
             }
-            .gladBottom {
-              width: 100%;
-              height: 83px;
-              background: url("../assets/images/xibaobottom.png") no-repeat;
-              background-size: 100%;
+            .gladBackground {
+              position: absolute;
+              width: 628px;
+              height: 403px;
+              top: 35px;
+              left: -225px;
+              background: url("../assets/images/xiabobeijing.png") no-repeat;
+              background-size: 100% 100%;
+              z-index: 100;
             }
           }
-          .gladBackground {
-            position: absolute;
-            width: 628px;
-            height: 403px;
-            top: 35px;
-            left: -225px;
-            background: url("../assets/images/xiabobeijing.png") no-repeat;
-            background-size: 100% 100%;
-            z-index: 100;
+          .countdown {
+            border: none;
           }
-        }
-        .countdown {
-          border: none;
-        }
-        .guide {
-          width: 150px;
-        }
-        .personInfo {
-          height: 100%;
-          width: 200px;
-          .head {
-            width: 40px;
-            height: 40px;
-            padding: 0 0 0 25px;
-            img {
+          .guide {
+            width: 150px;
+          }
+          .personInfo {
+            height: 100%;
+            width: 200px;
+            .head {
               width: 40px;
               height: 40px;
-              border-radius: 50%;
+              padding: 0 0 0 25px;
+              img {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+              }
             }
-          }
-          .el-dropdown {
-            margin-left: 20px;
-            font-size: 15px;
-            cursor: pointer;
+            .el-dropdown {
+              margin-left: 20px;
+              font-size: 15px;
+              cursor: pointer;
 
+            }
           }
         }
       }
-    }
 
-    .contentBox {
-      .el-container {
-        .aside {
-          position: fixed;
-          top: 66px;
-          height: 100%;
-          z-index: 56;
-          overflow: auto;
-          [class^="el-icons-fa"], [class*=" el-icons-fa"] {
-            vertical-align: middle;
-            margin-right: 5px;
-            width: 24px;
-            text-align: center;
-            font-size: 18px;
-          }
-          .developBack {
-            background: #405597 !important;
-          }
-          .el-menu {
-            i {
-              color: #fff !important;
-            }
-          }
-          .el-menu--collapse {
-            width: 64px;
+      .contentBox {
+        .el-container {
+          .aside {
+            position: fixed;
+            top: 66px;
             height: 100%;
+            z-index: 56;
+            overflow: auto;
+            [class^="el-icons-fa"], [class*=" el-icons-fa"] {
+              vertical-align: middle;
+              margin-right: 5px;
+              width: 24px;
+              text-align: center;
+              font-size: 18px;
+            }
+            .developBack {
+              background: #405597 !important;
+            }
+            .el-menu {
+              i {
+                color: #fff !important;
+              }
+            }
+            .el-menu--collapse {
+              width: 64px;
+              height: 100%;
+            }
+            .el-menu-vertical-demo:not(.el-menu--collapse) {
+              width: 240px;
+              min-height: 100%;
+            }
           }
-          .el-menu-vertical-demo:not(.el-menu--collapse) {
-            width: 240px;
-            min-height: 100%;
+          .el-main {
+            margin-top: 80px;
+            padding: 10px 20px;
+            margin-left: 240px;
+            overflow-x: hidden;
+            /*transition: margin-left .4s;*/
           }
-        }
-        .el-main {
-          margin-top: 80px;
-          padding: 10px 20px;
-          margin-left: 240px;
-          overflow-x: hidden;
-          /*transition: margin-left .4s;*/
         }
       }
-    }
-    .hideSidebar {
-      .el-main {
-        margin-left: 64px !important;
+      .hideSidebar {
+        .el-main {
+          margin-left: 64px !important;
+        }
       }
     }
   }
