@@ -65,6 +65,7 @@ import SuppliesUse from '../components/OAWork/property/items/officeSuppliesUse.v
 import SuppliesGather from '../components/OAWork/property/officeSuppliesGather/ officeSuppliesGather.vue'
 import CapitalChange from '../components/OAWork/property/items/capitalAssetsChange.vue'
 import CapitalGather from '../components/OAWork/property/items/capitalAssetsGather.vue'
+import SthToDo from '../components/OAWork/sthToDo/index.vue'
 
 
 //人资管理
@@ -73,6 +74,8 @@ import StaffManage from '../components/humanResource/staffManage/index.vue'
 // import Achievement from '../components/humanResource/achievement/index.vue'
 
 import RentingDetail from '../components/rentManage/rentingDetail.vue'
+
+import MessageCenter from '../components/messageCenter/index.vue'
 
 Vue.use(Router);
 
@@ -103,11 +106,22 @@ export default new Router({
       path: '/',
       component: Index,
       hidden: true,
-      name: 'Index',
+      name: '',
       children: [
         {path: '/main', component: Main, name: '主页', icon: 'el-icon-menu'},
       ]
     },
+    //不正常的二级路由
+    {
+      path: '/',
+      component: Index,
+      name: '',
+      abnormal:true,
+      children: [
+        {path: '/messageCenter', component: MessageCenter, name: '消息中心'},
+      ]
+    },
+
     {
       path: '/',
       component: Index,
@@ -197,7 +211,7 @@ export default new Router({
             {path: '/property/capitalGather', component: CapitalGather, name: '固定资产汇总'},
           ]
         },
-
+        {path: '/property/sthToDo', component: SthToDo, name: '代办事项'},
         {path: '/communication', component: Communication, name: '通讯管理',},
         {path: '/programme', component: Programme, name: '日程管理',},
         {path: '/knowledge', component: Knowledge, name: '知识管理',},

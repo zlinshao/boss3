@@ -1,16 +1,17 @@
 <template>
   <div id="locking">
-    <div class="foo">
-      <span class="letter" data-letter="B">B</span>
-      <span class="letter" data-letter="O">O</span>
-      <span class="letter" data-letter="S">S</span>
-      <span class="letter" data-letter="S">S</span>
+    <div class="container">
+      <div class="header">
+        <img src="../../../../assets/images/head.jpg" alt="">
+      </div>
+      <div class="name">
+        LEJIA
+      </div>
+      <div class="input">
+        <el-input placeholder="请输入密码" @keyup.enter.native="btnClick" v-model="keywords"></el-input>
+      </div>
     </div>
-    <div class="input">
-      <el-input placeholder="请输入密码" @keyup.enter.native="btnClick" v-model="keywords">
-        <el-button slot="append" @click="btnClick">确定</el-button>
-      </el-input>
-    </div>
+
   </div>
 </template>
 
@@ -48,73 +49,45 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
+<style lang="scss">
 
   #locking{
-    opacity: .7;
-    div.input{
-      .el-input-group{
-        width: 300px;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 100%;
+    background: url("../../../../assets/images/背景.png") no-repeat;
+    background-size: 100% 100%;
+    .container{
+      width: 250px;
+      height: 300px;
+      position: absolute;
+      top: 55%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      >div{
+        margin-bottom: 10px;
       }
-    }
-    div.foo {
-      padding-top: 250px;
-      width: 90%;
-      margin: 0 auto;
-      text-align: center;
-      .letter {
-        display: inline-block;
-        font-weight: 900;
-        font-size: 8em;
-        margin: 0.2em;
-        position: relative;
-        color: #00B4F1;
-        transform-style: preserve-3d;
-        z-index: 1;
-        transition: all 0.3s ease-in-out;
-        &:before, &:after {
-          position: absolute;
-          content: attr(data-letter);
-          transform-origin: top left;
-          top: 0;
-          left: 0;
+      .header{
+        text-align: center;
+        img{
+          width: 90px;
+          height: 90px;
+          border-radius: 50%;
         }
-
-        &:before, &:after {
-          transition: all 0.3s ease-in-out;
-        }
-
-        &:before {
-          color: #fff;
-          text-shadow: -1px 0px 1px rgba(255, 255, 255, .8),
-          1px 0px 1px rgba(0, 0, 0, .8);
-          z-index: 3;
-          transform: rotateX(0deg) rotateY(-15deg) rotateZ(0deg);
-        }
-
-        &:after {
-          color: rgba(0, 0, 0, .11);
-          z-index: 2;
-          transform: scale(1.08, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 1deg);
-        }
-
-        &:hover:before {
-          color: #fafafa;
-          transform: rotateX(0deg) rotateY(-40deg) rotateZ(0deg);
-        }
-
-        &:hover:after {
-          transform: scale(1.08, 1) rotateX(0deg) rotateY(40deg) rotateZ(0deg) skew(0deg, 22deg);
+      }
+      .name{
+        text-align: center;
+        font-size: 16px;
+        font-weight: bold;
+      }
+      div.input{
+        margin-top: 60px;
+        text-align: center;
+        width: 250px;
+        .el-input__inner{
+          border-radius: 20px;
         }
       }
     }
-
-
-
 
   }
 </style>

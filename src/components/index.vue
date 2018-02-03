@@ -18,11 +18,44 @@
 
           {{Countdown}}s
         </div>
-        <div class="message">
+        <div class="message" style="position: relative">
           <el-badge is-dot class="item">
             <i class="el-icons-fa-comment-o"></i>
             消息
           </el-badge>
+          <!--//喜报名片-->
+          <div class="gladBulletin">
+            <div class="gladTop"></div>
+            <div class="gladContent">
+              <div class="title">
+                <img src="../assets/images/daosui_left.png" alt="">
+                <span class="words">
+                  <span style="color: #e8468e;margin-right: 5px">恭喜</span>南京一区一组王彪出租租房
+                </span>
+                <img src="../assets/images/daosui_right.png" alt="">
+              </div>
+
+              <div class="glad_card">
+                <div class="glad_card_head">
+                  <img src="../assets/images/head.jpg" alt="">
+                </div>
+                <div class="glad_card_info">
+                  <div style="color:#6a8dfb;font-size: 16px;width: 100%">天华硅谷庄园 153-506</div>
+                  <div style="width: 100%;margin: 15px 0">
+                    <div style="border: 1px solid #fb4699;width:25px"></div>
+                  </div>
+                  <div style="width: 100%;height: 20px;font-size: 14px;">
+                    <span style="color: #abadae">签约时长：</span>3年3个月（租）
+                  </div>
+                  <div style="width: 100%;height: 20px;font-size: 14px;">
+                    <span style="color: #abadae">签约时长：</span>3年3个月（租）
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="gladBottom"></div>
+          </div>
+          <div class="gladBackground"></div>
         </div>
 
         <div class="guide">
@@ -51,6 +84,12 @@
               <el-dropdown-item>
                 <i class="el-icons-fa-unlock-alt" style="margin-right: 5px"></i>锁屏密码
               </el-dropdown-item>
+
+              <el-dropdown-item>
+                <router-link to="/messageCenter">
+                  <i class="el-icons-fa-comment-o" style="margin-right: 5px"></i>消息中心
+                </router-link>
+              </el-dropdown-item>
               <el-dropdown-item>
                 <i class="el-icons-fa-dot-circle-o" style="margin-right: 5px"></i>安全退出
               </el-dropdown-item>
@@ -62,18 +101,19 @@
 
     <div class="contentBox" :class="isCollapse? 'hideSidebar' : ''">
       <el-container>
-        <div class="aside">
-          <el-menu :default-active="$route.path" class="el-menu-vertical-demo" unique-opened :defaultOpeneds=defaultArray
+        <div class="aside scroll_bar" id="isCollapse">
+          <el-menu :default-active="$route.path" class="el-menu-vertical-demo" unique-opened
+                   :defaultOpeneds=defaultArray
                    :collapse="isCollapse" router @open="handleOpen" @close="handleClose"
                    background-color="#6a8dfb" text-color="#fff" active-text-color="#ffd04b">
             <template v-for="(item,index) in $router.options.routes">
               <!--一级菜单-->
-              <el-menu-item  v-if="item.hidden" v-for="child in item.children" :index="child.path" :key="child.path">
+              <el-menu-item v-if="item.hidden" v-for="child in item.children" :index="child.path" :key="child.path">
                 <i :class="child.icon"></i>
                 <span slot="title"> {{child.name}}</span>
               </el-menu-item>
 
-              <el-submenu :index="item.name+''" v-if="!item.hidden">
+              <el-submenu :index="item.name+''" v-if="!item.hidden && !item.abnormal">
                 <template slot="title">
                   <i :class="item.icon"></i>
                   <span>{{item.name}}</span>
@@ -85,7 +125,8 @@
                       <i :class="child.icon"></i>
                       <span>{{child.name}}</span>
                     </template>
-                    <el-menu-item v-for="last in child.children" :index="last.path" :key="last.path"  style="padding-left: 74px">
+                    <el-menu-item v-for="last in child.children" :index="last.path" :key="last.path"
+                                  style="padding-left: 74px">
                       {{last.name}}
                     </el-menu-item>
                   </el-submenu>
@@ -116,13 +157,13 @@
   import TagsView from './common/tagsView.vue'
   export default {
     name: 'Index',
-    components:{TagsView},
+    components: {TagsView},
     data(){
-      return{
-        isCollapse:false,
-        Countdown:999999,  //倒计时
-        screenStatus : false,
-        defaultArray:[],
+      return {
+        isCollapse: false,
+        Countdown: 999999,  //倒计时
+        screenStatus: false,
+        defaultArray: [],
       }
     },
     mounted(){
@@ -131,6 +172,11 @@
     computed: {
       visitedViews() {
         return this.$store
+      }
+    },
+    watch: {
+      isCollapse(val){
+        document.getElementById('isCollapse').style.overflow = val ? 'visible' : 'auto';
       }
     },
     methods: {
@@ -167,19 +213,19 @@
         this.screenStatus = true;
       },
       countTime(){
-        new Promise((resolve,reject) => {
-          let interval = setInterval( () => {
-            this.Countdown --;
-            if (this.Countdown < 0){
+        new Promise((resolve, reject) => {
+          let interval = setInterval(() => {
+            this.Countdown--;
+            if (this.Countdown < 0) {
               resolve('锁屏');
               clearInterval(interval)
             }
-            if(this.screenStatus){
+            if (this.screenStatus) {
               reject('重新计数');
               clearInterval(interval)
             }
-          },1000)
-        }).then( (data) => {
+          }, 1000)
+        }).then((data) => {
           Cookies.set('last_page_path', this.$route.path); // 本地存储锁屏之前打开的页面以便解锁后打开
           setTimeout(() => {
             this.$router.push({path: '/lock'});
@@ -206,9 +252,9 @@
 </script>
 
 <style lang="scss">
-  #index{
+  #index {
     /*min-height: 100%;*/
-    .navBar{
+    .navBar {
       width: 100%;
       height: 80px;
       background: #fff;
@@ -217,24 +263,24 @@
       left: 0;
       z-index: 66;
       display: flex;
-      .left{
+      .left {
         width: 50%;
         height: 100%;
         display: flex;
         align-items: center;
-        .logo{
+        .logo {
           width: 240px;
           height: 100%;
           border-right: 1px solid #e6e6e6;
           display: flex;
           align-items: center;
-          justify-content : space-between;
-          .boss{
+          justify-content: space-between;
+          .boss {
             font-size: 26px;
             color: #6a8dfb;
             margin-left: 50px;
           }
-          .el-icons-fa-bars{
+          .el-icons-fa-bars {
             font-size: 24px;
             color: #4f5aa2;
             margin-right: 25px;
@@ -242,52 +288,133 @@
           }
 
         }
-        .slogan{
+        .slogan {
           margin-left: 30px;
         }
       }
-      .right{
+      .right {
         width: 50%;
         height: 100%;
         display: flex;
         align-items: center;
-        justify-content : flex-end;
-        div{
+        justify-content: flex-end;
+        div {
           display: flex;
           align-items: center;
           font-size: 16px;
         }
-        .countdown,.message,.guide{
-          width: 120px;
+        .countdown, .message, .guide {
+          width: 150px;
           cursor: pointer;
-          justify-content :center;
+          justify-content: center;
           border-left: 1px solid #e6e6e6;
-          i{
+          i {
             margin-right: 10px;
             font-size: 20px;
             color: #409EFF;
           }
         }
-        .countdown{
+        .message {
+          .gladBulletin {
+            width: 490px;
+            height: 320px;
+            position: absolute;
+            top: 80px;
+            background: #f9f8fb;
+            border-radius: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: space-between;
+            background-size: 100% 100%;
+            .gladTop {
+              width: 100%;
+              height: 82px;
+              background: url("../assets/images/xibaotop.png") no-repeat;
+              background-size: 100%;
+            }
+            .gladContent {
+              width: 100%;
+              height: 150px;
+              display: block;
+              overflow: visible;
+              padding: 0 20px;
+              .title {
+                height: 50px;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                .words {
+                  margin: 0 2px;
+                  font-size: 20px;
+                  font-weight: bold;
+                  color: #d046f1;
+                }
+              }
+              .glad_card {
+                height: 140px;
+                border-top: 2px solid #6a8dfb;
+                border-radius: 5px;
+                background: #fff;
+                position: relative;
+                z-index: 10;
+                display: flex;
+                .glad_card_head {
+                  height: 100%;
+                  padding: 0 10px;
+                  img {
+                    width: 100px;
+                    height: 100px;
+                    border-radius: 5px
+                  }
+                }
+                .glad_card_info {
+                  height: 100px;
+                  flex-grow: 1;
+                  display: flex;
+                  flex-wrap: wrap;
+                  align-items: flex-start;
+                }
+              }
+            }
+            .gladBottom {
+              width: 100%;
+              height: 83px;
+              background: url("../assets/images/xibaobottom.png") no-repeat;
+              background-size: 100%;
+            }
+          }
+          .gladBackground {
+            position: absolute;
+            width: 628px;
+            height: 403px;
+            top: 35px;
+            left: -225px;
+            background: url("../assets/images/xiabobeijing.png") no-repeat;
+            background-size: 100% 100%;
+            z-index: 100;
+          }
+        }
+        .countdown {
           border: none;
         }
-        .guide{
+        .guide {
           width: 150px;
         }
-        .personInfo{
+        .personInfo {
           height: 100%;
           width: 200px;
-          .head{
+          .head {
             width: 40px;
             height: 40px;
             padding: 0 0 0 25px;
-            img{
+            img {
               width: 40px;
               height: 40px;
               border-radius: 50%;
             }
           }
-          .el-dropdown{
+          .el-dropdown {
             margin-left: 20px;
             font-size: 15px;
             cursor: pointer;
@@ -297,26 +424,26 @@
       }
     }
 
-    .contentBox{
-      .el-container{
-        .aside{
+    .contentBox {
+      .el-container {
+        .aside {
           position: fixed;
           top: 80px;
           height: 100%;
           z-index: 56;
-          /*overflow: auto;*/
-          [class^="el-icons-fa"], [class*=" el-icons-fa"]{
+          overflow: auto;
+          [class^="el-icons-fa"], [class*=" el-icons-fa"] {
             vertical-align: middle;
             margin-right: 5px;
             width: 24px;
             text-align: center;
             font-size: 18px;
           }
-          .developBack{
+          .developBack {
             background: #405597 !important;
           }
-          .el-menu{
-            i{
+          .el-menu {
+            i {
               color: #fff !important;
             }
           }
@@ -338,7 +465,7 @@
         }
       }
     }
-    .hideSidebar{
+    .hideSidebar {
       .el-main {
         margin-left: 64px !important;
       }

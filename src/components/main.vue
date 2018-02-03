@@ -367,7 +367,7 @@
       .newEntrants {
         > div {
           display: -webkit-box;
-          height: 100px;
+          min-height: 100px;
           border-bottom: 1px solid #e4e4e4;
           padding: 20px 10px 10px 10px;
           box-sizing: border-box;
