@@ -233,6 +233,7 @@
 </script>
 
 <style lang="scss">
+  
   @mixin border_radius($n) {
     -webkit-border-radius: $n;
     -moz-border-radius: $n;
