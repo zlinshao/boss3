@@ -2,30 +2,23 @@
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="clientContainer">
       <div class="tool">
-        <div class="tool_left">
-          <el-button size="mini" @click="selectStatus(1)" :class="selectFlag==1? 'selectButton':''">
-            <i class="el-icon-document"></i>&nbsp;收房合同
-          </el-button>
-          <el-button size="mini" @click="selectStatus(2)" :class="selectFlag==2? 'selectButton':''">
-            <i class="el-icon-document"></i>&nbsp;租房合同
-          </el-button>
+        <div class="topTabs">
+          <el-form :inline="true" size="mini" style="margin: 10px 0;">
+            <el-button v-for="(key,index) in tabs" :class="{'btn': isActive === index}"
+                       @click="onSubmit(index)" size="mini" :key="index">{{key}}
+            </el-button>
+          </el-form>
         </div>
       </div>
       <div class="filter">
         <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">
-          <el-form-item label="合同状态">
+          <el-form-item label="标记">
             <el-select v-model="formInline.house" clearable placeholder="请选择">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="回访状态">
-            <el-select v-model="formInline.house" clearable placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="合同日期">
+          <el-form-item label="选择日期">
             <el-date-picker
               v-model="statisticDate"
               type="daterange"
@@ -38,23 +31,18 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item>
-            <el-input v-model="formInline.name" @focus="selectDep" readonly placeholder="选择部门">
-              <el-button slot="append" type="primary">清空</el-button>
-            </el-input>
-          </el-form-item>
-          <el-form-item>
             <el-input v-model="formInline.name" placeholder="搜索">
               <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
             </el-input>
           </el-form-item>
           <el-form-item style="float: right">
-            <el-button type="success">导出合同</el-button>
+              <el-button type="primary">全部标记为已读</el-button>
           </el-form-item>
         </el-form>
       </div>
       <div class="main">
         <div class="myHouse">
-          <div class="myTable" @contextmenu="houseHeadMenu($event)">
+          <div class="myTable">
             <el-table
               :data="tableData"
               @row-click="clickTable"
@@ -62,59 +50,38 @@
               style="width: 100%">
               <el-table-column
                 prop="date"
-                label="合同编号">
+                v-if="isCheckbox"
+                type="selection">
+              </el-table-column>
+              <el-table-column
+                prop="date"
+                label="发布时间">
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="上传时间">
+                label="发布人">
               </el-table-column>
               <el-table-column
                 prop="province"
-                label="业主姓名">
+                label="标题">
               </el-table-column>
               <el-table-column
                 prop="address"
-                label="地址">
+                label="主要内容">
               </el-table-column>
               <el-table-column
                 prop="zip"
-                label="手机号码">
-              </el-table-column>
-              <el-table-column
-                prop="date"
-                label="合同到期时间">
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="资料补齐时间">
-              </el-table-column>
-              <el-table-column
-                prop="province"
-                label="过期情况">
-              </el-table-column>
-              <el-table-column
-                prop="city"
-                label="回访情况">
-              </el-table-column>
-              <el-table-column
-                prop="date"
-                label="开单人">
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="负责人">
-              </el-table-column>
-              <el-table-column
-                prop="province"
-                label="部门">
-              </el-table-column>
-              <el-table-column
-                prop="city"
-                label="审核状态">
+                label="阅读时间">
               </el-table-column>
             </el-table>
           </div>
           <div class="tableBottom">
+            <div class="right">
+              <div>未读 <span>5&nbsp;条</span></div>
+              <div>已读 <span>0&nbsp;条</span></div>
+              <a href="javascript:;" style="color: #6a8dfb">更多</a>
+            </div>
+
             <div class="left">
               <el-pagination
                 @size-change="handleSizeChange"
@@ -132,17 +99,14 @@
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
-
-    <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
   </div>
 </template>
 
 <script>
-  import RightMenu from '../../common/rightMenu.vue'
-  import Organization from '../../common/organization.vue'
+  import RightMenu from '../common/rightMenu.vue'
   export default {
     name: 'hello',
-    components: {RightMenu,Organization},
+    components: {RightMenu},
     data () {
       return {
         rightMenuX: 0,
@@ -213,28 +177,25 @@
         currentPage: 1,
         options: [
           {
-            value: '选项1',
-            label: '黄金糕'
+            value: '1',
+            label: '已读'
           }, {
-            value: '选项2',
-            label: '双皮奶'
-          }, {
-            value: '选项3',
-            label: '蚵仔煎'
-          }, {
-            value: '选项4',
-            label: '龙须面'
-          }, {
-            value: '选项5',
-            label: '北京烤鸭'
+            value: '2',
+            label: '未读'
           }],
 
         //模态框
         organizationDialog: false,
+        tabs: ['系统公告', '审批提醒', 'boss小秘书', '个人发信箱', '部门发信箱', '短信提醒'],
+        isActive: 0,
+        isCheckbox:false,
       }
     },
 
     methods: {
+      onSubmit(val) {
+        this.isActive = val;
+      },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
@@ -247,17 +208,10 @@
       //房屋右键
       houseMenu(row, event){
         this.lists = [
-          {clickIndex: 'stick', headIcon: 'el-icons-fa-arrow-up', label: '置顶',},
-          {clickIndex: 'cancel', headIcon: 'el-icons-fa-scissors', label: '作废',},
-          {clickIndex: '', headIcon: 'el-icons-fa-eye', label: '查看回访记录',},
-          {clickIndex: '', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
-        ];
-        this.contextMenuParam(event);
-      },
-      //合同表头右键
-      houseHeadMenu(e){
-        this.lists = [
-          {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
+          {clickIndex: 'read', headIcon: 'el-icons-fa-envelope-o', label: '标记为已读',},
+          {clickIndex: 'all', headIcon: 'el-icons-fa-envelope', label: '批量标记',},
+          {clickIndex: 'cancel', headIcon: 'el-icons-fa-envelope', label: '取消批量标记',},
+          {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },
@@ -265,39 +219,45 @@
       //右键回调时间
       clickEvent (index) {
         switch (index){
-          case 'stick' :
-            this.$confirm('您确定将其置顶吗', '提示', {
+          case 'read' :
+            this.$confirm('您确定标记为已读吗', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
               this.$message({
                 type: 'success',
-                message: '置顶成功!'
+                message: '已读成功!'
               });
             }).catch(() => {
               this.$message({
                 type: 'info',
-                message: '已取消置顶'
+                message: '已取消已读'
               });
             });
             break;
-          case 'cancel':
-            this.$confirm('您确定将其作废吗', '提示', {
+          case 'delete':
+            this.$confirm('您确定将其删除吗', '提示', {
               confirmButtonText: '确定',
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
               this.$message({
                 type: 'success',
-                message: '作废成功!'
+                message: '删除成功!'
               });
             }).catch(() => {
               this.$message({
                 type: 'info',
-                message: '已取消作废'
+                message: '已取消删除'
               });
             });
+            break;
+          case 'all':
+            this.isCheckbox = true;
+            break;
+          case 'cancel':
+            this.isCheckbox = false;
             break;
         }
       },
@@ -320,16 +280,6 @@
         })
       },
 
-      selectDep(){
-          console.log(1)
-          this.organizationDialog = true
-      },
-      closeOrganization(){
-        this.organizationDialog = false
-      },
-      selectStatus(flag){
-        this.selectFlag = flag;
-      },
     }
   }
 </script>
@@ -343,24 +293,7 @@
     }
     .tool {
       border-bottom: 1px solid #eee;
-      display: flex;
-      padding-bottom: 10px;
-      justify-content: space-between;
-      .tool_right {
-        display: flex;
-        align-items: center;
-        div {
-          width: 100px;
-          text-align: center;
-          cursor: pointer;
-          &:first-child {
-            /*border-right: 1px solid #ccc;*/
-          }
-          i {
-            color: #409EFF;
-          }
-        }
-      }
+
     }
     .filter {
       padding-top: 10px;
@@ -381,7 +314,7 @@
         .tableBottom {
           padding: 8px;
           display: flex;
-          justify-content: flex-end;
+          justify-content: space-between;
           .right {
             display: flex;
             align-items: center;
