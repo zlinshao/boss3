@@ -606,9 +606,9 @@
           }
         }
         .el-main {
-          margin-top: 80px;
+          margin-top: 66px;
           padding: 10px 20px;
-          margin-left: 240px;
+          margin-left: 210px;
           overflow-x: hidden;
           /*transition: margin-left .4s;*/
         }
