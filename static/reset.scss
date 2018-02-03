@@ -218,6 +218,9 @@
       .dates{
         .item{
           cursor: pointer !important;
+          &:hover{
+            color: #6a8dfb;
+          }
           .is-event,.is-today {
             border: 1px solid #6a8dfb !important;
           }
@@ -227,6 +230,18 @@
         }
         .item.selected-day .is-event {
           background-color: #6a8dfb !important;
+        }
+        .event{
+          color: inherit;
+          .date-num{
+            color: #6a8dfb !important;
+            &:hover{
+              color: #FFFFFF !important;
+            }
+          }
+          &:hover .is-event{
+            background: #6a8dfb !important;
+          }
         }
       }
     }

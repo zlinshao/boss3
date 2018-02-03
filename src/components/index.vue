@@ -2,9 +2,9 @@
   <div id="index" @click="clickScreen">
     <div class="navBar">
       <div class="left">
-        <div class="logo">
-          <div class="boss">BOSS</div>
-          <div class="el-icons-fa-bars" @click="changeCollapse"></div>
+        <div class="logo" :class="isCollapse? 'isCollapse_logo':'' ">
+          <div class="boss" v-if="!isCollapse">BOSS</div>
+          <div :class="isCollapse? 'isCollapse':'' " class="el-icons-fa-bars" @click="changeCollapse"></div>
         </div>
         <div class="slogan">
           <img src="../assets/images/slogan.png" alt="">
@@ -15,7 +15,6 @@
           <el-tooltip class="item" effect="dark" content="锁屏" placement="bottom">
             <i class="el-icon-time" @click="lockScreen"></i>
           </el-tooltip>
-
           {{Countdown}}s
         </div>
         <div class="message" style="position: relative">
@@ -24,38 +23,40 @@
             消息
           </el-badge>
           <!--//喜报名片-->
-          <div class="gladBulletin" v-show="false">
-            <div class="gladTop"></div>
-            <div class="gladContent">
-              <div class="title">
-                <img src="../assets/images/daosui_left.png" alt="">
-                <span class="words">
+          <div v-if="false">
+            <div class="gladBulletin">
+              <div class="gladTop"></div>
+              <div class="gladContent">
+                <div class="title">
+                  <img src="../assets/images/daosui_left.png" alt="">
+                  <span class="words">
                   <span style="color: #e8468e;margin-right: 5px">恭喜</span>南京一区一组王彪出租租房
                 </span>
-                <img src="../assets/images/daosui_right.png" alt="">
-              </div>
+                  <img src="../assets/images/daosui_right.png" alt="">
+                </div>
 
-              <div class="glad_card">
-                <div class="glad_card_head">
-                  <img src="../assets/images/head.jpg" alt="">
-                </div>
-                <div class="glad_card_info">
-                  <div style="color:#6a8dfb;font-size: 16px;width: 100%">天华硅谷庄园 153-506</div>
-                  <div style="width: 100%;margin: 15px 0">
-                    <div style="border: 1px solid #fb4699;width:25px"></div>
+                <div class="glad_card">
+                  <div class="glad_card_head">
+                    <img src="../assets/images/head.jpg" alt="">
                   </div>
-                  <div style="width: 100%;height: 20px;font-size: 14px;">
-                    <span style="color: #abadae">签约时长：</span>3年3个月（租）
-                  </div>
-                  <div style="width: 100%;height: 20px;font-size: 14px;">
-                    <span style="color: #abadae">签约时长：</span>3年3个月（租）
+                  <div class="glad_card_info">
+                    <div style="color:#6a8dfb;font-size: 16px;width: 100%">天华硅谷庄园 153-506</div>
+                    <div style="width: 100%;margin: 15px 0">
+                      <div style="border: 1px solid #fb4699;width:25px"></div>
+                    </div>
+                    <div style="width: 100%;height: 20px;font-size: 14px;">
+                      <span style="color: #abadae">签约时长：</span>3年3个月（租）
+                    </div>
+                    <div style="width: 100%;height: 20px;font-size: 14px;">
+                      <span style="color: #abadae">签约时长：</span>3年3个月（租）
+                    </div>
                   </div>
                 </div>
               </div>
+              <div class="gladBottom"></div>
             </div>
-            <div class="gladBottom"></div>
+            <div class="gladBackground"></div>
           </div>
-          <div class="gladBackground" v-show="false"></div>
         </div>
 
         <div class="guide">
@@ -253,6 +254,13 @@
 
 <style lang="scss">
   #index {
+
+    .isCollapse{
+      padding: 0 20px;
+    }
+    .isCollapse_logo{
+      width: 64px !important;
+    }
     /*min-height: 100%;*/
     .navBar {
       width: 100%;
@@ -320,6 +328,7 @@
             height: 320px;
             position: absolute;
             top: 80px;
+            left: -170px;
             background: #f9f8fb;
             border-radius: 10px;
             display: flex;
