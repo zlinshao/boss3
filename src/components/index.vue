@@ -274,7 +274,6 @@
 
 <style lang="scss">
   #index {
-
     .isCollapse {
       padding: 0 20px;
     }
