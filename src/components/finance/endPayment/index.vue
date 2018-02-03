@@ -8,7 +8,7 @@
             <el-option v-for="(key,index) in values" :label="key" :value="index + 1" :key="index"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="补齐时间">
+        <el-form-item>
           <div class="block">
             <el-date-picker
               v-model="form.dates"
@@ -465,10 +465,7 @@
           this.remarkVisible = true;
         }
       },
-      // 关闭付款/收款时间
-      closePayTime() {
-        this.payTimeVisible = false;
-      },
+
       closeRemark() {
         this.remarkVisible = false;
       },
@@ -499,5 +496,10 @@
 </script>
 
 <style lang="scss">
-
+  .border_table {
+    box-shadow: 0 0 10px 0 #bbb;
+    padding: 8px;
+    border-radius: 3px;
+    margin-bottom: 24px;
+  }
 </style>

@@ -162,6 +162,7 @@ export default new Router({
       children: [
         {path: '/collectBulletin', component: CollectBulletin, name: '收房喜报',},
         {path: '/rentBulletin', component: RentBulletin, name: '租房喜报',},
+        {path: '/finalBalance', component: FinalBalance, name: '尾款报备',},
         {path: '/specialBalance', component: SpecialBalance, name: '特殊情况报备',},
       ]
     },

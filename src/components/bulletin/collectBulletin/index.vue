@@ -54,16 +54,16 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" size="mini">导出</el-button>
+          <el-button type="primary" size="mini" @click="leadingOut">导出</el-button>
         </el-form-item>
       </el-form>
     </div>
 
-    <div class="border_table">
+    <div>
       <el-table
         :data="tableData"
         width="100%"
-        @row-contextmenu="payMenu">
+        @row-contextmenu="collectMenu">
         <el-table-column
           label="喜报时间"
           prop="date"
@@ -299,37 +299,27 @@
       close_subject() {
         console.log(1);
       },
-      // 双击 收
+      // 双击
       dblCollect(row, column, cell, event) {
         // console.log(row);
         // console.log(column);
         // console.log(cell);
         // console.log(event);
       },
-      // 右键 收
+      // 右键
       collectMenu(row, event) {
         this.lists = [
-          {clickIndex: 'oneRemark', headIcon: 'el-icon-edit', label: '备注',},
-        ];
-        this.contextMenuParam(event);
-      },
-      // 右键 租
-      payMenu(row, event) {
-        this.lists = [
-          {clickIndex: 'towRemark', headIcon: 'el-icon-edit', label: '备注',},
+          {clickIndex: 'remark', headIcon: 'el-icon-edit', label: '备注',},
         ];
         this.contextMenuParam(event);
       },
       // 右键回调
       clickEvent(val) {
-        if (val === 'oneRemark' || val === 'towRemark') {
+        if (val === 'remark') {
           this.remarkVisible = true;
         }
       },
-      // 关闭付款/收款时间
-      closePayTime() {
-        this.payTimeVisible = false;
-      },
+
       closeRemark() {
         this.remarkVisible = false;
       },

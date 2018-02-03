@@ -5,7 +5,7 @@
         <el-table
           :data="tableData"
           style="width: 100%"
-          max-height="550">
+          max-height="520">
           <el-table-column
             prop="date"
             label="备注时间"
