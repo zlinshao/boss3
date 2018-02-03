@@ -15,6 +15,7 @@
           <el-tooltip class="item" effect="dark" content="锁屏" placement="bottom">
             <i class="el-icon-time" @click="lockScreen"></i>
           </el-tooltip>
+
           {{Countdown}}s
         </div>
         <div class="message" style="position: relative">
@@ -69,30 +70,48 @@
               <span class="el-dropdown-link">
                 解兆飞<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>
-                <i class="el-icon-menu" style="margin-right: 5px"></i>个人主页
+            <el-dropdown-menu slot="dropdown" class="personal">
+              <el-dropdown-item class="personalList">
+                <p><i class="el-icon-menu"></i></p>
+                <div>
+                  个人主页
+                </div>
               </el-dropdown-item>
-              <el-dropdown-item>
-                <i class="el-icons-fa-sitemap" style="margin-right: 5px"></i>部门主页
+              <el-dropdown-item class="personalList">
+                <p><i class="el-icons-fa-sitemap"></i></p>
+                <div>
+                  部门主页
+                </div>
               </el-dropdown-item>
-              <el-dropdown-item>
-                <i class="el-icons-fa-edit" style="margin-right: 5px"></i>考勤自助
+              <el-dropdown-item class="personalList">
+                <p><i class="el-icon-bell"></i></p>
+                <div>
+                  消息中心
+                </div>
               </el-dropdown-item>
-              <el-dropdown-item>
-                <i class="el-icon-location" style="margin-right: 5px"></i>签到自助
+              <el-dropdown-item class="personalList">
+                <p><i class="el-icons-fa-edit"></i></p>
+                <div>
+                  考勤自助
+                </div>
               </el-dropdown-item>
-              <el-dropdown-item>
-                <i class="el-icons-fa-unlock-alt" style="margin-right: 5px"></i>锁屏密码
+              <el-dropdown-item class="personalList">
+                <p><i class="el-icon-location"></i></p>
+                <div>
+                  签到自助
+                </div>
               </el-dropdown-item>
-
-              <el-dropdown-item>
-                <router-link to="/messageCenter">
-                  <i class="el-icons-fa-comment-o" style="margin-right: 5px"></i>消息中心
-                </router-link>
+              <el-dropdown-item class="personalList">
+                <p><i class="el-icons-fa-unlock-alt"></i></p>
+                <div>
+                  锁屏密码
+                </div>
               </el-dropdown-item>
-              <el-dropdown-item>
-                <i class="el-icons-fa-dot-circle-o" style="margin-right: 5px"></i>安全退出
+              <el-dropdown-item class="detrusion">
+                <!--<p><i class="el-icons-fa-dot-circle-o"></i></p>-->
+                <div>
+                  安全退出
+                </div>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -261,10 +280,127 @@
     .isCollapse_logo{
       width: 64px !important;
     }
+  @mixin border_radius($n) {
+    -webkit-border-radius: $n;
+    -moz-border-radius: $n;
+    border-radius: $n;
+  }
+
+  @mixin box_shadow($n) {
+    -webkit-box-shadow: 0 0 16px 0 $n;
+    -moz-box-shadow: 0 0 16px 0 $n;
+    box-shadow: 0 0 16px 0 $n;
+  }
+
+  @mixin box_sizing {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  .personal {
+    width: 200px;
+    padding: 10px;
+    .personalList {
+      float: left;
+      @include box_sizing;
+      @include border_radius(6px);
+      padding: 0;
+      width: 80px;
+      height: 80px;
+      margin: 10px 10px 0;
+      color: #7394FB;
+      @include box_shadow(#dddddd);
+      .el-dropdown-menu__item {
+        line-height: 0;
+      }
+      div {
+        font-size: 12px;
+        height: 27px;
+        line-height: 27px;
+      }
+      p {
+        @include box_sizing;
+        margin: 0 auto;
+        height: 50px;
+        text-align: center;
+        padding-top: 10px;
+        i {
+          font-size: 30px;
+        }
+      }
+      div {
+        text-align: center;
+      }
+    }
+    .personalList:nth-of-type(1) {
+      border-top: 3px solid #6A8DFB;
+      p {
+        color: #6A8DFB;
+      }
+    }
+    .personalList:nth-of-type(2) {
+      border-top: 3px solid #58D788;
+      p {
+        color: #58D788;
+      }
+    }
+    .personalList:nth-of-type(3) {
+      border-top: 3px solid #FB4699;
+      p {
+        color: #FB4699;
+      }
+    }
+    .personalList:nth-of-type(4) {
+      border-top: 3px solid #C0C4CC;
+      p {
+        color: #C0C4CC;
+      }
+    }
+    .personalList:nth-of-type(5) {
+      border-top: 3px solid #58D788;
+      p {
+        color: #58D788;
+      }
+    }
+    .personalList:nth-of-type(6) {
+      border-top: 3px solid #6A8DFB;
+      p {
+        color: #6A8DFB;
+      }
+    }
+    .personalList:hover {
+      border-top-color: #409EFF;
+      background: #409EFF;
+      color: #ffffff;
+      @include box_shadow(#6A8DFB);
+      div {
+        font-size: 12px;
+        height: 30px;
+        line-height: 30px;
+      }
+      p {
+        color: #ffffff;
+      }
+    }
+    .detrusion {
+      float: left;
+      width: 180px;
+      margin: 20px 10px 10px;
+      background: #409EFF;
+      padding: 0;
+      text-align: center;
+      color: #ffffff;
+      @include box_shadow(#6A8DFB);
+      @include border_radius(6px);
+    }
+  }
+
+  #index {
     /*min-height: 100%;*/
     .navBar {
       width: 100%;
-      height: 80px;
+      height: 66px;
       background: #fff;
       position: fixed;
       top: 0;
@@ -277,7 +413,7 @@
         display: flex;
         align-items: center;
         .logo {
-          width: 240px;
+          width: 210px;
           height: 100%;
           border-right: 1px solid #e6e6e6;
           display: flex;
@@ -312,7 +448,7 @@
           font-size: 16px;
         }
         .countdown, .message, .guide {
-          width: 150px;
+          width: 120px;
           cursor: pointer;
           justify-content: center;
           border-left: 1px solid #e6e6e6;
@@ -437,7 +573,7 @@
       .el-container {
         .aside {
           position: fixed;
-          top: 80px;
+          top: 66px;
           height: 100%;
           z-index: 56;
           overflow: auto;

@@ -149,7 +149,7 @@ export default new Router({
         {path: '/otherSum', component: OtherSum, name: '其余款项总汇',},
         {path: '/statistics', component: Statistics, name: '统计',},
         {path: '/budgetManage', component: BudgetManage, name: '预算管理',},
-        {path: '/endPayment', component: EndPayment, name: '尾款报备',},
+        {path: '/endPayment', component: EndPayment, name: '尾款房租',},
         {path: '/incomeFlow', component: IncomeFlow, name: '收支流水',},
       ]
     },
