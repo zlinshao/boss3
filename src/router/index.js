@@ -211,7 +211,7 @@ export default new Router({
             {path: '/property/capitalGather', component: CapitalGather, name: '固定资产汇总'},
           ]
         },
-        {path: '/property/sthToDo', component: SthToDo, name: '代办事项'},
+        {path: '/property/sthToDo', component: SthToDo, name: '待办事项'},
         {path: '/communication', component: Communication, name: '通讯管理',},
         {path: '/programme', component: Programme, name: '日程管理',},
         {path: '/knowledge', component: Knowledge, name: '知识管理',},

@@ -35,7 +35,7 @@
               <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
             </el-input>
           </el-form-item>
-          <el-form-item style="float: right">
+          <el-form-item style="float: right" v-if="isCheckbox">
               <el-button type="primary">全部标记为已读</el-button>
           </el-form-item>
         </el-form>
