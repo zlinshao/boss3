@@ -24,7 +24,7 @@
             消息
           </el-badge>
           <!--//喜报名片-->
-          <div class="gladBulletin">
+          <div class="gladBulletin" v-show="false">
             <div class="gladTop"></div>
             <div class="gladContent">
               <div class="title">
@@ -55,7 +55,7 @@
             </div>
             <div class="gladBottom"></div>
           </div>
-          <div class="gladBackground"></div>
+          <div class="gladBackground" v-show="false"></div>
         </div>
 
         <div class="guide">
