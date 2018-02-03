@@ -3,7 +3,7 @@
     <div class="navBar">
       <div class="left">
         <div class="logo" :class="isCollapse? 'isCollapse_logo':'' ">
-          <div class="boss" v-if="!isCollapse">BOSS</div>
+          <div class="boss" :class="isCollapse? 'boss1':'' ">BOSS</div>
           <div :class="isCollapse? 'isCollapse':'' " class="el-icons-fa-bars" @click="changeCollapse"></div>
         </div>
         <div class="slogan">
@@ -259,7 +259,7 @@
         })
       },
       changeCollapse() {
-        this.isCollapse = !this.isCollapse
+        this.isCollapse = !this.isCollapse;
       },
       lockScreen() {
         Cookies.set('last_page_path', this.$route.path); // 本地存储锁屏之前打开的页面以便解锁后打开
@@ -400,6 +400,7 @@
     }
     .isCollapse_logo {
       width: 64px !important;
+      transition: all .4s;
     }
 
     .navBar {
@@ -416,6 +417,7 @@
         height: 100%;
         display: flex;
         align-items: center;
+        transition: all .4s;
         .logo {
           width: 210px;
           height: 100%;
@@ -423,21 +425,31 @@
           display: flex;
           align-items: center;
           justify-content: space-between;
+          transition: all .4s;
           .boss {
             font-size: 26px;
             color: #6a8dfb;
             margin-left: 50px;
+            transition: all .4s;
+          }
+          .boss1 {
+            font-size: 26px;
+            color: #6a8dfb;
+            margin-left: -72.25px;
+            transition: all .4s;
           }
           .el-icons-fa-bars {
             font-size: 24px;
             color: #4f5aa2;
             margin-right: 25px;
             cursor: pointer;
+            transition: all .4s;
           }
 
         }
         .slogan {
           margin-left: 30px;
+          transition: all .4s;
         }
       }
       .right {
