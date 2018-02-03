@@ -273,133 +273,133 @@
 </script>
 
 <style lang="scss">
+  @mixin border_radius($n) {
+    -webkit-border-radius: $n;
+    -moz-border-radius: $n;
+    border-radius: $n;
+  }
+
+  @mixin border_radius($n) {
+    -webkit-border-radius: $n;
+    -moz-border-radius: $n;
+    border-radius: $n;
+  }
+
+  @mixin box_shadow($n) {
+    -webkit-box-shadow: 0 0 16px 0 $n;
+    -moz-box-shadow: 0 0 16px 0 $n;
+    box-shadow: 0 0 16px 0 $n;
+  }
+
+  @mixin box_sizing {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  .personal {
+    width: 200px;
+    padding: 10px;
+    .personalList {
+      float: left;
+      @include box_sizing;
+      @include border_radius(6px);
+      padding: 0;
+      width: 80px;
+      height: 80px;
+      margin: 10px 10px 0;
+      color: #7394FB;
+      @include box_shadow(#dddddd);
+      .el-dropdown-menu__item {
+        line-height: 0;
+      }
+      div {
+        font-size: 12px;
+        height: 27px;
+        line-height: 27px;
+      }
+      p {
+        @include box_sizing;
+        margin: 0 auto;
+        height: 50px;
+        text-align: center;
+        padding-top: 10px;
+        i {
+          font-size: 30px;
+        }
+      }
+      div {
+        text-align: center;
+      }
+    }
+    .personalList:nth-of-type(1) {
+      border-top: 3px solid #6A8DFB;
+      p {
+        color: #6A8DFB;
+      }
+    }
+    .personalList:nth-of-type(2) {
+      border-top: 3px solid #58D788;
+      p {
+        color: #58D788;
+      }
+    }
+    .personalList:nth-of-type(3) {
+      border-top: 3px solid #FB4699;
+      p {
+        color: #FB4699;
+      }
+    }
+    .personalList:nth-of-type(4) {
+      border-top: 3px solid #C0C4CC;
+      p {
+        color: #C0C4CC;
+      }
+    }
+    .personalList:nth-of-type(5) {
+      border-top: 3px solid #58D788;
+      p {
+        color: #58D788;
+      }
+    }
+    .personalList:nth-of-type(6) {
+      border-top: 3px solid #6A8DFB;
+      p {
+        color: #6A8DFB;
+      }
+    }
+    .personalList:hover {
+      border-top-color: #409EFF;
+      background: #409EFF;
+      color: #ffffff;
+      @include box_shadow(#6A8DFB);
+      div {
+        font-size: 12px;
+        height: 30px;
+        line-height: 30px;
+      }
+      p {
+        color: #ffffff;
+      }
+    }
+    .detrusion {
+      float: left;
+      width: 180px;
+      margin: 20px 10px 10px;
+      background: #409EFF;
+      padding: 0;
+      text-align: center;
+      color: #ffffff;
+      @include box_shadow(#6A8DFB);
+      @include border_radius(6px);
+    }
+  }
   #index {
     .isCollapse {
       padding: 0 20px;
     }
     .isCollapse_logo {
       width: 64px !important;
-    }
-    @mixin border_radius($n) {
-      -webkit-border-radius: $n;
-      -moz-border-radius: $n;
-      border-radius: $n;
-    }
-
-    @mixin border_radius($n) {
-      -webkit-border-radius: $n;
-      -moz-border-radius: $n;
-      border-radius: $n;
-    }
-
-    @mixin box_shadow($n) {
-      -webkit-box-shadow: 0 0 16px 0 $n;
-      -moz-box-shadow: 0 0 16px 0 $n;
-      box-shadow: 0 0 16px 0 $n;
-    }
-
-    @mixin box_sizing {
-      -webkit-box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      box-sizing: border-box;
-    }
-
-    .personal {
-      width: 200px;
-      padding: 10px;
-      .personalList {
-        float: left;
-        @include box_sizing;
-        @include border_radius(6px);
-        padding: 0;
-        width: 80px;
-        height: 80px;
-        margin: 10px 10px 0;
-        color: #7394FB;
-        @include box_shadow(#dddddd);
-        .el-dropdown-menu__item {
-          line-height: 0;
-        }
-        div {
-          font-size: 12px;
-          height: 27px;
-          line-height: 27px;
-        }
-        p {
-          @include box_sizing;
-          margin: 0 auto;
-          height: 50px;
-          text-align: center;
-          padding-top: 10px;
-          i {
-            font-size: 30px;
-          }
-        }
-        div {
-          text-align: center;
-        }
-      }
-      .personalList:nth-of-type(1) {
-        border-top: 3px solid #6A8DFB;
-        p {
-          color: #6A8DFB;
-        }
-      }
-      .personalList:nth-of-type(2) {
-        border-top: 3px solid #58D788;
-        p {
-          color: #58D788;
-        }
-      }
-      .personalList:nth-of-type(3) {
-        border-top: 3px solid #FB4699;
-        p {
-          color: #FB4699;
-        }
-      }
-      .personalList:nth-of-type(4) {
-        border-top: 3px solid #C0C4CC;
-        p {
-          color: #C0C4CC;
-        }
-      }
-      .personalList:nth-of-type(5) {
-        border-top: 3px solid #58D788;
-        p {
-          color: #58D788;
-        }
-      }
-      .personalList:nth-of-type(6) {
-        border-top: 3px solid #6A8DFB;
-        p {
-          color: #6A8DFB;
-        }
-      }
-      .personalList:hover {
-        border-top-color: #409EFF;
-        background: #409EFF;
-        color: #ffffff;
-        @include box_shadow(#6A8DFB);
-        div {
-          font-size: 12px;
-          height: 30px;
-          line-height: 30px;
-        }
-        p {
-          color: #ffffff;
-        }
-      }
-      .detrusion {
-        float: left;
-        width: 180px;
-        margin: 20px 10px 10px;
-        background: #409EFF;
-        padding: 0;
-        text-align: center;
-        color: #ffffff;
-        @include box_shadow(#6A8DFB);
-        @include border_radius(6px);
-      }
     }
 
     .navBar {
