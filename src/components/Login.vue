@@ -267,13 +267,14 @@
         margin: 18px 0;
       }
       .confirmLogin {
-        margin: 30px 0 50px 0;
+        margin: 40px 0 60px 0;
         .el-button--primary {
           background: #6a8dfb;
           border-color: #6a8dfb;
           width: 100%;
           &:hover {
-            opacity: .8;
+            background: #83b2fb;
+            border-color: #83b2fb;
           }
         }
       }
@@ -293,7 +294,8 @@
           background-color: #58d788;
           border-color: #58d788;
           &:hover {
-            opacity: .8;
+            background-color: #7ad7a7;
+            border-color: #7ad7a7;
           }
         }
       }
