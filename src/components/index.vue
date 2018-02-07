@@ -1,6 +1,23 @@
 <template>
   <div id="index" @click="clickScreen">
-    <div class="navBar">
+    <div class="navBarLeft" :class="isFull? 'navBarRight':'' ">
+      <i class="el-icons-fa-compress" @click="fullScreen(2)"></i>
+    </div>
+    <div style="position: fixed;top: 3px;right: 20px;z-index: 100;">
+      <el-collapse-transition>
+        <div v-show="isFull">
+          <div class="transition-box">
+            <div>
+              <img src="../assets/images/情人节.png" alt="">
+            </div>
+            <div class="contents">
+              <div>回复的咖</div>
+            </div>
+          </div>
+        </div>
+      </el-collapse-transition>
+    </div>
+    <div class="navBar" :class="isFull? 'navBarHide':'' ">
       <div class="left">
         <div class="logo" :class="isCollapse? 'isCollapse_logo':'' ">
           <div class="boss" :class="isCollapse? 'boss1':'' ">BOSS</div>
@@ -11,6 +28,10 @@
         </div>
       </div>
       <div class="right">
+        <div class="countdown">
+          <i class="el-icons-fa-expand" @click="fullScreen(1)"></i>
+          <span style="line-height: 10px;">全屏</span>
+        </div>
         <div class="countdown">
           <el-tooltip class="item" effect="dark" content="锁屏" placement="bottom">
             <i class="el-icon-time" @click="lockScreen"></i>
@@ -161,7 +182,7 @@
           </el-menu>
         </div>
 
-        <el-main>
+        <el-main :class="isFull? 'mainHide':'' ">
           <TagsView></TagsView>
           <div style="padding: 10px;background: #fff">
             <router-view></router-view>
@@ -182,6 +203,7 @@
     data() {
       return {
         isCollapse: false,
+        isFull: false,
         Countdown: 999999,  //倒计时
         screenStatus: false,
         defaultArray: [],
@@ -201,6 +223,16 @@
       }
     },
     methods: {
+      // 全屏
+      fullScreen(val) {
+        if (val === 1) {
+          this.isFull = true;
+          this.isCollapse = true;
+        } else {
+          this.isFull = false;
+          this.isCollapse = false;
+        }
+      },
       handleOpen(key, keyPath) {
 //         console.log(key, keyPath);
 //         if(key === '财务账本'){
@@ -279,12 +311,6 @@
     border-radius: $n;
   }
 
-  @mixin border_radius($n) {
-    -webkit-border-radius: $n;
-    -moz-border-radius: $n;
-    border-radius: $n;
-  }
-
   @mixin box_shadow($n) {
     -webkit-box-shadow: 0 0 16px 0 $n;
     -moz-box-shadow: 0 0 16px 0 $n;
@@ -295,6 +321,10 @@
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+  }
+
+  @mixin transition {
+    transition: all .4s;
   }
 
   .personal {
@@ -390,17 +420,77 @@
       padding: 0;
       text-align: center;
       color: #ffffff;
-      @include box_shadow(#6A8DFB);
+      @include box_shadow(#409EFF);
       @include border_radius(6px);
     }
+    .detrusion:hover {
+      background: #6A8DFB;
+      color: #ffffff;
+      @include box_shadow(#6A8DFB);
+    }
   }
+
   #index {
+    .transition-box {
+      width: 120px;
+      height: 40px;
+      box-sizing: border-box;
+      display: flex;
+      display: -webkit-flex;
+      background-color: #6a8dfb;
+      div {
+        width: 80px;
+        color: #ffffff;
+        img{
+          width: 100%;
+          height: 100%;
+        }
+      }
+      div.contents{
+        display: flex;
+        display: -webkit-flex;
+        align-items: center;
+        flex-wrap: wrap;
+        padding-left: 10px;
+        @include box_sizing;
+      }
+    }
+    .department_name{
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+      background-color: #6a8dfb;
+      align-items: center;
+    }
     .isCollapse {
       padding: 0 20px;
     }
     .isCollapse_logo {
       width: 64px !important;
-      transition: all .4s;
+      @include transition;
+    }
+
+    .navBarLeft {
+      position: fixed;
+      top: 0;
+      left: -65px;
+      width: 65px;
+      height: 66px;
+      background: #ffffff;
+      display: -webkit-flex;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      @include transition;
+      i {
+        cursor: pointer;
+        font-size: 30px;
+        color: #409EFF;
+      }
+    }
+    .navBarRight {
+      left: 0;
+      @include transition;
     }
 
     .navBar {
@@ -412,12 +502,12 @@
       left: 0;
       z-index: 66;
       display: flex;
+      @include transition;
       .left {
         width: 50%;
         height: 100%;
         display: flex;
         align-items: center;
-        transition: all .4s;
         .logo {
           width: 210px;
           height: 100%;
@@ -430,26 +520,23 @@
             font-size: 26px;
             color: #6a8dfb;
             margin-left: 50px;
-            transition: all .4s;
+            @include transition;
           }
           .boss1 {
             font-size: 26px;
             color: #6a8dfb;
             margin-left: -72.25px;
-            transition: all .4s;
+            @include transition;
           }
           .el-icons-fa-bars {
             font-size: 24px;
             color: #4f5aa2;
             margin-right: 25px;
             cursor: pointer;
-            transition: all .4s;
           }
-
         }
         .slogan {
           margin-left: 30px;
-          transition: all .4s;
         }
       }
       .right {
@@ -585,6 +672,11 @@
       }
     }
 
+    .navBarHide {
+      top: -66px;
+      @include transition;
+    }
+
     .contentBox {
       .el-container {
         .aside {
@@ -622,7 +714,11 @@
           padding: 10px 20px;
           margin-left: 210px;
           overflow-x: hidden;
-          /*transition: margin-left .4s;*/
+          @include transition;
+        }
+        .mainHide {
+          margin-top: 0 !important;
+          @include transition;
         }
       }
     }

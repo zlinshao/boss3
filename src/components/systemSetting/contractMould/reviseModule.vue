@@ -36,12 +36,10 @@
 </template>
 
 <script>
-  import Dropzone from '../../common/dropzone'
 
   export default {
     name: "revise-module",
     props: ['module'],
-    components: {Dropzone},
     data() {
       return {
         dialogVisible: false,
