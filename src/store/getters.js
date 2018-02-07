@@ -3,5 +3,6 @@
  */
 const getters = {
   visitedViews: state => state.app.visitedViews,
+  menuStatus: state => state.app.menuStatus,
 }
 export default getters

@@ -4,6 +4,7 @@
 const app = {
   state: {
     visitedViews: [],
+    menuStatus : false,
   },
   mutations: {
     ADD_VISITED_VIEWS: (state, view) => {
@@ -20,6 +21,22 @@ const app = {
           break
         }
       }
+    },
+    CLOSE_ALL_VISITED: (state, view) => {
+      state.visitedViews.splice(view+1,state.visitedViews.length);
+      state.visitedViews.splice(0,view);
+    },
+    CLOSE_LEFT_VISITED: (state, view) => {
+      state.visitedViews.splice(0,view);
+    },
+    CLOSE_RIGHT_VISITED: (state, view) => {
+      state.visitedViews.splice(view+1,state.visitedViews.length);
+    },
+    CLOSE_MENU:(state,view) => {
+      state.menuStatus = false;
+    },
+    OPEN_MENU:(state,view) => {
+      state.menuStatus = true;
     }
   },
   actions: {
@@ -31,8 +48,23 @@ const app = {
         commit('DEL_VISITED_VIEWS', view)
         resolve([...state.visitedViews])
       })
-    }
+    },
+    closeALLVisited({ commit }, view){
+      commit('CLOSE_ALL_VISITED', view)
+    },
+    closeLeftVisited({ commit }, view){
+      commit('CLOSE_LEFT_VISITED', view)
+    },
+    closeRightVisited({ commit }, view){
+      commit('CLOSE_RIGHT_VISITED', view)
+    },
+    closeMenu({ commit }, view){
+      commit('CLOSE_MENU', view)
+    },
+    openMenu({ commit }, view){
+      commit('OPEN_MENU', view)
+    },
   }
-}
+};
 
 export default app

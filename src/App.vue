@@ -1,5 +1,5 @@
 <template>
-  <div id="app" @contextmenu="prevent($event)">
+  <div id="app" @contextmenu="prevent($event)" @click="closeMenu">
     <router-view></router-view>
   </div>
 </template>
@@ -10,6 +10,10 @@
     methods: {
       prevent(e) {
         e.preventDefault();
+        this.$store.dispatch('closeMenu')
+      },
+      closeMenu(){
+        this.$store.dispatch('closeMenu')
       }
     }
   }
