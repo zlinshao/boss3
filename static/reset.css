@@ -72,8 +72,6 @@
 
 .filter {
   padding-top: 10px; }
-  .filter .el-select .el-input {
-    width: 110px; }
   .filter .el-input-group__prepend {
     background-color: #fff !important; }
 
@@ -150,5 +148,59 @@
   .__vev_calendar-wrapper .cal-wrapper {
     width: 100% !important;
     padding: 0 !important; } }
+.highRanking {
+  position: relative; }
+  .highRanking .highSearch {
+    float: right;
+    height: 40px;
+    box-sizing: border-box; }
+  .highRanking .tabsSearch {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 40px;
+    border-bottom: 2px solid #e4e7ed;
+    box-sizing: border-box;
+    z-index: 10; }
+  .highRanking .high_grade {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    left: 0;
+    padding: 0;
+    background: #FFFFFF;
+    -webkit-box-shadow: 0 3px 16px 0 #aaa;
+    -moz-box-shadow: 0 3px 16px 0 #aaa;
+    box-shadow: 0 3px 16px 0 #aaa;
+    z-index: -1;
+    opacity: 0;
+    /*transition: all .4s;*/ }
+    .highRanking .high_grade .el-form-item--mini.el-form-item, .highRanking .high_grade .el-form-item--small.el-form-item {
+      margin: 0; }
+    .highRanking .high_grade .filterTitle {
+      padding: 8px 18px;
+      border-bottom: 1px solid #DDDDDD;
+      font-weight: bold; }
+    .highRanking .high_grade .el-row.el_row_border {
+      background: #FFFFFF;
+      border-bottom: 1px solid #DDDDDD; }
+      .highRanking .high_grade .el-row.el_row_border .el-row {
+        display: flex;
+        display: -webkit-flex;
+        align-items: center; }
+        .highRanking .high_grade .el-row.el_row_border .el-row .el_col_label {
+          padding: 8px 30px; }
+        .highRanking .high_grade .el-row.el_row_border .el-row .el_col_option {
+          padding: 8px 12px;
+          background-color: #f3f3f3; }
+    .highRanking .high_grade .btnOperate {
+      padding: 12px;
+      display: flex;
+      display: -webkit-flex;
+      justify-content: center; }
+  .highRanking .highHide {
+    z-index: 20;
+    opacity: 1;
+    /*transition: all .4s;*/ }
 
 /*# sourceMappingURL=reset.css.map */

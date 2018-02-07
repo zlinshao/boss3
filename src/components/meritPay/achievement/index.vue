@@ -1,68 +1,108 @@
 <template>
   <div id="periodicTable">
-    <div class="filter">
-      <el-form :inline="true" :model="form" size="mini" label-width="80px">
-        <el-form-item>
-          <el-select v-model="form.status" clearable size="mini">
-            <el-option label="款项状态" value=""></el-option>
-            <el-option v-for="(key,index) in values" :label="key" :value="index + 1" :key="index"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <div class="block">
-            <el-date-picker
-              v-model="form.dates"
-              type="daterange"
-              align="right"
-              unlink-panels
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :picker-options="pickerOptions">
-            </el-date-picker>
+    <div class="highRanking">
+      <div class="highSearch">
+        <el-form :inline="true" size="mini">
+          <el-form-item>
+            <el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" clearable>
+              <el-button slot="append" icon="el-icon-search"></el-button>
+              <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-form-item @click="leadingOut">
+              <el-button type="primary">导出</el-button>
+            </el-form-item>
+          </el-form-item>
+        </el-form>
+      </div>
+
+      <div class="filter high_grade" :class="isHigh? 'highHide':''">
+        <el-form :inline="true" :model="form" size="mini" label-width="100px">
+          <div class="filterTitle">
+            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
           </div>
-        </el-form-item>
-        <el-form-item>
-          <el-input v-model="form.organize" @focus="openOrganize" placeholder="请选择部门/员工"
-                    readonly>
-            <template slot="append">
-              <div style="cursor: pointer;" @click="close_">清空</div>
-            </template>
-          </el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-autocomplete
-            class="inline-input"
-            v-model="state" clearable
-            :fetch-suggestions="querySearch"
-            placeholder="请输入内容"
-            :trigger-on-focus="false"
-            @select="handleSelect">
-            <el-button slot="append" icon="el-icon-search"></el-button>
-          </el-autocomplete>
-        </el-form-item>
-        <el-form-item>
-          <el-select
-            @remove-tag="remChange"
-            @change="checkChange"
-            v-model="form.checkValue"
-            multiple
-            filterable
-            allow-create
-            default-first-option
-            placeholder="请选择文章标签">
-            <el-option
-              v-for="item in options"
-              :key="item.label"
-              :label="item.label"
-              :value="item.label">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary">导出</el-button>
-        </el-form-item>
-      </el-form>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">日期</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <div class="block">
+                      <el-date-picker
+                        v-model="form.dates"
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        :picker-options="pickerOptions">
+                      </el-date-picker>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">部门</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input v-model="form.organize" @focus="openOrganize" placeholder="请选择部门/员工"
+                              readonly>
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="close_">清空</div>
+                      </template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">标签选择</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select
+                      @remove-tag="remChange"
+                      @change="checkChange"
+                      v-model="form.checkValue"
+                      multiple
+                      filterable
+                      allow-create
+                      default-first-option
+                      placeholder="请选择文章标签">
+                      <el-option
+                        v-for="item in options"
+                        :key="item.label"
+                        :label="item.label"
+                        :value="item.label">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <div class="btnOperate">
+            <el-button size="mini" type="primary">搜索</el-button>
+            <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+            <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+          </div>
+        </el-form>
+      </div>
     </div>
 
     <el-table
@@ -148,6 +188,7 @@
     components: {organization},
     data() {
       return {
+        isHigh: false,
         currentPage: 1,
         values: ['出租', '提前一个月出租', '提前二个月以上续租'],
         form: {
@@ -216,6 +257,16 @@
       this.restaurants = this.loadAll();
     },
     methods: {
+      // 重置
+      resetting() {
+        this.form.organize = '';
+        this.form.dates = '';
+        this.form.keywords = '';
+      },
+      // 高级筛选
+      highGrade() {
+        this.isHigh = !this.isHigh;
+      },
       checkChange(val) {
         console.log(val);
       },
@@ -286,5 +337,15 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-
+  #periodicTable{
+    .filter {
+      padding-top: 10px;
+      .el-select .el-input {
+        width: 240px;
+      }
+      .el-input-group__prepend {
+        background-color: #fff !important;
+      }
+    }
+  }
 </style>
