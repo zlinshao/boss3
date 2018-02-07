@@ -143,15 +143,8 @@
   .__vev_calendar-wrapper .cal-wrapper .cal-body .dates .item .is-today {
     background-color: #6a8dfb !important; }
 .__vev_calendar-wrapper .cal-wrapper .cal-body .dates .item.selected-day .is-event {
-  background-color: #6a8dfb !important; }
-.__vev_calendar-wrapper .cal-wrapper .cal-body .dates .event {
-  color: inherit; }
-  .__vev_calendar-wrapper .cal-wrapper .cal-body .dates .event .date-num {
-    color: #6a8dfb !important; }
-    .__vev_calendar-wrapper .cal-wrapper .cal-body .dates .event .date-num:hover {
-      color: #FFFFFF !important; }
-  .__vev_calendar-wrapper .cal-wrapper .cal-body .dates .event:hover .is-event {
-    background: #6a8dfb !important; }
+  background-color: #6a8dfb !important;
+  color: #FFFFFF; }
 
 @media screen and (min-width: 768px) {
   .__vev_calendar-wrapper .cal-wrapper {

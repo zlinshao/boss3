@@ -230,19 +230,9 @@
         }
         .item.selected-day .is-event {
           background-color: #6a8dfb !important;
+          color: #FFFFFF;
         }
-        .event{
-          color: inherit;
-          .date-num{
-            color: #6a8dfb !important;
-            &:hover{
-              color: #FFFFFF !important;
-            }
-          }
-          &:hover .is-event{
-            background: #6a8dfb !important;
-          }
-        }
+
       }
     }
   }

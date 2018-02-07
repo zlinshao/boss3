@@ -7,6 +7,10 @@
 <script>
   export default {
     name: 'app',
+
+    mounted(){
+
+    },
     methods: {
       prevent(e) {
         e.preventDefault();

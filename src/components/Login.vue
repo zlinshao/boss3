@@ -11,7 +11,7 @@
           <img src="../assets/images/slogan.png" style="width: 100%" alt="">
         </div>
         <div class="login_type">
-          <div @click="openModal">
+          <div>
             <div><img src="../assets/images/dd1.png" alt=""></div>
             <div style="color:#6a8dfb;">钉钉 - 扫码</div>
             <div>一键登陆</div>
@@ -21,7 +21,7 @@
             <div style="color:#fb4699;">手机号</div>
             <div>快速登陆</div>
           </div>
-          <div @click="openModal">
+          <div>
             <div><img src="../assets/images/weixin2.png" alt=""></div>
             <div style="color: #58d788">微信 - 扫码</div>
             <div>一键登陆</div>
@@ -39,12 +39,12 @@
             <img src="../assets/images/slogan.png" style="width: 100%" alt="">
           </div>
           <div class="loginType">
-            <div id="ding" @mouseover="changeDingColor" @mouseout="changeDingColor" @click="openModal">
+            <div id="ding" @mouseover="changeDingColor" @mouseout="changeDingColor" @click="goBack">
               <img v-if="!dingColor" src="../assets/images/dd2.png" alt="">
               <img v-if="dingColor" src="../assets/images/dd1.png" alt="">
             </div>
             <div id="message"><img src="../assets/images/sj.png" alt=""></div>
-            <div id="weChart" @mouseover="changeWeiColor" @mouseout="changeWeiColor" @click="openModal">
+            <div id="weChart" @mouseover="changeWeiColor" @mouseout="changeWeiColor" @click="goBack">
               <img v-if="!weiColor" src="../assets/images/weixin1.png" alt="">
               <img v-if="weiColor" src="../assets/images/weixin2.png" alt="">
             </div>
@@ -71,11 +71,6 @@
 
 
     </div>
-
-    <div class="modal" v-show="isModal">
-      <div class="modalContent"></div>
-    </div>
-    <div class="modal_back" v-show="isModal" @click="closeModal"></div>
   </div>
 </template>
 
@@ -93,7 +88,6 @@
         isMessage: false,
         dingColor: false,
         weiColor: false,
-        isModal: false,
       };
     },
     mounted(){
@@ -253,11 +247,8 @@
       changeWeiColor(){
         this.weiColor = !this.weiColor;
       },
-      openModal(){
-        this.isModal = true;
-      },
-      closeModal(){
-        this.isModal = false;
+      goBack(){
+        this.isMessage = false;
       }
     }
   }
