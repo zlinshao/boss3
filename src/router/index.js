@@ -67,6 +67,7 @@ import SuppliesGather from '../components/OAWork/property/officeSuppliesGather/ 
 import CapitalChange from '../components/OAWork/property/items/capitalAssetsChange.vue'
 import CapitalGather from '../components/OAWork/property/items/capitalAssetsGather.vue'
 import SthToDo from '../components/OAWork/sthToDo/index.vue'
+import SthToDoDetail from '../components/OAWork/sthToDo/components/detail.vue'
 
 
 //人资管理
@@ -120,6 +121,7 @@ export default new Router({
       abnormal:true,
       children: [
         {path: '/messageCenter', component: MessageCenter, name: '消息中心'},
+        {path: '/sthToDoDetail', component: SthToDoDetail, name: '喜报详情'},
       ]
     },
 

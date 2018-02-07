@@ -1,26 +1,39 @@
 <template>
-  <div>
+  <div @click="show=false" @contextmenu="closeMenu">
     <div id="tagView">
-      <el-tag v-for="item in visitedViews" :key="item.name" closable :type="isActive(item)?'danger':'default'" @close="handleClose(item)">
-        <span class="tag_span" @click="skipPage(item)">
+      <el-tag v-for="(item,index) in visitedViews" :key="item.name" closable :type="isActive(item)?'danger':'default'" @close="handleClose(item)">
+        <span class="tag_span" @click="skipPage(item)" @contextmenu = openMenu(item,index)>
           {{item.name}}
         </span>
       </el-tag>
     </div>
-
+    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+               @clickOperate="clickEvent"></RightMenu>
   </div>
 </template>
 
 <script>
+    import RightMenu from './rightMenu.vue'
     export default {
+      components: {RightMenu},
       data(){
           return{
+            rightMenuX: 0,
+            rightMenuY: 0,
+            show: false,
+            lists: [],
+
             editableTabsValue : '',
+            index:'',
+            item:{}
           }
       },
       computed: {
         visitedViews() {
           return this.$store.state.app.visitedViews
+        },
+        menuStatus(){
+          return this.$store.state.app.menuStatus
         }
       },
       mounted(){
@@ -30,8 +43,11 @@
       watch: {
         $route() {
           this.addViewTags()
-          }
         },
+        menuStatus(val){
+            this.show = val;
+        }
+      },
       methods:{
         addViewTags() {
           const route = this.generateRoute();
@@ -75,6 +91,65 @@
         },
         isActive(route) {
           return route.path === this.$route.path || route.name === this.$route.name
+        },
+        openMenu(item,index){
+          this.$store.dispatch('openMenu');
+
+          this.index = index;
+          this.item = item;
+          if(this.visitedViews.length<2){
+
+          }else if(this.visitedViews.length>1&& index===this.visitedViews.length-1){
+            this.lists = [
+              {clickIndex: 'all', label: '关闭其他标签页',},
+              {clickIndex: 'left', label: '关闭左侧标签页',}
+            ];
+            this.contextMenuParam(event);
+          }else if(this.visitedViews.length>1&& index===0){
+            this.lists = [
+              {clickIndex: 'all', label: '关闭其他标签页',},
+              {clickIndex: 'right', label: '关闭右侧标签页',},
+            ];
+            this.contextMenuParam(event);
+          }else {
+            this.lists = [
+              {clickIndex: 'all', label: '关闭其他标签页',},
+              {clickIndex: 'left', label: '关闭左侧标签页',},
+              {clickIndex: 'right', label: '关闭右侧标签页',},
+            ];
+            this.contextMenuParam(event);
+          }
+        },
+        clickEvent (index){
+            switch (index){
+              case 'all':
+                  this.$store.dispatch('closeALLVisited',this.index);
+                  this.$router.push(this.item.path)
+                  break;
+              case 'left':
+                  this.$store.dispatch('closeLeftVisited',this.index);
+                  break;
+              case 'right':
+                  this.$store.dispatch('closeRightVisited',this.index);
+                  break;
+            }
+        },
+        //关闭右键菜单
+        closeMenu(){
+          this.show = false;
+        },
+        //右键参数
+        contextMenuParam(event){
+          //param: user right param
+          let e = event || window.event;	//support firefox contextmenu
+          this.show = false;
+          this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+          this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+          event.preventDefault();
+          event.stopPropagation();
+          this.$nextTick(() => {
+            this.show = true
+          })
         },
       }
     }

@@ -1,7 +1,8 @@
 <template>
   <div id="login">
     <div class="container">
-      <div class="top">
+
+      <div class="login_main" v-if="!isMessage">
         <div class="beijing"></div>
         <div class="logo">
           <img src="../assets/images/maotou.png" alt="">
@@ -9,29 +10,72 @@
         <div class="slogan">
           <img src="../assets/images/slogan.png" style="width: 100%" alt="">
         </div>
-        <div class="loginType">
-          <div><img src="../assets/images/dd2.png" alt=""></div>
-          <div><img src="../assets/images/sj.png" alt=""></div>
-          <div><img src="../assets/images/weixin1.png" alt=""></div>
+        <div class="login_type">
+          <div @click="openModal">
+            <div><img src="../assets/images/dd1.png" alt=""></div>
+            <div style="color:#6a8dfb;">钉钉 - 扫码</div>
+            <div>一键登陆</div>
+          </div>
+          <div @click="messageLogin">
+            <div><img src="../assets/images/sj.png" alt=""></div>
+            <div style="color:#fb4699;">手机号</div>
+            <div>快速登陆</div>
+          </div>
+          <div @click="openModal">
+            <div><img src="../assets/images/weixin2.png" alt=""></div>
+            <div style="color: #58d788">微信 - 扫码</div>
+            <div>一键登陆</div>
+          </div>
         </div>
       </div>
-      <div class="formItem">
-        <el-input placeholder="请输入手机号">
-          <template slot="append">
-            <span class="china">中国</span> +86
-          </template>
-        </el-input>
-        <el-input placeholder="请输入6位短信验证码">
-          <el-button slot="append" size="small" type="success">获取验证码</el-button>
-        </el-input>
 
-        <el-checkbox>记录本机登陆方式！</el-checkbox>
+      <div v-if="isMessage" class="messageLogin">
+        <div class="top">
+          <div class="beijing"></div>
+          <div class="logo">
+            <img src="../assets/images/maotou.png" alt="">
+          </div>
+          <div class="slogan">
+            <img src="../assets/images/slogan.png" style="width: 100%" alt="">
+          </div>
+          <div class="loginType">
+            <div id="ding" @mouseover="changeDingColor" @mouseout="changeDingColor" @click="openModal">
+              <img v-if="!dingColor" src="../assets/images/dd2.png" alt="">
+              <img v-if="dingColor" src="../assets/images/dd1.png" alt="">
+            </div>
+            <div id="message"><img src="../assets/images/sj.png" alt=""></div>
+            <div id="weChart" @mouseover="changeWeiColor" @mouseout="changeWeiColor" @click="openModal">
+              <img v-if="!weiColor" src="../assets/images/weixin1.png" alt="">
+              <img v-if="weiColor" src="../assets/images/weixin2.png" alt="">
+            </div>
+          </div>
+        </div>
+        <div class="formItem">
+          <el-input placeholder="请输入手机号">
+            <template slot="append">
+              <span class="china">中国</span> +86
+            </template>
+          </el-input>
+          <el-input placeholder="请输入6位短信验证码">
+            <el-button slot="append" size="small" type="success">获取验证码</el-button>
+          </el-input>
 
-        <div class="confirmLogin">
-          <el-button size="medium" type="primary"  @click.native.prevent="handleSubmit2" :loading="logining">登 陆</el-button>
+          <el-checkbox>记录本机登陆方式！</el-checkbox>
+
+          <div class="confirmLogin">
+            <el-button size="medium" type="primary" @click.native.prevent="handleSubmit2" :loading="logining">登 陆
+            </el-button>
+          </div>
         </div>
       </div>
+
+
     </div>
+
+    <div class="modal" v-show="isModal">
+      <div class="modalContent"></div>
+    </div>
+    <div class="modal_back" v-show="isModal" @click="closeModal"></div>
   </div>
 </template>
 
@@ -45,7 +89,11 @@
           account: 'admin',
           checkPass: '123456'
         },
-        checked: true
+        checked: true,
+        isMessage: false,
+        dingColor: false,
+        weiColor: false,
+        isModal: false,
       };
     },
     mounted(){
@@ -195,6 +243,21 @@
 //            return false;
 //          }
 //        });
+      },
+      messageLogin(){
+        this.isMessage = true;
+      },
+      changeDingColor(){
+        this.dingColor = !this.dingColor;
+      },
+      changeWeiColor(){
+        this.weiColor = !this.weiColor;
+      },
+      openModal(){
+        this.isModal = true;
+      },
+      closeModal(){
+        this.isModal = false;
       }
     }
   }
@@ -203,32 +266,52 @@
 
 <style lang="scss">
   #login {
+    .modal_back{
+      width: 100%;
+      height: 100%;
+      background: #000;
+      opacity: .5;
+      position: fixed;
+      z-index: 1000;
+    }
+    .modal {
+      .modalContent {
+        width: 400px;
+        height: 400px;
+        border-radius: 5px;
+        background: #FFF;
+        position: fixed;
+        z-index: 2000;
+        opacity: 1;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+      }
+    }
+
     width: 100vw;
     height: 100%;
     /*background: linear-gradient(to bottom right,#d6d6f7, #d6ebed 40%, #f4f3f6 65%);*/
     background: url("../assets/images/背景.png") no-repeat;
     background-size: 100% 100%;
     .container {
-      width: 612px;
+      width: 602px;
       min-height: 450px;
-      border-radius: 5px;
+      border-radius: 6px;
       padding: 0;
       /*background: url("../assets/images/椭圆646.png") no-repeat;*/
       /*background-size: 100% 100%;*/
       background: #FFFFFF;
       position: absolute;
+      box-sizing: border-box;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      border: 1px solid rgba(64, 158, 255, .12);
-      box-shadow: 0 3px 6px 0 rgba(64, 158, 255, .2), 0 0 6px 0 rgba(64, 158, 255, .04);
+      /*border: 1px solid rgba(106, 141, 251, .12);*/
+      box-shadow: 0 4px 6px 0 rgba(106, 141, 251, .2), 0 0 6px 0 rgba(106, 141, 251, .04);
 
-      .top {
-        width: 100%;
-        height: 270px;
-        background: #fcfbfc;
-        box-sizing: border-box;
-        .beijing{
+      .login_main {
+        .beijing {
           height: 95px;
           background: url("../assets/images/lanyuan.png") no-repeat;
           background-size: 100% 100%;
@@ -241,61 +324,134 @@
           width: 230px;
           margin: 10px auto 30px;
         }
-        .loginType{
-          width: 380px;
-          margin:0 auto ;
+        .login_type {
+          width: 490px;
+          height: 150px;
+          margin: 55px auto;
           display: flex;
           justify-content: space-between;
-          >div{
+          > div {
+            width: 150px;
+            height: 150px;
+            border-radius: 5px;
             cursor: pointer;
+            transition: all .5s;
+            box-sizing: border-box;
+            &:hover {
+              margin-top: -10px;
+            }
+            &:nth-child(1) {
+              border: 1px solid #6a8dfb;
+              border-top: 4px solid #6a8dfb;
+              box-shadow: 0 4px 6px 0 rgba(106, 141, 251, .2), 0 0 6px 0 rgba(106, 141, 251, .04);
+            }
+            &:nth-child(2) {
+              border: 1px solid #fb4699;
+              border-top: 4px solid #fb4699;
+              box-shadow: 0 4px 6px 0 rgba(251, 56, 173, 0.2), 0 0 6px 0 rgba(106, 141, 251, .04);
+            }
+            &:nth-child(3) {
+              border: 1px solid #58d788;
+              border-top: 4px solid #58d788;
+              box-shadow: 0 4px 6px 0 rgba(54, 251, 190, 0.2), 0 0 6px 0 rgba(106, 141, 251, .04);
+            }
+            > div {
+              &:nth-child(1) {
+                margin-top: 23px;
+                text-align: center;
+              }
+              &:nth-child(2) {
+                margin-top: 10px;
+                font-size: 14px;
+                text-align: center;
+              }
+              &:nth-child(3) {
+                margin-top: 15px;
+                font-size: 14px;
+                text-align: center;
+              }
+            }
           }
         }
       }
 
-      .formItem {
-        padding: 0 50px;
-      }
-      .el-input__inner {
-        border: none;
-        border-bottom: 1px solid #f4f3f6;
-        border-radius: 0;
-        height: 80px;
-      }
-
-      .el-checkbox {
-        color: #909399;
-        margin: 18px 0;
-      }
-      .confirmLogin {
-        margin: 40px 0 60px 0;
-        .el-button--primary {
-          background: #6a8dfb;
-          border-color: #6a8dfb;
+      .messageLogin {
+        width: 100%;
+        height: 100%;
+        .top {
           width: 100%;
-          &:hover {
-            background: #83b2fb;
-            border-color: #83b2fb;
+          height: 270px;
+          background: #fcfbfc;
+          box-sizing: border-box;
+          .beijing {
+            height: 95px;
+            background: url("../assets/images/lanyuan.png") no-repeat;
+            background-size: 100% 100%;
+          }
+          .logo {
+            text-align: center;
+            margin-top: -55px;
+          }
+          .slogan {
+            width: 230px;
+            margin: 10px auto 30px;
+          }
+          .loginType {
+            width: 380px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            > div {
+              cursor: pointer;
+            }
           }
         }
-      }
 
-      .el-input-group__append, .el-input-group__prepend {
-        background-color: #fff;
-        border: none;
-        border-bottom: 1px solid #f4f3f6;
-        border-radius: 0;
-        height: 60px;
-        .china {
-          padding: 0 30px;
-          border-left: 1px solid #babbbc;
+        .formItem {
+          padding: 0 50px;
         }
-        .el-button--success {
-          color: #fff;
-          background-color: #58d788;
-          border-color: #58d788;
-          &:hover {
-            background-color: #7ad7a7;
-            border-color: #7ad7a7;
+        .el-input__inner {
+          border: none;
+          border-bottom: 1px solid #f4f3f6;
+          border-radius: 0;
+          height: 80px;
+        }
+
+        .el-checkbox {
+          color: #909399;
+          margin: 18px 0;
+        }
+        .confirmLogin {
+          margin: 40px 0 60px 0;
+          .el-button--primary {
+            background: #6a8dfb;
+            border-color: #6a8dfb;
+            width: 100%;
+            &:hover {
+              background: #83b2fb;
+              border-color: #83b2fb;
+            }
+          }
+        }
+
+        .el-input-group__append, .el-input-group__prepend {
+          background-color: #fff;
+          border: none;
+          border-bottom: 1px solid #f4f3f6;
+          border-radius: 0;
+          height: 60px;
+          .china {
+            padding: 0 30px;
+            border-left: 1px solid #babbbc;
+          }
+          .el-button--success {
+            color: #fff;
+            background-color: #58d788;
+            border-color: #58d788;
+            &:hover {
+              background-color: #7ad7a7;
+              border-color: #7ad7a7;
+            }
           }
         }
       }

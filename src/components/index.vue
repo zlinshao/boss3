@@ -299,7 +299,7 @@
           this.$router.push({path: '/lock'});
         });
         Cookies.set('locking', '1');
-      }
+      },
     }
   }
 </script>

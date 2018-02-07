@@ -44,6 +44,7 @@
             <el-table
               :data="tableData"
               @row-click="clickTable"
+              @row-dblclick="dblClickTable"
               style="width: 100%">
               <el-table-column
                 prop="date"
@@ -288,6 +289,9 @@
       closeOrganization(){
         this.organizationDialog = false
       },
+      dblClickTable(){
+        this.$router.push('/sthToDoDetail')
+      }
     }
   }
 </script>
