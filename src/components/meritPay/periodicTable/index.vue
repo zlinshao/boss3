@@ -1,83 +1,86 @@
 <template>
   <div id="periodicTable">
-    <div class="highSearch">
-      <el-form :inline="true" size="mini">
-        <el-form-item>
-          <el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" clearable>
-            <el-button slot="append" icon="el-icon-search"></el-button>
-            <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
-          </el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-dropdown trigger="click" @command="leadingOut">
-            <el-button type="primary" trigger="click" size="mini">
-              导出<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="collect">1</el-dropdown-item>
-              <el-dropdown-item command="rent">2</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </el-form-item>
-      </el-form>
-    </div>
 
-    <div class="filter high_grade" :class="isHigh? 'highHide':''">
-      <el-form :inline="true" :model="form" size="mini" label-width="100px">
-        <div class="filterTitle">
-          <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
-        </div>
-        <el-row class="el_row_border">
-          <el-col :span="12">
-            <el-row>
-              <el-col :span="8">
-                <div class="el_col_label">日期</div>
-              </el-col>
-              <el-col :span="16" class="el_col_option">
-                <el-form-item>
-                  <div class="block">
-                    <el-date-picker
-                      v-model="form.dates"
-                      type="daterange"
-                      align="right"
-                      unlink-panels
-                      range-separator="至"
-                      start-placeholder="开始日期"
-                      end-placeholder="结束日期"
-                      :picker-options="pickerOptions">
-                    </el-date-picker>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-col>
-          <el-col :span="12">
-            <el-row>
-              <el-col :span="8">
-                <div class="el_col_label">部门</div>
-              </el-col>
-              <el-col :span="16" class="el_col_option">
-                <el-form-item>
-                  <el-input v-model="form.organize" @focus="openOrganize" placeholder="请选择部门/员工"
-                            readonly>
-                    <template slot="append">
-                      <div style="cursor: pointer;" @click="close_">清空</div>
-                    </template>
-                  </el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-col>
-        </el-row>
-        <div class="btnOperate">
-          <el-button size="mini" type="primary">搜索</el-button>
-          <el-button size="mini" type="primary" @click="resetting">重置</el-button>
-          <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
-        </div>
-      </el-form>
+    <div class="highRanking">
+      <div class="tabsSearch">
+        <el-form :inline="true" size="mini">
+          <el-form-item>
+            <el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" clearable>
+              <el-button slot="append" icon="el-icon-search"></el-button>
+              <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-dropdown trigger="click" @command="leadingOut">
+              <el-button type="primary" trigger="click" size="mini">
+                导出<i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="collect">1</el-dropdown-item>
+                <el-dropdown-item command="rent">2</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </el-form-item>
+        </el-form>
+      </div>
+
+      <div class="filter high_grade" :class="isHigh? 'highHide':''">
+        <el-form :inline="true" :model="form" size="mini" label-width="100px">
+          <div class="filterTitle">
+            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+          </div>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">日期</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <div class="block">
+                      <el-date-picker
+                        v-model="form.dates"
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        :picker-options="pickerOptions">
+                      </el-date-picker>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">部门</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input v-model="form.organize" @focus="openOrganize" placeholder="请选择部门/员工"
+                              readonly>
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="close_">清空</div>
+                      </template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <div class="btnOperate">
+            <el-button size="mini" type="primary">搜索</el-button>
+            <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+            <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+          </div>
+        </el-form>
+      </div>
     </div>
 
     <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -392,13 +395,13 @@
         this.form.dates = '';
         this.form.keywords = '';
       },
-      // tabs标签页
-      handleClick(tab, event) {
-        console.log(tab, event);
-      },
       // 高级筛选
       highGrade() {
         this.isHigh = !this.isHigh;
+      },
+      // tabs标签页
+      handleClick(tab, event) {
+        console.log(tab, event);
       },
       // 部门员工筛选
       openOrganize() {
@@ -465,65 +468,5 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-  #periodicTable {
-    position: relative;
-    .highSearch {
-      position: absolute;
-      top: 0;
-      right: 0;
-      height: 40px;
-      border-bottom: 2px solid #e4e7ed;
-      box-sizing: border-box;
-      z-index: 10;
-    }
-    .high_grade {
-      position: absolute;
-      top: 40px;
-      right: 0;
-      left: 0;
-      padding: 0;
-      background: #FFFFFF;
-      -webkit-box-shadow: 0 3px 16px 0 #aaa;
-      -moz-box-shadow: 0 3px 16px 0 #aaa;
-      box-shadow: 0 3px 16px 0 #aaa;
-      z-index: -1;
-      opacity: 0;
-      /*transition: all .4s;*/
-      .el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
-        margin: 0;
-      }
-      .filterTitle {
-        padding: 8px 18px;
-        border-bottom: 1px solid #DDDDDD;
-        font-weight: bold;
-      }
-      .el-row.el_row_border {
-        background: #FFFFFF;
-        border-bottom: 1px solid #DDDDDD;
-        .el-row {
-          display: flex;
-          display: -webkit-flex;
-          align-items: center;
-          .el_col_label {
-            padding: 8px 30px;
-          }
-          .el_col_option {
-            padding: 8px 12px;
-            background-color: #f3f3f3;
-          }
-        }
-      }
-      .btnOperate {
-        padding: 12px;
-        display: flex;
-        display: -webkit-flex;
-        justify-content: center;
-      }
-    }
-    .highHide {
-      z-index: 20;
-      opacity: 1;
-      /*transition: all .4s;*/
-    }
-  }
+
 </style>
