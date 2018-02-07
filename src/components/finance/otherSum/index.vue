@@ -53,7 +53,7 @@
           <el-button type="primary"><i class="el-icon-refresh"></i></el-button>
         </el-form-item>
 
-        <el-dropdown @command="leadingOut">
+        <el-dropdown trigger="click" @command="leadingOut">
           <el-button type="primary" size="mini">
             导出<i class="el-icon-arrow-down el-icon--right"></i>
           </el-button>

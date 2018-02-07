@@ -16,8 +16,8 @@
         </el-form>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button size="small" @click="dialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button size="small" @click="close_">取 消</el-button>
+        <el-button type="primary" size="small" @click="close_">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -41,13 +41,17 @@
       module(val) {
         this.dialogVisible = val;
       },
-      dialogVisible(val) {
-        if (!val) {
-          this.$emit('close');
-        }
+      // dialogVisible(val) {
+      //   if (!val) {
+      //     this.$emit('close');
+      //   }
+      // }
+    },
+    methods: {
+      close_() {
+        this.$emit('close');
       }
     },
-    methods: {},
   }
 </script>
 

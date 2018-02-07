@@ -26,6 +26,7 @@ import CollectBulletin from '../components/bulletin/collectBulletin/index.vue'  
 import RentBulletin from '../components/bulletin/rentBulletin/index.vue'                  //租房喜报
 import FinalBalance from '../components/bulletin/finalBalance/index.vue'                  //尾款报备
 import SpecialBalance from '../components/bulletin/specialBalance/index.vue'              //特殊情况报备
+import Auditing from '../components/bulletin/auditing/index.vue'                          //审核
 
 // 财务账本
 import AccountManage from '../components/finance/accountManage/index'                 //账户管理
@@ -147,7 +148,7 @@ export default new Router({
         {path: '/subjectManage', component: SubjectManage, name: '科目管理',},
         {path: '/roomCharge', component: RoomCharge, name: '房租款项总汇',},
         {path: '/otherSum', component: OtherSum, name: '其余款项总汇',},
-        {path: '/statistics', component: Statistics, name: '统计',},
+        {path: '/statistics', component: Statistics, name: '报表统计',},
         {path: '/budgetManage', component: BudgetManage, name: '预算管理',},
         {path: '/endPayment', component: EndPayment, name: '尾款房租',},
         {path: '/incomeFlow', component: IncomeFlow, name: '收支流水',},
@@ -164,6 +165,7 @@ export default new Router({
         {path: '/rentBulletin', component: RentBulletin, name: '租房喜报',},
         {path: '/finalBalance', component: FinalBalance, name: '尾款报备',},
         {path: '/specialBalance', component: SpecialBalance, name: '特殊情况报备',},
+        {path: '/auditing', component: Auditing, name: '审核',},
       ]
     },
 

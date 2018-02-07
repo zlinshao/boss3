@@ -1,128 +1,178 @@
 <template>
   <div id="statistics">
-    <div class="topTabs">
-      <el-form :inline="true" size="mini" style="margin: 10px 0;">
-        <el-button v-for="(key,index) in tabs" :class="{'btn': isActive === index}"
-                   @click="onSubmit(index)" size="mini" :key="index">{{key}}
-        </el-button>
-      </el-form>
-    </div>
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="月报表" name="first">
+        <div class="filter">
+          <el-form :inline="true" :model="form" size="mini" label-width="80px">
+            <el-form-item>
+              <el-select v-model="form.status" clearable size="mini">
+                <el-option label="款项状态" value=""></el-option>
+                <el-option v-for="(key,index) in values" :label="key" :value="index + 1" :key="index"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="补齐时间">
+              <div class="block">
+                <el-date-picker
+                  v-model="form.dates"
+                  type="daterange"
+                  align="right"
+                  unlink-panels
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  :picker-options="pickerOptions">
+                </el-date-picker>
+              </div>
+            </el-form-item>
+            <el-form-item>
+              <el-input v-model="form.organize" @focus="openOrganize" placeholder="请选择部门/员工"
+                        readonly>
+                <template slot="append">
+                  <div style="cursor: pointer;" @click="close_">清空</div>
+                </template>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-autocomplete
+                class="inline-input"
+                v-model="state" clearable
+                :fetch-suggestions="querySearch"
+                placeholder="请输入内容"
+                :trigger-on-focus="false"
+                @select="handleSelect">
+                <el-button slot="append" icon="el-icon-search"></el-button>
+              </el-autocomplete>
+            </el-form-item>
+            <el-form-item>
+              <el-dropdown @command="leadingOut">
+                <el-button type="primary" size="mini">
+                  导出<i class="el-icon-arrow-down el-icon--right"></i>
+                </el-button>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="one">月报表</el-dropdown-item>
+                  <el-dropdown-item command="tow">日报表</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </el-form-item>
+          </el-form>
+        </div>
 
-    <div class="filter">
-      <el-form :inline="true" :model="form" size="mini" label-width="80px">
-        <el-form-item>
-          <el-select v-model="form.status" clearable size="mini">
-            <el-option label="款项状态" value=""></el-option>
-            <el-option v-for="(key,index) in values" :label="key" :value="index + 1" :key="index"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="补齐时间">
-          <div class="block">
-            <el-date-picker
-              v-model="form.dates"
-              type="daterange"
-              align="right"
-              unlink-panels
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :picker-options="pickerOptions">
-            </el-date-picker>
-          </div>
-        </el-form-item>
-        <el-form-item>
-          <el-input v-model="form.organize" @focus="openOrganize" placeholder="请选择部门/员工"
-                    readonly>
-            <template slot="append">
-              <div style="cursor: pointer;" @click="close_">清空</div>
-            </template>
-          </el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-autocomplete
-            class="inline-input"
-            v-model="state" clearable
-            :fetch-suggestions="querySearch"
-            placeholder="请输入内容"
-            :trigger-on-focus="false"
-            @select="handleSelect">
-            <el-button slot="append" icon="el-icon-search"></el-button>
-          </el-autocomplete>
-        </el-form-item>
-        <el-form-item>
-          <el-dropdown @command="leadingOut">
-            <el-button type="primary" size="mini">
-              导出<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="one">月报表</el-dropdown-item>
-              <el-dropdown-item command="tow">日报表</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </el-form-item>
-      </el-form>
-    </div>
+        <el-table
+          :data="tableData0"
+          width="100%"
+          @row-dblclick="collectDetail">
+          <el-table-column
+            label="月份"
+            prop="id">
+          </el-table-column>
+          <el-table-column
+            label="合同应收"
+            prop="describe">
+          </el-table-column>
+          <el-table-column
+            label="合同应付"
+            prop="module">
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+      <el-tab-pane label="日报表" name="second">
+        <div class="filter">
+          <el-form :inline="true" :model="form" size="mini" label-width="80px">
+            <el-form-item>
+              <el-select v-model="form.status" clearable size="mini">
+                <el-option label="款项状态" value=""></el-option>
+                <el-option v-for="(key,index) in values" :label="key" :value="index + 1" :key="index"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="补齐时间">
+              <div class="block">
+                <el-date-picker
+                  v-model="form.dates"
+                  type="daterange"
+                  align="right"
+                  unlink-panels
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  :picker-options="pickerOptions">
+                </el-date-picker>
+              </div>
+            </el-form-item>
+            <el-form-item>
+              <el-input v-model="form.organize" @focus="openOrganize" placeholder="请选择部门/员工"
+                        readonly>
+                <template slot="append">
+                  <div style="cursor: pointer;" @click="close_">清空</div>
+                </template>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-autocomplete
+                class="inline-input"
+                v-model="state" clearable
+                :fetch-suggestions="querySearch"
+                placeholder="请输入内容"
+                :trigger-on-focus="false"
+                @select="handleSelect">
+                <el-button slot="append" icon="el-icon-search"></el-button>
+              </el-autocomplete>
+            </el-form-item>
+            <el-form-item>
+              <el-dropdown @command="leadingOut">
+                <el-button type="primary" size="mini">
+                  导出<i class="el-icon-arrow-down el-icon--right"></i>
+                </el-button>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="one">月报表</el-dropdown-item>
+                  <el-dropdown-item command="tow">日报表</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </el-form-item>
+          </el-form>
+        </div>
 
-    <el-table
-      v-if="isActive == 0"
-      :data="tableData0"
-      width="100%"
-      @row-dblclick="collectDetail">
-      <el-table-column
-        label="月份"
-        prop="id">
-      </el-table-column>
-      <el-table-column
-        label="合同应收"
-        prop="describe">
-      </el-table-column>
-      <el-table-column
-        label="合同应付"
-        prop="module">
-      </el-table-column>
-    </el-table>
-
-    <el-table
-      v-if="isActive == 1"
-      :data="tableData1"
-      width="100%">
-      <el-table-column
-        label="时间"
-        prop="id">
-      </el-table-column>
-      <el-table-column
-        label="房租收入"
-        prop="describe">
-      </el-table-column>
-      <el-table-column
-        label="押金收入"
-        prop="module">
-      </el-table-column>
-      <el-table-column
-        label="房租支出"
-        prop="module">
-      </el-table-column>
-      <el-table-column
-        label="中介费支出"
-        prop="module">
-      </el-table-column>
-      <el-table-column
-        label="押金支出"
-        prop="module">
-      </el-table-column>
-      <el-table-column
-        label="其他支出"
-        prop="module">
-      </el-table-column>
-      <el-table-column
-        label="总房数量"
-        prop="module">
-      </el-table-column>
-      <el-table-column
-        label="空置房数"
-        prop="module">
-      </el-table-column>
-    </el-table>
+        <el-table
+          :data="tableData1"
+          width="100%">
+          <el-table-column
+            label="时间"
+            prop="id">
+          </el-table-column>
+          <el-table-column
+            label="房租收入"
+            prop="describe">
+          </el-table-column>
+          <el-table-column
+            label="押金收入"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="房租支出"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="中介费支出"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="押金支出"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="其他支出"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="总房数量"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="空置房数"
+            prop="module">
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+    </el-tabs>
 
     <!--<div class="block pages">-->
     <!--<el-pagination-->
@@ -150,6 +200,7 @@
     components: {organization},
     data() {
       return {
+        activeName: 'first',
         // currentPage: 1,
         values: ['待入账', '待结清', '已结清', '已超额'],
         form: {
@@ -188,8 +239,6 @@
             }
           }]
         },
-        tabs: ['月报表', '日报表'],
-        isActive: 0,
 
         tableData0: [
           {
@@ -222,6 +271,11 @@
       // console.log(this.$router.resolve({path:'/statistics/staticDetail',query:{detail: 'collect'}}))
     },
     methods: {
+      activeName: 'first',
+      // tabs标签页
+      handleClick(tab, event) {
+        console.log(tab, event);
+      },
       // 双击
       collectDetail(row) {
         if (row.id === 1) {

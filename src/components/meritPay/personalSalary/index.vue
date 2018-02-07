@@ -485,6 +485,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
+          this.freezeVisible = false;
           this.$message({
             type: 'success',
             message: '冻结成功!'
@@ -492,7 +493,7 @@
         }).catch(() => {
           this.$message({
             type: 'info',
-            message: '已取消冻结'
+            message: '已取消冻结',
           });
         });
       }
