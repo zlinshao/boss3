@@ -12,9 +12,6 @@
           <el-form-item>
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="openSubject"><i class="el-icon-plus"></i>&nbsp;新增科目</el-button>
-          </el-form-item>
         </el-form>
       </div>
 
@@ -27,13 +24,13 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">所有归属</div>
+                  <div class="el_col_label">是否回访</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.belongTo" size="mini" clearable>
-                      <el-option label="请选择" value=""></el-option>
-                      <el-option v-for="(key,index) in belongValue" :label="key" :value="index + 1" :key="index"></el-option>
+                    <el-select v-model="form.selects">
+                      <el-option label="ffffff" value="1"></el-option>
+                      <el-option label="dddddd" value="2"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -42,14 +39,22 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">所有类型</div>
+                  <div class="el_col_label">日期</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.subjectType" size="mini" clearable>
-                      <el-option label="请选择" value=""></el-option>
-                      <el-option v-for="(key,index) in typeValue" :label="key" :value="index + 1" :key="index"></el-option>
-                    </el-select>
+                    <div class="block">
+                      <el-date-picker
+                        v-model="form.dates"
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        :picker-options="pickerOptions">
+                      </el-date-picker>
+                    </div>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -67,22 +72,36 @@
     <el-table
       :data="tableData"
       width="100%"
-      @row-contextmenu="houseMenu">
+      @row-contextmenu="collectMenu">
       <el-table-column
-        label="归属"
-        prop="name">
+        label="名称"
+        prop="id">
       </el-table-column>
       <el-table-column
-        label="项目"
-        prop="address">
+        label="收房(套)"
+        prop="describe">
       </el-table-column>
       <el-table-column
-        label="类型"
-        prop="otherName">
+        label="租房(套)"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="实际业绩"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="溢出业绩"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="是否回访">
+        <template slot-scope="scope">
+          <el-button type="text" size="mini" @click="returnVisit (scope.row.module)">{{scope.row.module}}</el-button>
+        </template>
       </el-table-column>
       <el-table-column
         label="备注"
-        prop="houseType">
+        prop="module">
       </el-table-column>
     </el-table>
 
@@ -101,16 +120,16 @@
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
 
-  <SubjectModule :FormVisible="addSubjectModule" @close="closeSubject"></SubjectModule>
+    <Remarks :module="remarkVisible" @close="closeRemark"></Remarks>
   </div>
 </template>
 
 <script>
+  import Remarks from '../../common/remarks'
   import RightMenu from '../../common/rightMenu.vue'    //右键
-  import SubjectModule from './subjectModule'
   export default {
     name: "index",
-    components: {RightMenu,SubjectModule},
+    components: {RightMenu, Remarks},
     data() {
       return {
         rightMenuX: 0,
@@ -118,45 +137,91 @@
         show: false,
         lists: [],
 
-        isHigh: false,
         currentPage: 1,
-        addSubjectModule: false,
+        remarkVisible: false,
+        isHigh: false,
         form: {
-          belongTo: '',
-          subjectType: '',
           keyWords: '',
+          selects: '',
+          dates: '',
         },
-        belongValue: ['收房', '租房'],
-        typeValue: ['收入', '支出'],
+        pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        },
         tableData: [
           {
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            otherName: '发的沙发沙发沙发',
-            houseType: '住宅',
+            id: 1,
+            describe: '1发发的挥到',
+            module: '已回访',
           }, {
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            otherName: '发的沙发沙发沙发',
-            houseType: '住宅',
-          }, {
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            otherName: '发的沙发沙发沙发',
-            houseType: '住宅',
-          }, {
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            otherName: '广是广泛大概高手高手',
-            houseType: '住宅',
+            id: 2,
+            describe: '2放大范德萨',
+            module: '未回访',
           },
-        ]
+          {
+            id: 1,
+            describe: '1发发的挥到',
+            module: '1Mangejjr',
+          }, {
+            id: 2,
+            describe: '2放大范德萨',
+            module: '1Manger',
+          }, {
+            id: 2,
+            describe: '2放大范德萨',
+            module: '1Manger',
+          }, {
+            id: 2,
+            describe: '2放大范德萨',
+            module: '1Manger',
+          }, {
+            id: 1,
+            describe: '1发发的挥到',
+            module: '1Mangejjr',
+          }, {
+            id: 2,
+            describe: '2放大范德萨',
+            module: '1Manger',
+          }, {
+            id: 2,
+            describe: '2放大范德萨',
+            module: '1Manger',
+          },
+        ],
       }
     },
     mounted() {
     },
     watch: {},
     methods: {
+      // 是否回访
+      returnVisit(row) {
+        console.log(row);
+      },
       // 重置
       resetting() {
         this.form.keywords = '';
@@ -165,34 +230,17 @@
       highGrade() {
         this.isHigh = !this.isHigh;
       },
-
-      openSubject() {
-        this.addSubjectModule = true;
-      },
-      closeSubject() {
-        this.addSubjectModule = false;
-      },
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      },
       // 右键
-      houseMenu(row, event) {
+      collectMenu(row, event) {
         this.lists = [
-          {clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '编辑',},
-          {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',},
+          {clickIndex: 'remark', headIcon: 'el-icon-edit', label: '备注',},
         ];
         this.contextMenuParam(event);
       },
       // 右键回调
       clickEvent(val) {
-        if (val === 'delete') {
-          console.log(val);
-          this.openDelete();
-        } else {
-          this.openSubject();
+        if (val === 'remark') {
+          this.remarkVisible = true;
         }
       },
       //关闭右键菜单
@@ -211,24 +259,16 @@
           this.show = true
         })
       },
-      // 删除
-      openDelete() {
-        this.$confirm('此操作将删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
-      }
+      // 备注
+      closeRemark() {
+        this.remarkVisible = false;
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+      },
     },
   }
 </script>

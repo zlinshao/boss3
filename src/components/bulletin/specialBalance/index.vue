@@ -1,56 +1,98 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
-    <div class="filter">
-      <el-form :inline="true" :model="form" size="mini" label-width="80px">
-        <el-form-item>
-          <el-select v-model="form.status" clearable size="mini">
-            <el-option label="收/租状态" value=""></el-option>
-            <el-option v-for="(key,index) in specialValue" :label="key" :value="index + 1" :key="index"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <div class="block">
-            <el-date-picker
-              v-model="form.dates"
-              type="daterange"
-              align="right"
-              unlink-panels
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :picker-options="pickerOptions">
-            </el-date-picker>
+    <div class="highRanking">
+      <div class="highSearch">
+        <el-form :model="form" :inline="true" size="mini">
+          <el-form-item>
+            <el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" clearable>
+              <el-button slot="append" icon="el-icon-search"></el-button>
+              <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+          </el-form-item>
+          <!--刷新-->
+          <el-form-item>
+            <el-button type="primary"><i class="el-icon-refresh"></i></el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="leadingOut">导出</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+
+      <div class="filter high_grade" :class="isHigh? 'highHide':''">
+        <el-form :inline="true" :model="form" size="mini" label-width="100px">
+          <div class="filterTitle">
+            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
           </div>
-        </el-form-item>
-        <el-form-item>
-          <el-input v-model="form.organize" @focus="openOrganize" placeholder="请选择部门/员工"
-                    readonly>
-            <template slot="append">
-              <div style="cursor: pointer;" @click="close_subject">清空</div>
-            </template>
-          </el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-autocomplete
-            class="inline-input"
-            v-model="state" clearable
-            :fetch-suggestions="querySearch"
-            placeholder="请输入内容"
-            :trigger-on-focus="false"
-            @select="handleSelect">
-            <el-button slot="append" icon="el-icon-search"></el-button>
-          </el-autocomplete>
-        </el-form-item>
-
-        <!--刷新-->
-        <el-form-item>
-          <el-button type="primary"><i class="el-icon-refresh"></i></el-button>
-        </el-form-item>
-
-        <el-form-item>
-          <el-button type="primary" size="mini" @click="leadingOut">导出</el-button>
-        </el-form-item>
-      </el-form>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">收租状态</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select v-model="form.status" clearable size="mini">
+                      <el-option label="请选择" value=""></el-option>
+                      <el-option v-for="(key,index) in specialValue" :label="key" :value="index + 1" :key="index"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">日期</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <div class="block">
+                      <el-date-picker
+                        v-model="form.dates"
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        :picker-options="pickerOptions">
+                      </el-date-picker>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">部门/员工</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input v-model="form.organize" @focus="openOrganize" placeholder="请选择部门/员工"
+                              readonly>
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="close_subject">清空</div>
+                      </template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <div class="btnOperate">
+            <el-button size="mini" type="primary">搜索</el-button>
+            <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+            <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+          </div>
+        </el-form>
+      </div>
     </div>
 
     <div>
@@ -153,6 +195,7 @@
         show: false,
         lists: [],
 
+        isHigh: false,
         currentPage: 1,
         organizeVisible: false,
         remarkVisible: false,
@@ -225,6 +268,14 @@
     },
     watch: {},
     methods: {
+      // 重置
+      resetting() {
+        this.form.keywords = '';
+      },
+      // 高级筛选
+      highGrade() {
+        this.isHigh = !this.isHigh;
+      },
       // 导出
       leadingOut(val) {
         console.log(val);

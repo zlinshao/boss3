@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="filter">
-      <el-form :inline="true" ref="form" :model="sizeForm" label-width="80px" size="mini">
+      <el-form :inline="true" :model="sizeForm" label-width="80px" size="mini">
         <el-form-item label="登陆时间">
           <div class="block">
             <el-date-picker

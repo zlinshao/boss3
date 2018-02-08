@@ -5,29 +5,14 @@
         <el-row>
           <el-col :span="22">
             <el-form-item label="付款时间">
-              <div class="block">
-                <el-date-picker
-                  v-model="form.dates"
-                  type="daterange"
-                  align="right"
-                  unlink-panels
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                  :picker-options="pickerOptions">
-                </el-date-picker>
-              </div>
+
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="22">
             <el-form-item label="科目选择">
-              <el-input v-model="form.subject" placeholder="请选择科目" readonly>
-                <template slot="append">
-                  <div style="cursor: pointer;" @click="close_">清空</div>
-                </template>
-              </el-input>
+
             </el-form-item>
           </el-col>
         </el-row>
