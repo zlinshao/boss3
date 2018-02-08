@@ -1,6 +1,6 @@
 <template>
   <div id="organizationId">
-    <el-dialog title="选人" :visible.sync="organizationVisible" width="785px" center>
+    <el-dialog title="选人" :visible.sync="organizationVisible" width="785px" center :modal="false">
      <div class="content">
        <div class="content_left" @click="inputFocus">
            <el-select id="search" size="small"

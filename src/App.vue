@@ -9,7 +9,12 @@
     name: 'app',
 
     mounted(){
+      document.onkeydown = function (e) {//键盘按键控制
+        e = e || window.event;
+        if(e.keyCode == 116){
 
+        }
+      };
     },
     methods: {
       prevent(e) {

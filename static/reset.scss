@@ -249,9 +249,10 @@
 .highRanking {
   position: relative;
   .highSearch {
-    float: right;
     height: 40px;
     box-sizing: border-box;
+    display: flex;
+    justify-content: flex-end;
   }
   .tabsSearch {
     position: absolute;

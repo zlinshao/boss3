@@ -151,9 +151,10 @@
 .highRanking {
   position: relative; }
   .highRanking .highSearch {
-    float: right;
     height: 40px;
-    box-sizing: border-box; }
+    box-sizing: border-box;
+    display: flex;
+    justify-content: flex-end; }
   .highRanking .tabsSearch {
     position: absolute;
     top: 0;

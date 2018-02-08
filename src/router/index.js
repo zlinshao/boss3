@@ -67,7 +67,8 @@ import SuppliesGather from '../components/OAWork/property/officeSuppliesGather/ 
 import CapitalChange from '../components/OAWork/property/items/capitalAssetsChange.vue'
 import CapitalGather from '../components/OAWork/property/items/capitalAssetsGather.vue'
 import SthToDo from '../components/OAWork/sthToDo/index.vue'
-import SthToDoDetail from '../components/OAWork/sthToDo/components/detail.vue'
+import SthToDoDetail from '../components/OAWork/sthToDo/components/detail_1.vue'
+import SthToDoDetail_2 from '../components/OAWork/sthToDo/components/detail_2.vue'
 
 
 //人资管理
@@ -122,6 +123,7 @@ export default new Router({
       children: [
         {path: '/messageCenter', component: MessageCenter, name: '消息中心'},
         {path: '/sthToDoDetail', component: SthToDoDetail, name: '喜报详情'},
+        {path: '/sthToDoDetail_2', component: SthToDoDetail_2, name: '喜报'},
       ]
     },
 
@@ -216,7 +218,7 @@ export default new Router({
             {path: '/property/capitalGather', component: CapitalGather, name: '固定资产汇总'},
           ]
         },
-        {path: '/property/sthToDo', component: SthToDo, name: '待办事项'},
+        {path: '/sthToDo', component: SthToDo, name: '待办事项'},
         {path: '/communication', component: Communication, name: '通讯管理',},
         {path: '/programme', component: Programme, name: '日程管理',},
         {path: '/knowledge', component: Knowledge, name: '知识管理',},
