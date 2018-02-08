@@ -1,34 +1,65 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
-    <div class="filter">
-      <el-form :inline="true" :model="form" size="mini" label-width="80px">
-        <el-form-item>
-          <el-select v-model="form.payWay" clearable>
-            <el-option label="支付方式" value=""></el-option>
-            <el-option label="银行卡" value="1"></el-option>
-            <el-option label="支付宝" value="2"></el-option>
-            <el-option label="微信" value="3"></el-option>
-            <el-option label="现金" value="4"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-input placeholder="账户名称/卡号" v-model="form.keyWords">
-            <el-button slot="append" icon="el-icon-search"></el-button>
-          </el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="openAddAccount">
-            <i class="el-icon-plus"></i>&nbsp;新增账户
-          </el-button>
-        </el-form-item>
-      </el-form>
+    <div class="highRanking">
+      <div class="highSearch">
+        <el-form :model="form" :inline="true" size="mini">
+          <el-form-item>
+            <el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" clearable>
+              <el-button slot="append" icon="el-icon-search"></el-button>
+              <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="openAddAccount">
+              <i class="el-icon-plus"></i>&nbsp;新增账户
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+
+      <div class="filter high_grade" :class="isHigh? 'highHide':''">
+        <el-form :inline="true" :model="form" size="mini" label-width="100px">
+          <div class="filterTitle">
+            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+          </div>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">支付方式</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select v-model="form.payWay" clearable>
+                    <el-option label="请选择" value=""></el-option>
+                    <el-option label="银行卡" value="1"></el-option>
+                    <el-option label="支付宝" value="2"></el-option>
+                    <el-option label="微信" value="3"></el-option>
+                    <el-option label="现金" value="4"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <div class="btnOperate">
+            <el-button size="mini" type="primary">搜索</el-button>
+            <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+            <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+          </div>
+        </el-form>
+      </div>
     </div>
+
     <el-table
       :data="tableData"
       width="100%"
       @row-contextmenu="houseMenu">
       <el-table-column
-        label="账户名称"
+        label="账户lllllllllliiiiiiii名称"
         prop="name">
       </el-table-column>
       <el-table-column
@@ -111,6 +142,7 @@
         show: false,
         lists: [],
 
+        isHigh: false,
         rechargeVisible: false,     //充值
         rechargeForm: {
           money: '',
@@ -140,6 +172,14 @@
     },
     watch: {},
     methods: {
+      // 重置
+      resetting() {
+        this.form.keywords = '';
+      },
+      // 高级筛选
+      highGrade() {
+        this.isHigh = !this.isHigh;
+      },
       // 新增修改账户
       openAddAccount() {
         this.addModule = true;

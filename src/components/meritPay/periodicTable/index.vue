@@ -276,7 +276,6 @@
 <script>
   import organization from '../../common/organization.vue'
 
-
   export default {
     name: 'index',
     components: {organization},

@@ -38,9 +38,9 @@
   import AddModule from '../../../common/organization.vue'
 
   export default {
+    name: 'hello',
     components: {AddModule},
     props: ['module', 'messageName'],
-    name: 'hello',
     data() {
       return {
         dialogVisible: false,

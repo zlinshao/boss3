@@ -28,6 +28,13 @@ import FinalBalance from '../components/bulletin/finalBalance/index.vue'        
 import SpecialBalance from '../components/bulletin/specialBalance/index.vue'              //特殊情况报备
 import Auditing from '../components/bulletin/auditing/index.vue'                          //审核
 
+// 微信管理
+import Reimbursement from '../components/wechatMessage/reimbursement/index.vue'           //微信报销
+import Complain from '../components/wechatMessage/complain/index.vue'                     //微信投诉
+import LookHouse from '../components/wechatMessage/lookHouse/index.vue'                   //预约看房
+import League from '../components/wechatMessage/league/index.vue'                         //房东加盟
+import Feedback from '../components/wechatMessage/feedback/index.vue'                     //意见反馈
+
 // 财务账本
 import AccountManage from '../components/finance/accountManage/index'                 //账户管理
 import SubjectManage from '../components/finance/subjectManage/index'                 //科目管理
@@ -191,6 +198,20 @@ export default new Router({
     {
       path: '/',
       component: Index,
+      name: '微信管理',
+      icon: 'el-icons-fa-sitemap',
+      children: [
+        {path: '/reimbursement', component: Reimbursement, name: '微信报销'},
+        {path: '/complain', component: Complain, name: '微信投诉',},
+        {path: '/lookHouse', component: LookHouse, name: '预约看房',},
+        {path: '/league', component: League, name: '房东加盟',},
+        {path: '/feedback', component: Feedback, name: '意见反馈',},
+      ]
+    },
+
+    {
+      path: '/',
+      component: Index,
       name: '人资管理',
       icon: 'el-icons-fa-sitemap',
       children: [
@@ -230,19 +251,6 @@ export default new Router({
       name: '系统设置',
       icon: 'el-icon-setting',
       children: [
-
-        {
-          path: '/recycle',
-          component: Recycle,
-          icon: 'el-icon-delete',
-          name: '回收站',
-        },
-        {
-          path: '/contractMould',
-          component: ContractMould,
-          icon: 'el-icon-document',
-          name: '合同模板',
-        },
         {
           path: '/message',
           component: Message,
@@ -253,6 +261,8 @@ export default new Router({
             {path: '/message/messageModule', component: MessageModule, name: '短信模板'},
           ]
         },
+        {path: '/recycle', component: Recycle, name: '回收站',},
+        {path: '/contractMould', component: ContractMould, name: '合同模板',},
         {path: '/loginRecord', component: LoginRecord, name: '登陆日志',},
         {path: '/userDictionary', component: UserDictionary, name: '用户字典',},
         {path: '/roleManage', component: RoleManage, name: '角色管理',},

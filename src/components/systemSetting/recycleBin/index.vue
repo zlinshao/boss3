@@ -1,5 +1,66 @@
 <template>
   <div id="recycleBin">
+    <div class="highRanking">
+      <div class="tabsSearch">
+        <el-form :model="form" :inline="true" size="mini">
+          <el-form-item>
+            <el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" clearable>
+              <el-button slot="append" icon="el-icon-search"></el-button>
+              <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+
+      <div class="filter high_grade" :class="isHigh? 'highHide':''">
+        <el-form :inline="true" :model="form" size="mini" label-width="100px">
+          <div class="filterTitle">
+            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+          </div>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">物业地址</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-form-item>
+                      <el-input v-model="form.address" placeholder="请输入内容"></el-input>
+                    </el-form-item>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">物业地址</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-form-item label="请选择">
+                      <el-select v-model="form.address" clearable>
+                        <el-option v-for="(key,index) in options" :label="key.label" :value="key.label" :key="index"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <div class="btnOperate">
+            <el-button size="mini" type="primary">搜索</el-button>
+            <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+            <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+          </div>
+        </el-form>
+      </div>
+    </div>
+
     <div class="topTabs">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="用户管理" name="first">
@@ -21,18 +82,6 @@
           </el-table>
         </el-tab-pane>
         <el-tab-pane label="配置管理" name="second">
-          <div class="filter">
-            <el-form :inline="true" :model="form" size="mini" label-width="80px">
-              <el-form-item label="物业地址">
-                <el-input v-model="form.address"></el-input>
-              </el-form-item>
-              <el-form-item label="物业地址">
-                <el-select v-model="form.address" clearable>
-                  <el-option v-for="(key,index) in options" :label="key.label" :value="key.label" :key="index"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-form>
-          </div>
           <el-table
             :data="tableData1"
             width="100%">
@@ -69,18 +118,6 @@
           </el-table>
         </el-tab-pane>
         <el-tab-pane label="定时任务补偿" name="fourth">
-          <div class="filter">
-            <el-form :inline="true" :model="form" size="mini" label-width="80px">
-              <el-form-item label="物业地址">
-                <el-input v-model="form.address"></el-input>
-              </el-form-item>
-              <el-form-item label="物业地址">
-                <el-select v-model="form.address" clearable>
-                  <el-option v-for="(key,index) in options" :label="key.label" :value="key.label" :key="index"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-form>
-          </div>
           <el-table
             :data="tableData1"
             width="100%">
@@ -120,6 +157,7 @@
     name: 'recycle-bin',
     data() {
       return {
+        isHigh: false,
         activeName: 'first',
         currentPage: 1,
         form: {
@@ -158,6 +196,14 @@
       }
     },
     methods: {
+      // 重置
+      resetting() {
+        this.form.keywords = '';
+      },
+      // 高级筛选
+      highGrade() {
+        this.isHigh = !this.isHigh;
+      },
       // tabs标签页
       handleClick(tab, event) {
         console.log(tab, event);
