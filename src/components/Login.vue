@@ -39,12 +39,12 @@
             <img src="../assets/images/slogan.png" style="width: 100%" alt="">
           </div>
           <div class="loginType">
-            <div id="ding" @mouseover="changeDingColor" @mouseout="changeDingColor" @click="goBack">
+            <div id="ding" @mouseover="lightDingColor" @mouseout="grayDingColor" @click="goBack">
               <img v-if="!dingColor" src="../assets/images/dd2.png" alt="">
               <img v-if="dingColor" src="../assets/images/dd1.png" alt="">
             </div>
             <div id="message"><img src="../assets/images/sj.png" alt=""></div>
-            <div id="weChart" @mouseover="changeWeiColor" @mouseout="changeWeiColor" @click="goBack">
+            <div id="weChart" @mouseover="lightWeiColor" @mouseout="grayWeiColor" @click="goBack">
               <img v-if="!weiColor" src="../assets/images/weixin1.png" alt="">
               <img v-if="weiColor" src="../assets/images/weixin2.png" alt="">
             </div>
@@ -241,14 +241,22 @@
       messageLogin(){
         this.isMessage = true;
       },
-      changeDingColor(){
-        this.dingColor = !this.dingColor;
+      lightDingColor(){
+        this.dingColor = true;
       },
-      changeWeiColor(){
-        this.weiColor = !this.weiColor;
+      grayDingColor(){
+        this.dingColor = false;
+      },
+      lightWeiColor(){
+        this.weiColor = true;
+      },
+      grayWeiColor(){
+        this.weiColor = false;
       },
       goBack(){
         this.isMessage = false;
+        this.dingColor = false;
+        this.weiColor = false;
       }
     }
   }
