@@ -1,7 +1,8 @@
 <template>
   <div id="index" @click="clickScreen">
     <div class="navBarLeft" :class="isFull? 'navBarRight':'' ">
-      <i class="el-icons-fa-compress" @click="fullScreen(2)"></i>
+      <!--<i class="el-icons-fa-compress"></i>-->
+      <p @click="fullScreen(2)"></p>
     </div>
     <div style="position: fixed;top: 3px;right: 20px;z-index: 100;">
       <el-collapse-transition>
@@ -29,8 +30,7 @@
       </div>
       <div class="right">
         <div class="countdown">
-          <i class="el-icons-fa-expand" @click="fullScreen(1)"></i>
-          <span style="line-height: 10px;">全屏</span>
+          <span style="line-height: 10px;" @click="fullScreen(1)">精简版</span>
         </div>
         <div class="countdown">
           <el-tooltip class="item" effect="dark" content="锁屏" placement="bottom">
@@ -441,12 +441,12 @@
       div {
         width: 80px;
         color: #ffffff;
-        img{
+        img {
           width: 100%;
           height: 100%;
         }
       }
-      div.contents{
+      div.contents {
         display: flex;
         display: -webkit-flex;
         align-items: center;
@@ -455,7 +455,7 @@
         @include box_sizing;
       }
     }
-    .department_name{
+    .department_name {
       color: #fff;
       padding: 10px;
       text-align: center;
@@ -473,8 +473,8 @@
     .navBarLeft {
       position: fixed;
       top: 0;
-      left: -65px;
-      width: 65px;
+      left: -64px;
+      width: 64px;
       height: 66px;
       background: #ffffff;
       display: -webkit-flex;
@@ -491,6 +491,11 @@
     .navBarRight {
       left: 0;
       @include transition;
+      p {
+        width: 27px;
+        height: 20px;
+        background: url('../assets/images/boss.svg') no-repeat;
+      }
     }
 
     .navBar {
