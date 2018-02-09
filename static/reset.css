@@ -204,4 +204,7 @@
     opacity: 1;
     /*transition: all .4s;*/ }
 
+#panelContent textarea {
+  resize: none !important; }
+
 /*# sourceMappingURL=reset.css.map */
