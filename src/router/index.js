@@ -77,6 +77,8 @@ import SthToDo from '../components/OAWork/sthToDo/index.vue'
 import SthToDoDetail from '../components/OAWork/sthToDo/components/detail_1.vue'
 import SthToDoDetail_2 from '../components/OAWork/sthToDo/components/detail_2.vue'
 import ContractChange from '../components/OAWork/sthToDo/components/contractChange.vue'
+import Deliver from '../components/OAWork/sthToDo/components/deliver.vue'
+import throwALease from '../components/OAWork/sthToDo/components/throwALease.vue'
 
 
 //人资管理
@@ -133,6 +135,8 @@ export default new Router({
         {path: '/sthToDoDetail', component: SthToDoDetail, name: '喜报详情'},
         {path: '/sthToDoDetail_2', component: SthToDoDetail_2, name: '喜报'},
         {path: '/contractChange', component: ContractChange, name: 'TEST_1'},
+        {path: '/deliver', component: Deliver, name: 'TEST_2'},
+        {path: '/throwALease', component: throwALease , name: 'TEST_3'},
       ]
     },
 

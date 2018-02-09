@@ -1,7 +1,7 @@
 <template>
   <div id="auditing">
     <div class="titles">
-     <b style="padding: 5px 0;font-size: 18px">合同信息修改 - 仙居雅苑1-121</b>
+     <b style="padding: 5px 0;font-size: 18px">事件转交 - 陆宣羽给你生成了一条代办事项</b>
     </div>
     <div class="main">
       <div class="mainTop">
@@ -12,125 +12,137 @@
       </div>
       <div class="mainContent">
         <el-row>
-          <el-col :span="12">
-            <div class="title">原合同信息</div>
+          <el-col :span="24">
+            <div class="title">具体事件</div>
             <div class="content left scroll_bar">
               <el-form :model="form" size="mini" label-width="120px">
                 <el-row>
-                  <el-col :span="16">
+                  <el-col :span="8">
                     <el-form-item label="合同编号">
                       <div class="textContent">仙居雅苑</div>
                     </el-form-item>
                   </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="16">
-                    <el-form-item label="合同开始时间">
+                  <el-col :span="8">
+                    <el-form-item label="地址">
+                      <div class="textContent">仙居雅苑</div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="户型">
                       <div class="textContent">仙居雅苑</div>
                     </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row>
-                  <el-col :span="16">
-                    <el-form-item label="空置期开始时间">
+                  <el-col :span="8">
+                    <el-form-item label="姓名">
+                      <div class="textContent">仙居雅苑</div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="电话">
+                      <div class="textContent">仙居雅苑</div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="身份证">
                       <div class="textContent">仙居雅苑</div>
                     </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row>
-                  <el-col :span="16">
-                    <el-form-item label="个人/中介">
+                  <el-col :span="8">
+                    <el-form-item label="押金">
                       <div class="textContent">仙居雅苑</div>
                     </el-form-item>
                   </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="16">
-                    <el-form-item label="报备状态">
-                      <div class="textContent">仙居雅苑</div>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="16">
+                  <el-col :span="8">
                     <el-form-item label="月单价">
                       <div class="textContent">仙居雅苑</div>
                     </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row>
-                  <el-col :span="16">
-                    <el-form-item label="第一次打房租日期">
+                  <el-col :span="8">
+                    <el-form-item label="合同开始时间">
+                      <div class="textContent">仙居雅苑</div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="合同结束时间">
+                      <div class="textContent">仙居雅苑</div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="合同期限">
                       <div class="textContent">仙居雅苑</div>
                     </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row>
                   <el-col :span="16">
-                    <el-form-item label="待签约日期">
+                    <el-form-item label="备注">
                       <div class="textContent">仙居雅苑</div>
                     </el-form-item>
                   </el-col>
                 </el-row>
               </el-form>
             </div>
-          </el-col>
-          <el-col :span="12">
-            <div class="title">新合同信息</div>
-            <div class="content right scroll_bar">
+
+            <div class="title">退房信息</div>
+            <div class="content left scroll_bar">
               <el-form :model="form" size="mini" label-width="120px">
                 <el-row>
-                  <el-col :span="16">
-                    <el-form-item label="合同编号">
+                  <el-col :span="8">
+                    <el-form-item label="退房时间">
+                      <div class="textContent">仙居雅苑</div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="退房性质">
+                      <div class="textContent">仙居雅苑</div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="退款账号">
+                      <div class="textContent">仙居雅苑</div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label="姓名">
+                      <div class="textContent">仙居雅苑</div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="开户行">
+                      <div class="textContent">仙居雅苑</div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="卡号">
                       <div class="textContent">仙居雅苑</div>
                     </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row>
                   <el-col :span="16">
-                    <el-form-item label="合同开始时间">
+                    <el-form-item label="应退还金额">
                       <div class="textContent">仙居雅苑</div>
                     </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row>
                   <el-col :span="16">
-                    <el-form-item label="空置期开始时间">
+                    <el-form-item label="退房原因">
                       <div class="textContent">仙居雅苑</div>
                     </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row>
                   <el-col :span="16">
-                    <el-form-item label="个人/中介">
-                      <div class="textContent">仙居雅苑</div>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="16">
-                    <el-form-item label="报备状态">
-                      <div class="textContent">仙居雅苑</div>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="16">
-                    <el-form-item label="月单价">
-                      <div class="textContent">仙居雅苑</div>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="16">
-                    <el-form-item label="第一次打房租日期">
-                      <div class="textContent">仙居雅苑</div>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="16">
-                    <el-form-item label="待签约日期">
+                    <el-form-item label="维护赔偿信息">
                       <div class="textContent">仙居雅苑</div>
                     </el-form-item>
                   </el-col>
@@ -215,7 +227,7 @@
         margin-top: 20px;
         .title {
           color: #409EFF;
-          margin-bottom: 8px;
+          margin: 10px 0;
           &:before{
             border-radius: 2px;
             margin-right: 5px;
@@ -225,8 +237,6 @@
           }
         }
         .content {
-          height: 650px;
-          overflow-y: auto;
           @include border_radius(6px);
           border: 1px solid #e1e1e1;
           .textContent{

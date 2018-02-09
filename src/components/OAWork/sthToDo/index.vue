@@ -3,17 +3,17 @@
     <div id="clientContainer">
 
       <div class="highRanking">
-        <div>
-          <el-button size="mini">
-            <router-link to="/contractChange">TEST_1</router-link>
-          </el-button>
-          <el-button size="mini">
-            <router-link to="">TEST_2</router-link>
-          </el-button>
-          <el-button size="mini">
-            <router-link to="">TEST_3</router-link>
-          </el-button>
-        </div>
+        <!--<div>-->
+          <!--<el-button size="mini">-->
+            <!--<router-link to="/contractChange">TEST_1</router-link>-->
+          <!--</el-button>-->
+          <!--<el-button size="mini">-->
+            <!--<router-link to="/deliver">TEST_2</router-link>-->
+          <!--</el-button>-->
+          <!--<el-button size="mini">-->
+            <!--<router-link to="/throwALease">TEST_3</router-link>-->
+          <!--</el-button>-->
+        <!--</div>-->
         <div class="highSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>

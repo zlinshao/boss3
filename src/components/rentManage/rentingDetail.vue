@@ -16,9 +16,9 @@
       <div class="top">
         <h3>仙居雅苑8-104详情</h3>
         <h3>
-          <el-button size="mini" type="primary">已回访</el-button>
+          <el-button size="mini" type="primary" v-if="false">已回访</el-button>
           <el-button size="mini" type="danger">未回访</el-button>
-          <el-button size="mini" type="warning">驳回</el-button>
+          <el-button size="mini" type="warning" v-if="false">驳回</el-button>
           <el-button size="mini" type="success">通过</el-button>
         </h3>
       </div>
@@ -571,7 +571,7 @@
         <div style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;"></div>
 
         <div class="operateHistoryInfo">
-          <el-form size="small" label-width="180px" >
+          <el-form size="small" label-width="180px">
             <el-row>
               <el-col :span="24">
                 <el-form-item label="操作历史">
@@ -586,6 +586,39 @@
       </div>
     </div>
 
+    <div class="operatePanel" style="position: fixed;bottom: 100px;right: 60px;" @click="isPanel = !isPanel">
+      <i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="el-icon-circle-plus"></i>
+    </div>
+    <div class="panelContent" id="panelContent" v-show="isPanel">
+        <div class="panel_header">
+          <div style="color: #6a8dfb;font-size: 16px">
+            房屋资料缺失项
+          </div>
+
+          <div @click="isPanel = false">
+            <span style="color: #fb4694;font-size: 16px;cursor: pointer">取消</span>
+          </div>
+        </div>
+
+        <div class="title">请输入缺失项目名，并使用 “,”隔开</div>
+        <div class="textBox">
+          <el-input
+            type="textarea"
+            :autosize="{ minRows: 6, maxRows: 6}"
+            placeholder="请输入内容">
+          </el-input>
+        </div>
+        <div style="margin-bottom: 30px">
+          <el-form ref="form" :model="sizeForm" label-width="80px">
+            <el-form-item label="选择通知人">
+              <el-input readonly=""></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div style="text-align: center;">
+          <el-button size="mini" type="primary" style="width: 200px">发&nbsp;&nbsp;送</el-button>
+        </div>
+    </div>
   </div>
 
 </template>
@@ -596,7 +629,8 @@
     data() {
       return {
         steps: 0,
-        sizeForm: {}
+        sizeForm: {},
+        isPanel: false,
       }
     },
     mounted(){
@@ -657,6 +691,42 @@
     height: 100%;
     overflow: hidden;
     background: #ffffff;
+
+    .panelContent {
+      width: 500px;
+      height: 375px;
+      background: #FFFFFF;
+      z-index: 2000;
+      border-radius: 6px;
+      position: fixed;
+      bottom: 100px;
+      right: 230px;
+      border: 1px solid rgba(64,158,255,.12);
+      box-shadow: 0 2px 4px 0 rgba(64,158,255,.12), 0 0 6px 0 rgba(64,158,255,.04);
+      padding: 0 10px;
+      .panel_header{
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-sizing: border-box;
+        border-bottom: 1px solid #E1E1E1;
+      }
+      .title {
+        color: #409EFF;
+        margin: 18px 0 10px 0;
+        &:before {
+          border-radius: 2px;
+          margin-right: 5px;
+          background: #409EFF;
+          border-left: 1px solid #409EFF;
+          content: '|';
+        }
+      }
+      .textBox{
+        margin-bottom: 15px;
+      }
+    }
 
     @media screen and (min-width: 1280px) {
       .stepLine {
