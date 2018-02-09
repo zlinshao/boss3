@@ -69,6 +69,7 @@ import CapitalGather from '../components/OAWork/property/items/capitalAssetsGath
 import SthToDo from '../components/OAWork/sthToDo/index.vue'
 import SthToDoDetail from '../components/OAWork/sthToDo/components/detail_1.vue'
 import SthToDoDetail_2 from '../components/OAWork/sthToDo/components/detail_2.vue'
+import ContractChange from '../components/OAWork/sthToDo/components/contractChange.vue'
 
 
 //人资管理
@@ -124,6 +125,7 @@ export default new Router({
         {path: '/messageCenter', component: MessageCenter, name: '消息中心'},
         {path: '/sthToDoDetail', component: SthToDoDetail, name: '喜报详情'},
         {path: '/sthToDoDetail_2', component: SthToDoDetail_2, name: '喜报'},
+        {path: '/contractChange', component: ContractChange, name: 'TEST_1'},
       ]
     },
 

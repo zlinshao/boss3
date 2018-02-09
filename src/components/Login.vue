@@ -59,9 +59,6 @@
           <el-input placeholder="请输入6位短信验证码">
             <el-button slot="append" size="small" type="success">获取验证码</el-button>
           </el-input>
-
-          <el-checkbox>记录本机登陆方式！</el-checkbox>
-
           <div class="confirmLogin">
             <el-button size="medium" type="primary" @click.native.prevent="handleSubmit2" :loading="logining">登 陆
             </el-button>
@@ -75,8 +72,10 @@
 </template>
 
 <script>
+  import ElButton from "../../node_modules/element-ui/packages/button/src/button";
   //import NProgress from 'nprogress'
   export default {
+    components: {ElButton},
     data() {
       return {
         logining: false,
