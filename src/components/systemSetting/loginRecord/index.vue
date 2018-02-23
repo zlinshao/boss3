@@ -1,28 +1,85 @@
 <template>
   <div>
-    <div class="filter">
-      <el-form :inline="true" :model="sizeForm" label-width="80px" size="mini">
-        <el-form-item label="登陆时间">
-          <div class="block">
-            <el-date-picker
-              v-model="sizeForm.date"
-              type="daterange"
-              align="right"
-              unlink-panels
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :picker-options="pickerOptions">
-            </el-date-picker>
+    <div class="highRanking">
+      <div class="highSearch">
+        <el-form :model="form" :inline="true" size="mini">
+          <el-form-item>
+            <el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" clearable>
+              <el-button slot="append" icon="el-icon-search"></el-button>
+              <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+
+      <div class="filter high_grade" :class="isHigh? 'highHide':''">
+        <el-form :inline="true" :model="form" size="mini" label-width="100px">
+          <div class="filterTitle">
+            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
           </div>
-        </el-form-item>
-        <el-form-item label="登陆人">
-          <el-input v-model="sizeForm.staff_name" @focus="openModule" placeholder="请选择登陆人" readonly></el-input>
-        </el-form-item>
-        <el-form-item label="登陆部门">
-          <el-input v-model="sizeForm.department_name" @focus="openModule" placeholder="请选择登陆部门" readonly></el-input>
-        </el-form-item>
-      </el-form>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">登陆人</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input v-model="form.staff_name" @focus="openModule" placeholder="请选择登陆人" readonly></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">登陆时间</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-form-item>
+                      <div class="block">
+                        <el-date-picker
+                          v-model="form.date"
+                          type="daterange"
+                          align="right"
+                          unlink-panels
+                          range-separator="至"
+                          start-placeholder="开始日期"
+                          end-placeholder="结束日期"
+                          :picker-options="pickerOptions">
+                        </el-date-picker>
+                      </div>
+                    </el-form-item>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">登陆部门</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input v-model="form.department_name" @focus="openModule" placeholder="请选择登陆部门" readonly></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <div class="btnOperate">
+            <el-button size="mini" type="primary">搜索</el-button>
+            <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+            <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+          </div>
+        </el-form>
+      </div>
     </div>
 
     <el-table
@@ -84,12 +141,14 @@
     components: {AddModule},
     data() {
       return {
+        isHigh: false,
         currentPage: 1,       //分页
         module: false,        //组织架构状态
-        sizeForm: {
+        form: {
           staff_name: '',
           department_name: '',
           date: '',
+          keyWords: '',
         },
         pickerOptions: {
           shortcuts: [{
@@ -156,6 +215,15 @@
       };
     },
     methods: {
+      // 重置
+      resetting() {
+        this.form.keywords = '';
+      },
+      // 高级筛选
+      highGrade() {
+        this.isHigh = !this.isHigh;
+      },
+
       // 登陆人
       openModule() {
         this.module = true;
