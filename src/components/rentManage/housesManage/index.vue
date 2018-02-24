@@ -1,67 +1,86 @@
  <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="houseContainer">
-      <div class="filter">
-        <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">
-          <!--<el-form-item label="房屋类型">-->
-            <!--<el-select v-model="formInline.house" clearable placeholder="请选择">-->
-              <!--<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">-->
-              <!--</el-option>-->
-            <!--</el-select>-->
-          <!--</el-form-item>-->
-          <!--<el-form-item label="房型">-->
-            <!--<el-select v-model="formInline.house" clearable placeholder="请选择">-->
-              <!--<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">-->
-              <!--</el-option>-->
-            <!--</el-select>-->
-          <!--</el-form-item>-->
-          <!--<el-form-item label="装修">-->
-            <!--<el-select v-model="formInline.house" clearable placeholder="请选择">-->
-              <!--<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">-->
-              <!--</el-option>-->
-            <!--</el-select>-->
-          <!--</el-form-item>-->
-          <!--<el-form-item label="参考价格">-->
-            <!--<el-select v-model="formInline.house" clearable placeholder="请选择">-->
-              <!--<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">-->
-              <!--</el-option>-->
-            <!--</el-select>-->
-          <!--</el-form-item>-->
-          <!--<el-form-item label="房屋特色">-->
-            <!--<el-select v-model="formInline.house" clearable placeholder="请选择">-->
-              <!--<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">-->
-              <!--</el-option>-->
-            <!--</el-select>-->
-          <!--</el-form-item>-->
-          <el-form-item label="房屋状态">
-            <el-select v-model="formInline.house" clearable placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="认领状态">
-            <el-select v-model="formInline.house" clearable placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-input readonly="" @focus="openOrganizationModal" v-model="formInline.ss" placeholder="点击选择部门">
-              <el-button slot="append" type="primary">清空</el-button>
-            </el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-input v-model="formInline.name" placeholder="搜索">
-              <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
-            </el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox label="显示本组" name="type"></el-checkbox>
-          </el-form-item>
-          <el-form-item style="float: right">
-            <el-button type="primary" @click="openOrganizationModal('dispatch')">分配</el-button>
-          </el-form-item>
-        </el-form>
+
+
+      <div class="highRanking">
+        <div class="highSearch">
+          <el-form :inline="true" size="mini">
+            <el-form-item>
+              <el-input placeholder="请输入内容" v-model="formInline.keyWords" size="mini" clearable>
+                <el-button slot="append" icon="el-icon-search"></el-button>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="openOrganizationModal('dispatch')">分配</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+
+        <div class="filter high_grade" :class="isHigh? 'highHide':''">
+          <el-form :inline="true" :model="formInline" size="mini" label-width="100px">
+            <div class="filterTitle">
+              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+            </div>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">房屋状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.house" clearable placeholder="请选择">
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">认领状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.house" clearable placeholder="请选择">
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">按部门搜索</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-input readonly="" @focus="openOrganizationModal" v-model="formInline.ss" placeholder="点击选择部门">
+                        <el-button slot="append" type="primary">清空</el-button>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <div class="btnOperate">
+              <el-button size="mini" type="primary">搜索</el-button>
+              <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+              <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+            </div>
+          </el-form>
+        </div>
+
       </div>
       <div class="main">
         <div class="tableBox">
@@ -319,6 +338,7 @@
 
         //模态框
         organizationDialog: false,
+        isHigh :false,
       }
     },
 
@@ -395,6 +415,12 @@
       closeOrganization(){
         this.organizationDialog = false;
       },
+      highGrade(){
+        this.isHigh = !this.isHigh;
+      },
+      resetting(){
+
+      }
     }
   }
 </script>

@@ -1,54 +1,123 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="clientContainer">
-      <div class="filter">
-        <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">
-          <el-form-item label="客户状态">
-            <el-select v-model="formInline.house" clearable placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="客户意向">
-            <el-select v-model="formInline.house" clearable placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="客户身份">
-            <el-select v-model="formInline.house" clearable placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="客户来源">
-            <el-select v-model="formInline.house" clearable placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="个人/中介">
-            <el-select v-model="formInline.house" clearable placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
 
-          <el-form-item>
-            <el-input v-model="formInline.name" placeholder="搜索">
-              <el-select v-model="formInline.select" clearable  slot="prepend" placeholder="请选择">
-                <el-option label="客户" value="1"></el-option>
-                <el-option label="负责人" value="2"></el-option>
-                <el-option label="用户电话" value="3"></el-option>
-                <el-option label="证件号" value="4"></el-option>
-              </el-select>
-              <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
-            </el-input>
-          </el-form-item>
-          <el-form-item style="float: right">
-            <el-button type="success">导出客源</el-button>
-          </el-form-item>
-        </el-form>
+      <div class="highRanking">
+        <div class="highSearch">
+          <el-form :inline="true" size="mini">
+            <el-form-item>
+              <el-input v-model="formInline.name" placeholder="搜索">
+                <el-select v-model="formInline.select" clearable  slot="prepend" placeholder="请选择">
+                  <el-option label="客户" value="1"></el-option>
+                  <el-option label="负责人" value="2"></el-option>
+                  <el-option label="用户电话" value="3"></el-option>
+                  <el-option label="证件号" value="4"></el-option>
+                </el-select>
+                <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="success">导出房源</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+
+        <div class="filter high_grade" :class="isHigh? 'highHide':''">
+          <el-form :inline="true" :model="formInline" size="mini" label-width="100px">
+            <div class="filterTitle">
+              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+            </div>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">客户状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.house" clearable placeholder="请选择">
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">客户意向</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.a" clearable placeholder="请选择">
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">客户身份</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.house" clearable placeholder="请选择">
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">客户来源</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.a" clearable placeholder="请选择">
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">个人/中介</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.house" clearable placeholder="请选择">
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <div class="btnOperate">
+              <el-button size="mini" type="primary">搜索</el-button>
+              <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+              <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+            </div>
+          </el-form>
+        </div>
       </div>
       <div class="main">
         <div class="tableBox">
@@ -239,6 +308,7 @@
         //模态框
         instructionDialog: false,
         remindDialog:false,
+        isHigh:false,
       }
     },
 
@@ -326,6 +396,12 @@
           this.show = true
         })
       },
+      highGrade(){
+        this.isHigh = !this.isHigh;
+      },
+      resetting(){
+
+      }
     }
   }
 </script>

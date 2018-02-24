@@ -1,119 +1,286 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="clientContainer">
-      <div class="tool">
-        <div class="tool_left">
-          <el-button size="mini" @click="selectStatus(1)" :class="selectFlag==1? 'selectButton':''">
-            <i class="el-icon-document"></i>&nbsp;收房合同
-          </el-button>
-          <el-button size="mini" @click="selectStatus(2)" :class="selectFlag==2? 'selectButton':''">
-            <i class="el-icon-document"></i>&nbsp;租房合同
-          </el-button>
+      <!--<div class="tool">-->
+        <!--<div class="tool_left">-->
+          <!--<el-button size="mini" @click="selectStatus(1)" :class="selectFlag==1? 'selectButton':''">-->
+            <!--<i class="el-icon-document"></i>&nbsp;收房合同-->
+          <!--</el-button>-->
+          <!--<el-button size="mini" @click="selectStatus(2)" :class="selectFlag==2? 'selectButton':''">-->
+            <!--<i class="el-icon-document"></i>&nbsp;租房合同-->
+          <!--</el-button>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="filter">-->
+        <!--<el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">-->
+          <!--<el-form-item label="合同状态">-->
+            <!--<el-select v-model="formInline.house" clearable placeholder="请选择">-->
+              <!--<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">-->
+              <!--</el-option>-->
+            <!--</el-select>-->
+          <!--</el-form-item>-->
+          <!--<el-form-item label="回访状态">-->
+            <!--<el-select v-model="formInline.house" clearable placeholder="请选择">-->
+              <!--<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">-->
+              <!--</el-option>-->
+            <!--</el-select>-->
+          <!--</el-form-item>-->
+          <!--<el-form-item label="合同日期">-->
+            <!--<el-date-picker-->
+              <!--v-model="statisticDate"-->
+              <!--type="daterange"-->
+              <!--align="right"-->
+              <!--unlink-panels-->
+              <!--range-separator="至"-->
+              <!--start-placeholder="开始日期"-->
+              <!--end-placeholder="结束日期"-->
+              <!--:picker-options="pickerOptions">-->
+            <!--</el-date-picker>-->
+          <!--</el-form-item>-->
+          <!--<el-form-item>-->
+            <!--<el-input v-model="formInline.name" @focus="selectDep" readonly placeholder="选择部门">-->
+              <!--<el-button slot="append" type="primary">清空</el-button>-->
+            <!--</el-input>-->
+          <!--</el-form-item>-->
+          <!--<el-form-item>-->
+            <!--<el-input v-model="formInline.name" placeholder="搜索">-->
+              <!--<el-button slot="append" type="primary" icon="el-icon-search"></el-button>-->
+            <!--</el-input>-->
+          <!--</el-form-item>-->
+          <!--<el-form-item style="float: right">-->
+            <!--<el-button type="success">导出合同</el-button>-->
+          <!--</el-form-item>-->
+        <!--</el-form>-->
+      <!--</div>-->
+
+      <div class="highRanking">
+        <div class="tabsSearch">
+          <el-form :inline="true" size="mini">
+            <el-form-item>
+              <el-input v-model="formInline.name" placeholder="搜索">
+                <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+            </el-form-item>
+            <el-form-item style="float: right">
+              <el-button type="success">导出合同</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+
+        <div class="filter high_grade" :class="isHigh? 'highHide':''">
+          <el-form :inline="true" :model="form" size="mini" label-width="100px">
+            <div class="filterTitle">
+              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+            </div>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">合同状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.house" clearable placeholder="请选择">
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">回访状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.a" clearable placeholder="请选择">
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">合同状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-input v-model="formInline.name" @focus="selectDep" readonly placeholder="选择部门">
+                        <el-button slot="append" type="primary">清空</el-button>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">回访状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-date-picker
+                        v-model="statisticDate"
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        :picker-options="pickerOptions">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+
+            <div class="btnOperate">
+              <el-button size="mini" type="primary">搜索</el-button>
+              <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+              <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+            </div>
+          </el-form>
         </div>
       </div>
-      <div class="filter">
-        <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">
-          <el-form-item label="合同状态">
-            <el-select v-model="formInline.house" clearable placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="回访状态">
-            <el-select v-model="formInline.house" clearable placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="合同日期">
-            <el-date-picker
-              v-model="statisticDate"
-              type="daterange"
-              align="right"
-              unlink-panels
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :picker-options="pickerOptions">
-            </el-date-picker>
-          </el-form-item>
-          <el-form-item>
-            <el-input v-model="formInline.name" @focus="selectDep" readonly placeholder="选择部门">
-              <el-button slot="append" type="primary">清空</el-button>
-            </el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-input v-model="formInline.name" placeholder="搜索">
-              <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
-            </el-input>
-          </el-form-item>
-          <el-form-item style="float: right">
-            <el-button type="success">导出合同</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
       <div class="main">
-        <div class="myHouse">
-          <div class="myTable" @contextmenu="houseHeadMenu($event)">
-            <el-table
-              :data="tableData"
-              @row-click="clickTable"
-              @row-contextmenu='houseMenu'
-              style="width: 100%">
-              <el-table-column
-                prop="date"
-                label="合同编号">
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="上传时间">
-              </el-table-column>
-              <el-table-column
-                prop="province"
-                label="业主姓名">
-              </el-table-column>
-              <el-table-column
-                prop="address"
-                label="地址">
-              </el-table-column>
-              <el-table-column
-                prop="zip"
-                label="手机号码">
-              </el-table-column>
-              <el-table-column
-                prop="date"
-                label="合同到期时间">
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="资料补齐时间">
-              </el-table-column>
-              <el-table-column
-                prop="province"
-                label="过期情况">
-              </el-table-column>
-              <el-table-column
-                prop="city"
-                label="回访情况">
-              </el-table-column>
-              <el-table-column
-                prop="date"
-                label="开单人">
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="负责人">
-              </el-table-column>
-              <el-table-column
-                prop="province"
-                label="部门">
-              </el-table-column>
-              <el-table-column
-                prop="city"
-                label="审核状态">
-              </el-table-column>
-            </el-table>
-          </div>
+        <div>
+          <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="收房合同" name="first">
+              <div class="myTable" @contextmenu="houseHeadMenu($event)">
+                <el-table
+                  :data="tableData"
+                  @row-click="clickTable"
+                  @row-contextmenu='houseMenu'
+                  style="width: 100%">
+                  <el-table-column
+                    prop="date"
+                    label="合同编号">
+                  </el-table-column>
+                  <el-table-column
+                    prop="name"
+                    label="上传时间">
+                  </el-table-column>
+                  <el-table-column
+                    prop="province"
+                    label="业主姓名">
+                  </el-table-column>
+                  <el-table-column
+                    prop="address"
+                    label="地址">
+                  </el-table-column>
+                  <el-table-column
+                    prop="zip"
+                    label="手机号码">
+                  </el-table-column>
+                  <el-table-column
+                    prop="date"
+                    label="合同到期时间">
+                  </el-table-column>
+                  <el-table-column
+                    prop="name"
+                    label="资料补齐时间">
+                  </el-table-column>
+                  <el-table-column
+                    prop="province"
+                    label="过期情况">
+                  </el-table-column>
+                  <el-table-column
+                    prop="city"
+                    label="回访情况">
+                  </el-table-column>
+                  <el-table-column
+                    prop="date"
+                    label="开单人">
+                  </el-table-column>
+                  <el-table-column
+                    prop="name"
+                    label="负责人">
+                  </el-table-column>
+                  <el-table-column
+                    prop="province"
+                    label="部门">
+                  </el-table-column>
+                  <el-table-column
+                    prop="city"
+                    label="审核状态">
+                  </el-table-column>
+                </el-table>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="租房合同" name="second">
+              <div class="myTable" @contextmenu="houseHeadMenu($event)">
+                <el-table
+                  :data="tableData"
+                  @row-click="clickTable"
+                  @row-contextmenu='houseMenu'
+                  style="width: 100%">
+                  <el-table-column
+                    prop="date"
+                    label="合同编号">
+                  </el-table-column>
+                  <el-table-column
+                    prop="name"
+                    label="上传时间">
+                  </el-table-column>
+                  <el-table-column
+                    prop="province"
+                    label="业主姓名">
+                  </el-table-column>
+                  <el-table-column
+                    prop="address"
+                    label="地址">
+                  </el-table-column>
+                  <el-table-column
+                    prop="zip"
+                    label="手机号码">
+                  </el-table-column>
+                  <el-table-column
+                    prop="date"
+                    label="合同到期时间">
+                  </el-table-column>
+                  <el-table-column
+                    prop="name"
+                    label="资料补齐时间">
+                  </el-table-column>
+                  <el-table-column
+                    prop="province"
+                    label="过期情况">
+                  </el-table-column>
+                  <el-table-column
+                    prop="city"
+                    label="回访情况">
+                  </el-table-column>
+                  <el-table-column
+                    prop="date"
+                    label="开单人">
+                  </el-table-column>
+                  <el-table-column
+                    prop="name"
+                    label="负责人">
+                  </el-table-column>
+                  <el-table-column
+                    prop="province"
+                    label="部门">
+                  </el-table-column>
+                  <el-table-column
+                    prop="city"
+                    label="审核状态">
+                  </el-table-column>
+                </el-table>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
           <div class="tableBottom">
             <div class="left">
               <el-pagination
@@ -231,6 +398,8 @@
 
         //模态框
         organizationDialog: false,
+        activeName: 'first',
+        isHigh:false,
       }
     },
 
@@ -330,6 +499,13 @@
       selectStatus(flag){
         this.selectFlag = flag;
       },
+      // tabs标签页
+      handleClick(tab, event) {
+        console.log(tab, event);
+      },
+      highGrade(){
+          this.isHigh = !this.isHigh;
+      }
     }
   }
 </script>
@@ -367,17 +543,7 @@
     }
     .main {
       font-size: 12px;
-      .myHouse {
-        border: 1px solid #dfe6fb;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .12), 0 0 6px 0 rgba(0, 0, 0, .04);
-        .myTable {
-          .el-table {
-            th {
-              background-color: #dfe6fb;
-            }
-          }
-        }
+      >div {
         .tableBottom {
           padding: 8px;
           display: flex;
