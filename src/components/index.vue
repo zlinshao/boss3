@@ -29,14 +29,11 @@
         </div>
       </div>
       <div class="right">
-        <div class="countdown">
-          <span style="line-height: 10px;" @click="fullScreen(1)">精简版</span>
+        <div class="countdown" style="border-right: 1px solid #DDDDDD">
+          <span style="line-height: 20px;color: #409EFF;" @click="fullScreen(1)">精简模式</span>
         </div>
         <div class="countdown">
-          <el-tooltip class="item" effect="dark" content="锁屏" placement="bottom">
-            <i class="el-icon-time" @click="lockScreen"></i>
-          </el-tooltip>
-
+          <i class="el-icon-time"></i>
           {{Countdown}}s
         </div>
         <div class="message" style="position: relative">
@@ -92,19 +89,19 @@
                 解兆飞<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
             <el-dropdown-menu slot="dropdown" class="personal">
-              <el-dropdown-item class="personalList">
-                <p><i class="el-icon-menu"></i></p>
-                <div>
-                  个人主页
-                </div>
-              </el-dropdown-item>
-              <el-dropdown-item class="personalList">
-                <p><i class="el-icons-fa-sitemap"></i></p>
-                <div>
-                  部门主页
-                </div>
-              </el-dropdown-item>
-              <el-dropdown-item class="personalList">
+              <!--<el-dropdown-item class="personalList">-->
+                <!--<p><i class="el-icon-menu"></i></p>-->
+                <!--<div>-->
+                  <!--个人主页-->
+                <!--</div>-->
+              <!--</el-dropdown-item>-->
+              <!--<el-dropdown-item class="personalList">-->
+                <!--<p><i class="el-icons-fa-sitemap"></i></p>-->
+                <!--<div>-->
+                  <!--部门主页-->
+                <!--</div>-->
+              <!--</el-dropdown-item>-->
+              <el-dropdown-item class="personalList" @click.native="routers('messageCenter')">
                 <p><i class="el-icon-bell"></i></p>
                 <div>
                   消息中心
@@ -122,10 +119,16 @@
                   签到自助
                 </div>
               </el-dropdown-item>
-              <el-dropdown-item class="personalList">
+              <el-dropdown-item class="personalList"  @click.native="lockScreen">
                 <p><i class="el-icons-fa-unlock-alt"></i></p>
                 <div>
-                  锁屏密码
+                  一键锁屏
+                </div>
+              </el-dropdown-item>
+              <el-dropdown-item class="personalList" @click.native="routers('personalSetting')">
+                <p><i class="el-icon-setting"></i></p>
+                <div>
+                  个人设置
                 </div>
               </el-dropdown-item>
               <el-dropdown-item class="detrusion">
@@ -223,6 +226,9 @@
       }
     },
     methods: {
+      routers(url) {
+        this.$router.push(url);
+      },
       // 全屏
       fullScreen(val) {
         if (val === 1) {

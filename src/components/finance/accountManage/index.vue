@@ -59,7 +59,7 @@
       width="100%"
       @row-contextmenu="houseMenu">
       <el-table-column
-        label="账户lllllllllliiiiiiii名称"
+        label="账户名称"
         prop="name">
       </el-table-column>
       <el-table-column
