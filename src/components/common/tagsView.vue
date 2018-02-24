@@ -66,6 +66,12 @@
             return false
           }
           this.$store.dispatch('addVisitedViews', route)
+
+//          const route = this.generateRoute();
+//          if (!route) {
+//            return false
+//          }
+//          this.$store.dispatch('addVisitedViews', route)
         },
 
         generateRoute() {
@@ -159,6 +165,9 @@
 
 <style rel="stylesheet/scss" lang="scss">
     #tagView {
+      /*max-height: 35px;*/
+      /*overflow: hidden;*/
+      /*display: flex;*/
       .el-tag{
         margin-right: 3px;
         cursor: pointer;
