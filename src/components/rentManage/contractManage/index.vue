@@ -1,57 +1,6 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="clientContainer">
-      <!--<div class="tool">-->
-        <!--<div class="tool_left">-->
-          <!--<el-button size="mini" @click="selectStatus(1)" :class="selectFlag==1? 'selectButton':''">-->
-            <!--<i class="el-icon-document"></i>&nbsp;收房合同-->
-          <!--</el-button>-->
-          <!--<el-button size="mini" @click="selectStatus(2)" :class="selectFlag==2? 'selectButton':''">-->
-            <!--<i class="el-icon-document"></i>&nbsp;租房合同-->
-          <!--</el-button>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!--<div class="filter">-->
-        <!--<el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">-->
-          <!--<el-form-item label="合同状态">-->
-            <!--<el-select v-model="formInline.house" clearable placeholder="请选择">-->
-              <!--<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">-->
-              <!--</el-option>-->
-            <!--</el-select>-->
-          <!--</el-form-item>-->
-          <!--<el-form-item label="回访状态">-->
-            <!--<el-select v-model="formInline.house" clearable placeholder="请选择">-->
-              <!--<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">-->
-              <!--</el-option>-->
-            <!--</el-select>-->
-          <!--</el-form-item>-->
-          <!--<el-form-item label="合同日期">-->
-            <!--<el-date-picker-->
-              <!--v-model="statisticDate"-->
-              <!--type="daterange"-->
-              <!--align="right"-->
-              <!--unlink-panels-->
-              <!--range-separator="至"-->
-              <!--start-placeholder="开始日期"-->
-              <!--end-placeholder="结束日期"-->
-              <!--:picker-options="pickerOptions">-->
-            <!--</el-date-picker>-->
-          <!--</el-form-item>-->
-          <!--<el-form-item>-->
-            <!--<el-input v-model="formInline.name" @focus="selectDep" readonly placeholder="选择部门">-->
-              <!--<el-button slot="append" type="primary">清空</el-button>-->
-            <!--</el-input>-->
-          <!--</el-form-item>-->
-          <!--<el-form-item>-->
-            <!--<el-input v-model="formInline.name" placeholder="搜索">-->
-              <!--<el-button slot="append" type="primary" icon="el-icon-search"></el-button>-->
-            <!--</el-input>-->
-          <!--</el-form-item>-->
-          <!--<el-form-item style="float: right">-->
-            <!--<el-button type="success">导出合同</el-button>-->
-          <!--</el-form-item>-->
-        <!--</el-form>-->
-      <!--</div>-->
 
       <div class="highRanking">
         <div class="tabsSearch">
@@ -71,7 +20,7 @@
         </div>
 
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
-          <el-form :inline="true" :model="form" size="mini" label-width="100px">
+          <el-form :inline="true" :model="formInline" size="mini" label-width="100px">
             <div class="filterTitle">
               <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>
@@ -505,6 +454,9 @@
       },
       highGrade(){
           this.isHigh = !this.isHigh;
+      },
+      resetting(){
+
       }
     }
   }

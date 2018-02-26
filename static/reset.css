@@ -207,4 +207,7 @@
 #panelContent textarea {
   resize: none !important; }
 
+#publicArticle .el-select {
+  display: block !important; }
+
 /*# sourceMappingURL=reset.css.map */

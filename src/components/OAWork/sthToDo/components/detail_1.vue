@@ -4,6 +4,7 @@
       <div><i class="el-icon-tickets"></i>&nbsp;使用说明</div>
       <div><i class="el-icon-setting"></i>&nbsp;设置</div>
     </div>
+
     <div class="main">
       <div class="mainTop">
         <el-button type="info" size="mini" plain>
@@ -158,37 +159,23 @@
               </el-form>
             </div>
           </el-col>
-          <el-col :span="8">
+          <el-col :span="4">
             <div class="title">合同照片</div>
-            <div class="content right scroll_bar" style="position: relative">
-              <el-col :span="6">
-                <div>
-                  <img data-magnify="" data-caption="图片查看器"
-                       data-src="https://farm5.staticflickr.com/4267/34162425794_1430f38362_z.jpg"
-                       src="https://farm5.staticflickr.com/4267/34162425794_1430f38362_s.jpg" alt="">
-                </div>
-              </el-col>
-              <el-col :span="6">
-                <div>
-                  <img data-magnify="" data-caption="图片查看器"
-                       data-src="https://farm5.staticflickr.com/4267/34162425794_1430f38362_z.jpg"
-                       src="https://farm5.staticflickr.com/4267/34162425794_1430f38362_s.jpg" alt="">
-                </div>
-              </el-col>
-              <el-col :span="6">
-                <div>
-                  <img data-magnify="" data-caption="图片查看器"
-                       data-src="https://farm5.staticflickr.com/4267/34162425794_1430f38362_z.jpg"
-                       src="https://farm5.staticflickr.com/4267/34162425794_1430f38362_s.jpg" alt="">
-                </div>
-              </el-col>
-              <el-col :span="6" v-for="(item,index) in 3" :key="index">
-                <div>
-                  <img data-magnify="" data-caption="图片查看器"
-                       data-src="https://farm5.staticflickr.com/4267/34162425794_1430f38362_z.jpg"
-                       src="https://farm5.staticflickr.com/4267/34162425794_1430f38362_s.jpg" alt="">
-                </div>
-              </el-col>
+            <div class="content right scroll_bar" id="con" @dragover='allowDrop($event)'>
+              <img data-magnify="" data-caption="图片查看器"
+                   data-src="http://imgstore.cdn.sogou.com/app/a/100540002/850349.jpg"
+                   src="http://imgstore.cdn.sogou.com/app/a/100540002/850349.jpg" alt="">
+              <img data-magnify="" data-caption="图片查看器"
+                   data-src="https://farm5.staticflickr.com/4267/34162425794_1430f38362_z.jpg"
+                   src="https://farm5.staticflickr.com/4267/34162425794_1430f38362_s.jpg" alt="">
+            </div>
+          </el-col>
+          <el-col :span="4">
+            <div class="title">合同照片</div>
+            <div class="content right scroll_bar" id="box" @dragover='allowDrop($event)'>
+              <img data-magnify="" data-caption="图片查看器"
+                   data-src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg"
+                   src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
             </div>
           </el-col>
         </el-row>
@@ -198,17 +185,47 @@
 </template>
 
 <script>
+
   export default {
     name: "index",
     data() {
       return {
         form: {
           name: '',
-        }
+        },
       }
     },
     mounted(){
+      let box=document.getElementById('box');
+      let con=document.getElementById('con');
+      let lis=document.getElementsByTagName('img');
+      for(let i=0;i<lis.length;i++){
+        lis[i].draggable=true;
+        lis[i].flag=false;
+        lis[i].ondragstart=function(){
+          this.flag=true;
 
+        };
+        lis[i].ondragend=function(){
+          this.flag=false;
+        }
+      }
+      box.ondrop = function(e) {
+        // e.preventDefault();
+        for (let i = 0; i < lis.length; i++) {
+          if(lis[i].flag){ //如果flag为真，则添加一个li至box里
+            box.appendChild(lis[i]);
+          }
+        }
+      };
+      con.ondrop = function(e) {
+        // e.preventDefault();
+        for (let i = 0; i < lis.length; i++) {
+          if(lis[i].flag){ //如果flag为真，则添加一个li至box里
+            con.appendChild(lis[i]);
+          }
+        }
+      }
     },
     watch: {},
     methods: {
@@ -229,6 +246,9 @@
             message: '已取消审核'
           });
         });
+      },
+      allowDrop(e){
+        e.preventDefault();
       }
     },
   }
@@ -236,7 +256,6 @@
 
 <style lang="scss">
   #auditing {
-
     .scroll_bar {
       &::-webkit-scrollbar-button {
         height: 10px;
@@ -254,6 +273,15 @@
       -moz-border-radius: $n;
       border-radius: $n;
     }
+
+    img{
+      margin: 5px 5px 2px;
+      @include border_radius(6px);
+      width: 120px;
+      height: 80px;
+      display: block;
+    }
+
     .titles {
       @include flex;
       justify-content: flex-end;
@@ -292,16 +320,7 @@
             .content.right {
               padding: 10px;
               .el-col {
-                div {
-                  background: #6a8dfb;
-                  height: 80px;
-                  margin: 5px 5px 2px;
-                  img{
-                    @include border_radius(6px);
-                    width: 100%;
-                    height: 100%;
-                  }
-                }
+
               }
             }
             .content {

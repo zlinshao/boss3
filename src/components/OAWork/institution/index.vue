@@ -1,23 +1,69 @@
 <template>
   <div>
     <div>
-      <div class="filter">
-        <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">
-          <el-form-item label="选择部门">
-            <el-select v-model="formInline.house" clearable placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item>
-            <el-input v-model="formInline.name" placeholder="搜索">
-              <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
-            </el-input>
-          </el-form-item>
-          <el-form-item style="float: right">
-            <el-button type="primary" @click="addInstitution">点击上传</el-button>
-          </el-form-item>
-        </el-form>
+      <!--<div class="filter">-->
+        <!--<el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">-->
+          <!--<el-form-item label="选择部门">-->
+            <!--<el-select v-model="formInline.house" clearable placeholder="请选择">-->
+              <!--<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">-->
+              <!--</el-option>-->
+            <!--</el-select>-->
+          <!--</el-form-item>-->
+          <!--<el-form-item>-->
+            <!--<el-input v-model="formInline.name" placeholder="搜索">-->
+              <!--<el-button slot="append" type="primary" icon="el-icon-search"></el-button>-->
+            <!--</el-input>-->
+          <!--</el-form-item>-->
+          <!--<el-form-item style="float: right">-->
+            <!--<el-button type="primary" @click="addInstitution">点击上传</el-button>-->
+          <!--</el-form-item>-->
+        <!--</el-form>-->
+      <!--</div>-->
+
+      <div class="highRanking">
+        <div class="highSearch">
+          <el-form :inline="true" size="mini">
+            <el-form-item>
+              <el-input placeholder="请输入内容" v-model="formInline.keyWords" size="mini" clearable>
+                <el-button slot="append" icon="el-icon-search"></el-button>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="addInstitution">点击上传</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+
+        <div class="filter high_grade" :class="isHigh? 'highHide':''">
+          <el-form :inline="true" :model="formInline" size="mini" label-width="100px">
+            <div class="filterTitle">
+              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+            </div>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">选择领取部门</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-input readonly="" @focus="openOrganizationModal('staff')" placeholder="点击选择"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <div class="btnOperate">
+              <el-button size="mini" type="primary">搜索</el-button>
+              <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+              <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+            </div>
+          </el-form>
+        </div>
+
       </div>
       <div class="main">
         <div class="myHouse">
@@ -62,18 +108,21 @@
     </div>
 
     <AddInstitution :addInstitutionDialog="addInstitutionDialog" @close="closeAddInstitution"></AddInstitution>
+    <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
   </div>
 </template>
 
 <script>
   import AddInstitution from './components/addInstitution.vue'
+  import Organization from '../../common/organization.vue'
   export default {
     name: 'hello',
-    components: {AddInstitution},
+    components: {AddInstitution,Organization},
     data () {
       return {
         /***********/
         addInstitutionDialog:false,
+        organizationDialog:false,
         formInline: {
           name: '',
           house: ''
@@ -141,6 +190,7 @@
 
         //模态框
         instructionDialog: false,
+        isHigh:false,
       }
     },
 
@@ -159,6 +209,18 @@
       },
       closeAddInstitution(){
           this.addInstitutionDialog = false;
+      },
+      openOrganizationModal(){
+        this.organizationDialog = true
+      },
+      closeOrganization(){
+        this.organizationDialog = false;
+      },
+      highGrade(){
+        this.isHigh = !this.isHigh;
+      },
+      resetting(){
+
       }
     }
   }
