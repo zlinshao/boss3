@@ -80,6 +80,8 @@ import ContractChange from '../components/OAWork/sthToDo/components/contractChan
 import Deliver from '../components/OAWork/sthToDo/components/deliver.vue'
 import throwALease from '../components/OAWork/sthToDo/components/throwALease.vue'
 
+import PublicArticle from '../components/OAWork/portals/components/publicArticle.vue'
+
 
 //人资管理
 import StaffManage from '../components/humanResource/staffManage/index.vue'
@@ -140,6 +142,7 @@ export default new Router({
         {path: '/contractChange', component: ContractChange, name: 'TEST_1'},
         {path: '/deliver', component: Deliver, name: 'TEST_2'},
         {path: '/throwALease', component: throwALease, name: 'TEST_3'},
+        {path: '/publicArticle', component: PublicArticle, name: '文章发布'},
       ]
     },
 

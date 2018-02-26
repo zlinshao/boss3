@@ -1,80 +1,292 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="clientContainer">
-      <div class="tool">
-        <div class="topTabs">
-          <el-form :inline="true" size="mini" style="margin: 10px 0;">
-            <el-button v-for="(key,index) in tabs" :class="{'btn': isActive === index}"
-                       @click="onSubmit(index)" size="mini" :key="index">{{key}}
-            </el-button>
+      <div class="highRanking">
+        <div class="tabsSearch">
+          <el-form :inline="true" size="mini">
+            <el-form-item>
+              <el-input v-model="formInline.name" placeholder="搜索">
+                <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+            </el-form-item>
+            <el-form-item v-if="isCheckbox">
+              <el-button type="primary">全部标记为已读</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+
+        <div class="filter high_grade" :class="isHigh? 'highHide':''">
+          <el-form :inline="true" :model="formInline" size="mini" label-width="100px">
+            <div class="filterTitle">
+              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+            </div>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">标记</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="formInline.house" clearable placeholder="请选择">
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">时间范围</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-date-picker
+                        v-model="statisticDate"
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        :picker-options="pickerOptions">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+
+            <div class="btnOperate">
+              <el-button size="mini" type="primary">搜索</el-button>
+              <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+              <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+            </div>
           </el-form>
         </div>
       </div>
-      <div class="filter">
-        <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">
-          <el-form-item label="标记">
-            <el-select v-model="formInline.house" clearable placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="选择日期">
-            <el-date-picker
-              v-model="statisticDate"
-              type="daterange"
-              align="right"
-              unlink-panels
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :picker-options="pickerOptions">
-            </el-date-picker>
-          </el-form-item>
-          <el-form-item>
-            <el-input v-model="formInline.name" placeholder="搜索">
-              <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
-            </el-input>
-          </el-form-item>
-          <el-form-item style="float: right" v-if="isCheckbox">
-              <el-button type="primary">全部标记为已读</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
+
+
       <div class="main">
-        <div class="myHouse">
-          <div class="myTable">
-            <el-table
-              :data="tableData"
-              @row-click="clickTable"
-              @row-contextmenu='houseMenu'
-              style="width: 100%">
-              <el-table-column
-                prop="date"
-                v-if="isCheckbox"
-                type="selection">
-              </el-table-column>
-              <el-table-column
-                prop="date"
-                label="发布时间">
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="发布人">
-              </el-table-column>
-              <el-table-column
-                prop="province"
-                label="标题">
-              </el-table-column>
-              <el-table-column
-                prop="address"
-                label="主要内容">
-              </el-table-column>
-              <el-table-column
-                prop="zip"
-                label="阅读时间">
-              </el-table-column>
-            </el-table>
-          </div>
+        <div>
+          <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="系统公告" name="first">
+              <div class="myTable">
+                <el-table
+                  :data="tableData"
+                  @row-click="clickTable"
+                  @row-contextmenu='houseMenu'
+                  style="width: 100%">
+                  <el-table-column
+                    prop="date"
+                    v-if="isCheckbox"
+                    type="selection">
+                  </el-table-column>
+                  <el-table-column
+                    prop="date"
+                    label="发布时间">
+                  </el-table-column>
+                  <el-table-column
+                    prop="name"
+                    label="发布人">
+                  </el-table-column>
+                  <el-table-column
+                    prop="province"
+                    label="标题">
+                  </el-table-column>
+                  <el-table-column
+                    prop="address"
+                    label="主要内容">
+                  </el-table-column>
+                  <el-table-column
+                    prop="zip"
+                    label="阅读时间">
+                  </el-table-column>
+                </el-table>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="审批提醒" name="second">
+              <div class="myTable">
+                <el-table
+                  :data="tableData"
+                  @row-click="clickTable"
+                  @row-contextmenu='houseMenu'
+                  style="width: 100%">
+                  <el-table-column
+                    prop="date"
+                    v-if="isCheckbox"
+                    type="selection">
+                  </el-table-column>
+                  <el-table-column
+                    prop="date"
+                    label="发布时间">
+                  </el-table-column>
+                  <el-table-column
+                    prop="name"
+                    label="发布人">
+                  </el-table-column>
+                  <el-table-column
+                    prop="province"
+                    label="标题">
+                  </el-table-column>
+                  <el-table-column
+                    prop="address"
+                    label="主要内容">
+                  </el-table-column>
+                  <el-table-column
+                    prop="zip"
+                    label="阅读时间">
+                  </el-table-column>
+                </el-table>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="boss小秘书" name="third">
+              <div class="myTable">
+                <el-table
+                  :data="tableData"
+                  @row-click="clickTable"
+                  @row-contextmenu='houseMenu'
+                  style="width: 100%">
+                  <el-table-column
+                    prop="date"
+                    v-if="isCheckbox"
+                    type="selection">
+                  </el-table-column>
+                  <el-table-column
+                    prop="date"
+                    label="发布时间">
+                  </el-table-column>
+                  <el-table-column
+                    prop="name"
+                    label="发布人">
+                  </el-table-column>
+                  <el-table-column
+                    prop="province"
+                    label="标题">
+                  </el-table-column>
+                  <el-table-column
+                    prop="address"
+                    label="主要内容">
+                  </el-table-column>
+                  <el-table-column
+                    prop="zip"
+                    label="阅读时间">
+                  </el-table-column>
+                </el-table>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="个人发信箱" name="fourth">
+              <div class="myTable">
+                <el-table
+                  :data="tableData"
+                  @row-click="clickTable"
+                  @row-contextmenu='houseMenu'
+                  style="width: 100%">
+                  <el-table-column
+                    prop="date"
+                    v-if="isCheckbox"
+                    type="selection">
+                  </el-table-column>
+                  <el-table-column
+                    prop="date"
+                    label="发布时间">
+                  </el-table-column>
+                  <el-table-column
+                    prop="name"
+                    label="发布人">
+                  </el-table-column>
+                  <el-table-column
+                    prop="province"
+                    label="标题">
+                  </el-table-column>
+                  <el-table-column
+                    prop="address"
+                    label="主要内容">
+                  </el-table-column>
+                  <el-table-column
+                    prop="zip"
+                    label="阅读时间">
+                  </el-table-column>
+                </el-table>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="部门发信箱" name="fifth">
+              <div class="myTable">
+                <el-table
+                  :data="tableData"
+                  @row-click="clickTable"
+                  @row-contextmenu='houseMenu'
+                  style="width: 100%">
+                  <el-table-column
+                    prop="date"
+                    v-if="isCheckbox"
+                    type="selection">
+                  </el-table-column>
+                  <el-table-column
+                    prop="date"
+                    label="发布时间">
+                  </el-table-column>
+                  <el-table-column
+                    prop="name"
+                    label="发布人">
+                  </el-table-column>
+                  <el-table-column
+                    prop="province"
+                    label="标题">
+                  </el-table-column>
+                  <el-table-column
+                    prop="address"
+                    label="主要内容">
+                  </el-table-column>
+                  <el-table-column
+                    prop="zip"
+                    label="阅读时间">
+                  </el-table-column>
+                </el-table>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="短信提醒" name="sixth">
+              <div class="myTable">
+                <el-table
+                  :data="tableData"
+                  @row-click="clickTable"
+                  @row-contextmenu='houseMenu'
+                  style="width: 100%">
+                  <el-table-column
+                    prop="date"
+                    v-if="isCheckbox"
+                    type="selection">
+                  </el-table-column>
+                  <el-table-column
+                    prop="date"
+                    label="发布时间">
+                  </el-table-column>
+                  <el-table-column
+                    prop="name"
+                    label="发布人">
+                  </el-table-column>
+                  <el-table-column
+                    prop="province"
+                    label="标题">
+                  </el-table-column>
+                  <el-table-column
+                    prop="address"
+                    label="主要内容">
+                  </el-table-column>
+                  <el-table-column
+                    prop="zip"
+                    label="阅读时间">
+                  </el-table-column>
+                </el-table>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
+
           <div class="tableBottom">
             <div class="right">
               <div>未读 <span>5&nbsp;条</span></div>
@@ -186,9 +398,10 @@
 
         //模态框
         organizationDialog: false,
-        tabs: ['系统公告', '审批提醒', 'boss小秘书', '个人发信箱', '部门发信箱', '短信提醒'],
         isActive: 0,
         isCheckbox:false,
+        activeName: 'first',
+        isHigh:false,
       }
     },
 
@@ -279,7 +492,12 @@
           this.show = true
         })
       },
+      highGrade(){
+        this.isHigh = !this.isHigh;
+      },
+      resetting(){
 
+      }
     }
   }
 </script>
@@ -300,17 +518,7 @@
     }
     .main {
       font-size: 12px;
-      .myHouse {
-        border: 1px solid #dfe6fb;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .12), 0 0 6px 0 rgba(0, 0, 0, .04);
-        .myTable {
-          .el-table {
-            th {
-              background-color: #dfe6fb;
-            }
-          }
-        }
+      >div {
         .tableBottom {
           padding: 8px;
           display: flex;

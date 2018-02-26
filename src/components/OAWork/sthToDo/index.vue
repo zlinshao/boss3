@@ -368,7 +368,7 @@
         this.organizationDialog = false
       },
       dblClickTable(){
-        this.$router.push('/sthToDoDetail_2')
+        this.$router.push('/sthToDoDetail')
       },
       highGrade(){
         this.isHigh = !this.isHigh;

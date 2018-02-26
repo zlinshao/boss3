@@ -1,17 +1,21 @@
 <template>
     <div>
-      <div class="filter">
-        <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">
-          <el-form-item>
-            <el-input v-model="formInline.name" placeholder="搜索">
-              <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
-            </el-input>
-          </el-form-item>
 
-          <el-form-item style="float: right">
-            <el-button type="primary" @click="openModal">点击上传</el-button>
-          </el-form-item>
-        </el-form>
+      <div class="highRanking">
+        <div class="highSearch">
+          <el-form :inline="true" size="mini">
+            <el-form-item>
+              <el-input placeholder="请输入内容" v-model="formInline.keyWords" size="mini" clearable>
+                <el-button slot="append" icon="el-icon-search"></el-button>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="openModal">点击上传</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+
+
       </div>
       <div class="main">
         <el-row :gutter="20">
