@@ -33,7 +33,8 @@
                   <el-form-item>
                     <el-select v-model="form.houseType">
                       <el-option label="请选择" value=""></el-option>
-                      <el-option v-for="(key,index) in houseValues" :label="key" :value="index + 1" :key="index"></el-option>
+                      <el-option v-for="(key,index) in houseValues" :label="key" :value="index + 1"
+                                 :key="index"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -49,7 +50,8 @@
                     <el-form-item>
                       <el-select v-model="form.markYears">
                         <el-option label="请选择" value=""></el-option>
-                        <el-option v-for="(key,index) in yearValues" :label="key" :value="index + 1" :key="index"></el-option>
+                        <el-option v-for="(key,index) in yearValues" :label="key" :value="index + 1"
+                                   :key="index"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-form-item>
@@ -67,7 +69,8 @@
                   <el-form-item>
                     <el-select v-model="form.province">
                       <el-option label="请选择" value=""></el-option>
-                      <el-option v-for="(key,index) in provinceValues" :label="key" :value="index + 1" :key="index"></el-option>
+                      <el-option v-for="(key,index) in provinceValues" :label="key" :value="index + 1"
+                                 :key="index"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -82,7 +85,8 @@
                   <el-form-item>
                     <el-select v-model="form.city" clearable>
                       <el-option label="请选择" value=""></el-option>
-                      <el-option v-for="(key,index) in cityValues" :label="key" :value="index + 1" :key="index"></el-option>
+                      <el-option v-for="(key,index) in cityValues" :label="key" :value="index + 1"
+                                 :key="index"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -99,7 +103,8 @@
                   <el-form-item>
                     <el-select v-model="form.county" clearable>
                       <el-option label="请选择" value=""></el-option>
-                      <el-option v-for="(key,index) in countyValues" :label="key" :value="index + 1" :key="index"></el-option>
+                      <el-option v-for="(key,index) in countyValues" :label="key" :value="index + 1"
+                                 :key="index"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -114,7 +119,8 @@
                   <el-form-item>
                     <el-select v-model="form.area" clearable>
                       <el-option label="请选择" value=""></el-option>
-                      <el-option v-for="(key,index) in areaValues" :label="key" :value="index + 1" :key="index"></el-option>
+                      <el-option v-for="(key,index) in areaValues" :label="key" :value="index + 1"
+                                 :key="index"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -135,7 +141,7 @@
       style="width: 100%;"
       @row-contextmenu='houseMenu'>
       <el-table-column
-        prop="name"
+        prop="village_name"
         label="小区名称">
       </el-table-column>
       <el-table-column
@@ -143,19 +149,19 @@
         label="地址">
       </el-table-column>
       <el-table-column
-        prop="otherName"
+        prop="village_alias"
         label="小区别名">
       </el-table-column>
       <el-table-column
-        prop="houseType"
+        prop="house_type"
         label="房屋类型">
       </el-table-column>
       <el-table-column
-        prop="markYear"
+        prop="built_year"
         label="建造年限">
       </el-table-column>
       <el-table-column
-        prop="building"
+        prop="total_buildings"
         label="房屋栋数">
       </el-table-column>
     </el-table>
@@ -165,17 +171,16 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[20, 100, 200, 300, 400]"
-        :page-size="20"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="400">
+        :page-size="12"
+        layout="total, prev, pager, next, jumper"
+        :total="paging">
       </el-pagination>
     </div>
     <!--右键-->
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
 
-    <VillageModule :module="addVisible" @close="closeVillage"></VillageModule>
+    <VillageModule :module="addVisible" @close="closeVillage" ></VillageModule>
   </div>
 </template>
 
@@ -193,8 +198,12 @@
         show: false,
         lists: [],
 
-        isHigh: false,
+        pitch: '',
+        formList: {},
         currentPage: 1,
+        paging: 0,
+
+        isHigh: false,
         addVisible: false,
         form: {
           houseType: '',
@@ -212,40 +221,21 @@
         countyValues: ['下沙区', '鼓楼区'],
         areaValues: ['高沙', '鼓楼'],
 
-        tableData: [
-          {
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            otherName: '发的沙发沙发沙发',
-            houseType: '住宅',
-            markYear: '1991',
-            building: '38栋',
-          }, {
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            otherName: '发的沙发沙发沙发',
-            houseType: '住宅',
-            markYear: '1991',
-            building: '38栋',
-          }, {
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            otherName: '发的沙发沙发沙发',
-            houseType: '住宅',
-            markYear: '1991',
-            building: '38栋',
-          }, {
-            name: '王小虎',
-            address: '上海市普陀区金沙江路 1518 弄',
-            otherName: '广是广泛大概高手高手',
-            houseType: '住宅',
-            markYear: '1991',
-            building: '38栋',
-          },
-        ]
+        tableData: []
       }
     },
+    mounted() {
+      this.myData(1);
+    },
     methods: {
+      myData(page) {
+        this.$http.get('setting/community/?pages=' + page).then((res) => {
+          if (res.data.code === '10000') {
+            this.tableData = res.data.data.list;
+            this.paging = res.data.data.count;
+          }
+        })
+      },
       // 重置
       resetting() {
         this.form.keywords = '';
@@ -260,15 +250,22 @@
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
+        this.currentPage = val;
+        this.myData(val);
       },
       openVillage() {
-        this.addVisible = true;
+        this.$http('setting/community/' + this.pitch).then((res) => {
+          if (res.data.code === '10020') {
+            this.addVisible = true;
+          }
+        });
       },
       closeVillage() {
         this.addVisible = false;
       },
       // 右键
       houseMenu(row, event) {
+        this.pitch = row.id;
         this.lists = [
           {clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '编辑',},
           {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除',},
