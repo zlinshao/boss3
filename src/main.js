@@ -28,6 +28,9 @@ Vue.use(ElementUI);
 Vue.use(VueRouter);
 Vue.use(Vuex);
 Vue.use(Cookies);
+axios.defaults.baseURL = globalConfig.server;
+axios.defaults.withCredentials = true;
+axios.defaults.headers.common['Env'] = globalConfig.env;
 Vue.prototype.$http = axios;
 
 Vue.config.productionTip = false;
