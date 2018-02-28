@@ -1282,6 +1282,9 @@
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+
+
+//        console.log(this.rightMenuX,this.rightMenuY)
         event.preventDefault();
         event.stopPropagation();
         this.$nextTick(() => {

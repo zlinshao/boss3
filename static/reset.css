@@ -133,7 +133,7 @@
   .__vev_calendar-wrapper .cal-wrapper .cal-body .weeks .item:first-child, .__vev_calendar-wrapper .cal-wrapper .cal-body .weeks .item:last-child {
     color: #fb4699; }
 .__vev_calendar-wrapper .cal-wrapper .cal-body .dates .item {
-  cursor: pointer !important; }
+  cursor: pointer; }
   .__vev_calendar-wrapper .cal-wrapper .cal-body .dates .item:hover {
     color: #6a8dfb; }
   .__vev_calendar-wrapper .cal-wrapper .cal-body .dates .item .is-event, .__vev_calendar-wrapper .cal-wrapper .cal-body .dates .item .is-today {
