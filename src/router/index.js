@@ -18,7 +18,8 @@ import MessageList from '../components/systemSetting/message/messageList.vue'   
 import MessageModule from '../components/systemSetting/message/messageModule.vue'     //短信
 import RoleManage from '../components/systemSetting/roleManage/index.vue'
 import PowerManage from '../components/systemSetting/powerManage/index.vue'
-import VillageManage from '../components/systemSetting/villageManage/index.vue'
+import VillageManage from '../components/systemSetting/villageManage/index.vue'             //小区管理
+import VillageDetail from '../components/systemSetting/villageManage/villageDetail.vue'     //小区管理详情
 import ExportManage from '../components/systemSetting/exportManage/index.vue'
 
 //喜报管理
@@ -138,6 +139,7 @@ export default new Router({
         {path: '/messageCenter', component: MessageCenter, name: '消息中心'},
         {path: '/sthToDoDetail', component: SthToDoDetail, name: '喜报详情'},
         {path: '/personalSetting', component: PersonalSetting, name: '个人设置'},
+        {path: '/villageManage/villageDetail', component: VillageDetail, name: '小区管理详情'},
         {path: '/sthToDoDetail_2', component: SthToDoDetail_2, name: '喜报'},
         {path: '/contractChange', component: ContractChange, name: 'TEST_1'},
         {path: '/deliver', component: Deliver, name: 'TEST_2'},

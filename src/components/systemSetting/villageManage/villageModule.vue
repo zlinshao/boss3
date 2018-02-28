@@ -1,82 +1,117 @@
 <template>
-  <div>
+  <div id="villageModule">
     <el-dialog title="新增小区" :visible.sync="dialogVisible" width="40%">
-      <el-form :model="form" size="mini" label-width="80px">
-        <el-form-item label="小区位置">
-          <el-select v-model="form.city" clearable>
-            <el-option label="江苏省" value="1"></el-option>
-            <el-option label="浙江省" value="2"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="小区名称">
-              <el-input @focus="openAddress" v-model="form.villageName" placeholder="请选择小区" readonly></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="小区地址">
-              <el-input v-model="form.villageAddress" placeholder="小区地址" :disabled="true"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="18">
-            <el-form-item label="小区别名">
-              <el-input v-model="form.otherName" placeholder="请输入小区别名"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="4">
-            <div class="amount">
-              <i class="el-icon-circle-plus-outline"></i>
-              <i class="el-icon-remove-outline"></i>
-            </div>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="建筑年限">
-              <el-select v-model="form.markYear" clearable>
-                <el-option label="建造年限" value=""></el-option>
-                <el-option v-for="(key,index) in yearValues" :label="key" :value="index + 1" :key="index"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="建筑年限">
-              <el-select v-model="form.houseType" clearable>
-                <el-option label="房屋类型" value=""></el-option>
-                <el-option v-for="(key,index) in houseValues" :label="key" :value="index + 1" :key="index"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="总栋数">
-              <el-input type="number" v-model="form.allBuilding" placeholder="请输入总栋数"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="物业费">
-              <el-input type="number" v-model="form.propertyFee" placeholder="金额"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-form-item label="小区照片">
-          <el-input v-model="form.addressId" :disabled="true"></el-input>
-          <!--<Dropzone :id="'addr'" :url="'http://test.v2.api.boss.lejias.cn/picture/upload'"></Dropzone>-->
-        </el-form-item>
-        <el-form-item label="周边配套">
-          <el-input type="textarea" :autosize="{minRows: 2,maxRows: 4}" placeholder="请输入配套情况" v-model="form.configure"></el-input>
-        </el-form-item>
-        <el-form-item label="小区简介">
-          <el-input type="textarea" :autosize="{minRows: 2,maxRows: 4}" placeholder="请输入简介" v-model="form.villageIntroduce"></el-input>
-        </el-form-item>
-      </el-form>
+      <div class="modules scroll_bar">
+        <el-form :model="form" size="mini" label-width="80px">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="省">
+                <el-select v-model="form.province" clearable @change="choose('city')">
+                  <el-option v-for="(item,index) in province" :label="item.province_name"
+                             :value="item.province_id" :key="index"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="市">
+                <el-select v-model="form.city" clearable @change="choose('area')">
+                  <el-option v-for="(item,index) in cityList" :label="item.city_name" :value="item.city_id"
+                             :key="index"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="区/县">
+                <el-select v-model="form.area" clearable @change="choose('region')">
+                  <el-option v-for="(item,index) in areaList" :label="item.area_name" :value="item.area_id"
+                             :key="index"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="区域">
+                <el-select v-model="form.region" clearable>
+                  <el-option v-for="(item,index) in regionList" :label="item.region_name" :value="item.id"
+                             :key="index"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="小区名称">
+                <el-input @focus="openAddress" v-model="form.villageName" placeholder="请选择小区" readonly></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="小区地址">
+                <el-input v-model="form.villageAddress" placeholder="小区地址" :disabled="true"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-form-item label="小区别名">
+            <el-input v-model="form.otherName" placeholder="请输入小区别名"></el-input>
+          </el-form-item>
+
+          <!--<el-col :span="4">-->
+          <!--<div class="amount">-->
+          <!--<i class="el-icon-circle-plus-outline"></i>-->
+          <!--<i class="el-icon-remove-outline"></i>-->
+          <!--</div>-->
+          <!--</el-col>-->
+
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="建筑年限">
+                <el-select v-model="form.built_year" clearable>
+                  <el-option v-for="(key,index) in yearValues" :label="key" :value="key" :key="index"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="房屋类型">
+                <el-select v-model="form.houseType" clearable>
+                  <el-option v-for="(key,index) in houseValues" :label="key" :value="index + 1"
+                             :key="index"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="总栋数">
+                <el-input type="number" v-model="form.allBuilding" placeholder="请输入总栋数"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="物业费">
+                <el-input type="number" v-model="form.propertyFee" placeholder="金333额"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          {{photos.pic_id}}
+          <el-form-item label="小区33333照片">
+            <!--<el-input v-model="form.addressId" :disabled="true"></el-input>-->
+            <Dropzone :id="'addr'" :photo="photos" @finish="photo_success"
+                      @remove="photo_remove"></Dropzone>
+          </el-form-item>
+          <el-form-item label="周边配套">
+            <el-input type="textarea" :autosize="{minRows: 2,maxRows: 4}" placeholder="请输入配套情况"
+                      v-model="form.configure"></el-input>
+          </el-form-item>
+          <el-form-item label="小区简介">
+            <el-input type="textarea" :autosize="{minRows: 2,maxRows: 4}" placeholder="请输入简介"
+                      v-model="form.villageIntroduce"></el-input>
+          </el-form-item>
+        </el-form>
+      </div>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="dialogVisible = false">取&nbsp;消</el-button>
-        <el-button size="small" type="primary" @click="dialogVisible = false">确&nbsp;定</el-button>
+        <el-button size="small" type="primary" @click="villageSave('save')">确&nbsp;定</el-button>
+        <el-button size="small" type="primary" @click="villageSave('update')">修&nbsp;改</el-button>
       </div>
     </el-dialog>
 
@@ -91,60 +126,199 @@
   export default {
     name: "add-village",
     components: {MapSearch, Dropzone},
-    props: ['module'],
+    props: ['module', 'formList', 'province'],
     data() {
       return {
+        photos: {
+          pic_id: [],
+          pic_url: {},
+        },
+        villageId: '',
         mapVisible: false,
         dialogVisible: false,
         form: {
-          city: '',
-          villageName: '',
-          villageAddress: '',
-          otherName: '',
-          markYear: '',
-          houseType: '',
-          allBuilding: '',
-          propertyFee: '',
-          addressId: '',
-          configure: '',
-          villageIntroduce: '',
+          province: '',                 //小区位置
+          city: '',                     //小区位置
+          area: '',                     //小区位置
+          region: '',                   //小区位置
+          villageName: '',              //小区名称
+          villageAddress: '',           //小区地址
+          otherName: '',                //小区别名
+          built_year: '',                 //建筑年限
+          houseType: '',                //房屋类型
+          allBuilding: '',              //总栋数
+          latitude: '',                 //纬度
+          longitude: '',                //经度
+          propertyFee: '',              //物业费
+          addressId: '',                //小区照片
+          configure: '',                //周边配套
+          villageIntroduce: '',         //小区简介
         },
+        cityList: [],
+        areaList: [],
+        regionList: [],
         yearValues: ['1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990'],
         houseValues: ['住宅', '公寓', '酒店公寓', '商住两用', '平方', '别墅', '其他'],
       }
     },
-    mounted() {
-    },
+
     watch: {
+      formList(val) {
+        this.villageId = val.id;
+        this.form.province = val.province;
+        this.$http.get('setting/others/city?city_parent=' + val.province).then((res) => {
+          if (res.data.code === '100050') {
+            this.cityList = res.data.data;
+            this.form.city = val.city;
+          }
+        });
+        this.$http.get('setting/others/area?area_parent=' + val.city).then((res) => {
+          if (res.data.code === '100060') {
+            this.areaList = res.data.data;
+            this.form.area = val.area;
+          }
+        });
+        this.$http.get('setting/others/region?region_parent=' + val.area).then((res) => {
+          if (res.data.code === '100070') {
+            this.regionList = res.data.data;
+            this.form.region = Number(val.region);
+          }
+        });
+        this.form.villageName = val.village_name;
+        this.form.villageAddress = val.address;
+        this.form.otherName = val.village_alias;
+        this.form.latitude = val.latitude;
+        this.form.longitude = val.longitude;
+        this.form.built_year = val.built_year;
+        this.form.houseType = val.house_type;
+        this.form.allBuilding = val.total_buildings;
+        this.form.propertyFee = val.property_fee;
+        this.photos.pic_url = val.album.house_pic;
+        for (let key in val.album.house_pic) {
+          this.photos.pic_id.push(key);
+        }
+        this.form.configure = val.peripheral_info;
+        this.form.villageIntroduce = val.content;
+      },
       module(val) {
         this.dialogVisible = val;
       },
       dialogVisible(val) {
         if (!val) {
           this.$emit('close');
+          document.getElementById('addr').innerHTML = '';
+          this.photos.pic_id = [];
+          this.photos.pic_url = {};
         }
       },
     },
     methods: {
+      // 上传成功
+      photo_success(val) {
+        this.photos.pic_id = val;
+      },
+      // 删除图片
+      photo_remove(val) {
+        this.photos.pic_id = val;
+      },
+      choose(val) {
+        if (val === 'city') {
+          this.$http.get('setting/others/city?city_parent=' + this.form.province).then((res) => {
+            if (res.data.code === '100050') {
+              this.cityList = res.data.data;
+            }
+          })
+        }
+        if (val === 'area') {
+          this.$http.get('setting/others/area?area_parent=' + this.form.city).then((res) => {
+            if (res.data.code === '100060') {
+              this.areaList = res.data.data;
+            }
+          })
+        }
+        if (val === 'region') {
+          this.$http.get('setting/others/region?region_parent=' + this.form.area).then((res) => {
+            if (res.data.code === '100070') {
+              this.regionList = res.data.data;
+            }
+          })
+        }
+      },
       openAddress() {
         this.mapVisible = true;
       },
-      closeAddress() {
+      closeAddress(val) {
+        console.log(val);
+        let lat = val.location.split(',')[0];
+        let long = val.location.split(',')[1];
+        this.form.latitude = lat;
+        this.form.longitude = long;
+        this.form.villageName = val.name;
+        this.form.villageAddress = val.address;
         this.mapVisible = false;
+      },
+      villageSave(addr) {
+        let type, urls;
+        if (addr === 'save') {
+          type = this.$http.post;
+          urls = 'setting/community/save';
+        } else {
+          type = this.$http.put;
+          urls = 'setting/community/update';
+        }
+        type(urls, {
+          id: this.villageId,
+          province: this.form.province,
+          city: this.form.city,
+          area: this.form.area,
+          region: this.form.region,
+          village_name: this.form.villageName,
+          address: this.form.villageAddress,
+          village_alias: this.form.otherName,
+          latitude: this.form.latitude,
+          longitude: this.form.longitude,
+          built_year: this.form.built_year,
+          house_type: this.form.houseType,
+          total_buildings: this.form.allBuilding,
+          property_fee: this.form.propertyFee,
+          house_pic: this.photos.pic_id,
+          peripheral_info: this.form.configure,
+          content: this.form.villageIntroduce,
+        }).then((res) => {
+          if (res.data.code === '10010' || res.data.code === '10030') {
+            this.dialogVisible = false;
+          }
+        })
       }
     },
   }
 </script>
 
-<style scoped lang="scss">
-  .amount {
-    i {
-      cursor: pointer;
-      font-size: 22px;
-      margin: 4px 6px 0;
+<style lang="scss">
+  #villageModule {
+    .el-dialog__wrapper {
+      .el-dialog {
+        .el-dialog__body {
+          padding: 0;
+          .modules {
+            padding: 15px;
+            max-height: 500px;
+            overflow: auto;
+          }
+        }
+      }
     }
-    i:first-of-type {
-      margin-left: 12px;
+    .amount {
+      i {
+        cursor: pointer;
+        font-size: 22px;
+        margin: 4px 6px 0;
+      }
+      i:first-of-type {
+        margin-left: 12px;
+      }
     }
   }
+
+
 </style>

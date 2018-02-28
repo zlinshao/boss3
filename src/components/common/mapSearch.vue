@@ -77,11 +77,11 @@
       FormVisible(val){
         this.mapFormVisible = val
       },
-      mapFormVisible(val){
-        if(!val){
-          this.$emit('close')
-        }
-      },
+      // mapFormVisible(val){
+      //   if(!val){
+      //
+      //   }
+      // },
       selectMember(val){
         if(val.length){
           this.buttonStatus = false
@@ -115,11 +115,11 @@
           this.tableData =[];
           this.chooseCity='';
           this.searchInfo = '';
-          console.log(this.selectedItem)
+          this.$emit('close',this.selectedItem);
+          // console.log(this.selectedItem)
         }
       },
       selectInfo(data){ //单选框选中数据
-        this.selectedItem = [];
         this.selectedItem = data;
       }
     }

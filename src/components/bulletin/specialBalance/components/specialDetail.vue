@@ -99,14 +99,6 @@
             max-height: 520px;
             overflow-x: auto;
           }
-          .form_border{
-            .total{
-              border-top: 1px solid #dfe6fb;
-              padding: 5px;
-              text-align: right;
-            }
-          }
-
         }
       }
     }
