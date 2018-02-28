@@ -4,7 +4,7 @@
       <div class="highSearch">
         <el-form :model="form" :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="小区名称/地址/位置" v-model="form.keyWords" size="mini" clearable>
+            <el-input placeholder="小区名称/地址/位置" v-model="form.keywords" size="mini" clearable>
               <el-button slot="append" icon="el-icon-search"></el-button>
               <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
             </el-input>
@@ -13,7 +13,7 @@
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="openVillage"><i class="el-icon-plus"></i>&nbsp;新增小区</el-button>
+            <el-button type="primary" @click="openVillage('add')"><i class="el-icon-plus"></i>&nbsp;新增小区</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -31,8 +31,7 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.houseType">
-                      <el-option label="请选择" value=""></el-option>
+                    <el-select v-model="form.house_type">
                       <el-option v-for="(key,index) in houseValues" :label="key" :value="index + 1"
                                  :key="index"></el-option>
                     </el-select>
@@ -48,8 +47,7 @@
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-form-item>
-                      <el-select v-model="form.markYears">
-                        <el-option label="请选择" value=""></el-option>
+                      <el-select v-model="form.built_year">
                         <el-option v-for="(key,index) in yearValues" :label="key" :value="index + 1"
                                    :key="index"></el-option>
                       </el-select>
@@ -67,10 +65,9 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.province">
-                      <el-option label="请选择" value=""></el-option>
-                      <el-option v-for="(key,index) in provinceValues" :label="key" :value="index + 1"
-                                 :key="index"></el-option>
+                    <el-select v-model="form.province" clearable @change="choose('city')">
+                      <el-option v-for="(item,index) in provinceList" :label="item.province_name"
+                                 :value="item.province_id" :key="index"></el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
@@ -83,9 +80,8 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.city" clearable>
-                      <el-option label="请选择" value=""></el-option>
-                      <el-option v-for="(key,index) in cityValues" :label="key" :value="index + 1"
+                    <el-select v-model="form.city" clearable @change="choose('area')">
+                      <el-option v-for="(item,index) in cityList" :label="item.city_name" :value="item.city_id"
                                  :key="index"></el-option>
                     </el-select>
                   </el-form-item>
@@ -101,9 +97,8 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.county" clearable>
-                      <el-option label="请选择" value=""></el-option>
-                      <el-option v-for="(key,index) in countyValues" :label="key" :value="index + 1"
+                    <el-select v-model="form.area" clearable @change="choose('region')">
+                      <el-option v-for="(item,index) in areaList" :label="item.area_name" :value="item.area_id"
                                  :key="index"></el-option>
                     </el-select>
                   </el-form-item>
@@ -117,9 +112,8 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.area" clearable>
-                      <el-option label="请选择" value=""></el-option>
-                      <el-option v-for="(key,index) in areaValues" :label="key" :value="index + 1"
+                    <el-select v-model="form.region" clearable>
+                      <el-option v-for="(item,index) in regionList" :label="item.region_name" :value="item.id"
                                  :key="index"></el-option>
                     </el-select>
                   </el-form-item>
@@ -128,7 +122,8 @@
             </el-col>
           </el-row>
           <div class="btnOperate">
-            <el-button size="mini" type="primary">搜索</el-button>
+
+            <el-button size="mini" type="primary" @click="myData(1)">搜索</el-button>
             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
             <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
           </div>
@@ -139,7 +134,8 @@
     <el-table
       :data="tableData"
       style="width: 100%;"
-      @row-contextmenu='houseMenu'>
+      @row-contextmenu='houseMenu'
+      @row-dblclick='dblMenu'>
       <el-table-column
         prop="village_name"
         label="小区名称">
@@ -180,7 +176,8 @@
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
 
-    <VillageModule :module="addVisible" @close="closeVillage" ></VillageModule>
+    <VillageModule :module="addVisible" @close="closeVillage" :formList="formList"
+                   :province="provinceList"></VillageModule>
   </div>
 </template>
 
@@ -198,6 +195,7 @@
         show: false,
         lists: [],
 
+        provinceList: [],
         pitch: '',
         formList: {},
         currentPage: 1,
@@ -206,13 +204,14 @@
         isHigh: false,
         addVisible: false,
         form: {
-          houseType: '',
-          markYears: '',
+          pages: 1,
+          house_type: '',
+          built_year: '',
+          keywords: '',
           province: '',
           city: '',
-          county: '',
           area: '',
-          keyWords: '',
+          region: '',
         },
         houseValues: ['住宅', '公寓', '酒店公寓', '商住两用', '平方', '别墅', '其他'],
         yearValues: ['1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990'],
@@ -221,24 +220,70 @@
         countyValues: ['下沙区', '鼓楼区'],
         areaValues: ['高沙', '鼓楼'],
 
-        tableData: []
+        tableData: [],
+
+        cityList: [],
+        areaList: [],
+        regionList: [],
       }
     },
     mounted() {
       this.myData(1);
+      this.$http.get('setting/others/province').then((res) => {
+        this.provinceList = res.data.data;
+      });
     },
     methods: {
-      myData(page) {
-        this.$http.get('setting/community/?pages=' + page).then((res) => {
+      myData(val) {
+        this.form.pages = val;
+        this.$http.get('setting/community/', {
+          params: this.form,
+        }).then((res) => {
           if (res.data.code === '10000') {
             this.tableData = res.data.data.list;
             this.paging = res.data.data.count;
           }
         })
       },
+
+      choose(val) {
+        if (val === 'city') {
+          this.$http.get('setting/others/city?city_parent=' + this.form.province).then((res) => {
+            if (res.data.code === '100050') {
+              this.cityList = res.data.data;
+            }
+          })
+        }
+        if (val === 'area') {
+          this.$http.get('setting/others/area?area_parent=' + this.form.city).then((res) => {
+            if (res.data.code === '100060') {
+              this.areaList = res.data.data;
+            }
+          })
+        }
+        if (val === 'region') {
+          this.$http.get('setting/others/region?region_parent=' + this.form.area).then((res) => {
+            if (res.data.code === '100070') {
+              this.regionList = res.data.data;
+            }
+          })
+        }
+      },
+      // 搜索
+      search() {
+
+      },
       // 重置
       resetting() {
+        this.form.pages = 1;
+        this.form.house_type = '';
+        this.form.built_year = '';
         this.form.keywords = '';
+        this.form.province = '';
+        this.form.city = '';
+        this.form.area = '';
+        this.form.region = '';
+        this.myData(1);
       },
       // 高级筛选
       highGrade() {
@@ -253,15 +298,25 @@
         this.currentPage = val;
         this.myData(val);
       },
-      openVillage() {
-        this.$http('setting/community/' + this.pitch).then((res) => {
-          if (res.data.code === '10020') {
-            this.addVisible = true;
-          }
-        });
+      openVillage(val) {
+        this.addVisible = true;
+        if (val === 'revise') {
+          this.$http('setting/community/' + this.pitch).then((res) => {
+            if (res.data.code === '10020') {
+              this.formList = res.data.data;
+            }
+          });
+        }
+        if (val === 'add') {
+
+        }
       },
       closeVillage() {
         this.addVisible = false;
+      },
+      // 双击
+      dblMenu(row) {
+        this.$router.push({path: '/villageManage/villageDetail', query: {ids: row.id}});
       },
       // 右键
       houseMenu(row, event) {
@@ -275,10 +330,9 @@
       // 右键回调
       clickEvent(val) {
         if (val === 'delete') {
-          console.log(val);
           this.openDelete();
         } else {
-          this.openVillage();
+          this.openVillage('revise');
         }
       },
       //关闭右键菜单
@@ -304,10 +358,21 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
+          this.$http.get('setting/community/delete/' + this.pitch).then((res) => {
+            if(res.data.code === '10040'){
+              this.$message({
+                type: 'success',
+                message: res.data.msg + '!'
+              });
+              this.myData(this.form.pages);
+            }else{
+              this.$message({
+                type: 'error',
+                message: res.data.msg + '!'
+              });
+            }
           });
+
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -321,5 +386,8 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-
+  #container {
+    width: 100%;
+    height: 400px;
+  }
 </style>
