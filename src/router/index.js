@@ -50,6 +50,7 @@ import IncomeFlow from '../components/finance/incomeFlow/index'                 
 import PeriodicTable from '../components/meritPay/periodicTable/index'
 import Achievement from '../components/meritPay/achievement/index'
 import PersonalSalary from '../components/meritPay/personalSalary/index'
+import Counter from '../components/meritPay/counter/index'                            //业绩计算器
 
 
 //租赁管理
@@ -208,6 +209,7 @@ export default new Router({
         {path: '/periodicTable', component: PeriodicTable, name: '周期表',},
         {path: '/achievement', component: Achievement, name: '业绩',},
         {path: '/personalSalary', component: PersonalSalary, name: '工资',},
+        {path: '/counter', component: Counter, name: '业绩计算器',},
       ]
     },
 
