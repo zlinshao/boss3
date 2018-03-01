@@ -51,28 +51,28 @@
       width="100%"
       @row-contextmenu="collectMenu">
       <el-table-column
-        label="名称"
-        prop="id">
+        label="姓名"
+        prop="name">
       </el-table-column>
       <el-table-column
-        label="收房(套)"
-        prop="describe">
+        label="联系电话"
+        prop="mobile">
       </el-table-column>
       <el-table-column
-        label="租房(套)"
-        prop="module">
+        label="房屋所在城市"
+        prop="city">
       </el-table-column>
       <el-table-column
-        label="实际业绩"
-        prop="module">
+        label="小区名称"
+        prop="community">
       </el-table-column>
       <el-table-column
-        label="溢出业绩"
-        prop="module">
+        label="其他情况"
+        prop="others">
       </el-table-column>
       <el-table-column
-        label="所属部门"
-        prop="module">
+        label="是否回访"
+        prop="status">
       </el-table-column>
       <el-table-column
         label="备注"
@@ -85,10 +85,9 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[20, 100, 200, 300, 400]"
         :page-size="20"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="400">
+        layout="total, prev, pager, next, jumper"
+        :total="totalNumber">
       </el-pagination>
     </div>
     <!--右键-->
@@ -120,79 +119,33 @@
           selects: '',
           dates: '',
         },
-        pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-          }]
+
+        tableData: [],
+        params:{
+          limit:12,
+          page:1
         },
-        tableData: [
-          {
-            id: 1,
-            describe: '1发发的挥到',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Mange333r',
-          },
-          {
-            id: 1,
-            describe: '1发发的挥到',
-            module: '1Mangejjr',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 1,
-            describe: '1发发的挥到',
-            module: '1Mangejjr',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          },
-        ],
+        pages: 1,
+        totalNumber : 0,
+        isLoading : true,
       }
     },
     mounted() {
+        this.getTableData();
     },
     watch: {},
     methods: {
+      getTableData(){
+        this.$http.get('/wechat/collect',{params:this.params}).then((res) => {
+          if(res.data.code === '10010'){
+            this.tableData = res.data.data;
+            this.pages = res.data.pages;
+            this.totalNumber = res.data.number;
+            this.isLoading = false;
+          }
+        })
+      },
+
       // 重置
       resetting() {
         this.form.keywords = '';
