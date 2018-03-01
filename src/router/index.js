@@ -18,7 +18,8 @@ import MessageList from '../components/systemSetting/message/messageList.vue'   
 import MessageModule from '../components/systemSetting/message/messageModule.vue'     //短信
 import RoleManage from '../components/systemSetting/roleManage/index.vue'
 import PowerManage from '../components/systemSetting/powerManage/index.vue'
-import VillageManage from '../components/systemSetting/villageManage/index.vue'
+import VillageManage from '../components/systemSetting/villageManage/index.vue'             //小区管理
+import VillageDetail from '../components/systemSetting/villageManage/villageDetail.vue'     //小区管理详情
 import ExportManage from '../components/systemSetting/exportManage/index.vue'
 
 //喜报管理
@@ -88,6 +89,7 @@ import PublicArticle from '../components/OAWork/portals/components/publicArticle
 import StaffManage from '../components/humanResource/staffManage/index.vue'
 // import Organization from '../components/humanResource/organization/index.vue'
 // import Achievement from '../components/humanResource/achievement/index.vue'
+import IntegralManage from '../components/humanResource/integralManage/index.vue'
 
 import RentingDetail from '../components/rentManage/rentingDetail.vue'
 
@@ -144,6 +146,16 @@ export default new Router({
         {path: '/deliver', component: Deliver, name: 'TEST_2'},
         {path: '/throwALease', component: throwALease, name: 'TEST_3'},
         {path: '/publicArticle', component: PublicArticle, name: '文章发布'},
+      ]
+    },
+    // 详情路由
+    {
+      path: '/',
+      component: Index,
+      name: '',
+      abnormal: true,
+      children: [
+        {path: '/villageManage/villageDetail', type: false, component: VillageDetail, name: '小区管理详情'},
       ]
     },
 
@@ -234,6 +246,7 @@ export default new Router({
       icon: 'el-icons-fa-sitemap',
       children: [
         {path: '/staffManage', component: StaffManage, name: '用户管理',},
+        {path: '/integralManage', component: IntegralManage, name: '积分管理',},
         // {path: '/organization', component: Organization, name: '组织架构',},
         // {path: '/achievement', component: Achievement, name: '业绩工资',},
       ]

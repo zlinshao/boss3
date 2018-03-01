@@ -74,33 +74,51 @@
       width="100%"
       @row-contextmenu="collectMenu">
       <el-table-column
-        label="名称"
-        prop="id">
+        label="合同编号"
+        prop="contract_id">
       </el-table-column>
       <el-table-column
-        label="收房(套)"
-        prop="describe">
+        label="房屋地址"
+        prop="address">
       </el-table-column>
       <el-table-column
-        label="租房(套)"
-        prop="module">
+        label="姓名"
+        prop="name">
       </el-table-column>
       <el-table-column
-        label="实际业绩"
-        prop="module">
+        label="联系电话"
+        prop="mobile">
       </el-table-column>
       <el-table-column
-        label="溢出业绩"
-        prop="module">
+        label="客户身份"
+        prop="identity">
       </el-table-column>
       <el-table-column
-        label="所属部门"
-        prop="module">
+        label="报销类别"
+        prop="reim_category">
       </el-table-column>
+      <el-table-column
+        label="报销金额"
+        prop="amount">
+      </el-table-column>
+      <el-table-column
+        label="银行卡号"
+        prop="account">
+      </el-table-column>
+      <el-table-column
+        label="开户行"
+        prop="bank">
+      </el-table-column>
+      <el-table-column
+        label="账户名"
+        prop="account_name">
+      </el-table-column>
+
       <el-table-column
         label="备注"
-        prop="module">
+        prop="remark">
       </el-table-column>
+
     </el-table>
 
     <div class="block pages">
@@ -108,10 +126,9 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[20, 100, 200, 300, 400]"
-        :page-size="20"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="400">
+        :page-size="12"
+        layout="total, prev, pager, next, jumper"
+        :total="totalNumber">
       </el-pagination>
     </div>
 
@@ -172,52 +189,33 @@
             }
           }]
         },
-        tableData: [
-          {
-            id: 1,
-            describe: '1发发的挥到',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Mange333r',
-          },
-          {
-            id: 1,
-            describe: '1发发的挥到',
-            module: '1Mangejjr',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 1,
-            describe: '1发发的挥到',
-            module: '1Mangejjr',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          },
-        ],
+        tableData: [],
+        params:{
+          limit:12,
+          page:1
+        },
+        pages: 1,
+        totalNumber : 0,
+        isLoading : true,
       }
     },
     mounted() {
+      this.getTableData();
     },
     watch: {},
     methods: {
+
+      getTableData(){
+        this.$http.get('/wechat/reimbursement',{params:this.params}).then((res) => {
+          if(res.data.code === '10010'){
+            this.tableData = res.data.data;
+            this.pages = res.data.pages;
+            this.totalNumber = res.data.number;
+            this.isLoading = false;
+          }
+        })
+      },
+
       // 重置
       resetting() {
         this.form.keywords = '';

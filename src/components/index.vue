@@ -718,10 +718,12 @@
           .el-menu-vertical-demo:not(.el-menu--collapse) {
             width: 210px;
             min-height: 100%;
+            padding-bottom: 70px;
           }
         }
         .el-main {
           margin-top: 66px;
+          min-height: 500px;
           padding: 10px 20px;
           margin-left: 210px;
           overflow-x: hidden;
