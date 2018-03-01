@@ -49,7 +49,7 @@
                   <el-form-item>
                     <el-form-item>
                       <el-select v-model="form.built_year">
-                        <el-option v-for="(key,index) in yearValues" :label="key" :value="index + 1"
+                        <el-option v-for="(key,index) in 51" :label="key + 1969" :value="index + 1969"
                                    :key="index"></el-option>
                       </el-select>
                     </el-form-item>
@@ -216,7 +216,6 @@
         },
         tableData: [],
 
-        yearValues: ['1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990'],
         provinceList: [],
         cityList: [],
         areaList: [],
@@ -230,14 +229,14 @@
           let term = this.$route.query.term;
           this.form = term;
           this.myData(term.pages);
-          if(term.province !== ''){
-            this.chooseList('city',term.province);
+          if (term.province !== '') {
+            this.chooseList('city', term.province);
           }
-          if(term.city !== ''){
-            this.chooseList('area',term.city);
+          if (term.city !== '') {
+            this.chooseList('area', term.city);
           }
-          if(term.area !== ''){
-            this.chooseList('region',term.area);
+          if (term.area !== '') {
+            this.chooseList('region', term.area);
           }
         } else {
           this.myData(1);
@@ -264,25 +263,25 @@
         })
       },
 
-      choose(val,id) {
+      choose(val, id) {
         if (val === 'city') {
           this.form.city = '';
           this.form.area = '';
           this.form.region = '';
-          this.chooseList(val,id);
+          this.chooseList(val, id);
         }
         if (val === 'area') {
           this.form.area = '';
           this.form.region = '';
-          this.chooseList(val,id);
+          this.chooseList(val, id);
         }
         if (val === 'region') {
           this.form.region = '';
-          this.chooseList(val,id);
+          this.chooseList(val, id);
         }
       },
 
-      chooseList(val,id) {
+      chooseList(val, id) {
         if (val === 'city') {
           this.$http.get('setting/others/city?city_parent=' + id).then((res) => {
             if (res.data.code === '100050') {
@@ -331,7 +330,6 @@
       // },
       openVillage(val) {
         this.addVisible = true;
-
         if (val === 'revise') {
           this.$http('setting/community/' + this.pitch).then((res) => {
             if (res.data.code === '10020') {
@@ -341,7 +339,7 @@
           });
         }
         if (val === 'add') {
-
+          this.formList.status = val;
         }
       },
       closeVillage() {
