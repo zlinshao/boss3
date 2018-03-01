@@ -67,7 +67,8 @@
             <el-col :span="12">
               <el-form-item label="建筑年限">
                 <el-select v-model="form.built_year" clearable>
-                  <el-option v-for="(key,index) in yearValues" :label="key" :value="key" :key="index"></el-option>
+                  <el-option v-for="(key,index) in 51" :label="key + 1969" :value="index + 1969"
+                             :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
