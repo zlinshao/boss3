@@ -74,30 +74,34 @@
       width="100%"
       @row-contextmenu="collectMenu">
       <el-table-column
-        label="名称"
-        prop="id">
+        label="姓名"
+        prop="name">
       </el-table-column>
       <el-table-column
-        label="收房(套)"
-        prop="describe">
+        label="联系电话"
+        prop="mobile">
       </el-table-column>
       <el-table-column
-        label="租房(套)"
-        prop="module">
+        label="期望房屋所在城市"
+        prop="city">
       </el-table-column>
       <el-table-column
-        label="实际业绩"
-        prop="module">
+        label="期望所在区域"
+        prop="domain">
       </el-table-column>
       <el-table-column
-        label="溢出业绩"
-        prop="module">
+        label="期望月单价"
+        prop="unit_price">
       </el-table-column>
       <el-table-column
-        label="是否回访">
+        label="其他情况">
         <template slot-scope="scope">
-          <el-button type="text" size="mini" @click="returnVisit (scope.row.module)">{{scope.row.module}}</el-button>
+          <el-button type="text" size="mini" @click="returnVisit (scope.row.id)">{{scope.row.other}}</el-button>
         </template>
+      </el-table-column>
+      <el-table-column
+        label="是否回访"
+        prop="state">
       </el-table-column>
       <el-table-column
         label="备注"
@@ -110,10 +114,9 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[20, 100, 200, 300, 400]"
         :page-size="20"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="400">
+        layout="total, prev, pager, next, jumper"
+        :total="totalNumber">
       </el-pagination>
     </div>
     <!--右键-->
@@ -172,52 +175,39 @@
             }
           }]
         },
-        tableData: [
-          {
-            id: 1,
-            describe: '1发发的挥到',
-            module: '已回访',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '未回访',
-          },
-          {
-            id: 1,
-            describe: '1发发的挥到',
-            module: '1Mangejjr',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 1,
-            describe: '1发发的挥到',
-            module: '1Mangejjr',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          },
-        ],
+        tableData: [],
+        params:{
+          limit:12,
+          page:1
+        },
+        pages: 1,
+        totalNumber : 0,
+        isLoading : true,
+        menuId:'',
       }
     },
     mounted() {
+      this.getTableData();
     },
     watch: {},
     methods: {
+
+      getTableData(){
+        this.$http.get('/wechat/rent',{params:this.params}).then((res) => {
+          if(res.data.code === '10010'){
+            this.tableData = res.data.data;
+            this.pages = res.data.pages;
+            this.totalNumber = res.data.number;
+            this.isLoading = false;
+          }
+        })
+      },
+
+      upDateState(id){
+          this.$http.put('/wechat/collect?id'+menuId).then((res) => {
+              console.log(res)
+          })
+      },
       // 是否回访
       returnVisit(row) {
         console.log(row);
@@ -232,6 +222,7 @@
       },
       // 右键
       collectMenu(row, event) {
+        this.menuId = row.id;
         this.lists = [
           {clickIndex: 'remark', headIcon: 'el-icon-edit', label: '备注',},
         ];

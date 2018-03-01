@@ -74,32 +74,36 @@
       width="100%"
       @row-contextmenu="collectMenu">
       <el-table-column
-        label="名称"
+        label="部门"
         prop="id">
       </el-table-column>
       <el-table-column
-        label="收房(套)"
+        label="房屋地址"
         prop="describe">
       </el-table-column>
       <el-table-column
-        label="租房(套)"
-        prop="module">
+        label="问题类型"
+        prop="category">
       </el-table-column>
       <el-table-column
-        label="实际业绩"
-        prop="module">
+        label="投诉详情"
+        prop="complaint">
       </el-table-column>
       <el-table-column
-        label="溢出业绩"
-        prop="module">
+        label="邮箱"
+        prop="email">
       </el-table-column>
       <el-table-column
-        label="所属部门"
-        prop="module">
+        label="其他联系方式"
+        prop="others">
       </el-table-column>
       <el-table-column
-        label="备注"
-        prop="module">
+        label="投诉时间"
+        prop="create_time">
+      </el-table-column>
+      <el-table-column
+        label="回复"
+        prop="reply">
       </el-table-column>
     </el-table>
 
@@ -108,23 +112,22 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[20, 100, 200, 300, 400]"
-        :page-size="20"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="400">
+        :page-size="12"
+        layout="total, prev, pager, next, jumper"
+        :total="totalNumber">
       </el-pagination>
     </div>
 
     <el-dialog title="投诉处理" :visible.sync="reversionVisible" width="30%">
-        <el-form :model="form" size="mini" label-width="80px">
+        <el-form size="mini" label-width="80px">
           <el-form-item label="回复：">
-            <el-input type="textarea" v-model="form.contents" :autosize="{minRows: 2,maxRows: 4}"></el-input>
+            <el-input type="textarea" v-model="replyContent" :autosize="{minRows: 2,maxRows: 4}"></el-input>
           </el-form-item>
         </el-form>
 
         <div slot="footer" class="dialog-footer">
           <el-button size="small" @click="reversionVisible = false">取&nbsp;消</el-button>
-          <el-button size="small" type="primary" @click="reversionVisible = false">确&nbsp;定</el-button>
+          <el-button size="small" type="primary" @click="confirmAdd">确&nbsp;定</el-button>
         </div>
     </el-dialog>
 
@@ -152,9 +155,10 @@
         form: {
           keyWords: '',
           selects: '',
-          dates: '',
-          contents: '',  //回复
+          dates: ''
         },
+
+        replyContent : '',    //回复内容
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -182,52 +186,34 @@
             }
           }]
         },
-        tableData: [
-          {
-            id: 1,
-            describe: '1发发的挥到',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Mange333r',
-          },
-          {
-            id: 1,
-            describe: '1发发的挥到',
-            module: '1Mangejjr',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 1,
-            describe: '1发发的挥到',
-            module: '1Mangejjr',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          },
-        ],
+        tableData: [],
+        params:{
+          limit:12,
+          page:1
+        },
+        pages: 1,
+        totalNumber : 0,
+        isLoading : true,
+        menuId:'',
       }
     },
     mounted() {
+      this.getTableData();
     },
     watch: {},
     methods: {
+
+      getTableData(){
+        this.$http.get('/wechat/complaint',{params:this.params}).then((res) => {
+          if(res.data.code === '10010'){
+            this.tableData = res.data.data;
+            this.pages = res.data.pages;
+            this.totalNumber = res.data.number;
+            this.isLoading = false;
+          }
+        })
+      },
+
       // 重置
       resetting() {
         this.form.keywords = '';
@@ -238,6 +224,7 @@
       },
       // 右键
       collectMenu(row, event) {
+        this.menuId = row.id;
         this.lists = [
           {clickIndex: 'reversion', headIcon: 'el-icon-edit', label: '回复',},
         ];
@@ -277,6 +264,16 @@
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
+      },
+
+      //确定
+      confirmAdd(){
+          this.reversionVisible = false;
+          this.$http.put('/wechat/complaint/'+this.menuId,{reply:this.replyContent}).then((res) => {
+              if(res.data.code === '10010'){
+                  this.getTableData();
+              }
+          })
       },
     },
   }

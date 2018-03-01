@@ -1,104 +1,19 @@
 <template>
-  <div>
-    <!--<div class="highRanking">-->
-      <!--<div class="highSearch">-->
-        <!--<el-form :inline="true" size="mini">-->
-          <!--<el-form-item>-->
-            <!--<el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" clearable>-->
-              <!--<el-button slot="append" icon="el-icon-search"></el-button>-->
-              <!--&lt;!&ndash;<el-button slot="append" icon="el-icons-fa-bars"></el-button>&ndash;&gt;-->
-            <!--</el-input>-->
-          <!--</el-form-item>-->
-          <!--<el-form-item>-->
-            <!--<el-button type="primary" size="mini" @click="highGrade">高级</el-button>-->
-          <!--</el-form-item>-->
-        <!--</el-form>-->
-      <!--</div>-->
-
-      <!--<div class="filter high_grade" :class="isHigh? 'highHide':''">-->
-        <!--<el-form :inline="true" :model="form" size="mini" label-width="100px">-->
-          <!--<div class="filterTitle">-->
-            <!--<i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索-->
-          <!--</div>-->
-          <!--<el-row class="el_row_border">-->
-            <!--<el-col :span="12">-->
-              <!--<el-row>-->
-                <!--<el-col :span="8">-->
-                  <!--<div class="el_col_label">日期</div>-->
-                <!--</el-col>-->
-                <!--<el-col :span="16" class="el_col_option">-->
-                  <!--<el-form-item>-->
-                    <!--<div class="block">-->
-                      <!--<el-date-picker-->
-                        <!--v-model="form.dates"-->
-                        <!--type="daterange"-->
-                        <!--align="right"-->
-                        <!--unlink-panels-->
-                        <!--range-separator="至"-->
-                        <!--start-placeholder="开始日期"-->
-                        <!--end-placeholder="结束日期"-->
-                        <!--:picker-options="pickerOptions">-->
-                      <!--</el-date-picker>-->
-                    <!--</div>-->
-                  <!--</el-form-item>-->
-                <!--</el-col>-->
-              <!--</el-row>-->
-            <!--</el-col>-->
-            <!--<el-col :span="12">-->
-              <!--<el-row>-->
-                <!--<el-col :span="8">-->
-                  <!--<div class="el_col_label">报销类别</div>-->
-                <!--</el-col>-->
-                <!--<el-col :span="16" class="el_col_option">-->
-                  <!--<el-form-item>-->
-                    <!--<el-select v-model="form.selects">-->
-                      <!--<el-option label="ffffff" value="1"></el-option>-->
-                      <!--<el-option label="dddddd" value="2"></el-option>-->
-                    <!--</el-select>-->
-                  <!--</el-form-item>-->
-                <!--</el-col>-->
-              <!--</el-row>-->
-            <!--</el-col>-->
-          <!--</el-row>-->
-          <!--<div class="btnOperate">-->
-            <!--<el-button size="mini" type="primary">搜索</el-button>-->
-            <!--<el-button size="mini" type="primary" @click="resetting">重置</el-button>-->
-            <!--<el-button size="mini" type="primary" @click="highGrade">取消</el-button>-->
-          <!--</div>-->
-        <!--</el-form>-->
-      <!--</div>-->
-    <!--</div>-->
-
+  <div v-loading = isLoading>
     <el-table
       :data="tableData"
       width="100%">
       <el-table-column
-        label="名称"
-        prop="id">
+        label="回馈内容"
+        prop="advice">
       </el-table-column>
       <el-table-column
-        label="收房(套)"
-        prop="describe">
+        label="回访方式"
+        prop="reply_method">
       </el-table-column>
       <el-table-column
-        label="租房(套)"
-        prop="module">
-      </el-table-column>
-      <el-table-column
-        label="实际业绩"
-        prop="module">
-      </el-table-column>
-      <el-table-column
-        label="溢出业绩"
-        prop="module">
-      </el-table-column>
-      <el-table-column
-        label="所属部门"
-        prop="module">
-      </el-table-column>
-      <el-table-column
-        label="备注"
-        prop="module">
+        label="联系方式"
+        prop="others">
       </el-table-column>
     </el-table>
 
@@ -106,11 +21,10 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[20, 100, 200, 300, 400]"
-        :page-size="20"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="400">
+        :current-page="params.page"
+        :page-size="12"
+        layout="total, prev, pager, next, jumper"
+        :total="totalNumber">
       </el-pagination>
     </div>
   </div>
@@ -121,93 +35,33 @@
     name: "index",
     data() {
       return {
-        currentPage: 1,
         isHigh: false,
-        form: {
-          keyWords: '',
-          selects: '',
-          dates: '',
+        params:{
+          limit:12,
+          page:1
         },
-        pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-          }]
-        },
-        tableData: [
-          {
-            id: 1,
-            describe: '1发发的挥到',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Mange333r',
-          },
-          {
-            id: 1,
-            describe: '1发发的挥到',
-            module: '1Mangejjr',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 1,
-            describe: '1发发的挥到',
-            module: '1Mangejjr',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '2放大范德萨',
-            module: '1Manger',
-          },
-        ],
+        tableData: [],
+        pages: 1,
+        totalNumber : 0,
+        isLoading : true,
       }
     },
     mounted() {
+      this.getTableData();
     },
-    watch: {},
+    watch: {
+
+    },
     methods: {
-      // 重置
-      resetting() {
-        this.form.keywords = '';
-      },
-      // 高级筛选
-      highGrade() {
-        this.isHigh = !this.isHigh;
+      getTableData(){
+        this.$http.get('/wechat/advice',{params:this.params}).then((res) => {
+            if(res.data.code === '10010'){
+                this.tableData = res.data.data;
+                this.pages = res.data.pages;
+                this.totalNumber = res.data.number;
+                this.isLoading = false;
+            }
+        })
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
