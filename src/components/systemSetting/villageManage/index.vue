@@ -4,7 +4,8 @@
       <div class="highSearch">
         <el-form :model="form" :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="小区名称/地址/位置" v-model="form.keywords" @keyup.enter.native="myData(1)" size="mini" clearable>
+            <el-input placeholder="小区名称/地址/位置" v-model="form.keywords" @keyup.enter.native="myData(1)" size="mini"
+                      clearable>
               <el-button slot="append" icon="el-icon-search" @click="myData(1)"></el-button>
               <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
             </el-input>
@@ -165,7 +166,7 @@
     <div class="block pages">
       <el-pagination
         @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
+        @current-change="myData"
         :current-page="currentPage"
         :page-size="12"
         layout="total, prev, pager, next, jumper"
@@ -196,7 +197,6 @@
         lists: [],
 
         dict: [],
-        provinceList: [],
         pitch: '',
         formList: {},
         currentPage: 1,
@@ -214,15 +214,10 @@
           area: '',
           region: '',
         },
-        houseValues: ['住宅', '公寓', '酒店公寓', '商住两用', '平方', '别墅', '其他'],
-        yearValues: ['1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990'],
-        provinceValues: ['江苏省', '浙江省'],
-        cityValues: ['南京', '杭州'],
-        countyValues: ['下沙区', '鼓楼区'],
-        areaValues: ['高沙', '鼓楼'],
-
         tableData: [],
 
+        yearValues: ['1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990'],
+        provinceList: [],
         cityList: [],
         areaList: [],
         regionList: [],
@@ -231,7 +226,12 @@
     mounted() {
       this.$http.get('setting/dictionary/11').then((res) => {
         this.dict = res.data.data;
-        this.myData(1);
+        if (this.$route.query.status === 1) {
+          this.form = this.$route.query.term;
+          this.myData(this.$route.query.term.pages);
+        } else {
+          this.myData(1);
+        }
       });
       this.$http.get('setting/others/province').then((res) => {
         this.provinceList = res.data.data;
@@ -240,14 +240,16 @@
     methods: {
       myData(val) {
         this.tableData = [];
-        this.paging = 0;
         this.form.pages = val;
         this.$http.get('setting/community/', {
           params: this.form,
         }).then((res) => {
           if (res.data.code === '10000') {
+            this.currentPage = val;
             this.tableData = res.data.data.list;
             this.paging = res.data.data.count;
+          } else {
+            this.paging = 0;
           }
         })
       },
@@ -275,10 +277,6 @@
           })
         }
       },
-      // 搜索
-      search() {
-
-      },
       // 重置
       resetting() {
         this.form.pages = 1;
@@ -299,11 +297,9 @@
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-        this.currentPage = val;
-        this.myData(val);
-      },
+      // handleCurrentChange(val) {
+      //   console.log(`当前页: ${val}`);
+      // },
       openVillage(val) {
         this.addVisible = true;
         if (val === 'revise') {
@@ -322,7 +318,7 @@
       },
       // 双击
       dblMenu(row) {
-        this.$router.push({path: '/villageManage/villageDetail', query: {ids: row.id}});
+        this.$router.push({path: '/villageManage/villageDetail', query: {ids: row.id, term: this.form}});
       },
       // 右键
       houseMenu(row, event) {
@@ -365,13 +361,13 @@
           type: 'warning'
         }).then(() => {
           this.$http.get('setting/community/delete/' + this.pitch).then((res) => {
-            if(res.data.code === '10040'){
+            if (res.data.code === '10040') {
               this.$message({
                 type: 'success',
                 message: res.data.msg + '!'
               });
               this.myData(this.form.pages);
-            }else{
+            } else {
               this.$message({
                 type: 'error',
                 message: res.data.msg + '!'

@@ -718,6 +718,7 @@
           .el-menu-vertical-demo:not(.el-menu--collapse) {
             width: 210px;
             min-height: 100%;
+            padding-bottom: 70px;
           }
         }
         .el-main {
