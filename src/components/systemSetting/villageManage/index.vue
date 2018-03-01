@@ -66,7 +66,7 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.province" clearable @change="choose('city')">
+                    <el-select v-model="form.province" clearable @change="choose('city',form.province)">
                       <el-option v-for="(item,index) in provinceList" :label="item.province_name"
                                  :value="item.province_id" :key="index"></el-option>
                     </el-select>
@@ -81,7 +81,7 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.city" clearable @change="choose('area')">
+                    <el-select v-model="form.city" clearable @change="choose('area',form.city)">
                       <el-option v-for="(item,index) in cityList" :label="item.city_name" :value="item.city_id"
                                  :key="index"></el-option>
                     </el-select>
@@ -98,7 +98,7 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.area" clearable @change="choose('region')">
+                    <el-select v-model="form.area" clearable @change="choose('region',form.area)">
                       <el-option v-for="(item,index) in areaList" :label="item.area_name" :value="item.area_id"
                                  :key="index"></el-option>
                     </el-select>
@@ -227,8 +227,18 @@
       this.$http.get('setting/dictionary/11').then((res) => {
         this.dict = res.data.data;
         if (this.$route.query.status === 1) {
-          this.form = this.$route.query.term;
-          this.myData(this.$route.query.term.pages);
+          let term = this.$route.query.term;
+          this.form = term;
+          this.myData(term.pages);
+          if(term.province !== ''){
+            this.chooseList('city',term.province);
+          }
+          if(term.city !== ''){
+            this.chooseList('area',term.city);
+          }
+          if(term.area !== ''){
+            this.chooseList('region',term.area);
+          }
         } else {
           this.myData(1);
         }
@@ -254,29 +264,48 @@
         })
       },
 
-      choose(val) {
+      choose(val,id) {
         if (val === 'city') {
-          this.$http.get('setting/others/city?city_parent=' + this.form.province).then((res) => {
+          this.form.city = '';
+          this.form.area = '';
+          this.form.region = '';
+          this.chooseList(val,id);
+        }
+        if (val === 'area') {
+          this.form.area = '';
+          this.form.region = '';
+          this.chooseList(val,id);
+        }
+        if (val === 'region') {
+          this.form.region = '';
+          this.chooseList(val,id);
+        }
+      },
+
+      chooseList(val,id) {
+        if (val === 'city') {
+          this.$http.get('setting/others/city?city_parent=' + id).then((res) => {
             if (res.data.code === '100050') {
               this.cityList = res.data.data;
             }
           })
         }
         if (val === 'area') {
-          this.$http.get('setting/others/area?area_parent=' + this.form.city).then((res) => {
+          this.$http.get('setting/others/area?area_parent=' + id).then((res) => {
             if (res.data.code === '100060') {
               this.areaList = res.data.data;
             }
           })
         }
         if (val === 'region') {
-          this.$http.get('setting/others/region?region_parent=' + this.form.area).then((res) => {
+          this.$http.get('setting/others/region?region_parent=' + id).then((res) => {
             if (res.data.code === '100070') {
               this.regionList = res.data.data;
             }
           })
         }
       },
+
       // 重置
       resetting() {
         this.form.pages = 1;
@@ -302,10 +331,12 @@
       // },
       openVillage(val) {
         this.addVisible = true;
+
         if (val === 'revise') {
           this.$http('setting/community/' + this.pitch).then((res) => {
             if (res.data.code === '10020') {
               this.formList = res.data.data;
+              this.formList.status = val;
             }
           });
         }
