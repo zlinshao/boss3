@@ -74,7 +74,7 @@
             <el-col :span="12">
               <el-form-item label="房屋类型">
                 <el-select v-model="form.houseType" clearable>
-                  <el-option v-for="(key,index) in houseValues" :label="key" :value="index + 1"
+                  <el-option v-for="(key,index) in dict" :label="key.dictionary_name" :value="key.id"
                              :key="index"></el-option>
                 </el-select>
               </el-form-item>
@@ -93,7 +93,7 @@
             </el-col>
           </el-row>
           {{photos.pic_id}}
-          <el-form-item label="小区33333照片">
+          <el-form-item label="小区照片">
             <!--<el-input v-model="form.addressId" :disabled="true"></el-input>-->
             <Dropzone :id="'addr'" :photo="photos" @finish="photo_success"
                       @remove="photo_remove"></Dropzone>
@@ -126,7 +126,7 @@
   export default {
     name: "add-village",
     components: {MapSearch, Dropzone},
-    props: ['module', 'formList', 'province'],
+    props: ['module', 'formList', 'province','dict'],
     data() {
       return {
         photos: {
