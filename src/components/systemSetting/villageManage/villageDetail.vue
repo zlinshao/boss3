@@ -1,6 +1,10 @@
 <template>
   <div id="villageDetail">
     <div class="scroll_bar">
+      <div class="title">
+        <router-link :to="{path: '/villageManage', query: {term: this.terms,status: 1}}">返回上一页</router-link>
+
+      </div>
       <div class="title">个人信息</div>
       <div class="form_border">
         <el-form size="mini" label-width="110px">
@@ -95,9 +99,11 @@
     data() {
       return {
         myData: {},
+        terms: {}
       }
     },
     mounted() {
+      this.terms = this.$route.query.term;
       this.$http.get('setting/community/' + this.$route.query.ids).then((res) => {
         this.myData = res.data.data;
       });
