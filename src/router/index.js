@@ -137,11 +137,20 @@ export default new Router({
         {path: '/messageCenter', component: MessageCenter, name: '消息中心'},
         {path: '/sthToDoDetail', component: SthToDoDetail, name: '喜报详情'},
         {path: '/personalSetting', component: PersonalSetting, name: '个人设置'},
-        {path: '/villageManage/villageDetail', component: VillageDetail, name: '小区管理详情'},
         {path: '/sthToDoDetail_2', component: SthToDoDetail_2, name: '喜报'},
         {path: '/contractChange', component: ContractChange, name: 'TEST_1'},
         {path: '/deliver', component: Deliver, name: 'TEST_2'},
         {path: '/throwALease', component: throwALease, name: 'TEST_3'},
+      ]
+    },
+    // 详情路由
+    {
+      path: '/',
+      component: Index,
+      name: '',
+      abnormal: true,
+      children: [
+        {path: '/villageManage/villageDetail', type: false, component: VillageDetail, name: '小区管理详情'},
       ]
     },
 

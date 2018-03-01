@@ -4,8 +4,8 @@
       <div class="highSearch">
         <el-form :model="form" :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="小区名称/地址/位置" v-model="form.keywords" size="mini" clearable>
-              <el-button slot="append" icon="el-icon-search"></el-button>
+            <el-input placeholder="小区名称/地址/位置" v-model="form.keywords" @keyup.enter.native="myData(1)" size="mini" clearable>
+              <el-button slot="append" icon="el-icon-search" @click="myData(1)"></el-button>
               <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
             </el-input>
           </el-form-item>
@@ -27,12 +27,12 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">房屋类型</div>
+                  <div class="el_col_label">房屋类型{{form.house_type}}</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-select v-model="form.house_type">
-                      <el-option v-for="(key,index) in houseValues" :label="key" :value="index + 1"
+                      <el-option v-for="(key,index) in dict" :label="key.dictionary_name" :value="key.id"
                                  :key="index"></el-option>
                     </el-select>
                   </el-form-item>
@@ -149,7 +149,7 @@
         label="小区别名">
       </el-table-column>
       <el-table-column
-        prop="house_type"
+        prop="dictionary_name"
         label="房屋类型">
       </el-table-column>
       <el-table-column
@@ -177,7 +177,7 @@
                @clickOperate="clickEvent"></RightMenu>
 
     <VillageModule :module="addVisible" @close="closeVillage" :formList="formList"
-                   :province="provinceList"></VillageModule>
+                   :province="provinceList" :dict="dict"></VillageModule>
   </div>
 </template>
 
@@ -195,6 +195,7 @@
         show: false,
         lists: [],
 
+        dict: [],
         provinceList: [],
         pitch: '',
         formList: {},
@@ -228,13 +229,18 @@
       }
     },
     mounted() {
-      this.myData(1);
+      this.$http.get('setting/dictionary/11').then((res) => {
+        this.dict = res.data.data;
+        this.myData(1);
+      });
       this.$http.get('setting/others/province').then((res) => {
         this.provinceList = res.data.data;
       });
     },
     methods: {
       myData(val) {
+        this.tableData = [];
+        this.paging = 0;
         this.form.pages = val;
         this.$http.get('setting/community/', {
           params: this.form,

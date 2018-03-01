@@ -722,6 +722,7 @@
         }
         .el-main {
           margin-top: 66px;
+          min-height: 500px;
           padding: 10px 20px;
           margin-left: 210px;
           overflow-x: hidden;
