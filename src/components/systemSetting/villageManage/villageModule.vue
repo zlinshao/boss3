@@ -6,7 +6,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="省">
-                <el-select v-model="form.province" clearable @change="choose('city')">
+                <el-select v-model="form.province" clearable @change="choose('city',form.province)">
                   <el-option v-for="(item,index) in province" :label="item.province_name"
                              :value="item.province_id" :key="index"></el-option>
                 </el-select>
@@ -14,7 +14,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="市">
-                <el-select v-model="form.city" clearable @change="choose('area')">
+                <el-select v-model="form.city" clearable @change="choose('area',form.city)">
                   <el-option v-for="(item,index) in cityList" :label="item.city_name" :value="item.city_id"
                              :key="index"></el-option>
                 </el-select>
@@ -24,7 +24,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="区/县">
-                <el-select v-model="form.area" clearable @change="choose('region')">
+                <el-select v-model="form.area" clearable @change="choose('region',form.area)">
                   <el-option v-for="(item,index) in areaList" :label="item.area_name" :value="item.area_id"
                              :key="index"></el-option>
                 </el-select>
@@ -67,7 +67,8 @@
             <el-col :span="12">
               <el-form-item label="建筑年限">
                 <el-select v-model="form.built_year" clearable>
-                  <el-option v-for="(key,index) in yearValues" :label="key" :value="key" :key="index"></el-option>
+                  <el-option v-for="(key,index) in 51" :label="key + 1969" :value="index + 1969"
+                             :key="index"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -92,7 +93,6 @@
               </el-form-item>
             </el-col>
           </el-row>
-          {{photos.pic_id}}
           <el-form-item label="小区照片">
             <!--<el-input v-model="form.addressId" :disabled="true"></el-input>-->
             <Dropzone :id="'addr'" :photo="photos" @finish="photo_success"
@@ -110,8 +110,8 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="dialogVisible = false">取&nbsp;消</el-button>
-        <el-button size="small" type="primary" @click="villageSave('save')">确&nbsp;定</el-button>
-        <el-button size="small" type="primary" @click="villageSave('update')">修&nbsp;改</el-button>
+        <el-button v-if="formList.status === 'add'" size="small" type="primary" @click="villageSave('save')">确&nbsp;定</el-button>
+        <el-button v-if="formList.status === 'revise'" size="small" type="primary" @click="villageSave('update')">修&nbsp;改</el-button>
       </div>
     </el-dialog>
 
@@ -164,26 +164,21 @@
 
     watch: {
       formList(val) {
+        console.log(val.status);
         this.villageId = val.id;
         this.form.province = val.province;
-        this.$http.get('setting/others/city?city_parent=' + val.province).then((res) => {
-          if (res.data.code === '100050') {
-            this.cityList = res.data.data;
-            this.form.city = val.city;
-          }
-        });
-        this.$http.get('setting/others/area?area_parent=' + val.city).then((res) => {
-          if (res.data.code === '100060') {
-            this.areaList = res.data.data;
-            this.form.area = val.area;
-          }
-        });
-        this.$http.get('setting/others/region?region_parent=' + val.area).then((res) => {
-          if (res.data.code === '100070') {
-            this.regionList = res.data.data;
-            this.form.region = Number(val.region);
-          }
-        });
+        if(val.province !== ''){
+          this.chooseList('city',val.province);
+          this.form.city = val.city;
+        }
+        if(val.city !== ''){
+          this.chooseList('area',val.city);
+          this.form.area = val.area;
+        }
+        if(val.area !== ''){
+          this.chooseList('region',val.area);
+          this.form.region = Number(val.region);
+        }
         this.form.villageName = val.village_name;
         this.form.villageAddress = val.address;
         this.form.otherName = val.village_alias;
@@ -221,29 +216,49 @@
       photo_remove(val) {
         this.photos.pic_id = val;
       },
-      choose(val) {
+
+      choose(val,id) {
         if (val === 'city') {
-          this.$http.get('setting/others/city?city_parent=' + this.form.province).then((res) => {
+          this.form.city = '';
+          this.form.area = '';
+          this.form.region = '';
+          this.chooseList(val,id);
+        }
+        if (val === 'area') {
+          this.form.area = '';
+          this.form.region = '';
+          this.chooseList(val,id);
+        }
+        if (val === 'region') {
+          this.form.region = '';
+          this.chooseList(val,id);
+        }
+      },
+
+      chooseList(val,id) {
+        if (val === 'city') {
+          this.$http.get('setting/others/city?city_parent=' + id).then((res) => {
             if (res.data.code === '100050') {
               this.cityList = res.data.data;
             }
           })
         }
         if (val === 'area') {
-          this.$http.get('setting/others/area?area_parent=' + this.form.city).then((res) => {
+          this.$http.get('setting/others/area?area_parent=' + id).then((res) => {
             if (res.data.code === '100060') {
               this.areaList = res.data.data;
             }
           })
         }
         if (val === 'region') {
-          this.$http.get('setting/others/region?region_parent=' + this.form.area).then((res) => {
+          this.$http.get('setting/others/region?region_parent=' + id).then((res) => {
             if (res.data.code === '100070') {
               this.regionList = res.data.data;
             }
           })
         }
       },
+
       openAddress() {
         this.mapVisible = true;
       },
