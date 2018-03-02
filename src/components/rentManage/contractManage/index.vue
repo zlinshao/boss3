@@ -245,6 +245,149 @@
           </div>
         </div>
       </div>
+
+
+      <div>
+        <el-dialog
+          title="新建维修"
+          :visible.sync="maintenanceDialog"
+          width="40%">
+          <el-form size="mini" label-width="100px">
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="合同编号">
+                  <el-input v-model="input" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="报修人姓名">
+                  <el-input v-model="input" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="联系电话">
+                  <el-input v-model="input" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="报修人性别">
+                  <el-radio v-model="radio" label="1">先生</el-radio>
+                  <el-radio v-model="radio" label="2">女士</el-radio>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="房屋地址">
+                  <el-input v-model="input" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="约定维修时间">
+                  <el-date-picker
+                    v-model="value1"
+                    type="datetime"
+                    placeholder="选择日期时间"
+                    size="mini">
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="维修内容">
+                  <el-input v-model="input" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="维修师傅">
+                  <el-input v-model="input" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="维修结果">
+                  <el-input v-model="input" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="维修金额">
+                  <el-input v-model="input" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="维修状态">
+                  <el-select v-model="value" placeholder="请选择" size="mini">
+                    <el-option
+                      v-for="item in options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="认责人">
+                  <el-select v-model="value" placeholder="请选择" size="mini">
+                    <el-option
+                      v-for="item in options"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="备注">
+                  <el-input v-model="input" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="操作人">
+                  <el-input v-model="input" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="签约人">
+                  <el-input v-model="input" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="负责人">
+                  <el-input v-model="input" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="所属部门">
+                  <el-input v-model="input" placeholder="请输入内容"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+
+          <div slot="footer" class="dialog-footer">
+            <el-button size="small" @click="maintenanceDialog = false">取&nbsp;消</el-button>
+            <el-button size="small" type="primary" @click="maintenanceDialog = false">确&nbsp;定</el-button>
+          </div>
+
+        </el-dialog>
+      </div>
+
+
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
@@ -260,7 +403,7 @@
     name: 'hello',
     components: {RightMenu,Organization},
     data () {
-      return {
+          return {
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
@@ -349,6 +492,14 @@
         organizationDialog: false,
         activeName: 'first',
         isHigh:false,
+        maintenanceDialog: false,     //维修模态框
+
+
+
+        input: '',
+        radio: '1',
+        value: '',
+        value1: '',
       }
     },
 
@@ -368,10 +519,12 @@
           {clickIndex: 'stick', headIcon: 'el-icons-fa-arrow-up', label: '置顶',},
           {clickIndex: 'cancel', headIcon: 'el-icons-fa-scissors', label: '作废',},
           {clickIndex: '', headIcon: 'el-icons-fa-eye', label: '查看回访记录',},
-          {clickIndex: '', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
+          {clickIndex: 'maintenanceDialog', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
         ];
         this.contextMenuParam(event);
       },
+
+
       //合同表头右键
       houseHeadMenu(e){
         this.lists = [
@@ -380,7 +533,7 @@
         this.contextMenuParam(event);
       },
 
-      //右键回调时间
+      //右键回调事件
       clickEvent (index) {
         switch (index){
           case 'stick' :
@@ -417,13 +570,15 @@
               });
             });
             break;
+          case 'maintenanceDialog':
+            this.maintenanceDialog = true;
+            break;
         }
       },
       //关闭右键菜单
       closeMenu(){
         this.show = false;
       },
-
       //右键参数
       contextMenuParam(event){
         //param: user right param

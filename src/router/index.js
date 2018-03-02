@@ -97,6 +97,9 @@ import MessageCenter from '../components/messageCenter/index.vue'
 
 import PersonalSetting from '../components/personalSetting/index.vue'    //个人设置
 
+
+import Individual from '../components/individual/index.vue'    //个人门户
+
 Vue.use(Router);
 
 export default new Router({
@@ -146,6 +149,7 @@ export default new Router({
         {path: '/deliver', component: Deliver, name: 'TEST_2'},
         {path: '/throwALease', component: throwALease, name: 'TEST_3'},
         {path: '/publicArticle', component: PublicArticle, name: '文章发布'},
+        {path: '/individual', component: Individual, name: '个人门户'},
       ]
     },
     // 详情路由
