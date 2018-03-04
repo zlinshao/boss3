@@ -29,10 +29,17 @@ Vue.use(ElementUI);
 Vue.use(VueRouter);
 Vue.use(Vuex);
 Vue.use(Cookies);
-axios.defaults.baseURL = globalConfig.server;
-axios.defaults.withCredentials = true;
-axios.defaults.headers.common['Env'] = globalConfig.env;
 Vue.prototype.$http = axios;
+Vue.prototype.$http.defaults.baseURL = globalConfig.server;
+Vue.prototype.$http.defaults.withCredentials = true;
+Vue.prototype.$http.defaults.headers.common['Env'] = globalConfig.env;
+
+Vue.prototype.$ajax = axios;
+Vue.prototype.$ajax.defaults.baseURL = globalConfig.server_user;
+Vue.prototype.$ajax.defaults.withCredentials = true;
+Vue.prototype.$ajax.defaults.headers.common['Env'] = globalConfig.env;
+Vue.prototype.$ajax.defaults.headers = globalConfig.header;
+
 
 Vue.config.productionTip = false;
 

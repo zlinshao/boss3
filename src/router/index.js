@@ -83,6 +83,8 @@ import Deliver from '../components/OAWork/sthToDo/components/deliver.vue'
 import throwALease from '../components/OAWork/sthToDo/components/throwALease.vue'
 
 import PublicArticle from '../components/OAWork/portals/components/publicArticle.vue'
+import ExamineAndApprove from '../components/OAWork/examineAndApprove/index.vue'
+
 
 
 //人资管理
@@ -271,6 +273,7 @@ export default new Router({
           ]
         },
         {path: '/sthToDo', component: SthToDo, name: '待办事项'},
+        {path: '/examineAndApprove', component: ExamineAndApprove, name: '审批'},
         {path: '/communication', component: Communication, name: '通讯管理',},
         {path: '/programme', component: Programme, name: '日程管理',},
         {path: '/knowledge', component: Knowledge, name: '知识管理',},

@@ -210,4 +210,8 @@
 #publicArticle .el-select {
   display: block !important; }
 
+#examineAndApprove .el-badge__content.is-fixed.is-dot {
+  top: 8px;
+  right: 2px; }
+
 /*# sourceMappingURL=reset.css.map */
