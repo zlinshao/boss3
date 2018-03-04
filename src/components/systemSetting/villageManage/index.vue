@@ -4,7 +4,8 @@
       <div class="highSearch">
         <el-form :model="form" :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="小区名称/地址/位置" v-model="form.keywords" @keyup.enter.native="myData(1)" size="mini" clearable>
+            <el-input placeholder="小区名称/地址/位置" v-model="form.keywords" @keyup.enter.native="myData(1)" size="mini"
+                      clearable>
               <el-button slot="append" icon="el-icon-search" @click="myData(1)"></el-button>
               <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
             </el-input>
@@ -48,7 +49,7 @@
                   <el-form-item>
                     <el-form-item>
                       <el-select v-model="form.built_year">
-                        <el-option v-for="(key,index) in yearValues" :label="key" :value="index + 1"
+                        <el-option v-for="(key,index) in 51" :label="key + 1969" :value="index + 1969"
                                    :key="index"></el-option>
                       </el-select>
                     </el-form-item>
@@ -65,7 +66,7 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.province" clearable @change="choose('city')">
+                    <el-select v-model="form.province" clearable @change="choose('city',form.province)">
                       <el-option v-for="(item,index) in provinceList" :label="item.province_name"
                                  :value="item.province_id" :key="index"></el-option>
                     </el-select>
@@ -80,7 +81,7 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.city" clearable @change="choose('area')">
+                    <el-select v-model="form.city" clearable @change="choose('area',form.city)">
                       <el-option v-for="(item,index) in cityList" :label="item.city_name" :value="item.city_id"
                                  :key="index"></el-option>
                     </el-select>
@@ -97,7 +98,7 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.area" clearable @change="choose('region')">
+                    <el-select v-model="form.area" clearable @change="choose('region',form.area)">
                       <el-option v-for="(item,index) in areaList" :label="item.area_name" :value="item.area_id"
                                  :key="index"></el-option>
                     </el-select>
@@ -165,7 +166,7 @@
     <div class="block pages">
       <el-pagination
         @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
+        @current-change="myData"
         :current-page="currentPage"
         :page-size="12"
         layout="total, prev, pager, next, jumper"
@@ -196,7 +197,6 @@
         lists: [],
 
         dict: [],
-        provinceList: [],
         pitch: '',
         formList: {},
         currentPage: 1,
@@ -214,15 +214,9 @@
           area: '',
           region: '',
         },
-        houseValues: ['住宅', '公寓', '酒店公寓', '商住两用', '平方', '别墅', '其他'],
-        yearValues: ['1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990', '1990'],
-        provinceValues: ['江苏省', '浙江省'],
-        cityValues: ['南京', '杭州'],
-        countyValues: ['下沙区', '鼓楼区'],
-        areaValues: ['高沙', '鼓楼'],
-
         tableData: [],
 
+        provinceList: [],
         cityList: [],
         areaList: [],
         regionList: [],
@@ -231,7 +225,22 @@
     mounted() {
       this.$http.get('setting/dictionary/11').then((res) => {
         this.dict = res.data.data;
-        this.myData(1);
+        if (this.$route.query.status === 1) {
+          let term = this.$route.query.term;
+          this.form = term;
+          this.myData(term.pages);
+          if (term.province !== '') {
+            this.chooseList('city', term.province);
+          }
+          if (term.city !== '') {
+            this.chooseList('area', term.city);
+          }
+          if (term.area !== '') {
+            this.chooseList('region', term.area);
+          }
+        } else {
+          this.myData(1);
+        }
       });
       this.$http.get('setting/others/province').then((res) => {
         this.provinceList = res.data.data;
@@ -240,45 +249,62 @@
     methods: {
       myData(val) {
         this.tableData = [];
-        this.paging = 0;
         this.form.pages = val;
         this.$http.get('setting/community/', {
           params: this.form,
         }).then((res) => {
           if (res.data.code === '10000') {
+            this.currentPage = val;
             this.tableData = res.data.data.list;
             this.paging = res.data.data.count;
+          } else {
+            this.paging = 0;
           }
         })
       },
 
-      choose(val) {
+      choose(val, id) {
         if (val === 'city') {
-          this.$http.get('setting/others/city?city_parent=' + this.form.province).then((res) => {
+          this.form.city = '';
+          this.form.area = '';
+          this.form.region = '';
+          this.chooseList(val, id);
+        }
+        if (val === 'area') {
+          this.form.area = '';
+          this.form.region = '';
+          this.chooseList(val, id);
+        }
+        if (val === 'region') {
+          this.form.region = '';
+          this.chooseList(val, id);
+        }
+      },
+
+      chooseList(val, id) {
+        if (val === 'city') {
+          this.$http.get('setting/others/city?city_parent=' + id).then((res) => {
             if (res.data.code === '100050') {
               this.cityList = res.data.data;
             }
           })
         }
         if (val === 'area') {
-          this.$http.get('setting/others/area?area_parent=' + this.form.city).then((res) => {
+          this.$http.get('setting/others/area?area_parent=' + id).then((res) => {
             if (res.data.code === '100060') {
               this.areaList = res.data.data;
             }
           })
         }
         if (val === 'region') {
-          this.$http.get('setting/others/region?region_parent=' + this.form.area).then((res) => {
+          this.$http.get('setting/others/region?region_parent=' + id).then((res) => {
             if (res.data.code === '100070') {
               this.regionList = res.data.data;
             }
           })
         }
       },
-      // 搜索
-      search() {
 
-      },
       // 重置
       resetting() {
         this.form.pages = 1;
@@ -299,22 +325,21 @@
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-        this.currentPage = val;
-        this.myData(val);
-      },
+      // handleCurrentChange(val) {
+      //   console.log(`当前页: ${val}`);
+      // },
       openVillage(val) {
         this.addVisible = true;
         if (val === 'revise') {
           this.$http('setting/community/' + this.pitch).then((res) => {
             if (res.data.code === '10020') {
               this.formList = res.data.data;
+              this.formList.status = val;
             }
           });
         }
         if (val === 'add') {
-
+          this.formList.status = val;
         }
       },
       closeVillage() {
@@ -322,7 +347,7 @@
       },
       // 双击
       dblMenu(row) {
-        this.$router.push({path: '/villageManage/villageDetail', query: {ids: row.id}});
+        this.$router.push({path: '/villageManage/villageDetail', query: {ids: row.id, term: this.form}});
       },
       // 右键
       houseMenu(row, event) {
@@ -365,13 +390,13 @@
           type: 'warning'
         }).then(() => {
           this.$http.get('setting/community/delete/' + this.pitch).then((res) => {
-            if(res.data.code === '10040'){
+            if (res.data.code === '10040') {
               this.$message({
                 type: 'success',
                 message: res.data.msg + '!'
               });
               this.myData(this.form.pages);
-            }else{
+            } else {
               this.$message({
                 type: 'error',
                 message: res.data.msg + '!'

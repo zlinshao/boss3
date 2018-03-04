@@ -1,7 +1,10 @@
 <template>
   <div id="villageDetail">
     <div class="scroll_bar">
-      <div class="title">个人信息</div>
+      <div style="display: flex;justify-content: space-between">
+        <div class="title">个人信息</div>
+        <router-link style="float: right;color: #409EFF;" :to="{path: '/villageManage', query: {term: this.terms,status: 1}}">返回上一页</router-link>
+      </div>
       <div class="form_border">
         <el-form size="mini" label-width="110px">
           <el-row>
@@ -52,6 +55,10 @@
             <el-col :span="8">
               <el-form-item label="照片">
                 <div class="special imgs">
+                  <!--<img data-magnify="" data-caption="图片查看器"-->
+                       <!--data-src="http://imgstore.cdn.sogou.com/app/a/100540002/850349.jpg"-->
+                       <!--src="http://imgstore.cdn.sogou.com/app/a/100540002/850349.jpg" alt="">-->
+
                   <img src="../../../assets/images/情人节.png" alt="">
                   <img src="../../../assets/images/情人节.png" alt="">
                   <img src="../../../assets/images/情人节.png" alt="">
@@ -68,12 +75,12 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="周边配套">
-                <div class="special">房贷首付</div>
+                <div class="special">{{myData.peripheral_info}}</div>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="小区简介">
-                <div class="special">房贷首付克里斯蒂</div>
+                <div class="special">{{myData.content}}</div>
               </el-form-item>
             </el-col>
           </el-row>
@@ -95,9 +102,11 @@
     data() {
       return {
         myData: {},
+        terms: {}
       }
     },
     mounted() {
+      this.terms = this.$route.query.term;
       this.$http.get('setting/community/' + this.$route.query.ids).then((res) => {
         this.myData = res.data.data;
       });

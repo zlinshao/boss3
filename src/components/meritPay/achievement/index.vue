@@ -1,4 +1,4 @@
-<template>
+1<template>
   <div id="periodicTable">
     <div class="highRanking">
       <div class="highSearch">

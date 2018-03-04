@@ -131,6 +131,12 @@
                   个人设置
                 </div>
               </el-dropdown-item>
+              <el-dropdown-item class="personalList" @click.native="routers('individual')">
+                <p><i class="el-icon-setting"></i></p>
+                <div>
+                  个人门户
+                </div>
+              </el-dropdown-item>
               <el-dropdown-item class="detrusion">
                 <!--<p><i class="el-icons-fa-dot-circle-o"></i></p>-->
                 <div>
@@ -718,6 +724,7 @@
           .el-menu-vertical-demo:not(.el-menu--collapse) {
             width: 210px;
             min-height: 100%;
+            padding-bottom: 70px;
           }
         }
         .el-main {

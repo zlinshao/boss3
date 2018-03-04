@@ -51,6 +51,7 @@ import IncomeFlow from '../components/finance/incomeFlow/index'                 
 import PeriodicTable from '../components/meritPay/periodicTable/index'
 import Achievement from '../components/meritPay/achievement/index'
 import PersonalSalary from '../components/meritPay/personalSalary/index'
+import Counter from '../components/meritPay/counter/index'                            //业绩计算器
 
 
 //租赁管理
@@ -97,6 +98,9 @@ import RentingDetail from '../components/rentManage/rentingDetail.vue'
 import MessageCenter from '../components/messageCenter/index.vue'
 
 import PersonalSetting from '../components/personalSetting/index.vue'    //个人设置
+
+
+import Individual from '../components/individual/index.vue'    //个人门户
 
 Vue.use(Router);
 
@@ -147,6 +151,7 @@ export default new Router({
         {path: '/deliver', component: Deliver, name: 'TEST_2'},
         {path: '/throwALease', component: throwALease, name: 'TEST_3'},
         {path: '/publicArticle', component: PublicArticle, name: '文章发布'},
+        {path: '/individual', component: Individual, name: '个人门户'},
       ]
     },
     // 详情路由
@@ -222,6 +227,7 @@ export default new Router({
         {path: '/periodicTable', component: PeriodicTable, name: '周期表',},
         {path: '/achievement', component: Achievement, name: '业绩',},
         {path: '/personalSalary', component: PersonalSalary, name: '工资',},
+        {path: '/counter', component: Counter, name: '业绩计算器',},
       ]
     },
 
