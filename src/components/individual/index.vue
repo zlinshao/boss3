@@ -200,7 +200,7 @@
             </el-row>
           </div>
 <!--底部统计图变更-->
-          <div class="market" v-if="" >
+          <div class="market" v-if="showUp" >
             <el-row>
               <el-col :span="24">
                 <div class="usermanage">
@@ -210,7 +210,7 @@
                         <el-row>
                           <el-col :span="12">
                             <div class="english">
-                              FDJKS FH SKJLSASKLFJ SKLF .
+                              PFRFORMANCE MANAGEMENT
                             </div>
                           </el-col>
                         </el-row>
@@ -229,7 +229,7 @@
                           <el-col :span="24">
                             <el-row>
                               <el-col :span="18">
-                                <div class="english">SGDFGD GSDS DSAG</div>
+                                <div class="english">INTEGRAL DETAIL</div>
                               </el-col>
                             </el-row>
                             <el-row>
@@ -277,7 +277,7 @@
                                   <div class="checkBelate">
                                     <img src="../../assets/images/individual/矿工.png" alt="" class="icos">
                                     <div class="count">
-                                      <span class="heading">矿工</span>
+                                      <span class="heading">旷工</span>
                                       <span class="num" style="color: #fb4699">232次</span>
                                     </div>
                                   </div>
@@ -308,7 +308,7 @@
                             <div class="bgPics">
                               <el-row>
                                 <el-col :span="18">
-                                  <div class="english">KHSF KFHS SDV</div>
+                                  <div class="english">SCHEDULE</div>
                                 </el-col>
                               </el-row>
                               <el-row>
@@ -332,8 +332,8 @@
                           <el-col :span="24">
                             <div class="officePics">
                               <el-row>
-                                <el-col :span="18">
-                                  <div class="english">KHSF KFHS SDV</div>
+                                <el-col :span="24">
+                                  <div class="english">PROMOTION CHANNEL</div>
                                 </el-col>
                               </el-row>
                               <el-row>
@@ -354,6 +354,273 @@
             </el-row>
           </div>
 
+          <div id="civilianpost">
+            <el-row>
+              <el-col :span="24">
+                <div class="usermanage">
+                  <el-row :gutter="20">
+                    <el-col :span="12">
+                      <div class="checkon">
+                        <el-row>
+                          <el-col :span="24">
+                            <el-row>
+                              <el-col :span="12">
+                                <div class="english">
+                                  PFRFORMANCE MANAGEMENT
+                                </div>
+                              </el-col>
+                            </el-row>
+                            <el-row>
+                              <el-col :span="12">
+                                <div class="manageButt">
+                                  <el-button type="text">考勤管理</el-button>
+                                </div>
+                              </el-col>
+                            </el-row>
+                          </el-col>
+                        </el-row>
+
+                        <el-row>
+                          <el-col :span="24">
+                            <el-row>
+                              <el-col :span="24">
+                                <div class="checkTitles">2018年12月考勤</div>
+                              </el-col>
+                            </el-row>
+
+                            <el-row>
+                              <el-col :span="24">
+                                <el-row>
+                                  <div class="checkLists">
+                                    <el-col :span="24">
+                                      <el-row>
+                                        <el-col :span="12">
+                                          <div class="belateList">
+                                            <el-row>
+                                              <el-col :span="24">
+                                                <el-row>
+                                                  <div class="belateHead">
+                                                    <el-col :span="10">
+                                                      <div class="belateTitle">迟到</div>
+                                                    </el-col>
+                                                    <el-col :span="4" :offset="12">
+                                                      <img src="../../assets/images/individual/chidao.png" alt="" class="imges">
+                                                    </el-col>
+                                                  </div>
+                                                </el-row>
+
+                                              </el-col>
+                                            </el-row>
+
+                                            <el-row>
+                                              <el-col :span="24">
+                                                  <el-row>
+                                                    <div class="counts">
+                                                      <el-col :sapn="12">
+                                                        <div class="numbs">0</div>
+                                                      </el-col>
+                                                      <el-col :sapn="12">
+                                                        <div class="units">次</div>
+                                                      </el-col>
+                                                    </div>
+                                                  </el-row>
+                                              </el-col>
+                                            </el-row>
+                                          </div>
+                                        </el-col>
+                                        <el-col :span="12">
+                                          <div class="belateList">
+                                            <el-row>
+                                              <el-col :span="24">
+                                                <el-row>
+                                                  <div class="belateHead">
+                                                    <el-col :span="10">
+                                                      <div class="belateTitle">早退</div>
+                                                    </el-col>
+                                                    <el-col :span="4" :offset="12">
+                                                      <img src="../../assets/images/individual/早退.png" alt="" class="imges">
+                                                    </el-col>
+                                                  </div>
+                                                </el-row>
+
+                                              </el-col>
+                                            </el-row>
+
+                                            <el-row>
+                                              <el-col :span="24">
+                                                <el-row>
+                                                  <div class="counts">
+                                                    <el-col :sapn="12">
+                                                      <div class="numbs">0</div>
+                                                    </el-col>
+                                                    <el-col :sapn="12">
+                                                      <div class="units">次</div>
+                                                    </el-col>
+                                                  </div>
+                                                </el-row>
+                                              </el-col>
+                                            </el-row>
+                                          </div>
+                                        </el-col>
+                                      </el-row>
+                                      <!--2-->
+                                      <div style="margin-top: 18px">
+                                        <el-row>
+                                          <el-col :span="12">
+                                            <div class="belateList" style="border: 1px solid #fb4699">
+                                              <el-row>
+                                                <el-col :span="24">
+                                                  <el-row>
+                                                    <div class="belateHead">
+                                                      <el-col :span="10">
+                                                        <div class="belateTitle" style="color: #fb4699">旷工</div>
+                                                      </el-col>
+                                                      <el-col :span="4" :offset="12">
+                                                        <img src="../../assets/images/individual/矿工.png" alt="" class="imges">
+                                                      </el-col>
+                                                    </div>
+                                                  </el-row>
+
+                                                </el-col>
+                                              </el-row>
+
+                                              <el-row>
+                                                <el-col :span="24">
+                                                  <el-row>
+                                                    <div class="counts">
+                                                      <el-col :sapn="12">
+                                                        <div class="numbs">0</div>
+                                                      </el-col>
+                                                      <el-col :sapn="12">
+                                                        <div class="units">次</div>
+                                                      </el-col>
+                                                    </div>
+                                                  </el-row>
+                                                </el-col>
+                                              </el-row>
+                                            </div>
+                                          </el-col>
+
+                                          <el-col :span="12">
+                                            <div class="belateList">
+                                              <el-row>
+                                                <el-col :span="24">
+                                                  <el-row>
+                                                    <div class="belateHead">
+                                                      <el-col :span="10">
+                                                        <div class="belateTitle">出勤天数</div>
+                                                      </el-col>
+                                                      <el-col :span="4" :offset="12">
+                                                        <img src="../../assets/images/individual/出勤.png" alt="" class="imges">
+                                                      </el-col>
+                                                    </div>
+                                                  </el-row>
+
+                                                </el-col>
+                                              </el-row>
+                                              <el-row>
+                                                <el-col :span="24">
+                                                  <el-row>
+                                                    <div class="counts">
+                                                      <el-col :sapn="12">
+                                                        <div class="numbs">0</div>
+                                                      </el-col>
+                                                      <el-col :sapn="12">
+                                                        <div class="units">次</div>
+                                                      </el-col>
+                                                    </div>
+                                                  </el-row>
+                                                </el-col>
+                                              </el-row>
+                                            </div>
+                                          </el-col>
+                                        </el-row>
+                                      </div>
+
+
+                                    </el-col>
+                                  </div>
+
+                                </el-row>
+                              </el-col>
+                            </el-row>
+
+                          </el-col>
+                        </el-row>
+
+
+                      </div>
+                    </el-col>
+
+                    <el-col :span="6">
+                      <div class="integral">
+                        <el-row>
+                          <el-col :span="24">
+                            <el-row>
+                              <el-col :span="18">
+                                <div class="english">INTEGRAL DETAIL</div>
+                              </el-col>
+                            </el-row>
+                            <el-row>
+                              <el-col :span="18">
+                                <div class="manageButt">
+                                  <el-button type="text">积分明细</el-button>
+                                </div>
+                              </el-col>
+                            </el-row>
+
+                            <el-row>
+                              <el-col :span="24" :offset="8">
+                                <div class="countPic">
+                                  <div class="boxs">
+                                    <img src="../../assets/images/individual/jifenred.png" alt="">
+                                  </div>
+                                  <div class="pointCounts">20020</div>
+                                </div>
+
+                              </el-col>
+                            </el-row>
+                          </el-col>
+                        </el-row>
+
+                      </div>
+                    </el-col>
+
+                    <el-col :span="6">
+                      <div class="upgrade">
+                        <!--晋升通道-->
+                        <el-row>
+                          <el-col :span="24">
+                            <div class="upgradeShow">
+                              <el-row>
+                                <el-col :span="24">
+                                  <div class="english">PROMOTION CHANNEL</div>
+                                </el-col>
+                              </el-row>
+                              <el-row>
+                                <el-col :span="16">
+                                  <div class="manageButt">
+                                    <el-button type="text" style="color: #fb4699">晋升通道</el-button>
+                                  </div>
+                                </el-col>
+                              </el-row>
+                              <el-row>
+                                <el-col :span="24">
+                                  <div class="upgradePic">
+                                    <img src="../../assets/images/individual/jingshen.png" alt="">
+                                  </div>
+                                </el-col>
+                              </el-row>
+                            </div>
+                          </el-col>
+                        </el-row>
+                      </div>
+                    </el-col>
+                  </el-row>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
 
         </el-col>
 
@@ -692,6 +959,7 @@
             color: #74dc9a;
             margin: 73px 0 0 40px;
             border-bottom: 1px solid #dfe6fb;
+            padding-bottom: 5px;
           }
 
           .checkList {
@@ -764,7 +1032,114 @@
         }
       }
 /*底部统计表文职*/
-      
+      #civilianpost {
+        .usermanage {
+          .checkon {
+            border: 1px solid #dfe6fb;
+            @include border_radius(4px);
+            height: 450px;
+            .manageButt{
+              margin-left: 41px;
+
+            }
+            .checkTitles {
+              margin: 60px 0 0 40px;
+              color: #fb4699;
+              border-bottom: 1px solid #e5e5e5;
+              padding-bottom: 5px;
+            }
+            .checkLists {
+              margin: 10px 0 0 40px;
+              .belateList {
+                border: 1px solid #409EFF;
+                margin-right: 20px;
+                @include border_radius(4px);
+                .belateHead {
+                  margin: 10px 0 0 15px;
+                  @include flex;
+                  justify-content: end;
+                  .belateTitle {
+                    font-size: 13px;
+                  }
+                  .imges {
+                    width: 20px;
+                    height: 20px;
+                  }
+                }
+                .counts {
+                  margin: 10px 0 20px 0;
+                  @include flex;
+                  .numbs {
+                    font-size: 37px;
+                    color: #409EFF;
+                   text-align: right;
+                  }
+                  .units {
+                    margin: 17px 0 0 5px;
+                    font-size: 13px;
+                    color: #4b385c;
+                  }
+                }
+              }
+            }
+          }
+          .integral{
+            /*border: 1px solid #dfe6fb;*/
+            height: 450px;
+            @include border_radius(4px);
+            background: url("../../assets/images/individual/jifeng.png") no-repeat;
+            -moz-background-size: 100% 100%;
+            background-size: 100% 100%;
+            .countPic {
+              @include flex;
+              margin: 80px 0 0 66px;
+              .boxs {
+                width: 30px;
+                height: 30px;
+                @include border_radius(50%);
+                border: 1px solid #fb4699;
+              }
+              img {
+                width: 20px;
+                height: 20px;
+                margin: 5px 0 0 5px;
+              }
+              .pointCounts {
+                font-size: 30px;
+                color: #fb4699;
+                margin-left: 5px;
+              }
+            }
+            .manageButt {
+              margin-left: 40px;
+            }
+          }
+          .upgrade {
+            @include border_radius(4px);
+            border: 1px solid #dfe6fb;
+            height: 450px;
+            .upgradeShow {
+              .manageButt {
+                margin-left: 40px;
+              }
+              .upgradePic {
+                height: 220px;
+                width: 290px;
+                margin-top: 10px;
+                border: none;
+                overflow: hidden;
+                img {
+                  height: 222px;
+                  width: 292px;
+                  margin: -1px 0 0 -1px;
+                }
+              }
+            }
+
+          }
+        }
+
+      }
 /*公司通告*/
       .company {
         margin-top: 2px;
@@ -786,17 +1161,19 @@
 
         .announTitle {
           margin: 12px 0 0 10px;
-          overflow:hidden;
-          white-space:nowrap;
-          text-overflow:ellipsis;
+          text-overflow : ellipsis;
+          white-space : nowrap;
+          overflow : hidden;
         }
         .detailes {
           margin: 10px;
           width: 374px;
           height: 35px;
-          overflow:hidden;
-          /*white-space:nowrap;*/
-          text-overflow:ellipsis;
+          text-overflow : ellipsis;
+          overflow : hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
 
         }
         .footButt {

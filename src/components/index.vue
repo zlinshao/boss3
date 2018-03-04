@@ -4,7 +4,7 @@
       <!--<i class="el-icons-fa-compress"></i>-->
       <p @click="fullScreen(2)"></p>
     </div>
-    <div style="position: fixed;top: 3px;right: 20px;z-index: 100;">
+    <div style="position: fixed;top: 30px;right: 20px;z-index: 100;">
       <el-collapse-transition>
         <div v-show="isFull">
           <div class="transition-box">
@@ -12,7 +12,17 @@
               <img src="../assets/images/情人节.png" alt="">
             </div>
             <div class="contents">
-              <div>回复的咖</div>
+              <el-row>
+                <el-col :span="24">
+                  <div style="font-size: 16px">回复的咖</div>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :span="24">
+                  <div style="font-size: 13px;margin-top: 3px;">80秒</div>
+                </el-col>
+              </el-row>
             </div>
           </div>
         </div>
@@ -34,13 +44,88 @@
         </div>
         <div class="countdown">
           <i class="el-icon-time"></i>
-          {{Countdown}}s
+          {{Countdown}}
         </div>
         <div class="message" style="position: relative">
-          <el-badge is-dot class="item">
-            <i class="el-icons-fa-comment-o"></i>
-            消息
-          </el-badge>
+          <el-dropdown>
+            <el-badge is-dot class="item">
+              <i class="el-icons-fa-comment-o"></i>
+              消息
+            </el-badge>
+            <el-dropdown-menu slot="dropdown" class="menuLists">
+              <!--消息图标-->
+              <div class="first">
+                <div>
+                  <el-row>
+                    <el-col :span="4">
+                      <div class="picSign">
+                        <i class="el-icon-bell"></i>
+                      </div>
+                    </el-col>
+                  </el-row>
+                </div>
+
+                <div>
+                  <el-dropdown-item>
+                        <el-row>
+                          <el-col :span="24">
+                            <div class="public">
+                              <el-row>
+                                <el-col :span="24">
+                                  <div class="signOne">系统公告</div>
+                                </el-col>
+                              </el-row>
+
+                              <el-row>
+                                <el-col :span="24">
+                                  <div class="limits">Lorem ipsum dolor23r23222222222222222 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aperiam architecto aspernatur dignissimos dolor dolorem doloremque ex facere facilis in minima mollitia, nihil nostrum quo ratione saepe tempore totam voluptatem?</div>
+                                </el-col>
+                              </el-row>
+                            </div>
+                          </el-col>
+                        </el-row>
+
+                  </el-dropdown-item>
+                </div>
+              </div>
+
+              <div class="first">
+                <div>
+                  <el-row>
+                    <el-col :span="4">
+                      <div class="picSign" style="background: #58d788">
+                        <i class="el-icon-edit-outline"></i>
+                      </div>
+                    </el-col>
+                  </el-row>
+                </div>
+
+                <div>
+                  <el-dropdown-item>
+                    <el-row>
+                      <el-col :span="24">
+                        <div class="public">
+                          <el-row>
+                            <el-col :span="24">
+                              <div class="signOne" style="color: #58d788">审批提醒</div>
+                            </el-col>
+                          </el-row>
+
+                          <el-row>
+                            <el-col :span="24">
+                              <div class="limits">Lorem ipsum dolor23r23222222222222222 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aperiam architecto aspernatur dignissimos dolor dolorem doloremque ex facere facilis in minima mollitia, nihil nostrum quo ratione saepe tempore totam voluptatem?</div>
+                            </el-col>
+                          </el-row>
+                        </div>
+                      </el-col>
+                    </el-row>
+
+                  </el-dropdown-item>
+                </div>
+              </div>
+            </el-dropdown-menu>
+          </el-dropdown>
+
           <!--//喜报名片-->
           <div v-if="false">
             <div class="gladBulletin">
@@ -86,7 +171,7 @@
           <div class="head"><img src="../assets/images/head.jpg"></div>
           <el-dropdown>
               <span class="el-dropdown-link">
-                解兆飞<i class="el-icon-arrow-down el-icon--right"></i>
+                解兆飞<i class="el-icon-arrow-down el-icon--right" style="margin-left: 25px"></i>
               </span>
             <el-dropdown-menu slot="dropdown" class="personal">
               <!--<el-dropdown-item class="personalList">-->
@@ -339,6 +424,11 @@
     transition: all .4s;
   }
 
+  @mixin flex {
+    display: -webkit-flex;
+    display: flex;
+  }
+
   .personal {
     width: 200px;
     padding: 10px;
@@ -444,27 +534,36 @@
 
   #index {
     .transition-box {
-      width: 120px;
-      height: 40px;
+      width: 200px;
+      height: 80px;
       box-sizing: border-box;
       display: flex;
       display: -webkit-flex;
-      background-color: #6a8dfb;
+      position: relative;
+      @include transition;
+      /*background-color: #6a8dfb;*/
+      background: url("../assets/images/peosonal.png") no-repeat;
+      -moz-background-size: 100% 100%;
+      background-size: 100% 100%;
       div {
-        width: 80px;
+        /*width: 80px;*/
         color: #ffffff;
         img {
-          width: 100%;
-          height: 100%;
+          position: absolute;
+          top: -25px;
+          width: 80px;
+          height: 80px;
+          left: -15px;;
         }
       }
       div.contents {
-        display: flex;
-        display: -webkit-flex;
-        align-items: center;
-        flex-wrap: wrap;
-        padding-left: 10px;
+        /*display: flex;*/
+        /*display: -webkit-flex;*/
+        /*align-items: center;*/
+        /*flex-wrap: wrap;*/
+        /*padding-left: 10px;*/
         @include box_sizing;
+        margin: 10px 0 0 85px;
       }
     }
     .department_name {
@@ -659,7 +758,10 @@
             background-size: 100% 100%;
             z-index: 100;
           }
+
         }
+
+
         .countdown {
           border: none;
         }
@@ -687,6 +789,8 @@
           }
         }
       }
+
+
     }
 
     .navBarHide {
@@ -748,4 +852,43 @@
     }
   }
 
+
+  /*----------------------  消息列表*-------------------*/
+  .menuLists {
+    .first {
+      @include flex;
+      margin-top: 10px;
+      li{
+        padding: 0;
+      }
+      .picSign {
+        width: 35px;
+        height: 35px;
+        font-size: 27px;
+        text-align: center;
+        /*border: 1px solid red;*/
+        @include border_radius(50%);
+        color: #ffffff;
+        background: #409EFF;
+        margin: 5px 0 0 20px;
+      }
+      .public {
+        line-height: 20px;
+        margin-left: 10px;
+        .signOne {
+          font-size: 16px;
+          color: #409EFF;
+        }
+        .limits {
+          font-size: 14px;
+          width: 280px;
+          text-overflow : ellipsis;
+          white-space : nowrap;
+          overflow : hidden;
+          padding-bottom: 15px;
+          border-bottom: 1px solid #eeeeee;
+        }
+      }
+    }
+  }
 </style>
