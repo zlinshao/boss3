@@ -39,18 +39,21 @@
             <img src="../assets/images/slogan.png" style="width: 100%" alt="">
           </div>
           <div class="loginType">
-            <div id="ding" @mouseover="lightDingColor" @mouseout="grayDingColor" @click="goBack">
+            <div id="ding"  @click="switchModel(1)">
               <img v-if="!dingColor" src="../assets/images/dd2.png" alt="">
               <img v-if="dingColor" src="../assets/images/dd1.png" alt="">
             </div>
-            <div id="message"><img src="../assets/images/sj.png" alt=""></div>
-            <div id="weChart" @mouseover="lightWeiColor" @mouseout="grayWeiColor" @click="goBack">
+            <div id="message" @click="switchModel(2)">
+              <img v-if="sjColor" src="../assets/images/sj.png" alt="">
+              <img v-if="!sjColor" src="../assets/images/sj_02.png" alt="">
+            </div>
+            <div id="weChart" @click="switchModel(3)">
               <img v-if="!weiColor" src="../assets/images/weixin1.png" alt="">
               <img v-if="weiColor" src="../assets/images/weixin2.png" alt="">
             </div>
           </div>
         </div>
-        <div class="formItem">
+        <div class="formItem" v-if="loginModel==2">
           <el-input placeholder="请输入手机号">
             <template slot="append">
               <span class="china">中国</span> +86
@@ -67,6 +70,22 @@
             </el-button>
           </div>
         </div>
+        <div v-if="loginModel == 1">
+          <div class="dingLogin">
+            <div><img src="../assets/images/dd1.png" alt=""></div>
+            <div style="color:#6a8dfb;">钉钉 - 扫码</div>
+            <div>一键登陆</div>
+          </div>
+        </div>
+
+        <div v-if="loginModel == 3">
+          <div class="dingLogin">
+            <div><img src="../assets/images/weixin2.png" alt=""></div>
+            <div style="color: #58d788">微信 - 扫码</div>
+            <div>一键登陆</div>
+          </div>
+        </div>
+
       </div>
 
 
@@ -88,6 +107,8 @@
         isMessage: false,
         dingColor: false,
         weiColor: false,
+        sjColor:true,
+        loginModel:2
       };
     },
     mounted(){
@@ -253,6 +274,25 @@
       grayWeiColor(){
         this.weiColor = false;
       },
+      lightSjColor(){
+          this.sjColor = true;
+      },
+      switchModel(flag){
+        this.loginModel = flag;
+        if(flag===1){
+          this.dingColor = true;
+          this.weiColor = false;
+          this.sjColor = false;
+        }else if(flag === 2){
+          this.dingColor = false;
+          this.weiColor = false;
+          this.sjColor = true;
+        }else if(flag === 3){
+          this.dingColor = false;
+          this.weiColor = true;
+          this.sjColor = false;
+        }
+      },
       goBack(){
         this.isMessage = false;
         this.dingColor = false;
@@ -377,6 +417,39 @@
       .messageLogin {
         width: 100%;
         height: 100%;
+
+        .dingLogin{
+          margin: 25px auto;
+          width: 150px;
+          height: 150px;
+          border-radius: 5px;
+          cursor: pointer;
+          transition: all .5s;
+          box-sizing: border-box;
+          border: 1px solid #6a8dfb;
+          border-top: 4px solid #6a8dfb;
+          box-shadow: 0 4px 6px 0 rgba(106, 141, 251, .2), 0 0 6px 0 rgba(106, 141, 251, .04);
+          &:hover {
+            background: #f4f4f4;
+          }
+          > div {
+            &:nth-child(1) {
+              margin-top: 23px;
+              text-align: center;
+            }
+            &:nth-child(2) {
+              margin-top: 10px;
+              font-size: 14px;
+              text-align: center;
+            }
+            &:nth-child(3) {
+              margin-top: 15px;
+              font-size: 14px;
+              text-align: center;
+            }
+          }
+        }
+
         .top {
           width: 100%;
           height: 270px;

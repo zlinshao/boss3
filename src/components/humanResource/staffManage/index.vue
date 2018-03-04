@@ -135,7 +135,7 @@
 </template>
 
 <script>
-  import TreeRender from '../../systemSetting/userDictionary/treeRender.vue'
+  import TreeRender from './components/treeRender.vue'
   import api from '../../systemSetting/userDictionary/api.js'
   import Organization from '../../common/organization.vue'
   import Sortable from 'sortablejs'
@@ -159,13 +159,26 @@
         sortable: null,
         currentPage:1,
         isDepartment : false,
+        //......................
+        params:{
+            name:'libai',
+            phone:15255556666,
+            org_id:1
+        }
       }
     },
     mounted(){
       this.initExpand();
       document.getElementById('staffManage').style.minHeight = window.innerHeight - 160 + 'px';
+      this.getStaffData();
     },
     methods: {
+      //获取员工数据列表
+      getStaffData(){
+          this.$ajax.post('api/v1/users',this.params).then((res) => {
+              console.log(res)
+          })
+      },
       sortDepartment(){
           this.isDepartment = !this.isDepartment;
       },
@@ -225,7 +238,7 @@
 //        }
       },
       handleEdit(s,d,n){//编辑节点
-//        console.log(s,d,n)
+        console.log(d)
       },
       handleDelete(s,d,n){//删除节点
 //        console.log(s,d,n);

@@ -261,7 +261,9 @@
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        this.currentPage = val;
+        this.params.page = val;
+        this.getTableData();
       },
     },
   }

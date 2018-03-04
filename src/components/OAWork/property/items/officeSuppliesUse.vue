@@ -29,7 +29,7 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入内容" v-model="formInline.keyWords" size="mini" clearable>
+            <el-input placeholder="请输入内容" v-model="params.keyWords" size="mini" clearable>
               <el-button slot="append" icon="el-icon-search"></el-button>
             </el-input>
           </el-form-item>
@@ -43,7 +43,7 @@
       </div>
 
       <div class="filter high_grade" :class="isHigh? 'highHide':''">
-        <el-form :inline="true" :model="formInline" size="mini" label-width="100px">
+        <el-form :inline="true" size="mini" label-width="100px">
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
           </div>
@@ -81,7 +81,7 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="formInline.region" placeholder="请选择状态">
+                    <el-select v-model="params.status" placeholder="请选择状态">
                       <el-option label="区域一" value="shanghai"></el-option>
                       <el-option label="区域二" value="beijing"></el-option>
                     </el-select>
@@ -105,35 +105,35 @@
           @row-contextmenu='openContextMenu'
           style="width: 100%">
           <el-table-column
-            prop="date"
+            prop="name"
             label="名称">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="unit"
             label="单位">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="number"
             label="数量">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="standard"
             label="规格">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="colour"
             label="颜色">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="brand"
             label="品牌">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="unit_price"
             label="单价">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="create_time"
             label="入库时间">
           </el-table-column>
           <el-table-column
@@ -145,7 +145,7 @@
             label="库存金额">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="remarks"
             label="备注">
           </el-table-column>
         </el-table>
@@ -155,11 +155,10 @@
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[10, 20, 30, 40]"
+            :current-page="params.page"
             :page-size="10"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="400">
+            layout="total, prev, pager, next, jumper"
+            :total="totalNumber">
           </el-pagination>
         </div>
       </div>
@@ -189,55 +188,36 @@
         lists: [],
         /***********/
         formInline:{},
-        tableData: [
-          {
-            date: '2016-05-03',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-          {
-            date: '2016-05-04',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-          {
-            date: '2016-05-01',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-          {
-            date: '2016-05-01',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          }
-        ],
+        tableData: [],
         currentPage: 1,
         addSuppliesDialog:false,
         isReverse: false,
         organizationDialog:false,
+        totalNumber:'',
+        params:{
+          status:'',
+          department_id:'',
+          staff_id:'',
+          keywords:'',
+          page:'',
+        }
       }
     },
+
+    mounted(){
+        this.getTableData();
+    },
     methods:{
+      getTableData(){
+          this.$http.get('/oa/getoffice/',{params:this.params}).then((res)=>{
+              if(res.data.code === '60000'){
+                  console.log(res.data.data.list)
+                this.tableData = res.data.data.list;
+                this.totalNumber = res.data.data.pages;
+              }
+          })
+      },
+
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
