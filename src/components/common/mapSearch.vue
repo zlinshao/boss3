@@ -77,11 +77,11 @@
       FormVisible(val){
         this.mapFormVisible = val
       },
-      // mapFormVisible(val){
-      //   if(!val){
-      //
-      //   }
-      // },
+      mapFormVisible(val) {
+        if (!val) {
+          this.$emit('close','');
+        }
+      },
       selectMember(val){
         if(val.length){
           this.buttonStatus = false
@@ -134,7 +134,7 @@
         .el-dialog__body{
           .content{
             .filter-container{
-
+              padding: 16px 0 0 16px;
             }
             .tableList{
               height: 400px;
