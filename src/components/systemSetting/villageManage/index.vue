@@ -49,7 +49,7 @@
                   <el-form-item>
                     <el-form-item>
                       <el-select v-model="form.built_year">
-                        <el-option v-for="(key,index) in 51" :label="key + 1969" :value="index + 1969"
+                        <el-option v-for="(key,index) in 151" :label="key + 1969" :value="index + 1969"
                                    :key="index"></el-option>
                       </el-select>
                     </el-form-item>
@@ -124,7 +124,7 @@
           </el-row>
           <div class="btnOperate">
 
-            <el-button size="mini" type="primary" @click="myData(1)">搜索</el-button>
+            <el-button size="mini" type="primary" @click="search()">搜索</el-button>
             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
             <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
           </div>
@@ -150,7 +150,7 @@
         label="小区别名">
       </el-table-column>
       <el-table-column
-        prop="dictionary_name"
+        prop="house_types"
         label="房屋类型">
       </el-table-column>
       <el-table-column
@@ -223,7 +223,7 @@
       }
     },
     mounted() {
-      this.$http.get('setting/dictionary/11').then((res) => {
+      this.$http.get('setting/dictionary/10').then((res) => {
         this.dict = res.data.data;
         if (this.$route.query.status === 1) {
           let term = this.$route.query.term;
@@ -304,7 +304,10 @@
           })
         }
       },
-
+      search() {
+        this.myData(1);
+        this.isHigh = false;
+      },
       // 重置
       resetting() {
         this.form.pages = 1;
@@ -349,6 +352,7 @@
       dblMenu(row) {
         this.$router.push({path: '/villageManage/villageDetail', query: {ids: row.id, term: this.form}});
       },
+
       // 右键
       houseMenu(row, event) {
         this.pitch = row.id;
@@ -382,6 +386,7 @@
           this.show = true
         })
       },
+
       // 删除
       openDelete() {
         this.$confirm('此操作将删除该文件, 是否继续?', '提示', {

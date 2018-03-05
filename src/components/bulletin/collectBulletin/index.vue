@@ -59,6 +59,8 @@
                         range-separator="至"
                         start-placeholder="开始日期"
                         end-placeholder="结束日期"
+                        format="yyyy-MM-dd"
+                        value-format="yyyy-MM-dd"
                         :picker-options="pickerOptions">
                       </el-date-picker>
                     </div>
@@ -368,6 +370,7 @@
       },
       // 右键
       collectMenu(row, event) {
+        console.log(event);
         this.lists = [
           {clickIndex: 'remark', headIcon: 'el-icon-edit', label: '备注',},
         ];
