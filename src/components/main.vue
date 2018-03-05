@@ -125,8 +125,6 @@
           title: 'Title-3',
           content: '今天李巧俊生孩子'
         }],
-
-//        weeks:['日','一','二','三','四','五','六']
       }
     },
     mounted(){
@@ -148,9 +146,7 @@
       },
       //日历变成中文
       changeLanguage(){
-        for(let i=1;i<8;i++){
-          document.querySelectorAll('.weeks>span:nth-child('+ i +')')[0].innerHTML=this.weeks[i-1]
-        }
+
       }
     }
   }

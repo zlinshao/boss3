@@ -1,18 +1,17 @@
 <template>
 	<span class="tree-expand">
-		<span class="tree-label" v-show="DATA.isEdit">
-			<el-input class="edit" size="mini" autofocus
-			v-model="DATA.name"
-			:ref="'treeInput'+DATA.id"
-			@click.stop.native="nodeEditFocus"
-			@blur.stop="nodeEditPass(STORE,DATA,NODE)"
-			@keyup.enter.stop.native="nodeEditPass(STORE,DATA,NODE)"></el-input>
-		</span>
-		<span v-show="!DATA.isEdit"
-		:class="[DATA.id > maxExpandId ? 'tree-new tree-label' : 'tree-label']">
+		<!--<span class="tree-label" v-show="DATA.isEdit">-->
+			<!--<el-input class="edit" size="mini" autofocus-->
+			<!--v-model="DATA.name"-->
+			<!--:ref="'treeInput'+DATA.id"-->
+			<!--@click.stop.native="nodeEditFocus"-->
+			<!--@blur.stop="nodeEditPass(STORE,DATA,NODE)"-->
+			<!--@keyup.enter.stop.native="nodeEditPass(STORE,DATA,NODE)"></el-input>-->
+		<!--</span>-->
+		<span :class="[DATA.id > maxExpandId ? 'tree-new tree-label' : 'tree-label']">
 			<span>{{DATA.name}}</span>
 		</span>
-		<span class="tree-btn" v-show="!DATA.isEdit">
+		<span class="tree-btn">
 			<i class="el-icon-plus" @click.stop="nodeAdd(STORE,DATA,NODE)"></i>
 			<i class="el-icon-edit" @click.stop="nodeEdit(STORE,DATA,NODE)"></i>
 			<i class="el-icon-delete" @click.stop="nodeDel(STORE,DATA,NODE)"></i>
@@ -29,17 +28,17 @@
 				this.$emit('nodeAdd',s,d,n);
 			},
 			nodeEdit(s,d,n){//编辑
-				d.isEdit = true;
-				this.$nextTick(() => {
-					this.$refs['treeInput'+d.id].$refs.input.focus();
-				});
+//				d.isEdit = true;
+//				this.$nextTick(() => {
+//					this.$refs['treeInput'+d.id].$refs.input.focus();
+//				});
 				this.$emit('nodeEdit',s,d,n);
 			},
 			nodeDel(s,d,n){//删除
 				this.$emit('nodeDel',s,d,n);
 			},
 			nodeEditPass(s,d,n){//编辑完成
-				d.isEdit = false;
+//				d.isEdit = false
 //        this.$emit('nodeEdit',s,d,n);
 			},
 			nodeEditFocus(){

@@ -38,20 +38,20 @@
           <div class="slogan">
             <img src="../assets/images/slogan.png" style="width: 100%" alt="">
           </div>
-          <div class="loginType">
-            <div id="ding"  @click="switchModel(1)">
-              <img v-if="!dingColor" src="../assets/images/dd2.png" alt="">
-              <img v-if="dingColor" src="../assets/images/dd1.png" alt="">
-            </div>
-            <div id="message" @click="switchModel(2)">
-              <img v-if="sjColor" src="../assets/images/sj.png" alt="">
-              <img v-if="!sjColor" src="../assets/images/sj_02.png" alt="">
-            </div>
-            <div id="weChart" @click="switchModel(3)">
-              <img v-if="!weiColor" src="../assets/images/weixin1.png" alt="">
-              <img v-if="weiColor" src="../assets/images/weixin2.png" alt="">
-            </div>
-          </div>
+          <!--<div class="loginType">-->
+            <!--<div id="ding"  @click="switchModel(1)">-->
+              <!--<img v-if="!dingColor" src="../assets/images/dd2.png" alt="">-->
+              <!--<img v-if="dingColor" src="../assets/images/dd1.png" alt="">-->
+            <!--</div>-->
+            <!--<div id="message" @click="switchModel(2)">-->
+              <!--<img v-if="sjColor" src="../assets/images/sj.png" alt="">-->
+              <!--<img v-if="!sjColor" src="../assets/images/sj_02.png" alt="">-->
+            <!--</div>-->
+            <!--<div id="weChart" @click="switchModel(3)">-->
+              <!--<img v-if="!weiColor" src="../assets/images/weixin1.png" alt="">-->
+              <!--<img v-if="weiColor" src="../assets/images/weixin2.png" alt="">-->
+            <!--</div>-->
+          <!--</div>-->
         </div>
         <div class="formItem" v-if="loginModel==2">
           <el-input placeholder="请输入手机号">
@@ -63,7 +63,9 @@
             <el-button slot="append" size="small" type="success">获取验证码</el-button>
           </el-input>
 
-          <el-checkbox>记录本机登陆方式！</el-checkbox>
+          <div style="display: flex;justify-content: flex-end;margin-top: 20px">
+            <el-button type="text" @click="isMessage=false">更换登陆方式</el-button>
+          </div>
 
           <div class="confirmLogin">
             <el-button size="medium" type="primary" @click.native.prevent="handleSubmit2" :loading="logining">登 陆
@@ -452,7 +454,7 @@
 
         .top {
           width: 100%;
-          height: 270px;
+          height: 210px;
           background: #fcfbfc;
           box-sizing: border-box;
           .beijing {
@@ -494,7 +496,7 @@
           margin: 18px 0;
         }
         .confirmLogin {
-          margin: 40px 0 60px 0;
+          margin: 20px 0 60px 0;
           .el-button--primary {
             background: #6a8dfb;
             border-color: #6a8dfb;

@@ -9,7 +9,7 @@ globalConfig = {
   env: 'dev',
   urlName: '',                                                        //用户名
   header:{
-    'Content-Type': 'application/x-www-form-urlencoded',
+    //'Content-Type': 'application/x-www-form-urlencoded',
     'Accept': 'application/json'
   }
 };
