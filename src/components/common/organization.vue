@@ -14,15 +14,15 @@
              :loading="loading">
              <el-option
                v-for="item in searchItems"
-               :key="item.value"
-               :label="item.label"
-               :value="item.value">
+               :key="item.id"
+               :label="item.name"
+               :value="item.id">
                <div class="head">
-                 <img src="../../assets/images/head.jpg" :class="selectMember.indexOf(item.label)>-1?'':'gray'">
+                 <img src="../../assets/images/head.jpg" :class="selectMember.indexOf(item.name)>-1?'':'gray'">
                </div>
                <div class="infoBox">
-                 <div class="info">{{item.label}}</div>
-                 <div class="info">{{item.value}}</div>
+                 <div class="info">{{item.name}}</div>
+                 <div class="info">{{item.phone}}</div>
                </div>
              </el-option>
            </el-select>
@@ -39,21 +39,31 @@
                 </a>
               </div>
               <div class="box-body scroll_bar">
-                <ul class="organizeList">
-                  <li v-for="item in 10" @click="selectStaff(item)">
-                    <div class="head">
-                      <img src="../../assets/images/head.jpg" alt="">
-                       <!--对号-->
-                      <span class="el-icon-check" v-if="item>4"></span>
-                       <!--遮罩-->
-                      <span class="shade" v-if="item>4"></span>
+                <ul>
+                  <li><el-checkbox>全选</el-checkbox></li>
+                  <li v-for="item in organizeList" @click="getDepartment(item.id)">
+                    <div>
+                      <el-checkbox></el-checkbox>
+                      <span>{{item.name}}</span>
                     </div>
-                    <div class="infoBox">
-                      <div class="info">张琳</div>
-                      <div class="info">研发部（前端）</div>
-                    </div>
+                    <div>({{item.users}}人)</div>
                   </li>
                 </ul>
+                <!--<ul class="organizeList">-->
+                  <!--<li v-for="item in 10" @click="selectStaff(item)">-->
+                    <!--<div class="head">-->
+                      <!--<img src="../../assets/images/head.jpg" alt="">-->
+                       <!--&lt;!&ndash;对号&ndash;&gt;-->
+                      <!--<span class="el-icon-check" v-if="item>4"></span>-->
+                       <!--&lt;!&ndash;遮罩&ndash;&gt;-->
+                      <!--<span class="shade" v-if="item>4"></span>-->
+                    <!--</div>-->
+                    <!--<div class="infoBox">-->
+                      <!--<div class="info">张琳</div>-->
+                      <!--<div class="info">研发部（前端）</div>-->
+                    <!--</div>-->
+                  <!--</li>-->
+                <!--</ul>-->
               </div>
             </div>
           </div>
@@ -79,30 +89,16 @@
         searchItems: [],    //搜索到人员
         selectMember: [],
         list: [],
+        keywords : '',
         loading: false,
-        states: ["Alabama", "Alaska", "Arizona",
-          "Arkansas", "California", "Colorado",
-          "Connecticut", "Delaware", "Florida",
-          "Georgia", "Hawaii", "Idaho", "Illinois",
-          "Indiana", "Iowa", "Kansas", "Kentucky",
-          "Louisiana", "Maine", "Maryland",
-          "Massachusetts", "Michigan", "Minnesota",
-          "Mississippi", "Missouri", "Montana",
-          "Nebraska", "Nevada", "New Hampshire",
-          "New Jersey", "New Mexico", "New York",
-          "North Carolina", "North Dakota", "Ohio",
-          "Oklahoma", "Oregon", "Pennsylvania",
-          "Rhode Island", "South Carolina",
-          "South Dakota", "Tennessee", "Texas",
-          "Utah", "Vermont", "Virginia",
-          "Washington", "West Virginia", "Wisconsin",
-          "Wyoming"]
+        organizeList:[],
       }
     },
     mounted() {
-      this.list = this.states.map(item => {
-        return { value: item, label: item };
-      });
+//      this.list = this.states.map(item => {
+//        return { value: item, label: item };
+//      });
+      this.getDepartment(1);
     },
     watch:{
       organizationDialog(val){
@@ -118,19 +114,37 @@
       }
     },
     methods:{
+      getDepartment(id){
+        this.$ajax.get('api/v1/organizations?parent_id='+id).then((res) => {
+          if(res.data.status === 'success'){
+            if(res.data.data.length>0){
+              this.organizeList = res.data.data;
+            }
+          }
+        })
+      },
       remoteMethod(query) {
-        if (query !== '') {
-          this.loading = true;
-          setTimeout(() => {
-            this.loading = false;
-            this.searchItems = this.list.filter(item => {
-              return item.label.toLowerCase()
-                  .indexOf(query.toLowerCase()) > -1;
-            });
-          }, 200);
-        } else {
+        if (query !== ''){
+          this.$ajax.get('api/v1/users?q='+query).then((res) => {
+            if(res.data.status === 'success'){
+              this.searchItems = res.data.data;
+            }
+          })
+        }else {
           this.searchItems = [];
         }
+
+//        if (query !== '') {
+//          this.loading = true;
+//          setTimeout(() => {
+//            this.loading = false;
+//            this.searchItems = this.list.filter(item => {
+//              return item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
+//            });
+//          }, 200);
+//        } else {
+//          this.searchItems = [];
+//        }
       },
       inputFocus(){
           let _input = document.getElementById('search');
@@ -246,6 +260,9 @@
                       padding: 5px 20px;
                       box-sizing: border-box;
                       cursor: pointer;
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
                       &:hover{
                         background: rgb(223, 237, 250);;
                       }

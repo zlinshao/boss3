@@ -1293,7 +1293,6 @@
       },
       /*****************************模态框打开******************************/
       openModalDialog(type){
-          console.log(type)
         switch (type) {
           case 'instructionDialog':   //说明书
             this.instructionDialog = true;

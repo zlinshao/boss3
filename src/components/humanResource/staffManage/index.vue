@@ -1,5 +1,5 @@
 <template>
-    <div id="staffManage">
+    <div id="staffManage"  @click="show=false" @contextmenu="closeMenu">
       <el-row :gutter="10">
         <el-col :span="6">
           <div class="border left">
@@ -63,9 +63,13 @@
                   <el-form-item label="选择部门">
                     <el-input @focus="organizationDialog = true" readonly=""></el-input>
                   </el-form-item>
-                  <el-form-item>
-                    <el-input v-model="formInline.name" placeholder="搜索">
-                      <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
+                  <el-form-item style="float: right">
+                    <el-button type="primary" @click="addStaff">新建员工</el-button>
+                  </el-form-item>
+
+                  <el-form-item style="float: right">
+                    <el-input v-model="formInline.keywords" placeholder="请输入搜索内容" @keyup.enter.native="search">
+                      <el-button slot="append" type="primary" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                   </el-form-item>
                 </el-form>
@@ -74,43 +78,44 @@
               <div class="staffTable">
                 <el-table
                   :data="tableData"
+                  @row-contextmenu="openContextMenu"
                   style="width: 100%">
                   <el-table-column
-                    prop="date"
+                    prop="name"
                     label="员工姓名">
                   </el-table-column>
+                  <!--<el-table-column-->
+                    <!--prop="org_id"-->
+                    <!--label="部门">-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--prop="date"-->
+                    <!--label="职务">-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--prop="date"-->
+                    <!--label="人员状态">-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--prop="date"-->
+                    <!--label="等级">-->
+                  <!--</el-table-column>-->
                   <el-table-column
-                    prop="date"
-                    label="部门">
-                  </el-table-column>
-                  <el-table-column
-                    prop="date"
-                    label="职务">
-                  </el-table-column>
-                  <el-table-column
-                    prop="date"
-                    label="人员状态">
-                  </el-table-column>
-                  <el-table-column
-                    prop="date"
-                    label="等级">
-                  </el-table-column>
-                  <el-table-column
-                    prop="date"
+                    prop="phone"
                     label="手机号">
                   </el-table-column>
                   <el-table-column
-                    prop="date"
+                    prop="created_at"
                     label="入职时间">
                   </el-table-column>
-                  <el-table-column
-                    prop="date"
-                    label="第一次合同">
-                  </el-table-column>
-                  <el-table-column
-                    prop="date"
-                    label="第二次合同">
-                  </el-table-column>
+                  <!--<el-table-column-->
+                    <!--prop="date"-->
+                    <!--label="第一次合同">-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--prop="date"-->
+                    <!--label="第二次合同">-->
+                  <!--</el-table-column>-->
                 </el-table>
               </div>
 
@@ -122,7 +127,7 @@
                   :page-sizes="[10, 20, 30, 40]"
                   :page-size="10"
                   layout="total, sizes, prev, pager, next, jumper"
-                  :total="400">
+                  :total="totalNum">
                 </el-pagination>
               </div>
             </div>
@@ -131,54 +136,172 @@
         </el-col>
       </el-row>
       <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
+      <AddStaff :addStaffDialog="addStaffDialog" :isEdit="isEdit" :editId="editId" @close="closeAddStaff"></AddStaff>
+      <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+                 @clickOperate="clickEvent"></RightMenu>
+      <EditDepart :editDepartDialog="editDepartDialog" :departId="departId" @close="closeEditDepart"></EditDepart>
+      <AddDepart :addDepartDialog="addDepartDialog" :parentId="parentId" @close="closeAddDepart"></AddDepart>
     </div>
 </template>
 
 <script>
   import TreeRender from './components/treeRender.vue'
-  import api from '../../systemSetting/userDictionary/api.js'
   import Organization from '../../common/organization.vue'
   import Sortable from 'sortablejs'
+  import AddStaff from './components/addStaff.vue'
+  import RightMenu from '../../common/rightMenu.vue'    //右键
+  import EditDepart from './components/editdepar.vue'
+  import AddDepart from './components/addDepart.vue'
   export default{
     name: 'tree',
-    components:{Organization},
+    components:{Organization,AddStaff,RightMenu,EditDepart,AddDepart},
     data(){
       return{
 //        maxExpandId: api.maxExpandId,//新增节点开始id
 //        non_maxExpandId: api.maxExpandId,//新增节点开始id(不更改)
-        setTree: api.treelist,//节点树数据
+
+        rightMenuX: 0,
+        rightMenuY: 0,
+        show: false,
+        lists: [],
+        /***********/
+        arrList:[],
+        setTree:  [],
         defaultProps: {
           children: 'children',
           label: 'name'
         },
         defaultExpandKeys: [],//默认展开节点列表
 
-        formInline:{},
+        formInline:{
+          keywords:'',
+          pageNum:10,
+          page:1,
+        },
         tableData:[],
-        organizationDialog:"",
+        organizationDialog:false,
         sortable: null,
         currentPage:1,
         isDepartment : false,
         //......................
-        params:{
-            name:'libai',
-            phone:15255556666,
-            org_id:1
-        }
+
+        addStaffDialog:false, //新增用户模态框
+        editDepartDialog:false, //编辑部门模态框
+        addDepartDialog:false, //新建部门模态框
+        isEdit:false,
+        editId : null,
+        totalNum : 0,
+        departId:null,
+        parentId:null,
       }
     },
     mounted(){
       this.initExpand();
       document.getElementById('staffManage').style.minHeight = window.innerHeight - 160 + 'px';
       this.getStaffData();
+      this.getDepart();
+      this.organizationDialog=true;
     },
     methods: {
       //获取员工数据列表
       getStaffData(){
-          this.$ajax.post('api/v1/users',this.params).then((res) => {
-              console.log(res)
+          this.$ajax.get('api/v1/users?q='+this.formInline.keywords+'&page='+this.formInline.page
+            +'&per_page_number='+this.formInline.pageNum).then((res) => {
+              if(res.data.status === 'success'){
+                this.tableData = res.data.data;
+                this.totalNum = res.data.meta.total;
+              }
           })
       },
+//      搜索
+      search(){
+          this.getStaffData();
+      },
+      //右键菜单
+      openContextMenu(row, event){
+        this.editId = row.id;
+        this.lists = [
+          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '编辑',},
+          {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
+        ];
+        let e = event || window.event;	//support firefox contextmenu
+        this.show = false;
+        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+
+//        console.log(this.rightMenuX,this.rightMenuY)
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true
+        })
+      },
+      //右键回调时间
+      clickEvent (index) {
+        this.openModalDialog(index);
+      },
+      openModalDialog(type){
+        if(type === 'edit'){
+          this.addStaffDialog = true;
+          this.isEdit = true;
+        }else if(type === 'delete'){
+          this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.deleteStaff();
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            });
+          });
+        }
+      },
+      //关闭右键菜单
+      closeMenu(){
+        this.show = false;
+      },
+      deleteStaff(){
+        this.$ajax.delete('api/v1/users/'+this.editId).then((res) => {
+          if(res.data.status === 'success'){
+            this.getStaffData();
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+          }else {
+            this.$message({
+              message: res.data.message,
+              type: 'warning'
+            });
+          }
+        })
+      },
+      //新建员工
+      addStaff(){
+        this.addStaffDialog = true;
+        this.isEdit = false;
+      },
+      closeAddStaff(val){
+        this.addStaffDialog = false;
+        this.isEdit = false;
+        this.editId = '';
+        if(val === 'success'){
+          this.getStaffData();
+        }
+      },
+      //分页
+      handleSizeChange(val) {
+        this.formInline.pageNum = val;
+        this.search();
+      },
+      handleCurrentChange(val) {
+        this.formInline.page = val;
+        this.search();
+      },
+      //-------------部门排序--------------------
       sortDepartment(){
           this.isDepartment = !this.isDepartment;
       },
@@ -194,12 +317,39 @@
       setSort() {
         const el = document.querySelectorAll('#sortTable ul')[0];
         this.sortable = Sortable.create(el, {
-
           onEnd: evt => {
 //            const tempIndex = this.newList.splice(evt.oldIndex, 1)[0]
 //            this.newList.splice(evt.newIndex, 0, tempIndex)
           }
         })
+      },
+
+
+      //----------------部门增删改查------------------------
+      //获取部门数据
+      getDepart(){
+        this.$ajax.get('api/v1/organizations').then((res) => {
+          this.arrList = res.data.data;
+          this.setTree = this.recurrence(null);
+          this.defaultExpandKeys=[];
+          this.arrList.forEach((item) => {
+            this.defaultExpandKeys.push(item.id);
+          });
+        })
+      },
+      //把数据转化为树形数据结构
+      recurrence(num){
+        let list = [];
+        this.arrList.forEach((item) => {
+          if(item.parent_id === num){
+            let tmp = this.recurrence(item.id);
+            if(tmp){
+              item['children'] = tmp;
+            }
+            list.push(item)  ;
+          }
+        });
+        return list
       },
 
       renderContent(h,{node,data,store}){//加载节点
@@ -219,78 +369,74 @@
         });
       },
       handleAdd(s,d,n){//增加节点
-        console.log(n)
-//        if(n.level >=6){
-//          this.$message.error("最多只支持五级！");
-//          return false;
-//        }
-//        //添加数据
-//        d.children.push({
-//          id: ++this.maxExpandId,
-//          name: '新增节点',
-//          pid: d.id,
-//          isEdit: false,
-//          children: []
-//        });
-//        //展开节点
-//        if(!n.expanded){
-//          n.expanded = true;
-//        }
+        this.addDepart(d.id);
       },
       handleEdit(s,d,n){//编辑节点
-        console.log(d)
+        this.editDepart(d.id);
       },
       handleDelete(s,d,n){//删除节点
-//        console.log(s,d,n);
-//        let that = this;
-//        //有子级不删除
-//        if(d.children && d.children.length !== 0){
-//          this.$message.error("此节点有子级，不可删除！");
-//          return false;
-//        }else{
-//          //新增节点直接删除，否则要询问是否删除
-//          let delNode = () => {
-//            let list = n.parent.data.children || n.parent.data,//节点同级数据
-//              _index = 99999;//要删除的index
-//            /*if(!n.parent.data.children){//删除顶级节点，无children
-//             list = n.parent.data
-//             }*/
-//            list.map((c,i) => {
-//              if(d.id === c.id){
-//                _index = i;
-//              }
-//            });
-//            let k = list.splice(_index,1);
-//            //console.log(_index,k)
-//            this.$message.success("删除成功！")
-//          };
-//          let isDel = () => {
-//            that.$confirm("是否删除此节点？","提示",{
-//              confirmButtonText: "确认",
-//              cancelButtonText: "取消",
-//              type: "warning"
-//            }).then(() => {
-//              delNode()
-//            }).catch(() => {
-//              return false;
-//            })
-//          };
-//          //判断是否新增
-//          d.id > this.non_maxExpandId ? delNode() : isDel()
-//
-//        }
+        this.$confirm('您确定删除吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+            this.deleteDpr(d.id);
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      },
+      //新建部门
+      addDepart(id){
+          this.parentId = id;
+          this.addDepartDialog = true
+      },
+      closeAddDepart(val){
+        this.addDepartDialog = false;
+        this.parentId = null;
+        if(val === 'success'){
+          this.getDepart();
+        }
+      },
+      //删除部门
+      deleteDpr(id){
+          this.$ajax.delete('api/v1/organizations/'+id).then((res) =>{
+              if(res.data.status === 'success'){
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                });
+                this.getDepart();
+              }else {
+                this.$message({
+                  message: res.data.message,
+                  type: 'warning'
+                });
+              }
+          })
+      },
+      //编辑部门
+      editDepart(id){
+        this.departId = id;
+        this.editDepartDialog = true;
+      },
+      //编辑部门回调
+      closeEditDepart(val){
+        this.editDepartDialog = false;
+        this.departId = null;
+        if(val === 'success'){
+          this.getDepart();
+        }
       },
 
+      //***********************************
+      //关闭选人框回调
       closeOrganization(){
           this.organizationDialog = false;
       },
-      //分页
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      },
+
 
       //确定排序
       confirmSave(){
@@ -309,7 +455,8 @@
             message: '已取消保存'
           });
         });
-      }
+      },
+
     }
 
   }

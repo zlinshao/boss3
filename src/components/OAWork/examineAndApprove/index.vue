@@ -168,7 +168,7 @@
               style="width: 100%">
               <el-table-column
                 prop="date"
-                v-if="isCheckbox"
+
                 type="selection">
               </el-table-column>
               <el-table-column
@@ -200,116 +200,120 @@
         </el-tab-pane>
         <el-tab-pane name="third">
           <el-badge  slot="label" :is-dot="false" class="item">已完成事项</el-badge>
-          <el-table
-            :data="tableData"
-            @row-dblclick="dblClickTable"
-            style="width: 100%">
-            <el-table-column
-              prop="date"
-              v-if="isCheckbox"
-              type="selection">
-            </el-table-column>
-            <el-table-column
-              prop="date"
-              label="审批标题">
-            </el-table-column>
-            <el-table-column
-              label="审批摘要">
-              <template slot-scope="scope">
-                <div>{{scope.row.city}}</div>
-                <div>{{scope.row.address}}</div>
-                <div>{{scope.row.zip}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="province"
-              label="发起时间">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="完成时间">
-            </el-table-column>
-            <el-table-column
-              prop="zip"
-              label="状态">
-            </el-table-column>
-          </el-table>
+          <div class="myTable">
+            <el-table
+              :data="tableData"
+              @row-dblclick="dblClickTable"
+              style="width: 100%">
+              <el-table-column
+                prop="date"
+
+                type="selection">
+              </el-table-column>
+              <el-table-column
+                prop="date"
+                label="审批标题">
+              </el-table-column>
+              <el-table-column
+                label="审批摘要">
+                <template slot-scope="scope">
+                  <div>{{scope.row.city}}</div>
+                  <div>{{scope.row.address}}</div>
+                  <div>{{scope.row.zip}}</div>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="province"
+                label="发起时间">
+              </el-table-column>
+              <el-table-column
+                prop="address"
+                label="完成时间">
+              </el-table-column>
+              <el-table-column
+                prop="zip"
+                label="状态">
+              </el-table-column>
+            </el-table>
+          </div>
         </el-tab-pane>
         <el-tab-pane label="我发起的" name="fourth">
           <el-badge  slot="label" is-dot="" class="item">我发起的</el-badge>
-          <el-table
-            :data="tableData"
-            @row-dblclick="dblClickTable"
-            style="width: 100%">
-            <el-table-column
-              prop="date"
-              v-if="isCheckbox"
-              type="selection">
-            </el-table-column>
-            <el-table-column
-              prop="date"
-              label="审批标题">
-            </el-table-column>
-            <el-table-column
-              label="审批摘要">
-              <template slot-scope="scope">
-                <div>{{scope.row.city}}</div>
-                <div>{{scope.row.address}}</div>
-                <div>{{scope.row.zip}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="province"
-              label="发起时间">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="完成时间">
-            </el-table-column>
-            <el-table-column
-              prop="zip"
-              label="状态">
-            </el-table-column>
-          </el-table>
+          <div class="myTable">
+            <el-table
+              :data="tableData"
+              @row-dblclick="dblClickTable"
+              style="width: 100%">
+              <el-table-column
+                prop="date"
+
+                type="selection">
+              </el-table-column>
+              <el-table-column
+                prop="date"
+                label="审批标题">
+              </el-table-column>
+              <el-table-column
+                label="审批摘要">
+                <template slot-scope="scope">
+                  <div>{{scope.row.city}}</div>
+                  <div>{{scope.row.address}}</div>
+                  <div>{{scope.row.zip}}</div>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="province"
+                label="发起时间">
+              </el-table-column>
+              <el-table-column
+                prop="address"
+                label="完成时间">
+              </el-table-column>
+              <el-table-column
+                prop="zip"
+                label="状态">
+              </el-table-column>
+            </el-table>
+          </div>
         </el-tab-pane>
         <el-tab-pane label="抄送我的" name="fifth">
           <el-badge  slot="label" :is-dot="false" class="item">抄送我的</el-badge>
-          <el-table
-            :data="tableData"
-            @row-dblclick="dblClickTable"
-            style="width: 100%">
-            <el-table-column
-              prop="date"
-              v-if="isCheckbox"
-              type="selection">
-            </el-table-column>
-            <el-table-column
-              prop="date"
-              label="审批标题">
-            </el-table-column>
-            <el-table-column
-              label="审批摘要">
-              <template slot-scope="scope">
-                <div>{{scope.row.city}}</div>
-                <div>{{scope.row.address}}</div>
-                <div>{{scope.row.zip}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="province"
-              label="发起时间">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="完成时间">
-            </el-table-column>
-            <el-table-column
-              label="审批摘要">
-              <template slot-scope="scope">
-                <div>{{scope.row.city}}</div>
-              </template>
-            </el-table-column>
-          </el-table>
+          <div class="myTable">
+            <el-table
+              :data="tableData"
+              @row-dblclick="dblClickTable"
+              style="width: 100%">
+              <el-table-column
+                prop="date"
+
+                type="selection">
+              </el-table-column>
+              <el-table-column
+                prop="date"
+                label="审批标题">
+              </el-table-column>
+              <el-table-column
+                label="审批摘要">
+                <template slot-scope="scope">
+                  <div>{{scope.row.city}}</div>
+                  <div>{{scope.row.address}}</div>
+                  <div>{{scope.row.zip}}</div>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="province"
+                label="发起时间">
+              </el-table-column>
+              <el-table-column
+                prop="address"
+                label="完成时间">
+              </el-table-column>
+              <el-table-column
+                prop="zip"
+                label="状态">
+              </el-table-column>
+            </el-table>
+          </div>
         </el-tab-pane>
       </el-tabs>
     </div>
