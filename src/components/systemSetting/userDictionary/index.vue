@@ -294,6 +294,7 @@
       // 右键
       houseMenu(row, event, tag) {
         this.treeData = row;
+        this.treeData.revise = '';
         this.lists = [
 
           {clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '编辑',},
@@ -304,7 +305,7 @@
           this.lists.push({clickIndex: 'up', headIcon: 'el-icon-sort', label: '上架',});
         }
         if (tag === 'tag') {
-          this.lists.unshift({clickIndex: 'add', headIcon: 'el-icon-plus', label: '新增子字典',});
+          this.lists.unshift({clickIndex: 'add', headIcon: 'el-icon-plus', label: '新增字典属性',});
         }
         this.contextMenuParam(event);
       },

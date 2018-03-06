@@ -56,25 +56,25 @@ axios.interceptors.response.use(function (response) {
 // });
 
 //重定向
-router.beforeEach((to, from, next) => {
-
-  if (to.path === '/login') {
-    sessionStorage.removeItem('user');
-  }
-  let user = JSON.parse(sessionStorage.getItem('user'));
-
-  if (Cookies.get('locking') === '1' && to.path !== '/lock') {
-    next({path: '/lock'});
-  } else if (Cookies.get('locking') === '0' && to.path === '/lock') {
-    next(false);
-  } else {
-    if (!user && to.path !== '/login') {
-      next({path: '/login'})
-    } else {
-      next()
-    }
-  }
-});
+// router.beforeEach((to, from, next) => {
+//
+//   if (to.path === '/login') {
+//     sessionStorage.removeItem('user');
+//   }
+//   let user = JSON.parse(sessionStorage.getItem('user'));
+//
+//   if (Cookies.get('locking') === '1' && to.path !== '/lock') {
+//     next({path: '/lock'});
+//   } else if (Cookies.get('locking') === '0' && to.path === '/lock') {
+//     next(false);
+//   } else {
+//     if (!user && to.path !== '/login') {
+//       next({path: '/login'})
+//     } else {
+//       next()
+//     }
+//   }
+// });
 
 new Vue({
   el: '#app',
