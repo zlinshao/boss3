@@ -6,7 +6,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="上级部门">
-                <el-input placeholder="请输入内容" v-model="params.parent_id"></el-input>
+                <el-input placeholder="请输入内容" disabled="" v-model="parent_name"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -33,7 +33,7 @@
 
 <script>
   export default {
-    props:['addDepartDialog','parentId'],
+    props:['addDepartDialog','parentId','parentName'],
     data() {
       return {
         addDepartDialogVisible:false,
@@ -42,6 +42,7 @@
           name:'',
           order:''
         },
+        parent_name:'',
       };
     },
     watch:{
@@ -56,6 +57,11 @@
       parentId(val){
           if(val){
               this.params.parent_id = val;
+          }
+      },
+      parentName(val){
+          if(val){
+              this.parent_name = val;
           }
       }
     },

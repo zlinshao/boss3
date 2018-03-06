@@ -18,7 +18,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="所属部门">
-                <el-input placeholder="请输入内容" v-model="params.org_id"></el-input>
+                <el-input placeholder="请输入内容" readonly="" @focus="selectDepart" v-model="department"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -29,12 +29,16 @@
         <el-button size="small" type="primary" @click.native="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
+
+    <Organization :organizationDialog="organizationDialog" @close="closeOrganization" @selectMember="selectMember"></Organization>
   </div>
 </template>
 
 <script>
+  import Organization from '../../../common/organization.vue'
   export default {
     props:['addStaffDialog','isEdit','editId'],
+    components:{Organization},
     data() {
       return {
         addStaffDialogVisible:false,
@@ -44,6 +48,8 @@
           phone:''
         },
         title : '新建用户',
+        organizationDialog:false,
+        department:'',
       };
     },
     watch:{
@@ -71,7 +77,9 @@
           if(res.data.status === 'success'){
             this.params.name = res.data.data.name;
             this.params.phone = res.data.data.phone;
-            this.params.org_id = res.data.data.org_id;
+            console.log(res.data.data)
+            this.params.org_id = res.data.data.org[0].id;
+            this.department = res.data.data.org[0].name;
 
           }else {
             this.$message({
@@ -108,6 +116,18 @@
           });
         }
 
+      },
+      selectDepart(){
+          this.organizationDialog = true
+      },
+      //关闭选人框回调
+      closeOrganization(){
+        this.organizationDialog = false;
+      },
+      selectMember(val){
+        this.params.org_id = val[0].id;
+        this.department = val[0].name;
+        this.organizationDialog = false;
       },
       beforeCloseModal(){
         if(this.isEdit){
