@@ -192,9 +192,17 @@
           this.$http.get(this.urls + 'setting/dictionary/show/' + val.id).then((res) => {
             if (res.data.code === '30050') {
               if (s === 'dict') {
-                this.dictList(this.dictListId);
+                this.dictList(val.id);
               } else {
                 this.initExpand(2);
+                if(res.data.msg === '下架成功'){
+                  this.dynamicTags = [];
+                  this.dynamicTagsStatus = true;
+                }
+                if(res.data.msg === '上架成功'){
+                  this.dictList(val.id);
+                  this.dynamicTagsStatus = false;
+                }
               }
               this.$message({
                 type: 'success',
@@ -307,7 +315,6 @@
           this.treeModule = true;
           this.treeData.revise = '';
           this.treeData.rev = 'dict'
-
         } else if (val === 'revise') {
           this.treeData.revise = 'revise';
           this.handleEdit('dict', this.treeData);
@@ -435,7 +442,7 @@
           padding-bottom: 10px;
           border-bottom: 1px solid #dfe6fb;
           margin-bottom: 10px;
-          div{
+          div {
             font-size: 16px;
             padding-left: 6px;
           }
