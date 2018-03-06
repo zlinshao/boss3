@@ -1,33 +1,39 @@
 <template>
   <div id="organizationId">
     <el-dialog title="选人" :visible.sync="organizationVisible" width="785px" center :modal="false">
-     <div class="content">
-       <div class="content_left" @click="inputFocus">
-           <el-select id="search" size="small"
-             v-model="selectMember"
-             multiple
-             filterable
-             remote
-             reserve-keyword
-             placeholder="搜索企业联系人"
-             :remote-method="remoteMethod"
-             :loading="loading">
-             <el-option
-               v-for="item in searchItems"
-               :key="item.value"
-               :label="item.label"
-               :value="item.value">
-               <div class="head">
-                 <img src="../../assets/images/head.jpg" :class="selectMember.indexOf(item.label)>-1?'':'gray'">
-               </div>
-               <div class="infoBox">
-                 <div class="info">{{item.label}}</div>
-                 <div class="info">{{item.value}}</div>
-               </div>
-             </el-option>
-           </el-select>
-       </div>
-       <div class="content_right">
+      <div class="content">
+
+        <div class="content_left" @click="inputFocus">
+          <div style="display:flex;flex-wrap: wrap;">
+            <div v-for="item in selectMember" style="height: 40px;line-height: 40px">
+              <el-tag type="info" closable size="medium" @close="handleClose(item)" style="margin-left:10px">{{item.name}}</el-tag>
+            </div>
+            <div style="flex-grow:1">
+              <el-input id="search" placeholder="请输入企业联系人" @keyup.native="remoteMethod"
+                        @keydown.8.native="backSpace" v-model="keywords" style="border: none"
+                        @keydown.down.native="changeDown" @keydown.up.native="changeUp" @keydown.13.native='keyDownAdd'></el-input>
+            </div>
+          </div>
+          <div class="searchItems">
+            <ul class="scroll_bar" id="searchList" v-if="searchItems.length>0">
+              <li v-for="(item,index) in searchItems" @click="selectSearchItem(item)" :class="{'hov':active_li==index}">
+                <div style="display: flex;">
+                  <div class="head">
+                    <img src="../../assets/images/head.jpg" :class="selectIdMember.indexOf(item.id)>-1?'':'gray'">
+                  </div>
+                  <div class="infoBox">
+                    <div class="info">{{item.name}}</div>
+                    <div class="info">{{item.phone}}</div>
+                  </div>
+                </div>
+
+                <i class="el-icon-check" style="float: right" v-if="selectIdMember.indexOf(item.id)>-1"></i>
+
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="content_right">
           <div class="box">
             <div class="boxHead">组织架构</div>
 
@@ -35,34 +41,54 @@
               <div class="breadcrumb">
                 <a><span>组织架构</span></a>
                 <a>
-                  <span >&nbsp;&gt;&nbsp;乐伽商业管理有限公司</span>
+                  <span @click="breadcrumbSearch(1)">&nbsp;&gt;&nbsp;南京乐品网络科技有限公司</span>
+                </a>
+                <a v-for="(item,index) in breadcrumbList" @click="breadcrumbSearch(item,index)">
+                  <span>&nbsp;&gt;&nbsp;{{item.name}}</span>
                 </a>
               </div>
               <div class="box-body scroll_bar">
-                <ul class="organizeList">
-                  <li v-for="item in 10" @click="selectStaff(item)">
-                    <div class="head">
-                      <img src="../../assets/images/head.jpg" alt="">
-                       <!--对号-->
-                      <span class="el-icon-check" v-if="item>4"></span>
-                       <!--遮罩-->
-                      <span class="shade" v-if="item>4"></span>
-                    </div>
-                    <div class="infoBox">
-                      <div class="info">张琳</div>
-                      <div class="info">研发部（前端）</div>
+                <ul>
+                  <!--<li>-->
+                    <!--<el-checkbox>全选</el-checkbox>-->
+                  <!--</li>-->
+                  <li v-for="item in organizeList">
+                    <!--<div @click="getNextLevel(item,$event)">-->
+                    <!--<el-checkbox ></el-checkbox>-->
+                    <!--<span style="margin-left: 6px">{{item.name}}</span>-->
+                    <!--</div>-->
+                    <!--<div>({{item.users}}人)</div>-->
+
+                    <el-checkbox-group v-model="checkedIdBox" @change="checkDepart(item,$event)">
+                      <el-checkbox  :label="item.id" :key="item.id">{{item.name}} ({{item.users}}人)</el-checkbox>
+                    </el-checkbox-group>
+
+                    <el-button type="text" :disabled="checkedIdBox.indexOf(item.id)>-1" class="lowerLevel"
+                               @click="getNextLevel(item,$event)">丨 下级</el-button>
+                  </li>
+                  <li v-for="item in departmentStaff" @click="selectStaff(item)">
+                    <div>
+                      <div class="head">
+                        <img src="../../assets/images/head.jpg" alt="">
+                        <!--对号-->
+                        <span class="el-icon-check" v-if="selectIdMember.indexOf(item.id)>-1"></span>
+                        <!--遮罩-->
+                        <span class="shade" v-if="selectIdMember.indexOf(item.id)>-1"></span>
+                      </div>
+                      <div class="infoBox">
+                        <div class="info">{{item.name}}</div>
+                        <div class="info">{{item.org[0].name}}</div>
+                      </div>
                     </div>
                   </li>
                 </ul>
               </div>
             </div>
           </div>
-       </div>
-     </div>
-
+        </div>
+      </div>
       <div slot="footer" class="dialog-footer">
-        <!--<el-button @click="organizationVisible = false">取 消</el-button>-->
-        <el-button type="primary" :disabled="buttonStatus" @click="organizationVisible = false">确 定</el-button>
+        <el-button type="primary" :disabled="buttonStatus" @click="confirmSelect">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -74,39 +100,30 @@
     data () {
       return {
         organizationVisible: false,
-        formLabelWidth: '120px',
-        buttonStatus :true,
+        buttonStatus :true,   //确认按钮禁用状态
+
         searchItems: [],    //搜索到人员
-        selectMember: [],
-        list: [],
-        loading: false,
-        states: ["Alabama", "Alaska", "Arizona",
-          "Arkansas", "California", "Colorado",
-          "Connecticut", "Delaware", "Florida",
-          "Georgia", "Hawaii", "Idaho", "Illinois",
-          "Indiana", "Iowa", "Kansas", "Kentucky",
-          "Louisiana", "Maine", "Maryland",
-          "Massachusetts", "Michigan", "Minnesota",
-          "Mississippi", "Missouri", "Montana",
-          "Nebraska", "Nevada", "New Hampshire",
-          "New Jersey", "New Mexico", "New York",
-          "North Carolina", "North Dakota", "Ohio",
-          "Oklahoma", "Oregon", "Pennsylvania",
-          "Rhode Island", "South Carolina",
-          "South Dakota", "Tennessee", "Texas",
-          "Utah", "Vermont", "Virginia",
-          "Washington", "West Virginia", "Wisconsin",
-          "Wyoming"]
+        keywords : '',
+
+        organizeList:[],    //组织架构部门列表
+        departmentStaff:[],//右侧员工聊表
+        breadcrumbList:[],  //面包屑列表
+
+        selectMember: [],     //已选数组
+        selectIdMember:[],    //左侧选择id
+        checkedIdBox:[],//已选部门id数组
+        //键盘
+        active_li: -1,  //键盘上下被选中li
+        hoverMember:[], //键盘悬浮成员
       }
     },
     mounted() {
-      this.list = this.states.map(item => {
-        return { value: item, label: item };
-      });
+
     },
     watch:{
       organizationDialog(val){
-        this.organizationVisible = val
+        this.organizationVisible = val;
+        this.getDepartment(1);
       },
       organizationVisible(val){
         if(!val){
@@ -114,33 +131,182 @@
         }
       },
       selectMember(val){
-          this.buttonStatus = !val.length;
+        this.buttonStatus = !val.length;
+      },
+      keywords(val){
+        if (val){
+          this.$http.get(globalConfig.server_user+'api/v1/users?q='+this.keywords).then((res) => {
+            if(res.data.status === 'success'){
+              this.searchItems = res.data.data;
+            }
+          })
+        }else {
+          this.searchItems = [];
+        }
       }
     },
     methods:{
-      remoteMethod(query) {
-        if (query !== '') {
-          this.loading = true;
-          setTimeout(() => {
-            this.loading = false;
-            this.searchItems = this.list.filter(item => {
-              return item.label.toLowerCase()
-                  .indexOf(query.toLowerCase()) > -1;
-            });
-          }, 200);
-        } else {
-          this.searchItems = [];
+      getDepartment(id){
+        this.$http.get(globalConfig.server_user+'api/v1/organizations?parent_id='+id).then((res) => {
+          if(res.data.status === 'success'){
+            this.organizeList = res.data.data;
+          }
+        });
+        this.$http.get(globalConfig.server_user+'api/v1/users?org_id='+id).then((res) => {
+          if(res.data.status === 'success'){
+            this.departmentStaff = res.data.data;
+          }
+        })
+      },
+
+      //*******************左侧********************
+      //搜索列表选择
+      selectSearchItem(item){
+        let isExist = null;
+        isExist = this.isExist(item,this.selectMember);
+        if(isExist){
+          this.filterSelectMember(item);
+        }else {
+          this.selectMember.push(item)
+          this.selectIdMember.push(item.id)
         }
       },
+
+      //删除标签页
+      handleClose(item){
+        this.filterSelectMember(item);
+      },
+      //回车删除事件
+      backSpace(){
+        this.hoverMember = [];
+        if (this.keywords === '' && this.selectMember.length > 0) {
+          this.selectMember.pop();
+          this.selectIdMember.pop();
+          this.checkedIdBox.pop();
+
+        }
+      },
+      //键盘向下事件
+      changeDown(){
+        if (this.searchItems.length !== 0) {
+          this.active_li++;
+          if (this.active_li === this.searchItems.length) this.active_li = this.searchItems.length - 1;
+          this.hoverMember = this.searchItems[this.active_li];
+          if (this.active_li > 2) document.getElementById('searchList').scrollTop += 50;
+        }
+      },
+      //键盘向上事件
+      changeUp(){
+        if (this.searchItems.length !== 0) {
+          this.active_li--;
+          if (this.active_li <= -1) {
+            this.active_li = -1;
+            this.hoverMember = [];
+          } else if (this.active_li > -1) {
+            this.hoverMember = this.searchItems[this.active_li];
+          }
+          if (this.active_li < this.searchItems.length - 4) document.getElementById('searchList').scrollTop -= 50;
+        }
+      },
+      //键盘添加事件
+      keyDownAdd(){
+        if(!Array.isArray(this.hoverMember)){
+          let isExist = null;
+          isExist = this.isExist(this.hoverMember,this.selectMember);
+          if(isExist){
+            this.filterSelectMember(this.hoverMember);
+          }else {
+            this.selectMember.push(this.hoverMember)
+            this.selectIdMember.push(this.hoverMember.id)
+          }
+        }
+      },
+      isExist(select, selectMember){     //判断该id是否已经被选中
+        for (let i = 0; i < selectMember.length; i++) {
+          if (select.id === selectMember[i].id && select.name === selectMember[i].name) {
+            return true;
+          }
+        }
+        return false;
+      },
+      //filter
+      filterSelectMember(item){
+        for(let i=0; i<this.selectMember.length;i++){
+          if(item.id===this.selectMember[i].id && item.name===this.selectMember[i].name){
+            this.selectMember.splice(i,1)
+            this.selectIdMember.splice(i,1)
+            this.checkedIdBox.splice(i,1)
+          }
+        }
+      },
+
+      //***************右侧组织架构********************
+      //选取部门
+      checkDepart(item,e){
+        let isExist = null;
+        isExist = this.isExist(item,this.selectMember);
+        if(isExist){
+          for(let i=0; i<this.selectMember.length;i++){
+            if(item.id===this.selectMember[i].id && item.name===this.selectMember[i].name){
+              this.selectMember.splice(i,1)
+            }
+          }
+        }else {
+          this.selectMember.push(item)
+        }
+      },
+      //搜索下级部门
+      getNextLevel(item,event){
+        if(event.target.className!=='el-checkbox__inner'&&event.target.className!=='el-checkbox__original'){
+          this.getDepartment(item.id);
+          this.breadcrumbList.push(item)
+        }
+
+      },
+      //面包屑搜索
+      breadcrumbSearch(item,index){
+        if(item === 1){
+          this.getDepartment(1);
+          this.breadcrumbList = [];
+        }else {
+          this.getDepartment(item.id);
+          this.breadcrumbList.splice(index + 1, this.breadcrumbList.length);
+        }
+      },
+      remoteMethod() {
+
+      },
+
       inputFocus(){
-          let _input = document.getElementById('search');
-          _input.focus();
+        let _input = document.getElementById('search');
+        _input.focus();
       },
 
       selectStaff(item){
-          let index = this.selectMember.indexOf(item);
-          index>-1?this.selectMember.splice(index,1):this.selectMember.push(item);
+        let isExist = null;
+        isExist = this.isExist(item,this.selectMember);
+        if(isExist){
+          for(let i=0; i<this.selectMember.length;i++){
+            if(item.id===this.selectMember[i].id && item.name===this.selectMember[i].name){
+              this.selectMember.splice(i,1);
+              this.selectIdMember.splice(i,1);
+            }
+          }
+        }else {
+          this.selectMember.push(item);
+          this.selectIdMember.push(item.id);
+        }
       },
+
+      //确定选择并发送
+      confirmSelect(){
+          this.organizationVisible = false;
+          this.$emit('selectMember',this.selectMember);
+
+          this.selectMember = [];       //已选数组
+          this.selectIdMember = [];     //左侧选择id
+          this.checkedIdBox = [];       //已选部门id数组
+      }
     }
   }
 </script>
@@ -151,46 +317,10 @@
     -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
     filter: grayscale(100%);
   }
-  .el-select-dropdown{
-    .el-select-dropdown__wrap{
-      ul {
-        li.el-select-dropdown__item{
-          height: 50px;
-          display: flex;
-          align-items: center;
-          .head{
-            font-size: 12px;
-            float: left;
-            height: 35px;
-            width: 35px;
-            border-radius: 50%;
-            margin-right: 5px;
-            position: relative;
-            img{
-              height: 35px;
-              width: 35px;
-              border-radius: 50%;
-            }
-          }
-          .infoBox{
-            height: 36px;
-            .info{
-              height: 20px;
-              line-height: 20px;
-              font-size: 15px;
-              &:last-child{
-                font-size: 12px;
-                height: 16px;
-                line-height: 16px;
-                color: #999;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
 
+  .hov {
+    background: #f5f7fa;
+  }
   #organizationId{
     .el-dialog__wrapper{
       .el-dialog{
@@ -208,11 +338,60 @@
               border: 1px solid #ddd;
               border-radius: 4px;
               box-sizing: border-box;
-              overflow: hidden;
+              /*overflow: hidden;*/
               &:hover{
                 border-color: #83c7ff;
               }
-
+              .searchItems{
+                ul {
+                  height: 396px;
+                  overflow: auto;
+                  background: #fff;
+                  border: 1px solid #ccc;
+                  border-radius: 5px;
+                  li {
+                    height: 50px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    cursor: pointer;
+                    padding: 5px 20px;
+                    -webkit-box-sizing: border-box;
+                    box-sizing: border-box;
+                    &:hover{
+                      background: #f5f7fa;
+                    }
+                    .head {
+                      font-size: 12px;
+                      float: left;
+                      height: 35px;
+                      width: 35px;
+                      border-radius: 50%;
+                      margin-right: 5px;
+                      position: relative;
+                      img {
+                        height: 35px;
+                        width: 35px;
+                        border-radius: 50%;
+                      }
+                    }
+                    .infoBox {
+                      height: 36px;
+                      .info {
+                        height: 20px;
+                        line-height: 20px;
+                        font-size: 15px;
+                        &:last-child {
+                          font-size: 12px;
+                          height: 16px;
+                          line-height: 16px;
+                          color: #999;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
             }
             .content_right{
               font-size: 14px;
@@ -246,6 +425,16 @@
                       padding: 5px 20px;
                       box-sizing: border-box;
                       cursor: pointer;
+                      display: flex;
+                      align-items: center;
+                      justify-content: space-between;
+
+                      .lowerLevel{
+                        color: #bbb;
+                        &:hover{
+                          color: #6a8dfb;
+                        }
+                      }
                       &:hover{
                         background: rgb(223, 237, 250);;
                       }

@@ -32,7 +32,7 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.house_type">
+                    <el-select v-model="form.house_type" clearable>
                       <el-option v-for="(key,index) in dict" :label="key.dictionary_name" :value="key.id"
                                  :key="index"></el-option>
                     </el-select>
@@ -48,8 +48,8 @@
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-form-item>
-                      <el-select v-model="form.built_year">
-                        <el-option v-for="(key,index) in 51" :label="key + 1969" :value="index + 1969"
+                      <el-select v-model="form.built_year" clearable>
+                        <el-option v-for="(key,index) in 151" :label="key + 1969" :value="index + 1969"
                                    :key="index"></el-option>
                       </el-select>
                     </el-form-item>
@@ -124,7 +124,7 @@
           </el-row>
           <div class="btnOperate">
 
-            <el-button size="mini" type="primary" @click="myData(1)">搜索</el-button>
+            <el-button size="mini" type="primary" @click="search()">搜索</el-button>
             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
             <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
           </div>
@@ -150,7 +150,7 @@
         label="小区别名">
       </el-table-column>
       <el-table-column
-        prop="dictionary_name"
+        prop="house_types"
         label="房屋类型">
       </el-table-column>
       <el-table-column
@@ -191,6 +191,7 @@
     components: {RightMenu, VillageModule},
     data() {
       return {
+        urls: globalConfig.server,
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
@@ -223,7 +224,7 @@
       }
     },
     mounted() {
-      this.$http.get('setting/dictionary/11').then((res) => {
+      this.$http.get(this.urls + 'setting/dictionary/10').then((res) => {
         this.dict = res.data.data;
         if (this.$route.query.status === 1) {
           let term = this.$route.query.term;
@@ -242,7 +243,7 @@
           this.myData(1);
         }
       });
-      this.$http.get('setting/others/province').then((res) => {
+      this.$http.get(this.urls + 'setting/others/province').then((res) => {
         this.provinceList = res.data.data;
       });
     },
@@ -250,7 +251,7 @@
       myData(val) {
         this.tableData = [];
         this.form.pages = val;
-        this.$http.get('setting/community/', {
+        this.$http.get(this.urls + 'setting/community/', {
           params: this.form,
         }).then((res) => {
           if (res.data.code === '10000') {
@@ -283,28 +284,31 @@
 
       chooseList(val, id) {
         if (val === 'city') {
-          this.$http.get('setting/others/city?city_parent=' + id).then((res) => {
+          this.$http.get(this.urls + 'setting/others/city?city_parent=' + id).then((res) => {
             if (res.data.code === '100050') {
               this.cityList = res.data.data;
             }
           })
         }
         if (val === 'area') {
-          this.$http.get('setting/others/area?area_parent=' + id).then((res) => {
+          this.$http.get(this.urls + 'setting/others/area?area_parent=' + id).then((res) => {
             if (res.data.code === '100060') {
               this.areaList = res.data.data;
             }
           })
         }
         if (val === 'region') {
-          this.$http.get('setting/others/region?region_parent=' + id).then((res) => {
+          this.$http.get(this.urls + 'setting/others/region?region_parent=' + id).then((res) => {
             if (res.data.code === '100070') {
               this.regionList = res.data.data;
             }
           })
         }
       },
-
+      search() {
+        this.myData(1);
+        this.isHigh = false;
+      },
       // 重置
       resetting() {
         this.form.pages = 1;
@@ -349,6 +353,7 @@
       dblMenu(row) {
         this.$router.push({path: '/villageManage/villageDetail', query: {ids: row.id, term: this.form}});
       },
+
       // 右键
       houseMenu(row, event) {
         this.pitch = row.id;
@@ -382,6 +387,7 @@
           this.show = true
         })
       },
+
       // 删除
       openDelete() {
         this.$confirm('此操作将删除该文件, 是否继续?', '提示', {

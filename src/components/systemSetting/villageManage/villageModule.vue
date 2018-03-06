@@ -110,7 +110,8 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="dialogVisible = false">取&nbsp;消</el-button>
-        <el-button v-if="formList.status === 'add'" size="small" type="primary" @click="villageSave('save')">确&nbsp;定</el-button>
+        <el-button v-if="formList.status === 'add'" size="small" type="primary" @click="villageSave('save')">确&nbsp;定
+        </el-button>
         <el-button v-if="formList.status === 'revise'" size="small" type="primary" @click="villageSave('update')">修&nbsp;改</el-button>
       </div>
     </el-dialog>
@@ -126,9 +127,10 @@
   export default {
     name: "add-village",
     components: {MapSearch, Dropzone},
-    props: ['module', 'formList', 'province','dict'],
+    props: ['module', 'formList', 'province', 'dict'],
     data() {
       return {
+        urls: globalConfig.server,
         photos: {
           pic_id: [],
           pic_url: {},
@@ -167,16 +169,16 @@
         console.log(val.status);
         this.villageId = val.id;
         this.form.province = val.province;
-        if(val.province !== ''){
-          this.chooseList('city',val.province);
+        if (val.province !== '') {
+          this.chooseList('city', val.province);
           this.form.city = val.city;
         }
-        if(val.city !== ''){
-          this.chooseList('area',val.city);
+        if (val.city !== '') {
+          this.chooseList('area', val.city);
           this.form.area = val.area;
         }
-        if(val.area !== ''){
-          this.chooseList('region',val.area);
+        if (val.area !== '') {
+          this.chooseList('region', val.area);
           this.form.region = Number(val.region);
         }
         this.form.villageName = val.village_name;
@@ -217,41 +219,41 @@
         this.photos.pic_id = val;
       },
 
-      choose(val,id) {
+      choose(val, id) {
         if (val === 'city') {
           this.form.city = '';
           this.form.area = '';
           this.form.region = '';
-          this.chooseList(val,id);
+          this.chooseList(val, id);
         }
         if (val === 'area') {
           this.form.area = '';
           this.form.region = '';
-          this.chooseList(val,id);
+          this.chooseList(val, id);
         }
         if (val === 'region') {
           this.form.region = '';
-          this.chooseList(val,id);
+          this.chooseList(val, id);
         }
       },
 
-      chooseList(val,id) {
+      chooseList(val, id) {
         if (val === 'city') {
-          this.$http.get('setting/others/city?city_parent=' + id).then((res) => {
+          this.$http.get(this.urls + 'setting/others/city?city_parent=' + id).then((res) => {
             if (res.data.code === '100050') {
               this.cityList = res.data.data;
             }
           })
         }
         if (val === 'area') {
-          this.$http.get('setting/others/area?area_parent=' + id).then((res) => {
+          this.$http.get(this.urls + 'setting/others/area?area_parent=' + id).then((res) => {
             if (res.data.code === '100060') {
               this.areaList = res.data.data;
             }
           })
         }
         if (val === 'region') {
-          this.$http.get('setting/others/region?region_parent=' + id).then((res) => {
+          this.$http.get(this.urls + 'setting/others/region?region_parent=' + id).then((res) => {
             if (res.data.code === '100070') {
               this.regionList = res.data.data;
             }
@@ -263,23 +265,24 @@
         this.mapVisible = true;
       },
       closeAddress(val) {
-        console.log(val);
-        let lat = val.location.split(',')[0];
-        let long = val.location.split(',')[1];
-        this.form.latitude = lat;
-        this.form.longitude = long;
-        this.form.villageName = val.name;
-        this.form.villageAddress = val.address;
         this.mapVisible = false;
+        if (val !== '') {
+          let lat = val.location.split(',')[0];
+          let long = val.location.split(',')[1];
+          this.form.latitude = lat;
+          this.form.longitude = long;
+          this.form.villageName = val.name;
+          this.form.villageAddress = val.address;
+        }
       },
       villageSave(addr) {
         let type, urls;
         if (addr === 'save') {
           type = this.$http.post;
-          urls = 'setting/community/save';
+          urls = this.urls + 'setting/community/save';
         } else {
           type = this.$http.put;
-          urls = 'setting/community/update';
+          urls = this.urls + 'setting/community/update';
         }
         type(urls, {
           id: this.villageId,

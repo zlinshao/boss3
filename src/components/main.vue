@@ -110,7 +110,7 @@
   let today = new Date();
   export default {
     name: 'app',
-    data () {
+    data() {
       return {
         demoEvents: [{
           date: `${today.getFullYear()}/${today.getMonth() + 1}/15`,
@@ -125,32 +125,28 @@
           title: 'Title-3',
           content: '今天李巧俊生孩子'
         }],
-
-//        weeks:['日','一','二','三','四','五','六']
       }
     },
-    mounted(){
-        this.changeLanguage();
+    mounted() {
+      this.changeLanguage();
     },
     methods: {
-      handleDayChanged (data) {
+      handleDayChanged(data) {
         console.log(data)
       },
-      handleMonthChanged (data) {
+      handleMonthChanged(data) {
         console.log(data)
       },
       //切换新闻中心标题
-      selectNewsType(e){
+      selectNewsType(e) {
         for (let i = 0; i < e.target.parentNode.children.length; i++) {
           e.target.parentNode.children[i].style.color = '#666';
         }
         e.target.style.color = '#6a8dfb';
       },
       //日历变成中文
-      changeLanguage(){
-        for(let i=1;i<8;i++){
-          document.querySelectorAll('.weeks>span:nth-child('+ i +')')[0].innerHTML=this.weeks[i-1]
-        }
+      changeLanguage() {
+
       }
     }
   }
@@ -161,9 +157,9 @@
     width: 100%;
     overflow: hidden;
 
-    @font-face{
-      font-family:Impact;//////字体名称
-      src:url(../assets/font/impact-2.ttf);  ////字体路径
+    @font-face {
+      font-family: Impact;//////字体名称
+      src: url(../assets/font/impact-2.ttf);  ////字体路径
     }
     .scroll_bar {
       &::-webkit-scrollbar-button {
@@ -258,7 +254,7 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                >img {
+                > img {
                   width: 40px;
                   height: 40px;
                   border-radius: 50%;
@@ -280,9 +276,9 @@
                 }
                 .longHuPic {
                   background: url("../assets/images/longhu_1.png") no-repeat;
-                  background-size: 100% ;
+                  background-size: 100%;
                   position: relative;
-                  >img {
+                  > img {
                     position: absolute;
                     top: 15px;
                     left: 4px;
@@ -295,9 +291,9 @@
                 }
                 .longHuPic {
                   background: url("../assets/images/longhu_2.png") no-repeat;
-                  background-size: 100% ;
+                  background-size: 100%;
                   position: relative;
-                  >img {
+                  > img {
                     position: absolute;
                     top: 15px;
                     left: 4px;
@@ -310,9 +306,9 @@
                 }
                 .longHuPic {
                   background: url("../assets/images/longhu_3.png") no-repeat;
-                  background-size: 100% ;
+                  background-size: 100%;
                   position: relative;
-                  >img {
+                  > img {
                     position: absolute;
                     top: 15px;
                     left: 4px;

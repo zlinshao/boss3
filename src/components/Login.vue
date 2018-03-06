@@ -11,8 +11,10 @@
           <img src="../assets/images/slogan.png" style="width: 100%" alt="">
         </div>
         <div class="login_type">
-          <div>
-            <div><img src="../assets/images/dd1.png" alt=""></div>
+          <div @click="sweepCode">
+            <div>
+              <img src="../assets/images/dd1.png" alt="">
+            </div>
             <div style="color:#6a8dfb;">钉钉 - 扫码</div>
             <div>一键登陆</div>
           </div>
@@ -38,35 +40,37 @@
           <div class="slogan">
             <img src="../assets/images/slogan.png" style="width: 100%" alt="">
           </div>
-          <div class="loginType">
-            <div id="ding"  @click="switchModel(1)">
-              <img v-if="!dingColor" src="../assets/images/dd2.png" alt="">
-              <img v-if="dingColor" src="../assets/images/dd1.png" alt="">
-            </div>
-            <div id="message" @click="switchModel(2)">
-              <img v-if="sjColor" src="../assets/images/sj.png" alt="">
-              <img v-if="!sjColor" src="../assets/images/sj_02.png" alt="">
-            </div>
-            <div id="weChart" @click="switchModel(3)">
-              <img v-if="!weiColor" src="../assets/images/weixin1.png" alt="">
-              <img v-if="weiColor" src="../assets/images/weixin2.png" alt="">
-            </div>
-          </div>
+          <!--<div class="loginType">-->
+          <!--<div id="ding"  @click="switchModel(1)">-->
+          <!--<img v-if="!dingColor" src="../assets/images/dd2.png" alt="">-->
+          <!--<img v-if="dingColor" src="../assets/images/dd1.png" alt="">-->
+          <!--</div>-->
+          <!--<div id="message" @click="switchModel(2)">-->
+          <!--<img v-if="sjColor" src="../assets/images/sj.png" alt="">-->
+          <!--<img v-if="!sjColor" src="../assets/images/sj_02.png" alt="">-->
+          <!--</div>-->
+          <!--<div id="weChart" @click="switchModel(3)">-->
+          <!--<img v-if="!weiColor" src="../assets/images/weixin1.png" alt="">-->
+          <!--<img v-if="weiColor" src="../assets/images/weixin2.png" alt="">-->
+          <!--</div>-->
+          <!--</div>-->
         </div>
         <div class="formItem" v-if="loginModel==2">
-          <el-input placeholder="请输入手机号">
+          <el-input placeholder="请输入手机号" v-model="phone">
             <template slot="append">
               <span class="china">中国</span> +86
             </template>
           </el-input>
-          <el-input placeholder="请输入6位短信验证码">
-            <el-button slot="append" size="small" type="success">获取验证码</el-button>
+          <el-input placeholder="请输入6位短信验证码" v-model="identifyingCode">
+            <el-button slot="append" size="small" type="success" @click.native="phoneLogin()">获取验证码</el-button>
           </el-input>
 
-          <el-checkbox>记录本机登陆方式！</el-checkbox>
+          <div style="display: flex;justify-content: flex-end;margin-top: 20px">
+            <el-button type="text" @click="isMessage=false">更换登陆方式</el-button>
+          </div>
 
           <div class="confirmLogin">
-            <el-button size="medium" type="primary" @click.native.prevent="handleSubmit2" :loading="logining">登 陆
+            <el-button size="medium" type="primary" @click.native.prevent="sureLogin(phone, identifyingCode)" :loading="logining">登 陆
             </el-button>
           </div>
         </div>
@@ -98,6 +102,9 @@
   export default {
     data() {
       return {
+        urls: globalConfig.server_user,
+        phone: '',
+        identifyingCode: '',
         logining: false,
         ruleForm2: {
           account: 'admin',
@@ -107,16 +114,45 @@
         isMessage: false,
         dingColor: false,
         weiColor: false,
-        sjColor:true,
-        loginModel:2
+        sjColor: true,
+        loginModel: 2
       };
     },
-    mounted(){
+    mounted() {
 //      this.getBackground();
+      if (JSON.stringify(this.$route.query) !== '{}') {
+        let phone = this.$route.query.phone;
+        let code = this.$route.query.code;
+        this.sureLogin(phone, code);
+      }
     },
     methods: {
+      phoneLogin() {
+        this.$http.post(this.urls + 'api/v1/sms', {
+          phone: this.phone,
+        }).then((res) => {
+
+        })
+      },
+      sureLogin(a, b) {
+        this.$http.post(this.urls + 'oauth/token', {
+          client_secret: 'udMntGnEJBgsevojFrMicLuW8G2ABBAsmRlK9fIC',
+          grant_type: 'password',
+          client_id: '2',
+          username: a,
+          password: b,
+        }).then((res) => {
+          localStorage.setItem('mydata', JSON.stringify(res.data.data));
+          let head = res.data.data;
+          globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
+          this.handleSubmit2();
+        })
+      },
+      sweepCode() {
+        window.location.href = 'https://oapi.dingtalk.com/connect/qrconnect?appid=dingoabeclxxwagukzyegm&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=http://test.boss-support.lejias.cn/sns_login'
+      },
       //背景特效
-      getBackground(){
+      getBackground() {
         let canvas = document.getElementById('canvas'),
           ctx = canvas.getContext('2d'),
           w = canvas.width = window.innerWidth - 10,
@@ -212,7 +248,7 @@
           ctx.globalCompositeOperation = 'source-over';
           ctx.globalAlpha = 0.5; //尾巴
           ctx.fillStyle = 'hsla(' + hue + ', 64%, 6%, 2)';
-          ctx.fillRect(0, 0, w, h)
+          ctx.fillRect(0, 0, w, h);
 
           ctx.globalCompositeOperation = 'lighter';
           for (let i = 1, l = stars.length; i < l; i++) {
@@ -259,41 +295,41 @@
 //          }
 //        });
       },
-      messageLogin(){
+      messageLogin() {
         this.isMessage = true;
       },
-      lightDingColor(){
+      lightDingColor() {
         this.dingColor = true;
       },
-      grayDingColor(){
+      grayDingColor() {
         this.dingColor = false;
       },
-      lightWeiColor(){
+      lightWeiColor() {
         this.weiColor = true;
       },
-      grayWeiColor(){
+      grayWeiColor() {
         this.weiColor = false;
       },
-      lightSjColor(){
-          this.sjColor = true;
+      lightSjColor() {
+        this.sjColor = true;
       },
-      switchModel(flag){
+      switchModel(flag) {
         this.loginModel = flag;
-        if(flag===1){
+        if (flag === 1) {
           this.dingColor = true;
           this.weiColor = false;
           this.sjColor = false;
-        }else if(flag === 2){
+        } else if (flag === 2) {
           this.dingColor = false;
           this.weiColor = false;
           this.sjColor = true;
-        }else if(flag === 3){
+        } else if (flag === 3) {
           this.dingColor = false;
           this.weiColor = true;
           this.sjColor = false;
         }
       },
-      goBack(){
+      goBack() {
         this.isMessage = false;
         this.dingColor = false;
         this.weiColor = false;
@@ -305,7 +341,7 @@
 
 <style lang="scss">
   #login {
-    .modal_back{
+    .modal_back {
       width: 100%;
       height: 100%;
       background: #000;
@@ -324,7 +360,7 @@
         opacity: 1;
         top: 50%;
         left: 50%;
-        transform: translate(-50%,-50%);
+        transform: translate(-50%, -50%);
       }
     }
 
@@ -418,7 +454,7 @@
         width: 100%;
         height: 100%;
 
-        .dingLogin{
+        .dingLogin {
           margin: 25px auto;
           width: 150px;
           height: 150px;
@@ -452,7 +488,7 @@
 
         .top {
           width: 100%;
-          height: 270px;
+          height: 210px;
           background: #fcfbfc;
           box-sizing: border-box;
           .beijing {
@@ -494,7 +530,7 @@
           margin: 18px 0;
         }
         .confirmLogin {
-          margin: 40px 0 60px 0;
+          margin: 20px 0 60px 0;
           .el-button--primary {
             background: #6a8dfb;
             border-color: #6a8dfb;

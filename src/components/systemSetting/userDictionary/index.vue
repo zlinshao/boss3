@@ -1,5 +1,5 @@
 <template>
-  <div id="dictionary">
+  <div id="dictionary" @click="show=false" @contextmenu="closeMenu">
     <div class="dic_content">
       <el-row :gutter="20">
         <el-col :span="6">
@@ -8,199 +8,272 @@
               <span>用户字典</span>
               <el-button size="mini" type="primary" style="text-align: right">使用指南</el-button>
             </div>
-            <el-tree ref="expandMenuList" class="expand-tree"
-                     v-if="isLoadingTree"
-                     :data="setTree"
-                     node-key="id"
-                     highlight-current
-                     show-checkbox
-                     accordion
-                     check-strictly
-                     :props="defaultProps"
-                     :expand-on-click-node="false"
-                     :render-content="renderContent"
-                     @check-change='handleNodeClick'
-                     @node-click="handleNodeClick">
+            <el-tree
+              ref="expandMenuList" class="expand-tree"
+              v-if="isLoadingTree"
+              :data="setTree"
+              node-key="id"
+              highlight-current
+              check-strictly
+              :default-expanded-keys="defaultExpandKeys"
+              :props="defaultProps"
+              :expand-on-click-node="false"
+              :render-content="renderContent"
+              @check-change='handleNodeClick'
+              @node-click="handleNodeClick">
             </el-tree>
           </div>
         </el-col>
+
         <el-col :span="18">
           <div class="dictionary_right">
-            <div class="right_top" v-if="!dictStatus">
-              <p @click="deacidizing"><i class="el-icons-fa-undo"></i>&nbsp;还原字典</p>
-              <p @click="dialogTableVisible = true"><i class="el-icons-fa-sort-numeric-desc"></i>&nbsp;一级字典排序</p>
-              <p @click="showInput"><i class="el-icon-plus"></i>&nbsp;增加住房性质</p>
+            <div class="topAdd" v-if="clickTag === 'click' && !dynamicTagsStatus">
+              <div>{{dictListName}}</div>
+              <el-button type="primary" size="mini" @click="dictAdd(clickTreeData)">
+                <i class="el-icon-plus"></i>&nbsp;新增字典
+              </el-button>
             </div>
-            <div class="right_top" v-if="dictStatus">
-              <p @click="deacidizing">还原字典信息列表</p>
-            </div>
-            <div v-if="!dictStatus">
-              <el-tag
-                :key="tag"
-                v-for="tag in dynamicTags"
-                closable
-                :disable-transitions="false"
-                @close="handleClose(tag)">
-                {{tag}}
-              </el-tag>
-              <el-input
-                class="inputNewTag"
-                v-if="inputVisible"
-                v-model="inputValue"
-                ref="saveTagInput"
-                size="small"
-                @keyup.enter.native="handleInputConfirm"
-                @blur="handleInputConfirm">
-              </el-input>
-            </div>
+            <p style="text-align: center" v-if="clickTag !== 'click' && !dynamicTagsStatus">请选择模块</p>
+            <p style="text-align: center" v-if="dynamicTagsStatus">模块已下架</p>
+            <div v-for="tag in dynamicTags">
+              <div class="right_top" @contextmenu="houseMenu(tag,$event,'tag')" v-if="!dictStatus">
+                <p :class="{'colorAAA':tag.status === 8}">{{tag.dictionary_name}}<span
+                  v-if="tag.status === 8">(已下架)</span></p>
+              </div>
 
-            <div v-if="dictStatus">
-              <el-row class="listDict" v-for="(item,index) in 10" :key="index">
-                <el-col :span="12">
-                  <div>
-                    <el-input placeholder="请输入内容" v-model="deaContent" size="mini" disabled>
-                      <template slot="append">
-                        <div style="color: #FFFFFF;cursor: pointer  "><i class="el-icons-fa-undo"></i>&nbsp;还原</div>
-                      </template>
-                    </el-input>
-                  </div>
-                </el-col>
-              </el-row>
+              <div v-if="!dictStatus && tag.status !== 8">
+                <el-tag
+                  class="disableTag"
+                  :type="item.status === 8 ? 'info': 'primary'"
+                  :key="index"
+                  v-if="tag.children.length !== 0"
+                  v-for="(item,index) in tag.children"
+                  :disable-transitions="false"
+                  @contextmenu.native="houseMenu(item,$event,'item')">
+                  {{item.dictionary_name}}
+                </el-tag>
+                <!--<el-input-->
+                <!--class="inputNewTag"-->
+                <!--v-if="inputVisible === tag.id"-->
+                <!--v-model="inputValue"-->
+                <!--ref="saveTagInput"-->
+                <!--size="small"-->
+                <!--@keyup.enter.native="handleInputConfirm()"-->
+                <!--@blur="handleInputConfirm()">-->
+                <!--</el-input>-->
+              </div>
             </div>
           </div>
         </el-col>
       </el-row>
-      <!--<el-button @click="handleAddTop">添加顶级节点</el-button>-->
     </div>
+    <!--右键-->
+    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+               @clickOperate="clickEvent"></RightMenu>
 
-    <el-dialog title="字典排序" :visible.sync="dialogTableVisible" width="30%">
-      <el-table :data="userData">
-        <el-table-column property="date" label="字典名称"></el-table-column>
-        <el-table-column label="排序值">
-          <template slot-scope="scpoe">
-            <el-select v-model="value" placeholder="请选择" size="mini">
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
-              </el-option>
-            </el-select>
-          </template>
-        </el-table-column>
-      </el-table>
-
-      <div slot="footer" class="dialog-footer">
-        <el-button size="small" @click="dialogTableVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="dialogTableVisible = false">确 定</el-button>
-      </div>
-    </el-dialog>
+    <TreeModule :module="treeModule" :msg="treeData" @close="initExpand" @dict="dictTitle"></TreeModule>
   </div>
 </template>
 <!-- VUE饿了么树形控件添加增删改功能按钮 -->
 <script>
   import TreeRender from './treeRender.vue'
-  import api from './api.js'
+  import TreeModule from './components/treeModule.vue'
+  import RightMenu from '../../common/rightMenu.vue'    //右键
 
   export default {
     name: 'tree',
+    components: {TreeModule, RightMenu},
     data() {
       return {
-        maxExpandId: api.maxExpandId,       //新增节点开始id
-        non_maxExpandId: api.maxExpandId,   //新增节点开始id(不更改)
+        urls: globalConfig.server,
+        rightMenuX: 0,
+        rightMenuY: 0,
+        show: false,
+        lists: [],
+
+        treeModule: false,
+        treeData: {},
+        clickTreeData: {},
+        maxExpandId: 0,                     //新增节点开始id
+        non_maxExpandId: 0,                 //新增节点开始id(不更改)
         isLoadingTree: false,               //是否加载节点树
-        setTree: api.treelist,              //节点树数据
+        setTree: [],                        //节点树数据
+
+        tags: {},
+        dictListId: '',                     //刷新字典id
+        dictListName: '',                   //模块名
+
         defaultProps: {
           children: 'children',
           label: 'name'
         },
         defaultExpandKeys: [],              //默认展开节点列表
 
-        dynamicTags: ['标签一', '标签二', '标签三'],
-        inputVisible: false,
+        dynamicTags: [],
+        dynamicTagsStatus: false,
+        clickTag: '',
+        inputVisible: '',
         inputValue: '',
 
         dictStatus: false,
-
-        userData: [{
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }],
-        dialogTableVisible: false,
-
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: '',
-        deaContent: '发货的苦大师傅立刻的撒',
       }
     },
     mounted() {
-      this.initExpand();
+      this.initExpand(2);
     },
     methods: {
-      // 删除标签
-      handleClose(tag) {
-        this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1);
-      },
-      // 显示标签输入框
-      showInput() {
-        this.inputVisible = true;
-        this.$nextTick(_ => {
-          this.$refs.saveTagInput.$refs.input.focus();
-        });
-      },
-      // 确认新增标签
-      handleInputConfirm() {
-        let inputValue = this.inputValue;
-        if (inputValue) {
-          this.dynamicTags.push(inputValue);
-        }
-        this.inputVisible = false;
-        this.inputValue = '';
-      },
-      // 还原字典
-      deacidizing() {
-        this.dictStatus = !this.dictStatus;
+      // 显示新标签输入框
+      showInput(tag) {
+        this.inputVisible = tag.id;
+        this.tags = tag;
       },
 
-      initExpand() {
-        this.setTree.map((a) => {
-          this.defaultExpandKeys.push(a.id);
+      // 确认新增标签
+      handleInputConfirm() {
+        this.$http.post(this.urls + 'setting/dictionary/save', {
+          dictionary_name: this.inputValue,
+          type: 5,
+          status: this.tags.status,
+          variable: '',
+          parent_id: this.tags.id,
+        }).then((res) => {
+          if (res.data.code === '30020') {
+            this.dynamicTags[0].children.push(res.data.data);
+            this.inputVisible = '';
+            this.inputValue = '';
+          }
         });
-        this.isLoadingTree = true;
       },
-      handleNodeClick(d, n, s) {                 //点击节点
-        console.log(d, n, s);
-        d.isEdit = false;                     //放弃编辑状态
+
+      // 增加模板
+      handleAdd(s, d, n) {
+        if (n.level >= 6) {
+          this.$message.error("最多只支持五级！");
+          return false;
+        } else {
+          this.treeModule = true;
+          this.treeData = d;
+          this.treeData.revise = '';
+          this.treeData.rev = ''
+        }
       },
-      renderContent(h, {node, data, store}) {     //加载节点
+      // 编辑模板
+      handleEdit(s, d, n) {
+        this.treeModule = true;
+        this.$http.get(this.urls + 'setting/dictionary/read/' + d.id).then((res) => {
+          this.treeData = res.data.data;
+          this.treeData.revise = 'revise';
+          if (s === 'dict') {
+            this.treeData.rev = 'dict'
+          } else {
+            this.treeData.rev = ''
+          }
+        })
+      },
+
+      // 模块上下架
+      handSelf(s, d, n) {
+        this.highLow(d, '');
+      },
+
+      // 字典上架下架
+      highLow(val, s) {
+        let content;
+        if (val.status === 7) {
+          content = '此操作将下架, 是否继续?'
+        } else {
+          content = '此操作将上架, 是否继续?'
+        }
+        this.$confirm(content, '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.get(this.urls + 'setting/dictionary/show/' + val.id).then((res) => {
+            if (res.data.code === '30050') {
+              if (s === 'dict') {
+                this.dictList(val.id);
+              } else {
+                this.initExpand(2);
+                if(res.data.msg === '下架成功'){
+                  this.dynamicTags = [];
+                  this.dynamicTagsStatus = true;
+                }
+                if(res.data.msg === '上架成功'){
+                  this.dictList(val.id);
+                  this.dynamicTagsStatus = false;
+                }
+              }
+              this.$message({
+                type: 'success',
+                message: res.data.msg,
+              });
+            } else {
+              this.$message({
+                type: 'default',
+                message: res.data.msg,
+              });
+            }
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消操作'
+          });
+        });
+      },
+
+      // 模块列表
+      initExpand(val) {
+        this.treeModule = false;
+        if (val === 2) {
+          this.$http.get(this.urls + 'setting/dictionary/').then((res) => {
+            this.setTree = res.data.data;
+            res.data.data.map((a) => {
+              this.defaultExpandKeys.push(a.id);
+            });
+          });
+          this.isLoadingTree = true;
+        }
+      },
+
+      // 点击节点
+      handleNodeClick(d, n, s) {
+        this.clickTag = 'click';
+        if (d.status === 7) {
+          this.dictList(d.id);
+          this.clickTreeData = d;
+          this.dictListId = d.id;
+          this.dictListName = d.dictionary_name;
+          this.dynamicTagsStatus = false;
+        } else {
+          this.dynamicTags = [];
+          this.dynamicTagsStatus = true;
+        }
+      },
+
+      // 新增最上级字典
+      dictAdd(val) {
+        this.treeData = val;
+        this.treeModule = true;
+        this.treeData.rev = 'dict'
+      },
+
+      // 修改字典标题回调
+      dictTitle() {
+        this.dictList(this.dictListId);
+      },
+
+      // 字典列表
+      dictList(val) {
+        this.treeModule = false;
+        this.$http.get(this.urls + 'setting/dictionary/' + val).then((res) => {
+          this.dynamicTags = res.data.data;
+        })
+      },
+
+      // 加载节点
+      renderContent(h, {node, data, store}) {
         let that = this;
         return h(TreeRender, {
           props: {
@@ -213,82 +286,98 @@
             nodeAdd: ((s, d, n) => that.handleAdd(s, d, n)),
             nodeEdit: ((s, d, n) => that.handleEdit(s, d, n)),
             nodeDel: ((s, d, n) => that.handleDelete(s, d, n)),
+            nodeSelf: ((s, d, n) => that.handSelf(s, d, n)),
           }
         });
       },
-      handleAddTop() {
-        this.setTree.push({
-          id: ++this.maxExpandId,
-          name: '新增节点',
-          pid: '',
-          isEdit: false,
-          children: [],
+
+      // 右键
+      houseMenu(row, event, tag) {
+        this.treeData = row;
+        this.lists = [
+
+          {clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '编辑',},
+        ];
+        if (row.status === 7) {
+          this.lists.push({clickIndex: 'down', headIcon: 'el-icon-sort', label: '下架',});
+        } else {
+          this.lists.push({clickIndex: 'up', headIcon: 'el-icon-sort', label: '上架',});
+        }
+        if (tag === 'tag') {
+          this.lists.unshift({clickIndex: 'add', headIcon: 'el-icon-plus', label: '新增子字典',});
+        }
+        this.contextMenuParam(event);
+      },
+
+      // 右键回调
+      clickEvent(val) {
+        if (val === 'add') {
+          this.treeModule = true;
+          this.treeData.revise = '';
+          this.treeData.rev = 'dict'
+        } else if (val === 'revise') {
+          this.treeData.revise = 'revise';
+          this.handleEdit('dict', this.treeData);
+        } else if (val === 'up' || val === 'down') {
+          this.highLow(this.treeData, 'dict')
+        }
+      },
+
+      //关闭右键菜单
+      closeMenu() {
+        this.show = false;
+      },
+      //右键参数
+      contextMenuParam(event) {
+        let e = event || window.event;
+        this.show = false;
+        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true
         })
       },
-      handleAdd(s, d, n) {       //增加节点
-        console.log(s);
-        console.log(d);
-        console.log(n);
-        if (n.level >= 6) {
-          this.$message.error("最多只支持五级！");
-          return false;
-        }
-        //添加数据
-        d.children.push({
-          id: ++this.maxExpandId,
-          name: '新增节点',
-          pid: d.id,
-          isEdit: false,
-          children: [],
-        });
-        //展开节点
-        if (!n.expanded) {
-          n.expanded = true;
-        }
-      },
-      handleEdit(s, d, n) {        //编辑节点
-        console.log(s, d, n)
-      },
-      handleDelete(s, d, n) {      //删除节点
-        console.log(s, d, n);
-        let that = this;
-        //有子级不删除
-        if (d.children && d.children.length !== 0) {
-          this.$message.error("此节点有子级，不可删除！");
-          return false;
-        } else {
-          //新增节点直接删除，否则要询问是否删除
-          let delNode = () => {
-            let list = n.parent.data.children || n.parent.data,   //节点同级数据
-              _index = 99999;                                     //要删除的index
-            /*if(!n.parent.data.children){                        //删除顶级节点，无children
-             list = n.parent.data
-             }*/
-            list.map((c, i) => {
-              if (d.id === c.id) {
-                _index = i;
-              }
-            });
-            let k = list.splice(_index, 1);
-            //console.log(_index,k)
-            this.$message.success("删除成功！")
-          };
-          let isDel = () => {
-            that.$confirm("是否删除此节点？", "提示", {
-              confirmButtonText: "确认",
-              cancelButtonText: "取消",
-              type: "warning"
-            }).then(() => {
-              delNode()
-            }).catch(() => {
-              return false;
-            })
-          };
-          //判断是否新增
-          d.id > this.non_maxExpandId ? delNode() : isDel();
 
-        }
-      },
+      // 删除节点
+      // handleDelete(s, d, n) {      //删除节点
+      //   let that = this;
+      //   //有子级不删除
+      //   if (d.children && d.children.length !== 0) {
+      //     this.$message.error("此节点有子级，不可删除！");
+      //     return false;
+      //   } else {
+      //     //新增节点直接删除，否则要询问是否删除
+      //     let delNode = () => {
+      //       let list = n.parent.data.children || n.parent.data,   //节点同级数据
+      //         _index = 99999;                                     //要删除的index
+      //       /*if(!n.parent.data.children){                        //删除顶级节点，无children
+      //        list = n.parent.data
+      //        }*/
+      //       list.map((c, i) => {
+      //         if (d.id === c.id) {
+      //           _index = i;
+      //         }
+      //       });
+      //       let k = list.splice(_index, 1);
+      //       this.$message.success("删除成功！")
+      //     };
+      //     let isDel = () => {
+      //       that.$confirm("是否删除此节点？", "提示", {
+      //         confirmButtonText: "确认",
+      //         cancelButtonText: "取消",
+      //         type: "warning"
+      //       }).then(() => {
+      //         delNode()
+      //       }).catch(() => {
+      //         return false;
+      //       })
+      //     };
+      //     //判断是否新增
+      //     d.id > this.non_maxExpandId ? delNode() : isDel();
+      //   }
+      // },
     }
   }
 </script>
@@ -306,6 +395,11 @@
           display: flex;
           justify-content: space-between;
         }
+        .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+          span {
+            font-weight: bold;
+          }
+        }
         .expand-tree {
           .is-current {
             overflow: hidden;
@@ -314,7 +408,7 @@
                 display: block;
               }
               .tree-label {
-                font-weight: 600;
+                /*font-weight: 600;*/
                 white-space: normal;
               }
             }
@@ -339,17 +433,40 @@
         border: 1px solid #dfe6fb;
         border-radius: 5px;
         height: 708px;
-        padding: 0 10px 10px;
+        padding: 10px;
+        .topAdd {
+          display: flex;
+          display: -webkit-flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-bottom: 10px;
+          border-bottom: 1px solid #dfe6fb;
+          margin-bottom: 10px;
+          div {
+            font-size: 16px;
+            padding-left: 6px;
+          }
+        }
         .right_top {
           display: flex;
           display: -webkit-flex;
+          align-items: center;
+          background: #d2e8ff;
+          margin-bottom: 3px;
           p {
             padding: 0 10px;
             cursor: pointer;
-            i {
-              color: #409EFF;
+            color: #37a1ff;
+            &:hover {
+              color: #66b1ff;
             }
           }
+          .colorAAA {
+            color: #aaaaaa;
+          }
+        }
+        .disableTag {
+          cursor: pointer;
         }
       }
     }
