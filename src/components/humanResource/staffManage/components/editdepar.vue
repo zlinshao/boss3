@@ -6,7 +6,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="上级部门">
-                <el-input placeholder="请输入内容" v-model="params.parent_id"></el-input>
+                <el-input placeholder="请输入内容" @focus="selectDepart" readonly="" v-model="department"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -28,12 +28,15 @@
         <el-button size="small" type="primary" @click.native="confirmEdit">确 定</el-button>
       </span>
     </el-dialog>
+    <Organization :organizationDialog="organizationDialog" @close="closeOrganization" @selectMember="selectMember"></Organization>
   </div>
 </template>
 
 <script>
+  import Organization from '../../../common/organization.vue'
   export default {
     props:['editDepartDialog','departId'],
+    components:{Organization},
     data() {
       return {
         editDepartDialogVisible:false,
@@ -42,6 +45,8 @@
           name:'',
           order:''
         },
+        organizationDialog:false,
+        department:'',
       };
     },
     watch:{
@@ -87,6 +92,18 @@
             });
           }
         });
+      },
+      selectDepart(){
+        this.organizationDialog = true
+      },
+      //关闭选人框回调
+      closeOrganization(){
+        this.organizationDialog = false;
+      },
+      selectMember(val){
+        this.params.parent_id = val[0].id;
+        this.department = val[0].name;
+        this.organizationDialog = false;
       },
       closeModal(){
         this.editDepartDialogVisible = false;

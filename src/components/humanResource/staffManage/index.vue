@@ -137,11 +137,11 @@
         </el-col>
       </el-row>
       <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
+      <EditDepart :editDepartDialog="editDepartDialog" :departId="departId" @close="closeEditDepart"></EditDepart>
       <AddStaff :addStaffDialog="addStaffDialog" :isEdit="isEdit" :editId="editId" @close="closeAddStaff"></AddStaff>
       <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                  @clickOperate="clickEvent"></RightMenu>
-      <EditDepart :editDepartDialog="editDepartDialog" :departId="departId" @close="closeEditDepart"></EditDepart>
-      <AddDepart :addDepartDialog="addDepartDialog" :parentId="parentId" @close="closeAddDepart"></AddDepart>
+      <AddDepart :addDepartDialog="addDepartDialog" :parentId="parentId" :parentName="parentName" @close="closeAddDepart"></AddDepart>
     </div>
 </template>
 
@@ -195,6 +195,7 @@
         totalNum : 0,
         departId:null,
         parentId:null,
+        parentName:null,
         selectDepart:"南京乐品网络科技有限公司"
       }
     },
@@ -377,7 +378,7 @@
         this.getStaffData();
       },
       handleAdd(s,d,n){//增加节点
-        this.addDepart(d.id);
+        this.addDepart(d);
       },
       handleEdit(s,d,n){//编辑节点
         this.editDepart(d.id);
@@ -397,13 +398,15 @@
         });
       },
       //新建部门
-      addDepart(id){
-          this.parentId = id;
+      addDepart(data){
+          this.parentId = data.id;
+          this.parentName = data.name;
           this.addDepartDialog = true
       },
       closeAddDepart(val){
         this.addDepartDialog = false;
         this.parentId = null;
+        this.parentName = null;
         if(val === 'success'){
           this.getDepart();
         }

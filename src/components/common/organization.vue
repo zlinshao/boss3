@@ -118,11 +118,12 @@
       }
     },
     mounted() {
-      this.getDepartment(1);
+
     },
     watch:{
       organizationDialog(val){
-        this.organizationVisible = val
+        this.organizationVisible = val;
+        this.getDepartment(1);
       },
       organizationVisible(val){
         if(!val){
@@ -300,7 +301,6 @@
       //确定选择并发送
       confirmSelect(){
           this.organizationVisible = false;
-          console.log(this.selectMember)
           this.$emit('selectMember',this.selectMember);
 
           this.selectMember = [];       //已选数组
