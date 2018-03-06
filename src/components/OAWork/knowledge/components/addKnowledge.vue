@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="制度上传" :visible.sync="addKnowledgeDialogVisible" width="40%">
+    <el-dialog title="制度上传" :visible.sync="moduleVisible" width="40%">
       <div>
         <el-form size="small" label-width="100px" :modal="formInline">
           <el-row>
@@ -28,8 +28,8 @@
           <el-row>
             <el-col :span="22">
               <el-form-item label="文件上传" required>
-                <DropZone @dropzone-removedFile="dropzoneR" @dropzone-success="dropzoneS" @complete="dropzoneALL"
-                          id="myVueDropzone" url="https://httpbin.org/post"></DropZone>
+                <Dropzone :id="'know'" :photo="photos" @finish="photo_success"
+                          @remove="photo_remove"></Dropzone>
               </el-form-item>
             </el-col>
           </el-row>
@@ -42,7 +42,7 @@
           </el-row>
           <el-row>
             <el-col :span="22">
-              <el-form-item label="可查看人员" required >
+              <el-form-item label="可查看人员" required>
                 <el-input readonly placeholder="请输入内容" @focus="openModal"></el-input>
               </el-form-item>
             </el-col>
@@ -51,57 +51,64 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="addKnowledgeDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="addKnowledgeDialogVisible = false">确 定</el-button>
+        <el-button size="small" @click="moduleVisible = false">取 消</el-button>
+        <el-button size="small" type="primary" @click="moduleVisible = false">确 定</el-button>
       </span>
     </el-dialog>
+
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
   </div>
 </template>
 
 <script>
   import Organization from '../../../common/organization.vue'
-  import DropZone from '../../../common/dropzone.vue'
+  import Dropzone from '../../../common/dropzone.vue'
+
   export default {
-    props:['addKnowledgeDialog'],
-    components:{Organization,DropZone},
+    props: ['addKnowledgeDialog'],
+    components: {Organization, Dropzone},
     data() {
       return {
-        addKnowledgeDialogVisible:false,
+        moduleVisible: false,
         organizationDialog: false,
-        formInline: {region:''},
-        tableData:[],
-        value1:'',
+        formInline: {
+          region: ''
+        },
+        photos: {
+          pic_id: [],
+          pic_url: {},
+        },
       };
     },
-    watch:{
-      addKnowledgeDialog(val){
-        this.addKnowledgeDialogVisible = val
+    watch: {
+      addKnowledgeDialog(val) {
+        this.moduleVisible = val
       },
-      addKnowledgeDialogVisible(val){
-        if(!val){
-          this.$emit('close')
+      moduleVisible(val) {
+        if (!val) {
+          this.$emit('close');
+          document.getElementById('know').innerHTML = '';
+          this.photos.pic_id = [];
+          this.photos.pic_url = {};
         }
       },
     },
-    methods:{
-      openModal(){
-          this.organizationDialog = true;
+    methods: {
+      // 上传成功
+      photo_success(val) {
+        this.photos.pic_id = val;
       },
-      closeOrganization(){
+      // 删除图片
+      photo_remove(val) {
+        this.photos.pic_id = val;
+      },
+
+      openModal() {
+        this.organizationDialog = true;
+      },
+      closeOrganization() {
         this.organizationDialog = false;
       },
-      dropzoneS(file) {
-        console.log(file)
-        this.$message({ message: '上传成功', type: 'success' })
-      },
-      dropzoneR(file) {
-        console.log(file)
-        this.$message({ message: '删除成功', type: 'success' })
-      },
-      dropzoneALL(val){
-        alert(val)
-      }
     }
   };
 </script>

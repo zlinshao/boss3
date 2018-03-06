@@ -14,7 +14,6 @@
               :data="setTree"
               node-key="id"
               highlight-current
-              accordion
               check-strictly
               :default-expanded-keys="defaultExpandKeys"
               :props="defaultProps"
@@ -29,6 +28,7 @@
         <el-col :span="18">
           <div class="dictionary_right">
             <div class="topAdd" v-if="clickTag === 'click' && !dynamicTagsStatus">
+              <div>{{dictListName}}</div>
               <el-button type="primary" size="mini" @click="dictAdd(clickTreeData)">
                 <i class="el-icon-plus"></i>&nbsp;新增字典
               </el-button>
@@ -101,6 +101,7 @@
 
         tags: {},
         dictListId: '',                     //刷新字典id
+        dictListName: '',                   //模块名
 
         defaultProps: {
           children: 'children',
@@ -235,6 +236,7 @@
           this.dictList(d.id);
           this.clickTreeData = d;
           this.dictListId = d.id;
+          this.dictListName = d.dictionary_name;
           this.dynamicTagsStatus = false;
         } else {
           this.dynamicTags = [];
@@ -426,9 +428,17 @@
         height: 708px;
         padding: 10px;
         .topAdd {
-          text-align: right;
+          display: flex;
+          display: -webkit-flex;
+          justify-content: space-between;
+          align-items: center;
           padding-bottom: 10px;
           border-bottom: 1px solid #dfe6fb;
+          margin-bottom: 10px;
+          div{
+            font-size: 16px;
+            padding-left: 6px;
+          }
         }
         .right_top {
           display: flex;
