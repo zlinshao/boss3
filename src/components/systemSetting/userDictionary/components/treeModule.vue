@@ -26,6 +26,7 @@
     props: ['module', 'msg'],
     data() {
       return {
+        urls: globalConfig.server,
         treeVisible: false,
         values: ['上级', '平级', '下级'],
         form: {
@@ -67,10 +68,10 @@
         let type, urls, rev;
         if (val === 1) {
           type = this.$http.post;
-          urls = 'setting/dictionary/save';
+          urls = this.urls + 'setting/dictionary/save';
         } else {
           type = this.$http.put;
-          urls = 'setting/dictionary/update';
+          urls = this.urls + 'setting/dictionary/update';
         }
         if (this.msg.rev === 'dict') {
           rev = 5;

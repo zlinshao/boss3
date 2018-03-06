@@ -2,7 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import axios from  'axios'
+import axios from 'axios'
 import Vuex from 'vuex'
 
 import ElementUI from 'element-ui'
@@ -30,25 +30,29 @@ Vue.use(VueRouter);
 Vue.use(Vuex);
 Vue.use(Cookies);
 Vue.prototype.$http = axios;
-Vue.prototype.$http.defaults.baseURL = globalConfig.server;
-Vue.prototype.$http.defaults.withCredentials = true;
-Vue.prototype.$http.defaults.headers.common['Env'] = globalConfig.env;
+axios.defaults.withCredentials = true;
+axios.defaults.headers.common['Env'] = globalConfig.env;
+axios.defaults.headers = globalConfig.header;
 
-Vue.prototype.$ajax = axios;
-Vue.prototype.$ajax.defaults.baseURL = globalConfig.server_user;
-Vue.prototype.$ajax.defaults.withCredentials = true;
-Vue.prototype.$ajax.defaults.headers.common['Env'] = globalConfig.env;
-Vue.prototype.$ajax.defaults.headers = globalConfig.header;
-
-
+if (localStorage.mydata !== undefined) {
+  let head = JSON.parse(localStorage.mydata);
+  globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
+}
 Vue.config.productionTip = false;
+
+// 拦截器
+// axios.interceptors.response.use(function (response) {
+// 对响应数据做点什么
+// console.log(response)
+// }, function (error) {
+// 对响应错误做点什么
+// return Promise.reject(error);
+// });
 
 // const router = new VueRouter({
 //   mode: 'history',
 //   router
 // });
-
-
 
 //重定向
 router.beforeEach((to, from, next) => {
@@ -58,13 +62,13 @@ router.beforeEach((to, from, next) => {
   }
   let user = JSON.parse(sessionStorage.getItem('user'));
 
-  if(Cookies.get('locking') === '1' && to.path !=='/lock'){
-    next({path:'/lock'});
-  }else if(Cookies.get('locking') === '0' && to.path ==='/lock'){
+  if (Cookies.get('locking') === '1' && to.path !== '/lock') {
+    next({path: '/lock'});
+  } else if (Cookies.get('locking') === '0' && to.path === '/lock') {
     next(false);
-  }else {
+  } else {
     if (!user && to.path !== '/login') {
-      next({ path: '/login' })
+      next({path: '/login'})
     } else {
       next()
     }
@@ -76,5 +80,5 @@ new Vue({
   router,
   store,
   template: '<App/>',
-  components: { App }
+  components: {App}
 }).$mount('#app');

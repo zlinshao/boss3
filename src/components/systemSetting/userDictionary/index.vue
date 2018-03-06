@@ -85,6 +85,7 @@
     components: {TreeModule, RightMenu},
     data() {
       return {
+        urls: globalConfig.server,
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
@@ -128,7 +129,7 @@
 
       // 确认新增标签
       handleInputConfirm() {
-        this.$http.post('setting/dictionary/save', {
+        this.$http.post(this.urls + 'setting/dictionary/save', {
           dictionary_name: this.inputValue,
           type: 5,
           status: this.tags.status,
@@ -158,7 +159,7 @@
       // 编辑模板
       handleEdit(s, d, n) {
         this.treeModule = true;
-        this.$http.get('setting/dictionary/read/' + d.id).then((res) => {
+        this.$http.get(this.urls + 'setting/dictionary/read/' + d.id).then((res) => {
           this.treeData = res.data.data;
           this.treeData.revise = 'revise';
           if (s === 'dict') {
@@ -177,7 +178,6 @@
       // 字典上架下架
       highLow(val, s) {
         let content;
-        console.log(val);
         if (val.status === 7) {
           content = '此操作将下架, 是否继续?'
         } else {
@@ -188,7 +188,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.get('setting/dictionary/show/' + val.id).then((res) => {
+          this.$http.get(this.urls + 'setting/dictionary/show/' + val.id).then((res) => {
             if (res.data.code === '30050') {
               if (s === 'dict') {
                 this.dictList(this.dictListId);
@@ -218,7 +218,7 @@
       initExpand(val) {
         this.treeModule = false;
         if (val === 2) {
-          this.$http.get('setting/dictionary/').then((res) => {
+          this.$http.get(this.urls + 'setting/dictionary/').then((res) => {
             this.setTree = res.data.data;
             res.data.data.map((a) => {
               this.defaultExpandKeys.push(a.id);
@@ -257,7 +257,7 @@
       // 字典列表
       dictList(val) {
         this.treeModule = false;
-        this.$http.get('setting/dictionary/' + val).then((res) => {
+        this.$http.get(this.urls + 'setting/dictionary/' + val).then((res) => {
           this.dynamicTags = res.data.data;
         })
       },
@@ -332,44 +332,43 @@
       },
 
       // 删除节点
-      handleDelete(s, d, n) {      //删除节点
-        let that = this;
-        //有子级不删除
-        if (d.children && d.children.length !== 0) {
-          this.$message.error("此节点有子级，不可删除！");
-          return false;
-        } else {
-          //新增节点直接删除，否则要询问是否删除
-          let delNode = () => {
-            let list = n.parent.data.children || n.parent.data,   //节点同级数据
-              _index = 99999;                                     //要删除的index
-            /*if(!n.parent.data.children){                        //删除顶级节点，无children
-             list = n.parent.data
-             }*/
-            list.map((c, i) => {
-              if (d.id === c.id) {
-                _index = i;
-              }
-            });
-            let k = list.splice(_index, 1);
-            //console.log(_index,k)
-            this.$message.success("删除成功！")
-          };
-          let isDel = () => {
-            that.$confirm("是否删除此节点？", "提示", {
-              confirmButtonText: "确认",
-              cancelButtonText: "取消",
-              type: "warning"
-            }).then(() => {
-              delNode()
-            }).catch(() => {
-              return false;
-            })
-          };
-          //判断是否新增
-          d.id > this.non_maxExpandId ? delNode() : isDel();
-        }
-      },
+      // handleDelete(s, d, n) {      //删除节点
+      //   let that = this;
+      //   //有子级不删除
+      //   if (d.children && d.children.length !== 0) {
+      //     this.$message.error("此节点有子级，不可删除！");
+      //     return false;
+      //   } else {
+      //     //新增节点直接删除，否则要询问是否删除
+      //     let delNode = () => {
+      //       let list = n.parent.data.children || n.parent.data,   //节点同级数据
+      //         _index = 99999;                                     //要删除的index
+      //       /*if(!n.parent.data.children){                        //删除顶级节点，无children
+      //        list = n.parent.data
+      //        }*/
+      //       list.map((c, i) => {
+      //         if (d.id === c.id) {
+      //           _index = i;
+      //         }
+      //       });
+      //       let k = list.splice(_index, 1);
+      //       this.$message.success("删除成功！")
+      //     };
+      //     let isDel = () => {
+      //       that.$confirm("是否删除此节点？", "提示", {
+      //         confirmButtonText: "确认",
+      //         cancelButtonText: "取消",
+      //         type: "warning"
+      //       }).then(() => {
+      //         delNode()
+      //       }).catch(() => {
+      //         return false;
+      //       })
+      //     };
+      //     //判断是否新增
+      //     d.id > this.non_maxExpandId ? delNode() : isDel();
+      //   }
+      // },
     }
   }
 </script>

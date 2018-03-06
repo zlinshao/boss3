@@ -129,6 +129,7 @@
     },
     mounted(){
         this.changeLanguage();
+
     },
     methods: {
       handleDayChanged (data) {

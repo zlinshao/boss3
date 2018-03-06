@@ -130,6 +130,7 @@
     props: ['module', 'formList', 'province', 'dict'],
     data() {
       return {
+        urls: globalConfig.server,
         photos: {
           pic_id: [],
           pic_url: {},
@@ -238,21 +239,21 @@
 
       chooseList(val, id) {
         if (val === 'city') {
-          this.$http.get('setting/others/city?city_parent=' + id).then((res) => {
+          this.$http.get(this.urls + 'setting/others/city?city_parent=' + id).then((res) => {
             if (res.data.code === '100050') {
               this.cityList = res.data.data;
             }
           })
         }
         if (val === 'area') {
-          this.$http.get('setting/others/area?area_parent=' + id).then((res) => {
+          this.$http.get(this.urls + 'setting/others/area?area_parent=' + id).then((res) => {
             if (res.data.code === '100060') {
               this.areaList = res.data.data;
             }
           })
         }
         if (val === 'region') {
-          this.$http.get('setting/others/region?region_parent=' + id).then((res) => {
+          this.$http.get(this.urls + 'setting/others/region?region_parent=' + id).then((res) => {
             if (res.data.code === '100070') {
               this.regionList = res.data.data;
             }
@@ -278,10 +279,10 @@
         let type, urls;
         if (addr === 'save') {
           type = this.$http.post;
-          urls = 'setting/community/save';
+          urls = this.urls + 'setting/community/save';
         } else {
           type = this.$http.put;
-          urls = 'setting/community/update';
+          urls = this.urls + 'setting/community/update';
         }
         type(urls, {
           id: this.villageId,

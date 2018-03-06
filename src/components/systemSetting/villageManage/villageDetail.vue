@@ -104,6 +104,7 @@
     props: ['formList'],
     data() {
       return {
+        urls: globalConfig.server,
         myData: {},
         terms: {},
         house_pic: {},
@@ -111,7 +112,7 @@
     },
     mounted() {
       this.terms = this.$route.query.term;
-      this.$http.get('setting/community/' + this.$route.query.ids).then((res) => {
+      this.$http.get(this.urls + 'setting/community/' + this.$route.query.ids).then((res) => {
         this.myData = res.data.data;
         this.house_pic = res.data.data.album.house_pic;
       });

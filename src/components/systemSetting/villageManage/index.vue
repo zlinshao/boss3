@@ -32,7 +32,7 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.house_type">
+                    <el-select v-model="form.house_type" clearable>
                       <el-option v-for="(key,index) in dict" :label="key.dictionary_name" :value="key.id"
                                  :key="index"></el-option>
                     </el-select>
@@ -48,7 +48,7 @@
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-form-item>
-                      <el-select v-model="form.built_year">
+                      <el-select v-model="form.built_year" clearable>
                         <el-option v-for="(key,index) in 151" :label="key + 1969" :value="index + 1969"
                                    :key="index"></el-option>
                       </el-select>
@@ -143,7 +143,7 @@
       </el-table-column>
       <el-table-column
         prop="address"
-        label="地址">
+        label="地址11111">
       </el-table-column>
       <el-table-column
         prop="village_alias"
@@ -191,6 +191,7 @@
     components: {RightMenu, VillageModule},
     data() {
       return {
+        urls: globalConfig.server,
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
@@ -223,7 +224,7 @@
       }
     },
     mounted() {
-      this.$http.get('setting/dictionary/10').then((res) => {
+      this.$http.get(this.urls + 'setting/dictionary/10').then((res) => {
         this.dict = res.data.data;
         if (this.$route.query.status === 1) {
           let term = this.$route.query.term;
@@ -242,7 +243,7 @@
           this.myData(1);
         }
       });
-      this.$http.get('setting/others/province').then((res) => {
+      this.$http.get(this.urls + 'setting/others/province').then((res) => {
         this.provinceList = res.data.data;
       });
     },
@@ -250,7 +251,7 @@
       myData(val) {
         this.tableData = [];
         this.form.pages = val;
-        this.$http.get('setting/community/', {
+        this.$http.get(this.urls + 'setting/community/', {
           params: this.form,
         }).then((res) => {
           if (res.data.code === '10000') {
@@ -283,21 +284,21 @@
 
       chooseList(val, id) {
         if (val === 'city') {
-          this.$http.get('setting/others/city?city_parent=' + id).then((res) => {
+          this.$http.get(this.urls + 'setting/others/city?city_parent=' + id).then((res) => {
             if (res.data.code === '100050') {
               this.cityList = res.data.data;
             }
           })
         }
         if (val === 'area') {
-          this.$http.get('setting/others/area?area_parent=' + id).then((res) => {
+          this.$http.get(this.urls + 'setting/others/area?area_parent=' + id).then((res) => {
             if (res.data.code === '100060') {
               this.areaList = res.data.data;
             }
           })
         }
         if (val === 'region') {
-          this.$http.get('setting/others/region?region_parent=' + id).then((res) => {
+          this.$http.get(this.urls + 'setting/others/region?region_parent=' + id).then((res) => {
             if (res.data.code === '100070') {
               this.regionList = res.data.data;
             }
