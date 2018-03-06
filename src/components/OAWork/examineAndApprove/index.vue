@@ -1,208 +1,218 @@
 <template>
-    <div id="examineAndApprove">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
-        <el-tab-pane label="我的审批" name="first">
-          <div class="myApplication">
-            <div>
-              <div class="head">
-                <div class="title">积分申请（1）</div>
-                <div class="open_close" @click="retract(1)">
-                  <span v-if="isOpen_1">收起</span>
-                  <span v-else="">展开</span>
-                </div>
+  <div id="examineAndApprove">
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="发起审批" name="first">
+        <div class="myApplication">
+          <div>
+            <div class="head">
+              <div class="title">积分申请（1）</div>
+              <div class="open_close" @click="retract(1)">
+                <span v-if="isOpen_1">收起</span>
+                <span v-else="">展开</span>
               </div>
-              <div class="content" v-if="isOpen_1">
-                <div class="content_item">
-                  <div>
-                    <div class="item_icon"></div>
-                    <div class="item_name">积分申请</div>
-                  </div>
+            </div>
+            <div class="content" v-if="isOpen_1">
+              <div class="content_item" @click="openFrames('frameVisible')">
+                <div>
+                  <div class="item_icon"></div>
+                  <div class="item_name">积分申请</div>
                 </div>
               </div>
             </div>
-            <div>
-              <div class="head">
-                <div class="title">住宿（2）</div>
-                <div class="open_close" @click="retract(2)">
-                  <span v-if="isOpen_2">收起</span>
-                  <span v-else="">展开</span>
+          </div>
+          <div>
+            <div class="head">
+              <div class="title">住宿（2）</div>
+              <div class="open_close" @click="retract(2)">
+                <span v-if="isOpen_2">收起</span>
+                <span v-else="">展开</span>
+              </div>
+            </div>
+            <div class="content" v-if="isOpen_2">
+              <div class="content_item"  @click="openFrames('lisuVisible')">
+                <div>
+                  <div class="item_icon"></div>
+                  <div class="item_name">离宿申请</div>
                 </div>
               </div>
-              <div class="content" v-if="isOpen_2">
-                <div class="content_item" v-for="item in 2">
-                  <div>
-                    <div class="item_icon"></div>
-                    <div class="item_name">住宿</div>
-                  </div>
+              <div class="content_item"  @click="openFrames('zhusuVisible')">
+                <div>
+                  <div class="item_icon"></div>
+                  <div class="item_name">住宿申请</div>
                 </div>
               </div>
             </div>
-            <div>
-              <div class="head">
-                <div class="title">报销</div>
-                <div class="open_close" @click="retract(3)">
-                  <span v-if="isOpen_3">收起</span>
-                  <span v-else="">展开</span>
+          </div>
+          <div>
+            <div class="head">
+              <div class="title">报销</div>
+              <div class="open_close" @click="retract(3)">
+                <span v-if="isOpen_3">收起</span>
+                <span v-else="">展开</span>
+              </div>
+            </div>
+            <div class="content" v-if="isOpen_3">
+              <div class="content_item" @click="openFrames('baoxiaoVisible')">
+                <div>
+                  <div class="item_icon"></div>
+                  <div class="item_name">报销流程</div>
                 </div>
               </div>
-              <div class="content" v-if="isOpen_3">
-                <div class="content_item" v-for="item in 6">
-                  <div>
-                    <div class="item_icon"></div>
-                    <div class="item_name">报销</div>
-                  </div>
+              <div class="content_item" @click="openFrames('shiyebuVisible')">
+                <div>
+                  <div class="item_icon"></div>
+                  <div class="item_name">事业部报销</div>
+                </div>
+              </div>
+              <div class="content_item" @click="openFrames('gaocengVisible')">
+                <div>
+                  <div class="item_icon"></div>
+                  <div class="item_name">高层报销</div>
+                </div>
+              </div>
+              <div class="content_item" @click="openFrames('chuchaiVisible')">
+                <div>
+                  <div class="item_icon"></div>
+                  <div class="item_name">出差报销</div>
+                </div>
+              </div>
+              <div class="content_item" @click="openFrames('reserveVisible')">
+                <div>
+                  <div class="item_icon"></div>
+                  <div class="item_name">备用金申领</div>
                 </div>
               </div>
             </div>
-            <div>
-              <div class="head">
-                <div class="title">离职申请</div>
-                <div class="open_close" @click="retract(4)">
-                  <span v-if="isOpen_4">收起</span>
-                  <span v-else="">展开</span>
-                </div>
+          </div>
+          <div>
+            <div class="head">
+              <div class="title">离职申请</div>
+              <div class="open_close" @click="retract(4)">
+                <span v-if="isOpen_4">收起</span>
+                <span v-else="">展开</span>
               </div>
-              <div class="content" v-if="isOpen_4">
-                <div class="content_item">
-                  <div>
-                    <div class="item_icon"></div>
-                    <div class="item_name">离职申请</div>
-                  </div>
+            </div>
+            <div class="content" v-if="isOpen_4">
+              <div class="content_item">
+                <div>
+                  <div class="item_icon"></div>
+                  <div class="item_name">离职申请</div>
                 </div>
               </div>
             </div>
-            <div>
-              <div class="head">
-                <div class="title">交通工具申请</div>
-                <div class="open_close" @click="retract(5)">
-                  <span v-if="isOpen_5">收起</span>
-                  <span v-else="">展开</span>
-                </div>
+          </div>
+          <div>
+            <div class="head">
+              <div class="title">交通工具申请</div>
+              <div class="open_close" @click="retract(5)">
+                <span v-if="isOpen_5">收起</span>
+                <span v-else="">展开</span>
               </div>
-              <div class="content" v-if="isOpen_5">
-                <div class="content_item">
-                  <div>
-                    <div class="item_icon"></div>
-                    <div class="item_name">交通工具申请</div>
-                  </div>
+            </div>
+            <div class="content" v-if="isOpen_5">
+              <div class="content_item">
+                <div>
+                  <div class="item_icon"></div>
+                  <div class="item_name">交通工具申请</div>
                 </div>
               </div>
             </div>
-            <div>
-              <div class="head">
-                <div class="title">请假</div>
-                <div class="open_close" @click="retract(6)">
-                  <span v-if="isOpen_6">收起</span>
-                  <span v-else="">展开</span>
+          </div>
+          <div>
+            <div class="head">
+              <div class="title">请假</div>
+              <div class="open_close" @click="retract(6)">
+                <span v-if="isOpen_6">收起</span>
+                <span v-else="">展开</span>
+              </div>
+            </div>
+            <div class="content" v-if="isOpen_6">
+              <div class="content_item" @click="openFrames('leaveVisible')">
+                <div>
+                  <div class="item_icon"></div>
+                  <div class="item_name">请假审批</div>
                 </div>
               </div>
-              <div class="content" v-if="isOpen_6">
-                <div class="content_item" v-for="item in 3">
-                  <div>
-                    <div class="item_icon"></div>
-                    <div class="item_name">请假</div>
-                  </div>
+              <div class="content_item" @click="openFrames('takeworkVisible')">
+                <div>
+                  <div class="item_icon"></div>
+                  <div class="item_name">调休申请</div>
+                </div>
+              </div>
+              <div class="content_item" >
+                <div>
+                  <div class="item_icon"></div>
+                  <div class="item_name">部门负责人请假专申请</div>
                 </div>
               </div>
             </div>
-            <div>
-              <div class="head">
-                <div class="title">客服部问题申报</div>
-                <div class="open_close" @click="retract(7)">
-                  <span v-if="isOpen_7">收起</span>
-                  <span v-else="">展开</span>
-                </div>
+          </div>
+          <div>
+            <div class="head">
+              <div class="title">客服部问题申报</div>
+              <div class="open_close" @click="retract(7)">
+                <span v-if="isOpen_7">收起</span>
+                <span v-else="">展开</span>
               </div>
-              <div class="content" v-if="isOpen_7">
-                <div class="content_item" v-for="item in 8">
-                  <div>
-                    <div class="item_icon"></div>
-                    <div class="item_name">客服部问题申报</div>
-                  </div>
+            </div>
+            <div class="content" v-if="isOpen_7">
+              <div class="content_item" v-for="item in 8">
+                <div>
+                  <div class="item_icon"></div>
+                  <div class="item_name">客服部问题申报</div>
                 </div>
               </div>
             </div>
-            <div>
-              <div class="head">
-                <div class="title">出勤休假</div>
-                <div class="open_close" @click="retract(8)">
-                  <span v-if="isOpen_8">收起</span>
-                  <span v-else="">展开</span>
-                </div>
+          </div>
+          <div>
+            <div class="head">
+              <div class="title">出勤休假</div>
+              <div class="open_close" @click="retract(8)">
+                <span v-if="isOpen_8">收起</span>
+                <span v-else="">展开</span>
               </div>
-              <div class="content" v-if="isOpen_8">
-                <div class="content_item" v-for="item in 3">
-                  <div>
-                    <div class="item_icon"></div>
-                    <div class="item_name">出勤休假</div>
-                  </div>
+            </div>
+            <div class="content" v-if="isOpen_8">
+              <div class="content_item" @click="openFrames('replenishmentVisible')">
+                <div>
+                  <div class="item_icon"></div>
+                  <div class="item_name">补卡申请</div>
                 </div>
               </div>
             </div>
-            <div>
-              <div class="head">
-                <div class="title">其他</div>
-                <div class="open_close" @click="retract(9)">
-                  <span v-if="isOpen_9">收起</span>
-                  <span v-else="">展开</span>
+          </div>
+          <div>
+            <div class="head">
+              <div class="title">其他</div>
+              <div class="open_close" @click="retract(9)">
+                <span v-if="isOpen_9">收起</span>
+                <span v-else="">展开</span>
+              </div>
+            </div>
+            <div class="content" v-if="isOpen_9">
+              <div class="content_item" @click="openFrames('purchaseVisible')">
+                <div>
+                  <div class="item_icon"></div>
+                  <div class="item_name">采购申请</div>
                 </div>
               </div>
-              <div class="content" v-if="isOpen_9">
-                <div class="content_item" v-for="item in 10">
-                  <div>
-                    <div class="item_icon"></div>
-                    <div class="item_name">其他</div>
-                  </div>
+              <div class="content_item" @click="openFrames('receiptVisible')">
+                <div>
+                  <div class="item_icon"></div>
+                  <div class="item_name">收据领用</div>
                 </div>
               </div>
             </div>
+          </div>
 
-          </div>
-        </el-tab-pane>
-        <el-tab-pane name="second">
-          <el-badge  slot="label" is-dot="" class="item">代办事项</el-badge>
-          <div class="myTable">
-            <el-table
-              :data="tableData"
-              @row-dblclick="dblClickTable"
-              style="width: 100%">
-              <el-table-column
-                prop="date"
-                v-if="isCheckbox"
-                type="selection">
-              </el-table-column>
-              <el-table-column
-                prop="date"
-                label="审批标题">
-              </el-table-column>
-              <el-table-column
-                label="审批摘要">
-                <template slot-scope="scope">
-                  <div>{{scope.row.city}}</div>
-                  <div>{{scope.row.address}}</div>
-                  <div>{{scope.row.zip}}</div>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="province"
-                label="发起时间">
-              </el-table-column>
-              <el-table-column
-                prop="address"
-                label="完成时间">
-              </el-table-column>
-              <el-table-column
-                prop="zip"
-                label="状态">
-              </el-table-column>
-            </el-table>
-          </div>
-        </el-tab-pane>
-        <el-tab-pane name="third">
-          <el-badge  slot="label" :is-dot="false" class="item">已完成事项</el-badge>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane name="second">
+        <el-badge slot="label" is-dot="" class="item">待办事项</el-badge>
+        <div class="myTable">
           <el-table
             :data="tableData"
-            @row-dblclick="dblClickTable"
+            @row-dblclick="dblClickTable('reimbursedetail')"
             style="width: 100%">
             <el-table-column
               prop="date"
@@ -234,102 +244,190 @@
               label="状态">
             </el-table-column>
           </el-table>
-        </el-tab-pane>
-        <el-tab-pane label="我发起的" name="fourth">
-          <el-badge  slot="label" is-dot="" class="item">我发起的</el-badge>
-          <el-table
-            :data="tableData"
-            @row-dblclick="dblClickTable"
-            style="width: 100%">
-            <el-table-column
-              prop="date"
-              v-if="isCheckbox"
-              type="selection">
-            </el-table-column>
-            <el-table-column
-              prop="date"
-              label="审批标题">
-            </el-table-column>
-            <el-table-column
-              label="审批摘要">
-              <template slot-scope="scope">
-                <div>{{scope.row.city}}</div>
-                <div>{{scope.row.address}}</div>
-                <div>{{scope.row.zip}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="province"
-              label="发起时间">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="完成时间">
-            </el-table-column>
-            <el-table-column
-              prop="zip"
-              label="状态">
-            </el-table-column>
-          </el-table>
-        </el-tab-pane>
-        <el-tab-pane label="抄送我的" name="fifth">
-          <el-badge  slot="label" :is-dot="false" class="item">抄送我的</el-badge>
-          <el-table
-            :data="tableData"
-            @row-dblclick="dblClickTable"
-            style="width: 100%">
-            <el-table-column
-              prop="date"
-              v-if="isCheckbox"
-              type="selection">
-            </el-table-column>
-            <el-table-column
-              prop="date"
-              label="审批标题">
-            </el-table-column>
-            <el-table-column
-              label="审批摘要">
-              <template slot-scope="scope">
-                <div>{{scope.row.city}}</div>
-                <div>{{scope.row.address}}</div>
-                <div>{{scope.row.zip}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="province"
-              label="发起时间">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="完成时间">
-            </el-table-column>
-            <el-table-column
-              label="审批摘要">
-              <template slot-scope="scope">
-                <div>{{scope.row.city}}</div>
-              </template>
-            </el-table-column>
-          </el-table>
-        </el-tab-pane>
-      </el-tabs>
-    </div>
+        </div>
+      </el-tab-pane>
+      <el-tab-pane name="third">
+        <el-badge slot="label" :is-dot="false" class="item">已完成事项</el-badge>
+        <el-table
+          :data="tableData"
+          @row-dblclick="dblClickTable"
+          style="width: 100%">
+          <el-table-column
+            prop="date"
+            v-if="isCheckbox"
+            type="selection">
+          </el-table-column>
+          <el-table-column
+            prop="date"
+            label="审批标题">
+          </el-table-column>
+          <el-table-column
+            label="审批摘要">
+            <template slot-scope="scope">
+              <div>{{scope.row.city}}</div>
+              <div>{{scope.row.address}}</div>
+              <div>{{scope.row.zip}}</div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="province"
+            label="发起时间">
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            label="完成时间">
+          </el-table-column>
+          <el-table-column
+            prop="zip"
+            label="状态">
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+      <el-tab-pane label="我发起的" name="fourth">
+        <el-badge slot="label" is-dot="" class="item">我发起的</el-badge>
+        <el-table
+          :data="tableData"
+          @row-dblclick="dblClickTable"
+          style="width: 100%">
+          <el-table-column
+            prop="date"
+            v-if="isCheckbox"
+            type="selection">
+          </el-table-column>
+          <el-table-column
+            prop="date"
+            label="审批标题">
+          </el-table-column>
+          <el-table-column
+            label="审批摘要">
+            <template slot-scope="scope">
+              <div>{{scope.row.city}}</div>
+              <div>{{scope.row.address}}</div>
+              <div>{{scope.row.zip}}</div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="province"
+            label="发起时间">
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            label="完成时间">
+          </el-table-column>
+          <el-table-column
+            prop="zip"
+            label="状态">
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+      <el-tab-pane label="抄送我的" name="fifth">
+        <el-badge slot="label" :is-dot="false" class="item">抄送我的</el-badge>
+        <el-table
+          :data="tableData"
+          @row-dblclick="dblClickTable"
+          style="width: 100%">
+          <el-table-column
+            prop="date"
+            v-if="isCheckbox"
+            type="selection">
+          </el-table-column>
+          <el-table-column
+            prop="date"
+            label="审批标题">
+          </el-table-column>
+          <el-table-column
+            label="审批摘要">
+            <template slot-scope="scope">
+              <div>{{scope.row.city}}</div>
+              <div>{{scope.row.address}}</div>
+              <div>{{scope.row.zip}}</div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="province"
+            label="发起时间">
+          </el-table-column>
+          <el-table-column
+            prop="address"
+            label="完成时间">
+          </el-table-column>
+          <el-table-column
+            label="审批摘要">
+            <template slot-scope="scope">
+              <div>{{scope.row.city}}</div>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+    </el-tabs>
+    <Frames :module="frameVisible" @close='closeFrame'></Frames>
+    <Lisu :module="lisuVisible" @close='closeFrame'></Lisu>
+    <Zhusu :module="zhusuVisible" @close='closeFrame'></Zhusu>
+    <Baoxiao :module="baoxiaoVisible" @close='closeFrame'></Baoxiao>
+    <Career :module="shiyebuVisible" @close='closeFrame'></Career>
+    <Gaoceng :module="gaocengVisible" @close='closeFrame'></Gaoceng>
+    <Chuchai :module="chuchaiVisible" @close='closeFrame'></Chuchai>
+    <Reserve :module="reserveVisible" @close='closeFrame'></Reserve>
+    <Reserve :module="purchaseVisible" @close='closeFrame'></Reserve>
+    <Leave :module="leaveVisible" @close='closeFrame'></Leave>
+    <Takework :module="takeworkVisible" @close='closeFrame'></Takework>
+    <Replenishment :module="replenishmentVisible" @close='closeFrame'></Replenishment>
+    <Receipt :module="receiptVisible" @close='closeFrame'></Receipt>
+
+    <Reimbursement :module="reimbursedetail" @close='closeFrame'></Reimbursement>
+
+
+
+  </div>
 </template>
 
 <script>
+  import Frames from './comments/frames.vue'
+  import Lisu from './comments/lisu.vue'
+  import Zhusu from './comments/zhusu.vue'
+  import Baoxiao from './comments/baoxiao.vue'
+  import Career from './comments/shiyebu.vue'
+  import Gaoceng from './comments/gaoceng.vue'
+  import Chuchai from './comments/chuchai.vue'
+  import Reserve from './comments/reservemoney.vue'
+  import Purchase from './comments/purchaseapply.vue'
+  import Leave from './comments/leave.vue'
+  import Takework from './comments/takework.vue'
+  import Replenishment from './comments/replenishment.vue'
+  import Receipt from './comments/receipt.vue'
+  // 详情
+  import Reimbursement from './comments/details/reimbursementdetail.vue'
+
   export default {
+    components: { Frames,
+      Lisu,
+      Zhusu,
+      Baoxiao,
+      Career,
+      Gaoceng,
+      Chuchai,
+      Reserve,
+      Purchase,
+      Leave,
+      Takework,
+      Replenishment,
+      Receipt,
+
+      Reimbursement,
+    },
     data() {
       return {
         activeName: 'first',
-        isOpen_1:true,
-        isOpen_2:true,
-        isOpen_3:true,
-        isOpen_4:true,
-        isOpen_5:true,
-        isOpen_6:true,
-        isOpen_7:true,
-        isOpen_8:true,
-        isOpen_9:true,
-        tableData:[
+        isOpen_1: true,
+        isOpen_2: true,
+        isOpen_3: true,
+        isOpen_4: true,
+        isOpen_5: true,
+        isOpen_6: true,
+        isOpen_7: true,
+        isOpen_8: true,
+        isOpen_9: true,
+        tableData: [
           {
             date: '2016-05-03',
             name: '王小虎',
@@ -339,66 +437,161 @@
             zip: 200333
           },
         ],
+        isCheckbox: 'true',
+// 模态框
+        frameVisible: false,              //积分申请
+        lisuVisible: false,               //离宿申请
+        zhusuVisible: false,              //住宿申请
+        baoxiaoVisible: false,            //报销申请
+        shiyebuVisible: false,            //事业部报销申请
+        gaocengVisible: false,            //高层报销申请
+        chuchaiVisible: false,            //出差报销申请
+        reserveVisible: false,            //备用金申请
+        purchaseVisible: false,           //备用金申请
+        leaveVisible: false,              //请假审批
+        takeworkVisible: false,           //调休审批
+        replenishmentVisible: false,      //补卡申请
+        receiptVisible: false,            //收据领用
+        reimbursedetail: false,            //报销详情
+
+
       };
     },
     methods: {
       handleClick(tab, event) {
         console.log(tab, event);
       },
-      retract(flag){
-          if(flag === 1){
-            this.isOpen_1 = !this.isOpen_1;
-          }else if(flag === 2){
-            this.isOpen_2 = !this.isOpen_2;
-          }else if(flag === 3){
-            this.isOpen_3 = !this.isOpen_3;
-          }else if(flag === 4){
-            this.isOpen_4 = !this.isOpen_4;
-          }else if(flag === 5){
-            this.isOpen_5 = !this.isOpen_5;
-          }else if(flag === 6){
-            this.isOpen_6 = !this.isOpen_6;
-          }else if(flag === 7){
-            this.isOpen_7 = !this.isOpen_7;
-          }else if(flag === 8){
-            this.isOpen_8 = !this.isOpen_8;
-          }else if(flag === 9){
-            this.isOpen_9 = !this.isOpen_9;
-          }
+      retract(flag) {
+        if (flag === 1) {
+          this.isOpen_1 = !this.isOpen_1;
+        } else if (flag === 2) {
+          this.isOpen_2 = !this.isOpen_2;
+        } else if (flag === 3) {
+          this.isOpen_3 = !this.isOpen_3;
+        } else if (flag === 4) {
+          this.isOpen_4 = !this.isOpen_4;
+        } else if (flag === 5) {
+          this.isOpen_5 = !this.isOpen_5;
+        } else if (flag === 6) {
+          this.isOpen_6 = !this.isOpen_6;
+        } else if (flag === 7) {
+          this.isOpen_7 = !this.isOpen_7;
+        } else if (flag === 8) {
+          this.isOpen_8 = !this.isOpen_8;
+        } else if (flag === 9) {
+          this.isOpen_9 = !this.isOpen_9;
+        }
       },
-      dblClickTable(){
-        this.$router.push('/sthToDoDetail')
+      dblClickTable(type) {
+        // this.$router.push('/sthToDoDetail')
+        switch (type) {
+          case 'reimbursedetail':          //报销详情
+            this.reimbursedetail = true;
+            break;
+
+        }
       },
+
+      openFrames(type) {
+        switch (type) {
+          case 'frameVisible':          //积分申请
+            this.frameVisible = true;
+            break;
+          case 'lisuVisible':           //离宿
+            this.lisuVisible = true;
+            break;
+          case 'zhusuVisible':          //住宿
+            this.zhusuVisible = true;
+            break;
+          case 'baoxiaoVisible':          //报销
+            this.baoxiaoVisible = true;
+            break;
+          case 'shiyebuVisible':          //事业部报销
+            this.shiyebuVisible = true;
+            break;
+          case 'gaocengVisible':          //高层报销
+            this.gaocengVisible = true;
+            break;
+          case 'chuchaiVisible':          //出差报销
+            this.chuchaiVisible = true;
+            break;
+          case 'reserveVisible':          //备用金申领
+            this.reserveVisible = true;
+            break;
+          case 'purchaseVisible':          //采购申请
+            this.purchaseVisible = true;
+            break;
+          case 'leaveVisible':            //请假审批
+            this.leaveVisible = true;
+            break;
+          case 'takeworkVisible':            //调休申请
+            this.takeworkVisible = true;
+            break;
+          case 'replenishmentVisible':           //补卡申请
+            this.replenishmentVisible = true;
+            break;
+          case 'receiptVisible':                //收据领用
+            this.receiptVisible = true;
+            break;
+        }
+      },
+      closeFrame(){
+        this.frameVisible = false;
+        this.lisuVisible = false;
+        this.zhusuVisible = false;
+        this.baoxiaoVisible = false;
+        this.shiyebuVisible = false;
+        this.gaocengVisible = false;
+        this.chuchaiVisible = false;
+        this.reserveVisible = false;
+        this.purchaseVisible = false;
+        this.leaveVisible = false;
+        this.takeworkVisible = false;
+        this.replenishmentVisible = false;
+        this.receiptVisible = false;
+        this.reimbursedetail = false;
+      }
     }
   };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-  .myApplication{
+  @mixin flex {
+    display: -webkit-flex;
+    display: flex;
+  }
+
+  @mixin border_radius($n) {
+    -webkit-border-radius: $n;
+    -moz-border-radius: $n;
+    border-radius: $n;
+  }
+
+  .myApplication {
     padding: 0 20px;
-    >div{
+    > div {
       border-bottom: 1px solid #e3e3e3;
-      .head{
+      .head {
         display: flex;
         justify-content: space-between;
         margin: 10px 0;
-        .title{
+        .title {
           color: #409EFF;
           font-size: 16px;
         }
-        .open_close{
+        .open_close {
           cursor: pointer;
-          &:hover{
+          &:hover {
             color: #6a8dfb;
           }
         }
       }
-      .content{
+      .content {
         margin-bottom: 10px;
         display: flex;
         flex-wrap: wrap;
-        .content_item{
+        .content_item {
           width: 190px;
           height: 100px;
           margin: 5px;
@@ -408,24 +601,27 @@
           display: flex;
           align-items: center;
           justify-content: center;
-          &:hover{
+          &:hover {
             border: 1px solid #fb4699;
-            .item_icon{
+            .item_icon {
               background: #fb4699;
             }
           }
-          .item_icon{
+          .item_icon {
             width: 40px;
             height: 40px;
             border-radius: 50%;
             margin: 5px auto;
             background: #6a8dfb;
           }
-          .item_name{
+          .item_name {
             text-align: center;
           }
         }
       }
     }
   }
+
+
+
 </style>

@@ -3,48 +3,76 @@
       <div class="personInfo">
         <div class="bgPic">
           <!--<img src="../../assets/images/individual/beijing.png" alt="">-->
-          <el-row>
-            <el-col :span="2" :offset="2">
-              <div class="headPic">
-                <img src="../../assets/images/individual/touxiang.png" alt="">
-              </div>
-            </el-col>
-            <el-col :span="8">
-              <div class="headName">
-                <el-row>
-                  <el-col :span="4">
-                    <p class="userName">张琳琳琳</p>
-                  </el-col>
-                  <el-col :span="12">
-                    <img src="../../assets/images/individual/1.png" alt="">
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="24">
-                    <p class="sign">Lorem ipsum dolor sit amet, consectetur adipisicing</p>
-                  </el-col>
-                </el-row>
-              </div>
-            </el-col>
+          <!--<el-row type="flex">-->
+            <!--<el-col :span="2" :offset="2">-->
+              <!--<div class="headPic">-->
+                <!--<img src="../../assets/images/individual/touxiang.png" alt="">-->
+              <!--</div>-->
+            <!--</el-col>-->
+            <!--<el-col :span="8">-->
+              <!--<div class="headName">-->
+                <!--<el-row>-->
+                  <!--<el-col :span="4">-->
+                    <!--<p class="userName">张琳琳琳</p>-->
+                  <!--</el-col>-->
+                  <!--<el-col :span="12">-->
+                    <!--<img src="../../assets/images/individual/1.png" alt="">-->
+                  <!--</el-col>-->
+                <!--</el-row>-->
+                <!--<el-row>-->
+                  <!--<el-col :span="24">-->
+                    <!--<p class="sign">Lorem ipsum dolor sit amet, consectetur adipisicing</p>-->
+                  <!--</el-col>-->
+                <!--</el-row>-->
+              <!--</div>-->
+            <!--</el-col>-->
 
-            <el-col :span="8" :offset="3">
-              <div class="userSetting">
-                <div class="userPhoto">
-                  <i class="el-icon-picture"></i>
-                  <el-button type="text" style="color: #FFFFFF">照片</el-button>
-                </div>
-                <div class="userFavorite">
-                  <i class="el-icon-goods"></i>
-                  <el-button type="text">收藏夹</el-button>
-                </div>
-                <div class="userSet">
-                  <i class="el-icon-setting"></i>
-                  <el-button type="text">设置</el-button>
-                </div>
-              </div>
-            </el-col>
-          </el-row>
+            <!--<el-col :span="8" :offset="3">-->
+              <!--<div class="userSetting">-->
+                <!--<div class="userPhoto">-->
+                  <!--<i class="el-icon-picture"></i>-->
+                  <!--<el-button type="text" style="color: #FFFFFF">照片</el-button>-->
+                <!--</div>-->
+                <!--<div class="userFavorite">-->
+                  <!--<i class="el-icon-goods"></i>-->
+                  <!--<el-button type="text">收藏夹</el-button>-->
+                <!--</div>-->
+                <!--<div class="userSet">-->
+                  <!--<i class="el-icon-setting"></i>-->
+                  <!--<el-button type="text">设置</el-button>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</el-col>-->
+          <!--</el-row>-->
+
+          <div class="headPic">
+            <img src="../../assets/images/individual/touxiang.png" alt="">
+          </div>
+          <div class="headName">
+            <div style="display: flex">
+              <p class="userName">张琳琳琳</p>
+              <img src="../../assets/images/individual/1.png" alt="">
+            </div>
+            <p class="sign">Lorem ipsum dolor sit amet, consectetur adipisicing</p>
+          </div>
+
+          <div class="userSetting">
+            <div class="userPhoto">
+              <i class="el-icon-picture"></i>
+              <el-button type="text" style="color: #FFFFFF">照片</el-button>
+            </div>
+            <div class="userFavorite">
+              <i class="el-icon-goods"></i>
+              <el-button type="text">收藏夹</el-button>
+            </div>
+            <div class="userSet">
+              <i class="el-icon-setting"></i>
+              <el-button type="text">设置</el-button>
+            </div>
+          </div>
+
         </div>
+
       </div>
 
     <div class="userAdmin">
@@ -797,8 +825,11 @@
         background: url("../../assets/images/individual/beijing.png") no-repeat;
         -moz-background-size: 100% 100%;
         background-size: 100% 100%;
+        @include flex;
         .headPic {
           @include border_radius(50%);
+          /*position: absolute;*/
+
           width: 120px;
           height: 120px;
           margin: 30px 0;
@@ -1049,7 +1080,7 @@
               padding-bottom: 5px;
             }
             .checkLists {
-              margin: 10px 0 0 40px;
+              margin: 15px 0 0 40px;
               .belateList {
                 border: 1px solid #409EFF;
                 margin-right: 20px;
@@ -1167,8 +1198,8 @@
         }
         .detailes {
           margin: 10px;
-          width: 374px;
-          height: 35px;
+          width: 95%;
+          min-height: 32px;
           text-overflow : ellipsis;
           overflow : hidden;
           display: -webkit-box;
