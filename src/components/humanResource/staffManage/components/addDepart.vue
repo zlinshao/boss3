@@ -62,7 +62,7 @@
     methods:{
       //编辑时获取员工信息
       confirmEdit(){
-        this.$ajax.post('api/v1/organizations',this.params).then((res) => {
+        this.$http.post(globalConfig.server_user+'api/v1/organizations',this.params).then((res) => {
           if(res.data.status === 'success'){
             this.$emit('close','success');
             this.closeModal();
