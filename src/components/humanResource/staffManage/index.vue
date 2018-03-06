@@ -7,9 +7,9 @@
               <div>
                 组织架构
               </div>
-              <div>
-                <el-button size="mini">使用指南</el-button>
-              </div>
+              <!--<div>-->
+                <!--<el-button size="mini">使用指南</el-button>-->
+              <!--</div>-->
             </div>
             <div id="dragTree">
               <el-tree ref="expandMenuList" class="expand-tree"
@@ -18,6 +18,7 @@
                        highlight-current
                        accordion
                        check-strictly
+                       @node-click="nodeClick"
                        :default-expanded-keys="defaultExpandKeys"
                        :props="defaultProps"
                        :expand-on-click-node="false"
@@ -30,7 +31,7 @@
           <div class="border right">
             <div class="top">
 
-              <div>乐伽商业管理有限公司</div>
+              <div>{{selectDepart}}</div>
 
               <div @click="sortDepartment">
                 <el-button size="mini">部门排序</el-button>
@@ -177,6 +178,7 @@
           keywords:'',
           pageNum:10,
           page:1,
+          org_id:'',
         },
         tableData:[],
         organizationDialog:false,
@@ -193,6 +195,7 @@
         totalNum : 0,
         departId:null,
         parentId:null,
+        selectDepart:"南京乐品网络科技有限公司"
       }
     },
     mounted(){
@@ -200,13 +203,12 @@
       document.getElementById('staffManage').style.minHeight = window.innerHeight - 160 + 'px';
       this.getStaffData();
       this.getDepart();
-      this.organizationDialog=true;
     },
     methods: {
       //获取员工数据列表
       getStaffData(){
-          this.$ajax.get('api/v1/users?q='+this.formInline.keywords+'&page='+this.formInline.page
-            +'&per_page_number='+this.formInline.pageNum).then((res) => {
+          this.$http.get(globalConfig.server_user+'api/v1/users?q='+this.formInline.keywords+'&page='+this.formInline.page
+            +'&per_page_number='+this.formInline.pageNum+'&org_id='+this.formInline.org_id).then((res) => {
               if(res.data.status === 'success'){
                 this.tableData = res.data.data;
                 this.totalNum = res.data.meta.total;
@@ -264,7 +266,7 @@
         this.show = false;
       },
       deleteStaff(){
-        this.$ajax.delete('api/v1/users/'+this.editId).then((res) => {
+        this.$http.delete(globalConfig.server_user+'api/v1/users/'+this.editId).then((res) => {
           if(res.data.status === 'success'){
             this.getStaffData();
             this.$message({
@@ -328,7 +330,7 @@
       //----------------部门增删改查------------------------
       //获取部门数据
       getDepart(){
-        this.$ajax.get('api/v1/organizations').then((res) => {
+        this.$http.get(globalConfig.server_user+'api/v1/organizations').then((res) => {
           this.arrList = res.data.data;
           this.setTree = this.recurrence(null);
           this.defaultExpandKeys=[];
@@ -346,7 +348,7 @@
             if(tmp){
               item['children'] = tmp;
             }
-            list.push(item)  ;
+            list.push(item);
           }
         });
         return list
@@ -367,6 +369,12 @@
             nodeDel: ((s,d,n) => that.handleDelete(s,d,n))
           }
         });
+      },
+      //点击节点
+      nodeClick(data,node,store){
+        this.formInline.org_id = data.id;
+        this.selectDepart = data.name;
+        this.getStaffData();
       },
       handleAdd(s,d,n){//增加节点
         this.addDepart(d.id);
@@ -402,7 +410,7 @@
       },
       //删除部门
       deleteDpr(id){
-          this.$ajax.delete('api/v1/organizations/'+id).then((res) =>{
+          this.$http.delete(globalConfig.server_user+'api/v1/organizations/'+id).then((res) =>{
               if(res.data.status === 'success'){
                 this.$message({
                   type: 'success',

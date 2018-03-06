@@ -45,6 +45,8 @@
   display: block; }
   #organizationId .el-select .el-input__inner {
     border: none; }
+#organizationId .el-input__inner {
+  border: none; }
 
 .el-select-dropdown .el-select-dropdown__wrap {
   max-height: 410px; }

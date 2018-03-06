@@ -62,7 +62,7 @@
     methods:{
       //编辑时获取员工信息
       getStaffInfo(){
-        this.$ajax.get('api/v1/organizations/'+this.departId).then((res) => {
+        this.$http.get(globalConfig.server_user+'api/v1/organizations/'+this.departId).then((res) => {
           if(res.data.status === 'success'){
             this.params.name = res.data.data.name;
             this.params.order = res.data.data.order;
@@ -76,7 +76,7 @@
         });
       },
       confirmEdit(){
-        this.$ajax.put('api/v1/organizations/'+this.departId,this.params).then((res) => {
+        this.$http.put(globalConfig.server_user+'api/v1/organizations/'+this.departId,this.params).then((res) => {
           if(res.data.status === 'success'){
             this.$emit('close','success');
             this.closeModal();

@@ -67,11 +67,12 @@
     methods:{
       //编辑时获取员工信息
       getStaffInfo(){
-        this.$ajax.get('api/v1/users/'+this.editId).then((res) => {
+        this.$http.get(globalConfig.server_user+'api/v1/users/'+this.editId).then((res) => {
           if(res.data.status === 'success'){
             this.params.name = res.data.data.name;
             this.params.phone = res.data.data.phone;
             this.params.org_id = res.data.data.org_id;
+
           }else {
             this.$message({
               message: res.data.message,
@@ -82,7 +83,7 @@
       },
       confirmAdd(){
         if(!this.isEdit){
-          this.$ajax.post('api/v1/users',this.params).then((res) => {
+          this.$http.post(globalConfig.server_user+'api/v1/users',this.params).then((res) => {
             if(res.data.status === 'success'){
               this.$emit('close','success');
               this.closeModal();
@@ -94,7 +95,7 @@
             }
           });
         }else {
-          this.$ajax.put('api/v1/users/'+this.editId,this.params).then((res) => {
+          this.$http.put(globalConfig.server_user+'api/v1/users/'+this.editId,this.params).then((res) => {
             if(res.data.status === 'success'){
               this.$emit('close','success');
               this.closeModal();
