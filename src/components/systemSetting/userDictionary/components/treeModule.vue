@@ -86,8 +86,11 @@
           parent_id: this.parent_id,
         }).then((res) => {
           if (res.data.code === '30020' || res.data.code === '30040') {
-            this.$emit('dict');
-            this.$emit('close', 2);
+            if (rev === 5) {
+              this.$emit('dict');
+            } else if (rev === 4) {
+              this.$emit('close', 2);
+            }
             this.form.topClass = '';
             this.form.name = '';
           }
@@ -98,23 +101,5 @@
 </script>
 
 <style lang="scss">
-  #treeModule {
-    .labelCenter {
-      label {
-        text-align: center;
-        padding: 0;
-      }
-    }
-    .i_font {
-      i {
-        font-size: 20px;
-        cursor: pointer;
-        padding: 6px 0 0 6px;
-        &:hover {
-          color: #409EFF;
-        }
-      }
-    }
-  }
 
 </style>

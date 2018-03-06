@@ -143,6 +143,8 @@
           password: b,
         }).then((res) => {
           localStorage.setItem('mydata', JSON.stringify(res.data.data));
+          let head = res.data.data;
+          globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
           this.handleSubmit2();
         })
       },

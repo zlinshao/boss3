@@ -143,7 +143,7 @@
       </el-table-column>
       <el-table-column
         prop="address"
-        label="地址11111">
+        label="地址">
       </el-table-column>
       <el-table-column
         prop="village_alias"

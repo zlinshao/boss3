@@ -36,6 +36,7 @@
         dropzone: '',
         initOnce: true,
         pic_id: [],
+        urls: globalConfig.server_user,
       }
     },
     mounted() {
@@ -43,7 +44,7 @@
       const element = document.getElementById(this.id);
       const vm = this;
       this.dropzone = new Dropzone(element, {
-        url: globalConfig.pic_address,
+        url: vm.urls + 'api/v1/files',
         // resizeWidth: 1000,
         addRemoveLinks: true,
         dictRemoveLinks: "x",
