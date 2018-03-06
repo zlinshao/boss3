@@ -1,9 +1,9 @@
 <template>
   <div id="login"
        v-loading="!underWay"
-       element-loading-text="登陆中"
+       element-loading-text="页面初始化中......"
        element-loading-spinner="el-icon-loading"
-       element-loading-background="rgba(0, 0, 0, 0.8)">
+       element-loading-background="rgba(0, 0, 0, 0.6)">
 
     <div class="container" v-if="underWay">
 
@@ -393,6 +393,12 @@
 
 <style lang="scss">
   #login {
+    .el-loading-spinner {
+      font-size: 30px;
+      p {
+        font-size: 30px;
+      }
+    }
     .modal_back {
       width: 100%;
       height: 100%;
