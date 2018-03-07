@@ -197,6 +197,9 @@
           localStorage.setItem('mydata', JSON.stringify(res.data.data));
           let head = res.data.data;
           globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
+          // this.$http.get(this.urls + 'api/v1/session').then((res) => {
+          //
+          // });
           this.$router.push({path: '/main'});
         })
       },
@@ -306,7 +309,6 @@
           for (let i = 1, l = stars.length; i < l; i++) {
             stars[i].draw();
           }
-
           window.requestAnimationFrame(animation);
         }
 

@@ -1,128 +1,325 @@
 <template>
-  <div>
-    <div class="filter">
-      <el-form class="demo-form-inline" size="small">
-        <el-form-item>
-          <el-button type="primary" style="float: right;" @click="onSubmit"><i class="el-icon-plus"></i>&nbsp;新&nbsp;增
-          </el-button>
-        </el-form-item>
-      </el-form>
+  <div @click="show = false" @contextmenu="closeMenu">
+    <div class="highRanking">
+      <div class="tabsSearch">
+        <el-form :inline="true" size="mini">
+          <el-form-item>
+            <el-button v-if="activeName === 'first'" type="primary" size="mini" @click="onSubmit()">
+              <i class="el-icon-plus"></i>&nbsp;新增系统
+            </el-button>
+            <el-button v-if="activeName === 'second'" type="primary" size="mini" @click="onSubmit()">
+              <i class="el-icon-plus"></i>&nbsp;新增模块
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
     </div>
-    <el-table
-      :data="tableData"
-      style="width: 100%">
 
-      <el-table-column
-        prop="id"
-        label="ID"
-        width="88px;">
-      </el-table-column>
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="系统" name="first">
+        <el-table
+          :data="tableFirst"
+          style="width: 100%"
+          @row-contextmenu='houseMenu'>
+          <el-table-column
+            prop="id"
+            label="ID"
+            width="88px;">
+          </el-table-column>
 
-      <el-table-column
-        prop="name"
-        label="规则名">
-      </el-table-column>
+          <el-table-column
+            prop="name"
+            label="系统标示">
+          </el-table-column>
 
-      <el-table-column
-        prop="describe"
-        label="描述">
-      </el-table-column>
+          <el-table-column
+            prop="display_name"
+            label="系统名称">
+          </el-table-column>
 
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            @click="handleEdit(scope.$index, scope.row)">编辑
-          </el-button>
-          <el-button
-            size="mini"
-            type="danger"
-            @click="openDelete(scope.$index, scope.row)">删除
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+          <el-table-column
+            prop="description"
+            label="系统描述">
+          </el-table-column>
 
-    <RevisePower :module="powerModule" :name="title" @close="closeEdit"></RevisePower>
+          <el-table-column
+            prop="updated_at"
+            label="修改时间">
+          </el-table-column>
+
+          <el-table-column
+            prop="created_at"
+            label="创建时间">
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+
+      <el-tab-pane label="模块" name="second">
+        <el-table
+          :data="tableSecond"
+          style="width: 100%"
+          @row-contextmenu='moduleMenu'>
+          <el-table-column
+            prop="id"
+            label="ID"
+            width="88px;">
+          </el-table-column>
+
+          <el-table-column
+            prop="name"
+            label="模块标示">
+          </el-table-column>
+
+          <el-table-column
+            prop="display_name"
+            label="模块名称">
+          </el-table-column>
+
+          <el-table-column
+            prop="description"
+            label="模块描述">
+          </el-table-column>
+
+          <el-table-column
+            prop="updated_at"
+            label="修改时间">
+          </el-table-column>
+
+          <el-table-column
+            prop="created_at"
+            label="创建时间">
+          </el-table-column>
+        </el-table>
+      </el-tab-pane>
+    </el-tabs>
+
+    <div class="block pages">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="powerList"
+        :current-page="currentPage"
+        :page-size="15"
+        layout="total, prev, pager, next, jumper"
+        :total="paging">
+      </el-pagination>
+    </div>
+
+    <RevisePower :module="powerModule" :title="title" :names="moduleName" :table="tableFirst" :msg="tableDetail" @close="close_"
+                 @sure="search"></RevisePower>
+
+    <!--右键-->
+    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+               @clickOperate="clickEvent"></RightMenu>
   </div>
 </template>
 
 <script>
   import RevisePower from './revisePower.vue'
+  import RightMenu from '../../common/rightMenu.vue'    //右键
 
   export default {
-    components: {RevisePower},
+    components: {RevisePower, RightMenu},
     name: 'hello',
     data() {
       return {
-        tableData: [
-          {
-            id: 1,
-            name: 'Conference/conferenceRead_scan',
-            describe: '发挥到了萨菲航空斯大林饭卡上的',
-          }, {
-            id: 2,
-            name: 'Conference/conferenceRead_scan',
-            describe: '发挥到了萨菲航空斯大林饭卡上的',
-          }, {
-            id: 3,
-            name: 'Conference/conferenceRead_scan',
-            describe: '发挥到了萨菲航空斯大林饭卡上的',
-          }, {
-            id: 4,
-            name: 'Conference/conferenceRead_scan',
-            describe: '发挥到了萨菲航空斯大林饭卡上的',
-          }, {
-            id: 5,
-            name: 'Conference/conferenceRead_scan',
-            describe: '发挥到了萨菲航空斯大林饭卡上的',
-          }, {
-            id: 6,
-            name: 'Conference/conferenceRead_scan',
-            describe: '发挥到了萨菲航空斯大林饭卡上的',
-          },
-        ],
+        urls: globalConfig.server_user,
+        rightMenuX: 0,
+        rightMenuY: 0,
+        show: false,
+        lists: [],
+
+        form: {
+          page: 1,
+        },
+        currentPage: 1,
+        paging: 0,
+
+        activeName: 'first',
+        moduleName: 'first',
+        tableFirst: [],
+        tableSecond: [],
+        tableDetail: {},
+        details: {},
         powerModule: false,
         title: '',
       }
     },
+    mounted() {
+      this.powerList(1);
+    },
+    watch: {
+      activeName(val) {
+        this.moduleName = val;
+        if (val === 'first') {
+          this.powerList(1);
+        } else {
+          this.moduleList(1);
+        }
+      }
+    },
     methods: {
-      // 新增
+      // tabs标签页
+      handleClick(tab, event) {
+        // console.log(tab, event);
+      },
+      // ===================系统================
+      // 系统列表
+      powerList(val) {
+        this.tableFirst = [];
+        this.form.page = val;
+        this.close_();
+        this.$http.get(this.urls + 'api/v1/systems', {
+          params: this.form
+        }).then((res) => {
+          if (res.data.status === 'success') {
+            this.currentPage = val;
+            this.tableFirst = res.data.data;
+            this.paging = res.data.meta.total;
+          }
+        })
+      },
+      // 系统修改
+      powerDetail(val) {
+        this.$http.get(this.urls + 'api/v1/systems/' + val.id).then((res) => {
+          if (res.data.status === 'success') {
+            this.powerModule = true;
+            this.tableDetail = res.data.data;
+            this.title = '修改';
+          }
+        })
+      },
       onSubmit() {
+        this.title = '新增';
         this.powerModule = true;
-        this.title = '新增权限';
       },
-      // 修改
-      handleEdit(index, row) {
-        console.log(index, row);
-        this.powerModule = true;
-        this.title = '修改权限';
+
+      // ==============模块=================
+      moduleList(val) {
+        this.tableSecond = [];
+        this.form.page = val;
+        this.$http.get(this.urls + 'api/v1/modules', {
+          params: this.form
+        }).then((res) => {
+          if (res.data.status === 'success') {
+            this.currentPage = val;
+            this.tableSecond = res.data.data;
+            this.paging = res.data.meta.total;
+          }
+        });
       },
-      closeEdit() {
+
+      // 搜索当前页
+      search() {
+        this.powerList(this.currentPage);
+      },
+      // 关闭模态框
+      close_() {
         this.powerModule = false;
       },
 
-      handleDelete(index, row) {
-        console.log(index, row);
-      },
       // 删除
-      openDelete(index, row) {
+      openDelete(val, id) {
         this.$confirm('此操作将删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
+          if (id === 1) {
+            this.$http.delete(this.urls + 'api/v1/systems/' + val.id).then((res) => {
+              if (res.data.status === 'success') {
+                this.powerList(this.currentPage);
+                this.$message({
+                  type: 'success',
+                  message: res.data.message,
+                });
+              }
+            });
+          }
+          if (id === 2) {
+            this.$http.delete(this.urls + 'api/v1/modules/' + val.id).then((res) => {
+              if (res.data.status === 'success') {
+                this.moduleList(this.currentPage);
+                this.$message({
+                  type: 'success',
+                  message: res.data.message,
+                });
+              }
+            });
+          }
         }).catch(() => {
           this.$message({
             type: 'info',
             message: '已取消删除'
           });
         });
-      }
+      },
+
+      // 右键
+      houseMenu(row, event) {
+        this.tableDetail = [];
+        this.details = row;
+        this.lists = [
+          {clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '编辑'},
+          {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除'},
+        ];
+        this.contextMenuParam(event);
+      },
+      moduleMenu(row, event) {
+        this.tableDetail = [];
+        this.details = row;
+        this.lists = [
+          {clickIndex: 'reviseModule', headIcon: 'el-icon-edit-outline', label: '编辑'},
+          {clickIndex: 'deleteModule', headIcon: 'el-icon-circle-close-outline', label: '删除'},
+        ];
+        this.contextMenuParam(event);
+      },
+      // 右键回调
+      clickEvent(val) {
+        switch (val) {
+          case 'module':
+            this.moduleName = 'second';
+            this.tableDetail = this.details;
+            this.title = '新增';
+            this.powerModule = true;
+            break;
+          case 'revise':
+            this.title = '修改';
+            this.moduleName = 'first';
+            this.tableDetail = this.details;
+            this.powerModule = true;
+            break;
+          case 'delete':
+            this.openDelete(this.details, 1);
+            break;
+          case 'reviseModule':
+
+            break;
+          case 'deleteModule':
+            this.openDelete(this.details, 2);
+            break;
+        }
+      },
+      //关闭右键菜单
+      closeMenu() {
+        this.show = false;
+      },
+      //右键参数
+      contextMenuParam(event) {
+        let e = event || window.event;
+        this.show = false;
+        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true
+        })
+      },
+
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+
     }
   }
 </script>
