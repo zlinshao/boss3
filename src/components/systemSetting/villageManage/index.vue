@@ -334,17 +334,10 @@
       // },
       openVillage(val) {
         this.addVisible = true;
-        if (val === 'revise') {
-          this.$http('setting/community/' + this.pitch).then((res) => {
-            if (res.data.code === '10020') {
-              this.formList = res.data.data;
-              this.formList.status = val;
-            }
-          });
-        }
-        if (val === 'add') {
+        this.$http.get(this.urls + 'setting/community/' + this.pitch).then((res) => {
+          this.formList = res.data.data;
           this.formList.status = val;
-        }
+        });
       },
       closeVillage() {
         this.addVisible = false;

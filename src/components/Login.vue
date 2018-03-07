@@ -1,6 +1,11 @@
 <template>
-  <div id="login">
-    <div class="container">
+  <div id="login"
+       v-loading="!underWay"
+       element-loading-text="页面初始化中......"
+       element-loading-spinner="el-icon-loading"
+       element-loading-background="rgba(0, 0, 0, 0.6)">
+
+    <div class="container" v-if="underWay">
 
       <div class="login_main" v-if="!isMessage">
         <div class="beijing"></div>
@@ -61,8 +66,17 @@
               <span class="china">中国</span> +86
             </template>
           </el-input>
-          <el-input placeholder="请输入6位短信验证码" v-model="identifyingCode">
-            <el-button slot="append" size="small" type="success" @click.native="phoneLogin()">获取验证码</el-button>
+          <el-input placeholder="请输入6位短信验证码" @keyup.enter.native="sureLogin(phone, identifyingCode)"
+                    v-model="identifyingCode">
+
+            <el-button slot="append" style="width: 102px;" size="small" v-if="!loading" type="success"
+                       @click.native="phoneLogin()">
+              获取验证码
+            </el-button>
+
+            <el-button slot="append" style="width: 102px;" size="small" v-if="loading" :disabled="loading"
+                       type="success">发送中({{loadingNum}})
+            </el-button>
           </el-input>
 
           <div style="display: flex;justify-content: flex-end;margin-top: 20px">
@@ -70,7 +84,7 @@
           </div>
 
           <div class="confirmLogin">
-            <el-button size="medium" type="primary" @click.native.prevent="sureLogin(phone, identifyingCode)" :loading="logining">登 陆
+            <el-button size="medium" type="primary" @click.native.prevent="sureLogin(phone, identifyingCode)">登 陆
             </el-button>
           </div>
         </div>
@@ -105,11 +119,13 @@
         urls: globalConfig.server_user,
         phone: '',
         identifyingCode: '',
-        logining: false,
-        ruleForm2: {
-          account: 'admin',
-          checkPass: '123456'
-        },
+        loading: false,
+        underWay: true,      //登陆中
+        loadingNum: 60,
+        // ruleForm2: {
+        //   account: 'admin',
+        //   checkPass: '123456'
+        // },
         checked: true,
         isMessage: false,
         dingColor: false,
@@ -124,6 +140,7 @@
         let phone = this.$route.query.phone;
         let code = this.$route.query.code;
         this.sureLogin(phone, code);
+        this.underWay = false;
       }
     },
     methods: {
@@ -131,9 +148,44 @@
         this.$http.post(this.urls + 'api/v1/sms', {
           phone: this.phone,
         }).then((res) => {
-
+          let msg = res.data.message;
+          if (res.data.status === 'success') {
+            this.countDown();
+            this.loading = true;
+            this.$message({
+              message: msg,
+              type: 'success'
+            });
+          } else {
+            if (typeof msg !== 'string') {
+              this.$message({
+                message: res.data.message.phone[0],
+                type: 'info'
+              });
+            } else {
+              this.$message({
+                message: res.data.message,
+                type: 'info'
+              });
+            }
+          }
         })
       },
+
+      countDown() {
+        new Promise((resolve, reject) => {
+          let interval = setInterval(() => {
+            if (this.loadingNum > 0) {
+              this.loadingNum--;
+            }
+            if (this.loadingNum === 0) {
+              this.loadingNum = 60;
+              this.loading = false;
+            }
+          }, 1000)
+        })
+      },
+
       sureLogin(a, b) {
         this.$http.post(this.urls + 'oauth/token', {
           client_secret: 'udMntGnEJBgsevojFrMicLuW8G2ABBAsmRlK9fIC',
@@ -145,7 +197,10 @@
           localStorage.setItem('mydata', JSON.stringify(res.data.data));
           let head = res.data.data;
           globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
-          this.handleSubmit2();
+          // this.$http.get(this.urls + 'api/v1/session').then((res) => {
+          //
+          // });
+          this.$router.push({path: '/main'});
         })
       },
       sweepCode() {
@@ -254,7 +309,6 @@
           for (let i = 1, l = stars.length; i < l; i++) {
             stars[i].draw();
           }
-
           window.requestAnimationFrame(animation);
         }
 
@@ -262,12 +316,12 @@
       },
 
 
-      handleReset2() {
-        this.$refs.ruleForm2.resetFields();
-      },
-      handleSubmit2(ev) {
-        sessionStorage.setItem('user', JSON.stringify(this.ruleForm2));
-        this.$router.push({path: '/main'});
+      // handleReset2() {
+      //   this.$refs.ruleForm2.resetFields();
+      // },
+      // handleSubmit2(ev) {
+      //   sessionStorage.setItem('user', JSON.stringify(this.ruleForm2));
+
 
 //        this.$refs.ruleForm2.validate((valid) => {
 //          if (valid) {
@@ -294,7 +348,7 @@
 //            return false;
 //          }
 //        });
-      },
+//       },
       messageLogin() {
         this.isMessage = true;
       },
@@ -341,6 +395,12 @@
 
 <style lang="scss">
   #login {
+    .el-loading-spinner {
+      font-size: 30px;
+      p {
+        font-size: 30px;
+      }
+    }
     .modal_back {
       width: 100%;
       height: 100%;

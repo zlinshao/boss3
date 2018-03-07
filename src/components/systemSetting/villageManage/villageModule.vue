@@ -166,7 +166,6 @@
 
     watch: {
       formList(val) {
-        console.log(val.status);
         this.villageId = val.id;
         this.form.province = val.province;
         if (val.province !== '') {

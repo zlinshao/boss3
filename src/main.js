@@ -43,7 +43,7 @@ Vue.config.productionTip = false;
 // 拦截器
 axios.interceptors.response.use(function (response) {
   // 对响应数据做点什么
-  console.log(response);
+  // console.log(response);
   return response;
 }, function (error) {
   // 对响应错误做点什么
@@ -57,23 +57,36 @@ axios.interceptors.response.use(function (response) {
 
 //重定向
 router.beforeEach((to, from, next) => {
+  console.log(from);
+  next();
+  // if (to.path === '/login' && router.query === undefined) {
+  //   localStorage.removeItem('myData');
+  //   next({path: '/login'});
+  //   if(from.path !== '/login'){
+  //
+  //   }
+  // }
 
-  if (to.path === '/login') {
-    sessionStorage.removeItem('user');
-  }
-  let user = JSON.parse(sessionStorage.getItem('user'));
 
-  if (Cookies.get('locking') === '1' && to.path !== '/lock') {
-    next({path: '/lock'});
-  } else if (Cookies.get('locking') === '0' && to.path === '/lock') {
-    next(false);
-  } else {
-    if (!user && to.path !== '/login') {
-      next({path: '/login'})
-    } else {
-      next()
-    }
-  }
+  // if (router.query !== undefined) {
+  //   let query = router.query;
+  //   next({path: '/main'});
+  // } else {
+  //   next({path: '/login'})
+  // }
+  // let user = JSON.parse(sessionStorage.getItem('user'));
+  //
+  // if (Cookies.get('locking') === '1' && to.path !== '/lock') {
+  //   next({path: '/lock'});
+  // } else if (Cookies.get('locking') === '0' && to.path === '/lock') {
+  //   next(false);
+  // } else {
+  //   if (!user && to.path !== '/login') {
+  //     next({path: '/login'})
+  //   } else {
+  //     next()
+  //   }
+  // }
 });
 
 new Vue({

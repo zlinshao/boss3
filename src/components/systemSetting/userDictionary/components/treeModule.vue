@@ -7,8 +7,16 @@
             <el-option v-for="(key,index) in values" :value="index + 1" :label="key" :key="index"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="名称">
-          <el-input v-model="form.name"></el-input>
+        <el-form-item label="字典数量" v-if="msg.revise !== 'revise' && msg.rev === 'dict'">
+          <el-input v-model="amount" placeholder="请输入数量"></el-input>
+        </el-form-item>
+        <el-form-item label="名称" v-if="msg.revise !== 'revise' && msg.rev === 'dict'"
+                      v-for="(key,index) in form.names"
+                      :key="index">
+          <el-input v-model="form.names[index]" placeholder="请输入名称"></el-input>
+        </el-form-item>
+        <el-form-item label="名称" v-else>
+          <el-input v-model="form.name" placeholder="请输入名称"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -29,9 +37,11 @@
         urls: globalConfig.server,
         treeVisible: false,
         values: ['上级', '平级', '下级'],
+        amount: '',
         form: {
           topClass: '',
           name: '',
+          names: [''],
         },
         ids: '',
         parent_id: '',
@@ -39,6 +49,16 @@
       }
     },
     watch: {
+      amount(val) {
+        if (val === '') {
+          this.form.names = [''];
+        } else {
+          this.form.names = [];
+          for (let i = 0; i < val; i++) {
+            this.form.names.push('');
+          }
+        }
+      },
       module(val) {
         this.treeVisible = val;
       },
@@ -60,12 +80,14 @@
           this.$emit('close', 1);
           this.form.topClass = '';
           this.form.name = '';
+          this.form.names = [''];
+          this.amount = '';
         }
       },
     },
     methods: {
       sureTree(val) {
-        let type, urls, rev;
+        let type, urls, rev, names;
         if (val === 1) {
           type = this.$http.post;
           urls = this.urls + 'setting/dictionary/save';
@@ -78,11 +100,16 @@
         } else {
           rev = 4;
         }
+        if(this.msg.revise !== 'revise' && this.msg.rev === 'dict'){
+          names = this.form.names;
+        }else{
+          names = this.form.name
+        }
         type(urls, {
           id: this.ids,
           type: rev,
           style: this.form.topClass,
-          dictionary_name: this.form.name,
+          dictionary_name: names,
           parent_id: this.parent_id,
         }).then((res) => {
           if (res.data.code === '30020' || res.data.code === '30040') {
