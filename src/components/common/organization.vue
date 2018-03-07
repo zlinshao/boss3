@@ -33,13 +33,15 @@
             </ul>
           </div>
         </div>
-        <div class="content_right">
+        <div class="content_right scroll_bar">
           <div class="box">
             <div class="boxHead">组织架构</div>
 
             <div class="breadcrumb-wrapper">
               <div class="breadcrumb">
-                <a><span>组织架构</span></a>
+                <a>
+                  <span @click="getALL(1)">组织架构</span>
+                </a>
                 <a>
                   <span @click="breadcrumbSearch(1)">&nbsp;&gt;&nbsp;南京乐品网络科技有限公司</span>
                 </a>
@@ -47,7 +49,7 @@
                   <span>&nbsp;&gt;&nbsp;{{item.name}}</span>
                 </a>
               </div>
-              <div class="box-body scroll_bar">
+              <div class="box-body">
                 <ul>
                   <!--<li>-->
                     <!--<el-checkbox>全选</el-checkbox>-->
@@ -402,7 +404,9 @@
               border: 1px solid #ddd;
               border-radius: 4px;
               box-sizing: border-box;
+              overflow: auto;
               div{
+                max-height: 440px;
                 .boxHead{
                   text-align: center;
                   padding: 5px 0;
@@ -417,8 +421,6 @@
                   }
                 }
                 .box-body{
-                  max-height: 380px;
-                  overflow: auto;
                   ul{
                     padding: 0;
                     li{

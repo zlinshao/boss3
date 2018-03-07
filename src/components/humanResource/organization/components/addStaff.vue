@@ -1,22 +1,22 @@
 <template>
   <div id="addRentRepair">
-    <el-dialog :title="title" :visible.sync="addStaffDialogVisible" width="40%" :before-close="beforeCloseModal">
+    <el-dialog :title="title" :visible.sync="addStaffDialogVisible" width="30%" :before-close="beforeCloseModal">
       <div>
         <el-form size="mini" :model="params" label-width="100px">
           <el-row>
-            <el-col :span="12">
+            <el-col :span="24">
               <el-form-item label="姓名">
                 <el-input placeholder="请输入内容" v-model="params.name"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="24">
               <el-form-item label='手机号'>
                 <el-input placeholder="请输入内容" v-model="params.phone"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="12">
+            <el-col :span="24">
               <el-form-item label="所属部门">
                 <el-input placeholder="请输入内容" readonly="" @focus="selectDepart" v-model="department"></el-input>
               </el-form-item>
