@@ -86,7 +86,6 @@ import PublicArticle from '../components/OAWork/portals/components/publicArticle
 import ExamineAndApprove from '../components/OAWork/examineAndApprove/index.vue'
 
 
-
 //人资管理
 import StaffManage from '../components/humanResource/staffManage/index.vue'
 import Organization from '../components/humanResource/organization/index.vue'
@@ -100,7 +99,10 @@ import MessageCenter from '../components/messageCenter/index.vue'
 import PersonalSetting from '../components/personalSetting/index.vue'    //个人设置
 
 
-import Individual from '../components/individual/index.vue'    //个人门户
+import Individual from '../components/individual/index.vue'   //个人门户
+import CheckWork from '../components/checkWork/index.vue'     //考勤自主
+import Register from '../components/register/index.vue'       //签到自主
+
 
 Vue.use(Router);
 
@@ -152,6 +154,8 @@ export default new Router({
         {path: '/throwALease', component: throwALease, name: 'TEST_3'},
         {path: '/publicArticle', component: PublicArticle, name: '文章发布'},
         {path: '/individual', component: Individual, name: '个人门户'},
+        {path: '/checkWork', component: CheckWork, name: '考勤自助'},
+        {path: '/register', component: Register, name: '签到自助'},
       ]
     },
     // 详情路由

@@ -54,75 +54,49 @@
             </el-badge>
             <el-dropdown-menu slot="dropdown" class="menuLists">
               <!--消息图标-->
-              <div class="first">
-                <div>
+              <el-dropdown-item>
+                <div class="first">
                   <el-row>
                     <el-col :span="4">
                       <div class="picSign">
                         <i class="el-icon-bell"></i>
                       </div>
                     </el-col>
-                  </el-row>
-                </div>
-
-                <div>
-                  <el-dropdown-item>
-                        <el-row>
-                          <el-col :span="24">
-                            <div class="public">
-                              <el-row>
-                                <el-col :span="24">
-                                  <div class="signOne">系统公告</div>
-                                </el-col>
-                              </el-row>
-
-                              <el-row>
-                                <el-col :span="24">
-                                  <div class="limits">Lorem ipsum dolor23r23222222222222222 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aperiam architecto aspernatur dignissimos dolor dolorem doloremque ex facere facilis in minima mollitia, nihil nostrum quo ratione saepe tempore totam voluptatem?</div>
-                                </el-col>
-                              </el-row>
-                            </div>
-                          </el-col>
-                        </el-row>
-
-                  </el-dropdown-item>
-                </div>
-              </div>
-
-              <div class="first">
-                <div>
-                  <el-row>
-                    <el-col :span="4">
-                      <div class="picSign" style="background: #58d788">
-                        <i class="el-icon-edit-outline"></i>
+                    <el-col :span="20">
+                      <div class="public" @click="routers('messageCenter')">
+                        <div class="signOne">系统公告</div>
+                        <div class="limits">Lorem ipsum dolor23r23222222222222222 Lorem ipsum dolor sit amet,
+                          consectetur adipisicing elit. Ad aperiam architecto aspernatur dignissimos dolor dolorem
+                          doloremque ex facere facilis in minima mollitia, nihil nostrum quo ratione saepe tempore
+                          totam voluptatem?
+                        </div>
                       </div>
                     </el-col>
                   </el-row>
                 </div>
+              </el-dropdown-item>
 
-                <div>
-                  <el-dropdown-item>
-                    <el-row>
-                      <el-col :span="24">
-                        <div class="public">
-                          <el-row>
-                            <el-col :span="24">
-                              <div class="signOne" style="color: #58d788">审批提醒</div>
-                            </el-col>
-                          </el-row>
-
-                          <el-row>
-                            <el-col :span="24">
-                              <div class="limits">Lorem ipsum dolor23r23222222222222222 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aperiam architecto aspernatur dignissimos dolor dolorem doloremque ex facere facilis in minima mollitia, nihil nostrum quo ratione saepe tempore totam voluptatem?</div>
-                            </el-col>
-                          </el-row>
+              <el-dropdown-item>
+                <div class="first">
+                  <el-row>
+                    <el-col :span="4">
+                      <div class="picSign" style="background: #58d788;">
+                        <i class="el-icon-edit-outline"></i>
+                      </div>
+                    </el-col>
+                    <el-col :span="20">
+                      <div class="public" @click="routers('messageCenter')">
+                        <div class="signOne" style="color: #58d788;">审批提醒</div>
+                        <div class="limits">Lorem ipsum dolor23r23222222222222222 Lorem ipsum dolor sit amet,
+                          consectetur adipisicing elit. Ad aperiam architecto aspernatur dignissimos dolor dolorem
+                          doloremque ex facere facilis in minima mollitia, nihil nostrum quo ratione saepe tempore
+                          totam voluptatem?
                         </div>
-                      </el-col>
-                    </el-row>
-
-                  </el-dropdown-item>
+                      </div>
+                    </el-col>
+                  </el-row>
                 </div>
-              </div>
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
 
@@ -175,185 +149,166 @@
               </span>
             <el-dropdown-menu slot="dropdown" class="personal">
               <!--<el-dropdown-item class="personalList">-->
-                <!--<p><i class="el-icon-menu"></i></p>-->
-                <!--<div>-->
-                  <!--个人主页-->
-                <!--</div>-->
+              <!--<p><i class="el-icon-menu"></i></p>-->
+              <!--<div>-->
+              <!--个人主页-->
+              <!--</div>-->
               <!--</el-dropdown-item>-->
               <!--<el-dropdown-item class="personalList">-->
-                <!--<p><i class="el-icons-fa-sitemap"></i></p>-->
-                <!--<div>-->
-                  <!--部门主页-->
-                <!--</div>-->
+              <!--<p><i class="el-icons-fa-sitemap"></i></p>-->
+              <!--<div>-->
+              <!--部门主页-->
+              <!--</div>-->
               <!--</el-dropdown-item>-->
 
-              <el-row>
-                <el-col :span="24">
-                  <el-row>
-                    <el-col :span="12">
-                      <div class="signCount" style="margin-left: 4px">
-                        <div class="personalSign">
-                          <i class="el-icon-star-off"></i>
-                        </div>
-                        <div class="signNumber">9999</div>
-                        <div class="signUnit">分</div>
-                      </div>
-                    </el-col>
-                    <el-col :span="12">
-                      <div class="signCount" style="margin-left: 15px">
-                        <div class="personalSign" style="background: #409EFF">
-                          <i class="el-icon-star-off"></i>
-                        </div>
-                        <div class="signNumber" style="color: #409eff">9999</div>
-                        <div class="signUnit">币</div>
-                      </div>
-                    </el-col>
-                  </el-row>
-                </el-col>
-              </el-row>
 
               <el-row>
-                <el-col :span="24">
-                  <div class="rank">等级</div>
-                </el-col>
-              </el-row>
-
-              <el-row>
-                <el-col :span="24">
-                  <div class="progressBar">
-                    <!--<el-progress :percentage="50" :show-text="false"></el-progress>-->
-                    <div class="progress">
-                      <span></span>
+                <el-col :span="12">
+                  <div class="signCount" style="margin-left: 4px">
+                    <div class="personalSign">
+                      <i class="el-icon-star-off"></i>
                     </div>
-                    <div class="round roundLeft"></div>
-                    <div class="round roundRight"></div>
+                    <div class="signNumber">9999</div>
+                    <div class="signUnit">分</div>
+                  </div>
+                </el-col>
+                <el-col :span="12">
+                  <div class="signCount" style="margin-left: 15px">
+                    <div class="personalSign" style="background: #409EFF">
+                      <i class="el-icon-star-off"></i>
+                    </div>
+                    <div class="signNumber" style="color: #409eff">9999</div>
+                    <div class="signUnit">币</div>
                   </div>
                 </el-col>
               </el-row>
 
-              <el-row>
-                <el-col :span="24">
-                  <div class="level">
-                    <div>A</div>
-                    <div>B</div>
-                  </div>
-                </el-col>
-              </el-row>
+              <div class="rank">等级</div>
 
-              <el-row>
-                <el-col :span="24">
-                  <div class="navigation">
-                    <el-row>
-                      <el-col :span="10" class="checkUp">
-                        <div class="navigationLeft">
-                        <el-dropdown-item @click.native="routers('messageCenter')" style="padding: 0">
-                          <div class="msgCenter">
-                            <i class="el-icon-bell"></i>
-                            <div class="msgTitle">消息中心</div>
-                          </div>
-                        </el-dropdown-item>
+              <div class="progressBar">
+                <!--<el-progress :percentage="50" :show-text="false"></el-progress>-->
+                <div class="progress">
+                  <span></span>
+                </div>
+                <div class="round roundLeft"></div>
+                <div class="round roundRight"></div>
+              </div>
+
+              <div class="level">
+                <div>A</div>
+                <div>B</div>
+              </div>
+
+              <div class="navigation">
+                <el-row>
+                  <el-col :span="10" class="checkUp">
+                    <div class="navigationLeft">
+                      <el-dropdown-item @click.native="routers('messageCenter')" style="padding: 0">
+                        <div class="msgCenter">
+                          <i class="el-icon-bell"></i>
+                          <div class="msgTitle">消息中心</div>
                         </div>
-                      </el-col>
+                      </el-dropdown-item>
+                    </div>
+                  </el-col>
 
-                      <el-col :span="10" class="checkUp" :offset="4">
-                        <div class="navigationLeft">
-                          <el-dropdown-item @click.native="routers('messageCenter')" style="padding: 0">
-                            <div class="msgCenter">
-                              <i class="el-icons-fa-edit" style="color: #58D788;"></i>
-                              <div class="msgTitle">考勤自助</div>
-                            </div>
-                          </el-dropdown-item>
+                  <el-col :span="10" class="checkUp" :offset="4">
+                    <div class="navigationLeft">
+                      <el-dropdown-item @click.native="routers('checkWork')" style="padding: 0">
+                        <div class="msgCenter">
+                          <i class="el-icons-fa-edit" style="color: #58D788;"></i>
+                          <div class="msgTitle">考勤自助</div>
                         </div>
-                      </el-col>
-                    </el-row>
+                      </el-dropdown-item>
+                    </div>
+                  </el-col>
+                </el-row>
 
-
-                    <el-row>
-                      <el-col :span="10" class="checkUp">
-                        <div class="navigationLeft">
-                          <el-dropdown-item style="padding: 0">
-                            <div class="msgCenter">
-                              <i class="el-icon-location" style="color: #fb4699"></i>
-                              <div class="msgTitle">签到自助</div>
-                            </div>
-                          </el-dropdown-item>
+                <el-row>
+                  <el-col :span="10" class="checkUp">
+                    <div class="navigationLeft">
+                      <el-dropdown-item style="padding: 0" @click.native="routers('register')">
+                        <div class="msgCenter">
+                          <i class="el-icon-location" style="color: #fb4699"></i>
+                          <div class="msgTitle">签到自助</div>
                         </div>
-                      </el-col>
+                      </el-dropdown-item>
+                    </div>
+                  </el-col>
 
-                      <el-col :span="10" class="checkUp" :offset="4">
-                        <div class="navigationLeft">
-                          <el-dropdown-item @click.native="lockScreen" style="padding: 0">
-                            <div class="msgCenter">
-                              <i class="el-icons-fa-unlock-alt" style="color: #C0C4CC;"></i>
-                              <div class="msgTitle">一键锁屏</div>
-                            </div>
-                          </el-dropdown-item>
+                  <el-col :span="10" class="checkUp" :offset="4">
+                    <div class="navigationLeft">
+                      <el-dropdown-item @click.native="lockScreen" style="padding: 0">
+                        <div class="msgCenter">
+                          <i class="el-icons-fa-unlock-alt" style="color: #C0C4CC;"></i>
+                          <div class="msgTitle">一键锁屏</div>
                         </div>
-                      </el-col>
-                    </el-row>
+                      </el-dropdown-item>
+                    </div>
+                  </el-col>
+                </el-row>
 
-                    <el-row>
-                      <el-col :span="10" class="checkUp">
-                        <div class="navigationLeft">
-                          <el-dropdown-item @click.native="routers('personalSetting')" style="padding: 0">
-                            <div class="msgCenter">
-                              <i class="el-icon-setting"></i>
-                              <div class="msgTitle">个人设置</div>
-                            </div>
-                          </el-dropdown-item>
+                <el-row>
+                  <el-col :span="10" class="checkUp">
+                    <div class="navigationLeft">
+                      <el-dropdown-item @click.native="routers('personalSetting')" style="padding: 0">
+                        <div class="msgCenter">
+                          <i class="el-icon-setting"></i>
+                          <div class="msgTitle">个人设置</div>
                         </div>
-                      </el-col>
+                      </el-dropdown-item>
+                    </div>
+                  </el-col>
 
-                      <el-col :span="10" class="checkUp" :offset="4">
-                        <div class="navigationLeft">
-                          <el-dropdown-item @click.native="routers('individual')" style="padding: 0">
-                            <div class="msgCenter">
-                              <i class="el-icon-setting" style="color: #58D788;"></i>
-                              <div class="msgTitle">个人门户</div>
-                            </div>
-                          </el-dropdown-item>
+                  <el-col :span="10" class="checkUp" :offset="4">
+                    <div class="navigationLeft">
+                      <el-dropdown-item @click.native="routers('individual')" style="padding: 0">
+                        <div class="msgCenter">
+                          <i class="el-icon-setting" style="color: #58D788;"></i>
+                          <div class="msgTitle">个人门户</div>
                         </div>
-                      </el-col>
-                    </el-row>
-                  </div>
-                </el-col>
-              </el-row>
-<!--2-->
+                      </el-dropdown-item>
+                    </div>
+                  </el-col>
+                </el-row>
+              </div>
+
+              <!--2-->
               <!--<el-dropdown-item class="personalList" @click.native="routers('messageCenter')">-->
-                <!--<p><i class="el-icon-bell"></i></p>-->
-                <!--<div>-->
-                  <!--消息中心-->
-                <!--</div>-->
+              <!--<p><i class="el-icon-bell"></i></p>-->
+              <!--<div>-->
+              <!--消息中心-->
+              <!--</div>-->
               <!--</el-dropdown-item>-->
               <!--<el-dropdown-item class="personalList">-->
-                <!--<p><i class="el-icons-fa-edit"></i></p>-->
-                <!--<div>-->
-                  <!--考勤自助-->
-                <!--</div>-->
+              <!--<p><i class="el-icons-fa-edit"></i></p>-->
+              <!--<div>-->
+              <!--考勤自助-->
+              <!--</div>-->
               <!--</el-dropdown-item>-->
               <!--<el-dropdown-item class="personalList">-->
-                <!--<p><i class="el-icon-location"></i></p>-->
-                <!--<div>-->
-                  <!--签到自助-->
-                <!--</div>-->
+              <!--<p><i class="el-icon-location"></i></p>-->
+              <!--<div>-->
+              <!--签到自助-->
+              <!--</div>-->
               <!--</el-dropdown-item>-->
               <!--<el-dropdown-item class="personalList"  @click.native="lockScreen">-->
-                <!--<p><i class="el-icons-fa-unlock-alt"></i></p>-->
-                <!--<div>-->
-                  <!--一键锁屏-->
-                <!--</div>-->
+              <!--<p><i class="el-icons-fa-unlock-alt"></i></p>-->
+              <!--<div>-->
+              <!--一键锁屏-->
+              <!--</div>-->
               <!--</el-dropdown-item>-->
               <!--<el-dropdown-item class="personalList" @click.native="routers('personalSetting')">-->
-                <!--<p><i class="el-icon-setting"></i></p>-->
-                <!--<div>-->
-                  <!--个人设置-->
-                <!--</div>-->
+              <!--<p><i class="el-icon-setting"></i></p>-->
+              <!--<div>-->
+              <!--个人设置-->
+              <!--</div>-->
               <!--</el-dropdown-item>-->
               <!--<el-dropdown-item class="personalList" @click.native="routers('individual')">-->
-                <!--<p><i class="el-icon-setting"></i></p>-->
-                <!--<div>-->
-                  <!--个人门户-->
-                <!--</div>-->
+              <!--<p><i class="el-icon-setting"></i></p>-->
+              <!--<div>-->
+              <!--个人门户-->
+              <!--</div>-->
               <!--</el-dropdown-item>-->
               <el-dropdown-item class="detrusion">
                 <!--<p><i class="el-icons-fa-dot-circle-o"></i></p>-->
@@ -648,8 +603,8 @@
       }
     }
 
-/*修改*/
-    .signCount{
+    /*修改*/
+    .signCount {
       @include flex;
       .personalSign {
         width: 25px;
@@ -677,7 +632,7 @@
     .progressBar {
       margin-top: 10px;
       position: relative;
-      .progress{
+      .progress {
         width: 100%;
         height: 5px;
         border-radius: 5px;
@@ -685,12 +640,12 @@
         overflow: hidden;
         background: #E8E9E9;
       }
-      .progress>span {
+      .progress > span {
         position: absolute;
         display: inline-block;
         width: 50%;
         height: 100%;
-        background: -webkit-linear-gradient(left,  #409eff, #fa4699);
+        background: -webkit-linear-gradient(left, #409eff, #fa4699);
         text-align: center;
       }
 
@@ -712,14 +667,13 @@
         right: -3px;
       }
       /*@keyframes load{*/
-        /*0%{*/
-          /*width: 0%;*/
-        /*}*/
-        /*100%{*/
-          /*width:70%;*/
-        /*}*/
+      /*0%{*/
+      /*width: 0%;*/
       /*}*/
-
+      /*100%{*/
+      /*width:70%;*/
+      /*}*/
+      /*}*/
 
     }
     .level {
@@ -727,10 +681,15 @@
       justify-content: space-between;
       margin-top: 10px;
     }
-    .navigation{
+    .navigation {
       margin-top: 10px;
       .navigationLeft {
         margin-right: 10px;
+        .el-dropdown-menu__item:hover {
+          &:hover {
+            background: transparent;
+          }
+        }
         .msgCenter {
           @include flex;
           font-size: 13px;
@@ -744,8 +703,6 @@
           }
         }
       }
-
-
 
     }
 
@@ -996,7 +953,6 @@
 
         }
 
-
         .countdown {
           border: none;
         }
@@ -1024,7 +980,6 @@
           }
         }
       }
-
 
     }
 
@@ -1087,41 +1042,43 @@
     }
   }
 
-
   /*----------------------  消息列表*-------------------*/
   .menuLists {
+    li + li {
+      border-top: 1px solid #dfe6fb;
+    }
+    li {
+      line-height: 20px;
+    }
     .first {
-      @include flex;
-      margin-top: 10px;
-      li{
+      width: 300px;
+      padding: 10px;
+      cursor: pointer;
+      li {
         padding: 0;
       }
       .picSign {
+        font-size: 27px;
         width: 35px;
         height: 35px;
-        font-size: 27px;
+        line-height: 35px;
         text-align: center;
-        /*border: 1px solid red;*/
         @include border_radius(50%);
         color: #ffffff;
         background: #409EFF;
-        margin: 5px 0 0 20px;
+        margin-right: 12px;
+        margin-top: 2px;
       }
       .public {
-        line-height: 20px;
-        margin-left: 10px;
         .signOne {
           font-size: 16px;
           color: #409EFF;
         }
         .limits {
           font-size: 14px;
-          width: 280px;
-          text-overflow : ellipsis;
-          white-space : nowrap;
-          overflow : hidden;
-          padding-bottom: 15px;
-          border-bottom: 1px solid #eeeeee;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
         }
       }
     }
