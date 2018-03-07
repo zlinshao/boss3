@@ -191,7 +191,10 @@
           if(res.data.status === 'success'){
             this.positionData = res.data.data;
           }else {
-            this.$message(res.data.msg);
+            this.$notify.info({
+              title: '消息',
+              message: res.data.message,
+            });
             this.positionTableData = [];
           }
         })
@@ -202,7 +205,10 @@
           if(res.data.status === 'success'){
             this.postData = res.data.data;
           }else {
-            this.$message(res.data.msg);
+            this.$notify.info({
+              title: '消息',
+              message: res.data.message,
+            });
             this.postData = [];
           }
         })

@@ -122,6 +122,13 @@
                     label="岗位">
                   </el-table-column>
                   <el-table-column
+                    label="上级岗位">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>
+                      <span v-else=""> &nbsp;暂无&nbsp; </span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
                     prop="pName"
                     label="职位">
                   </el-table-column>
@@ -348,8 +355,8 @@
         }).then(() => {
           this.deleteDpr(d.id);
         }).catch(() => {
-          this.$message({
-            type: 'info',
+          this.$notify.info({
+            title: '消息',
             message: '已取消删除'
           });
         });
@@ -372,15 +379,17 @@
       deleteDpr(id){
         this.$http.delete(globalConfig.server_user+'api/v1/organizations/'+id).then((res) =>{
           if(res.data.status === 'success'){
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
+            this.$notify({
+              title: '成功',
+              message: '删除成功',
+              type:'success'
             });
             this.getDepart();
           }else {
-            this.$message({
+            this.$notify({
+              title: '警告',
               message: res.data.message,
-              type: 'warning'
+              type:'warning'
             });
           }
         })
@@ -439,10 +448,11 @@
           }).then(() => {
             this.deleteStaff();
           }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消删除'
+            this.$notify.info({
+              title: '消息',
+              message: '已取消删除',
             });
+
           });
         }
       },
@@ -451,14 +461,15 @@
         this.$http.delete(globalConfig.server_user+'api/v1/users/'+this.editId).then((res) => {
           if(res.data.status === 'success'){
             this.getStaffData();
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
+            this.$notify({
+              title: '成功',
+              message: '删除成功',
+              type:'success'
             });
           }else {
-            this.$message({
-              message: res.data.message,
-              type: 'warning'
+            this.$notify.info({
+              title: '消息',
+              message: '已取消删除'
             });
           }
         })
@@ -504,7 +515,10 @@
               });
             }
           }else {
-            this.$message(res.data.msg);
+            this.$notify.info({
+              title: '消息',
+              message: res.data.message,
+            });
             this.positionList = [];
             this.totalOnlyPositionNum = 0;
           }
@@ -533,8 +547,8 @@
           }).then(() => {
             this.deleteOnlyPosition();
           }).catch(() => {
-            this.$message({
-              type: 'info',
+            this.$notify.info({
+              title: '消息',
               message: '已取消删除'
             });
           });
@@ -552,15 +566,17 @@
       deleteOnlyPosition(){
         this.$http.delete(globalConfig.server_user+'api/v1/position/type/'+this.onlyPositionId).then((res) =>{
           if(res.data.status === 'success'){
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
+            this.$notify({
+              title: '消息',
+              message: '删除成功',
+              type:'success'
             });
             this.getOnlyPosition();
           }else {
-            this.$message({
+            this.$notify({
+              title: '警告',
               message: res.data.message,
-              type: 'warning'
+              type:'warning'
             });
           }
         })
@@ -595,6 +611,15 @@
             +'&per_page_number='+this.params.pageNum).then((res) => {
             if(res.data.status === 'success'){
               let arr = res.data.data;
+
+              for(let i=0;i<arr.length;i++){
+                arr.forEach((item) => {
+                  if(item.parent_id === arr[i].id){
+                    item.parent_name = arr[i].name;
+                  }
+                })
+              }
+
               for(let i=0;i<tableData.length;i++){
                 arr.forEach((item) => {
                   if(item.type === tableData[i].id){
@@ -636,9 +661,9 @@
           }).then(() => {
             this.deletePosition();
           }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消删除'
+            this.$notify.info({
+              title: '消息',
+              message: '已取消删除',
             });
           });
         }
@@ -655,15 +680,18 @@
       deletePosition(){
         this.$http.delete(globalConfig.server_user+'api/v1/positions/'+this.positionId).then((res) =>{
           if(res.data.status === 'success'){
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
+              alert(2)
+            this.$notify({
+              title: '成功',
+              message: '删除成功',
+              type:'success'
             });
             this.getPosition();
           }else {
-            this.$message({
+            this.$notify({
+              title: '警告',
               message: res.data.message,
-              type: 'warning'
+              type:'warning'
             });
           }
         })
@@ -746,14 +774,15 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '保存成功!'
+          this.$notify({
+            title: '成功',
+            message: '保存成功',
+            type:'success'
           });
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消保存'
+          this.$notify.info({
+            title: '消息',
+            message: '已取消',
           });
         });
       },
