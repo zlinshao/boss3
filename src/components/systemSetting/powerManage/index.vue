@@ -95,6 +95,7 @@
 
     <div class="block pages">
       <el-pagination
+        v-show="activeName === 'first'"
         @size-change="handleSizeChange"
         @current-change="powerList"
         :current-page="currentPage"
@@ -102,10 +103,20 @@
         layout="total, prev, pager, next, jumper"
         :total="paging">
       </el-pagination>
+
+      <el-pagination
+        v-show="activeName === 'second'"
+        @size-change="handleSizeChange"
+        @current-change="moduleList"
+        :current-page="currentPage"
+        :page-size="15"
+        layout="total, prev, pager, next, jumper"
+        :total="paging">
+      </el-pagination>
     </div>
 
-    <RevisePower :module="powerModule" :title="title" :names="moduleName" :table="tableFirst" :msg="tableDetail" @close="close_"
-                 @sure="search"></RevisePower>
+    <RevisePower :module="powerModule" :title="title" :names="moduleName" :table="tableFirst" :msg="tableDetail"
+                 @close="close_" @sure="search"></RevisePower>
 
     <!--右键-->
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
@@ -188,15 +199,12 @@
           }
         })
       },
-      onSubmit() {
-        this.title = '新增';
-        this.powerModule = true;
-      },
 
       // ==============模块=================
       moduleList(val) {
         this.tableSecond = [];
         this.form.page = val;
+        this.close_();
         this.$http.get(this.urls + 'api/v1/modules', {
           params: this.form
         }).then((res) => {
@@ -208,10 +216,20 @@
         });
       },
 
-      // 搜索当前页
-      search() {
-        this.powerList(this.currentPage);
+      onSubmit() {
+        this.title = '新增';
+        this.powerModule = true;
       },
+
+      // 搜索当前页
+      search(val) {
+        if (val === 'first') {
+          this.powerList(this.currentPage);
+        } else {
+          this.moduleList(this.currentPage);
+        }
+      },
+
       // 关闭模态框
       close_() {
         this.powerModule = false;

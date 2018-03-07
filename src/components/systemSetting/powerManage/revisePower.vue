@@ -6,13 +6,13 @@
       <el-form :model="form" size="mini" label-width="80px">
         <div v-if="names === 'first'">
           <el-form-item label="系统标示">
-            <el-input v-model="form.name" :disabled="title === '修改'" clearable placeholder="系统标示"></el-input>
+            <el-input v-model="form.name" :disabled="title === '修改'" :clearable="title !== '修改'" placeholder="系统标示"></el-input>
           </el-form-item>
           <el-form-item label="系统名称">
             <el-input v-model="form.display_name" clearable placeholder="系统名称"></el-input>
           </el-form-item>
           <el-form-item label="系统描述">
-            <el-input v-model="form.content" :disabled="title === '修改'" clearable placeholder="系统描述"></el-input>
+            <el-input v-model="form.content" :disabled="title === '修改'" :clearable="title !== '修改'" placeholder="系统描述"></el-input>
           </el-form-item>
         </div>
 
@@ -103,7 +103,7 @@
         }).then((res) => {
           if (res.data.status === 'success') {
             this.prompt(res.data.message, 1);
-            this.$emit('sure');
+            this.$emit('sure',this.names);
           } else {
             this.prompt(res.data.message, 2);
           }
@@ -120,7 +120,7 @@
         }).then((res) => {
           if (res.data.status === 'success') {
             this.prompt(res.data.message, 1);
-            // this.$emit('sure');
+            this.$emit('sure',this.names);
           } else {
             this.prompt(res.data.message, 2);
           }

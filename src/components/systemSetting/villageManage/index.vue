@@ -334,8 +334,10 @@
       // },
       openVillage(val) {
         this.addVisible = true;
+        this.$http.get(this.urls + 'setting/community/' + this.pitch).then((res) => {
+          this.formList = res.data.data;
           this.formList.status = val;
-
+        });
       },
       closeVillage() {
         this.addVisible = false;
