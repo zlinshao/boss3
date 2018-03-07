@@ -73,9 +73,10 @@
             this.$emit('close','success');
             this.closeModal();
           }else {
-            this.$message({
+            this.$notify({
+              title: '警告',
               message: res.data.message,
-              type: 'warning'
+              type:'warning'
             });
           }
         });
