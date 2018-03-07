@@ -116,6 +116,8 @@
         this.myData = res.data.data;
         this.house_pic = res.data.data.album.house_pic;
       });
+
+
       var map = new AMap.Map("container", {
         resizeEnable: true
       });
