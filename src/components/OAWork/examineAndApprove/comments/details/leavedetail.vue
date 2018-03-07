@@ -1,8 +1,8 @@
 <template>
   <div class="modalFrame">
     <el-dialog
-      title="报销审批"
-      :visible.sync="reimbursedetail"
+      title="请假审批"
+      :visible.sync="leavedetail"
       width="50%">
       <div class="frameHead">
         <div class="personInfo">
@@ -22,25 +22,38 @@
       <div class="infoList scroll_bar">
         <el-form size="mini" label-width="80px">
 
-            <div>报销明细(1)</div>
-
           <el-row>
             <el-col :span="12">
-              <el-form-item label="报销金额(元)">
+              <el-form-item label="审批编号">
                 <el-input readonly>
                 </el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="报销类别">
+              <el-form-item label="请假类型">
                 <el-input readonly>
                 </el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
+            <el-col :span="12">
+              <el-form-item label="日期">
+                <el-input readonly>
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="时长">
+                <el-input readonly>
+                </el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
             <el-col>
-              <el-form-item label="费用明细">
+              <el-form-item label="请假事由">
                 <el-input type="textarea" :autosize="{minRows: 2, maxRows: 4}" readonly></el-input>
               </el-form-item>
             </el-col>
@@ -91,7 +104,7 @@
             </div>
           </el-form-item>
           <!--<div class="payTime">-->
-            <!--共耗时5天四小时，比10%的同类申请快-->
+          <!--共耗时5天四小时，比10%的同类申请快-->
           <!--</div>-->
         </el-form>
       </div>
@@ -99,7 +112,7 @@
 
 
       <span slot="footer">
-        <el-button type="primary" @click="reimbursedetail = false">提交</el-button>
+        <el-button type="primary" @click="leavedetail = false">提交</el-button>
       </span>
     </el-dialog>
   </div>
@@ -107,11 +120,11 @@
 
 <script>
   export default {
-    name: "reimbursedetail",
+    name: "leavedetail",
     props: ['module'],
     data () {
       return {
-        reimbursedetail: false,           //报销详情
+        leavedetail: false,           //请假
         form: {
           input1: '',
           value1: '',
@@ -140,9 +153,9 @@
     },
     watch:{
       module(val){
-        this.reimbursedetail = val;
+        this.leavedetail = val;
       },
-      reimbursedetail(val){
+      leavedetail(val){
         if(!val){
           this.$emit('close');
         }
@@ -186,51 +199,51 @@
       }
     }
   }
-.frameHead {
-  width: 100%;
-  @include flex;
-  justify-content: space-between;
-  .personInfo {
+  .frameHead {
+    width: 100%;
     @include flex;
-    .headPic {
-      width: 45px;
-      height: 45px;
-      @include border_radius(50%);
-      img {
+    justify-content: space-between;
+    .personInfo {
+      @include flex;
+      .headPic {
         width: 45px;
         height: 45px;
         @include border_radius(50%);
+        img {
+          width: 45px;
+          height: 45px;
+          @include border_radius(50%);
+        }
+      }
+      .personName {
+        :nth-child(1) {
+          color: #409EFF;
+          font-size: 14px;
+        }
+        :nth-child(2) {
+          font-size: 12px;
+        }
+        margin-left: 10px;
       }
     }
-    .personName {
-      :nth-child(1) {
-        color: #409EFF;
-        font-size: 14px;
-      }
-      :nth-child(2) {
-        font-size: 12px;
-      }
-      margin-left: 10px;
+  }
+  .infoList {
+    padding: 25px 55px;
+    input {
+      background-color: #EEF3FC;
     }
   }
-}
-.infoList {
-  padding: 25px 55px;
-  input {
-    background-color: #EEF3FC;
-  }
-}
-.timeDate {
-  padding-left: 20px;
-  color: #BEBEBF;
-  @include flex;
-  .detailTime {
-    font-family: 'Impact', sans-serif;
-    margin-left: 5px;
-    font-size: 14px;
+  .timeDate {
+    padding-left: 20px;
+    color: #BEBEBF;
+    @include flex;
+    .detailTime {
+      font-family: 'Impact', sans-serif;
+      margin-left: 5px;
+      font-size: 14px;
 
+    }
   }
-}
   .upLoad {
     @include border_radius(4px);
     border: 1px solid #dfe6fb;
@@ -243,39 +256,39 @@
   .remind {
     font-size: 12px;
   }
-.conservator {
-  @include border_radius(50%);
-  .conservatorInfo{
-    /*border: 1px solid red;*/
-    width: 70px;
-    height: 66px;
-    img {
-      width: 35px;
-      height: 35px;
-      @include border_radius(50%);
-      margin-left: 21px;
+  .conservator {
+    @include border_radius(50%);
+    .conservatorInfo{
+      /*border: 1px solid red;*/
+      width: 70px;
+      height: 66px;
+      img {
+        width: 35px;
+        height: 35px;
+        @include border_radius(50%);
+        margin-left: 21px;
+      }
+      .conservatorName {
+        font-size: 13px;
+        text-align: center;
+        width: 80px;
+        height: 20px;
+      }
     }
-    .conservatorName {
-      font-size: 13px;
-      text-align: center;
-      width: 80px;
+    .grade {
+      border: 1px solid #dfe6fb;
+      @include border_radius(4px);
+      width: 75px;
       height: 20px;
+      line-height: 20px;
+      font-size: 13px;
+      color: #409EFF;
+      text-align: center;
+      margin: 0 0 10px 3px;
     }
   }
-  .grade {
-    border: 1px solid #dfe6fb;
-    @include border_radius(4px);
-    width: 75px;
-    height: 20px;
-    line-height: 20px;
-    font-size: 13px;
-    color: #409EFF;
-    text-align: center;
-    margin: 0 0 10px 3px;
+  .payTime {
+    font-size: 14px;
+    color: #fb4699;
   }
-}
-.payTime {
-  font-size: 14px;
-  color: #fb4699;
-}
 </style>

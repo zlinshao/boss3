@@ -193,7 +193,7 @@
                     <el-col :span="12">
                       <div class="signCount" style="margin-left: 4px">
                         <div class="personalSign">
-                          <i class="el-icon-star-off"></i>
+                          <i class="iconfont icon-jifen1"></i>
                         </div>
                         <div class="signNumber">9999</div>
                         <div class="signUnit">分</div>
@@ -202,7 +202,7 @@
                     <el-col :span="12">
                       <div class="signCount" style="margin-left: 15px">
                         <div class="personalSign" style="background: #409EFF">
-                          <i class="el-icon-star-off"></i>
+                          <i class="iconfont icon-jinbi"></i>
                         </div>
                         <div class="signNumber" style="color: #409eff">9999</div>
                         <div class="signUnit">币</div>
@@ -652,10 +652,10 @@
     .signCount{
       @include flex;
       .personalSign {
-        width: 25px;
-        height: 25px;
-        font-size: 22px;
-        text-align: center;
+        width: 30px;
+        height: 30px;
+        line-height: 30px;
+        font-size: 16px;
         color: #FFFFFF;
         background: #fb4699;
         @include border_radius(50%);

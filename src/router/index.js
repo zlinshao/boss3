@@ -101,6 +101,7 @@ import PersonalSetting from '../components/personalSetting/index.vue'    //个�
 
 
 import Individual from '../components/individual/index.vue'    //个人门户
+import Converge from '../components/converge/index.vue'    //员工广场
 
 Vue.use(Router);
 
@@ -134,6 +135,7 @@ export default new Router({
       name: '',
       children: [
         {path: '/main', component: Main, name: '主页', icon: 'el-icon-menu'},
+        {path: '/converge', component: Converge, name: '员工广场', icon: 'el-icon-menu'},
       ]
     },
     //不正常的二级路由

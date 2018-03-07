@@ -83,6 +83,7 @@
           </div>
           <div class="title" style="color: #6a8dfb;margin-top: 22px">
             <span style="border-left: 4px solid #6a8dfb;"></span>新闻中心
+            <!--<el-button @click.native="routers('converge')" type="mini">员工广场</el-button>-->
           </div>
           <div class="newsCenter scroll_bar">
             <div class="newTitle" @click.stop="selectNewsType($event)">

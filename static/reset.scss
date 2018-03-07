@@ -334,3 +334,13 @@
     right: 2px;
   }
 }
+.el-dialog__wrapper {
+  .el-dialog {
+    .el-dialog__body {
+      .scroll_bar {
+        overflow: auto;
+        max-height: 550px;
+      }
+    }
+  }
+}
