@@ -102,7 +102,6 @@ import PersonalSetting from '../components/personalSetting/index.vue'    //个�
 
 import Individual from '../components/individual/index.vue'    //个人门户
 import Converge from '../components/converge/index.vue'    //员工广场
-import Individual from '../components/individual/index.vue'   //个人门户
 import CheckWork from '../components/checkWork/index.vue'     //考勤自主
 import Register from '../components/register/index.vue'       //签到自主
 
@@ -259,7 +258,7 @@ export default new Router({
       children: [
         {path: '/staffManage', component: StaffManage, name: '用户管理',},
         {path: '/integralManage', component: IntegralManage, name: '积分管理',},
-        {path: '/organization', component: Organization, name: '组织架构',},
+        // {path: '/organization', component: Organization, name: '组织架构',},
         // {path: '/achievement', component: Achievement, name: '业绩工资',},
       ]
     },
