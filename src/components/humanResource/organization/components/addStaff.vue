@@ -77,14 +77,14 @@
           if(res.data.status === 'success'){
             this.params.name = res.data.data.name;
             this.params.phone = res.data.data.phone;
-            console.log(res.data.data)
             this.params.org_id = res.data.data.org[0].id;
             this.department = res.data.data.org[0].name;
 
           }else {
-            this.$message({
+            this.$notify({
+              title: '警告',
               message: res.data.message,
-              type: 'warning'
+              type:'warning'
             });
           }
         });
@@ -96,9 +96,10 @@
               this.$emit('close','success');
               this.closeModal();
             }else {
-              this.$message({
+              this.$notify({
+                title: '警告',
                 message: res.data.message,
-                type: 'warning'
+                type:'warning'
               });
             }
           });
@@ -108,9 +109,10 @@
               this.$emit('close','success');
               this.closeModal();
             }else {
-              this.$message({
+              this.$notify({
+                title: '警告',
                 message: res.data.message,
-                type: 'warning'
+                type:'warning'
               });
             }
           });

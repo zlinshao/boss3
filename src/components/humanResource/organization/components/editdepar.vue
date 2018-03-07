@@ -73,9 +73,10 @@
             this.params.order = res.data.data.order;
             this.params.parent_id = res.data.data.parent_id;
           }else {
-            this.$message({
+            this.$notify({
+              title: '警告',
               message: res.data.message,
-              type: 'warning'
+              type:'warning'
             });
           }
         });
@@ -86,9 +87,10 @@
             this.$emit('close','success');
             this.closeModal();
           }else {
-            this.$message({
+            this.$notify({
+              title: '警告',
               message: res.data.message,
-              type: 'warning'
+              type:'warning'
             });
           }
         });
