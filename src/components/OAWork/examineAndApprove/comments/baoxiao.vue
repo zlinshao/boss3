@@ -1,33 +1,36 @@
 <template>
   <div class="modalFrame ">
-    <el-dialog
-      title="报销流程"
-      :visible.sync="reimbursement"
-      width="50%">
+    <el-dialog title="报销流程" :visible.sync="reimbursement" width="50%">
       <div class="scroll_bar">
-        <el-form :model="form" size="mini" label-width="80px">
-          <el-form-item label="报销明细(1)"></el-form-item>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="报销金额(元)">
-                <el-input v-model="form.input1" placeholder="请输入数字(必填)">
-                </el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label="报销类别">
-                <el-input v-model="form.input1" placeholder="如:采购经费、活动经费(必填)">
-                </el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
+        <el-form :model="form" size="mini" label-width="100px">
+          <div v-for="item in number">
+            <el-form-item :label="'报销明细('+item+')'">
+              <el-button v-if="item>1" type="text" size="mini" style="float: right">删除</el-button>
+            </el-form-item>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="报销金额(元)" required="">
+                  <el-input v-model="reimbursement_amount[item-1]" placeholder="请输入数字(必填)">
+                  </el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="报销类别" required="">
+                  <el-input v-model="reimbursement_type[item-1]" placeholder="如:采购经费、活动经费(必填)">
+                  </el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
 
-          <el-form-item label="费用明细">
-            <el-input v-model="form.textarea" type="textarea" :autosize="{minRows: 2, maxRows: 4}" placeholder="请输入费用明细描述"></el-input>
-          </el-form-item>
+            <el-form-item label="费用明细">
+              <el-input v-model="reimbursement_cost_details[item]" type="textarea"
+                        :autosize="{minRows: 2, maxRows: 4}" placeholder="请输入费用明细描述"></el-input>
+            </el-form-item>
+          </div>
+
 
           <el-form-item>
-            <el-button>
+            <el-button @click="addNumber">
               <i class="el-icon-plus"></i>增加报销明细
             </el-button>
           </el-form-item>
@@ -240,11 +243,16 @@
       return {
         reimbursement: false,           //报销申请
         form: {
-          input1: '',
-          value1: '',
-          textarea: '',
-          dialogImageUrl: '',
-        }
+          content:[],
+          remark:'',
+          image_pic:[],
+          attachment_file:[],
+          creator_id:'',
+        },
+        reimbursement_amount:[],
+        reimbursement_type:[],
+        reimbursement_cost_details:[],
+        number:1,
 
       }
     },
@@ -265,7 +273,11 @@
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
-      }
+      },
+      //增加报销明细
+      addNumber(){
+          this.number++;
+      },
     }
   }
 </script>
