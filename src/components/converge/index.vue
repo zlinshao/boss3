@@ -82,7 +82,10 @@
                   </div>
                   <div class="lints"></div>
                   <div class="newsButt">
-                    <el-button type="primary" size="mini">MORE</el-button>
+                    <router-link to="/Infodetails">
+                      <el-button type="primary" size="mini">MORE</el-button>
+                    </router-link>
+
                   </div>
                 </div>
               </el-col>
@@ -724,8 +727,6 @@
       @include border_radius(5px);
       padding: 15px;
       margin-top: 10px;
-
-
     }
     .newsOne {
       border-right: 1px solid #e5e5e5;

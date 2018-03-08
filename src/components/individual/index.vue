@@ -44,32 +44,40 @@
               <!--</div>-->
             <!--</el-col>-->
           <!--</el-row>-->
+          <el-row>
+            <el-col :span="12">
+              <div class="peoperInfo">
+                <div class="headPic">
+                  <img src="../../assets/images/individual/touxiang.png" alt="">
+                </div>
+                <div class="headName">
+                  <div style="display: flex">
+                    <p class="userName">张琳琳琳</p>
+                    <img src="../../assets/images/individual/1.png" alt="">
+                  </div>
+                  <p class="sign">Lorem ipsum dolor sit amet, consectetur adipisicing</p>
+                </div>
+              </div>
 
-          <div class="headPic">
-            <img src="../../assets/images/individual/touxiang.png" alt="">
-          </div>
-          <div class="headName">
-            <div style="display: flex">
-              <p class="userName">张琳琳琳</p>
-              <img src="../../assets/images/individual/1.png" alt="">
-            </div>
-            <p class="sign">Lorem ipsum dolor sit amet, consectetur adipisicing</p>
-          </div>
+            </el-col>
+            <el-col :span="12">
+              <div class="userSetting">
+                <div class="userPhoto">
+                  <i class="el-icon-picture"></i>
+                  <el-button type="text" style="color: #FFFFFF">照片</el-button>
+                </div>
+                <div class="userFavorite">
+                  <i class="el-icon-goods"></i>
+                  <el-button type="text">收藏夹</el-button>
+                </div>
+                <div class="userSet">
+                  <i class="el-icon-setting"></i>
+                  <el-button type="text">设置</el-button>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
 
-          <div class="userSetting">
-            <div class="userPhoto">
-              <i class="el-icon-picture"></i>
-              <el-button type="text" style="color: #FFFFFF">照片</el-button>
-            </div>
-            <div class="userFavorite">
-              <i class="el-icon-goods"></i>
-              <el-button type="text">收藏夹</el-button>
-            </div>
-            <div class="userSet">
-              <i class="el-icon-setting"></i>
-              <el-button type="text">设置</el-button>
-            </div>
-          </div>
 
         </div>
 
@@ -826,9 +834,12 @@
         -moz-background-size: 100% 100%;
         background-size: 100% 100%;
         @include flex;
+        .peoperInfo {
+          @include flex;
+          width: 100%;
+        }
         .headPic {
           @include border_radius(50%);
-          /*position: absolute;*/
 
           width: 120px;
           height: 120px;

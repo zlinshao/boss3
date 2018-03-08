@@ -100,16 +100,18 @@ import MessageCenter from '../components/messageCenter/index.vue'
 import PersonalSetting from '../components/personalSetting/index.vue'    //个人设置
 
 
-import Individual from '../components/individual/index.vue'    //个人门户
-import Converge from '../components/converge/index.vue'    //员工广场
-import CheckWork from '../components/checkWork/index.vue'     //考勤自主
-import Register from '../components/register/index.vue'       //签到自主
+import Individual from '../components/individual/index.vue'               //个人门户
+import Converge from '../components/converge/index.vue'                   //员工广场
+import Infodetails from '../components/converge/details/infodetails.vue'  //员工广场详情
+import CheckWork from '../components/checkWork/index.vue'                 //考勤自主
+import Register from '../components/register/index.vue'                   //签到自主
 
 
 Vue.use(Router);
 
 export default new Router({
   routes: [
+
 
     {
       path: '/login',
@@ -138,7 +140,7 @@ export default new Router({
       name: '',
       children: [
         {path: '/main', component: Main, name: '主页', icon: 'el-icon-menu'},
-        {path: '/converge', component: Converge, name: '员工广场', icon: 'el-icon-menu'},
+        {path: '/converge/', component: Converge, name: '员工广场', icon: 'el-icon-menu',},
       ]
     },
     //不正常的二级路由
@@ -157,6 +159,8 @@ export default new Router({
         {path: '/throwALease', component: throwALease, name: 'TEST_3'},
         {path: '/publicArticle', component: PublicArticle, name: '文章发布'},
         {path: '/individual', component: Individual, name: '个人门户'},
+        {path: '/infodetails', component: Infodetails, name: '员工广场详情'},
+
       ]
     },
     // 详情路由
