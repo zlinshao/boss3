@@ -89,7 +89,6 @@
     },
     methods: {
       rules(val) {
-        console.log(val);
         let index = this.pic_id.indexOf(val);
         if (index > -1) {
           this.pic_id.splice(index, 1);

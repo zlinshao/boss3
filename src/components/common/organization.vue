@@ -462,7 +462,7 @@
                   padding: 5px 0;
                 }
                 .breadcrumb-wrapper{
-                  height: 405px;
+                  height: 383px;
                   overflow: auto;
                   .breadcrumb{
                     padding: 0 15px;

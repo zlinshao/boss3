@@ -5,12 +5,12 @@
         <el-form :model="form" size="mini" label-width="100px">
           <div v-for="item in number">
             <el-form-item :label="'报销明细('+item+')'">
-              <el-button v-if="item>1" type="text" size="mini" style="float: right">删除</el-button>
+              <el-button v-if="item>1" type="text" size="mini" style="float: right" @click="deleteNumber(item-1)">删除</el-button>
             </el-form-item>
             <el-row>
               <el-col :span="12">
                 <el-form-item label="报销金额(元)" required="">
-                  <el-input v-model="reimbursement_amount[item-1]" placeholder="请输入数字(必填)">
+                  <el-input type="number" v-model="reimbursement_amount[item-1]" placeholder="请输入数字(必填)">
                   </el-input>
                 </el-form-item>
               </el-col>
@@ -236,9 +236,11 @@
 </template>
 
 <script>
+  import Dropzone from '../../../common/dropzone.vue'
   export default {
     name: "baoxiao",
     props: ['module'],
+    components:{Dropzone},
     data () {
       return {
         reimbursement: false,           //报销申请
@@ -278,6 +280,13 @@
       addNumber(){
           this.number++;
       },
+      //删除报销明细
+      deleteNumber(index){
+        this.number--;
+        this.reimbursement_amount.splice(index,1)
+        this.reimbursement_type.splice(index,1)
+        this.reimbursement_cost_details.splice(index,1)
+      }
     }
   }
 </script>

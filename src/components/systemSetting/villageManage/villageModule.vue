@@ -95,8 +95,7 @@
           </el-row>
           <el-form-item label="小区照片">
             <!--<el-input v-model="form.addressId" :disabled="true"></el-input>-->
-            <Dropzone :id="'addr'" :photo="photos" @finish="photo_success"
-                      @remove="photo_remove"></Dropzone>
+            <Dropzone :id="'addr'" :photo="photos" @finish="photo_success" @remove="photo_remove"></Dropzone>
           </el-form-item>
           <el-form-item label="周边配套">
             <el-input type="textarea" :autosize="{minRows: 2,maxRows: 4}" placeholder="请输入配套情况"

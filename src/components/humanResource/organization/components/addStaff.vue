@@ -147,7 +147,8 @@
           org_id:'',
           name:'',
           phone:''
-        }
+        };
+        this.department = '';
       }
     }
   };
