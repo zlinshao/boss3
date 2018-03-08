@@ -43,7 +43,7 @@
           @size-change="handleSizeChange"
           @current-change="powerList"
           :current-page="firstPage"
-          :page-size="15"
+          :page-size="showSize"
           layout="total, prev, pager, next, jumper"
           :total="paging1">
         </el-pagination>
@@ -89,7 +89,7 @@
           @size-change="handleSizeChange"
           @current-change="moduleList"
           :current-page="secondPage"
-          :page-size="15"
+          :page-size="showSize"
           layout="total, prev, pager, next, jumper"
           :total="paging2">
         </el-pagination>
@@ -134,7 +134,7 @@
           @size-change="handleSizeChange"
           @current-change="authority"
           :current-page="thirdPage"
-          :page-size="15"
+          :page-size="showSize"
           layout="total, prev, pager, next, jumper"
           :total="paging3">
         </el-pagination>
@@ -165,6 +165,7 @@
         show: false,
         lists: [],
 
+        showSize: 5,
         firstForm: {
           page: 1
         },
@@ -225,7 +226,7 @@
       powerList(val) {
         this.tableFirst = [];
         this.firstForm.page = val;
-        this.$http.get(this.urls + 'api/v1/systems', {
+        this.$http.get(this.urls + 'api/v1/systems?per_page_number=5', {
           params: this.firstForm
         }).then((res) => {
           if (res.data.status === 'success') {
@@ -243,10 +244,10 @@
       },
       // ==============模块=================
       // 模块列表
-      moduleList(val, id) {
+      moduleList(val) {
         this.tableSecond = [];
         this.secondForm.page = val;
-        this.$http.get(this.urls + 'api/v1/modules?sys_id=' + this.addID.firstID, {
+        this.$http.get(this.urls + 'api/v1/modules?per_page_number=5&sys_id=' + this.addID.firstID, {
           params: this.secondForm
         }).then((res) => {
           if (res.data.status === 'success') {
@@ -265,7 +266,7 @@
       authority(val) {
         this.tableThird = [];
         this.thirdForm.page = val;
-        this.$http.get(this.urls + 'api/v1/permissions?mod_id=' + this.addID.secondID, {
+        this.$http.get(this.urls + 'api/v1/permissions?per_page_number=5&mod_id=' + this.addID.secondID, {
           params: this.thirdForm
         }).then((res) => {
           if (res.data.status === 'success') {
