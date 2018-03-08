@@ -1,26 +1,26 @@
-.el-dialog__wrapper{
-  .el-dialog{
-    .el-dialog__header{
+.el-dialog__wrapper {
+  .el-dialog {
+    .el-dialog__header {
       border-bottom: 1px solid #eee;
       padding: 15px;
-      .el-dialog__title{
+      .el-dialog__title {
         color: #409EFF;
         line-height: 0;
         font-size: 16px;
       }
     }
-    .el-dialog__body{
+    .el-dialog__body {
       padding: 15px;
       font-size: 12px !important;
-      .el-form{
+      .el-form {
         .el-form-item--small.el-form-item {
           margin-bottom: 18px;
         }
       }
-      .title{
+      .title {
         color: #409EFF;
         opacity: .7;
-        &:before{
+        &:before {
           border-radius: 2px;
           margin-right: 5px;
           background: #409EFF;
@@ -29,38 +29,39 @@
         }
       }
 
-      .el-input,.el-select ,.el-date-editor {
+      .el-input, .el-select, .el-date-editor {
         width: 100%;
       }
 
-      .describe_border{
+      .describe_border {
         padding: 15px 10px;
         border: 1px solid #dfe6fb;
         border-radius: 5px;
         margin-bottom: 15px;
       }
 
-      .form_border{
+      .form_border {
         padding: 18px 10px 0 10px;
         margin-bottom: 15px;
         border: 1px solid #dfe6fb;
         border-radius: 5px;
       }
-      .table_border{
+      .table_border {
         font-size: 12px;
         margin-bottom: 15px;
-        border: 1px solid rgba(64,158,255,.12);
-        box-shadow: 0 2px 4px 0 rgba(64,158,255,.12), 0 0 6px 0 rgba(64,158,255,.04);
+        border: 1px solid rgba(64, 158, 255, .12);
+        box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);
       }
     }
   }
 }
-#organizationId{
-  .el-dialog__body{
+
+#organizationId {
+  .el-dialog__body {
     background: #F8F8F8 !important;
   }
-  .el-dialog__footer{
-    padding: 15px ;
+  .el-dialog__footer {
+    padding: 15px;
   }
   .el-select {
     display: block;
@@ -68,21 +69,23 @@
       border: none;
     }
   }
-  .el-input__inner{
+  .el-input__inner {
     border: none;
   }
 }
 
-.el-select-dropdown{
-  .el-select-dropdown__wrap{
+.el-select-dropdown {
+  .el-select-dropdown__wrap {
     max-height: 410px;
   }
 }
+
 .el-table {
   th {
     background-color: #dfe6fb !important;
   }
 }
+
 .blueTable {
   .el-table {
     th {
@@ -99,7 +102,7 @@
   }
 }
 
-.el-form-item__label{
+.el-form-item__label {
   font-size: 12px !important;
 }
 
@@ -113,6 +116,7 @@
     align-items: center;
   }
 }
+
 .filter {
   padding-top: 10px;
   .el-select .el-input {
@@ -123,8 +127,8 @@
   }
 }
 
-#rentingDetail{
-  .el-form-item__label{
+#rentingDetail {
+  .el-form-item__label {
     color: #bcbcbd;
   }
   .el-step__head.is-process {
@@ -135,42 +139,41 @@
     font-weight: 700;
     color: #58d788;
   }
-  .el-tabs--border-card>.el-tabs__header {
+  .el-tabs--border-card > .el-tabs__header {
     background-color: #eef3fc;
     border-bottom: 1px solid #eef3fc;
   }
 }
 
-
-.expand-tree{
-  .is-current{
-    overflow:hidden;
-    >.el-tree-node__content{
-      .tree-btn{
+.expand-tree {
+  .is-current {
+    overflow: hidden;
+    > .el-tree-node__content {
+      .tree-btn {
         display: block;
       }
-      .tree-label{
-        font-weight:600;
-        white-space:normal;
+      .tree-label {
+        font-weight: 600;
+        white-space: normal;
       }
     }
   }
 
-  .el-tree-node{
-    &:hover{
-      overflow:hidden;
+  .el-tree-node {
+    &:hover {
+      overflow: hidden;
     }
   }
 
-  .el-tree-node__content{
+  .el-tree-node__content {
     height: 30px;
-    &:hover .tree-btn{
-      display:inline-block;
+    &:hover .tree-btn {
+      display: inline-block;
     }
   }
 }
 
-.topTabs{
+.topTabs {
   $color: #409EFF;
   .btn {
     background-color: $color !important;
@@ -182,7 +185,6 @@
   }
 }
 
-
 .block.pages {
   display: flex;
   display: -webkit-flex;
@@ -190,9 +192,9 @@
   margin: 20px 0 10px;
 }
 
-@font-face{
-  font-family:Impact;
-  src:url(../src/assets/font/impact-2.ttf);
+@font-face {
+  font-family: Impact;
+  src: url(../src/assets/font/impact-2.ttf);
 }
 
 //日历
@@ -206,25 +208,25 @@
   }
   .cal-wrapper {
     .cal-header {
-      color :#6a8dfb !important;
+      color: #6a8dfb !important;
       border-bottom: 1px solid #e5e5e5;
       font-family: 'Impact', sans-serif;
     }
-    .cal-body{
+    .cal-body {
       .weeks .item {
         color: #14e731;
         font-weight: bold;
-        &:first-child,&:last-child{
-          color:#fb4699;
+        &:first-child, &:last-child {
+          color: #fb4699;
         }
       }
-      .dates{
-        .item{
+      .dates {
+        .item {
           cursor: pointer;
-          &:hover{
+          &:hover {
             color: #6a8dfb;
           }
-          .is-event,.is-today {
+          .is-event, .is-today {
             border: 1px solid #6a8dfb !important;
           }
           .is-today {
@@ -241,7 +243,7 @@
   }
 }
 
-@media screen and (min-width: 768px){
+@media screen and (min-width: 768px) {
   .__vev_calendar-wrapper .cal-wrapper {
     width: 100% !important;
     padding: 0 !important;
@@ -317,20 +319,37 @@
   }
 }
 
-#panelContent{
-  textarea{
+#panelContent {
+  textarea {
     resize: none !important;
   }
 }
-#publicArticle{
+
+#publicArticle {
   .el-select {
     display: block !important;
   }
 }
 
-#examineAndApprove{
+#examineAndApprove {
   .el-badge__content.is-fixed.is-dot {
     top: 8px;
     right: 2px;
   }
 }
+
+.dialog_scroll {
+  .el-dialog__wrapper {
+    .el-dialog {
+      .el-dialog__body {
+        padding: 0;
+        .scroll_bar {
+          padding: 15px;
+          max-height: 500px;
+          overflow: auto;
+        }
+      }
+    }
+  }
+}
+

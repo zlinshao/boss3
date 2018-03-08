@@ -1,5 +1,5 @@
 <template>
-  <div id="villageModule">
+  <div id="villageModule" class="dialog_scroll">
     <el-dialog title="新增小区" :visible.sync="dialogVisible" width="40%">
       <div class="modules scroll_bar">
         <el-form :model="form" size="mini" label-width="80px">
