@@ -1,36 +1,53 @@
 <template>
   <div>
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%">
-
-
       <el-form :model="form" size="mini" label-width="80px">
         <div v-if="names === 'first'">
           <el-form-item label="系统标示">
-            <el-input v-model="form.name" :disabled="title === '修改'" :clearable="title !== '修改'" placeholder="系统标示"></el-input>
+            <el-input v-model="form.name" :disabled="title === '修改'" :clearable="title !== '修改'"
+                      placeholder="系统标示"></el-input>
           </el-form-item>
           <el-form-item label="系统名称">
             <el-input v-model="form.display_name" clearable placeholder="系统名称"></el-input>
           </el-form-item>
           <el-form-item label="系统描述">
-            <el-input v-model="form.content" :disabled="title === '修改'" :clearable="title !== '修改'" placeholder="系统描述"></el-input>
+            <el-input v-model="form.content" :disabled="title === '修改'" :clearable="title !== '修改'"
+                      placeholder="系统描述"></el-input>
           </el-form-item>
         </div>
 
         <div v-if="names === 'second'">
-          <el-form-item label="所属系统">
-            <el-select v-model="form.sys_id" clearable>
-              <el-option v-for="(item,index) in table" :label="item.display_name" :value="item.id"
-                         :key="index"></el-option>
-            </el-select>
-          </el-form-item>
           <el-form-item label="模块标示">
-            <el-input v-model="form.name" clearable placeholder="模块标示"></el-input>
+            <el-input v-model="form.name" :disabled="title === '修改'" :clearable="title !== '修改'"
+                      placeholder="模块标示"></el-input>
           </el-form-item>
           <el-form-item label="模块名称">
             <el-input v-model="form.display_name" clearable placeholder="模块名称"></el-input>
           </el-form-item>
           <el-form-item label="模块描述">
-            <el-input v-model="form.content" clearable placeholder="描述"></el-input>
+            <el-input v-model="form.content" :disabled="title === '修改'" :clearable="title !== '修改'" clearable
+                      placeholder="模块描述"></el-input>
+          </el-form-item>
+        </div>
+
+        <div v-if="names === 'third'">
+          <el-form-item label="选择权限">
+            <el-radio-group v-model="form.radio">
+              <el-radio :label="1">操作权限</el-radio>
+              <el-radio :label="2">数据权限</el-radio>
+            </el-radio-group>
+
+          </el-form-item>
+          <el-form-item label="权限标示">
+            <el-input v-model="form.name" :disabled="title === '修改'" :clearable="title !== '修改'"
+                      placeholder="权限标示"></el-input>
+          </el-form-item>
+          <el-form-item label="权限名称">
+            <el-input v-model="form.display_name" clearable placeholder="权限名称"></el-input>
+          </el-form-item>
+          <el-form-item label="权限描述">
+            <el-input v-model="form.content" :disabled="title === '修改'" :clearable="title !== '修改'" clearable
+                      placeholder="权限描述"></el-input>
           </el-form-item>
         </div>
       </el-form>
@@ -39,8 +56,13 @@
         <el-button size="small" @click="dialogVisible = false">取&nbsp;消</el-button>
         <el-button size="small" v-if="names === 'first'" type="primary" @click="addPower(title)">{{title}}
         </el-button>
-        <el-button size="small" v-if="names === 'second'" type="primary" @click="addModule()">新增
+        <el-button size="small" v-if="names === 'second'" type="primary" @click="addModule(title)">{{title}}
         </el-button>
+        <el-button size="small" v-if="names === 'third'" type="primary" @click="authorityModule(title)">{{title}}
+        </el-button>
+        <div style="float: left;margin-top: 6px">
+          <el-checkbox v-model="check" v-if="names === 'third' && title === '新增'">持续新增</el-checkbox>
+        </div>
       </div>
     </el-dialog>
   </div>
@@ -49,14 +71,19 @@
 <script>
   export default {
     name: "revise-role",
-    props: ['module', 'title', 'msg','table', 'names'],
+    props: ['module', 'title', 'addID', 'msg', 'names'],
     data() {
       return {
         urls: globalConfig.server_user,
         dialogVisible: false,
-        ids: '',
+
+        check: false,
+        tableSecond: [],
         form: {
+          radio: 1,
+          ids: '',
           sys_id: '',            //所属系统
+          mod_id: '',            //所属模块
           name: '',
           display_name: '',
           content: '',
@@ -66,13 +93,26 @@
 
     watch: {
       msg(val) {
-        if (this.names === 'first' && this.title === '修改') {
-          this.ids = val.id;
-          this.form.name = val.name;
-          this.form.display_name = val.display_name;
-          this.form.content = val.description;
-        }if (this.names === 'second') {
-
+        if(this.title === '修改'){
+          if (this.names === 'first') {
+            this.form.ids = val.id;
+            this.form.name = val.name;
+            this.form.display_name = val.display_name;
+            this.form.content = val.description;
+          }
+          if (this.names === 'second') {
+            this.form.ids = val.id;
+            this.form.name = val.name;
+            this.form.display_name = val.display_name;
+            this.form.content = val.description;
+          }
+          if (this.names === 'third') {
+            this.form.ids = val.id;
+            this.form.radio = val.type;
+            this.form.name = val.name;
+            this.form.display_name = val.display_name;
+            this.form.content = val.description;
+          }
         }
       },
 
@@ -90,46 +130,113 @@
     methods: {
       // ===============系统新增/修改=================
       addPower(val) {
-        let type;
         if (val === '修改') {
-          type = this.$http.put;
+          this.$http.put(this.urls + 'api/v1/systems/' + this.form.ids, {
+            name: this.form.name,
+            display_name: this.form.display_name,
+            description: this.form.content,
+          }).then((res) => {
+            if (res.data.status === 'success') {
+              this.prompt(res.data.message, 1);
+              this.$emit('sure', this.names);
+            } else {
+              this.prompt(res.data.message, 2);
+            }
+          })
         } else {
-          type = this.$http.post;
+          this.$http.post(this.urls + 'api/v1/systems', {
+            name: this.form.name,
+            display_name: this.form.display_name,
+            description: this.form.content,
+          }).then((res) => {
+            if (res.data.status === 'success') {
+              this.prompt(res.data.message, 1);
+              this.$emit('sure', this.names);
+            } else {
+              this.prompt(res.data.message, 2);
+            }
+          })
         }
-        type(this.urls + 'api/v1/systems/' + this.ids, {
-          name: this.form.name,
-          display_name: this.form.display_name,
-          description: this.form.content,
-        }).then((res) => {
-          if (res.data.status === 'success') {
-            this.prompt(res.data.message, 1);
-            this.$emit('sure',this.names);
-          } else {
-            this.prompt(res.data.message, 2);
-          }
-        })
       },
 
-      // ====================新增修改模块==============
-      addModule() {
-        this.$http.post(this.urls + 'api/v1/modules', {
-          sys_id: this.form.sys_id,
-          name: this.form.name,
-          display_name: this.form.display_name,
-          description: this.form.content,
-        }).then((res) => {
-          if (res.data.status === 'success') {
-            this.prompt(res.data.message, 1);
-            this.$emit('sure',this.names);
-          } else {
-            this.prompt(res.data.message, 2);
-          }
-        })
+      // ====================新增/修改模块==============
+      addModule(val) {
+        if (val === '修改') {
+          this.$http.put(this.urls + 'api/v1/modules/' + this.form.ids, {
+            name: this.form.name,
+            display_name: this.form.display_name,
+            description: this.form.content,
+          }).then((res) => {
+            if (res.data.status === 'success') {
+              this.prompt(res.data.message, 1);
+              this.$emit('sure', this.names);
+            } else {
+              this.prompt(res.data.message, 2);
+            }
+          })
+        } else {
+          this.$http.post(this.urls + 'api/v1/modules', {
+            sys_id: this.addID.firstID,
+            name: this.form.name,
+            display_name: this.form.display_name,
+            description: this.form.content,
+          }).then((res) => {
+            if (res.data.status === 'success') {
+              this.prompt(res.data.message, 1);
+              this.$emit('sure', this.names);
+            } else {
+              this.prompt(res.data.message, 2);
+            }
+          })
+        }
+      },
+
+      // ===================新增/修改权限=================
+      authorityModule(val) {
+        if (val === '修改') {
+          this.$http.put(this.urls + 'api/v1/permissions/' + this.form.ids, {
+            mod_id: this.addID.secondID,
+            name: this.form.name,
+            display_name: this.form.display_name,
+            description: this.form.content,
+          }).then((res) => {
+            if (res.data.status === 'success') {
+              this.prompt(res.data.message, 1);
+              this.$emit('sure', this.names);
+            } else {
+              this.prompt(res.data.message, 2);
+            }
+          })
+        } else {
+          this.$http.post(this.urls + 'api/v1/permissions', {
+            type: this.form.radio,
+            sys_id: this.addID.firstID,
+            mod_id: this.addID.secondID,
+            name: this.form.name,
+            display_name: this.form.display_name,
+            description: this.form.content,
+          }).then((res) => {
+            if (res.data.status === 'success') {
+              this.prompt(res.data.message, 1);
+              this.$emit('sure', this.names);
+              if (this.check) {
+                this.close_();
+              } else {
+                this.$emit('close');
+              }
+            } else {
+              this.prompt(res.data.message, 2);
+            }
+          })
+        }
       },
 
       // 清空数据
       close_() {
-        this.ids = '';
+        this.form.radio = 1;
+        this.form.ids = '';
+        this.form.sys_id = '';
+        this.form.mod_id = '';
         this.form.sys_name = '';
         this.form.name = '';
         this.form.display_name = '';
@@ -149,7 +256,7 @@
           let index = 0;
           let interval = null;
           for (let key in val) {
-            dataList.push(val[key][0])
+            dataList.push(val[key][0]);
           }
           new Promise((resolve, reject) => {
             interval = setInterval(() => {

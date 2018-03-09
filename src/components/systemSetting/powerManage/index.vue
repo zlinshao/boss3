@@ -1,121 +1,147 @@
 <template>
   <div @click="show = false" @contextmenu="closeMenu">
     <div class="highRanking">
-      <div class="tabsSearch">
-        <el-form :inline="true" size="mini">
-          <el-form-item>
-            <el-button v-if="activeName === 'first'" type="primary" size="mini" @click="onSubmit()">
-              <i class="el-icon-plus"></i>&nbsp;新增系统
-            </el-button>
-            <el-button v-if="activeName === 'second'" type="primary" size="mini" @click="onSubmit()">
-              <i class="el-icon-plus"></i>&nbsp;新增模块
-            </el-button>
-          </el-form-item>
-        </el-form>
+      <div class="highHide" style="text-align: right;margin-bottom: 10px;">
+        <el-button type="primary" size="mini" @click="newSystem"><i class="el-icon-plus"></i>&nbsp;新增系统</el-button>
+      </div>
+    </div>
+    <div class="border_1" @contextmenu='addMenu(1,$event)'>
+      <el-table
+        :row-class-name="tableFirstName"
+        :data="tableFirst"
+        style="width: 100%"
+        @row-contextmenu='houseMenu'
+        @row-click="firstClick">
+        <el-table-column
+          prop="id"
+          label="ID"
+          width="88px;">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="系统标示">
+        </el-table-column>
+        <el-table-column
+          prop="display_name"
+          label="系统名称">
+        </el-table-column>
+        <el-table-column
+          prop="description"
+          label="系统描述">
+        </el-table-column>
+        <el-table-column
+          prop="updated_at"
+          label="修改时间">
+        </el-table-column>
+        <el-table-column
+          prop="created_at"
+          label="创建时间">
+        </el-table-column>
+      </el-table>
+      <div class="block pages">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="powerList"
+          :current-page="firstPage"
+          :page-size="showSize"
+          layout="total, prev, pager, next, jumper"
+          :total="paging1">
+        </el-pagination>
       </div>
     </div>
 
-    <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="系统" name="first">
-        <el-table
-          :data="tableFirst"
-          style="width: 100%"
-          @row-contextmenu='houseMenu'>
-          <el-table-column
-            prop="id"
-            label="ID"
-            width="88px;">
-          </el-table-column>
 
-          <el-table-column
-            prop="name"
-            label="系统标示">
-          </el-table-column>
-
-          <el-table-column
-            prop="display_name"
-            label="系统名称">
-          </el-table-column>
-
-          <el-table-column
-            prop="description"
-            label="系统描述">
-          </el-table-column>
-
-          <el-table-column
-            prop="updated_at"
-            label="修改时间">
-          </el-table-column>
-
-          <el-table-column
-            prop="created_at"
-            label="创建时间">
-          </el-table-column>
-        </el-table>
-      </el-tab-pane>
-
-      <el-tab-pane label="模块" name="second">
-        <el-table
-          :data="tableSecond"
-          style="width: 100%"
-          @row-contextmenu='moduleMenu'>
-          <el-table-column
-            prop="id"
-            label="ID"
-            width="88px;">
-          </el-table-column>
-
-          <el-table-column
-            prop="name"
-            label="模块标示">
-          </el-table-column>
-
-          <el-table-column
-            prop="display_name"
-            label="模块名称">
-          </el-table-column>
-
-          <el-table-column
-            prop="description"
-            label="模块描述">
-          </el-table-column>
-
-          <el-table-column
-            prop="updated_at"
-            label="修改时间">
-          </el-table-column>
-
-          <el-table-column
-            prop="created_at"
-            label="创建时间">
-          </el-table-column>
-        </el-table>
-      </el-tab-pane>
-    </el-tabs>
-
-    <div class="block pages">
-      <el-pagination
-        v-show="activeName === 'first'"
-        @size-change="handleSizeChange"
-        @current-change="powerList"
-        :current-page="currentPage"
-        :page-size="15"
-        layout="total, prev, pager, next, jumper"
-        :total="paging">
-      </el-pagination>
-
-      <el-pagination
-        v-show="activeName === 'second'"
-        @size-change="handleSizeChange"
-        @current-change="moduleList"
-        :current-page="currentPage"
-        :page-size="15"
-        layout="total, prev, pager, next, jumper"
-        :total="paging">
-      </el-pagination>
+    <div class="border_1" @contextmenu='addMenu(2,$event)'>
+      <el-table
+        :row-class-name="tableSecondName"
+        :data="tableSecond"
+        style="width: 100%"
+        @row-contextmenu='moduleMenu'
+        @row-click="secondClick">
+        <el-table-column
+          prop="id"
+          label="ID"
+          width="88px;">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="模块标示">
+        </el-table-column>
+        <el-table-column
+          prop="display_name"
+          label="模块名称">
+        </el-table-column>
+        <el-table-column
+          prop="description"
+          label="模块描述">
+        </el-table-column>
+        <el-table-column
+          prop="updated_at"
+          label="修改时间">
+        </el-table-column>
+        <el-table-column
+          prop="created_at"
+          label="创建时间">
+        </el-table-column>
+      </el-table>
+      <div class="block pages">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="moduleList"
+          :current-page="secondPage"
+          :page-size="showSize"
+          layout="total, prev, pager, next, jumper"
+          :total="paging2">
+        </el-pagination>
+      </div>
     </div>
 
-    <RevisePower :module="powerModule" :title="title" :names="moduleName" :table="tableFirst" :msg="tableDetail"
+
+    <div class="border_1" @contextmenu='addMenu(3,$event)'>
+      <el-table
+        :row-class-name="tableThirdName"
+        :data="tableThird"
+        style="width: 100%"
+        @row-contextmenu='modMenu'>
+        <el-table-column
+          prop="id"
+          label="ID"
+          width="88px;">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="权限标示">
+        </el-table-column>
+        <el-table-column
+          prop="display_name"
+          label="权限名称">
+        </el-table-column>
+        <el-table-column
+          prop="description"
+          label="权限描述">
+        </el-table-column>
+        <el-table-column
+          prop="updated_at"
+          label="修改时间">
+        </el-table-column>
+        <el-table-column
+          prop="created_at"
+          label="创建时间">
+        </el-table-column>
+      </el-table>
+      <div class="block pages">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="authority"
+          :current-page="thirdPage"
+          :page-size="showSize"
+          layout="total, prev, pager, next, jumper"
+          :total="paging3">
+        </el-pagination>
+      </div>
+    </div>
+
+    <RevisePower :module="powerModule" :title="title" :names="moduleName" :addID="addID" :msg="tableDetail"
                  @close="close_" @sure="search"></RevisePower>
 
     <!--右键-->
@@ -139,16 +165,32 @@
         show: false,
         lists: [],
 
-        form: {
-          page: 1,
+        showSize: 5,
+        firstForm: {
+          page: 1
         },
-        currentPage: 1,
-        paging: 0,
+        secondForm: {
+          page: 1
+        },
+        thirdForm: {
+          page: 1
+        },
+        firstPage: 1,
+        secondPage: 1,
+        thirdPage: 1,
+        paging1: 0,
+        paging2: 0,
+        paging3: 0,
 
-        activeName: 'first',
         moduleName: 'first',
         tableFirst: [],
         tableSecond: [],
+        tableThird: [],
+        addID: {
+          firstID: '',
+          secondID: '',
+          thirdID: '',
+        },
         tableDetail: {},
         details: {},
         powerModule: false,
@@ -158,62 +200,85 @@
     mounted() {
       this.powerList(1);
     },
-    watch: {
-      activeName(val) {
-        this.moduleName = val;
-        if (val === 'first') {
-          this.powerList(1);
-        } else {
-          this.moduleList(1);
-        }
-      }
-    },
+
     methods: {
-      // tabs标签页
-      handleClick(tab, event) {
-        // console.log(tab, event);
+      // 行 变色
+      tableFirstName({row, rowIndex}) {
+        if (row.id === this.addID.firstID) {
+          return 'success-row';
+        }
+        return '';
+      },
+      tableSecondName({row, rowIndex}) {
+        if (row.id === this.addID.secondID) {
+          return 'success-row';
+        }
+        return '';
+      },
+      tableThirdName({row, rowIndex}) {
+        if (row.id === this.addID.thirdID) {
+          return 'success-row';
+        }
+        return '';
       },
       // ===================系统================
       // 系统列表
       powerList(val) {
         this.tableFirst = [];
-        this.form.page = val;
-        this.close_();
-        this.$http.get(this.urls + 'api/v1/systems', {
-          params: this.form
+        this.firstForm.page = val;
+        this.$http.get(this.urls + 'api/v1/systems?per_page_number=5', {
+          params: this.firstForm
         }).then((res) => {
           if (res.data.status === 'success') {
-            this.currentPage = val;
             this.tableFirst = res.data.data;
-            this.paging = res.data.meta.total;
-          }
-        })
-      },
-      // 系统修改
-      powerDetail(val) {
-        this.$http.get(this.urls + 'api/v1/systems/' + val.id).then((res) => {
-          if (res.data.status === 'success') {
-            this.powerModule = true;
-            this.tableDetail = res.data.data;
-            this.title = '修改';
+            this.paging1 = res.data.meta.total;
           }
         })
       },
 
+      firstClick(row) {
+        this.addID.firstID = row.id;
+        this.moduleList(1);
+        this.tableSecond = [];
+        this.tableThird = [];
+      },
       // ==============模块=================
+      // 模块列表
       moduleList(val) {
         this.tableSecond = [];
-        this.form.page = val;
-        this.close_();
-        this.$http.get(this.urls + 'api/v1/modules', {
-          params: this.form
+        this.secondForm.page = val;
+        this.$http.get(this.urls + 'api/v1/modules?per_page_number=5&sys_id=' + this.addID.firstID, {
+          params: this.secondForm
         }).then((res) => {
           if (res.data.status === 'success') {
-            this.currentPage = val;
             this.tableSecond = res.data.data;
-            this.paging = res.data.meta.total;
+            this.paging2 = res.data.meta.total;
           }
         });
+      },
+
+      secondClick(row) {
+        this.addID.secondID = row.id;
+        this.authority(1);
+        this.tableThird = [];
+      },
+      // ==============权限=================
+      authority(val) {
+        this.tableThird = [];
+        this.thirdForm.page = val;
+        this.$http.get(this.urls + 'api/v1/permissions?per_page_number=5&mod_id=' + this.addID.secondID, {
+          params: this.thirdForm
+        }).then((res) => {
+          if (res.data.status === 'success') {
+            this.tableThird = res.data.data;
+            this.paging3 = res.data.meta.total;
+          }
+        });
+      },
+
+      newSystem() {
+        this.moduleName = 'first';
+        this.onSubmit();
       },
 
       onSubmit() {
@@ -224,9 +289,13 @@
       // 搜索当前页
       search(val) {
         if (val === 'first') {
-          this.powerList(this.currentPage);
+          this.powerList(1);
+          this.close_();
+        } else if (val === 'second') {
+          this.moduleList(1, this.addID.firstID);
+          this.close_();
         } else {
-          this.moduleList(this.currentPage);
+          this.authority(1, this.addID.secondID);
         }
       },
 
@@ -236,34 +305,30 @@
       },
 
       // 删除
-      openDelete(val, id) {
+      openDelete(id, val) {
+        console.log(id);
+        console.log(val);
         this.$confirm('此操作将删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          if (id === 1) {
-            this.$http.delete(this.urls + 'api/v1/systems/' + val.id).then((res) => {
-              if (res.data.status === 'success') {
-                this.powerList(this.currentPage);
-                this.$message({
-                  type: 'success',
-                  message: res.data.message,
-                });
-              }
-            });
+          let address;
+          if (val === 'first') {
+            address = this.urls + 'api/v1/systems/';
+          } else if (val === 'second') {
+            address = this.urls + 'api/v1/modules/';
+          } else {
+            address = this.urls + 'api/v1/permissions/';
           }
-          if (id === 2) {
-            this.$http.delete(this.urls + 'api/v1/modules/' + val.id).then((res) => {
-              if (res.data.status === 'success') {
-                this.moduleList(this.currentPage);
-                this.$message({
-                  type: 'success',
-                  message: res.data.message,
-                });
-              }
-            });
-          }
+          this.$http.delete(address + id.id).then((res) => {
+            if (res.data.status === 'success') {
+              this.search(val);
+              this.prompt(res.data.message, 1);
+            } else {
+              this.prompt(res.data.message, 2);
+            }
+          });
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -271,34 +336,78 @@
           });
         });
       },
+      scrollTop() {
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+      },
+      // 右键新增
+      addMenu(val, event) {
+        switch (val) {
+          case 1:
+            this.lists = [
+              {clickIndex: 'add1', headIcon: 'el-icon-edit-outline', label: '新增'},
+            ];
+            break;
+          case 2:
+            this.lists = [
+              {clickIndex: 'add2', headIcon: 'el-icon-edit-outline', label: '新增'},
+            ];
+            break;
+          case 3:
+            this.lists = [
+              {clickIndex: 'add3', headIcon: 'el-icon-edit-outline', label: '新增'},
+            ];
+            break;
+        }
 
-      // 右键
+        this.contextMenuParam(event);
+      },
+      // 右键 系统
       houseMenu(row, event) {
-        this.tableDetail = [];
+        this.firstClick(row);
+        this.tableDetail = {};
         this.details = row;
         this.lists = [
+          {clickIndex: 'add2', headIcon: 'el-icon-edit-outline', label: '新增模块'},
           {clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '编辑'},
           {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除'},
         ];
         this.contextMenuParam(event);
       },
+      // 右键 模块
       moduleMenu(row, event) {
-        this.tableDetail = [];
+        this.secondClick(row);
+        this.tableDetail = {};
         this.details = row;
+        this.addID.secondID = row.id;
         this.lists = [
+          {clickIndex: 'add3', headIcon: 'el-icon-edit-outline', label: '新增权限'},
           {clickIndex: 'reviseModule', headIcon: 'el-icon-edit-outline', label: '编辑'},
           {clickIndex: 'deleteModule', headIcon: 'el-icon-circle-close-outline', label: '删除'},
+        ];
+        this.contextMenuParam(event);
+      },
+      // 右键 权限
+      modMenu(row, event) {
+        this.tableDetail = {};
+        this.details = row;
+        this.lists = [
+          {clickIndex: 'reviseMod', headIcon: 'el-icon-edit-outline', label: '编辑'},
+          {clickIndex: 'deleteMod', headIcon: 'el-icon-circle-close-outline', label: '删除'},
         ];
         this.contextMenuParam(event);
       },
       // 右键回调
       clickEvent(val) {
         switch (val) {
-          case 'module':
+          case 'add2':
+            this.onSubmit();
             this.moduleName = 'second';
-            this.tableDetail = this.details;
-            this.title = '新增';
-            this.powerModule = true;
+            this.scrollTop();
+            break;
+          case 'add3':
+            this.onSubmit();
+            this.moduleName = 'third';
+            this.scrollTop();
             break;
           case 'revise':
             this.title = '修改';
@@ -306,14 +415,26 @@
             this.tableDetail = this.details;
             this.powerModule = true;
             break;
-          case 'delete':
-            this.openDelete(this.details, 1);
-            break;
           case 'reviseModule':
-
+            this.moduleName = 'second';
+            this.tableDetail = this.details;
+            this.title = '修改';
+            this.powerModule = true;
+            break;
+          case 'reviseMod':
+            this.moduleName = 'third';
+            this.tableDetail = this.details;
+            this.title = '修改';
+            this.powerModule = true;
+            break;
+          case 'delete':
+            this.openDelete(this.details, 'first');
             break;
           case 'deleteModule':
-            this.openDelete(this.details, 2);
+            this.openDelete(this.details, 'second');
+            break;
+          case 'deleteMod':
+            this.openDelete(this.details, 'third');
             break;
         }
       },
@@ -337,12 +458,38 @@
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
-
+      // ====================提示信息=================
+      prompt(val, stu) {
+        if (stu === 1) {
+          this.$notify({
+            title: '成功',
+            message: val,
+            type: 'success'
+          });
+        } else {
+          this.$notify({
+            title: '警告',
+            message: val,
+            type: 'warning'
+          });
+        }
+      },
     }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss">
+  .border_1 {
+    padding: 10px;
+    border: 1px solid #DDDDDD;
+    -webkit-box-shadow: 0 0 10px 0 #DDDDDD;
+    -moz-box-shadow: 0 0 10px 0 #DDDDDD;
+    box-shadow: 0 0 10px 0 #DDDDDD;
+    margin-bottom: 15px;
+  }
 
+  .el-table .success-row {
+    background: #f0f9eb;
+  }
 </style>
