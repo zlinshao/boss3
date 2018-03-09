@@ -360,7 +360,7 @@
       //**************部门操作函数********************
       //获取部门数据
       getDepart(){
-        this.$http.get(globalConfig.server_user+'api/v1/organizations?per_page_number=50').then((res) => {
+        this.$http.get(globalConfig.server_user+'api/v1/organizations?per_page_number=500').then((res) => {
           this.arrList = res.data.data;
           this.setTree = this.recurrence(null);
           this.defaultExpandKeys=[];

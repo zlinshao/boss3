@@ -300,16 +300,7 @@ export default new Router({
       name: '系统设置',
       icon: 'el-icon-setting',
       children: [
-        {
-          path: '/message',
-          component: Message,
-          icon: 'el-icon-message',
-          name: '短信模块',
-          children: [
-            {path: '/message/messageList', component: MessageList, name: '短信列表'},
-            {path: '/message/messageModule', component: MessageModule, name: '短信模板'},
-          ]
-        },
+        {path: '/message/message', component: Message, name: '短信'},
         {path: '/recycle', component: Recycle, name: '回收站',},
         {path: '/contractMould', component: ContractMould, name: '合同模板',},
         {path: '/loginRecord', component: LoginRecord, name: '登陆日志',},
