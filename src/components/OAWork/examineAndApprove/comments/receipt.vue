@@ -6,35 +6,35 @@
       width="50%">
       <div class="scroll_bar">
         <el-form :model="form" size="mini" label-width="80px">
-          <el-form-item label="物品用途">
-            <el-input v-model="form.input1" placeholder="请输入(必填)">
-            </el-input>
-          </el-form-item>
-          <el-form-item label="物品明细(1)"></el-form-item>
 
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="物品名称">
-                <el-input v-model="form.input1" placeholder="请输入物品名称(必填)">
-                </el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="12">
-              <el-form-item label=数量>
-                <el-input v-model="form.input1" placeholder="请输入数量">
-                </el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
+          <div v-for="item in number">
+            <el-form-item :label="'物品明细('+item+')'">
+              <el-button v-if="item>1" type="text" size="mini" style="float: right" @click="deleteNumber(item-1)">删除</el-button>
+            </el-form-item>
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="物品名称">
+                  <el-input v-model="receipt_name[item-1]" placeholder="请输入(必填)">
+                  </el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="数量">
+                  <el-input v-model="receipt_number[item-1]" type="number" placeholder="请输入(必填)">
+                  </el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </div>
 
           <el-form-item>
-            <el-button>
+            <el-button @click="addNumber">
               <i class="el-icon-plus"></i>增加物品明细
             </el-button>
           </el-form-item>
 
-          <el-form-item label="领用详情">
-            <el-input v-model="form.textarea" type="textarea" :autosize="{minRows: 2, maxRows: 4}" placeholder="请输入物品领用详细说明"></el-input>
+          <el-form-item label="领用详情" >
+            <el-input v-model="form.remark" type="textarea" :autosize="{minRows: 2, maxRows: 4}" placeholder="请输入物品领用详细说明"></el-input>
           </el-form-item>
 
 
@@ -214,7 +214,7 @@
       </div>
 
       <span slot="footer">
-        <el-button type="primary" @click="receiptVisible = false">提交</el-button>
+        <el-button type="primary" size="small" @click="confirmSubmit">提交</el-button>
       </span>
     </el-dialog>
   </div>
@@ -228,29 +228,12 @@
       return {
         receiptVisible: false,           //收据领用
         form: {
-          input1: '',
-          value1: '',
-          textarea: '',
-          dialogImageUrl: '',
-          value3: '',
+          content: [],
+          remark: '',
         },
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: '',
+        receipt_name:[],
+        receipt_number:[],
+        number:1,
       }
     },
     watch:{
@@ -270,6 +253,51 @@
       handlePictureCardPreview(file) {
         this.form.dialogImageUrl = file.url;
         this.dialogVisible = true;
+      },
+      //增加报销明细
+      addNumber(){
+        this.number++;
+      },
+      //删除报销明细
+      deleteNumber(index){
+        this.number--;
+        this.receipt_name.splice(index,1);
+        this.receipt_number.splice(index,1);
+      },
+      //确认提交
+      confirmSubmit(){
+        let contentItem = {};
+        this.form.content=[];
+        for(let i=0;i<this.number;i++){
+          contentItem = {};
+          contentItem.receipt_name = this.receipt_name[i]?this.receipt_name[i]:'';
+          contentItem.receipt_number = this.receipt_number[i]?this.receipt_number[i]:'';
+          this.form.content.push(contentItem);
+        }
+        this.$http.post(globalConfig.server+'oa/receipt',this.form).then((res) => {
+          if(res.data.code === '200010'){
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg,
+            });
+            this.closeModal();
+          }else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
+          }
+        })
+      },
+      closeModal(){
+        this.form = {
+          content: [],
+          remark: '',
+        };
+        this.receipt_name = [];
+        this.receipt_number = [];
+        this.number = 1;
+        this.receiptVisible = false;
       }
     }
   }

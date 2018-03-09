@@ -57,7 +57,6 @@ axios.interceptors.response.use(function (response) {
 
 //重定向
 router.beforeEach((to, from, next) => {
-  console.log(from);
   next();
   // if (to.path === '/login' && router.query === undefined) {
   //   localStorage.removeItem('myData');

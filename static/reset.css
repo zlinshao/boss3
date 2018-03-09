@@ -221,4 +221,7 @@
   max-height: 550px;
   padding: 10px; }
 
+.el-table .success-row {
+  background: #f0f9eb; }
+
 /*# sourceMappingURL=reset.css.map */
