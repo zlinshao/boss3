@@ -19,6 +19,8 @@
                      accordion
                      check-strictly
                      @node-click="nodeClick"
+                     @node-expand="nodeExpand"
+                     @node-collapse="nodeCollapse"
                      :default-expanded-keys="defaultExpandKeys"
                      :props="defaultProps"
                      :expand-on-click-node="false"
@@ -363,9 +365,8 @@
         this.$http.get(globalConfig.server_user+'api/v1/organizations?per_page_number=500').then((res) => {
           this.arrList = res.data.data;
           this.setTree = this.recurrence(null);
-          this.defaultExpandKeys=[];
           this.arrList.forEach((item) => {
-            if(item.parent_id < 1){
+            if(item.parent_id < 1 && this.defaultExpandKeys.indexOf(item.id)<0){
               this.defaultExpandKeys.push(item.id);
             }
           });
@@ -391,6 +392,16 @@
         this.params.org_id = data.id;
         this.department_id = data.id;
         this.department_name = data.name;
+      },
+      nodeExpand(data,node,store){
+        if(this.defaultExpandKeys.indexOf(data.id)<0){
+          this.defaultExpandKeys.push(data.id)
+        }
+      },
+      nodeCollapse(data,node,store){
+        this.defaultExpandKeys.filter((x)=>{
+          return x!==data.id;
+        })
       },
       handleAdd(s,d,n){//增加节点
         this.addDepart(d);
