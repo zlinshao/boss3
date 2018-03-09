@@ -84,9 +84,20 @@
                   style="width: 100%">
                   <el-table-column
                     prop="date"
-                    v-if="isCheckbox"
+                    v-if=""
                     type="selection">
                   </el-table-column>
+
+                  <el-table-column
+                    prop=""
+                    v-if=""
+                    label="">
+                    <template slot-scope="scope">
+                      <i class="el-icon-message" style="color: #fb4699"></i>
+                      <!--<span style="margin-left: 10px"></span>-->
+                    </template>
+                  </el-table-column>
+
                   <el-table-column
                     prop="date"
                     label="发布时间">
@@ -119,9 +130,20 @@
                   style="width: 100%">
                   <el-table-column
                     prop="date"
-                    v-if="isCheckbox"
+                    v-if=""
                     type="selection">
                   </el-table-column>
+
+                  <el-table-column
+                    prop=""
+                    v-if=""
+                    label="">
+                    <template slot-scope="scope">
+                      <i class="el-icon-message" style="color: #fb4699"></i>
+                      <!--<span style="margin-left: 10px"></span>-->
+                    </template>
+                  </el-table-column>
+
                   <el-table-column
                     prop="date"
                     label="发布时间">
@@ -154,9 +176,20 @@
                   style="width: 100%">
                   <el-table-column
                     prop="date"
-                    v-if="isCheckbox"
+                    v-if=""
                     type="selection">
                   </el-table-column>
+
+                  <el-table-column
+                    prop=""
+                    v-if=""
+                    label="">
+                    <template slot-scope="scope">
+                      <i class="el-icon-message" style="color: #fb4699"></i>
+                      <!--<span style="margin-left: 10px"></span>-->
+                    </template>
+                  </el-table-column>
+
                   <el-table-column
                     prop="date"
                     label="发布时间">
@@ -189,9 +222,20 @@
                   style="width: 100%">
                   <el-table-column
                     prop="date"
-                    v-if="isCheckbox"
+                    v-if=""
                     type="selection">
                   </el-table-column>
+
+                  <el-table-column
+                    prop=""
+                    v-if=""
+                    label="">
+                    <template slot-scope="scope">
+                      <i class="el-icon-message" style="color: #fb4699"></i>
+                      <!--<span style="margin-left: 10px"></span>-->
+                    </template>
+                  </el-table-column>
+
                   <el-table-column
                     prop="date"
                     label="发布时间">
@@ -224,9 +268,20 @@
                   style="width: 100%">
                   <el-table-column
                     prop="date"
-                    v-if="isCheckbox"
+                    v-if=""
                     type="selection">
                   </el-table-column>
+
+                  <el-table-column
+                    prop=""
+                    v-if=""
+                    label="">
+                    <template slot-scope="scope">
+                      <i class="el-icon-message" style="color: #fb4699"></i>
+                      <!--<span style="margin-left: 10px"></span>-->
+                    </template>
+                  </el-table-column>
+
                   <el-table-column
                     prop="date"
                     label="发布时间">
@@ -259,9 +314,20 @@
                   style="width: 100%">
                   <el-table-column
                     prop="date"
-                    v-if="isCheckbox"
+                    v-if=""
                     type="selection">
                   </el-table-column>
+
+                  <el-table-column
+                    prop=""
+                    v-if=""
+                    label="">
+                    <template slot-scope="scope">
+                      <i class="el-icon-message" style="color: #fb4699"></i>
+                      <!--<span style="margin-left: 10px"></span>-->
+                    </template>
+                  </el-table-column>
+
                   <el-table-column
                     prop="date"
                     label="发布时间">

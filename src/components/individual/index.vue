@@ -2,82 +2,33 @@
   <div id="individual">
       <div class="personInfo">
         <div class="bgPic">
-          <!--<img src="../../assets/images/individual/beijing.png" alt="">-->
-          <!--<el-row type="flex">-->
-            <!--<el-col :span="2" :offset="2">-->
-              <!--<div class="headPic">-->
-                <!--<img src="../../assets/images/individual/touxiang.png" alt="">-->
-              <!--</div>-->
-            <!--</el-col>-->
-            <!--<el-col :span="8">-->
-              <!--<div class="headName">-->
-                <!--<el-row>-->
-                  <!--<el-col :span="4">-->
-                    <!--<p class="userName">张琳琳琳</p>-->
-                  <!--</el-col>-->
-                  <!--<el-col :span="12">-->
-                    <!--<img src="../../assets/images/individual/1.png" alt="">-->
-                  <!--</el-col>-->
-                <!--</el-row>-->
-                <!--<el-row>-->
-                  <!--<el-col :span="24">-->
-                    <!--<p class="sign">Lorem ipsum dolor sit amet, consectetur adipisicing</p>-->
-                  <!--</el-col>-->
-                <!--</el-row>-->
-              <!--</div>-->
-            <!--</el-col>-->
-
-            <!--<el-col :span="8" :offset="3">-->
-              <!--<div class="userSetting">-->
-                <!--<div class="userPhoto">-->
-                  <!--<i class="el-icon-picture"></i>-->
-                  <!--<el-button type="text" style="color: #FFFFFF">照片</el-button>-->
-                <!--</div>-->
-                <!--<div class="userFavorite">-->
-                  <!--<i class="el-icon-goods"></i>-->
-                  <!--<el-button type="text">收藏夹</el-button>-->
-                <!--</div>-->
-                <!--<div class="userSet">-->
-                  <!--<i class="el-icon-setting"></i>-->
-                  <!--<el-button type="text">设置</el-button>-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</el-col>-->
-          <!--</el-row>-->
-          <el-row>
-            <el-col :span="12">
-              <div class="peoperInfo">
-                <div class="headPic">
-                  <img src="../../assets/images/individual/touxiang.png" alt="">
-                </div>
-                <div class="headName">
-                  <div style="display: flex">
-                    <p class="userName">张琳琳琳</p>
-                    <img src="../../assets/images/individual/1.png" alt="">
-                  </div>
-                  <p class="sign">Lorem ipsum dolor sit amet, consectetur adipisicing</p>
-                </div>
+          <div class="peoperInfo">
+            <div class="headPic">
+              <img src="../../assets/images/individual/touxiang.png" alt="">
+            </div>
+            <div class="headName">
+              <div style="display: flex">
+                <p class="userName">张琳琳琳</p>
+                <img src="../../assets/images/individual/1.png" alt="">
               </div>
+              <p class="sign">Lorem ipsum dolor sit amet, consectetur adipisicing</p>
+            </div>
+          </div>
 
-            </el-col>
-            <el-col :span="12">
-              <div class="userSetting">
-                <div class="userPhoto">
-                  <i class="el-icon-picture"></i>
-                  <el-button type="text" style="color: #FFFFFF">照片</el-button>
-                </div>
-                <div class="userFavorite">
-                  <i class="el-icon-goods"></i>
-                  <el-button type="text">收藏夹</el-button>
-                </div>
-                <div class="userSet">
-                  <i class="el-icon-setting"></i>
-                  <el-button type="text">设置</el-button>
-                </div>
-              </div>
-            </el-col>
-          </el-row>
-
+          <div class="userSetting">
+            <div class="userPhoto">
+              <i class="el-icon-picture"></i>
+              <el-button type="text" style="color: #FFFFFF">照片</el-button>
+            </div>
+            <div class="userFavorite">
+              <i class="el-icon-goods"></i>
+              <el-button type="text">收藏夹</el-button>
+            </div>
+            <div class="userSet">
+              <i class="el-icon-setting"></i>
+              <el-button type="text">设置</el-button>
+            </div>
+          </div>
 
         </div>
 
@@ -86,157 +37,95 @@
     <div class="userAdmin">
       <el-row :gutter="20">
         <el-col :span="18">
-          <el-row>
-            <el-col :span="24">
-              <div class="userTitle">个人主页</div>
-            </el-col>
-          </el-row>
+          <div class="userTitle">个人主页</div>
           <div class="userOption">
             <el-row :gutter="20">
               <!--1-->
               <el-col :span="6">
                 <div class="optionOne">
-                  <el-row>
-                    <el-col :span="6">
-                      <div class="picOne">
-                        <i class="el-icon-goods"></i>
+                  <div class="contents">
+                    <div class="picOne">
+                      <i class="el-icon-goods"></i>
+                    </div>
+                    <div class="words">
+                      <div class="letters">BACKLOG</div>
+                      <div class="infos">
+                        <el-button type="text">待办事项</el-button>
+                        <span class="numbers">24</span>
                       </div>
-                    </el-col>
+                    </div>
+                    <div class="picTwo">
+                      <img src="../../assets/images/individual/矩形834.png" alt="">
+                    </div>
 
-                    <el-col :span="11">
-                      <div class="words">
-                        <el-row>
-                          <el-col :span="24">
-                            <div class="letters">BACKLOG</div>
-                          </el-col>
-                        </el-row>
-                        <el-row>
-                          <el-col :span="24">
-                            <div class="infos">
-                              <el-button type="text">待办事项</el-button>
-                              <span class="numbers">24</span>
-                            </div>
-                          </el-col>
-                        </el-row>
-                      </div>
-                    </el-col>
-                    <el-col :span="2">
-                      <div class="picTwo">
-                        <img src="../../assets/images/individual/矩形834.png" alt="">
-                      </div>
-                    </el-col>
-                  </el-row>
+                  </div>
+
                 </div>
               </el-col>
               <!--2-->
               <el-col :span="6">
-                <div class="optionTwo">
-                  <el-row>
-                    <el-col :span="6">
-                      <div class="picOne">
-                        <i class="el-icon-date"></i>
+                <div class="optionOne optionTwo">
+                  <div class="contents">
+                    <div class="picOne">
+                      <i class="el-icon-date"></i>
+                    </div>
+                    <div class="words">
+                      <div class="letters" style="font-size: 18px;color: #c25b60;">JOURNAL</div>
+                      <div class="infos">
+                        <el-button type="text">日志管理</el-button>
+                        <span class="numbers">12</span>
                       </div>
-                    </el-col>
+                    </div>
+                    <div class="picTwo">
+                      <img src="../../assets/images/individual/矩形834拷贝.png" alt="">
+                    </div>
 
-                    <el-col :span="11">
-                      <div class="words">
-                        <el-row>
-                          <el-col :span="24">
-                            <div class="letters">JOURNAL</div>
-                          </el-col>
-                        </el-row>
-                        <el-row>
-                          <el-col :span="24">
-                            <div class="infos">
-                              <el-button type="text">日志管理</el-button>
-                              <span class="numbers">24</span>
-                            </div>
-                          </el-col>
-                        </el-row>
-                      </div>
-                    </el-col>
-                    <el-col :span="2">
-                      <div class="picTwo">
-                        <img src="../../assets/images/individual/矩形834拷贝.png" alt="">
-                      </div>
-                    </el-col>
-                  </el-row>
+                  </div>
+
                 </div>
               </el-col>
-<!--3-->
               <el-col :span="6">
-                <div class="optionThree">
-                  <el-row>
-                    <el-col :span="6">
-                      <div class="picOne">
-                        <i class="el-icon-tickets"></i>
+                <div class="optionOne optionThree">
+                  <div class="contents">
+                    <div class="picOne">
+                      <i class="el-icon-document" style="width: 25px"></i>
+                    </div>
+                    <div class="words">
+                      <div class="letters" style="font-size: 18px;color: #3895ad;">MAIL LIST</div>
+                      <div class="infos">
+                        <el-button type="text">通讯录</el-button>
+                        <span class="numbers">24</span>
                       </div>
-                    </el-col>
-
-                    <el-col :span="11">
-                      <div class="words">
-                        <el-row>
-                          <el-col :span="24">
-                            <div class="letters">MAIL LIST</div>
-                          </el-col>
-                        </el-row>
-                        <el-row>
-                          <el-col :span="24">
-                            <div class="infos">
-                              <el-button type="text">通讯录</el-button>
-                              <span class="numbers">24</span>
-                            </div>
-                          </el-col>
-                        </el-row>
-                      </div>
-                    </el-col>
-                    <el-col :span="2">
-                      <div class="picTwo">
-                        <img src="../../assets/images/individual/矩形834拷贝2.png" alt="">
-                      </div>
-                    </el-col>
-                  </el-row>
+                    </div>
+                    <div class="picTwo">
+                      <img src="../../assets/images/individual/矩形834拷贝2.png" alt="">
+                    </div>
+                  </div>
                 </div>
               </el-col>
-              <!--4-->
               <el-col :span="6">
                 <div class="optionOne optionFour">
-                  <el-row>
-                    <el-col :span="6">
-                      <div class="picOne">
-                        <i class="el-icon-document"></i>
+                  <div class="contents">
+                    <div class="picOne" style="font-size: 25px">
+                      <i class="iconfont icon-shichanghuodong"></i>
+                    </div>
+                    <div class="words">
+                      <div class="letters" style="font-size: 18px;color: #625ac2;">SCHEDULE</div>
+                      <div class="infos">
+                        <el-button type="text">日程管理</el-button>
+                        <span class="numbers">24</span>
                       </div>
-                    </el-col>
-
-                    <el-col :span="11">
-                      <div class="words">
-                        <el-row>
-                          <el-col :span="24">
-                            <div class="letters">SCHEDULE</div>
-                          </el-col>
-                        </el-row>
-                        <el-row>
-                          <el-col :span="24">
-                            <div class="infos">
-                              <el-button type="text">日程管理</el-button>
-                              <span class="numbers">4</span>
-                            </div>
-                          </el-col>
-                        </el-row>
-                      </div>
-                    </el-col>
-                    <el-col :span="2">
-                      <div class="picTwo">
-                        <img src="../../assets/images/individual/矩形834拷贝3.png" alt="">
-                      </div>
-                    </el-col>
-                  </el-row>
+                    </div>
+                    <div class="picTwo">
+                      <img src="../../assets/images/individual/矩形834拷贝3.png" alt="">
+                    </div>
+                  </div>
                 </div>
               </el-col>
             </el-row>
           </div>
 <!--底部统计图变更-->
-          <div class="market" v-if="showUp" >
+          <div class="market" v-if="" >
             <el-row>
               <el-col :span="24">
                 <div class="usermanage">
@@ -390,7 +279,7 @@
             </el-row>
           </div>
 
-          <div id="civilianpost">
+          <div id="civilianpost" v-if="showUp">
             <el-row>
               <el-col :span="24">
                 <div class="usermanage">
@@ -423,168 +312,67 @@
                                 <div class="checkTitles">2018年12月考勤</div>
                               </el-col>
                             </el-row>
-
-                            <el-row>
-                              <el-col :span="24">
-                                <el-row>
-                                  <div class="checkLists">
-                                    <el-col :span="24">
-                                      <el-row>
-                                        <el-col :span="12">
-                                          <div class="belateList">
-                                            <el-row>
-                                              <el-col :span="24">
-                                                <el-row>
-                                                  <div class="belateHead">
-                                                    <el-col :span="10">
-                                                      <div class="belateTitle">迟到</div>
-                                                    </el-col>
-                                                    <el-col :span="4" :offset="12">
-                                                      <img src="../../assets/images/individual/chidao.png" alt="" class="imges">
-                                                    </el-col>
-                                                  </div>
-                                                </el-row>
-
-                                              </el-col>
-                                            </el-row>
-
-                                            <el-row>
-                                              <el-col :span="24">
-                                                  <el-row>
-                                                    <div class="counts">
-                                                      <el-col :sapn="12">
-                                                        <div class="numbs">0</div>
-                                                      </el-col>
-                                                      <el-col :sapn="12">
-                                                        <div class="units">次</div>
-                                                      </el-col>
-                                                    </div>
-                                                  </el-row>
-                                              </el-col>
-                                            </el-row>
-                                          </div>
-                                        </el-col>
-                                        <el-col :span="12">
-                                          <div class="belateList">
-                                            <el-row>
-                                              <el-col :span="24">
-                                                <el-row>
-                                                  <div class="belateHead">
-                                                    <el-col :span="10">
-                                                      <div class="belateTitle">早退</div>
-                                                    </el-col>
-                                                    <el-col :span="4" :offset="12">
-                                                      <img src="../../assets/images/individual/早退.png" alt="" class="imges">
-                                                    </el-col>
-                                                  </div>
-                                                </el-row>
-
-                                              </el-col>
-                                            </el-row>
-
-                                            <el-row>
-                                              <el-col :span="24">
-                                                <el-row>
-                                                  <div class="counts">
-                                                    <el-col :sapn="12">
-                                                      <div class="numbs">0</div>
-                                                    </el-col>
-                                                    <el-col :sapn="12">
-                                                      <div class="units">次</div>
-                                                    </el-col>
-                                                  </div>
-                                                </el-row>
-                                              </el-col>
-                                            </el-row>
-                                          </div>
-                                        </el-col>
-                                      </el-row>
-                                      <!--2-->
-                                      <div style="margin-top: 18px">
-                                        <el-row>
-                                          <el-col :span="12">
-                                            <div class="belateList" style="border: 1px solid #fb4699">
-                                              <el-row>
-                                                <el-col :span="24">
-                                                  <el-row>
-                                                    <div class="belateHead">
-                                                      <el-col :span="10">
-                                                        <div class="belateTitle" style="color: #fb4699">旷工</div>
-                                                      </el-col>
-                                                      <el-col :span="4" :offset="12">
-                                                        <img src="../../assets/images/individual/矿工.png" alt="" class="imges">
-                                                      </el-col>
-                                                    </div>
-                                                  </el-row>
-
-                                                </el-col>
-                                              </el-row>
-
-                                              <el-row>
-                                                <el-col :span="24">
-                                                  <el-row>
-                                                    <div class="counts">
-                                                      <el-col :sapn="12">
-                                                        <div class="numbs">0</div>
-                                                      </el-col>
-                                                      <el-col :sapn="12">
-                                                        <div class="units">次</div>
-                                                      </el-col>
-                                                    </div>
-                                                  </el-row>
-                                                </el-col>
-                                              </el-row>
-                                            </div>
-                                          </el-col>
-
-                                          <el-col :span="12">
-                                            <div class="belateList">
-                                              <el-row>
-                                                <el-col :span="24">
-                                                  <el-row>
-                                                    <div class="belateHead">
-                                                      <el-col :span="10">
-                                                        <div class="belateTitle">出勤天数</div>
-                                                      </el-col>
-                                                      <el-col :span="4" :offset="12">
-                                                        <img src="../../assets/images/individual/出勤.png" alt="" class="imges">
-                                                      </el-col>
-                                                    </div>
-                                                  </el-row>
-
-                                                </el-col>
-                                              </el-row>
-                                              <el-row>
-                                                <el-col :span="24">
-                                                  <el-row>
-                                                    <div class="counts">
-                                                      <el-col :sapn="12">
-                                                        <div class="numbs">0</div>
-                                                      </el-col>
-                                                      <el-col :sapn="12">
-                                                        <div class="units">次</div>
-                                                      </el-col>
-                                                    </div>
-                                                  </el-row>
-                                                </el-col>
-                                              </el-row>
-                                            </div>
-                                          </el-col>
-                                        </el-row>
-                                      </div>
-
-
-                                    </el-col>
+                            <div class="checkLists">
+                              <el-row :gutter="20">
+                                <el-col :span="12">
+                                  <div class="belateList">
+                                    <div class="belateHead">
+                                      <div class="belateTitle">迟到</div>
+                                      <img src="../../assets/images/individual/chidao.png" alt="" class="imges">
+                                    </div>
+                                    <div class="counts">
+                                      <div class="numbs">0</div>
+                                      <div class="units">次</div>
+                                    </div>
                                   </div>
+                                </el-col>
 
+                                <el-col :span="12">
+                                  <div class="belateList">
+                                    <div class="belateHead">
+                                      <div class="belateTitle">早退</div>
+                                      <img src="../../assets/images/individual/早退.png" alt="" class="imges">
+                                    </div>
+                                    <div class="counts">
+                                      <div class="numbs">0</div>
+                                      <div class="units">次</div>
+                                    </div>
+                                  </div>
+                                </el-col>
+                              </el-row>
+                                <!--2-->
+                              <div style="margin-top: 18px">
+                                <el-row :gutter="20">
+                                  <el-col :span="12">
+                                    <div class="belateList" style="border: 1px solid #fb4699">
+                                      <div class="belateHead">
+                                        <div class="belateTitle">旷工</div>
+                                        <img src="../../assets/images/individual/矿工.png" alt="" class="imges">
+                                      </div>
+                                      <div class="counts">
+                                        <div class="numbs" style="color: #fb4699">0</div>
+                                        <div class="units">次</div>
+                                      </div>
+                                    </div>
+                                  </el-col>
+
+                                  <el-col :span="12">
+                                    <div class="belateList">
+                                      <div class="belateHead">
+                                        <div class="belateTitle">出勤天数</div>
+                                        <img src="../../assets/images/individual/出勤.png" alt="" class="imges">
+                                      </div>
+                                      <div class="counts">
+                                        <div class="numbs">0</div>
+                                        <div class="units">次</div>
+                                      </div>
+                                    </div>
+                                  </el-col>
                                 </el-row>
-                              </el-col>
-                            </el-row>
-
+                              </div>
+                            </div>
                           </el-col>
                         </el-row>
-
-
                       </div>
                     </el-col>
 
@@ -604,18 +392,12 @@
                                 </div>
                               </el-col>
                             </el-row>
-
-                            <el-row>
-                              <el-col :span="24" :offset="8">
-                                <div class="countPic">
-                                  <div class="boxs">
-                                    <img src="../../assets/images/individual/jifenred.png" alt="">
-                                  </div>
-                                  <div class="pointCounts">20020</div>
-                                </div>
-
-                              </el-col>
-                            </el-row>
+                            <div class="countPic">
+                              <div class="boxs">
+                                <img src="../../assets/images/individual/jifenred.png" alt="">
+                              </div>
+                              <div class="pointCounts">99999</div>
+                            </div>
                           </el-col>
                         </el-row>
 
@@ -678,20 +460,12 @@
                       </div>
                     </el-col>
                   </el-row>
-                  <el-row>
-                    <el-col :span="24">
-                      <div style="margin-top: 12px">
-                        <el-row>
-                          <el-col :span="18">
-                            <div class="announTitle">恭喜我公司企业Logo注册成功</div>
-                          </el-col>
-                          <el-col :span="6">
-                            <div class="announDate">2018-03-02</div>
-                          </el-col>
-                        </el-row>
-                      </div>
-                    </el-col>
-                  </el-row>
+
+                  <div style="margin-top: 12px" class="announ">
+                    <div class="announTitle">恭喜我公司企业Logo注册成功</div>
+                    <div class="announDate">2018-03-02</div>
+                  </div>
+
                   <el-row>
                     <el-col :span="24">
                       <div class="detailes">
@@ -699,65 +473,45 @@
                       </div>
                     </el-col>
                   </el-row>
-                  <el-row>
-                    <el-col :span="24">
-                      <div class="footButt">
-                        <el-row>
-                          <el-col :span="4">
-                            <el-button type="primary" plain size="mini" style="margin-left: 10px">新闻</el-button>
-                          </el-col>
-                          <el-col :span="8" :offset="10">
-                            <div class="style1">
-                              <div class="surname">
-                                <img src="../../assets/images/individual/点赞.png" alt="">
-                                <div class="nums">12432</div>
-                              </div>
-                              <div class="reader">
-                                <i class="el-icon-view"></i>
-                                <div class="numsTwo">215</div>
-                              </div>
-                            </div>
-                          </el-col>
-                        </el-row>
+                  <div class="footButt">
+                    <el-button type="primary" plain size="mini" style="margin-left: 10px">新闻</el-button>
+                    <div class="style1">
+                      <div class="surname">
+                        <img src="../../assets/images/individual/点赞.png" alt="">
+                        <div class="nums">12432</div>
                       </div>
-                    </el-col>
-                  </el-row>
+                      <div class="reader">
+                        <i class="el-icon-view"></i>
+                        <div class="numsTwo">215</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </el-col>
           </el-row>
-          <el-row>
+          <el-row style="margin-top: 10px">
             <el-col :span="24">
-              <!--公司活动-->
-              <div class="company activities">
+              <div class="company">
                 <el-row>
                   <el-col :span="24">
                     <div class="userTitle">公司活动</div>
                   </el-col>
                 </el-row>
-
-                <div  class="mainPart">
+                <div class="mainPart">
                   <el-row>
                     <el-col :span="24">
-                      <div class="activity">
+                      <div class="announcement">
                         <!--<img src="../../assets/images/individual/gonggao.png" alt="">-->
                       </div>
                     </el-col>
                   </el-row>
-                  <el-row>
-                    <el-col :span="24">
-                      <div style="margin-top: 12px">
-                        <el-row>
-                          <el-col :span="18">
-                            <div class="announTitle">恭喜我公司企业Logo注册成功</div>
-                          </el-col>
-                          <el-col :span="6">
-                            <div class="announDate">2018-03-02</div>
-                          </el-col>
-                        </el-row>
-                      </div>
-                    </el-col>
-                  </el-row>
+
+                  <div style="margin-top: 12px" class="announ">
+                    <div class="announTitle">恭喜我公司企业Logo注册成功</div>
+                    <div class="announDate">2018-03-02</div>
+                  </div>
+
                   <el-row>
                     <el-col :span="24">
                       <div class="detailes">
@@ -765,29 +519,19 @@
                       </div>
                     </el-col>
                   </el-row>
-                  <el-row>
-                    <el-col :span="24">
-                      <div class="footButt">
-                        <el-row>
-                          <el-col :span="4">
-                            <el-button type="primary" plain size="mini" style="margin-left: 10px">新闻</el-button>
-                          </el-col>
-                          <el-col :span="8" :offset="10">
-                            <div class="style1">
-                              <div class="surname">
-                                <img src="../../assets/images/individual/点赞.png" alt="">
-                                <div class="nums">5555</div>
-                              </div>
-                              <div class="reader">
-                                <i class="el-icon-view"></i>
-                                <div class="numsTwo">123</div>
-                              </div>
-                            </div>
-                          </el-col>
-                        </el-row>
+                  <div class="footButt">
+                    <el-button type="primary" plain size="mini" style="margin-left: 10px">新闻</el-button>
+                    <div class="style1">
+                      <div class="surname">
+                        <img src="../../assets/images/individual/点赞.png" alt="">
+                        <div class="nums">12432</div>
                       </div>
-                    </el-col>
-                  </el-row>
+                      <div class="reader">
+                        <i class="el-icon-view"></i>
+                        <div class="numsTwo">215</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </el-col>
@@ -834,9 +578,11 @@
         -moz-background-size: 100% 100%;
         background-size: 100% 100%;
         @include flex;
+        justify-content: space-between;
         .peoperInfo {
           @include flex;
-          width: 100%;
+          width: 50%;
+          margin-left: 100px;
         }
         .headPic {
           @include border_radius(50%);
@@ -846,8 +592,9 @@
           margin: 30px 0;
         }
         .headName {
-          margin-top: 60px;
+          margin: 60px 0 0 30px;
           color: #FFFFFF;
+          overflow: hidden;
           .userName {
             font-size: 20px;
             margin: 0;
@@ -860,6 +607,8 @@
         .userSetting {
           @include flex;
           margin-top: 80px;
+          width: 50%;
+          overflow: hidden;
           div{
             margin-right: 50px;
             font-size: 18px;
@@ -906,19 +655,58 @@
           background: url("../../assets/images/individual/矩形拷贝26.png") no-repeat;
           -moz-background-size: 100% 100%;
           background-size: 100% 100%;
-          .letters {
-            font-size: 18px;
-            color: #436bca;
+          width: 100%;
+          height: 120px;
+          @include flex;
+          justify-content:center;
+          align-items:center;
+          .contents {
+            height: 60px;
+            width: 100%;
+            @include flex;
+            justify-content: center;
+            overflow: hidden;
+            .picOne {
+              width: 54px;
+              height: 54px;
+              line-height: 54px;
+              @include border_radius(50%);
+              border: 1px solid #FFFFFF;
+              color: #FFFFFF;
+              font-size: 25px;
+              text-align: center;
+            }
+            .words {
+              @include flex;
+              flex-direction: column;
+              justify-content: center;
+              margin: 0 10px;
+              .letters {
+                font-size: 18px;
+                color: #436bca;
+              }
+              .infos {
+                font-size: 16px;
+                color: #FFFFFF;
+                .numbers {
+                  font-family: Impact;
+                  margin-left: 10px;
+                }
+                button {
+                  color: #FFFFFF;
+                }
+              }
+            }
+            .picTwo {
+              margin-top: -10px;
+            }
           }
+
         }
         .optionTwo {
           background: url("../../assets/images/individual/矩形拷贝25.png") no-repeat;
           -moz-background-size: 100% 100%;
           background-size: 100% 100%;
-          .letters {
-            font-size: 18px;
-            color: #c25b60;
-          }
         }
         .optionThree {
           background: url("../../assets/images/individual/矩形拷贝12.png") no-repeat;
@@ -938,38 +726,8 @@
             color: #625ac2;
           }
         }
-        .picOne {
-          width: 54px;
-          height: 54px;
-          margin: 40px 40px 40px 50px;
-          @include border_radius(50%);
-          border: 1px solid #FFFFFF;
-          color: #FFFFFF;
-          font-size: 25px;
-          text-align: center;
-          overflow: hidden;
-          i {
-            margin: 14.5px auto;
-          }
-        }
-        .words {
-          margin: 42px 0 0 40px;
-          .infos {
-            color: #FFFFFF;
-            button {
-              color: #FFFFFF;
-              font-size: 14px;
-            }
-            .numbers {
-              margin-left: 10px;
-              font-family: 'Impact', sans-serif;
-              font-size: 16px;
-            }
-          }
-        }
-        .picTwo {
-          margin: 25px 0 0 10px;
-        }
+
+
       }
 /*底部统计表市场部*/
       .usermanage {
@@ -986,6 +744,7 @@
           background-size: 100% 100%;
           /*border: 1px solid #dfe6fb;*/
           @include border_radius(4px);
+          overflow: hidden;
           .manageButt {
             margin-left: 41px;
           }
@@ -994,6 +753,7 @@
           height: 450px;
           border: 1px solid #dfe6fb;
           @include border_radius(4px);
+          overflow: hidden;
           .manageButt {
             margin-left: 40px;
           }
@@ -1036,6 +796,7 @@
           /*border: 1px solid #dfe6fb;*/
           height: 450px;
           @include border_radius(4px);
+          overflow: hidden;
           .bgPics {
             height: 220px;
             background: url("../../assets/images/individual/jifeng.png") no-repeat;
@@ -1067,6 +828,7 @@
             background: url("../../assets/images/individual/jingshen.png") no-repeat;
             -moz-background-size: 100% 100%;
             background-size: 100% 100%;
+            overflow: hidden;
             .manageButt {
               margin-left: 40px;
             }
@@ -1080,6 +842,7 @@
             border: 1px solid #dfe6fb;
             @include border_radius(4px);
             height: 450px;
+            overflow: hidden;
             .manageButt{
               margin-left: 41px;
 
@@ -1091,15 +854,18 @@
               padding-bottom: 5px;
             }
             .checkLists {
-              margin: 15px 0 0 40px;
+              margin: 10px 10px 0 40px;
               .belateList {
+                width: 100%;
+                height: 100px;
                 border: 1px solid #409EFF;
                 margin-right: 20px;
                 @include border_radius(4px);
+                overflow: hidden;
                 .belateHead {
-                  margin: 10px 0 0 15px;
+                  margin: 10px;
                   @include flex;
-                  justify-content: end;
+                  justify-content: space-between;
                   .belateTitle {
                     font-size: 13px;
                   }
@@ -1109,12 +875,13 @@
                   }
                 }
                 .counts {
-                  margin: 10px 0 20px 0;
+                  /*margin: 10px 0 20px 0;*/
                   @include flex;
+                  justify-content: center;
                   .numbs {
                     font-size: 37px;
                     color: #409EFF;
-                   text-align: right;
+                    text-align: right;
                   }
                   .units {
                     margin: 17px 0 0 5px;
@@ -1128,13 +895,16 @@
           .integral{
             /*border: 1px solid #dfe6fb;*/
             height: 450px;
+            overflow: hidden;
             @include border_radius(4px);
             background: url("../../assets/images/individual/jifeng.png") no-repeat;
             -moz-background-size: 100% 100%;
             background-size: 100% 100%;
             .countPic {
               @include flex;
-              margin: 80px 0 0 66px;
+              justify-content: flex-end;
+              line-height: 32px;
+              margin: 70px 10px 0 0;
               .boxs {
                 width: 30px;
                 height: 30px;
@@ -1144,10 +914,10 @@
               img {
                 width: 20px;
                 height: 20px;
-                margin: 5px 0 0 5px;
+                margin: 5px 0 0 6px;
               }
               .pointCounts {
-                font-size: 30px;
+                font-size: 27px;
                 color: #fb4699;
                 margin-left: 5px;
               }
@@ -1160,6 +930,7 @@
             @include border_radius(4px);
             border: 1px solid #dfe6fb;
             height: 450px;
+            overflow: hidden;
             .upgradeShow {
               .manageButt {
                 margin-left: 40px;
@@ -1185,12 +956,13 @@
 /*公司通告*/
       .company {
         margin-top: 2px;
+        overflow: hidden;
         .mainPart{
           border: 1px solid #dfe6fb;
           @include border_radius(4px);
           margin-top: 12px;
           .announDate {
-            margin: 12px 0 0 10px;
+            /*margin: 12px 0 0 10px;*/
           }
         }
         .announcement {
@@ -1200,13 +972,18 @@
           /*margin-top: 15px;*/
           height: 136px;
         }
-
-        .announTitle {
-          margin: 12px 0 0 10px;
-          text-overflow : ellipsis;
-          white-space : nowrap;
-          overflow : hidden;
+        .announ {
+          margin: 12px 10px 0;
+          @include flex;
+          justify-content: space-between;
+          .announTitle {
+            /*margin: 12px 0 0 10px;*/
+            text-overflow : ellipsis;
+            white-space : nowrap;
+            overflow : hidden;
+          }
         }
+
         .detailes {
           margin: 10px;
           width: 95%;
@@ -1220,9 +997,12 @@
         }
         .footButt {
           margin-bottom: 10px;
+          @include flex;
+          justify-content: space-between;
           .style1{
             @include flex;
-            margin-left: 25px;
+            justify-content: space-between;
+            margin-right: 10px;
             .surname {
               @include flex;
               .nums {
