@@ -103,8 +103,8 @@ import PersonalSetting from '../components/personalSetting/index.vue'    //个�
 import Individual from '../components/individual/index.vue'               //个人门户
 import Converge from '../components/converge/index.vue'                   //员工广场
 import Infodetails from '../components/converge/details/infodetails.vue'  //员工广场详情
-import CheckWork from '../components/checkWork/index.vue'                 //考勤自主
-import Register from '../components/register/index.vue'                   //签到自主
+import CheckWork from '../components/checkWork/index.vue'                 //考勤自助
+import Register from '../components/register/index.vue'                   //签到自助
 
 
 Vue.use(Router);
@@ -140,7 +140,7 @@ export default new Router({
       name: '',
       children: [
         {path: '/main', component: Main, name: '主页', icon: 'el-icon-menu'},
-        {path: '/converge/', component: Converge, name: '员工广场', icon: 'el-icon-menu',},
+        {path: '/converge', component: Converge, name: '员工广场', icon: 'el-icon-menu',},
       ]
     },
     //不正常的二级路由
@@ -153,6 +153,8 @@ export default new Router({
         {path: '/messageCenter', component: MessageCenter, name: '消息中心'},
         {path: '/sthToDoDetail', component: SthToDoDetail, name: '喜报详情'},
         {path: '/personalSetting', component: PersonalSetting, name: '个人设置'},
+        {path: '/checkWork', component: CheckWork, name: '考勤自助'},
+        {path: '/register', component: Register, name: '签到自助'},
         {path: '/sthToDoDetail_2', component: SthToDoDetail_2, name: '喜报'},
         {path: '/contractChange', component: ContractChange, name: 'TEST_1'},
         {path: '/deliver', component: Deliver, name: 'TEST_2'},
