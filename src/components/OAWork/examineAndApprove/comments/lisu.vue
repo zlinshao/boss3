@@ -4,22 +4,23 @@
       title="离宿申请"
       :visible.sync="accommodation"
       width="50%">
-      <el-form :model="form" size="mini" label-width="80px">
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="离宿申请人姓名">
-              <el-input v-model="form.input1" placeholder="请输入(必填)">
-              </el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="片区">
-              <el-input v-model="form.input1" placeholder="请输入片区"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
+      <div class="scroll_bar">
+        <el-form :model="form" size="mini" label-width="80px">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="离宿申请人姓名">
+                <el-input v-model="form.input1" placeholder="请输入(必填)">
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="片区">
+                <el-input v-model="form.input1" placeholder="请输入片区"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
               <el-form-item label="离宿住宿地址">
                 <el-select v-model="value" placeholder="请选择">
                   <el-option
@@ -30,181 +31,183 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="日期">
-              <el-date-picker
-                v-model="form.value1"
-                type="date"
-                placeholder="请选择日期">
-              </el-date-picker>
-            </el-form-item>
-          </el-col>
-        </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="日期">
+                <el-date-picker
+                  v-model="form.value1"
+                  type="date"
+                  placeholder="请选择日期">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
 
 
 
-        <el-form-item label="审批人">
-          <div class="upLoad">
-            <el-row>
-              <el-col>
-                <div class="remind">审批人已由管理员预置,并将自动去重</div>
-              </el-col>
-            </el-row>
+          <el-form-item label="审批人">
+            <div class="upLoad">
+              <el-row>
+                <el-col>
+                  <div class="remind">审批人已由管理员预置,并将自动去重</div>
+                </el-col>
+              </el-row>
 
-            <el-row>
-              <el-col :span="2">
-                <div class="conservator">
-                  <div class="conservatorInfo">
-                    <img src="../../../../assets/images/情人节.png" alt="">
-                    <div class="conservatorName">张琳琳</div>
+              <el-row>
+                <el-col :span="2">
+                  <div class="conservator">
+                    <div class="conservatorInfo">
+                      <img src="../../../../assets/images/情人节.png" alt="">
+                      <div class="conservatorName">张琳琳</div>
+                    </div>
                   </div>
-                </div>
-              </el-col>
-              <el-col :span="1">
-                <div class="picSign">
-                  <i class="el-icon-arrow-right"></i>
-                </div>
-              </el-col>
-
-              <el-col :span="2">
-                <div class="conservator">
-                  <div class="conservatorInfo">
-                    <img src="../../../../assets/images/情人节.png" alt="">
-                    <div class="conservatorName">张琳琳</div>
+                </el-col>
+                <el-col :span="1">
+                  <div class="picSign">
+                    <i class="el-icon-arrow-right"></i>
                   </div>
-                  <div class="grade">第1级主管</div>
-                </div>
-              </el-col>
-            </el-row>
-          </div>
-        </el-form-item>
+                </el-col>
 
-        <el-form-item label="抄送人">
-          <div class="upLoad ">
-            <el-row>
-              <el-col>
-                <div class="remind">审批通过后，通知抄送人</div>
-              </el-col>
-            </el-row>
-            <div class="examine">
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div>
-                <el-button type="text">添加抄送人</el-button>
-              </div>
+                <el-col :span="2">
+                  <div class="conservator">
+                    <div class="conservatorInfo">
+                      <img src="../../../../assets/images/情人节.png" alt="">
+                      <div class="conservatorName">张琳琳</div>
+                    </div>
+                    <div class="grade">第1级主管</div>
+                  </div>
+                </el-col>
+              </el-row>
             </div>
+          </el-form-item>
 
-          </div>
-        </el-form-item>
-      </el-form>
+          <el-form-item label="抄送人">
+            <div class="upLoad ">
+              <el-row>
+                <el-col>
+                  <div class="remind">审批通过后，通知抄送人</div>
+                </el-col>
+              </el-row>
+              <div class="examine">
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div>
+                  <el-button type="text">添加抄送人</el-button>
+                </div>
+              </div>
+
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
+
       <span slot="footer">
         <el-button type="primary" @click="accommodation = false">提交</el-button>
       </span>

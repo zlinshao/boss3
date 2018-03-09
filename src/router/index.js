@@ -86,9 +86,10 @@ import PublicArticle from '../components/OAWork/portals/components/publicArticle
 import ExamineAndApprove from '../components/OAWork/examineAndApprove/index.vue'
 
 
+
 //人资管理
 import StaffManage from '../components/humanResource/staffManage/index.vue'
-import Organization from '../components/humanResource/organization/index.vue'
+// import Organization from '../components/humanResource/organization/index.vue'
 // import Achievement from '../components/humanResource/achievement/index.vue'
 import IntegralManage from '../components/humanResource/integralManage/index.vue'
 
@@ -99,15 +100,18 @@ import MessageCenter from '../components/messageCenter/index.vue'
 import PersonalSetting from '../components/personalSetting/index.vue'    //个人设置
 
 
-import Individual from '../components/individual/index.vue'   //个人门户
-import CheckWork from '../components/checkWork/index.vue'     //考勤自主
-import Register from '../components/register/index.vue'       //签到自主
+import Individual from '../components/individual/index.vue'               //个人门户
+import Converge from '../components/converge/index.vue'                   //员工广场
+import Infodetails from '../components/converge/details/infodetails.vue'  //员工广场详情
+import CheckWork from '../components/checkWork/index.vue'                 //考勤自主
+import Register from '../components/register/index.vue'                   //签到自主
 
 
 Vue.use(Router);
 
 export default new Router({
   routes: [
+
 
     {
       path: '/login',
@@ -136,6 +140,7 @@ export default new Router({
       name: '',
       children: [
         {path: '/main', component: Main, name: '主页', icon: 'el-icon-menu'},
+        {path: '/converge/', component: Converge, name: '员工广场', icon: 'el-icon-menu',},
       ]
     },
     //不正常的二级路由
@@ -154,8 +159,8 @@ export default new Router({
         {path: '/throwALease', component: throwALease, name: 'TEST_3'},
         {path: '/publicArticle', component: PublicArticle, name: '文章发布'},
         {path: '/individual', component: Individual, name: '个人门户'},
-        {path: '/checkWork', component: CheckWork, name: '考勤自助'},
-        {path: '/register', component: Register, name: '签到自助'},
+        {path: '/infodetails', component: Infodetails, name: '员工广场详情'},
+
       ]
     },
     // 详情路由
@@ -257,7 +262,7 @@ export default new Router({
       children: [
         {path: '/staffManage', component: StaffManage, name: '用户管理',},
         {path: '/integralManage', component: IntegralManage, name: '积分管理',},
-        {path: '/organization', component: Organization, name: '组织架构',},
+        // {path: '/organization', component: Organization, name: '组织架构',},
         // {path: '/achievement', component: Achievement, name: '业绩工资',},
       ]
     },

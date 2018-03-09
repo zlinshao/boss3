@@ -97,8 +97,8 @@
     }
 
     &::-webkit-scrollbar-button {
-      height: 0;
-      background-color: #eee;
+      height: 10px;
+      background-color: #e4e7ed;
     }
 
     &::-webkit-scrollbar-track {

@@ -4,204 +4,207 @@
       title="补卡申请"
       :visible.sync="replenishmentVisible"
       width="50%">
-      <el-form :model="form" size="mini" label-width="80px">
-        <el-form-item label="日期">
-          <div class="block">
-            <el-date-picker
-              v-model="form.dates"
-              type="daterange"
-              align="right"
-              unlink-panels
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :picker-options="pickerOptions">
-            </el-date-picker>
-          </div>
-        </el-form-item>
-
-        <el-form-item label="补卡原因">
-          <el-input v-model="form.textarea" type="textarea" :autosize="{minRows: 2, maxRows: 4}" placeholder="请输入(必填)"></el-input>
-        </el-form-item>
-
-        <el-form-item label=证明人>
-          <el-input v-model="form.input1" placeholder="请输入(必填)">
-          </el-input>
-        </el-form-item>
-
-        <el-form-item label="图片">
-          <div class="upLoad">
-            <el-upload
-              action="https://jsonplaceholder.typicode.com/posts/"
-              list-type="picture-card"
-              :on-preview="handlePictureCardPreview"
-              :on-remove="handleRemove">
-              <i class="el-icon-plus"></i>
-            </el-upload>
-          </div>
-        </el-form-item>
-
-        <el-form-item label="审批人">
-          <div class="upLoad">
-            <el-row>
-              <el-col>
-                <div class="remind">审批人已由管理员预置,并将自动去重</div>
-              </el-col>
-            </el-row>
-
-            <el-row>
-              <el-col :span="2">
-                <div class="conservator">
-                  <div class="conservatorInfo">
-                    <img src="../../../../assets/images/情人节.png" alt="">
-                    <div class="conservatorName">张琳琳</div>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="1">
-                <div class="picSign">
-                  <i class="el-icon-arrow-right"></i>
-                </div>
-              </el-col>
-
-              <el-col :span="2">
-                <div class="conservator">
-                  <div class="conservatorInfo">
-                    <img src="../../../../assets/images/情人节.png" alt="">
-                    <div class="conservatorName">张琳琳</div>
-                  </div>
-                  <div class="grade">第1级主管</div>
-                </div>
-              </el-col>
-            </el-row>
-          </div>
-        </el-form-item>
-
-        <el-form-item label="抄送人">
-          <div class="upLoad ">
-            <el-row>
-              <el-col>
-                <div class="remind">审批通过后，通知抄送人</div>
-              </el-col>
-            </el-row>
-            <div class="examine">
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div class="conservator">
-                <div class="conservatorInfo">
-                  <img src="../../../../assets/images/情人节.png" alt="">
-                  <div class="conservatorName">张琳琳</div>
-                </div>
-              </div>
-
-              <div>
-                <el-button type="text">添加抄送人</el-button>
-              </div>
+      <div class="scroll_bar">
+        <el-form :model="form" size="mini" label-width="80px">
+          <el-form-item label="日期">
+            <div class="block">
+              <el-date-picker
+                v-model="form.dates"
+                type="daterange"
+                align="right"
+                unlink-panels
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                :picker-options="pickerOptions">
+              </el-date-picker>
             </div>
+          </el-form-item>
 
-          </div>
-        </el-form-item>
-      </el-form>
+          <el-form-item label="补卡原因">
+            <el-input v-model="form.textarea" type="textarea" :autosize="{minRows: 2, maxRows: 4}" placeholder="请输入(必填)"></el-input>
+          </el-form-item>
+
+          <el-form-item label=证明人>
+            <el-input v-model="form.input1" placeholder="请输入(必填)">
+            </el-input>
+          </el-form-item>
+
+          <el-form-item label="图片">
+            <div class="upLoad">
+              <el-upload
+                action="https://jsonplaceholder.typicode.com/posts/"
+                list-type="picture-card"
+                :on-preview="handlePictureCardPreview"
+                :on-remove="handleRemove">
+                <i class="el-icon-plus"></i>
+              </el-upload>
+            </div>
+          </el-form-item>
+
+          <el-form-item label="审批人">
+            <div class="upLoad">
+              <el-row>
+                <el-col>
+                  <div class="remind">审批人已由管理员预置,并将自动去重</div>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :span="2">
+                  <div class="conservator">
+                    <div class="conservatorInfo">
+                      <img src="../../../../assets/images/情人节.png" alt="">
+                      <div class="conservatorName">张琳琳</div>
+                    </div>
+                  </div>
+                </el-col>
+                <el-col :span="1">
+                  <div class="picSign">
+                    <i class="el-icon-arrow-right"></i>
+                  </div>
+                </el-col>
+
+                <el-col :span="2">
+                  <div class="conservator">
+                    <div class="conservatorInfo">
+                      <img src="../../../../assets/images/情人节.png" alt="">
+                      <div class="conservatorName">张琳琳</div>
+                    </div>
+                    <div class="grade">第1级主管</div>
+                  </div>
+                </el-col>
+              </el-row>
+            </div>
+          </el-form-item>
+
+          <el-form-item label="抄送人">
+            <div class="upLoad ">
+              <el-row>
+                <el-col>
+                  <div class="remind">审批通过后，通知抄送人</div>
+                </el-col>
+              </el-row>
+              <div class="examine">
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div class="conservator">
+                  <div class="conservatorInfo">
+                    <img src="../../../../assets/images/情人节.png" alt="">
+                    <div class="conservatorName">张琳琳</div>
+                  </div>
+                </div>
+
+                <div>
+                  <el-button type="text">添加抄送人</el-button>
+                </div>
+              </div>
+
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
+
       <span slot="footer">
         <el-button type="primary" @click="replenishmentVisible = false">提交</el-button>
       </span>
@@ -222,6 +225,7 @@
           textarea: '',
           dialogImageUrl: '',
           value3: '',
+          dates: '',
         },
         value4:'',
         options: [{
@@ -242,7 +246,7 @@
         }],
         value: '',
         innerVisible: false,  //查看明细
-        pickerOptions2: {
+        pickerOptions: {
           shortcuts: [{
             text: '最近一周',
             onClick(picker) {

@@ -33,17 +33,14 @@
             </ul>
           </div>
         </div>
-        <div class="content_right scroll_bar">
+        <div class="content_right">
           <div class="box">
-            <div class="boxHead">组织架构</div>
+            <div class="boxHead">{{highestDepart}}</div>
 
-            <div class="breadcrumb-wrapper">
+            <div class="breadcrumb-wrapper scroll_bar">
               <div class="breadcrumb">
                 <a>
-                  <span @click="getALL(1)">组织架构</span>
-                </a>
-                <a>
-                  <span @click="breadcrumbSearch(1)">&nbsp;&gt;&nbsp;南京乐品网络科技有限公司</span>
+                  <span @click="breadcrumbSearch(1)">{{highestDepart}}</span>
                 </a>
                 <a v-for="(item,index) in breadcrumbList" @click="breadcrumbSearch(item,index)">
                   <span>&nbsp;&gt;&nbsp;{{item.name}}</span>
@@ -62,7 +59,7 @@
                     <!--<div>({{item.users}}人)</div>-->
 
                     <el-checkbox-group v-model="checkedIdBox" @change="checkDepart(item,$event)">
-                      <el-checkbox  :label="item.id" :key="item.id">{{item.name}} ({{item.users}}人)</el-checkbox>
+                      <el-checkbox  :disabled="noDepart" :label="item.id" :key="item.id">{{item.name}} ({{item.users}}人)</el-checkbox>
                     </el-checkbox-group>
 
                     <el-button type="text" :disabled="checkedIdBox.indexOf(item.id)>-1" class="lowerLevel"
@@ -98,7 +95,7 @@
 
 <script>
   export default {
-    props:['organizationDialog'],
+    props:['organizationDialog','length','type'],
     data () {
       return {
         organizationVisible: false,
@@ -117,6 +114,11 @@
         //键盘
         active_li: -1,  //键盘上下被选中li
         hoverMember:[], //键盘悬浮成员
+        highestDepart:'',   //最高级岗位
+
+        noStaff:true,
+        noDepart:false,
+        memberLength:0,
       }
     },
     mounted() {
@@ -132,9 +134,6 @@
           this.$emit('close')
         }
       },
-      selectMember(val){
-        this.buttonStatus = !val.length;
-      },
       keywords(val){
         if (val){
           this.$http.get(globalConfig.server_user+'api/v1/users?q='+this.keywords).then((res) => {
@@ -145,10 +144,59 @@
         }else {
           this.searchItems = [];
         }
+      },
+      type(val){
+        if(val){
+          if(val==='depart'){
+            this.noStaff = true;
+            this.noDepart = false;
+          }else if(val==='staff'){
+            this.noStaff = false;
+            this.noDepart = true;
+          }else {
+            this.noStaff = false;
+            this.noDepart = false;
+          }
+        }
+      },
+      length(val){
+        if(val){
+            this.memberLength = val;
+        }
+      },
+      selectMember(val){
+        this.buttonStatus = !val.length;
+        if(val.length>0){
+          if(val[val.length-1].hasOwnProperty("phone") && this.noStaff){
+            this.selectMember.pop();
+            this.selectIdMember.pop();
+            this.$notify({
+              title: '警告',
+              message: '选择超过限制（不可以选择员工）',
+              type: 'warning'
+            });
+          }
+
+          if(val.length>this.memberLength&&this.memberLength){
+            this.selectMember.pop();
+            this.selectIdMember.pop();
+            this.checkedIdBox.pop();
+            this.$notify({
+              title: '警告',
+              message: '选择超过限制(最多选择'+this.memberLength+'个)',
+              type: 'warning'
+            });
+          }
+        }
       }
     },
     methods:{
       getDepartment(id){
+        this.$http.get(globalConfig.server_user+'api/v1/organizations/1').then((res) => {
+          if(res.data.status === 'success'){
+            this.highestDepart = res.data.data.name;
+          }
+        });
         this.$http.get(globalConfig.server_user+'api/v1/organizations?parent_id='+id).then((res) => {
           if(res.data.status === 'success'){
             this.organizeList = res.data.data;
@@ -302,12 +350,15 @@
 
       //确定选择并发送
       confirmSelect(){
-          this.organizationVisible = false;
-          this.$emit('selectMember',this.selectMember);
+        this.organizationVisible = false;
+        this.$emit('selectMember',this.selectMember);
 
-          this.selectMember = [];       //已选数组
-          this.selectIdMember = [];     //左侧选择id
-          this.checkedIdBox = [];       //已选部门id数组
+        this.selectMember = [];       //已选数组
+        this.selectIdMember = [];     //左侧选择id
+        this.checkedIdBox = [];       //已选部门id数组
+        this.noStaff = false;
+        this.noDepart = false;
+        this.memberLength = 0;
       }
     }
   }
@@ -404,7 +455,6 @@
               border: 1px solid #ddd;
               border-radius: 4px;
               box-sizing: border-box;
-              overflow: auto;
               div{
                 max-height: 440px;
                 .boxHead{
@@ -412,6 +462,8 @@
                   padding: 5px 0;
                 }
                 .breadcrumb-wrapper{
+                  height: 405px;
+                  overflow: auto;
                   .breadcrumb{
                     padding: 0 15px;
                     a:not(last-child){

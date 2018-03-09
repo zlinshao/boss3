@@ -216,11 +216,17 @@
   top: 8px;
   right: 2px; }
 
+<<<<<<< HEAD
+.el-dialog__wrapper .el-dialog .el-dialog__body .scroll_bar {
+  overflow: auto;
+  max-height: 550px; }
+=======
 .dialog_scroll .el-dialog__wrapper .el-dialog .el-dialog__body {
   padding: 0; }
   .dialog_scroll .el-dialog__wrapper .el-dialog .el-dialog__body .scroll_bar {
     padding: 15px;
     max-height: 500px;
     overflow: auto; }
+>>>>>>> 734cae680af181b2c0ac437a1b1f96a487e76508
 
 /*# sourceMappingURL=reset.css.map */
