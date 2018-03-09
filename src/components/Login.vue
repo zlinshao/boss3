@@ -203,7 +203,7 @@
             localStorage.setItem('personal', JSON.stringify(res.data.data));
             globalConfig.personal = res.data.data;
 
-            // this.$router.push({path: '/main'});
+            this.$router.push({path: '/main'});
           });
         });
       },
