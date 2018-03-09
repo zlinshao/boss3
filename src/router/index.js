@@ -89,7 +89,7 @@ import ExamineAndApprove from '../components/OAWork/examineAndApprove/index.vue'
 
 //人资管理
 import StaffManage from '../components/humanResource/staffManage/index.vue'
-// import Organization from '../components/humanResource/organization/index.vue'
+import Organization from '../components/humanResource/organization/index.vue'
 // import Achievement from '../components/humanResource/achievement/index.vue'
 import IntegralManage from '../components/humanResource/integralManage/index.vue'
 
@@ -103,8 +103,8 @@ import PersonalSetting from '../components/personalSetting/index.vue'    //个�
 import Individual from '../components/individual/index.vue'               //个人门户
 import Converge from '../components/converge/index.vue'                   //员工广场
 import Infodetails from '../components/converge/details/infodetails.vue'  //员工广场详情
-import CheckWork from '../components/checkWork/index.vue'                 //考勤自主
-import Register from '../components/register/index.vue'                   //签到自主
+import CheckWork from '../components/checkWork/index.vue'                 //考勤自助
+import Register from '../components/register/index.vue'                   //签到自助
 
 
 Vue.use(Router);
@@ -140,7 +140,7 @@ export default new Router({
       name: '',
       children: [
         {path: '/main', component: Main, name: '主页', icon: 'el-icon-menu'},
-        {path: '/converge/', component: Converge, name: '员工广场', icon: 'el-icon-menu',},
+        {path: '/converge', component: Converge, name: '员工广场', icon: 'el-icon-menu',},
       ]
     },
     //不正常的二级路由
@@ -153,6 +153,8 @@ export default new Router({
         {path: '/messageCenter', component: MessageCenter, name: '消息中心'},
         {path: '/sthToDoDetail', component: SthToDoDetail, name: '喜报详情'},
         {path: '/personalSetting', component: PersonalSetting, name: '个人设置'},
+        {path: '/checkWork', component: CheckWork, name: '考勤自助'},
+        {path: '/register', component: Register, name: '签到自助'},
         {path: '/sthToDoDetail_2', component: SthToDoDetail_2, name: '喜报'},
         {path: '/contractChange', component: ContractChange, name: 'TEST_1'},
         {path: '/deliver', component: Deliver, name: 'TEST_2'},
@@ -262,7 +264,7 @@ export default new Router({
       children: [
         {path: '/staffManage', component: StaffManage, name: '用户管理',},
         {path: '/integralManage', component: IntegralManage, name: '积分管理',},
-        // {path: '/organization', component: Organization, name: '组织架构',},
+        {path: '/organization', component: Organization, name: '组织架构',},
         // {path: '/achievement', component: Achievement, name: '业绩工资',},
       ]
     },
@@ -298,16 +300,7 @@ export default new Router({
       name: '系统设置',
       icon: 'el-icon-setting',
       children: [
-        {
-          path: '/message',
-          component: Message,
-          icon: 'el-icon-message',
-          name: '短信模块',
-          children: [
-            {path: '/message/messageList', component: MessageList, name: '短信列表'},
-            {path: '/message/messageModule', component: MessageModule, name: '短信模板'},
-          ]
-        },
+        {path: '/message/message', component: Message, name: '短信'},
         {path: '/recycle', component: Recycle, name: '回收站',},
         {path: '/contractMould', component: ContractMould, name: '合同模板',},
         {path: '/loginRecord', component: LoginRecord, name: '登陆日志',},

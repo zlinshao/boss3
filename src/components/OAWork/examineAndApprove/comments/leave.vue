@@ -9,32 +9,41 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="请假类型">
-                <el-select v-model="value" placeholder="请选择">
+                <el-select v-model="form.leave_type" placeholder="请选择">
                   <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
+                    v-for="item in dictionary"
+                    :key="item.id"
+                    :label="item.dictionary_name"
+                    :value="item.id">
                   </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="12">
-              <el-form-item label="日期">
+              <el-form-item label="开始时间">
                 <el-date-picker
-                  v-model="form.value3"
-                  type="datetimerange"
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期">
+                  v-model="form.leave_start_time"
+                  type="datetime"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  placeholder="选择日期时间">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="结束时间">
+                <el-date-picker
+                  v-model="form.leave_end_time"
+                  type="datetime"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  placeholder="选择日期时间">
                 </el-date-picker>
               </el-form-item>
             </el-col>
           </el-row>
-
           <el-form-item label="时长">
-            <el-input v-model="form.input1" readonly>
-            </el-input>
+            <el-input v-model="hours" readonly></el-input>
           </el-form-item>
 
           <el-form-item>
@@ -68,7 +77,7 @@
           </el-dialog>
 
           <el-form-item label="请假事由">
-            <el-input v-model="form.textarea" type="textarea" :autosize="{minRows: 2, maxRows: 4}" placeholder="请输入请假事由(必填)"></el-input>
+            <el-input v-model="form.remark" type="textarea" :autosize="{minRows: 2, maxRows: 4}" placeholder="请输入请假事由(必填)"></el-input>
           </el-form-item>
 
 
@@ -248,7 +257,7 @@
       </div>
 
       <span slot="footer">
-        <el-button type="primary" @click="leaveVisible = false">提交</el-button>
+        <el-button type="primary" size="small" @click="confirmSubmit">提交</el-button>
       </span>
     </el-dialog>
   </div>
@@ -262,31 +271,18 @@
       return {
         leaveVisible: false,           //请假审批
         form: {
-          input1: '',
-          value1: '',
-          textarea: '',
-          dialogImageUrl: '',
-          value3: '',
+          leave_type: '',
+          leave_start_time: '',
+          leave_end_time: '',
+          leave_duration: '',
+          remark: '',
         },
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: '',
+        dictionary:[],
         innerVisible: false,  //查看明细
       }
+    },
+    mounted(){
+        this.getDictionary();
     },
     watch:{
       module(val){
@@ -298,13 +294,59 @@
         }
       }
     },
+    computed:{
+        hours(){
+            let totalHours = Math.ceil((new Date(this.form.leave_end_time).getTime()-new Date(this.form.leave_start_time).getTime())/1000/3600);
+            return totalHours>0?totalHours+'小时':'';
+        }
+    },
     methods: {
+      getDictionary(){
+        this.$http.get(globalConfig.server+'setting/dictionary/112').then((res) => {
+          if(res.data.code === '30010'){
+            this.dictionary = res.data.data;
+          }else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
+          }
+        })
+      },
       handleRemove(file, fileList) {
         console.log(file, fileList);
       },
       handlePictureCardPreview(file) {
         this.form.dialogImageUrl = file.url;
         this.dialogVisible = true;
+      },
+      confirmSubmit(){
+        this.form.leave_duration = Math.ceil((new Date(this.form.leave_end_time).getTime()-new Date(this.form.leave_start_time).getTime())/1000/3600);
+        this.$http.post(globalConfig.server+'oa/leave',this.form).then((res) => {
+          if(res.data.code === '180010'){
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg,
+            });
+            this.closeModal();
+          }else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
+          }
+        })
+      },
+      closeModal(){
+        this.form = {
+          leave_type: '',
+          leave_start_time: '',
+          leave_end_time: '',
+          leave_duration: '',
+          remark: '',
+        };
+        this.options = [];
+        this.leaveVisible = false;
       }
     }
   }

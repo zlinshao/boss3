@@ -5,29 +5,36 @@
       :visible.sync="replenishmentVisible"
       width="50%">
       <div class="scroll_bar">
-        <el-form :model="form" size="mini" label-width="80px">
-          <el-form-item label="日期">
-            <div class="block">
-              <el-date-picker
-                v-model="form.dates"
-                type="daterange"
-                align="right"
-                unlink-panels
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                :picker-options="pickerOptions">
-              </el-date-picker>
-            </div>
-          </el-form-item>
+        <el-form :model="form" size="mini" label-width="100px">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="开始时间">
+                <el-date-picker
+                  v-model="form.fill_card_start_time"
+                  type="datetime"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  placeholder="选择日期时间">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="结束时间">
+                <el-date-picker
+                  v-model="form.fill_card_end_time"
+                  type="datetime"
+                  value-format="yyyy-MM-dd HH:mm:ss"
+                  placeholder="选择日期时间">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
 
           <el-form-item label="补卡原因">
-            <el-input v-model="form.textarea" type="textarea" :autosize="{minRows: 2, maxRows: 4}" placeholder="请输入(必填)"></el-input>
+            <el-input v-model="form.remark" type="remark" :autosize="{minRows: 2, maxRows: 4}" placeholder="请输入(必填)"></el-input>
           </el-form-item>
 
           <el-form-item label=证明人>
-            <el-input v-model="form.input1" placeholder="请输入(必填)">
-            </el-input>
+            <el-input v-model="witness_name" @focus="selectDepart" placeholder="请输入(必填)"></el-input>
           </el-form-item>
 
           <el-form-item label="图片">
@@ -206,73 +213,34 @@
       </div>
 
       <span slot="footer">
-        <el-button type="primary" @click="replenishmentVisible = false">提交</el-button>
+        <el-button type="primary" size="small" @click="confirmSubmit">提交</el-button>
       </span>
     </el-dialog>
+    <Organization :organizationDialog="organizationDialog" @close="closeOrganization" :length="length" :type="type"
+                  @selectMember="selectMember"></Organization>
   </div>
 </template>
 
 <script>
+  import Organization from '../../../common/organization.vue'
+
   export default {
-    name: "replenishment",
     props: ['module'],
+    components:{Organization},
     data () {
       return {
         replenishmentVisible: false,           //请假审批
+        organizationDialog:false,
         form: {
-          input1: '',
-          value1: '',
-          textarea: '',
-          dialogImageUrl: '',
-          value3: '',
-          dates: '',
+          staff_id   : [],
+          fill_card_start_time: '',
+          fill_card_end_time: '',
+          remark: '',
         },
-        value4:'',
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: '',
         innerVisible: false,  //查看明细
-        pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-          }]
-        },
+        witness_name:'',
+        type:'',
+        length:'',
       }
     },
     watch:{
@@ -292,6 +260,57 @@
       handlePictureCardPreview(file) {
         this.form.dialogImageUrl = file.url;
         this.dialogVisible = true;
+      },
+
+      selectDepart(){
+        this.organizationDialog = true;
+        this.type = 'staff';
+        this.length = 2;
+      },
+      //关闭选人框回调
+      closeOrganization(){
+        this.organizationDialog = false;
+      },
+      selectMember(val){
+        if(val.length>0){
+          this.form.staff_id    = [];
+          this.witness_name ='';
+          val.forEach((item) => {
+            this.form.staff_id   .push(item.id);
+            this.witness_name+=' '+item.name+' ';
+          });
+        }
+        this.organizationDialog = false;
+      },
+
+      //确认提交
+      confirmSubmit(){
+        this.$http.post(globalConfig.server+'oa/fillcard',this.form).then((res) => {
+          if(res.data.code === '190010'){
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg,
+            });
+            this.closeModal();
+          }else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
+          }
+        })
+      },
+      closeModal(){
+        this.form = {
+          staff_id   : [],
+          fill_card_start_time: '',
+          fill_card_end_time: '',
+          remark: '',
+        };
+        this.type = '';
+        this.length = '';
+        this.witness_name = '';
+        this.replenishmentVisible = false;
       }
     }
   }

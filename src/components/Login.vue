@@ -203,7 +203,7 @@
             localStorage.setItem('personal', JSON.stringify(res.data.data));
             globalConfig.personal = res.data.data;
 
-            // this.$router.push({path: '/main'});
+            this.$router.push({path: '/main'});
           });
         });
       },
@@ -418,17 +418,12 @@
       margin-top: 160px;
     }
     .loadingTran {
-      border: 3px solid #ffffff;
-      border-left: 0;
-      border-right: 0;
-      -webkit-border-radius: 50%;
-      -moz-border-radius: 50%;
-      border-radius: 50%;
       transition: transform;
       animation: rotate 3s linear infinite;
-      /*background: url("../assets/images/loading.png") no-repeat center center;*/
+      background: url("../assets/images/loading.png") no-repeat center center;
     }
     .loadingBoss {
+      margin-top: -56px;
       background: url("../assets/images/loadingBoss.png") no-repeat center center;
     }
 

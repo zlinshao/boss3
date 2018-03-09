@@ -19,6 +19,8 @@
                      accordion
                      check-strictly
                      @node-click="nodeClick"
+                     @node-expand="nodeExpand"
+                     @node-collapse="nodeCollapse"
                      :default-expanded-keys="defaultExpandKeys"
                      :props="defaultProps"
                      :expand-on-click-node="false"
@@ -30,7 +32,7 @@
       <el-col :span="18">
         <div class="border right">
           <div class="top">
-            <div>{{selectDepart}}</div>
+            <div>{{department_name}}</div>
             <!--<div @click="sortDepartment">-->
               <!--<el-button size="mini">部门排序</el-button>-->
               <!--&lt;!&ndash;<el-button v-if="isDepartment" style="color: #ffffff" type="text">取消排序</el-button>&ndash;&gt;-->
@@ -66,8 +68,7 @@
                   <!--</el-form-item>-->
                   <el-form-item style="float: right">
                     <el-button type="primary" @click="addStaff" v-if="activeName==='first'">新建员工</el-button>
-                    <el-button type="primary" @click="addPosition" v-if="activeName==='second'">新建职位</el-button>
-                    <el-button type="primary" @click="addPosition" v-if="activeName==='third'">新建岗位</el-button>
+                    <el-button type="primary" @click="addPosition('position')" v-if="activeName==='second'">新建职位</el-button>
                   </el-form-item>
                   <el-form-item style="float: right">
                     <el-input v-model="params.keywords" placeholder="请输入搜索内容" @keyup.enter.native="search">
@@ -96,85 +97,122 @@
                     label="入职时间">
                   </el-table-column>
                 </el-table>
+                <div class="tableBottom">
+                  <el-pagination
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    :current-page="currentPage"
+                    :page-sizes="[10, 20, 30, 40]"
+                    :page-size="10"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="totalStaffNum">
+                  </el-pagination>
+                </div>
               </el-tab-pane>
               <el-tab-pane label="职位管理" name="second">
-                <el-table
-                  :data="positionList"
-                  @row-contextmenu="openOnlyPositionMenu"
-                  style="width: 100%">
-                  <el-table-column
-                    prop="name"
-                    label="职位">
-                  </el-table-column>
-                  <el-table-column
-                    prop="orgName"
-                    label="部门">
-                  </el-table-column>
-                </el-table>
+                <div class="tableBox">
+                  <div class="blueTable">
+                    <el-table
+                      :data="positionList"
+                      :row-class-name="tableRowClassName"
+                      @row-contextmenu="openOnlyPositionMenu"
+                      @row-click="clickOnlyPositionMenu"
+                      style="width: 100%">
+                      <el-table-column
+                        prop="name"
+                        label="职位">
+                      </el-table-column>
+                      <el-table-column
+                        prop="orgName"
+                        label="部门">
+                      </el-table-column>
+                    </el-table>
+                  </div>
+                  <div class="tableBottom">
+                    <el-pagination
+                      @size-change="handleSizeChange"
+                      @current-change="handleCurrentChange"
+                      :current-page="currentPage"
+                      :page-sizes="[5, 10, 15, 20]"
+                      :page-size="5"
+                      layout="total, sizes, prev, pager, next, jumper"
+                      :total="totalOnlyPositionNum">
+                    </el-pagination>
+                  </div>
+                </div>
+                <!--岗位-->
+                <div class="tableBox">
+                  <div class="greenTable">
+                    <el-table
+                      :data="positionTableData"
+                      @row-contextmenu="openPositionMenu"
+                      style="width: 100%">
+                      <el-table-column
+                        prop="name"
+                        label="岗位">
+                      </el-table-column>
+                      <el-table-column
+                        label="上级岗位">
+                        <template slot-scope="scope">
+                          <span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>
+                          <span v-else=""> &nbsp;暂无&nbsp; </span>
+                        </template>
+                      </el-table-column>
+                      <el-table-column
+                        prop="pName"
+                        label="职位">
+                      </el-table-column>
+                      <el-table-column
+                        prop="orgName"
+                        label="部门">
+                      </el-table-column>
+                    </el-table>
+                  </div>
+                  <div class="tableBottom">
+                    <el-pagination
+                      @size-change="handleSizeChange"
+                      @current-change="handleCurrentChange"
+                      :current-page="currentPage"
+                      :page-sizes="[5, 10, 15, 20]"
+                      :page-size="5"
+                      layout="total, sizes, prev, pager, next, jumper"
+                      :total="totalPositionNum">
+                    </el-pagination>
+                  </div>
+                </div>
               </el-tab-pane>
-              <el-tab-pane label="岗位管理" name="third">
-                <el-table
-                  :data="positionTableData"
-                  @row-contextmenu="openPositionMenu"
-                  style="width: 100%">
-                  <el-table-column
-                    prop="name"
-                    label="岗位">
-                  </el-table-column>
-                  <el-table-column
-                    label="上级岗位">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>
-                      <span v-else=""> &nbsp;暂无&nbsp; </span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    prop="pName"
-                    label="职位">
-                  </el-table-column>
-                  <el-table-column
-                    prop="orgName"
-                    label="部门">
-                  </el-table-column>
-                </el-table>
-              </el-tab-pane>
+
+              <!--<el-tab-pane label="岗位管理" name="third">-->
+                <!--<el-table-->
+                  <!--:data="positionTableData"-->
+                  <!--@row-contextmenu="openPositionMenu"-->
+                  <!--style="width: 100%">-->
+                  <!--<el-table-column-->
+                    <!--prop="name"-->
+                    <!--label="岗位">-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--label="上级岗位">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>-->
+                      <!--<span v-else=""> &nbsp;暂无&nbsp; </span>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--prop="pName"-->
+                    <!--label="职位">-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--prop="orgName"-->
+                    <!--label="部门">-->
+                  <!--</el-table-column>-->
+                <!--</el-table>-->
+              <!--</el-tab-pane>-->
 
             </el-tabs>
 
 
-            <div class="tableBottom" v-if="activeName==='first'">
-              <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[10, 20, 30, 40]"
-                :page-size="10"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="totalStaffNum">
-              </el-pagination>
-            </div>
-            <div class="tableBottom" v-if="activeName==='second'">
-              <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[10, 20, 30, 40]"
-                :page-size="10"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="totalOnlyPositionNum">
-              </el-pagination>
-            </div>
-            <div class="tableBottom" v-if="activeName==='third'">
-              <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[10, 20, 30, 40]"
-                :page-size="10"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="totalPositionNum">
-              </el-pagination>
-            </div>
+
           </div>
 
         </div>
@@ -182,12 +220,12 @@
     </el-row>
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
     <EditDepart :editDepartDialog="editDepartDialog" :departId="departId" @close="closeEditDepart"></EditDepart>
-    <AddStaff :addStaffDialog="addStaffDialog" :isEdit="isEdit" :editId="editId" @close="closeAddStaff"></AddStaff>
+    <AddStaff :addStaffDialog="addStaffDialog" :addStaffParams="addStaffParams" :isEdit="isEdit" :editId="editId" @close="closeAddStaff"></AddStaff>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
     <AddDepart :addDepartDialog="addDepartDialog" :parentId="parentId" :parentName="parentName" @close="closeAddDepart"></AddDepart>
 
-    <AddPosition :addPositionDialog="addPositionDialog" @close="closeAddPosition"></AddPosition>
+    <AddPosition :addPositionDialog="addPositionDialog" :addPositionParams="addPositionParams" @close="closeAddPosition"></AddPosition>
     <EditPosition :editPositionDialog="editPositionDialog" :positionId="positionId" :positionName="positionName" @close="closeEditPosition"></EditPosition>
     <EditOnlyPosition :editOnlyPositionDialog="editOnlyPositionDialog" :onlyPositionId="onlyPositionId"
                       :onlyPositionName="onlyPositionName" @close="closeEditOnlyPosition"></EditOnlyPosition>
@@ -254,7 +292,8 @@
         departId:null,
         parentId:null,
         parentName:null,
-        selectDepart:"全公司",
+
+
         loading:true,
         activeName:'',      //当前tab名
         positionId:'',      //岗位id
@@ -262,10 +301,16 @@
         onlyPositionId:'',  //职位id
         onlyPositionName:'',
         menuType:'',    //右键类别
-        watchDepartId:'',  //y用于监听部门变化
+
+        department_id:'',  //y用于监听部门变化
+        department_name:"",
+
         isGetStaff:false,
         isGetOnlyPosition:false,
         isGetPosition:false,
+        post_position:'', //  职位或岗位
+        addPositionParams:[],
+        addStaffParams:[],      //新建员工参数
       }
     },
     mounted(){
@@ -273,34 +318,42 @@
       document.getElementById('staffManage').style.minHeight = window.innerHeight - 160 + 'px';
       this.getDepart();
       this.activeName = 'first';
-
+      this.$http.get(globalConfig.server_user+'api/v1/organizations/1').then((res) => {
+        if(res.data.status === 'success'){
+          let data = res.data.data;
+          this.params.org_id = data.id;
+          this.department_id = data.id;
+          this.department_name = data.name;
+        }
+      });
     },
     watch:{
-      watchDepartId(val){
+      department_id(val){
         this.isGetStaff=false;
         this.isGetOnlyPosition=false;
         this.isGetPosition=false;
+        this.onlyPositionId = '';
+        this.onlyPositionName = '';
         if(this.activeName === 'first'){
           this.getStaffData();
           this.isGetStaff=true;
         }else if(this.activeName === 'second'){
           this.getOnlyPosition();
           this.isGetOnlyPosition=true;
-        }else {
-          this.getPosition();
-          this.isGetPosition=true;
         }
       },
       activeName(val){
+        if(val==='first'){
+          this.params.pageNum = 10;
+        }else if(val==='second'){
+          this.params.pageNum = 5;
+        }
         if(val==='first'&& !this.isGetStaff){
           this.getStaffData();
           this.isGetStaff=true;
         }else if(val==='second'&& !this.isGetOnlyPosition){
           this.getOnlyPosition();
           this.isGetOnlyPosition=true;
-        }else if(val==='third'&& !this.isGetPosition){
-          this.getPosition();
-          this.isGetPosition=true;
         }
       }
     },
@@ -309,16 +362,15 @@
       //**************部门操作函数********************
       //获取部门数据
       getDepart(){
-        this.$http.get(globalConfig.server_user+'api/v1/organizations').then((res) => {
+        this.$http.get(globalConfig.server_user+'api/v1/organizations?per_page_number=500').then((res) => {
           this.arrList = res.data.data;
           this.setTree = this.recurrence(null);
-          this.defaultExpandKeys=[];
           this.arrList.forEach((item) => {
-            this.defaultExpandKeys.push(item.id);
+            if(item.parent_id < 1 && this.defaultExpandKeys.indexOf(item.id)<0){
+              this.defaultExpandKeys.push(item.id);
+            }
           });
           this.getStaffData();
-//          this.getOnlyPosition();
-//          this.getPosition();
         })
       },
       //把数据转化为树形数据结构
@@ -338,8 +390,18 @@
       //点击节点
       nodeClick(data,node,store){
         this.params.org_id = data.id;
-        this.watchDepartId = data.id;
-        this.selectDepart = data.name;
+        this.department_id = data.id;
+        this.department_name = data.name;
+      },
+      nodeExpand(data,node,store){
+        if(this.defaultExpandKeys.indexOf(data.id)<0){
+          this.defaultExpandKeys.push(data.id)
+        }
+      },
+      nodeCollapse(data,node,store){
+        this.defaultExpandKeys.filter((x)=>{
+          return x!==data.id;
+        })
       },
       handleAdd(s,d,n){//增加节点
         this.addDepart(d);
@@ -415,7 +477,7 @@
       //获取员工数据列表
       getStaffData(){
         this.$http.get(globalConfig.server_user+'api/v1/users?q='+this.params.keywords+'&page='+this.params.page
-          +'&per_page_number='+this.params.pageNum+'&org_id='+this.params.org_id).then((res) => {
+          +'&per_page_number='+this.params.pageNum+'&org_id='+this.params.org_id+'&is_recursion=1').then((res) => {
           if(res.data.status === 'success'){
             this.staffTableData = res.data.data;
             this.totalStaffNum = res.data.meta.total;
@@ -478,6 +540,7 @@
       addStaff(){
         this.addStaffDialog = true;
         this.isEdit = false;
+        this.addStaffParams = Object.assign({},this.addStaffParams, {depart_id:this.params.org_id,depart_name:this.department_name})
       },
       closeAddStaff(val){
         this.addStaffDialog = false;
@@ -490,50 +553,64 @@
 
 
 
-
-
       //********************职位操作函数****************
       //获取单独职位列表
       getOnlyPosition(){
-        this.$http.get(globalConfig.server_user+'api/v1/position/type?org_id='+this.params.org_id+'&page='+this.params.page
-          +'&per_page_number='+this.params.pageNum).then((res) => {
-          if(res.data.status === 'success'){
-            let tableData = res.data.data;
-            this.positionList = [];
-            this.totalOnlyPositionNum = res.data.meta.total;
-            if(tableData.length>0){
-              tableData.forEach((data) => {
-                let org_id = data.org_id;
-                let org_name = null;
-                //遍历部门部门数组 根据org_id获取部门名称
-                this.arrList.forEach((x)=>{
-                  if(x.id === org_id){
-                    org_name = x.name
-                  }
+        this.positionTableData = [];
+        if(this.params.org_id){
+          this.$http.get(globalConfig.server_user+'api/v1/position/type?org_id='+this.params.org_id+'&page='+this.params.page
+            +'&per_page_number='+this.params.pageNum).then((res) => {
+            if(res.data.status === 'success'){
+              let tableData = res.data.data;
+              this.positionList = [];
+              this.totalOnlyPositionNum = res.data.meta.total;
+              if(tableData.length>0){
+                tableData.forEach((data) => {
+                  let org_id = data.org_id;
+                  let org_name = null;
+                  //遍历部门部门数组 根据org_id获取部门名称
+                  this.arrList.forEach((x)=>{
+                    if(x.id === org_id){
+                      org_name = x.name
+                    }
+                  });
+                  this.positionList.push(Object.assign({},data,{orgName:org_name}));
                 });
-                this.positionList.push(Object.assign({},data,{orgName:org_name}));
+              }
+            }else {
+              this.$notify.info({
+                title: '消息',
+                message: res.data.message,
               });
+              this.positionList = [];
+              this.totalOnlyPositionNum = 0;
             }
-          }else {
-            this.$notify.info({
-              title: '消息',
-              message: res.data.message,
-            });
-            this.positionList = [];
-            this.totalOnlyPositionNum = 0;
-          }
-        })
+          })
+        }
       },
       //职位右键菜单
       openOnlyPositionMenu(row, event){
         this.onlyPositionId = row.id;
         this.onlyPositionName = row.name;
+        this.department_id = row.org_id;
+        this.department_name = row.orgName;
+        this.getPosition();
         this.menuType = 'onlyPosition';
         this.lists = [
+          {clickIndex: 'addPost', headIcon: 'el-icon-plus', label: '增加岗位',},
           {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
           {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextParams(event);
+      },
+      //职位单击
+      clickOnlyPositionMenu(row,event){
+        this.onlyPositionId = row.id;
+        this.onlyPositionName = row.name;
+        this.department_id = row.org_id;
+        this.department_name = row.orgName;
+
+        this.getPosition();
       },
       //右键职位回调
       openOnlyPositionDialog(type){
@@ -552,6 +629,8 @@
               message: '已取消删除'
             });
           });
+        }else if(type === 'addPost'){
+            this.addPosition('post');
         }
       },
 
@@ -583,62 +662,90 @@
       },
 
       //********************岗位操作函数****************
-      //获取岗位
+      //根据职位获取岗位
       getPosition(){
-        let tableData = [];
-        let org_id = null;
-        let org_name = null;
-        //通过职位获取相关部门信息
-        this.$http.get(globalConfig.server_user+'api/v1/position/type?org_id='+this.params.org_id).then((res) => {
+        this.$http.get(globalConfig.server_user+'api/v1/positions?type=' + this.onlyPositionId+'&page='+this.params.page
+          +'&per_page_number='+this.params.pageNum).then((res) => {
           if(res.data.status === 'success'){
-            tableData = res.data.data;
-            if(tableData.length>0) {
-              tableData.forEach((data) => {
-                org_id = data.org_id;
-                org_name = null;
-                //遍历部门部门数组 根据org_id获取部门名称
-                this.arrList.forEach((x) => {
-                  if (x.id === org_id) {
-                    org_name = x.name
-                  }
-                });
-              });
+            let arr = res.data.data;
+
+            for(let i=0;i<arr.length;i++){
+              arr.forEach((item) => {
+                if(item.parent_id === arr[i].id){
+                  item.parent_name = arr[i].name;
+                }
+              })
             }
+
+            arr.forEach((item) => {
+              item.pName = this.onlyPositionName;
+              item.orgId = this.department_id;
+              item.orgName = this.department_name;
+            });
+            this.totalPositionNum = res.data.meta.total;
+            this.positionTableData = arr;
+          }else {
+            this.totalPositionNum = 0;
+            this.positionTableData = [];
           }
-        }).then((data)=>{
-          //
-          this.$http.get(globalConfig.server_user+'api/v1/positions?org_id=' + this.params.org_id+'&page='+this.params.page
-            +'&per_page_number='+this.params.pageNum).then((res) => {
-            if(res.data.status === 'success'){
-              let arr = res.data.data;
-
-              for(let i=0;i<arr.length;i++){
-                arr.forEach((item) => {
-                  if(item.parent_id === arr[i].id){
-                    item.parent_name = arr[i].name;
-                  }
-                })
-              }
-
-              for(let i=0;i<tableData.length;i++){
-                arr.forEach((item) => {
-                  if(item.type === tableData[i].id){
-                    item.pName = tableData[i].name;
-                    item.orgId = org_id;
-                    item.orgName = org_name;
-                  }
-                })
-              }
-              this.totalPositionNum = res.data.meta.total;
-              this.positionTableData = arr;
-            }else {
-              this.totalPositionNum = 0;
-              this.positionTableData = [];
-            }
-          })
         })
-
       },
+      //根据部门获取岗位
+//      getPosition(){
+//        let tableData = [];
+//        let org_id = null;
+//        let org_name = null;
+//        //通过职位获取相关部门信息
+//        this.$http.get(globalConfig.server_user+'api/v1/position/type?org_id='+this.params.org_id).then((res) => {
+//          if(res.data.status === 'success'){
+//            tableData = res.data.data;
+//            if(tableData.length>0) {
+//              tableData.forEach((data) => {
+//                org_id = data.org_id;
+//                org_name = null;
+//                //遍历部门部门数组 根据org_id获取部门名称
+//                this.arrList.forEach((x) => {
+//                  if (x.id === org_id) {
+//                    org_name = x.name
+//                  }
+//                });
+//              });
+//            }
+//          }
+//        }).then((data)=>{
+//          //
+//          this.$http.get(globalConfig.server_user+'api/v1/positions?org_id=' + this.params.org_id+'&page='+this.params.page
+//            +'&per_page_number='+this.params.pageNum).then((res) => {
+//            if(res.data.status === 'success'){
+//              let arr = res.data.data;
+//
+//              for(let i=0;i<arr.length;i++){
+//                arr.forEach((item) => {
+//                  if(item.parent_id === arr[i].id){
+//                    item.parent_name = arr[i].name;
+//                  }
+//                })
+//              }
+//
+//              for(let i=0;i<tableData.length;i++){
+//                arr.forEach((item) => {
+//                  if(item.type === tableData[i].id){
+//                    item.pName = tableData[i].name;
+//                    item.orgId = org_id;
+//                    item.orgName = org_name;
+//                  }
+//                })
+//              }
+//              this.totalPositionNum = res.data.meta.total;
+//              this.positionTableData = arr;
+//            }else {
+//              this.totalPositionNum = 0;
+//              this.positionTableData = [];
+//            }
+//          })
+//        })
+//
+//      },
       //岗位右键菜单
       openPositionMenu(row, event){
         this.positionId = row.id;
@@ -698,15 +805,23 @@
       },
 
       //新建岗位
-      addPosition(){
-        this.addPositionDialog = true
+      addPosition(val){
+        this.addPositionDialog = true;
+        if(val ==='position'){
+          this.addPositionParams = Object.assign({},this.addPositionParams,
+            {depart_id:this.params.org_id,depart_name:this.department_name,post_position:'position'})
+        }else {
+          this.addPositionParams = Object.assign({},this.addPositionParams,
+            {depart_id:this.params.org_id,depart_name:this.department_name,post_position:'post',
+              position_id:this.onlyPositionId,position_name:this.onlyPositionName})
+        }
       },
       closeAddPosition(val){
         this.addPositionDialog = false;
         if(val === 'success'){
-          if(this.activeName=== 'second'){
+          if(this.addPositionParams.post_position=== 'position'){
             this.getOnlyPosition();
-          }else if(this.activeName=== 'third'){
+          }else if(this.addPositionParams.post_position=== 'post'){
             this.getPosition();
           }
         }
@@ -829,6 +944,14 @@
           }
         })
       },
+
+      //************列表变色************
+      tableRowClassName({row, rowIndex}) {
+        if (row.id === this.onlyPositionId) {
+          return 'success-row';
+        }
+        return '';
+      }
     }
   }
 </script>
@@ -889,6 +1012,16 @@
       }
       .staffTable{
         padding: 0 10px;
+      }
+      .tableBox {
+        border: 1px solid #dfe6fb;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .12), 0 0 6px 0 rgba(0, 0, 0, .04);
+        .tableBottom {
+          padding: 8px;
+          display: flex;
+          justify-content: flex-end;
+        }
       }
       .tableBottom{
         padding: 8px;
