@@ -142,10 +142,13 @@
           使用指南
         </div>
         <div class="personInfo">
-          <div class="head"><img src="../assets/images/head.jpg"></div>
+          <div class="head">
+            <img :src="personal.avatar" v-if="personal.avatar !== null">
+            <img src="../assets/images/head.png" v-else>
+          </div>
           <el-dropdown>
               <span class="el-dropdown-link">
-                解兆飞<i class="el-icon-arrow-down el-icon--right" style="margin-left: 25px"></i>
+                {{personal.name}}<i class="el-icon-arrow-down el-icon--right" style="margin-left: 25px"></i>
               </span>
             <el-dropdown-menu slot="dropdown" class="personal">
               <!--<el-dropdown-item class="personalList">-->
@@ -160,7 +163,6 @@
               <!--部门主页-->
               <!--</div>-->
               <!--</el-dropdown-item>-->
-
 
               <el-row>
                 <el-col :span="12">
@@ -310,7 +312,7 @@
               <!--个人门户-->
               <!--</div>-->
               <!--</el-dropdown-item>-->
-              <el-dropdown-item class="detrusion">
+              <el-dropdown-item class="detrusion" @click.native="routers('/login')">
                 <!--<p><i class="el-icons-fa-dot-circle-o"></i></p>-->
                 <div>
                   安全退出
@@ -384,6 +386,7 @@
     components: {TagsView},
     data() {
       return {
+        personal: globalConfig.personal,
         isCollapse: false,
         isFull: false,
         Countdown: 999999,  //倒计时

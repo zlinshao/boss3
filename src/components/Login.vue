@@ -1,9 +1,11 @@
 <template>
-  <div id="login"
-       v-loading="!underWay"
-       element-loading-text="页面初始化中......"
-       element-loading-spinner="el-icon-loading"
-       element-loading-background="rgba(0, 0, 0, 0.6)">
+  <div id="login">
+
+    <div class="loadingMain" v-if="!underWay">
+      <div class="loadingTran"></div>
+      <div class="loadingBoss"></div>
+      <div class="loadingTitle">Loading.....</div>
+    </div>
 
     <div class="container" v-if="underWay">
 
@@ -105,8 +107,6 @@
         </div>
 
       </div>
-
-
     </div>
   </div>
 </template>
@@ -136,6 +136,7 @@
     },
     mounted() {
 //      this.getBackground();
+
       if (JSON.stringify(this.$route.query) !== '{}') {
         let phone = this.$route.query.phone;
         let code = this.$route.query.code;
@@ -194,14 +195,17 @@
           username: a,
           password: b,
         }).then((res) => {
-          localStorage.setItem('mydata', JSON.stringify(res.data.data));
+          localStorage.setItem('myData', JSON.stringify(res.data.data));
           let head = res.data.data;
           globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
-          // this.$http.get(this.urls + 'api/v1/session').then((res) => {
-          //
-          // });
-          this.$router.push({path: '/main'});
-        })
+
+          this.$http.get(this.urls + 'api/v1/session').then((res) => {
+            localStorage.setItem('personal', JSON.stringify(res.data.data));
+            globalConfig.personal = res.data.data;
+
+            this.$router.push({path: '/main'});
+          });
+        });
       },
       sweepCode() {
         window.location.href = 'https://oapi.dingtalk.com/connect/qrconnect?appid=dingoabeclxxwagukzyegm&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=http://test.boss-support.lejias.cn/sns_login'
@@ -395,12 +399,67 @@
 
 <style lang="scss">
   #login {
-    .el-loading-spinner {
+    .loadingMain {
+      display: flex;
+      display: -webkit-flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+    .loadingTran, .loadingBoss {
+      position: fixed;
+      margin-top: -60px;
+      width: 200px;
+      height: 200px;
+    }
+    .loadingTitle {
       font-size: 30px;
-      p {
-        font-size: 30px;
+      color: #DDDDDD;
+      margin-top: 160px;
+    }
+    .loadingTran {
+      transition: transform;
+      animation: rotate 3s linear infinite;
+      background: url("../assets/images/loading.png") no-repeat center center;
+    }
+    .loadingBoss {
+      margin-top: -56px;
+      background: url("../assets/images/loadingBoss.png") no-repeat center center;
+    }
+
+    @-webkit-keyframes rotate {
+      from {
+        -webkit-transform: rotate(360deg);
+      }
+      to {
+        -webkit-transform: rotate(0deg);
       }
     }
+    @-moz-keyframes rotate {
+      from {
+        -moz-transform: rotate(359deg);
+      }
+      to {
+        -moz-transform: rotate(0deg);
+      }
+    }
+    @-o-keyframes rotate {
+      from {
+        -o-transform: rotate(359deg);
+      }
+      to {
+        -o-transform: rotate(0deg);
+      }
+    }
+    @keyframes rotate {
+      from {
+        transform: rotate(359deg);
+      }
+      to {
+        transform: rotate(0deg);
+      }
+    }
+
     .modal_back {
       width: 100%;
       height: 100%;

@@ -11,5 +11,6 @@ globalConfig = {
   header:{
     //'Content-Type': 'application/x-www-form-urlencoded',
     'Accept': 'application/json',
-  }
+  },
+  personal:{}
 };
