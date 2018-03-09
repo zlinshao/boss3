@@ -12,6 +12,7 @@ import router from './router'
 import App from './App.vue'
 import store from './store'
 import Boss from './boss.config.js'
+import Fun from './fun.config.js'
 import Cookies from 'js-cookie';
 
 import 'vue-event-calendar/dist/style.css' //1.1.10之后的版本，css被放在了单独的文件中，方便替换
@@ -25,6 +26,7 @@ import vueEventCalendar from 'vue-event-calendar'
 
 Vue.use(vueEventCalendar, {locale: 'zh',});
 Vue.use(Boss);
+Vue.use(Fun);
 Vue.use(ElementUI);
 Vue.use(VueRouter);
 Vue.use(Vuex);
@@ -34,10 +36,15 @@ axios.defaults.withCredentials = true;
 axios.defaults.headers.common['Env'] = globalConfig.env;
 axios.defaults.headers = globalConfig.header;
 
-if (localStorage.mydata !== undefined) {
-  let head = JSON.parse(localStorage.mydata);
+if (localStorage.myData !== undefined) {
+  let head = JSON.parse(localStorage.myData);
   globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
 }
+
+if (localStorage.personal !== undefined) {
+  globalConfig.personal = JSON.parse(localStorage.personal);
+}
+
 Vue.config.productionTip = false;
 
 // 拦截器
@@ -57,36 +64,16 @@ axios.interceptors.response.use(function (response) {
 
 //重定向
 router.beforeEach((to, from, next) => {
-  console.log(from);
-  next();
-  // if (to.path === '/login' && router.query === undefined) {
-  //   localStorage.removeItem('myData');
-  //   next({path: '/login'});
-  //   if(from.path !== '/login'){
-  //
-  //   }
-  // }
-
-
-  // if (router.query !== undefined) {
-  //   let query = router.query;
-  //   next({path: '/main'});
-  // } else {
-  //   next({path: '/login'})
-  // }
-  // let user = JSON.parse(sessionStorage.getItem('user'));
-  //
-  // if (Cookies.get('locking') === '1' && to.path !== '/lock') {
-  //   next({path: '/lock'});
-  // } else if (Cookies.get('locking') === '0' && to.path === '/lock') {
-  //   next(false);
-  // } else {
-  //   if (!user && to.path !== '/login') {
-  //     next({path: '/login'})
-  //   } else {
-  //     next()
-  //   }
-  // }
+  if (to.path === '/login') {
+    localStorage.removeItem('myData');
+    localStorage.removeItem('personal');
+  }
+  let data = localStorage.getItem("myData");
+  if (!data && to.path !== '/login') {
+    next({path: '/login'})
+  } else {
+    next();
+  }
 });
 
 new Vue({

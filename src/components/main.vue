@@ -101,7 +101,6 @@
         </el-col>
       </el-row>
 
-
     </div>
   </div>
 </template>
@@ -112,6 +111,7 @@
     name: 'app',
     data() {
       return {
+        urls: globalConfig.server_user,
         demoEvents: [{
           date: `${today.getFullYear()}/${today.getMonth() + 1}/15`,
           title: 'Title-1',
@@ -129,6 +129,8 @@
     },
     mounted() {
       this.changeLanguage();
+      console.log(globalConfig.header);
+      console.log(globalConfig.personal);
     },
     methods: {
       handleDayChanged(data) {
