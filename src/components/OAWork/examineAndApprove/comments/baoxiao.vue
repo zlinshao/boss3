@@ -23,7 +23,7 @@
             </el-row>
 
             <el-form-item label="费用明细">
-              <el-input v-model="reimbursement_cost_details[item]" type="textarea"
+              <el-input v-model="reimbursement_cost_details[item-1]" type="textarea"
                         :autosize="{minRows: 2, maxRows: 4}" placeholder="请输入费用明细描述"></el-input>
             </el-form-item>
           </div>
@@ -36,7 +36,7 @@
           </el-form-item>
 
           <el-form-item label="总报销金额(元):">
-            <span></span>
+            <span>{{totalMoney}}元</span>
           </el-form-item>
 
           <el-form-item label="图片">
@@ -229,7 +229,7 @@
 
       </div>
       <span slot="footer">
-            <el-button type="primary" @click="reimbursement = false">提交</el-button>
+            <el-button type="primary" size="small" @click="confirmSubmit">提交</el-button>
         </span>
     </el-dialog>
   </div>
@@ -238,7 +238,6 @@
 <script>
   import Dropzone from '../../../common/dropzone.vue'
   export default {
-    name: "baoxiao",
     props: ['module'],
     components:{Dropzone},
     data () {
@@ -249,13 +248,12 @@
           remark:'',
           image_pic:[],
           attachment_file:[],
-          creator_id:'',
         },
         reimbursement_amount:[],
         reimbursement_type:[],
         reimbursement_cost_details:[],
         number:1,
-
+        totalMoney:0
       }
     },
     watch:{
@@ -266,11 +264,21 @@
         if(!val){
           this.$emit('close');
         }
-      }
+      },
+      reimbursement_amount(val){
+          if(val){
+            this.totalMoney=0;
+            val.forEach((x) => {
+                this.totalMoney+=Number(x) ;
+            })
+          }else {
+            this.totalMoney=0;
+          }
+      },
     },
     methods: {
       handleRemove(file, fileList) {
-        console.log(file, fileList);
+
       },
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;
@@ -283,9 +291,49 @@
       //删除报销明细
       deleteNumber(index){
         this.number--;
-        this.reimbursement_amount.splice(index,1)
-        this.reimbursement_type.splice(index,1)
-        this.reimbursement_cost_details.splice(index,1)
+        this.reimbursement_amount.splice(index,1);
+        this.reimbursement_type.splice(index,1);
+        this.reimbursement_cost_details.splice(index,1);
+      },
+      //确认提交
+      confirmSubmit(){
+        let contentItem = {};
+        this.form.content=[];
+        for(let i=0;i<this.number;i++){
+          contentItem = {};
+          contentItem.reimbursement_amount = this.reimbursement_amount[i]?this.reimbursement_amount[i]:'';
+          contentItem.reimbursement_type = this.reimbursement_type[i]?this.reimbursement_type[i]:'';
+          contentItem.reimbursement_cost_details = this.reimbursement_cost_details[i]?this.reimbursement_cost_details[i]:'';
+          this.form.content.push(contentItem);
+        }
+        this.$http.post(globalConfig.server+'oa/reimbursement',this.form).then((res) => {
+          if(res.data.code === '140010'){
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg,
+            });
+            this.closeModal();
+          }else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
+          }
+        })
+      },
+      closeModal(){
+        this.form = {
+          content:[],
+          remark:'',
+          image_pic:[],
+          attachment_file:[],
+        };
+        this.reimbursement_amount = [];
+        this.reimbursement_type = [];
+        this.reimbursement_cost_details = [];
+        this.number = 1;
+        this.totalMoney=0;
+        this.reimbursement = false;
       }
     }
   }

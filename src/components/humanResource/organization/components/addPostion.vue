@@ -1,14 +1,36 @@
 <template>
   <div>
-    <el-dialog title="新建职位/岗位" :visible.sync="addPositionDialogVisible" width="30%">
+    <el-dialog :title="title" :visible.sync="addPositionDialogVisible" width="30%">
       <div>
         <el-form size="mini" :model="params" label-width="100px">
           <el-row>
             <el-col :span="24">
               <el-form-item label="类目" required="">
-                <el-select v-model="type" clearable="" placeholder="请选择类目">
+                <el-select v-model="type" disabled placeholder="请选择类目">
                   <el-option label="职位" value="position"></el-option>
                   <el-option label="岗位" value="post"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24">
+              <el-form-item label="所属部门" required="">
+                <el-input placeholder="请输入内容" disabled="" v-model="department"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" v-if="type==='position'">
+              <el-form-item label='职位名称' required="">
+                <el-input placeholder="请输入内容" v-model="params.name"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" v-if="type==='post'">
+              <el-form-item label="所属职位" required="">
+                <el-input disabled="" v-model="positionName"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" v-if="type==='post'">
+              <el-form-item label="上级岗位">
+                <el-select v-model="params.parent_id" clearable="" placeholder="请选择上级岗位">
+                  <el-option v-for="item in postData" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -28,30 +50,6 @@
               </el-form-item>
             </el-col>
 
-            <el-col :span="24" v-if="type==='position'">
-              <el-form-item label='职位名称' required="">
-                <el-input placeholder="请输入内容" v-model="params.name"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="所属部门" required="">
-                <el-input placeholder="请输入内容" readonly="" @focus="selectDepart" v-model="department"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24" v-if="type==='post'">
-              <el-form-item label="所属职位" required="">
-                <el-select v-model="positionId" clearable="" placeholder="请选择职位">
-                  <el-option v-for="item in positionData" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24" v-if="type==='post'">
-              <el-form-item label="上级岗位">
-                <el-select v-model="params.parent_id" clearable="" placeholder="请选择上级岗位">
-                  <el-option v-for="item in postData" :key="item.id" :label="item.name" :value="item.id"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
           </el-row>
         </el-form>
       </div>
@@ -69,16 +67,16 @@
 <script>
   import Organization from '../../../common/organization.vue'
   export default {
-    props:['addPositionDialog'],
+    props:['addPositionDialog','addPositionParams'],
     components:{Organization},
     data() {
       return {
         addPositionDialogVisible:false,
         params:{
-          org_id:'',
-          name:'',
-          type:'',
-          parent_id:'',
+          org_id:'',    //部门id
+          name:'',      //名字
+          type:'',       //所属职位
+          parent_id:'',   //上级岗位id
           display_name:'',
           description:''
         },
@@ -86,8 +84,9 @@
         organizationDialog:false,
         department:'',
         positionData:[],
-        positionId:'',
+        positionName:'',
         postData:[],
+        title:'新建职位'
       };
     },
     watch:{
@@ -99,12 +98,24 @@
           this.$emit('close')
         }
       },
-      positionId(val){
-        if(val){
-          this.params.type = val;
+      'params.type':{
+        handler(val,oldVal){
           this.getPost(val);
         }
       },
+      type(val){
+         this.title = val === 'post'?'新建岗位':'新建职位';
+      },
+      'addPositionParams':{
+        deep:true,
+        handler(val,oldVal){
+          this.type = val.post_position;
+          this.params.org_id = val.depart_id;
+          this.department = val.depart_name;
+          this.positionName = val.position_name;
+          this.params.type = val.position_id;
+        }
+      }
     },
     methods:{
       //编辑时获取员工信息
@@ -114,6 +125,10 @@
           this.$http.post(globalConfig.server_user+'api/v1/position/type',this.params).then((res) => {
             if(res.data.status === 'success'){
               this.$emit('close','success');
+              this.$notify.success({
+                title: '成功',
+                message: res.data.message,
+              });
               this.closeModal();
             }else {
               this.$notify({
@@ -128,6 +143,10 @@
             if(res.data.status === 'success'){
               this.$emit('close','success');
               this.closeModal();
+              this.$notify.success({
+                title: '成功',
+                message: res.data.message,
+              });
             }else {
               let msgData=res.data.message;
               if(typeof (msgData) !=='string'){
@@ -224,7 +243,7 @@
         };
         this.type = "";    //类别
         this.department = '';
-        this.positionId = '';
+        this.positionName = '';
         this.positionData = [];
       }
     }
