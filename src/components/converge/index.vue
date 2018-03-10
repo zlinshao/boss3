@@ -645,6 +645,7 @@
         border-radius: 5px;
         height: 300px;
         position: relative;
+        overflow: hidden;
         img {
           @include border_radius(5px);
           width: 100%;
