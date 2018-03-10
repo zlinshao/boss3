@@ -26,7 +26,6 @@ import vueEventCalendar from 'vue-event-calendar'
 
 Vue.use(vueEventCalendar, {locale: 'zh',});
 Vue.use(Boss);
-Vue.use(Fun);
 Vue.use(ElementUI);
 Vue.use(VueRouter);
 Vue.use(Vuex);
@@ -46,6 +45,8 @@ if (localStorage.personal !== undefined) {
 }
 
 Vue.config.productionTip = false;
+
+Vue.prototype.adminFun = Fun;
 
 // 拦截器
 axios.interceptors.response.use(function (response) {

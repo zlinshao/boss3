@@ -224,7 +224,6 @@
       // ===================系统================
       // 系统列表
       powerList(val) {
-        this.tableFirst = [];
         this.firstForm.page = val;
         this.$http.get(this.urls + 'api/v1/systems?per_page_number=5', {
           params: this.firstForm
@@ -245,7 +244,6 @@
       // ==============模块=================
       // 模块列表
       moduleList(val, id) {
-        this.tableSecond = [];
         this.secondForm.page = val;
         this.$http.get(this.urls + 'api/v1/modules?per_page_number=5&sys_id=' + this.addID.firstID, {
           params: this.secondForm
@@ -264,7 +262,6 @@
       },
       // ==============权限=================
       authority(val) {
-        this.tableThird = [];
         this.thirdForm.page = val;
         this.$http.get(this.urls + 'api/v1/permissions?per_page_number=5&mod_id=' + this.addID.secondID, {
           params: this.thirdForm

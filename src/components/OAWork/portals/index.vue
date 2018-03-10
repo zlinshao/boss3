@@ -132,7 +132,7 @@
           status: [],
         },
         form: {
-          list: 15,
+          list: 7,
           dict_id: '',
           status: '',
           keywords: '',
@@ -141,6 +141,7 @@
         formDetail: {},
         paging: 0,
         currentPage: 1,
+        beforePage: '',
         tableData: [],
         pitch: '',
         if_shows: '',
@@ -167,7 +168,7 @@
         }).then((res) => {
           this.isHigh = false;
           if (res.data.code === '80000') {
-            this.currentPage = page;
+            this.beforePage = page;
             this.tableData = res.data.data.data;
             this.paging = res.data.data.count;
           } else {
@@ -270,7 +271,8 @@
         }).then(() => {
           this.$http.get(this.urls + 'oa/portal/delete/' + id).then((res) => {
             if (res.data.code === '80040') {
-              this.myData(this.currentPage);
+              this.myData(this.beforePage);
+              this.currentPage = this.beforePage;
               this.prompt(1, res.data.msg);
             } else {
               this.prompt(2, res.data.msg);
