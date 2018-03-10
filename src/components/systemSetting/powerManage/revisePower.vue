@@ -61,7 +61,7 @@
         <el-button size="small" v-if="names === 'third'" type="primary" @click="authorityModule(title)">{{title}}
         </el-button>
         <div style="float: left;margin-top: 6px">
-          <el-checkbox v-model="check" v-if="names === 'third' && title === '新增'">持续新增</el-checkbox>
+          <el-checkbox v-model="checked" v-if="names === 'third' && title === '新增'">持续新增</el-checkbox>
         </div>
       </div>
     </el-dialog>
@@ -77,7 +77,7 @@
         urls: globalConfig.server_user,
         dialogVisible: false,
 
-        check: false,
+        checked: false,
         tableSecond: [],
         form: {
           radio: 1,
@@ -219,7 +219,7 @@
             if (res.data.status === 'success') {
               this.prompt(res.data.message, 1);
               this.$emit('sure', this.names);
-              if (this.check) {
+              if (this.checked) {
                 this.close_();
               } else {
                 this.$emit('close');

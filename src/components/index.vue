@@ -1,7 +1,6 @@
 <template>
   <div id="index" @click="clickScreen">
     <div class="navBarLeft" :class="isFull? 'navBarRight':'' ">
-      <!--<i class="el-icons-fa-compress"></i>-->
       <p @click="fullScreen(2)"></p>
     </div>
     <div style="position: fixed;top: 30px;right: 20px;z-index: 100;">
@@ -32,7 +31,8 @@
       <div class="left">
         <div class="logo" :class="isCollapse? 'isCollapse_logo':'' ">
           <div class="boss" :class="isCollapse? 'boss1':'' ">BOSS</div>
-          <div :class="isCollapse? 'isCollapse':'' " class="el-icons-fa-bars" @click="changeCollapse"></div>
+          <div v-if="isCollapse" class="isCollapse" @click="changeCollapse"></div>
+          <div v-if="!isCollapse" class="el-icons-fa-bars" @click="changeCollapse"></div>
         </div>
         <div class="slogan">
           <img src="../assets/images/slogan.png" alt="">
@@ -769,7 +769,10 @@
       align-items: center;
     }
     .isCollapse {
-      padding: 0 20px;
+      width: 27px;
+      height: 20px;
+      margin-right: 20px;
+      background: url("../assets/images/boss.svg") no-repeat;
     }
     .isCollapse_logo {
       width: 64px !important;
