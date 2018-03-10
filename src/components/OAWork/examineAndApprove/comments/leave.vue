@@ -9,7 +9,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="请假类型">
-                <el-select v-model="form.leave_type" placeholder="请选择">
+                <el-select v-model="form.leave_type"  clearable="" placeholder="请选择">
                   <el-option
                     v-for="item in dictionary"
                     :key="item.id"

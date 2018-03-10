@@ -3,12 +3,12 @@
     <div class="navBarLeft" :class="isFull? 'navBarRight':'' ">
       <p @click="fullScreen(2)"></p>
     </div>
-    <div style="position: fixed;top: 30px;right: 20px;z-index: 100;">
+    <div id="KeFuDiv" style="position: fixed;top: 30px;right: 20px;z-index: 1000000;" onmousedown="MoveDiv(KeFuDiv,event);">
       <el-collapse-transition>
         <div v-show="isFull">
           <div class="transition-box">
             <div>
-              <img src="../assets/images/情人节.png" alt="">
+              <img src="../assets/images/head.jpg" style="border-radius: 20px" alt="">
             </div>
             <div class="contents">
               <el-row>
@@ -27,6 +27,10 @@
         </div>
       </el-collapse-transition>
     </div>
+
+
+
+
     <div class="navBar" :class="isFull? 'navBarHide':'' ">
       <div class="left">
         <div class="logo" :class="isCollapse? 'isCollapse_logo':'' ">
@@ -146,24 +150,11 @@
             <img :src="personal.avatar" v-if="personal.avatar !== null">
             <img src="../assets/images/head.png" v-else>
           </div>
-          <el-dropdown>
+          <el-dropdown  trigger="click">
               <span class="el-dropdown-link">
                 {{personal.name}}<i class="el-icon-arrow-down el-icon--right" style="margin-left: 25px"></i>
               </span>
             <el-dropdown-menu slot="dropdown" class="personal">
-              <!--<el-dropdown-item class="personalList">-->
-              <!--<p><i class="el-icon-menu"></i></p>-->
-              <!--<div>-->
-              <!--个人主页-->
-              <!--</div>-->
-              <!--</el-dropdown-item>-->
-              <!--<el-dropdown-item class="personalList">-->
-              <!--<p><i class="el-icons-fa-sitemap"></i></p>-->
-              <!--<div>-->
-              <!--部门主页-->
-              <!--</div>-->
-              <!--</el-dropdown-item>-->
-
               <el-row>
                 <el-col :span="12">
                   <div class="signCount" style="margin-left: 4px">
@@ -380,7 +371,6 @@
 <script>
   import Cookies from 'js-cookie'
   import TagsView from './common/tagsView.vue'
-
   export default {
     name: 'Index',
     components: {TagsView},
@@ -396,6 +386,7 @@
     },
     mounted() {
       this.countTime();
+
     },
     computed: {
       visitedViews() {
