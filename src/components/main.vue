@@ -1,6 +1,5 @@
 <template>
   <div id="main">
-    <el-button type="primary" @click="hhhhh">反对法士大夫</el-button>
     <div class="container">
       <el-row :gutter="10">
         <el-col :span="16">
@@ -135,9 +134,6 @@
       console.log(globalConfig.personal);
     },
     methods: {
-      hhhhh(){
-        this.adminFun.zidian(147);
-      },
       handleDayChanged(data) {
         console.log(data)
       },

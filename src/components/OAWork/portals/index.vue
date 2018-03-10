@@ -132,7 +132,7 @@
           status: [],
         },
         form: {
-          list: 7,
+          list: 15,
           dict_id: '',
           status: '',
           keywords: '',
