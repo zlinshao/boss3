@@ -109,6 +109,12 @@
             this.getPosition(this.params.org_id);
           }
         }
+      },
+      'params.org_id':{
+        deep:true,
+        handler(val,oldVal){
+          this.getPosition(this.params.org_id);
+        }
       }
     },
     methods:{
@@ -121,6 +127,11 @@
             this.params.org_id = res.data.data.org[0].id;
             this.department = res.data.data.org[0].name;
             this.roleArray = res.data.data.role;
+            if(this.roleArray.length>0){
+              this.roleArray.forEach((item) => {
+                this.params.position_id.push(item.position_id)
+              })
+            }
             this.getPosition(this.params.org_id);
           }else {
             this.$notify({
@@ -136,11 +147,6 @@
         this.$http.get(globalConfig.server_user+'api/v1/positions?org_id=' + id+ '&per_page_number=50').then((res) => {
           if(res.data.status === 'success'){
             this.positionArray = res.data.data;
-            if(this.roleArray.length>0){
-              this.roleArray.forEach((item) => {
-                this.params.position_id.push(item.position_id)
-              })
-            }
           }else {
             this.positionArray =[];
           }
