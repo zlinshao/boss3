@@ -1,6 +1,6 @@
 <template>
   <div id="staffManage"  @click="show=false" @contextmenu="closeMenu">
-    <el-row :gutter="10">
+    <el-row :gutter="20">
       <el-col :span="6">
         <div class="border left">
           <div class="top">
@@ -961,7 +961,7 @@
   #staffManage{
     min-height: 790px;
     .border{
-      border: 1px solid #6a8dfb;
+      /*border: 1px solid #6a8dfb;*/
       border-radius: 4px;
       min-height: 790px;
       .top{
