@@ -88,7 +88,7 @@ import ExamineAndApprove from '../components/OAWork/examineAndApprove/index.vue'
 
 
 //人资管理
-import StaffManage from '../components/humanResource/staffManage/index.vue'
+// import StaffManage from '../components/humanResource/staffManage/index.vue'
 import Organization from '../components/humanResource/organization/index.vue'
 // import Achievement from '../components/humanResource/achievement/index.vue'
 import IntegralManage from '../components/humanResource/integralManage/index.vue'
@@ -262,9 +262,9 @@ export default new Router({
       name: '人资管理',
       icon: 'el-icons-fa-sitemap',
       children: [
-        {path: '/staffManage', component: StaffManage, name: '用户管理',},
-        {path: '/integralManage', component: IntegralManage, name: '积分管理',},
+        // {path: '/staffManage', component: StaffManage, name: '用户管理',},
         {path: '/organization', component: Organization, name: '组织架构',},
+        {path: '/integralManage', component: IntegralManage, name: '积分管理',},
         // {path: '/achievement', component: Achievement, name: '业绩工资',},
       ]
     },

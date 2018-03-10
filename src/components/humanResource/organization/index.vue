@@ -565,6 +565,8 @@
               this.positionList = [];
               this.totalOnlyPositionNum = res.data.meta.total;
               if(tableData.length>0){
+                this.onlyPositionId = tableData[0].id;
+                this.getPosition();
                 tableData.forEach((data) => {
                   let org_id = data.org_id;
                   let org_name = null;
