@@ -93,12 +93,12 @@
         }
       },
       isEdit(val){
-          if(!val){
-            this.title = '新建用户'
-          }else {
-            this.title = '修改用户'
-            this.getStaffInfo();
-          }
+        if(!val){
+          this.title = '新建用户'
+        }else {
+          this.title = '修改用户'
+          this.getStaffInfo();
+        }
       },
       'addStaffParams':{
         deep:true,
@@ -138,7 +138,7 @@
             this.positionArray = res.data.data;
             if(this.roleArray.length>0){
               this.roleArray.forEach((item) => {
-                this.params.position_id.push(item.id)
+                this.params.position_id.push(item.position_id)
               })
             }
           }else {
@@ -177,9 +177,9 @@
 
       },
       selectDepart(){
-          this.organizationDialog = true;
-          this.type = 'depart';
-          this.length = 1;
+        this.organizationDialog = true;
+        this.type = 'depart';
+        this.length = 1;
       },
       //关闭选人框回调
       closeOrganization(){
