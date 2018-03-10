@@ -244,7 +244,7 @@
       },
       // ==============模块=================
       // 模块列表
-      moduleList(val) {
+      moduleList(val, id) {
         this.tableSecond = [];
         this.secondForm.page = val;
         this.$http.get(this.urls + 'api/v1/modules?per_page_number=5&sys_id=' + this.addID.firstID, {
@@ -336,9 +336,6 @@
           });
         });
       },
-      scrollTop() {
-        document.body.scrollTop = document.documentElement.scrollTop = 0;
-      },
       // 右键新增
       addMenu(val, event) {
         switch (val) {
@@ -396,18 +393,21 @@
         ];
         this.contextMenuParam(event);
       },
+      stickTop() {
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+      },
       // 右键回调
       clickEvent(val) {
         switch (val) {
           case 'add2':
             this.onSubmit();
             this.moduleName = 'second';
-            this.scrollTop();
+            this.stickTop();
             break;
           case 'add3':
             this.onSubmit();
             this.moduleName = 'third';
-            this.scrollTop();
+            this.stickTop();
             break;
           case 'revise':
             this.title = '修改';

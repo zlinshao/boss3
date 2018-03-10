@@ -113,5 +113,7 @@
       background-color: #ffffff;
     }
   }
-
+  #cover{
+    min-height: 40px;
+  }
 </style>
