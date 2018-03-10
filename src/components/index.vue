@@ -473,11 +473,31 @@
         this.isCollapse = !this.isCollapse;
       },
       lockScreen() {
-        Cookies.set('last_page_path', this.$route.path); // 本地存储锁屏之前打开的页面以便解锁后打开
-        setTimeout(() => {
-          this.$router.push({path: '/lock'});
-        });
-        Cookies.set('locking', '1');
+//        Cookies.set('last_page_path', this.$route.path); // 本地存储锁屏之前打开的页面以便解锁后打开
+        this.$http.get(globalConfig.server+'setting/others/lock_screen_status?lock_status=1').then((res)=>{
+          if(res.data.code === '100003'){
+
+//            new Promise((resolve,reject) =>{
+//              sessionStorage.setItem('lockStatus', 1);
+//              if(sessionStorage.getItem('lockStatus')){
+//                resolve();
+//              }
+//            }).then((data)=>{
+//              this.$router.push({path: '/lock'});
+//            });
+            this.$router.push({path: '/lock'});
+          }else {
+            this.$notify({
+              title: '警告',
+              message: res.data.msg,
+              type: 'warning'
+            });
+          }
+        })
+//        setTimeout(() => {
+//
+//        });
+//        Cookies.set('locking', '1');
       },
     }
   }

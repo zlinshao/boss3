@@ -327,35 +327,27 @@
           锁屏密码设置/修改
         </el-col>
         <el-col :span="20">
-          <div class="nowrap" style="margin-bottom: 12px;">
-            <!--<div>手机号码</div>-->
-            <div>
-              <el-input model="form" clearable placeholder="请输入手机号码"></el-input>
-            </div>
-          </div>
           <div class="validate">
             <div>
-              <el-input model="form" clearable placeholder="请输入验证码"></el-input>
+              <el-input placeholder="请输入验证码" v-model="sms_lock_num"></el-input>
             </div>
             <div>
-              <el-button type="primary">获取验证码</el-button>
-            </div>
-            <div>
-              <el-button type="text">60S后重新获取</el-button>
+              <el-button @click="sendMessage" v-if="isSending>59" style="width: 140px;" type="primary">获取验证码</el-button>
+              <el-button v-if="isSending<60" disabled="" style="width: 140px;" type="primary">{{isSending}}s后重新发送</el-button>
             </div>
           </div>
           <div class="validate">
             <div class="validateSign">
-              <el-input model="form" clearable placeholder="请输入新密码"></el-input>
-              <i class="el-icon-success"></i>
+              <el-input v-model="set_pwd_lock" placeholder="请输入新密码"></el-input>
+              <i class="el-icon-success" style="color: #46ff53" v-show="set_pwd_lock.length>6"></i>
             </div>
           </div>
-          <div class="validate">
-            <div class="validateSign">
-              <el-input model="form" clearable placeholder="请确认新密码"></el-input>
-              <i class="el-icon-success"></i>
-            </div>
-          </div>
+          <!--<div class="validate">-->
+            <!--<div class="validateSign">-->
+              <!--<el-input type="password" v-model="identify_pwd_lock" placeholder="请确认新密码"></el-input>-->
+              <!--<i class="el-icon-success" style="color: #46ff53" v-show="false"></i>-->
+            <!--</div>-->
+          <!--</div>-->
 
           <div class="remark">
             备注：密码长度6-16位，数字、字母和符号至少包含两种。
@@ -366,7 +358,7 @@
       <el-row>
         <el-col :span="4">&nbsp;</el-col>
         <el-col :span="20">
-          <el-button type="primary" size="small" style="padding: 10px 140px;">保存</el-button>
+          <el-button type="primary" size="small" @click="setLockPassword" style="padding: 10px 140px;">保存</el-button>
         </el-col>
       </el-row>
     </div>
@@ -381,6 +373,10 @@
         basicSet: true,
         secondPassword: false,
         lockScreen: false,
+        isSending : 60,    //发送验证码
+        sms_lock_num:'',    //验证码
+        set_pwd_lock:'',    //锁屏密码
+        identify_pwd_lock:'',
         form: {},
         checkList: [],
         pickerOptions: {
@@ -414,7 +410,9 @@
     },
     mounted() {
     },
-    watch: {},
+    watch: {
+
+    },
     methods: {
       showBasicset() {
         this.basicSet = true;
@@ -422,14 +420,54 @@
         this.lockScreen = false;
       },
       showSecond() {
-          this.basicSet = false;
-          this.secondPassword = true;
-          this.lockScreen = false;
+        this.basicSet = false;
+        this.secondPassword = true;
+        this.lockScreen = false;
       },
       showLockscreen() {
-          this.basicSet = false;
-          this.secondPassword = false;
-          this.lockScreen = true;
+        this.basicSet = false;
+        this.secondPassword = false;
+        this.lockScreen = true;
+      },
+      //发送验证码
+      sendMessage(){
+        new Promise((resolve, reject) => {
+          let interval = setInterval(() => {
+            this.isSending--;
+            if(this.isSending<0){
+              clearInterval(interval)
+              resolve()
+            }
+          }, 1000)
+        }).then((data) => {
+            this.isSending = 60;
+        });
+        this.$http.get(globalConfig.server+'setting/others/sms_code').then((res)=>{
+            if(res.data.code === '100090'){
+              this.$notify({
+                title: '成功',
+                message: res.data.msg,
+                type: 'success'
+              });
+            }
+        })
+      },
+      setLockPassword(){
+        this.$http.get(globalConfig.server+'setting/others/lock_screen_status?sms_lock_num='+this.sms_lock_num +'&set_pwd_lock='+this.set_pwd_lock).then((res)=>{
+            if(res.data.code === '100000'){
+              this.$notify({
+                title: '成功',
+                message: res.data.msg,
+                type: 'success'
+              });
+            }else {
+              this.$notify({
+                title: '警告',
+                message: res.data.msg,
+                type: 'warning'
+              });
+            }
+        })
       },
     },
   }

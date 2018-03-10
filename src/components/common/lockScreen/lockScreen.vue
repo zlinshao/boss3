@@ -14,13 +14,13 @@
             }
         },
         methods:{
-          lockScreen(){
-            Cookies.set('last_page_path', this.$route.path); // 本地存储锁屏之前打开的页面以便解锁后打开
-            setTimeout(() => {
-              this.$router.push({path: '/lock'});
-            });
-            Cookies.set('locking', '1');
-          }
+//          lockScreen(){
+//            Cookies.set('last_page_path', this.$route.path); // 本地存储锁屏之前打开的页面以便解锁后打开
+//            setTimeout(() => {
+//              this.$router.push({path: '/lock'});
+//            });
+//            Cookies.set('locking', '1');
+//          }
         }
     }
 </script>

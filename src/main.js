@@ -61,18 +61,52 @@ axios.interceptors.response.use(function (response) {
 //   router
 // });
 
+
+
 //重定向
 router.beforeEach((to, from, next) => {
-  if (to.path === '/login') {
-    localStorage.removeItem('myData');
-    localStorage.removeItem('personal');
-  }
-  let data = localStorage.getItem("myData");
-  if (!data && to.path !== '/login') {
-    next({path: '/login'})
-  } else {
-    next();
-  }
+
+  let lockStatus = true;
+  axios.get(globalConfig.server+'special/special/unlock_screen?pwd_lock=').then((res)=>{
+    lockStatus = res.data.code !== '10013';
+    // console.log(lockStatus)
+    // console.log(to.path)
+    if (to.path === '/login') {
+      localStorage.removeItem('myData');
+      localStorage.removeItem('personal');
+    }
+
+    let data = localStorage.getItem("myData");
+
+    if (!data && to.path !== '/login') {
+      next({path: '/login'})
+    }else if(!lockStatus && to.path!=='/lock'){
+      next({path:'/lock'});
+    }else if(lockStatus && to.path === '/lock'){
+      next({path:from.path});
+    }else {
+      next();
+    }
+  });
+
+
+  // if (to.path === '/login') {
+  //   localStorage.removeItem('myData');
+  //   localStorage.removeItem('personal');
+  // }
+  //
+  // let data = localStorage.getItem("myData");
+  // let lockStatus = sessionStorage.getItem("lockStatus");
+  //
+  // if (!data && to.path !== '/login') {
+  //   next({path: '/login'})
+  // }else if(Number(lockStatus) === 1 && to.path !== '/lock'){
+  //   next({path:'/lock'});
+  // }else if(Number(lockStatus) !== 1&& to.path === '/lock'){
+  //   next({path:from.path});
+  // }else {
+  //   next();
+  // }
 });
 
 new Vue({
