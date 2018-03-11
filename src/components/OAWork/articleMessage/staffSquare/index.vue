@@ -113,8 +113,8 @@
 </template>
 
 <script>
-  import RightMenu from '../../common/rightMenu.vue'    //右键
-  import Organization from '../../common/organization.vue'
+  import RightMenu from '../../../common/rightMenu.vue'    //右键
+  import Organization from '../../../common/organization.vue'
 
   export default {
     components: {RightMenu, Organization},

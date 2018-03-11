@@ -148,10 +148,10 @@
 </template>
 
 <script>
-  import Organization from '../../common/organization.vue'
+  import Organization from '../../../common/organization.vue'
   import Contact from './components/contractDetail.vue'
   import CreateTask from './components/createTask.vue'
-  import RightMenu from '../../common/rightMenu.vue'    //右键
+  import RightMenu from '../../../common/rightMenu.vue'    //右键
   import Dispatch from './components/dispatch.vue'
 
 

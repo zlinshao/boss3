@@ -2,7 +2,7 @@
   <div @click="show=false" @contextmenu="closeMenu">
     <div class="highRanking">
       <div class="highSearch">
-        <el-form :model="form" :inline="true" size="mini">
+        <el-form :inline="true" size="mini">
           <el-form-item>
             <el-input placeholder="小区名称/地址/位置" v-model="form.keywords" @keyup.enter.native="myData(1)" size="mini"
                       clearable>
@@ -183,7 +183,7 @@
 </template>
 
 <script>
-  import RightMenu from '../../common/rightMenu.vue'    //右键
+  import RightMenu from '../../../common/rightMenu.vue'    //右键
   import VillageModule from './villageModule'
 
   export default {

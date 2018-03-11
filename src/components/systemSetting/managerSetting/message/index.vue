@@ -61,11 +61,6 @@
         label="短信名称">
       </el-table-column>
       <el-table-column
-        prop="create_time"
-        label="创建时间">
-      </el-table-column>
-
-      <el-table-column
         prop="sign"
         label="sign码">
       </el-table-column>
@@ -77,12 +72,16 @@
         prop="url"
         label="URL">
       </el-table-column>
-
       <el-table-column
         width="600"
         prop="content"
         label="短信内容">
       </el-table-column>
+      <el-table-column
+        prop="create_time"
+        label="创建时间">
+      </el-table-column>
+
     </el-table>
 
     <div class="block pages">
@@ -113,8 +112,8 @@
 </template>
 
 <script>
-  import RightMenu from '../../common/rightMenu.vue'    //右键
-  import AddModule from '../../common/organization.vue'
+  import RightMenu from '../../../common/rightMenu.vue'    //右键
+  import AddModule from '../../../common/organization.vue'
   import MessageModule from './components/messageModule.vue'
   import ReviseName from './components/reviseName.vue'
 

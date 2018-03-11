@@ -152,7 +152,7 @@
 
 <script>
   import RevisePower from './revisePower.vue'
-  import RightMenu from '../../common/rightMenu.vue'    //右键
+  import RightMenu from '../../../common/rightMenu.vue'    //右键
 
   export default {
     components: {RevisePower, RightMenu},

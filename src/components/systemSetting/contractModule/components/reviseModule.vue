@@ -36,7 +36,7 @@
 </template>
 
 <script>
-  import Dropzone from '../../common/dropzone.vue'
+  import Dropzone from '../../../common/dropzone.vue'
 
   export default {
     name: "revise-module",

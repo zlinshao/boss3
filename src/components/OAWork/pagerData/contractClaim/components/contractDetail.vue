@@ -64,7 +64,7 @@
 </template>
 
 <script>
-  import ElInput from "../../../../../node_modules/element-ui/packages/input/src/input";
+  import ElInput from "../../../../../../node_modules/element-ui/packages/input/src/input";
   export default {
     components: {ElInput},
     props:['contractDialog'],

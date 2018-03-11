@@ -3,7 +3,8 @@
     <div class="navBarLeft" :class="isFull? 'navBarRight':'' ">
       <p @click="fullScreen(2)"></p>
     </div>
-    <div id="KeFuDiv" style="position: fixed;top: 30px;right: 20px;z-index: 1000000;" onmousedown="MoveDiv(KeFuDiv,event);">
+    <div id="KeFuDiv" style="position: fixed;top: 30px;right: 20px;z-index: 1000000;"
+         onmousedown="MoveDiv(KeFuDiv,event);">
       <el-collapse-transition>
         <div v-show="isFull">
           <div class="transition-box">
@@ -27,8 +28,6 @@
         </div>
       </el-collapse-transition>
     </div>
-
-
 
 
     <div class="navBar" :class="isFull? 'navBarHide':'' ">
@@ -150,7 +149,7 @@
             <img data-card="" :data-src="JSON.stringify(personal)" :src="personal.avatar" v-if="personal.avatar !== null">
             <img src="../assets/images/head.png" v-else>
           </div>
-          <el-dropdown  trigger="click">
+          <el-dropdown trigger="click">
               <span class="el-dropdown-link">
                 {{personal.name}}<i class="el-icon-arrow-down el-icon--right" style="margin-left: 25px"></i>
               </span>
@@ -357,6 +356,12 @@
           </el-menu>
         </div>
 
+        <div style="position: fixed;bottom: 10px;left: 36px;z-index: 99999;"  v-if="!isCollapse">
+          <div style="color: #ffffff;">业务咨询&nbsp;&nbsp;陆经理</div>
+          <div style="color: #ffffff;">版本信息&nbsp;&nbsp;BOSS&nbsp;3.0</div>
+        </div>
+        <!--<div style="position: fixed;bottom: 10px;left: 0;z-index: 99999;color: #ffffff;" v-if="isCollapse">BOSS&nbsp;3.0</div>-->
+
         <el-main :class="isFull? 'mainHide':'' ">
           <TagsView></TagsView>
           <div style="padding: 10px;background: #fff">
@@ -371,13 +376,14 @@
 <script>
   import Cookies from 'js-cookie'
   import TagsView from './common/tagsView.vue'
+
   export default {
     name: 'Index',
     components: {TagsView},
     data() {
       return {
         personal: globalConfig.personal,
-        isCollapse: false,
+        isCollapse: true,
         isFull: false,
         Countdown: 999999,  //倒计时
         screenStatus: false,
@@ -480,8 +486,8 @@
       },
       lockScreen() {
 //        Cookies.set('last_page_path', this.$route.path); // 本地存储锁屏之前打开的页面以便解锁后打开
-        this.$http.get(globalConfig.server+'setting/others/lock_screen_status?lock_status=1').then((res)=>{
-          if(res.data.code === '100003'){
+        this.$http.get(globalConfig.server + 'setting/others/lock_screen_status?lock_status=1').then((res) => {
+          if (res.data.code === '100003') {
 
 //            new Promise((resolve,reject) =>{
 //              sessionStorage.setItem('lockStatus', 1);
@@ -492,7 +498,7 @@
 //              this.$router.push({path: '/lock'});
 //            });
             this.$router.push({path: '/lock'});
-          }else {
+          } else {
             this.$notify({
               title: '警告',
               message: res.data.msg,

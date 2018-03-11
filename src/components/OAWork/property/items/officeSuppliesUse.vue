@@ -1,28 +1,28 @@
 <template>
   <div @click="show=false" @contextmenu="show=false">
     <!--<div class="filter">-->
-      <!--<el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">-->
-        <!--<el-form-item label="选择领取人">-->
-          <!--<el-input readonly="" @focus="openOrganizationModal('staff')" placeholder="点击选择"></el-input>-->
-        <!--</el-form-item>-->
-        <!--<el-form-item label="选择领取部门">-->
-          <!--<el-input readonly="" @focus="openOrganizationModal('department')" placeholder="点击选择"></el-input>-->
-        <!--</el-form-item>-->
-        <!--<el-form-item label="选择状态">-->
-          <!--<el-select v-model="formInline.region" placeholder="请选择状态">-->
-            <!--<el-option label="区域一" value="shanghai"></el-option>-->
-            <!--<el-option label="区域二" value="beijing"></el-option>-->
-          <!--</el-select>-->
-        <!--</el-form-item>-->
-        <!--<el-form-item>-->
-          <!--<el-input v-model="formInline.name" placeholder="搜索">-->
-            <!--<el-button slot="append" type="primary" icon="el-icon-search"></el-button>-->
-          <!--</el-input>-->
-        <!--</el-form-item>-->
-        <!--<el-form-item>-->
-          <!--<el-button type="primary">导出</el-button>-->
-        <!--</el-form-item>-->
-      <!--</el-form>-->
+    <!--<el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">-->
+    <!--<el-form-item label="选择领取人">-->
+    <!--<el-input readonly="" @focus="openOrganizationModal('staff')" placeholder="点击选择"></el-input>-->
+    <!--</el-form-item>-->
+    <!--<el-form-item label="选择领取部门">-->
+    <!--<el-input readonly="" @focus="openOrganizationModal('department')" placeholder="点击选择"></el-input>-->
+    <!--</el-form-item>-->
+    <!--<el-form-item label="选择状态">-->
+    <!--<el-select v-model="formInline.region" placeholder="请选择状态">-->
+    <!--<el-option label="区域一" value="shanghai"></el-option>-->
+    <!--<el-option label="区域二" value="beijing"></el-option>-->
+    <!--</el-select>-->
+    <!--</el-form-item>-->
+    <!--<el-form-item>-->
+    <!--<el-input v-model="formInline.name" placeholder="搜索">-->
+    <!--<el-button slot="append" type="primary" icon="el-icon-search"></el-button>-->
+    <!--</el-input>-->
+    <!--</el-form-item>-->
+    <!--<el-form-item>-->
+    <!--<el-button type="primary">导出</el-button>-->
+    <!--</el-form-item>-->
+    <!--</el-form>-->
     <!--</div>-->
 
     <div class="highRanking">
@@ -178,8 +178,8 @@
   import Organization from '../../../common/organization.vue'
 
   export default {
-    components:{RightMenu,AddSupplies,Organization},
-    data () {
+    components: {RightMenu, AddSupplies, Organization},
+    data() {
       return {
         rightMenuX: 0,
         rightMenuY: 0,
@@ -187,35 +187,35 @@
         isHigh: false,
         lists: [],
         /***********/
-        formInline:{},
+        formInline: {},
         tableData: [],
         currentPage: 1,
-        addSuppliesDialog:false,
+        addSuppliesDialog: false,
         isReverse: false,
-        organizationDialog:false,
-        totalNumber:'',
-        params:{
-          status:'',
-          department_id:'',
-          staff_id:'',
-          keywords:'',
-          page:'',
+        organizationDialog: false,
+        totalNumber: 0,
+        params: {
+          status: '',
+          department_id: '',
+          staff_id: '',
+          keywords: '',
+          page: 1,
         }
       }
     },
 
-    mounted(){
-        this.getTableData();
+    mounted() {
+      this.getTableData();
     },
-    methods:{
-      getTableData(){
-          this.$http.get('/oa/getoffice/',{params:this.params}).then((res)=>{
-              if(res.data.code === '60000'){
-                  console.log(res.data.data.list)
-                this.tableData = res.data.data.list;
-                this.totalNumber = res.data.data.pages;
-              }
-          })
+    methods: {
+      getTableData() {
+        this.$http.get('/oa/getoffice/', {params: this.params}).then((res) => {
+          if (res.data.code === '60000') {
+            console.log(res.data.data.list)
+            this.tableData = res.data.data.list;
+            this.totalNumber = res.data.data.pages;
+          }
+        })
       },
 
       handleSizeChange(val) {
@@ -224,11 +224,11 @@
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
       },
-      clickTable(row, event, column){
+      clickTable(row, event, column) {
         console.log(row, event, column)
       },
-      openContextMenu(row, event){
-        this.lists=[
+      openContextMenu(row, event) {
+        this.lists = [
           {clickIndex: 'reverseSuppliesDialog', headIcon: 'el-icon-edit', label: '修改信息',},
           {clickIndex: 'reverseSuppliesDialog', headIcon: 'el-icons-fa-hdd-o', label: '物品领取',},
           {clickIndex: 'reverseSuppliesDialog', headIcon: 'el-icons-fa-mail-reply', label: '物品借用',},
@@ -247,13 +247,13 @@
         })
       },
       //右键回调时间
-      clickEvent (index) {
+      clickEvent(index) {
         this.openModal(index);
       },
-      openOrganizationModal(){
+      openOrganizationModal() {
         this.organizationDialog = true
       },
-      deleteInfo(){
+      deleteInfo() {
         this.$confirm('删除后不可恢复, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -270,16 +270,16 @@
           });
         });
       },
-      closeAddSupplies(){
+      closeAddSupplies() {
         this.addSuppliesDialog = false;
       },
-      closeOrganization(){
+      closeOrganization() {
         this.organizationDialog = false;
       },
-      highGrade(){
+      highGrade() {
         this.isHigh = !this.isHigh;
       },
-      resetting(){
+      resetting() {
 
       }
     }

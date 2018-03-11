@@ -37,7 +37,7 @@
 </template>
 
 <script>
-  import AddModule from '../../../common/organization.vue'
+  import AddModule from '../../../../common/organization.vue'
 
   export default {
     name: 'hello',

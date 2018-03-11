@@ -1,7 +1,7 @@
 <template>
   <div id="publicArticle">
     <div class="title" v-show="previewShow">文章发布</div>
-    <el-form v-show="previewShow" ref="form" :model="form" label-width="100px">
+    <el-form v-show="previewShow" label-width="100px">
       <el-form-item label="标题">
         <el-input v-model="form.name" placeholder="请输入标题"></el-input>
       </el-form-item>
@@ -39,7 +39,7 @@
       </div>
       <div class="staff_name">
         <div class="staff_pic">
-          <img src="../../../../assets/images/head.png">
+          <img src="../../../../../assets/images/head.png">
         </div>
         <div class="info">
           <span>
@@ -59,7 +59,7 @@
 
 <script>
   import {VueEditor} from 'vue2-editor'
-  import Dropzone from '../../../common/dropzone.vue'
+  import Dropzone from '../../../../common/dropzone.vue'
 
   export default {
     components: {
@@ -142,7 +142,7 @@
           status: val
         }).then((res) => {
           if (res.data.code === '80010' || res.data.code === '80030') {
-            this.goBack();
+            // this.goBack();
             this.prompt(1, res.data.msg);
           } else {
             this.prompt(2, res.data.msg);
@@ -150,7 +150,7 @@
         })
       },
       goBack() {
-        this.$router.push('/portals')
+        this.$router.push('/articleMessage')
       },
       handleImageAdded(file, Editor, cursorLocation, resetUploader) {
         // An example of using FormData
