@@ -1,13 +1,26 @@
 <template>
     <div>
-
-      <img data-magnify="" data-caption="图片查看器"
-           data-src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg"
-           src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
-
-
-
-      <img data-card="" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+      <div></div>
+      <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+      <img data-card="" data-src="344234" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+      <img data-card="" data-src="3442dasda34" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+      <img data-card="" data-src="34432323234" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+      <img data-card="" data-src="34432323234" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+      <img data-card="" data-src="34432323234" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+      <img data-card="" data-src="34432323234" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+      <img data-card="" data-src="34432323234" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+      <img data-card="" data-src="34432323234" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+      <img data-card="" data-src="34432323234" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+      <img data-card="" data-src="34432323234" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+      <img data-card="" data-src="34432323234" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+      <img data-card="" data-src="34432323234" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+      <img data-card="" data-src="34432323234" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+      <img data-card="" data-src="34432323234" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+      <img data-card="" data-src="34432323234" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+      <img data-card="" data-src="34432323234" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+      <img data-card="" data-src="34432323234" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+      <img data-card="" data-src="34432323234" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+      <img data-card="" data-src="34432323234" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
     </div>
 
 
@@ -27,6 +40,8 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
     img{
-      width: 300px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
     }
 </style>
