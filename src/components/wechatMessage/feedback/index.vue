@@ -54,7 +54,7 @@
     },
     methods: {
       getTableData(){
-        this.$http.get('/wechat/advice',{params:this.params}).then((res) => {
+        this.$http.get(globalConfig.server+'/wechat/advice',{params:this.params}).then((res) => {
             if(res.data.code === '10010'){
                 this.tableData = res.data.data;
                 this.pages = res.data.pages;

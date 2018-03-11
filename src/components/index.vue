@@ -376,6 +376,7 @@
 <script>
   import Cookies from 'js-cookie'
   import TagsView from './common/tagsView.vue'
+  import screenfull from 'screenfull'
 
   export default {
     name: 'Index',
@@ -398,7 +399,21 @@
     },
     mounted() {
       this.countTime();
-
+//      this.$http.get(globalConfig.server+'setting/setting/read?type=1&staff_id='+globalConfig.personal.id).then((res)=>{
+//        if(res.data.code === '100000'){
+//          this.$notify({
+//            title: '成功',
+//            message: res.data.msg,
+//            type: 'success'
+//          });
+//        }else {
+//          this.$notify({
+//            title: '警告',
+//            message: res.data.msg,
+//            type: 'warning'
+//          });
+//        }
+//      })
     },
     computed: {
       visitedViews() {
@@ -416,13 +431,16 @@
       },
       // 全屏
       fullScreen(val) {
-        if (val === 1) {
-          this.isFull = true;
-          this.isCollapse = true;
-        } else {
-          this.isFull = false;
-          this.isCollapse = false;
-        }
+        screenfull.toggle();
+//        this.isCollapse = val === 1;
+//        this.isFull = val === 1;
+//        if (val === 1) {
+//          this.isFull = true;
+//          this.isCollapse = true;
+//        } else {
+//          this.isFull = false;
+//          this.isCollapse = false;
+//        }
       },
       handleOpen(key, keyPath) {
 //         console.log(key, keyPath);
@@ -800,6 +818,7 @@
     .isCollapse_logo {
       width: 64px !important;
       @include transition;
+      cursor: pointer;
     }
 
     .navBarLeft {
@@ -822,7 +841,7 @@
     }
     .navBarRight {
       left: 0;
-      @include transition;
+//      @include transition;
       p {
         width: 27px;
         height: 20px;
@@ -1014,7 +1033,7 @@
 
     .navBarHide {
       top: -66px;
-      @include transition;
+//      @include transition;
     }
 
     .contentBox {
@@ -1060,7 +1079,7 @@
         }
         .mainHide {
           margin-top: 0 !important;
-          @include transition;
+//          @include transition;
         }
       }
     }

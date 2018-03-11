@@ -19,7 +19,8 @@
               <li v-for="(item,index) in searchItems" @click="selectSearchItem(item)" :class="{'hov':active_li==index}">
                 <div style="display: flex;">
                   <div class="head">
-                    <img src="../../assets/images/head.jpg" :class="selectIdMember.indexOf(item.id)>-1?'':'gray'">
+                    <img v-if="item.avatar" :src="item.avatar" :class="selectIdMember.indexOf(item.id)>-1?'':'gray'">
+                    <img v-else="" src="../../assets/images/head.jpg" :class="selectIdMember.indexOf(item.id)>-1?'':'gray'">
                   </div>
                   <div class="infoBox">
                     <div class="info">{{item.name}}</div>
@@ -68,7 +69,8 @@
                   <li v-for="item in departmentStaff" @click="selectStaff(item)">
                     <div>
                       <div class="head">
-                        <img src="../../assets/images/head.jpg" alt="">
+                        <img v-if="item.avatar" :src="item.avatar">
+                        <img v-else="" src="../../assets/images/head.jpg">
                         <!--对号-->
                         <span class="el-icon-check" v-if="selectIdMember.indexOf(item.id)>-1"></span>
                         <!--遮罩-->

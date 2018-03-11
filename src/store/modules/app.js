@@ -5,6 +5,7 @@ const app = {
   state: {
     visitedViews: [],
     menuStatus : false,
+    isLoading:false,
   },
   mutations: {
     ADD_VISITED_VIEWS: (state, view) => {
@@ -37,7 +38,13 @@ const app = {
     },
     OPEN_MENU:(state,view) => {
       state.menuStatus = true;
-    }
+    },
+    SHOW_LOADING:(state,view) => {
+      state.isLoading = true;
+    },
+    HIDE_LOADING:(state,view) => {
+      state.isLoading = false;
+    },
   },
   actions: {
     addVisitedViews({ commit }, view) {
@@ -63,6 +70,12 @@ const app = {
     },
     openMenu({ commit }, view){
       commit('OPEN_MENU', view)
+    },
+    showLoading({ commit }, view){
+      commit('SHOW_LOADING', view)
+    },
+    hideLoading({ commit }, view){
+      commit('HIDE_LOADING', view)
     },
   }
 };
