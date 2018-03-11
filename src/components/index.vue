@@ -147,7 +147,7 @@
         </div>
         <div class="personInfo">
           <div class="head">
-            <img :src="personal.avatar" v-if="personal.avatar !== null">
+            <img data-card="" :data-src="JSON.stringify(personal)" :src="personal.avatar" v-if="personal.avatar !== null">
             <img src="../assets/images/head.png" v-else>
           </div>
           <el-dropdown  trigger="click">
@@ -382,6 +382,12 @@
         Countdown: 999999,  //倒计时
         screenStatus: false,
         defaultArray: [],
+        object:{
+            name:'zhanglin',
+            year:123
+        },
+        sendObject:null,
+//        personalCard: JSON_stringify(globalConfig.personal),
       }
     },
     mounted() {
@@ -391,12 +397,12 @@
     computed: {
       visitedViews() {
         return this.$store
-      }
+      },
     },
     watch: {
       isCollapse(val) {
         document.getElementById('isCollapse').style.overflow = val ? 'visible' : 'auto';
-      }
+      },
     },
     methods: {
       routers(url) {

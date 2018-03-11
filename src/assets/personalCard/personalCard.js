@@ -1,38 +1,64 @@
 /**
- * Created by Administrator on 2018/3/11 0011.
+ * Created by AigLe on 2018/3/11 0011.
  */
+
+let isClickHead = false;
 $(document).on('click', '[data-card]', function (e) {
-  // console.log($(e.target).attr('data-src'))
-  let p = $(e.target).attr('data-src');
-  let el = e;
-  // let eleWidth = e.target.width;
-  let left = e.target.offsetLeft;
-  let top = e.target.offsetTop;
-  console.log(window.innerWidth);
-  if(left+500>window.innerWidth){
-    left = window.innerWidth - 500
+  let personal = JSON.parse($(e.target).attr('data-src'));
+  let offsetLeft = e.target.offsetLeft;
+  let offsetTop = e.target.offsetTop;
+  //定位名片顯示位置
+  if(offsetLeft+480>window.innerWidth){
+    offsetLeft = window.innerWidth - 520
   }
-  if(top+250>window.innerHeight){
-    top = window.innerHeight - 250 - e.target.width -30;
+  if(offsetTop+250>window.innerHeight){
+    offsetTop = window.innerHeight - 250 - e.target.width -30;
   }else {
-    top =top+e.target.width+10;
+    offsetTop =offsetTop + e.target.width+10;
   }
-  insertHtml(top,left);
+  insertHtml(offsetTop,offsetLeft,personal);
+  e.stopPropagation();
+  isClickHead = true;
 });
 
 
-function insertHtml(top,left) {
-  let contentHtml = `<div id="personalCard" style="position: absolute;left: ${left}px;top: ${top}px;">
-                         <div class="personalCard_left"></div>
-                         <div class="personalCard_right"></div>
+function insertHtml(offsetTop,offsetLeft,personal) {
+  let contentHtml = `<div id="personalCard" style="position: absolute;left: ${offsetLeft}px;top: ${offsetTop}px;">
+                         <div class="personalCard_left">
+                              <div class="header">
+                                  <img src="${personal.avatar}" alt="">
+                              </div>
+                              <div class="name">${personal.name}</div>
+                         </div>
+                         <div class="personalCard_right">
+                             <ul>
+                                <li> <span>部门 ：</span> <span style="color: #555">${personal.org[0].name}</span></li>
+                                <li> <span>分部 ：</span> <span style="color: #555">${personal.pinyin}</span></li>
+                                <li> <span>岗位 ：</span> <span style="color: #555">${personal.created_at}</span></li>
+                                <li> <span>上级 ：</span> <span style="color: #555">${personal.is_enable}</span></li>
+                                <li> <span>状态 ：</span> <span style="color: #555">${personal.is_on_job}</span></li>
+                                <li> <span>手机 ：</span> <span style="color: #555">${personal.phone}</span></li>
+                                <li> <span>邮箱 ：</span> <span style="color: #555">${personal.email}</span></li>
+                             </ul>
+                             <div class="personalCard_right_bottom">14.146.92.67</div>
+                         </div>
                      </div>`;
 
-  if($('#personalCard').length<1){
-    $('body').append(contentHtml);
-  }else {
-    console.log(3)
-    $('#personalCard').remove();
-    $('body').append(contentHtml);
-  }
+  let personalCard = $('#personalCard');
 
+
+  if(personalCard.length<1){
+    $('body').append(contentHtml);
+    isClickHead = false;
+  }else {
+    personalCard.remove();
+    $('body').append(contentHtml);
+    isClickHead = false;
+  }
 }
+$(document).click(function(e){
+  let personalCard = $('#personalCard');
+  if(!personalCard.is(e.target) && personalCard.has(e.target).length === 0){
+    personalCard.remove();
+  }
+});
