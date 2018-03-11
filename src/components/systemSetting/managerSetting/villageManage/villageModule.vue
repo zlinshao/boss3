@@ -120,8 +120,8 @@
 </template>
 
 <script>
-  import MapSearch from '../../common/mapSearch'
-  import Dropzone from '../../common/dropzone'
+  import MapSearch from '../../../common/mapSearch'
+  import Dropzone from '../../../common/dropzone'
 
   export default {
     name: "add-village",

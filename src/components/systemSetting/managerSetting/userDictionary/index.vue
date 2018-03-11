@@ -78,7 +78,7 @@
 <script>
   import TreeRender from './treeRender.vue'
   import TreeModule from './components/treeModule.vue'
-  import RightMenu from '../../common/rightMenu.vue'    //右键
+  import RightMenu from '../../../common/rightMenu.vue'    //右键
 
   export default {
     name: 'tree',

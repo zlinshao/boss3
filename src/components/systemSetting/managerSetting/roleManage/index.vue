@@ -1,37 +1,31 @@
 <template>
   <div>
-    <div class="filter">
-      <el-form class="demo-form-inline" size="small">
-        <el-form-item>
-          <el-button type="primary" style="float: right;" @click="onSubmit"><i class="el-icon-plus"></i>&nbsp;新&nbsp;增</el-button>
-        </el-form-item>
-      </el-form>
+    <div class="highRanking">
+      <div class="highHide" style="text-align: right;margin-bottom: 10px;">
+        <el-button size="mini" type="primary"  @click="onSubmit"><i class="el-icon-plus"></i>&nbsp;新增角色</el-button>
+      </div>
     </div>
+
     <el-table
       :data="tableData"
       style="width: 100%">
-
       <el-table-column
         prop="id"
         label="ID"
         width="88px;">
       </el-table-column>
-
       <el-table-column
         prop="describe"
         label="描述">
       </el-table-column>
-
       <el-table-column
         prop="module"
         label="模块">
       </el-table-column>
-
       <el-table-column
         prop="child_module"
         label="子模块">
       </el-table-column>
-
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button
@@ -52,7 +46,7 @@
 </template>
 
 <script>
-  import ReviseRole from './reviseRole.vue'
+  import ReviseRole from './components/reviseRole.vue'
 
   export default {
     components: {ReviseRole},
@@ -129,6 +123,6 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss">
 
 </style>

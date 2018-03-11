@@ -481,7 +481,16 @@
       padding: 20px 17px;
       .title {
         color: #fb4699;
+        padding-left: 2px;
+        &:before {
+          border-radius: 2px;
+          margin-right: 5px;
+          border-left: 2px solid #fb4699;
+          content: '';
+
+        }
       }
+
       .ingreatNews {
         .ingreat_title {
           color: #303133;

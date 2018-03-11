@@ -213,144 +213,6 @@
                 </el-table>
               </div>
             </el-tab-pane>
-            <el-tab-pane label="个人发信箱" name="fourth">
-              <div class="myTable">
-                <el-table
-                  :data="tableData"
-                  @row-click="clickTable"
-                  @row-contextmenu='houseMenu'
-                  style="width: 100%">
-                  <el-table-column
-                    prop="date"
-                    v-if=""
-                    type="selection">
-                  </el-table-column>
-
-                  <el-table-column
-                    prop=""
-                    v-if=""
-                    label="">
-                    <template slot-scope="scope">
-                      <i class="el-icon-message" style="color: #fb4699"></i>
-                      <!--<span style="margin-left: 10px"></span>-->
-                    </template>
-                  </el-table-column>
-
-                  <el-table-column
-                    prop="date"
-                    label="发布时间">
-                  </el-table-column>
-                  <el-table-column
-                    prop="name"
-                    label="发布人">
-                  </el-table-column>
-                  <el-table-column
-                    prop="province"
-                    label="标题">
-                  </el-table-column>
-                  <el-table-column
-                    prop="address"
-                    label="主要内容">
-                  </el-table-column>
-                  <el-table-column
-                    prop="zip"
-                    label="阅读时间">
-                  </el-table-column>
-                </el-table>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="部门发信箱" name="fifth">
-              <div class="myTable">
-                <el-table
-                  :data="tableData"
-                  @row-click="clickTable"
-                  @row-contextmenu='houseMenu'
-                  style="width: 100%">
-                  <el-table-column
-                    prop="date"
-                    v-if=""
-                    type="selection">
-                  </el-table-column>
-
-                  <el-table-column
-                    prop=""
-                    v-if=""
-                    label="">
-                    <template slot-scope="scope">
-                      <i class="el-icon-message" style="color: #fb4699"></i>
-                      <!--<span style="margin-left: 10px"></span>-->
-                    </template>
-                  </el-table-column>
-
-                  <el-table-column
-                    prop="date"
-                    label="发布时间">
-                  </el-table-column>
-                  <el-table-column
-                    prop="name"
-                    label="发布人">
-                  </el-table-column>
-                  <el-table-column
-                    prop="province"
-                    label="标题">
-                  </el-table-column>
-                  <el-table-column
-                    prop="address"
-                    label="主要内容">
-                  </el-table-column>
-                  <el-table-column
-                    prop="zip"
-                    label="阅读时间">
-                  </el-table-column>
-                </el-table>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="短信提醒" name="sixth">
-              <div class="myTable">
-                <el-table
-                  :data="tableData"
-                  @row-click="clickTable"
-                  @row-contextmenu='houseMenu'
-                  style="width: 100%">
-                  <el-table-column
-                    prop="date"
-                    v-if=""
-                    type="selection">
-                  </el-table-column>
-
-                  <el-table-column
-                    prop=""
-                    v-if=""
-                    label="">
-                    <template slot-scope="scope">
-                      <i class="el-icon-message" style="color: #fb4699"></i>
-                      <!--<span style="margin-left: 10px"></span>-->
-                    </template>
-                  </el-table-column>
-
-                  <el-table-column
-                    prop="date"
-                    label="发布时间">
-                  </el-table-column>
-                  <el-table-column
-                    prop="name"
-                    label="发布人">
-                  </el-table-column>
-                  <el-table-column
-                    prop="province"
-                    label="标题">
-                  </el-table-column>
-                  <el-table-column
-                    prop="address"
-                    label="主要内容">
-                  </el-table-column>
-                  <el-table-column
-                    prop="zip"
-                    label="阅读时间">
-                  </el-table-column>
-                </el-table>
-              </div>
-            </el-tab-pane>
           </el-tabs>
 
           <div class="tableBottom">
@@ -472,6 +334,9 @@
     },
 
     methods: {
+      handleClick(val) {
+
+      },
       onSubmit(val) {
         this.isActive = val;
       },

@@ -137,8 +137,8 @@
 </template>
 
 <script>
-  import ReviseModule from './reviseModule'
-  import ReviseName from './reviseName'
+  import ReviseModule from './components/reviseModule'
+  import ReviseName from './components/reviseName'
 
   export default {
     name: "index",

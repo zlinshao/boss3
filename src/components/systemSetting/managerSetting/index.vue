@@ -1,0 +1,55 @@
+<template>
+  <div>
+    <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tab-pane label="短信模板" name="first">
+        <Message></Message>
+      </el-tab-pane>
+      <el-tab-pane label="登陆日志" name="second">
+        <LoginRecord></LoginRecord>
+      </el-tab-pane>
+      <el-tab-pane label="用户字典" name="third">
+        <UserDictionary></UserDictionary>
+      </el-tab-pane>
+      <el-tab-pane label="角色管理" name="fourth">
+        <RoleManage></RoleManage>
+      </el-tab-pane>
+      <el-tab-pane label="权限管理" name="fifth">
+        <PowerManage></PowerManage>
+      </el-tab-pane>
+      <el-tab-pane label="小区管理" name="sixth">
+        <VillageManage></VillageManage>
+      </el-tab-pane>
+    </el-tabs>
+  </div>
+</template>
+
+<script>
+  import Message from './message/index.vue'
+  import LoginRecord from './loginRecord/index.vue'
+  import UserDictionary from './userDictionary/index.vue'
+  import RoleManage from './roleManage/index.vue'
+  import PowerManage from './powerManage/index.vue'
+  import VillageManage from './villageManage/index.vue'
+
+  export default {
+    name: "index",
+    components: {Message, LoginRecord, UserDictionary, RoleManage, PowerManage, VillageManage},
+    data() {
+      return {
+        activeName: 'first'
+      }
+    },
+    mounted() {
+    },
+    watch: {},
+    methods: {
+      handleClick(val) {
+
+      }
+    },
+  }
+</script>
+
+<style scoped>
+
+</style>

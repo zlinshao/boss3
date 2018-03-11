@@ -1,16 +1,19 @@
 <template>
   <div>
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="乐伽大学" name="first">
+      <el-tab-pane label="微信报销" name="first">
 
       </el-tab-pane>
-      <el-tab-pane label="公司门户" name="second">
+      <el-tab-pane label="微信投诉" name="second">
 
       </el-tab-pane>
-      <el-tab-pane label="员工广场" name="third">
-        <StaffSquare></StaffSquare>
+      <el-tab-pane label="预约看房" name="third">
+
       </el-tab-pane>
-      <el-tab-pane label="制度管理" name="fourth">
+      <el-tab-pane label="房东加盟" name="fourth">
+
+      </el-tab-pane>
+      <el-tab-pane label="意见反馈" name="fifth">
 
       </el-tab-pane>
     </el-tabs>
@@ -18,10 +21,10 @@
 </template>
 
 <script>
-  import StaffSquare from './staffSquare/index.vue'
+
   export default {
     name: "index",
-    components: {StaffSquare},
+    components: {},
     data() {
       return {
         activeName: 'first'

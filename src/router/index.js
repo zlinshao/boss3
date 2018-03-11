@@ -59,22 +59,21 @@ import IntegralManage from '../components/humanResource/integralManage/index.vue
 // import Counter from '../components/meritPay/counter/index'                               //业绩计算器
 import Management from '../components/OAWork/management/index.vue'                          //办公管理
 
-import Knowledge from '../components/OAWork/knowledge/index.vue'
-import Portals from '../components/OAWork/portals/index.vue'
-import ContractClaim from '../components/OAWork/contractClaim/index.vue'
-import Property from '../components/OAWork/property/index.vue'
-import SuppliesUse from '../components/OAWork/property/items/officeSuppliesUse.vue'
-import SuppliesGather from '../components/OAWork/property/officeSuppliesGather/ officeSuppliesGather.vue'
-import CapitalChange from '../components/OAWork/property/items/capitalAssetsChange.vue'
-import CapitalGather from '../components/OAWork/property/items/capitalAssetsGather.vue'
-import SthToDo from '../components/OAWork/sthToDo/index.vue'
-import SthToDoDetail from '../components/OAWork/sthToDo/components/detail_1.vue'
-import SthToDoDetail_2 from '../components/OAWork/sthToDo/components/detail_2.vue'
-import ContractChange from '../components/OAWork/sthToDo/components/contractChange.vue'
-import Deliver from '../components/OAWork/sthToDo/components/deliver.vue'
-import throwALease from '../components/OAWork/sthToDo/components/throwALease.vue'
-import ArticleMessage from '../components/OAWork/articleMessage/index.vue'
-import PublicArticle from '../components/OAWork/portals/components/publicArticle.vue'
+// import SuppliesUse from '../components/OAWork/property/items/officeSuppliesUse.vue'                       //办公用品申领
+// import SuppliesGather from '../components/OAWork/property/officeSuppliesGather/officeSuppliesGather.vue'  //办公用品汇总
+// import CapitalChange from '../components/OAWork/property/items/capitalAssetsChange.vue'                   //固定资产异动
+// import CapitalGather from '../components/OAWork/property/items/capitalAssetsGather.vue'                   //固定资产总汇
+import Property from '../components/OAWork/property/index.vue'                                               //资产管理
+
+// import ArticleMessage from '../components/OAWork/articleMessage/staffSquare/index.vue'                    //员工广场
+import PublicArticle from '../components/OAWork/articleMessage/staffSquare/components/PublicArticle.vue'     //文章发布
+import ArticleMessage from '../components/OAWork/articleMessage/index.vue'                                   //文章管理
+
+// import ContractClaim from '../components/OAWork/pagerData/contractClaim/index.vue'
+import PagerData from '../components/OAWork/pagerData/index.vue'                        //纸质资料
+
+// import Knowledge from '../components/OAWork/knowledge/index.vue'                     //知识管理
+
 import ExamineAndApprove from '../components/OAWork/examineAndApprove/index.vue'
 
 
@@ -84,20 +83,21 @@ import College from '../components/lejiaCollege/college/index.vue'
 
 
 // 系统设置
-import Recycle from '../components/systemSetting/recycleBin/index.vue'                //回收站
-import ContractMould from '../components/systemSetting/contractMould/index.vue'       //合同模板
-import LoginRecord from '../components/systemSetting/loginRecord/index.vue'           //操作记录
-import UserDictionary from '../components/systemSetting/userDictionary/index.vue'
+import ModuleSetting from '../components/systemSetting/moduleSetting/index.vue'                             //模块设置
 
-import Message from '../components/systemSetting/message/index.vue'                   //短信
-// import MessageList from '../components/systemSetting/message/messageList.vue'         //短信
+// import Message from '../components/systemSetting/message/index.vue'                                      //短信模板
+// import LoginRecord from '../components/systemSetting/loginRecord/index.vue'                              //登陆日志
+// import UserDictionary from '../components/systemSetting/userDictionary/index.vue'                        //用户字典
+// import RoleManage from '../components/systemSetting/roleManage/index.vue'                                //角色管理
+// import PowerManage from '../components/systemSetting/powerManage/index.vue'                              //权限管理
+// import VillageManage from '../components/systemSetting/villageManage/index.vue'                          //小区管理
+import VillageDetail from '../components/systemSetting/managerSetting/villageManage/villageDetail.vue'      //小区管理详情
+import ManagerSetting from '../components/systemSetting/managerSetting/index.vue'                           //管理员设置
 
 
-import RoleManage from '../components/systemSetting/roleManage/index.vue'
-import PowerManage from '../components/systemSetting/powerManage/index.vue'
-import VillageManage from '../components/systemSetting/villageManage/index.vue'             //小区管理
-import VillageDetail from '../components/systemSetting/villageManage/villageDetail.vue'     //小区管理详情
-import ExportManage from '../components/systemSetting/exportManage/index.vue'
+// import Recycle from '../components/systemSetting/recycleBin/index.vue'                                   //回收站
+// import contractModule from '../components/systemSetting/contractModule/index.vue'                        //合同模板
+// import ExportManage from '../components/systemSetting/exportManage/index.vue'                            //导出管理
 
 
 //喜报管理
@@ -116,17 +116,20 @@ import PersonalSalary from '../components/meritPay/personalSalary/index'
 
 import RentingDetail from '../components/rentManage/rentingDetail.vue'
 
-import MessageCenter from '../components/messageCenter/index.vue'
-
-import PersonalSetting from '../components/personalSetting/index.vue'    //个人设置
-
-
-import Individual from '../components/individual/index.vue'               //个人门户
-import Converge from '../components/converge/index.vue'                   //员工广场
-import Infodetails from '../components/converge/details/infodetails.vue'  //员工广场详情
-import CheckWork from '../components/checkWork/index.vue'                 //考勤自助
-import Register from '../components/register/index.vue'                   //签到自助
-import DailyRecord from '../components/dailyRecord/index.vue'             //日志管理
+import MessageCenter from '../components/messageCenter/index.vue'                         //消息中心
+import SthToDoDetail from '../components/OAWork/sthToDo/components/detail_1.vue'          //喜报详情
+import SthToDoDetail_2 from '../components/OAWork/sthToDo/components/detail_2.vue'        //喜报
+import PersonalSetting from '../components/personalSetting/index.vue'                     //个人设置
+import CheckWork from '../components/checkWork/index.vue'                                 //考勤自助
+import Register from '../components/register/index.vue'                                   //签到自助
+import ContractChange from '../components/OAWork/sthToDo/components/contractChange.vue'   //TEST_1
+import Deliver from '../components/OAWork/sthToDo/components/deliver.vue'                 //TEST_2
+import throwALease from '../components/OAWork/sthToDo/components/throwALease.vue'         //TEST_3
+import Individual from '../components/individual/index.vue'                               //个人门户
+import Converge from '../components/converge/index.vue'                                   //员工广场
+import Infodetails from '../components/converge/details/infodetails.vue'                  //员工广场详情
+import DailyRecord from '../components/dailyRecord/index.vue'                             //日志管理
+import SthToDo from '../components/OAWork/sthToDo/index.vue'                              //待办事项
 
 
 Vue.use(Router);
@@ -182,10 +185,10 @@ export default new Router({
       children: [
         {path: '/messageCenter', component: MessageCenter, name: '消息中心'},
         {path: '/sthToDoDetail', component: SthToDoDetail, name: '喜报详情'},
+        {path: '/sthToDoDetail_2', component: SthToDoDetail_2, name: '喜报'},
         {path: '/personalSetting', component: PersonalSetting, name: '个人设置'},
         {path: '/checkWork', component: CheckWork, name: '考勤自助'},
         {path: '/register', component: Register, name: '签到自助'},
-        {path: '/sthToDoDetail_2', component: SthToDoDetail_2, name: '喜报'},
         {path: '/contractChange', component: ContractChange, name: 'TEST_1'},
         {path: '/deliver', component: Deliver, name: 'TEST_2'},
         {path: '/throwALease', component: throwALease, name: 'TEST_3'},
@@ -193,7 +196,7 @@ export default new Router({
         {path: '/individual', component: Individual, name: '个人门户'},
         {path: '/infodetails', component: Infodetails, name: '员工广场详情'},
         {path: '/dailyRecord', component: DailyRecord, name: '日志管理'},
-
+        {path: '/sthToDo', component: SthToDo, name: '待办事项'},
       ]
     },
 
@@ -314,27 +317,32 @@ export default new Router({
       name: 'OA办公',
       icon: 'el-icons-fa-clipboard',
       children: [
-        {
-          path: '/property', component: Property, icon: 'el-icons-fa-money', name: '资产管理',
-          children: [
-            {path: '/property/suppliesUse', component: SuppliesUse, name: '办公用品申领'},
-            {path: '/property/suppliesGather', component: SuppliesGather, name: '办公用品汇总'},
-            {path: '/property/capitalChange', component: CapitalChange, name: '固定资产异动'},
-            {path: '/property/capitalGather', component: CapitalGather, name: '固定资产汇总'},
-          ]
-        },
+        // {
+        //   path: '/property', component: Property, icon: 'el-icons-fa-money', name: '资产管理',
+        //   children: [
+        //     {path: '/property/suppliesUse', component: SuppliesUse, name: '办公用品申领'},
+        //     {path: '/property/suppliesGather', component: SuppliesGather, name: '办公用品汇总'},
+        //     {path: '/property/capitalChange', component: CapitalChange, name: '固定资产异动'},
+        //     {path: '/property/capitalGather', component: CapitalGather, name: '固定资产汇总'},
+        //   ]
+        // },
+        {path: '/property', component: Property, name: '资产管理'},
+
+        {path: '/articleMessage', component: ArticleMessage, name: '文章管理'},
+
+        {path: '/examineAndApprove', component: ExamineAndApprove, name: '审批管理'},
+
         // {path: '/communication', component: Communication, name: '通讯管理',},
         // {path: '/programme', component: Programme, name: '日程管理',},
         // {path: '/institution', component: Institution, name: '制度管理',},
         // {path: '/vote', component: Vote, name: '投票管理',},
         // {path: '/counter', component: Counter, name: '业绩计算器',},
         {path: '/management', component: Management, name: '办公管理'},
-        {path: '/sthToDo', component: SthToDo, name: '待办事项'},
-        {path: '/examineAndApprove', component: ExamineAndApprove, name: '审批'},
-        {path: '/knowledge', component: Knowledge, name: '知识管理',},
-        {path: '/portals', component: Portals, name: '门户管理',},
-        {path: '/contractClaim', component: ContractClaim, name: '合同认领',},
-        {path: '/articleMessage', component: ArticleMessage, name: '文章管理',},
+
+        // {path: '/contractClaim', component: ContractClaim, name: '合同认领',},
+        {path: '/pagerData', component: PagerData, name: '纸质资料'},
+        // {path: '/knowledge', component: Knowledge, name: '知识管理',},
+
       ]
     },
 
@@ -354,16 +362,19 @@ export default new Router({
       name: '系统设置',
       icon: 'el-icon-setting',
       children: [
-        {path: '/message/message', component: Message, name: '短信模板'},
+        {path: 'moduleSetting', component: ModuleSetting, name: '模块设置'},
 
-        {path: '/recycle', component: Recycle, name: '回收站',},
-        {path: '/contractMould', component: ContractMould, name: '合同模板',},
-        {path: '/loginRecord', component: LoginRecord, name: '登陆日志',},
-        {path: '/userDictionary', component: UserDictionary, name: '用户字典',},
-        {path: '/roleManage', component: RoleManage, name: '角色管理',},
-        {path: '/powerManage', component: PowerManage, name: '权限管理',},
-        {path: '/villageManage', component: VillageManage, name: '小区管理',},
-        {path: '/exportManage', component: ExportManage, name: '导出管理',},
+        // {path: '/message/message', component: Message, name: '短信模板'},
+        // {path: '/loginRecord', component: LoginRecord, name: '登陆日志',},
+        // {path: '/userDictionary', component: UserDictionary, name: '用户字典',},
+        // {path: '/roleManage', component: RoleManage, name: '角色管理',},
+        // {path: '/powerManage', component: PowerManage, name: '权限管理',},
+        // {path: '/villageManage', component: VillageManage, name: '小区管理',},
+        {path: 'managerSetting', component: ManagerSetting, name: '管理员设置'},
+
+        // {path: '/recycle', component: Recycle, name: '回收站',},
+        // {path: '/contractModule', component: ContractModule, name: '合同模板',},
+        // {path: '/exportManage', component: ExportManage, name: '导出管理',},
       ]
     },
 

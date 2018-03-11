@@ -479,35 +479,35 @@
         },
         staffData: {
           title: '',// 员工风采
-          data: [],
+          data: [''],
         },
         cusData: {
           title: '',// 客户纪实
-          data: [],
+          data: [''],
         },
         lifeData: {
           title: '',// 公司生活
-          data: [],
+          data: [''],
         },
         hotData: {
           title: '',// 热门导读
-          data: [],
+          data: [''],
         },
         figureData: {
           title: '',// 人物志
-          data: [],
+          data: [''],
         },
         hostData: {
           title: '',// 主轮播
-          data: [],
+          data: [''],
         },
         lessData: {
           title: '',// 次标题1
-          data: [],
+          data: [''],
         },
         lowData: {
           title: '',// 次标题2
-          data: [],
+          data: [''],
         },
       }
     },
@@ -732,11 +732,9 @@
         .newsDetail {
           color: #8f9193;
           width: 100%;
-          height: 36px;
-          line-height: 18px;
           margin-top: 20px;
-          text-overflow: ellipsis;
           overflow: hidden;
+          text-overflow: ellipsis;
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
@@ -817,11 +815,9 @@
         .lifePic {
           @include flex;
           justify-content: space-between;
-          margin-top: 20px;
           .picList {
             width: 100%;
             height: 100px;
-            margin-top: 15px;
             img {
               width: 100%;
               height: 100%;
