@@ -88,9 +88,11 @@ import Recycle from '../components/systemSetting/recycleBin/index.vue'          
 import ContractMould from '../components/systemSetting/contractMould/index.vue'       //合同模板
 import LoginRecord from '../components/systemSetting/loginRecord/index.vue'           //操作记录
 import UserDictionary from '../components/systemSetting/userDictionary/index.vue'
+
 import Message from '../components/systemSetting/message/index.vue'                   //短信
-import MessageList from '../components/systemSetting/message/messageList.vue'         //短信
-import MessageModule from '../components/systemSetting/message/messageModule.vue'     //短信
+// import MessageList from '../components/systemSetting/message/messageList.vue'         //短信
+
+
 import RoleManage from '../components/systemSetting/roleManage/index.vue'
 import PowerManage from '../components/systemSetting/powerManage/index.vue'
 import VillageManage from '../components/systemSetting/villageManage/index.vue'             //小区管理
@@ -131,6 +133,14 @@ Vue.use(Router);
 
 export default new Router({
   routes: [
+    {
+      path: '/',
+      // component: Index,
+      hidden:true,
+      name: 'Index',
+      redirect: '/main',
+    },
+
     {
       path: '/login',
       component: Login,
@@ -344,16 +354,8 @@ export default new Router({
       name: '系统设置',
       icon: 'el-icon-setting',
       children: [
-        {
-          path: '/message',
-          component: Message,
-          icon: 'el-icon-message',
-          name: '短信模块',
-          children: [
-            {path: '/message/messageList', component: MessageList, name: '短信列表'},
-            {path: '/message/messageModule', component: MessageModule, name: '短信模板'},
-          ]
-        },
+        {path: '/message/message', component: Message, name: '短信模板'},
+
         {path: '/recycle', component: Recycle, name: '回收站',},
         {path: '/contractMould', component: ContractMould, name: '合同模板',},
         {path: '/loginRecord', component: LoginRecord, name: '登陆日志',},
