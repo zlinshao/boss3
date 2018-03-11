@@ -93,12 +93,12 @@
         }
       },
       isEdit(val){
-          if(!val){
-            this.title = '新建用户'
-          }else {
-            this.title = '修改用户'
-            this.getStaffInfo();
-          }
+        if(!val){
+          this.title = '新建用户'
+        }else {
+          this.title = '修改用户'
+          this.getStaffInfo();
+        }
       },
       'addStaffParams':{
         deep:true,
@@ -108,6 +108,12 @@
             this.department = val.depart_name;
             this.getPosition(this.params.org_id);
           }
+        }
+      },
+      'params.org_id':{
+        deep:true,
+        handler(val,oldVal){
+          this.getPosition(this.params.org_id);
         }
       }
     },
@@ -121,6 +127,11 @@
             this.params.org_id = res.data.data.org[0].id;
             this.department = res.data.data.org[0].name;
             this.roleArray = res.data.data.role;
+            if(this.roleArray.length>0){
+              this.roleArray.forEach((item) => {
+                this.params.position_id.push(item.position_id)
+              })
+            }
             this.getPosition(this.params.org_id);
           }else {
             this.$notify({
@@ -136,11 +147,6 @@
         this.$http.get(globalConfig.server_user+'api/v1/positions?org_id=' + id+ '&per_page_number=50').then((res) => {
           if(res.data.status === 'success'){
             this.positionArray = res.data.data;
-            if(this.roleArray.length>0){
-              this.roleArray.forEach((item) => {
-                this.params.position_id.push(item.id)
-              })
-            }
           }else {
             this.positionArray =[];
           }
@@ -177,9 +183,9 @@
 
       },
       selectDepart(){
-          this.organizationDialog = true;
-          this.type = 'depart';
-          this.length = 1;
+        this.organizationDialog = true;
+        this.type = 'depart';
+        this.length = 1;
       },
       //关闭选人框回调
       closeOrganization(){

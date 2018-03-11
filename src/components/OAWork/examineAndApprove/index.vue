@@ -185,6 +185,38 @@
               </div>
             </div>
             <div class="content" v-if="isOpen_7">
+              <div class="content_item" @click="openFrames('repair')">
+                <div>
+                  <div class="item_icon">
+                    <i class="iconfont icon-jinbi"></i>
+                  </div>
+                  <div class="item_name">房屋维修申报</div>
+                </div>
+              </div>
+              <div class="content_item" @click="openFrames('problemReport')">
+                <div>
+                  <div class="item_icon">
+                    <i class="iconfont icon-jinbi"></i>
+                  </div>
+                  <div class="item_name">客服部问题申报</div>
+                </div>
+              </div>
+              <div class="content_item" @click="openFrames('miscellaneousExpenses')">
+                <div>
+                  <div class="item_icon">
+                    <i class="iconfont icon-jinbi"></i>
+                  </div>
+                  <div class="item_name">水电燃物业费、公摊费</div>
+                </div>
+              </div>
+              <div class="content_item" @click="openFrames('miscellaneousExpensesOfficial')">
+                <div>
+                  <div class="item_icon">
+                    <i class="iconfont icon-jinbi"></i>
+                  </div>
+                  <div class="item_name">水电燃报销（官网）</div>
+                </div>
+              </div>
               <div class="content_item" v-if="showUp">
                 <div>
                   <div class="item_icon"></div>
@@ -740,7 +772,10 @@
     <Replenishmentdetail :module="replenishmentdetail" @close='closeFrame'></Replenishmentdetail>
     <Purchasedetail :module="purchasedetail" @close='closeFrame'></Purchasedetail>
     <Receiptdetail :module="receiptdetail" @close='closeFrame'></Receiptdetail>
-
+    <ProblemReport :module="problemReportVisible" @close='closeFrame'></ProblemReport>
+    <Repair :module="repairVisible" @close='closeFrame'></Repair>
+    <MiscellaneousExpenses :module="miscellaneousExpensesVisible" @close='closeFrame'></MiscellaneousExpenses>
+    <MiscellaneousExpensesOfficial :module="miscellaneousExpensesOfficialVisible" @close='closeFrame'></MiscellaneousExpensesOfficial>
 
   </div>
 </template>
@@ -760,6 +795,11 @@
   import Takework from './comments/takework.vue'
   import Replenishment from './comments/replenishment.vue'
   import Receipt from './comments/receipt.vue'
+  import ProblemReport from './comments/problemReport.vue'
+  import Repair from './comments/repair.vue'
+  import MiscellaneousExpenses from './comments/miscellaneousExpenses.vue'
+  import MiscellaneousExpensesOfficial from './comments/miscellaneousExpensesOfficial.vue'
+
   // 详情
   import Reimbursement from './comments/details/reimbursementdetail.vue'
   import Reimbursedone from './comments/details/reimbursementdone.vue'
@@ -769,6 +809,7 @@
   import Replenishmentdetail from './comments/details/replenishmentdetail.vue'
   import Purchasedetail from './comments/details/purchasedetail.vue'
   import Receiptdetail from './comments/details/receiptdetail.vue'
+
 
   export default {
     components: { Frames,
@@ -784,6 +825,11 @@
       Takework,
       Replenishment,
       Receipt,
+      ProblemReport,
+      Repair,
+      MiscellaneousExpenses,
+      MiscellaneousExpensesOfficial,
+
 
       Reimbursement,
       Reimbursedone,
@@ -840,6 +886,10 @@
         replenishmentdetail: false,            //补卡待审批
         purchasedetail: false,            //采购待审批
         receiptdetail: false,            //收据领用待审批
+        problemReportVisible: false,            //客服部问题申报
+        repairVisible: false,            //客服部问题申报
+        miscellaneousExpensesVisible: false,            //客服部问题申报
+        miscellaneousExpensesOfficialVisible: false,            //客服部问题申报
 
 
       };
@@ -941,6 +991,18 @@
           case 'receiptVisible':                //收据领用
             this.receiptVisible = true;
             break;
+          case 'problemReport':             //problemReport
+            this.problemReportVisible = true;
+            break;
+          case 'repair':             //repair
+            this.repairVisible = true;
+            break;
+          case 'miscellaneousExpenses':             //repair
+            this.miscellaneousExpensesVisible = true;
+            break;
+          case 'miscellaneousExpensesOfficial':             //repair
+            this.miscellaneousExpensesOfficialVisible = true;
+            break;
         }
       },
       closeFrame(){
@@ -965,6 +1027,10 @@
         this.replenishmentdetail = false;
         this.purchasedetail = false;
         this.receiptdetail = false;
+        this.problemReportVisible = false;
+        this.repairVisible = false;
+        this.miscellaneousExpensesVisible = false;
+        this.miscellaneousExpensesOfficialVisible = false;
 
       }
     }

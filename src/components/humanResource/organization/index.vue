@@ -1,6 +1,6 @@
 <template>
   <div id="staffManage"  @click="show=false" @contextmenu="closeMenu">
-    <el-row :gutter="10">
+    <el-row :gutter="20">
       <el-col :span="6">
         <div class="border left">
           <div class="top">
@@ -565,6 +565,8 @@
               this.positionList = [];
               this.totalOnlyPositionNum = res.data.meta.total;
               if(tableData.length>0){
+                this.onlyPositionId = tableData[0].id;
+                this.getPosition();
                 tableData.forEach((data) => {
                   let org_id = data.org_id;
                   let org_name = null;
@@ -961,7 +963,7 @@
   #staffManage{
     min-height: 790px;
     .border{
-      border: 1px solid #6a8dfb;
+      /*border: 1px solid #6a8dfb;*/
       border-radius: 4px;
       min-height: 790px;
       .top{

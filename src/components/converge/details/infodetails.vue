@@ -1,211 +1,154 @@
 <template>
   <div class="newsDetail">
     <el-row>
-      <el-col :span="16">
+      <el-col :span="colNum">
         <div style="padding: 20px 17px">
           <div class="newsMain">
-            <div class="newsTitle">标题标题标题标题标题标题标题标题标题标题标题标题</div>
+            <div class="newsTitle">{{formList.title}}</div>
           </div>
-          <div class="userInfo" style="margin-top: 22px">
+          <div class="userInfo" style="margin-top: 18px">
             <div class="publishInfo">
               <div class="headPic">
-                <img src="../../../assets/images/head.jpg" alt="">
+                <img :src="staffs.avatar" v-if="staffs.avatar !== null">
+                <img src="../../../assets/images/head.png" v-else>
               </div>
-              <div class="publishName">徐志摩</div>
-              <div class="publishRank">研发部-研发部研发部研发部</div>
+              <div class="publishName">{{staffs.name}}</div>
+              <div class="publishRank">
+                <span v-for="key in staffs.org">
+                    <span>{{key.name}}</span>
+                </span>
+              </div>
             </div>
             <div class="InfoRight">
-              <div class="title">乐伽新闻</div>
-              <div class="newsDate">2017-09-09</div>
+              <div class="title">{{formList.dict_ids}}</div>
+              <div class="newsDate">{{formList.create_time}}</div>
             </div>
           </div>
 
-          <div class="newsPic">
-            <img src="../../../assets/images/情人节.png" alt="">
+          <div id="htmlForEditor">
+
           </div>
 
-          <div class="newsInfo">
-            轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩。 那河畔的金柳，
-            是夕阳中的新娘；波光里的艳影，在我的心头荡漾。
-            软泥上的青荇，油油的在水底招摇；在康河的柔波里，我甘心做一条水草！ 那榆荫下的一潭，不是清泉， 是天上虹；揉碎在浮藻间，
-            沉淀着彩虹似的梦。寻梦？撑一支长篙，向青草更青处漫溯；满载一船星辉，在星辉斑斓里放歌。但我不能放歌，悄悄是别离的笙箫；
-            夏虫也为我沉默，沉默是今晚的康桥！悄悄的我走了，正如我悄悄的来；我挥一挥衣袖，不带走一片云彩。
-            轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩。 那河畔的金柳，
-            是夕阳中的新娘；波光里的艳影，在我的心头荡漾。
-            软泥上的青荇，油油的在水底招摇；在康河的柔波里，我甘心做一条水草！ 那榆荫下的一潭，不是清泉， 是天上虹；揉碎在浮藻间，
-            沉淀着彩虹似的梦。寻梦？撑一支长篙，向青草更青处漫溯；满载一船星辉，在星辉斑斓里放歌。但我不能放歌，悄悄是别离的笙箫；
-            夏虫也为我沉默，沉默是今晚的康桥！悄悄的我走了，正如我悄悄的来；我挥一挥衣袖，不带走一片云彩。
-          </div>
-
-          <div class="newsPic">
-            <img src="../../../assets/images/情人节.png" alt="">
-          </div>
-          <div class="newsInfo">
-            轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩。 那河畔的金柳，
-            是夕阳中的新娘；波光里的艳影，在我的心头荡漾。
-            软泥上的青荇，油油的在水底招摇；在康河的柔波里，我甘心做一条水草！ 那榆荫下的一潭，不是清泉， 是天上虹；揉碎在浮藻间，
-            沉淀着彩虹似的梦。寻梦？撑一支长篙，向青草更青处漫溯；满载一船星辉，在星辉斑斓里放歌。但我不能放歌，悄悄是别离的笙箫；
-            夏虫也为我沉默，沉默是今晚的康桥！悄悄的我走了，正如我悄悄的来；我挥一挥衣袖，不带走一片云彩。
-            轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩。 那河畔的金柳，
-            是夕阳中的新娘；波光里的艳影，在我的心头荡漾。
-            软泥上的青荇，油油的在水底招摇；在康河的柔波里，我甘心做一条水草！ 那榆荫下的一潭，不是清泉， 是天上虹；揉碎在浮藻间，
-            沉淀着彩虹似的梦。寻梦？撑一支长篙，向青草更青处漫溯；满载一船星辉，在星辉斑斓里放歌。但我不能放歌，悄悄是别离的笙箫；
-            夏虫也为我沉默，沉默是今晚的康桥！悄悄的我走了，正如我悄悄的来；我挥一挥衣袖，不带走一片云彩。
-          </div>
-          <div class="lines"></div>
-          <div class="readerInfos">
-            <div></div>
-            <div class="readers">
-              <div>
-                <i class="iconfont icon-xiaoxi"></i>1232
-              </div>
-              <div>
-                <i class="iconfont icon-dianzan"></i>123
-              </div>
-              <div>
-                <i class="iconfont icon-yanjing"></i>123
+          <div v-if="isShow">
+            <div class="lines"></div>
+            <div class="readerInfos">
+              <div></div>
+              <div class="readers">
+                <div>
+                  <i class="iconfont icon-xiaoxi"></i>{{formList.comments_count}}
+                </div>
+                <div>
+                  <i class="iconfont icon-dianzan" :class="{'zan': assistId}" @click="assist()"></i>&nbsp;{{formList.favor_num}}
+                </div>
+                <div>
+                  <i class="iconfont icon-yanjing"></i>&nbsp;{{formList.read_num}}
+                </div>
               </div>
             </div>
-          </div>
-          <div class="contents">
-            <div>
-              上一篇：轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩
-            </div>
-            <div>
-              下一篇：轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩
-            </div>
+            <!--<div class="contents">-->
+            <!--<div>-->
+            <!--上一篇：轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩-->
+            <!--</div>-->
+            <!--<div>-->
+            <!--下一篇：轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩-->
+            <!--</div>-->
+            <!--</div>-->
           </div>
         </div>
 
-        <div class="comment_box">
-          <div class="userInfo">
-            <div class="publishInfo" style="color: #a2a3a6;font-size: 15px">
-              <div class="headPic">
-                <img src="../../../assets/images/head.jpg" alt="">
-              </div>
-              <div class="publishName">徐志摩</div>
-              <div class="publishRank">研发部-研发部研发部研发部</div>
+        <div class="comment_box" v-if="isShow">
+          <div class="publishComment">
+            <div class="portrait">
+              <img :src="staffs.avatar" v-if="staffs.avatar !== null">
+              <img src="../../../assets/images/head.png" v-else>
             </div>
-            <div class="InfoRight">
-              <div></div>
-              <div class="newsDate">2017-09-09</div>
+            <div class="comments">
+              <div class="staff_name">
+                <div>
+                  <span>{{staffs.name}}</span>&nbsp;&nbsp;
+                  <span v-for="key in staffs.org">
+                    <span>{{key.name}}</span>
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
-          <el-form size="mini" style="margin: 20px 0 0 54px">
+
+          <el-form size="mini">
             <el-form-item>
-              <el-input type="textarea" :rows="3"></el-input>
+              <el-input type="textarea" :rows="3" v-model="addContent"></el-input>
             </el-form-item>
             <el-form-item>
               <div class="submitButt">
-                <div></div>
-                <el-button type="success" size="mini">发表</el-button>
+                <el-button type="success" size="mini" @click="addReply(formList.id)">发表</el-button>
               </div>
             </el-form-item>
           </el-form>
-          <div class="commentOn">
-            <div class="publish">
-              <div class="userInfo">
-                <div class="publishInfo" style="color: #a2a3a6;font-size: 15px">
-                  <div class="headPic">
-                    <img src="../../../assets/images/head.jpg" alt="">
-                  </div>
-                  <div class="publishName">徐志摩</div>
-                  <div class="publishRank">研发部-研发部研发部研发部</div>
-                </div>
-                <div class="InfoRight">
-                  <div></div>
-                  <div class="newsDate">2017-09-09</div>
-                </div>
-              </div>
-              <div class="publishDetail">
-                轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩。 那河畔的金柳，
-                是夕阳中的新娘；波光里的艳影，在我的心头荡漾。
-                轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩。 那河畔的金柳，
-                是夕阳中的新娘；波光里的艳影，在我的心头荡漾。
-              </div>
-              <div class="replyButt">
-                <div></div>
+
+          <div class="commentOn" v-for="key in commentOn">
+            <div class="portrait">
+              <img :src="key.staffs.avatar" v-if="key.staffs.avatar !== null">
+              <img src="../../../assets/images/head.png" v-else>
+            </div>
+            <div class="comments">
+              <div class="staff_name">
                 <div>
-                  <el-button type="primary" size="mini" @click="add">回复</el-button>
+                  <span>{{key.staffs.name}}</span>&nbsp;&nbsp;
+                  <span v-for="item in key.staffs.org">
+                    <span class="staffBefore">{{item.name}}</span>
+                  </span>
+                </div>
+                <div>
+                  {{key.create_time}}
                 </div>
               </div>
-              <div class="inputBox" v-if="showUp">
-                <el-form size="mini">
-                  <el-form-item>
-                    <el-input type="textarea" :rows="3"></el-input>
-                  </el-form-item>
-                  <el-form-item>
-                    <div class="submitButt">
-                      <div></div>
-                      <el-button type="success" size="mini">发表</el-button>
-                    </div>
-                  </el-form-item>
-                </el-form>
+              <div class="commentContent">
+                {{key.content}}
               </div>
             </div>
+          </div>
+
+          <div class="block pages" v-if="paging > 11">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="myData"
+              :current-page="currentPage"
+              :page-size="10"
+              layout="total, prev, pager, next, jumper"
+              :total="paging">
+            </el-pagination>
           </div>
         </div>
-
       </el-col>
-      <el-col :span="8">
+
+      <!--热门导读-->
+      <el-col :span="8" v-if="isShow">
         <div class="ingreat">
-          <div class="title">热门新闻</div>
-          <div class="ingreatNews">
-            <div class="ingreat_title">轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩。</div>
+          <div class="title">{{hotData.title}}</div>
+          <div class="ingreatNews" v-for="(key,index) in hotData.data" v-if="index < 3">
+            <div class="ingreat_title" @click="routerDetail(key.id)">{{key.title}}</div>
             <div class="subhead">
-              <div class="ingreat_data">2017-09-09</div>
+              <div class="ingreat_data">{{key.create_time}}</div>
               <div class="readers">
                 <div>
-                  <i class="iconfont icon-xiaoxi"></i><span>1232</span>
+                  <i class="iconfont icon-xiaoxi"></i>{{key.comments_count}}
                 </div>
                 <div>
-                  <i class="iconfont icon-dianzan"></i><span>1232</span>
+                  <i class="iconfont icon-dianzan"></i>&nbsp;{{key.favor_num}}
                 </div>
                 <div>
-                  <i class="iconfont icon-yanjing"></i><span>1232</span>
+                  <i class="iconfont icon-yanjing"></i>&nbsp;{{key.read_num}}
                 </div>
               </div>
             </div>
-            <div class="ingreat_pic">
-              <img src="../../../assets/images/情人节.png" alt="">
+            <div class="ingreat_pic" @click="routerDetail(key.id)">
+              <img v-for="pic in key.album.cover_pic" :src="pic.big">
             </div>
             <div class="ingreat_detail">
-              轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩。
-              轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩。
-              轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩。
+              <span v-html="key.content"></span>
             </div>
             <div class="ingreat_butt">
-              <el-button type="primary" size="mini">MORE</el-button>
-            </div>
-          </div>
-          <div style="margin-top: 66px">
-            <div class="ingreatNews">
-              <div class="ingreat_title">轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩。</div>
-              <div class="subhead">
-                <div class="ingreat_data">2017-09-09</div>
-                <div class="readers">
-                  <div>
-                    <i class="iconfont icon-xiaoxi"></i><span>1232</span>
-                  </div>
-                  <div>
-                    <i class="iconfont icon-dianzan"></i><span>1232</span>
-                  </div>
-                  <div>
-                    <i class="iconfont icon-yanjing"></i><span>1232</span>
-                  </div>
-                </div>
-              </div>
-              <div class="ingreat_pic">
-                <img src="../../../assets/images/情人节.png" alt="">
-              </div>
-              <div class="ingreat_detail">
-                轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩。
-                轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩。
-                轻轻的我走了，正如我轻轻的来；我轻轻的招手，作别西天的云彩。
-              </div>
-              <div class="ingreat_butt">
-                <el-button type="primary" size="mini">MORE</el-button>
-              </div>
+              <el-button type="primary" size="mini" @click="routerDetail(key.id)">更多</el-button>
             </div>
           </div>
         </div>
@@ -216,38 +159,180 @@
 </template>
 
 <script>
-    export default {
-        name: "infodetails",
-      data () {
-          return {
-            showUp: false,
-          }
-      },
-      methods:{
-        add(){
-          this.showUp = true;
+  export default {
+    name: "infodetails",
+    data() {
+      return {
+        urls: globalConfig.server,
+        showUp: '',
+        isShow: true,
+        colNum: 16,
+        htmlForEditor: '',
+        formList: {},
+        staffs: {},
+        addContent: '',
+        commentOn: [],
+
+        currentPage: 1,
+        paging: 0,
+        page: 1,
+
+        form: {
+          status: 149,
+          keywords: '',
+          pages: 1,
+        },
+        hotData: [],
+
+        assistId: false,     //点赞
+      }
+    },
+    mounted() {
+      this.addRegion();
+      let query = this.$route.query;
+      if (JSON.stringify(query) !== '{}') {
+        this.publicDetail(query.ids);
+        if (query.detail === 'port') {
+          this.isShow = false;
+          this.colNum = 24;
+        } else {
+          this.isShow = true;
+          this.colNum = 16;
         }
       }
+    },
+    methods: {
+      // 详情
+      routerDetail(id) {
+        this.$router.push({path: '/Infodetails', query: {ids: id, detail: 'converge'}});
+        this.publicDetail(id);
+      },
+      // 热门导读
+      addRegion() {
+        this.$http.get(this.urls + 'oa/portal/?dict_id=' + 142, {
+          params: this.form
+        }).then((res) => {
+          this.hotData.title = res.data.data.data[0].dict_ids;
+          this.hotData.data = res.data.data.data;
+        })
+      },
+      // 详情
+      publicDetail(id) {
+        this.$http.get(this.urls + 'oa/portal/' + id).then((res) => {
+          if (res.data.code === '80020') {
+            this.formList = res.data.data;
+            let detail = res.data.data;
+            document.getElementById('htmlForEditor').innerHTML = detail.content;
+            this.staffs = detail.staffs[0];
+            // this.photos.pic_url = detail.album.cover_pic;
+            this.myData(id);
+          }
+        })
+      },
+      search(val) {
+        this.myData(this.formList.id, val);
+      },
+      myData(id, val) {
+        this.page = val;
+        this.$http.get(this.urls + 'oa/portal/comment/' + this.formList.id, {
+          params: {
+            pages: this.page,
+          }
+        }).then((res) => {
+          if (res.data.code === '80090') {
+            this.commentOn = res.data.data.data;
+            this.paging = res.data.data.count;
+          } else {
+            this.commentOn = [];
+            this.paging = 0;
+          }
+        })
+      },
+      // 赞
+      assist() {
+        this.$http.get(this.urls + 'oa/portal/favor/' + this.formList.id).then((res) => {
+          if (res.data.code === '80070') {
+            this.publicDetail(this.formList.id);
+            this.assistId = true;
+            if (this.assistId) {
+              this.formList.favor_num++;
+            }
+          }
+        })
+      },
+      // 回复 /发表
+      addReply(id) {
+        this.$http.post(this.urls + 'oa/portal/comment', {
+          obj_id: this.formList.id,
+          content: this.addContent,
+          parent_id: id,
+        }).then((res) => {
+          this.addContent = '';
+          if (res.data.code === '80060') {
+            this.myData(1);
+            this.prompt(res.data.msg, 1);
+          } else {
+            this.prompt(res.data.msg, 2);
+          }
+        })
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      prompt(val, stu) {
+        if (stu === 1) {
+          this.$notify({
+            title: '成功',
+            message: val,
+            type: 'success'
+          });
+        } else {
+          this.$notify({
+            title: '警告',
+            message: val,
+            type: 'warning'
+          });
+        }
+      },
     }
+  }
 </script>
 
 <style scoped lang="scss">
-  #converge {
-    width: 100%;
-    overflow: hidden;
+  @mixin flex {
+    display: -webkit-flex;
+    display: flex;
   }
 
-    @mixin flex {
-      display: -webkit-flex;
-      display: flex;
+  @mixin border_radius($n) {
+    -webkit-border-radius: $n;
+    -moz-border-radius: $n;
+    border-radius: $n;
+  }
+
+  .newsDetail {
+    .readers {
+      div {
+        @include flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      div {
+        i {
+          font-size: 20px;
+        }
+      }
+      div:first-of-type {
+        i {
+          padding-top: 2px;
+        }
+      }
     }
 
-    @mixin border_radius($n) {
-      -webkit-border-radius: $n;
-      -moz-border-radius: $n;
-      border-radius: $n;
+    #htmlForEditor {
+      margin-top: 18px;
     }
-  .newsDetail {
+
     @include border_radius(5px);
     border: 1px solid #dfe6fb;
     margin-top: 10px;
@@ -256,6 +341,8 @@
     .newsMain {
       @include flex;
       justify-content: space-between;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #dfe6fb;
       .newsTitle {
         color: #606266;
         font-size: 24px;
@@ -289,11 +376,17 @@
         }
         .publishRank {
           margin-left: 16px;
+          span {
+            span + span:before {
+              content: ' - ';
+            }
+          }
         }
       }
       .InfoRight {
         @include flex;
         justify-content: space-between;
+        line-height: 39px;
         .title {
           /*font-size: 16px;*/
           color: #6a8dfb;
@@ -306,19 +399,6 @@
       }
     }
 
-    .newsPic {
-      width:100%;
-      height: 250px;
-      margin-top: 20px;
-      img {
-        width:100%;
-        height: 100%;
-      }
-    }
-    .newsInfo {
-      margin: 30px 0 21px 0;
-      color: #606266;
-    }
     .lines {
       width: 25px;
       border-bottom: 3px solid #6a8dfb;
@@ -328,15 +408,15 @@
       @include flex;
       justify-content: space-between;
       width: 100%;
-      margin-top:30px;
+      margin-top: 30px;
       .readers {
         @include flex;
         justify-content: space-between;
       }
-       div {
-         margin-left: 20px;
-         cursor: pointer;
-       }
+      div {
+        margin-left: 20px;
+        cursor: pointer;
+      }
     }
     .contents {
       margin-top: 30px;
@@ -353,54 +433,68 @@
       background: #F4F6FC;
       padding: 10px;
       .submitButt {
-        @include flex;
-        justify-content: space-between;
+        text-align: right;
       }
-    }
-    .publish {
-      .publishFrame {
-        @include flex;
-        justify-content: space-between;
-        font-size: 12px;
-      }
-      .publishDetail {
-        /*font-size: 13px;*/
-        margin-left: 54px;
-        line-height: 16px;
-      }
-      .replyButt {
-        @include flex;
-        justify-content: space-between;
-        margin: 10px 0;
-      }
-      .inputBox {
-        margin-left: 45px;
-        .submitButt {
-          @include flex;
-          justify-content: space-between;
+      .portrait {
+        margin-right: 20px;
+        min-width: 40px;
+        max-width: 40px;
+        min-height: 40px;
+        max-height: 40px;
+        img {
+          @include border_radius(50%);
+          width: 100%;
+          height: 100%;
         }
       }
+      .comments {
+        line-height: 24px;
+        width: 100%;
+        .staff_name {
+          color: #2d64b3;
+          @include flex;
+          justify-content: space-between;
+          .staffBefore + .staffBefore:before {
+            content: ' - ';
+          }
+        }
+        .commentContent {
+          color: #000;
+        }
+      }
+      .publishComment {
+        @include flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      .commentOn {
+        padding: 6px;
+        border-top: 1px solid #eeeeee;
+        @include flex;
+        align-items: center;
+      }
     }
-    .commentOn {
-      background: #F4F6FC;
-      padding-top: 10px;
-      border-top: 1px solid #eeeeee;
-    }
-/*右边栏*/
+
+    /*右边栏*/
     .ingreat {
+      margin-top: 66px;
       padding: 20px 17px;
       .title {
-        margin-top: 62px;
         color: #fb4699;
       }
       .ingreatNews {
         .ingreat_title {
           color: #303133;
           margin-top: 28px;
+          &:hover {
+            cursor: pointer;
+            color: #6ca5ff;
+          }
         }
         .subhead {
           @include flex;
           justify-content: space-between;
+          align-items: center;
           margin-top: 19px;
           font-size: 12px;
           .readers {
@@ -422,7 +516,7 @@
           cursor: pointer;
           margin-top: 11px;
           img {
-            width:100%;
+            width: 100%;
             height: 100%;
           }
         }
@@ -430,8 +524,8 @@
           width: 100%;
           height: 35px;
           margin-top: 10px;
-          text-overflow : ellipsis;
-          overflow : hidden;
+          text-overflow: ellipsis;
+          overflow: hidden;
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;

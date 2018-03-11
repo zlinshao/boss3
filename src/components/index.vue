@@ -1,15 +1,14 @@
 <template>
   <div id="index" @click="clickScreen">
     <div class="navBarLeft" :class="isFull? 'navBarRight':'' ">
-      <!--<i class="el-icons-fa-compress"></i>-->
       <p @click="fullScreen(2)"></p>
     </div>
-    <div style="position: fixed;top: 30px;right: 20px;z-index: 100;">
+    <div id="KeFuDiv" style="position: fixed;top: 30px;right: 20px;z-index: 1000000;" onmousedown="MoveDiv(KeFuDiv,event);">
       <el-collapse-transition>
         <div v-show="isFull">
           <div class="transition-box">
             <div>
-              <img src="../assets/images/情人节.png" alt="">
+              <img src="../assets/images/head.jpg" style="border-radius: 20px" alt="">
             </div>
             <div class="contents">
               <el-row>
@@ -28,11 +27,16 @@
         </div>
       </el-collapse-transition>
     </div>
+
+
+
+
     <div class="navBar" :class="isFull? 'navBarHide':'' ">
       <div class="left">
         <div class="logo" :class="isCollapse? 'isCollapse_logo':'' ">
           <div class="boss" :class="isCollapse? 'boss1':'' ">BOSS</div>
-          <div :class="isCollapse? 'isCollapse':'' " class="el-icons-fa-bars" @click="changeCollapse"></div>
+          <div v-if="isCollapse" class="isCollapse" @click="changeCollapse"></div>
+          <div v-if="!isCollapse" class="el-icons-fa-bars" @click="changeCollapse"></div>
         </div>
         <div class="slogan">
           <img src="../assets/images/slogan.png" alt="">
@@ -146,24 +150,11 @@
             <img :src="personal.avatar" v-if="personal.avatar !== null">
             <img src="../assets/images/head.png" v-else>
           </div>
-          <el-dropdown>
+          <el-dropdown  trigger="click">
               <span class="el-dropdown-link">
                 {{personal.name}}<i class="el-icon-arrow-down el-icon--right" style="margin-left: 25px"></i>
               </span>
             <el-dropdown-menu slot="dropdown" class="personal">
-              <!--<el-dropdown-item class="personalList">-->
-              <!--<p><i class="el-icon-menu"></i></p>-->
-              <!--<div>-->
-              <!--个人主页-->
-              <!--</div>-->
-              <!--</el-dropdown-item>-->
-              <!--<el-dropdown-item class="personalList">-->
-              <!--<p><i class="el-icons-fa-sitemap"></i></p>-->
-              <!--<div>-->
-              <!--部门主页-->
-              <!--</div>-->
-              <!--</el-dropdown-item>-->
-
               <el-row>
                 <el-col :span="12">
                   <div class="signCount" style="margin-left: 4px">
@@ -380,7 +371,6 @@
 <script>
   import Cookies from 'js-cookie'
   import TagsView from './common/tagsView.vue'
-
   export default {
     name: 'Index',
     components: {TagsView},
@@ -396,6 +386,7 @@
     },
     mounted() {
       this.countTime();
+
     },
     computed: {
       visitedViews() {
@@ -482,11 +473,31 @@
         this.isCollapse = !this.isCollapse;
       },
       lockScreen() {
-        Cookies.set('last_page_path', this.$route.path); // 本地存储锁屏之前打开的页面以便解锁后打开
-        setTimeout(() => {
-          this.$router.push({path: '/lock'});
-        });
-        Cookies.set('locking', '1');
+//        Cookies.set('last_page_path', this.$route.path); // 本地存储锁屏之前打开的页面以便解锁后打开
+        this.$http.get(globalConfig.server+'setting/others/lock_screen_status?lock_status=1').then((res)=>{
+          if(res.data.code === '100003'){
+
+//            new Promise((resolve,reject) =>{
+//              sessionStorage.setItem('lockStatus', 1);
+//              if(sessionStorage.getItem('lockStatus')){
+//                resolve();
+//              }
+//            }).then((data)=>{
+//              this.$router.push({path: '/lock'});
+//            });
+            this.$router.push({path: '/lock'});
+          }else {
+            this.$notify({
+              title: '警告',
+              message: res.data.msg,
+              type: 'warning'
+            });
+          }
+        })
+//        setTimeout(() => {
+//
+//        });
+//        Cookies.set('locking', '1');
       },
     }
   }
@@ -769,7 +780,10 @@
       align-items: center;
     }
     .isCollapse {
-      padding: 0 20px;
+      width: 27px;
+      height: 20px;
+      margin-right: 20px;
+      background: url("../assets/images/boss.svg") no-repeat;
     }
     .isCollapse_logo {
       width: 64px !important;

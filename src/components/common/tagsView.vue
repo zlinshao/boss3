@@ -1,12 +1,12 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
-    <div id="tagView">
-      <el-tag v-for="(item,index) in visitedViews" :key="item.name" closable :type="isActive(item)?'danger':'default'" @close="handleClose(item)">
+    <ScrollPanel class="tagView" ref='scrollPane'>
+      <el-tag ref='item' v-for="(item,index) in visitedViews" :to="item.path" :key="item.name" closable :type="isActive(item)?'danger':'default'" @close="handleClose(item)">
         <span class="tag_span" @click="skipPage(item)" @contextmenu = openMenu(item,index)>
           {{item.name}}
         </span>
       </el-tag>
-    </div>
+    </ScrollPanel>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
   </div>
@@ -14,8 +14,9 @@
 
 <script>
     import RightMenu from './rightMenu.vue'
+    import ScrollPanel from './scrollPanel.vue'
     export default {
-      components: {RightMenu},
+      components: {RightMenu,ScrollPanel},
       data(){
           return{
             rightMenuX: 0,
@@ -42,13 +43,27 @@
 
       watch: {
         $route() {
-          this.addViewTags()
+          this.addViewTags();
+          this.moveToCurrentTag()
         },
         menuStatus(val){
             this.show = val;
         }
       },
       methods:{
+        //已到当前tag
+        moveToCurrentTag() {
+          const items = this.$refs.item;
+          this.$nextTick(() => {
+            for (const tag of items) {
+              if (tag.$attrs.to === this.$route.path) {
+                this.$refs.scrollPane.moveToTarget(tag.$el)
+                break
+              }
+            }
+          })
+        },
+
         addViewTags() {
 //          const route = this.generateRoute();
 //
@@ -164,7 +179,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 
 <style rel="stylesheet/scss" lang="scss">
-    #tagView {
+    .tagView {
       max-height: 35px;
       overflow: hidden;
       display: flex;

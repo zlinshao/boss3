@@ -14,8 +14,8 @@ import LoginRecord from '../components/systemSetting/loginRecord/index.vue'     
 import UserDictionary from '../components/systemSetting/userDictionary/index.vue'
 
 import Message from '../components/systemSetting/message/index.vue'                   //短信
-import MessageList from '../components/systemSetting/message/messageList.vue'         //短信
-import MessageModule from '../components/systemSetting/message/messageModule.vue'     //短信
+// import MessageList from '../components/systemSetting/message/messageList.vue'         //短信
+// import MessageModule from '../components/systemSetting/message/messageModule.vue'     //短信
 import RoleManage from '../components/systemSetting/roleManage/index.vue'
 import PowerManage from '../components/systemSetting/powerManage/index.vue'
 import VillageManage from '../components/systemSetting/villageManage/index.vue'             //小区管理
@@ -84,6 +84,7 @@ import throwALease from '../components/OAWork/sthToDo/components/throwALease.vue
 
 import PublicArticle from '../components/OAWork/portals/components/publicArticle.vue'
 import ExamineAndApprove from '../components/OAWork/examineAndApprove/index.vue'
+import University from '../components/OAWork/university/index.vue'
 
 
 
@@ -111,7 +112,13 @@ Vue.use(Router);
 
 export default new Router({
   routes: [
-
+    {
+      path: '/',
+      // component: Index,
+      hidden:true,
+      name: 'Index',
+      redirect: '/main',
+    },
 
     {
       path: '/login',
@@ -292,6 +299,7 @@ export default new Router({
         {path: '/portals', component: Portals, name: '门户管理',},
         {path: '/vote', component: Vote, name: '投票管理',},
         {path: '/contractClaim', component: ContractClaim, name: '合同认领',},
+        {path: '/university', component: University, name: '乐伽大学',},
       ]
     },
     {
@@ -300,15 +308,15 @@ export default new Router({
       name: '系统设置',
       icon: 'el-icon-setting',
       children: [
-        {path: '/message/message', component: Message, name: '短信'},
-        {path: '/recycle', component: Recycle, name: '回收站',},
-        {path: '/contractMould', component: ContractMould, name: '合同模板',},
+        {path: '/message/message', component: Message, name: '短信模板'},
+        // {path: '/recycle', component: Recycle, name: '回收站',},
+        // {path: '/contractMould', component: ContractMould, name: '合同模板',},
         {path: '/loginRecord', component: LoginRecord, name: '登陆日志',},
         {path: '/userDictionary', component: UserDictionary, name: '用户字典',},
         {path: '/roleManage', component: RoleManage, name: '角色管理',},
         {path: '/powerManage', component: PowerManage, name: '权限管理',},
         {path: '/villageManage', component: VillageManage, name: '小区管理',},
-        {path: '/exportManage', component: ExportManage, name: '导出管理',},
+        // {path: '/exportManage', component: ExportManage, name: '导出管理',},
       ]
     },
 

@@ -35,14 +35,44 @@
     },
     methods: {
       btnClick(){
-        if(this.keywords){
-          Cookies.set('locking', '0');
-          this.$router.push({
-            path: Cookies.get('last_page_path') // 解锁之后跳转到锁屏之前的页面
-          });
-        }else {
-          this.$message('请输入密码');
-        }
+        this.$http.get(globalConfig.server+'special/special/unlock_screen?pwd_lock='+this.keywords).then((res)=>{
+          if(res.data.code === '10010'){
+            this.$router.push({path: '/main'});
+//            sessionStorage.setItem('lockStatus', 0);
+//            new Promise((resolve,reject) =>{
+//              sessionStorage.setItem('lockStatus', 0);
+//              if(Number(sessionStorage.getItem('lockStatus')) !== 1){
+//                resolve();
+//              }
+//            }).then((data)=>{
+//              this.$router.push({path: '/main'});
+//            });
+          }else {
+            this.$notify({
+              title: '警告',
+              message: res.data.msg,
+              type: 'warning'
+            });
+          }
+
+//          if(res.data.code === '100003'){
+//            this.$router.push({path: '/lock'});
+//          }else {
+//            this.$notify({
+//              title: '警告',
+//              message: res.data.msg,
+//              type: 'warning'
+//            });
+//          }
+        })
+//        if(this.keywords){
+//          Cookies.set('locking', '0');
+//          this.$router.push({
+//            path: Cookies.get('last_page_path') // 解锁之后跳转到锁屏之前的页面
+//          });
+//        }else {
+//          this.$message('请输入密码');
+//        }
       }
     }
   }
