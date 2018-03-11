@@ -224,4 +224,7 @@
 .el-table .success-row {
   background: #f0f9eb; }
 
+.el-tabs .el-tabs__content {
+  position: static; }
+
 /*# sourceMappingURL=reset.css.map */
