@@ -1,6 +1,6 @@
 <template>
-  <div id="app" @contextmenu="prevent($event)" @click="closeMenu">
-    <router-view v-loading="isLoading"></router-view>
+  <div id="app" v-loading="isLoading" @contextmenu="prevent($event)" @click="closeMenu">
+    <router-view></router-view>
   </div>
 </template>
 
