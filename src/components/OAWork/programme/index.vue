@@ -1,5 +1,16 @@
 <template>
-    <h1>this is region</h1>
+    <div>
+
+      <img data-magnify="" data-caption="图片查看器"
+           data-src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg"
+           src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+
+
+
+      <img data-card="" src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+    </div>
+
+
 </template>
 
 <script>
@@ -15,5 +26,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+    img{
+      width: 300px;
+    }
 </style>

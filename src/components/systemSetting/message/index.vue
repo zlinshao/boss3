@@ -262,9 +262,12 @@
         this.messageModule = true;
       },
       // 关闭短信模板
-      closeMessageModule() {
+      closeMessageModule(val) {
         this.messageModule = false;
         this.messageName = '';
+        if(val === 'success'){
+            this.getDate();
+        }
       },
 
       // 修改短信名称

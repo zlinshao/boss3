@@ -69,6 +69,8 @@
       messageName(val){
           if(val ==='修改短信模板'){
               this.getMessageDetail();
+          }else {
+              this.form.id = '';
           }
       },
       activeId(val){
@@ -109,6 +111,7 @@
                 message: res.data.msg
               });
               this.closeModule();
+              this.$emit('close','success')
             }else {
               this.$notify.warning({
                 title: '警告',
@@ -123,6 +126,7 @@
                 title: '成功',
                 message: res.data.msg
               });
+              this.$emit('close','success')
               this.closeModule();
             }else {
               this.$notify.warning({
