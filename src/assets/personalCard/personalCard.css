@@ -1,0 +1,16 @@
+#personalCard{
+  width: 500px;
+  height: 250px;
+  /*box-sizing: border-box;*/
+  background: #ffffff;
+  border: 1px solid rgba(64,158,255,.12);
+  box-shadow: 0 4px 8px 0 rgba(64,158,255,.12), 0 0 6px 0 rgba(64,158,255,.04);
+  display: flex;
+}
+.personalCard_right,.personalCard_left{
+  width: 250px;
+  height: 250px;
+}
+.personalCard_left{
+  background: #8dadfb;
+}

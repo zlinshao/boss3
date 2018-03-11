@@ -20,7 +20,9 @@ import 'vue-event-calendar/dist/style.css' //1.1.10之后的版本，css被放�
 import $ from 'jquery'
 import './assets/magnify/jquery.magnify.css'
 import './assets/magnify/jquery.magnify'
-import './assets/js/test.js'
+
+import './assets/personalCard/personalCard.css'
+import './assets/personalCard/personalCard.js'
 
 import vueEventCalendar from 'vue-event-calendar'
 
