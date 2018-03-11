@@ -515,6 +515,7 @@
           height: 180px;
           cursor: pointer;
           margin-top: 11px;
+          overflow: hidden;
           img {
             width: 100%;
             height: 100%;
