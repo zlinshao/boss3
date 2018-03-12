@@ -26,7 +26,7 @@
         </div>
         <div>
           <span class="iconfont icon-shezhi"></span>
-          <span>设置</span>
+          <span @click="routerLink('/integraldetail')">设置</span>
         </div>
       </div>
     </div>

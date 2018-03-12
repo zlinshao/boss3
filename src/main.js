@@ -27,6 +27,7 @@ import './assets/personalCard/personalCard.js'
 import vueEventCalendar from 'vue-event-calendar'
 
 
+
 Vue.use(vueEventCalendar, {locale: 'zh',});
 Vue.use(Boss);
 Vue.use(ElementUI);

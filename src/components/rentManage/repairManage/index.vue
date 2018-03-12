@@ -118,7 +118,7 @@
 
 <script>
   import RightMenu from '../../common/rightMenu.vue'
-  //  import Instruction from './components/instruction.vue'
+  //  import Instruction from './comments/instruction.vue'
   export default {
     name: 'hello',
     components: {RightMenu},
