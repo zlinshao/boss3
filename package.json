@@ -19,7 +19,7 @@
     "element-ui": "^2.2.1",
     "jquery": "^2.2.4",
     "js-cookie": "^2.2.0",
-    "screenfull": "3.3.2",
+    "screenfull": "^3.3.2",
     "sortablejs": "1.6.1",
     "vue": "^2.5.2",
     "vue-event-calendar": "^1.5.2",
