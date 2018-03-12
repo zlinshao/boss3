@@ -204,7 +204,7 @@
     methods: {
 
       getTableData(){
-        this.$http.get('/wechat/complaint',{params:this.params}).then((res) => {
+        this.$http.get(globalConfig.server+'/wechat/complaint',{params:this.params}).then((res) => {
           if(res.data.code === '10010'){
             this.tableData = res.data.data;
             this.pages = res.data.pages;
@@ -271,7 +271,7 @@
       //确定
       confirmAdd(){
           this.reversionVisible = false;
-          this.$http.put('/wechat/complaint/'+this.menuId,{reply:this.replyContent}).then((res) => {
+          this.$http.put(globalConfig.server+'/wechat/complaint/'+this.menuId,{reply:this.replyContent}).then((res) => {
               if(res.data.code === '10010'){
                   this.getTableData();
               }

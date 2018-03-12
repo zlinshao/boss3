@@ -349,3 +349,11 @@
 .el-table .success-row {
   background: #f0f9eb;
 }
+
+
+//取消tabs 相對定位
+.el-tabs {
+  .el-tabs__content{
+    position: static;
+  }
+}

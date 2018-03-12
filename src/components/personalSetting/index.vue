@@ -171,82 +171,90 @@
     <!--</el-col>-->
     <!--</el-row>-->
     <!--</div>-->
-
     <div class="main" v-if="basicSet">
-      <el-row>
-        <el-col class="leftTitle" :span="4" style="margin-top: 5px">
-          首页倒计时
-        </el-col>
-        <el-col :span="20">
-          <div class="nowrap" style="margin-bottom: 12px;">
-            <div>倒计时设置</div>
-            &nbsp;&nbsp;
-            <div>
-              <el-input model="form" size="mini" clearable></el-input>
-            </div>
-          </div>
-          <div class="remark">
-            备注：法大师傅士大夫的撒范德萨范德萨范德萨发幅度萨芬安德森
-          </div>
-        </el-col>
-      </el-row>
+      <el-form label-width="200px">
+        <el-form-item v-for="(item,index) in dictionary" :key="item.id" :label="item.dictionary_name" v-if="index<1">
+          <el-select v-model="basicSetting.id[0]" size="medium" clearable="" placeholder="请选择">
+            <el-option
+              v-for="item in item.children"
+              :key="item.id"
+              :label="item.dictionary_name"
+              :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <!--<el-row>-->
+        <!--<el-col class="leftTitle" :span="4" style="margin-top: 5px">-->
+          <!--首页倒计时-->
+        <!--</el-col>-->
+        <!--<el-col :span="20">-->
+          <!--<div class="nowrap" style="margin-bottom: 12px;">-->
+            <!--<div>倒计时设置</div>-->
+            <!--&nbsp;&nbsp;-->
+            <!--<div>-->
+              <!---->
+            <!--</div>-->
+          <!--</div>-->
+          <!--<div class="remark">-->
+            <!--备注：法大师傅士大夫的撒范德萨范德萨范德萨发幅度萨芬安德森-->
+          <!--</div>-->
+        <!--</el-col>-->
+      <!--</el-row>-->
 
-      <el-row>
-        <el-col class="leftTitle" :span="4">
-          喜报弹窗设置
-        </el-col>
-        <el-col :span="20">
-          <div>
-            <el-checkbox-group v-model="checkList">
-              <el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>
-            </el-checkbox-group>
-          </div>
-          <div class="remark">
-            备注：法大师傅士大夫的撒范德萨范德萨范德萨发幅度萨芬安德森
-          </div>
-        </el-col>
-      </el-row>
+      <!--<el-row>-->
+        <!--<el-col class="leftTitle" :span="4">-->
+          <!--喜报弹窗设置-->
+        <!--</el-col>-->
+        <!--<el-col :span="20">-->
+          <!--<div>-->
+            <!--<el-checkbox-group v-model="checkList">-->
+              <!--<el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>-->
+            <!--</el-checkbox-group>-->
+          <!--</div>-->
+          <!--<div class="remark">-->
+            <!--备注：法大师傅士大夫的撒范德萨范德萨范德萨发幅度萨芬安德森-->
+          <!--</div>-->
+        <!--</el-col>-->
+      <!--</el-row>-->
 
-      <el-row>
-        <el-col class="leftTitle" :span="4">
-          喜报弹窗设置
-        </el-col>
-        <el-col :span="20">
-          <div>
-            <el-checkbox-group v-model="checkList">
-              <el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>
-            </el-checkbox-group>
-          </div>
-          <div class="remark">
-            备注：法大师傅士大夫的撒范德萨范德萨范德萨发幅度萨芬安德森
-          </div>
-        </el-col>
-      </el-row>
+      <!--<el-row>-->
+        <!--<el-col class="leftTitle" :span="4">-->
+          <!--喜报弹窗设置-->
+        <!--</el-col>-->
+        <!--<el-col :span="20">-->
+          <!--<div>-->
+            <!--<el-checkbox-group v-model="checkList">-->
+              <!--<el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>-->
+            <!--</el-checkbox-group>-->
+          <!--</div>-->
+          <!--<div class="remark">-->
+            <!--备注：法大师傅士大夫的撒范德萨范德萨范德萨发幅度萨芬安德森-->
+          <!--</div>-->
+        <!--</el-col>-->
+      <!--</el-row>-->
 
 
-      <el-row>
-        <el-col class="leftTitle" :span="4">
-          喜报弹窗设置
-        </el-col>
-        <el-col :span="20">
-          <div>
-            <el-checkbox-group v-model="checkList">
-              <el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>
-              <el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>
-              <el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>
-              <el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>
-              <el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>
-            </el-checkbox-group>
-          </div>
-        </el-col>
-      </el-row>
+      <!--<el-row>-->
+        <!--<el-col class="leftTitle" :span="4">-->
+          <!--喜报弹窗设置-->
+        <!--</el-col>-->
+        <!--<el-col :span="20">-->
+          <!--<div>-->
+            <!--<el-checkbox-group v-model="checkList">-->
+              <!--<el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>-->
+              <!--<el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>-->
+              <!--<el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>-->
+              <!--<el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>-->
+              <!--<el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>-->
+            <!--</el-checkbox-group>-->
+          <!--</div>-->
+        <!--</el-col>-->
+      <!--</el-row>-->
+      <div style="text-align: center;margin-top: 200px">
+        <el-button @click="addBasicSetting" type="primary" size="small" style="padding: 10px 140px;">保存</el-button>
+      </div>
 
-      <el-row>
-        <el-col :span="4">&nbsp;</el-col>
-        <el-col :span="20">
-          <el-button type="primary" size="small" style="padding: 10px 140px;">保存</el-button>
-        </el-col>
-      </el-row>
     </div>
     <div class="main" v-if="secondPassword">
 
@@ -373,10 +381,7 @@
         basicSet: true,
         secondPassword: false,
         lockScreen: false,
-        isSending : 60,    //发送验证码
-        sms_lock_num:'',    //验证码
-        set_pwd_lock:'',    //锁屏密码
-        identify_pwd_lock:'',
+
         form: {},
         checkList: [],
         pickerOptions: {
@@ -406,14 +411,38 @@
             }
           }]
         },
+        //锁屏
+        isSending : 60,    //发送验证码
+        sms_lock_num:'',    //验证码
+        set_pwd_lock:'',    //锁屏密码
+        identify_pwd_lock:'',
+        dictionary:[],      //字典
+        //个人基本设置
+        basicSetting:{
+          id: [],
+          type:1
+        }
       }
     },
     mounted() {
+        this.getDictionary();
     },
     watch: {
 
     },
     methods: {
+      getDictionary(){
+        this.$http.get(globalConfig.server+'setting/dictionary/202').then((res) => {
+          if(res.data.code === '30010'){
+            this.dictionary = res.data.data;
+          }else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
+          }
+        })
+      },
       showBasicset() {
         this.basicSet = true;
         this.secondPassword = false;
@@ -469,6 +498,23 @@
             }
         })
       },
+      addBasicSetting(){
+        this.$http.post(globalConfig.server+'setting/setting/save',this.basicSetting).then((res)=>{
+          if(res.data.code === '50000'){
+            this.$notify({
+              title: '成功',
+              message: res.data.msg,
+              type: 'success'
+            });
+          }else {
+            this.$notify({
+              title: '警告',
+              message: res.data.msg,
+              type: 'warning'
+            });
+          }
+        })
+      }
     },
   }
 </script>

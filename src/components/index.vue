@@ -3,7 +3,8 @@
     <div class="navBarLeft" :class="isFull? 'navBarRight':'' ">
       <p @click="fullScreen(2)"></p>
     </div>
-    <div id="KeFuDiv" style="position: fixed;top: 30px;right: 20px;z-index: 1000000;" onmousedown="MoveDiv(KeFuDiv,event);">
+    <div id="KeFuDiv" style="position: fixed;top: 30px;right: 20px;z-index: 1000000;"
+         onmousedown="MoveDiv(KeFuDiv,event);">
       <el-collapse-transition>
         <div v-show="isFull">
           <div class="transition-box">
@@ -27,8 +28,6 @@
         </div>
       </el-collapse-transition>
     </div>
-
-
 
 
     <div class="navBar" :class="isFull? 'navBarHide':'' ">
@@ -147,10 +146,10 @@
         </div>
         <div class="personInfo">
           <div class="head">
-            <img :src="personal.avatar" v-if="personal.avatar !== null">
+            <img data-card="" :data-src="JSON.stringify(personal)" :src="personal.avatar" v-if="personal.avatar !== null">
             <img src="../assets/images/head.png" v-else>
           </div>
-          <el-dropdown  trigger="click">
+          <el-dropdown trigger="click">
               <span class="el-dropdown-link">
                 {{personal.name}}<i class="el-icon-arrow-down el-icon--right" style="margin-left: 25px"></i>
               </span>
@@ -357,6 +356,12 @@
           </el-menu>
         </div>
 
+        <div style="position: fixed;bottom: 10px;left: 36px;z-index: 99999;"  v-if="!isCollapse">
+          <div style="color: #ffffff;">业务咨询&nbsp;&nbsp;陆经理</div>
+          <div style="color: #ffffff;">版本信息&nbsp;&nbsp;BOSS&nbsp;3.0</div>
+        </div>
+        <!--<div style="position: fixed;bottom: 10px;left: 0;z-index: 99999;color: #ffffff;" v-if="isCollapse">BOSS&nbsp;3.0</div>-->
+
         <el-main :class="isFull? 'mainHide':'' ">
           <TagsView></TagsView>
           <div style="padding: 10px;background: #fff">
@@ -371,32 +376,54 @@
 <script>
   import Cookies from 'js-cookie'
   import TagsView from './common/tagsView.vue'
+  import screenfull from 'screenfull'
+
   export default {
     name: 'Index',
     components: {TagsView},
     data() {
       return {
         personal: globalConfig.personal,
-        isCollapse: false,
+        isCollapse: true,
         isFull: false,
         Countdown: 999999,  //倒计时
         screenStatus: false,
         defaultArray: [],
+        object:{
+            name:'zhanglin',
+            year:123
+        },
+        sendObject:null,
+//        personalCard: JSON_stringify(globalConfig.personal),
       }
     },
     mounted() {
       this.countTime();
-
+//      this.$http.get(globalConfig.server+'setting/setting/read?type=1&staff_id='+globalConfig.personal.id).then((res)=>{
+//        if(res.data.code === '100000'){
+//          this.$notify({
+//            title: '成功',
+//            message: res.data.msg,
+//            type: 'success'
+//          });
+//        }else {
+//          this.$notify({
+//            title: '警告',
+//            message: res.data.msg,
+//            type: 'warning'
+//          });
+//        }
+//      })
     },
     computed: {
       visitedViews() {
         return this.$store
-      }
+      },
     },
     watch: {
       isCollapse(val) {
         document.getElementById('isCollapse').style.overflow = val ? 'visible' : 'auto';
-      }
+      },
     },
     methods: {
       routers(url) {
@@ -404,13 +431,16 @@
       },
       // 全屏
       fullScreen(val) {
-        if (val === 1) {
-          this.isFull = true;
-          this.isCollapse = true;
-        } else {
-          this.isFull = false;
-          this.isCollapse = false;
-        }
+        screenfull.toggle();
+//        this.isCollapse = val === 1;
+//        this.isFull = val === 1;
+//        if (val === 1) {
+//          this.isFull = true;
+//          this.isCollapse = true;
+//        } else {
+//          this.isFull = false;
+//          this.isCollapse = false;
+//        }
       },
       handleOpen(key, keyPath) {
 //         console.log(key, keyPath);
@@ -474,8 +504,8 @@
       },
       lockScreen() {
 //        Cookies.set('last_page_path', this.$route.path); // 本地存储锁屏之前打开的页面以便解锁后打开
-        this.$http.get(globalConfig.server+'setting/others/lock_screen_status?lock_status=1').then((res)=>{
-          if(res.data.code === '100003'){
+        this.$http.get(globalConfig.server + 'setting/others/lock_screen_status?lock_status=1').then((res) => {
+          if (res.data.code === '100003') {
 
 //            new Promise((resolve,reject) =>{
 //              sessionStorage.setItem('lockStatus', 1);
@@ -486,7 +516,7 @@
 //              this.$router.push({path: '/lock'});
 //            });
             this.$router.push({path: '/lock'});
-          }else {
+          } else {
             this.$notify({
               title: '警告',
               message: res.data.msg,
@@ -788,6 +818,7 @@
     .isCollapse_logo {
       width: 64px !important;
       @include transition;
+      cursor: pointer;
     }
 
     .navBarLeft {
@@ -810,7 +841,7 @@
     }
     .navBarRight {
       left: 0;
-      @include transition;
+//      @include transition;
       p {
         width: 27px;
         height: 20px;
@@ -1002,7 +1033,7 @@
 
     .navBarHide {
       top: -66px;
-      @include transition;
+//      @include transition;
     }
 
     .contentBox {
@@ -1048,7 +1079,7 @@
         }
         .mainHide {
           margin-top: 0 !important;
-          @include transition;
+//          @include transition;
         }
       }
     }

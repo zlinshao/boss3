@@ -1,5 +1,5 @@
 <template>
-  <div id="app" @contextmenu="prevent($event)" @click="closeMenu">
+  <div id="app" v-loading="isLoading" @contextmenu="prevent($event)" @click="closeMenu">
     <router-view></router-view>
   </div>
 </template>
@@ -15,6 +15,11 @@
 
         }
       };
+    },
+    computed:{
+      isLoading(){
+          return this.$store.state.app.isLoading
+      }
     },
     methods: {
       prevent(e) {
