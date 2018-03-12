@@ -17,8 +17,8 @@
         <div class="highSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" clearable>
-                <el-button slot="append" icon="el-icon-search"></el-button>
+              <el-input placeholder="请输入内容" v-model="form.item_name" @keyup.enter.native="search" size="mini">
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -31,7 +31,7 @@
         </div>
 
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
-          <el-form :inline="true" :model="form" size="mini" label-width="100px">
+          <el-form :inline="true" size="mini" label-width="100px">
             <div class="filterTitle">
               <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>
@@ -39,22 +39,12 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">日期</div>
+                    <div class="el_col_label">员工</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <div class="block">
-                        <el-date-picker
-                          v-model="form.dates"
-                          type="daterange"
-                          align="right"
-                          unlink-panels
-                          range-separator="至"
-                          start-placeholder="开始日期"
-                          end-placeholder="结束日期"
-                          :picker-options="pickerOptions">
-                        </el-date-picker>
-                      </div>
+                      <el-input v-model="staff_name" @focus="selectDep('staff')" placeholder="请选择部门/员工" readonly>
+                      </el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -66,11 +56,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input v-model="form.organize" @focus="selectDep" placeholder="请选择部门/员工"
-                                readonly>
-                        <!--<template slot="append">-->
-                        <!--<div style="cursor: pointer;" @click="close_">清空</div>-->
-                        <!--</template>-->
+                      <el-input v-model="department_name" @focus="selectDep('depart')" placeholder="请选择部门/员工" readonly>
                       </el-input>
                     </el-form-item>
                   </el-col>
@@ -92,22 +78,22 @@
             <el-table
               :data="tableData"
               @row-click="clickTable"
-              @row-dblclick="dblClickTable"
+              @row-contextmenu = 'rightMenu'
               style="width: 100%">
               <el-table-column
                 prop="date"
                 label="时间">
               </el-table-column>
               <el-table-column
-                prop="name"
+                prop="sname"
                 label="姓名">
               </el-table-column>
               <el-table-column
-                prop="province"
+                prop="dname"
                 label="部门">
               </el-table-column>
               <el-table-column
-                prop="address"
+                prop="name"
                 label="项目名称">
               </el-table-column>
             </el-table>
@@ -118,11 +104,11 @@
               <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage"
+                :current-page="form.page"
                 :page-sizes="[10, 20, 30, 40]"
-                :page-size="10"
+                :page-size="form.limit"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="totalNumber">
               </el-pagination>
             </div>
           </div>
@@ -131,7 +117,7 @@
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
-    <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
+    <Organization :organizationDialog="organizationDialog" :length="length" :type="type" @close="closeOrganization" @selectMember="selectMember"></Organization>
     <NewAdd :newAddDialog="newAddDialog" @close="closeAdd"></NewAdd>
   </div>
 </template>
@@ -152,74 +138,26 @@
         lists: [],
         /***********/
         selectFlag:1,
-        pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-          }]
-        },
         statisticDate: '',
 
         form: {
-          name: '',
-          house: ''
+          page: 1,
+          limit: 10,
+          item_name:'',
+          staff_id:'',
+          credit_from:'',
+          credit_to:'',
+          department_id:'',
         },
-        tableData: [
-          {
-            date: '2016-05-03',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-          {
-            date: '2016-05-04',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-        ],
-        currentPage: 1,
-        options: [
-          {
-            value: '1',
-            label: '已读'
-          }, {
-            value: '2',
-            label: '未读'
-          }],
+        staff_name:'',
+        department_name:'',
+        length:'',
+        type:'',
+
+        activeId:'',
+
+        totalNumber:0,
+        tableData: [],
 
         //模态框
         organizationDialog: false,
@@ -230,26 +168,50 @@
         newAddDialog : false,
       }
     },
-
+    mounted(){
+        this.getTableData();
+    },
     methods: {
+
+      getTableData(){
+          this.$http.get(globalConfig.server+'/credit/manage',{params:this.form}).then((res) => {
+            if(res.data.code === '30310'){
+                this.totalNumber = res.data.num;
+                this.tableData = res.data.data;
+            }else {
+                this.$notify.warning({
+                  title:'警告',
+                  message:res.data.msg
+                })
+            }
+          })
+      },
+      search(){
+          this.form.page = 1;
+          this.getTableData();
+      },
       onSubmit(val) {
         this.isActive = val;
       },
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+        this.form.limit = val;
+        this.getTableData();
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        this.form.page = val;
+        this.getTableData();
       },
       clickTable(row, event, column){
         console.log(row, event, column)
       },
-      //房屋右键
-      houseMenu(row, event){
+      //右键
+      rightMenu(row, event){
+        this.activeId = row.id;
         this.lists = [
-          {clickIndex: 'read', headIcon: 'el-icons-fa-envelope-o', label: '标记为已读',},
-          {clickIndex: 'all', headIcon: 'el-icons-fa-envelope', label: '批量标记',},
-          {clickIndex: 'cancel', headIcon: 'el-icons-fa-envelope', label: '取消批量标记',},
+//          {clickIndex: 'read', headIcon: 'el-icons-fa-envelope-o', label: '标记为已读',},
+//          {clickIndex: 'all', headIcon: 'el-icons-fa-envelope', label: '批量标记',},
+//          {clickIndex: 'cancel', headIcon: 'el-icons-fa-envelope', label: '取消批量标记',},
+          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
           {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
@@ -257,48 +219,37 @@
 
       //右键回调时间
       clickEvent (index) {
-        switch (index){
-          case 'read' :
-            this.$confirm('您确定标记为已读吗', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              this.$message({
-                type: 'success',
-                message: '已读成功!'
-              });
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消已读'
-              });
+        if(index === 'delete'){
+          this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.deleteIntegral();
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
             });
-            break;
-          case 'delete':
-            this.$confirm('您确定将其删除吗', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              });
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消删除'
-              });
-            });
-            break;
-          case 'all':
-            this.isCheckbox = true;
-            break;
-          case 'cancel':
-            this.isCheckbox = false;
-            break;
+          });
+        }else if(index === 'edit'){
+
         }
+      },
+
+      //deleteIntegral
+      deleteIntegral(){
+        this.$http.delete(globalConfig.server+'/credit/manage/'+this.activeId).then((res) => {
+          if(res.data.code === '30310'){
+            this.totalNumber = res.data.num;
+            this.tableData = res.data.data;
+          }else {
+            this.$notify.warning({
+              title:'警告',
+              message:res.data.msg
+            })
+          }
+        })
       },
       //关闭右键菜单
       closeMenu(){
@@ -318,15 +269,23 @@
           this.show = true
         })
       },
-      selectDep(){
-        console.log(1)
-        this.organizationDialog = true
+      selectDep(val){
+        this.organizationDialog = true;
+        this.length = 1;
+        this.type = val;
       },
       closeOrganization(){
-        this.organizationDialog = false
+
+        this.organizationDialog = false;
       },
-      dblClickTable(){
-        this.$router.push('/sthToDoDetail')
+      selectMember(val){
+        if(val[0].hasOwnProperty('avatar')){
+          this.staff_name = val[0].name;
+          this.staff_id = val[0].id;
+        }else{
+          this.department_name = val[0].name;
+          this.department_id = val[0].id;
+        }
       },
       highGrade(){
         this.isHigh = !this.isHigh;
