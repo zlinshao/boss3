@@ -26,7 +26,9 @@ import './assets/personalCard/personalCard.js'
 
 import vueEventCalendar from 'vue-event-calendar'
 
-
+// 地图
+import AMap from 'vue-amap'
+Vue.use(AMap);
 
 Vue.use(vueEventCalendar, {locale: 'zh',});
 Vue.use(Boss);

@@ -124,7 +124,7 @@
       </el-col>
       <el-col :span="14">
         <div class="registerMap">
-          <div id="map-container"></div>
+          <el-amap id="mapcointainer"></el-amap>
         </div>
       </el-col>
     </el-row>
@@ -135,6 +135,8 @@
 </template>
 
 <script>
+
+  import {lazyAmapApiLoaderInstanse} from 'vue-amap';
 
   import Department from './comments/department.vue'
   import Personnel from './comments/personnel.vue'
@@ -176,7 +178,11 @@
       }
     },
     mounted() {
-
+      this.map = new AMap.Map('mapcointainer', {
+        resizeEnable:true,
+        zoom:11,
+        center:[118.778015,32.057101]
+      })
     },
     watch: {},
     methods: {
@@ -222,7 +228,11 @@
   .registerList {
     padding: 20px 30px;
     height: 650px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
     overflow-y: auto;
+    border: 1px solid #cccccc;
     .personnelInfo {
       padding: 10px;
       cursor: pointer;
@@ -282,5 +292,8 @@
   .registerMap {
     height: 650px;
     border: 1px solid #cccccc;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
   }
 </style>
