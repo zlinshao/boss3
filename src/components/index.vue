@@ -43,7 +43,7 @@
       </div>
       <div class="right">
         <div class="countdown" style="border-right: 1px solid #DDDDDD">
-          <span style="line-height: 20px;color: #409EFF;" @click="fullScreen(1)">精简模式</span>
+          <span style="line-height: 20px;color: #409EFF;"  @click="fullScreen(1)">精简模式</span>
         </div>
         <div class="countdown">
           <i class="el-icon-time"></i>
@@ -145,9 +145,9 @@
           使用指南
         </div>
         <div class="personInfo">
-          <div class="head">
-            <img data-card="" :data-src="JSON.stringify(personal)" :src="personal.avatar" v-if="personal.avatar !== null">
-            <img src="../assets/images/head.png" v-else>
+          <div class="head" style="cursor: pointer">
+            <img data-card="" :data-src="JSON.stringify(personal)" :src="personal.avatar" v-if="personal.avatar">
+            <img src="../assets/images/head.jpg" v-else>
           </div>
           <el-dropdown trigger="click">
               <span class="el-dropdown-link">
@@ -386,7 +386,8 @@
         personal: globalConfig.personal,
         isCollapse: true,
         isFull: false,
-        Countdown: 999999,  //倒计时
+        Countdown: 0,  //倒计时
+        defaultTime: 0,  //倒计时
         screenStatus: false,
         defaultArray: [],
         object:{
@@ -399,21 +400,6 @@
     },
     mounted() {
       this.countTime();
-//      this.$http.get(globalConfig.server+'setting/setting/read?type=1&staff_id='+globalConfig.personal.id).then((res)=>{
-//        if(res.data.code === '100000'){
-//          this.$notify({
-//            title: '成功',
-//            message: res.data.msg,
-//            type: 'success'
-//          });
-//        }else {
-//          this.$notify({
-//            title: '警告',
-//            message: res.data.msg,
-//            type: 'warning'
-//          });
-//        }
-//      })
     },
     computed: {
       visitedViews() {
@@ -432,8 +418,7 @@
       // 全屏
       fullScreen(val) {
         screenfull.toggle();
-//        this.isCollapse = val === 1;
-//        this.isFull = val === 1;
+//        this.isCollapse = this.isFull = val === 1;
 //        if (val === 1) {
 //          this.isFull = true;
 //          this.isCollapse = true;
@@ -475,6 +460,28 @@
         this.screenStatus = true;
       },
       countTime() {
+        let countDown = [];
+        this.$http.get(globalConfig.server+'setting/dictionary/203').then((res)=>{
+          if(res.data.code === '30010'){
+            countDown = res.data.data;
+            this.$http.get(globalConfig.server+'setting/setting/read?type=1&staff_id='+globalConfig.personal.id).then((res)=>{
+              if(res.data.code === '50010'){
+                let array = res.data.data;
+                for(let i=0;i<array.length;i++){
+                  countDown.forEach((item)=>{
+                    if(array[i].dict_id == item.id){
+                      this.defaultTime = this.Countdown = Number(item.dictionary_name);
+                      this.startCount();
+                    }
+                  })
+                }
+              }
+            })
+          }
+        });
+      },
+
+      startCount(){
         new Promise((resolve, reject) => {
           let interval = setInterval(() => {
             this.Countdown--;
@@ -488,14 +495,12 @@
             }
           }, 1000)
         }).then((data) => {
-          Cookies.set('last_page_path', this.$route.path); // 本地存储锁屏之前打开的页面以便解锁后打开
           setTimeout(() => {
             this.$router.push({path: '/lock'});
           });
-          Cookies.set('locking', '1');
         }).catch((data) => {
-          this.Countdown = 999999;
-          this.countTime();
+          this.Countdown = this.defaultTime;
+          this.startCount();
           this.screenStatus = false;
         })
       },
@@ -710,15 +715,6 @@
         top: -5px;
         right: -3px;
       }
-      /*@keyframes load{*/
-      /*0%{*/
-      /*width: 0%;*/
-      /*}*/
-      /*100%{*/
-      /*width:70%;*/
-      /*}*/
-      /*}*/
-
     }
     .level {
       @include flex;

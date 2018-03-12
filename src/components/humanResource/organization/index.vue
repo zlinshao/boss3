@@ -531,7 +531,7 @@
           }else {
             this.$notify.info({
               title: '消息',
-              message: '已取消删除'
+              message: res.data.message
             });
           }
         })
