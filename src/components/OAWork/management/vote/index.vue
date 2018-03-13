@@ -1,16 +1,23 @@
 <template>
   <div>
-    投票管理
+    <UPLOAD :ID="upID" @getImg="getImgData"></UPLOAD>
   </div>
 </template>
 
 <script>
+  import UPLOAD from '../../../common/UPLOAD.vue'
   export default {
-    name: 'index',
+    components:{UPLOAD},
     data() {
-      return {}
+      return {
+          upID:"PICID"
+      }
     },
-    methods: {}
+    methods: {
+      getImgData(val){
+          console.log(val)
+      }
+    }
   }
 </script>
 
