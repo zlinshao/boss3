@@ -215,7 +215,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '租赁管理',
-      icon: 'el-icons-fa-home',
+      icon: 'iconfont icon--zulinguanli-',
       children: [
         {path: '/wholeRentManage', component: WholeRentManage, name: '整租管理',},
         {path: '/jointRentManage', component: JointRentManage, name: '合租管理',},
@@ -236,7 +236,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '财务账本',
-      icon: 'el-icon-tickets',
+      icon: 'iconfont icon--caiwuzhangben-',
       children: [
         // {path: '/accountManage', component: AccountManage, name: '账户管理',},
         // {path: '/subjectManage', component: SubjectManage, name: '科目管理',},
@@ -266,7 +266,7 @@ export default new Router({
       hidden: true,
       name: '',
       children: [
-        {path: '/wechatMessage', component: WechatMessage, name: '微信管理', icon: 'el-icon-menu'},
+        {path: '/wechatMessage', component: WechatMessage, name: '微信管理', icon: 'iconfont icon--weixinguanli-'},
       ]
     },
 
@@ -288,7 +288,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '人资管理',
-      icon: 'el-icons-fa-sitemap',
+      icon: 'iconfont icon--renziguanli-',
       children: [
         {path: '/staffManage', component: StaffManage, name: '用户管理',},
         {path: '/integralManage', component: IntegralManage, name: '积分管理',},
@@ -297,25 +297,25 @@ export default new Router({
       ]
     },
 
-    {
-      path: '/',
-      component: Index,
-      name: '喜报管理',
-      icon: 'el-icons-fa-money',
-      children: [
-        {path: '/collectBulletin', component: CollectBulletin, name: '收房喜报',},
-        {path: '/rentBulletin', component: RentBulletin, name: '租房喜报',},
-        {path: '/finalBalance', component: FinalBalance, name: '尾款报备',},
-        {path: '/specialBalance', component: SpecialBalance, name: '特殊情况报备',},
-        {path: '/auditing', component: Auditing, name: '审核',},
-      ]
-    },
+    // {
+    //   path: '/',
+    //   component: Index,
+    //   name: '喜报管理',
+    //   icon: 'el-icons-fa-money',
+    //   children: [
+    //     {path: '/collectBulletin', component: CollectBulletin, name: '收房喜报',},
+    //     {path: '/rentBulletin', component: RentBulletin, name: '租房喜报',},
+    //     {path: '/finalBalance', component: FinalBalance, name: '尾款报备',},
+    //     {path: '/specialBalance', component: SpecialBalance, name: '特殊情况报备',},
+    //     {path: '/auditing', component: Auditing, name: '审核',},
+    //   ]
+    // },
 
     {
       path: '/',
       component: Index,
       name: 'OA办公',
-      icon: 'el-icons-fa-clipboard',
+      icon: 'iconfont icon--oabangong-',
       children: [
         // {
         //   path: '/property', component: Property, icon: 'el-icons-fa-money', name: '资产管理',
@@ -350,7 +350,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '乐伽大学',
-      icon: 'el-icons-fa-sitemap',
+      icon: 'iconfont icon-leqiedaxue-',
       children: [
         {path: '/college', component: College, name: '乐伽大学 '},
         {path: '/LineCollege', component: LineCollege, name: '在线导师'},
@@ -360,7 +360,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '系统设置',
-      icon: 'el-icon-setting',
+      icon: 'iconfont icon--xitongshezhi-',
       children: [
         {path: 'moduleSetting', component: ModuleSetting, name: '模块设置'},
 
@@ -378,17 +378,17 @@ export default new Router({
       ]
     },
 
-    {
-      path: '/',
-      component: Index,
-      name: '业绩工资',
-      icon: 'el-icons-fa-money',
-      children: [
-        {path: '/periodicTable', component: PeriodicTable, name: '周期表',},
-        {path: '/achievement', component: Achievement, name: '业绩',},
-        {path: '/personalSalary', component: PersonalSalary, name: '工资',},
-      ]
-    },
+    // {
+    //   path: '/',
+    //   component: Index,
+    //   name: '业绩工资',
+    //   icon: 'el-icons-fa-money',
+    //   children: [
+    //     {path: '/periodicTable', component: PeriodicTable, name: '周期表',},
+    //     {path: '/achievement', component: Achievement, name: '业绩',},
+    //     {path: '/personalSalary', component: PersonalSalary, name: '工资',},
+    //   ]
+    // },
 
   ]
 })

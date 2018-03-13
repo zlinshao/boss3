@@ -324,13 +324,13 @@
             <template v-for="(item,index) in $router.options.routes">
               <!--一级菜单-->
               <el-menu-item v-if="item.hidden" v-for="child in item.children" :index="child.path" :key="child.path">
-                <i :class="child.icon"></i>
+                <i :class="child.icon" style="font-size: 18px"></i>
                 <span slot="title"> {{child.name}}</span>
               </el-menu-item>
 
               <el-submenu :index="item.name+''" v-if="!item.hidden && !item.abnormal">
                 <template slot="title">
-                  <i :class="item.icon"></i>
+                  <i :class="item.icon" style="font-size: 18px"></i>
                   <span>{{item.name}}</span>
                 </template>
                 <template v-for="(child,key) in item.children">
@@ -417,6 +417,7 @@
           this.isFull = false;
           this.isCollapse = false;
         }
+        // this.isFull = this.isCollapse = val === 1;
       },
       handleOpen(key, keyPath) {
 //         console.log(key, keyPath);
