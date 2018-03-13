@@ -6,27 +6,26 @@
           <el-col :span="12">
             <el-row :gutter="2">
               <el-col :span="8">
-                <el-input placeholder="点击选择部门" size="mini" @click.native="openFrames('departmentVisible')" readonly>
+                <el-input placeholder="点击选择部门" size="mini" v-model="departments" @click.native="openFrames" readonly>
                   <!--<el-button slot="append" @click="clearSelect(1)">清空</el-button>-->
                 </el-input>
               </el-col>
 
               <el-col :span="8">
-                <el-input placeholder="点击选择人员" size="mini" @click.native="openFrames('personnelVisible')" readonly>
-                  <el-button slot="append" @click="clearSelect(2)">清空</el-button>
+                <el-input placeholder="点击选择人员" size="mini" v-model="personnels" @click.native="openFrames" readonly>
                 </el-input>
               </el-col>
 
-              <!--<el-col :span="8">-->
-                <!--<el-select v-model="value8" filterable placeholder="请选择">-->
-                  <!--<el-option-->
-                    <!--v-for="item in options"-->
-                    <!--:key="item.value"-->
-                    <!--:label="item.label"-->
-                    <!--:value="item.value">-->
-                  <!--</el-option>-->
-                <!--</el-select>-->
-              <!--</el-col>-->
+              <el-col :span="8">
+                <el-select v-model="value8" filterable placeholder="请选择">
+                  <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-col>
 
             </el-row>
 
@@ -37,7 +36,7 @@
 
     <el-row :gutter="30">
       <el-col :span="10">
-          <div class="registerList">
+          <div class="registerList scroll_bar">
             <div class="personnelInfo">
               <div class="name_pic">
                 <div class="personnelPIc">
@@ -120,34 +119,36 @@
         </div>
       </el-col>
       <el-col :span="14">
-        <div class="registerMap">
-          <el-amap id="mapcointainer">
-
-          </el-amap>
+        <div class="map">
+          <div id="mapContainer" class="registerMap">
+            <!--<h4 v-if="location.length==0||location[0]===''">暂无地图信息...</h4>-->
+          </div>
+          <!--<div class="ambitusDetail" v-if="location.length>0&&location[0]!==''">-->
+          <!--<div class="ambitusDetail_top" @click="changeActive($event)">-->
+          <!--<a class="active">交通</a>-->
+          <!--<a>学校</a>-->
+          <!--<a>医疗</a>-->
+          <!--<a>购物</a>-->
+          <!--<a>生活</a>-->
+          <!--<a>娱乐</a>-->
+          <!--</div>-->
+          <!--</div>-->
+          <!--<div id="panel" class="roll"></div>-->
         </div>
       </el-col>
     </el-row>
 
-    <!--<Department :module="departmentVisible" @close='closeFrame'></Department>-->
-    <!--<Personnel :module="personnelVisible" @close='closeFrame'></Personnel>-->
-    <Organization :organizationDialog="organizationDialog"></Organization>
+    <Organization :organizationDialog="organizationDialog" @close="closeOrganize" @selectMember="selectMember"></Organization>
   </div>
 </template>
 
 <script>
 
-  import {lazyAmapApiLoaderInstanse} from 'vue-amap';
-
-
-  // import Department from './comments/department.vue'
-  // import Personnel from './comments/personnel.vue'
   import Organization from '../common/organization'
 
   export default {
     name: "index",
     components:{
-      // Department,
-      // Personnel,
       Organization
     },
     data() {
@@ -171,49 +172,45 @@
         value: '',
         value5: [],
         value8: '',
-        departments: [],
-        personnels: [],
+        departments: '',
+        personnels: '',
         currentPage3: 1,
+        //选人框
         organizationDialog:false,
-
+        length:null,
+        type:null,
 
         isShow: false,              //暂无数据
-        departmentVisible: false,   //选择部门
-        personnelVisible: false,   //选择人员
       }
     },
     mounted() {
-      this.map = new AMap.Map('mapcointainer', {
-        resizeEnable:true,
-        zoom:11,
-        center:[118.790681,32.04792]
-      })
+      this.initMap();
     },
     watch: {},
     methods: {
       openFrames(type) {
-        alert(2)
         this.organizationDialog = true;
-        // switch (type) {
-        //   case 'departmentVisible':
-        //     this.departmentVisible = true;
-        //     break;
-        //   case 'personnelVisible':
-        //     this.personnelVisible = true;
-        //     break;
-        // }
       },
-      // closeFrame(){
-      //   this.departmentVisible = false;
-      //   this.personnelVisible = false;
-      // },
-
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
       },
+
+      closeOrganize(){
+        this.organizationDialog = false;
+      },
+      selectMember(val){
+        val.forEach((item) =>{
+          if(item.hasOwnProperty('avatar')){
+            //push到人的数组
+          }else {
+            //push到部门的数组
+          }
+        })
+      },
+
 // 清空
       clearSelect(num){
         if (num==1){
@@ -231,7 +228,39 @@
         }
 
         this.search();
-      }
+      },
+
+
+      //init map
+      initMap(){
+        let _this =this;
+
+        let map = new AMap.Map("mapContainer", {
+          resizeEnable: true,
+          zoom: 15,
+          // center:_this.location,
+          center:[118.790681,32.04792]
+        });
+        // let marker = new AMap.Marker({
+        //   position: [118.790681,32.04792]
+        // });
+        // marker.setMap(map);
+        // AMap.service(["AMap.PlaceSearch"], function() {
+        //   let placeSearch = new AMap.PlaceSearch({ //构造地点查询类
+        //     pageSize: 4,
+        //     type: _this.ambient,
+        //     pageIndex: 1,
+        //     city: '', //城市
+        //     map: map,
+        //     panel: "panel"
+        //   });
+        //
+        //   let centerPoint = [118.790681,32.04792]; //中心点坐标
+        //
+        //   placeSearch.searchNearBy('', centerPoint, 500, function(status, result) {});
+
+        // });
+      },
     },
   }
 </script>
@@ -254,6 +283,7 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     overflow-y: auto;
+    overflow-x: hidden;
     border: 1px solid #cccccc;
     .personnelInfo {
       padding: 10px;
