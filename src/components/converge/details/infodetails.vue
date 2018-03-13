@@ -76,7 +76,7 @@
 
           <el-form size="mini">
             <el-form-item>
-              <el-input type="textarea" :rows="3" v-model="addContent"></el-input>
+              <el-input type="textarea" :rows="3" v-model="addContent" placeholder="请输入评论内容"></el-input>
             </el-form-item>
             <el-form-item>
               <div class="submitButt">
