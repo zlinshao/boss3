@@ -18,7 +18,7 @@
     },
     computed:{
       isLoading(){
-          return this.$store.state.app.isLoading
+//          return this.$store.state.app.isLoading
       }
     },
     methods: {

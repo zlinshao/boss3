@@ -24,10 +24,6 @@
           <span class="iconfont icon-shiyongshouce"></span>
           <span>收藏夹</span>
         </div>
-        <div>
-          <span class="iconfont icon-shezhi"></span>
-          <span @click="routerLink('/integraldetail')">设置</span>
-        </div>
       </div>
     </div>
     <div class="main">
@@ -65,11 +61,165 @@
                 </div>
               </div>
             </div>
+            <div class="messageTab">
+              <div class="achievementTab">
+                <div class="titles">
+                  <div>PFREORMANCE MANAGEMENT</div>
+                  <div>考勤管理</div>
+                </div>
+                <div class="months">
+                  <div class="monthTime">0000-00-00</div>
+                  <div class="month1">
+                    <div>
+                      <p class="monthP">
+                        <span>迟到</span>
+                        <i class="iconfont icon-shiyongshouce"></i>
+                      </p>
+                      <p><b>19</b>次</p>
+                    </div>
+                    <div>
+                      <p class="monthP">
+                        <span>迟到</span>
+                        <i class="iconfont icon-shiyongshouce"></i>
+                      </p>
+                      <p>
+                        <b>19</b>次
+                      </p>
+                    </div>
+                    <div>
+                      <p class="monthP">
+                        <span>迟到</span>
+                        <i class="iconfont icon-shiyongshouce"></i>
+                      </p>
+                      <p>
+                        <b>19</b>次
+                      </p>
+                    </div>
+                    <div>
+                      <p class="monthP">
+                        <span>迟到</span>
+                        <i class="iconfont icon-shiyongshouce"></i>
+                      </p>
+                      <p>
+                        <b>19</b>次
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="checkTab">
+                <div class="titles">
+                  <div>RNTEGAL GETAIL</div>
+                  <div>积分明细</div>
+                </div>
+                <div class="checkNum">
+                  <i class="el-icon-plus"></i> 1289
+                </div>
+              </div>
+              <div class="integralTab">
+                <div class="titles">
+                  <div>RNTEGAL GETAIL</div>
+                  <div>晋升通道</div>
+                </div>
+                <div class="integralBack">
+
+                </div>
+              </div>
+            </div>
+            <div class="message">
+              <div class="achievement">
+                <div class="titles">
+                  <div>PFREORMANCE MANAGEMENT</div>
+                  <div>业绩管理</div>
+                </div>
+              </div>
+              <div class="check">
+                <div class="titles">
+                  <div>RNTEGAL GETAIL</div>
+                  <div>考勤管理</div>
+                </div>
+                <div class="checkWork">
+                  <div>
+                    2018-12考勤
+                  </div>
+                  <div class="beLate">
+                    <i class="el-icon-plus"></i>&nbsp;&nbsp;迟到<b>&nbsp;2&nbsp;次</b>
+                  </div>
+                  <div class="leave">
+                    <i class="el-icon-plus"></i>&nbsp;&nbsp;早退<b>&nbsp;6&nbsp;次</b>
+                  </div>
+                  <div class="workman">
+                    <i class="el-icon-plus"></i>&nbsp;&nbsp;矿工<b>&nbsp;0&nbsp;次</b>
+                  </div>
+                  <div class="dates">
+                    <i class="el-icon-plus"></i>&nbsp;&nbsp;考勤天数<b>&nbsp;4&nbsp;天</b>
+                  </div>
+                </div>
+              </div>
+              <div class="integral">
+                <div class="integralTop">
+                  <div class="titles">
+                    <div>RNTEGAL GETAIL</div>
+                    <div>明细积分</div>
+                  </div>
+                </div>
+                <div class="integralBottom">
+                  <div class="titles">
+                    <div>RNTEGAL GETAIL</div>
+                    <div>晋升通道</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </el-col>
         <el-col :span="6">
           <div class="mainRight">
+            <div class="title">
+              公司公告
+            </div>
+            <div class="company1">
+              <div class="com"></div>
+              <div class="caption">
+                <span>恭喜我公司企业logo注册成功顶顶顶顶顶顶顶顶顶顶顶顶顶</span>
+                <span class="times">0000-00-00</span>
+              </div>
+              <div class="mainTitle">
+                犯得上发厉害了可适当放宽道路浇洒发货看见了十大发和看见了十大发看后决定是否房贷还款时间发的时刻就疯狂的吉萨疯狂的吉萨付好款了撒
+              </div>
+              <div class="buttonNew">
+                <div>
+                  <el-button size="mini" type="primary">新闻</el-button>
+                </div>
+                <div>
+                  <i class="el-icon-info"></i>123
+                  <i class="el-icon-info"></i>124
+                </div>
+              </div>
 
+            </div>
+            <div class="title">
+              公司活动
+            </div>
+            <div class="company2">
+              <div class="com"></div>
+              <div class="caption">
+                <span>恭喜我公司企业logo注册成功顶顶顶顶顶顶顶顶顶顶顶顶</span>
+                <span class="times">0000-00-00</span>
+              </div>
+              <div class="mainTitle">
+                犯得上发厉害了可适当放宽道路浇洒发货看见了十大发和看见了十大发看后决定是否房贷还款时间发的时刻就疯狂的吉萨疯狂的吉萨付好款了撒
+              </div>
+              <div class="buttonNew">
+                <div>
+                  <el-button size="mini" type="primary">新闻</el-button>
+                </div>
+                <div>
+                  <i class="el-icon-info"></i>123
+                  <i class="el-icon-info"></i>124
+                </div>
+              </div>
+            </div>
           </div>
         </el-col>
       </el-row>
@@ -164,7 +314,7 @@
         }
       }
       .topBackRight {
-        margin-right: 270px;
+        margin-right: 220px;
         div + div {
           margin-left: 20px;
         }
@@ -227,7 +377,7 @@
             .aLeft {
               min-width: 52px;
               max-width: 52px;
-              margin-right: 20px;
+              margin: 0 20px;
               @include border_radius(50%);
               border: 1px solid $colorBor;
             }
@@ -287,6 +437,216 @@
                 color: #625ac2;
               }
             }
+          }
+        }
+
+        .message, .messageTab {
+          @include flex;
+          height: 446px;
+          margin-top: 12px;
+          .titles {
+            margin: 43px 41px;
+            div:first-of-type {
+              font-size: 16px;
+              color: #4b385c;
+            }
+            div:last-of-type {
+              color: #6abdfd;
+            }
+          }
+          .achievementTab, .achievement {
+            width: 51%;
+          }
+          .achievementTab, .check, .integral, .checkTab, .integralTab {
+            @include border_radius(6px);
+            border: 1px solid #DDDDDD;
+          }
+          .achievementTab {
+            .months {
+              padding: 40px 0 0 40px;
+              .monthTime {
+                color: #E69FBF;
+                border-bottom: 1px solid #DDDDDD;;
+                padding: 10px;
+                padding-left: 0;
+              }
+              .month1 {
+                color: #E69FBF;
+                @include flex;
+                flex-wrap: wrap;
+                div {
+                  @include border_radius(6px);
+                  border: 1px solid #DDDDDD;
+                  width: 45%;
+                  margin: 1.6% 1.6% 0 0;
+                  height: 108px;
+                  box-sizing: border-box;
+                  padding: 0 20px;
+                  .monthP {
+                    @include flex;
+                    align-items: flex-end;
+                    justify-content: space-between;
+                    text-align: center;
+                  }
+                  p {
+                    text-align: center;
+                    b {
+                      font-weight: normal;
+                      font-size: 30px;
+                      padding-right: 6px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          .check, .integral, .checkTab, .integralTab {
+            width: 25%;
+          }
+          .check, .checkTab {
+            margin: 0 12px;
+          }
+          .checkTab {
+            @include back("../../assets/images/individual/jifeng.png");
+            background-size: 101% 101%;
+            background-position: -1px -1px;
+            .checkNum {
+              text-align: right;
+              color: #E69FBF;
+              margin-right: 35px;
+              font-size: 24px;
+            }
+          }
+          .integralTab {
+            .titles {
+              div:last-of-type {
+                color: #E69FBF;
+              }
+            }
+            .integralBack{
+              width: 100%;
+              height: 240px;
+              @include back("../../assets/images/individual/jingshen.png");
+              background-size: 101% 101%;
+              background-position: -1px -1px;
+            }
+          }
+        }
+        .message {
+          .achievement {
+            @include back("../../assets/images/individual/yeji.png");
+            background-size: 100% 100%;
+          }
+          .check {
+            .checkWork {
+              div:first-child {
+                height: 40px;
+                line-height: 43px;
+                border-bottom: 1px solid #DDDDDD;
+              }
+              margin-top: 81px;
+              div + div {
+                height: 60px;
+                line-height: 60px;
+                margin-left: 40px;
+                border-top: 1px solid #DDDDDD;
+              }
+              .beLate {
+                border-top: 0;
+                i, b {
+                  color: #F6CF78;
+                }
+              }
+              .leave {
+                i, b {
+                  color: #788DE5;
+                }
+              }
+              .workman {
+                i, b {
+                  color: #E375A3;
+                }
+              }
+              .dates {
+                i, b {
+                  color: #788DE5;
+                }
+              }
+            }
+          }
+          .integral {
+            border: 0;
+            .integralTop, .integralBottom {
+              height: 215px;
+              border: 1px solid #DDDDDD;
+              @include border_radius(6px);
+              @include back("../../assets/images/individual/jifeng.png");
+              background-size: 101% 101%;
+              background-position: -1px -1px;
+            }
+            .integralBottom {
+              margin-top: 12px;
+              @include back("../../assets/images/individual/jingshen.png");
+              background-size: 101% 101%;
+              background-position: -1px -1px;
+            }
+          }
+        }
+        .messageTab {
+
+        }
+      }
+
+      .mainRight {
+        margin-left: 10px;
+        .company1, .company2 {
+          @include border_radius(6px);
+          border: 1px solid #DDDDDD;
+          height: 270px;
+          .caption {
+            @include flex;
+            justify-content: space-between;
+            padding: 10px;
+            span:first-child {
+              width: 100%;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+            .times {
+              min-width: 88px;
+              text-align: right;
+            }
+          }
+          .mainTitle {
+            margin: 10px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            color: #aaaaaa;
+          }
+          .buttonNew {
+            margin: 0 10px;
+            @include flex;
+            justify-content: space-between;
+            align-items: center;
+            i {
+              margin-left: 15px;
+              padding-right: 6px;
+              color: #aaaaaa;
+            }
+          }
+          .com {
+            height: 130px;
+            @include back("../../assets/images/individual/gonggao.png");
+          }
+        }
+        .company2 {
+          .com {
+            @include back("../../assets/images/individual/huodong.png");
           }
         }
       }

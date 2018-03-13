@@ -5,7 +5,7 @@
         <el-form size="mini" :model="params" label-width="100px">
           <el-row>
             <el-col :span="24">
-              <el-form-item label="岗位名称" required="">
+              <el-form-item label="职位名称" required="">
                 <el-input placeholder="请输入内容" v-model="params.name"></el-input>
               </el-form-item>
             </el-col>

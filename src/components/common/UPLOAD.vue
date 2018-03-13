@@ -1,7 +1,7 @@
 <template>
   <div>
     <div id="container">
-      <div class="btn btn-default btn-lg" id="pickfiles">
+      <div class="btn btn-default btn-lg pickfiles" :id="ID">
       </div>
     </div>
   </div>
@@ -12,6 +12,7 @@
 
   export default {
     name: 'hello',
+    props:['ID'],
     data () {
       return {
         imgArray: [],
@@ -73,7 +74,7 @@
         let _this = this;
         _this.uploader = Qiniu.uploader({
           runtimes: 'html5,flash,html4',      // 上传模式，依次退化
-          browse_button: 'pickfiles',       //上传按钮的ID
+          browse_button: _this.ID,       //上传按钮的ID
           uptoken: token,                     // uptoken是上传凭证，由其他程序生成
 
           get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
@@ -91,7 +92,7 @@
 
           init: {
             'PostInit': function () {
-              document.getElementById('pickfiles').innerHTML = '';
+              document.getElementById(_this.ID).innerHTML = '';
 //
 //              document.getElementById('uploadfiles').onclick = function() {
 //                uploader.start();
@@ -115,7 +116,7 @@
 //                  </div>
 //                `;
                 if (!file || !/image\//.test(file.type) || /photoshop/.test(file.type)) {
-                  document.getElementById('pickfiles').innerHTML += `
+                  document.getElementById(_this.ID).innerHTML += `
 
                   <div class="imgItem" style="margin: 10px;" id="${file.id}">
                       <div style=" width: 120px;  height: 120px; overflow: hidden; border-radius: 10px;position: relative;">
@@ -134,7 +135,7 @@
                   var fr = new mOxie.FileReader();
                   fr.onload = function () {
                     // 文件添加进队列后，处理相关的事情
-                    document.getElementById('pickfiles').innerHTML += `
+                    document.getElementById(_this.ID).innerHTML += `
                     <div class="imgItem" style="margin: 10px;" id="${file.id}">
                       <div style=" width: 120px;  height: 120px; overflow: hidden; border-radius: 10px;position: relative;">
                       <img src="${fr.result}"
@@ -190,7 +191,7 @@
 //                  $('#'+file.id).remove();
                   _this.imgId.push(res.data.data.id);
                   _this.imgArray.push(res.data.data.name);
-                  _this.$emit('getImg', [_this.imgId,_this.isUploading]);
+                  _this.$emit('getImg', [_this.ID,_this.imgId,_this.isUploading]);
                 }
               })
             },
@@ -223,7 +224,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-  #pickfiles {
+  .pickfiles {
     min-height: 40px;
     box-sizing: border-box;
     border: 1px solid #bbb;
@@ -252,26 +253,6 @@
         }
       }
     }
-    /*img {*/
-    /*width: 120px;*/
-    /*height: 120px;*/
-    /*border-radius: 10px;*/
-    /*cursor: pointer;*/
-    /**/
-    /*}*/
-    /*.imgBox{*/
-    /*margin: 10px;*/
-    /**/
-    /*.deleteImg{*/
-    /*text-align: center;*/
-    /*cursor: pointer;*/
-    /*height: 14px;*/
-    /*&:hover{*/
-    /*color: #6a8dfb;*/
-    /*}*/
-    /*}*/
-    /*}*/
-
   }
 
 

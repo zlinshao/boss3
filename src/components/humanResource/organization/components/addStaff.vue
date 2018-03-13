@@ -6,14 +6,14 @@
           <el-row v-if="!isEdit">
             <el-col :span="24">
               <el-form-item label="所属部门">
-                <el-input placeholder="请输入内容" disabled="" v-model="department"></el-input>
+                <el-input placeholder="请输入内容" v-model="department" readonly="" @focus="selectDepart"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row v-if="isEdit">
             <el-col :span="24">
               <el-form-item label="所属部门">
-                <el-input placeholder="请输入内容" readonly="" @focus="selectDepart" v-model="department"></el-input>
+                <el-input placeholder="请输入内容" v-model="department" readonly="" @focus="selectDepart"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -70,13 +70,13 @@
         addStaffDialogVisible:false,
         params:{
           position_id:[],
-          org_id:'',
+          org_id:[],
           name:'',
           phone:''
         },
         title : '新建用户',
         organizationDialog:false,
-        department:'',
+        department: '',
         type:null,
         length:null,
         positionArray:[],
@@ -104,7 +104,8 @@
         deep:true,
         handler(val,oldVal){
           if(!this.isEdit){
-            this.params.org_id = val.depart_id;
+            this.params.org_id = [];
+            this.params.org_id.push(val.depart_id);
             this.department = val.depart_name;
             this.getPosition(this.params.org_id);
           }
@@ -124,8 +125,16 @@
           if(res.data.status === 'success'){
             this.params.name = res.data.data.name;
             this.params.phone = res.data.data.phone;
-            this.params.org_id = res.data.data.org[0].id;
-            this.department = res.data.data.org[0].name;
+            let departNameArray = [];
+            this.params.org_id = [];
+            this.params.position_id = [];
+            if(res.data.data.org.length>0){
+              res.data.data.org.forEach((item) => {
+                this.params.org_id.push(item.id);
+                departNameArray.push(item.name);
+              })
+            }
+            this.department = departNameArray.join(',');
             this.roleArray = res.data.data.role;
             if(this.roleArray.length>0){
               this.roleArray.forEach((item) => {
@@ -185,7 +194,6 @@
       selectDepart(){
         this.organizationDialog = true;
         this.type = 'depart';
-        this.length = 1;
       },
       //关闭选人框回调
       closeOrganization(){
@@ -194,8 +202,15 @@
         this.length = null;
       },
       selectMember(val){
-        this.params.org_id = val[0].id;
-        this.department = val[0].name;
+        this.params.org_id = [];
+        let departNameArray = [];
+        if(val.length>0){
+          val.forEach((item) => {
+            this.params.org_id.push(item.id);
+            departNameArray.push(item.name);
+          })
+        }
+        this.department = departNameArray.join(',');
         this.type = null;
         this.length = null;
         this.organizationDialog = false;
