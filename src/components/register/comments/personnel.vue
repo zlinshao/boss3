@@ -1,7 +1,7 @@
 <template>
   <div class="modalFrame">
     <el-dialog
-      title="选择部门"
+      title="选择人员"
       :visible.sync="personnelVisible"
       width="40%">
       <el-row :gutter="10">
@@ -33,7 +33,7 @@
         </el-col>
       </el-row>
       <span slot="footer">
-        <el-button  size="small">关闭</el-button>
+        <el-button  size="small" @click="closeFrame">关闭</el-button>
         <el-button type="primary" size="small">确定</el-button>
       </span>
     </el-dialog>
@@ -47,7 +47,7 @@
     data () {
       return {
         state4: '',
-        checked: true,
+        checked: false,
         personnelVisible: false,
       }
     },
@@ -79,7 +79,12 @@
       },
       handleSelect(item) {
         // console.log(item);
-      }
+      },
+
+      closeFrame(){
+        this.personnelVisible = false;
+      },
+
     }
   }
 </script>
@@ -99,7 +104,7 @@
   .search {
     min-height: 400px;
     padding: 10px;
-    border: 1px solid #6a8dfb;
+    border: 1px solid #cccccc;
     @include border_radius(5px);
   }
   .selectTitle {
@@ -117,6 +122,7 @@
     justify-content: space-between;
     .company {
       margin-left: 10px;
+      cursor: pointer;
     }
     .selectCheck {
       @include flex;

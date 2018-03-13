@@ -6,32 +6,27 @@
           <el-col :span="12">
             <el-row :gutter="2">
               <el-col :span="8">
-                <div @click="openFrames('departmentVisible')">
-                  <el-input placeholder="点击选择部门" size="mini" v-model="input4" readonly>
-                    <template slot="append">清空</template>
-                  </el-input>
-                </div>
+                <el-input placeholder="点击选择部门" size="mini" @click.native="openFrames('departmentVisible')" readonly>
+                  <!--<el-button slot="append" @click="clearSelect(1)">清空</el-button>-->
+                </el-input>
               </el-col>
 
               <el-col :span="8">
-                <div @click="openFrames('personnelVisible')">
-                  <el-input placeholder="点击选择人员" size="mini" v-model="input4" readonly>
-                    <template slot="append">清空</template>
-                  </el-input>
-                </div>
-
+                <el-input placeholder="点击选择人员" size="mini" @click.native="openFrames('personnelVisible')" readonly>
+                  <el-button slot="append" @click="clearSelect(2)">清空</el-button>
+                </el-input>
               </el-col>
 
-              <el-col :span="8">
-                <el-select v-model="value8" filterable placeholder="请选择">
-                  <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-col>
+              <!--<el-col :span="8">-->
+                <!--<el-select v-model="value8" filterable placeholder="请选择">-->
+                  <!--<el-option-->
+                    <!--v-for="item in options"-->
+                    <!--:key="item.value"-->
+                    <!--:label="item.label"-->
+                    <!--:value="item.value">-->
+                  <!--</el-option>-->
+                <!--</el-select>-->
+              <!--</el-col>-->
 
             </el-row>
 
@@ -50,6 +45,7 @@
                 </div>
                 <div class="personnelName">乐伽公寓</div>
               </div>
+              <div class="remarks">备注：吃饭</div>
               <div class="register_position">
                 <i class="el-icon-location"></i>
                 <div class="positionInfo">江苏省苏州市虎丘区枫桥街道福建沙县特色小吃(华山路)富康新村</div>
@@ -66,6 +62,7 @@
                 </div>
                 <div class="personnelName">乐伽公寓</div>
               </div>
+              <div class="remarks">备注：擦皮鞋</div>
               <div class="register_position">
                 <i class="el-icon-location"></i>
                 <div class="positionInfo">江苏省苏州市虎丘区枫桥街道福建沙县特色小吃(华山路)富康新村</div>
@@ -124,13 +121,16 @@
       </el-col>
       <el-col :span="14">
         <div class="registerMap">
-          <el-amap id="mapcointainer"></el-amap>
+          <el-amap id="mapcointainer">
+
+          </el-amap>
         </div>
       </el-col>
     </el-row>
 
-    <Department :module="departmentVisible" @close='closeFrame'></Department>
-    <Personnel :module="personnelVisible" @close='closeFrame'></Personnel>
+    <!--<Department :module="departmentVisible" @close='closeFrame'></Department>-->
+    <!--<Personnel :module="personnelVisible" @close='closeFrame'></Personnel>-->
+    <Organization :organizationDialog="organizationDialog"></Organization>
   </div>
 </template>
 
@@ -138,14 +138,17 @@
 
   import {lazyAmapApiLoaderInstanse} from 'vue-amap';
 
-  import Department from './comments/department.vue'
-  import Personnel from './comments/personnel.vue'
+
+  // import Department from './comments/department.vue'
+  // import Personnel from './comments/personnel.vue'
+  import Organization from '../common/organization'
 
   export default {
     name: "index",
     components:{
-      Department,
-      Personnel,
+      // Department,
+      // Personnel,
+      Organization
     },
     data() {
       return {
@@ -165,11 +168,13 @@
           value: '选项5',
           label: '北京烤鸭'
         }],
+        value: '',
         value5: [],
-        input4: '',
         value8: '',
+        departments: [],
+        personnels: [],
         currentPage3: 1,
-        myData : [],
+        organizationDialog:false,
 
 
         isShow: false,              //暂无数据
@@ -181,25 +186,27 @@
       this.map = new AMap.Map('mapcointainer', {
         resizeEnable:true,
         zoom:11,
-        center:[118.778015,32.057101]
+        center:[118.790681,32.04792]
       })
     },
     watch: {},
     methods: {
       openFrames(type) {
-        switch (type) {
-          case 'departmentVisible':
-            this.departmentVisible = true;
-            break;
-          case 'personnelVisible':
-            this.personnelVisible = true;
-            break;
-        }
+        alert(2)
+        this.organizationDialog = true;
+        // switch (type) {
+        //   case 'departmentVisible':
+        //     this.departmentVisible = true;
+        //     break;
+        //   case 'personnelVisible':
+        //     this.personnelVisible = true;
+        //     break;
+        // }
       },
-      closeFrame(){
-        this.departmentVisible = false;
-        this.personnelVisible = false;
-      },
+      // closeFrame(){
+      //   this.departmentVisible = false;
+      //   this.personnelVisible = false;
+      // },
 
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -207,9 +214,24 @@
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
       },
+// 清空
+      clearSelect(num){
+        if (num==1){
+          if (this.departments.length==0){
+            return
+          }
+          // this.params.department_id = '';
+          this.departments = [];
+        } else {
+          if (this.personnels.length==0){
+            return
+          }
+          // this.params.staff_id = '';
+          this.personnels = [];
+        }
 
-
-
+        this.search();
+      }
     },
   }
 </script>
@@ -260,6 +282,9 @@
             color: #6a8dfb;
           }
         }
+      }
+      .remarks {
+        margin-top: 15px;
       }
       .register_position {
         @include flex;
