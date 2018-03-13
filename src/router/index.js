@@ -12,67 +12,67 @@ import Lock from '../components/common/lockScreen/components/lockedScreen.vue'
 import WholeRentManage from '../components/rentManage/wholeRentManage/index.vue'
 import JointRentManage from '../components/rentManage/jointRentManage/index.vue'
 
-// import ContractManage from '../components/rentManage/datumMessage/contractManage/index.vue'
-// import ClientManage from '../components/rentManage/datumMessage/clientManage/index.vue'
-// import HousesManage from '../components/rentManage/datumMessage/housesManage/index.vue'
-// import RepairManage from '../components/rentManage/repairManage/index.vue'
+// import ContractManage from '../comments/rentManage/datumMessage/contractManage/index.vue'
+// import ClientManage from '../comments/rentManage/datumMessage/clientManage/index.vue'
+// import HousesManage from '../comments/rentManage/datumMessage/housesManage/index.vue'
+// import RepairManage from '../comments/rentManage/repairManage/index.vue'
 import DatumMessage from '../components/rentManage/datumMessage/index.vue'                    //资料管理
 
 
 // 财务账本
-// import AccountManage from '../components/finance/accountManage/index'                      //账户管理
-// import SubjectManage from '../components/finance/subjectManage/index'                      //科目管理
+// import AccountManage from '../comments/finance/accountManage/index'                      //账户管理
+// import SubjectManage from '../comments/finance/subjectManage/index'                      //科目管理
 import Foundation from '../components/finance/foundation/index'                               //基础管理
 
-// import RoomCharge from '../components/finance/roomCharge/index'                            //房租总汇
-// import OtherSum from '../components/finance/otherSum/index'                                //剩余款项总汇
+// import RoomCharge from '../comments/finance/roomCharge/index'                            //房租总汇
+// import OtherSum from '../comments/finance/otherSum/index'                                //剩余款项总汇
 import FundMessage from '../components/finance/fundMessage/index.vue'                         //款项管理
 
-// import BudgetManage from '../components/finance/budgetManage/index'                        //预算管理
-// import EndPayment from '../components/finance/endPayment/index'                            //尾款报备
+// import BudgetManage from '../comments/finance/budgetManage/index'                        //预算管理
+// import EndPayment from '../comments/finance/endPayment/index'                            //尾款报备
 import StaticDetail from '../components/finance/statistics/components/staticDetail'           //统计详情
 import Statistics from '../components/finance/statistics/index.vue'                           //数据统计
 import IncomeFlow from '../components/finance/incomeFlow/index'                               //收支流水
 
 
 // 微信管理
-// import Reimbursement from '../components/wechatMessage/reimbursement/index.vue'            //微信报销
-// import Complain from '../components/wechatMessage/complain/index.vue'                      //微信投诉
-// import LookHouse from '../components/wechatMessage/lookHouse/index.vue'                    //预约看房
-// import League from '../components/wechatMessage/league/index.vue'                          //房东加盟
-// import Feedback from '../components/wechatMessage/feedback/index.vue'                      //意见反馈
+// import Reimbursement from '../comments/wechatMessage/reimbursement/index.vue'            //微信报销
+// import Complain from '../comments/wechatMessage/complain/index.vue'                      //微信投诉
+// import LookHouse from '../comments/wechatMessage/lookHouse/index.vue'                    //预约看房
+// import League from '../comments/wechatMessage/league/index.vue'                          //房东加盟
+// import Feedback from '../comments/wechatMessage/feedback/index.vue'                      //意见反馈
 import WechatMessage from '../components/wechatMessage/index.vue'                             //微信管理
 
 
 //人资管理
-// import StaffManage from '../components/humanResource/staffManage/index.vue'
+// import StaffManage from '../comments/humanResource/staffManage/index.vue'
 import Organization from '../components/humanResource/organization/index.vue'
-// import Achievement from '../components/humanResource/achievement/index.vue'
+// import Achievement from '../comments/humanResource/achievement/index.vue'
 import IntegralManage from '../components/humanResource/integralManage/index.vue'
 
 
 //OA办公
-// import Communication from '../components/OAWork/communication/index.vue'                 //通讯管理
-// import Programme from '../components/OAWork/programme/index.vue'                         //日程管理
-// import Institution from '../components/OAWork/institution/index.vue'                     //制度管理
-// import Vote from '../components/OAWork/vote/index.vue'                                   //投票管理
-// import Counter from '../components/meritPay/counter/index'                               //业绩计算器
+// import Communication from '../comments/OAWork/communication/index.vue'                 //通讯管理
+// import Programme from '../comments/OAWork/programme/index.vue'                         //日程管理
+// import Institution from '../comments/OAWork/institution/index.vue'                     //制度管理
+// import Vote from '../comments/OAWork/vote/index.vue'                                   //投票管理
+// import Counter from '../comments/meritPay/counter/index'                               //业绩计算器
 import Management from '../components/OAWork/management/index.vue'                          //办公管理
 
-// import SuppliesUse from '../components/OAWork/property/items/officeSuppliesUse.vue'                       //办公用品申领
-// import SuppliesGather from '../components/OAWork/property/officeSuppliesGather/officeSuppliesGather.vue'  //办公用品汇总
-// import CapitalChange from '../components/OAWork/property/items/capitalAssetsChange.vue'                   //固定资产异动
-// import CapitalGather from '../components/OAWork/property/items/capitalAssetsGather.vue'                   //固定资产总汇
+// import SuppliesUse from '../comments/OAWork/property/items/officeSuppliesUse.vue'                       //办公用品申领
+// import SuppliesGather from '../comments/OAWork/property/officeSuppliesGather/officeSuppliesGather.vue'  //办公用品汇总
+// import CapitalChange from '../comments/OAWork/property/items/capitalAssetsChange.vue'                   //固定资产异动
+// import CapitalGather from '../comments/OAWork/property/items/capitalAssetsGather.vue'                   //固定资产总汇
 import Property from '../components/OAWork/property/index.vue'                                               //资产管理
 
-// import ArticleMessage from '../components/OAWork/articleMessage/staffSquare/index.vue'                    //员工广场
+// import ArticleMessage from '../comments/OAWork/articleMessage/staffSquare/index.vue'                    //员工广场
 import PublicArticle from '../components/OAWork/articleMessage/staffSquare/components/PublicArticle.vue'     //文章发布
 import ArticleMessage from '../components/OAWork/articleMessage/index.vue'                                   //文章管理
 
-// import ContractClaim from '../components/OAWork/pagerData/contractClaim/index.vue'
+// import ContractClaim from '../comments/OAWork/pagerData/contractClaim/index.vue'
 import PagerData from '../components/OAWork/pagerData/index.vue'                        //纸质资料
 
-// import Knowledge from '../components/OAWork/knowledge/index.vue'                     //知识管理
+// import Knowledge from '../comments/OAWork/knowledge/index.vue'                     //知识管理
 
 import ExamineAndApprove from '../components/OAWork/examineAndApprove/index.vue'
 
@@ -85,19 +85,19 @@ import College from '../components/lejiaCollege/college/index.vue'
 // 系统设置
 import ModuleSetting from '../components/systemSetting/moduleSetting/index.vue'                             //模块设置
 
-// import Message from '../components/systemSetting/message/index.vue'                                      //短信模板
-// import LoginRecord from '../components/systemSetting/loginRecord/index.vue'                              //登陆日志
-// import UserDictionary from '../components/systemSetting/userDictionary/index.vue'                        //用户字典
-// import RoleManage from '../components/systemSetting/roleManage/index.vue'                                //角色管理
-// import PowerManage from '../components/systemSetting/powerManage/index.vue'                              //权限管理
-// import VillageManage from '../components/systemSetting/villageManage/index.vue'                          //小区管理
+// import Message from '../comments/systemSetting/message/index.vue'                                      //短信模板
+// import LoginRecord from '../comments/systemSetting/loginRecord/index.vue'                              //登陆日志
+// import UserDictionary from '../comments/systemSetting/userDictionary/index.vue'                        //用户字典
+// import RoleManage from '../comments/systemSetting/roleManage/index.vue'                                //角色管理
+// import PowerManage from '../comments/systemSetting/powerManage/index.vue'                              //权限管理
+// import VillageManage from '../comments/systemSetting/villageManage/index.vue'                          //小区管理
 import VillageDetail from '../components/systemSetting/managerSetting/villageManage/villageDetail.vue'      //小区管理详情
 import ManagerSetting from '../components/systemSetting/managerSetting/index.vue'                           //管理员设置
 
 
-// import Recycle from '../components/systemSetting/recycleBin/index.vue'                                   //回收站
-// import contractModule from '../components/systemSetting/contractModule/index.vue'                        //合同模板
-// import ExportManage from '../components/systemSetting/exportManage/index.vue'                            //导出管理
+// import Recycle from '../comments/systemSetting/recycleBin/index.vue'                                   //回收站
+// import contractModule from '../comments/systemSetting/contractModule/index.vue'                        //合同模板
+// import ExportManage from '../comments/systemSetting/exportManage/index.vue'                            //导出管理
 
 
 //喜报管理
@@ -131,6 +131,8 @@ import Infodetails from '../components/converge/details/infodetails.vue'        
 import DailyRecord from '../components/dailyRecord/index.vue'                             //日志管理
 import SthToDo from '../components/OAWork/sthToDo/index.vue'                              //待办事项
 
+
+import Integraldetail from '../components/humanResource/integralManage/components/integraldetail.vue'         // 积分明细
 
 Vue.use(Router);
 
@@ -197,6 +199,8 @@ export default new Router({
         {path: '/infodetails', component: Infodetails, name: '员工广场详情'},
         {path: '/dailyRecord', component: DailyRecord, name: '日志管理'},
         {path: '/sthToDo', component: SthToDo, name: '待办事项'},
+        {path: '/integraldetail', component: Integraldetail, name: '积分明细'},
+
       ]
     },
 

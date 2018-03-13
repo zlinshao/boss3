@@ -12,7 +12,7 @@
         </div>
       </div>
     </div>
-    <!--课程状态-->
+<!--课程状态-->
     <div class="curriculum">
       <div class="curriculumTitle">
         <div class="left_border"></div>
@@ -161,7 +161,7 @@
         </el-row>
       </div>
     </div>
-    <!--教师风采-->
+<!--教师风采-->
     <div class="teacher">
       <div class="curriculumTitle">
         <div class="left_border" style="border-left: 2px solid #fb4699;"></div>
@@ -202,7 +202,7 @@
         </el-col>
       </el-row>
     </div>
-    <!--图片赏析-->
+<!--图片赏析-->
     <div class="img_appreciation">
       <div class="curriculumTitle">
         <div class="left_border"></div>
@@ -455,19 +455,19 @@
           color: #FFFFFF;
           max-width: 200px;
         }
-        .teacher_name {
-          font-size: 30px;
-        }
-        .teacher_department {
-          margin: 14px 0 20px 0;
-        }
-        .separate {
-          width: 30px;
-          border-top: 3px solid #fb4699;
-        }
-        .teacher_motto {
-          margin: 40px 0 20px 0;
-        }
+          .teacher_name {
+            font-size: 30px;
+          }
+          .teacher_department {
+            margin: 14px 0 20px 0;
+          }
+          .separate {
+            width: 30px;
+            border-top: 3px solid #fb4699;
+          }
+          .teacher_motto {
+            margin: 40px 0 20px 0;
+          }
         .teacher_center {
           position: absolute;
           top: 78px;
