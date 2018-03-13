@@ -9,7 +9,7 @@
 			<!--@keyup.enter.stop.native="nodeEditPass(STORE,DATA,NODE)"></el-input>-->
 		<!--</span>-->
 		<span :class="[DATA.id > maxExpandId ? 'tree-new tree-label' : 'tree-label']">
-			<span>{{DATA.name}}</span>
+			<span>{{DATA.name}}&nbsp;&nbsp; <span class="totalNumber"> ({{DATA.users}}人)</span></span>
 		</span>
 		<span class="tree-btn">
 			<i class="el-icon-plus" @click.stop="nodeAdd(STORE,DATA,NODE)"></i>
@@ -49,6 +49,12 @@
 </script>
 
 <style scoped="">
+
+  .totalNumber{
+    font-family: 'Impact', sans-serif;
+    color: #ccc;
+    font-size: 14px;
+  }
 	.tree-expand{
 		overflow:hidden;
     display: inline-block;

@@ -62,7 +62,7 @@
           <div  v-show="!isDepartment" style="padding: 10px;">
             <div class="highRanking">
               <div class="tabsSearch">
-                <el-form :inline="true" :model="params" size="mini" class="demo-form-inline">
+                <el-form onsubmit="return false;" :inline="true" size="mini" class="demo-form-inline">
                   <!--<el-form-item label="选择部门">-->
                   <!--<el-input @focus="organizationDialog = true" readonly=""></el-input>-->
                   <!--</el-form-item>-->
@@ -71,7 +71,7 @@
                     <el-button type="primary" @click="addPosition('position')" v-if="activeName==='second'">新建职位</el-button>
                   </el-form-item>
                   <el-form-item style="float: right">
-                    <el-input v-model="params.keywords" placeholder="请输入搜索内容" @keyup.enter.native="search">
+                    <el-input v-model="params.keywords" placeholder="请输入搜索内容" @keyup.enter.prevent.native="search">
                       <el-button slot="append" type="primary" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                   </el-form-item>
@@ -84,9 +84,29 @@
                   :data="staffTableData"
                   @row-contextmenu="openContextMenu"
                   style="width: 100%">
+
+                  <el-table-column>
+                    <template slot-scope="scope">
+                      <img v-if="scope.row.avatar" :src="scope.row.avatar" style="width: 30px;height: 30px;border-radius: 50%;">
+                      <img v-else="" src="../../../assets/images/head.jpg" style="width: 30px;height: 30px;border-radius: 50%;filter: grayscale(100%);">
+                    </template>
+                  </el-table-column>
+
                   <el-table-column
                     prop="name"
                     label="员工姓名">
+                  </el-table-column>
+                  <el-table-column
+                    label="部门">
+                    <template slot-scope="scope">
+                      <span v-for="item in scope.row.org">{{item.name}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="岗位">
+                    <template slot-scope="scope">
+                      <span v-for="item in scope.row.role">{{item.display_name}}</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="phone"
@@ -789,7 +809,6 @@
       deletePosition(){
         this.$http.delete(globalConfig.server_user+'api/v1/positions/'+this.positionId).then((res) =>{
           if(res.data.status === 'success'){
-              alert(2)
             this.$notify({
               title: '成功',
               message: '删除成功',

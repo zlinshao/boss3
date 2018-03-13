@@ -1,15 +1,17 @@
 <template>
   <div>
     <div id="container">
-      <div class="btn btn-default btn-lg" id="uploadFiles">
-        <div v-for="(item,index) in imgArray" class="imgBox" @mouseover="mouseOver(index)" @mouseout="mouseOut(index)">
-          <img  :src="item">
-          <div class="deleteImg">
-            <i class="el-icon-delete" v-if="activeIndex===index" @click="deleteImg(item,index,$event)">删除</i>
-          </div>
-        </div>
+      <div class="btn btn-default btn-lg" id="pickfiles">
+        <!--<div v-for="(item,index) in imgArray" class="imgBox" @mouseover="mouseOver(index)" @mouseout="mouseOut(index)">-->
+          <!--<img v-if="item" :src="item">-->
+          <!--<i v-else="" class="el-icon-loading"></i>-->
+          <!--<div class="deleteImg">-->
+            <!--<i class="el-icon-delete" v-if="activeIndex===index" @click="deleteImg(item,index,$event)">删除</i>-->
+          <!--</div>-->
+        <!--</div>-->
       </div>
     </div>
+    {{imgId}}{{imgArray}}
   </div>
 </template>
 
@@ -21,12 +23,48 @@
         imgArray: [],
         imgId: [],
         isUploading:false,
-        activeIndex : null
+        activeIndex : null,
+        uploader:null,
       }
     },
     mounted(){
       this.getTokenMessage();
+      let _this =this;
+      $(document).on('click','a.pic_delete',function () {
+        console.log(_this.uploader.files)
+        let toremove = '';
+        let id = $(this).attr("data-val");
+        for (var i in _this.uploader.files) {
+          if (_this.uploader.files[i].id === id) {
+            toremove = i;
+          }
+        }
+        $('#'+id).remove();
+        _this.uploader.files.splice(toremove, 1);
+      });
     },
+
+    watch:{
+      uploader : {
+        deep:true,
+        handler(val,old){
+          if(val && val!==null){
+              console.log(val.files)
+              console.log(old)
+//            if(val.files.length < old.files.length)
+//              for(let i=0;i<this.imgArray.length;i++){
+//                for(let j=0;j<val.files.length;j++){
+//                  if(this.imgArray[i] == val.files[j].target_name){
+//                    this.imgId.splice(i,1)
+//                    this.imgArray.splice(i,1)
+//                  }
+//                }
+//              }
+          }
+        }
+      }
+    },
+
     methods: {
       mouseOver(index){
         this.activeIndex = index;
@@ -41,11 +79,11 @@
       },
 
       uploaderReady(token) {
-
+        let event = event;
         let _this = this;
-        let uploader = Qiniu.uploader({
+        _this.uploader = Qiniu.uploader({
           runtimes: 'html5,flash,html4',      // 上传模式，依次退化
-          browse_button: 'uploadFiles',       //上传按钮的ID
+          browse_button: 'pickfiles',       //上传按钮的ID
           uptoken: token,                     // uptoken是上传凭证，由其他程序生成
 
           get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
@@ -62,9 +100,67 @@
           auto_start: true,                   // 选择文件后自动上传，若关闭需要自己绑定事件触发上传
 
           init: {
+            'PostInit': function() {
+              document.getElementById('pickfiles').innerHTML = '';
+//
+//              document.getElementById('uploadfiles').onclick = function() {
+//                uploader.start();
+//                return false;
+//              };
+            },
+
+
             'FilesAdded': function (up, files) {
+
+
+
               plupload.each(files, function (file) {
-                // 文件添加进队列后，处理相关的事情
+
+
+
+//                document.getElementById('pickfiles').innerHTML += `
+//                  <div style="margin: 10px;  width: 120px;  height: 120px; overflow: hidden; border-radius: 10px;position: relative;" id="${file.id}">
+//                      <img src=""  style="width: 120px; height: 120px; border-radius: 10px;filter:blur(2px);">
+//                      <div style="width: 100%;position: absolute;top: 20px;text-align: center">${plupload.formatSize(file.size)}</div>
+//                      <div style="width: 100%;position: absolute;bottom: 10px;font-size:20px;text-align: center"><b style=""></b></div>
+//                  </div>
+//                `;
+
+                console.log(file)
+                if (!file || !/image\//.test(file.type) || /photoshop/.test(file.type)) {
+                  document.getElementById('pickfiles').innerHTML += `
+                  <div style="margin: 10px;  width: 120px;  height: 120px; overflow: hidden; border-radius: 10px;position: relative;" id="${file.id}">
+                      <img src=""  style="width: 120px; height: 120px; border-radius: 10px;filter:blur(2px);">
+                      <div style="width: 100%;position: absolute;top: 50px;text-align: center;color: #ffffff">${plupload.formatSize(file.size)}</div>
+                      <div style="width: 100%;position: absolute;bottom: 10px;font-size:20px;text-align: center;"><b style=""></b></div>
+                  </div>
+                  <div>
+                     <a href="javascript:;" class="pic_delete" data-val=${file.id}>删除</a>
+                  </div>
+                  `;
+
+
+
+                }else {
+                  var fr = new mOxie.FileReader();
+                  fr.onload = function () {
+                    // 文件添加进队列后，处理相关的事情
+                    document.getElementById('pickfiles').innerHTML += `
+                    <div style="margin: 10px;" id="${file.id}">
+                      <div style=" width: 120px;  height: 120px; overflow: hidden; border-radius: 10px;position: relative;">
+                      <img src="${fr.result}"  style="width: 120px; height: 120px; border-radius: 10px;">
+                      <div style="width: 100%;position: absolute;top: 20px;text-align: center">${plupload.formatSize(file.size)}</div>
+                      <div style="width: 100%;position: absolute;bottom: 10px;font-size:20px;text-align: center;color: #ffffff;"><b style=""></b></div>
+                    </div>
+                    <div style="text-align: center">
+                        <a href="javascript:;" class="pic_delete" data-val=${file.id}>删除</a>
+                    </div>
+                    </div>
+                `;
+                  };
+                  fr.readAsDataURL(file.getSource());
+
+                }
 
               });
             },
@@ -73,8 +169,10 @@
               _this.isUploading = true;
             },
             'UploadProgress': function (up, file) {
-              console.log(up)
               // 每个文件上传时，处理相关的事情
+
+                document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+
             },
             'FileUploaded': function (up, file, info) {
 
@@ -95,8 +193,9 @@
                 name: url.key
               }).then((res) => {
                 if (res.data.status === "success") {
+//                  $('#'+file.id).remove();
                   _this.imgId.push(res.data.data.id);
-                  _this.imgArray.push(res.data.data.uri);
+                  _this.imgArray.push(res.data.data.name);
                 }
               })
             },
@@ -115,7 +214,7 @@
             'Key': function (up, file) {
               // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
               // 该配置必须要在unique_names: false，save_key: false时才生效
-              var key = "";
+              let key = "";
               // do something with key here
               return key
             }
@@ -130,14 +229,15 @@
         this.imgId.splice(index,1);
         this.imgArray.splice(index,1);
 //        this.isDelete = false;
-      }
+      },
+
     }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-  #uploadFiles {
+  #pickfiles {
     width: 100%;
     min-height: 40px;
     box-sizing: border-box;
