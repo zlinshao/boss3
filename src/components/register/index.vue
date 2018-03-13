@@ -7,7 +7,7 @@
             <el-row :gutter="2">
               <el-col :span="8">
                 <el-input placeholder="点击选择部门" size="mini" @click.native="openFrames('departmentVisible')" readonly>
-                  <!--<el-button slot="append" @click="clearSelect(1)">清空</el-button>-->
+                  <el-button slot="append" @click="clearSelect(1)">清空</el-button>
                 </el-input>
               </el-col>
 
