@@ -35,13 +35,13 @@
               <div></div>
               <div class="readers">
                 <div>
-                  <i class="iconfont icon-xiaoxi"></i>{{formList.comments_count}}
+                  <i class="iconfont icon-pinglun"></i>&nbsp;&nbsp;{{formList.comments_count}}
                 </div>
                 <div>
-                  <i class="iconfont icon-dianzan" :class="{'zan': assistId}" @click="assist()"></i>&nbsp;{{formList.favor_num}}
+                  <i class="iconfont icon-zan" :class="{'zan': assistId}" @click="assist()"></i>&nbsp;{{formList.favor_num}}
                 </div>
                 <div>
-                  <i class="iconfont icon-yanjing"></i>&nbsp;{{formList.read_num}}
+                  <i class="el-icon-view"></i>&nbsp;&nbsp;{{formList.read_num}}
                 </div>
               </div>
             </div>
@@ -131,18 +131,20 @@
               <div class="ingreat_data">{{key.create_time}}</div>
               <div class="readers">
                 <div>
-                  <i class="iconfont icon-xiaoxi"></i>{{key.comments_count}}
+                  <i class="iconfont icon-pinglun"></i>&nbsp;&nbsp;{{key.comments_count}}
                 </div>
                 <div>
-                  <i class="iconfont icon-dianzan"></i>&nbsp;{{key.favor_num}}
+                  <i class="iconfont icon-zan"></i>&nbsp;{{key.favor_num}}
                 </div>
                 <div>
-                  <i class="iconfont icon-yanjing"></i>&nbsp;{{key.read_num}}
+                  <i class="el-icon-view"></i>&nbsp;&nbsp;{{key.read_num}}
                 </div>
               </div>
             </div>
             <div class="ingreat_pic" @click="routerDetail(key.id)">
-              <img v-for="pic in key.album.cover_pic" :src="pic.big">
+               <span v-for="pic in key.album.cover_pic">
+                    <img v-for="p in pic" :src="p.uri">
+                  </span>
             </div>
             <div class="ingreat_detail">
               <span v-html="key.content"></span>
