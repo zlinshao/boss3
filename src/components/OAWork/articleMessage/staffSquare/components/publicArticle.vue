@@ -18,8 +18,7 @@
       </el-form-item>
 
       <el-form-item label="封面图片">
-        <Dropzone :id="'cover'" :photo="photos" @finish="photo_success"
-                  @remove="photo_remove"></Dropzone>
+        <Dropzone :ID="'cover'" @getImg="photo_success"></Dropzone>
       </el-form-item>
 
       <el-form-item style="text-align: center;">
@@ -59,7 +58,7 @@
 
 <script>
   import {VueEditor} from 'vue2-editor'
-  import Dropzone from '../../../../common/dropzone.vue'
+  import Dropzone from '../../../../common/UPLOAD.vue'
 
   export default {
     components: {
@@ -170,11 +169,7 @@
       },
       // 上传成功
       photo_success(val) {
-        this.photos.pic_id = val;
-      },
-      // 删除图片
-      photo_remove(val) {
-        this.photos.pic_id = val;
+        this.photos.pic_id = val[1];
       },
 
       prompt(val, info) {
