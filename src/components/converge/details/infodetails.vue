@@ -1,5 +1,5 @@
 <template>
-  <div class="newsDetail">
+  <div id="newsDetail" v-loading="loading">
     <el-row>
       <el-col :span="colNum">
         <div style="padding: 20px 17px">
@@ -187,6 +187,7 @@
         hotData: [],
 
         assistId: false,     //点赞
+        loading: false,     //点赞
       }
     },
     mounted() {
@@ -207,7 +208,12 @@
       // 详情
       routerDetail(id) {
         this.$router.push({path: '/Infodetails', query: {ids: id, detail: 'converge'}});
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
         this.publicDetail(id);
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+        }, 600)
       },
       // 热门导读
       addRegion() {
@@ -300,19 +306,24 @@
   }
 </script>
 
-<style scoped lang="scss">
-  @mixin flex {
-    display: -webkit-flex;
-    display: flex;
-  }
+<style lang="scss">
+  #newsDetail {
+    @mixin flex {
+      display: -webkit-flex;
+      display: flex;
+    }
 
-  @mixin border_radius($n) {
-    -webkit-border-radius: $n;
-    -moz-border-radius: $n;
-    border-radius: $n;
-  }
+    @mixin border_radius($n) {
+      -webkit-border-radius: $n;
+      -moz-border-radius: $n;
+      border-radius: $n;
+    }
 
-  .newsDetail {
+    .el-loading-mask {
+      .el-loading-spinner {
+        top: 30%;
+      }
+    }
     .readers {
       div {
         @include flex;
@@ -484,10 +495,11 @@
       .title {
         color: #fb4699;
         padding-left: 2px;
+        font-weight: bold;
         &:before {
           border-radius: 2px;
           margin-right: 5px;
-          border-left: 2px solid #fb4699;
+          border-left: 4px solid #fb4699;
           content: '';
 
         }

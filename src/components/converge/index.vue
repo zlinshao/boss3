@@ -338,7 +338,7 @@
               </div>
               <h6 class="a4"></h6>
               <div class="onBtn box">
-                <el-button type="primary" size="mini">更多</el-button>
+                <el-button type="primary" size="mini" @click="routerDetail(key.id)">更多</el-button>
               </div>
               <div class="bottom">
                 <div class="mainRight">
@@ -569,8 +569,7 @@
     h6 {
       margin: 0;
       width: 20px;
-      border: 2px solid $color1;
-      @include border_radius(10px);
+      border-top: 3px solid $color1;
     }
     h6.a1 {
       border-color: $color1;
@@ -636,6 +635,7 @@
       @include text_overflow(2);
       color: #aaaaaa;
       height: 40px;
+      line-height: 21px;
     }
     .titleMain.text {
       margin: 20px 0;
