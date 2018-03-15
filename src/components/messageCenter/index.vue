@@ -1,471 +1,282 @@
 <template>
-  <div @click="show=false" @contextmenu="closeMenu">
-    <div id="clientContainer">
-      <div class="highRanking">
-        <div class="tabsSearch">
-          <el-form :inline="true" size="mini">
-            <el-form-item>
-              <el-input v-model="formInline.name" placeholder="搜索">
-                <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
-              </el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
-            </el-form-item>
-            <el-form-item v-if="isCheckbox">
-              <el-button type="primary">全部标记为已读</el-button>
-            </el-form-item>
-          </el-form>
+  <div id="messageCent">
+    <div class="container">
+      <div class="header">
+        <div class="headName">消息列表</div>
+
+        <div class="filterGroup">
+
+          <div class="buttonGroup">
+            <el-button size="small" type="danger" @click="isRead"> <i class="iconfont icon-yanjing" style="margin: 0 5px"></i> 已 读</el-button>
+            <el-button size="small" type="success" @click="unRead">  <i class="iconfont icon-yanjingclose" style="margin: 0 5px"></i> 未 读</el-button>
+          </div>
+
+          <div class="search">
+            <el-input placeholder="请输入内容" size="small" @keyup.enter.native="search">
+              <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+            </el-input>
+          </div>
         </div>
 
-        <div class="filter high_grade" :class="isHigh? 'highHide':''">
-          <el-form :inline="true" :model="formInline" size="mini" label-width="100px">
-            <div class="filterTitle">
-              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
-            </div>
-            <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">标记</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select v-model="formInline.house" clearable placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">时间范围</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-date-picker
-                        v-model="statisticDate"
-                        type="daterange"
-                        align="right"
-                        unlink-panels
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        :picker-options="pickerOptions">
-                      </el-date-picker>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
-
-            <div class="btnOperate">
-              <el-button size="mini" type="primary">搜索</el-button>
-              <el-button size="mini" type="primary" @click="resetting">重置</el-button>
-              <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
-            </div>
-          </el-form>
-        </div>
       </div>
 
-
-      <div class="main">
-        <div>
-          <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="系统公告" name="first">
-              <div class="myTable">
-                <el-table
-                  :data="tableData"
-                  @row-click="clickTable"
-                  @row-contextmenu='houseMenu'
-                  style="width: 100%">
-                  <el-table-column
-                    prop="date"
-                    v-if=""
-                    type="selection">
-                  </el-table-column>
-
-                  <el-table-column
-                    prop=""
-                    v-if=""
-                    label="">
-                    <template slot-scope="scope">
-                      <i class="el-icon-message" style="color: #fb4699"></i>
-                      <!--<span style="margin-left: 10px"></span>-->
-                    </template>
-                  </el-table-column>
-
-                  <el-table-column
-                    prop="date"
-                    label="发布时间">
-                  </el-table-column>
-                  <el-table-column
-                    prop="name"
-                    label="发布人">
-                  </el-table-column>
-                  <el-table-column
-                    prop="province"
-                    label="标题">
-                  </el-table-column>
-                  <el-table-column
-                    prop="address"
-                    label="主要内容">
-                  </el-table-column>
-                  <el-table-column
-                    prop="zip"
-                    label="阅读时间">
-                  </el-table-column>
-                </el-table>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="审批提醒" name="second">
-              <div class="myTable">
-                <el-table
-                  :data="tableData"
-                  @row-click="clickTable"
-                  @row-contextmenu='houseMenu'
-                  style="width: 100%">
-                  <el-table-column
-                    prop="date"
-                    v-if=""
-                    type="selection">
-                  </el-table-column>
-
-                  <el-table-column
-                    prop=""
-                    v-if=""
-                    label="">
-                    <template slot-scope="scope">
-                      <i class="el-icon-message" style="color: #fb4699"></i>
-                      <!--<span style="margin-left: 10px"></span>-->
-                    </template>
-                  </el-table-column>
-
-                  <el-table-column
-                    prop="date"
-                    label="发布时间">
-                  </el-table-column>
-                  <el-table-column
-                    prop="name"
-                    label="发布人">
-                  </el-table-column>
-                  <el-table-column
-                    prop="province"
-                    label="标题">
-                  </el-table-column>
-                  <el-table-column
-                    prop="address"
-                    label="主要内容">
-                  </el-table-column>
-                  <el-table-column
-                    prop="zip"
-                    label="阅读时间">
-                  </el-table-column>
-                </el-table>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="boss小秘书" name="third">
-              <div class="myTable">
-                <el-table
-                  :data="tableData"
-                  @row-click="clickTable"
-                  @row-contextmenu='houseMenu'
-                  style="width: 100%">
-                  <el-table-column
-                    prop="date"
-                    v-if=""
-                    type="selection">
-                  </el-table-column>
-
-                  <el-table-column
-                    prop=""
-                    v-if=""
-                    label="">
-                    <template slot-scope="scope">
-                      <i class="el-icon-message" style="color: #fb4699"></i>
-                      <!--<span style="margin-left: 10px"></span>-->
-                    </template>
-                  </el-table-column>
-
-                  <el-table-column
-                    prop="date"
-                    label="发布时间">
-                  </el-table-column>
-                  <el-table-column
-                    prop="name"
-                    label="发布人">
-                  </el-table-column>
-                  <el-table-column
-                    prop="province"
-                    label="标题">
-                  </el-table-column>
-                  <el-table-column
-                    prop="address"
-                    label="主要内容">
-                  </el-table-column>
-                  <el-table-column
-                    prop="zip"
-                    label="阅读时间">
-                  </el-table-column>
-                </el-table>
-              </div>
-            </el-tab-pane>
-          </el-tabs>
-
-          <div class="tableBottom">
-            <div class="right">
-              <div>未读 <span>5&nbsp;条</span></div>
-              <div>已读 <span>0&nbsp;条</span></div>
-              <a href="javascript:;" style="color: #6a8dfb">更多</a>
+      <div class="mainContent">
+        <div class="contentItem" v-for="item in messageTable">
+          <div class="itemTime">{{item.created_at.split(' ')[0]}}&nbsp;&nbsp; <span>{{item.created_at.split(' ')[1]}}</span></div>
+          <div class="itemLIne">
+            <div class="line"></div>
+            <div class="circle"></div>
+            <div class="stretchLine"></div>
+          </div>
+          <div class="itemMain">
+            <div class="itemMainHead">
+              <img src="../../assets/images/head.jpg" alt="" data-card>
             </div>
-
-            <div class="left">
-              <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[10, 20, 30, 40]"
-                :page-size="10"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
-              </el-pagination>
+            <div class="itemMainContent">
+              <div class="personInfo">
+                <div style="height: 40px;line-height: 40px">BOOS小秘书</div>
+                <!--<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. flex-grow:1;flex-grow:1;flex-grow:1;</div>-->
+              </div>
+              <div class="title">
+                <div class="titleWord" v-if="item.content">{{item.content.title}}</div>
+                <div class="from">
+                  <span v-if="item.read_at" style="color: #8de1ab">已读</span>
+                  <span v-else="" style="color: #fc76af">未读</span>
+                </div>
+              </div>
+              <div class="messageInfo" v-if="item.content">
+                {{item.content.content}}
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      <div style="text-align: center;margin: 20px 0 50px 0 ;cursor: pointer" @click="getMore" v-if="!isLastPage">
+        加载更多...
+      </div>
+      <div style="text-align: center;margin: 20px 0 50px 0 ;" v-if="isLastPage">
+        已经到最底部了
+      </div>
     </div>
-    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-               @clickOperate="clickEvent"></RightMenu>
   </div>
 </template>
 
 <script>
-  import RightMenu from '../common/rightMenu.vue'
+  import ElButton from "../../../node_modules/element-ui/packages/button/src/button";
   export default {
-    name: 'hello',
-    components: {RightMenu},
+    components: {ElButton},
     data () {
       return {
-        rightMenuX: 0,
-        rightMenuY: 0,
-        show: false,
-        lists: [],
-        /***********/
-        selectFlag:1,
-        pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-          }]
+        params:{
+          keywords:'',
+          per_page_number:5,
+          page:1,
+          unread:'',
         },
-        statisticDate: '',
-
-        formInline: {
-          name: '',
-          house: ''
-        },
-        tableData: [
-          {
-            date: '2016-05-03',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-          {
-            date: '2016-05-04',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-        ],
-        currentPage: 1,
-        options: [
-          {
-            value: '1',
-            label: '已读'
-          }, {
-            value: '2',
-            label: '未读'
-          }],
-
-        //模态框
-        organizationDialog: false,
-        isActive: 0,
-        isCheckbox:false,
-        activeName: 'first',
-        isHigh:false,
+        currentPage:1,
+        messageTable:[],
+        isLastPage:false,
       }
     },
-
+    mounted(){
+        this.getMessage();
+    },
     methods: {
-      handleClick(val) {
-
-      },
-      onSubmit(val) {
-        this.isActive = val;
-      },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
       },
-      clickTable(row, event, column){
-        console.log(row, event, column)
-      },
-      //房屋右键
-      houseMenu(row, event){
-        this.lists = [
-          {clickIndex: 'read', headIcon: 'el-icons-fa-envelope-o', label: '标记为已读',},
-          {clickIndex: 'all', headIcon: 'el-icons-fa-envelope', label: '批量标记',},
-          {clickIndex: 'cancel', headIcon: 'el-icons-fa-envelope', label: '取消批量标记',},
-          {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
-        ];
-        this.contextMenuParam(event);
-      },
-
-      //右键回调时间
-      clickEvent (index) {
-        switch (index){
-          case 'read' :
-            this.$confirm('您确定标记为已读吗', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              this.$message({
-                type: 'success',
-                message: '已读成功!'
-              });
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消已读'
-              });
-            });
-            break;
-          case 'delete':
-            this.$confirm('您确定将其删除吗', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              });
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消删除'
-              });
-            });
-            break;
-          case 'all':
-            this.isCheckbox = true;
-            break;
-          case 'cancel':
-            this.isCheckbox = false;
-            break;
-        }
-      },
-      //关闭右键菜单
-      closeMenu(){
-        this.show = false;
-      },
-
-      //右键参数
-      contextMenuParam(event){
-        //param: user right param
-        let e = event || window.event;	//support firefox contextmenu
-        this.show = false;
-        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
-        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
-        event.preventDefault();
-        event.stopPropagation();
-        this.$nextTick(() => {
-          this.show = true
+      getMessage(){
+        this.$http.get(globalConfig.server_user+'api/v1/messages',{params:this.params}).then((res) => {
+          if(res.data.status === 'success'){
+            let arr = [];
+            arr = res.data.data;
+            if(this.params.page === res.data.meta.last_page){
+                this.isLastPage = true;
+            }
+            arr.forEach((x)=>{
+              this.messageTable.push(x)
+            })
+          }
         })
       },
-      highGrade(){
-        this.isHigh = !this.isHigh;
+      getMore(){
+        this.params.page++;
+        this.getMessage();
       },
-      resetting(){
+      unRead(){
+        this.params.page = 1;
+        this.params.unread = 1;
+        this.messageTable = [];
+        this.getMessage();
+      },
+      isRead(){
+        this.params.page = 1;
+        this.params.unread = '';
+        this.messageTable = [];
+        this.getMessage();
+      },
+      search(){
 
-      }
+      },
     }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped="">
-  #clientContainer {
-    .selectButton{
-      color: #fff;
-      background: #66b1ff;
-    }
-    .tool {
-      border-bottom: 1px solid #eee;
+<style lang="scss">
 
+  @font-face {
+    font-family: Impact;//////字体名称
+    src: url(../../assets/font/impact-2.ttf);  ////字体路径
+  }
+
+
+  .el-button--danger {
+    background-color: #fb4694;
+    border-color: #fb4694;
+  }
+
+  .el-button--success {
+    background-color: #58d788;
+    border-color: #58d788;
+  }
+
+  .container {
+    min-height: 800px;
+    border: 1px solid rgba(64, 158, 255, .3);
+    box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .08);
+    border-radius: 5px;
+    .header {
+      margin-top: 28px;
+      padding-bottom: 17px;
+      border-bottom: 1px solid #eeeeee;
+      .headName {
+        color: #6a8dfb;
+        font-size: 16px;
+        margin-left: 20px;
+      }
+      .el-input-group__append{
+        &:hover{
+          opacity: .9;
+        }
+        .el-icon-search{
+          font-size: 20px;
+          color: #ffffff;
+        }
+      }
+      .filterGroup{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+        margin-top: 10px;
+        .search {
+          /*margin-top: 44px;*/
+          /*display: inline-block;*/
+          width: 300px;
+          margin-left: 113px;
+          border-radius: 4px;
+          border: 1px solid #6a8dfb;
+          box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .08);
+          .el-input-group__append {
+            background: #6a8dfb;
+            color: #ffffff;
+            border: none;
+          }
+          .el-input__inner {
+            border: none;
+          }
+        }
+      }
     }
-    .filter {
-      padding-top: 10px;
-    }
-    .main {
-      font-size: 12px;
-      >div {
-        .tableBottom {
-          padding: 8px;
+
+    .mainContent {
+      padding-top: 5px;
+      .contentItem {
+        display: flex;
+        &:last-child{
+          border-bottom: 1px solid #eeeeee;
+        }
+        .itemTime {
+          min-width: 170px;
+          padding: 30px 0 0 113px;
+          span {
+            color: #666;
+            opacity: .8;
+            font-size: 14px;
+            font-family: 'Impact', sans-serif;
+          }
+        }
+        .itemLIne {
+          width: 8px;
           display: flex;
-          justify-content: space-between;
-          .right {
-            display: flex;
-            align-items: center;
-            div {
-              width: 100px;
-              text-align: center;
-              span {
-                color: #fb529f;
+          flex-direction: column;
+          align-items: center;
+
+          .line {
+            height: 35px;
+            border-right: 1px solid #eeeeee;
+          }
+          .circle {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #6a8dfb;
+          }
+          .stretchLine{
+            border-right: 1px solid #eeeeee;
+            flex-grow:1;
+          }
+        }
+
+        .itemMain{
+          flex-grow:1;
+          display: flex;
+          .itemMainHead{
+            width: 90px;
+            img{
+              width: 40px;
+              height: 40px;
+              border-radius: 50%;
+              margin: 20px 20px 0 30px;
+              cursor: pointer;
+              &:hover{
+                filter: blur(1px);
               }
-              &:first-child {
-                border-right: 1px solid #ccc;
+            }
+          }
+
+          .itemMainContent{
+            padding-right: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eeeeee;
+            flex-grow:1;
+            .personInfo{
+              margin-top: 20px;
+            }
+            .title{
+              margin-bottom: 6px;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              .titleWord{
+                color: #444;
+                font-weight: 600;
               }
+            }
+            .messageInfo{
+              line-height:150%;
+              text-align:justify;
+              min-height: 39px;
+              text-justify:inter-ideograph;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 2;  //这里是在第二行有省略号
+              overflow: hidden;
             }
           }
         }

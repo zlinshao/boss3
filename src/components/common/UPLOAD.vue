@@ -2,12 +2,18 @@
   <div>
     <div id="container">
       <div class="btn btn-default btn-lg pickfiles" :id="ID">
+          <div style="width: 120px;height: 120px;"></div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+
+
+  $('.pic_delete').click(function (e) {
+
+  })
 
 
   export default {
@@ -23,11 +29,10 @@
       }
     },
     mounted(){
-      this.getTokenMessage();
       let _this = this;
       $(document).on('click', 'a.pic_delete', function () {
         let id = $(this).attr("data-val");
-        let toremove = ''
+        let toremove = '';
         for (let i in _this.uploader.files) {
           if (_this.uploader.files[i].id === id) {
             toremove = i;
@@ -42,9 +47,10 @@
             _this.$emit('getImg', [_this.imgId,_this.isUploading]);
           }
         }
-
-        return false
       });
+
+      this.getTokenMessage();
+
     },
 
     watch: {
@@ -70,7 +76,6 @@
       },
 
       uploaderReady(token) {
-        let event = event;
         let _this = this;
         _this.uploader = Qiniu.uploader({
           runtimes: 'html5,flash,html4',      // 上传模式，依次退化
@@ -93,46 +98,29 @@
           init: {
             'PostInit': function () {
               document.getElementById(_this.ID).innerHTML = '';
-//
-//              document.getElementById('uploadfiles').onclick = function() {
-//                uploader.start();
-//                return false;
-//              };
             },
-
 
             'FilesAdded': function (up, files) {
 
-
               plupload.each(files, function (file) {
-
-
-
-//                document.getElementById('pickfiles').innerHTML += `
-//                  <div style="margin: 10px;  width: 120px;  height: 120px; overflow: hidden; border-radius: 10px;position: relative;" id="${file.id}">
-//                      <img src=""  style="width: 120px; height: 120px; border-radius: 10px;filter:blur(2px);">
-//                      <div style="width: 100%;position: absolute;top: 20px;text-align: center">${plupload.formatSize(file.size)}</div>
-//                      <div style="width: 100%;position: absolute;bottom: 10px;font-size:20px;text-align: center"><b style=""></b></div>
-//                  </div>
-//                `;
                 if (!file || !/image\//.test(file.type) || /photoshop/.test(file.type)) {
                   document.getElementById(_this.ID).innerHTML += `
 
                   <div class="imgItem" style="margin: 10px;" id="${file.id}">
                       <div style=" width: 120px;  height: 120px; overflow: hidden; border-radius: 10px;position: relative;">
-                      <img src="" style="width: 120px; height: 120px; border-radius: 10px;">
+                      <img src="" style="width: 120px; height: 120px; border-radius: 10px;filter: blur(2px)">
                       <div class="imgSize" >${plupload.formatSize(file.size)}</div>
                       <div style="width: 100%;position: absolute;bottom: 10px;font-size:20px;text-align: center;"><b style=""></b></div>
                     </div>
-                    <div style="text-align: center">
+                    <div style="text-align: center;height: 14px"">
                         <a href="javascript:;" class="pic_delete" data-val=${file.id}>删除</a>
                     </div>
                     </div>
 
                   `;
-
                 } else {
-                  var fr = new mOxie.FileReader();
+                  let fr = new mOxie.FileReader();
+
                   fr.onload = function () {
                     // 文件添加进队列后，处理相关的事情
                     document.getElementById(_this.ID).innerHTML += `
@@ -144,17 +132,15 @@
                       <div style="width: 100%;position: absolute;bottom: 10px;font-size:20px;text-align: center;color: #ffffff;"><b style=""></b></div>
                     </div>
                     <div style="text-align: center;height: 14px">
-                        <a href="javascript:;" class="pic_delete" data-val=${file.id}>删除</a>
+                        <a href="javascript:;" class="pic_delete" onclick="(function(event) {
+                          return false
+                        })()" data-val=${file.id}>删除</a>
                     </div>
                     </div>
                    `;
                   };
                   fr.readAsDataURL(file.getSource());
-
-
                 }
-
-
               });
             },
             'BeforeUpload': function (up, file) {
@@ -164,7 +150,6 @@
             'UploadProgress': function (up, file) {
               // 每个文件上传时，处理相关的事情
               if (document.getElementById(file.id)) {
-
                 document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
               }
 
@@ -220,40 +205,42 @@
 
     }
   }
+
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-  .pickfiles {
-    min-height: 40px;
-    box-sizing: border-box;
-    border: 1px solid #bbb;
-    border-radius: 4px;
-    display: flex;
-    flex-wrap: wrap;
-    .imgItem {
-      .imgSize {
-        width: 100%;
-        position: absolute;
-        bottom: 50px;
-        font-size: 18px;
-        text-align: center;
-        display: none;
-      }
-      .pic_delete{
-        display: none;
-      }
-      &:hover {
-        img {
-          filter: blur(2px) !important;
+  #container{
+    .pickfiles {
+      min-height: 40px;
+      box-sizing: border-box;
+      border: 1px solid #bbb;
+      border-radius: 4px;
+      display: flex;
+      flex-wrap: wrap;
+      .imgItem {
+        .imgSize {
+          width: 100%;
+          position: absolute;
+          bottom: 50px;
+          font-size: 18px;
+          text-align: center;
+          display: none;
         }
-        .imgSize{display: block}
         .pic_delete{
-          display: block;
+          display: none;
+        }
+        &:hover {
+          img {
+            filter: blur(2px) !important;
+          }
+          .imgSize{display: block}
+          .pic_delete{
+            display: block;
+          }
         }
       }
     }
   }
-
-
 </style>
