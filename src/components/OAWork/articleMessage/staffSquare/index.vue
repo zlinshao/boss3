@@ -207,15 +207,16 @@
       // 右键
       openContextMenu(row, event) {
         this.pitch = row.id;
-        if (row.if_shows !== '上架') {
-          this.if_shows = '上架';
+        console.log(row.statuss);
+        if (row.statuss !== '已发布') {
+          this.statuss = '已发布';
           this.lists = [
             {clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '编辑'},
             {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除'},
             {clickIndex: 'grounding', headIcon: 'el-icon-circle-close-outline', label: '上架'},
           ];
         } else {
-          this.if_shows = '下架';
+          this.statuss = '已结束';
           this.lists = [
             {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架',},
           ];
@@ -232,10 +233,10 @@
             this.deleteInfo(this.pitch);
             break;
           case 'grounding':
-            this.upperShelf(this.pitch, this.if_shows);
+            this.upperShelf(this.pitch, '上架');
             break;
           case 'undercarriage':
-            this.upperShelf(this.pitch, this.if_shows);
+            this.upperShelf(this.pitch, '下架');
             break;
         }
       },
@@ -287,8 +288,8 @@
       },
 
       // 上架下架
-      upperShelf(id) {
-        this.$confirm('此操作将' + this.if_shows + '文章, 是否继续?', '提示', {
+      upperShelf(id,title) {
+        this.$confirm('此操作将' + title + '文章, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
