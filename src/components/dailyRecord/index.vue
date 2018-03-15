@@ -69,41 +69,7 @@
           </div>
         </div>
         <el-tab-pane label="看日志" name="first">
-          <div class="lookLog" v-for="key in 5">
-            <div class="pic">
-              <img src="../../assets/images/head.jpg" alt="">
-            </div>
-            <div style="width: 100%">
-              <div class="titles">
-                <div class="a">到付快递费好看多啦</div>
-                <div class="b">0000-00-00</div>
-                <p>今日营业额：<span>1000</span></p>
-                <p>今日客户数：<span>1000</span></p>
-                <p>月累计营业额：<span>1000</span></p>
-                <p>本月业绩目标：<span>1000</span></p>
-              </div>
-              <div class="lookPeople">
-                <div><span>1223</span>人已读</div>
-                <span v-for="key in 12">
-                  <img src="../../assets/images/head.jpg" alt="">
-                </span>
-                <p>●●●</p>
-              </div>
-              <div class="commentContent" v-if="false">
-                <div v-for="key in 3">
-                  <span>习大大：</span>
-                  <span>发射点范德萨范德萨范德萨范德萨打发</span>
-                </div>
-                <p>
-                  全部22条评论
-                </p>
-              </div>
-              <div class="comment" v-if="false">
-                <el-input class="comInput" size="mini" placeholder="请输入内容" v-model="comments"></el-input>
-                <el-button size="mini" type="primary">评&nbsp;论</el-button>
-              </div>
-            </div>
-          </div>
+          <LookLog></LookLog>
         </el-tab-pane>
         <el-tab-pane label="发日志" name="second">
           <div class="sendLog">
@@ -195,8 +161,11 @@
 </template>
 
 <script>
+
+  import LookLog from './lookLog/index.vue'
   export default {
     name: "index",
+    components:{LookLog},
     data() {
       return {
         form: {},
