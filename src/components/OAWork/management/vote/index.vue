@@ -1,6 +1,10 @@
 <template>
   <div>
-    <UPLOAD :ID="upID" @getImg="getImgData"></UPLOAD>
+    <UPLOAD :ID="'first'" @getImg="getImgData"></UPLOAD>
+    <UPLOAD :ID="'second'" @getImg="getImgData"></UPLOAD>
+    <UPLOAD :ID="'third'" @getImg="getImgData"></UPLOAD>
+    <UPLOAD :ID="'fourth'" @getImg="getImgData"></UPLOAD>
+    <UPLOAD :ID="'fifth'" @getImg="getImgData"></UPLOAD>
   </div>
 </template>
 
