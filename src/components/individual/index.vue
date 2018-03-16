@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="topBackRight">
-        <div>
+        <div @click="routerLink('/pictureManage')">
           <span class="iconfont icon-shiyongshouce"></span>
           <span>照片</span>
         </div>
