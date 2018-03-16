@@ -126,6 +126,7 @@ import ContractChange from '../components/OAWork/sthToDo/components/contractChan
 import Deliver from '../components/OAWork/sthToDo/components/deliver.vue'                 //TEST_2
 import throwALease from '../components/OAWork/sthToDo/components/throwALease.vue'         //TEST_3
 import Individual from '../components/individual/index.vue'                               //个人门户
+import PictureManage from '../components/pictureManage/pictureManage.vue'                //相册管理
 import Converge from '../components/converge/index.vue'                                   //员工广场
 import Infodetails from '../components/converge/details/infodetails.vue'                  //员工广场详情
 import DailyRecord from '../components/dailyRecord/index.vue'                             //日志管理
@@ -196,6 +197,7 @@ export default new Router({
         {path: '/throwALease', component: throwALease, name: 'TEST_3'},
         {path: '/publicArticle', component: PublicArticle, name: '文章发布'},
         {path: '/individual', component: Individual, name: '个人门户'},
+        {path: '/pictureManage', component: PictureManage, name: '相册管理'},
         {path: '/infodetails', component: Infodetails, name: '员工广场详情'},
         {path: '/dailyRecord', component: DailyRecord, name: '日志管理'},
         {path: '/sthToDo', component: SthToDo, name: '待办事项'},
