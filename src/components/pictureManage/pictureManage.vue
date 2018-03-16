@@ -31,8 +31,8 @@
         <el-col :span="24">
           <div class="myPicture">
             <div class="title">我的相册</div>
-              <el-button icon="el-icon-picture-outline" type="primary" size="small">上传照片</el-button>
-              <el-button icon="el-icon-picture-outline" type="success" size="small">创建相册</el-button>
+              <el-button icon="el-icon-picture-outline" type="primary" size="small" @click="openModalDialog('uploadImageDialog')">上传照片</el-button>
+              <el-button icon="el-icon-picture-outline" type="success" size="small" @click="openModalDialog('createAlbumDialog')">创建相册</el-button>
           </div>
           <div class="pictures">
             <el-row :gutter="35">
@@ -152,18 +152,38 @@
 
       </el-row>
     </div>
+    <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog"></create-album>
   </div>
 </template>
 
 <script>
+  import CreateAlbum from "./createAlbum";
+
   export default {
-    name: "pictureManage",
+    components: {CreateAlbum},
+    name: "picture-manage",
     data() {
-      return {}
+      return {
+        uploadImageDialog: false,
+        createAlbumDialog: false,
+      }
     },
     methods: {
       routerLink(val) {
         this.$router.push({path: val})
+      },
+      openModalDialog(type) {
+        switch(type) {
+          case 'uploadImageDialog':   //打开上传图片对话框
+            this.uploadImageDialog = true;
+            break;
+          case 'createAlbumDialog':   //打开创建相册对话框
+            this.createAlbumDialog = true;
+            break;
+        }
+      },
+      closeCreateAlbumDialog(){
+        this.createAlbumDialog = false;
       }
     }
   }
