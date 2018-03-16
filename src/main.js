@@ -41,6 +41,7 @@ axios.defaults.withCredentials = true;
 axios.defaults.headers.common['Env'] = globalConfig.env;
 axios.defaults.headers = globalConfig.header;
 
+
 if (localStorage.myData !== undefined) {
   let head = JSON.parse(localStorage.myData);
   globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
