@@ -142,7 +142,7 @@
         </div>
         <div class="personInfo">
           <div class="head" style="cursor: pointer">
-            <img data-card="" :data-src="JSON.stringify(personal)" :src="personal.avatar" v-if="personal.avatar">
+            <img v-if="personal.avatar" data-card="" :data-src="JSON.stringify(personal)" :src="personal.avatar">
             <img src="../assets/images/head.jpg" v-else>
           </div>
           <el-dropdown trigger="click">
