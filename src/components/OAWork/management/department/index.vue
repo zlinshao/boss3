@@ -1,21 +1,72 @@
 <template>
   <div>
     <div>
-      <div class="filter">
-        <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">
-          <el-form-item label="选择部门">
-            <el-select v-model="formInline.house" clearable placeholder="请选择">
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
+    <div class="highRanking">
+      <div class="highSearch">
+        <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input v-model="formInline.name" placeholder="签到人或日期搜索">
-              <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
+            <el-input placeholder="签到人" v-model="form.name" @keyup.enter.native="myData(1)" size="mini"
+                      clearable>
+              <el-button slot="append" icon="el-icon-search" @click="myData(1)"></el-button>
+              <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
             </el-input>
           </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+          </el-form-item>
+
         </el-form>
       </div>
+
+      <div class="filter high_grade" :class="isHigh? 'highHide':''">
+        <el-form :inline="true" :model="form" size="mini" label-width="100px">
+          <div class="filterTitle">
+            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+          </div>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">部门人员</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                <el-form-item >
+                   <el-input readonly="" v-model="this.departname" @click.native="openOrganizationModal()" placeholder="点击选择"></el-input>
+                </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">时间</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-date-picker
+                    size="mini"
+                    v-model="value4"
+                    type="datetimerange"
+                    :picker-options="pickerOptions2"
+                    value-format="yyyy-MM-dd"
+                    format="yyyy-MM-dd"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    align="right">
+                  </el-date-picker>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <div class="btnOperate">
+
+            <el-button size="mini" type="primary" @click="search()">搜索</el-button>
+            <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+            <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+          </div>
+        </el-form>
+      </div>
+    </div>
       <div class="main">
         <div class="myHouse">
           <div class="blueTable">
@@ -27,11 +78,11 @@
                 label="签到人">
               </el-table-column>
               <el-table-column
-                prop="department"
+                prop="dname"
                 label="部门">
               </el-table-column>
               <el-table-column
-                prop="date"
+                prop="last_date"
                 label="签到日期">
               </el-table-column>
               <el-table-column
@@ -72,11 +123,10 @@
             <div class="left">
               <el-pagination
                 @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
+                @current-change="myData"
                 :current-page="nowPage"
-                :page-sizes="[10, 20, 30, 40]"
-                :page-size="10"
-                layout="total, sizes, prev, pager, next, jumper"
+                :page-size="12"
+                layout="total, prev, pager, next, jumper"
                 :total="total">
               </el-pagination>
             </div>
@@ -84,43 +134,69 @@
         </div>
       </div>
     </div>
+    <Organization :organizationDialog="organizationDialog" @close="closeOrganization"  @selectMember="coloseaa"></Organization>
   </div>
 </template>
 
 <script>
+
+ import Organization from '../../../common/organization.vue'
   export default {
+    components:{
+      Organization
+    },
     data () {
       return {
         /***********/
-        urls:globalConfig.server,
-        formInline: {
-          name: '',
-          house: ''
-        },
-        
+        urls:globalConfig.server,    
+        departname:'', 
+        pename:'', 
         tableData: [],
+        organizationDialog: false,
+        len:0,
+        orgtype:'',
+        form:{
+          page:1,
+          limit:12,
+          time:'',
+          year_month:'2018-03',
+          department_id:''
+          },
+        isHigh: false,
         nowPage: 1,   //当前页
         total:0,      //总条数
-        options: [
-          {
-            value: '选项1',
-            label: '黄金糕'
-          }, {
-            value: '选项2',
-            label: '双皮奶'
-          }, {
-            value: '选项3',
-            label: '蚵仔煎'
-          }, {
-            value: '选项4',
-            label: '龙须面'
-          }, {
-            value: '选项5',
-            label: '北京烤鸭'
-          }],
+
 
         //模态框
         instructionDialog: false,
+        pickerOptions2: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        },   
+        value4: ''
       }
     },
 
@@ -128,32 +204,63 @@
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+      openOrganizationModal() {
+        this.organizationDialog = true;
+        
+      },
+      closeOrganization() {
+        this.organizationDialog = false;
+        
+      },
+      coloseaa(val){
+        console.log(val)
+        this.departname=val[0].name
+        this.form.department_id=val[0].id
+        
+      },
+      myData(val) {
+        this.tableData = [];
+        this.form.page = val;
+        this.form.time=this.value4;
+       
+        this.$http.get(this.urls+'attendance/summary/', {
+          params: this.form,
+        }).then((res) => {
+            console.log(res);
+            if (res.data.code === '20010') {
+                this.tableData=res.data.data;
+                this.nowPage=val;
+                this.total=res.data.num;
+            }
+            else{
+              this.total=0;
+            }
+      
+         })
       },
       clickTable(row, event, column){
         console.log(row, event, column)
       },
+      search() {
+        this.myData(1);
+        this.isHigh = false;
+      },
+      // 重置
+      resetting() {
+          this.form.page=1,
+          this.form.limit=12,
+          this.form.department_id='',
+          this.form.time='',
+        this.myData(1);
+      },
+      // 高级筛选
+      highGrade() {
+        this.isHigh = !this.isHigh;
+      },
     },
-        created:function(){
-        let date = new Date();
-        let seperator1 = "-";
-        let year = date.getFullYear();
-        let month = date.getMonth() + 1;
-        if (month >= 1 && month <= 9) {
-            month = "0" + month;
-        }
-        let data = year + seperator1 + month;
-        this.$http.get(this.urls+'attendance/summary?year_month='+data).then((res) => {
-            console.log(res);
-            debugger;
-            if (res.data.code === '20010') {
-                this.tableData=res.data.data 
- 
-            }
-      
-         })
-       }
+    mounted() {
+    this.myData(1);
+    }
   }
 </script>
 
@@ -168,5 +275,8 @@
     display: flex;
     justify-content: flex-end;
 
+  }
+  .el-table .cell{
+    text-align: center;
   }
 </style>
