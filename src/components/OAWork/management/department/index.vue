@@ -134,7 +134,7 @@
         </div>
       </div>
     </div>
-    <Organization :organizationDialog="organizationDialog" @close="closeOrganization"  @selectMember="coloseaa"></Organization>
+    <Organization :organizationDialog="organizationDialog" :length="len"   @close="closeOrganization"  @selectMember="coloseaa"></Organization>
   </div>
 </template>
 
@@ -206,17 +206,17 @@
       },
       openOrganizationModal() {
         this.organizationDialog = true;
-        
+        this.len=1;
       },
       closeOrganization() {
         this.organizationDialog = false;
-        
+        this.len=0;
       },
       coloseaa(val){
         console.log(val)
         this.departname=val[0].name
         this.form.department_id=val[0].id
-        
+        this.len=0;
       },
       myData(val) {
         this.tableData = [];
