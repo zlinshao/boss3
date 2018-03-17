@@ -98,7 +98,9 @@ router.beforeEach((to, from, next) => {
 
     if (!data && to.path !== '/login') {
       next({path: '/login'})
-    }else if(!lockStatus && to.path!=='/lock'){
+    }else if(data&&to.path === '/'){
+      next({path: '/main'})
+    } else if(!lockStatus && to.path!=='/lock'){
       next({path:'/lock'});
     }else if(lockStatus && to.path === '/lock'){
       next({path:from.path});

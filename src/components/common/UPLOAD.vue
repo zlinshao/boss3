@@ -223,7 +223,6 @@
   }
 
   #container {
-    padding: 0 5px;
     .pickfiles {
       display: flex;
       display: -webkit-flex; /* Safari */
@@ -231,6 +230,9 @@
       > div {
         margin-left: 15px;
         margin-top: 15px;
+        &:first-child{
+          margin-left: 0;
+        }
       }
       .imgItem {
         &:hover {
