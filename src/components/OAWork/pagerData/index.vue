@@ -5,7 +5,7 @@
         <ContractClaim></ContractClaim>
       </el-tab-pane>
       <el-tab-pane label="收据编号" name="second">
-
+        <Receipt></Receipt>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -13,10 +13,10 @@
 
 <script>
   import ContractClaim from './contractClaim/index.vue'
-
+  import Receipt from './receipt/index.vue'
   export default {
     name: "index",
-    components: {ContractClaim},
+    components: {ContractClaim,Receipt},
     data() {
       return {
         activeName: 'first'
