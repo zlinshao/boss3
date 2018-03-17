@@ -143,13 +143,13 @@ Vue.use(Router);
 
 export default new Router({
   routes: [
-    {
-      path: '/',
-      // component: Index,
-      hidden:true,
-      name: 'Index',
-      redirect: '/main',
-    },
+    // {
+    //   path: '/',
+    //   // component: Index,
+    //   hidden:true,
+    //   name: 'Index',
+    //   redirect: '/main',
+    // },
 
     {
       path: '/login',
