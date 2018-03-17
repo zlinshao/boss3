@@ -126,6 +126,7 @@ import ContractChange from '../components/OAWork/sthToDo/components/contractChan
 import Deliver from '../components/OAWork/sthToDo/components/deliver.vue'                 //TEST_2
 import throwALease from '../components/OAWork/sthToDo/components/throwALease.vue'         //TEST_3
 import Individual from '../components/individual/index.vue'                               //个人门户
+
 import Converge from '../components/converge/index.vue'                                   //员工广场
 import Infodetails from '../components/converge/details/infodetails.vue'                  //员工广场详情
 import DailyRecord from '../components/dailyRecord/index.vue'                             //日志管理
@@ -134,6 +135,10 @@ import SthToDo from '../components/OAWork/sthToDo/index.vue'                    
 
 import Integraldetail from '../components/humanResource/integralManage/components/integraldetail.vue'         // 积分明细
 
+import PictureManage from '../components/pictureManage/pictureManage.vue'                //相册管理
+import CreateAlbum from '../components/pictureManage/createAlbum.vue'                //创建相册
+import ChoosePictures from '../components/pictureManage/ChoosePictures.vue'                //选择照片
+import ImproveImgInfo from '../components/pictureManage/ImproveImgInfo.vue'                //完善照片信息
 Vue.use(Router);
 
 export default new Router({
@@ -200,10 +205,12 @@ export default new Router({
         {path: '/dailyRecord', component: DailyRecord, name: '日志管理'},
         {path: '/sthToDo', component: SthToDo, name: '待办事项'},
         {path: '/integraldetail', component: Integraldetail, name: '积分明细'},
-
+        {path: '/pictureManage', component: PictureManage, name: '相册管理'},
+        {path: '/createAlbum', component: CreateAlbum, name: "创建相册",},
+        {path: '/choosePictures', component: ChoosePictures, name: "选择照片",},
+        {path: '/improveImgInfo', component: ImproveImgInfo, name: "完善照片信息",},
       ]
     },
-
     // 详情路由
     {
       path: '/',
