@@ -17,19 +17,41 @@
       </div>
       <div class="dates" >
         <div v-for="date in dayList"  class="item dayItem" :class="date.color?'border_color':''" :style="{borderColor:date.status?date.color:''}">
-          <p style="line-height: 40px;font-size: 18px" @click="handleChangeCurday(date)">
-            <span v-if="date.status&&date.title==='迟到'" style="color:#FCA131">{{date.status ? date.date.split('/')[2] : '&nbsp'}}</span>
-            <span v-if="date.status&&date.title==='早退'" style="color:#6a8dfb">{{date.status ? date.date.split('/')[2] : '&nbsp'}}</span>
-            <span v-if="date.status&&date.title==='旷工'" style="color:#fc2c96">{{date.status ? date.date.split('/')[2] : '&nbsp'}}</span>
+          <p style="line-height: 32px;font-size: 18px" @click="handleChangeCurday(date)">
+            <span v-if="date.status&&date.title==='Late'" style="color:#FCA131">{{date.status ? date.date.split('/')[2] : '&nbsp'}}</span>
+            <span v-if="date.status&&date.title==='Early'" style="color:#6a8dfb">{{date.status ? date.date.split('/')[2] : '&nbsp'}}</span>
+            <span v-if="date.status&&date.title==='NotSigned'" style="color:#fc2c96">{{date.status ? date.date.split('/')[2] : '&nbsp'}}</span>
+            <span v-if="date.status&&date.title==='Absenteeism'" style="color:#fc2c96">{{date.status ? date.date.split('/')[2] : '&nbsp'}}</span>
             <span v-if="date.status&&!date.title" style="color:#333">{{date.status ? date.date.split('/')[2] : '&nbsp'}}</span>
           </p>
           <!--<span v-if="date.status ? (today == date.date) : false" class="is-today" :style="{backgroundColor: customColor }" ></span>-->
           <!--<span v-if="date.status ? (date.title != undefined) : false" class="is-event"-->
           <!--:style="{borderColor: customColor, backgroundColor: (date.date == selectedDay) ? customColor : 'inherit'}"></span>-->
-          <span v-if="date.status&&date.title==='迟到'" style="color:#FCA131">{{date.title}}</span>
-          <span v-if="date.status&&date.title==='早退'" style="color:#6a8dfb">{{date.title}}</span>
-          <span v-if="date.status&&date.title==='旷工'" style="color:#fc2c96">旷工</span>
-          <span v-if="date.status&&!date.title" style="color:#bbb">正常</span>
+          <span v-if="date.status&&date.title==='Late'" style="color:#fc2c96">
+            <span class="time">{{date.start}} - {{date.end}}<br /></span>迟到
+            <span v-if="date.status&&date.desc==='Early'">( 早退 )</span>
+            <span v-if="date.status&&date.desc==='NotSigned'">( 未打卡 )</span>
+            <span v-if="date.status&&date.desc==='Absenteeism'">( 旷工 )</span>
+          </span>
+          <span v-if="date.status&&date.title==='Early'" style="color:#fc2c96">
+            <span class="time">{{date.start}} - {{date.end}}<br /></span>早退
+            <span v-if="date.status&&date.desc==='Late'">( 迟到 )</span>
+            <span v-if="date.status&&date.desc==='NotSigned'">( 未打卡 )</span>
+            <span v-if="date.status&&date.desc==='Absenteeism'">( 旷工 )</span>
+          </span>
+          <span v-if="date.status&&date.title==='NotSigned'" style="color:#fc2c96">
+            <span class="time">{{date.start}} - {{date.end}}<br /></span>未打卡
+            <span v-if="date.status&&date.desc==='Late'">( 迟到 )</span>
+            <span v-if="date.status&&date.desc==='Early'">( 早退 )</span>
+            <span v-if="date.status&&date.desc==='Absenteeism'">( 旷工 )</span>
+          </span>
+          <span v-if="date.status&&date.title==='Absenteeism'" style="color:#fc2c96">
+            <span class="time">{{date.start}} - {{date.end}}<br /></span>旷工
+            <span v-if="date.status&&date.desc==='Late'">( 迟到 )</span>
+            <span v-if="date.status&&date.desc==='Early'">( 早退 )</span>
+            <span v-if="date.status&&date.desc==='NotSigned'">( 未打卡 )</span>
+          </span>
+          <span v-if="date.status&&!date.title" style="color:#bbb"><span class="time">09:00 - 18:00<br /></span>正常</span>
         </div>
       </div>
     </div>
@@ -93,16 +115,13 @@
           };
           this.events.forEach((event) => {
             if (isEqualDateStr(event.date, tempItem.date)) {
-              if(event.title){
-                if(event.title === '迟到'){
-                  tempItem.color = '#FCA131'
-                }else if(event.title === '早退'){
-                  tempItem.color = '#6a8dfb'
-                }else if(event.title === '旷工'){
-                  tempItem.color = '#fc2c96'
-                }
+              if(event.title){    
+                  tempItem.color = '#fc2c96'      
               }
               tempItem.title = event.title;
+              tempItem.title1 = event.title1;
+              tempItem.start = event.start;
+              tempItem.end = event.end;
               tempItem.desc = event.desc || '';
               if (event.customClass) tempItem.customClass.push(event.customClass)
             }
@@ -126,6 +145,7 @@
     methods: {
       nextMonth () {
         this.$EventCalendar.nextMonth();
+        
         this.$emit('month-changed', this.curYearMonth)
       },
       preMonth () {
@@ -169,5 +189,12 @@
     .weeks{
       height: 60px;
     }
+    .dates .time{
+      font-family:sans-serif;
+      margin: 3px 0;
+      display: block;
+      font-size: 16px;
+    }
   }
+  
 </style>
