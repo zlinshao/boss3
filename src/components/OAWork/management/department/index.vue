@@ -5,7 +5,7 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="签到人" v-model="form.name" @keyup.enter.native="myData(1)" size="mini"
+            <el-input placeholder="签到人" v-model="form.pename" @keyup.enter.native="myData(1)" size="mini"
                       clearable>
               <el-button slot="append" icon="el-icon-search" @click="myData(1)"></el-button>
               <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
@@ -159,6 +159,7 @@
           page:1,
           limit:12,
           time:'',
+          pename:'',
           year_month:'2018-03',
           department_id:''
           },
@@ -251,6 +252,7 @@
           this.form.limit=12,
           this.form.department_id='',
           this.form.time='',
+          this.form.pename='',
         this.myData(1);
       },
       // 高级筛选
