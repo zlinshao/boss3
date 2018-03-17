@@ -118,7 +118,7 @@
         hoverMember:[], //键盘悬浮成员
         highestDepart:'',   //最高级岗位
 
-        noStaff:true,
+        noStaff:false,
         noDepart:false,
         memberLength:0,
       }

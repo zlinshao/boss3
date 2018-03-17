@@ -361,3 +361,10 @@
 #messageCent{
 
 }
+
+
+.noMarginForm{
+  .el-form-item{
+    margin-bottom: 0 !important;
+  }
+}
