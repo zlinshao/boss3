@@ -2,10 +2,10 @@
   <div id="createAlbum">
     <el-dialog title="创建相册" :visible.sync="createAlbumDialogVisible" width="30%">
       <div class="">
-        <el-form size="mini" :model="form" label-width="100px">
+        <el-form size="mini" onsumbit="return false;" :model="form" label-width="100px">
           <el-row >
               <el-form-item label="相册名称:">
-                <el-input v-model="form.title" placeholder="请输入相册名称"></el-input>
+                <el-input v-model="form.name" placeholder="请输入相册名称"></el-input>
               </el-form-item>
           </el-row>
           <el-row>
@@ -14,12 +14,12 @@
               </el-form-item>
           </el-row>
           <el-row>
-            <el-form-item label="主题:" prop="type">
-              <el-checkbox-group v-model="form.theme">
-                <el-checkbox label="个人" name="type"></el-checkbox>
-                <el-checkbox label="部门" name="type"></el-checkbox>
-                <el-checkbox label="房屋" name="type"></el-checkbox>
-              </el-checkbox-group>
+            <el-form-item label="主题:">
+              <el-radio-group v-model="form.theme">
+                <el-radio label="1" key="1">个人</el-radio>
+                <el-radio label="2" key="2">房屋</el-radio>
+                <el-radio label="3" key="3">部门</el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-row>
         </el-form>
@@ -46,7 +46,7 @@
             createAlbumDialogVisible: false,
             choosePicturesDialog: false,
             form: {
-              title: '',
+              name: '',
               description: '',
               theme: '',
             },
@@ -64,27 +64,25 @@
         },
       methods: {
         createAlbumSuccess() {
-          var self = this;
-          this.createAlbumDialogVisible = false;
-            this.$confirm('相册111创建成功，是否马上上传照片到这个相册?', '创建成功', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              // this.$message({
-              //   type: 'success',
-              //   message: '点击确定!'
-              // });
-              self.choosePicturesDialog = true;
-              console.log(`111111111${self.choosePicturesDialog}`);
-            }).catch(() => {
-              // this.$message({
-              //   type: 'info',
-              //   message: '已取消上传'
-              // });
-              self.choosePicturesDialog = false;
+            this.$http.post(globalConfig.server + "album",this.form).then((res)=>{
+              if(res.data.code ==='20110'){
+                this.createAlbumDialogVisible = false;
+                this.$confirm('相册111创建成功，是否马上上传照片到这个相册?', '创建成功', {
+                  confirmButtonText: '确定',
+                  cancelButtonText: '取消',
+                  type: 'warning'
+                }).then(() => {
+                  this.choosePicturesDialog = true;
+                }).catch(() => {
+                  this.choosePicturesDialog = false;
+                });
+              }else {
+                this.$notify.warning({
+                  title:"警告",
+                  message:res.data.msg
+                })
+              }
             });
-
           },
         closeChoosePicturesDialog() {
           this.choosePicturesDialog = false;
