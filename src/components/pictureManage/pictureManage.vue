@@ -31,141 +31,48 @@
         <el-col :span="24">
           <div class="myPicture">
             <div class="title">我的相册</div>
-              <el-button icon="el-icon-picture-outline" type="primary" size="small" @click="openModalDialog('uploadImageDialog')">上传照片</el-button>
+              <el-button icon="el-icon-picture-outline" type="primary" size="small" @click="openModalDialog('choosePicturesDialog')">上传照片</el-button>
               <el-button icon="el-icon-picture-outline" type="success" size="small" @click="openModalDialog('createAlbumDialog')">创建相册</el-button>
           </div>
           <div class="pictures">
-            <el-row :gutter="35">
-              <el-col :span="4">
-                <div class="pictureDetail">
-                <img src="../../assets/images/university/caia412-34427.png">
-                <div class="clearfix">
-                  <span class="text_over_ellipsis">相册名称相册名称相册名称相册名称</span>
-                  <span style="float: right;">25张</span>
+            <el-row :gutter="30" >
+              <div v-for="item in albumData">
+                <el-col :span="4" style="margin-bottom:20px;">
+                  <div class="pictureDetail">
+                  <img src="../../assets/images/university/caia412-34427.png">
+                  <div class="clearfix">
+                    <span class="text_over_ellipsis">{{item.name}}</span>
+                    <span style="float: right;">{{item.photo_count}}张</span>
+                  </div>
                 </div>
+                </el-col>
               </div>
-              </el-col>
-              <el-col :span="4">
-                <div class="pictureDetail">
-                  <img src="../../assets/images/university/caia412-34427.png">
-                  <div class="clearfix">
-                    <span class="text_over_ellipsis">相册名称相册名称相册名称相册名称</span>
-                    <span style="float: right;">25张</span>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="4">
-                <div class="pictureDetail">
-                  <img src="../../assets/images/university/caia412-34427.png">
-                  <div class="clearfix">
-                    <span class="text_over_ellipsis">相册名称相册名称相册名称相册名称</span>
-                    <span style="float: right;">25张</span>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="4">
-                <div class="pictureDetail">
-                  <img src="../../assets/images/university/caia412-34427.png">
-                  <div class="clearfix">
-                    <span class="text_over_ellipsis">相册名称相册名称相册名称相册名称</span>
-                    <span style="float: right;">25张</span>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="4">
-                <div class="pictureDetail">
-                  <img src="../../assets/images/university/caia412-34427.png">
-                  <div class="clearfix">
-                    <span class="text_over_ellipsis">相册名称相册名称相册名称相册名称</span>
-                    <span style="float: right;">25张</span>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="4">
-                <div class="pictureDetail">
-                  <img src="../../assets/images/university/caia412-34427.png">
-                  <div class="clearfix">
-                    <span class="text_over_ellipsis">相册名称相册名称相册名称相册名称</span>
-                    <span style="float: right;">25张</span>
-                  </div>
-                </div>
-              </el-col>
             </el-row>
-            <el-row :gutter="35">
-              <el-col :span="4">
-                <div class="pictureDetail">
-                  <img src="../../assets/images/university/caia412-34427.png">
-                  <div class="clearfix">
-                    <span class="text_over_ellipsis">相册名称相册名称相册名称相册名称</span>
-                    <span style="float: right;">25张</span>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="4">
-                <div class="pictureDetail">
-                  <img src="../../assets/images/university/caia412-34427.png">
-                  <div class="clearfix">
-                    <span class="text_over_ellipsis">相册名称相册名称相册名称相册名称</span>
-                    <span style="float: right;">25张</span>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="4">
-                <div class="pictureDetail">
-                  <img src="../../assets/images/university/caia412-34427.png">
-                  <div class="clearfix">
-                    <span class="text_over_ellipsis">相册名称相册名称相册名称相册名称</span>
-                    <span style="float: right;">25张</span>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="4">
-                <div class="pictureDetail">
-                  <img src="../../assets/images/university/caia412-34427.png">
-                  <div class="clearfix">
-                    <span class="text_over_ellipsis">相册名称相册名称相册名称相册名称</span>
-                    <span style="float: right;">25张</span>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="4">
-                <div class="pictureDetail">
-                  <img src="../../assets/images/university/caia412-34427.png">
-                  <div class="clearfix">
-                    <span class="text_over_ellipsis">相册名称相册名称相册名称相册名称</span>
-                    <span style="float: right;">25张</span>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="4">
-                <div class="pictureDetail">
-                  <img src="../../assets/images/university/caia412-34427.png">
-                  <div class="clearfix">
-                    <span class="text_over_ellipsis">相册名称相册名称</span>
-                    <span style="float: right;">25张</span>
-                  </div>
-                </div>
-              </el-col>
-            </el-row>
+
           </div>
         </el-col>
 
       </el-row>
     </div>
     <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog"></create-album>
+    <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog"></choose-pictures>
   </div>
 </template>
 
 <script>
   import CreateAlbum from "./createAlbum";
-
+  import choosePictures from './choosePictures.vue';
   export default {
-    components: {CreateAlbum},
+    components: {
+      CreateAlbum,
+      choosePictures,
+    },
     name: "picture-manage",
     data() {
       return {
-        uploadImageDialog: false,
+        choosePicturesDialog: false,
         createAlbumDialog: false,
+        albumData: [],
       }
     },
     methods: {
@@ -174,8 +81,8 @@
       },
       openModalDialog(type) {
         switch(type) {
-          case 'uploadImageDialog':   //打开上传图片对话框
-            this.uploadImageDialog = true;
+          case 'choosePicturesDialog':   //打开上传图片对话框
+            this.choosePicturesDialog = true;
             break;
           case 'createAlbumDialog':   //打开创建相册对话框
             this.createAlbumDialog = true;
@@ -184,7 +91,21 @@
       },
       closeCreateAlbumDialog(){
         this.createAlbumDialog = false;
+      },
+      closeChoosePicturesDialog() {
+        this.choosePicturesDialog = false;
+      },
+      getImgData(){
+        var self = this;
+        this.$http.get(globalConfig.server + "album").then((res) =>{
+          if (res.data.code == "20110") {
+            self.albumData = res.data.data;
+          }
+        });
       }
+    },
+    mounted() {
+      this.getImgData();
     }
   }
 </script>

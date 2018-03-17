@@ -1,107 +1,228 @@
 <template>
   <div id="main">
     <div class="container">
+      <!--上方轮播-->
+      <el-row>
+        <div class="banner">
+          <el-carousel height="300px">
+            <el-carousel-item v-for="item in 4" :key="item">
+              <div class="banner_pic">
+                <img src="../assets/images/情人节.png" alt="">
+              </div>
+            </el-carousel-item>
+          </el-carousel>
+        </div>
+      </el-row>
+      <!--业绩排名和公告信息-->
       <el-row :gutter="10">
         <el-col :span="16">
-          <div class="banner">
-            <el-carousel height="300px">
-              <el-carousel-item v-for="item in 4" :key="item">
-                <div class="banner_pic">
-                  <img src="../assets/images/情人节.png" alt="">
-                </div>
-              </el-carousel-item>
-            </el-carousel>
-          </div>
-
           <div class="mainContent">
-
-            <!--<el-row :gutter="10">-->
-
-            <el-col :span="12" style="padding-left: 0">
               <div class="title" style="color: #6a8dfb;">
-                <span style="border-left: 4px solid #6a8dfb;"></span>日历
+                <span style="border-left: 4px solid #6a8dfb;"></span>业绩排名
               </div>
-              <div class="calendar">
-                <vue-event-calendar :events="demoEvents" @day-changed="handleDayChanged"
-                                    @month-changed="handleMonthChanged"></vue-event-calendar>
-              </div>
-            </el-col>
-            <el-col :span="12" style="padding-right: 0">
-              <div class="title" style="color: #fb4699;">
-                <span style="border-left: 4px solid #fb4699;"></span>龙虎榜
-              </div>
-              <div class="longHuBang">
+            <div>
+              <el-row >
+                <el-col :span="6" class="hover_pic"><img src="./../assets/images/paiming1.png" width="100%"></el-col>
+                <el-col :span="6" class="hover_pic"><img src="./../assets/images/paiming2.png" width="100%"></el-col>
+                <el-col :span="6" class="hover_pic"><img src="./../assets/images/paiming3.png" width="100%"></el-col>
+                <el-col :span="6" class="hover_pic"><img src="./../assets/images/paiming4.png" width="100%"></el-col>
+              </el-row>
+            </div>
+              <div class="paiming">
+                <div>
+                  <el-row class="header">
+                    <el-col :span="4"><span>排名</span></el-col>
+                    <el-col :span="4"><span>姓名</span></el-col>
+                    <el-col :span="4"><span>部门</span></el-col>
+                    <el-col :span="4"><span>当前业绩</span></el-col>
+                    <el-col :span="4"><span>收租套数</span></el-col>
+                    <el-col :span="4"><span>负责人</span></el-col>
+                  </el-row>
+                </div>
                 <div class="item_list scroll_bar">
-                  <div v-for="item in 7">
-                    <div class="longLuOrder">{{item}}</div>
-                    <div class="longHuPic">
+                  <div v-for="item in 10">
+                    <el-col :span="4" class="longLuOrder t_center" >{{item}}</el-col>
+                    <el-col :span="4" class="longHuPic t_center">
                       <img src="../assets/images/head.jpg" alt="">
-                    </div>
+                    </el-col>
                     <div class="longHuName">陆宣羽</div>
-                    <div>南京一区 - 百万一组</div>
-                    <div class="achievement">212.222.00元</div>
+                    <el-col :span="4" class="t_right">南京一区 - 百万一组</el-col>
+                    <el-col :span="4" class="achievement" style="padding-right:45px;">212.222.00元</el-col>
+                    <el-col :span="4" class=" t_center" style="padding-right:0px;">37套</el-col>
+                    <el-col :span="4" class=" t_center" style="padding-left:13px;">汪玉睿</el-col>
                   </div>
                 </div>
               </div>
-            </el-col>
+          </div>
+
+        </el-col>
+        <el-col :span="8">
+          <div>
+            <div class="title" style="color: #7ee8a6;">
+              <span style="border-left: 4px solid #7ee8a6;"></span>公告信息
+            </div>
+              <div><img src="./../assets/images/gonggao.png" style="width: 100%;height: 196px;"></div>
+              <div class="rightContent">
+                <p class="info_title">恭喜我公司企业注册logo成功</p>
+                <div class="clearfix">
+                  <span>2017-01-17</span>
+                  <span style="float: right;">
+                    <i class="iconfont icon-xinxi">22</i>
+                    <i class="iconfont icon-xinxi">143</i>
+                    <i class="el-icon-view">15</i>
+                  </span>
+                </div>
+                <div style="margin-top: 10px;">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                <div><em class="ix"></em></div>
+                <div style="border-bottom: 1px solid #eee;padding-bottom: 10px;"><el-button size="small" style="background: #6a8dfb;color: #fff;margin-top: 10px;">MORE</el-button></div>
+
+                <div class="clearfix list_gonggao" v-for="item in 4">
+                  <div style="display: inline-block;float: left;"><img src="./../assets/images/gonggao_detail.png" height="100"></div>
+                  <div style="padding-left: 200px;">
+                    <p class="info_title">恭喜我公司企业注册logo成功</p>
+                    <div>恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                    <div><em class="ix"></em></div>
+                  </div>
+                </div>
+
+              </div>
+          </div>
+        </el-col>
+      </el-row>
+      <!--员工广场和外部消息-->
+      <el-row :gutter="10" style="margin-bottom: 10px;">
+        <el-col :span="16">
+          <div>
+            <div class="title" style="color: #6a8dfb;;">
+              <span style="border-left: 4px solid #6a8dfb;"></span>员工广场
+            </div>
+            <div class="yuangong">
+              <div style="display: inline-block;float: left;"><img src="./../assets/images/yuangong.png" alt=""></div>
+              <div class="clearfix" style="padding-left: 520px;">
+                <div class="list_gonggao" v-for="item in 3">
+                  <div style="display: inline-block;float: left;"><img src="./../assets/images/gonggao_detail.png" height="100"></div>
+                  <div style="padding-left: 200px;">
+                    <p class="info_title">恭喜我公司企业注册logo成功</p>
+                    <div>恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                    <div><em class="ix" style="background:#fb4699;"></em></div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </el-col>
         <el-col :span="8">
-          <div class="leJiaHistory hover_pic">
-            <img src="../assets/images/发展.png" alt="">
-          </div>
-
-          <div class="system">
-            <div class="talent hover_pic">
-              <img src="../assets/images/人才.png" alt="">
+          <div>
+            <div class="title" style="color: #fb4699;">
+              <span style="border-left: 4px solid #fb4699;"></span>外部消息
             </div>
-
-            <div class="manage hover_pic">
-              <img src="../assets/images/管理.png" alt="">
-            </div>
-          </div>
-
-          <div class="title" style="color: #76e79e;">
-            <span style="border-left: 4px solid #76e79e;"></span>新人入职
-          </div>
-          <div class="newEntrants scroll_bar">
-            <div class="newEntrants_list" v-for="item in 2">
-              <div class="newHeader">
-                <img src="../assets/images/head.jpg" alt="">
-              </div>
-              <div class="newEntrants_content">
-                <div class="newEntrants_info">
-                  <div style="font-weight:bold;color:#747576;margin-right: 20px">陆宣羽</div>
-                  <div>南京一区 - 百万一组</div>
-                  <div style="flex-grow: 1;text-align: right;margin-right: 10px">2018-01-31</div>
+            <div class="news">
+              <div class="list_gonggao" v-for="item in 3">
+                <div style="display: inline-block;float: left;"><img src="./../assets/images/news.png" height="100"></div>
+                <div style="padding-left: 130px;">
+                  <p class="info_title">恭喜我公司企业注册logo成功</p>
+                  <div>恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                  <div class="clearfix" style="margin-top: 10px;">
+                    <span>2017-01-17</span>
+                    <span style="float: right;">
+                    <i class="iconfont icon-xinxi">22</i>
+                    <i class="iconfont icon-xinxi">143</i>
+                    <i class="el-icon-view">15</i>
+                  </span>
+                  </div>
                 </div>
-                <div class="newEntrants_intro">
-                  大家好，我是刘德华，大家好，我是刘德华，大家好，我是刘德华，大家好，我是刘德华，大家好，我是刘德华.
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="title" style="color: #6a8dfb;margin-top: 22px">
-            <span style="border-left: 4px solid #6a8dfb;"></span>新闻中心
-            <!--<el-button @click.native="routers('converge')" type="mini">员工广场</el-button>-->
-          </div>
-          <div class="newsCenter scroll_bar">
-            <div class="newTitle" @click.stop="selectNewsType($event)">
-              <a href="javascript:;" style="color: #6a8dfb">乐伽新闻</a>
-              <a href="javascript:;">员工风采</a>
-              <a href="javascript:;">热门导读</a>
-            </div>
-
-            <div class="newsContent">
-              <div><img src="../assets/images/head.jpg" alt=""></div>
-              <div class="news_words">
-                align-self属性允许单个项目有与其他项目不一样的对齐方式，可覆盖align-items属性。默认值为auto，表示继承父元素的align-items属性，如果没有父元素，则等同于stretch。
               </div>
             </div>
           </div>
         </el-col>
       </el-row>
+      <!--乐伽大学和每周战报-->
+      <el-row :gutter="10" style="margin-bottom: 10px;">
+        <el-col :span="16">
+          <div>
+            <div class="title" style="color: #6a8dfb;;">
+              <span style="border-left: 4px solid #6a8dfb;"></span>乐伽大学
+            </div>
+            <div class="lejia">
+              <el-row>
+                <el-col :span="8" style="padding:0;">
+                  <div class="hover_pic" style="padding:0;"><img src="./../assets/images/lejia1.png" width="100%"></div>
+                </el-col>
+                <el-col :span="8" style="padding:0;">
+                  <div class="list_frame" style="padding: 16px;border: 1px solid #dfe6fb;border-radius: 5px;">
+                    <div style="display: inline-block;float: left;margin-top: 45px;"><img src="./../assets/images/news.png" height="100"></div>
+                    <div style="padding: 12px 12px 34px 120px;">
+                      <p class="info_title">恭喜我公司企业注册logo成功</p>
+                      <div>恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                      <span style="display: block;margin-top: 15px;">
+                      <i class="el-icon-view">15人</i>&nbsp;&nbsp;&nbsp;
+                      <i class="iconfont icon-xinxi">143人</i>
+                    </span>
+                    </div>
+                  </div>
+                </el-col>
+                <el-col :span="8" style="padding:0;">
+                  <div class="hover_pic"><img src="./../assets/images/lejia1.png" width="100%" ></div>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8" style="padding:0;">
+                  <div class="list_frame" style="padding: 16px;border: 1px solid #dfe6fb;border-radius: 5px;">
+                    <div style="display: inline-block;float: left;margin-top: 45px;"><img src="./../assets/images/news.png" height="100"></div>
+                    <div style="padding: 12px 12px 34px 120px;">
+                      <p class="info_title">恭喜我公司企业注册logo成功</p>
+                      <div>恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                      <span style="display: block;margin-top: 15px;">
+                      <i class="el-icon-view">15人</i>&nbsp;&nbsp;&nbsp;
+                      <i class="iconfont icon-xinxi">143人</i>
+                    </span>
+                    </div>
+                  </div>
+                </el-col>
+                <el-col :span="8" style="padding:0;">
+                  <div class="hover_pic"><img src="./../assets/images/lejia2.png" width="100%"></div>
+                </el-col>
+                <el-col :span="8" style="padding:0;">
+                  <div class="list_frame" style="padding: 16px;border: 1px solid #dfe6fb;border-radius: 5px;">
+                    <div style="display: inline-block;float: left;margin-top: 45px;"><img src="./../assets/images/news.png" height="100"></div>
+                    <div style="padding: 12px 12px 34px 120px;">
+                      <p class="info_title">恭喜我公司企业注册logo成功</p>
+                      <div>恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                      <span style="display: block;margin-top: 15px;">
+                      <i class="el-icon-view">15人</i>&nbsp;&nbsp;&nbsp;
+                      <i class="iconfont icon-xinxi">143人</i>
+                    </span>
+                    </div>
+                  </div>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+        </el-col>
+        <el-col :span="8">
+          <div>
+            <div class="title" style="color: #7ee8a6;">
+              <span style="border-left: 4px solid #7ee8a6;"></span>每周战报
+            </div>
+            <div class="zhanbao ">
+              <div><img src="./../assets/images/zhanbao1.png" style="width: 100%;"></div>
+              <div style="padding:16px 20px 50px;">
+                <p class="info_title">恭喜我公司企业注册logo成功</p>
+                <div class="clearfix">
+                  <div style="display: inline-block;float: left;"><img src="./../assets/images/gonggao_detail.png" height="100"></div>
+                  <div class="list_gonggao" style="padding-left: 200px;">
+                    <p class="info_title">恭喜我公司企业注册logo成功</p>
+                    <div>恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                    <div><em class="ix"></em></div>
+                  </div>
+                </div>
+              </div>
 
+            </div>
+          </div>
+        </el-col>
+
+      </el-row>
     </div>
   </div>
 </template>
@@ -156,6 +277,53 @@
 </script>
 
 <style scoped lang="scss">
+  .t_center{
+    text-align: center;
+  }
+  .t_right{
+    text-align: right;
+  }
+  .yuangong{
+    border: 1px solid #dfe6fb;
+    border-radius: 5px;
+  }
+  .news{
+    border: 1px solid #dfe6fb;
+    padding: 12px 20px;
+    border-radius: 5px;
+  }
+  .lejia{
+    border-radius: 5px;
+    border: 1px solid #dfe6fb;
+  }
+  .zhanbao{
+    border-radius: 5px;
+    border: 1px solid #dfe6fb;
+  }
+  .rightContent{
+    padding:0 10px;
+    margin-top: -5px;
+    border-radius: 5px;
+    border: 1px solid #dfe6fb;
+    box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);
+  }
+  .clearfix:after{
+    margin: 8px 0 3px;
+    content:"";
+    display: block;
+    clear:both;
+  }
+  .info_title{
+    font-size: 17px;
+    font-weight: bold;
+  }
+  .ix {
+    display: inline-block;
+    height: 3px;
+    width: 20px;
+    background: #58d788;
+    margin-top: 15px;
+  }
   #main {
     width: 100%;
     overflow: hidden;
@@ -170,16 +338,37 @@
         background-color: #ffffff;
       }
     }
+
     .container {
       .hover_pic {
         overflow: hidden;
         border: 1px solid #dfe6fb;
         border-radius: 5px;
-        box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);
+        /*box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);*/
         img {
           transition: all .5s;
           &:hover {
             transform: scale(1.1);
+          }
+        }
+      }
+      .list_gonggao{
+        &:hover {
+          .info_title {
+            color: #6a8dfb;
+          }
+        }
+      }
+      .list_frame{
+        &:hover {
+          .info_title {
+            color: #6a8dfb;
+          }
+          .el-icon-view{
+            color: red;
+          }
+          .icon-xinxi{
+            color: green;
           }
         }
       }
@@ -220,20 +409,24 @@
           padding: 10px;
           box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);
         }
-        .longHuBang {
+        .paiming {
           margin-bottom: 10px;
           border: 1px solid #dfe6fb;
-          padding: 0 10px;
           border-radius: 5px;
           box-sizing: border-box;
           box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);
-          height: 433px;
+          .header {
+            background: #7ee8a6;
+            color: #fff;
+            text-align: center;
+            padding: 10px;
+          }
           .item_list {
-            overflow: auto;
+            padding: 0 10px;
             height: 100%;
             > div {
               font-family: 'Impact', sans-serif;
-              height: 70px;
+              height: 73px;
               border-bottom: 1px solid #e4e4e4;
               display: flex;
               align-items: center;
