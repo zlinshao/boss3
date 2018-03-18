@@ -34,12 +34,12 @@
 </template>
 
 <script>
-  import choosePictures from './choosePictures.vue';
+  import ChoosePictures from './choosePictures.vue';
     export default {
         name: "create-album",
         props: ['createAlbumDialog'],
         components: {
-          choosePictures,
+          ChoosePictures,
         },
         data() {
           return {

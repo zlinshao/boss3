@@ -137,8 +137,8 @@ import Integraldetail from '../components/humanResource/integralManage/component
 
 import PictureManage from '../components/pictureManage/pictureManage.vue'                //相册管理
 import CreateAlbum from '../components/pictureManage/createAlbum.vue'                //创建相册
-import ChoosePictures from '../components/pictureManage/ChoosePictures.vue'                //选择照片
-import ImproveImgInfo from '../components/pictureManage/ImproveImgInfo.vue'                //完善照片信息
+import ChoosePictures from '../components/pictureManage/choosePictures.vue'                //选择照片
+import ImproveImgInfo from '../components/pictureManage/improveImgInfo.vue'                //完善照片信息
 Vue.use(Router);
 
 export default new Router({
