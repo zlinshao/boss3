@@ -61,7 +61,7 @@
 
 <script>
   import CreateAlbum from "./createAlbum";
-  import choosePictures from './choosePictures.vue';
+  import choosePictures from './selectPictures.vue';
   export default {
     components: {
       CreateAlbum,

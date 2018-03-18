@@ -2,7 +2,7 @@
   <div id="createAlbum">
     <el-dialog title="创建相册" :visible.sync="createAlbumDialogVisible" width="30%">
       <div class="">
-        <el-form size="mini" onsumbit="return false;" :model="form" label-width="100px">
+        <el-form size="mini" onsubmit="return false;" :model="form" label-width="100px">
           <el-row >
               <el-form-item label="相册名称:">
                 <el-input v-model="form.name" placeholder="请输入相册名称"></el-input>
@@ -16,9 +16,9 @@
           <el-row>
             <el-form-item label="主题:">
               <el-radio-group v-model="form.theme">
-                <el-radio label="1" key="1">个人</el-radio>
-                <el-radio label="2" key="2">房屋</el-radio>
-                <el-radio label="3" key="3">部门</el-radio>
+                <el-radio label="1" :key="1">个人</el-radio>
+                <el-radio label="2" :key="2">房屋</el-radio>
+                <el-radio label="3" :key="3">部门</el-radio>
               </el-radio-group>
             </el-form-item>
           </el-row>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-  import choosePictures from './choosePictures.vue';
+  import choosePictures from './selectPictures.vue';
     export default {
         name: "create-album",
         props: ['createAlbumDialog'],
