@@ -46,7 +46,7 @@
       <div v-show="selectFlag==1" class="blueTable">
 
         <div class="filter">
-          <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline" style="display: flex;justify-content: ">
+          <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline" style="display: flex;justify-content:flex-end ">
             <!--<el-form-item label="选择部门">-->
               <!--<el-input readonly="" @focus="openOrganizationModal('department')" placeholder="点击选择"></el-input>-->
             <!--</el-form-item>-->
@@ -70,11 +70,10 @@
             </el-form-item>
           </el-form>
         </div>
-
+        <!--//汇总-->
         <el-table
           :data="tableData"
           @row-dblclick = 'showContractDetail'
-          @row-contextmenu='openContextMenu'
           style="width: 100%">
           <el-table-column
             prop="date"
@@ -119,9 +118,9 @@
         </el-table>
       </div>
       <div v-show="selectFlag==2" class="blueTable">
-
+        <!--合同申领-->
         <div class="filter">
-          <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline" style="display: flex;justify-content: ">
+          <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline" style="display: flex;justify-content:flex-end">
             <el-form-item>
               <el-input v-model="formInline.name" placeholder="搜索">
                 <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
@@ -139,6 +138,7 @@
         <el-table
           :data="tableData"
           @row-dblclick = 'showContractDetail'
+          @row-contextmenu='openApplyMenu'
           style="width: 100%">
           <el-table-column
             prop="date"
@@ -188,6 +188,8 @@
                @clickOperate="clickEvent"></RightMenu>
     <Dispatch :dispatchDialog="dispatchDialog" @close="closeDispatch"></Dispatch>
 
+    <EditApply :editApplyDialog="editApplyDialog" @close="closeEditApplyDialog"></EditApply>
+
   </div>
 </template>
 
@@ -198,9 +200,11 @@
   import RightMenu from '../../../common/rightMenu.vue'    //右键
   import Dispatch from './components/dispatch.vue'
 
+  import EditApply from './components/editApply.vue'
+
 
   export default {
-    components:{Organization,Contact,CreateTask,RightMenu,Dispatch},
+    components:{Organization,Contact,CreateTask,RightMenu,Dispatch,EditApply},
     data () {
       return {
         rightMenuX: 0,
@@ -258,6 +262,8 @@
         createTaskDialog : false,
         contractDialog: false,  //合同详情
         dispatchDialog:false,
+
+        editApplyDialog:false,    //修改合同申领
       }
     },
     methods:{
@@ -289,37 +295,25 @@
       closeCreateTask(){
           this.createTaskDialog = false
       },
-      openContextMenu(row, event){
+      openApplyMenu(row, event){
         this.lists = [
-          {clickIndex: 'dispatchDialog', headIcon: 'el-icon-menu', label: '分配',},
-          {clickIndex: '', headIcon: 'el-icon-edit-outline', label: '添加备注',},
-          {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
+          {clickIndex: 'dispatchApply', headIcon: 'el-icon-menu', label: '分配',},
+          {clickIndex: 'editApply', headIcon: 'el-icon-edit', label: '修改',},
+          {clickIndex: 'addRemarkApply', headIcon: 'el-icon-edit-outline', label: '添加备注',},
+          {clickIndex: 'deleteApply', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },
       //右键回调时间
       clickEvent (index) {
-        this.openModalDialog(index);
+        this.applyMenuCallback(index);
       },
-      //关闭右键菜单
-      closeMenu(){
-        this.show = false;
-      },
-      //右键参数
-      contextMenuParam(event){
-        //param: user right param
-        let e = event || window.event;	//support firefox contextmenu
-        this.show = false;
-        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
-        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
-        event.preventDefault();
-        event.stopPropagation();
-        this.$nextTick(() => {
-          this.show = true
-        })
-      },
-      openModalDialog(index){
+
+      applyMenuCallback(index){
           switch (index){
+            case 'editApply' :
+              this.editApplyDialog = true;
+              break;
             case 'dispatchDialog' :
                 this.dispatchDialog = true;
                 break;
@@ -343,9 +337,35 @@
           }
       },
 
+      //修改合同个申领回到
+      closeEditApplyDialog(){
+          this.editApplyDialog = false;
+      },
+
       closeDispatch(){
         this.dispatchDialog = false;
-      }
+      },
+
+
+
+      ///**********************************
+      //关闭右键菜单
+      closeMenu(){
+        this.show = false;
+      },
+      //右键参数
+      contextMenuParam(event){
+        //param: user right param
+        let e = event || window.event;	//support firefox contextmenu
+        this.show = false;
+        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true
+        })
+      },
     }
 
   }
