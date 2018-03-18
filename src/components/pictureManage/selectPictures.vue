@@ -28,7 +28,7 @@
 
 <script>
     import Upload from '../common/UPLOAD.vue';
-    import ImproveImgInfo from './improveImgInfo.vue';
+    import ImproveImgInfo from './improveImage.vue';
     export default {
         name: "choose-pictures",
         props: ['choosePicturesDialog'],
