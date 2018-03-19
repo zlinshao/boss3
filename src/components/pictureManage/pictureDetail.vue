@@ -1,5 +1,5 @@
 <template>
-  <div id="pictureManage" style="box-shadow: #acbae4 1px 3px 5px, #acbae4 1px 1px 5px;">
+  <div id="pictureDetail" style="box-shadow: #acbae4 1px 3px 5px, #acbae4 1px 1px 5px;">
     <div class="topBack">
       <div class="topBackLeft">
         <div class="leftPic">
@@ -33,34 +33,38 @@
             <div>
               <el-button type="text" class="title" @click="routerLink('/pictureManage')">我的相册</el-button>
             </div>
-            <el-button icon="el-icon-picture-outline" type="primary" size="small" @click="openModalDialog('choosePicturesDialog')">上传照片</el-button>
-            <el-button icon="el-icon-picture-outline" type="success" size="small" @click="openModalDialog('createAlbumDialog')">创建相册</el-button>
-        </div>
+            <div>
+              <el-row :gutter="20">
+                <el-col :span="3"><img src="../../assets/images/university/caia412-34427.png"></el-col>
+                <el-col :span="6">
+                  <div style="font-size: 30px;color: #393939;padding-top: 30px;">海绵宝宝&nbsp;&nbsp;<span style="font-size: 18px;">8张</span></div>
+                  <el-button icon="el-icon-picture-outline" type="primary" class="upload_photo" size="medium" @click="openModalDialog('choosePicturesDialog')">上传照片</el-button>
+                  <el-button size="small">批量管理</el-button>
+                  <el-dropdown trigger="click" >
+                    <el-button size="small">更多</el-button>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item>编辑相册信息</el-dropdown-item>
+                      <el-dropdown-item>设置相册封面</el-dropdown-item>
+                      <el-dropdown-item>删除相册</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
           <div class="pictures">
-            <el-row :gutter="30" >
+            <el-row :gutter="40" >
               <div v-for="item in albumData">
                 <el-col :span="4" style="margin-bottom:20px;">
-                  <div class="pictureDetail" >
-                    <el-dropdown trigger="click" style="float: right;">
-                      <span class="el-dropdown-link">
-                        下拉<i class="el-icon-arrow-down el-icon--right"></i>
-                      </span>
-                      <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item >编辑</el-dropdown-item>
-                        <el-dropdown-item>更换封面</el-dropdown-item>
-                        <el-dropdown-item>删除</el-dropdown-item>
-                      </el-dropdown-menu>
-                    </el-dropdown>
-                  <img src="../../assets/images/university/caia412-34427.png" @click="routerLink('/pictureDetail')">
-                  <div class="clearfix">
-                    <span class="text_over_ellipsis">{{item.name}}</span>
-                    <span style="float: right;">{{item.photo_count}}张</span>
+                  <div class="pictureDetail">
+                    <img src="../../assets/images/university/caia412-34427.png">
+                    <div class="clearfix t_center">
+                      <span class="text_over_ellipsis">海绵宝宝名称</span>
+                    </div>
                   </div>
-                </div>
                 </el-col>
               </div>
             </el-row>
-
           </div>
         </el-col>
 
@@ -79,7 +83,7 @@
       CreateAlbum,
       choosePictures,
     },
-    name: "picture-manage",
+    name: "picture-detail",
     data() {
       return {
         choosePicturesDialog: false,
@@ -123,7 +127,15 @@
 </script>
 
 <style lang="scss" scoped>
-  #pictureManage {
+  .t_center{
+    text-align: center;
+  }
+  .upload_photo {
+    margin-top: 20px;
+    padding: 20px;
+    font-size: 20px;
+  }
+  #pictureDetail {
     .el-row {
       margin-bottom: 20px;
       &:last-child {
@@ -252,7 +264,7 @@
       .pictures {
         .pictureDetail {
           background: #eee;
-          padding: 15px;
+          padding: 0 0 15px;
           -webkit-border-radius: 5px;
           -moz-border-radius: 5px;
           border-radius: 5px;
@@ -275,7 +287,7 @@
         }
       }
 
-      }
+    }
 
   }
 </style>

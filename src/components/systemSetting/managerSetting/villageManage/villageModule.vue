@@ -94,8 +94,7 @@
             </el-col>
           </el-row>
           <el-form-item label="小区照片">
-            <!--<el-input v-model="form.addressId" :disabled="true"></el-input>-->
-            <Dropzone :id="'addr'" :photo="photos" @finish="photo_success" @remove="photo_remove"></Dropzone>
+            <upLoad :ID="'address'" @getImg="villagePic"></upLoad>
           </el-form-item>
           <el-form-item label="周边配套">
             <el-input type="textarea" :autosize="{minRows: 2,maxRows: 4}" placeholder="请输入配套情况"
@@ -121,19 +120,15 @@
 
 <script>
   import MapSearch from '../../../common/mapSearch'
-  import Dropzone from '../../../common/dropzone'
+  import upLoad from '../../../common/UPLOAD.vue'
 
   export default {
     name: "add-village",
-    components: {MapSearch, Dropzone},
+    components: {MapSearch, upLoad},
     props: ['module', 'formList', 'province', 'dict'],
     data() {
       return {
         urls: globalConfig.server,
-        photos: {
-          pic_id: [],
-          pic_url: {},
-        },
         villageId: '',
         mapVisible: false,
         dialogVisible: false,
@@ -145,13 +140,13 @@
           villageName: '',              //小区名称
           villageAddress: '',           //小区地址
           otherName: '',                //小区别名
-          built_year: '',                 //建筑年限
+          built_year: '',               //建筑年限
           houseType: '',                //房屋类型
           allBuilding: '',              //总栋数
           latitude: '',                 //纬度
           longitude: '',                //经度
           propertyFee: '',              //物业费
-          addressId: '',                //小区照片
+          addressId: [],                //小区照片
           configure: '',                //周边配套
           villageIntroduce: '',         //小区简介
         },
@@ -188,10 +183,6 @@
         this.form.houseType = val.house_type;
         this.form.allBuilding = val.total_buildings;
         this.form.propertyFee = val.property_fee;
-        this.photos.pic_url = val.album.house_pic;
-        for (let key in val.album.house_pic) {
-          this.photos.pic_id.push(key);
-        }
         this.form.configure = val.peripheral_info;
         this.form.villageIntroduce = val.content;
       },
@@ -201,20 +192,13 @@
       dialogVisible(val) {
         if (!val) {
           this.$emit('close');
-          document.getElementById('addr').innerHTML = '';
-          this.photos.pic_id = [];
-          this.photos.pic_url = {};
         }
       },
     },
     methods: {
       // 上传成功
-      photo_success(val) {
-        this.photos.pic_id = val;
-      },
-      // 删除图片
-      photo_remove(val) {
-        this.photos.pic_id = val;
+      villagePic(val) {
+        this.addressId = val[1];
       },
 
       choose(val, id) {
@@ -297,15 +281,53 @@
           house_type: this.form.houseType,
           total_buildings: this.form.allBuilding,
           property_fee: this.form.propertyFee,
-          house_pic: this.photos.pic_id,
+          house_pic: this.addressId,
           peripheral_info: this.form.configure,
           content: this.form.villageIntroduce,
         }).then((res) => {
           if (res.data.code === '10010' || res.data.code === '10030') {
             this.dialogVisible = false;
+            this.$emit('addVillage');
+            this.prompt(res.data.msg, 1);
+          } else {
+            this.prompt(res.data.msg, 2);
           }
         })
-      }
+      },
+      close_() {
+        this.form.province = '';                 //小区位置
+        this.form.city = '';                     //小区位置
+        this.form.area = '';                     //小区位置
+        this.form.region = '';                   //小区位置
+        this.form.villageName = '';              //小区名称
+        this.form.villageAddress = '';           //小区地址
+        this.form.otherName = '';                //小区别名
+        this.form.built_year = '';               //建筑年限
+        this.form.houseType = '';                //房屋类型
+        this.form.allBuilding = '';              //总栋数
+        this.form.latitude = '';                 //纬度
+        this.form.longitude = '';                //经度
+        this.form.propertyFee = '';              //物业费
+        this.form.addressId = [];                //小区照片
+        this.form.configure = '';                //周边配套
+        this.form.villageIntroduce = '';         //小区简介
+      },
+      // ====================提示信息=================
+      prompt(val, stu) {
+        if (stu === 1) {
+          this.$notify({
+            title: '成功',
+            message: val,
+            type: 'success'
+          });
+        } else {
+          this.$notify({
+            title: '警告',
+            message: val,
+            type: 'warning'
+          });
+        }
+      },
     },
   }
 </script>

@@ -142,11 +142,16 @@
         </div>
         <div class="personInfo">
           <div class="head" style="cursor: pointer">
-            <img data-card="" :data-src="JSON.stringify(personal)" :src="personal.avatar" v-if="personal.avatar">
-            <img src="../assets/images/head.jpg" v-else>
+            <span v-if="personal !== undefined">
+              <img data-card="" :data-src="JSON.stringify(personal)" :src="personal.avatar">
+            </span>
+            <span v-else="">
+              <img src="../assets/images/head.jpg">
+            </span>
+
           </div>
           <el-dropdown trigger="click">
-              <span class="el-dropdown-link">
+              <span class="el-dropdown-link" v-if="personal  !== undefined">
                 {{personal.name}}<i class="el-icon-arrow-down el-icon--right" style="margin-left: 25px"></i>
               </span>
             <el-dropdown-menu slot="dropdown" class="personal">

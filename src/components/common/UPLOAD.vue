@@ -6,6 +6,9 @@
       <!--</div>-->
 
       <div :id="'pickfiles'+ID" class="pickfiles">
+
+
+
         <div class="upButton" :id="ID">
           <span class="el-icon-plus"></span>
         </div>
@@ -88,7 +91,7 @@
           unique_names: true,                 // 默认false，key为文件
           domain: 'http://static.lejias.cn',  // bucket域名，下载资源时用到，必需
 
-          container: 'container',             // 上传区域DOM ID，默认是browser_button的父元素
+//          container: 'container',             // 上传区域DOM ID，默认是browser_button的父元素
           max_file_size: '100mb',             // 最大文件体积限制
           flash_swf_url: 'path/of/plupload/Moxie.swf',  //引入flash，相对路径
           max_retries: 1,                     // 上传失败最大重试次数
@@ -220,7 +223,6 @@
   }
 
   #container {
-    padding: 0 5px;
     .pickfiles {
       display: flex;
       display: -webkit-flex; /* Safari */
@@ -228,6 +230,9 @@
       > div {
         margin-left: 15px;
         margin-top: 15px;
+        &:first-child{
+          margin-left: 0;
+        }
       }
       .imgItem {
         &:hover {

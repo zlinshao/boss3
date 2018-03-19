@@ -178,7 +178,7 @@
                @clickOperate="clickEvent"></RightMenu>
 
     <VillageModule :module="addVisible" @close="closeVillage" :formList="formList"
-                   :province="provinceList" :dict="dict"></VillageModule>
+                   :province="provinceList" :dict="dict" @addVillage="search"></VillageModule>
   </div>
 </template>
 
@@ -334,10 +334,14 @@
       // },
       openVillage(val) {
         this.addVisible = true;
-        this.$http.get(this.urls + 'setting/community/' + this.pitch).then((res) => {
-          this.formList = res.data.data;
+        if (val === 'revise') {
+          this.$http.get(this.urls + 'setting/community/' + this.pitch).then((res) => {
+            this.formList = res.data.data;
+            this.formList.status = val;
+          });
+        } else {
           this.formList.status = val;
-        });
+        }
       },
       closeVillage() {
         this.addVisible = false;
@@ -388,7 +392,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.get('setting/community/delete/' + this.pitch).then((res) => {
+          this.$http.get(this.urls + 'setting/community/delete/' + this.pitch).then((res) => {
             if (res.data.code === '10040') {
               this.$message({
                 type: 'success',
