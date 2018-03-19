@@ -19,6 +19,7 @@
 
 <script>
   import StaffSquare from './staffSquare/index.vue'
+
   export default {
     name: "index",
     components: {StaffSquare},
@@ -28,6 +29,9 @@
       }
     },
     mounted() {
+      if (this.$route.query.tabs !== undefined) {
+        this.activeName = this.$route.query.tabs;
+      }
     },
     watch: {},
     methods: {

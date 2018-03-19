@@ -87,8 +87,12 @@
             label="发布时间">
           </el-table-column>
           <el-table-column
-            prop="statuss"
             label="状态">
+            <template slot-scope="scope">
+              <el-button class="btnStatus" v-if="scope.row.statuss === '已发布'" type="primary" size="mini">{{scope.row.statuss}}</el-button>
+              <el-button class="btnStatus" v-if="scope.row.statuss === '已结束'" type="warning" size="mini">{{scope.row.statuss}}</el-button>
+              <el-button class="btnStatus" v-if="scope.row.statuss === '草稿'" type="info" size="mini">{{scope.row.statuss}}</el-button>
+            </template>
           </el-table-column>
         </el-table>
       </div>
@@ -141,7 +145,6 @@
         formDetail: {},
         paging: 0,
         currentPage: 1,
-        beforePage: '',
         tableData: [],
         pitch: '',
         if_shows: '',
@@ -168,7 +171,7 @@
         }).then((res) => {
           this.isHigh = false;
           if (res.data.code === '80000') {
-            this.beforePage = page;
+            this.currentPage = page;
             this.tableData = res.data.data.data;
             this.paging = res.data.data.count;
           } else {
@@ -272,8 +275,7 @@
         }).then(() => {
           this.$http.get(this.urls + 'oa/portal/delete/' + id).then((res) => {
             if (res.data.code === '80040') {
-              this.myData(this.beforePage);
-              this.currentPage = this.beforePage;
+              this.myData(this.currentPage);
               this.prompt(1, res.data.msg);
             } else {
               this.prompt(2, res.data.msg);
@@ -288,7 +290,7 @@
       },
 
       // 上架下架
-      upperShelf(id,title) {
+      upperShelf(id, title) {
         this.$confirm('此操作将' + title + '文章, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -330,6 +332,9 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
-
+<style lang="scss">
+ .btnStatus{
+   cursor: inherit;
+   min-width:   68px;
+ }
 </style>
