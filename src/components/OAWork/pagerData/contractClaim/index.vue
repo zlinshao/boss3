@@ -47,16 +47,6 @@
 
         <div class="filter">
           <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline" style="display: flex;justify-content:flex-end ">
-            <!--<el-form-item label="选择部门">-->
-              <!--<el-input readonly="" @focus="openOrganizationModal('department')" placeholder="点击选择"></el-input>-->
-            <!--</el-form-item>-->
-            <!--<el-form-item label="合同分类">-->
-              <!--<el-select clearable v-model="formInline.region" placeholder="请选择合同分类">-->
-                <!--<el-option label="领取" value="shanghai"></el-option>-->
-                <!--<el-option label="作废" value="beijing"></el-option>-->
-                <!--<el-option label="上缴" value="beijing"></el-option>-->
-              <!--</el-select>-->
-            <!--</el-form-item>-->
             <el-form-item>
               <el-input v-model="formInline.name" placeholder="搜索">
                 <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
@@ -166,6 +156,58 @@
           </el-table-column>
         </el-table>
       </div>
+
+      <div v-show="selectFlag==3" class="blueTable">
+        <!--合同作废-->
+        <div class="filter">
+          <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline" style="display: flex;justify-content:flex-end">
+            <el-form-item>
+              <el-input v-model="formInline.name" placeholder="搜索">
+                <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary">导出</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="createNewTask">合同申领</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+
+        <el-table
+          :data="contractData"
+          @row-dblclick = 'showContractDetail'
+          @row-contextmenu='openCancelMenu'
+          style="width: 100%">
+          <el-table-column
+            prop="report_time"
+            label="领取时间">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="部门">
+          </el-table-column>
+          <el-table-column
+            prop="staff_name"
+            label="姓名">
+          </el-table-column>
+          <el-table-column
+            prop="collect_contracts_count"
+            label="领取合同数（收）">
+          </el-table-column>
+          <el-table-column
+            prop="rent_contracts_count"
+            label="领取合同数（租）">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="备注">
+          </el-table-column>
+        </el-table>
+      </div>
+
+
       <div class="tableBottom">
         <div class="left">
           <el-pagination
@@ -189,7 +231,8 @@
 
     <Dispatch :dispatchDialog="dispatchDialog" @close="closeDispatch"></Dispatch>
 
-    <EditApply :editApplyDialog="editApplyDialog" @close="closeEditApplyDialog"></EditApply>
+    <EditApply :editApplyDialog="editApplyDialog" :applyEditId="applyEditId"
+               :startOperate="startOperate" @close="closeEditApplyDialog"></EditApply>
 
   </div>
 </template>
@@ -226,6 +269,8 @@
 
         editApplyDialog:false,    //修改合同申领
         contractData:[],    //列表数据
+        applyEditId:'',     //领取合同id
+        startOperate:false,   //开始操作
       }
     },
     watch:{
@@ -265,6 +310,19 @@
           this.createTaskDialog = false
       },
       openApplyMenu(row, event){
+        this.applyEditId = row.id;
+
+        this.lists = [
+          {clickIndex: 'dispatchApply', headIcon: 'el-icon-menu', label: '分配',},
+          {clickIndex: 'editApply', headIcon: 'el-icon-edit', label: '修改',},
+          {clickIndex: 'addRemarkApply', headIcon: 'el-icon-edit-outline', label: '添加备注',},
+          {clickIndex: 'deleteApply', headIcon: 'el-icon-delete', label: '删除',},
+        ];
+        this.contextMenuParam(event);
+      },
+
+      openCancelMenu(row, event){
+        this.applyEditId = row.id;
         this.lists = [
           {clickIndex: 'dispatchApply', headIcon: 'el-icon-menu', label: '分配',},
           {clickIndex: 'editApply', headIcon: 'el-icon-edit', label: '修改',},
@@ -281,6 +339,7 @@
       applyMenuCallback(index){
           switch (index){
             case 'editApply' :
+              this.startOperate = true;
               this.editApplyDialog = true;
               break;
             case 'dispatchApply' :
@@ -312,6 +371,7 @@
       //修改合同个申领回到
       closeEditApplyDialog(){
           this.editApplyDialog = false;
+          this.startOperate = false;
       },
 
       closeDispatch(){
@@ -324,6 +384,8 @@
             }
           })
       },
+      //****************************合同作废***********************//
+
 
 
       ///***********************************************************//

@@ -17,8 +17,9 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="城市">
-                  <el-select clearable v-model="params.city_code" placeholder="请选择城市" @change="selectCity">
-                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                  <el-select clearable v-model="params.city_code" placeholder="请选择城市" @change="selectCity" value="">
+                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.variable.city_code"
+                               :key="item.id"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -544,7 +545,6 @@
 
       selectCity(){
         this.$http.get(globalConfig.server+'contract/max/'+this.params.city_code).then((res) => {
-
           this.params.collect_start = res.data.data.collect;
           this.params.rent_start = res.data.data.rent;
         })
