@@ -35,31 +35,43 @@
             </div>
             <div>
               <el-row :gutter="20">
-                <el-col :span="3"><img src="../../assets/images/university/caia412-34427.png"></el-col>
+                <el-col :span="3"><img :src="albumDetail.cover_path" style="height: 195px;"></el-col>
                 <el-col :span="6">
-                  <div style="font-size: 30px;color: #393939;padding-top: 30px;">海绵宝宝&nbsp;&nbsp;<span style="font-size: 18px;">8张</span></div>
+                  <div style="font-size: 30px;color: #393939;padding-top: 30px;">{{albumDetail.name}}&nbsp;&nbsp;<span style="font-size: 18px;">{{albumDetail.photo_count}}张</span></div>
                   <el-button icon="el-icon-picture-outline" type="primary" class="upload_photo" size="medium" @click="openModalDialog('choosePicturesDialog')">上传照片</el-button>
-                  <el-button size="small">批量管理</el-button>
-                  <el-dropdown trigger="click" >
-                    <el-button size="small">更多</el-button>
-                    <el-dropdown-menu slot="dropdown">
-                      <el-dropdown-item>编辑相册信息</el-dropdown-item>
-                      <el-dropdown-item>设置相册封面</el-dropdown-item>
-                      <el-dropdown-item>删除相册</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </el-dropdown>
+                  <el-button size="small" @click="editAlbum(albumDetail.id)">编辑相册信息</el-button>
+                  <!--<el-button size="small">批量管理</el-button>-->
+                  <!--<el-dropdown trigger="click" >-->
+                    <!--<el-button size="small">更多</el-button>-->
+                    <!--<el-dropdown-menu slot="dropdown">-->
+                      <!--<el-dropdown-item>编辑相册信息</el-dropdown-item>-->
+                      <!--<el-dropdown-item>设置相册封面</el-dropdown-item>-->
+                      <!--<el-dropdown-item>删除相册</el-dropdown-item>-->
+                    <!--</el-dropdown-menu>-->
+                  <!--</el-dropdown>-->
                 </el-col>
               </el-row>
             </div>
           </div>
           <div class="pictures">
             <el-row :gutter="40" >
-              <div v-for="item in albumData">
+              <div v-for="item in photoData">
                 <el-col :span="4" style="margin-bottom:20px;">
                   <div class="pictureDetail">
-                    <img src="../../assets/images/university/caia412-34427.png">
+                    <el-dropdown style="float: right;">
+                      <span class="el-dropdown-link">
+                        <i class="el-icon-arrow-down el-icon--right"></i>
+                      </span>
+                      <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item @click.native="editPhoto(item)">编辑</el-dropdown-item>
+                        <el-dropdown-item @click.native="setCoverImg(item)">设为封面</el-dropdown-item>
+                        <!--<el-dropdown-item @click.native="movePhoto(item.id)">移动到相册</el-dropdown-item>-->
+                        <el-dropdown-item @click.native="deletePhoto(item.id)">删除</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </el-dropdown>
+                    <img :src="item.picture_path">
                     <div class="clearfix t_center">
-                      <span class="text_over_ellipsis">海绵宝宝名称</span>
+                      <span class="text_over_ellipsis">{{item.name}}</span>
                     </div>
                   </div>
                 </el-col>
@@ -67,11 +79,30 @@
             </el-row>
           </div>
         </el-col>
-
       </el-row>
     </div>
-    <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog"></create-album>
-    <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog"></choose-pictures>
+    <el-dialog id="photoDetail" title="编辑照片信息" :visible.sync="photoDetailDialogVisible" width="30%">
+      <div class="">
+        <el-form size="mini" onsubmit="return false;" :model="photoForm" label-width="100px">
+          <el-row >
+            <el-form-item label="照片名称:">
+              <el-input v-model="photoForm.name" placeholder="请输入照片名称" ></el-input>
+            </el-form-item>
+          </el-row>
+          <el-row>
+            <el-form-item label="照片描述:">
+              <el-input v-model="photoForm.description" type="textarea" placeholder="请输入照片描述"></el-input>
+            </el-form-item>
+          </el-row>
+        </el-form>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="small" @click="photoDetailDialogVisible = false">取 消</el-button>
+        <el-button size="small" type="primary" @click="editPhotoSuccess">确 定</el-button>
+      </span>
+    </el-dialog>
+    <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog" ></create-album>
+    <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog" :albumId="albumDetail.id"></choose-pictures>
   </div>
 </template>
 
@@ -88,12 +119,19 @@
       return {
         choosePicturesDialog: false,
         createAlbumDialog: false,
-        albumData: [],
+        photoData: [],
+        albumDetail: this.$route.query.albumDetail,
+        photoDetailDialogVisible: false,
+        photoForm: {
+          name: '',
+          description: '',
+        },
+        deleteIds: [],
       }
     },
     methods: {
       routerLink(val) {
-        this.$router.push({path: val})
+        this.$router.push({path: val});
       },
       openModalDialog(type) {
         switch(type) {
@@ -111,17 +149,72 @@
       closeChoosePicturesDialog() {
         this.choosePicturesDialog = false;
       },
-      getImgData(){
-        var self = this;
-        this.$http.get(globalConfig.server + "album").then((res) =>{
-          if (res.data.code == "20110") {
-            self.albumData = res.data.data;
+      getAllPhotos(){
+        this.$http.get(globalConfig.server + "photo?album_id="+ this.albumDetail.id).then((res) => {
+          if (res.data.code == "20210") {
+            this.photoData = res.data.data;
           }
         });
-      }
+      },
+      editPhoto(item) {
+        console.log(`editPhoto==========${item}`);
+        this.photoDetailDialogVisible = true;
+      },
+      setCoverImg(item) {
+        this.$http.put(globalConfig.server + 'album/cover/'+item.id+'&cover='+this.albumDetail.id).then((res) => {
+          if(res.data.code == "20110") {
+            // window.location.reload();
+          } else {
+            this.$notify.warning({
+              title:"警告",
+              message:res.data.msg
+            });
+          }
+        });
+      },
+      movePhoto(id) {
+
+      },
+      deletePhoto(id) {
+        this.deleteIds.push(id);
+        console.log(`id===${id}---${this.deleteIds}`);
+        this.$confirm('确定删除照片吗？','删除照片',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.delete(globalConfig.server + 'photo?photo_ids=' + this.deleteIds).then((res) =>{
+            if (res.data.code == "20210") {
+              // window.location.reload();
+            } else {
+              this.$notify.warning({
+                title:"警告",
+                message:res.data.msg
+              });
+            }
+          });
+        });
+
+      },
+      editPhotoSuccess() {
+        this.$http.put(globalConfig.server + 'photo/2',this.photoForm).then((res) =>{
+          if(res.data.code == "20210") {
+            this.photoDetailDialogVisible = true;
+          } else {
+            this.$notify.warning({
+              title:"警告",
+              message:res.data.msg
+            });
+          }
+        });
+      },
+      editAlbum(id) {
+        this.createAlbumDialog = true;
+      },
     },
     mounted() {
-      this.getImgData();
+      this.getAllPhotos();
+      console.log(`albumDetail==========${JSON.stringify(this.albumDetail)}`);
     }
   }
 </script>
@@ -131,9 +224,7 @@
     text-align: center;
   }
   .upload_photo {
-    margin-top: 20px;
-    padding: 20px;
-    font-size: 20px;
+    margin-top: 40px;
   }
   #pictureDetail {
     .el-row {

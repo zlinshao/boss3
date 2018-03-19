@@ -2,25 +2,28 @@
   <div id="choosePictures">
     <el-dialog title="选择相册" :visible.sync="choosePicturesDialogVisible" width="40%">
       <div class="">
-        <el-form size="mini" :model="formImg" label-width="100px">
+        <el-form size="mini" :model="form" label-width="100px">
           <el-row >
             <el-form-item label="选择相册" >
               <el-col :span="8" >
-              <el-select v-model="formImg.albums" placeholder="请选择相册">
-                <el-option label="相册一" value="shanghai"></el-option>
-                <el-option label="相册二" value="beijing"></el-option>
-                <el-option label="相册三" value="nanjing"></el-option>
+              <el-select v-model="form.album_id" placeholder="请选择相册" >
+                <div v-for="album in albumData">
+                  <el-option  :label="album.name" :value="album.id">{{album.name}}</el-option>
+                </div>
               </el-select>
               </el-col>
+            </el-form-item>
+            <!--图片ids-->
+            <el-form-item label="上传图片">
+              <Upload :ID="'upload'" @getImg="getImage"></Upload>
             </el-form-item>
           </el-row>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="choosePicturesDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="startUploadImages">开始上传</el-button>
+        <el-button size="small" type="primary" @click="startUploadImages">保存</el-button>
       </span>
-      <Upload :ID="'upload'" @getImg="getImage" style="margin-left: 20px;"></Upload>
     </el-dialog>
     <improve-img-info :improveImgInfoDialog="improveImgInfoDialog" @close="closeImproveImgInfoDialog" @upload="continueUploading"></improve-img-info>
   </div>
@@ -31,7 +34,7 @@
     import ImproveImgInfo from './improveImage.vue';
     export default {
         name: "choose-pictures",
-        props: ['choosePicturesDialog'],
+        props: ['choosePicturesDialog','albumId'],
         components:{
           Upload,
           ImproveImgInfo,
@@ -40,25 +43,46 @@
           return {
             choosePicturesDialogVisible: false,
             improveImgInfoDialog: false,
-            formImg: {
-              albums: '',
+            form: {
+              album_id: '',
+              picture_ids: [],
             },
+            albumData: '',
           }
         },
       methods: {
         startUploadImages() {
-          this.choosePicturesDialogVisible = false;
-          this.improveImgInfoDialog = true;  //显示完善照片信息界面
+          this.$http.post(globalConfig.server + 'photo',this.form).then((res)=>{
+            if(res.data.code == '20210') {
+              this.choosePicturesDialogVisible = false;
+              this.improveImgInfoDialog = true;  //显示完善照片信息界面
+            }else{
+              this.$notify.warning({
+                title:"警告",
+                message:res.data.msg
+              });
+            }
+          });
+
         },
         getImage(val) {
           console.log(val);
+          this.form.picture_ids = val[1]; //选择的图片数组ids
         },
-        closeImproveImgInfoDialog(){
+        closeImproveImgInfoDialog() {
           this.improveImgInfoDialog = false;  //关闭完善照片信息界面
         },
         continueUploading() {
           this.choosePicturesDialogVisible = true;
-        }
+        },
+        getImgData() {
+          var self = this;
+          this.$http.get(globalConfig.server + "album").then((res) =>{
+            if (res.data.code == "20110") {
+              self.albumData = res.data.data;
+            }
+          });
+        },
       },
       watch: {
         choosePicturesDialog(val) {
@@ -69,6 +93,10 @@
             this.$emit('close');
           }
         }
+      },
+      mounted() {
+          this.getImgData();
+         this.form.album_id =  this.albumId;
       },
     }
 </script>
