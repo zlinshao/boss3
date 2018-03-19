@@ -28,7 +28,7 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">房屋类型{{form.house_type}}</div>
+                  <div class="el_col_label">房屋类型</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
