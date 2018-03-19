@@ -7,7 +7,7 @@
           <el-carousel height="300px">
             <el-carousel-item v-for="item in 4" :key="item">
               <div class="banner_pic">
-                <img src="../assets/images/情人节.png" alt="">
+                <img src="../assets/images/banner.png" alt="">
               </div>
             </el-carousel-item>
           </el-carousel>
@@ -21,16 +21,28 @@
                 <span style="border-left: 4px solid #6a8dfb;"></span>业绩排名
               </div>
             <div>
-              <el-row >
-                <el-col :span="6" class="hover_pic"><img src="./../assets/images/paiming1.png" width="100%"></el-col>
-                <el-col :span="6" class="hover_pic"><img src="./../assets/images/paiming2.png" width="100%"></el-col>
-                <el-col :span="6" class="hover_pic"><img src="./../assets/images/paiming3.png" width="100%"></el-col>
-                <el-col :span="6" class="hover_pic"><img src="./../assets/images/paiming4.png" width="100%"></el-col>
+              <el-row style="font-size: 0;">
+                <el-col :span="person_ranking">
+                  <img src="./../assets/images/paiming11.png" @click="selectRanking('person')" width="100%" height="90">
+                  <div class="rank_word" :class="{'select_person_word':person_ranking == 9}">个人排名</div>
+                </el-col>
+                <el-col :span="city_ranking">
+                  <img src="./../assets/images/paiming22.png" @click="selectRanking('city')" width="100%" height="90">
+                  <div class="rank_word" :class="{'select_city_word':city_ranking == 9}">城市排名</div>
+                </el-col>
+                <el-col :span="region_ranking">
+                  <img src="./../assets/images/paiming33.png" @click="selectRanking('region')" width="100%" height="90">
+                  <div class="rank_word" :class="{'select_region_word':region_ranking == 9}">区域排名</div>
+                </el-col>
+                <el-col :span="group_ranking">
+                  <img src="./../assets/images/paiming44.png" @click="selectRanking('group')" width="100%" height="90">
+                  <div class="rank_word" :class="{'select_group_word':group_ranking == 9}">小组排名</div>
+                </el-col>
               </el-row>
             </div>
               <div class="paiming">
                 <div>
-                  <el-row class="header">
+                  <el-row class="header" :style="bg_color">
                     <el-col :span="4"><span>排名</span></el-col>
                     <el-col :span="4"><span>姓名</span></el-col>
                     <el-col :span="4"><span>部门</span></el-col>
@@ -61,26 +73,26 @@
             <div class="title" style="color: #7ee8a6;">
               <span style="border-left: 4px solid #7ee8a6;"></span>公告信息
             </div>
-              <div><img src="./../assets/images/gonggao.png" style="width: 100%;height: 196px;"></div>
+              <div><img src="./../assets/images/gonggao.png" style="width: 100%;height: 195px;"></div>
               <div class="rightContent">
-                <p class="info_title">恭喜我公司企业注册logo成功</p>
+                <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
                 <div class="clearfix">
                   <span>2017-01-17</span>
                   <span style="float: right;">
-                    <i class="iconfont icon-xinxi">22</i>
-                    <i class="iconfont icon-xinxi">143</i>
+                    <i class="iconfont icon-xinxi" style="margin-right: -7px;"></i>22 &nbsp;&nbsp;&nbsp;
+                    <i class="iconfont icon-zan" style="margin-right: -7px;"></i>143 &nbsp;&nbsp;&nbsp;
                     <i class="el-icon-view">15</i>
                   </span>
                 </div>
-                <div style="margin-top: 10px;">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                <div style="margin-top: 10px;" class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
                 <div><em class="ix"></em></div>
-                <div style="border-bottom: 1px solid #eee;padding-bottom: 10px;"><el-button size="small" style="background: #6a8dfb;color: #fff;margin-top: 10px;">MORE</el-button></div>
+                <div style="border-bottom: 1px solid #eee;padding-bottom: 10px;"><el-button size="small" style="background: #6a8dfb;color: #fff;margin-top: 15px;">MORE</el-button></div>
 
                 <div class="clearfix list_gonggao" v-for="item in 4">
                   <div style="display: inline-block;float: left;"><img src="./../assets/images/gonggao_detail.png" height="100"></div>
                   <div style="padding-left: 200px;">
-                    <p class="info_title">恭喜我公司企业注册logo成功</p>
-                    <div>恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                    <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
+                    <div class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
                     <div><em class="ix"></em></div>
                   </div>
                 </div>
@@ -97,13 +109,13 @@
               <span style="border-left: 4px solid #6a8dfb;"></span>员工广场
             </div>
             <div class="yuangong">
-              <div style="display: inline-block;float: left;"><img src="./../assets/images/yuangong.png" alt=""></div>
+              <div style="display: inline-block;float: left;font-size: 0;"><img src="./../assets/images/yuangong.png" height="390px;"></div>
               <div class="clearfix" style="padding-left: 520px;">
                 <div class="list_gonggao" v-for="item in 3">
                   <div style="display: inline-block;float: left;"><img src="./../assets/images/gonggao_detail.png" height="100"></div>
                   <div style="padding-left: 200px;">
-                    <p class="info_title">恭喜我公司企业注册logo成功</p>
-                    <div>恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                    <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
+                    <div class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
                     <div><em class="ix" style="background:#fb4699;"></em></div>
                   </div>
                 </div>
@@ -120,13 +132,13 @@
               <div class="list_gonggao" v-for="item in 3">
                 <div style="display: inline-block;float: left;"><img src="./../assets/images/news.png" height="100"></div>
                 <div style="padding-left: 130px;">
-                  <p class="info_title">恭喜我公司企业注册logo成功</p>
-                  <div>恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                  <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
+                  <div class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
                   <div class="clearfix" style="margin-top: 10px;">
                     <span>2017-01-17</span>
                     <span style="float: right;">
-                    <i class="iconfont icon-xinxi">22</i>
-                    <i class="iconfont icon-xinxi">143</i>
+                    <i class="iconfont icon-xinxi" style="margin-right: -7px;"></i>22 &nbsp;&nbsp;
+                    <i class="iconfont icon-xinxi" style="margin-right: -7px;"></i>143 &nbsp;&nbsp;
                     <i class="el-icon-view">15</i>
                   </span>
                   </div>
@@ -146,51 +158,51 @@
             <div class="lejia">
               <el-row>
                 <el-col :span="8" style="padding:0;">
-                  <div class="hover_pic" style="padding:0;"><img src="./../assets/images/lejia1.png" width="100%"></div>
+                  <div class="hover_pic" style="padding:0;"><img src="./../assets/images/lejia1.png" width="100%" height="195"></div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
-                  <div class="list_frame" style="padding: 16px;border: 1px solid #dfe6fb;border-radius: 5px;">
-                    <div style="display: inline-block;float: left;margin-top: 45px;"><img src="./../assets/images/news.png" height="100"></div>
+                  <div class="list_frame">
+                    <div style="display: inline-block;float: left;margin-top: 30px;"><img src="./../assets/images/news.png" height="100"></div>
                     <div style="padding: 12px 12px 34px 120px;">
-                      <p class="info_title">恭喜我公司企业注册logo成功</p>
-                      <div>恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                      <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
+                      <div class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
                       <span style="display: block;margin-top: 15px;">
-                      <i class="el-icon-view">15人</i>&nbsp;&nbsp;&nbsp;
-                      <i class="iconfont icon-xinxi">143人</i>
+                      <i class="el-icon-view"></i><span class="view_word">15人</span>&nbsp;&nbsp;&nbsp;
+                        <i class="el-icon-edit"></i><span class="edit_word">143人</span>
                     </span>
                     </div>
                   </div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
-                  <div class="hover_pic"><img src="./../assets/images/lejia1.png" width="100%" ></div>
+                  <div class="hover_pic"><img src="./../assets/images/lejia1.png" width="100%"  height="195"></div>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="8" style="padding:0;">
-                  <div class="list_frame" style="padding: 16px;border: 1px solid #dfe6fb;border-radius: 5px;">
-                    <div style="display: inline-block;float: left;margin-top: 45px;"><img src="./../assets/images/news.png" height="100"></div>
+                  <div class="list_frame">
+                    <div style="display: inline-block;float: left;margin-top: 30px;"><img src="./../assets/images/news.png" height="100"></div>
                     <div style="padding: 12px 12px 34px 120px;">
-                      <p class="info_title">恭喜我公司企业注册logo成功</p>
-                      <div>恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                      <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
+                      <div class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
                       <span style="display: block;margin-top: 15px;">
-                      <i class="el-icon-view">15人</i>&nbsp;&nbsp;&nbsp;
-                      <i class="iconfont icon-xinxi">143人</i>
+                        <i class="el-icon-view"></i><span class="view_word">15人</span>&nbsp;&nbsp;&nbsp;
+                        <i class="el-icon-edit"></i><span class="edit_word">143人</span>
                     </span>
                     </div>
                   </div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
-                  <div class="hover_pic"><img src="./../assets/images/lejia2.png" width="100%"></div>
+                  <div class="hover_pic"><img src="./../assets/images/lejia2.png" width="100%" height="195"></div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
-                  <div class="list_frame" style="padding: 16px;border: 1px solid #dfe6fb;border-radius: 5px;">
-                    <div style="display: inline-block;float: left;margin-top: 45px;"><img src="./../assets/images/news.png" height="100"></div>
-                    <div style="padding: 12px 12px 34px 120px;">
-                      <p class="info_title">恭喜我公司企业注册logo成功</p>
-                      <div>恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                  <div class="list_frame">
+                    <div style="display: inline-block;float: left;margin-top: 30px;"><img src="./../assets/images/news.png" height="100"></div>
+                    <div style="padding: 12px 12px 0px 120px;">
+                      <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
+                      <div class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
                       <span style="display: block;margin-top: 15px;">
-                      <i class="el-icon-view">15人</i>&nbsp;&nbsp;&nbsp;
-                      <i class="iconfont icon-xinxi">143人</i>
+                      <i class="el-icon-view"></i><span class="view_word">15人</span>&nbsp;&nbsp;&nbsp;
+                      <i class="el-icon-edit" ></i><span class="edit_word">143人</span>
                     </span>
                     </div>
                   </div>
@@ -204,15 +216,15 @@
             <div class="title" style="color: #7ee8a6;">
               <span style="border-left: 4px solid #7ee8a6;"></span>每周战报
             </div>
-            <div class="zhanbao ">
-              <div><img src="./../assets/images/zhanbao1.png" style="width: 100%;"></div>
-              <div style="padding:16px 20px 50px;">
-                <p class="info_title">恭喜我公司企业注册logo成功</p>
+            <div class="zhanbao" style="height: 394px;">
+              <div><img src="./../assets/images/zhanbao1.png" style="width: 100%;height: 195px;"></div>
+              <div style="padding:16px 20px 0px;">
+                <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
                 <div class="clearfix">
                   <div style="display: inline-block;float: left;"><img src="./../assets/images/gonggao_detail.png" height="100"></div>
-                  <div class="list_gonggao" style="padding-left: 200px;">
-                    <p class="info_title">恭喜我公司企业注册logo成功</p>
-                    <div>恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                  <div class="list_gonggao" style="padding-left: 200px;margin-top: -7px;">
+                    <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
+                    <div class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
                     <div><em class="ix"></em></div>
                   </div>
                 </div>
@@ -247,10 +259,14 @@
           title: 'Title-3',
           content: '今天李巧俊生孩子'
         }],
+        person_ranking: 5,
+        city_ranking: 9,
+        region_ranking: 5,
+        group_ranking: 5,
+        bg_color: '',
       }
     },
     mounted() {
-      this.changeLanguage();
       console.log(globalConfig.header);
       console.log(globalConfig.personal);
     },
@@ -268,20 +284,85 @@
         }
         e.target.style.color = '#6a8dfb';
       },
-      //日历变成中文
-      changeLanguage() {
-
-      }
+      selectRanking(val) {
+        switch(val){
+          case "person":
+            this.person_ranking = 9;
+            this.city_ranking = this.region_ranking = this.group_ranking = 5;
+            this.bg_color = 'background: #b4c6fd';
+            break;
+          case "city":
+            this.city_ranking = 9;
+            this.person_ranking = this.region_ranking = this.group_ranking = 5;
+            this.bg_color = 'background: #8ae3ab';
+            break;
+          case "region":
+            this.region_ranking = 9;
+            this.city_ranking = this.person_ranking = this.group_ranking = 5;
+            this.bg_color = 'background: #fee4a0';
+            break;
+          case "group":
+            this.group_ranking = 9;
+            this.city_ranking = this.region_ranking = this.person_ranking = 5;
+            this.bg_color = 'background: #fda2cc';
+            break;
+        }
+      },
     }
   }
 </script>
 
 <style scoped lang="scss">
+  [class*=el-col-] {
+    transition: 0.3s;
+  }
+  i::before {
+    width: 10px;
+  }
+  .text_over_norwap{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .second_line_camp{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    font-size: 14px;
+    line-height: 20px;
+  }
   .t_center{
     text-align: center;
   }
   .t_right{
     text-align: right;
+  }
+  .rank_word {
+     position: relative;
+     font-size: 14px;
+     width: 30px;
+     padding: 7px;
+     color: #464748;
+     margin: -70px 0 18px 15px;
+   }
+  .select_person_word {
+      color: #fff;
+      background: linear-gradient(-45deg, transparent 10px, #6a8dfb 0);
+    }
+  .select_city_word {
+    color: #fff;
+    background: linear-gradient(-45deg, transparent 10px, #58d788 0);
+  }
+
+  .select_region_word {
+    color: #fff;
+    background: linear-gradient(-45deg, transparent 10px, #fdca41 0);
+  }
+  .select_group_word {
+    color: #fff;
+    background: linear-gradient(-45deg, transparent 10px, #fb4699 0);
   }
   .yuangong{
     border: 1px solid #dfe6fb;
@@ -291,10 +372,12 @@
     border: 1px solid #dfe6fb;
     padding: 12px 20px;
     border-radius: 5px;
+    height: 367px;
   }
   .lejia{
     border-radius: 5px;
     border: 1px solid #dfe6fb;
+    font-size: 0;
   }
   .zhanbao{
     border-radius: 5px;
@@ -305,7 +388,8 @@
     margin-top: -5px;
     border-radius: 5px;
     border: 1px solid #dfe6fb;
-    box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);
+    height: 675px;
+   // box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);
   }
   .clearfix:after{
     margin: 8px 0 3px;
@@ -314,7 +398,7 @@
     clear:both;
   }
   .info_title{
-    font-size: 17px;
+    font-size: 16px;
     font-weight: bold;
   }
   .ix {
@@ -323,6 +407,9 @@
     width: 20px;
     background: #58d788;
     margin-top: 15px;
+  }
+  .el-icon-view {
+    font-size: 14px;
   }
   #main {
     width: 100%;
@@ -360,15 +447,21 @@
         }
       }
       .list_frame{
+        padding: 16px;
+        border: none;
+        border-radius: 5px;
+        height: 180px;
+        padding-bottom: 0;
+        font-size: 14px;
         &:hover {
           .info_title {
             color: #6a8dfb;
           }
-          .el-icon-view{
-            color: red;
+          .view_word{
+            color: #fb4699;
           }
-          .icon-xinxi{
-            color: green;
+          .edit_word{
+            color: #58d788;
           }
         }
       }
@@ -402,19 +495,12 @@
       }
       .mainContent {
         width: 100%;
-        .calendar {
-          margin-bottom: 10px;
-          border-radius: 5px;
-          border: 1px solid #dfe6fb;
-          padding: 10px;
-          box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);
-        }
         .paiming {
           margin-bottom: 10px;
           border: 1px solid #dfe6fb;
           border-radius: 5px;
           box-sizing: border-box;
-          box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);
+          // box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);
           .header {
             background: #7ee8a6;
             color: #fff;
