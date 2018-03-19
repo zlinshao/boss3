@@ -200,6 +200,7 @@
       // 上传成功
       villagePic(val) {
         this.addressId = val[1];
+        console.log(val)
       },
 
       choose(val, id) {

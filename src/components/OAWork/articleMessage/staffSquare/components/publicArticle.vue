@@ -67,6 +67,7 @@
     data() {
       return {
         urls: globalConfig.server,
+        address: globalConfig.server_user,
         pitch: '',
         photos: {
           pic_id: [],
@@ -141,7 +142,7 @@
           status: val
         }).then((res) => {
           if (res.data.code === '80010' || res.data.code === '80030') {
-            // this.goBack();
+            this.goBack();
             this.prompt(1, res.data.msg);
           } else {
             this.prompt(2, res.data.msg);
@@ -149,7 +150,7 @@
         })
       },
       goBack() {
-        this.$router.push('/articleMessage')
+        this.$router.push({path: '/articleMessage', query: {tabs: 'third'}})
       },
       handleImageAdded(file, Editor, cursorLocation, resetUploader) {
         // An example of using FormData
@@ -157,7 +158,7 @@
         // formData.append('file', file)
         let formData = new FormData();
         formData.append('image', file);
-        this.$http.post(this.urls + 'picture/upload', formData).then((res) => {
+        this.$http.post(this.address + 'api/v1/files', formData).then((res) => {
           console.log(res.data.data);
           let picId = res.data.data;
           this.$http.post('picture/' + picId).then((res) => {

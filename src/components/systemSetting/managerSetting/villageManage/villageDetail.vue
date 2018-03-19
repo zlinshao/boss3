@@ -56,12 +56,10 @@
             <el-col :span="8">
               <el-form-item label="照片">
                 <div class="special imgs">
-                  <img data-magnify="" data-caption="图片查看器" v-for="key in house_pic"
-                       :data-src="key.raw"
-                       :src="key.raw" alt="">
-                  <!--<img src="../../../assets/images/情人节.png" alt="">-->
-                  <!--<img src="../../../assets/images/情人节.png" alt="">-->
-                  <!--<img src="../../../assets/images/情人节.png" alt="">-->
+                  <span v-for="(key,index) in house_pic">
+                     <img data-magnify="" data-caption="图片查看器" v-for="item in key"
+                          :data-src="item.uri" :src="item.uri">
+                  </span>
                 </div>
               </el-form-item>
             </el-col>

@@ -9,7 +9,7 @@
           <div class="userInfo" style="margin-top: 18px">
             <div class="publishInfo">
               <div class="headPic">
-                <img :src="staffs.avatar" v-if="staffs.avatar !== null">
+                <img :src="staffs.avatar" v-if="staffs.avatar !== ''">
                 <img src="../../../assets/images/head.png" v-else>
               </div>
               <div class="publishName">{{staffs.name}}</div>
@@ -20,7 +20,8 @@
               </div>
             </div>
             <div class="InfoRight">
-              <div class="title">{{formList.dict_ids}}</div>
+              <div class="title" v-if="formList.dict_ids !== '主轮播' && formList.dict_ids !== '次标题1' && formList.dict_ids !== '次标题2'">{{formList.dict_ids}}</div>
+              <div class="title" v-else>乐伽新闻</div>
               <div class="newsDate">{{formList.create_time}}</div>
             </div>
           </div>
@@ -59,7 +60,7 @@
         <div class="comment_box" v-if="isShow">
           <div class="publishComment">
             <div class="portrait">
-              <img :src="staffs.avatar" v-if="staffs.avatar !== null">
+              <img :src="staffs.avatar" v-if="staffs.avatar !== ''">
               <img src="../../../assets/images/head.png" v-else>
             </div>
             <div class="comments">
@@ -111,7 +112,7 @@
           <div class="block pages" v-if="paging > 11">
             <el-pagination
               @size-change="handleSizeChange"
-              @current-change="myData"
+              @current-change="search"
               :current-page="currentPage"
               :page-size="10"
               layout="total, prev, pager, next, jumper"
@@ -232,8 +233,7 @@
             let detail = res.data.data;
             document.getElementById('htmlForEditor').innerHTML = detail.content;
             this.staffs = detail.staffs[0];
-            // this.photos.pic_url = detail.album.cover_pic;
-            this.myData(id);
+            this.myData(id, 1);
           }
         })
       },
