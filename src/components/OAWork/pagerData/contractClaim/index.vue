@@ -16,8 +16,8 @@
         </el-button>
       </div>
     </div>
-    <!--<div class="filter">-->
-      <!--<el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline" style="display: flex;justify-content: ">-->
+    <div class="filter">
+      <el-form :inline="true" onsubmit="return false" size="mini" class="demo-form-inline" style="display: flex;justify-content:flex-end ">
         <!--<el-form-item label="选择部门">-->
           <!--<el-input readonly="" @focus="openOrganizationModal('department')" placeholder="点击选择"></el-input>-->
         <!--</el-form-item>-->
@@ -28,105 +28,70 @@
             <!--<el-option label="上缴" value="beijing"></el-option>-->
           <!--</el-select>-->
         <!--</el-form-item>-->
-        <!--<el-form-item>-->
-          <!--<el-input v-model="formInline.name" placeholder="搜索">-->
-            <!--<el-button slot="append" type="primary" icon="el-icon-search"></el-button>-->
-          <!--</el-input>-->
-        <!--</el-form-item>-->
-        <!--<el-form-item>-->
-          <!--<el-button type="primary">导出</el-button>-->
-        <!--</el-form-item>-->
-        <!--<el-form-item>-->
-          <!--<el-button type="primary" @click="createNewTask">创建任务</el-button>-->
-        <!--</el-form-item>-->
-      <!--</el-form>-->
-    <!--</div>-->
+        <el-form-item>
+          <el-input v-model="params.search" placeholder="搜索" @keydown.enter.native="fuzzySearch">
+            <el-button slot="append" type="primary" @click="fuzzySearch" icon="el-icon-search"></el-button>
+          </el-input>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button type="primary" @click="createNewTask">创建任务</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
 
     <div class="main">
-      <div v-show="selectFlag==1" class="blueTable">
-
-        <div class="filter">
-          <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline" style="display: flex;justify-content:flex-end ">
-            <el-form-item>
-              <el-input v-model="formInline.name" placeholder="搜索">
-                <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
-              </el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary">导出</el-button>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="createNewTask">创建任务</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
-        <!--//汇总-->
+      <!--//汇总-->
+      <div v-show="selectFlag==1">
         <el-table
-          :data="tableData"
-          @row-dblclick = 'showContractDetail'
+          :data="contractTotalData"
           style="width: 100%">
           <el-table-column
             prop="date"
             label="部门">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="staff_id"
             label="姓名">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="collect_count"
             label="剩余合同书（收）">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="rent_count"
             label="剩余合同书（租）">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="collect_apply"
             label="已领取合同数（收）">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="rent_apply"
             label="已领取合同数（租）">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="collect_invalidate"
             label="已作废合同数（收）">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="rent_invalidate"
             label="已作废合同数（租）">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="collect_handin"
             label="已上缴合同数（收）">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="rent_handin"
             label="已上缴合同数（租）">
           </el-table-column>
         </el-table>
       </div>
-      <div v-show="selectFlag==2" class="blueTable">
-        <!--合同申领-->
-        <div class="filter">
-          <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline" style="display: flex;justify-content:flex-end">
-            <el-form-item>
-              <el-input v-model="formInline.name" placeholder="搜索">
-                <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
-              </el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary">导出</el-button>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="createNewTask">合同申领</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
-
+      <!--合同申领-->
+      <div v-show="selectFlag==2">
         <el-table
-          :data="contractData"
+          :data="contractApplyData"
           @row-dblclick = 'showContractDetail'
           @row-contextmenu='openApplyMenu'
           style="width: 100%">
@@ -157,28 +122,47 @@
         </el-table>
       </div>
 
-      <div v-show="selectFlag==3" class="blueTable">
-        <!--合同作废-->
-        <div class="filter">
-          <el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline" style="display: flex;justify-content:flex-end">
-            <el-form-item>
-              <el-input v-model="formInline.name" placeholder="搜索">
-                <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
-              </el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary">导出</el-button>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="createNewTask">合同申领</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
-
+      <!--合同作废-->
+      <div v-show="selectFlag==3">
         <el-table
-          :data="contractData"
+          :data="contractCancelData"
           @row-dblclick = 'showContractDetail'
           @row-contextmenu='openCancelMenu'
+          style="width: 100%">
+          <el-table-column
+            prop="report_time"
+            label="领取时间">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="部门">
+          </el-table-column>
+          <el-table-column
+            prop="staff_name"
+            label="姓名">
+          </el-table-column>
+          <el-table-column
+            prop="collect_contracts_count"
+            label="领取合同数（收）">
+          </el-table-column>
+          <el-table-column
+            prop="rent_contracts_count"
+            label="领取合同数（租）">
+          </el-table-column>
+          <el-table-column
+            prop="name"
+            label="备注">
+
+          </el-table-column>
+        </el-table>
+      </div>
+
+      <!--合同上缴-->
+      <div v-show="selectFlag==4">
+        <el-table
+          :data="contractHandInData"
+          @row-dblclick = 'showContractDetail'
+          @row-contextmenu='openHandInMenu'
           style="width: 100%">
           <el-table-column
             prop="report_time"
@@ -206,18 +190,15 @@
           </el-table-column>
         </el-table>
       </div>
-
-
       <div class="tableBottom">
         <div class="left">
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-sizes="[10, 20, 30, 40]"
-            :page-size="10"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="400">
+            :current-page="params.page"
+            :page-size="12"
+            layout="total, prev, pager, next, jumper"
+            :total="totalNumbers">
           </el-pagination>
         </div>
       </div>
@@ -225,14 +206,18 @@
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
 
-    <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
-    <Contact :contractDialog="contractDialog" @close="closeContract"></Contact>
-    <CreateTask :createTaskDialog="createTaskDialog" @close="closeCreateTask"></CreateTask>
+    <Organization :organizationDialog="organizationDialog" @close="closeModalCallback"></Organization>
+    <Contact :contractDialog="contractDialog" @close="closeModalCallback"></Contact>
+    <CreateTask :createTaskDialog="createTaskDialog" @close="closeModalCallback"></CreateTask>
 
-    <Dispatch :dispatchDialog="dispatchDialog" @close="closeDispatch"></Dispatch>
+    <Dispatch :dispatchDialog="dispatchDialog" @close="closeModalCallback"></Dispatch>
 
     <EditApply :editApplyDialog="editApplyDialog" :applyEditId="applyEditId"
-               :startOperate="startOperate" @close="closeEditApplyDialog"></EditApply>
+               :startOperate="startOperate" @close="closeModalCallback"></EditApply>
+    <EditCancel :editCancelDialog="editCancelDialog" :cancelEditId="cancelEditId"
+               :startOperate="startOperate" @close="closeModalCallback"></EditCancel>
+    <EditHandIn :editHandInDialog="editHandInDialog" :handInEditId="handInEditId"
+               :startOperate="startOperate" @close="closeModalCallback"></EditHandIn>
 
   </div>
 </template>
@@ -245,10 +230,12 @@
   import Dispatch from './components/dispatch.vue'
 
   import EditApply from './components/editApply.vue'
+  import EditCancel from './components/editCancel.vue'
+  import EditHandIn from './components/editHandin.vue'
 
 
   export default {
-    components:{Organization,Contact,CreateTask,RightMenu,Dispatch,EditApply},
+    components:{Organization,Contact,CreateTask,RightMenu,Dispatch,EditApply,EditCancel,EditHandIn},
     data () {
       return {
         rightMenuX: 0,
@@ -257,58 +244,83 @@
         lists: [],
         /***********/
         selectFlag:1,
-        formInline:{},
-        tableData: [],
-        currentPage: 1,
+        totalNumbers:0,
+        params:{
+          page:1,
+          search:'',
+        },
 
-
+        //***********************//
         organizationDialog:false,
         createTaskDialog : false,
         contractDialog: false,  //合同详情
         dispatchDialog:false,
 
         editApplyDialog:false,    //修改合同申领
-        contractData:[],    //列表数据
+        editCancelDialog:false,    //修改合同作废
+        editHandInDialog:false,    //修改合同作废
+        contractTotalData:[],    //汇总列表列表数据
+        contractApplyData:[],    //列表数据
+        contractCancelData:[],    //列表数据
+        contractHandInData:[],    //列表数据
         applyEditId:'',     //领取合同id
+        cancelEditId:'',     //领取合同id
+        handInEditId:'',     //领取合同id
         startOperate:false,   //开始操作
       }
     },
     watch:{
       selectFlag(val){
-          if(val ===2){
-              this.getApplyList();
-          }
+        this.params.page = 1;
+        if(val ===2){
+          this.getApplyList();
+        }else if(val === 3){
+          this.getCancelList();
+        }else if(val === 4){
+          this.getHandInList();
+        }else if(val === 1){
+          this.getTotalList();
+        }
       }
+    },
+    mounted(){
+      this.getTotalList();
     },
     methods:{
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
+
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        this.params.page = val;
+        if(this.selectFlag ===2){
+          this.getApplyList();
+        }else if(this.selectFlag === 3){
+          this.getCancelList();
+        }else if(this.selectFlag === 4){
+          this.getHandInList();
+        }else if(this.selectFlag === 1){
+          this.getTotalList();
+        }
       },
 
-      openOrganizationModal(){
-        this.organizationDialog = true
-      },
-      closeOrganization(){
-        this.organizationDialog = false;
-      },
-      showContractDetail(){   //显示合同详情
-          this.contractDialog = true
-      },
-      closeContract(){
-          this.contractDialog = false;
+      fuzzySearch(){
+        this.params.page = 1;
+        if(this.selectFlag ===2){
+          this.getApplyList();
+        }else if(this.selectFlag === 3){
+          this.getCancelList();
+        }else if(this.selectFlag === 4){
+          this.getHandInList();
+        }else if(this.selectFlag === 1){
+          this.getTotalList();
+        }
       },
       selectStatus(flag){
-          this.selectFlag = flag;
+        this.selectFlag = flag;
       },
-      createNewTask(){
-          this.createTaskDialog = true
-      },
-      closeCreateTask(){
-          this.createTaskDialog = false
-      },
+
+      //************************右键操作项*****************************
       openApplyMenu(row, event){
         this.applyEditId = row.id;
 
@@ -322,12 +334,19 @@
       },
 
       openCancelMenu(row, event){
-        this.applyEditId = row.id;
+        this.cancelEditId = row.id;
         this.lists = [
-          {clickIndex: 'dispatchApply', headIcon: 'el-icon-menu', label: '分配',},
-          {clickIndex: 'editApply', headIcon: 'el-icon-edit', label: '修改',},
-          {clickIndex: 'addRemarkApply', headIcon: 'el-icon-edit-outline', label: '添加备注',},
-          {clickIndex: 'deleteApply', headIcon: 'el-icon-delete', label: '删除',},
+          {clickIndex: 'editCancel', headIcon: 'el-icon-edit', label: '修改',},
+          {clickIndex: 'deleteCancel', headIcon: 'el-icon-delete', label: '删除',},
+        ];
+        this.contextMenuParam(event);
+      },
+
+      openHandInMenu(row,event){
+        this.handInEditId = row.id;
+        this.lists = [
+          {clickIndex: 'editHandIn', headIcon: 'el-icon-edit', label: '修改',},
+          {clickIndex: 'deleteHandIn', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },
@@ -362,31 +381,101 @@
                 });
               });
               break;
+            case 'editCancel' :
+              this.startOperate = true;
+              this.editCancelDialog = true;
+              break;
+            case 'editHandIn' :
+              this.startOperate = true;
+              this.editHandInDialog = true;
+              break;
           }
       },
+
+
+
+      openOrganizationModal(){
+        this.organizationDialog = true
+      },
+      showContractDetail(){   //显示合同详情
+        this.contractDialog = true
+      },
+
+      createNewTask(){
+        this.createTaskDialog = true
+      },
+
+
+      //****************************汇总***************************//
+
+      getTotalList(){
+        this.$http.get(globalConfig.server+'contract/mission',{params:this.params}).then((res) => {
+          if(res.data.code === '20000'){
+            this.contractTotalData = res.data.data.data;
+            this.totalNumbers =res.data.data.count;
+          }else {
+            this.contractTotalData =[];
+            this.totalNumbers =0;
+          }
+        })
+      },
+
 
       //****************************合同申领***********************//
 
 
-      //修改合同个申领回到
-      closeEditApplyDialog(){
-          this.editApplyDialog = false;
-          this.startOperate = false;
-      },
+      //修改合同相关回调
+      closeModalCallback(){
+        this.startOperate = false;
 
-      closeDispatch(){
+
+        this.editApplyDialog = false;
+        this.editCancelDialog = false;
+        this.editHandInDialog = false;
+        this.organizationDialog = false;
+        this.contractDialog = false;
+        this.createTaskDialog = false;
         this.dispatchDialog = false;
       },
+
+
       getApplyList(){
-          this.$http.get(globalConfig.server+'contract/apply').then((res) => {
-            if(res.data.code === '20000'){
-              this.contractData = res.data.data.data;
-            }
-          })
+        this.$http.get(globalConfig.server+'contract/apply',{params:this.params}).then((res) => {
+          if(res.data.code === '20000'){
+            this.contractApplyData = res.data.data.data;
+            this.totalNumbers =res.data.data.count;
+          }else {
+            this.contractApplyData =[];
+            this.totalNumbers =0;
+          }
+        })
       },
       //****************************合同作废***********************//
+      getCancelList(){
+        this.$http.get(globalConfig.server+'contract/invalidate',{params:this.params}).then((res) => {
+          if(res.data.code === '20000'){
+            this.contractCancelData = res.data.data.data;
+            this.totalNumbers =res.data.data.count;
+          }else {
+            this.contractCancelData =[];
+            this.totalNumbers =0;
+          }
+        })
+      },
 
+      //***************************合同上缴**************************//
 
+      getHandInList(){
+        this.$http.get(globalConfig.server+'contract/handin',{params:this.params}).then((res) => {
+          if(res.data.code === '20000'){
+            this.contractHandInData = res.data.data.data;
+            this.totalNumbers =res.data.data.count;
+          }else {
+            this.contractHandInData =[];
+            this.totalNumbers =0;
+          }
+        })
+      },
 
       ///***********************************************************//
       //关闭右键菜单

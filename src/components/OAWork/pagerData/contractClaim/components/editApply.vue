@@ -159,7 +159,7 @@
       };
     },
     mounted(){
-        this.getDictionary();
+
     },
     watch:{
       editApplyDialog(val){

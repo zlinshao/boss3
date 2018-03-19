@@ -168,7 +168,7 @@
               </div>
 
               <div class="title">
-                租房合同上缴(请勾选)
+                租房合同上缴(请勾选){{collectCancelRent}}
               </div>
               <div v-for="(item,index) in Object.keys(collectCancelRent)" >
                 <el-row >
