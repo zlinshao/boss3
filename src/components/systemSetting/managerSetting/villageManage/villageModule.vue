@@ -296,6 +296,7 @@
         })
       },
       close_() {
+        this.villageId = '';                     //小区id
         this.form.province = '';                 //小区位置
         this.form.city = '';                     //小区位置
         this.form.area = '';                     //小区位置
