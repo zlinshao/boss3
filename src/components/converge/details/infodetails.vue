@@ -20,12 +20,20 @@
               </div>
             </div>
             <div class="InfoRight">
-              <div class="title" v-if="formList.dict_ids !== '主轮播' && formList.dict_ids !== '次标题1' && formList.dict_ids !== '次标题2'">{{formList.dict_ids}}</div>
+              <div class="title"
+                   v-if="formList.dict_ids !== '主轮播' && formList.dict_ids !== '次标题1' && formList.dict_ids !== '次标题2'">
+                {{formList.dict_ids}}
+              </div>
               <div class="title" v-else>乐伽新闻</div>
               <div class="newsDate">{{formList.create_time}}</div>
             </div>
           </div>
-
+          <div class="frontCover">
+            <!--<p>封面图</p>-->
+            <h1 v-for="key in cover_pic">
+              <img :src="pic.uri" v-for="pic in key">
+            </h1>
+          </div>
           <div id="htmlForEditor">
 
           </div>
@@ -176,6 +184,8 @@
         addContent: '',
         commentOn: [],
 
+        cover_pic: [],
+
         currentPage: 1,
         paging: 0,
         page: 1,
@@ -230,6 +240,7 @@
         this.$http.get(this.urls + 'oa/portal/' + id).then((res) => {
           if (res.data.code === '80020') {
             this.formList = res.data.data;
+            this.cover_pic = res.data.data.album.cover_pic;
             let detail = res.data.data;
             document.getElementById('htmlForEditor').innerHTML = detail.content;
             this.staffs = detail.staffs[0];
@@ -318,7 +329,10 @@
       -moz-border-radius: $n;
       border-radius: $n;
     }
-
+    img {
+      width: 100%;
+      height: 100%;
+    }
     .el-loading-mask {
       .el-loading-spinner {
         top: 30%;
@@ -341,7 +355,13 @@
         }
       }
     }
+    .frontCover {
+      h1 {
+        width: 100%;
+        height: 300px;
+      }
 
+    }
     #htmlForEditor {
       margin-top: 18px;
     }
@@ -456,8 +476,6 @@
         max-height: 40px;
         img {
           @include border_radius(50%);
-          width: 100%;
-          height: 100%;
         }
       }
       .comments {
@@ -539,10 +557,6 @@
           cursor: pointer;
           margin-top: 11px;
           overflow: hidden;
-          img {
-            width: 100%;
-            height: 100%;
-          }
         }
         .ingreat_detail {
           width: 100%;

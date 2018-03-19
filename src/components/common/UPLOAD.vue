@@ -106,7 +106,8 @@
             },
 
             'FilesAdded': function (up, files) {
-
+              _this.isUploading = true;
+              _this.$emit('getImg', [_this.ID, _this.imgId, _this.isUploading]);
               plupload.each(files, function (file) {
                 if (!file || !/image\//.test(file.type) || /photoshop/.test(file.type)) {
 
@@ -145,7 +146,7 @@
             },
             'BeforeUpload': function (up, file) {
               // 每个文件上传前，处理相关的事情
-              _this.isUploading = true;
+
             },
             'UploadProgress': function (up, file) {
               // 每个文件上传时，处理相关的事情
