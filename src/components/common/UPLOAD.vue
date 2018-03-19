@@ -228,7 +228,7 @@
       display: -webkit-flex; /* Safari */
       flex-wrap: wrap;
       > div {
-        margin-left: 15px;
+        margin-right: 15px;
         margin-top: 15px;
         &:first-child{
           margin-left: 0;
