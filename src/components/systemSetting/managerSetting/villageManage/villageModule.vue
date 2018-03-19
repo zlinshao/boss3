@@ -1,6 +1,6 @@
 <template>
   <div id="villageModule" class="dialog_scroll">
-    <el-dialog title="新增小区" :visible.sync="dialogVisible" width="40%">
+    <el-dialog :title="formList.status" :visible.sync="dialogVisible" width="40%">
       <div class="modules scroll_bar">
         <el-form :model="form" size="mini" label-width="80px">
           <el-row>
@@ -89,7 +89,7 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="物业费">
-                <el-input type="number" v-model="form.propertyFee" placeholder="金333额"></el-input>
+                <el-input type="number" v-model="form.propertyFee" placeholder="金额"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -108,9 +108,9 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="dialogVisible = false">取&nbsp;消</el-button>
-        <el-button v-if="formList.status === 'add'" size="small" type="primary" @click="villageSave('save')">确&nbsp;定
+        <el-button v-if="formList.status === '新增小区'" size="small" type="primary" @click="villageSave('save')">确&nbsp;定
         </el-button>
-        <el-button v-if="formList.status === 'revise'" size="small" type="primary" @click="villageSave('update')">修&nbsp;改</el-button>
+        <el-button v-if="formList.status === '修改小区'" size="small" type="primary" @click="villageSave('update')">修&nbsp;改</el-button>
       </div>
     </el-dialog>
 
@@ -192,6 +192,7 @@
       dialogVisible(val) {
         if (!val) {
           this.$emit('close');
+          this.close_();
         }
       },
     },
@@ -311,6 +312,7 @@
         this.form.addressId = [];                //小区照片
         this.form.configure = '';                //周边配套
         this.form.villageIntroduce = '';         //小区简介
+        $('.imgItem').remove();
       },
       // ====================提示信息=================
       prompt(val, stu) {
