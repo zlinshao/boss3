@@ -235,7 +235,7 @@
       min-height: 650px;
     }
     .main {
-      .myPicture{
+      .myPicture {
         margin-left: 17px;
         color: #6a8dfb;
         padding-top: 10px;
