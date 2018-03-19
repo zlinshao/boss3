@@ -27,7 +27,7 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">部门人员</div>
+                  <div class="el_col_label">部门搜索</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                 <el-form-item >
@@ -134,7 +134,7 @@
         </div>
       </div>
     </div>
-    <Organization :organizationDialog="organizationDialog" :length="len"   @close="closeOrganization"  @selectMember="coloseaa"></Organization>
+    <Organization :organizationDialog="organizationDialog" :length="len" :type="depart"  @close="closeOrganization"  @selectMember="coloseaa"></Organization>
   </div>
 </template>
 
@@ -151,16 +151,18 @@
         urls:globalConfig.server,    
         departname:'', 
         pename:'', 
+        value4:'',
         tableData: [],
         organizationDialog: false,
         len:0,
+        depart:'',
         orgtype:'',
         form:{
           page:1,
           limit:12,
           time:'',
           pename:'',
-          year_month:'2018-03',
+          year_month:'2018-03',  //TODO
           department_id:''
           },
         isHigh: false,
@@ -208,16 +210,19 @@
       openOrganizationModal() {
         this.organizationDialog = true;
         this.len=1;
+        this.depart="depart";
       },
       closeOrganization() {
         this.organizationDialog = false;
         this.len=0;
+        this.depart="";
       },
       coloseaa(val){
         console.log(val)
         this.departname=val[0].name
         this.form.department_id=val[0].id
         this.len=0;
+        this.depart="";
       },
       myData(val) {
         this.tableData = [];
@@ -248,12 +253,16 @@
       },
       // 重置
       resetting() {
-          this.form.page=1,
-          this.form.limit=12,
-          this.form.department_id='',
-          this.form.time='',
-          this.form.pename='',
-        this.myData(1);
+          this.form={
+          page:1,
+          limit:12,
+          time:'',
+          pename:'',
+          department_id:''
+          },
+          this.departname='',
+          this.value4='',
+          this.myData(1);
       },
       // 高级筛选
       highGrade() {
