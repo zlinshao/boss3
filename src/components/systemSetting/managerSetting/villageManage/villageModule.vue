@@ -278,7 +278,7 @@
           village_alias: this.form.otherName,
           latitude: this.form.latitude,
           longitude: this.form.longitude,
-          built_year: this.form.built_year,
+          built_year: this.form.built_year + 1,
           house_type: this.form.houseType,
           total_buildings: this.form.allBuilding,
           property_fee: this.form.propertyFee,
