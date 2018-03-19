@@ -142,10 +142,10 @@
         </div>
         <div class="personInfo">
           <div class="head" style="cursor: pointer">
-            <span v-if="personal !== undefined">
+            <span v-if="personal.avatar !== ''">
               <img data-card="" :data-src="JSON.stringify(personal)" :src="personal.avatar">
             </span>
-            <span v-else="">
+            <span v-else>
               <img src="../assets/images/head.jpg">
             </span>
 
