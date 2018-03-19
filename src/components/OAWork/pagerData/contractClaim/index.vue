@@ -136,12 +136,12 @@
         </div>
 
         <el-table
-          :data="tableData"
+          :data="contractData"
           @row-dblclick = 'showContractDetail'
           @row-contextmenu='openApplyMenu'
           style="width: 100%">
           <el-table-column
-            prop="date"
+            prop="report_time"
             label="领取时间">
           </el-table-column>
           <el-table-column
@@ -149,15 +149,15 @@
             label="部门">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="staff_name"
             label="姓名">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="collect_contracts_count"
             label="领取合同数（收）">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="rent_contracts_count"
             label="领取合同数（租）">
           </el-table-column>
           <el-table-column
@@ -180,12 +180,13 @@
         </div>
       </div>
     </div>
+    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+               @clickOperate="clickEvent"></RightMenu>
 
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
     <Contact :contractDialog="contractDialog" @close="closeContract"></Contact>
     <CreateTask :createTaskDialog="createTaskDialog" @close="closeCreateTask"></CreateTask>
-    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-               @clickOperate="clickEvent"></RightMenu>
+
     <Dispatch :dispatchDialog="dispatchDialog" @close="closeDispatch"></Dispatch>
 
     <EditApply :editApplyDialog="editApplyDialog" @close="closeEditApplyDialog"></EditApply>
@@ -212,58 +213,26 @@
         show: false,
         lists: [],
         /***********/
-
         selectFlag:1,
         formInline:{},
-        tableData: [
-          {
-            date: '2016-05-03',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-          {
-            date: '2016-05-04',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-          {
-            date: '2016-05-01',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-          {
-            date: '2016-05-01',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          }
-        ],
+        tableData: [],
         currentPage: 1,
+
+
         organizationDialog:false,
         createTaskDialog : false,
         contractDialog: false,  //合同详情
         dispatchDialog:false,
 
         editApplyDialog:false,    //修改合同申领
+        contractData:[],    //列表数据
+      }
+    },
+    watch:{
+      selectFlag(val){
+          if(val ===2){
+              this.getApplyList();
+          }
       }
     },
     methods:{
@@ -314,10 +283,10 @@
             case 'editApply' :
               this.editApplyDialog = true;
               break;
-            case 'dispatchDialog' :
+            case 'dispatchApply' :
                 this.dispatchDialog = true;
                 break;
-            case 'delete':
+            case 'deleteApply':
               this.$confirm('您确定将其删除吗', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -337,6 +306,9 @@
           }
       },
 
+      //****************************合同申领***********************//
+
+
       //修改合同个申领回到
       closeEditApplyDialog(){
           this.editApplyDialog = false;
@@ -345,10 +317,16 @@
       closeDispatch(){
         this.dispatchDialog = false;
       },
+      getApplyList(){
+          this.$http.get(globalConfig.server+'contract/apply').then((res) => {
+            if(res.data.code === '20000'){
+              this.contractData = res.data.data.data;
+            }
+          })
+      },
 
 
-
-      ///**********************************
+      ///***********************************************************//
       //关闭右键菜单
       closeMenu(){
         this.show = false;
