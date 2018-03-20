@@ -137,7 +137,6 @@
         this.albumId = id;
       },
       deleteAlbum(id) {
-        console.log(`deleteAlbum-albumId====${JSON.stringify(id)}`);
         this.$confirm('删除相册会将相册中的照片一起删除，您确定删除吗？','删除相册',{
           confirmButtonText: '确定',
           cancelButtonText: '取消',

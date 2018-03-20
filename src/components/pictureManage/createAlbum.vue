@@ -56,9 +56,6 @@
             createAlbumId: '',
           }
         },
-      mounted() {
-          //console.log(`createAlbum-albumDetail====${this.albumDetail}`);
-      },
         watch: {
           createAlbumDialog(val) {
             this.createAlbumDialogVisible = val;
@@ -70,9 +67,6 @@
 
           },
           albumId(val) {
-            // this.form = val;
-            // this.form.theme = val.theme.toString(); // 主题需要字符串才能选中显示
-            console.log(`createAlbum-albumId-watch====${JSON.stringify(val)}`);
             var self = this;
             this.$http.get(globalConfig.server+"album/2").then((res) =>{
               if(res.data.code == "20110") {
@@ -85,9 +79,12 @@
       methods: {
         createAlbum() {
             this.$http.post(globalConfig.server + "album",this.form).then((res)=>{
+              console.log(res.data)
               if(res.data.code == '20110'){
                 this.createAlbumDialogVisible = false;
+                console.log(res.data)
                 this.createAlbumId = res.data.data.id;
+                console.log(`createAlbumId====${this.createAlbumId}`);
                 this.$confirm('相册'+this.form.name+'保存成功，是否马上上传照片到这个相册?', '创建成功', {
                   confirmButtonText: '确定',
                   cancelButtonText: '取消',

@@ -1,6 +1,6 @@
 <template>
   <div id="choosePictures">
-    <el-dialog title="选择相册" :visible.sync="choosePicturesDialogVisible" width="40%">
+    <el-dialog title="选择相册" :visible.sync="choosePicturesDialogVisible" width="50%">
       <div class="">
         <el-form size="mini" :model="form" label-width="100px">
           <el-row >
@@ -57,6 +57,7 @@
               this.choosePicturesDialogVisible = false;
               this.improveImgInfoDialog = true;  //显示完善照片信息界面
               this.form.picture_ids = [];
+              $(".imgItem").remove();
             }else{
               this.$notify.warning({
                 title:"警告",
@@ -67,7 +68,6 @@
 
         },
         getImage(val) {
-          console.log(val);
           this.form.picture_ids = val[1]; //选择的图片数组ids
         },
         closeImproveImgInfoDialog() {
@@ -80,7 +80,6 @@
           this.$http.get(globalConfig.server + "album").then((res) =>{
             if (res.data.code == "20110") {
               this.albumData = res.data.data;
-              console.log(`select-albumData-------${JSON.stringify(this.albumData)}`);
             }
           });
         },
@@ -94,6 +93,10 @@
           if(!val) {
             this.$emit('close');
           }
+        },
+        albumId(val) {
+          this.form.album_id =  val;
+          this.getImgData();
         }
       },
       mounted() {

@@ -161,7 +161,6 @@
         this.$http.get(globalConfig.server + "photo?album_id="+ this.albumId).then((res) => {
           if (res.data.code == "20210") {
             this.photoData = res.data.data;
-            console.log(`photoData=====${JSON.stringify(this.photoData)}`);
           } else {
             this.$notify.warning({
               title:"警告",
@@ -226,7 +225,6 @@
         this.$http.get(globalConfig.server + 'album/'+ this.albumId).then((res) => {
             if(res.data.code == '20110'){
               this.albumDetail = res.data.data;
-              console.log(`albumDetail=====${JSON.stringify(this.albumDetail)}`);
             }else{
               this.$notify.warning({
                 title:"警告",
@@ -239,7 +237,6 @@
     mounted() {
       this.getAllPhotos();
       this.getAlbumDetail();
-      console.log(`albumId=====${JSON.stringify(this.albumId)}`);
     }
   }
 </script>
