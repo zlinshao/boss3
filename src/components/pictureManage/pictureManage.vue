@@ -314,7 +314,7 @@
           clear:both;
         }
         .text_over_norwap{
-          width: 160px;
+          width: 150px;
           overflow: hidden;
           white-space: nowrap;
           display: inline-block;
