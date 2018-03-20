@@ -132,7 +132,7 @@ import DailyRecord from '../components/dailyRecord/index.vue'                   
 import SthToDo from '../components/OAWork/sthToDo/index.vue'                              //待办事项
 
 
-import Integraldetail from '../components/humanResource/integralManage/components/integraldetail.vue'         // 积分明细
+import Integraldetail from '../components/integraldetail/integraldetail.vue'         // 积分明细
 
 Vue.use(Router);
 
