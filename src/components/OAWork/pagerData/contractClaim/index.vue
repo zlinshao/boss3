@@ -47,7 +47,7 @@
           :data="contractTotalData"
           style="width: 100%">
           <el-table-column
-            prop="date"
+            prop="department_name"
             label="部门">
           </el-table-column>
           <el-table-column
@@ -100,7 +100,7 @@
             label="领取时间">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="department_name"
             label="部门">
           </el-table-column>
           <el-table-column
@@ -134,7 +134,7 @@
             label="领取时间">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="department_name"
             label="部门">
           </el-table-column>
           <el-table-column
@@ -169,7 +169,7 @@
             label="领取时间">
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="department_name  "
             label="部门">
           </el-table-column>
           <el-table-column
