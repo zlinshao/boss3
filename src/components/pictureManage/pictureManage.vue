@@ -50,8 +50,8 @@
                         <el-dropdown-item @click.native="deleteAlbum(item.id)">删除</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
-                    <img v-if="item.cover_path" :src="item.cover_path" height="150px" @click="goPictureDetail(item)">
-                    <img v-else src="../../assets/images/university/caia412-34427.png" height="150px"  @click="goPictureDetail(item)">
+                    <img v-if="item.cover_path" :src="item.cover_path" height="150px" @click="goPictureDetail(item.id)">
+                    <img v-else src="../../assets/images/university/caia412-34427.png" height="150px"  @click="goPictureDetail(item.id)">
                   <div class="clearfix">
                     <span class="text_over_norwap">{{item.name}}</span>
                     <span style="float: right;">{{item.photo_count}}张</span>
@@ -77,7 +77,7 @@
       </el-row>
     </div>
     <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog" :albumId="albumId"></create-album>
-    <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog"></choose-pictures>
+    <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog" ></choose-pictures>
   </div>
 </template>
 
@@ -103,8 +103,8 @@
       routerLink(val) {
         this.$router.push({path: val})
       },
-      goPictureDetail(item) {
-        this.$router.push({path: '/pictureDetail', query:{albumDetail: item}});
+      goPictureDetail(id) {
+        this.$router.push({path: '/pictureDetail', query:{albumId: id}});
       },
       openModalDialog(type) {
         switch(type) {
@@ -145,7 +145,7 @@
         }).then(() => {
           this.$http.put(globalConfig.server + 'album/delete/' + id).then((res) => {
             if(res.data.code == "20110") {
-              // window.location.reload();
+              this.getImgData();
             } else {
               this.$notify.warning({
                 title:"警告",

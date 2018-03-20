@@ -22,7 +22,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="choosePicturesDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="startUploadImages">保存</el-button>
+        <el-button size="small" type="primary" @click="saveImages">保存</el-button>
       </span>
     </el-dialog>
     <improve-img-info :improveImgInfoDialog="improveImgInfoDialog" @close="closeImproveImgInfoDialog" @upload="continueUploading"></improve-img-info>
@@ -51,11 +51,12 @@
           }
         },
       methods: {
-        startUploadImages() {
+        saveImages() {
           this.$http.post(globalConfig.server + 'photo',this.form).then((res)=>{
             if(res.data.code == '20210') {
               this.choosePicturesDialogVisible = false;
               this.improveImgInfoDialog = true;  //显示完善照片信息界面
+              this.form.picture_ids = [];
             }else{
               this.$notify.warning({
                 title:"警告",
@@ -76,10 +77,10 @@
           this.choosePicturesDialogVisible = true;
         },
         getImgData() {
-          var self = this;
           this.$http.get(globalConfig.server + "album").then((res) =>{
             if (res.data.code == "20110") {
-              self.albumData = res.data.data;
+              this.albumData = res.data.data;
+              console.log(`select-albumData-------${JSON.stringify(this.albumData)}`);
             }
           });
         },
@@ -87,6 +88,7 @@
       watch: {
         choosePicturesDialog(val) {
           this.choosePicturesDialogVisible = val;
+          this.getImgData();
         },
         choosePicturesDialogVisible(val) {
           if(!val) {
@@ -95,7 +97,7 @@
         }
       },
       mounted() {
-          this.getImgData();
+         this.getImgData();
          this.form.album_id =  this.albumId;
       },
     }

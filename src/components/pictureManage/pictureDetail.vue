@@ -101,8 +101,8 @@
         <el-button size="small" type="primary" @click="editPhotoSuccess">确 定</el-button>
       </span>
     </el-dialog>
-    <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog" :albumId="albumDetail.id"></create-album>
-    <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog" :albumId="albumDetail.id"></choose-pictures>
+    <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog" :albumId="albumId"></create-album>
+    <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog" :albumId="albumId"></choose-pictures>
   </div>
 </template>
 
@@ -122,7 +122,8 @@
         choosePicturesDialog: false,
         createAlbumDialog: false,
         photoData: [],
-        albumDetail: this.$route.query.albumDetail,
+        albumDetail: {},
+        albumId: this.$route.query.albumId,
         photoDetailDialogVisible: false,
         photoForm: {
           name: '',
@@ -157,9 +158,15 @@
         this.choosePicturesDialog = false;
       },
       getAllPhotos(){
-        this.$http.get(globalConfig.server + "photo?album_id="+ this.albumDetail.id).then((res) => {
+        this.$http.get(globalConfig.server + "photo?album_id="+ this.albumId).then((res) => {
           if (res.data.code == "20210") {
             this.photoData = res.data.data;
+            console.log(`photoData=====${JSON.stringify(this.photoData)}`);
+          } else {
+            this.$notify.warning({
+              title:"警告",
+              message:res.data.msg
+            });
           }
         });
       },
@@ -167,9 +174,9 @@
         this.photoDetailDialogVisible = true;
       },
       setCoverImg(item) {
-        this.$http.put(globalConfig.server + 'album/cover/' + item.id + '&cover=' + this.albumDetail.id).then((res) => {
+        this.$http.put(globalConfig.server + 'album/cover/' + item.id + '?cover=' + this.albumId).then((res) => {
           if(res.data.code == "20110") {
-            // window.location.reload();
+
           } else {
             this.$notify.warning({
               title:"警告",
@@ -189,7 +196,7 @@
         }).then(() => {
           this.$http.put(globalConfig.server + 'photo/delete/'+ id ).then((res) =>{
             if (res.data.code == "20210") {
-              // window.location.reload();
+              this.getAllPhotos();  // 重新请求数据，相当于刷新
             } else {
               this.$notify.warning({
                 title:"警告",
@@ -215,10 +222,24 @@
       editAlbum(id) {
         this.createAlbumDialog = true;
       },
+      getAlbumDetail(){
+        this.$http.get(globalConfig.server + 'album/'+ this.albumId).then((res) => {
+            if(res.data.code == '20110'){
+              this.albumDetail = res.data.data;
+              console.log(`albumDetail=====${JSON.stringify(this.albumDetail)}`);
+            }else{
+              this.$notify.warning({
+                title:"警告",
+                message:res.data.msg
+              });
+            }
+        });
+      },
     },
     mounted() {
       this.getAllPhotos();
-      console.log(`albumDetail==========${JSON.stringify(this.albumDetail)}`);
+      this.getAlbumDetail();
+      console.log(`albumId=====${JSON.stringify(this.albumId)}`);
     }
   }
 </script>
