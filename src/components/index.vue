@@ -1,3 +1,4 @@
+jing'jian
 <template>
   <div id="index" @click="clickScreen">
     <div class="navBarLeft" :class="isFull? 'navBarRight':'' ">
@@ -33,7 +34,7 @@
     <div class="navBar" :class="isFull? 'navBarHide':'' ">
       <div class="left">
         <div class="logo" :class="isCollapse? 'isCollapse_logo':'' ">
-          <div class="boss" :class="isCollapse? 'boss1':'' ">BOSS</div>
+          <div class="boss" :class="isCollapse? 'boss1':'' " @click="routers('/main')">BOSS</div>
           <div v-if="isCollapse" class="isCollapse" @click="changeCollapse"></div>
           <div v-if="!isCollapse" class="el-icons-fa-bars" @click="changeCollapse"></div>
         </div>
@@ -42,24 +43,39 @@
         </div>
       </div>
       <div class="right">
-        <div class="countdown" style="border-right: 1px solid #DDDDDD">
-          <span style="line-height: 20px;color: #409EFF;"  @click="fullScreen(1)">精简模式</span>
+        <div class="countdown">
+          <span @click="fullScreen(1)" class="topFlex">
+            <i class="iconfont icon-quanping"></i><span>全屏</span>
+          </span>
         </div>
         <div class="countdown">
-          <i class="el-icon-time"></i>
-          {{Countdown}}
+          <el-dropdown trigger="click">
+            <span class="el-dropdown-link topFlex">
+              <i class="iconfont icon-qita1"></i><span>快捷入口</span>
+            </span>
+            <el-dropdown-menu slot="dropdown" class="shortcutList">
+              <el-dropdown-item v-for="(key,index) in 16" :key="index" :class="{'border_top': index > 3}">
+                <b class="iconfont icon-qita1"
+                   :class="{'backColor1': -1 < index,'backColor2': index === 3 || index === 11 || index === 13,'backColor3': index === 5 || index === 14,'backColor4':index === 4}"></b>
+                <span>黄金糕钉钉</span>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
-        <div class="message" style="position: relative">
+        <div class="countdown topFlex">
+          <i class="el-icon-time"></i>
+          <span>{{Countdown}}</span>
+        </div>
+        <div class="countdown message" style="position: relative">
           <el-dropdown>
-            <el-badge :value="unReadMessageData.length" class="item">
-              <i class="el-icons-fa-comment-o"></i>
-              消 息
+            <el-badge :value="unReadMessageData.length" class="item topFlex">
+              <i class="el-icons-fa-comment-o"></i><span>消息</span>
             </el-badge>
             <el-dropdown-menu slot="dropdown" class="menuLists">
               <!--消息图标-->
               <el-dropdown-item v-for="(item,index) in unReadMessageData" v-if="index<2" :key="index">
                 <div class="first">
-                  <el-row   @click.native="showMessageDetail(item)">
+                  <el-row @click.native="showMessageDetail(item)">
                     <el-col :span="4">
                       <div class="picSign">
                         <i class="el-icon-bell"></i>
@@ -74,28 +90,6 @@
                   </el-row>
                 </div>
               </el-dropdown-item>
-
-              <!--<el-dropdown-item>-->
-                <!--<div class="first">-->
-                  <!--<el-row>-->
-                    <!--<el-col :span="4">-->
-                      <!--<div class="picSign" style="background: #58d788;">-->
-                        <!--<i class="el-icon-edit-outline"></i>-->
-                      <!--</div>-->
-                    <!--</el-col>-->
-                    <!--<el-col :span="20">-->
-                      <!--<div class="public" @click="routers('messageCenter')">-->
-                        <!--<div class="signOne" style="color: #58d788;">审批提醒</div>-->
-                        <!--<div class="limits">Lorem ipsum dolor23r23222222222222222 Lorem ipsum dolor sit amet,-->
-                          <!--consectetur adipisicing elit. Ad aperiam architecto aspernatur dignissimos dolor dolorem-->
-                          <!--doloremque ex facere facilis in minima mollitia, nihil nostrum quo ratione saepe tempore-->
-                          <!--totam voluptatem?-->
-                        <!--</div>-->
-                      <!--</div>-->
-                    <!--</el-col>-->
-                  <!--</el-row>-->
-                <!--</div>-->
-              <!--</el-dropdown-item>-->
             </el-dropdown-menu>
           </el-dropdown>
 
@@ -134,11 +128,6 @@
             </div>
             <div class="gladBackground"></div>
           </div>
-        </div>
-
-        <div class="guide">
-          <i class="el-icon-warning"></i>
-          使用指南
         </div>
         <div class="personInfo">
           <div class="head" style="cursor: pointer">
@@ -325,13 +314,13 @@
             <template v-for="(item,index) in $router.options.routes">
               <!--一级菜单-->
               <el-menu-item v-if="item.hidden" v-for="child in item.children" :index="child.path" :key="child.path">
-                <i :class="child.icon" style="font-size: 22px"></i>
+                <i :class="child.icon" style="font-size: 24px"></i>
                 <span slot="title"> {{child.name}}</span>
               </el-menu-item>
 
               <el-submenu :index="item.name+''" v-if="!item.hidden && !item.abnormal">
                 <template slot="title">
-                  <i :class="item.icon" style="font-size: 22px"></i>
+                  <i :class="item.icon" style="font-size: 24px"></i>
                   <span>{{item.name}}</span>
                 </template>
                 <template v-for="(child,key) in item.children">
@@ -357,7 +346,7 @@
           </el-menu>
         </div>
 
-        <div style="position: fixed;bottom: 10px;left: 36px;z-index: 99999;"  v-if="!isCollapse">
+        <div style="position: fixed;bottom: 10px;left: 36px;z-index: 99999;" v-if="!isCollapse">
           <div style="color: #ffffff;">业务咨询&nbsp;&nbsp;陆经理</div>
           <div style="color: #ffffff;">版本信息&nbsp;&nbsp;BOSS&nbsp;3.0</div>
         </div>
@@ -385,7 +374,7 @@
 
   export default {
     name: 'Index',
-    components: {TagsView,MessageDetail},
+    components: {TagsView, MessageDetail},
     data() {
       return {
         personal: globalConfig.personal,
@@ -395,22 +384,22 @@
         defaultTime: 0,  //倒计时
         screenStatus: false,
         defaultArray: [],
-        object:{
-            name:'zhanglin',
-            year:123
+        object: {
+          name: 'zhanglin',
+          year: 123
         },
-        sendObject:null,
-        messageDialog:false,
+        sendObject: null,
+        messageDialog: false,
 
-        unReadMessageData:[],
-        messageDetail:[],
+        unReadMessageData: [],
+        messageDetail: [],
       }
     },
     mounted() {
       this.countTime();
-      setInterval( ()=> {
+      setInterval(() => {
         this.getUnReadMessage()
-      },10000);
+      }, 10000);
     },
     computed: {
       visitedViews() {
@@ -428,25 +417,25 @@
       },
 
       //显示消息详情
-      showMessageDetail(val){
+      showMessageDetail(val) {
         this.messageDetail = val;
         this.messageDialog = true;
-        this.$http.put(globalConfig.server_user+'api/v1/messages/'+val.id).then((res) => {
-          if(res.data.status === 'success'){
+        this.$http.put(globalConfig.server_user + 'api/v1/messages/' + val.id).then((res) => {
+          if (res.data.status === 'success') {
             this.getUnReadMessage();
           }
         })
       },
-      closeMessage(){
+      closeMessage() {
         this.messageDialog = false;
       },
       //获取未读消息
-      getUnReadMessage(){
-          this.$http.get(globalConfig.server_user+'api/v1/messages?unread=1').then((res) => {
-            if(res.data.status === 'success'){
-                this.unReadMessageData = res.data.data;
-            }
-          })
+      getUnReadMessage() {
+        this.$http.get(globalConfig.server_user + 'api/v1/messages?unread=1').then((res) => {
+          if (res.data.status === 'success') {
+            this.unReadMessageData = res.data.data;
+          }
+        })
       },
 
       // 全屏
@@ -465,15 +454,15 @@
       },
       countTime() {
         let countDown = [];
-        this.$http.get(globalConfig.server+'setting/dictionary/203').then((res)=>{
-          if(res.data.code === '30010'){
+        this.$http.get(globalConfig.server + 'setting/dictionary/203').then((res) => {
+          if (res.data.code === '30010') {
             countDown = res.data.data;
-            this.$http.get(globalConfig.server+'setting/setting/read?type=1&staff_id='+globalConfig.personal.id).then((res)=>{
-              if(res.data.code === '50010'){
+            this.$http.get(globalConfig.server + 'setting/setting/read?type=1&staff_id=' + globalConfig.personal.id).then((res) => {
+              if (res.data.code === '50010') {
                 let array = res.data.data;
-                for(let i=0;i<array.length;i++){
-                  countDown.forEach((item)=>{
-                    if(array[i].dict_id == item.id){
+                for (let i = 0; i < array.length; i++) {
+                  countDown.forEach((item) => {
+                    if (array[i].dict_id == item.id) {
                       this.defaultTime = this.Countdown = Number(item.dictionary_name);
                       this.startCount();
                     }
@@ -485,7 +474,7 @@
         });
       },
 
-      startCount(){
+      startCount() {
         new Promise((resolve, reject) => {
           let interval = setInterval(() => {
             this.Countdown--;
@@ -555,6 +544,11 @@
     display: flex;
   }
 
+  $color1: #409EFF;
+  $color2: #58D788;
+  $color3: #FB4699;
+  $color4: #FDCA41;
+
   .personal {
     width: 200px;
     padding: 18px 16px;
@@ -566,7 +560,7 @@
       width: 80px;
       height: 80px;
       margin: 10px 10px 0;
-      color: #7394FB;
+      color: $color1;
       @include box_shadow(#dddddd);
       .el-dropdown-menu__item {
         line-height: 0;
@@ -591,21 +585,20 @@
       }
     }
     .personalList:nth-of-type(1) {
-      border-top: 3px solid #6A8DFB;
+      border-top: 3px solid $color1;
       p {
-        color: #6A8DFB;
+        color: $color1;
       }
     }
     .personalList:nth-of-type(2) {
-      border-top: 3px solid #58D788;
-      p {
-        color: #58D788;
+      border-top: 3px solid $color2 p {
+        color: $color2
       }
     }
     .personalList:nth-of-type(3) {
-      border-top: 3px solid #FB4699;
+      border-top: 3px solid $color3;
       p {
-        color: #FB4699;
+        color: $color3;
       }
     }
     .personalList:nth-of-type(4) {
@@ -615,22 +608,21 @@
       }
     }
     .personalList:nth-of-type(5) {
-      border-top: 3px solid #58D788;
-      p {
-        color: #58D788;
+      border-top: 3px solid $color2 p {
+        color: $color2
       }
     }
     .personalList:nth-of-type(6) {
-      border-top: 3px solid #6A8DFB;
+      border-top: 3px solid $color1;
       p {
-        color: #6A8DFB;
+        color: $color1;
       }
     }
     .personalList:hover {
-      border-top-color: #409EFF;
-      background: #409EFF;
+      border-top-color: $color1;
+      background: $color1;
       color: #ffffff;
-      @include box_shadow(#6A8DFB);
+      @include box_shadow($color1);
       div {
         font-size: 12px;
         height: 30px;
@@ -650,11 +642,11 @@
         font-size: 22px;
         text-align: center;
         color: #FFFFFF;
-        background: #fb4699;
+        background: $color3;
         @include border_radius(50%);
       }
       .signNumber {
-        color: #fb4699;
+        color: $color3;
         margin: 5px 0 0 8px;
         font-size: 13px;
       }
@@ -683,7 +675,7 @@
         display: inline-block;
         width: 50%;
         height: 100%;
-        background: -webkit-linear-gradient(left, #409eff, #fa4699);
+        background: -webkit-linear-gradient(left, $color1, $color3);
         text-align: center;
       }
 
@@ -695,7 +687,7 @@
         background: #FFFFFF;
       }
       .roundLeft {
-        border: 5px solid #FDCA41;
+        border: 5px solid $color4;
         top: -5px;
         left: -2px;
       }
@@ -724,7 +716,7 @@
           font-size: 13px;
           padding: 0;
           i {
-            color: #409EFF;
+            color: $color1;
             margin-top: 11px;
           }
           .msgTitle {
@@ -739,7 +731,7 @@
       float: left;
       width: 180px;
       margin: 20px 10px 10px;
-      background: #409EFF;
+      background: $color1;
       padding: 0;
       text-align: center;
       color: #ffffff;
@@ -747,9 +739,9 @@
       @include border_radius(6px);
     }
     .detrusion:hover {
-      background: #6A8DFB;
+      background: #4079ff;
       color: #ffffff;
-      @include box_shadow(#6A8DFB);
+      @include box_shadow(#4079ff);
     }
   }
 
@@ -791,7 +783,7 @@
       color: #fff;
       padding: 10px;
       text-align: center;
-      background-color: #6a8dfb;
+      background-color: $color1;
       align-items: center;
     }
     .isCollapse {
@@ -821,12 +813,12 @@
       i {
         cursor: pointer;
         font-size: 30px;
-        color: #409EFF;
+        color: $color1;
       }
     }
     .navBarRight {
       left: 0;
-//      @include transition;
+      //      @include transition;
       p {
         width: 27px;
         height: 20px;
@@ -844,6 +836,7 @@
       z-index: 66;
       display: flex;
       @include transition;
+      /*box-shadow: 0 0 10px 0 #f4f3f6;*/
       .left {
         width: 50%;
         height: 100%;
@@ -859,13 +852,14 @@
           transition: all .4s;
           .boss {
             font-size: 26px;
-            color: #6a8dfb;
+            color: $color1;
             margin-left: 50px;
             @include transition;
+            cursor: pointer;
           }
           .boss1 {
             font-size: 26px;
-            color: #6a8dfb;
+            color: $color1;
             margin-left: -72.25px;
             @include transition;
           }
@@ -891,7 +885,7 @@
           align-items: center;
           font-size: 16px;
         }
-        .countdown, .message, .guide {
+        .countdown, .message {
           width: 120px;
           cursor: pointer;
           justify-content: center;
@@ -989,9 +983,10 @@
         .countdown {
           border: none;
         }
-        .guide {
-          width: 150px;
+        .countdown.topFlex {
+          margin-top: 3px;
         }
+
         .personInfo {
           height: 100%;
           width: 200px;
@@ -1018,7 +1013,7 @@
 
     .navBarHide {
       top: -66px;
-//      @include transition;
+      //      @include transition;
     }
 
     .contentBox {
@@ -1064,7 +1059,7 @@
         }
         .mainHide {
           margin-top: 0 !important;
-//          @include transition;
+          //          @include transition;
         }
       }
     }
@@ -1073,6 +1068,55 @@
         margin-left: 64px !important;
       }
     }
+  }
+
+  /*----------------------  快捷入口*-------------------*/
+  .shortcutList {
+    .backColor1 {
+      background: $color1;
+    }
+    .backColor2 {
+      background: $color2;
+    }
+    .backColor3 {
+      background: $color3;
+    }
+    .backColor4 {
+      background: $color4;
+    }
+
+    width: 362px;
+    box-sizing: border-box;
+    .el-dropdown-menu__item {
+      line-height: 20px;
+      width: 90px;
+      float: left;
+      text-align: center;
+      padding: 12px 0 6px;
+      b {
+        @include border_radius(6px);
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        color: #ffff;
+        line-height: 50px;
+        font-size: 22px;
+      }
+      span {
+        color: #575859;
+        margin: 6px 0;
+        display: block;
+      }
+    }
+    .border_top {
+      border-top: 1px solid #e5e5e5;
+    }
+  }
+
+  .topFlex {
+    @include flex;
+    align-items: center;
   }
 
   /*----------------------  消息列表*-------------------*/
@@ -1098,14 +1142,14 @@
         text-align: center;
         @include border_radius(50%);
         color: #ffffff;
-        background: #409EFF;
+        background: $color1;
         margin-right: 12px;
         margin-top: 2px;
       }
       .public {
         .signOne {
           font-size: 16px;
-          color: #409EFF;
+          color: $color1;
         }
         .limits {
           font-size: 14px;
