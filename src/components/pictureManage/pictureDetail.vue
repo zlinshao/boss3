@@ -35,7 +35,10 @@
             </div>
             <div>
               <el-row :gutter="20">
-                <el-col :span="3"><img :src="albumDetail.cover_path" style="height: 195px;"></el-col>
+                <el-col :span="3">
+                  <img v-if="albumDetail.cover_path" :src="albumDetail.cover_path" style="height: 195px;">
+                  <img v-else src="../../assets/images/university/caia412-34427.png" style="height: 195px;" >
+                </el-col>
                 <el-col :span="6">
                   <div style="font-size: 30px;color: #393939;padding-top: 30px;">{{albumDetail.name}}&nbsp;&nbsp;<span style="font-size: 18px;">{{albumDetail.photo_count}}张</span></div>
                   <el-button icon="el-icon-picture-outline" type="primary" class="upload_photo" size="medium" @click="openModalDialog('choosePicturesDialog')">上传照片</el-button>
@@ -69,7 +72,7 @@
                         <el-dropdown-item @click.native="deletePhoto(item.id)">删除</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
-                    <img :src="item.picture_path" style="height: 150px;">
+                    <img :src="item.picture_path" style="height: 200px;">
                     <div class="clearfix t_center">
                       <span class="text_over_ellipsis">{{item.name}}</span>
                     </div>
@@ -89,19 +92,25 @@
               <el-input v-model="photoForm.name" placeholder="请输入照片名称" ></el-input>
             </el-form-item>
           </el-row>
-          <el-row>
-            <el-form-item label="照片描述:">
-              <el-input v-model="photoForm.description" type="textarea" placeholder="请输入照片描述"></el-input>
-            </el-form-item>
-          </el-row>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="photoDetailDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="editPhotoSuccess">确 定</el-button>
+        <el-button size="small" type="primary" @click="">确 定</el-button>
       </span>
     </el-dialog>
-    <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog" :albumId="albumId"></create-album>
+    <!--<div style=" position: absolute;top: 900px;left: 700px;">-->
+      <!--<el-pagination-->
+        <!--@size-change="handleSizeChange"-->
+        <!--@current-change="handleCurrentChange"-->
+        <!--:current-page="currentPage"-->
+        <!--:page-sizes="[12, 24, 36, 48]"-->
+        <!--:page-size="12"-->
+        <!--layout="total, sizes, prev, pager, next, jumper"-->
+        <!--:total="totalNum">-->
+      <!--</el-pagination>-->
+    <!--</div>-->
+    <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog" :albumId="albumDetail.id"></create-album>
     <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog" :albumId="albumId"></choose-pictures>
   </div>
 </template>
@@ -127,15 +136,24 @@
         photoDetailDialogVisible: false,
         photoForm: {
           name: '',
-          description: '',
         },
         show: false,
         lists: [],
         rightMenuX: 0,
         rightMenuY: 0,
+        // totalNum: 0,
+        // currentPage: 1,
       }
     },
     methods: {
+      // handleSizeChange(val) {
+      //   console.log(`每页 ${val} 条`);
+      // },
+      // handleCurrentChange(val) {
+      //   console.log(`当前页: ${val}`);
+      //   this.currentPage = val;
+      //   this.getImgData();
+      // },
       routerLink(val) {
         this.$router.push({path: val});
       },
@@ -151,14 +169,16 @@
       },
       closeCreateAlbumDialog(){
         this.getAllPhotos();
+        this.getAlbumDetail();
         this.createAlbumDialog = false;
       },
       closeChoosePicturesDialog() {
         this.getAllPhotos();
+        this.getAlbumDetail();
         this.choosePicturesDialog = false;
       },
       getAllPhotos(){
-        this.$http.get(globalConfig.server + "photo?album_id="+ this.albumId).then((res) => {
+        this.$http.get(globalConfig.server + "photo?album_id="+ this.albumId ).then((res) => { //+"&page="+ this.currentPage+"&limit=12"
           if (res.data.code == "20210") {
             this.photoData = res.data.data;
           } else {
@@ -171,11 +191,25 @@
       },
       editPhoto(item) {
         this.photoDetailDialogVisible = true;
+        this.$http.get(globalConfig.server + "photo/" + item.id).then((res) =>{
+          if(res.data.code == "20210") {
+            this.photoForm = res.data.data;
+          }else{
+            this.$notify.warning({
+              title:"警告",
+              message:res.data.msg
+            });
+          }
+        });
       },
       setCoverImg(item) {
-        this.$http.put(globalConfig.server + 'album/cover/' + item.id + '?cover=' + this.albumId).then((res) => {
+        this.$http.put(globalConfig.server + 'album/cover/' +  this.albumId + '?cover=' + item.id).then((res) => {
           if(res.data.code == "20110") {
-
+            this.$notify.success({
+              title:"成功",
+              message:res.data.msg
+            });
+            this.getAlbumDetail();
           } else {
             this.$notify.warning({
               title:"警告",
@@ -207,7 +241,7 @@
 
       },
       editPhotoSuccess() {
-        this.$http.put(globalConfig.server + 'photo/2',this.photoForm).then((res) =>{
+        this.$http.put(globalConfig.server + 'photo/',this.photoForm).then((res) =>{
           if(res.data.code == "20210") {
             this.photoDetailDialogVisible = true;
           } else {
@@ -396,9 +430,6 @@
           white-space: nowrap;
           display: inline-block;
           text-overflow: ellipsis;
-        }
-        img{
-          max-height: 150px;
         }
       }
 

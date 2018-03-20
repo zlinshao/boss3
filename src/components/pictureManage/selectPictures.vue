@@ -13,7 +13,7 @@
               </el-select>
               </el-col>
             </el-form-item>
-            <!--图片ids-->
+            <!--图片ids-->{{form.picture_ids}}
             <el-form-item label="上传图片">
               <Upload :ID="'upload'" @getImg="getImage"></Upload>
             </el-form-item>
@@ -25,7 +25,7 @@
         <el-button size="small" type="primary" @click="saveImages">保存</el-button>
       </span>
     </el-dialog>
-    <improve-img-info :improveImgInfoDialog="improveImgInfoDialog" @close="closeImproveImgInfoDialog" @upload="continueUploading"></improve-img-info>
+    <improve-img-info :improveImgInfoDialog="improveImgInfoDialog" @close="closeImproveImgInfoDialog" @upload="continueUploading" :uploadImgLength="uploadImgLength"></improve-img-info>
   </div>
 </template>
 
@@ -48,6 +48,7 @@
               picture_ids: [],
             },
             albumData: '',
+            uploadImgLength: 0,
           }
         },
       methods: {
@@ -60,15 +61,17 @@
               $(".imgItem").remove();
             }else{
               this.$notify.warning({
-                title:"警告",
-                message:res.data.msg
+                title: "警告",
+                message: res.data.msg
               });
             }
           });
 
         },
         getImage(val) {
+          console.log(val);
           this.form.picture_ids = val[1]; //选择的图片数组ids
+          this.uploadImgLength = val.length;
         },
         closeImproveImgInfoDialog() {
           this.improveImgInfoDialog = false;  //关闭完善照片信息界面
@@ -96,7 +99,6 @@
         },
         albumId(val) {
           this.form.album_id =  val;
-          this.getImgData();
         }
       },
       mounted() {

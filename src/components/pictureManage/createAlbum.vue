@@ -68,7 +68,7 @@
           },
           albumId(val) {
             var self = this;
-            this.$http.get(globalConfig.server+"album/2").then((res) =>{
+            this.$http.get(globalConfig.server+"album/"+ this.albumId).then((res) =>{
               if(res.data.code == "20110") {
                 self.form = res.data.data;
                 self.form.theme =  res.data.data.theme.toString(); // 主题需要字符串才能选中显示
@@ -85,12 +85,15 @@
                 console.log(res.data)
                 this.createAlbumId = res.data.data.id;
                 console.log(`createAlbumId====${this.createAlbumId}`);
-                this.$confirm('相册'+this.form.name+'保存成功，是否马上上传照片到这个相册?', '创建成功', {
+                this.form = {};
+                this.$confirm('相册'+ res.data.data.name+'保存成功，是否马上上传照片到这个相册?', '创建成功', {
                   confirmButtonText: '确定',
                   cancelButtonText: '取消',
                   type: 'warning'
                 }).then(() => {
                   this.choosePicturesDialog = true;
+                  this.createAlbumDialogVisible = false;
+                  this.$emit('close');
                 }).catch(() => {
                   this.choosePicturesDialog = false;
                 });
@@ -103,9 +106,15 @@
             });
           },
         editAlbum() {
-          this.$http.put(globalConfig.sever + 'album/2',this.form).then((res)=>{
+          this.$http.put(globalConfig.server + 'album/'+ this.albumId,this.form).then((res)=>{
             if(res.data.code == '20110') {
               this.choosePicturesDialog = true;
+              this.createAlbumDialogVisible = false;
+              this.$emit('close');
+              this.$notify.success({
+                title:"成功",
+                message:res.data.msg
+              });
             }else{
               this.$notify.warning({
                 title:"警告",

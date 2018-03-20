@@ -50,8 +50,8 @@
                         <el-dropdown-item @click.native="deleteAlbum(item.id)">删除</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
-                    <img v-if="item.cover_path" :src="item.cover_path" height="150px" @click="goPictureDetail(item.id)">
-                    <img v-else src="../../assets/images/university/caia412-34427.png" height="150px"  @click="goPictureDetail(item.id)">
+                    <img v-if="item.cover_path" :src="item.cover_path" style="height:180px;" @click="goPictureDetail(item.id)">
+                    <img v-else src="../../assets/images/university/caia412-34427.png" style="height:180px;"  @click="goPictureDetail(item.id)">
                   <div class="clearfix">
                     <span class="text_over_norwap">{{item.name}}</span>
                     <span style="float: right;">{{item.photo_count}}张</span>
@@ -62,20 +62,20 @@
             </el-row>
           </div>
         </el-col>
-        <div class="left">
-          <!--<el-pagination-->
-            <!--@size-change="handleSizeChange"-->
-            <!--@current-change="handleCurrentChange"-->
-            <!--:current-page="currentPage"-->
-            <!--:page-sizes="[10, 20, 30, 40]"-->
-            <!--:page-size="10"-->
-            <!--layout="total, sizes, prev, pager, next, jumper"-->
-            <!--:total="0">-->
-          <!--</el-pagination>-->
-        </div>
-
       </el-row>
+      <div style=" position: absolute;top: 900px;left: 700px;">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="currentPage"
+          :page-sizes="[12, 24, 36, 48]"
+          :page-size="12"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="totalNum">
+        </el-pagination>
+      </div>
     </div>
+
     <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog" :albumId="albumId"></create-album>
     <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog" ></choose-pictures>
   </div>
@@ -97,9 +97,19 @@
         albumData: [],
         albumId: '',
         coverImg: 'this.src="' + globalConfig.server + require('../../assets/images/university/caia412-34427.png') + '"' ,
+        totalNum: 0,
+        currentPage: 1,
       }
     },
     methods: {
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.currentPage = val;
+        this.getImgData();
+      },
       routerLink(val) {
         this.$router.push({path: val})
       },
@@ -125,10 +135,10 @@
         this.choosePicturesDialog = false;
       },
       getImgData(){
-        var self = this;
-        this.$http.get(globalConfig.server + "album").then((res) =>{
+        this.$http.get(globalConfig.server + "album?page="+ this.currentPage+"&limit=12").then((res) =>{
           if (res.data.code == "20110") {
-            self.albumData = res.data.data;
+            this.albumData = res.data.data;
+            this.totalNum = res.data.num;
           }
         });
       },
@@ -310,9 +320,6 @@
           display: inline-block;
           text-overflow: ellipsis;
           height: 17px;
-        }
-        img{
-          max-height: 150px;
         }
       }
 
