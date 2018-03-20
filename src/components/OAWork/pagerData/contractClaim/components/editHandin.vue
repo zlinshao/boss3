@@ -424,6 +424,9 @@
               }
               this.$http.get(globalConfig.server+'contract/staff/'+this.params.staff_id).then((res) => {
                 if(res.data.code === '20000'){
+
+                  console.log(res.data.data.collect)
+
                   this.contractCancelCollect = Object.assign({},this.contractCancelCollect,res.data.data.collect);
                   this.contractCancelRent = Object.assign({},this.contractCancelRent,res.data.data.rent);
                 }
@@ -619,6 +622,7 @@
               proof:0,
             };
             this.checkBox.forEach((item) => {
+              candidateItem = {};
               candidateItem.address = this.rentHandinAddress[item];
               candidateItem.proof = 0;
               if(this.handover[item]){
@@ -630,6 +634,7 @@
               if(this.keyCode[item]){
                 candidateItem.proof+=4;
               }
+              console.log(candidateItem)
               candidateArray[item] = candidateItem;
             });
 

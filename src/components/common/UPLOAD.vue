@@ -133,6 +133,8 @@
             },
 
             'FilesAdded': function (up, files) {
+
+              console.log(files)
               _this.isUploading = true;
               _this.$emit('getImg', [_this.ID, _this.imgId, _this.isUploading]);
 
@@ -196,16 +198,21 @@
               let url = JSON.parse(info);
               let sourceLink = domain + "/" + url.key;
 
+              console.log(file)
 //              _this.isUpId = file.id;
 
               _this.$http.post(globalConfig.server_user + 'api/v1/files', {
                 url: sourceLink,
-                name: url.key
+                name: url.key,
+                raw_name : file.name,
+                type: file.type,
+                size:file.size
               }).then((res) => {
                 if (res.data.status === "success") {
                   _this.imgId.push(res.data.data.id);
 
                   let object = {};
+                  console.log(res.data)
                   object.id = res.data.data.id;
                   object.name = res.data.data.name;
                   _this.imgArray.push(object);
