@@ -67,7 +67,7 @@
             <el-col :span="12">
               <el-form-item label="建筑年限">
                 <el-select v-model="form.built_year" clearable>
-                  <el-option v-for="(key,index) in 51" :label="key + 1970" :value="index + 1970"
+                  <el-option v-for="(key,index) in 51" :label="key + 1969" :value="index + 1970"
                              :key="index"></el-option>
                 </el-select>
               </el-form-item>
@@ -289,7 +289,7 @@
           village_alias: this.form.otherName,
           latitude: this.form.latitude,
           longitude: this.form.longitude,
-          built_year: this.form.built_year + 1,
+          built_year: this.form.built_year,
           house_type: this.form.houseType,
           total_buildings: this.form.allBuilding,
           property_fee: this.form.propertyFee,
