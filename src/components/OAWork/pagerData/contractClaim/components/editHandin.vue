@@ -40,7 +40,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="领用人">
-                  <el-input readonly="" v-model="staff_name" @click.native="openOrganizeModal"></el-input>
+                  <el-input disabled="" v-model="staff_name" @focus="openOrganizeModal"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -273,7 +273,7 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="editHandInDialogVisible = false">取 消</el-button>
+        <el-button size="small" @click="init">取 消</el-button>
         <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
@@ -371,7 +371,8 @@
       },
       editHandInDialogVisible(val){
         if(!val){
-          this.$emit('close')
+          this.$emit('close');
+          this.init()
         }
       },
       startOperate(val){
@@ -405,6 +406,12 @@
             this.params.screenshot = arr.full.screenshot;
             this.checkBoxHandin = [];
             this.params.contract_type = arr.contract_type;
+
+            this.params.department_id = arr.department.id;
+            this.depart_name = arr.department.name;
+            if(arr.full.simple_staff){
+              this.staff_name = arr.full.simple_staff.real_name;
+            }
 
             if(Number(this.params.contract_type) === 108){    //如果是公司合同
               for(let key in arr.category){
@@ -712,6 +719,7 @@
                 title:'成功',
                 message:res.data.msg
               });
+              this.$emit('close');
               this.editHandInDialogVisible = false;
               this.init();
             }else {

@@ -916,15 +916,15 @@
   import OwnerDelay from '../components/ownerDelay.vue'              //房东延期
   import OwnerRenew from '../components/ownerRenew.vue'              //房东续约
   import RentVacation from '../components/rentVacation.vue'          //租客续约
-  import IncreaseGoods from '../components/increaseGoods.vue' //物品增加
-  import DecreaseGoods from '../components/decreaseGoods.vue' //物品减少
-  import OwnerArrears from '../components/OwnerArrears.vue'   //房东欠款
-  import AddFollowUp from '../components/addFollowUp.vue'     //增加跟进记录
-  import CollectVacation from '../components/collectVacation.vue' //房东退房
-  import AddCollectRepair from '../components/addCollectRepair.vue' //添加房东维修
-  import AddRentRepair from '../components/addRentRepair.vue'//添加租客维修
-  import RentChangeRoom from '../components/rentChangeRoom.vue'   //租客换房
-  import Sublease from '../components/sublease.vue'     //转租
+  import IncreaseGoods from '../components/increaseGoods.vue'         //物品增加
+  import DecreaseGoods from '../components/decreaseGoods.vue'         //物品减少
+  import OwnerArrears from '../components/OwnerArrears.vue'           //房东欠款
+  import AddFollowUp from '../components/addFollowUp.vue'             //增加跟进记录
+  import CollectVacation from '../components/collectVacation.vue'     //房东退房
+  import AddCollectRepair from '../components/addCollectRepair.vue'   //添加房东维修
+  import AddRentRepair from '../components/addRentRepair.vue'         //添加租客维修
+  import RentChangeRoom from '../components/rentChangeRoom.vue'       //租客换房
+  import Sublease from '../components/sublease.vue'       //转租
   import RentRenew from '../components/rentRenew.vue'     //租客续约
   import AddRentInfo from '../components/addRentInfo.vue' //登记租客
   import SendMessage from '../../common/sendMessage.vue'  //发送短信
