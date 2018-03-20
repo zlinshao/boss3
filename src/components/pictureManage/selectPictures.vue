@@ -23,7 +23,7 @@
         <el-button size="small" type="primary" @click="saveImages">保存</el-button>
       </span>
     </el-dialog>
-    <improve-img-info :improveImgInfoDialog="improveImgInfoDialog" @close="closeImproveImgInfoDialog" @upload="continueUploading" :pictureIds="form.picture_ids" :uploadImgLength="uploadImgLength"></improve-img-info>
+    <improve-img-info :improveImgInfoDialog="improveImgInfoDialog" @close="closeImproveImgInfoDialog" @upload="continueUploading" :pictureIds="form.picture_ids" :uploadImgLength="uploadImgLength" ></improve-img-info>
   </div>
 </template>
 
@@ -32,7 +32,7 @@
     import ImproveImgInfo from './improveImage.vue';
     export default {
         name: "choose-pictures",
-        props: ['choosePicturesDialog','albumId'],
+        props: ['choosePicturesDialog','albumId','fromDetail'],
         components:{
           Upload,
           ImproveImgInfo,
@@ -55,7 +55,9 @@
           this.$http.post(globalConfig.server + 'photo',this.form).then((res)=>{
             if(res.data.code == '20210') {
               this.choosePicturesDialogVisible = false;
-              this.improveImgInfoDialog = true;  //显示完善照片信息界面
+              if(!this.fromDetail){
+                this.improveImgInfoDialog = true;  //显示完善照片信息界面
+              }
               this.isClear = true;
             }else{
               this.$notify.warning({
@@ -77,11 +79,11 @@
         continueUploading() {
           this.choosePicturesDialogVisible = true;
         },
+        // 获取指定相册信息
         getImgData() {
           this.$http.get(globalConfig.server + "album").then((res) =>{
             if (res.data.code == "20110") {
               this.albumData = res.data.data;
-              this.form.album_id = Number(this.albumId) ;
             }
           });
         },
@@ -98,11 +100,12 @@
         },
         albumId(val) {
           this.getImgData();
+          this.form.album_id = Number(this.albumId) ;
         }
       },
       mounted() {
-         // this.getImgData();
-         // this.form.album_id =  this.albumId;
+         this.getImgData();
+         this.form.album_id =  this.albumId;
       },
     }
 </script>

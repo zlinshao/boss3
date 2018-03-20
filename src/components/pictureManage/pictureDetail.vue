@@ -36,12 +36,12 @@
             <div>
               <el-row :gutter="20">
                 <el-col :span="4">
-                  <img v-if="albumDetail.cover_path" :src="albumDetail.cover_path" style="height: 195px;">
-                  <img v-else src="../../assets/images/university/caia412-34427.png" style="height: 195px;width：210px;" >
+                  <img v-if="albumDetail.cover_path" :src="albumDetail.cover_path" style="height:195px;width: 200px;" />
+                  <img v-else src="../../assets/images/university/caia412-34427.png" style="height:195px;width:200px;" />
                 </el-col>
                 <el-col :span="6">
                   <div style="font-size: 30px;color: #393939;padding-top: 30px;">{{albumDetail.name}}&nbsp;&nbsp;<span style="font-size: 18px;">{{albumDetail.photo_count}}张</span></div>
-                  <el-button icon="el-icon-picture-outline" type="primary" class="upload_photo" size="medium" @click="openModalDialog('choosePicturesDialog')">上传照片</el-button>
+                  <el-button icon="el-icon-picture-outline" type="primary" class="upload_photo" size="medium" @click="openModalDialog('choosePicturesDialog')" >上传照片</el-button>
                   <el-button size="small" @click="editAlbum(albumDetail.id)">编辑相册信息</el-button>
                   <!--<el-button size="small">批量管理</el-button>-->
                   <!--<el-dropdown trigger="click" >-->
@@ -96,7 +96,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="photoDetailDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="">确 定</el-button>
+        <el-button size="small" type="primary" @click="savePhotoSuccess">确 定</el-button>
       </span>
     </el-dialog>
     <div style=" position: absolute;top: 900px;left: 700px;">
@@ -111,7 +111,7 @@
       </el-pagination>
     </div>
     <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog" :albumId="albumDetail.id"></create-album>
-    <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog" :albumId="albumId"></choose-pictures>
+    <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog" :albumId="albumId" fromDetail="fromPicture"></choose-pictures>
   </div>
 </template>
 
@@ -143,6 +143,7 @@
         rightMenuY: 0,
         totalNum: 0,
         currentPage: 1,
+        saveItemId: '',
       }
     },
     methods: {
@@ -195,6 +196,21 @@
         this.$http.get(globalConfig.server + "photo/" + item.id).then((res) =>{
           if(res.data.code == "20210") {
             this.photoForm = res.data.data;
+            this.saveItemId = item.id;
+          }else{
+            this.$notify.warning({
+              title:"警告",
+              message:res.data.msg
+            });
+          }
+        });
+      },
+      savePhotoSuccess(){
+        this.$http.put(globalConfig.server + "photo/" + this.saveItemId,this.photoForm).then((res) =>{
+          if(res.data.code == "20210") {
+            this.photoForm = res.data.data;
+            this.photoDetailDialogVisible = false;
+            this.getAllPhotos();
           }else{
             this.$notify.warning({
               title:"警告",
