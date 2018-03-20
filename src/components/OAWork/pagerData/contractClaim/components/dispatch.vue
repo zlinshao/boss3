@@ -85,6 +85,7 @@
         length:0,
         type:'',
         organizationDialog:false,
+
       };
     },
     watch:{

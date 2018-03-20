@@ -2,7 +2,7 @@
   <div>
     <el-dialog title="领取合同修改" :visible.sync="editApplyDialogVisible">
       <div class="scroll_bar">
-        <div class="title">基本信息</div>
+        <div class="title">基本信息{{params.screenshot}}</div>
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="120px">
             <el-row>
@@ -94,7 +94,7 @@
             <el-row>
               <el-col>
                 <el-form-item label="截图">
-                  <Upload :ID="'jieTu'" @getImg="getImg"></Upload>
+                  <Upload :ID="'jieTu'" :editImage="editImage" @getImg="getImg"></Upload>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -150,7 +150,7 @@
         rent : '',
         upStatus:false,
 
-
+        editImage:{},
 
 //        已经选取的合同编号
         isSelectCollect: [],
@@ -198,8 +198,15 @@
                   this.staff_name = applyInfo.simple_staff.real_name;
                 }
 
+                //照片修改
+                let picObject = {};
+                this.params.screenshot = [];
+                applyInfo.screenshot.forEach((item) =>{
+                  picObject[item.id] = item.uri;
+                  this.params.screenshot.push(item.id)
+                });
+                this.editImage = picObject;
 
-                this.params.screenshot = applyInfo.screenshot;
 
                 this.isSelectCollect = applyInfo.collects;
                 this.isSelectRent = applyInfo.rents;
@@ -243,6 +250,7 @@
       },
 
       getImg(val){
+        console.log(val)
         this.upStatus = val[2];
         this.params.screenshot = val[1];
       },

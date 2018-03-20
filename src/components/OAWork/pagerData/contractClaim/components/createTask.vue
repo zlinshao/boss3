@@ -168,7 +168,7 @@
               </div>
 
               <div class="title">
-                租房合同上缴(请勾选){{collectCancelRent}}
+                租房合同上缴(请勾选)
               </div>
               <div v-for="(item,index) in Object.keys(collectCancelRent)" >
                 <el-row >
@@ -458,10 +458,11 @@
       };
     },
     mounted(){
-        this.getDictionary();
+
     },
     watch:{
       createTaskDialog(val){
+        this.getDictionary();
         this.createTaskDialogVisible = val
       },
       createTaskDialogVisible(val){
@@ -507,10 +508,12 @@
             this.collectCancelCollect = res.data.data.collect;
             this.collectCancelRent = res.data.data.rent;
           }else {
-            this.$notify.warning({
-              title:'警告',
-              message:res.data.msg
-            })
+            this.collectCancelCollect = [];
+            this.collectCancelRent = [];
+//            this.$notify.warning({
+//              title:'警告',
+//              message:res.data.msg
+//            })
           }
         })
       },

@@ -3,7 +3,9 @@
     <div id="pictureContainer">
       <div class="editImg" v-if="Object.keys(editImg).length>0">
         <div style="position: relative" v-for="(val,key) in editImg">
-          <img :src="val" alt="">
+          <div style="width: 120px;  height: 120px; border-radius:6px;background: #f0f0f0">
+            <img :src="val" alt="">
+          </div>
           <div class="remove el-icon-circle-close" @click="deleteImage(key)"></div>
         </div>
       </div>
@@ -72,6 +74,7 @@
         deep: true,
         handler(val, old){
           this.editImg = this.editImage;
+          this.imgId = [];
           for(let key in val){
             this.imgId.push(key)
           }
