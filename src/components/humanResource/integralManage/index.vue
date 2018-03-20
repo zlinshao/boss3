@@ -1,195 +1,159 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="clientContainer">
-
-
-      <el-tabs v-model="activeName" @tab-click="">
-        <div class="highRanking">
-          <!--<div>-->
-          <!--<el-button size="mini">-->
-          <!--<router-link to="/contractChange">TEST_1</router-link>-->
-          <!--</el-button>-->
-          <!--<el-button size="mini">-->
-          <!--<router-link to="/deliver">TEST_2</router-link>-->
-          <!--</el-button>-->
-          <!--<el-button size="mini">-->
-          <!--<router-link to="/throwALease">TEST_3</router-link>-->
-          <!--</el-button>-->
-          <!--</div>-->
-          <div class="highSearch">
-            <el-form :inline="true" oncommit="return false" size="mini">
-              <el-form-item>
-                <el-input placeholder="请输入内容" @clear="search" clearable v-model="form.item_name" @keyup.enter.native="search" size="mini">
-                  <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
-                </el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" size="mini" @click="newList">新增积分项</el-button>
-              </el-form-item>
-            </el-form>
-          </div>
-          <div class="filter high_grade" :class="isHigh? 'highHide':''">
-            <el-form :inline="true" size="mini" label-width="100px">
-              <div class="filterTitle">
-                <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
-              </div>
-              <el-row class="el_row_border">
-                <el-col :span="12">
-                  <el-row>
-                    <el-col :span="8">
-                      <div class="el_col_label">员工</div>
-                    </el-col>
-                    <el-col :span="16" class="el_col_option">
-                      <el-form-item>
-                        <el-input v-model="staff_name" @focus="selectDep('staff')" placeholder="请选择部门/员工" readonly>
-                        </el-input>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                </el-col>
-                <el-col :span="12">
-                  <el-row>
-                    <el-col :span="8">
-                      <div class="el_col_label">部门</div>
-                    </el-col>
-                    <el-col :span="16" class="el_col_option">
-                      <el-form-item>
-                        <el-input v-model="department_name" @focus="selectDep('depart')" placeholder="请选择部门/员工"
-                                  readonly>
-                        </el-input>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                </el-col>
-              </el-row>
-              <div class="btnOperate">
-                <el-button size="mini" type="primary">搜索</el-button>
-                <el-button size="mini" type="primary" @click="resetting">重置</el-button>
-                <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
-              </div>
-            </el-form>
-          </div>
-
+      <div class="highRanking">
+        <div class="tabsSearch">
+          <el-form :inline="true" size="mini">
+            <el-form-item>
+              <el-input placeholder="请输入内容" @clear="search" clearable v-model="form.item_name"
+                        @keyup.enter.native="search" size="mini">
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="newList">新增积分项</el-button>
+            </el-form-item>
+          </el-form>
         </div>
+        <div class="filter high_grade" :class="isHigh? 'highHide':''">
+          <el-form :inline="true" size="mini" label-width="100px">
+            <div class="filterTitle">
+              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+            </div>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">员工</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-input v-model="staff_name" @focus="selectDep('staff')" placeholder="请选择部门/员工" readonly>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">部门</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-input v-model="department_name" @focus="selectDep('depart')" placeholder="请选择部门/员工"
+                                readonly>
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <div class="btnOperate">
+              <el-button size="mini" type="primary">搜索</el-button>
+              <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+              <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+            </div>
+          </el-form>
+        </div>
+      </div>
+      <el-tabs v-model="activeName">
         <el-tab-pane label="明细" name="first">
-          <div class="main">
-            <div class="myHouse">
-              <div class="myTable">
-                <el-table
-                  :data="tableData"
-                  @row-click="clickTable"
-                  @row-dblclick="dblClickTable('integralDetl')"
-                  @row-contextmenu='rightMenu'
-                  style="width: 100%">
-                  <el-table-column
-                    prop="date"
-                    label="时间">
-                  </el-table-column>
-                  <el-table-column
-                    prop="sname"
-                    label="姓名">
-                  </el-table-column>
-                  <el-table-column
-                    prop="dname"
-                    label="部门">
-                  </el-table-column>
-                  <el-table-column
-                    prop="name"
-                    label="项目名称">
-                  </el-table-column>
-                  <el-table-column
-                    prop="remark"
-                    label="备注">
-                    <template slot-scope="scope">
-                      <div v-for="(key,index) in scope.row.last_remark">
-                        {{key.content}}
-                      </div>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </div>
-              <div class="tableBottom">
-
-                <div class="left">
-                  <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="form.page"
-                    :page-size="form.limit"
-                    layout="total, prev, pager, next, jumper"
-                    :total="totalNumber">
-                  </el-pagination>
-                </div>
-              </div>
-            </div>
-          </div>
+          <el-table
+            :data="tableData"
+            @row-dblclick="dblClickTable"
+            @row-contextmenu='rightMenu'
+            style="width: 100%">
+            <el-table-column
+              prop="date"
+              label="时间">
+            </el-table-column>
+            <el-table-column
+              prop="sname"
+              label="姓名">
+            </el-table-column>
+            <el-table-column
+              prop="dname"
+              label="部门">
+            </el-table-column>
+            <el-table-column
+              prop="name"
+              label="项目名称">
+            </el-table-column>
+            <!--<el-table-column-->
+              <!--prop="remark"-->
+              <!--label="备注">-->
+              <!--<template slot-scope="scope">-->
+                <!--<div v-for="(key,index) in scope.row.last_remark">-->
+                  <!--{{key.content}}-->
+                <!--</div>-->
+              <!--</template>-->
+            <!--</el-table-column>-->
+          </el-table>
         </el-tab-pane>
+
         <el-tab-pane label="汇总" name="second">
-          <div>
-            <el-table
-              :data="tableData2"
-              style="width: 100%">
-              <el-table-column
-                prop="date"
-                label="时间">
-              </el-table-column>
-              <el-table-column
-                prop="sname"
-                label="姓名">
-              </el-table-column>
-              <el-table-column
-                prop="dname"
-                label="部门">
-              </el-table-column>
-              <el-table-column
-                prop="amount"
-                label="积分总额">
-              </el-table-column>
-              <!--<el-table-column-->
-                <!--prop="address"-->
-                <!--label="备注">-->
-              <!--</el-table-column>-->
-            </el-table>
-            <div class="block pages">
-              <el-pagination
-                @size-change="handleSizeChanges"
-                @current-change="handleCurrentChanges"
-                :current-page="currentPages"
-                :page-size="gatherList.limit"
-                layout="total, prev, pager, next, jumper"
-                :total="paging">
-              </el-pagination>
-            </div>
-          </div>
+          <el-table
+            :data="tableData"
+            style="width: 100%">
+            <el-table-column
+              prop="date"
+              label="时间">
+            </el-table-column>
+            <el-table-column
+              prop="sname"
+              label="姓名">
+            </el-table-column>
+            <el-table-column
+              prop="dname"
+              label="部门">
+            </el-table-column>
+            <el-table-column
+              prop="amount"
+              label="积分总额">
+            </el-table-column>
+            <!--<el-table-column-->
+              <!--prop="address"-->
+              <!--label="备注">-->
+            <!--</el-table-column>-->
+          </el-table>
         </el-tab-pane>
       </el-tabs>
+      <div class="pages block">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="search"
+          :current-page="form.page"
+          :page-size="form.limit"
+          layout="total, prev, pager, next, jumper"
+          :total="totalNumber">
+        </el-pagination>
+      </div>
     </div>
+
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
 
-    <Organization :organizationDialog="organizationDialog" :length="length" :type="type" @close="closeOrganization"
+    <Organization :organizationDialog="organizeDialog" :length="length" :type="type"
                   @selectMember="selectMember"></Organization>
 
-    <NewAdd :newAddDialog="newAddDialog" :newAdd="newAdd" :formDetail="formDetail" @close="closeAdd"></NewAdd>
-
+    <!--积分详情-->
     <IntegralDetail :module="integralDetail" @close="integralDetail = false"></IntegralDetail>
-    <ReviseIntegral :module="reviseIntegral" @close="reviseIntegral = false"></ReviseIntegral>
+
   </div>
 </template>
 
 <script>
   import RightMenu from '../../common/rightMenu.vue'
   import Organization from '../../common/organization.vue'
-  import NewAdd from './components/newAdd.vue'
   import IntegralDetail from './components/integralDetl.vue'
-  import ReviseIntegral from './components/reviseIntegral.vue'
 
   export default {
     name: 'hello',
-    components: {RightMenu, Organization, NewAdd, IntegralDetail, ReviseIntegral},
+    components: {RightMenu, Organization, IntegralDetail},
     data() {
       return {
         activeName: 'first',
@@ -213,14 +177,7 @@
           credit_to: '',
           department_id: '',
         },
-        gatherList: {
-          page: 1,
-          limit:1,
-          staff_id:'',
-          credit_from: '',
-          credit_to: '',
-          department_id: '',
-        },
+
         staff_name: '',
         department_name: '',
         length: '',
@@ -235,19 +192,15 @@
         tableData2: [],           //汇总列表
 
         //模态框
-        organizationDialog: false,
-        tabs: ['系统公告', '审批提醒', 'boss小秘书', '个人发信箱', '部门发信箱', '短信提醒'],
+        organizeDialog: false,
+
         isActive: 0,
-        isCheckbox: false,
         isHigh: false,
-        newAddDialog: false,
         integralDetail: false,
-        reviseIntegral: false,
       }
     },
     mounted() {
       this.getTableData();
-      this.getGatherList();
     },
     methods: {
       getTableData() {
@@ -267,64 +220,37 @@
         })
       },
       // 获取汇总列表
-      getGatherList () {
-        this.$http.get(globalConfig.server + 'credit/manage/summary',{params: this.gatherList}).then((res) => {
+      getGatherList() {
+        this.$http.get(globalConfig.server + 'credit/manage/summary', {params: this.form}).then((res) => {
           // console.log(res);
           if (res.data.code === "30310") {
             this.paging = res.data.num;
             this.tableData2 = res.data.data;
 
-          }else{
+          } else {
             this.tableData2 = [];
             this.paging = 0;
           }
         })
       },
 
-      search() {
-        this.form.page = 1;
-        this.getTableData();
-        this.$http.get(globalConfig.server + 'credit/manage',{params: this.form}).then((res) => {
-          console.log(res);
+      // 积分详情
+      dblClickTable() {
+        this.integralDetail = true;
+      },
 
-          if(res.data.code === '30310') {
-            this.tableData = res.data.data;
-          }
-          if(this.form.item_name === ''){
-            this.getTableData();
-          }
-        })
-      },
-      onSubmit(val) {
-        this.isActive = val;
-      },
-      handleSizeChange(val) {
-        this.form.limit = val;
-        this.getTableData();
-      },
-      handleCurrentChange(val) {
-        this.form.page = val;
-        this.getTableData();
-      },
-// 汇总列表分页
-      handleSizeChanges(val) {
+      search(val) {
         console.log(val);
       },
-      handleCurrentChanges(val) {
-        this.getGatherList(val);
+
+      handleSizeChange(val) {
+        console.log(val);
       },
 
-
-      clickTable(row, event, column) {
-        // console.log(row, event, column)
-      },
       //右键
       rightMenu(row, event) {
         this.activeId = row.id;
         this.lists = [
-//          {clickIndex: 'read', headIcon: 'el-icons-fa-envelope-o', label: '标记为已读',},
-//          {clickIndex: 'all', headIcon: 'el-icons-fa-envelope', label: '批量标记',},
-//          {clickIndex: 'cancel', headIcon: 'el-icons-fa-envelope', label: '取消批量标记',},
           {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
           {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
         ];
@@ -332,16 +258,16 @@
       },
 
       // 新增
-      newList () {
+      newList() {
         this.newAdd = '新增';
         this.newAddDialog = true;
       },
       // 修改
       revise() {
-        this.newAddDialog = true;
-        this.newAdd = '修改';
-        this.$http.get(globalConfig.server + 'credit/manage/'+ this.activeId).then((res) => {
+        this.$http.get(globalConfig.server + 'credit/manage/' + this.activeId).then((res) => {
           this.formDetail = res.data.data;
+          this.newAddDialog = true;
+          this.newAdd = '修改';
         })
       },
 
@@ -361,7 +287,7 @@
             });
           });
         } else if (index === 'edit') {
-              this.revise();
+          this.revise();
         }
       },
 
@@ -397,15 +323,15 @@
           this.show = true
         })
       },
+      // 人资搜索
       selectDep(val) {
-        this.organizationDialog = true;
+        this.organizeDialog = true;
         this.length = 1;
         this.type = val;
       },
-      closeOrganization() {
-        this.organizationDialog = false;
-      },
+      // 确认部门
       selectMember(val) {
+        this.organizeDialog = false;
         if (val[0].hasOwnProperty('avatar')) {
           this.staff_name = val[0].name;
           this.staff_id = val[0].id;
@@ -414,23 +340,14 @@
           this.department_id = val[0].id;
         }
       },
+      // 高级搜索
       highGrade() {
         this.isHigh = !this.isHigh;
       },
       resetting() {
 
       },
-      closeAdd() {
-        this.getTableData();
-        this.newAddDialog = false
-      },
-      dblClickTable(type) {
-        switch (type) {
-          case 'integralDetl':
-            this.integralDetail = true;
-            break;
-        }
-      },
+
     }
   }
 </script>
