@@ -266,10 +266,6 @@
         bg_color: '',
       }
     },
-    mounted() {
-      console.log(globalConfig.header);
-      console.log(globalConfig.personal);
-    },
     methods: {
       handleDayChanged(data) {
         console.log(data)
