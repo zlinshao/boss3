@@ -14,7 +14,7 @@
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="openVillage('add')"><i class="el-icon-plus"></i>&nbsp;新增小区</el-button>
+            <el-button type="primary" @click="openVillage('新增小区')"><i class="el-icon-plus"></i>&nbsp;新增小区</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -28,7 +28,7 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">房屋类型{{form.house_type}}</div>
+                  <div class="el_col_label">房屋类型</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
@@ -334,7 +334,7 @@
       // },
       openVillage(val) {
         this.addVisible = true;
-        if (val === 'revise') {
+        if (val === '修改小区') {
           this.$http.get(this.urls + 'setting/community/' + this.pitch).then((res) => {
             this.formList = res.data.data;
             this.formList.status = val;
@@ -365,7 +365,7 @@
         if (val === 'delete') {
           this.openDelete();
         } else {
-          this.openVillage('revise');
+          this.openVillage('修改小区');
         }
       },
       //关闭右键菜单
@@ -420,8 +420,5 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-  #container {
-    width: 100%;
-    height: 400px;
-  }
+
 </style>

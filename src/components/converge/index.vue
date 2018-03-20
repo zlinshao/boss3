@@ -9,7 +9,8 @@
                 <img v-for="p in pic" :src="p.uri">
               </span>
             </span>
-            <div class="titleShow" @click="routerDetail(key.id)" v-for="(key,index) in hostData.data" v-if="index === 0 && hostData.data[0] !== ''">
+            <div class="titleShow" @click="routerDetail(key.id)" v-for="(key,index) in hostData.data"
+                 v-if="index === 0 && hostData.data[0] !== ''">
               <span>{{key.title}}</span>
             </div>
           </div>
@@ -42,7 +43,8 @@
                     <img v-for="p in pic" :src="p.uri">
                   </span>
                 </span>
-                <div @click="routerDetail(key.id)" class="titleShow" v-for="(key,index) in lowData.data" v-if="index === 0 && lowData.data[0] !== ''">
+                <div @click="routerDetail(key.id)" class="titleShow" v-for="(key,index) in lowData.data"
+                     v-if="index === 0 && lowData.data[0] !== ''">
                   <span>{{key.title}}</span>
                 </div>
               </h1>
@@ -261,10 +263,10 @@
                   </span>
                 </div>
                 <div class="bottomPic">
-                  <div @click="routerDetail(key.id)">
-                     <span v-for="pic in key.album.cover_pic">
-                    <img v-for="p in pic" :src="p.uri">{{index}}
-                  </span>
+                  <div>
+                     <span v-for="pic in key.album.cover_pic" @click="routerDetail(key.id)">
+                      <img v-for="p in pic" :src="p.uri">{{index}}
+                    </span>
                   </div>
                 </div>
                 <div class="titleMain text" v-html="key.content">
@@ -276,37 +278,43 @@
               </div>
             </el-col>
             <el-col :span="12">
-              <el-row class="personageRight" v-for="(key,index) in figureData.data"
-                      v-if="index !== 0 && figureData.data[0] !== ''" :key="index">
+              <el-row class="personageRight">
                 <el-col :span="16" class="per1">
-                  <div class="bigPer1 module">
-                    <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
-                        <img v-for="p in pic" :src="p.uri">
+                  <div class="bigPer1 module" v-for="(key,index) in figureData.data"
+                       v-if="index === 1 && figureData.data[0] !== ''" @click="routerDetail(key.id)">
+                    <span v-for="pic in key.album.cover_pic">
+                      <img v-for="p in pic" :src="p.uri">
                     </span>
                     <div class="titleShow">
                       <span>{{key.title}}</span>
                     </div>
                   </div>
                   <div class="bigPer2">
-                    <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
+                    <span @click="routerDetail(key.id)" v-for="(key,index) in figureData.data"
+                          v-if="index === 2 || index === 3 && figureData.data[0] !== ''">
+                      <a v-for="pic in key.album.cover_pic">
                         <img v-for="p in pic" :src="p.uri">
+                      </a>
                     </span>
                   </div>
                 </el-col>
                 <el-col :span="8" class="per2">
-                  <div>
-                   <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
-                        <img v-for="p in pic" :src="p.uri">
+                  <div v-for="(key,index) in figureData.data"
+                       v-if="index === 4 && figureData.data[0] !== ''">
+                    <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
+                     <img v-for="p in pic" :src="p.uri">
                     </span>
                   </div>
-                  <div>
+                  <div v-for="(key,index) in figureData.data"
+                       v-if="index === 5 && figureData.data[0] !== ''">
                    <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
-                        <img v-for="p in pic" :src="p.uri">
+                     <img v-for="p in pic" :src="p.uri">
                     </span>
                   </div>
-                  <div>
-                   <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
-                        <img v-for="p in pic" :src="p.uri">
+                  <div v-for="(key,index) in figureData.data"
+                       v-if="index === 6 && figureData.data[0] !== ''">
+                    <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
+                      <img v-for="p in pic" :src="p.uri">
                     </span>
                   </div>
                 </el-col>
@@ -781,7 +789,7 @@
               height: 214px;
               margin-bottom: 12px;
             }
-            div.bigPer2 {
+            .bigPer2 {
               @include flex;
               justify-content: space-between;
               flex-wrap: wrap;

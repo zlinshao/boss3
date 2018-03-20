@@ -228,7 +228,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '租赁管理',
-      icon: 'iconfont icon--zulinguanli-',
+      icon: 'iconfont icon-zulinguanli',
       children: [
         {path: '/wholeRentManage', component: WholeRentManage, name: '整租管理',},
         {path: '/jointRentManage', component: JointRentManage, name: '合租管理',},
@@ -249,7 +249,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '财务账本',
-      icon: 'iconfont icon--caiwuzhangben-',
+      icon: 'iconfont icon-caiwuzhangben',
       children: [
         // {path: '/accountManage', component: AccountManage, name: '账户管理',},
         // {path: '/subjectManage', component: SubjectManage, name: '科目管理',},
@@ -279,7 +279,7 @@ export default new Router({
       hidden: true,
       name: '',
       children: [
-        {path: '/wechatMessage', component: WechatMessage, name: '微信管理', icon: 'iconfont icon--weixinguanli-'},
+        {path: '/wechatMessage', component: WechatMessage, name: '微信管理', icon: 'iconfont icon-weixinguanli1'},
       ]
     },
 
@@ -301,7 +301,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '人资管理',
-      icon: 'iconfont icon--renziguanli-',
+      icon: 'iconfont icon-renziguanli',
       children: [
         // {path: '/staffManage', component: StaffManage, name: '用户管理',},
         {path: '/organization', component: Organization, name: '组织架构',},
@@ -328,7 +328,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: 'OA办公',
-      icon: 'iconfont icon--oabangong-',
+      icon: 'iconfont icon-oabangong',
       children: [
         // {
         //   path: '/property', component: Property, icon: 'el-icons-fa-money', name: '资产管理',
@@ -363,7 +363,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '乐伽大学',
-      icon: 'iconfont icon-leqiedaxue-',
+      icon: 'iconfont icon-leqiedaxue1',
       children: [
         {path: '/college', component: College, name: '乐伽大学 '},
         {path: '/LineCollege', component: LineCollege, name: '在线导师'},
@@ -373,7 +373,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '系统设置',
-      icon: 'iconfont icon--xitongshezhi-',
+      icon: 'iconfont icon-xitongshezhi1',
       children: [
         {path: 'moduleSetting', component: ModuleSetting, name: '模块设置'},
 

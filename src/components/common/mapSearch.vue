@@ -95,19 +95,19 @@
         this.$http.defaults.withCredentials = false;
         this.$http.defaults.headers = {};
         this.$http.get(addr+'&keywords='+this.searchInfo+'&city='+this.chooseCity).then((res) => {
-            if(res.data.tips.length>0){
-              this.$message({message:'这是一条成功提示',type:'success'});
-
-              //过滤掉没有地址的数据
-              this.tableData = res.data.tips.filter((x) =>{
-                  return typeof x.address === 'string'
-              })
-
-            }else {
-              this.$message({message:'这是一条失败提示',type:'error'});
-            }
+          if(res.data.tips.length>0){
+            //过滤掉没有地址的数据
+            this.tableData = res.data.tips.filter((x) =>{
+                return typeof x.address === 'string'
+            })
+          }
         });
         this.$http.defaults.withCredentials = true;
+        this.$http.defaults.headers = globalConfig.header;
+        if (localStorage.myData !== undefined) {
+          let head = JSON.parse(localStorage.myData);
+          globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
+        }
       },
       closeDialog(done){    //关闭模态框回调
           this.mapFormVisible = false;

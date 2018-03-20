@@ -18,7 +18,7 @@
       </el-form-item>
 
       <el-form-item label="封面图片">
-        <Dropzone :ID="'cover'" @getImg="photo_success"></Dropzone>
+        <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic"></Dropzone>
       </el-form-item>
 
       <el-form-item style="text-align: center;">
@@ -38,14 +38,17 @@
       </div>
       <div class="staff_name">
         <div class="staff_pic">
+          <img :src="personal.avatar" v-if="personal.avatar !== ''">
           <img src="../../../../../assets/images/head.png">
         </div>
         <div class="info">
           <span>
-            <span>xxx</span>&nbsp;&nbsp;
-            <span>xxxx-xxxx</span>
+            <span>{{personal.name}}</span>&nbsp;&nbsp;
+            <span v-for="key in personal.org">
+              {{key.name}}
+            </span>
           </span>
-          <span>0000-00-00 00:00:00</span>
+          <span>{{times}}</span>
         </div>
       </div>
       <div class="ql-editor" v-html="form.htmlForEditor"></div>
@@ -67,11 +70,12 @@
     data() {
       return {
         urls: globalConfig.server,
+        address: globalConfig.server_user,
+        personal: {},
+        times: '',
         pitch: '',
-        photos: {
-          pic_id: [],
-          pic_url: {},
-        },
+        cover_pic: {},
+        cover_id: [],
         dict: {
           region: [],
           status: [],
@@ -102,10 +106,16 @@
             this.form.name = detail.title;
             this.form.region = detail.dict_id;
             this.form.htmlForEditor = detail.content;
-            this.photos.pic_url = detail.album.cover_pic;
-            for (let key in detail.album.cover_pic) {
-              this.photos.pic_id.push(key);
+            let pic = detail.album.cover_pic;
+            let arr = {};
+            this.cover_id = [];
+            for (let key in pic) {
+              this.cover_id.push(key);
+              for (let i = 0; i < pic[key].length; i++) {
+                arr[key] = pic[key][i].uri;
+              }
             }
+            this.cover_pic = arr;
           }
         })
       },
@@ -120,6 +130,8 @@
       // 预览
       preview() {
         this.previewShow = false;
+        this.personal = JSON.parse(localStorage.getItem("personal"));
+        this.nowDate();
       },
       // 返回上一步
       preBtn() {
@@ -137,11 +149,11 @@
           title: this.form.name,
           dict_id: this.form.region,
           content: this.form.htmlForEditor,
-          cover_pic: this.photos.pic_id,
+          cover_pic: this.cover_id,
           status: val
         }).then((res) => {
           if (res.data.code === '80010' || res.data.code === '80030') {
-            // this.goBack();
+            this.goBack();
             this.prompt(1, res.data.msg);
           } else {
             this.prompt(2, res.data.msg);
@@ -149,7 +161,7 @@
         })
       },
       goBack() {
-        this.$router.push('/articleMessage')
+        this.$router.push({path: '/articleMessage', query: {tabs: 'third'}})
       },
       handleImageAdded(file, Editor, cursorLocation, resetUploader) {
         // An example of using FormData
@@ -157,7 +169,7 @@
         // formData.append('file', file)
         let formData = new FormData();
         formData.append('image', file);
-        this.$http.post(this.urls + 'picture/upload', formData).then((res) => {
+        this.$http.post(this.address + 'api/v1/files', formData).then((res) => {
           console.log(res.data.data);
           let picId = res.data.data;
           this.$http.post('picture/' + picId).then((res) => {
@@ -169,7 +181,7 @@
       },
       // 上传成功
       photo_success(val) {
-        this.photos.pic_id = val[1];
+        this.cover_id = val[1];
       },
 
       prompt(val, info) {
@@ -184,6 +196,32 @@
             message: info,
           });
         }
+      },
+      // 当前时间
+      nowDate() {
+        let date = new Date();
+        let year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let strDate = date.getDate();
+        let hour = date.getHours(); //获取当前小时数(0-23)
+        let minutes = date.getMinutes(); //获取当前分钟数(0-59)
+        let seconds = date.getSeconds(); //获取当前秒数(0-59)
+        if (month < 10) {
+          month = '0' + month;
+        }
+        if (strDate < 10) {
+          strDate = '0' + strDate;
+        }
+        if (hour < 10) {
+          hour = '0' + hour;
+        }
+        if (minutes < 10) {
+          minutes = '0' + minutes;
+        }
+        if (seconds < 10) {
+          seconds = '0' + seconds;
+        }
+        this.times = year + '-' + month + '-' + strDate + ' ' + hour + ':' + minutes + ':' + seconds
       }
     }
   }

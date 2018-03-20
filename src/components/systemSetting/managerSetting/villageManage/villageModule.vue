@@ -1,6 +1,6 @@
 <template>
   <div id="villageModule" class="dialog_scroll">
-    <el-dialog title="新增小区" :visible.sync="dialogVisible" width="40%">
+    <el-dialog :title="formList.status" :visible.sync="dialogVisible" width="40%">
       <div class="modules scroll_bar">
         <el-form :model="form" size="mini" label-width="80px">
           <el-row>
@@ -67,7 +67,7 @@
             <el-col :span="12">
               <el-form-item label="建筑年限">
                 <el-select v-model="form.built_year" clearable>
-                  <el-option v-for="(key,index) in 51" :label="key + 1969" :value="index + 1969"
+                  <el-option v-for="(key,index) in 51" :label="key + 1969" :value="index + 1970"
                              :key="index"></el-option>
                 </el-select>
               </el-form-item>
@@ -89,12 +89,12 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="物业费">
-                <el-input type="number" v-model="form.propertyFee" placeholder="金333额"></el-input>
+                <el-input type="number" v-model="form.propertyFee" placeholder="金额"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-form-item label="小区照片">
-            <upLoad :ID="'address'" @getImg="villagePic"></upLoad>
+            <upLoad :ID="'address'" @getImg="villagePic" :editImage="cover_pic"></upLoad>
           </el-form-item>
           <el-form-item label="周边配套">
             <el-input type="textarea" :autosize="{minRows: 2,maxRows: 4}" placeholder="请输入配套情况"
@@ -108,9 +108,9 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="dialogVisible = false">取&nbsp;消</el-button>
-        <el-button v-if="formList.status === 'add'" size="small" type="primary" @click="villageSave('save')">确&nbsp;定
+        <el-button v-if="formList.status === '新增小区'" size="small" type="primary" @click="villageSave('save')">确&nbsp;定
         </el-button>
-        <el-button v-if="formList.status === 'revise'" size="small" type="primary" @click="villageSave('update')">修&nbsp;改</el-button>
+        <el-button v-if="formList.status === '修改小区'" size="small" type="primary" @click="villageSave('update')">修&nbsp;改</el-button>
       </div>
     </el-dialog>
 
@@ -132,6 +132,7 @@
         villageId: '',
         mapVisible: false,
         dialogVisible: false,
+        cover_pic: {},
         form: {
           province: '',                 //小区位置
           city: '',                     //小区位置
@@ -185,6 +186,16 @@
         this.form.propertyFee = val.property_fee;
         this.form.configure = val.peripheral_info;
         this.form.villageIntroduce = val.content;
+        let pic = val.album.house_pic;
+        let arr = {};
+        this.form.addressId = [];
+        for (let key in pic) {
+          this.form.addressId.push(key);
+          for (let i = 0; i < pic[key].length; i++) {
+            arr[key] = pic[key][i].uri;
+          }
+        }
+        this.cover_pic = arr;
       },
       module(val) {
         this.dialogVisible = val;
@@ -192,13 +203,14 @@
       dialogVisible(val) {
         if (!val) {
           this.$emit('close');
+          this.close_();
         }
       },
     },
     methods: {
       // 上传成功
       villagePic(val) {
-        this.addressId = val[1];
+        this.form.addressId = val[1];
       },
 
       choose(val, id) {
@@ -281,7 +293,7 @@
           house_type: this.form.houseType,
           total_buildings: this.form.allBuilding,
           property_fee: this.form.propertyFee,
-          house_pic: this.addressId,
+          house_pic: this.form.addressId,
           peripheral_info: this.form.configure,
           content: this.form.villageIntroduce,
         }).then((res) => {
@@ -295,6 +307,7 @@
         })
       },
       close_() {
+        this.villageId = '';                     //小区id
         this.form.province = '';                 //小区位置
         this.form.city = '';                     //小区位置
         this.form.area = '';                     //小区位置
@@ -309,8 +322,10 @@
         this.form.longitude = '';                //经度
         this.form.propertyFee = '';              //物业费
         this.form.addressId = [];                //小区照片
+        this.cover_pic = {};                    //小区照片
         this.form.configure = '';                //周边配套
         this.form.villageIntroduce = '';         //小区简介
+        $('.imgItem').remove();
       },
       // ====================提示信息=================
       prompt(val, stu) {
