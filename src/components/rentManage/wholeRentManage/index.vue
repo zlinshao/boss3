@@ -905,6 +905,7 @@
     <ReturnVisit :returnVisitDialog="returnVisitDialog" @close="closeReturnVisit"></ReturnVisit>
     <TopForm :topFormSetDialog="topFormSetDialog" @close="closeTopForm"></TopForm>
     <Setting :settingDialog="settingDialog" @close="closeSetting"></Setting>
+    <visit-record :visitRecordDialog="visitRecordDialog" @close="closeVisitRecord"></visit-record>
   </div>
 </template>
 
@@ -933,6 +934,7 @@
   import ReturnVisit from '../components/returnVisit.vue'   //查看回访
   import TopForm from '../components/topFormSet.vue'    //表头列表
   import Setting from './components/setting.vue'
+  import VisitRecord from './../components/visitRecord.vue'    //回访记录
 
   export default {
     name: 'hello',
@@ -960,7 +962,8 @@
       Repayment,
       ReturnVisit,
       TopForm,
-      Setting
+      Setting,
+      VisitRecord,
     },
     data () {
       return {
@@ -993,6 +996,7 @@
         returnVisitDialog:false,      //查看回访
         topFormSetDialog:false,       //选择列
         settingDialog : false,        //设置
+        visitRecordDialog: false,    //回访记录
 
         isHigh: false,
 
@@ -1210,6 +1214,7 @@
           {clickIndex: 'addCollectRepairDialog', headIcon: 'el-icons-fa-gear', label: '维修',},
 //              {clickIndex: 1, headIcon: 'el-icons-fa-user', label: '黑名单',},
           {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
+          {clickIndex: 'visitRecordDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '回访记录',},
 //          {clickIndex: '', headIcon: 'el-icons-fa-plus-circle', label: '对比',},
         ];
         this.contextMenuParam(event);
@@ -1271,6 +1276,7 @@
           {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
 //          {clickIndex: 1, headIcon: 'el-icons-fa-plus-circle', label: '对比',},
           {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加跟进',},
+          {clickIndex: 'visitRecordDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '回访记录',},
         ];
         this.contextMenuParam(event);
       },
@@ -1366,6 +1372,9 @@
           case 'settingDialog':     //转到合租
             this.settingDialog = true;
             break;
+          case 'visitRecordDialog':
+            this.visitRecordDialog = true;
+            break;
         }
 
       },
@@ -1460,7 +1469,10 @@
       },
       resetting(){
 
-      }
+      },
+      closeVisitRecord() {
+        this.visitRecordDialog = false;
+      },
     }
   }
 </script>
