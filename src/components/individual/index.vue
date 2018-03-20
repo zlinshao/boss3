@@ -110,7 +110,7 @@
               <div class="checkTab">
                 <div class="titles">
                   <div>RNTEGAL GETAIL</div>
-                  <div @click="routerLink('/integraldetail')">积分明细</div>
+                  <div @click="routerLink('/integraldetail')" style="cursor: pointer;">积分明细</div>
                 </div>
                 <div class="checkNum">
                   <i class="el-icon-plus"></i> 1289

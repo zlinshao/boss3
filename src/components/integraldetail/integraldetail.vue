@@ -61,9 +61,6 @@
     data() {
       return {
         urls: globalConfig.server,
-
-        // highGrade: false,
-
         form: {
           page: 1,
           limit: 12,
@@ -80,10 +77,6 @@
       this.getIntegralList(1);
     },
     methods: {
-      // 高级筛选
-      // highGrade() {
-      //   this.isHigh = !this.isHigh;
-      // },
       // 重置
       resetting() {
         this.form.pages = 1;
@@ -112,7 +105,6 @@
           if (res.data.code === '30110') {
             this.itemList = res.data.data;
             this.paging = res.data.num;
-            // this.currentPage = val;
           } else {
             this.itemList = [];
             this.paging = 0;
