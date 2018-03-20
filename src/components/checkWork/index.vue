@@ -34,7 +34,8 @@ export default {
         start:'',
         end:'',
         title:'',
-        desc:''
+        desc:'',
+        flag:'1'
       }
     };
   },
@@ -85,6 +86,12 @@ export default {
                       else if(dataresult[i].time_result !='Normal' && dataresult[j].time_result !='Normal'){
                         this.eachitem.title=dataresult[i].time_result;
                         this.eachitem.desc=dataresult[j].time_result;
+                      }
+                      else if (dataresult[i].time_result =='Normal' && dataresult[j].time_result =='Normal'){
+                        this.eachitem.flag="1";
+                      }
+                      else{
+                        this.eachitem.flag="0";
                       }
                       this.demoEvents.push(this.eachitem);
                   }

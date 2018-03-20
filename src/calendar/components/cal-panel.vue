@@ -51,7 +51,8 @@
             <span v-if="date.status&&date.desc==='Early'">( 早退 )</span>
             <span v-if="date.status&&date.desc==='NotSigned'">( 未打卡 )</span>
           </span>
-          <span v-if="date.status&&!date.title" style="color:#bbb"><span class="time">09:00 - 18:00<br /></span>正常</span>
+          <span v-if="date.status&&!date.title && date.flag" style="color:#bbb"><span class="time">{{date.start}} - {{date.end}}<br /></span>正常</span>
+          <span v-if="date.status&&!date.title && !date.flag" style="color:#bbb"></span>
         </div>
       </div>
     </div>
@@ -121,6 +122,7 @@
               tempItem.title = event.title;
               tempItem.title1 = event.title1;
               tempItem.start = event.start;
+              tempItem.flag = event.flag;
               tempItem.end = event.end;
               tempItem.desc = event.desc || '';
               if (event.customClass) tempItem.customClass.push(event.customClass)
