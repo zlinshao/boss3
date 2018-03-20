@@ -15,7 +15,7 @@
               </span>
             </el-col>
           </el-row>
-          <el-row >
+          <el-row>
             <el-form-item label="名称:">
               <el-input v-model="formInfo.name" placeholder="请输入名称"></el-input>
             </el-form-item>
@@ -33,7 +33,7 @@
 <script>
   export default {
     name: 'improve-img-info',
-    props: ['improveImgInfoDialog','uploadImgLength'],
+    props: ['improveImgInfoDialog','pictureIds','uploadImgLength'],
     data() {
       return {
         improveImgInfoDialogVisible: false,
@@ -41,7 +41,7 @@
         formInfo: {
           name: '',
         },
-        photo_ids:[2,4],
+        photo_ids:[],
       }
     },
     watch: {
@@ -52,6 +52,9 @@
         if(!val) {
           this.$emit('close');
         }
+      },
+      pictureIds(val) {
+        console.log("pictureIds============="+val);
       }
     },
     methods: {
@@ -64,9 +67,13 @@
         this.editImgInfoDialogVisible = true;
       },
       saveAllPhoto() {
-        this.$http.put(globalConfig.server + "/photo/edit?photo_ids=" + this.photo_ids+"&name="+this.name).then((res)=>{
-          if(res.data.code == ""){
-
+        this.$http.put(globalConfig.server + "/photo/edit",{photo_ids:this.pictureIds,name:this.formInfo.name}).then((res)=>{
+          if(res.data.code == "20210"){
+            this.improveImgInfoDialogVisible = false;
+            this.$notify.success({
+              title:"成功",
+              message:res.data.msg
+            });
           }
         });
       },

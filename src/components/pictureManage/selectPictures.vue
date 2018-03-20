@@ -7,15 +7,13 @@
             <el-form-item label="选择相册" >
               <el-col :span="8" >
               <el-select v-model="form.album_id" placeholder="请选择相册" >
-                <div v-for="album in albumData">
-                  <el-option  :label="album.name" :value="album.id">{{album.name}}</el-option>
-                </div>
+                <el-option  v-for="album in albumData" :label="album.name" :value="album.id" :key="album.id">{{album.name}}</el-option>
               </el-select>
               </el-col>
             </el-form-item>
-            <!--图片ids-->{{form.picture_ids}}
+            <!--图片ids-->
             <el-form-item label="上传图片">
-              <Upload :ID="'upload'" @getImg="getImage"></Upload>
+              <Upload :ID="'upload'" @getImg="getImage" :isClear="isClear"></Upload>
             </el-form-item>
           </el-row>
         </el-form>
@@ -25,7 +23,7 @@
         <el-button size="small" type="primary" @click="saveImages">保存</el-button>
       </span>
     </el-dialog>
-    <improve-img-info :improveImgInfoDialog="improveImgInfoDialog" @close="closeImproveImgInfoDialog" @upload="continueUploading" :uploadImgLength="uploadImgLength"></improve-img-info>
+    <improve-img-info :improveImgInfoDialog="improveImgInfoDialog" @close="closeImproveImgInfoDialog" @upload="continueUploading" :pictureIds="form.picture_ids" :uploadImgLength="uploadImgLength"></improve-img-info>
   </div>
 </template>
 
@@ -47,8 +45,9 @@
               album_id: '',
               picture_ids: [],
             },
-            albumData: '',
+            albumData: [],
             uploadImgLength: 0,
+            isClear: false,
           }
         },
       methods: {
@@ -57,8 +56,7 @@
             if(res.data.code == '20210') {
               this.choosePicturesDialogVisible = false;
               this.improveImgInfoDialog = true;  //显示完善照片信息界面
-              this.form.picture_ids = [];
-              $(".imgItem").remove();
+              this.isClear = true;
             }else{
               this.$notify.warning({
                 title: "警告",
@@ -71,7 +69,7 @@
         getImage(val) {
           console.log(val);
           this.form.picture_ids = val[1]; //选择的图片数组ids
-          this.uploadImgLength = val.length;
+          this.uploadImgLength = val[1].length;
         },
         closeImproveImgInfoDialog() {
           this.improveImgInfoDialog = false;  //关闭完善照片信息界面
@@ -83,6 +81,7 @@
           this.$http.get(globalConfig.server + "album").then((res) =>{
             if (res.data.code == "20110") {
               this.albumData = res.data.data;
+              this.form.album_id = Number(this.albumId) ;
             }
           });
         },
@@ -98,12 +97,12 @@
           }
         },
         albumId(val) {
-          this.form.album_id =  val;
+          this.getImgData();
         }
       },
       mounted() {
-         this.getImgData();
-         this.form.album_id =  this.albumId;
+         // this.getImgData();
+         // this.form.album_id =  this.albumId;
       },
     }
 </script>
