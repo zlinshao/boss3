@@ -31,7 +31,7 @@
         <el-button size="small" type="primary" @click="createAlbum" v-else>确 定</el-button>
       </span>
     </el-dialog>
-    <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog"></choose-pictures>
+    <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog" :albumId="createAlbumId"></choose-pictures>
   </div>
 </template>
 
@@ -53,6 +53,7 @@
               theme: '',
             },
             dialogTitle: this.albumId ?  '编辑相册': '创建相册',
+            createAlbumId: '',
           }
         },
       mounted() {
@@ -86,6 +87,7 @@
             this.$http.post(globalConfig.server + "album",this.form).then((res)=>{
               if(res.data.code == '20110'){
                 this.createAlbumDialogVisible = false;
+                this.createAlbumId = res.data.data.id;
                 this.$confirm('相册'+this.form.name+'保存成功，是否马上上传照片到这个相册?', '创建成功', {
                   confirmButtonText: '确定',
                   cancelButtonText: '取消',
@@ -94,7 +96,6 @@
                   this.choosePicturesDialog = true;
                 }).catch(() => {
                   this.choosePicturesDialog = false;
-                  // window.location.reload()
                 });
               }else {
                 this.$notify.warning({
