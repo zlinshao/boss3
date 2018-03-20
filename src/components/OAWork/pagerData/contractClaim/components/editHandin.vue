@@ -65,7 +65,7 @@
               <div v-for="(item,index) in Object.keys(contractCancelCollect)" >
                 <el-row >
                   <el-col :span="6">
-                    <el-checkbox-group v-model="checkBoxHandin">
+                    <el-checkbox-group v-model="checkBox">
                       <el-checkbox :label="item" name="type">{{contractCancelCollect[item]}}</el-checkbox>
                     </el-checkbox-group>
                   </el-col>
@@ -89,7 +89,7 @@
               <div v-for="(item,index) in Object.keys(contractCancelRent)" >
                 <el-row >
                   <el-col :span="6">
-                    <el-checkbox-group v-model="checkBoxHandin">
+                    <el-checkbox-group v-model="checkBox">
                       <el-checkbox :label="item" name="type">{{contractCancelRent[item]}}</el-checkbox>
                     </el-checkbox-group>
                   </el-col>
@@ -273,7 +273,7 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="init">取 消</el-button>
+        <el-button size="small" @click="editHandInDialogVisible = false">取 消</el-button>
         <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
@@ -326,7 +326,7 @@
         handover:{},
         receipt:{},
         keyCode:{},
-        checkBoxHandin:[],
+        checkBox:[],
 
         //中介合同备用字段（shou）
         medi_contracts_number:[],
@@ -404,7 +404,7 @@
             this.params.report_time = arr.full.report_time;
             this.params.city_code = arr.full.city_code;
             this.params.screenshot = arr.full.screenshot;
-            this.checkBoxHandin = [];
+            this.checkBox = [];
             this.params.contract_type = arr.contract_type;
 
             this.params.department_id = arr.department.id;
@@ -434,7 +434,7 @@
               this.receipt = arr.receipt;
               this.keyCode = arr.key;
               for(let key in this.keyCode){
-                this.checkBoxHandin.push(key)
+                this.checkBox.push(key)
               }
             }else if(Number(this.params.contract_type) === 109){
 
@@ -632,8 +632,9 @@
               }
               candidateArray[item] = candidateItem;
             });
+
             //计算出最终结果
-            this.params.candidate = Object.assign({},this.params.candidate,candidateArray);
+            this.params.candidate = Object.assign({},this.params.candidate,candidateArray)
           }else if(Number(this.params.contract_type) === 109){
             this.params.candidate = {};
             let contentItem = {};
@@ -733,6 +734,7 @@
       },
       init(){
         $('.imgItem').remove();
+
         this.params = {
           city_code:'',
           report_time:'',

@@ -703,6 +703,7 @@
                 candidateArray[item] = candidateItem;
               });
               //计算出最终结果
+
               this.params.candidate = Object.assign({},this.params.candidate,candidateArray);
             }else if(Number(this.params.contract_type) === 109){
               this.params.candidate = {};
