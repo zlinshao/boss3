@@ -16,7 +16,7 @@
         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
                     v-model="form.htmlForEditor"></vue-editor>
       </el-form-item>
-{{cover_id}}
+
       <el-form-item label="封面图片">
         <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic"></Dropzone>
       </el-form-item>

@@ -94,7 +94,7 @@
             </el-col>
           </el-row>
           <el-form-item label="小区照片">
-            <upLoad :ID="'address'" @getImg="villagePic"></upLoad>
+            <upLoad :ID="'address'" @getImg="villagePic" :editImage="cover_pic"></upLoad>
           </el-form-item>
           <el-form-item label="周边配套">
             <el-input type="textarea" :autosize="{minRows: 2,maxRows: 4}" placeholder="请输入配套情况"
@@ -132,6 +132,7 @@
         villageId: '',
         mapVisible: false,
         dialogVisible: false,
+        cover_pic: {},
         form: {
           province: '',                 //小区位置
           city: '',                     //小区位置
@@ -185,6 +186,16 @@
         this.form.propertyFee = val.property_fee;
         this.form.configure = val.peripheral_info;
         this.form.villageIntroduce = val.content;
+        let pic = val.album.house_pic;
+        let arr = {};
+        this.form.addressId = [];
+        for (let key in pic) {
+          this.form.addressId.push(key);
+          for (let i = 0; i < pic[key].length; i++) {
+            arr[key] = pic[key][i].uri;
+          }
+        }
+        this.cover_pic = arr;
       },
       module(val) {
         this.dialogVisible = val;
@@ -199,8 +210,7 @@
     methods: {
       // 上传成功
       villagePic(val) {
-        this.addressId = val[1];
-        console.log(val)
+        this.form.addressId = val[1];
       },
 
       choose(val, id) {
@@ -283,7 +293,7 @@
           house_type: this.form.houseType,
           total_buildings: this.form.allBuilding,
           property_fee: this.form.propertyFee,
-          house_pic: this.addressId,
+          house_pic: this.form.addressId,
           peripheral_info: this.form.configure,
           content: this.form.villageIntroduce,
         }).then((res) => {
@@ -312,6 +322,7 @@
         this.form.longitude = '';                //经度
         this.form.propertyFee = '';              //物业费
         this.form.addressId = [];                //小区照片
+        this.cover_pic = {};                    //小区照片
         this.form.configure = '';                //周边配套
         this.form.villageIntroduce = '';         //小区简介
         $('.imgItem').remove();
