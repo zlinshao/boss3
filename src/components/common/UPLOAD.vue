@@ -2,7 +2,7 @@
   <div>
     <div id="pictureContainer">
       <div class="editImg" v-if="Object.keys(editImg).length>0">
-        <div style="position: relative" v-for="(val,key) in editImg">
+        <div class="imgItem" style="position: relative" v-for="(val,key) in editImg">
           <div style="width: 120px;  height: 120px; border-radius:6px;background: #f0f0f0">
             <img :src="val" alt="">
           </div>
@@ -301,12 +301,6 @@
         margin-top: 15px;
         &:first-child{
           margin-left: 0;
-        }
-      }
-      .imgItem {
-        &:hover {
-          /*-webkit-filter: blur(2px); !* Chrome, Safari, Opera *!*/
-          /*filter: blur(2px);*/
         }
       }
       .upButton {

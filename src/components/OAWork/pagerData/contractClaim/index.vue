@@ -45,13 +45,10 @@
       <div v-show="selectFlag==1">
         <el-table
           :data="contractTotalData"
+          @row-contextmenu='openTotalMenu'
           style="width: 100%">
           <el-table-column
-            prop="department_name"
-            label="部门">
-          </el-table-column>
-          <el-table-column
-            prop="staff_id"
+            prop="simple_staff.real_name"
             label="姓名">
           </el-table-column>
           <el-table-column
@@ -326,11 +323,22 @@
       },
 
       //************************右键操作项*****************************
-      openApplyMenu(row, event){
-        this.applyEditId = row.id;
+      openTotalMenu(row, event){
         this.dispatchObject = row;
         this.lists = [
           {clickIndex: 'dispatchApply', headIcon: 'el-icon-menu', label: '分配',},
+//          {clickIndex: 'editApply', headIcon: 'el-icon-edit', label: '修改',},
+//          {clickIndex: 'addRemarkApply', headIcon: 'el-icon-edit-outline', label: '添加备注',},
+//          {clickIndex: 'deleteApply', headIcon: 'el-icon-delete', label: '删除',},
+        ];
+        this.contextMenuParam(event);
+      },
+
+      openApplyMenu(row, event){
+        this.applyEditId = row.id;
+//        this.dispatchObject = row;
+        this.lists = [
+//          {clickIndex: 'dispatchApply', headIcon: 'el-icon-menu', label: '分配',},
           {clickIndex: 'editApply', headIcon: 'el-icon-edit', label: '修改',},
 //          {clickIndex: 'addRemarkApply', headIcon: 'el-icon-edit-outline', label: '添加备注',},
           {clickIndex: 'deleteApply', headIcon: 'el-icon-delete', label: '删除',},

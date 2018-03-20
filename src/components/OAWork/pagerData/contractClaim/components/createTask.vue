@@ -803,6 +803,7 @@
       },
       closeAddModal(){
         this.createTaskDialogVisible = false;
+        $('.imgItem').remove();
         this.params = {
           city_code:'',
 //          category:'',

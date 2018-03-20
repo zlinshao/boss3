@@ -732,6 +732,7 @@
         }
       },
       init(){
+        $('.imgItem').remove();
         this.params = {
           city_code:'',
           report_time:'',
