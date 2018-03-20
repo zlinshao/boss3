@@ -1,10 +1,12 @@
 <template>
   <div>
-    <UPLOAD :ID="'first'" :editImage="editImg" @getImg="getImgData"></UPLOAD>
+    <UPLOAD :ID="'first'" :isClear="isClear" :editImage="editImg" @getImg="getImgData"></UPLOAD>
     <UPLOAD :ID="'second'" :editImage="editImg1" @getImg="getImgData"></UPLOAD>
     <UPLOAD :ID="'third'" :editImage="editImg2" @getImg="getImgData"></UPLOAD>
     <UPLOAD :ID="'fourth'" @getImg="getImgData"></UPLOAD>
     <UPLOAD :ID="'fifth'" @getImg="getImgData"></UPLOAD>
+
+    <button @click="ddd">4234</button>
   </div>
 </template>
 
@@ -18,7 +20,8 @@
 
         },
         editImg1:{},
-        editImg2:{}
+        editImg2:{},
+        isClear:false
       }
     },
     mounted(){
@@ -41,6 +44,9 @@
     methods: {
       getImgData(val){
           console.log(val)
+      },
+      ddd(){
+        this.isClear = true
       }
     }
   }

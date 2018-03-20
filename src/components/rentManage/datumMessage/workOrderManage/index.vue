@@ -115,7 +115,7 @@
       </div>
 
       <div class="main">
-        <div class="myTable" @contextmenu="houseHeadMenu($event)">
+        <div class="myTable" >
           <el-table
             :data="tableData"
             @row-click="clickTable"
@@ -130,28 +130,28 @@
               label="房屋地址">
             </el-table-column>
             <el-table-column
-              prop="province"
+              prop="child_count"
               label="事件数">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="types"
               label="包含跟进项">
             </el-table-column>
             <el-table-column
-              prop="zip"
+              prop="expected_finish_time"
               label="预计完成时间">
             </el-table-column>
             <el-table-column
-              prop="date"
+              prop="creator_id"
               label="创建人">
             </el-table-column>
             <el-table-column
-              prop="name"
+              prop="follow_id"
               label="跟进人">
             </el-table-column>
             <el-table-column
-              prop="province"
-              label="完成情况">
+              prop="follow_statuss"
+              label="跟进状态">
             </el-table-column>
 
           </el-table>
@@ -243,15 +243,6 @@
           {clickIndex: 'cancel', headIcon: 'el-icons-fa-scissors', label: '作废',},
           {clickIndex: '', headIcon: 'el-icons-fa-eye', label: '查看回访记录',},
           {clickIndex: 'maintenanceDialog', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
-        ];
-        this.contextMenuParam(event);
-      },
-
-
-      //合同表头右键
-      houseHeadMenu(e){
-        this.lists = [
-          {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
         ];
         this.contextMenuParam(event);
       },
