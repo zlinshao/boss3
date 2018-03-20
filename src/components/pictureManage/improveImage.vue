@@ -129,7 +129,7 @@
         this.editImgInfoDialogVisible = true;
       },
       editAlbum() {
-        this.$http.put(globalConfig.sever + 'album/2',this.formInfo).then((res)=>{
+        this.$http.put(globalConfig.server + 'photo/2',this.formInfo).then((res)=>{
           if(res.data.code == '20110') {
             this.choosePicturesDialog = true;
           }else{

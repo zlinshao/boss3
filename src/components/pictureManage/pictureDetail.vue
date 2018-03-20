@@ -69,7 +69,7 @@
                         <el-dropdown-item @click.native="deletePhoto(item.id)">删除</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
-                    <img :src="item.picture_path">
+                    <img :src="item.picture_path" style="height: 150px;">
                     <div class="clearfix t_center">
                       <span class="text_over_ellipsis">{{item.name}}</span>
                     </div>
@@ -128,7 +128,6 @@
           name: '',
           description: '',
         },
-        deleteIds: [],
         show: false,
         lists: [],
         rightMenuX: 0,
@@ -150,9 +149,11 @@
         }
       },
       closeCreateAlbumDialog(){
+        this.getAllPhotos();
         this.createAlbumDialog = false;
       },
       closeChoosePicturesDialog() {
+        this.getAllPhotos();
         this.choosePicturesDialog = false;
       },
       getAllPhotos(){
@@ -163,11 +164,10 @@
         });
       },
       editPhoto(item) {
-        console.log(`editPhoto==========${item}`);
         this.photoDetailDialogVisible = true;
       },
       setCoverImg(item) {
-        this.$http.put(globalConfig.server + 'album/cover/'+item.id+'&cover='+this.albumDetail.id).then((res) => {
+        this.$http.put(globalConfig.server + 'album/cover/' + item.id + '&cover=' + this.albumDetail.id).then((res) => {
           if(res.data.code == "20110") {
             // window.location.reload();
           } else {
@@ -182,14 +182,12 @@
 
       },
       deletePhoto(id) {
-        this.deleteIds.push(id);
-        console.log(`id===${id}---${this.deleteIds}`);
         this.$confirm('确定删除照片吗？','删除照片',{
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.delete(globalConfig.server + 'photo?photo_ids=' + this.deleteIds).then((res) =>{
+          this.$http.put(globalConfig.server + 'photo/delete/'+ id ).then((res) =>{
             if (res.data.code == "20210") {
               // window.location.reload();
             } else {
@@ -233,6 +231,7 @@
     margin-top: 40px;
   }
   #pictureDetail {
+    min-width: 1500px;
     .el-row {
       margin-bottom: 20px;
       &:last-child {

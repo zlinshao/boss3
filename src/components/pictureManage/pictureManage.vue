@@ -47,7 +47,6 @@
                       </span>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item @click.native="editAlbum(item.id)">编辑</el-dropdown-item>
-                        <el-dropdown-item>更换封面</el-dropdown-item>
                         <el-dropdown-item @click.native="deleteAlbum(item.id)">删除</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
@@ -117,10 +116,12 @@
             break;
         }
       },
-      closeCreateAlbumDialog(){
+      closeCreateAlbumDialog() {
+        this.getImgData();
         this.createAlbumDialog = false;
       },
       closeChoosePicturesDialog() {
+        this.getImgData();
         this.choosePicturesDialog = false;
       },
       getImgData(){
@@ -142,9 +143,9 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.delete(globalConfig.server + 'album/2').then((res) => {
+          this.$http.put(globalConfig.server + 'album/delete/' + id).then((res) => {
             if(res.data.code == "20110") {
-              window.location.reload();
+              // window.location.reload();
             } else {
               this.$notify.warning({
                 title:"警告",
@@ -163,6 +164,7 @@
 
 <style lang="scss" scoped>
   #pictureManage {
+    min-width: 1500px;
     .el-row {
       margin-bottom: 20px;
       &:last-child {

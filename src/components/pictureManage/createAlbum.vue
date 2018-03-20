@@ -66,6 +66,7 @@
             if(!val) {
               this.$emit('close');
             }
+
           },
           albumId(val) {
             // this.form = val;
