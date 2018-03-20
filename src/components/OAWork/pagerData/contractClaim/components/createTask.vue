@@ -41,7 +41,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="领用人">
-                  <el-input readonly="" v-model="staff_name" @click.native="openOrganizeModal"></el-input>
+                  <el-input readonly="" v-model="staff_name" @focus="openOrganizeModal"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -652,6 +652,7 @@
                   message:res.data.msg
                 });
                 this.closeAddModal();
+                this.$emit('close');
               }else {
                 this.$notify.warning({
                   title:'警告',
@@ -667,6 +668,7 @@
                   message:res.data.msg
                 });
                 this.closeAddModal();
+                this.$emit('close');
               }else {
                 this.$notify.warning({
                   title:'警告',
@@ -784,7 +786,8 @@
                   title:'成功',
                   message:res.data.msg
                 });
-//                this.closeAddModal();
+                this.$emit('close');
+                this.closeAddModal();
               }else {
                 this.$notify.warning({
                   title:'警告',

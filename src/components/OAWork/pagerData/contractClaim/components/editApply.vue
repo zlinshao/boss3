@@ -36,7 +36,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="领用人">
-                  <el-input disabled="" v-model="staff_name" @click.native="openOrganizeModal"></el-input>
+                  <el-input disabled="" v-model="staff_name" @focus="openOrganizeModal"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -191,7 +191,13 @@
                 let applyInfo = res.data.data.full;
                 this.params.report_time = applyInfo.report_time;
                 this.params.staff_id = applyInfo.staff_id;
-//                this.params.department_id = applyInfo.department_id;
+                this.params.department_id = applyInfo.department_id;
+
+                this.depart_name = res.data.data.department.name;
+                if(applyInfo.simple_staff){
+                  this.staff_name = applyInfo.simple_staff.real_name;
+                }
+
 
                 this.params.screenshot = applyInfo.screenshot;
 
@@ -255,6 +261,7 @@
                 title:'成功',
                 message:res.data.msg
               });
+              this.$emit('close');
               this.closeAddModal();
             }else {
               this.$notify.warning({
