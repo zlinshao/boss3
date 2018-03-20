@@ -3,16 +3,31 @@
     <div class="convergeTop">
       <el-row>
         <el-col :span="16">
-          <div class="topLeft">
-            <img src="../../assets/images/yuangong2.png" alt="">
-            <div></div>
+          <div class="topLeft module">
+            <span v-for="(key,index) in hostData.data" v-if="index === 0 && hostData.data[0] !== ''">
+              <span v-for="pic in key.album.cover_pic">
+                <img v-for="p in pic" :src="p.uri">
+              </span>
+            </span>
+            <div class="titleShow" @click="routerDetail(key.id)" v-for="(key,index) in hostData.data"
+                 v-if="index === 0 && hostData.data[0] !== ''">
+              <span>{{key.title}}</span>
+            </div>
           </div>
         </el-col>
         <el-col :span="8">
           <div class="topRight">
             <div class="a">
-              <h1 class="rightA">
-                <img src="../../assets/images/yuangong1.png" alt="">
+              <h1 class="rightA module">
+                <span v-for="(key,index) in lessData.data" v-if="index === 0 && lessData.data[0] !== ''">
+                  <span v-for="pic in key.album.cover_pic">
+                    <img v-for="p in pic" :src="p.uri">
+                  </span>
+                </span>
+                <div class="titleShow" @click="routerDetail(key.id)" v-for="(key,index) in lessData.data"
+                     v-if="index === 0 && lessData.data[0] !== ''">
+                  <span>{{key.title}}</span>
+                </div>
               </h1>
               <h2>
                 <img src="../../assets/images/yuangong1.png" alt="">
@@ -22,8 +37,16 @@
               <h2 class="rightA">
                 <img src="../../assets/images/yuangong2.png" alt="">
               </h2>
-              <h1>
-                <img src="../../assets/images/yuangong2.png" alt="">
+              <h1 class="rightA module">
+                <span v-for="(key,index) in lowData.data" v-if="index === 0 && lowData.data[0] !== ''">
+                   <span v-for="pic in key.album.cover_pic">
+                    <img v-for="p in pic" :src="p.uri">
+                  </span>
+                </span>
+                <div @click="routerDetail(key.id)" class="titleShow" v-for="(key,index) in lowData.data"
+                     v-if="index === 0 && lowData.data[0] !== ''">
+                  <span>{{key.title}}</span>
+                </div>
               </h1>
             </div>
           </div>
@@ -32,57 +55,317 @@
     </div>
 
     <div class="convergeMain">
-      <el-row>
-        <el-col :span="16" class="hotRead">
-          <div class="title">
-            <span></span>热门导读
+
+      <!--乐伽新闻-->
+      <el-row style="display: -webkit-flex;display: flex;">
+        <el-col :span="16" class="lejiaNews">
+          <div class="title color1 a1">
+            {{newsData.title}}
           </div>
           <el-row class="elPadding">
             <el-col :span="12">
-              <div class="mainLeft">
-                <div class="headline">范德萨范德萨范德萨发犯得上发</div>
+              <div class="mainLeft" v-for="(key,index) in newsData.data" v-if="index === 0 && newsData.data[0] !== ''">
+                <div class="headline" @click="routerDetail(key.id)">{{key.title}}</div>
                 <div class="titleTime">
-                  <span>0000-00-00</span>
+                  <span>{{key.create_time}}</span>
                   <span>
-                    <i class="el-icon-view"></i>123
-                    <i class="el-icon-view"></i>123
-                    <i class="el-icon-view"></i>123
+                    <i class="iconfont icon-pinglun"></i>{{key.comments_count}}
+                    <i class="iconfont icon-zan"></i>{{key.favor_num}}
+                    <i class="el-icon-view"></i>{{key.read_num}}
                   </span>
                 </div>
                 <div class="titleImg">
-                  <img src="" alt="">
+                  <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
+                    <img v-for="p in pic" :src="p.uri">
+                  </span>
                 </div>
-                <div class="titleMain text">电话发卡号发大师傅立刻的撒可怜见发发的火山口发号施令的卡发和空间的身份空间的萨芬看就是大海口警方斯达克警方刷点卡积分和卡拉
+                <div class="titleMain text" v-html="key.content">
                 </div>
-                <h6></h6>
-                <div style="margin-top: 20px">
-                  <el-button type="primary" size="mini">更多</el-button>
+                <h6 class="a1"></h6>
+                <div class="onBtn">
+                  <el-button type="primary" size="mini" @click="routerDetail(key.id)">更多</el-button>
                 </div>
               </div>
             </el-col>
             <el-col :span="12">
               <div class="mainRight">
-                <div class="a" v-for="key in 4">
+                <div class="a" @click="routerDetail(key.id)" v-for="(key,index) in newsData.data"
+                     v-if="index !== 0 && newsData.data[0] !== ''">
                   <div>
-                    <img src="" alt="">
+                     <span v-for="pic in key.album.cover_pic">
+                    <img v-for="p in pic" :src="p.uri">
+                  </span>
                   </div>
                   <div>
-                    <p class="headline">发货的款式反动势力咖啡了范德萨范德萨范德萨范德萨斯大林</p>
-                    <span class="titleMain">发货的款式反动势回fdsfdsafsdaf复可见萨芬开绿灯撒加快了发动机是咖啡力咖啡了斯大林
-                    </span>
-                    <h6></h6>
+                    <p class="headline">{{key.title}}</p>
+                    <span class="titleMain" v-html="key.content"></span>
+                    <h6 class="a1"></h6>
                   </div>
                 </div>
               </div>
             </el-col>
           </el-row>
         </el-col>
-        <el-col :span="8">
-          <div class="title">
-            员工广场
+
+        <!--员工风采-->
+        <el-col :span="8" class="appearance">
+          <div class="title color3 a3">
+            {{staffData.title}}
           </div>
-          <div>
-            
+          <div class="elPadding">
+            <div v-for="(key,index) in staffData.data" v-if="index === 0 && staffData.data[0] !== ''">
+              <div class="titleImg box">
+                 <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
+                    <img v-for="p in pic" :src="p.uri">
+                  </span>
+              </div>
+              <div class="headline box" @click="routerDetail(key.id)">{{key.title}}</div>
+              <div class="titleTime box">
+                <span>{{key.create_time}}</span>
+                <span>
+                    <i class="iconfont icon-pinglun"></i>{{key.comments_count}}
+                    <i class="iconfont icon-zan"></i>{{key.favor_num}}
+                    <i class="el-icon-view"></i>{{key.read_num}}
+                  </span>
+              </div>
+              <div class="titleMain text box" v-html="key.content"></div>
+              <h6 class="a3"></h6>
+              <div class="onBtn box">
+                <el-button type="primary" size="mini" @click="routerDetail(key.id)">更多</el-button>
+              </div>
+              <div class="bottom">
+                <div class="mainRight">
+                  <div @click="routerDetail(key.id)" class="a" v-for="(key,index) in staffData.data" v-if="index !== 0">
+                    <div>
+                       <span v-for="pic in key.album.cover_pic">
+                    <img v-for="p in pic" :src="p.uri">
+                  </span>
+                    </div>
+                    <div>
+                      <p class="headline">{{key.title}}</p>
+                      <span class="titleMain" v-html="key.content">
+                    </span>
+                      <h6 class="a3"></h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </el-col>
+      </el-row>
+
+      <el-row style="display: -webkit-flex;display: flex;">
+        <el-col :span="16" style="margin-right: 10px;">
+          <el-row style="display: -webkit-flex;display: flex;">
+            <!--客户纪实-->
+            <el-col :span="12" style="margin-right: 10px;" class="customer">
+              <div class="title color2 a2">{{cusData.title}}</div>
+
+              <div class="elPadding box">
+                <div v-for="(key,index) in cusData.data" v-if="index === 0 && cusData.data[0] !== ''">
+                  <div class="titleImg box">
+                     <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
+                    <img v-for="p in pic" :src="p.uri">
+                  </span>
+                  </div>
+                  <div class="headline box" @click="routerDetail(key.id)">{{key.title}}</div>
+                  <div class="titleTime box">
+                    <span>{{key.create_time}}</span>
+                    <span>
+                      <i class="iconfont icon-pinglun"></i>{{key.comments_count}}
+                      <i class="iconfont icon-zan"></i>{{key.favor_num}}
+                      <i class="el-icon-view"></i>{{key.read_num}}
+                  </span>
+                  </div>
+                  <div class="titleMain text box" v-html="key.content">
+                  </div>
+                  <h6 class="a2"></h6>
+                  <div class="onBtn box">
+                    <el-button type="primary" size="mini" @click="routerDetail(key.id)">更多</el-button>
+                  </div>
+                  <div class="bottom">
+                    <div class="mainRight">
+                      <div class="a" @click="routerDetail(key.id)" v-for="(key,index) in cusData.data"
+                           v-if="index !== 0">
+                        <div>
+                           <span v-for="pic in key.album.cover_pic">
+                    <img v-for="p in pic" :src="p.uri">
+                  </span>
+                        </div>
+                        <div>
+                          <p class="headline">{{key.title}}</p>
+                          <span class="titleMain" v-html="key.content"></span>
+                          <h6 class="a2"></h6>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </el-col>
+
+            <!--公司生活-->
+            <el-col :span="12">
+              <div class="title color1 a1">{{lifeData.title}}</div>
+              <div class="companyLife elPadding box">
+                <div class="mainLeft" v-for="(key,index) in lifeData.data"
+                     v-if="index === 0 && lifeData.data[0] !== ''">
+                  <div class="headline" @click="routerDetail(key.id)">{{key.title}}</div>
+                  <div class="titleTime">
+                    <span>{{key.create_time}}</span>
+                    <span>
+                      <i class="iconfont icon-pinglun"></i>{{key.comments_count}}
+                      <i class="iconfont icon-zan"></i>{{key.favor_num}}
+                      <i class="el-icon-view"></i>{{key.read_num}}
+                    </span>
+                  </div>
+                  <div class="titleImg">
+                     <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
+                        <img v-for="p in pic" :src="p.uri">
+                    </span>
+                  </div>
+                  <div class="titleMain text" v-html="key.content">
+                  </div>
+                  <h6 class="a1"></h6>
+                  <div class="onBtn">
+                    <el-button type="primary" size="mini" @click="routerDetail(key.id)">更多</el-button>
+                  </div>
+                </div>
+
+                <div class="bottomPic">
+                  <div @click="routerDetail(key.id)" v-for="(key,index) in lifeData.data"
+                       v-if="index !== 0 && lifeData.data[0] !== ''">
+                    <span v-for="pic in key.album.cover_pic">
+                        <img v-for="p in pic" :src="p.uri">
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+
+          <!--人物志-->
+          <div class="title color1 a1">
+            {{figureData.title}}
+          </div>
+          <el-row class="elPadding personage">
+            <el-col :span="12">
+              <div class="mainLeft" v-for="(key,index) in figureData.data"
+                   v-if="index === 0 && figureData.data[0] !== ''">
+                <div class="headline" @click="routerDetail(key.id)">{{key.title}}</div>
+                <div class="titleTime">
+                  <span>{{key.create_time}}</span>
+                  <span>
+                    <i class="iconfont icon-pinglun"></i>{{key.comments_count}}
+                    <i class="iconfont icon-zan"></i>{{key.favor_num}}
+                    <i class="el-icon-view"></i>{{key.read_num}}
+                  </span>
+                </div>
+                <div class="bottomPic">
+                  <div>
+                     <span v-for="pic in key.album.cover_pic" @click="routerDetail(key.id)">
+                      <img v-for="p in pic" :src="p.uri">{{index}}
+                    </span>
+                  </div>
+                </div>
+                <div class="titleMain text" v-html="key.content">
+                </div>
+                <h6 class="a1"></h6>
+                <div class="onBtn">
+                  <el-button type="primary" size="mini" @click="routerDetail(key.id)">更多</el-button>
+                </div>
+              </div>
+            </el-col>
+            <el-col :span="12">
+              <el-row class="personageRight">
+                <el-col :span="16" class="per1">
+                  <div class="bigPer1 module" v-for="(key,index) in figureData.data"
+                       v-if="index === 1 && figureData.data[0] !== ''" @click="routerDetail(key.id)">
+                    <span v-for="pic in key.album.cover_pic">
+                      <img v-for="p in pic" :src="p.uri">
+                    </span>
+                    <div class="titleShow">
+                      <span>{{key.title}}</span>
+                    </div>
+                  </div>
+                  <div class="bigPer2">
+                    <span @click="routerDetail(key.id)" v-for="(key,index) in figureData.data"
+                          v-if="index === 2 || index === 3 && figureData.data[0] !== ''">
+                      <a v-for="pic in key.album.cover_pic">
+                        <img v-for="p in pic" :src="p.uri">
+                      </a>
+                    </span>
+                  </div>
+                </el-col>
+                <el-col :span="8" class="per2">
+                  <div v-for="(key,index) in figureData.data"
+                       v-if="index === 4 && figureData.data[0] !== ''">
+                    <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
+                     <img v-for="p in pic" :src="p.uri">
+                    </span>
+                  </div>
+                  <div v-for="(key,index) in figureData.data"
+                       v-if="index === 5 && figureData.data[0] !== ''">
+                   <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
+                     <img v-for="p in pic" :src="p.uri">
+                    </span>
+                  </div>
+                  <div v-for="(key,index) in figureData.data"
+                       v-if="index === 6 && figureData.data[0] !== ''">
+                    <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
+                      <img v-for="p in pic" :src="p.uri">
+                    </span>
+                  </div>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+        </el-col>
+
+        <!--热门导读-->
+        <el-col :span="8">
+          <div class="title color4 a4">{{hotData.title}}</div>
+          <div class="hotReady" v-for="(key,index) in hotData.data" v-if="index === 0 && hotData.data[0] !== ''">
+            <div class="elPadding">
+              <div class="titleImg box">
+                 <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
+                    <img v-for="p in pic" :src="p.uri">
+                  </span>
+              </div>
+              <div class="headline box" @click="routerDetail(key.id)">{{key.title}}</div>
+              <div class="titleTime box">
+                <span>{{key.create_time}}</span>
+                <span>
+                  <i class="iconfont icon-pinglun"></i>{{key.comments_count}}
+                  <i class="iconfont icon-zan"></i>{{key.favor_num}}
+                  <i class="el-icon-view"></i>{{key.read_num}}
+                </span>
+              </div>
+              <div class="titleMain text box" v-html="key.content">
+              </div>
+              <h6 class="a4"></h6>
+              <div class="onBtn box">
+                <el-button type="primary" size="mini" @click="routerDetail(key.id)">更多</el-button>
+              </div>
+              <div class="bottom">
+                <div class="mainRight">
+                  <div class="a" v-for="(key,index) in hotData.data" v-if="index !== 0" @click="routerDetail(key.id)">
+                    <div>
+                       <span v-for="pic in key.album.cover_pic">
+                    <img v-for="p in pic" :src="p.uri">
+                  </span>
+                    </div>
+                    <div>
+                      <p class="headline">{{key.title}}</p>
+                      <span class="titleMain" v-html="key.content">
+                    </span>
+                      <h6 class="a4"></h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </el-col>
       </el-row>
@@ -141,7 +424,6 @@
       }
     },
     mounted() {
-
       this.addRegion();
     },
     methods: {
@@ -210,60 +492,143 @@
   }
 </script>
 
-<style scoped lang="scss">
-  @mixin flex {
-    display: flex;
-    display: -webkit-flex;
-  }
-
-  @mixin border_radius($n) {
-    -webkit-border-radius: $n;
-    -moz-border-radius: $n;
-    border-radius: $n;
-  }
-
-  @mixin border_1 {
-    border: 1px solid #F4F6FD;
-    @include border_radius(6px);
-  }
-
-  @mixin text_overflow($n) {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: $n;
-    line-clamp: $n;
-  }
-
-  $color: #409EFF;
-  img {
-    width: 100%;
-    height: 100%;
-  }
-
+<style lang="scss">
   #converge {
-    h6 {
-      margin: 0;
-      width: 20px;
-      border: 2px solid red;
-      @include border_radius(10px);
+    $color: #409EFF;
+    $colorBor: #ddd;
+    @mixin flex {
+      display: flex;
+      display: -webkit-flex;
     }
 
-    .title {
-      color: #409EFF;
-      padding: 10px;
-      opacity: .7;
-      font-weight: bold;
-      &:before{
-        border-radius: 2px;
-        margin-right: 8px;
-        background: #409EFF;
-        border-left: 1px solid #409EFF;
-        content: '|';
+    @mixin border_radius($n) {
+      -webkit-border-radius: $n;
+      -moz-border-radius: $n;
+      border-radius: $n;
+    }
+
+    @mixin border_1 {
+      border: 1px solid $colorBor;
+      @include border_radius(6px);
+    }
+
+    @mixin text_overflow($n) {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      text-overflow: ellipsis;
+      -webkit-line-clamp: $n;
+      line-clamp: $n;
+    }
+    $color1: #fb4699;
+    $color2: #58d788;
+    $color3: #6a8dfb;
+    $color4: #fdca41;
+    .color1 {
+      color: $color1;
+    }
+    .color2 {
+      color: $color2;
+    }
+    .color3 {
+      color: $color3;
+    }
+    .color4 {
+      color: $color4;
+    }
+    .module {
+      position: relative;
+      .titleShow {
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, .4);
+        @include flex;
+        align-items: flex-end;
+        span {
+          font-weight: normal;
+          color: rgba(255, 255, 255, .8);
+          font-size: 20px;
+          margin-bottom: 20px;
+          margin-left: 20px;
+          @include text_overflow(1);
+        }
+      }
+      &:hover {
+        .titleShow {
+          opacity: 1;
+          cursor: pointer;
+        }
       }
     }
 
+    img {
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+    p {
+      margin: 0 !important;
+    }
+    div, span, p {
+      overflow: hidden;
+    }
+    h6 {
+      margin: 0;
+      width: 20px;
+      border-top: 3px solid $color1;
+    }
+    h6.a1 {
+      border-color: $color1;
+    }
+    h6.a2 {
+      border-color: $color2;
+    }
+    h6.a3 {
+      border-color: $color3;
+    }
+    h6.a4 {
+      border-color: $color4;
+    }
+    .onBtn {
+      margin: 30px 0;
+    }
+    .onBtn.box {
+      margin: 24px 0;
+    }
+    .title {
+      padding: 10px;
+      opacity: .7;
+      font-weight: bold;
+      &:before {
+        border-radius: 2px;
+        margin-right: 8px;
+        border-left: 4px solid #409EFF;
+        content: '';
+      }
+    }
+    .title.a1 {
+      &:before {
+        border-color: $color1;
+      }
+    }
+    .title.a2 {
+      &:before {
+        border-color: $color2;
+      }
+    }
+    .title.a3 {
+      &:before {
+        border-color: $color3;
+      }
+    }
+    .title.a4 {
+      &:before {
+        border-color: $color4;
+      }
+    }
     .headline {
       font-size: 16px;
       color: #101010;
@@ -272,38 +637,52 @@
         color: $color;
       }
     }
+    .headline.box {
+      margin: 12px 0;
+    }
     .titleMain {
       @include text_overflow(2);
       color: #aaaaaa;
+      height: 40px;
+      line-height: 21px;
     }
     .titleMain.text {
-      margin: 20px 0 20px;
+      margin: 20px 0;
+    }
+    .titleMain.text.box {
+      margin: 12px 0 18px;
     }
     .titleImg {
-      cursor: pointer;
       height: 240px;
-      background: $color;
+    }
+    .titleImg.box {
+      height: 130px;
     }
     .titleTime {
       @include flex;
       margin: 20px 0 15px;
       justify-content: space-between;
       span {
+        @include flex;
+        align-items: flex-start;
         i {
           padding: 0 2px 0 10px;
         }
       }
     }
+    .titleTime.box {
+      margin: 0;
+    }
     .elPadding {
+      box-sizing: border-box;
       @include border_1;
-      padding: 12px 10px;
+      padding: 15px 10px;
     }
     .convergeTop {
       .topLeft {
         position: relative;
         height: 270px;
         margin-right: 10px;
-        overflow: hidden;
       }
       .topRight {
         div {
@@ -311,7 +690,7 @@
           height: 130px;
           h1, h2 {
             margin: 0;
-            width: 49%;
+            min-width: 49%;
             height: 130px;
             overflow: hidden;
           }
@@ -324,25 +703,28 @@
         }
       }
     }
+
     .convergeMain {
-      .hotRead {
+      .lejiaNews {
+        margin-right: 10px;
+      }
+      .lejiaNews, .appearance, .customer, .hotReady {
         .elPadding {
-          height: 470px;
-          overflow: hidden;
+          height: 493px;
           .mainLeft {
             padding-right: 10px;
             margin-right: 10px;
-            border-right: 1px solid #F4F6FD;
+            border-right: 1px solid $colorBor;
           }
           .mainRight {
             .a {
-              margin-bottom: 15px;
+              margin-bottom: 20px;
               height: 100px;
               cursor: pointer;
               @include flex;
               div:first-child {
                 min-width: 160px;
-                background: #000;
+                max-width: 160px;
                 margin-right: 12px;
               }
               div:last-child {
@@ -352,10 +734,76 @@
                 justify-content: space-between;
                 p {
                   margin: 0;
-                  color: #101010;
                   @include text_overflow(1);
                 }
               }
+            }
+          }
+        }
+      }
+      .appearance, .customer, .hotReady {
+        .bottom {
+          padding-top: 18px;
+          border-top: 1px solid $colorBor;
+        }
+      }
+      .hotReady .elPadding {
+        height: 1006px;
+        .mainRight {
+          .a {
+            margin-bottom: 29px;
+          }
+        }
+      }
+      .companyLife, .personage {
+        .bottomPic {
+          @include flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+          height: 100px;
+          div {
+            width: 32%;
+            height: 97px;
+            margin-bottom: 12px;
+          }
+        }
+      }
+      .elPadding.box {
+        height: 614px;
+      }
+      .personage {
+        @include flex;
+        height: 355px;
+        .mainLeft {
+          margin-right: 10px;
+        }
+        .personageRight {
+          border-left: 1px solid $colorBor;
+          @include flex;
+          .per1 {
+            margin: 0 12px 0 10px;
+          }
+          .per1, .per2 {
+            .bigPer1 {
+              width: 100%;
+              height: 214px;
+              margin-bottom: 12px;
+            }
+            .bigPer2 {
+              @include flex;
+              justify-content: space-between;
+              flex-wrap: wrap;
+              span {
+                margin: 0;
+                width: 48%;
+                height: 101px;
+              }
+            }
+          }
+          .per2 {
+            div {
+              height: 101px;
+              margin-bottom: 12px;
             }
           }
         }

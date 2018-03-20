@@ -1,5 +1,5 @@
 <template>
-  <div class="newsDetail">
+  <div id="newsDetail" v-loading="loading">
     <el-row>
       <el-col :span="colNum">
         <div style="padding: 20px 17px">
@@ -9,7 +9,7 @@
           <div class="userInfo" style="margin-top: 18px">
             <div class="publishInfo">
               <div class="headPic">
-                <img :src="staffs.avatar" v-if="staffs.avatar !== null">
+                <img :src="staffs.avatar" v-if="staffs.avatar !== ''">
                 <img src="../../../assets/images/head.png" v-else>
               </div>
               <div class="publishName">{{staffs.name}}</div>
@@ -20,11 +20,20 @@
               </div>
             </div>
             <div class="InfoRight">
-              <div class="title">{{formList.dict_ids}}</div>
+              <div class="title"
+                   v-if="formList.dict_ids !== '主轮播' && formList.dict_ids !== '次标题1' && formList.dict_ids !== '次标题2'">
+                {{formList.dict_ids}}
+              </div>
+              <div class="title" v-else>乐伽新闻</div>
               <div class="newsDate">{{formList.create_time}}</div>
             </div>
           </div>
-
+          <div class="frontCover">
+            <!--<p>封面图</p>-->
+            <h1 v-for="key in cover_pic">
+              <img :src="pic.uri" v-for="pic in key">
+            </h1>
+          </div>
           <div id="htmlForEditor">
 
           </div>
@@ -35,13 +44,13 @@
               <div></div>
               <div class="readers">
                 <div>
-                  <i class="iconfont icon-xiaoxi"></i>{{formList.comments_count}}
+                  <i class="iconfont icon-pinglun"></i>&nbsp;&nbsp;{{formList.comments_count}}
                 </div>
                 <div>
-                  <i class="iconfont icon-dianzan" :class="{'zan': assistId}" @click="assist()"></i>&nbsp;{{formList.favor_num}}
+                  <i class="iconfont icon-zan" :class="{'zan': assistId}" @click="assist()"></i>&nbsp;{{formList.favor_num}}
                 </div>
                 <div>
-                  <i class="iconfont icon-yanjing"></i>&nbsp;{{formList.read_num}}
+                  <i class="el-icon-view"></i>&nbsp;&nbsp;{{formList.read_num}}
                 </div>
               </div>
             </div>
@@ -59,7 +68,7 @@
         <div class="comment_box" v-if="isShow">
           <div class="publishComment">
             <div class="portrait">
-              <img :src="staffs.avatar" v-if="staffs.avatar !== null">
+              <img :src="staffs.avatar" v-if="staffs.avatar !== ''">
               <img src="../../../assets/images/head.png" v-else>
             </div>
             <div class="comments">
@@ -111,7 +120,7 @@
           <div class="block pages" v-if="paging > 11">
             <el-pagination
               @size-change="handleSizeChange"
-              @current-change="myData"
+              @current-change="search"
               :current-page="currentPage"
               :page-size="10"
               layout="total, prev, pager, next, jumper"
@@ -131,18 +140,20 @@
               <div class="ingreat_data">{{key.create_time}}</div>
               <div class="readers">
                 <div>
-                  <i class="iconfont icon-xiaoxi"></i>{{key.comments_count}}
+                  <i class="iconfont icon-pinglun"></i>&nbsp;&nbsp;{{key.comments_count}}
                 </div>
                 <div>
-                  <i class="iconfont icon-dianzan"></i>&nbsp;{{key.favor_num}}
+                  <i class="iconfont icon-zan"></i>&nbsp;{{key.favor_num}}
                 </div>
                 <div>
-                  <i class="iconfont icon-yanjing"></i>&nbsp;{{key.read_num}}
+                  <i class="el-icon-view"></i>&nbsp;&nbsp;{{key.read_num}}
                 </div>
               </div>
             </div>
             <div class="ingreat_pic" @click="routerDetail(key.id)">
-              <img v-for="pic in key.album.cover_pic" :src="pic.big">
+               <span v-for="pic in key.album.cover_pic">
+                    <img v-for="p in pic" :src="p.uri">
+                  </span>
             </div>
             <div class="ingreat_detail">
               <span v-html="key.content"></span>
@@ -173,6 +184,8 @@
         addContent: '',
         commentOn: [],
 
+        cover_pic: [],
+
         currentPage: 1,
         paging: 0,
         page: 1,
@@ -185,6 +198,7 @@
         hotData: [],
 
         assistId: false,     //点赞
+        loading: false,     //点赞
       }
     },
     mounted() {
@@ -205,7 +219,12 @@
       // 详情
       routerDetail(id) {
         this.$router.push({path: '/Infodetails', query: {ids: id, detail: 'converge'}});
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
         this.publicDetail(id);
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+        }, 600)
       },
       // 热门导读
       addRegion() {
@@ -221,11 +240,11 @@
         this.$http.get(this.urls + 'oa/portal/' + id).then((res) => {
           if (res.data.code === '80020') {
             this.formList = res.data.data;
+            this.cover_pic = res.data.data.album.cover_pic;
             let detail = res.data.data;
             document.getElementById('htmlForEditor').innerHTML = detail.content;
             this.staffs = detail.staffs[0];
-            // this.photos.pic_url = detail.album.cover_pic;
-            this.myData(id);
+            this.myData(id, 1);
           }
         })
       },
@@ -298,19 +317,27 @@
   }
 </script>
 
-<style scoped lang="scss">
-  @mixin flex {
-    display: -webkit-flex;
-    display: flex;
-  }
+<style lang="scss">
+  #newsDetail {
+    @mixin flex {
+      display: -webkit-flex;
+      display: flex;
+    }
 
-  @mixin border_radius($n) {
-    -webkit-border-radius: $n;
-    -moz-border-radius: $n;
-    border-radius: $n;
-  }
-
-  .newsDetail {
+    @mixin border_radius($n) {
+      -webkit-border-radius: $n;
+      -moz-border-radius: $n;
+      border-radius: $n;
+    }
+    img {
+      width: 100%;
+      height: 100%;
+    }
+    .el-loading-mask {
+      .el-loading-spinner {
+        top: 30%;
+      }
+    }
     .readers {
       div {
         @include flex;
@@ -328,7 +355,13 @@
         }
       }
     }
+    .frontCover {
+      h1 {
+        width: 100%;
+        height: 300px;
+      }
 
+    }
     #htmlForEditor {
       margin-top: 18px;
     }
@@ -443,8 +476,6 @@
         max-height: 40px;
         img {
           @include border_radius(50%);
-          width: 100%;
-          height: 100%;
         }
       }
       .comments {
@@ -482,10 +513,11 @@
       .title {
         color: #fb4699;
         padding-left: 2px;
+        font-weight: bold;
         &:before {
           border-radius: 2px;
           margin-right: 5px;
-          border-left: 2px solid #fb4699;
+          border-left: 4px solid #fb4699;
           content: '';
 
         }
@@ -525,10 +557,6 @@
           cursor: pointer;
           margin-top: 11px;
           overflow: hidden;
-          img {
-            width: 100%;
-            height: 100%;
-          }
         }
         .ingreat_detail {
           width: 100%;

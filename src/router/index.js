@@ -126,6 +126,7 @@ import ContractChange from '../components/OAWork/sthToDo/components/contractChan
 import Deliver from '../components/OAWork/sthToDo/components/deliver.vue'                 //TEST_2
 import throwALease from '../components/OAWork/sthToDo/components/throwALease.vue'         //TEST_3
 import Individual from '../components/individual/index.vue'                               //个人门户
+
 import Converge from '../components/converge/index.vue'                                   //员工广场
 import Infodetails from '../components/converge/details/infodetails.vue'                  //员工广场详情
 import DailyRecord from '../components/dailyRecord/index.vue'                             //日志管理
@@ -134,17 +135,23 @@ import SthToDo from '../components/OAWork/sthToDo/index.vue'                    
 
 import Integraldetail from '../components/humanResource/integralManage/components/integraldetail.vue'         // 积分明细
 
+import PictureManage from '../components/pictureManage/pictureManage.vue'                //相册管理
+import CreateAlbum from '../components/pictureManage/createAlbum.vue'                //创建相册
+import ChoosePictures from '../components/pictureManage/selectPictures.vue'                //选择照片
+import ImproveImgInfo from '../components/pictureManage/improveImage.vue'                //完善照片信息
+import PictureDetail from '../components/pictureManage/pictureDetail.vue';               //相册详情
+import VisitRecord from '../components/rentManage/components/visitRecord.vue';               //回访记录
 Vue.use(Router);
 
 export default new Router({
   routes: [
-    {
-      path: '/',
-      // component: Index,
-      hidden:true,
-      name: 'Index',
-      redirect: '/main',
-    },
+    // {
+    //   path: '/',
+    //   // component: Index,
+    //   hidden:true,
+    //   name: 'Index',
+    //   redirect: '/main',
+    // },
 
     {
       path: '/login',
@@ -200,10 +207,14 @@ export default new Router({
         {path: '/dailyRecord', component: DailyRecord, name: '日志管理'},
         {path: '/sthToDo', component: SthToDo, name: '待办事项'},
         {path: '/integraldetail', component: Integraldetail, name: '积分明细'},
-
+        {path: '/pictureManage', component: PictureManage, name: '相册管理'},
+        {path: '/createAlbum', component: CreateAlbum, name: "创建相册",},
+        {path: '/choosePictures', component: ChoosePictures, name: "选择照片",},
+        {path: '/improveImgInfo', component: ImproveImgInfo, name: "完善照片信息",},
+        {path: '/pictureDetail', component: PictureDetail, name: "相册详情",},
+        {path: '/visitRecord', component: VisitRecord, name: "回访记录"},
       ]
     },
-
     // 详情路由
     {
       path: '/',
@@ -219,7 +230,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '租赁管理',
-      icon: 'iconfont icon--zulinguanli-',
+      icon: 'iconfont icon-zulinguanli',
       children: [
         {path: '/wholeRentManage', component: WholeRentManage, name: '整租管理',},
         {path: '/jointRentManage', component: JointRentManage, name: '合租管理',},
@@ -240,7 +251,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '财务账本',
-      icon: 'iconfont icon--caiwuzhangben-',
+      icon: 'iconfont icon-caiwuzhangben',
       children: [
         // {path: '/accountManage', component: AccountManage, name: '账户管理',},
         // {path: '/subjectManage', component: SubjectManage, name: '科目管理',},
@@ -270,7 +281,7 @@ export default new Router({
       hidden: true,
       name: '',
       children: [
-        {path: '/wechatMessage', component: WechatMessage, name: '微信管理', icon: 'iconfont icon--weixinguanli-'},
+        {path: '/wechatMessage', component: WechatMessage, name: '微信管理', icon: 'iconfont icon-weixinguanli1'},
       ]
     },
 
@@ -292,7 +303,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '人资管理',
-      icon: 'iconfont icon--renziguanli-',
+      icon: 'iconfont icon-renziguanli',
       children: [
         // {path: '/staffManage', component: StaffManage, name: '用户管理',},
         {path: '/organization', component: Organization, name: '组织架构',},
@@ -319,7 +330,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: 'OA办公',
-      icon: 'iconfont icon--oabangong-',
+      icon: 'iconfont icon-oabangong',
       children: [
         // {
         //   path: '/property', component: Property, icon: 'el-icons-fa-money', name: '资产管理',
@@ -354,7 +365,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '乐伽大学',
-      icon: 'iconfont icon-leqiedaxue-',
+      icon: 'iconfont icon-leqiedaxue1',
       children: [
         {path: '/college', component: College, name: '乐伽大学 '},
         {path: '/LineCollege', component: LineCollege, name: '在线导师'},
@@ -364,7 +375,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '系统设置',
-      icon: 'iconfont icon--xitongshezhi-',
+      icon: 'iconfont icon-xitongshezhi1',
       children: [
         {path: 'moduleSetting', component: ModuleSetting, name: '模块设置'},
 

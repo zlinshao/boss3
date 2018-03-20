@@ -64,7 +64,7 @@
               </el-col>
             </el-row>
             <div class="btnOperate">
-              <el-button size="mini" type="primary">搜索</el-button>
+              <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
               <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
             </div>
@@ -187,6 +187,7 @@
           })
       },
       search(){
+          this.isHigh = false;
           this.form.page = 1;
           this.getTableData();
       },
@@ -239,10 +240,13 @@
 
       //deleteIntegral
       deleteIntegral(){
-        this.$http.delete(globalConfig.server+'/credit/manage/'+this.activeId).then((res) => {
+        this.$http.put(globalConfig.server+'/credit/manage/delete/'+this.activeId).then((res) => {
           if(res.data.code === '30310'){
-            this.totalNumber = res.data.num;
-            this.tableData = res.data.data;
+            this.$notify.success({
+              title:'警告',
+              message:res.data.msg
+            })
+            this.search();
           }else {
             this.$notify.warning({
               title:'警告',
@@ -291,7 +295,10 @@
         this.isHigh = !this.isHigh;
       },
       resetting(){
-
+          this.staff_id = '';
+          this.staff_name = '';
+          this.department_id = '';
+          this.department_name = '';
       },
       closeAdd(){
           this.newAddDialog = false

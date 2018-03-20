@@ -905,6 +905,7 @@
     <ReturnVisit :returnVisitDialog="returnVisitDialog" @close="closeReturnVisit"></ReturnVisit>
     <TopForm :topFormSetDialog="topFormSetDialog" @close="closeTopForm"></TopForm>
     <Setting :settingDialog="settingDialog" @close="closeSetting"></Setting>
+    <visit-record :visitRecordDialog="visitRecordDialog" @close="closeVisitRecord"></visit-record>
   </div>
 </template>
 
@@ -916,15 +917,15 @@
   import OwnerDelay from '../components/ownerDelay.vue'              //房东延期
   import OwnerRenew from '../components/ownerRenew.vue'              //房东续约
   import RentVacation from '../components/rentVacation.vue'          //租客续约
-  import IncreaseGoods from '../components/increaseGoods.vue' //物品增加
-  import DecreaseGoods from '../components/decreaseGoods.vue' //物品减少
-  import OwnerArrears from '../components/OwnerArrears.vue'   //房东欠款
-  import AddFollowUp from '../components/addFollowUp.vue'     //增加跟进记录
-  import CollectVacation from '../components/collectVacation.vue' //房东退房
-  import AddCollectRepair from '../components/addCollectRepair.vue' //添加房东维修
-  import AddRentRepair from '../components/addRentRepair.vue'//添加租客维修
-  import RentChangeRoom from '../components/rentChangeRoom.vue'   //租客换房
-  import Sublease from '../components/sublease.vue'     //转租
+  import IncreaseGoods from '../components/increaseGoods.vue'         //物品增加
+  import DecreaseGoods from '../components/decreaseGoods.vue'         //物品减少
+  import OwnerArrears from '../components/OwnerArrears.vue'           //房东欠款
+  import AddFollowUp from '../components/addFollowUp.vue'             //增加跟进记录
+  import CollectVacation from '../components/collectVacation.vue'     //房东退房
+  import AddCollectRepair from '../components/addCollectRepair.vue'   //添加房东维修
+  import AddRentRepair from '../components/addRentRepair.vue'         //添加租客维修
+  import RentChangeRoom from '../components/rentChangeRoom.vue'       //租客换房
+  import Sublease from '../components/sublease.vue'       //转租
   import RentRenew from '../components/rentRenew.vue'     //租客续约
   import AddRentInfo from '../components/addRentInfo.vue' //登记租客
   import SendMessage from '../../common/sendMessage.vue'  //发送短信
@@ -933,6 +934,7 @@
   import ReturnVisit from '../components/returnVisit.vue'   //查看回访
   import TopForm from '../components/topFormSet.vue'    //表头列表
   import Setting from './components/setting.vue'
+  import VisitRecord from './../components/visitRecord.vue'    //回访记录
 
   export default {
     name: 'hello',
@@ -960,7 +962,8 @@
       Repayment,
       ReturnVisit,
       TopForm,
-      Setting
+      Setting,
+      VisitRecord,
     },
     data () {
       return {
@@ -993,6 +996,7 @@
         returnVisitDialog:false,      //查看回访
         topFormSetDialog:false,       //选择列
         settingDialog : false,        //设置
+        visitRecordDialog: false,    //回访记录
 
         isHigh: false,
 
@@ -1210,6 +1214,7 @@
           {clickIndex: 'addCollectRepairDialog', headIcon: 'el-icons-fa-gear', label: '维修',},
 //              {clickIndex: 1, headIcon: 'el-icons-fa-user', label: '黑名单',},
           {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
+          {clickIndex: 'visitRecordDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '回访记录',},
 //          {clickIndex: '', headIcon: 'el-icons-fa-plus-circle', label: '对比',},
         ];
         this.contextMenuParam(event);
@@ -1271,6 +1276,7 @@
           {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
 //          {clickIndex: 1, headIcon: 'el-icons-fa-plus-circle', label: '对比',},
           {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加跟进',},
+          {clickIndex: 'visitRecordDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '回访记录',},
         ];
         this.contextMenuParam(event);
       },
@@ -1366,6 +1372,9 @@
           case 'settingDialog':     //转到合租
             this.settingDialog = true;
             break;
+          case 'visitRecordDialog':
+            this.visitRecordDialog = true;
+            break;
         }
 
       },
@@ -1460,7 +1469,10 @@
       },
       resetting(){
 
-      }
+      },
+      closeVisitRecord() {
+        this.visitRecordDialog = false;
+      },
     }
   }
 </script>

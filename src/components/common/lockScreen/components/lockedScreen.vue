@@ -54,25 +54,8 @@
               type: 'warning'
             });
           }
-
-//          if(res.data.code === '100003'){
-//            this.$router.push({path: '/lock'});
-//          }else {
-//            this.$notify({
-//              title: '警告',
-//              message: res.data.msg,
-//              type: 'warning'
-//            });
-//          }
         })
-//        if(this.keywords){
-//          Cookies.set('locking', '0');
-//          this.$router.push({
-//            path: Cookies.get('last_page_path') // 解锁之后跳转到锁屏之前的页面
-//          });
-//        }else {
-//          this.$message('请输入密码');
-//        }
+
       }
     }
   }

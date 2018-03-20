@@ -3,7 +3,7 @@
     <div class="dic_content">
       <el-row :gutter="20">
         <el-col :span="6">
-          <div class="dictionary_left">
+          <div class="dictionary_left scroll_bar">
             <div class="dictionary_top">
               <span>用户字典</span>
               <el-button size="mini" type="primary" style="text-align: right">使用指南</el-button>
@@ -26,7 +26,7 @@
         </el-col>
 
         <el-col :span="18">
-          <div class="dictionary_right">
+          <div class="dictionary_right scroll_bar">
             <div class="topAdd" v-if="clickTag === 'click' && !dynamicTagsStatus">
               <div>{{dictListName}}</div>
               <el-button type="primary" size="mini" @click="dictAdd(clickTreeData)">
@@ -390,6 +390,8 @@
       .dictionary_left {
         border: 1px solid #dfe6fb;
         border-radius: 5px;
+        height: 728px;
+        overflow: auto;
         .dictionary_top {
           padding: 10px;
           background: #dfe6fb;
@@ -435,6 +437,7 @@
         border-radius: 5px;
         height: 708px;
         padding: 10px;
+        overflow: auto;
         .topAdd {
           display: flex;
           display: -webkit-flex;

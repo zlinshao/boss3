@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tabs v-model="activeName" @tab-click="handleClick" class="tabContent">
       <el-tab-pane label="短信模板" name="first">
         <Message></Message>
       </el-tab-pane>
@@ -50,6 +50,10 @@
   }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+  .tabContent {
+    .el-tabs__content {
+      overflow: visible;
+    }
+  }
 </style>

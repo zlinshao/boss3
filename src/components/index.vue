@@ -51,55 +51,51 @@
         </div>
         <div class="message" style="position: relative">
           <el-dropdown>
-            <el-badge is-dot class="item">
+            <el-badge :value="unReadMessageData.length" class="item">
               <i class="el-icons-fa-comment-o"></i>
-              消息
+              消 息
             </el-badge>
             <el-dropdown-menu slot="dropdown" class="menuLists">
               <!--消息图标-->
-              <el-dropdown-item>
+              <el-dropdown-item v-for="(item,index) in unReadMessageData" v-if="index<2" :key="index">
                 <div class="first">
-                  <el-row>
+                  <el-row   @click.native="showMessageDetail(item)">
                     <el-col :span="4">
                       <div class="picSign">
                         <i class="el-icon-bell"></i>
                       </div>
                     </el-col>
                     <el-col :span="20">
-                      <div class="public" @click="routers('messageCenter')">
+                      <div class="public">
                         <div class="signOne">系统公告</div>
-                        <div class="limits">Lorem ipsum dolor23r23222222222222222 Lorem ipsum dolor sit amet,
-                          consectetur adipisicing elit. Ad aperiam architecto aspernatur dignissimos dolor dolorem
-                          doloremque ex facere facilis in minima mollitia, nihil nostrum quo ratione saepe tempore
-                          totam voluptatem?
-                        </div>
+                        <div class="limits">{{item.content.content}}</div>
                       </div>
                     </el-col>
                   </el-row>
                 </div>
               </el-dropdown-item>
 
-              <el-dropdown-item>
-                <div class="first">
-                  <el-row>
-                    <el-col :span="4">
-                      <div class="picSign" style="background: #58d788;">
-                        <i class="el-icon-edit-outline"></i>
-                      </div>
-                    </el-col>
-                    <el-col :span="20">
-                      <div class="public" @click="routers('messageCenter')">
-                        <div class="signOne" style="color: #58d788;">审批提醒</div>
-                        <div class="limits">Lorem ipsum dolor23r23222222222222222 Lorem ipsum dolor sit amet,
-                          consectetur adipisicing elit. Ad aperiam architecto aspernatur dignissimos dolor dolorem
-                          doloremque ex facere facilis in minima mollitia, nihil nostrum quo ratione saepe tempore
-                          totam voluptatem?
-                        </div>
-                      </div>
-                    </el-col>
-                  </el-row>
-                </div>
-              </el-dropdown-item>
+              <!--<el-dropdown-item>-->
+                <!--<div class="first">-->
+                  <!--<el-row>-->
+                    <!--<el-col :span="4">-->
+                      <!--<div class="picSign" style="background: #58d788;">-->
+                        <!--<i class="el-icon-edit-outline"></i>-->
+                      <!--</div>-->
+                    <!--</el-col>-->
+                    <!--<el-col :span="20">-->
+                      <!--<div class="public" @click="routers('messageCenter')">-->
+                        <!--<div class="signOne" style="color: #58d788;">审批提醒</div>-->
+                        <!--<div class="limits">Lorem ipsum dolor23r23222222222222222 Lorem ipsum dolor sit amet,-->
+                          <!--consectetur adipisicing elit. Ad aperiam architecto aspernatur dignissimos dolor dolorem-->
+                          <!--doloremque ex facere facilis in minima mollitia, nihil nostrum quo ratione saepe tempore-->
+                          <!--totam voluptatem?-->
+                        <!--</div>-->
+                      <!--</div>-->
+                    <!--</el-col>-->
+                  <!--</el-row>-->
+                <!--</div>-->
+              <!--</el-dropdown-item>-->
             </el-dropdown-menu>
           </el-dropdown>
 
@@ -146,11 +142,16 @@
         </div>
         <div class="personInfo">
           <div class="head" style="cursor: pointer">
-            <img data-card="" :data-src="JSON.stringify(personal)" :src="personal.avatar" v-if="personal.avatar">
-            <img src="../assets/images/head.jpg" v-else>
+            <span v-if="personal.avatar !== ''">
+              <img data-card="" :data-src="JSON.stringify(personal)" :src="personal.avatar">
+            </span>
+            <span v-else>
+              <img src="../assets/images/head.jpg">
+            </span>
+
           </div>
           <el-dropdown trigger="click">
-              <span class="el-dropdown-link">
+              <span class="el-dropdown-link" v-if="personal  !== undefined">
                 {{personal.name}}<i class="el-icon-arrow-down el-icon--right" style="margin-left: 25px"></i>
               </span>
             <el-dropdown-menu slot="dropdown" class="personal">
@@ -324,13 +325,13 @@
             <template v-for="(item,index) in $router.options.routes">
               <!--一级菜单-->
               <el-menu-item v-if="item.hidden" v-for="child in item.children" :index="child.path" :key="child.path">
-                <i :class="child.icon"></i>
+                <i :class="child.icon" style="font-size: 22px"></i>
                 <span slot="title"> {{child.name}}</span>
               </el-menu-item>
 
               <el-submenu :index="item.name+''" v-if="!item.hidden && !item.abnormal">
                 <template slot="title">
-                  <i :class="item.icon"></i>
+                  <i :class="item.icon" style="font-size: 22px"></i>
                   <span>{{item.name}}</span>
                 </template>
                 <template v-for="(child,key) in item.children">
@@ -370,6 +371,9 @@
         </el-main>
       </el-container>
     </div>
+
+    <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeMessage"></MessageDetail>
+
   </div>
 </template>
 
@@ -377,10 +381,11 @@
   import Cookies from 'js-cookie'
   import TagsView from './common/tagsView.vue'
   import screenfull from 'screenfull'
+  import MessageDetail from './common/messageDetail.vue'
 
   export default {
     name: 'Index',
-    components: {TagsView},
+    components: {TagsView,MessageDetail},
     data() {
       return {
         personal: globalConfig.personal,
@@ -395,11 +400,17 @@
             year:123
         },
         sendObject:null,
-//        personalCard: JSON_stringify(globalConfig.personal),
+        messageDialog:false,
+
+        unReadMessageData:[],
+        messageDetail:[],
       }
     },
     mounted() {
       this.countTime();
+      setInterval( ()=> {
+        this.getUnReadMessage()
+      },10000);
     },
     computed: {
       visitedViews() {
@@ -415,43 +426,36 @@
       routers(url) {
         this.$router.push(url);
       },
+
+      //显示消息详情
+      showMessageDetail(val){
+        this.messageDetail = val;
+        this.messageDialog = true;
+        this.$http.put(globalConfig.server_user+'api/v1/messages/'+val.id).then((res) => {
+          if(res.data.status === 'success'){
+            this.getUnReadMessage();
+          }
+        })
+      },
+      closeMessage(){
+        this.messageDialog = false;
+      },
+      //获取未读消息
+      getUnReadMessage(){
+          this.$http.get(globalConfig.server_user+'api/v1/messages?unread=1').then((res) => {
+            if(res.data.status === 'success'){
+                this.unReadMessageData = res.data.data;
+            }
+          })
+      },
+
       // 全屏
       fullScreen(val) {
         screenfull.toggle();
-//        this.isCollapse = this.isFull = val === 1;
-//        if (val === 1) {
-//          this.isFull = true;
-//          this.isCollapse = true;
-//        } else {
-//          this.isFull = false;
-//          this.isCollapse = false;
-//        }
+
       },
       handleOpen(key, keyPath) {
-//         console.log(key, keyPath);
-//         if(key === '财务账本'){
-//           this.defaultArray = [];
-//           this.$prompt('请输入密码', '提示', {
-//             confirmButtonText: '确定',
-//             cancelButtonText: '取消',
-// //          inputPattern: /[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/,
-// //          inputErrorMessage: '邮箱格式不正确'
-//           }).then(({ value }) => {
-// //          this.$message({
-// //            type: 'success',
-// //            message: '你的密码是: ' + value
-// //          });
-//             if(Number(value) === 6666){
-//               this.defaultArray = [key];
-//             }
-//           }).catch(() => {
-// //          this.$message({
-// //            type: 'info',
-// //            message: '取消输入'
-// //          });
-//             this.defaultArray = [];
-//           });
-//         }
+
       },
       handleClose(key, keyPath) {
         console.log(key, keyPath);
@@ -485,7 +489,7 @@
         new Promise((resolve, reject) => {
           let interval = setInterval(() => {
             this.Countdown--;
-            if (this.Countdown < 0) {
+            if (this.Countdown < 1) {
               resolve('锁屏');
               clearInterval(interval)
             }
@@ -495,9 +499,7 @@
             }
           }, 1000)
         }).then((data) => {
-          setTimeout(() => {
-            this.$router.push({path: '/lock'});
-          });
+          this.lockScreen();
         }).catch((data) => {
           this.Countdown = this.defaultTime;
           this.startCount();
@@ -511,15 +513,6 @@
 //        Cookies.set('last_page_path', this.$route.path); // 本地存储锁屏之前打开的页面以便解锁后打开
         this.$http.get(globalConfig.server + 'setting/others/lock_screen_status?lock_status=1').then((res) => {
           if (res.data.code === '100003') {
-
-//            new Promise((resolve,reject) =>{
-//              sessionStorage.setItem('lockStatus', 1);
-//              if(sessionStorage.getItem('lockStatus')){
-//                resolve();
-//              }
-//            }).then((data)=>{
-//              this.$router.push({path: '/lock'});
-//            });
             this.$router.push({path: '/lock'});
           } else {
             this.$notify({
@@ -529,16 +522,12 @@
             });
           }
         })
-//        setTimeout(() => {
-//
-//        });
-//        Cookies.set('locking', '1');
       },
     }
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped="">
   @mixin border_radius($n) {
     -webkit-border-radius: $n;
     -moz-border-radius: $n;
