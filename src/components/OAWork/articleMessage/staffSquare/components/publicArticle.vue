@@ -16,9 +16,9 @@
         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
                     v-model="form.htmlForEditor"></vue-editor>
       </el-form-item>
-
+{{cover_id}}
       <el-form-item label="封面图片">
-        <Dropzone :ID="'cover'" @getImg="photo_success"></Dropzone>
+        <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic"></Dropzone>
       </el-form-item>
 
       <el-form-item style="text-align: center;">
@@ -74,10 +74,8 @@
         personal: {},
         times: '',
         pitch: '',
-        photos: {
-          pic_id: [],
-          pic_url: {},
-        },
+        cover_pic: {},
+        cover_id: [],
         dict: {
           region: [],
           status: [],
@@ -108,10 +106,16 @@
             this.form.name = detail.title;
             this.form.region = detail.dict_id;
             this.form.htmlForEditor = detail.content;
-            this.photos.pic_url = detail.album.cover_pic;
-            for (let key in detail.album.cover_pic) {
-              this.photos.pic_id.push(key);
+            let pic = detail.album.cover_pic;
+            let arr = {};
+            this.cover_id = [];
+            for (let key in pic) {
+              this.cover_id.push(key);
+              for (let i = 0; i < pic[key].length; i++) {
+                arr[key] = pic[key][i].uri;
+              }
             }
+            this.cover_pic = arr;
           }
         })
       },
@@ -145,7 +149,7 @@
           title: this.form.name,
           dict_id: this.form.region,
           content: this.form.htmlForEditor,
-          cover_pic: this.photos.pic_id,
+          cover_pic: this.cover_id,
           status: val
         }).then((res) => {
           if (res.data.code === '80010' || res.data.code === '80030') {
@@ -177,8 +181,7 @@
       },
       // 上传成功
       photo_success(val) {
-        this.photos.pic_id = val[1];
-        console.log(val);
+        this.cover_id = val[1];
       },
 
       prompt(val, info) {
