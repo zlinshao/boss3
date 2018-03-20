@@ -254,7 +254,7 @@
           })
         }else {
           this.$http.put(globalConfig.server+'contract/invalidate/'+this.cancelEditId,this.params).then((res) => {
-            if(res.data.code ==='20010'){
+            if(res.data.code ==='20000'){
               this.$notify.success({
                 title:'成功',
                 message:res.data.msg
@@ -271,6 +271,7 @@
         }
       },
       closeAddModal(){
+        $('.imgItem').remove();
         this.editCancelDialogVisible = false;
         this.params = {
           city_code:'',

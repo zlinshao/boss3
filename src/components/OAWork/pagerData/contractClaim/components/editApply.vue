@@ -281,6 +281,7 @@
         }
       },
       closeAddModal(){
+        $('.imgItem').remove();
         this.editApplyDialogVisible = false;
         this.params = {
           city_code:'',

@@ -11,13 +11,6 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="部门">
-                <el-input disabled=""  v-model="department_name"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
               <el-form-item label="分配人">
                 <el-input readonly="" v-model="dispatchName" @focus="openOrganizeModal"></el-input>
               </el-form-item>
@@ -78,14 +71,12 @@
         contractCancelCollect:[],
         contractCancelRent:[],
         staff_name : '',
-        department_name : '',
         staff_id : '',
         dispatchId : '',
         dispatchName : '',
         length:0,
         type:'',
         organizationDialog:false,
-
       };
     },
     watch:{
@@ -105,15 +96,16 @@
       'dispatchObject':{
         deep:true,
         handler(val,old){
-          this.staff_name = val.staff_name;
+          this.staff_name = val.simple_staff.real_name;
           this.staff_id = val.staff_id;
-          this.department_name = val.department_name;
           this.getStaffContract()
         }
       }
     },
     methods:{
       getStaffContract(){
+        this.contractCancelCollect = [];
+        this.contractCancelRent = [];
         this.$http.get(globalConfig.server+'contract/staff/'+this.staff_id).then((res) => {
           if(res.data.code === '20000'){
             this.contractCancelCollect = Object.assign({},this.contractCancelCollect,res.data.data.collect);
@@ -155,7 +147,7 @@
               title:'成功',
               message:res.data.msg
             });
-            this.dispatchDialogVisible = false;
+            this.initData();
           }else {
             this.$notify.warning({
               title:'警告',
@@ -163,7 +155,24 @@
             })
           }
         });
-      }
+      },
+
+      initData(){
+        $('.imgItem').remove();
+        this.dispatchDialogVisible = false;
+
+        this.contractCancelCollect = [];
+        this.contractCancelRent = [];
+        this.params = {candidate:[]};
+        this.staff_name = '';
+        this.department_name = '';
+        this.staff_id = '';
+        this.dispatchId = '';
+        this.dispatchName = '';
+        this.type = '';
+        this.length = 0;
+
+      },
     }
   };
 </script>
