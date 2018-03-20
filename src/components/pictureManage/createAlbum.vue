@@ -1,6 +1,6 @@
 <template>
   <div id="createAlbum">
-    <el-dialog title="创建相册" :visible.sync="createAlbumDialogVisible" width="30%">
+    <el-dialog :title="dialogTitle" :visible.sync="createAlbumDialogVisible" width="30%">
       <div class="">
         <el-form size="mini" onsubmit="return false;" :model="form" label-width="100px">
           <el-row >
@@ -52,6 +52,7 @@
               description: '',
               theme: '',
             },
+            dialogTitle: this.albumId ?  '编辑相册': '创建相册',
           }
         },
       mounted() {

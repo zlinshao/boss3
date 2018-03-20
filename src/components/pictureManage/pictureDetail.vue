@@ -58,7 +58,7 @@
               <div v-for="item in photoData">
                 <el-col :span="4" style="margin-bottom:20px;">
                   <div class="pictureDetail">
-                    <el-dropdown style="float: right;">
+                    <el-dropdown style="float: right;position: relative;background: #fff;display: inline;margin-bottom: -15px;">
                       <span class="el-dropdown-link">
                         <i class="el-icon-arrow-down el-icon--right"></i>
                       </span>
@@ -101,7 +101,7 @@
         <el-button size="small" type="primary" @click="editPhotoSuccess">确 定</el-button>
       </span>
     </el-dialog>
-    <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog" ></create-album>
+    <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog" :albumId="albumDetail.id"></create-album>
     <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog" :albumId="albumDetail.id"></choose-pictures>
   </div>
 </template>
@@ -109,10 +109,12 @@
 <script>
   import CreateAlbum from "./createAlbum";
   import choosePictures from './selectPictures.vue';
+  import RightMenu from '../common/rightMenu.vue'    //右键
   export default {
     components: {
       CreateAlbum,
       choosePictures,
+      RightMenu,
     },
     name: "picture-detail",
     data() {
@@ -127,6 +129,10 @@
           description: '',
         },
         deleteIds: [],
+        show: false,
+        lists: [],
+        rightMenuX: 0,
+        rightMenuY: 0,
       }
     },
     methods: {
@@ -365,6 +371,7 @@
           content:"";
           display: block;
           clear:both;
+          height: 17px;
         }
         .text_over_ellipsis{
           width: 160px;
