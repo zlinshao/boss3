@@ -22,7 +22,7 @@
 
   export default {
     name: 'hello',
-    props: ['ID','editImage'],
+    props: ['ID','editImage','isClear'],
     data () {
       return {
         imgArray: [],
@@ -78,6 +78,14 @@
           for(let key in val){
             this.imgId.push(key)
           }
+        }
+      },
+      isClear(val){
+        if(val){
+          this.imgId = [];
+          this.imgArray = [];
+          this.editImg = [];
+          $('.imgItem').remove();
         }
       }
     },
@@ -198,7 +206,6 @@
               let url = JSON.parse(info);
               let sourceLink = domain + "/" + url.key;
 
-              console.log(file)
 //              _this.isUpId = file.id;
 
               _this.$http.post(globalConfig.server_user + 'api/v1/files', {
@@ -212,7 +219,6 @@
                   _this.imgId.push(res.data.data.id);
 
                   let object = {};
-                  console.log(res.data)
                   object.id = res.data.data.id;
                   object.name = res.data.data.name;
                   _this.imgArray.push(object);
