@@ -689,6 +689,7 @@
                 proof:0,
               };
               this.checkBox.forEach((item) => {
+                candidateItem = {};
                 candidateItem.address = this.rentHandinAddress[item];
                 candidateItem.proof = 0;
                 if(this.handover[item]){

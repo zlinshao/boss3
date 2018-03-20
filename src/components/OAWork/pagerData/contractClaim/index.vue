@@ -28,6 +28,15 @@
             <!--<el-option label="上缴" value="beijing"></el-option>-->
           <!--</el-select>-->
         <!--</el-form-item>-->
+        <el-form-item v-if="selectFlag==4">
+          <el-select v-model="params.proof" placeholder="请选择" clearable="" @change="search" value="">
+            <el-option label="资料齐全" value="7"></el-option>
+            <el-option label="交接单" value="1"></el-option>
+            <el-option label="收据" value="2"></el-option>
+            <el-option label="钥匙" value="4"></el-option>
+          </el-select>
+        </el-form-item>
+
         <el-form-item>
           <el-input v-model="params.search" placeholder="搜索" @keydown.enter.native="search">
             <el-button slot="append" type="primary" @click="search" icon="el-icon-search"></el-button>
@@ -246,6 +255,7 @@
         params:{
           page:1,
           search:'',
+          proof:'',
         },
 
         //***********************//
