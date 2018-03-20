@@ -133,7 +133,7 @@ import DailyRecord from '../components/dailyRecord/index.vue'                   
 import SthToDo from '../components/OAWork/sthToDo/index.vue'                              //待办事项
 
 
-import Integraldetail from '../components/humanResource/integralManage/components/integraldetail.vue'         // 积分明细
+import Integraldetail from '../components/integraldetail/integraldetail.vue'         // 积分明细
 
 import PictureManage from '../components/pictureManage/pictureManage.vue'                //相册管理
 import CreateAlbum from '../components/pictureManage/createAlbum.vue'                //创建相册
