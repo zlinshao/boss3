@@ -13,7 +13,6 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -30,6 +29,7 @@
         activeIndex: null,
         uploader: null,
         editImg:{},
+        isUpId:''
       }
     },
 
@@ -87,8 +87,8 @@
         this.activeIndex = null;
       },
       deleteImage(key){
-
         this.imgId = this.imgId.filter((x) => {return x !== key});
+        this.$emit('getImg', [this.ID, this.imgId, this.isUploading]);
         let imgObject = {};
         for(let img in this.editImg){
           if(img !== key){
@@ -140,7 +140,7 @@
                       <div style=" width: 120px;  height: 120px; border-radius:6px;position: relative;">
                         <img src="">
                         <div class="progress"><p></p></div>
-                        <div class="remove pic_delete el-icon-circle-close"  data-val=${file.id}>
+                        <div class="remove pic_delete el-icon-circle-close" data-val=${file.id}>
 
                         </div>
                       </div>
@@ -156,8 +156,7 @@
                       <div style=" position: relative;">
                         <img src="${fr.result}">
                         <div class="progress"><p style="color: #fff !important;"></p></div>
-                        <div class="remove pic_delete el-icon-circle-close"  data-val=${file.id}>
-
+                        <div class="remove pic_delete el-icon-circle-close" data-val=${file.id}>
                         </div>
                       </div>
                     </div>
@@ -167,8 +166,11 @@
                 }
               });
             },
+
+
             'BeforeUpload': function (up, file) {
               // 每个文件上传前，处理相关的事情
+
 
             },
             'UploadProgress': function (up, file) {
@@ -190,6 +192,8 @@
               let domain = up.getOption('domain');
               let url = JSON.parse(info);
               let sourceLink = domain + "/" + url.key;
+
+//              _this.isUpId = file.id;
 
               _this.$http.post(globalConfig.server_user + 'api/v1/files', {
                 url: sourceLink,
@@ -231,6 +235,9 @@
     }
   }
 
+  function aaa() {
+    alert(2)
+  }
 
 </script>
 
