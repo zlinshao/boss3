@@ -111,12 +111,14 @@
             <div class="yuangong">
               <div style="display: inline-block;float: left;font-size: 0;"><img src="./../assets/images/yuangong.png" height="390px;"></div>
               <div class="clearfix" style="padding-left: 520px;">
-                <div class="list_gonggao" v-for="item in 3">
-                  <div style="display: inline-block;float: left;margin-top: 20px;"><img src="./../assets/images/gonggao_detail.png" height="100"></div>
-                  <div style="padding-left: 200px;padding-top: 10px;">
-                    <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
-                    <div class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
-                    <div><em class="ix" style="background:#fb4699;"></em></div>
+                <div style="padding-top:20px;">
+                  <div class="list_gonggao" v-for="item in 3">
+                    <div style="display: inline-block;float: left;"><img src="./../assets/images/gonggao_detail.png" height="100"></div>
+                    <div style="padding-left: 200px;">
+                      <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
+                      <div class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                      <div><em class="ix" style="background:#fb4699;"></em></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -413,6 +415,7 @@
   }
   #main {
     width: 100%;
+    min-width: 1500px;
     overflow: hidden;
 
     @font-face {
@@ -550,7 +553,8 @@
               .longHuName {
                 font-weight: bold;
                 color: #747576;
-                margin: 0 20px 0 30px;
+                margin: 0 35px 0 10px;
+                width: 65px;
               }
               &:nth-child(1) {
                 .longLuOrder, .achievement {

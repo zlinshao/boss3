@@ -41,9 +41,9 @@
               <div v-for="item in albumData">
                 <el-col :span="4" style="margin-bottom:20px;">
                   <div class="pictureDetail" >
-                    <el-dropdown style="float: right;">
+                   <el-dropdown style="float: right;position: relative;background: #fff;padding-right:3px;display: inline;margin-bottom: -15px;">
                       <span class="el-dropdown-link">
-                        下拉<i class="el-icon-arrow-down el-icon--right"></i>
+                        <i class="el-icon-arrow-down el-icon--right"></i>
                       </span>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item @click.native="editAlbum(item.id)">编辑</el-dropdown-item>
@@ -51,8 +51,8 @@
                         <el-dropdown-item @click.native="deleteAlbum(item.id)">删除</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
-                  <img v-if="item.cover_path" :src="item.cover_path" @click="goPictureDetail(item)">
-                    <img v-else src="../../assets/images/university/caia412-34427.png" @click="goPictureDetail(item)">
+                    <img v-if="item.cover_path" :src="item.cover_path" height="150px" @click="goPictureDetail(item)">
+                    <img v-else src="../../assets/images/university/caia412-34427.png" height="150px"  @click="goPictureDetail(item)">
                   <div class="clearfix">
                     <span class="text_over_norwap">{{item.name}}</span>
                     <span style="float: right;">{{item.photo_count}}张</span>
@@ -63,6 +63,17 @@
             </el-row>
           </div>
         </el-col>
+        <div class="left">
+          <!--<el-pagination-->
+            <!--@size-change="handleSizeChange"-->
+            <!--@current-change="handleCurrentChange"-->
+            <!--:current-page="currentPage"-->
+            <!--:page-sizes="[10, 20, 30, 40]"-->
+            <!--:page-size="10"-->
+            <!--layout="total, sizes, prev, pager, next, jumper"-->
+            <!--:total="0">-->
+          <!--</el-pagination>-->
+        </div>
 
       </el-row>
     </div>

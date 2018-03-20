@@ -140,6 +140,7 @@ import CreateAlbum from '../components/pictureManage/createAlbum.vue'           
 import ChoosePictures from '../components/pictureManage/selectPictures.vue'                //选择照片
 import ImproveImgInfo from '../components/pictureManage/improveImage.vue'                //完善照片信息
 import PictureDetail from '../components/pictureManage/pictureDetail.vue';               //相册详情
+import VisitRecord from '../components/rentManage/components/visitRecord.vue';               //回访记录
 Vue.use(Router);
 
 export default new Router({
@@ -211,6 +212,7 @@ export default new Router({
         {path: '/choosePictures', component: ChoosePictures, name: "选择照片",},
         {path: '/improveImgInfo', component: ImproveImgInfo, name: "完善照片信息",},
         {path: '/pictureDetail', component: PictureDetail, name: "相册详情",},
+        {path: '/visitRecord', component: VisitRecord, name: "回访记录"},
       ]
     },
     // 详情路由
