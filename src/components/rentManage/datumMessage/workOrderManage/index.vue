@@ -6,7 +6,7 @@
         <div class="highSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input v-model="formInline.name" placeholder="搜索">
+              <el-input v-model="params.name" placeholder="搜索">
                 <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
@@ -20,7 +20,7 @@
         </div>
 
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
-          <el-form :inline="true" :model="formInline" size="mini" label-width="100px">
+          <el-form :inline="true" :model="params" size="mini" label-width="100px">
             <div class="filterTitle">
               <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>
@@ -32,7 +32,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="formInline.house" clearable placeholder="请选择">
+                      <el-select v-model="params.house" clearable placeholder="请选择">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                       </el-select>
@@ -47,7 +47,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="formInline.a" clearable placeholder="请选择">
+                      <el-select v-model="params.a" clearable placeholder="请选择">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                       </el-select>
@@ -64,7 +64,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="formInline.house" clearable placeholder="请选择">
+                      <el-select v-model="params.house" clearable placeholder="请选择">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                       </el-select>
@@ -79,7 +79,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="formInline.a" clearable placeholder="请选择">
+                      <el-select v-model="params.a" clearable placeholder="请选择">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                       </el-select>
@@ -96,7 +96,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="formInline.house" clearable placeholder="请选择">
+                      <el-select v-model="params.house" clearable placeholder="请选择">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                       </el-select>
@@ -134,7 +134,7 @@
               label="事件数">
             </el-table-column>
             <el-table-column
-              prop="types"
+              prop="child.length"
               label="包含跟进项">
             </el-table-column>
             <el-table-column
@@ -161,11 +161,11 @@
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
-              :current-page="currentPage"
-              :page-sizes="[10, 20, 30, 40]"
-              :page-size="10"
+              :current-page="params.page"
+              :page-sizes="[12, 20, 30, 40]"
+              :page-size="params.limit"
               layout="total, sizes, prev, pager, next, jumper"
-              :total="400">
+              :total="totalNumber">
             </el-pagination>
           </div>
         </div>
@@ -175,16 +175,22 @@
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
 
-    <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
+    <Organization :organizationDialog="organizationDialog" @close="closeModal"></Organization>
+    <EditWork :editWorkDialog="editWorkDialog" :activeId="activeId" :startEdit="startEdit" @close="closeModal"></EditWork>
+    <AddResult :addResultDialog="addResultDialog" :activeId="activeId" :startAddResult="startAddResult" @close="closeModal"></AddResult>
+    <AddChildTask :addChildTaskDialog="addChildTaskDialog" :activeId="activeId" :startAddResult="startEdit" @close="closeModal"></AddChildTask>
   </div>
 </template>
 
 <script>
   import RightMenu from '../../../common/rightMenu.vue'
   import Organization from '../../../common/organization.vue'
+  import EditWork from './components/editWorkOrder.vue'
+  import AddResult from './components/addResult.vue'
+  import AddChildTask from './components/addChildTask.vue'
   export default {
     name: 'hello',
-    components: {RightMenu,Organization},
+    components: {RightMenu,Organization,EditWork,AddResult,AddChildTask},
     data () {
       return {
         rightMenuX: 0,
@@ -192,23 +198,26 @@
         show: false,
         lists: [],
         /***********/
-
         statisticDate: '',
 
-        formInline: {
-          name: '',
-          house: ''
+        totalNumber : 0,
+        params: {
+          page: 1,
+          limit: 12
         },
         tableData: [],
-        currentPage: 1,
         options: [],
 
         //模态框
         organizationDialog: false,
+        editWorkDialog: false,     //编辑
+        addChildTaskDialog: false,     //添加子任务框
+        addResultDialog: false,     //添加跟进记录
         activeName: 'first',
         isHigh:false,
-        maintenanceDialog: false,     //维修模态框
-
+        activeId:'',
+        startEdit:false,
+        startAddResult:false,
       }
     },
 
@@ -218,31 +227,35 @@
     methods: {
       //获取列表数据
       getTableData(){
-        this.$http.get(globalConfig.server+'customer/work_order').then((res) => {
+        this.$http.get(globalConfig.server+'customer/work_order',{params:this.params}).then((res) => {
           if(res.data.code === '10000'){
-            this.tableData = res.data.data;
+            this.tableData = res.data.data.data;
+            this.totalNumber = res.data.data.num;
           }else {
             this.tableData = [];
+            this.totalNumber = 0;
           }
         })
       },
 
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+        this.params.limit = val;
+        this.getTableData();
       },
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+        this.params.page = val;
+        this.getTableData();
       },
       clickTable(row, event, column){
         console.log(row, event, column)
       },
       //房屋右键
       houseMenu(row, event){
+        this.activeId = row.id;
         this.lists = [
-          {clickIndex: 'stick', headIcon: 'el-icons-fa-arrow-up', label: '置顶',},
-          {clickIndex: 'cancel', headIcon: 'el-icons-fa-scissors', label: '作废',},
-          {clickIndex: '', headIcon: 'el-icons-fa-eye', label: '查看回访记录',},
-          {clickIndex: 'maintenanceDialog', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
+          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
+          {clickIndex: 'addResult', headIcon: 'el-icon-plus', label: '添加跟进项',},
+          {clickIndex: 'addChildren', headIcon: 'el-icon-plus', label: '添加子任务',},
         ];
         this.contextMenuParam(event);
       },
@@ -250,42 +263,17 @@
       //右键回调事件
       clickEvent (index) {
         switch (index){
-          case 'stick' :
-            this.$confirm('您确定将其置顶吗', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              this.$message({
-                type: 'success',
-                message: '置顶成功!'
-              });
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消置顶'
-              });
-            });
+          case 'edit' :
+            this.editWorkDialog = true;
+            this.startEdit = true;
             break;
-          case 'cancel':
-            this.$confirm('您确定将其作废吗', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              this.$message({
-                type: 'success',
-                message: '作废成功!'
-              });
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消作废'
-              });
-            });
+          case 'addResult' :
+            this.addResultDialog = true;
+            this.startAddResult = true;
             break;
-          case 'maintenanceDialog':
-            this.maintenanceDialog = true;
+          case 'addChildren' :
+            this.addChildTaskDialog = true;
+            this.startEdit = true;
             break;
         }
       },
@@ -307,17 +295,17 @@
         })
       },
 
-      selectDep(){
-        console.log(1)
-        this.organizationDialog = true
+      closeModal(){
+        this.organizationDialog = false;
+        this.editWorkDialog = false;
+        this.addChildTaskDialog = false;
+        this.addResultDialog = false;
+
+        //操作状态
+        this.startEdit = false;
+        this.startAddResult = false;
       },
-      closeOrganization(){
-        this.organizationDialog = false
-      },
-      // tabs标签页
-      handleClick(tab, event) {
-        console.log(tab, event);
-      },
+
       highGrade(){
         this.isHigh = !this.isHigh;
       },

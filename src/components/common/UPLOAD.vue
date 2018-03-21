@@ -251,10 +251,6 @@
     }
   }
 
-  function aaa() {
-    alert(2)
-  }
-
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

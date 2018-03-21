@@ -408,9 +408,9 @@
     },
     mounted() {
       this.countTime();
-      setInterval( ()=> {
-        this.getUnReadMessage()
-      },10000);
+//      setInterval( ()=> {
+//        this.getUnReadMessage()
+//      },10000);
     },
     computed: {
       visitedViews() {
@@ -510,9 +510,11 @@
         this.isCollapse = !this.isCollapse;
       },
       lockScreen() {
-//        Cookies.set('last_page_path', this.$route.path); // 本地存储锁屏之前打开的页面以便解锁后打开
         this.$http.get(globalConfig.server + 'setting/others/lock_screen_status?lock_status=1').then((res) => {
           if (res.data.code === '100003') {
+            sessionStorage.setItem('beforePath',this.$route.path);
+
+            sessionStorage.setItem('lockStatus', 1);
             this.$router.push({path: '/lock'});
           } else {
             this.$notify({

@@ -7,8 +7,8 @@
         <div class="filterGroup">
 
           <div class="buttonGroup">
-            <el-button size="small" type="danger" @click="isRead"> <i class="iconfont icon-yanjing" style="margin: 0 5px"></i> 已 读</el-button>
-            <el-button size="small" type="success" @click="unRead">  <i class="iconfont icon-yanjingclose" style="margin: 0 5px"></i> 未 读</el-button>
+            <el-button size="mini" type="success" @click="isRead"> <i class="iconfont icon-yanjing" style="margin: 0 5px"></i> 已 读</el-button>
+            <el-button size="mini" type="danger" @click="unRead"> <i class="iconfont icon-yanjingclose" style="margin: 0 5px"></i> 未 读</el-button>
           </div>
 
           <div class="search">
@@ -94,9 +94,7 @@
           if(res.data.status === 'success'){
             let arr = [];
             arr = res.data.data;
-            if(this.params.page === res.data.meta.last_page){
-                this.isLastPage = true;
-            }
+            this.isLastPage = this.params.page === res.data.meta.last_page;
             arr.forEach((x)=>{
               this.messageTable.push(x)
             })
@@ -203,7 +201,7 @@
         }
         .itemTime {
           min-width: 170px;
-          padding: 30px 0 0 113px;
+          padding: 30px 0 0 20px;
           span {
             color: #666;
             opacity: .8;
