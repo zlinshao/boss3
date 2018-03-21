@@ -248,19 +248,6 @@
     data() {
       return {
         urls: globalConfig.server_user,
-        demoEvents: [{
-          date: `${today.getFullYear()}/${today.getMonth() + 1}/15`,
-          title: 'Title-1',
-          content: '今天张琳死了'
-        }, {
-          date: `${today.getFullYear()}/${today.getMonth() + 1}/24`,
-          title: 'Title-2',
-          content: '今天解兆飞也死了'
-        }, {
-          date: `${today.getFullYear()}/${today.getMonth() === 11 ? 1 : today.getMonth() + 2}/06`,
-          title: 'Title-3',
-          content: '今天李巧俊生孩子'
-        }],
         person_ranking: 5,
         city_ranking: 9,
         region_ranking: 5,

@@ -87,6 +87,8 @@
           type: '',
         },
         previewShow: true,
+        moduleType: this.$route.query.moduleType,
+        tabIndex: '',
       }
     },
     mounted() {
@@ -120,12 +122,45 @@
         })
       },
       getDict() {
-        this.$http.get(this.urls + 'setting/dictionary/137').then((res) => {
-          this.dict.region = res.data.data;
-        });
-        this.$http.get(this.urls + 'setting/dictionary/147').then((res) => {
-          this.dict.status = res.data.data;
-        })
+        switch(this.moduleType){
+          case 'lejiaCollege':  //乐伽大学
+            this.tabIndex = 'first';
+            this.$http.get(this.urls + 'setting/dictionary/361').then((res) => {
+              this.dict.region = res.data.data;
+            });
+            this.$http.get(this.urls + 'setting/dictionary/373').then((res) => {
+              this.dict.status = res.data.data;
+            });
+            break;
+          case 'companyPortal':   //公司门户
+            this.tabIndex = 'second';
+            this.$http.get(this.urls + 'setting/dictionary/377').then((res) => {
+              this.dict.region = res.data.data;
+            });
+            this.$http.get(this.urls + 'setting/dictionary/369').then((res) => {
+              this.dict.status = res.data.data;
+            });
+            break;
+          case 'staffSquare':    //员工广场
+            this.tabIndex = 'third';
+            this.$http.get(this.urls + 'setting/dictionary/137').then((res) => {
+              this.dict.region = res.data.data;
+            });
+            this.$http.get(this.urls + 'setting/dictionary/147').then((res) => {
+              this.dict.status = res.data.data;
+            });
+            break;
+          case 'systemManageMent':   //制度管理
+            this.tabIndex = 'fourth';
+            this.$http.get(this.urls + 'setting/dictionary/380').then((res) => {
+              this.dict.region = res.data.data;
+            });
+            this.$http.get(this.urls + 'setting/dictionary/365').then((res) => {
+              this.dict.status = res.data.data;
+            });
+            break;
+        }
+
       },
       // 预览
       preview() {
@@ -161,7 +196,7 @@
         })
       },
       goBack() {
-        this.$router.push({path: '/articleMessage', query: {tabs: 'third'}})
+        this.$router.push({path: '/articleMessage', query: {tabs: this.tabIndex}})
       },
       handleImageAdded(file, Editor, cursorLocation, resetUploader) {
         // An example of using FormData
