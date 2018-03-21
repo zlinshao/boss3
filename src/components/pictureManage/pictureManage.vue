@@ -39,7 +39,7 @@
           <div class="pictures">
             <el-row :gutter="30" >
               <div v-for="item in albumData">
-                <el-col :span="4" style="margin-bottom:20px;">
+                <el-col :span="4" style="margin-bottom:30px;">
                   <div class="pictureDetail" >
                    <el-dropdown style="float: right;position: relative;background: #fff;padding-right:3px;display: inline;margin-bottom: -15px;">
                       <span class="el-dropdown-link">
@@ -50,8 +50,8 @@
                         <el-dropdown-item @click.native="deleteAlbum(item.id)">删除</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
-                    <img v-if="item.cover_path" :src="item.cover_path" style="height:180px;" @click="goPictureDetail(item.id)">
-                    <img v-else src="../../assets/images/university/caia412-34427.png" style="height:180px;"  @click="goPictureDetail(item.id)">
+                    <img v-if="item.cover_path" :src="item.cover_path" style="height:160px;" @click="goPictureDetail(item.id)">
+                    <img v-else src="../../assets/images/university/caia412-34427.png" style="height:160px;"  @click="goPictureDetail(item.id)">
                   <div class="clearfix">
                     <span class="text_over_norwap">{{item.name}}</span>
                     <span style="float: right;">{{item.photo_count}}张</span>

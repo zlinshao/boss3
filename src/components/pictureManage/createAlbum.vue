@@ -4,7 +4,7 @@
       <div class="">
         <el-form size="mini" onsubmit="return false;" :model="form" label-width="100px">
           <el-row >
-              <el-form-item label="相册名称:">
+              <el-form-item label="相册名称:" required>
                 <el-input v-model="form.name" placeholder="请输入相册名称" ></el-input>
               </el-form-item>
           </el-row>
@@ -39,7 +39,7 @@
   import choosePictures from './selectPictures.vue';
     export default {
         name: "create-album",
-        props: ['createAlbumDialog','albumId'],
+        props: ['createAlbumDialog','albumId','fromDetail'],
         components: {
           choosePictures,
         },
@@ -108,13 +108,16 @@
         editAlbum() {
           this.$http.put(globalConfig.server + 'album/'+ this.albumId,this.form).then((res)=>{
             if(res.data.code == '20110') {
-              this.choosePicturesDialog = true;
+              if(!this.fromDetail){
+                this.choosePicturesDialog = true;
+              }
               this.createAlbumDialogVisible = false;
               this.$emit('close');
               this.$notify.success({
                 title:"成功",
                 message:res.data.msg
               });
+
             }else{
               this.$notify.warning({
                 title:"警告",

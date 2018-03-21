@@ -121,6 +121,7 @@
   import Organization from '../../../common/organization.vue'
 
   export default {
+    props: ['moduleType'],
     components: {RightMenu, Organization},
     data() {
       return {
@@ -157,12 +158,44 @@
     },
     methods: {
       getDict() {
-        this.$http.get(this.urls + 'setting/dictionary/137').then((res) => {
-          this.dict.region = res.data.data;
-        });
-        this.$http.get(this.urls + 'setting/dictionary/147').then((res) => {
-          this.dict.status = res.data.data;
-        })
+        switch(this.moduleType){
+          case 'lejiaCollege':  //乐伽大学
+            this.form.dict_id = 361;
+            this.$http.get(this.urls + 'setting/dictionary/361').then((res) => {
+              this.dict.region = res.data.data;
+            });
+            this.$http.get(this.urls + 'setting/dictionary/373').then((res) => {
+              this.dict.status = res.data.data;
+            });
+            break;
+          case 'companyPortal':   //公司门户
+            this.form.dict_id = 377;
+            this.$http.get(this.urls + 'setting/dictionary/377').then((res) => {
+              this.dict.region = res.data.data;
+            });
+            this.$http.get(this.urls + 'setting/dictionary/369').then((res) => {
+              this.dict.status = res.data.data;
+            });
+            break;
+          case 'staffSquare':    //员工广场
+            this.form.dict_id = 137;
+            this.$http.get(this.urls + 'setting/dictionary/137').then((res) => {
+              this.dict.region = res.data.data;
+            });
+            this.$http.get(this.urls + 'setting/dictionary/147').then((res) => {
+              this.dict.status = res.data.data;
+            });
+            break;
+          case 'systemManageMent':   //制度管理
+            this.form.dict_id = 380;
+            this.$http.get(this.urls + 'setting/dictionary/380').then((res) => {
+              this.dict.region = res.data.data;
+            });
+            this.$http.get(this.urls + 'setting/dictionary/365').then((res) => {
+              this.dict.status = res.data.data;
+            });
+            break;
+        }
       },
       myData(page) {
         this.form.pages = page;
@@ -198,7 +231,7 @@
       },
       // 文章发布
       publicArticle() {
-        this.$router.push({path: '/publicArticle'})
+        this.$router.push({path: '/publicArticle', query:{ moduleType: this.moduleType }});
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);

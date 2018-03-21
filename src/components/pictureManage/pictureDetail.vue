@@ -36,8 +36,8 @@
             <div>
               <el-row :gutter="20">
                 <el-col :span="4">
-                  <img v-if="albumDetail.cover_path" :src="albumDetail.cover_path" style="height:195px;width: 200px;" />
-                  <img v-else src="../../assets/images/university/caia412-34427.png" style="height:195px;width:200px;" />
+                  <img v-if="albumDetail.cover_path" :src="albumDetail.cover_path" style="height:180px;width: 180px;" />
+                  <img v-else src="../../assets/images/university/caia412-34427.png" style="height:180px;width:180px;" />
                 </el-col>
                 <el-col :span="6">
                   <div style="font-size: 30px;color: #393939;padding-top: 30px;">{{albumDetail.name}}&nbsp;&nbsp;<span style="font-size: 18px;">{{albumDetail.photo_count}}张</span></div>
@@ -59,7 +59,7 @@
           <div class="pictures">
             <el-row :gutter="40" >
               <div v-for="item in photoData">
-                <el-col :span="4" style="margin-bottom:20px;">
+                <el-col :span="3" style="margin-bottom:20px;">
                   <div class="pictureDetail">
                     <el-dropdown style="float: right;position: relative;background: #fff;display: inline;margin-bottom: -15px;">
                       <span class="el-dropdown-link">
@@ -72,7 +72,7 @@
                         <el-dropdown-item @click.native="deletePhoto(item.id)">删除</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
-                    <img :src="item.picture_path" style="height: 200px;">
+                    <img :src="item.picture_path" data-magnify="" :data-src="item.picture_path" style="height: 160px;">
                     <div class="clearfix t_center">
                       <span class="text_over_ellipsis">{{item.name}}</span>
                     </div>
@@ -112,7 +112,7 @@
       </span>
     </el-dialog>
 
-    <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog" :albumId="albumDetail.id"></create-album>
+    <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog" :albumId="albumDetail.id" fromDetail="fromPicture"></create-album>
     <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog" :albumId="albumId" fromDetail="fromPicture"></choose-pictures>
   </div>
 </template>
@@ -237,16 +237,13 @@
           }
         });
       },
-      movePhoto(id) {
-
-      },
       deletePhoto(id) {
         this.$confirm('确定删除照片吗？','删除照片',{
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.put(globalConfig.server + 'photo/delete/'+ id ).then((res) =>{
+          this.$http.put(globalConfig.server + 'photo/delete/'+ id +"?album_id="+ this.albumId).then((res) =>{
             if (res.data.code == "20210") {
               this.getAllPhotos();  // 重新请求数据，相当于刷新
               this.getAlbumDetail();
@@ -260,10 +257,11 @@
         });
 
       },
-      editPhotoSuccess() {
-        this.$http.put(globalConfig.server + 'photo/',this.photoForm).then((res) =>{
+      savePhotoSuccess() {
+        this.$http.put(globalConfig.server + 'photo/'+this.saveItemId+"?album_id="+this.albumId+"&name="+ this.photoForm.name).then((res) =>{
           if(res.data.code == "20210") {
-            this.photoDetailDialogVisible = true;
+            this.photoDetailDialogVisible = false;
+            this. getAllPhotos();
           } else {
             this.$notify.warning({
               title:"警告",
@@ -432,7 +430,7 @@
       .pictures {
         .pictureDetail {
           background: #eee;
-          padding: 0 0 15px;
+          padding: 10px;
           -webkit-border-radius: 5px;
           -moz-border-radius: 5px;
           border-radius: 5px;
@@ -442,7 +440,7 @@
           content:"";
           display: block;
           clear:both;
-          height: 17px;
+          height: 19px;
         }
         .text_over_ellipsis{
           width: 150px;
