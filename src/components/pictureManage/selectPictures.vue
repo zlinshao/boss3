@@ -32,7 +32,7 @@
     import ImproveImgInfo from './improveImage.vue';
     export default {
         name: "choose-pictures",
-        props: ['choosePicturesDialog','albumId','fromDetail'],
+        props: ['choosePicturesDialog','albumId'],
         components:{
           Upload,
           ImproveImgInfo,
@@ -55,9 +55,7 @@
           this.$http.post(globalConfig.server + 'photo',this.form).then((res)=>{
             if(res.data.code == '20210') {
               this.choosePicturesDialogVisible = false;
-              if(!this.fromDetail){
-                this.improveImgInfoDialog = true;  //显示完善照片信息界面
-              }
+              this.improveImgInfoDialog = true;  //显示完善照片信息界面
               this.$emit("close");
               this.isClear = true;
             }else{

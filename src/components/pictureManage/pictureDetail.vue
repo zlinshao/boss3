@@ -113,7 +113,7 @@
     </el-dialog>
 
     <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog" :albumId="albumDetail.id" fromDetail="fromPicture"></create-album>
-    <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog" :albumId="albumId" fromDetail="fromPicture"></choose-pictures>
+    <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog" :albumId="albumId"></choose-pictures>
   </div>
 </template>
 
@@ -176,9 +176,9 @@
         this.createAlbumDialog = false;
       },
       closeChoosePicturesDialog() {
+        this.choosePicturesDialog = false;
         this.getAllPhotos();
         this.getAlbumDetail();
-        this.choosePicturesDialog = false;
       },
       getAllPhotos(){
         this.$http.get(globalConfig.server + "photo?album_id="+ this.albumId +"&page="+ this.currentPage+"&limit=12").then((res) => { //
