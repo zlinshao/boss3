@@ -54,10 +54,11 @@
         saveImages() {
           this.$http.post(globalConfig.server + 'photo',this.form).then((res)=>{
             if(res.data.code == '20210') {
+              this.$emit("close");
               this.choosePicturesDialogVisible = false;
               this.improveImgInfoDialog = true;  //显示完善照片信息界面
-              this.$emit("close");
               this.isClear = true;
+
             }else{
               this.$notify.warning({
                 title: "警告",
@@ -74,6 +75,7 @@
         },
         closeImproveImgInfoDialog() {
           this.improveImgInfoDialog = false;  //关闭完善照片信息界面
+          this.$emit('close');
         },
         continueUploading() {
           this.choosePicturesDialogVisible = true;

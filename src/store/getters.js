@@ -5,5 +5,6 @@ const getters = {
   visitedViews: state => state.app.visitedViews,
   menuStatus: state => state.app.menuStatus,
   isLoading: state => state.app.isLoading,
+  albumId: state => state.picture.albumId,
 }
 export default getters

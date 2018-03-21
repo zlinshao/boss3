@@ -14,7 +14,7 @@
               </el-form-item>
           </el-row>
           <el-row>
-            <el-form-item label="主题:">
+            <el-form-item label="主题:" required>
               <el-radio-group v-model="form.theme">
                 <el-radio label="1" :key="1">个人</el-radio>
                 <el-radio label="2" :key="2">房屋</el-radio>
@@ -64,10 +64,12 @@
             if(!val) {
               this.$emit('close');
             }
-
           },
           albumId(val) {
             var self = this;
+            if(val){
+              this.dialogTitle = '编辑相册';
+            }
             this.$http.get(globalConfig.server+"album/"+ this.albumId).then((res) =>{
               if(res.data.code == "20110") {
                 self.form = res.data.data;
@@ -84,7 +86,6 @@
                 this.createAlbumDialogVisible = false;
                 console.log(res.data)
                 this.createAlbumId = res.data.data.id;
-                console.log(`createAlbumId====${this.createAlbumId}`);
                 this.form = {};
                 this.$confirm('相册'+ res.data.data.name+'保存成功，是否马上上传照片到这个相册?', '创建成功', {
                   confirmButtonText: '确定',
@@ -108,9 +109,7 @@
         editAlbum() {
           this.$http.put(globalConfig.server + 'album/'+ this.albumId,this.form).then((res)=>{
             if(res.data.code == '20110') {
-              if(!this.fromDetail){
-                this.choosePicturesDialog = true;
-              }
+
               this.createAlbumDialogVisible = false;
               this.$emit('close');
               this.$notify.success({
@@ -128,6 +127,7 @@
         },
         closeChoosePicturesDialog() {
           this.choosePicturesDialog = false;
+          this.$emit("close");
         }
       },
     }

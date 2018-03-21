@@ -7,7 +7,7 @@
         </div>
         <div class="rightPic">
           <p>
-            <span>姓名姓名</span>
+            <span>姓名姓名{{albumId}}</span>
             <span></span>
           </p>
           <p>
@@ -35,12 +35,12 @@
             </div>
             <div>
               <el-row :gutter="20">
-                <el-col :span="4">
+                <el-col :span="3">
                   <img v-if="albumDetail.cover_path" :src="albumDetail.cover_path" style="height:180px;width: 180px;" />
                   <img v-else src="../../assets/images/university/caia412-34427.png" style="height:180px;width:180px;" />
                 </el-col>
-                <el-col :span="6">
-                  <div style="font-size: 30px;color: #393939;padding-top: 30px;">{{albumDetail.name}}&nbsp;&nbsp;<span style="font-size: 18px;">{{albumDetail.photo_count}}张</span></div>
+                <el-col :span="10">
+                  <div style="font-size: 30px;color: #393939;padding-top: 30px;">{{albumDetail.name}}&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 18px;">{{albumDetail.photo_count}}张</span></div>
                   <el-button icon="el-icon-picture-outline" type="primary" class="upload_photo" size="medium" @click="openModalDialog('choosePicturesDialog')" >上传照片</el-button>
                   <el-button size="small" @click="editAlbum(albumDetail.id)">编辑相册信息</el-button>
                   <!--<el-button size="small">批量管理</el-button>-->
@@ -72,7 +72,7 @@
                         <el-dropdown-item @click.native="deletePhoto(item.id)">删除</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
-                    <img :src="item.picture_path" data-magnify="" :data-src="item.picture_path" style="height: 160px;">
+                    <img :src="item.picture_path" data-magnify="" :data-src="item.picture_path" style="height: 140px;">
                     <div class="clearfix t_center">
                       <span class="text_over_ellipsis">{{item.name}}</span>
                     </div>
@@ -134,7 +134,6 @@
         createAlbumDialog: false,
         photoData: [],
         albumDetail: {},
-        albumId: this.$route.query.albumId,
         photoDetailDialogVisible: false,
         photoForm: {
           name: '',
@@ -146,6 +145,11 @@
         totalNum: 0,
         currentPage: 1,
         saveItemId: '',
+      }
+    },
+    computed:{
+      albumId(){
+        return  this.$route.query.albumId ? this.$route.query.albumId : this.$store.state.picture.albumId;
       }
     },
     methods: {
@@ -185,11 +189,9 @@
           if (res.data.code == "20210") {
             this.photoData = res.data.data;
             this.totalNum = res.data.num;
-          } else {
-            this.$notify.warning({
-              title:"警告",
-              message:res.data.msg
-            });
+          } else if(res.data.code == "20212"){
+            this.photoData = [];
+            this.totalNum = 0;
           }
         });
       },
@@ -247,9 +249,8 @@
             if (res.data.code == "20210") {
               this.getAllPhotos();  // 重新请求数据，相当于刷新
               this.getAlbumDetail();
-            } else {
-              this.$notify.warning({
-                title:"警告",
+              this.$notify.success({
+                title:"成功",
                 message:res.data.msg
               });
             }
@@ -289,6 +290,7 @@
     mounted() {
       this.getAllPhotos();
       this.getAlbumDetail();
+      this.$store.dispatch('saveAlbumId',this.$route.query.albumId);
     }
   }
 </script>
