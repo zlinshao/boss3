@@ -265,46 +265,7 @@
                   </el-col>
                 </el-row>
               </div>
-
-              <!--2-->
-              <!--<el-dropdown-item class="personalList" @click.native="routers('messageCenter')">-->
-              <!--<p><i class="el-icon-bell"></i></p>-->
-              <!--<div>-->
-              <!--消息中心-->
-              <!--</div>-->
-              <!--</el-dropdown-item>-->
-              <!--<el-dropdown-item class="personalList">-->
-              <!--<p><i class="el-icons-fa-edit"></i></p>-->
-              <!--<div>-->
-              <!--考勤自助-->
-              <!--</div>-->
-              <!--</el-dropdown-item>-->
-              <!--<el-dropdown-item class="personalList">-->
-              <!--<p><i class="el-icon-location"></i></p>-->
-              <!--<div>-->
-              <!--签到自助-->
-              <!--</div>-->
-              <!--</el-dropdown-item>-->
-              <!--<el-dropdown-item class="personalList"  @click.native="lockScreen">-->
-              <!--<p><i class="el-icons-fa-unlock-alt"></i></p>-->
-              <!--<div>-->
-              <!--一键锁屏-->
-              <!--</div>-->
-              <!--</el-dropdown-item>-->
-              <!--<el-dropdown-item class="personalList" @click.native="routers('personalSetting')">-->
-              <!--<p><i class="el-icon-setting"></i></p>-->
-              <!--<div>-->
-              <!--个人设置-->
-              <!--</div>-->
-              <!--</el-dropdown-item>-->
-              <!--<el-dropdown-item class="personalList" @click.native="routers('individual')">-->
-              <!--<p><i class="el-icon-setting"></i></p>-->
-              <!--<div>-->
-              <!--个人门户-->
-              <!--</div>-->
-              <!--</el-dropdown-item>-->
               <el-dropdown-item class="detrusion" @click.native="routers('/login')">
-                <!--<p><i class="el-icons-fa-dot-circle-o"></i></p>-->
                 <div>
                   安全退出
                 </div>
