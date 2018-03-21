@@ -1,5 +1,5 @@
 <template>
-  <div id="pictureDetail" style="box-shadow: #acbae4 1px 3px 5px, #acbae4 1px 1px 5px;">
+  <div id="pictureDetail">
     <div class="topBack">
       <div class="topBackLeft">
         <div class="leftPic">
@@ -81,6 +81,17 @@
               </div>
             </el-row>
           </div>
+          <div style="text-align: center;">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[12, 24, 36, 48]"
+              :page-size="12"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="totalNum">
+            </el-pagination>
+          </div>
         </el-col>
       </el-row>
     </div>
@@ -99,17 +110,7 @@
         <el-button size="small" type="primary" @click="savePhotoSuccess">确 定</el-button>
       </span>
     </el-dialog>
-    <div style=" position: absolute;top: 900px;left: 700px;">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[12, 24, 36, 48]"
-        :page-size="12"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="totalNum">
-      </el-pagination>
-    </div>
+
     <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog" :albumId="albumDetail.id"></create-album>
     <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog" :albumId="albumId" fromDetail="fromPicture"></choose-pictures>
   </div>
@@ -247,6 +248,7 @@
           this.$http.put(globalConfig.server + 'photo/delete/'+ id ).then((res) =>{
             if (res.data.code == "20210") {
               this.getAllPhotos();  // 重新请求数据，相当于刷新
+              this.getAlbumDetail();
             } else {
               this.$notify.warning({
                 title:"警告",

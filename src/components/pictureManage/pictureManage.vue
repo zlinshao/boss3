@@ -1,5 +1,5 @@
 <template>
-  <div id="pictureManage" style="box-shadow: #acbae4 1px 3px 5px, #acbae4 1px 1px 5px;">
+  <div id="pictureManage">
     <div class="topBack">
       <div class="topBackLeft">
         <div class="leftPic">
@@ -61,19 +61,20 @@
               </div>
             </el-row>
           </div>
+          <div style="text-align: center;">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[12, 24, 36, 48]"
+              :page-size="12"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="totalNum">
+            </el-pagination>
+          </div>
         </el-col>
       </el-row>
-      <div style=" position: absolute;top: 900px;left: 700px;">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[12, 24, 36, 48]"
-          :page-size="12"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="totalNum">
-        </el-pagination>
-      </div>
+
     </div>
 
     <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog" :albumId="albumId"></create-album>
