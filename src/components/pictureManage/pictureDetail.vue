@@ -7,7 +7,7 @@
         </div>
         <div class="rightPic">
           <p>
-            <span>姓名姓名{{albumId}}</span>
+            <span>姓名姓名</span>
             <span></span>
           </p>
           <p>
@@ -87,8 +87,8 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="currentPage"
-              :page-sizes="[12, 24, 36, 48]"
-              :page-size="12"
+              :page-sizes="[16, 32, 48, 64]"
+              :page-size="16"
               layout="total, sizes, prev, pager, next, jumper"
               :total="totalNum">
             </el-pagination>
@@ -185,7 +185,7 @@
         this.getAlbumDetail();
       },
       getAllPhotos(){
-        this.$http.get(globalConfig.server + "photo?album_id="+ this.albumId +"&page="+ this.currentPage+"&limit=12").then((res) => { //
+        this.$http.get(globalConfig.server + "photo?album_id="+ this.albumId +"&page="+ this.currentPage+"&limit=16").then((res) => { //
           if (res.data.code == "20210") {
             this.photoData = res.data.data;
             this.totalNum = res.data.num;

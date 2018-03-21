@@ -157,6 +157,10 @@
           this.$http.put(globalConfig.server + 'album/delete/' + id).then((res) => {
             if(res.data.code == "20110") {
               this.getImgData();
+              this.$notify.success({
+                title:"成功",
+                message:res.data.msg
+              });
             } else {
               this.$notify.warning({
                 title:"警告",
