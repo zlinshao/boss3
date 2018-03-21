@@ -361,7 +361,6 @@
           <div style="color: #ffffff;">业务咨询&nbsp;&nbsp;陆经理</div>
           <div style="color: #ffffff;">版本信息&nbsp;&nbsp;BOSS&nbsp;3.0</div>
         </div>
-        <!--<div style="position: fixed;bottom: 10px;left: 0;z-index: 99999;color: #ffffff;" v-if="isCollapse">BOSS&nbsp;3.0</div>-->
 
         <el-main :class="isFull? 'mainHide':'' ">
           <TagsView></TagsView>
@@ -378,7 +377,6 @@
 </template>
 
 <script>
-  import Cookies from 'js-cookie'
   import TagsView from './common/tagsView.vue'
   import screenfull from 'screenfull'
   import MessageDetail from './common/messageDetail.vue'
