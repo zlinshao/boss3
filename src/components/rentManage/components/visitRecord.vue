@@ -4,25 +4,29 @@
       <div class="">
         <el-form size="mini" onsubmit="return false;" :model="form" label-width="100px">
           <el-row >
-            <el-form-item label="回访时间：">
-              <el-date-picker v-model="form.date" type="datetime" placeholder="选择日期时间"></el-date-picker>
-            </el-form-item>
+            <el-form-item label="回访时间："></el-form-item>
+          </el-row>
+          <el-row>
+            <el-form-item label="回访人："></el-form-item>
           </el-row>
           <el-row>
             <el-form-item label="回访内容：">
-              <el-input v-model="form.description" type="textarea" placeholder="请输入回访内容"></el-input>
+              <el-input v-model="form.content" type="textarea" placeholder="请输入回访内容"></el-input>
             </el-form-item>
           </el-row>
           <el-row >
-            <el-form-item label="回访人：">
-              <el-input v-model="form.name" placeholder="请输入回访人" ></el-input>
+            <el-form-item>
+              <el-input v-model="form.contract_id" type="hidden"></el-input>
             </el-form-item>
+            <el-for-item>
+              <el-input v-model="form.category" type="hidden"></el-input>
+            </el-for-item>
           </el-row>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="visitRecordDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="">确 定</el-button>
+        <el-button size="small" type="primary" @click="saveVisitRecord">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -31,15 +35,15 @@
 <script>
   export default {
     name: "create-album",
-    props: ['visitRecordDialog'],
+    props: ['visitRecordDialog','contractId','category'],
     components: { },
     data() {
       return {
         visitRecordDialogVisible: false,
         form: {
-          date: '',
-          name: '',
-          description: '',
+          content: '',
+          contract_id: '1', //从父组件传过来 合同id
+          category: 1, // 从父组件传过来  // 收房1 租房2
         },
       }
     },
@@ -52,9 +56,31 @@
           this.$emit('close');
         }
       },
+      contractId(val) {
+        this.form.contract_id = val;
+      },
+      category(val) {
+        this.form.category = val;
+      },
     },
     methods: {
-
+      saveVisitRecord() {
+        this.$http.post(globalConfig.server + "contract/feedback",this.form).then((res) => {
+          if(res.data.code == "20010") {
+            this.$notify.success({
+              title:"成功",
+              message:res.data.msg
+            });
+            this.visitRecordDialogVisible = false;
+            this.form = {};
+          }else{
+            this.$notify.warning({
+              title:"警告",
+              message:res.data.msg
+            });
+          }
+        });
+      }
     },
   }
 </script>

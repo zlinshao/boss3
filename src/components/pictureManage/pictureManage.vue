@@ -62,7 +62,8 @@
             </el-row>
           </div>
           <div style="text-align: center;">
-            <el-pagination
+            <div v-if="totalNum==0">暂无数据</div>
+            <el-pagination v-else
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="currentPage"
