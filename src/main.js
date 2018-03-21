@@ -93,30 +93,17 @@ router.beforeEach((to, from, next) => {
   }
 
   let data = localStorage.getItem("myData");
-
-  axios.get(globalConfig.server+'special/special/unlock_screen?pwd_lock=').then((res)=>{
-    lockStatus = res.data.code !== '10013';
-
-    if (!data && to.path !== '/login') {
-      next({path: '/login'})
-    }else if(data&&to.path === '/'){
-      next({path: '/main'})
-    }else if(!lockStatus && to.path!=='/lock'){
-      next({path:'/lock'});
-    }else if(lockStatus && to.path === '/lock'){
-      next({path:from.path});
-    }else {
-      next();
-    }
-  }).catch((error) => {
-    if (!data && to.path !== '/login') {
-      next({path: '/login'})
-    }else if(data&&to.path === '/'){
-      next({path: '/main'})
-    }else {
-      next();
-    }
-  })
+  if (!data && to.path !== '/login') {
+    next({path: '/login'})
+  }else if(data&&to.path === '/'){
+    next({path: '/main'})
+  }else if(Number(sessionStorage.getItem('lockStatus'))===1 && to.path!=='/lock'){
+    next({path:'/lock'});
+  }else if(Number(sessionStorage.getItem('lockStatus'))===0 && to.path === '/lock'){
+    next({path:from.path});
+  }else {
+    next();
+  }
 });
 
 new Vue({

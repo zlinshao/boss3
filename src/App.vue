@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-loading="isLoading" @contextmenu="prevent($event)" @click="closeMenu">
+  <div id="app" @contextmenu="prevent($event)" @click="closeMenu">
     <router-view></router-view>
   </div>
 </template>
@@ -7,7 +7,11 @@
 <script>
   export default {
     name: 'app',
-
+    data(){
+        return{
+            loading:null
+        }
+    },
     mounted(){
       document.onkeydown = function (e) {//键盘按键控制
         e = e || window.event;
@@ -18,7 +22,21 @@
     },
     computed:{
       isLoading(){
-//          return this.$store.state.app.isLoading
+          return this.$store.state.app.isLoading;
+      }
+    },
+    watch:{
+      isLoading(val){
+//        if(val){
+//          this.loading = this.$loading({
+//            lock: true,
+//            text: '正在加载...',
+//            spinner: 'el-icon-loading',
+//            background: 'rgba(0, 0, 0, 0)'
+//          });
+//        }else {
+//          this.loading.close();
+//        }
       }
     },
     methods: {
