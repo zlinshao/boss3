@@ -1,7 +1,6 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="clientContainer">
-
       <div class="highRanking">
         <div class="highSearch">
           <el-form :inline="true" size="mini">
@@ -20,7 +19,7 @@
         </div>
 
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
-          <el-form :inline="true" :model="params" size="mini" label-width="100px">
+          <el-form :inline="true" onsubmit="return false" size="mini" label-width="100px">
             <div class="filterTitle">
               <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>
@@ -162,7 +161,7 @@
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
-              :current-page="params.page"
+              :current-page="params.pages"
               :page-sizes="[12, 20, 30, 40]"
               :page-size="params.limit"
               layout="total, sizes, prev, pager, next, jumper"
@@ -177,8 +176,6 @@
                @clickOperate="clickEvent"></RightMenu>
 
     <Organization :organizationDialog="organizationDialog" @close="closeModal"></Organization>
-    <EditWork :editWorkDialog="editWorkDialog" :activeId="activeId" :startEdit="startEdit" @close="closeModal"></EditWork>
-    <AddResult :addResultDialog="addResultDialog" :activeId="activeId" :startAddResult="startAddResult" @close="closeModal"></AddResult>
     <AddChildTask :addChildTaskDialog="addChildTaskDialog" :activeId="activeId" :startAddResult="startEdit" @close="closeModal"></AddChildTask>
     <OrderDetail :orderDetailDialog="orderDetailDialog" :activeId="activeId" :startDetail="startDetail" @close="closeModal"></OrderDetail>
   </div>
@@ -187,13 +184,12 @@
 <script>
   import RightMenu from '../../../common/rightMenu.vue'
   import Organization from '../../../common/organization.vue'
-  import EditWork from './components/editWorkOrder.vue'
-  import AddResult from './components/addResult.vue'
+
   import AddChildTask from './components/addChildTask.vue'
   import OrderDetail from './components/workOrderDetail.vue'
   export default {
     name: 'hello',
-    components: {RightMenu,Organization,EditWork,AddResult,AddChildTask,OrderDetail},
+    components: {RightMenu,Organization,AddChildTask,OrderDetail},
     data () {
       return {
         rightMenuX: 0,
@@ -205,7 +201,7 @@
 
         totalNumber : 0,
         params: {
-          page: 1,
+          pages: 1,
           limit: 12
         },
         tableData: [],
@@ -215,7 +211,6 @@
         organizationDialog: false,
         editWorkDialog: false,     //编辑
         addChildTaskDialog: false,     //添加子任务框
-        addResultDialog: false,     //添加跟进记录
         orderDetailDialog : false,
         activeName: 'first',
         isHigh:false,
@@ -226,8 +221,12 @@
       }
     },
 
-    mounted(){
-        this.getTableData();
+    created(){
+      if(this.$store.state.datum.work_order_filter.pages){
+        this.params.pages=this.$store.state.datum.work_order_filter.pages;
+        this.params.limit=this.$store.state.datum.work_order_filter.limit;
+      }
+      this.getTableData();
     },
     methods: {
       //获取列表数据
@@ -235,7 +234,7 @@
         this.$http.get(globalConfig.server+'customer/work_order',{params:this.params}).then((res) => {
           if(res.data.code === '10000'){
             this.tableData = res.data.data.data;
-            this.totalNumber = res.data.data.num;
+            this.totalNumber = res.data.data.count;
           }else {
             this.tableData = [];
             this.totalNumber = 0;
@@ -246,10 +245,12 @@
       handleSizeChange(val) {
         this.params.limit = val;
         this.getTableData();
+        this.$store.dispatch('workOrderFilter',this.params);
       },
       handleCurrentChange(val) {
-        this.params.page = val;
+        this.params.pages = val;
         this.getTableData();
+        this.$store.dispatch('workOrderFilter',this.params);
       },
       clickTable(row, event, column){
         console.log(row, event, column)
@@ -258,8 +259,7 @@
       houseMenu(row, event){
         this.activeId = row.id;
         this.lists = [
-          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-          {clickIndex: 'addResult', headIcon: 'el-icon-plus', label: '添加跟进记录',},
+//          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
           {clickIndex: 'addChildren', headIcon: 'el-icon-plus', label: '添加子任务',},
         ];
         this.contextMenuParam(event);
@@ -272,14 +272,10 @@
       //右键回调事件
       clickEvent (index) {
         switch (index){
-          case 'edit' :
-            this.editWorkDialog = true;
-            this.startEdit = true;
-            break;
-          case 'addResult' :
-            this.addResultDialog = true;
-            this.startAddResult = true;
-            break;
+//          case 'edit' :
+//            this.editWorkDialog = true;
+//            this.startEdit = true;
+//            break;
           case 'addChildren' :
             this.addChildTaskDialog = true;
             this.startEdit = true;
@@ -304,19 +300,20 @@
         })
       },
 
-      closeModal(){
+      closeModal(val){
         this.organizationDialog = false;
-        this.editWorkDialog = false;
+//        this.editWorkDialog = false;
         this.addChildTaskDialog = false;
-        this.addResultDialog = false;
         this.orderDetailDialog = false;
 
         //操作状态
-        this.startEdit = false;
+//        this.startEdit = false;
         this.startAddResult = false;
         this.startDetail = false;
 
-        this.getTableData();
+        if(val){
+
+        }
       },
 
       highGrade(){

@@ -31,9 +31,19 @@
         activeName: 'first'
       }
     },
-    mounted() {
+    computed : {
+      active_name(){
+        return this.$store.state.datum.active_name;
+      }
     },
-    watch: {},
+    mounted() {
+      this.activeName = this.active_name?this.active_name:'first'
+    },
+    watch: {
+      activeName(val){
+        this.$store.dispatch('activeName',val)
+      }
+    },
     methods: {
       handleClick(val) {
 

@@ -3,30 +3,30 @@
     <el-dialog title="添加跟进记录" :visible.sync="addResultDialogVisible" width="40%">
       <div>
         <el-form size="small" :model="params" label-width="100px">
-          <el-row>
+          <!--<el-row>-->
 
-            <el-col :span="12">
-              <el-form-item label="填写时间">
-                <el-date-picker type="datetime" placeholder="选择日期时间"
-                                value-format="yyyy-MM-dd HH:mm:ss" v-model="params.expect_time"></el-date-picker>
-              </el-form-item>
-            </el-col>
+            <!--&lt;!&ndash;<el-col :span="12">&ndash;&gt;-->
+              <!--&lt;!&ndash;<el-form-item label="填写时间">&ndash;&gt;-->
+                <!--&lt;!&ndash;<el-date-picker type="datetime" placeholder="选择日期时间"&ndash;&gt;-->
+                                <!--&lt;!&ndash;value-format="yyyy-MM-dd HH:mm:ss" v-model="params.expect_time"></el-date-picker>&ndash;&gt;-->
+              <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
+            <!--&lt;!&ndash;</el-col>&ndash;&gt;-->
 
-            <el-col :span="12">
-              <el-form-item label="工单进度">
-                <el-select clearable v-model="params.type" placeholder="工单进度" value="">
-                  <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
+            <!--<el-col :span="12">-->
+              <!--<el-form-item label="工单进度">-->
+                <!--<el-select clearable v-model="params.follow_status" placeholder="工单进度" value="">-->
+                  <!--<el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>-->
+                <!--</el-select>-->
+              <!--</el-form-item>-->
+            <!--</el-col>-->
 
-          </el-row>
+          <!--</el-row>-->
 
 
           <el-row>
             <el-col :span="24">
               <el-form-item label="跟进结果" required="">
-                <el-input type="textarea" v-model="params.matters"></el-input>
+                <el-input type="textarea" v-model="params.content"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -48,16 +48,14 @@
   import UPLOAD from '../../../../common/UPLOAD.vue'
   export default {
     name:'addFollowUp',
-    props:['addResultDialog','activeId','startAddResult'],
+    props:['addResultDialog','activeId'],
     components:{Organization,UPLOAD},
     data() {
       return {
         addResultDialogVisible:false,
         params:{
-          matters:'',
-          follow_time  : '',                 //'跟进时间',
-          follow_status : '',                  //'跟进时间',
-          follow_content : '',             //'跟进内容',
+          id:'',
+          content : '',             //'跟进内容',
         },
         organizationDialog: false,
         isClear:false,
@@ -78,25 +76,16 @@
           this.isClear = false
         }
       },
-      startAddResult(val){
-        if(val){
-          this.getDetail();
-        }
+      activeId(val){
+        this.params.id = val;
       }
     },
     mounted(){
-      this.getDictionary();
+//      this.getDictionary();
     },
     methods:{
       getDictionary(){
         this.$http.get(globalConfig.server+'setting/dictionary/335').then((res) => {
-          if(res.data.code === "30010"){
-            this.dictionary = res.data.data;
-          }
-        });
-      },
-      getDetail(){
-        this.$http.get(globalConfig.server+'customer/work_order/'+this.activeId).then((res) => {
           if(res.data.code === "30010"){
             this.dictionary = res.data.data;
           }
@@ -124,13 +113,14 @@
       },
       //确认提交
       confirmAdd(){
-        this.$http.post(globalConfig.server+'customer/work_order',this.params).then((res) => {
-          if(res.data.code === '10010'){
+        this.$http.post(globalConfig.server+'customer/work_order/matters',this.params).then((res) => {
+          if(res.data.code === '10050'){
             this.$notify.success({
               title:'成功',
               message:res.data.msg
             });
             this.init();
+            this.$emit('close','success');
             this.addResultDialogVisible = false;
           }else {
             this.$notify.warning({
@@ -142,16 +132,8 @@
       },
       init(){
         this.params = {
-          module:'1',                      //'关联模型', 1-收房  2-租房
-          matters:'',                     //跟进事项
-          contract_id : '1',               //'合同id',
-          type : '',                      //'事件类型',
-          follow_id : '',                 // '跟进人',
-          expect_time  : '',              //'预计完成时间',
-          expected_finish_time : '',      //'预计完成时间',
-          follow_time : '',               //'跟进时间',
-//          follow_content : '',            //'跟进内容',
-          image_pic:[]
+          id:'',
+          content : '',             //'跟进内容',
         };
         this.follow_name = '';
         this.isClear = true;

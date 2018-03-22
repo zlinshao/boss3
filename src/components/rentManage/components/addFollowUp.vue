@@ -79,7 +79,6 @@
           expect_time  : '',                 //'期待维修时间',
           expected_finish_time : '',         //'预计完成时间',
           follow_time : '',                  //'跟进时间',
-//          follow_content : '',             //'跟进内容',
           image_pic:[]
         },
         organizationDialog: false,
@@ -88,6 +87,7 @@
         follow_name:'',
         length:0,
         type:'',
+        upStatus:false
       };
     },
     watch:{
@@ -98,7 +98,7 @@
         if(!val){
           this.$emit('close');
         }else {
-            this.isClear = false
+          this.isClear = false
         }
       }
     },
@@ -132,24 +132,32 @@
       },
       getImgData(val){
         this.params.image_pic = val[1];
+        this.upStatus = val[2];
       },
       //确认提交
       confirmAdd(){
-        this.$http.post(globalConfig.server+'customer/work_order',this.params).then((res) => {
-          if(res.data.code === '10010'){
-            this.$notify.success({
-              title:'成功',
-              message:res.data.msg
-            });
-            this.init();
-            this.addFollowUpDialogVisible = false;
-          }else {
-            this.$notify.warning({
-              title:'警告',
-              message:res.data.msg
-            })
-          }
-        })
+        if(this.upStatus){
+          this.$notify.warning({
+            title:'警告',
+            message:'图片正在上传'
+          })
+        }else {
+          this.$http.post(globalConfig.server+'customer/work_order',this.params).then((res) => {
+            if(res.data.code === '10010'){
+              this.$notify.success({
+                title:'成功',
+                message:res.data.msg
+              });
+              this.init();
+              this.addFollowUpDialogVisible = false;
+            }else {
+              this.$notify.warning({
+                title:'警告',
+                message:res.data.msg
+              })
+            }
+          })
+        }
       },
       init(){
         this.params = {
@@ -166,6 +174,7 @@
         };
         this.follow_name = '';
         this.isClear = true;
+        this.upStatus = false;
       }
     }
   };

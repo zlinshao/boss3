@@ -19,21 +19,30 @@
             </el-col>
 
             <el-col :span="12">
-              <el-form-item label="期待维修时间">
-                <el-date-picker type="datetime" placeholder="选择日期时间"
-                                value-format="yyyy-MM-dd HH:mm:ss" v-model="params.expect_time"></el-date-picker>
+              <el-form-item label="跟进进度">
+                <el-select clearable v-model="params.follow_status" placeholder="工单进度" value="">
+                  <el-option v-for="item in dictionary_follow" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
 
+            <el-col :span="12">
+              <el-form-item label="跟进时间">
+                <el-date-picker type="datetime" placeholder="选择日期时间"
+                                value-format="yyyy-MM-dd HH:mm:ss" v-model="params.follow_time"></el-date-picker>
+              </el-form-item>
+            </el-col>
+
+          </el-row>
+
+          <el-row>
             <el-col :span="12">
               <el-form-item label="预计完成时间">
                 <el-date-picker type="datetime" placeholder="选择日期时间"
                                 value-format="yyyy-MM-dd HH:mm:ss" v-model="params.expected_finish_time"></el-date-picker>
               </el-form-item>
             </el-col>
-
           </el-row>
-
 
           <el-row>
             <el-col :span="24">
@@ -43,7 +52,7 @@
             </el-col>
             <el-col :span="24">
               <el-form-item label="上传照片">
-                <UPLOAD :ID="'first'" :isClear="isClear" @getImg="getImgData"></UPLOAD>
+                <UPLOAD :ID="'firstEdit'" :isClear="isClear" :editImage="editImage" @getImg="getImgData"></UPLOAD>
               </el-form-item>
             </el-col>
           </el-row>
@@ -71,23 +80,25 @@
       return {
         editWorkDialogVisible:false,
         params:{
-          module:'1',                        //'关联模型', 1-收房  2-租房
           matters:'',                        //跟进事项
-          contract_id : '1',                 //'合同id',
           type : '',                         //'事件类型',
           follow_id : '',                    // '跟进人',
-          expect_time  : '',                 //'期待维修时间',
+//          expect_time  : '',                 //'期待维修时间',
           expected_finish_time : '',         //'预计完成时间',
           follow_time : '',                  //'跟进时间',
-//          follow_content : '',             //'跟进内容',
+          follow_status : '',                  //'跟进时间',
           image_pic:[]
         },
         organizationDialog: false,
         isClear:false,
         dictionary:[],
+        dictionary_follow:[],
         follow_name:'',
         length:0,
         type:'',
+        detailInfo:{},
+        editImage:{},
+        upStatus:false
       };
     },
     watch:{
@@ -117,11 +128,35 @@
             this.dictionary = res.data.data;
           }
         });
+        this.$http.get(globalConfig.server+'setting/dictionary/335').then((res) => {
+          if(res.data.code === "30010"){
+            this.dictionary_follow = res.data.data;
+          }
+        });
       },
       getDetail(){
         this.$http.get(globalConfig.server+'customer/work_order/'+this.activeId).then((res) => {
-          if(res.data.code === "30010"){
-            this.dictionary = res.data.data;
+          if(res.data.code === "10020"){
+            let detail = res.data.data;
+            this.params.matters = detail.matters;
+            this.params.type = detail.type;
+            this.params.follow_id = detail.follow_id;
+            this.follow_name = detail.follows[0].name;
+            this.params.expected_finish_time = detail.expected_finish_time;
+            this.params.follow_status = detail.follow_status;
+            this.params.follow_time = detail.follow_time;
+
+            //照片修改
+            let picObject = {};
+            this.editImage = {};
+            this.params.image_pic = [];
+            if(detail.album!==[]){
+              for(let key in detail.album.image_pic){
+                picObject[key] = detail.album.image_pic[key][0].uri;
+                this.params.image_pic.push(key)
+              }
+            }
+            this.editImage = picObject;
           }
         });
       },
@@ -144,40 +179,50 @@
       },
       getImgData(val){
         this.params.image_pic = val[1];
+        this.upStatus = val[2];
       },
       //确认提交
       confirmAdd(){
-        this.$http.post(globalConfig.server+'customer/work_order',this.params).then((res) => {
-          if(res.data.code === '10010'){
-            this.$notify.success({
-              title:'成功',
-              message:res.data.msg
-            });
-            this.init();
-            this.editWorkDialogVisible = false;
-          }else {
-            this.$notify.warning({
-              title:'警告',
-              message:res.data.msg
-            })
-          }
-        })
+        if(this.upStatus){
+          this.$notify.warning({
+            title:'警告',
+            message:'图片正在上传'
+          })
+        }else {
+          this.$http.put(globalConfig.server+'customer/work_order/'+this.activeId,this.params).then((res) => {
+            if(res.data.code === '10030'){
+              this.$notify.success({
+                title:'成功',
+                message:res.data.msg
+              });
+              this.init();
+              this.$emit('close','success');
+              this.editWorkDialogVisible = false;
+            }else {
+              this.$notify.warning({
+                title:'警告',
+                message:res.data.msg
+              })
+            }
+          })
+        }
       },
       init(){
         this.params = {
-          module:'1',                      //'关联模型', 1-收房  2-租房
-          matters:'',                     //跟进事项
-          contract_id : '1',               //'合同id',
-          type : '',                      //'事件类型',
-          follow_id : '',                 // '跟进人',
-          expect_time  : '',              //'预计完成时间',
-          expected_finish_time : '',      //'预计完成时间',
-          follow_time : '',               //'跟进时间',
-//          follow_content : '',            //'跟进内容',
+          matters:'',                        //跟进事项
+          type : '',                         //'事件类型',
+          follow_id : '',                    // '跟进人',
+//          expect_time  : '',                 //'期待维修时间',
+          expected_finish_time : '',         //'预计完成时间',
+          follow_time : '',                  //'跟进时间',
+          follow_status : '',                  //'跟进时间',
           image_pic:[]
         };
         this.follow_name = '';
         this.isClear = true;
+        this.detailInfo = {};
+        this.editImage = {};
+        this.upStatus = false;
       }
     }
   };
