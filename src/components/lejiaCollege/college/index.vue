@@ -5,10 +5,10 @@
 
       <div class="navigation">
         <div class="navigation_left">
-          <img src="../../../assets/images/university/勋章.svg" style="width:40px;"/>
+          <img src="../../../assets/images/university/勋章.svg" alt="成绩查询" style="width:40px;"/>
         </div>
         <div class="navigation_right">
-          <img src="../../../assets/images/university/在线报名.svg" style="width:32px;"/>
+          <img src="../../../assets/images/university/在线报名.svg" alt="在线报名" style="width:32px;"/>
         </div>
       </div>
     </div>
@@ -27,136 +27,30 @@
           </el-col>
           <el-col :span="15">
             <el-row>
-              <el-col :span="8">
+              <el-col :span="8" v-for="item in courseStatus">
                 <div class="list_frame">
                   <div class="list_pic">
-                    <img src="../../../assets/images/university/图层1121.png" alt="">
+                    <img :src="item.uri" alt="">
                   </div>
                   <div class="list_detail">
-                    <div class="list_title">技能培训课程训练</div>
-                    <div class="list_remark">注册成功注册成功注册成功注册成功注册成功注册成册成功注册成功注册功</div>
+                    <div class="list_title">{{item.title}}</div>
+                    <div class="list_remark">{{item.content}}</div>
                     <div class="readerInfo">
                       <div class="read">
                         <i class="iconfont icon-yanjing"></i>
-                        <span>123人</span>
+                        <span>{{item.read_num}}人</span>
                       </div>
                       <div class="critique">
                         <i class="el-icon-edit"></i>
-                        <span>123人</span>
+                        <span>{{item.favor_num}}人</span>
                       </div>
                     </div>
                   </div>
                 </div>
               </el-col>
-              <el-col :span="8">
-                <div class="list_frame">
-                  <div class="list_pic">
-                    <img src="../../../assets/images/university/图层1118.png" alt="">
-                  </div>
-                  <div class="list_detail">
-                    <div class="list_title">技能培训课程训练</div>
-                    <div class="list_remark">注册成功注册成功注册成功注册成功注册成功注册成册成功注册成功注册功</div>
-                    <div class="readerInfo">
-                      <div class="read">
-                        <i class="iconfont icon-yanjing"></i>
-                        <span>123人</span>
-                      </div>
-                      <div class="critique">
-                        <i class="el-icon-edit"></i>
-                        <span>123人</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="8">
-                <div class="list_frame">
-                  <div class="list_pic">
-                    <img src="../../../assets/images/university/图层1120.png" alt="">
-                  </div>
-                  <div class="list_detail">
-                    <div class="list_title">技能培训课程训练</div>
-                    <div class="list_remark">注册成功注册成功注册成功注册成功注册成功注册成册成功注册成功注册功</div>
-                    <div class="readerInfo">
-                      <div class="read">
-                        <i class="iconfont icon-yanjing"></i>
-                        <span>123人</span>
-                      </div>
-                      <div class="critique">
-                        <i class="el-icon-edit"></i>
-                        <span>123人</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </el-col>
+
             </el-row>
 
-            <el-row>
-              <el-col :span="8">
-                <div class="list_frame">
-                  <div class="list_pic">
-                    <img src="../../../assets/images/university/图层1122.png" alt="">
-                  </div>
-                  <div class="list_detail">
-                    <div class="list_title">技能培训课程训练</div>
-                    <div class="list_remark">注册成功注册成功注册成功注册成功注册成功注册成册成功注册成功注册功</div>
-                    <div class="readerInfo">
-                      <div class="read">
-                        <i class="iconfont icon-yanjing"></i>
-                        <span>123人</span>
-                      </div>
-                      <div class="critique">
-                        <i class="el-icon-edit"></i>
-                        <span>123人</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="8">
-                <div class="list_frame">
-                  <div class="list_pic">
-                    <img src="../../../assets/images/university/图层1124.png" alt="">
-                  </div>
-                  <div class="list_detail">
-                    <div class="list_title">技能培训课程训练</div>
-                    <div class="list_remark">注册成功注册成功注册成功注册成功注册成功注册成册成功注册成功注册功</div>
-                    <div class="readerInfo">
-                      <div class="read">
-                        <i class="iconfont icon-yanjing"></i>
-                        <span>123人</span>
-                      </div>
-                      <div class="critique">
-                        <i class="el-icon-edit"></i>
-                        <span>123人</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </el-col>
-              <el-col :span="8">
-                <div class="list_frame">
-                  <div class="list_pic">
-                    <img src="../../../assets/images/university/图层1123.png" alt="">
-                  </div>
-                  <div class="list_detail">
-                    <div class="list_title">技能培训课程训练</div>
-                    <div class="list_remark">注册成功注册成功注册成功注册成功注册成功注册成册成功注册成功注册功</div>
-                    <div class="readerInfo">
-                      <div class="read">
-                        <i class="iconfont icon-yanjing"></i>
-                        <span>123人</span>
-                      </div>
-                      <div class="critique">
-                        <i class="el-icon-edit"></i>
-                        <span>123人</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </el-col>
-            </el-row>
           </el-col>
         </el-row>
       </div>
@@ -167,40 +61,38 @@
         <div class="left_border" style="border-left: 2px solid #fb4699;"></div>
         <div class="title" style="color: #fb4699">教师风采</div>
       </div>
-      <el-row :gutter="12">
-        <el-col :span="5">
-          <div class="teacher_left">
-            <img src="../../../assets/images/university/412-07843.png" alt="">
-            <div class="teacher_info">
-              <div class="teacher_name">徐志摩</div>
-              <div class="teacher_department">研发部&nbsp;-&nbsp;研发部研发部</div>
-              <div class="separate"></div>
-              <div class="teacher_motto">再别&nbsp;&nbsp;康桥&nbsp;&nbsp;再别&nbsp;&nbsp;康桥</div>
-              <div class="teacher_ sendword">我是天空里的一片云&nbsp;偶尔投影在你的波心&nbsp;你不必讶异 更无须欢喜&nbsp;在转瞬间消灭了踪影</div>
-            </div>
-          </div>
-        </el-col>
-        <el-col :span="14">
-          <div class="teacher_left">
-            <img src="../../../assets/images/university/is843-069.png" alt="">
-            <div class="teacher_center">
-              <div class="teacher_name">徐志摩</div>
-              <div class="teacher_department" style="color: #303133">研发部&nbsp;-&nbsp;研发部研发部</div>
-              <div class="separate"></div>
-              <div class="teacher_motto">再别&nbsp;&nbsp;康桥&nbsp;&nbsp;再别&nbsp;&nbsp;康桥</div>
-              <div class="teacher_ sendword">我是天空里的一片云&nbsp;偶尔投影在你的波心&nbsp;你不必讶异 更无须欢喜&nbsp;在转瞬间消灭了踪影</div>
-            </div>
-          </div>
-        </el-col>
-        <el-col :span="5">
-          <div class="teacher_left key_right"  @mouseover="showKey()" @mouseout="outHide()">
-            <img src="../../../assets/images/university/ie360-041.png" alt="">
-            <div class="shade" v-if="isshow">
-              <i class="el-icon-arrow-right"></i>
-            </div>
-          </div>
-        </el-col>
-      </el-row>
+      <!--<el-row :gutter="12">-->
+        <!--<el-col :span="5">-->
+          <!--<div class="teacher_left key_left"  @mouseover="showKey('left')" @mouseout="outHide('left')">-->
+            <!--<img v-if="teacherStyles" :src="teacherStyles[0] && teacherStyles[0].uri"  />-->
+            <!--&lt;!&ndash;<img vl-else src="../../../assets/images/university/412-07843.png" >&ndash;&gt;-->
+            <!--<div class="shade" v-if="isLeftShow" @click="previous">-->
+              <!--<i class="el-icon-arrow-left"></i>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</el-col>-->
+        <!--<el-col :span="14">-->
+          <!--<div class="teacher_left key_center">-->
+            <!--<img v-if="teacherStyles" :src="teacherStyles[1] &&teacherStyles[1].uri" :center="teacherSelect" />-->
+            <!--&lt;!&ndash;<img vl-else src="../../../assets/images/university/is843-069.png" alt="">&ndash;&gt;-->
+          <!--</div>-->
+        <!--</el-col>-->
+        <!--<el-col :span="5">-->
+          <!--<div class="teacher_left key_right" @mouseover="showKey('right')" @mouseout="outHide('right')">-->
+            <!--<img v-if="teacherStyles" :src="teacherStyles[2] &&teacherStyles[2].uri" alt="">-->
+            <!--&lt;!&ndash;<img src="../../../assets/images/university/ie360-041.png" alt="">&ndash;&gt;-->
+
+            <!--<div class="shade" v-if="isRightShow" @click="next">-->
+              <!--<i class="el-icon-arrow-right"></i>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</el-col>-->
+      <!--</el-row>-->
+        <el-carousel :interval="5000" type="card" height="400px">
+          <el-carousel-item v-for="item in teacherStyles">
+            <img :src="item.uri" alt="" >
+          </el-carousel-item>
+        </el-carousel>
     </div>
     <!--图片赏析-->
     <div class="img_appreciation">
@@ -209,10 +101,11 @@
         <div class="title">图片赏析</div>
       </div>
       <div class="img_list">
-        <el-row :gutter="2" style="margin-top: 10px">
+        <el-row :gutter="2"  style="margin-top: 10px">
           <el-col :span="10">
             <div class="img_left">
-              <img src="../../../assets/images/university/f0097148.png" alt="">
+              <!--<img src="../../../assets/images/university/f0097148.png" alt="">-->
+              <img v-if="pictureAppreciation[0]" :src="pictureAppreciation[0].uri" alt="">
             </div>
           </el-col>
           <el-col :span="4">
@@ -222,7 +115,8 @@
           </el-col>
           <el-col :span="10">
             <div class="img_left">
-              <img src="../../../assets/images/university/tip034t018298.png" alt="">
+              <!--<img src="../../../assets/images/university/tip034t018298.png" alt="">-->
+              <img v-if="pictureAppreciation[1]" :src="pictureAppreciation[1].uri" alt="">
             </div>
           </el-col>
         </el-row>
@@ -236,7 +130,8 @@
             </el-col>
             <el-col :span="9">
               <div class="img_left">
-                <img src="../../../assets/images/university/tis022b13040057.png" alt="">
+                <!--<img src="../../../assets/images/university/tis022b13040057.png" alt="">-->
+                <img v-if="pictureAppreciation[2]" :src="pictureAppreciation[2].uri" alt="">
               </div>
             </el-col>
             <el-col :span="5">
@@ -246,7 +141,8 @@
             </el-col>
             <el-col :span="5">
               <div class="img_left">
-                <img src="../../../assets/images/university/ph1852-p01924.png" alt="">
+                <!--<img src="../../../assets/images/university/ph1852-p01924.png" alt="">-->
+                <img v-if="pictureAppreciation[3]" :src="pictureAppreciation[3].uri" alt="">
               </div>
             </el-col>
           </el-row>
@@ -261,23 +157,141 @@
 <script>
   export default {
     name: "index",
-    data () {
+    data() {
       return {
-        isshow: false,
+        isLeftShow: false,
+        isRightShow: false,
+        teacherStyles: [],
+        // teacherSelect: 1,
+        pictureAppreciation: [],
+        courseStatus: [],
       }
     },
     methods: {
-      showKey () {
-        this.isshow = true;
+      showKey(val) {
+        if (val == 'left') {
+          this.isLeftShow = true;
+        } else {
+          this.isRightShow = true;
+        }
       },
-      outHide () {
-        this.isshow = false;
+      outHide(val) {
+        if (val == 'left') {
+          this.isLeftShow = false;
+        } else {
+          this.isRightShow = false;
+        }
+      },
+      previous() {
+        // if(this.teacherSelect > 0){
+        //   if(this.teacherStyles.length-this.teacherSelect >= 3){
+        //     console.log(1111);
+        //     this.teacherStyles[0].uri = this.teacherStyles[this.teacherSelect].uri;
+        //     this.teacherStyles[1].uri = this.teacherStyles[this.teacherSelect+1].uri;
+        //     this.teacherStyles[2].uri = this.teacherStyles[this.teacherSelect+2].uri;
+        //     this.teacherSelect++;
+        //   }else if(this.teacherStyles.length-this.teacherSelect <= 2){
+        //     console.log(2222);
+        //     this.getTeachers();
+        //     this.teacherStyles[0].uri = this.teacherStyles[this.teacherSelect].uri;
+        //     this.teacherStyles[1].uri = this.teacherStyles[this.teacherSelect+1].uri;
+        //     this.teacherStyles[2].uri = '';
+        //     this.teacherSelect++;
+        //   }
+        // }
+      },
+      next() {
+
+      },
+      //请求教师风采每一篇文章的第一张图片
+      getTeachers(){
+        this.$http.get(globalConfig.server + "oa/portal/?dict_id=363&pages=1").then((res) => {
+          let teachers = res.data.data.data;
+          this.teacherStyles = [];
+          for (let i = 0; i < teachers.length; i++) {
+            let cover_pic = teachers[i].album.cover_pic;
+            let first = true;
+            for (let key in cover_pic) {
+              if (first) {
+                let pic = {};
+                pic.id = teachers[i].id;
+                pic.uri = cover_pic[key][0].uri;
+                this.teacherStyles.push(pic);
+              }
+              first = false;
+            }
+          }
+        });
+      },
+      //请求图片赏析的图片
+      getPictureAppreciation(){
+        this.$http.get(globalConfig.server + "oa/portal/?dict_id=364&pages=1").then((res) => {
+          let pictures = res.data.data.data;
+          this.pictureAppreciation = [];
+          for (let i = 0; i < pictures.length; i++) {
+            let cover_pic = pictures[i].album.cover_pic;
+            let first = true;
+            for (let key in cover_pic) {
+              if (first) {
+                let pic = {};
+                pic.id = pictures[i].id;
+                pic.uri = cover_pic[key][0].uri;
+                this.pictureAppreciation.push(pic);
+              }
+              first = false;
+            }
+          }
+        });
+      },
+      getCourseStatus(){
+        this.$http.get(globalConfig.server + "oa/portal/?dict_id=362&pages=1").then((res) => {
+          let courses = res.data.data.data;
+          this.courseStatus = [];
+          for (let i = 0; i < courses.length; i++) {
+            let cover_pic = courses[i].album.cover_pic;
+            let first = true;
+            for (let key in cover_pic) {
+              if (first) {
+                let pic = {};
+                pic.id = courses[i].id;
+                pic.title = courses[i].title;
+                pic.content = courses[i].content;
+                pic.read_num = courses[i].read_num;
+                pic.favor_num = courses[i].favor_num;
+                pic.uri = cover_pic[key][0].uri;
+                this.courseStatus.push(pic);
+              }
+              first = false;
+            }
+          }
+        });
       }
-    }
+    },
+    mounted() {
+      this.getCourseStatus();
+      this.getTeachers();
+      this.getPictureAppreciation();
+      $("ul.el-carousel__indicators").css("display", "none");
+    },
   }
 </script>
 
 <style scoped lang="scss">
+  ul.el-carousel__indicators{
+    display: none;
+  }
+  .el-carousel__item img {
+    width: 100%;
+    height: 100%;
+  }
+
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
+  }
   @mixin flex {
     display: -webkit-flex;
     display: flex;
@@ -308,7 +322,7 @@
           width: 92px;
           height: 92px;
           @include border_radius(50%);
-          cursor:pointer;
+          cursor: pointer;
           text-align: center;
           -webkit-box-sizing: border-box;
           -moz-box-sizing: border-box;
@@ -352,7 +366,7 @@
           img {
             width: 100%;
             height: 100%;
-            cursor:pointer;
+            cursor: pointer;
           }
         }
         .list_frame {
@@ -362,7 +376,7 @@
           border: 1px solid #e4e7ed;
           padding: 0 30px;
           overflow: hidden;
-          cursor:pointer;
+          cursor: pointer;
           -webkit-box-sizing: border-box;
           -moz-box-sizing: border-box;
           box-sizing: border-box;
@@ -411,8 +425,8 @@
               font-size: 14px;
               color: #a1a2a4;
               margin: 13px 0 23px 0;
-              text-overflow : ellipsis;
-              overflow : hidden;
+              text-overflow: ellipsis;
+              overflow: hidden;
               display: -webkit-box;
               -webkit-line-clamp: 2;
               -webkit-box-orient: vertical;
@@ -445,7 +459,7 @@
         img {
           width: 100%;
           height: 100%;
-          cursor:pointer;
+          cursor: pointer;
         }
         .teacher_info {
           position: absolute;
@@ -477,12 +491,12 @@
           max-width: 200px;
         }
       }
-      .key_right {
+      .key_right, .key_left {
         position: relative;
         .shade {
           width: 100%;
           height: 100%;
-          background: rgba(0,0,0,0.5);
+          background: rgba(0, 0, 0, 0.5);
           position: absolute;
           top: 0;
           left: 0;
@@ -505,7 +519,7 @@
         img {
           width: 100%;
           height: 100%;
-          cursor:pointer;
+          cursor: pointer;
         }
       }
     }
