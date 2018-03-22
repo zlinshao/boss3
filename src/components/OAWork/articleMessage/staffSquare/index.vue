@@ -92,6 +92,8 @@
               <el-button class="btnStatus" v-if="scope.row.statuss === '已发布'" type="primary" size="mini">{{scope.row.statuss}}</el-button>
               <el-button class="btnStatus" v-if="scope.row.statuss === '已结束'" type="warning" size="mini">{{scope.row.statuss}}</el-button>
               <el-button class="btnStatus" v-if="scope.row.statuss === '草稿'" type="info" size="mini">{{scope.row.statuss}}</el-button>
+              <el-tag type="success" v-if="scope.row.top !== null ">置顶</el-tag>
+              <el-tag type="warning" v-if="scope.row.fine !==null ">精华</el-tag>
             </template>
           </el-table-column>
         </el-table>
@@ -164,17 +166,11 @@
             this.$http.get(this.urls + 'setting/dictionary/361').then((res) => {
               this.dict.region = res.data.data;
             });
-            this.$http.get(this.urls + 'setting/dictionary/373').then((res) => {
-              this.dict.status = res.data.data;
-            });
             break;
           case 'companyPortal':   //公司门户
             this.form.dict_id = 377;
             this.$http.get(this.urls + 'setting/dictionary/377').then((res) => {
               this.dict.region = res.data.data;
-            });
-            this.$http.get(this.urls + 'setting/dictionary/369').then((res) => {
-              this.dict.status = res.data.data;
             });
             break;
           case 'staffSquare':    //员工广场
@@ -182,20 +178,17 @@
             this.$http.get(this.urls + 'setting/dictionary/137').then((res) => {
               this.dict.region = res.data.data;
             });
-            this.$http.get(this.urls + 'setting/dictionary/147').then((res) => {
-              this.dict.status = res.data.data;
-            });
             break;
           case 'systemManageMent':   //制度管理
             this.form.dict_id = 380;
             this.$http.get(this.urls + 'setting/dictionary/380').then((res) => {
               this.dict.region = res.data.data;
             });
-            this.$http.get(this.urls + 'setting/dictionary/365').then((res) => {
-              this.dict.status = res.data.data;
-            });
             break;
         }
+        this.$http.get(this.urls + 'setting/dictionary/147').then((res) => {
+          this.dict.status = res.data.data;
+        });
       },
       myData(page) {
         this.form.pages = page;
@@ -253,9 +246,32 @@
           ];
         } else {
           this.statuss = '已结束';
-          this.lists = [
-            {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架',},
-          ];
+          if(row.top === null && row.fine === null){
+            this.lists = [
+              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架',},
+              {clickIndex: 'top', headIcon: 'el-icon-edit-outline', label: '置顶',},
+              {clickIndex: 'essence', headIcon: 'el-icon-edit-outline', label: '精华',},
+            ];
+          } else if(row.top !== null && row.fine === null){
+            this.lists = [
+              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架',},
+              {clickIndex: 'top', headIcon: 'el-icon-edit-outline', label: '取消置顶',},
+              {clickIndex: 'essence', headIcon: 'el-icon-edit-outline', label: '精华',},
+            ];
+          } else if(row.top === null && row.fine !== null){
+            this.lists = [
+              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架',},
+              {clickIndex: 'top', headIcon: 'el-icon-edit-outline', label: '置顶',},
+              {clickIndex: 'essence', headIcon: 'el-icon-edit-outline', label: '取消精华',},
+            ];
+          }else{
+            this.lists = [
+              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架',},
+              {clickIndex: 'top', headIcon: 'el-icon-edit-outline', label: '取消置顶',},
+              {clickIndex: 'essence', headIcon: 'el-icon-edit-outline', label: '取消精华',},
+            ];
+          }
+
         }
         this.contextMenuParam(event);
       },
@@ -263,7 +279,7 @@
       clickEvent(val) {
         switch (val) {
           case 'revise':
-            this.$router.push({path: '/publicArticle', query: {ids: this.pitch}});
+            this.$router.push({path: '/publicArticle', query: {ids: this.pitch, moduleType: this.moduleType}});
             break;
           case 'delete':
             this.deleteInfo(this.pitch);
@@ -273,6 +289,12 @@
             break;
           case 'undercarriage':
             this.upperShelf(this.pitch, '下架');
+            break;
+          case 'top':
+            this.top(this.pitch,'置顶');
+            break;
+          case 'essence':
+            this.essence(this.pitch,'精华');
             break;
         }
       },
@@ -358,7 +380,34 @@
             message: info,
           });
         }
-      }
+      },
+
+      //置顶
+      top(id, info) {
+        this.$http.put(globalConfig.server +"oa/portal/status/" + id,{type:'top'}).then((res) => {
+          if(res.data.code == "800100" || res.data.code == "800110") {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.myData(1);
+            this.getDict();
+          }
+        });
+      },
+      //精华
+      essence(id, info) {
+        this.$http.put(globalConfig.server +"oa/portal/status/" + id,{type:'fine'}).then((res) => {
+          if(res.data.code == "800100" || res.data.code == "800110" ) {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.myData(1);
+            this.getDict();
+          }
+        });
+      },
     }
 
   }

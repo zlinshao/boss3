@@ -1,6 +1,6 @@
 <template>
   <div id="publicArticle">
-    <div class="title" v-show="previewShow">文章发布</div>
+    <div class="title" v-show="previewShow">文章发布{{moduleType}}</div>
     <el-form v-show="previewShow" label-width="100px">
       <el-form-item label="标题">
         <el-input v-model="form.name" placeholder="请输入标题"></el-input>
@@ -12,7 +12,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="内容" required="">
+      <el-form-item label="内容">
         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
                     v-model="form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
       </el-form-item>
@@ -129,17 +129,11 @@
             this.$http.get(this.urls + 'setting/dictionary/361').then((res) => {
               this.dict.region = res.data.data;
             });
-            this.$http.get(this.urls + 'setting/dictionary/373').then((res) => {
-              this.dict.status = res.data.data;
-            });
             break;
           case 'companyPortal':   //公司门户
             this.tabIndex = 'second';
             this.$http.get(this.urls + 'setting/dictionary/377').then((res) => {
               this.dict.region = res.data.data;
-            });
-            this.$http.get(this.urls + 'setting/dictionary/369').then((res) => {
-              this.dict.status = res.data.data;
             });
             break;
           case 'staffSquare':    //员工广场
@@ -147,21 +141,18 @@
             this.$http.get(this.urls + 'setting/dictionary/137').then((res) => {
               this.dict.region = res.data.data;
             });
-            this.$http.get(this.urls + 'setting/dictionary/147').then((res) => {
-              this.dict.status = res.data.data;
-            });
             break;
           case 'systemManageMent':   //制度管理
             this.tabIndex = 'fourth';
             this.$http.get(this.urls + 'setting/dictionary/380').then((res) => {
               this.dict.region = res.data.data;
             });
-            this.$http.get(this.urls + 'setting/dictionary/365').then((res) => {
-              this.dict.status = res.data.data;
-            });
             break;
         }
-
+        // 统一用员工广场的状态
+        this.$http.get(this.urls + 'setting/dictionary/147').then((res) => {
+          this.dict.status = res.data.data;
+        });
       },
       // 预览
       preview() {
@@ -261,18 +252,18 @@
       }
     },
     watch: {
-      'form.region':{
-        handler(val){
-          if(val == '363' || val == '364') {
-            this.editorDisabled = true;  //图片赏析和教师风采时富文本框禁用
-            $("#editor").css("background","#eae9e985");
-            this.form.htmlForEditor='';
-          }else{
-            this.editorDisabled = false;
-            $("#editor").css("background","initial");
-          }
-        }
-      }
+      // 'form.region':{
+      //   handler(val){
+      //     if(val == '363' || val == '364') {
+      //       this.editorDisabled = true;  //图片赏析和教师风采时富文本框禁用
+      //       $("#editor").css("background","#eae9e985");
+      //       this.form.htmlForEditor='';
+      //     }else{
+      //       this.editorDisabled = false;
+      //       $("#editor").css("background","initial");
+      //     }
+      //   }
+      // }
     }
   }
 </script>
