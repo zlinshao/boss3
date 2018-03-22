@@ -442,47 +442,61 @@
             </el-tab-pane>
             <el-tab-pane label="物品增减">
               <el-table
-                :data="rentingData"
+                :data="assetchange"
                 @row-click="clickTable"
-
                 style="width: 100%">
                 <el-table-column
-                  prop="contract_num"
+                  width=80
+                  prop="change_type"
                   label="类型">
                 </el-table-column>
                 <el-table-column
-                  prop="address"
+                  prop="operate_time"
                   label="操作时间">
                 </el-table-column>
                 <el-table-column
-                  prop="house_type"
-                  label="物品种类">
+                  prop="codes"
+                  show-overflow-tooltip
+                  width=300
+                  label="物品编号">
                 </el-table-column>
                 <el-table-column
-                  prop="deposit"
+                  prop="categories"
+                  show-overflow-tooltip
                   label="物品名称">
                 </el-table-column>
                 <el-table-column
-                  prop="price"
+                  prop="assets_count"
                   label="物品数量">
                 </el-table-column>
                 <el-table-column
-                  prop="pay_type"
+                  prop="assets_sum"
                   label="单价/总计（元）">
                 </el-table-column>
                 <el-table-column
-                  prop="vacancy"
+                  prop="extra"
                   label="物品来源/去向">
                 </el-table-column>
                 <el-table-column
-                  prop="contract_year"
+                  prop="house"
                   label="搬出/搬入地址">
                 </el-table-column>
                 <el-table-column
-                  prop="start_time"
+                  prop="origin_dest"
                   label="原物品去向">
                 </el-table-column>
               </el-table>
+          <div class="tableBottom">
+            <div class="left">
+              <el-pagination
+                @current-change="myData"
+                :current-page="goodsnowPage"
+                :page-size="2"
+                layout="total, prev, pager, next, jumper"
+                :total="total">
+              </el-pagination>
+            </div>
+          </div>
             </el-tab-pane>
             <el-tab-pane label="退/换房记录">
               <el-table
@@ -917,15 +931,15 @@
   import OwnerDelay from '../components/ownerDelay.vue'              //房东延期
   import OwnerRenew from '../components/ownerRenew.vue'              //房东续约
   import RentVacation from '../components/rentVacation.vue'          //租客续约
-  import IncreaseGoods from '../components/increaseGoods.vue'         //物品增加
-  import DecreaseGoods from '../components/decreaseGoods.vue'         //物品减少
-  import OwnerArrears from '../components/OwnerArrears.vue'           //房东欠款
-  import AddFollowUp from '../components/addFollowUp.vue'             //增加跟进记录
-  import CollectVacation from '../components/collectVacation.vue'     //房东退房
-  import AddCollectRepair from '../components/addCollectRepair.vue'   //添加房东维修
-  import AddRentRepair from '../components/addRentRepair.vue'         //添加租客维修
-  import RentChangeRoom from '../components/rentChangeRoom.vue'       //租客换房
-  import Sublease from '../components/sublease.vue'       //转租
+  import IncreaseGoods from '../components/increaseGoods.vue' //物品增加
+  import DecreaseGoods from '../components/decreaseGoods.vue' //物品减少
+  import OwnerArrears from '../components/OwnerArrears.vue'   //房东欠款
+  import AddFollowUp from '../components/addFollowUp.vue'     //增加跟进记录
+  import CollectVacation from '../components/collectVacation.vue' //房东退房
+  import AddCollectRepair from '../components/addCollectRepair.vue' //添加房东维修
+  import AddRentRepair from '../components/addRentRepair.vue'//添加租客维修
+  import RentChangeRoom from '../components/rentChangeRoom.vue'   //租客换房
+  import Sublease from '../components/sublease.vue'     //转租
   import RentRenew from '../components/rentRenew.vue'     //租客续约
   import AddRentInfo from '../components/addRentInfo.vue' //登记租客
   import SendMessage from '../../common/sendMessage.vue'  //发送短信
@@ -1170,6 +1184,16 @@
             value: '选项5',
             label: '北京烤鸭'
           }],
+          assetchange:[], //物品增减
+          assetchangelen:'', //物品增减总数
+          urls:globalConfig.server,
+          goodsnowPage: 1,   //物品增减当前页
+          total:0,      //物品增减总条数
+          goodsform:{
+            house_id:1,
+            page:1,
+            limit:2,
+          }
       }
     },
 
@@ -1470,15 +1494,54 @@
       resetting(){
 
       },
+      myData(val) {
+        this.assetchange=[]
+        this.goodsform.page = val;
+           this.$http.get(this.urls+'house/asset_change', { params: this.goodsform, }).then((res) => {
+             console.log(res)
+            if (res.data.code === '20000') {
+                this.assetchange=res.data.data.data;
+                
+                for(let i=0;i<this.goodsform.limit;i++){
+                 
+                  if(this.assetchange[i].change_type =='app\\house\\model\\AssetIn'){
+                    this.assetchange[i].change_type='增进'
+                  }
+                  else{
+                    this.assetchange[i].change_type='搬出'
+                  }                  
+                  let codeslen=res.data.data.data[i].codes.length 
+                  this.assetchange[i].codes = this.assetchange[i].codes+";"
+                  this.assetchange[i].categories = this.assetchange[i].categories+";"
+                
+                  }
+
+                this.goodsnowPage=val;
+                this.total=res.data.data.count;
+            }
+            else{
+              this.goodstotal=0;
+            }
+      
+         })       
+
+      } ,
       closeVisitRecord() {
         this.visitRecordDialog = false;
       },
+    },
+    created:function(){
+  
+    },
+    mounted() {
+    this.myData(1);
     }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped="">
+
   #wholeRentContainer {
     .tool {
       border-bottom: 1px solid #eee;
@@ -1498,6 +1561,7 @@
         }
       }
     }
+    
     .filter {
       padding-top: 10px;
     }
