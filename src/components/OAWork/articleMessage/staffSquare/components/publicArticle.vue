@@ -14,7 +14,7 @@
 
       <el-form-item label="内容" required="">
         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
-                    v-model="form.htmlForEditor"></vue-editor>
+                    v-model="form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
       </el-form-item>
 
       <el-form-item label="封面图片">
@@ -89,6 +89,7 @@
         previewShow: true,
         moduleType: this.$route.query.moduleType,
         tabIndex: '',
+        editorDisabled: false,
       }
     },
     mounted() {
@@ -257,6 +258,20 @@
           seconds = '0' + seconds;
         }
         this.times = year + '-' + month + '-' + strDate + ' ' + hour + ':' + minutes + ':' + seconds
+      }
+    },
+    watch: {
+      'form.region':{
+        handler(val){
+          if(val == '363' || val == '364') {
+            this.editorDisabled = true;  //图片赏析和教师风采时富文本框禁用
+            $("#editor").css("background","#eae9e985");
+            this.form.htmlForEditor='';
+          }else{
+            this.editorDisabled = false;
+            $("#editor").css("background","initial");
+          }
+        }
       }
     }
   }

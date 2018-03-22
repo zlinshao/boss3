@@ -1,14 +1,14 @@
 <template>
   <div id="university">
     <div class="headPic">
-      <img src="../../../assets/images/university/1-乐伽大学.png" alt="">
+      <img src="../../../assets/images/university/1-乐伽大学.png">
 
       <div class="navigation">
         <div class="navigation_left">
-          <i class="el-icon-loading"></i>
+          <img src="../../../assets/images/university/勋章.svg" style="width:40px;"/>
         </div>
         <div class="navigation_right">
-          <i class="el-icon-document"></i>
+          <img src="../../../assets/images/university/在线报名.svg" style="width:32px;"/>
         </div>
       </div>
     </div>
