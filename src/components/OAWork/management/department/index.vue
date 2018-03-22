@@ -232,7 +232,6 @@
         this.$http.get(this.urls+'attendance/summary/', {
           params: this.form,
         }).then((res) => {
-            console.log(res);
             if (res.data.code === '20010') {
                 this.tableData=res.data.data;
                 this.nowPage=val;
