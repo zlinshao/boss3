@@ -1,7 +1,7 @@
 /**
  * Created by Administrator on 2017/12/13 0013.
  */
-const app = {
+const article = {
   state: {
     article_id :'',
   },
@@ -31,4 +31,4 @@ const app = {
   }
 };
 
-export default app
+export default article

@@ -1,7 +1,7 @@
 /**
  * Created by Administrator on 2017/12/13 0013.
  */
-const app = {
+const picture = {
   state: {
     albumId : ''
   },
@@ -37,4 +37,4 @@ const app = {
   }
 };
 
-export default app
+export default picture
