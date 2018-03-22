@@ -325,18 +325,18 @@
         <div class="title">剩余合同</div>
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="120px">
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="剩余合同数（收）">
-                  <el-input disabled="" v-model="collect"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="剩余合同数（租）">
-                  <el-input disabled="" v-model="rent"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
+            <!--<el-row>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="剩余合同数（收）">-->
+                  <!--<el-input disabled="" v-model="collect"></el-input>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="剩余合同数（租）">-->
+                  <!--<el-input disabled="" v-model="rent"></el-input>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
 
             <el-row>
               <el-col>
@@ -519,10 +519,10 @@
       },
 
       getContractStatus(id){
-        this.$http.get(globalConfig.server+'contract/remain/'+id).then((res) => {
-          this.collect = res.data.data.collect;
-          this.rent = res.data.data.rent;
-        })
+//        this.$http.get(globalConfig.server+'contract/remain/'+id).then((res) => {
+//          this.collect = res.data.data.collect;
+//          this.rent = res.data.data.rent;
+//        })
       },
       getImg(val){
         this.upStatus = val[2];
