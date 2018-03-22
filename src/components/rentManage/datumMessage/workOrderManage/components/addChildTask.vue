@@ -1,7 +1,7 @@
 <template>
   <div id="addFollowUp">
     <el-dialog title="添加跟进项" :visible.sync="addChildTaskDialogVisible" width="40%">
-      <div>{{params.parent_id}}
+      <div>
         <el-form size="small" :model="params" label-width="100px">
           <el-row>
             <el-col :span="12">
@@ -43,7 +43,7 @@
             </el-col>
             <el-col :span="24">
               <el-form-item label="上传照片">
-                <UPLOAD :ID="'first'" :isClear="isClear" @getImg="getImgData"></UPLOAD>
+                <UPLOAD :ID="'addResultPic'" :isClear="isClear" @getImg="getImgData"></UPLOAD>
               </el-form-item>
             </el-col>
           </el-row>

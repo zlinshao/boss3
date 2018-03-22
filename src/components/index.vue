@@ -367,9 +367,9 @@
     },
     mounted() {
       this.countTime();
-//      setInterval( ()=> {
-//        this.getUnReadMessage()
-//      },10000);
+      setInterval( ()=> {
+        this.getUnReadMessage()
+      },10000);
     },
     computed: {
       visitedViews() {

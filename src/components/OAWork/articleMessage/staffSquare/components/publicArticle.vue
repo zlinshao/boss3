@@ -1,6 +1,6 @@
 <template>
   <div id="publicArticle">
-    <div class="title" v-show="previewShow">文章发布</div>
+    <div class="title" v-show="previewShow">文章发布{{ids}}</div>
     <el-form v-show="previewShow" label-width="100px">
       <el-form-item label="标题">
         <el-input v-model="form.name" placeholder="请输入标题"></el-input>
@@ -92,6 +92,11 @@
         editorDisabled: false,
       }
     },
+    computed:{
+      ids(val){
+        return this.$route.query.ids? this.$route.query.ids:this.$store.state.article.article_id;
+      }
+    },
     mounted() {
       this.getDict();
       let ids = this.$route.query.ids;
@@ -99,6 +104,9 @@
       if (ids !== undefined) {
         this.publicDetail(ids);
         this.pitch = ids;
+      }
+      if(ids){
+        this.$store.dispatch('articleId',ids)
       }
     },
     methods: {

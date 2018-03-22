@@ -119,6 +119,7 @@
           <el-table
             :data="tableData"
             @row-click="clickTable"
+            @row-dblclick="dblClickTable"
             @row-contextmenu='houseMenu'
             style="width: 100%">
             <el-table-column
@@ -179,6 +180,7 @@
     <EditWork :editWorkDialog="editWorkDialog" :activeId="activeId" :startEdit="startEdit" @close="closeModal"></EditWork>
     <AddResult :addResultDialog="addResultDialog" :activeId="activeId" :startAddResult="startAddResult" @close="closeModal"></AddResult>
     <AddChildTask :addChildTaskDialog="addChildTaskDialog" :activeId="activeId" :startAddResult="startEdit" @close="closeModal"></AddChildTask>
+    <OrderDetail :orderDetailDialog="orderDetailDialog" :activeId="activeId" :startDetail="startDetail" @close="closeModal"></OrderDetail>
   </div>
 </template>
 
@@ -188,9 +190,10 @@
   import EditWork from './components/editWorkOrder.vue'
   import AddResult from './components/addResult.vue'
   import AddChildTask from './components/addChildTask.vue'
+  import OrderDetail from './components/workOrderDetail.vue'
   export default {
     name: 'hello',
-    components: {RightMenu,Organization,EditWork,AddResult,AddChildTask},
+    components: {RightMenu,Organization,EditWork,AddResult,AddChildTask,OrderDetail},
     data () {
       return {
         rightMenuX: 0,
@@ -213,11 +216,13 @@
         editWorkDialog: false,     //编辑
         addChildTaskDialog: false,     //添加子任务框
         addResultDialog: false,     //添加跟进记录
+        orderDetailDialog : false,
         activeName: 'first',
         isHigh:false,
         activeId:'',
         startEdit:false,
         startAddResult:false,
+        startDetail:false,
       }
     },
 
@@ -254,12 +259,16 @@
         this.activeId = row.id;
         this.lists = [
           {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-          {clickIndex: 'addResult', headIcon: 'el-icon-plus', label: '添加跟进项',},
+          {clickIndex: 'addResult', headIcon: 'el-icon-plus', label: '添加跟进记录',},
           {clickIndex: 'addChildren', headIcon: 'el-icon-plus', label: '添加子任务',},
         ];
         this.contextMenuParam(event);
       },
-
+      dblClickTable(row, event){
+        this.activeId = row.id;
+        this.startDetail = true;
+        this.orderDetailDialog = true;
+      },
       //右键回调事件
       clickEvent (index) {
         switch (index){
@@ -300,10 +309,14 @@
         this.editWorkDialog = false;
         this.addChildTaskDialog = false;
         this.addResultDialog = false;
+        this.orderDetailDialog = false;
 
         //操作状态
         this.startEdit = false;
         this.startAddResult = false;
+        this.startDetail = false;
+
+        this.getTableData();
       },
 
       highGrade(){

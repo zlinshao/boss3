@@ -30,7 +30,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="领用日期">
+                <el-form-item label="作废日期">
                   <el-date-picker
                     type="datetime"
                     placeholder="选择日期时间"
@@ -39,7 +39,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="领用人">
+                <el-form-item label="作废人">
                   <el-input disabled="" v-model="staff_name" @focus="openOrganizeModal"></el-input>
                 </el-form-item>
               </el-col>
@@ -241,18 +241,18 @@
         <div class="title">剩余合同</div>
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="120px">
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="剩余合同数（收）">
-                  <el-input disabled="" v-model="collect"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="剩余合同数（租）">
-                  <el-input disabled="" v-model="rent"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
+            <!--<el-row>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="剩余合同数（收）">-->
+                  <!--<el-input disabled="" v-model="collect"></el-input>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="剩余合同数（租）">-->
+                  <!--<el-input disabled="" v-model="rent"></el-input>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
 
             <el-row>
               <el-col>
@@ -424,8 +424,6 @@
               }
               this.$http.get(globalConfig.server+'contract/staff/'+this.params.staff_id).then((res) => {
                 if(res.data.code === '20000'){
-
-                  console.log(res.data.data.collect)
 
                   this.contractCancelCollect = Object.assign({},this.contractCancelCollect,res.data.data.collect);
                   this.contractCancelRent = Object.assign({},this.contractCancelRent,res.data.data.rent);

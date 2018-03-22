@@ -1,4 +1,4 @@
-/**
+  /**
  *  ___  ___  _____   ______  __   __ _____ ______ __    __
  * |   \/   |/  _  \ /  __  \|  \ |  |_   _|   ___|  \  /  |
  * |        |  / \  |  |  \__|   \|  | | | |  |___ \  \/  /
@@ -16,7 +16,7 @@
   z-index: 9999;
   width: 320px;
   height: 320px;
-  background-color: #6a8dfb;
+  background-color: #f9f9f9;
   -webkit-box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.3);
           box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.3);
   cursor: default;
@@ -113,7 +113,7 @@
   margin: 0;
   padding: 10px;
   font-size: 14px;
-  color: #ccc;
+  color: #999;
   text-align: center;
   background: none;
   border-width: 0;
@@ -123,17 +123,15 @@
 }
 
 .magnify-button:hover {
-  color: #fff;
+  color: #6a8dfb;
 }
 
 .magnify-button.magnify-button-close:hover {
-  background-color: #6a8dfb;
-  opacity: .8;
+  color: #6a8dfb;
 }
 
 .magnify-button.magnify-button-maximize:hover {
-  background-color: #6a8dfb;
-  opacity: .8;
+  color: #6a8dfb;
 }
 
 .magnify-loading {
