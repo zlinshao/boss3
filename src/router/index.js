@@ -368,7 +368,7 @@ export default new Router({
       icon: 'iconfont icon-leqiedaxue1',
       children: [
         {path: '/college', component: College, name: '乐伽大学 '},
-        {path: '/LineCollege', component: LineCollege, name: '在线导师'},
+        {path: '/LineCollege', component: LineCollege, name: '在线考试'},
       ]
     },
     {

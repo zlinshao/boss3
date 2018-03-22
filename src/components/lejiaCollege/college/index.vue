@@ -5,10 +5,10 @@
 
       <div class="navigation">
         <div class="navigation_left">
-          <img src="../../../assets/images/university/勋章.svg" alt="成绩查询" style="width:40px;"/>
+          <img src="../../../assets/images/university/勋章.svg" title="成绩查询" style="width:40px;"/>
         </div>
         <div class="navigation_right">
-          <img src="../../../assets/images/university/在线报名.svg" alt="在线报名" style="width:32px;"/>
+          <img src="../../../assets/images/university/在线报名.svg" title="在线报名" style="width:32px;"/>
         </div>
       </div>
     </div>
@@ -22,15 +22,15 @@
         <el-row>
           <el-col :span="9">
             <div class="list_left">
-              <img src="../../../assets/images/university/caia412-34427.png" alt="">
+              <img v-if="courseStatusTop[0]" :src="courseStatusTop[0].uri" @click="routerDetail(courseStatusTop[0].id)">
             </div>
           </el-col>
           <el-col :span="15">
             <el-row>
               <el-col :span="8" v-for="item in courseStatus">
-                <div class="list_frame">
+                <div class="list_frame" @click="routerDetail(item.id)">
                   <div class="list_pic">
-                    <img :src="item.uri" alt="">
+                    <img :src="item.uri"  >
                   </div>
                   <div class="list_detail">
                     <div class="list_title">{{item.title}}</div>
@@ -90,7 +90,7 @@
       <!--</el-row>-->
         <el-carousel :interval="5000" type="card" height="400px">
           <el-carousel-item v-for="item in teacherStyles">
-            <img :src="item.uri" alt="" >
+            <img :src="item.uri" alt=""  @click="routerDetail(item.id)" >
           </el-carousel-item>
         </el-carousel>
     </div>
@@ -105,7 +105,7 @@
           <el-col :span="10">
             <div class="img_left">
               <!--<img src="../../../assets/images/university/f0097148.png" alt="">-->
-              <img v-if="pictureAppreciation[0]" :src="pictureAppreciation[0].uri" alt="">
+              <img v-if="pictureAppreciation[0]" :src="pictureAppreciation[0].uri" @click="routerDetail(pictureAppreciation[0].id)">
             </div>
           </el-col>
           <el-col :span="4">
@@ -116,7 +116,7 @@
           <el-col :span="10">
             <div class="img_left">
               <!--<img src="../../../assets/images/university/tip034t018298.png" alt="">-->
-              <img v-if="pictureAppreciation[1]" :src="pictureAppreciation[1].uri" alt="">
+              <img v-if="pictureAppreciation[1]" :src="pictureAppreciation[1].uri" @click="routerDetail(pictureAppreciation[1].id)">
             </div>
           </el-col>
         </el-row>
@@ -131,7 +131,7 @@
             <el-col :span="9">
               <div class="img_left">
                 <!--<img src="../../../assets/images/university/tis022b13040057.png" alt="">-->
-                <img v-if="pictureAppreciation[2]" :src="pictureAppreciation[2].uri" alt="">
+                <img v-if="pictureAppreciation[2]" :src="pictureAppreciation[2].uri" @click="routerDetail(pictureAppreciation[2].id)">
               </div>
             </el-col>
             <el-col :span="5">
@@ -142,7 +142,7 @@
             <el-col :span="5">
               <div class="img_left">
                 <!--<img src="../../../assets/images/university/ph1852-p01924.png" alt="">-->
-                <img v-if="pictureAppreciation[3]" :src="pictureAppreciation[3].uri" alt="">
+                <img v-if="pictureAppreciation[3]" :src="pictureAppreciation[3].uri" @click="routerDetail(pictureAppreciation[3].id)">
               </div>
             </el-col>
           </el-row>
@@ -165,9 +165,14 @@
         // teacherSelect: 1,
         pictureAppreciation: [],
         courseStatus: [],
+        courseStatusTop:[],
       }
     },
     methods: {
+      // 详情
+      routerDetail(id) {
+        this.$router.push({path: '/Infodetails', query: {ids: id, detail: 'converge'}})
+      },
       showKey(val) {
         if (val == 'left') {
           this.isLeftShow = true;
@@ -243,16 +248,20 @@
           }
         });
       },
+      //请求课程状态的数据
       getCourseStatus(){
         this.$http.get(globalConfig.server + "oa/portal/?dict_id=362&pages=1").then((res) => {
           let courses = res.data.data.data;
           this.courseStatus = [];
+          this.courseStatusTop = [];
           for (let i = 0; i < courses.length; i++) {
             let cover_pic = courses[i].album.cover_pic;
             let first = true;
             for (let key in cover_pic) {
               if (first) {
                 let pic = {};
+                let top={};
+                top.id = courses[i].id;
                 pic.id = courses[i].id;
                 pic.title = courses[i].title;
                 pic.content = courses[i].content;
@@ -260,6 +269,10 @@
                 pic.favor_num = courses[i].favor_num;
                 pic.uri = cover_pic[key][0].uri;
                 this.courseStatus.push(pic);
+                if(courses[i].top !== null) {
+                  top.uri = cover_pic[key][0].uri;
+                  this.courseStatusTop.push(top);
+                }
               }
               first = false;
             }
