@@ -28,9 +28,18 @@
             <!--<el-option label="上缴" value="beijing"></el-option>-->
           <!--</el-select>-->
         <!--</el-form-item>-->
+        <el-form-item v-if="selectFlag==4">
+          <el-select v-model="params.proof" placeholder="请选择" clearable="" @change="search" value="">
+            <el-option label="资料齐全" value="7"></el-option>
+            <el-option label="交接单" value="1"></el-option>
+            <el-option label="收据" value="2"></el-option>
+            <el-option label="钥匙" value="4"></el-option>
+          </el-select>
+        </el-form-item>
+
         <el-form-item>
-          <el-input v-model="params.search" placeholder="搜索" @keydown.enter.native="fuzzySearch">
-            <el-button slot="append" type="primary" @click="fuzzySearch" icon="el-icon-search"></el-button>
+          <el-input v-model="params.search" placeholder="搜索" @keydown.enter.native="search">
+            <el-button slot="append" type="primary" @click="search" icon="el-icon-search"></el-button>
           </el-input>
         </el-form-item>
 
@@ -45,13 +54,10 @@
       <div v-show="selectFlag==1">
         <el-table
           :data="contractTotalData"
+          @row-contextmenu='openTotalMenu'
           style="width: 100%">
           <el-table-column
-            prop="department_name"
-            label="部门">
-          </el-table-column>
-          <el-table-column
-            prop="staff_id"
+            prop="simple_staff.real_name"
             label="姓名">
           </el-table-column>
           <el-table-column
@@ -169,7 +175,7 @@
             label="领取时间">
           </el-table-column>
           <el-table-column
-            prop="department_name  "
+            prop="department_name"
             label="部门">
           </el-table-column>
           <el-table-column
@@ -210,14 +216,15 @@
     <Contact :contractDialog="contractDialog" @close="closeModalCallback"></Contact>
     <CreateTask :createTaskDialog="createTaskDialog" @close="closeModalCallback"></CreateTask>
 
-    <Dispatch :dispatchDialog="dispatchDialog" @close="closeModalCallback"></Dispatch>
+    <Dispatch :dispatchDialog="dispatchDialog" :dispatchObject="dispatchObject"
+              :startOperate="startOperate" @close="closeModalCallback"></Dispatch>
 
     <EditApply :editApplyDialog="editApplyDialog" :applyEditId="applyEditId"
-               :startOperate="startOperate" @close="closeModalCallback"></EditApply>
+               :startOperate="startApplyOperate" @close="closeModalCallback"></EditApply>
     <EditCancel :editCancelDialog="editCancelDialog" :cancelEditId="cancelEditId"
-               :startOperate="startOperate" @close="closeModalCallback"></EditCancel>
+               :startOperate="startCancelOperate" @close="closeModalCallback"></EditCancel>
     <EditHandIn :editHandInDialog="editHandInDialog" :handInEditId="handInEditId"
-               :startOperate="startOperate" @close="closeModalCallback"></EditHandIn>
+               :startOperate="startHandInOperate" @close="closeModalCallback"></EditHandIn>
 
   </div>
 </template>
@@ -248,6 +255,7 @@
         params:{
           page:1,
           search:'',
+          proof:'',
         },
 
         //***********************//
@@ -267,6 +275,10 @@
         cancelEditId:'',     //领取合同id
         handInEditId:'',     //领取合同id
         startOperate:false,   //开始操作
+        startHandInOperate:false,   //开始操作
+        startCancelOperate:false,   //开始操作
+        startApplyOperate:false,   //开始操作
+        dispatchObject:{},
       }
     },
     watch:{
@@ -304,7 +316,7 @@
         }
       },
 
-      fuzzySearch(){
+      search(){
         this.params.page = 1;
         if(this.selectFlag ===2){
           this.getApplyList();
@@ -321,13 +333,24 @@
       },
 
       //************************右键操作项*****************************
-      openApplyMenu(row, event){
-        this.applyEditId = row.id;
-
+      openTotalMenu(row, event){
+        this.dispatchObject = row;
         this.lists = [
           {clickIndex: 'dispatchApply', headIcon: 'el-icon-menu', label: '分配',},
+//          {clickIndex: 'editApply', headIcon: 'el-icon-edit', label: '修改',},
+//          {clickIndex: 'addRemarkApply', headIcon: 'el-icon-edit-outline', label: '添加备注',},
+//          {clickIndex: 'deleteApply', headIcon: 'el-icon-delete', label: '删除',},
+        ];
+        this.contextMenuParam(event);
+      },
+
+      openApplyMenu(row, event){
+        this.applyEditId = row.id;
+//        this.dispatchObject = row;
+        this.lists = [
+//          {clickIndex: 'dispatchApply', headIcon: 'el-icon-menu', label: '分配',},
           {clickIndex: 'editApply', headIcon: 'el-icon-edit', label: '修改',},
-          {clickIndex: 'addRemarkApply', headIcon: 'el-icon-edit-outline', label: '添加备注',},
+//          {clickIndex: 'addRemarkApply', headIcon: 'el-icon-edit-outline', label: '添加备注',},
           {clickIndex: 'deleteApply', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
@@ -337,7 +360,7 @@
         this.cancelEditId = row.id;
         this.lists = [
           {clickIndex: 'editCancel', headIcon: 'el-icon-edit', label: '修改',},
-          {clickIndex: 'deleteCancel', headIcon: 'el-icon-delete', label: '删除',},
+//          {clickIndex: 'deleteCancel', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },
@@ -346,7 +369,7 @@
         this.handInEditId = row.id;
         this.lists = [
           {clickIndex: 'editHandIn', headIcon: 'el-icon-edit', label: '修改',},
-          {clickIndex: 'deleteHandIn', headIcon: 'el-icon-delete', label: '删除',},
+//          {clickIndex: 'deleteHandIn', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },
@@ -358,10 +381,11 @@
       applyMenuCallback(index){
           switch (index){
             case 'editApply' :
-              this.startOperate = true;
+              this.startApplyOperate = true;
               this.editApplyDialog = true;
               break;
             case 'dispatchApply' :
+                this.startOperate = true;
                 this.dispatchDialog = true;
                 break;
             case 'deleteApply':
@@ -370,10 +394,7 @@
                 cancelButtonText: '取消',
                 type: 'warning'
               }).then(() => {
-                this.$message({
-                  type: 'success',
-                  message: '删除成功!'
-                });
+                this.deleteApplyContract();
               }).catch(() => {
                 this.$message({
                   type: 'info',
@@ -382,11 +403,11 @@
               });
               break;
             case 'editCancel' :
-              this.startOperate = true;
+              this.startCancelOperate = true;
               this.editCancelDialog = true;
               break;
             case 'editHandIn' :
-              this.startOperate = true;
+              this.startHandInOperate = true;
               this.editHandInDialog = true;
               break;
           }
@@ -427,8 +448,9 @@
       //修改合同相关回调
       closeModalCallback(){
         this.startOperate = false;
-
-
+        this.startApplyOperate = false;
+        this.startHandInOperate = false;
+        this.startCancelOperate = false;
         this.editApplyDialog = false;
         this.editCancelDialog = false;
         this.editHandInDialog = false;
@@ -436,6 +458,7 @@
         this.contractDialog = false;
         this.createTaskDialog = false;
         this.dispatchDialog = false;
+        this.search();
       },
 
 
@@ -447,6 +470,19 @@
           }else {
             this.contractApplyData =[];
             this.totalNumbers =0;
+          }
+        })
+      },
+
+      deleteApplyContract(){
+        this.$http.post(globalConfig.server+'contract/apply/delete/'+this.applyEditId).then((res) => {
+          if(res.data.code === '20010'){
+            this.search();
+          }else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
           }
         })
       },

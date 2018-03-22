@@ -2,16 +2,16 @@
   <div>
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="乐伽大学" name="first">
-
+        <StaffSquare moduleType="lejiaCollege"></StaffSquare>
       </el-tab-pane>
       <el-tab-pane label="公司门户" name="second">
-
+        <StaffSquare moduleType="companyPortal"></StaffSquare>
       </el-tab-pane>
       <el-tab-pane label="员工广场" name="third">
-        <StaffSquare></StaffSquare>
+        <StaffSquare moduleType="staffSquare"></StaffSquare>
       </el-tab-pane>
       <el-tab-pane label="制度管理" name="fourth">
-
+        <StaffSquare moduleType="systemManageMent"></StaffSquare>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -35,7 +35,7 @@
     },
     watch: {},
     methods: {
-      handleClick(val) {
+      handleClick(tab, event) {
 
       }
     },

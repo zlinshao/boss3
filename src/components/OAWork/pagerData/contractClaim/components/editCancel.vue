@@ -25,7 +25,7 @@
               </el-col>
 
               <el-col :span="8">
-                <el-form-item label="领用日期">
+                <el-form-item label="报备日期">
                   <el-date-picker
                     type="datetime"
                     placeholder="选择日期时间"
@@ -35,8 +35,8 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="领用人">
-                  <el-input disabled="" v-model="staff_name" @click.native="openOrganizeModal"></el-input>
+                <el-form-item label="报备人">
+                  <el-input disabled="" v-model="staff_name" @focus="openOrganizeModal"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -78,18 +78,18 @@
         <div class="title">剩余合同</div>
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="120px">
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="剩余合同数（收）">
-                  <el-input disabled="" v-model="collect"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="剩余合同数（租）">
-                  <el-input disabled="" v-model="rent"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
+            <!--<el-row>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="剩余合同数（收）">-->
+                  <!--<el-input disabled="" v-model="collect"></el-input>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="剩余合同数（租）">-->
+                  <!--<el-input disabled="" v-model="rent"></el-input>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
 
             <el-row>
               <el-col>
@@ -190,7 +190,13 @@
             let applyInfo = res.data.data.full;
             this.params.report_time = applyInfo.report_time;
             this.params.staff_id = applyInfo.staff_id;
-//                this.params.department_id = applyInfo.department_id;
+            this.params.department_id = applyInfo.department_id;
+
+
+            this.depart_name = res.data.data.department.name;
+            if(applyInfo.simple_staff){
+              this.staff_name = applyInfo.simple_staff.real_name;
+            }
 
             this.params.screenshot = applyInfo.screenshot;
 
@@ -248,11 +254,12 @@
           })
         }else {
           this.$http.put(globalConfig.server+'contract/invalidate/'+this.cancelEditId,this.params).then((res) => {
-            if(res.data.code ==='20010'){
+            if(res.data.code ==='20000'){
               this.$notify.success({
                 title:'成功',
                 message:res.data.msg
               });
+              this.$emit('close');
               this.closeAddModal();
             }else {
               this.$notify.warning({
@@ -264,6 +271,7 @@
         }
       },
       closeAddModal(){
+        $('.imgItem').remove();
         this.editCancelDialogVisible = false;
         this.params = {
           city_code:'',

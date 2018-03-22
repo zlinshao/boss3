@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :title="newAdd" :visible.sync="newAddDialogVisible" width="40%">
+    <el-dialog :title="newAdd" :visible.sync="integralVisible" width="40%">
       <div>
         <el-form size="mini" :model="form" label-width="100px">
           <el-row>
@@ -61,7 +61,7 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="newAddDialogVisible = false">取 消</el-button>
+        <el-button size="small" @click="integralVisible = false">取 消</el-button>
         <el-button size="small" type="primary" @click="submitIntegral">确 定</el-button>
       </span>
     </el-dialog>
@@ -70,10 +70,11 @@
 
 <script>
   export default {
-    props: ['newAdd', 'newAddDialog', 'formDetail'],
+    name: 'integral-module',
+    props: [],
     data() {
       return {
-        newAddDialogVisible: false,
+        integralVisible: false,
         formList: {
           page: 1,
           limit: 120,
@@ -113,9 +114,9 @@
         }
       },
       newAddDialog(val) {
-        this.newAddDialogVisible = val;
+        this.integralVisible = val;
       },
-      newAddDialogVisible(val) {
+      integralVisible(val) {
         if (!val) {
           this.$emit('close');
           this.close_();

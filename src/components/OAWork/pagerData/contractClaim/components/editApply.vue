@@ -2,7 +2,7 @@
   <div>
     <el-dialog title="领取合同修改" :visible.sync="editApplyDialogVisible">
       <div class="scroll_bar">
-        <div class="title">基本信息</div>
+        <div class="title">基本信息{{params.screenshot}}</div>
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="120px">
             <el-row>
@@ -36,7 +36,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="领用人">
-                  <el-input disabled="" v-model="staff_name" @click.native="openOrganizeModal"></el-input>
+                  <el-input disabled="" v-model="staff_name" @focus="openOrganizeModal"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -78,23 +78,23 @@
         <div class="title">剩余合同</div>
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="120px">
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="剩余合同数（收）">
-                  <el-input disabled="" v-model="collect"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="剩余合同数（租）">
-                  <el-input disabled="" v-model="rent"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
+            <!--<el-row>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="剩余合同数（收）">-->
+                  <!--<el-input disabled="" v-model="collect"></el-input>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="剩余合同数（租）">-->
+                  <!--<el-input disabled="" v-model="rent"></el-input>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
 
             <el-row>
               <el-col>
                 <el-form-item label="截图">
-                  <Upload :ID="'jieTu'" @getImg="getImg"></Upload>
+                  <Upload :ID="'jieTu'" :editImage="editImage" @getImg="getImg"></Upload>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -150,7 +150,7 @@
         rent : '',
         upStatus:false,
 
-
+        editImage:{},
 
 //        已经选取的合同编号
         isSelectCollect: [],
@@ -191,9 +191,22 @@
                 let applyInfo = res.data.data.full;
                 this.params.report_time = applyInfo.report_time;
                 this.params.staff_id = applyInfo.staff_id;
-//                this.params.department_id = applyInfo.department_id;
+                this.params.department_id = applyInfo.department_id;
 
-                this.params.screenshot = applyInfo.screenshot;
+                this.depart_name = res.data.data.department.name;
+                if(applyInfo.simple_staff){
+                  this.staff_name = applyInfo.simple_staff.real_name;
+                }
+
+                //照片修改
+                let picObject = {};
+                this.params.screenshot = [];
+                applyInfo.screenshot.forEach((item) =>{
+                  picObject[item.id] = item.uri;
+                  this.params.screenshot.push(item.id)
+                });
+                this.editImage = picObject;
+
 
                 this.isSelectCollect = applyInfo.collects;
                 this.isSelectRent = applyInfo.rents;
@@ -237,6 +250,7 @@
       },
 
       getImg(val){
+        console.log(val)
         this.upStatus = val[2];
         this.params.screenshot = val[1];
       },
@@ -255,6 +269,7 @@
                 title:'成功',
                 message:res.data.msg
               });
+              this.$emit('close');
               this.closeAddModal();
             }else {
               this.$notify.warning({
@@ -266,6 +281,7 @@
         }
       },
       closeAddModal(){
+        $('.imgItem').remove();
         this.editApplyDialogVisible = false;
         this.params = {
           city_code:'',

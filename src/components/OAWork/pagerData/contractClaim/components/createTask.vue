@@ -41,7 +41,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="领用人">
-                  <el-input readonly="" v-model="staff_name" @click.native="openOrganizeModal"></el-input>
+                  <el-input readonly="" v-model="staff_name" @focus="openOrganizeModal"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -168,7 +168,7 @@
               </div>
 
               <div class="title">
-                租房合同上缴(请勾选){{collectCancelRent}}
+                租房合同上缴(请勾选)
               </div>
               <div v-for="(item,index) in Object.keys(collectCancelRent)" >
                 <el-row >
@@ -325,18 +325,18 @@
         <div class="title">剩余合同</div>
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="120px">
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="剩余合同数（收）">
-                  <el-input disabled="" v-model="collect"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="剩余合同数（租）">
-                  <el-input disabled="" v-model="rent"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
+            <!--<el-row>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="剩余合同数（收）">-->
+                  <!--<el-input disabled="" v-model="collect"></el-input>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="剩余合同数（租）">-->
+                  <!--<el-input disabled="" v-model="rent"></el-input>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
 
             <el-row>
               <el-col>
@@ -458,10 +458,11 @@
       };
     },
     mounted(){
-        this.getDictionary();
+
     },
     watch:{
       createTaskDialog(val){
+        this.getDictionary();
         this.createTaskDialogVisible = val
       },
       createTaskDialogVisible(val){
@@ -507,19 +508,21 @@
             this.collectCancelCollect = res.data.data.collect;
             this.collectCancelRent = res.data.data.rent;
           }else {
-            this.$notify.warning({
-              title:'警告',
-              message:res.data.msg
-            })
+            this.collectCancelCollect = [];
+            this.collectCancelRent = [];
+//            this.$notify.warning({
+//              title:'警告',
+//              message:res.data.msg
+//            })
           }
         })
       },
 
       getContractStatus(id){
-        this.$http.get(globalConfig.server+'contract/remain/'+id).then((res) => {
-          this.collect = res.data.data.collect;
-          this.rent = res.data.data.rent;
-        })
+//        this.$http.get(globalConfig.server+'contract/remain/'+id).then((res) => {
+//          this.collect = res.data.data.collect;
+//          this.rent = res.data.data.rent;
+//        })
       },
       getImg(val){
         this.upStatus = val[2];
@@ -652,6 +655,7 @@
                   message:res.data.msg
                 });
                 this.closeAddModal();
+                this.$emit('close');
               }else {
                 this.$notify.warning({
                   title:'警告',
@@ -667,6 +671,7 @@
                   message:res.data.msg
                 });
                 this.closeAddModal();
+                this.$emit('close');
               }else {
                 this.$notify.warning({
                   title:'警告',
@@ -684,6 +689,7 @@
                 proof:0,
               };
               this.checkBox.forEach((item) => {
+                candidateItem = {};
                 candidateItem.address = this.rentHandinAddress[item];
                 candidateItem.proof = 0;
                 if(this.handover[item]){
@@ -698,6 +704,7 @@
                 candidateArray[item] = candidateItem;
               });
               //计算出最终结果
+
               this.params.candidate = Object.assign({},this.params.candidate,candidateArray);
             }else if(Number(this.params.contract_type) === 109){
               this.params.candidate = {};
@@ -784,7 +791,8 @@
                   title:'成功',
                   message:res.data.msg
                 });
-//                this.closeAddModal();
+                this.$emit('close');
+                this.closeAddModal();
               }else {
                 this.$notify.warning({
                   title:'警告',
@@ -797,6 +805,7 @@
       },
       closeAddModal(){
         this.createTaskDialogVisible = false;
+        $('.imgItem').remove();
         this.params = {
           city_code:'',
 //          category:'',

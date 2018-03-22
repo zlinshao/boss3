@@ -1,6 +1,6 @@
 <template>
   <div id="locking">
-    <div class="container">
+    <div class="lock_container">
       <div class="header">
         <img src="../../../../assets/images/head.jpg" alt="">
       </div>
@@ -37,16 +37,15 @@
       btnClick(){
         this.$http.get(globalConfig.server+'special/special/unlock_screen?pwd_lock='+this.keywords).then((res)=>{
           if(res.data.code === '10010'){
-            this.$router.push({path: '/main'});
-//            sessionStorage.setItem('lockStatus', 0);
-//            new Promise((resolve,reject) =>{
-//              sessionStorage.setItem('lockStatus', 0);
-//              if(Number(sessionStorage.getItem('lockStatus')) !== 1){
-//                resolve();
-//              }
-//            }).then((data)=>{
-//              this.$router.push({path: '/main'});
-//            });
+
+            new Promise((resolve,reject) =>{
+              sessionStorage.setItem('lockStatus', 0);
+              if(Number(sessionStorage.getItem('lockStatus')) !== 1){
+                resolve();
+              }
+            }).then((data)=>{
+              this.$router.push({path: sessionStorage.getItem('beforePath')});
+            });
           }else {
             this.$notify({
               title: '警告',
@@ -69,7 +68,7 @@
     height: 100%;
     background: url("../../../../assets/images/背景.png") no-repeat;
     background-size: 100% 100%;
-    .container{
+    .lock_container{
       width: 250px;
       height: 300px;
       position: absolute;

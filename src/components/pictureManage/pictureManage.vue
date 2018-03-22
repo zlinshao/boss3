@@ -1,5 +1,5 @@
 <template>
-  <div id="pictureManage" style="box-shadow: #acbae4 1px 3px 5px, #acbae4 1px 1px 5px;">
+  <div id="pictureManage">
     <div class="topBack">
       <div class="topBackLeft">
         <div class="leftPic">
@@ -39,20 +39,19 @@
           <div class="pictures">
             <el-row :gutter="30" >
               <div v-for="item in albumData">
-                <el-col :span="4" style="margin-bottom:20px;">
+                <el-col :span="4" style="margin-bottom:30px;">
                   <div class="pictureDetail" >
-                    <el-dropdown style="float: right;">
+                   <el-dropdown style="float: right;position: relative;background: #fff;padding-right:3px;display: inline;margin-bottom: -15px;">
                       <span class="el-dropdown-link">
-                        下拉<i class="el-icon-arrow-down el-icon--right"></i>
+                        <i class="el-icon-arrow-down el-icon--right"></i>
                       </span>
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item @click.native="editAlbum(item.id)">编辑</el-dropdown-item>
-                        <el-dropdown-item>更换封面</el-dropdown-item>
                         <el-dropdown-item @click.native="deleteAlbum(item.id)">删除</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>
-                  <img v-if="item.cover_path" :src="item.cover_path" @click="goPictureDetail(item)">
-                    <img v-else src="../../assets/images/university/caia412-34427.png" @click="goPictureDetail(item)">
+                    <img v-if="item.cover_path" :src="item.cover_path" style="height:160px;" @click="goPictureDetail(item.id)">
+                    <img v-else src="../../assets/images/university/caia412-34427.png" style="height:160px;"  @click="goPictureDetail(item.id)">
                   <div class="clearfix">
                     <span class="text_over_norwap">{{item.name}}</span>
                     <span style="float: right;">{{item.photo_count}}张</span>
@@ -62,12 +61,25 @@
               </div>
             </el-row>
           </div>
+          <div style="text-align: center;">
+            <div v-if="totalNum==0">暂无数据</div>
+            <el-pagination v-else
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="currentPage"
+              :page-sizes="[12, 24, 36, 48]"
+              :page-size="12"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="totalNum">
+            </el-pagination>
+          </div>
         </el-col>
-
       </el-row>
+
     </div>
+
     <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog" :albumId="albumId"></create-album>
-    <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog"></choose-pictures>
+    <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog" ></choose-pictures>
   </div>
 </template>
 
@@ -87,14 +99,24 @@
         albumData: [],
         albumId: '',
         coverImg: 'this.src="' + globalConfig.server + require('../../assets/images/university/caia412-34427.png') + '"' ,
+        totalNum: 0,
+        currentPage: 1,
       }
     },
     methods: {
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.currentPage = val;
+        this.getImgData();
+      },
       routerLink(val) {
         this.$router.push({path: val})
       },
-      goPictureDetail(item) {
-        this.$router.push({path: '/pictureDetail', query:{albumDetail: item}});
+      goPictureDetail(id) {
+        this.$router.push({path: '/pictureDetail', query:{albumId: id}});
       },
       openModalDialog(type) {
         switch(type) {
@@ -106,17 +128,19 @@
             break;
         }
       },
-      closeCreateAlbumDialog(){
+      closeCreateAlbumDialog() {
+        this.getImgData();
         this.createAlbumDialog = false;
       },
       closeChoosePicturesDialog() {
+        this.getImgData();
         this.choosePicturesDialog = false;
       },
       getImgData(){
-        var self = this;
-        this.$http.get(globalConfig.server + "album").then((res) =>{
+        this.$http.get(globalConfig.server + "album?page="+ this.currentPage+"&limit=12").then((res) =>{
           if (res.data.code == "20110") {
-            self.albumData = res.data.data;
+            this.albumData = res.data.data;
+            this.totalNum = res.data.num;
           }
         });
       },
@@ -125,15 +149,18 @@
         this.albumId = id;
       },
       deleteAlbum(id) {
-        console.log(`deleteAlbum-albumId====${JSON.stringify(id)}`);
         this.$confirm('删除相册会将相册中的照片一起删除，您确定删除吗？','删除相册',{
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.delete(globalConfig.server + 'album/2').then((res) => {
+          this.$http.put(globalConfig.server + 'album/delete/' + id).then((res) => {
             if(res.data.code == "20110") {
-              window.location.reload();
+              this.getImgData();
+              this.$notify.success({
+                title:"成功",
+                message:res.data.msg
+              });
             } else {
               this.$notify.warning({
                 title:"警告",
@@ -152,6 +179,7 @@
 
 <style lang="scss" scoped>
   #pictureManage {
+    min-width: 1500px;
     .el-row {
       margin-bottom: 20px;
       &:last-child {
@@ -292,15 +320,12 @@
           clear:both;
         }
         .text_over_norwap{
-          width: 160px;
+          width: 150px;
           overflow: hidden;
           white-space: nowrap;
           display: inline-block;
           text-overflow: ellipsis;
           height: 17px;
-        }
-        img{
-          max-height: 150px;
         }
       }
 

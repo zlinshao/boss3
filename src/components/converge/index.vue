@@ -53,9 +53,7 @@
         </el-col>
       </el-row>
     </div>
-
     <div class="convergeMain">
-
       <!--乐伽新闻-->
       <el-row style="display: -webkit-flex;display: flex;">
         <el-col :span="16" class="lejiaNews">
@@ -263,10 +261,8 @@
                   </span>
                 </div>
                 <div class="bottomPic">
-                  <div>
-                     <span v-for="pic in key.album.cover_pic" @click="routerDetail(key.id)">
-                      <img v-for="p in pic" :src="p.uri">{{index}}
-                    </span>
+                  <div v-for="pic in key.album.cover_pic" @click="routerDetail(key.id)">
+                    <img v-for="p in pic" :src="p.uri">{{index}}
                   </div>
                 </div>
                 <div class="titleMain text" v-html="key.content">
@@ -432,61 +428,141 @@
         this.$router.push({path: '/Infodetails', query: {ids: id, detail: 'converge'}})
       },
       addRegion() {
-        this.$http.get(this.urls + 'setting/dictionary/137').then((res) => {
-          this.dict = res.data.data;
-          let d = res.data.data;
-          for (let i = 0; i < d.length; i++) {
-            this.$http.get(this.urls + 'oa/portal/?dict_id=' + d[i].id, {
+        // 主轮播
+        this.$http.get(this.urls + 'oa/portal/?dict_id=144', {
+          params: this.form
+        }).then((res) => {
+          this.hostData.title = res.data.data.data[0].dict_ids;
+          this.hostData.data = res.data.data.data;
+          // 次标题1
+
+          this.$http.get(this.urls + 'oa/portal/?dict_id=145', {
+            params: this.form
+          }).then((res) => {
+            this.lessData.title = res.data.data.data[0].dict_ids;
+            this.lessData.data = res.data.data.data;
+            // 次标题2
+
+            this.$http.get(this.urls + 'oa/portal/?dict_id=146', {
               params: this.form
             }).then((res) => {
-              if (d[i].dictionary_name === '乐伽新闻') {
-                // 乐伽新闻
-                this.newsData.title = d[i].dictionary_name;
+              this.lowData.title = res.data.data.data[0].dict_ids;
+              this.lowData.data = res.data.data.data;
+              // 乐伽新闻
+
+              this.$http.get(this.urls + 'oa/portal/?dict_id=138', {
+                params: this.form
+              }).then((res) => {
+                this.newsData.title = res.data.data.data[0].dict_ids;
                 this.newsData.data = res.data.data.data;
-              }
-              if (d[i].dictionary_name === '员工风采') {
+
                 // 员工风采
-                this.staffData.title = d[i].dictionary_name;
-                this.staffData.data = res.data.data.data;
-              }
-              if (d[i].dictionary_name === '客户纪实') {
-                // 客户纪实
-                this.cusData.title = d[i].dictionary_name;
-                this.cusData.data = res.data.data.data;
-              }
-              if (d[i].dictionary_name === '公司生活') {
-                // 公司生活
-                this.lifeData.title = d[i].dictionary_name;
-                this.lifeData.data = res.data.data.data;
-              }
-              if (d[i].dictionary_name === '热门导读') {
-                // 热门导读
-                this.hotData.title = d[i].dictionary_name;
-                this.hotData.data = res.data.data.data;
-              }
-              if (d[i].dictionary_name === '人物志') {
-                // 人物志
-                this.figureData.title = d[i].dictionary_name;
-                this.figureData.data = res.data.data.data;
-              }
-              if (d[i].dictionary_name === '主轮播') {
-                // 主轮播
-                this.hostData.title = d[i].dictionary_name;
-                this.hostData.data = res.data.data.data;
-              }
-              if (d[i].dictionary_name === '次标题1') {
-                // 次标题1
-                this.lessData.title = d[i].dictionary_name;
-                this.lessData.data = res.data.data.data;
-              }
-              if (d[i].dictionary_name === '次标题2') {
-                // 次标题2
-                this.lowData.title = d[i].dictionary_name;
-                this.lowData.data = res.data.data.data;
-              }
+                this.$http.get(this.urls + 'oa/portal/?dict_id=139', {
+                  params: this.form
+                }).then((res) => {
+                  this.staffData.title = res.data.data.data[0].dict_ids;
+                  this.staffData.data = res.data.data.data;
+
+                  // 客户纪实
+                  this.$http.get(this.urls + 'oa/portal/?dict_id=140', {
+                    params: this.form
+                  }).then((res) => {
+                    this.cusData.title = res.data.data.data[0].dict_ids;
+                    this.cusData.data = res.data.data.data;
+                  });
+
+                  // 热门导读
+                  this.$http.get(this.urls + 'oa/portal/?dict_id=142', {
+                    params: this.form
+                  }).then((res) => {
+                    this.hotData.title = res.data.data.data[0].dict_ids;
+                    this.hotData.data = res.data.data.data;
+                  });
+
+                  // 公司生活
+                  this.$http.get(this.urls + 'oa/portal/?dict_id=141', {
+                    params: this.form
+                  }).then((res) => {
+                    this.lifeData.title = res.data.data.data[0].dict_ids;
+                    this.lifeData.data = res.data.data.data;
+
+                    // 人物志
+                    this.$http.get(this.urls + 'oa/portal/?dict_id=143', {
+                      params: this.form
+                    }).then((res) => {
+                      this.figureData.title = res.data.data.data[0].dict_ids;
+                      this.figureData.data = res.data.data.data;
+                    })
+
+                  });
+
+                })
+
+              })
+
             })
-          }
+
+          })
+
         })
+
+        // this.$http.get(this.urls + 'setting/dictionary/137').then((res) => {
+        //   this.dict = res.data.data;
+        // let d = res.data.data;
+        // for (let i = 0; i < d.length; i++) {
+        //   console.log(d[i].id,d[i].dictionary_name);
+        //   let name = d[i].dictionary_name;
+        //   this.$http.get(this.urls + 'oa/portal/?dict_id=' + d[i].id, {
+        //     params: this.form
+        //   }).then((res) => {
+        //     if (name === '主轮播') {
+        //       // 主轮播
+        //       this.hostData.title = name;
+        //       this.hostData.data = res.data.data.data;
+        //     }
+        //     if (name === '次标题1') {
+        //       // 次标题1
+        //       this.lessData.title = name;
+        //       this.lessData.data = res.data.data.data;
+        //     }
+        //     if (name === '次标题2') {
+        //       // 次标题2
+        //       this.lowData.title = name;
+        //       this.lowData.data = res.data.data.data;
+        //     }
+        //     if (name === '乐伽新闻') {
+        //       // 乐伽新闻
+        //       this.newsData.title = name;
+        //       this.newsData.data = res.data.data.data;
+        //     }
+        //     if (name === '员工风采') {
+        //       // 员工风采
+        //       this.staffData.title = name;
+        //       this.staffData.data = res.data.data.data;
+        //     }
+        //     if (name === '客户纪实') {
+        //       // 客户纪实
+        //       this.cusData.title = name;
+        //       this.cusData.data = res.data.data.data;
+        //     }
+        //     if (name === '公司生活') {
+        //       // 公司生活
+        //       this.lifeData.title = name;
+        //       this.lifeData.data = res.data.data.data;
+        //     }
+        //     if (name === '热门导读') {
+        //       // 热门导读
+        //       this.hotData.title = name;
+        //       this.hotData.data = res.data.data.data;
+        //     }
+        //     if (name === '人物志') {
+        //       // 人物志
+        //       this.figureData.title = name;
+        //       this.figureData.data = res.data.data.data;
+        //     }
+        //   })
+        // }
+        // })
       }
     },
   }
@@ -599,7 +675,7 @@
       margin: 24px 0;
     }
     .title {
-      padding: 10px;
+      padding: 16px 0;
       opacity: .7;
       font-weight: bold;
       &:before {
@@ -759,7 +835,7 @@
         .bottomPic {
           @include flex;
           flex-wrap: wrap;
-          justify-content: space-between;
+          justify-content: space-around;
           height: 100px;
           div {
             width: 32%;

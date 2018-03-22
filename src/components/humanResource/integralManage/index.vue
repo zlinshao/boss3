@@ -1,23 +1,12 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="clientContainer">
-
       <div class="highRanking">
-        <!--<div>-->
-        <!--<el-button size="mini">-->
-        <!--<router-link to="/contractChange">TEST_1</router-link>-->
-        <!--</el-button>-->
-        <!--<el-button size="mini">-->
-        <!--<router-link to="/deliver">TEST_2</router-link>-->
-        <!--</el-button>-->
-        <!--<el-button size="mini">-->
-        <!--<router-link to="/throwALease">TEST_3</router-link>-->
-        <!--</el-button>-->
-        <!--</div>-->
-        <div class="highSearch">
+        <div class="tabsSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input placeholder="请输入内容" v-model="form.item_name" @keyup.enter.native="search" size="mini">
+              <el-input placeholder="请输入内容" @clear="search" clearable v-model="form.item_name"
+                        @keyup.enter.native="search" size="mini">
                 <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
@@ -25,11 +14,10 @@
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="mini" @click="newAddDialog = true">新增积分项</el-button>
+              <el-button type="primary" size="mini" @click="newList">新增积分项</el-button>
             </el-form-item>
           </el-form>
         </div>
-
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
           <el-form :inline="true" size="mini" label-width="100px">
             <div class="filterTitle">
@@ -56,7 +44,8 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input v-model="department_name" @focus="selectDep('depart')" placeholder="请选择部门/员工" readonly>
+                      <el-input v-model="department_name" @focus="selectDep('depart')" placeholder="请选择部门/员工"
+                                readonly>
                       </el-input>
                     </el-form-item>
                   </el-col>
@@ -64,163 +53,227 @@
               </el-col>
             </el-row>
             <div class="btnOperate">
-              <el-button size="mini" type="primary" @click="search">搜索</el-button>
+              <el-button size="mini" type="primary">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
               <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
             </div>
           </el-form>
         </div>
-
       </div>
-      <div class="main">
-        <div class="myHouse">
-          <div class="myTable">
-            <el-table
-              :data="tableData"
-              @row-click="clickTable"
-              @row-contextmenu = 'rightMenu'
-              style="width: 100%">
-              <el-table-column
-                prop="date"
-                label="时间">
-              </el-table-column>
-              <el-table-column
-                prop="sname"
-                label="姓名">
-              </el-table-column>
-              <el-table-column
-                prop="dname"
-                label="部门">
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="项目名称">
-              </el-table-column>
-            </el-table>
-          </div>
-          <div class="tableBottom">
+      <el-tabs v-model="activeName">
+        <el-tab-pane label="明细" name="first">
+          <el-table
+            :data="tableData"
+            @row-dblclick="dblClickTable"
+            @row-contextmenu='rightMenu'
+            style="width: 100%">
+            <el-table-column
+              prop="date"
+              label="时间">
+            </el-table-column>
+            <el-table-column
+              prop="sname"
+              label="姓名">
+            </el-table-column>
+            <el-table-column
+              prop="dname"
+              label="部门">
+            </el-table-column>
+            <el-table-column
+              prop="name"
+              label="项目名称">
+            </el-table-column>
+            <!--<el-table-column-->
+              <!--prop="remark"-->
+              <!--label="备注">-->
+              <!--<template slot-scope="scope">-->
+                <!--<div v-for="(key,index) in scope.row.last_remark">-->
+                  <!--{{key.content}}-->
+                <!--</div>-->
+              <!--</template>-->
+            <!--</el-table-column>-->
+          </el-table>
+        </el-tab-pane>
 
-            <div class="left">
-              <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="form.page"
-                :page-sizes="[10, 20, 30, 40]"
-                :page-size="form.limit"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="totalNumber">
-              </el-pagination>
-            </div>
-          </div>
-        </div>
+        <el-tab-pane label="汇总" name="second">
+          <el-table
+            :data="tableData"
+            style="width: 100%">
+            <el-table-column
+              prop="date"
+              label="时间">
+            </el-table-column>
+            <el-table-column
+              prop="sname"
+              label="姓名">
+            </el-table-column>
+            <el-table-column
+              prop="dname"
+              label="部门">
+            </el-table-column>
+            <el-table-column
+              prop="amount"
+              label="积分总额">
+            </el-table-column>
+            <!--<el-table-column-->
+              <!--prop="address"-->
+              <!--label="备注">-->
+            <!--</el-table-column>-->
+          </el-table>
+        </el-tab-pane>
+      </el-tabs>
+      <div class="pages block">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="search"
+          :current-page="form.page"
+          :page-size="form.limit"
+          layout="total, prev, pager, next, jumper"
+          :total="totalNumber">
+        </el-pagination>
       </div>
     </div>
+
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
-    <Organization :organizationDialog="organizationDialog" :length="length" :type="type" @close="closeOrganization" @selectMember="selectMember"></Organization>
-    <NewAdd :newAddDialog="newAddDialog" @close="closeAdd"></NewAdd>
+
+    <Organization :organizationDialog="organizeDialog" :length="length" :type="type"
+                  @selectMember="selectMember"></Organization>
+
+    <!--积分详情-->
+    <IntegralDetail :module="integralDetail" @close="integralDetail = false"></IntegralDetail>
+
   </div>
 </template>
 
 <script>
   import RightMenu from '../../common/rightMenu.vue'
   import Organization from '../../common/organization.vue'
-  import NewAdd from './components/newAdd.vue'
+  import IntegralDetail from './components/integralDetl.vue'
 
   export default {
     name: 'hello',
-    components: {RightMenu,Organization,NewAdd},
-    data () {
+    components: {RightMenu, Organization, IntegralDetail},
+    data() {
       return {
+        activeName: 'first',
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
         lists: [],
+        newAdd: '',
         /***********/
-        selectFlag:1,
+        selectFlag: 1,
         statisticDate: '',
+        paging: 0,
+        currentPages: 1,
 
         form: {
           page: 1,
           limit: 10,
-          item_name:'',
-          staff_id:'',
-          credit_from:'',
-          credit_to:'',
-          department_id:'',
+          item_name: '',
+          staff_id: '',
+          credit_from: '',
+          credit_to: '',
+          department_id: '',
         },
-        staff_name:'',
-        department_name:'',
-        length:'',
-        type:'',
 
-        activeId:'',
+        staff_name: '',
+        department_name: '',
+        length: '',
+        type: '',
 
-        totalNumber:0,
-        tableData: [],
+        activeId: '',
+        formDetail: {},
+
+        totalNumber: 0,
+        tableData: [],            //明细列表
+        remark: [],
+        tableData2: [],           //汇总列表
 
         //模态框
-        organizationDialog: false,
-        tabs: ['系统公告', '审批提醒', 'boss小秘书', '个人发信箱', '部门发信箱', '短信提醒'],
+        organizeDialog: false,
+
         isActive: 0,
-        isCheckbox:false,
-        isHigh:false,
-        newAddDialog : false,
+        isHigh: false,
+        integralDetail: false,
       }
     },
-    mounted(){
-        this.getTableData();
+    mounted() {
+      this.getTableData();
     },
     methods: {
+      getTableData() {
+        this.$http.get(globalConfig.server + 'credit/manage', {params: this.form}).then((res) => {
+          // console.log(res.data.data);
+          if (res.data.code === '30310') {
+            this.totalNumber = res.data.num;
+            this.tableData = res.data.data;
+            // this.remark = res.data.data.last_remark;
+            // res.data.data.last_remark[0].content = this.remark;
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            })
+          }
+        })
+      },
+      // 获取汇总列表
+      getGatherList() {
+        this.$http.get(globalConfig.server + 'credit/manage/summary', {params: this.form}).then((res) => {
+          // console.log(res);
+          if (res.data.code === "30310") {
+            this.paging = res.data.num;
+            this.tableData2 = res.data.data;
 
-      getTableData(){
-          this.$http.get(globalConfig.server+'/credit/manage',{params:this.form}).then((res) => {
-            if(res.data.code === '30310'){
-                this.totalNumber = res.data.num;
-                this.tableData = res.data.data;
-            }else {
-                this.$notify.warning({
-                  title:'警告',
-                  message:res.data.msg
-                })
-            }
-          })
+          } else {
+            this.tableData2 = [];
+            this.paging = 0;
+          }
+        })
       },
-      search(){
-          this.isHigh = false;
-          this.form.page = 1;
-          this.getTableData();
+
+      // 积分详情
+      dblClickTable() {
+        this.integralDetail = true;
       },
-      onSubmit(val) {
-        this.isActive = val;
+
+      search(val) {
+        console.log(val);
       },
+
       handleSizeChange(val) {
-        this.form.limit = val;
-        this.getTableData();
+        console.log(val);
       },
-      handleCurrentChange(val) {
-        this.form.page = val;
-        this.getTableData();
-      },
-      clickTable(row, event, column){
-        console.log(row, event, column)
-      },
+
       //右键
-      rightMenu(row, event){
+      rightMenu(row, event) {
         this.activeId = row.id;
         this.lists = [
-//          {clickIndex: 'read', headIcon: 'el-icons-fa-envelope-o', label: '标记为已读',},
-//          {clickIndex: 'all', headIcon: 'el-icons-fa-envelope', label: '批量标记',},
-//          {clickIndex: 'cancel', headIcon: 'el-icons-fa-envelope', label: '取消批量标记',},
           {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
           {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },
 
+      // 新增
+      newList() {
+        this.newAdd = '新增';
+        this.newAddDialog = true;
+      },
+      // 修改
+      revise() {
+        this.$http.get(globalConfig.server + 'credit/manage/' + this.activeId).then((res) => {
+          this.formDetail = res.data.data;
+          this.newAddDialog = true;
+          this.newAdd = '修改';
+        })
+      },
+
       //右键回调时间
-      clickEvent (index) {
-        if(index === 'delete'){
+      clickEvent(index) {
+        if (index === 'delete') {
           this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -233,35 +286,32 @@
               message: '已取消删除'
             });
           });
-        }else if(index === 'edit'){
-
+        } else if (index === 'edit') {
+          this.revise();
         }
       },
 
       //deleteIntegral
-      deleteIntegral(){
-        this.$http.put(globalConfig.server+'/credit/manage/delete/'+this.activeId).then((res) => {
-          if(res.data.code === '30310'){
-            this.$notify.success({
-              title:'警告',
-              message:res.data.msg
-            })
-            this.search();
-          }else {
+      deleteIntegral() {
+        this.$http.put(globalConfig.server + 'credit/manage/delete/' + this.activeId).then((res) => {
+          if (res.data.code === '30310') {
+            this.totalNumber = res.data.num;
+            this.tableData = res.data.data;
+          } else {
             this.$notify.warning({
-              title:'警告',
-              message:res.data.msg
+              title: '警告',
+              message: res.data.msg
             })
           }
         })
       },
       //关闭右键菜单
-      closeMenu(){
+      closeMenu() {
         this.show = false;
       },
 
       //右键参数
-      contextMenuParam(event){
+      contextMenuParam(event) {
         //param: user right param
         let e = event || window.event;	//support firefox contextmenu
         this.show = false;
@@ -273,36 +323,31 @@
           this.show = true
         })
       },
-      selectDep(val){
-        this.organizationDialog = true;
+      // 人资搜索
+      selectDep(val) {
+        this.organizeDialog = true;
         this.length = 1;
         this.type = val;
       },
-      closeOrganization(){
-
-        this.organizationDialog = false;
-      },
-      selectMember(val){
-        if(val[0].hasOwnProperty('avatar')){
+      // 确认部门
+      selectMember(val) {
+        this.organizeDialog = false;
+        if (val[0].hasOwnProperty('avatar')) {
           this.staff_name = val[0].name;
           this.staff_id = val[0].id;
-        }else{
+        } else {
           this.department_name = val[0].name;
           this.department_id = val[0].id;
         }
       },
-      highGrade(){
+      // 高级搜索
+      highGrade() {
         this.isHigh = !this.isHigh;
       },
-      resetting(){
-          this.staff_id = '';
-          this.staff_name = '';
-          this.department_id = '';
-          this.department_name = '';
+      resetting() {
+
       },
-      closeAdd(){
-          this.newAddDialog = false
-      }
+
     }
   }
 </script>
@@ -310,7 +355,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped="">
   #clientContainer {
-    .selectButton{
+    .selectButton {
       color: #fff;
       background: #66b1ff;
     }

@@ -2,8 +2,10 @@
   <div>
     <div id="pictureContainer">
       <div class="editImg" v-if="Object.keys(editImg).length>0">
-        <div style="position: relative" v-for="(val,key) in editImg">
-          <img :src="val" alt="">
+        <div class="imgItem" style="position: relative" v-for="(val,key) in editImg">
+          <div style="width: 120px;  height: 120px; border-radius:6px;background: #f0f0f0">
+            <img :src="val" alt="">
+          </div>
           <div class="remove el-icon-circle-close" @click="deleteImage(key)"></div>
         </div>
       </div>
@@ -20,7 +22,7 @@
 
   export default {
     name: 'hello',
-    props: ['ID','editImage'],
+    props: ['ID','editImage','isClear'],
     data () {
       return {
         imgArray: [],
@@ -72,9 +74,18 @@
         deep: true,
         handler(val, old){
           this.editImg = this.editImage;
+          this.imgId = [];
           for(let key in val){
             this.imgId.push(key)
           }
+        }
+      },
+      isClear(val){
+        if(val){
+          this.imgId = [];
+          this.imgArray = [];
+          this.editImg = [];
+          $('.imgItem').remove();
         }
       }
     },
@@ -130,6 +141,8 @@
             },
 
             'FilesAdded': function (up, files) {
+
+              console.log(files)
               _this.isUploading = true;
               _this.$emit('getImg', [_this.ID, _this.imgId, _this.isUploading]);
 
@@ -197,7 +210,10 @@
 
               _this.$http.post(globalConfig.server_user + 'api/v1/files', {
                 url: sourceLink,
-                name: url.key
+                name: url.key,
+                raw_name : file.name,
+                type: file.type,
+                size:file.size
               }).then((res) => {
                 if (res.data.status === "success") {
                   _this.imgId.push(res.data.data.id);
@@ -233,10 +249,6 @@
       },
 
     }
-  }
-
-  function aaa() {
-    alert(2)
   }
 
 </script>
@@ -298,12 +310,6 @@
         margin-top: 15px;
         &:first-child{
           margin-left: 0;
-        }
-      }
-      .imgItem {
-        &:hover {
-          /*-webkit-filter: blur(2px); !* Chrome, Safari, Opera *!*/
-          /*filter: blur(2px);*/
         }
       }
       .upButton {

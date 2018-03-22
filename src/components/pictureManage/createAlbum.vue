@@ -1,10 +1,10 @@
 <template>
   <div id="createAlbum">
-    <el-dialog title="创建相册" :visible.sync="createAlbumDialogVisible" width="30%">
+    <el-dialog :title="dialogTitle" :visible.sync="createAlbumDialogVisible" width="30%">
       <div class="">
         <el-form size="mini" onsubmit="return false;" :model="form" label-width="100px">
           <el-row >
-              <el-form-item label="相册名称:">
+              <el-form-item label="相册名称:" required>
                 <el-input v-model="form.name" placeholder="请输入相册名称" ></el-input>
               </el-form-item>
           </el-row>
@@ -14,7 +14,7 @@
               </el-form-item>
           </el-row>
           <el-row>
-            <el-form-item label="主题:">
+            <el-form-item label="主题:" required>
               <el-radio-group v-model="form.theme">
                 <el-radio label="1" :key="1">个人</el-radio>
                 <el-radio label="2" :key="2">房屋</el-radio>
@@ -31,7 +31,7 @@
         <el-button size="small" type="primary" @click="createAlbum" v-else>确 定</el-button>
       </span>
     </el-dialog>
-    <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog"></choose-pictures>
+    <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog" :albumId="createAlbumId"></choose-pictures>
   </div>
 </template>
 
@@ -39,7 +39,7 @@
   import choosePictures from './selectPictures.vue';
     export default {
         name: "create-album",
-        props: ['createAlbumDialog','albumId'],
+        props: ['createAlbumDialog','albumId','fromDetail'],
         components: {
           choosePictures,
         },
@@ -52,11 +52,10 @@
               description: '',
               theme: '',
             },
+            dialogTitle: this.albumId ?  '编辑相册': '创建相册',
+            createAlbumId: '',
           }
         },
-      mounted() {
-          //console.log(`createAlbum-albumDetail====${this.albumDetail}`);
-      },
         watch: {
           createAlbumDialog(val) {
             this.createAlbumDialogVisible = val;
@@ -67,11 +66,11 @@
             }
           },
           albumId(val) {
-            // this.form = val;
-            // this.form.theme = val.theme.toString(); // 主题需要字符串才能选中显示
-            console.log(`createAlbum-albumId-watch====${JSON.stringify(val)}`);
             var self = this;
-            this.$http.get(globalConfig.server+"album/2").then((res) =>{
+            if(val){
+              this.dialogTitle = '编辑相册';
+            }
+            this.$http.get(globalConfig.server+"album/"+ this.albumId).then((res) =>{
               if(res.data.code == "20110") {
                 self.form = res.data.data;
                 self.form.theme =  res.data.data.theme.toString(); // 主题需要字符串才能选中显示
@@ -82,17 +81,22 @@
       methods: {
         createAlbum() {
             this.$http.post(globalConfig.server + "album",this.form).then((res)=>{
+              console.log(res.data)
               if(res.data.code == '20110'){
                 this.createAlbumDialogVisible = false;
-                this.$confirm('相册'+this.form.name+'保存成功，是否马上上传照片到这个相册?', '创建成功', {
+                console.log(res.data)
+                this.createAlbumId = res.data.data.id;
+                this.form = {};
+                this.$confirm('相册'+ res.data.data.name+'保存成功，是否马上上传照片到这个相册?', '创建成功', {
                   confirmButtonText: '确定',
                   cancelButtonText: '取消',
                   type: 'warning'
                 }).then(() => {
                   this.choosePicturesDialog = true;
+                  this.createAlbumDialogVisible = false;
+                  this.$emit('close');
                 }).catch(() => {
                   this.choosePicturesDialog = false;
-                  // window.location.reload()
                 });
               }else {
                 this.$notify.warning({
@@ -103,9 +107,16 @@
             });
           },
         editAlbum() {
-          this.$http.put(globalConfig.sever + 'album/2',this.form).then((res)=>{
+          this.$http.put(globalConfig.server + 'album/'+ this.albumId,this.form).then((res)=>{
             if(res.data.code == '20110') {
-              this.choosePicturesDialog = true;
+
+              this.createAlbumDialogVisible = false;
+              this.$emit('close');
+              this.$notify.success({
+                title:"成功",
+                message:res.data.msg
+              });
+
             }else{
               this.$notify.warning({
                 title:"警告",
@@ -116,6 +127,7 @@
         },
         closeChoosePicturesDialog() {
           this.choosePicturesDialog = false;
+          this.$emit("close");
         }
       },
     }

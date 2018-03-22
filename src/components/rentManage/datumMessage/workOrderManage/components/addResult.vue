@@ -1,34 +1,22 @@
 <template>
   <div id="addFollowUp">
-    <el-dialog title="添加跟进" :visible.sync="addFollowUpDialogVisible" width="40%">
+    <el-dialog title="添加跟进记录" :visible.sync="addResultDialogVisible" width="40%">
       <div>
         <el-form size="small" :model="params" label-width="100px">
           <el-row>
+
             <el-col :span="12">
-              <el-form-item label="工单类型" required="">
-                <el-select clearable v-model="params.type" placeholder="缴费方式" value="">
+              <el-form-item label="填写时间">
+                <el-date-picker type="datetime" placeholder="选择日期时间"
+                                value-format="yyyy-MM-dd HH:mm:ss" v-model="params.expect_time"></el-date-picker>
+              </el-form-item>
+            </el-col>
+
+            <el-col :span="12">
+              <el-form-item label="工单进度">
+                <el-select clearable v-model="params.type" placeholder="工单进度" value="">
                   <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
                 </el-select>
-              </el-form-item>
-            </el-col>
-
-            <el-col :span="12">
-              <el-form-item label="跟进人" required="">
-                <el-input  v-model="follow_name" @focus="openOrganizeModal"></el-input>
-              </el-form-item>
-            </el-col>
-
-            <el-col :span="12">
-              <el-form-item label="跟进时间">
-                <el-date-picker type="datetime" placeholder="选择日期时间"
-                                value-format="yyyy-MM-dd HH:mm:ss" v-model="params.follow_time"></el-date-picker>
-              </el-form-item>
-            </el-col>
-
-            <el-col :span="12">
-              <el-form-item label="预计完成时间">
-                <el-date-picker type="datetime" placeholder="选择日期时间"
-                                value-format="yyyy-MM-dd HH:mm:ss" v-model="params.expected_finish_time"></el-date-picker>
               </el-form-item>
             </el-col>
 
@@ -37,20 +25,15 @@
 
           <el-row>
             <el-col :span="24">
-              <el-form-item label="跟进事项" required="">
+              <el-form-item label="跟进结果" required="">
                 <el-input type="textarea" v-model="params.matters"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label="上传照片">
-                <UPLOAD :ID="'first'" :isClear="isClear" @getImg="getImgData"></UPLOAD>
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="addFollowUpDialogVisible = false">取 消</el-button>
+        <el-button size="small" @click="addResultDialogVisible = false">取 消</el-button>
         <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
@@ -61,26 +44,20 @@
 </template>
 
 <script>
-  import Organization from '../../common/organization.vue'
-  import UPLOAD from '../../common/UPLOAD.vue'
+  import Organization from '../../../../common/organization.vue'
+  import UPLOAD from '../../../../common/UPLOAD.vue'
   export default {
     name:'addFollowUp',
-    props:['addFollowUpDialog'],
+    props:['addResultDialog','activeId','startAddResult'],
     components:{Organization,UPLOAD},
     data() {
       return {
-        addFollowUpDialogVisible:false,
+        addResultDialogVisible:false,
         params:{
-          module:'1',                        //'关联模型', 1-收房  2-租房
-          matters:'',                        //跟进事项
-          contract_id : '1',                 //'合同id',
-          type : '',                         //'事件类型',
-          follow_id : '',                    // '跟进人',
-          expect_time  : '',                 //'期待维修时间',
-          expected_finish_time : '',         //'预计完成时间',
-          follow_time : '',                  //'跟进时间',
-//          follow_content : '',             //'跟进内容',
-          image_pic:[]
+          matters:'',
+          follow_time  : '',                 //'跟进时间',
+          follow_status : '',                  //'跟进时间',
+          follow_content : '',             //'跟进内容',
         },
         organizationDialog: false,
         isClear:false,
@@ -91,14 +68,19 @@
       };
     },
     watch:{
-      addFollowUpDialog(val){
-        this.addFollowUpDialogVisible = val
+      addResultDialog(val){
+        this.addResultDialogVisible = val
       },
-      addFollowUpDialogVisible(val){
+      addResultDialogVisible(val){
         if(!val){
           this.$emit('close');
         }else {
-            this.isClear = false
+          this.isClear = false
+        }
+      },
+      startAddResult(val){
+        if(val){
+          this.getDetail();
         }
       }
     },
@@ -107,7 +89,14 @@
     },
     methods:{
       getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/255').then((res) => {
+        this.$http.get(globalConfig.server+'setting/dictionary/335').then((res) => {
+          if(res.data.code === "30010"){
+            this.dictionary = res.data.data;
+          }
+        });
+      },
+      getDetail(){
+        this.$http.get(globalConfig.server+'customer/work_order/'+this.activeId).then((res) => {
           if(res.data.code === "30010"){
             this.dictionary = res.data.data;
           }
@@ -142,7 +131,7 @@
               message:res.data.msg
             });
             this.init();
-            this.addFollowUpDialogVisible = false;
+            this.addResultDialogVisible = false;
           }else {
             this.$notify.warning({
               title:'警告',

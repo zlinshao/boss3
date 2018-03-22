@@ -265,46 +265,7 @@
                   </el-col>
                 </el-row>
               </div>
-
-              <!--2-->
-              <!--<el-dropdown-item class="personalList" @click.native="routers('messageCenter')">-->
-              <!--<p><i class="el-icon-bell"></i></p>-->
-              <!--<div>-->
-              <!--消息中心-->
-              <!--</div>-->
-              <!--</el-dropdown-item>-->
-              <!--<el-dropdown-item class="personalList">-->
-              <!--<p><i class="el-icons-fa-edit"></i></p>-->
-              <!--<div>-->
-              <!--考勤自助-->
-              <!--</div>-->
-              <!--</el-dropdown-item>-->
-              <!--<el-dropdown-item class="personalList">-->
-              <!--<p><i class="el-icon-location"></i></p>-->
-              <!--<div>-->
-              <!--签到自助-->
-              <!--</div>-->
-              <!--</el-dropdown-item>-->
-              <!--<el-dropdown-item class="personalList"  @click.native="lockScreen">-->
-              <!--<p><i class="el-icons-fa-unlock-alt"></i></p>-->
-              <!--<div>-->
-              <!--一键锁屏-->
-              <!--</div>-->
-              <!--</el-dropdown-item>-->
-              <!--<el-dropdown-item class="personalList" @click.native="routers('personalSetting')">-->
-              <!--<p><i class="el-icon-setting"></i></p>-->
-              <!--<div>-->
-              <!--个人设置-->
-              <!--</div>-->
-              <!--</el-dropdown-item>-->
-              <!--<el-dropdown-item class="personalList" @click.native="routers('individual')">-->
-              <!--<p><i class="el-icon-setting"></i></p>-->
-              <!--<div>-->
-              <!--个人门户-->
-              <!--</div>-->
-              <!--</el-dropdown-item>-->
               <el-dropdown-item class="detrusion" @click.native="routers('/login')">
-                <!--<p><i class="el-icons-fa-dot-circle-o"></i></p>-->
                 <div>
                   安全退出
                 </div>
@@ -361,7 +322,6 @@
           <div style="color: #ffffff;">业务咨询&nbsp;&nbsp;陆经理</div>
           <div style="color: #ffffff;">版本信息&nbsp;&nbsp;BOSS&nbsp;3.0</div>
         </div>
-        <!--<div style="position: fixed;bottom: 10px;left: 0;z-index: 99999;color: #ffffff;" v-if="isCollapse">BOSS&nbsp;3.0</div>-->
 
         <el-main :class="isFull? 'mainHide':'' ">
           <TagsView></TagsView>
@@ -378,7 +338,6 @@
 </template>
 
 <script>
-  import Cookies from 'js-cookie'
   import TagsView from './common/tagsView.vue'
   import screenfull from 'screenfull'
   import MessageDetail from './common/messageDetail.vue'
@@ -510,9 +469,11 @@
         this.isCollapse = !this.isCollapse;
       },
       lockScreen() {
-//        Cookies.set('last_page_path', this.$route.path); // 本地存储锁屏之前打开的页面以便解锁后打开
         this.$http.get(globalConfig.server + 'setting/others/lock_screen_status?lock_status=1').then((res) => {
           if (res.data.code === '100003') {
+            sessionStorage.setItem('beforePath',this.$route.path);
+
+            sessionStorage.setItem('lockStatus', 1);
             this.$router.push({path: '/lock'});
           } else {
             this.$notify({

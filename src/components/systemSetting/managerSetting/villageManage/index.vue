@@ -4,9 +4,9 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="小区名称/地址/位置" v-model="form.keywords" @keyup.enter.native="myData(1)" size="mini"
+            <el-input placeholder="小区名称/地址/位置" v-model="form.keywords" @keyup.enter.native="search()" size="mini"
                       clearable>
-              <el-button slot="append" icon="el-icon-search" @click="myData(1)"></el-button>
+              <el-button slot="append" icon="el-icon-search" @click="search()"></el-button>
               <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
             </el-input>
           </el-form-item>
@@ -306,6 +306,9 @@
         }
       },
       search() {
+        this.$http.get(globalConfig.server_user + 'api/v1/houses?q=502').then((res) => {
+
+        })
         this.myData(1);
         this.isHigh = false;
       },

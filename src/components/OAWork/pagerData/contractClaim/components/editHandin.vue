@@ -30,7 +30,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="领用日期">
+                <el-form-item label="作废日期">
                   <el-date-picker
                     type="datetime"
                     placeholder="选择日期时间"
@@ -39,8 +39,8 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="领用人">
-                  <el-input readonly="" v-model="staff_name" @click.native="openOrganizeModal"></el-input>
+                <el-form-item label="作废人">
+                  <el-input disabled="" v-model="staff_name" @focus="openOrganizeModal"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -65,7 +65,7 @@
               <div v-for="(item,index) in Object.keys(contractCancelCollect)" >
                 <el-row >
                   <el-col :span="6">
-                    <el-checkbox-group v-model="checkBoxHandin">
+                    <el-checkbox-group v-model="checkBox">
                       <el-checkbox :label="item" name="type">{{contractCancelCollect[item]}}</el-checkbox>
                     </el-checkbox-group>
                   </el-col>
@@ -89,7 +89,7 @@
               <div v-for="(item,index) in Object.keys(contractCancelRent)" >
                 <el-row >
                   <el-col :span="6">
-                    <el-checkbox-group v-model="checkBoxHandin">
+                    <el-checkbox-group v-model="checkBox">
                       <el-checkbox :label="item" name="type">{{contractCancelRent[item]}}</el-checkbox>
                     </el-checkbox-group>
                   </el-col>
@@ -241,18 +241,18 @@
         <div class="title">剩余合同</div>
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="120px">
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="剩余合同数（收）">
-                  <el-input disabled="" v-model="collect"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="剩余合同数（租）">
-                  <el-input disabled="" v-model="rent"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
+            <!--<el-row>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="剩余合同数（收）">-->
+                  <!--<el-input disabled="" v-model="collect"></el-input>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="剩余合同数（租）">-->
+                  <!--<el-input disabled="" v-model="rent"></el-input>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
 
             <el-row>
               <el-col>
@@ -326,7 +326,7 @@
         handover:{},
         receipt:{},
         keyCode:{},
-        checkBoxHandin:[],
+        checkBox:[],
 
         //中介合同备用字段（shou）
         medi_contracts_number:[],
@@ -371,7 +371,8 @@
       },
       editHandInDialogVisible(val){
         if(!val){
-          this.$emit('close')
+          this.$emit('close');
+          this.init()
         }
       },
       startOperate(val){
@@ -403,8 +404,14 @@
             this.params.report_time = arr.full.report_time;
             this.params.city_code = arr.full.city_code;
             this.params.screenshot = arr.full.screenshot;
-            this.checkBoxHandin = [];
+            this.checkBox = [];
             this.params.contract_type = arr.contract_type;
+
+            this.params.department_id = arr.department.id;
+            this.depart_name = arr.department.name;
+            if(arr.full.simple_staff){
+              this.staff_name = arr.full.simple_staff.real_name;
+            }
 
             if(Number(this.params.contract_type) === 108){    //如果是公司合同
               for(let key in arr.category){
@@ -417,6 +424,7 @@
               }
               this.$http.get(globalConfig.server+'contract/staff/'+this.params.staff_id).then((res) => {
                 if(res.data.code === '20000'){
+
                   this.contractCancelCollect = Object.assign({},this.contractCancelCollect,res.data.data.collect);
                   this.contractCancelRent = Object.assign({},this.contractCancelRent,res.data.data.rent);
                 }
@@ -427,7 +435,7 @@
               this.receipt = arr.receipt;
               this.keyCode = arr.key;
               for(let key in this.keyCode){
-                this.checkBoxHandin.push(key)
+                this.checkBox.push(key)
               }
             }else if(Number(this.params.contract_type) === 109){
 
@@ -612,6 +620,7 @@
               proof:0,
             };
             this.checkBox.forEach((item) => {
+              candidateItem = {};
               candidateItem.address = this.rentHandinAddress[item];
               candidateItem.proof = 0;
               if(this.handover[item]){
@@ -623,10 +632,12 @@
               if(this.keyCode[item]){
                 candidateItem.proof+=4;
               }
+              console.log(candidateItem)
               candidateArray[item] = candidateItem;
             });
+
             //计算出最终结果
-            this.params.candidate = Object.assign({},this.params.candidate,candidateArray);
+            this.params.candidate = Object.assign({},this.params.candidate,candidateArray)
           }else if(Number(this.params.contract_type) === 109){
             this.params.candidate = {};
             let contentItem = {};
@@ -712,6 +723,7 @@
                 title:'成功',
                 message:res.data.msg
               });
+              this.$emit('close');
               this.editHandInDialogVisible = false;
               this.init();
             }else {
@@ -724,6 +736,8 @@
         }
       },
       init(){
+        $('.imgItem').remove();
+
         this.params = {
           city_code:'',
           report_time:'',
