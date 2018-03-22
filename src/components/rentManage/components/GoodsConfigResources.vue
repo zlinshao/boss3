@@ -25,8 +25,6 @@
   <el-table
     :data="tableData"
     border
-    show-summary
-    :summary-method="getSummaries"
     height="304"
     style="width: 100%" >
     <el-table-column  label="物品来源">
@@ -71,9 +69,8 @@
         </template>
     </el-table-column>
 
-  </el-table>  
-  <span class="goodsCount">合计总价：{{sums}}<br />
-  
+  </el-table> 
+ <span class="goodsCount">
   <i @click="addone" class="iconfont icon-zengjia" style="color: #6a8dfb;font-size:30px; line-height:44px;cursor: pointer;"></i> </span> 
 </div>                   
       </div>
@@ -113,7 +110,7 @@
         houselist:[], //物品位置
         forms: [],  //物品来源
         goods:[],   //物品名称    
-        tableData: [{}, {}, {}, {}, {}, {}]
+        tableData: [{}, {}, {}, {}, {}]
       };
     },
     watch:{
@@ -291,9 +288,9 @@
   }
   .goodsall .goodsCount{
     width: 1300px;
-    height: 32px;
+    height: 42px;
     font-size: 16px;
-    line-height: 32px;
+    line-height: 42px;
     text-align: center;
     display: block;
     border: 1px #ebeef5 solid;
