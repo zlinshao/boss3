@@ -3,28 +3,14 @@
     <el-dialog title="物品选择" :visible.sync="increaseGoodsDialogVisible" width="60%" >
       <div class="goodsall">
         <el-button type="primary" @click="openModalDialog('deliveryDialog')">增加</el-button>
-        <div class="earchroom">
-            <span class="earchroom_top">主卧</span>
+        <div class="earchroom" v-for="(houses,x) in houselist" :key="x">
+            <span class="earchroom_top">{{houses.dictionary_name}}</span>
             <div class="earchroom_mid" >
             <el-form :model="form">
                         <el-form-item >
                             <el-checkbox-group v-model="form.check">
-                                <el-col :span="6" :key="index" v-for="(val,index) in userList" >
-                                    <el-checkbox :label="val.id" name="USER">{{val.id}}&nbsp;&nbsp;{{val.name}}</el-checkbox>                            
-                                </el-col>
-                            </el-checkbox-group>
-                        </el-form-item>
-            </el-form>
-            </div>
-        </div>
-        <div class="earchroom">
-            <span class="earchroom_top">主卧</span>
-            <div class="earchroom_mid" >
-            <el-form :model="form">
-                        <el-form-item >
-                            <el-checkbox-group v-model="form.check">
-                                <el-col :span="6" :key="index" v-for="(val,index) in userList" >
-                                    <el-checkbox :label="val.id" name="USER">{{val.id}}&nbsp;&nbsp;{{val.name}}</el-checkbox>                            
+                                <el-col :span="6" :key="index" v-for="(val,index) in goods[houses.dictionary_name]" >                             
+                                    <el-checkbox :label="val.id" name="USER">{{val.code}}&nbsp;&nbsp;{{val.category}}</el-checkbox>                            
                                 </el-col>
                             </el-checkbox-group>
                         </el-form-item>
@@ -32,27 +18,13 @@
             </div>
         </div>
 
-        <div class="earchroom">
-            <span class="earchroom_top">主卧</span>
-            <div class="earchroom_mid" >
-            <el-form :model="form">
-                        <el-form-item >
-                            <el-checkbox-group v-model="form.check">
-                                <el-col :span="6" :key="index" v-for="(val,index) in userList" >
-                                    <el-checkbox :label="val.id" name="USER">{{val.id}}&nbsp;&nbsp;{{val.name}}</el-checkbox>                            
-                                </el-col>
-                            </el-checkbox-group>
-                        </el-form-item>
-            </el-form>
-            </div>
-        </div>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="increaseGoodsDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="increaseGoodsDialogVisible = false">保 存</el-button>
+        <el-button size="small" type="primary" @click="changeGoodssave">保 存</el-button>
       </span>
     </el-dialog>
-  <DeliveryResources :deliveryDialog="deliveryDialog" @close="closeDeliveryResources"></DeliveryResources> 
+  <DeliveryResources :value="houselen" :deliveryDialog="deliveryDialog" @close="closeDeliveryResources" @deliveryFlag="deliveryFlag"></DeliveryResources> 
   </div>
 
 </template>
@@ -68,29 +40,14 @@
       return {
         increaseGoodsDialogVisible:false,
         deliveryDialog:false,
+        houselist:[],
+        goods:[],
+        houselen:'',
+        urls:globalConfig.server,
         form:{
           check:[]
         },
-        userList:[{
-          id:"1",
-          name:"床"
-          },{
-          id:"2",
-          name:"床2"
-          },{
-          id:"3",
-          name:"床3"
-          },{
-          id:"4",
-          name:"床4"
-          },{
-          id:"5",
-          name:"床5"
-          },{
-          id:"6",
-          name:"床6"
-          }
-        ]
+        goods:[]
 
       };
     },
@@ -110,7 +67,33 @@
       },
       closeDeliveryResources(){
         this.deliveryDialog=false;
+      },
+      deliveryFlag(){
+        this.delivery()
+      },
+      changeGoodssave(){
+        this.increaseGoodsDialogVisible = false;
+        this.$emit('changeGoodssave', this.form)        
+      },
+      delivery(){
+      //交接单详情接口       
+      this.$http.get(this.urls+'house/asset?house_id=1').then((res) => {  
+          if (res.data.code === '20000') {
+            this.goods=res.data.data;
+          }  
+      })
       }
+
+    },
+    created:function(){
+      //房间编号
+      this.$http.get(this.urls+'setting/dictionary/298').then((res) => {  
+        if (res.data.code === '30010') {
+        this.houselist=res.data.data;  
+        this.houselen=this.houselist.length;           
+            }  
+         })
+      this.delivery()
 
     }
   };
@@ -132,7 +115,7 @@
    
   }
   .goodsall .earchroom .earchroom_top{
-    width:40px;
+    width:74px;
     text-align: center;
     height:28px;
     line-height: 28px;
@@ -144,7 +127,7 @@
   }
   .goodsall .earchroom .earchroom_mid{
     width:1080px;
-    height: 210px;
+    height: 190px;
     overflow: auto; 
   }
 

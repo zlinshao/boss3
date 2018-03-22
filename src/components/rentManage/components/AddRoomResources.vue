@@ -77,7 +77,7 @@
 
 
   export default {
-    props:['addGoodsDialog'],
+    props:['addRoom'],
 
     data() {
       return {
@@ -85,7 +85,6 @@
         urls:globalConfig.server,
         hourse:'',
         addGoodsFlag:false,  //物品是否增加成功标识
-        lenx:7,
         form:{
           name:[]
         },
@@ -93,7 +92,7 @@
       };
     },
     watch:{
-      addGoodsDialog(val){
+      addRoom(val){
         this.increaseGoodsDialogVisible = val
       },
       increaseGoodsDialogVisible(val){
@@ -111,14 +110,14 @@
             if(res.data.code == "20010"){
             this.addGoodsFlag = true;
             this.$emit('addGoodsOk', this.addGoodsFlag)
-            this.$alert('添加成功', 'SUCCESS', {
+            this.$alert('添加成功', '提示', {
             confirmButtonText: '确定',
             type: 'success'
             })
             this.increaseGoodsDialogVisible=false;   
             }
             else{
-             this.$alert('添加失败', 'SUCCESS', {
+             this.$alert('添加失败', '提示', {
             confirmButtonText: '确定',
             type: 'error'
             })             
