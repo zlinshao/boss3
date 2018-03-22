@@ -7,6 +7,7 @@ import app from './modules/app'
 import getters from './getters'
 import picture from './modules/picture'   //相册管理状态
 import article from './modules/article'
+import datum from './modules/datumMessage'
 
 Vue.use(Vuex);
 
@@ -14,7 +15,8 @@ const store = new Vuex.Store({
   modules: {
     app,
     article,
-    picture
+    picture,
+    datum,
   },
   getters
 });
