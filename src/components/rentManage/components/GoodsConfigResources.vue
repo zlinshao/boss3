@@ -1,6 +1,6 @@
 <template>
   <div id="increaseGoods">
-    <el-dialog title="物品增配" :visible.sync="increaseGoodsDialogVisible" width="75%" >
+    <el-dialog title="物品增配" :visible.sync="increaseGoodsDialogVisible" width="75%" style="min-width:1110px;" >
       <div class="goodsall">
             <span class="topmassage">物品增配（点击下方按钮切换添加模式）</span>
             <el-button type="primary" @click="openModalDialogx('addGoodsDialog')">物品设置</el-button>
@@ -251,7 +251,7 @@
   };
 </script>
 <style lang="scss" scoped="">
-  .goodsall{ width: 1350px; height: 500px; margin:10px auto 0; border:1px #ccc solid; position: relative;}
+  .goodsall{  height: 500px; margin:10px auto 0; border:1px #ccc solid; position: relative;}
   .goodsall .topmassage{
     width: 304px;
     height: 32px; 
@@ -277,7 +277,7 @@
     line-height: 40px;   
   }
   .goodsall .goodtable{
-    width:1300px;
+    width: 96%;
     height: 345px;
     position: absolute;
     left:25px;
@@ -287,7 +287,7 @@
     background: #fff !important;
   }
   .goodsall .goodsCount{
-    width: 1300px;
+   
     height: 42px;
     font-size: 16px;
     line-height: 42px;

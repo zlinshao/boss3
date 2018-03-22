@@ -8,7 +8,7 @@
             <div class="earchroom_mid" >
             <el-form :model="form[x]" style="margin-left:40px;margin-right:20px;">
               <el-row>
-              <el-col :span="4" :key="index" v-for="(val,index) in userList[x].goodsx" >
+              <el-col :span="6" :key="index" v-for="(val,index) in userList[x].goodsx" >
                 <el-form-item >                               
                   <span class="goodsname" >{{val.dictionary_name}}</span><el-input v-model="form[x].addnum[index]" size="small" width=40% placeholder=""></el-input>                                                     
                 </el-form-item>
@@ -192,14 +192,14 @@
   };
 </script>
 <style lang="scss" scoped="">
-  .goodsall{ width: 1110px; height: 500px; margin:0px auto 0; overflow: auto;}
+  .goodsall{ width: 100%; height: 500px; margin:0px auto 0; overflow: auto;}
 
   .goodsall .el-button--primary{
     margin-bottom:20px;
     
   }
   .goodsall .earchroom{
-    width:1080px ;
+ 
     height: 150px;
     margin-top:10px;
     border:1px #ccc solid;
@@ -219,7 +219,7 @@
     font-size: 14px;
   }
   .goodsall .earchroom .earchroom_mid{
-    width:1080px;
+    
     height: 140px;
     overflow: auto;
     padding-top:10px; 

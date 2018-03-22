@@ -149,6 +149,7 @@
         }else{
            this.$http.post(this.urls+'house/asset_out', {
            house_id:1,
+           operate_time:this.value2,
            dest:this.form.gone,
            content:this.goodscodesave,
            screenshot:[]

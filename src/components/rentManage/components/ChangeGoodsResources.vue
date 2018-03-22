@@ -1,6 +1,6 @@
 <template>
   <div id="increaseGoods">
-    <el-dialog title="物品选择" :visible.sync="increaseGoodsDialogVisible" width="60%" >
+    <el-dialog title="物品选择" :visible.sync="increaseGoodsDialogVisible" width="65%" >
       <div class="goodsall">
         <el-button type="primary" @click="openModalDialog('deliveryDialog')">增加</el-button>
         <div class="earchroom" v-for="(houses,x) in houselist" :key="x">
@@ -54,6 +54,7 @@
     watch:{
       changeGoodsDialog(val){
         this.increaseGoodsDialogVisible = val
+        this.delivery()
       },
       increaseGoodsDialogVisible(val){
         if(!val){
@@ -99,14 +100,14 @@
   };
 </script>
 <style lang="scss" scoped="">
-  .goodsall{ width: 1110px; height: 480px; margin:0px auto 0; overflow: auto;}
+  .goodsall{width: 100%;  height: 480px; margin:0px auto 0; overflow: auto;}
 
   .goodsall .el-button--primary{
     margin-bottom:20px;
     
   }
   .goodsall .earchroom{
-    width:1080px ;
+    min-width: 750px;
     height: 190px;
     padding-top:8px;
     border:1px #ccc solid;
@@ -126,7 +127,7 @@
     font-size: 14px;
   }
   .goodsall .earchroom .earchroom_mid{
-    width:1080px;
+  
     height: 190px;
     overflow: auto; 
   }

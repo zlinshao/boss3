@@ -11,7 +11,7 @@
                 </el-select>        
               </el-form-item>
             </el-col>
-            <el-col :span="12"><span style="color:#f00; display:block; text-indent: 20px;">物品名称只能输入7个汉字</span></el-col>
+            <el-col :span="12"><span style="color:#f00; display:block;line-height:16px; margin-left:20px;">物品名称只能<br />输入7个汉字</span></el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
