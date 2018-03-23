@@ -1,8 +1,7 @@
 <template>
   <div id="organizationId">
-    <el-dialog title="选人" :visible.sync="organizationVisible" width="785px" center :modal="false">
+    <el-dialog title="选人" :visible.sync="organizationVisible" width="785px" center>
       <div class="content">
-
         <div class="content_left" @click="inputFocus">
           <div style="display:flex;flex-wrap: wrap;">
             <div v-for="item in selectMember" style="height: 40px;line-height: 40px">
@@ -194,6 +193,7 @@
     },
     methods:{
       getDepartment(id){
+          //获取顶级部门名称
         this.$http.get(globalConfig.server_user+'api/v1/organizations/1').then((res) => {
           if(res.data.status === 'success'){
             this.highestDepart = res.data.data.name;
@@ -313,7 +313,6 @@
           this.getDepartment(item.id);
           this.breadcrumbList.push(item)
         }
-
       },
       //面包屑搜索
       breadcrumbSearch(item,index){

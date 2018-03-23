@@ -236,6 +236,10 @@
             'UploadComplete': function () {
               //队列文件处理完毕后，处理相关的事情
               _this.isUploading = false;
+              _this.$notify.success({
+                title:'成功',
+                message:'文件已全部上传成功！'
+              })
             },
             'Key': function (up, file) {
               // 若想在前端对每个文件的key进行个性化处理，可以配置该函数

@@ -11,13 +11,14 @@
                 </el-select>
               </el-form-item>
             </el-col>
-
             <el-col :span="12">
               <el-form-item label="跟进人" required="">
                 <el-input  v-model="follow_name" @focus="openOrganizeModal"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
 
+          <el-row>
             <el-col :span="12">
               <el-form-item label="跟进进度">
                 <el-select clearable v-model="params.follow_status" placeholder="工单进度" value="">
@@ -25,14 +26,12 @@
                 </el-select>
               </el-form-item>
             </el-col>
-
             <el-col :span="12">
               <el-form-item label="跟进时间">
                 <el-date-picker type="datetime" placeholder="选择日期时间"
                                 value-format="yyyy-MM-dd HH:mm:ss" v-model="params.follow_time"></el-date-picker>
               </el-form-item>
             </el-col>
-
           </el-row>
 
           <el-row>
