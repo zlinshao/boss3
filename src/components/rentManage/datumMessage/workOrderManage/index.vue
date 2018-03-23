@@ -12,9 +12,6 @@
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
-            <el-form-item>
-              <el-button type="success">导出房源</el-button>
-            </el-form-item>
           </el-form>
         </div>
 
@@ -27,13 +24,12 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">客户状态</div>
+                    <div class="el_col_label">跟进状态</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="params.house" clearable placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
+                      <el-select clearable v-model="params.follow_status" placeholder="跟进状态" value="">
+                        <el-option v-for="item in dictionary_follow" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -42,70 +38,18 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">客户意向</div>
+                    <div class="el_col_label">跟进人</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="params.a" clearable placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
-            <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">客户身份</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select v-model="params.house" clearable placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">客户来源</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select v-model="params.a" clearable placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
-            <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">个人/中介</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select v-model="params.house" clearable placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                      </el-select>
+                      <el-input  v-model="follow_name" readonly="" @focus="openOrganizeModal"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
               </el-col>
             </el-row>
             <div class="btnOperate">
-              <el-button size="mini" type="primary">搜索</el-button>
+              <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
               <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
             </div>
@@ -175,7 +119,8 @@
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
 
-    <Organization :organizationDialog="organizationDialog" @close="closeModal"></Organization>
+    <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
+                  @close='closeModal' @selectMember="selectMember"></Organization>
     <AddChildTask :addChildTaskDialog="addChildTaskDialog" :activeId="activeId" :startAddResult="startEdit" @close="closeModal"></AddChildTask>
     <OrderDetail :orderDetailDialog="orderDetailDialog" :activeId="activeId" :startDetail="startDetail" @close="closeModal"></OrderDetail>
   </div>
@@ -202,8 +147,13 @@
         totalNumber : 0,
         params: {
           pages: 1,
-          limit: 12
+          limit: 12,
+          follow_status:'',
+          follow_id:'',
         },
+        follow_name:'',   //跟进人
+        length:0,
+        type:'',
         tableData: [],
         options: [],
 
@@ -218,10 +168,12 @@
         startEdit:false,
         startAddResult:false,
         startDetail:false,
+        dictionary_follow:[]//  跟进状态字典
       }
     },
 
     created(){
+      this.getDictionary();
       if(this.$store.state.datum.work_order_filter.pages){
         this.params.pages=this.$store.state.datum.work_order_filter.pages;
         this.params.limit=this.$store.state.datum.work_order_filter.limit;
@@ -229,6 +181,13 @@
       this.getTableData();
     },
     methods: {
+      getDictionary(){
+        this.$http.get(globalConfig.server+'setting/dictionary/335').then((res) => {
+          if(res.data.code === "30010"){
+            this.dictionary_follow = res.data.data;
+          }
+        });
+      },
       //获取列表数据
       getTableData(){
         this.$http.get(globalConfig.server+'customer/work_order',{params:this.params}).then((res) => {
@@ -316,11 +275,32 @@
         }
       },
 
+      //调出选人组件
+      openOrganizeModal(){
+        this.organizationDialog = true;
+        this.type = 'staff';
+        this.length = 1;
+      },
+      selectMember(val){
+        this.type = '';
+        this.length = '';
+        this.params.follow_id = val[0].id;
+        this.follow_name = val[0].name;
+
+      },
+
       highGrade(){
         this.isHigh = !this.isHigh;
       },
+      search(){
+        this.params.pages = 1;
+        this.getTableData();
+      },
       resetting(){
-
+        this.params.follow_id = '';
+        this.params.follow_status = '';
+        this.follow_name = '';
+        this.search();
       }
     }
   }

@@ -48,7 +48,7 @@
   import UPLOAD from '../../../../common/UPLOAD.vue'
   export default {
     name:'addFollowUp',
-    props:['addResultDialog','activeId'],
+    props:['addResultDialog','activeId','startAddResult'],
     components:{Organization,UPLOAD},
     data() {
       return {
@@ -76,9 +76,9 @@
           this.isClear = false
         }
       },
-      activeId(val){
-        this.params.id = val;
-      }
+      startAddResult(val){
+        this.params.id = this.activeId
+      },
     },
     mounted(){
 //      this.getDictionary();

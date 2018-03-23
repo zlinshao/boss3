@@ -37,7 +37,6 @@
       btnClick(){
         this.$http.get(globalConfig.server+'special/special/unlock_screen?pwd_lock='+this.keywords).then((res)=>{
           if(res.data.code === '10010'){
-
             new Promise((resolve,reject) =>{
               sessionStorage.setItem('lockStatus', 0);
               if(Number(sessionStorage.getItem('lockStatus')) !== 1){
@@ -45,6 +44,15 @@
               }
             }).then((data)=>{
               this.$router.push({path: sessionStorage.getItem('beforePath')});
+            });
+          }else if(res.data.code === '10015'){
+            new Promise((resolve,reject) =>{
+              sessionStorage.setItem('lockStatus', 0);
+              if(Number(sessionStorage.getItem('lockStatus')) !== 1){
+                resolve();
+              }
+            }).then((data)=>{
+              this.$router.push({path: '/main'});
             });
           }else {
             this.$notify({

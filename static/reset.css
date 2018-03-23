@@ -230,4 +230,13 @@
 .noMarginForm .el-form-item {
   margin-bottom: 0 !important; }
 
+.amap-markers .amap-marker .amap-icon img {
+  border-radius: 50%; }
+
+.el-table th {
+  text-align: center !important; }
+
+.el-table__body td {
+  text-align: center !important; }
+
 /*# sourceMappingURL=reset.css.map */

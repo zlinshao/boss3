@@ -295,8 +295,7 @@
       deleteIntegral() {
         this.$http.put(globalConfig.server + 'credit/manage/delete/' + this.activeId).then((res) => {
           if (res.data.code === '30310') {
-            this.totalNumber = res.data.num;
-            this.tableData = res.data.data;
+            this.getTableData();
           } else {
             this.$notify.warning({
               title: '警告',

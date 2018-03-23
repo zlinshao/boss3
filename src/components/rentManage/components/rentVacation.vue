@@ -2,7 +2,7 @@
   <div id="rentVacation">
     <el-dialog title="租客退房" :visible.sync="rentVacationDialogVisible" width="60%">
       <div class="scroll_bar">
-        <div class="title">房东信息</div>
+        <div class="title">客户-信息</div>
         <div class="table_border" >
           <table class="tableDetail">
             <tr>
@@ -444,8 +444,15 @@
         }
       }
     },
+    mounted(){
+      this.getData();
+    },
     methods:{
-
+      getData(){
+        this.$http.get(globalConfig.server+'customer/check_out/1').then((res) => {
+          console.log(res.data.data)
+        })
+      }
     }
   };
 </script>

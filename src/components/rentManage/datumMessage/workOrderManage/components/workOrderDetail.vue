@@ -181,7 +181,7 @@
     </el-dialog>
     <EditWork :editWorkDialog="editWorkDialog" :activeId="activeId" :startEdit="startEdit" @close="closeModal"></EditWork>
 
-    <AddResult :addResultDialog="addResultDialog" :activeId="addResultId" @close="closeModal"></AddResult>
+    <AddResult :addResultDialog="addResultDialog" :startAddResult="startAddResult" :activeId="addResultId" @close="closeModal"></AddResult>
   </div>
 </template>
 
@@ -199,6 +199,7 @@
         workOrderDetail:{},
         addResultId:'',
         addResultDialog:false,
+        startAddResult:false,
 
         editWorkDialog:false,
         startEdit:false,
@@ -236,12 +237,14 @@
       addResult(id){
         this.addResultId = id;
         this.addResultDialog = true;
+        this.startAddResult = true;
 
       },
       closeModal(val){
         this.addResultDialog = false;
         this.editWorkDialog = false;
         this.startEdit = false;
+        this.startAddResult = false;
         if(val === 'success'){
           this.getDetail();
         }
