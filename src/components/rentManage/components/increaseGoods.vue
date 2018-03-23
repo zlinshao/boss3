@@ -203,7 +203,7 @@
             else{
               this.$notify.error({
               title: '错误',
-              message: '增加失败'
+              message: '操作失败'
               });     
             }
             this.allall='';
