@@ -27,10 +27,10 @@
           </el-col>
           <el-col :span="15">
             <el-row>
-              <el-col :span="8" v-for="course in courseStatus" :key="course.id">
+              <el-col :span="8" v-for="(course,key) in courseStatus" :key="course.id" v-if="key<6">
                 <div class="list_frame" @click="routerDetail(course.id)">
                   <div class="list_pic">
-                    <img :src="course.uri"  >
+                    <img :src="course.uri"  style="border-radius:10px;">
                   </div>
                   <div class="list_detail">
                     <div class="list_title" style="min-width: 220px;">{{course.title}}</div>
@@ -211,19 +211,24 @@
       //请求教师风采每一篇文章的第一张图片
       getTeachers(){
         this.$http.get(globalConfig.server + "oa/portal/?dict_id=363&pages=1").then((res) => {
-          let teachers = res.data.data.data;
+          let teachers = res && res.data && res.data.data && res.data.data.data;
           this.teacherStyles = [];
+          if(typeof teacher === "undefined"){
+            return;
+          }
           for (let i = 0; i < teachers.length; i++) {
             let cover_pic = teachers[i].album.cover_pic;
             let first = true;
             for (let key in cover_pic) {
-              if (first) {
-                let pic = {};
-                pic.id = teachers[i].id;
-                pic.uri = cover_pic[key][0].uri;
-                this.teacherStyles.push(pic);
+              if(courses[i].statuss == "已发布") {
+                if (first) {
+                  let pic = {};
+                  pic.id = teachers[i].id;
+                  pic.uri = cover_pic[key][0].uri;
+                  this.teacherStyles.push(pic);
+                }
+                first = false;
               }
-              first = false;
             }
           }
         });
@@ -231,19 +236,24 @@
       //请求图片赏析的图片
       getPictureAppreciation(){
         this.$http.get(globalConfig.server + "oa/portal/?dict_id=364&pages=1").then((res) => {
-          let pictures = res.data.data.data;
+          let pictures = res && res.data && res.data.data && res.data.data.data;
           this.pictureAppreciation = [];
+          if(typeof pictures === "undefined"){
+            return;
+          }
           for (let i = 0; i < pictures.length; i++) {
             let cover_pic = pictures[i].album.cover_pic;
             let first = true;
             for (let key in cover_pic) {
-              if (first) {
-                let pic = {};
-                pic.id = pictures[i].id;
-                pic.uri = cover_pic[key][0].uri;
-                this.pictureAppreciation.push(pic);
+              if(courses[i].statuss == "已发布"){
+                if (first) {
+                  let pic = {};
+                  pic.id = pictures[i].id;
+                  pic.uri = cover_pic[key][0].uri;
+                  this.pictureAppreciation.push(pic);
+                }
+                first = false;
               }
-              first = false;
             }
           }
         });
@@ -251,30 +261,35 @@
       //请求课程状态的数据
       getCourseStatus(){
         this.$http.get(globalConfig.server + "oa/portal/?dict_id=362&pages=1").then((res) => {
-          let courses = res.data.data.data;
+          let courses = res && res.data && res.data.data && res.data.data.data;
           this.courseStatus = [];
           this.courseStatusTop = [];
+          if(typeof courses === "undefined"){
+            return;
+          }
           for (let i = 0; i < courses.length; i++) {
             let cover_pic = courses[i].album.cover_pic;
             let first = true;
             for (let key in cover_pic) {
-              if (first) {
-                let pic = {};
-                let top={};
-                top.id = courses[i].id;
-                pic.id = courses[i].id;
-                pic.title = courses[i].title;
-                pic.content = courses[i].content;
-                pic.read_num = courses[i].read_num;
-                pic.favor_num = courses[i].favor_num;
-                pic.uri = cover_pic[key][0].uri;
-                this.courseStatus.push(pic);
-                if(courses[i].top !== null) {
-                  top.uri = cover_pic[key][0].uri;
-                  this.courseStatusTop.push(top);
+              if(courses[i].statuss == "已发布"){
+                if (first) {
+                  let pic = {};
+                  let top={};
+                  top.id = courses[i].id;
+                  pic.id = courses[i].id;
+                  pic.title = courses[i].title;
+                  pic.content = courses[i].content;
+                  pic.read_num = courses[i].read_num;
+                  pic.favor_num = courses[i].favor_num;
+                  pic.uri = cover_pic[key][0].uri;
+                  this.courseStatus.push(pic);
+                  if(courses[i].top !== null) {
+                    top.uri = cover_pic[key][0].uri;
+                    this.courseStatusTop.push(top);
+                  }
                 }
+                first = false;
               }
-              first = false;
             }
           }
         });
@@ -317,6 +332,7 @@
   }
 
   #university {
+    min-width: 1300px;
     .headPic {
       width: 100%;
       height: 400px;

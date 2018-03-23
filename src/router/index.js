@@ -78,7 +78,7 @@ import ExamineAndApprove from '../components/OAWork/examineAndApprove/index.vue'
 
 
 // 乐伽大学
-import LineCollege from '../components/lejiaCollege/lineTeacher/index.vue'
+import LineCollege from '../components/lejiaCollege/OnlineExam/index.vue'
 import College from '../components/lejiaCollege/college/index.vue'
 
 
