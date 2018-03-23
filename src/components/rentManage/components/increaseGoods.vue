@@ -145,6 +145,7 @@
       //保存
       savelast(){
         if(this.data.good){
+          debugger;
         for(let i=0;i<this.data.good.length;i++)
         {
           this.list.push({"room":this.data.house[i],"category":this.data.good[i],"amount":this.data.num[i]})
@@ -206,11 +207,12 @@
               message: '操作失败'
               });     
             }
+            this.increaseGoodsDialogVisible=false;
             this.allall='';
             this.value2='';
             this.form={come:'',time:'', gone:''}
             this.list='';
-            this.decreaseGoodsDialogVisible=false;  
+              
               
          }) 
         }

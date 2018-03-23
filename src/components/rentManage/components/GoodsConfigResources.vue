@@ -177,7 +177,6 @@
         }
       },
       savex(){ 
-        debugger;
         this.configflag=true;
         if(this.formlen==0){
           this.configflag=false;
@@ -201,9 +200,17 @@
         this.$emit('goodsconfig-changed', this.form)
         }
       },
-      //校验信息 good,price,num
+      //校验信息 house,good,price,num
       validate(){
         for(let i=0;i<=this.formlen-1;i++){
+        if(!this.form.house[i] &&this.configflag==true){
+          this.configflag=false;
+          this.$notify({
+            title: '警告',
+            message: '物品位置为必选选项',
+            type: 'warning'
+          });         
+        }
         if(!this.form.good[i] &&this.configflag==true){
           this.configflag=false;
           this.$notify({
