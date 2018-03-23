@@ -2,7 +2,7 @@
   <div id="decreaseGoods">
     <el-dialog title="物品搬出" :visible.sync="decreaseGoodsDialogVisible" width="40%">
       <div>
-        <el-form size="small" :model="form" label-width="84px">
+        <el-form size="small" :model="form" label-width="80px">
           <el-row>
             <el-col :span="12">
               <el-form-item label="操作时间">
@@ -21,9 +21,9 @@
           </el-row>
         </el-form>
 
-        <el-form size="small" :model="form" label-width="84px">
+        <el-form size="small" :model="form" label-width="80px">
           <el-form-item label="物品名称" required>
-            <el-input type="textarea" v-model="goodscode" :rows="1" @click.native="openModalDialog('changeGoodsDialog')"></el-input>
+            <el-input type="textarea" v-model="goodScode" :rows="1" @click.native="openModalDialog('changeGoodsDialog')"></el-input>
           </el-form-item>
         </el-form>
 
@@ -41,28 +41,32 @@
             </el-col>
           </el-row>
         </el-form>
-        
-        <span style="float:right;line-height:32px;">操作人：{{this.personal.name}}</span>
-        <div class="upload_div"><Upload :ID="'upload'" @getImg="getImage" ></Upload></div>
-        <el-form size="small" :model="form" label-width="54px">
+
+
+        <el-form size="small" label-width="80px">
+          <el-form-item label="上传照片">
+            <Upload :ID="'upload'" @getImg="getImage" ></Upload>
+          </el-form-item>
+        </el-form>
+        <el-form size="small" :model="form" label-width="80px">
           <el-form-item label="备注">
             <el-input type="textarea" :rows="1" ></el-input>
           </el-form-item>
-        </el-form>        
+        </el-form>
 
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="decreaseGoodsDialogVisible = false">取 消</el-button>
         <el-button size="small" type="primary" @click="decreaseGoodsSave">确 定</el-button>
       </span>
-      
+
     </el-dialog>
-  <ChangeGoodsResources :changeGoodsDialog="changeGoodsDialog" @close="closeChangeGoodsResources" @changeGoodssave="changeGoodssave"></ChangeGoodsResources>
+  <ChangeGoodsResources :changeGoodsDialog="changeGoodsDialog" @close="closeChangeGoodsResources" @changeGoodSave="changeGoodSave"></ChangeGoodsResources>
   </div>
 </template>
 
 <script>
- import ChangeGoodsResources from '../components/ChangeGoodsResources.vue' //物品增配页面
+  import ChangeGoodsResources from '../components/ChangeGoodsResources.vue' //物品增配页面
   import Upload from '../../common/UPLOAD.vue';
   export default {
     props:['decreaseGoodsDialog'],
@@ -78,9 +82,9 @@
           gone:'',
           value:''
         },
-        goodscode:'', //物品名称
+        goodScode:'', //物品名称
         goodscodesave:'', //物品名称保存使用
-        saveflag:'',  //保存校验标识 
+        saveflag:'',  //保存校验标识
         goods:[],
         houselist:[],
         urls:globalConfig.server,
@@ -110,8 +114,8 @@
             }
           }]
         },
-       
-        value2: '',       
+
+        value2: '',
         goodsgoing: []
       };
     },
@@ -138,8 +142,8 @@
       dechange(val){
         this.showflag=val;
       },
-      changeGoodssave(val){
-        this.goodscode='';    
+      changeGoodSave(val){
+        this.goodScode='';
         this.goodscodesave=val.check;
         for(let k=0;k<val.check.length;k++){
 
@@ -148,11 +152,11 @@
           for(let j=0;j<this.goods[this.houselist[i].dictionary_name].length;j++)
           {
             if(val.check[k]==this.goods[this.houselist[i].dictionary_name][j].id){
-              this.goodscode +=this.goods[this.houselist[i].dictionary_name][j].code +";"
+              this.goodScode +=this.goods[this.houselist[i].dictionary_name][j].code +";"
             }
           }
-        }  
-        }  
+        }
+        }
       },
       decreaseGoodsSave(){
         this.saveflag=true;
@@ -162,23 +166,23 @@
             title: '警告',
             message: '增配时间不能为空',
             type: 'warning'
-          });         
-        } 
+          });
+        }
         if(this.goodscodesave =='' && this.saveflag==true){
           this.saveflag=false;
           this.$notify({
             title: '警告',
             message: '物品名称不能为空',
             type: 'warning'
-          });         
-        }       
+          });
+        }
         if(this.form.gone =='' && this.saveflag==true){
           this.saveflag=false;
           this.$notify({
             title: '警告',
             message: '原物品去向不能为空',
             type: 'warning'
-          });         
+          });
         }
 
         if(this.saveflag){
@@ -188,7 +192,7 @@
            dest:this.form.gone,
            content:this.goodscodesave,
            screenshot:[]
-            }).then((res) => {      
+            }).then((res) => {
             if(res.data.code == "20010"){
             this.$notify({
               title: '成功',
@@ -196,48 +200,48 @@
               type: 'success'
             });
             this.allall='';
-            this.goodscode='';
+            this.goodScode='';
             this.value2='';
             this.form.gone='';
             this.goodscodesave='';
             this.deliveryFlag=true;
             this.$emit('deliveryFlag', this.addGoodsFlag)
-            this.decreaseGoodsDialogVisible=false;   
+            this.decreaseGoodsDialogVisible=false;
             }
             else{
              this.$notify.error({
               title: '错误',
               message: '操作失败'
-              });  
-            this.goodscode='';  
-            this.decreaseGoodsDialogVisible=false;    
-                  
-            } 
-         })       
+              });
+            this.goodScode='';
+            this.decreaseGoodsDialogVisible=false;
+
+            }
+         })
         }
       }
     },
     created:function(){
       this.personal = JSON.parse(localStorage.getItem("personal"));
-      //物品去向       
-      this.$http.get(this.urls+'setting/dictionary/323').then((res) => {  
-       
+      //物品去向
+      this.$http.get(this.urls+'setting/dictionary/323').then((res) => {
+
           if (res.data.code === '30010') {
               this.goodsgoing=res.data.data;
-          }  
+          }
       })
-      //交接单详情接口       
-      this.$http.get(this.urls+'house/asset?house_id=1').then((res) => {  
+      //交接单详情接口
+      this.$http.get(this.urls+'house/asset?house_id=1').then((res) => {
           if (res.data.code === '20000') {
             this.goods=res.data.data;
             console.log(this.goods)
-          }  
+          }
       })
       //房间编号
-      this.$http.get(this.urls+'setting/dictionary/298').then((res) => {  
+      this.$http.get(this.urls+'setting/dictionary/298').then((res) => {
         if (res.data.code === '30010') {
-        this.houselist=res.data.data;                
-            }  
+        this.houselist=res.data.data;
+            }
          })
     }
   };
@@ -245,10 +249,10 @@
 <style lang="scss" scoped="">
 .container{top:20px;}
 .upload_div {
-  width:690px; 
-  min-height:160px; 
-  margin-left:40px; 
-  float:left; 
+  width:690px;
+  min-height:160px;
+  margin-left:40px;
+  float:left;
   margin-bottom:20px;
 }
 </style>
