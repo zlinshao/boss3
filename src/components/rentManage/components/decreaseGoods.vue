@@ -80,6 +80,7 @@
         },
         goodscode:'', //物品名称
         goodscodesave:'', //物品名称保存使用
+        saveflag:'',  //保存校验标识 
         goods:[],
         houselist:[],
         urls:globalConfig.server,
@@ -154,10 +155,33 @@
         }  
       },
       decreaseGoodsSave(){
-        if(this.form.gone =='' || this.goodscodesave=='' ){
-        this.$alert('物品名称、原物品去向不能为空', 'ERROR', {confirmButtonText: '确定',type: 'error'
-        }).catch(()=>{});    
-        }else{
+        this.saveflag=true;
+        if(this.value2 =='' && this.saveflag==true){
+          this.saveflag=false;
+          this.$notify({
+            title: '警告',
+            message: '增配时间不能为空',
+            type: 'warning'
+          });         
+        } 
+        if(this.goodscodesave =='' && this.saveflag==true){
+          this.saveflag=false;
+          this.$notify({
+            title: '警告',
+            message: '物品名称不能为空',
+            type: 'warning'
+          });         
+        }       
+        if(this.form.gone =='' && this.saveflag==true){
+          this.saveflag=false;
+          this.$notify({
+            title: '警告',
+            message: '原物品去向不能为空',
+            type: 'warning'
+          });         
+        }
+
+        if(this.saveflag){
            this.$http.post(this.urls+'house/asset_out', {
            house_id:1,
            operate_time:this.value2,
@@ -166,21 +190,25 @@
            screenshot:[]
             }).then((res) => {      
             if(res.data.code == "20010"){
-            this.$alert('添加成功', 'SUCCESS', {
-            confirmButtonText: '确定',
-            type: 'success'
-            })
+            this.$notify({
+              title: '成功',
+              message: '操作成功',
+              type: 'success'
+            });
             this.allall='';
             this.goodscode='';
+            this.value2='';
+            this.form.gone='';
+            this.goodscodesave='';
             this.deliveryFlag=true;
             this.$emit('deliveryFlag', this.addGoodsFlag)
             this.decreaseGoodsDialogVisible=false;   
             }
             else{
-            this.$alert('添加失败', 'SUCCESS', {
-            confirmButtonText: '确定',
-            type: 'error'
-            })  
+             this.$notify.error({
+              title: '错误',
+              message: '操作失败'
+              });  
             this.goodscode='';  
             this.decreaseGoodsDialogVisible=false;    
                   
