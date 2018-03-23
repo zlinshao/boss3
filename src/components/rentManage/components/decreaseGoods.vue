@@ -80,6 +80,8 @@
         },
         goodscode:'', //物品名称
         goodscodesave:'', //物品名称保存使用
+        goods:[],
+        houselist:[],
         urls:globalConfig.server,
         showflag:'0',
          pickerOptions1: {
@@ -138,9 +140,18 @@
       changeGoodssave(val){
         this.goodscode='';    
         this.goodscodesave=val.check;
-        for(let i=0;i<val.check.length;i++){
-          this.goodscode+= val.check[i]+";";
-        }    
+        for(let k=0;k<val.check.length;k++){
+
+        for(let i=0;i<this.houselist.length;i++)
+        {
+          for(let j=0;j<this.goods[this.houselist[i].dictionary_name].length;j++)
+          {
+            if(val.check[k]==this.goods[this.houselist[i].dictionary_name][j].id){
+              this.goodscode +=this.goods[this.houselist[i].dictionary_name][j].code +";"
+            }
+          }
+        }  
+        }  
       },
       decreaseGoodsSave(){
         if(this.form.gone =='' || this.goodscodesave=='' ){
@@ -187,6 +198,19 @@
               this.goodsgoing=res.data.data;
           }  
       })
+      //交接单详情接口       
+      this.$http.get(this.urls+'house/asset?house_id=1').then((res) => {  
+          if (res.data.code === '20000') {
+            this.goods=res.data.data;
+            console.log(this.goods)
+          }  
+      })
+      //房间编号
+      this.$http.get(this.urls+'setting/dictionary/298').then((res) => {  
+        if (res.data.code === '30010') {
+        this.houselist=res.data.data;                
+            }  
+         })
     }
   };
 </script>
