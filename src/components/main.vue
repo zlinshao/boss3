@@ -5,9 +5,9 @@
       <el-row>
         <div class="banner">
           <el-carousel height="300px">
-            <el-carousel-item v-for="item in 4" :key="item">
+            <el-carousel-item v-for="item in banners" :key="item.id">
               <div class="banner_pic">
-                <img src="../assets/images/banner.png" alt="">
+                <img :src="item.uri" @click="routerDetail(item.id)">
               </div>
             </el-carousel-item>
           </el-carousel>
@@ -109,14 +109,14 @@
               <span style="border-left: 4px solid #6a8dfb;"></span>员工广场
             </div>
             <div class="yuangong">
-              <div style="display: inline-block;float: left;font-size: 0;"><img src="./../assets/images/yuangong.png" height="390px;"></div>
+              <div style="display: inline-block;float: left;font-size: 0;"><img v-if="staffSquareTop[0]" :src="staffSquareTop[0].uri" @click="routerDetail(staffSquareTop[0].id)" width="500" height="390"></div>
               <div class="clearfix" style="padding-left: 520px;">
                 <div style="padding-top:20px;">
-                  <div class="list_gonggao" v-for="item in 3">
-                    <div style="display: inline-block;float: left;"><img src="./../assets/images/gonggao_detail.png" height="100"></div>
+                  <div class="list_gonggao" v-for="(item, key) in staffSquares" :key="item.id" v-if="key < 3" @click="routerDetail(item.id)">
+                    <div style="display: inline-block;float: left;"><img :src="item.uri" height="100" width="180"></div>
                     <div style="padding-left: 200px;">
-                      <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
-                      <div class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                      <p class="info_title text_over_norwap">{{item.title}}</p>
+                      <div class="second_line_camp">{{item.content}}</div>
                       <div><em class="ix" style="background:#fb4699;"></em></div>
                     </div>
                   </div>
@@ -131,17 +131,17 @@
               <span style="border-left: 4px solid #fb4699;"></span>外部消息
             </div>
             <div class="news">
-              <div class="list_gonggao" v-for="item in 3">
-                <div style="display: inline-block;float: left;"><img src="./../assets/images/news.png" height="100"></div>
+              <div class="list_gonggao" v-for="(item,key) in externalNews" :key="item.id" v-if="key<3" @click="routerDetail(item.id)">
+                <div style="display: inline-block;float: left;"><img :src="item.uri" height="100" width="120"></div>
                 <div style="padding-left: 130px;">
-                  <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
-                  <div class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                  <p class="info_title text_over_norwap">{{item.title}}</p>
+                  <div class="second_line_camp">{{item.content}}</div>
                   <div class="clearfix" style="margin-top: 10px;">
                     <span>2017-01-17</span>
                     <span style="float: right;">
-                    <i class="iconfont icon-xinxi" style="margin-right: -7px;"></i>22 &nbsp;&nbsp;
-                    <i class="iconfont icon-xinxi" style="margin-right: -7px;"></i>143 &nbsp;&nbsp;
-                    <i class="el-icon-view">15</i>
+                    <i class="iconfont icon-xinxi" style="margin-right: -7px;"></i>{{item.favor_num}} &nbsp;&nbsp;
+                    <i class="iconfont icon-xinxi" style="margin-right: -7px;"></i>{{item.favor_num}} &nbsp;&nbsp;
+                    <i class="el-icon-view">{{item.read_num}}</i>
                   </span>
                   </div>
                 </div>
@@ -160,17 +160,18 @@
             <div class="lejia">
               <el-row>
                 <el-col :span="8" style="padding:0;">
-                  <div class="hover_pic" style="padding:0;"><img src="./../assets/images/lejia1.png" width="100%" height="195"></div>
+                  <div class="hover_pic" style="padding:0;border-radius: 10px;"><img src="./../assets/images/lejia1.png" width="100%" height="195"></div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
-                  <div class="list_frame">
-                    <div style="display: inline-block;float: left;margin-top: 30px;"><img src="./../assets/images/news.png" height="100"></div>
+                  <div class="list_frame" @click="routerDetail(lejiaCollege[0] && lejiaCollege[0].id)">
+                    <div style="display: inline-block;float: left;margin-top: 30px;">
+                      <img v-if="lejiaCollege[0]" :src="lejiaCollege[0].uri" width="100" height="100" style="border-radius: 10px;"></div>
                     <div style="padding: 12px 12px 34px 120px;">
-                      <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
-                      <div class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                      <p class="info_title text_over_norwap">{{lejiaCollege[0] && lejiaCollege[0].title}}</p>
+                      <div class="second_line_camp">{{lejiaCollege[0] && lejiaCollege[0].content}}</div>
                       <span style="display: block;margin-top: 15px;">
-                      <i class="el-icon-view"></i><span class="view_word">15人</span>&nbsp;&nbsp;&nbsp;
-                        <i class="el-icon-edit"></i><span class="edit_word">143人</span>
+                      <i class="el-icon-view"></i><span class="view_word">{{lejiaCollege[0] && lejiaCollege[0].read_num}}人</span>&nbsp;&nbsp;&nbsp;
+                        <i class="el-icon-edit"></i><span class="edit_word">{{lejiaCollege[0] && lejiaCollege[0].favor_num}}人</span>
                     </span>
                     </div>
                   </div>
@@ -181,14 +182,14 @@
               </el-row>
               <el-row>
                 <el-col :span="8" style="padding:0;">
-                  <div class="list_frame">
-                    <div style="display: inline-block;float: left;margin-top: 30px;"><img src="./../assets/images/news.png" height="100"></div>
+                  <div class="list_frame" @click="routerDetail(lejiaCollege[1] && lejiaCollege[1].id)">
+                    <div style="display: inline-block;float: left;margin-top: 30px;"><img v-if="lejiaCollege[1]" :src="lejiaCollege[1].uri"  height="100" width="100" style="border-radius: 10px;"></div>
                     <div style="padding: 12px 12px 34px 120px;">
-                      <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
-                      <div class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                      <p class="info_title text_over_norwap">{{lejiaCollege[1] && lejiaCollege[1].title}}</p>
+                      <div class="second_line_camp">{{lejiaCollege[1] && lejiaCollege[1].content}}</div>
                       <span style="display: block;margin-top: 15px;">
-                        <i class="el-icon-view"></i><span class="view_word">15人</span>&nbsp;&nbsp;&nbsp;
-                        <i class="el-icon-edit"></i><span class="edit_word">143人</span>
+                        <i class="el-icon-view"></i><span class="view_word">{{lejiaCollege[1] && lejiaCollege[1].read_num}}人</span>&nbsp;&nbsp;&nbsp;
+                        <i class="el-icon-edit"></i><span class="edit_word">{{lejiaCollege[1] && lejiaCollege[1].read_num}}人</span>
                     </span>
                     </div>
                   </div>
@@ -197,14 +198,14 @@
                   <div class="hover_pic"><img src="./../assets/images/lejia2.png" width="100%" height="195"></div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
-                  <div class="list_frame">
-                    <div style="display: inline-block;float: left;margin-top: 30px;"><img src="./../assets/images/news.png" height="100"></div>
+                  <div class="list_frame" @click="routerDetail(lejiaCollege[2] && lejiaCollege[2].id)">
+                    <div style="display: inline-block;float: left;margin-top: 30px;"><img :src="lejiaCollege[2] && lejiaCollege[2].uri" height="100" width="100" style="border-radius: 10px;"></div>
                     <div style="padding: 12px 12px 0px 120px;">
-                      <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
-                      <div class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                      <p class="info_title text_over_norwap">{{lejiaCollege[2] && lejiaCollege[2].title}}</p>
+                      <div class="second_line_camp">{{lejiaCollege[2] && lejiaCollege[2].content}}</div>
                       <span style="display: block;margin-top: 15px;">
-                      <i class="el-icon-view"></i><span class="view_word">15人</span>&nbsp;&nbsp;&nbsp;
-                      <i class="el-icon-edit" ></i><span class="edit_word">143人</span>
+                      <i class="el-icon-view"></i><span class="view_word">{{lejiaCollege[2] && lejiaCollege[1].read_num}}人</span>&nbsp;&nbsp;&nbsp;
+                      <i class="el-icon-edit" ></i><span class="edit_word">{{lejiaCollege[2] && lejiaCollege[1].favor_num}}人</span>
                     </span>
                     </div>
                   </div>
@@ -253,9 +254,20 @@
         region_ranking: 5,
         group_ranking: 5,
         bg_color: '',
+        banners: [],
+        staffSquares: [],
+        staffSquareTop:[],
+        externalNews: [],
+        lejiaCollege: [],
+        lejiaCollegeTop: [],
+        lejiaCollegeFine: [],
       }
     },
     methods: {
+      // 详情
+      routerDetail(id) {
+        this.$router.push({path: '/Infodetails', query: {ids: id, detail: 'converge'}})
+      },
       handleDayChanged(data) {
         console.log(data)
       },
@@ -293,7 +305,145 @@
             break;
         }
       },
-    }
+      //获取banner
+      getBanners() {
+        this.$http.get(globalConfig.server + "oa/portal/?dict_id=378&pages=1").then((res) => {
+          let bannerData = res && res.data && res.data.data && res.data.data.data;
+          this.banners = [];
+          if(typeof bannerData === "undefined"){
+            return;
+          }
+          for (let i = 0; i < bannerData.length; i++) {
+            let cover_pic = bannerData[i].album.cover_pic;
+            let first = true;
+            for (let key in cover_pic) {
+              if(bannerData[i].statuss == "已发布") {
+                if (first) {
+                  let pic = {};
+                  pic.id = bannerData[i].id;
+                  pic.uri = cover_pic[key][0].uri;
+                  this.banners.push(pic);
+                }
+                first = false;
+              }
+            }
+          }
+        });
+      },
+      getStaffSquare() {
+        this.$http.get(globalConfig.server + "oa/portal/?dict_id=137&pages=1").then((res) => {
+          let staffData = res && res.data && res.data.data && res.data.data.data;
+          this.staffSquares = [];
+          this.staffSquareTop = [];
+          if(typeof staffData === "undefined"){
+            return;
+          }
+          for (let i = 0; i < staffData.length; i++) {
+            let cover_pic = staffData[i].album.cover_pic;
+            let first = true;
+            for (let key in cover_pic) {
+              if(staffData[i].statuss == "已发布") {
+                if (first) {
+                  let pic = {};
+                  let top={};
+
+                  pic.id = staffData[i].id;
+                  pic.uri = cover_pic[key][0].uri;
+                  pic.title = staffData[i].title;
+                  pic.content = staffData[i].content;
+                  this.staffSquares.push(pic);
+                  if(staffData[i].top !== null) {
+                    top.id = staffData[i].id;
+                    top.title = staffData[i].title;
+                    top.uri = cover_pic[key][0].uri;
+                    this.staffSquareTop.push(top);
+                  }
+                }
+                first = false;
+              }
+            }
+          }
+        });
+      },
+      getNews() {
+        this.$http.get(globalConfig.server + "oa/portal/?dict_id=378&pages=1").then((res) => {
+          let newsData = res && res.data && res.data.data && res.data.data.data;
+          this.externalNews = [];
+          if(typeof newsData === "undefined"){
+            return;
+          }
+          for (let i = 0; i < newsData.length; i++) {
+            let cover_pic = newsData[i].album.cover_pic;
+            let first = true;
+            for (let key in cover_pic) {
+              if(newsData[i].statuss == "已发布") {
+                if (first) {
+                  let pic = {};
+                  pic.id = newsData[i].id;
+                  pic.title = newsData[i].title;
+                  pic.content = newsData[i].content;
+                  pic.favor_num = newsData[i].favor_num;
+                  pic.read_num = newsData[i].read_num;
+                  pic.uri = cover_pic[key][0].uri;
+                  this.externalNews.push(pic);
+                }
+                first = false;
+              }
+            }
+          }
+        });
+      },
+      getLejiaCollege() {
+        this.$http.get(globalConfig.server + "oa/portal/?dict_id=361&pages=1").then((res) => {
+          let lejiaData = res && res.data && res.data.data && res.data.data.data;
+          this.lejiaCollege = [];
+          this.lejiaCollegeTop = [];
+          this.lejiaCollegeFine = [];
+          if(typeof lejiaData === "undefined"){
+            return;
+          }
+          for (let i = 0; i < lejiaData.length; i++) {
+            let cover_pic = lejiaData[i].album.cover_pic;
+            let first = true;
+            for (let key in cover_pic) {
+              if(lejiaData[i].statuss == "已发布") {
+                if (first) {
+                  let pic = {};
+                  let top={};
+                  let fine={};
+                  pic.id = lejiaData[i].id;
+                  pic.uri = cover_pic[key][0].uri;
+                  pic.title = lejiaData[i].title;
+                  pic.content = lejiaData[i].content;
+                  pic.read_num = lejiaData[i].read_num;
+                  pic.favor_num = lejiaData[i].favor_num;
+                  this.lejiaCollege.push(pic);
+                  if(lejiaData[i].top !== null) {
+                    top.id = lejiaData[i].id;
+                    top.title = lejiaData[i].title;
+                    top.uri = cover_pic[key][0].uri;
+                    this.lejiaCollegeTop.push(top);
+                  }
+                  if(lejiaData[i].fine !== null) {
+                    fine.id = lejiaData[i].id;
+                    fine.title = lejiaData[i].title;
+                    fine.uri = cover_pic[key][0].uri;
+                    this.lejiaCollegeFine.push(fine);
+                  }
+                }
+                first = false;
+              }
+            }
+          }
+        });
+      },
+    },
+    mounted() {
+      this.getBanners();
+      this.getStaffSquare();
+      this.getNews();
+      this.getLejiaCollege();
+    },
   }
 </script>
 
