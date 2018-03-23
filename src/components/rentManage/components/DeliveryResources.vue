@@ -103,10 +103,11 @@
         }).then((res) => {
   
             if(res.data.code == "20010"){         
-            this.$alert('添加成功', '提示', {
-            confirmButtonText: '确定',
-            type: 'success'
-            })
+            this.$notify({
+              title: '成功',
+              message: '操作成功',
+              type: 'success'
+            });
             this.allall='';
               for(let i=0;i<this.houselist.length;i++){
               this.form[i].check=[]; 
@@ -118,10 +119,10 @@
             this.increaseGoodsDialogVisible=false;   
             }
             else{
-            this.$alert('添加失败', '提示', {
-            confirmButtonText: '确定',
-            type: 'error'
-            })             
+              this.$notify.error({
+              title: '错误',
+              message: '操作失败'
+              });              
             } 
          })
   

@@ -2,7 +2,7 @@
   <div id="increaseGoods">
     <el-dialog title="物品增配" :visible.sync="increaseGoodsDialogVisible" width="40%">
       <div>
-        <el-form size="mini" :model="form" label-width="100px">
+        <el-form size="mini" :model="form" label-width="100px" >
           <el-row>
             <el-col :span="8">
               <el-form-item label="增配时间" required>
@@ -25,16 +25,11 @@
             </el-col>
           </el-row>
 
-          <el-form-item label="物品名称" required>
-            <el-input type="textarea" v-model="allall" @click.native="openModalDialog('goodsConfigDialog')"></el-input>
+          <el-form-item label="物品名称" required >
+            <el-input  type="textarea" v-model="allall" @click.native="openModalDialog('goodsConfigDialog')"></el-input>
           </el-form-item>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="价格" >
-                <el-input></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="16">
               <el-form-item label="原物品去向" required>
                 <el-select v-model="form.gone" placeholder="请选择活动区域" >
                   <el-option v-for="item in goodsgoing" :key="item.id" :label="item.dictionary_name" :value="item.dictionary_name">
@@ -73,6 +68,7 @@
         urls:globalConfig.server,
         houselist:[],
         goods:[],
+        saveflag: true,  //保存校验标识
         goodsgoing:[],  //物品去向字典
         goddsname:[],
         form:{
@@ -126,7 +122,7 @@
         this.goodsConfigDialog=true;
       },
       closeGoodsConfigResources(){
-        this.goodsConfigDialog=false;
+          this.goodsConfigDialog=false;
       },
       goodsconfigformchange(data){
         this.data=data;
@@ -142,22 +138,53 @@
                   this.allall+="，"
               }
            }
-          this.allall+= "物品数量：" + data.num[i]+"，" + "物品单价：" +data.price[i]+"；";
+          this.allall+= "物品单价：" +data.price[i] +"，" + "物品数量：" + data.num[i]+"；";
 
         }
       },
       //保存
       savelast(){
         if(this.data.good){
+          debugger;
         for(let i=0;i<this.data.good.length;i++)
         {
           this.list.push({"room":this.data.house[i],"category":this.data.good[i],"amount":this.data.num[i]})
           
         }}
-        if(this.value2 =='' || this.form.come =='' || this.list =='' || this.form.gone ==''){
-        this.$alert('增配时间、物品来源、物品名称、原物品去向不能为空', 'ERROR', {confirmButtonText: '确定',type: 'error'
-        }).catch(()=>{});    
-        }else{
+        this.saveflag=true;
+        if(this.value2 =='' && this.saveflag==true){
+          this.saveflag=false;
+          this.$notify({
+            title: '警告',
+            message: '增配时间不能为空',
+            type: 'warning'
+          });         
+        }
+        if(this.form.come =='' && this.saveflag==true){
+          this.saveflag=false;
+          this.$notify({
+            title: '警告',
+            message: '物品来源不能为空',
+            type: 'warning'
+          });         
+        }
+        if(this.list =='' && this.saveflag==true){
+          this.saveflag=false;
+          this.$notify({
+            title: '警告',
+            message: '物品名称不能为空',
+            type: 'warning'
+          });         
+        }
+        if(this.form.gone =='' && this.saveflag==true){
+          this.saveflag=false;
+          this.$notify({
+            title: '警告',
+            message: '原物品去向不能为空',
+            type: 'warning'
+          });         
+        }
+        if(this.saveflag){
          this.$http.post(this.urls+'house/asset_in', {
            house_id:1,
            operate_time:this.value2,
@@ -167,28 +194,33 @@
            "dest": this.form.gone
         }).then((res) => {
           
-            if(res.data.code == "20010"){
-            this.$alert('添加成功', '提示', {
-            confirmButtonText: '确定',
-            type: 'success'
-            })
-            this.allall='';
-            this.increaseGoodsDialogVisible=false;   
+          if(res.data.code == "20010"){
+            this.$notify({
+              title: '成功',
+              message: '操作成功',
+              type: 'success'
+            });
             }
             else{
-            this.$alert('添加失败', '提示', {
-            confirmButtonText: '确定',
-            type: 'error'
-            })        
-            this.decreaseGoodsDialogVisible=false;  
-            this.allall='';    
-            } 
+              this.$notify.error({
+              title: '错误',
+              message: '操作失败'
+              });     
+            }
+            this.increaseGoodsDialogVisible=false;
+            this.allall='';
+            this.value2='';
+            this.form={come:'',time:'', gone:''}
+            this.list='';
+              
+              
          }) 
         }
       
       }
     },
     created:function(){
+
       this.personal = JSON.parse(localStorage.getItem("personal"));
             //物品来源       
       this.$http.get(this.urls+'setting/dictionary/319').then((res) => {  
