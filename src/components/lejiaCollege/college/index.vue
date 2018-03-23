@@ -21,8 +21,9 @@
       <div class="curriculumList">
         <el-row>
           <el-col :span="9">
-            <div class="list_left">
+            <div class="list_left" @mouseover="showKey()" @mouseout="outHide()">
               <img v-if="courseStatusTop[0]" :src="courseStatusTop[0].uri" @click="routerDetail(courseStatusTop[0].id)">
+              <div class="shade" v-if="isTopShow" >{{courseStatusTop[0] && courseStatusTop[0].title}}</div>
             </div>
           </el-col>
           <el-col :span="15">
@@ -159,13 +160,14 @@
     name: "index",
     data() {
       return {
-        isLeftShow: false,
-        isRightShow: false,
+        // isLeftShow: false,
+        // isRightShow: false,
         teacherStyles: [],
         // teacherSelect: 1,
         pictureAppreciation: [],
         courseStatus: [],
         courseStatusTop:[],
+        isTopShow: false,
       }
     },
     methods: {
@@ -174,18 +176,20 @@
         this.$router.push({path: '/Infodetails', query: {ids: id, detail: 'converge'}})
       },
       showKey(val) {
-        if (val == 'left') {
-          this.isLeftShow = true;
-        } else {
-          this.isRightShow = true;
-        }
+        // if (val == 'left') {
+        //   this.isLeftShow = true;
+        // } else {
+        //   this.isRightShow = true;
+        // }
+        this.isTopShow = true;
       },
       outHide(val) {
-        if (val == 'left') {
-          this.isLeftShow = false;
-        } else {
-          this.isRightShow = false;
-        }
+        // if (val == 'left') {
+        //   this.isLeftShow = false;
+        // } else {
+        //   this.isRightShow = false;
+        // }
+        this.isTopShow = false;
       },
       previous() {
         // if(this.teacherSelect > 0){
@@ -276,6 +280,8 @@
                   let pic = {};
                   let top={};
                   top.id = courses[i].id;
+                  top.title = courses[i].title;
+
                   pic.id = courses[i].id;
                   pic.title = courses[i].title;
                   pic.content = courses[i].content;
@@ -319,6 +325,23 @@
 
   .el-carousel__item:nth-child(2n+1) {
     background-color: #d3dce6;
+  }
+  .list_left {
+    position: relative;
+    .shade {
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      position: absolute;
+      top: 0;
+      left: 0;
+      text-align: center;
+      color: #fff;
+      font-size: 25px;
+      display: -webkit-flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
   @mixin flex {
     display: -webkit-flex;
