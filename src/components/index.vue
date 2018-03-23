@@ -471,9 +471,9 @@
       lockScreen() {
         this.$http.get(globalConfig.server + 'setting/others/lock_screen_status?lock_status=1').then((res) => {
           if (res.data.code === '100003') {
-            sessionStorage.setItem('beforePath',this.$route.path);
+            localStorage.setItem('beforePath',this.$route.path);
 
-            sessionStorage.setItem('lockStatus', 1);
+            localStorage.setItem('lockStatus', 1);
             this.$router.push({path: '/lock'});
           } else {
             this.$notify({

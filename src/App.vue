@@ -12,13 +12,18 @@
             loading:null
         }
     },
-    mounted(){
+    created(){
       document.onkeydown = function (e) {//键盘按键控制
         e = e || window.event;
         if(e.keyCode == 116){
 
         }
       };
+      $(document).ready(function () {
+        $('tbody tr').click(function () {
+          $(this).addClass('selected_tr').siblings().removeClass('selected_tr');
+        });
+      })
     },
     computed:{
       isLoading(){
@@ -37,7 +42,7 @@
 //        }else {
 //          this.loading.close();
 //        }
-      }
+      },
     },
     methods: {
       prevent(e) {

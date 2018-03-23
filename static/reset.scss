@@ -340,6 +340,7 @@
       .scroll_bar {
         overflow: auto;
         max-height: 550px;
+        overflow-x: hidden;
         padding: 10px;
       }
     }
@@ -380,4 +381,14 @@
 }
 .el-table__body td {
   text-align: center !important;
+}
+///分页
+.pagination{
+  padding: 8px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.selected_tr{
+  background: #fdfde3 !important;
 }

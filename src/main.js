@@ -86,6 +86,7 @@ axios.interceptors.response.use(function (response) {
 
 //重定向
 router.beforeEach((to, from, next) => {
+
   let lockStatus = true;
   if (to.path === '/login') {
     localStorage.removeItem('myData');
@@ -97,9 +98,9 @@ router.beforeEach((to, from, next) => {
     next({path: '/login'})
   }else if(data&&to.path === '/'){
     next({path: '/main'})
-  }else if(Number(sessionStorage.getItem('lockStatus'))===1 && to.path!=='/lock'){
+  }else if(Number(localStorage.getItem('lockStatus'))===1 && to.path!=='/lock'){
     next({path:'/lock'});
-  }else if(Number(sessionStorage.getItem('lockStatus'))===0 && to.path === '/lock'){
+  }else if(Number(localStorage.getItem('lockStatus'))===0 && to.path === '/lock'){
     next({path:from.path});
   }else {
     next();
@@ -112,4 +113,4 @@ new Vue({
   store,
   template: '<App/>',
   components: {App}
-}).$mount('#app');
+})

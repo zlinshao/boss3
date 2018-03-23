@@ -38,17 +38,17 @@
         this.$http.get(globalConfig.server+'special/special/unlock_screen?pwd_lock='+this.keywords).then((res)=>{
           if(res.data.code === '10010'){
             new Promise((resolve,reject) =>{
-              sessionStorage.setItem('lockStatus', 0);
-              if(Number(sessionStorage.getItem('lockStatus')) !== 1){
+              localStorage.setItem('lockStatus', 0);
+              if(Number(localStorage.getItem('lockStatus')) !== 1){
                 resolve();
               }
             }).then((data)=>{
-              this.$router.push({path: sessionStorage.getItem('beforePath')});
+              this.$router.push({path: localStorage.getItem('beforePath')});
             });
           }else if(res.data.code === '10015'){
             new Promise((resolve,reject) =>{
-              sessionStorage.setItem('lockStatus', 0);
-              if(Number(sessionStorage.getItem('lockStatus')) !== 1){
+              localStorage.setItem('lockStatus', 0);
+              if(Number(localStorage.getItem('lockStatus')) !== 1){
                 resolve();
               }
             }).then((data)=>{
