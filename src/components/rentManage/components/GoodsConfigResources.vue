@@ -104,13 +104,15 @@
 
         index:-1,
         sums:0,
+        formlen:1,
+        configflag:true,  //物品增配标识
         urls:globalConfig.server,
         addGoodsDialog:false,
         time:'',
         houselist:[], //物品位置
         forms: [],  //物品来源
         goods:[],   //物品名称    
-        tableData: [{}, {}, {}, {}, {}]
+        tableData: [{}]
       };
     },
     watch:{
@@ -162,14 +164,71 @@
         this.form.price.splice(index, 1); 
         this.form.num.splice(index, 1);
         this.form.sum.splice(index, 1);
+        this.formlen--;
       },
       //增加一行
       addone(){
-        this.tableData.push({});
+        
+        this.configflag=true;
+        this.validate();
+        if(this.configflag){
+          this.formlen++;
+          this.tableData.push({});
+        }
       },
-      savex(){    
+      savex(){ 
+        debugger;
+        this.configflag=true;
+        if(this.formlen==0){
+          this.configflag=false;
+          this.$notify({
+          title: '警告',
+          message: '未增配任何物品',
+          type: 'warning'
+          });          
+        }{
+          this.validate();
+        }
+        
+        
+        if(this.configflag){ 
+          this.$notify({
+          title: '成功',
+          message: '物品增配完成',
+          type: 'success'
+        });  
         this.increaseGoodsDialogVisible = false;
         this.$emit('goodsconfig-changed', this.form)
+        }
+      },
+      //校验信息 good,price,num
+      validate(){
+        for(let i=0;i<=this.formlen-1;i++){
+        if(!this.form.good[i] &&this.configflag==true){
+          this.configflag=false;
+          this.$notify({
+            title: '警告',
+            message: '物品名称为必选选项',
+            type: 'warning'
+          });         
+        }
+        if(!this.form.price[i] &&this.configflag==true){
+          this.configflag=false;
+          this.$notify({
+            title: '警告',
+            message: '物品单价为必选选项',
+            type: 'warning'
+          });         
+        }
+        if(!this.form.num[i] && this.configflag==true){
+          this.configflag=false;
+          this.$notify({
+            title: '警告',
+            message: '物品数量为必选选项',
+            type: 'warning'
+          });         
+        }
+      }
       },
       //合计
       getSummaries(param) {
