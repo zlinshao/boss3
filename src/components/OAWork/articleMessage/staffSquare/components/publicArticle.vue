@@ -87,7 +87,6 @@
           type: '',
         },
         previewShow: true,
-        moduleType: this.$route.query.moduleType,
         tabIndex: '',
         editorDisabled: false,
       }
@@ -95,18 +94,22 @@
     computed:{
       ids(val){
         return this.$route.query.ids? this.$route.query.ids:this.$store.state.article.article_id;
+        console.log("article_id==="+this.$store.state.article.article_id);
+      },
+      moduleType() {
+        return this.$route.query.ModuleType ? this.$route.query.ModuleType : this.$store.state.article.module_type;
       }
     },
     mounted() {
       this.getDict();
-      let ids = this.$route.query.ids;
       this.pitch = '';
-      if (ids !== undefined) {
-        this.publicDetail(ids);
-        this.pitch = ids;
+      if (this.ids !== undefined) {
+        this.publicDetail(this.ids);
+        this.pitch = this.ids;
       }
-      if(ids){
-        this.$store.dispatch('articleId',ids);
+      if(this.ids){
+        this.$store.dispatch('articleId',this.ids);
+        console.log("articleId======" + this.ids);
       }
     },
     methods: {

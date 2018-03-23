@@ -2,16 +2,16 @@
   <div>
     <el-tabs v-model="activeName" @tab-click="handleClick(activeName)">
       <el-tab-pane label="乐伽大学" name="first">
-        <StaffSquare :moduleType="moduleType"></StaffSquare>
+        <StaffSquare :type="moduleType"></StaffSquare>
       </el-tab-pane>
       <el-tab-pane label="公司门户" name="second">
-        <StaffSquare :moduleType="moduleType"></StaffSquare>
+        <StaffSquare :type="moduleType"></StaffSquare>
       </el-tab-pane>
       <el-tab-pane label="员工广场" name="third">
-        <StaffSquare :moduleType="moduleType"></StaffSquare>
+        <StaffSquare :type="moduleType"></StaffSquare>
       </el-tab-pane>
       <el-tab-pane label="制度管理" name="fourth">
-        <StaffSquare :moduleType="moduleType"></StaffSquare>
+        <StaffSquare :type="moduleType"></StaffSquare>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -33,8 +33,13 @@
       if (this.$route.query.tabs !== undefined) {
         this.activeName = this.$route.query.tabs;
       }
+      this.$store.dispatch('moduleType',this.moduleType);
     },
-    watch: {},
+    watch: {
+      moduleType(val){
+        this.$store.dispatch('moduleType',this.moduleType);
+      }
+    },
     methods: {
       handleClick(val) {
         switch (val) {
@@ -51,7 +56,6 @@
             this.moduleType = 'systemManageMent';
             break;
         }
-
       }
     },
   }
