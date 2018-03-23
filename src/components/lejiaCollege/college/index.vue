@@ -4,11 +4,13 @@
       <img src="../../../assets/images/university/1-乐伽大学.png">
 
       <div class="navigation">
-        <div class="navigation_left">
-          <img src="../../../assets/images/university/勋章.svg" title="成绩查询" style="width:40px;"/>
+        <div class="navigation_left" @mouseover="showKey('achievement')" @mouseout="outHide('achievement') ">
+          <img src="../../../assets/images/university/勋章.svg" v-if="achievementImgShow" style="width:40px;"/>
+          <div v-if="!achievementImgShow">成绩查询</div>
         </div>
-        <div class="navigation_right">
-          <img src="../../../assets/images/university/在线报名.svg" title="在线报名" style="width:32px;"/>
+        <div class="navigation_right" @mouseover="showKey('sign')" @mouseout="outHide('sign') ">
+          <img src="../../../assets/images/university/在线报名.svg" v-if="signImgShow" style="width:32px;position: absolute;right: 26px;"/>
+          <div v-if="!signImgShow">在线报名</div>
         </div>
       </div>
     </div>
@@ -21,7 +23,7 @@
       <div class="curriculumList">
         <el-row>
           <el-col :span="9">
-            <div class="list_left" @mouseover="showKey()" @mouseout="outHide()">
+            <div class="list_left" @mouseover="showKey('top')" @mouseout="outHide('top')">
               <img v-if="courseStatusTop[0]" :src="courseStatusTop[0].uri" @click="routerDetail(courseStatusTop[0].id)">
               <div class="shade" v-if="isTopShow" >{{courseStatusTop[0] && courseStatusTop[0].title}}</div>
             </div>
@@ -34,7 +36,7 @@
                     <img :src="course.uri"  style="border-radius:10px;">
                   </div>
                   <div class="list_detail">
-                    <div class="list_title" style="min-width: 220px;">{{course.title}}</div>
+                    <div class="list_title">{{course.title}}</div>
                     <div class="list_remark">{{course.content}}</div>
                     <div class="readerInfo">
                       <div class="read">
@@ -168,6 +170,8 @@
         courseStatus: [],
         courseStatusTop:[],
         isTopShow: false,
+        achievementImgShow: true,
+        signImgShow: true,
       }
     },
     methods: {
@@ -181,7 +185,18 @@
         // } else {
         //   this.isRightShow = true;
         // }
-        this.isTopShow = true;
+        switch(val){
+          case 'top':
+            this.isTopShow = true;
+            break;
+          case 'achievement':
+            this.achievementImgShow = false;
+            break;
+          case 'sign':
+            this.signImgShow = false;
+            break;
+        }
+
       },
       outHide(val) {
         // if (val == 'left') {
@@ -189,7 +204,17 @@
         // } else {
         //   this.isRightShow = false;
         // }
-        this.isTopShow = false;
+        switch(val){
+          case 'top':
+            this.isTopShow = false;
+            break;
+          case 'achievement':
+            this.achievementImgShow = true;
+            break;
+          case 'sign':
+            this.signImgShow = true;
+            break;
+        }
       },
       previous() {
         // if(this.teacherSelect > 0){
@@ -382,10 +407,26 @@
         }
         .navigation_left {
           background: #6a8dfb;
+          div{
+            display: flex; /*Flex布局*/
+            display: -webkit-flex;  /* Safari */
+            align-items:center; /*指定垂直居中*/
+            justify-content:  center;
+            color: #fff;
+            font-size:  18px;
+          }
         }
         .navigation_right {
           background: #fb4699;
           margin-left: 30px;
+          div{
+            display: flex; /*Flex布局*/
+            display: -webkit-flex;  /* Safari */
+            align-items:center; /*指定垂直居中*/
+            justify-content:  center;
+            color: #fff;
+            font-size:  18px;
+          }
         }
         i {
           font-size: 30px;
