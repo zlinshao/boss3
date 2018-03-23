@@ -27,13 +27,13 @@
           </el-col>
           <el-col :span="15">
             <el-row>
-              <el-col :span="8" v-for="course in courseStatus">
+              <el-col :span="8" v-for="course in courseStatus" :key="course.id">
                 <div class="list_frame" @click="routerDetail(course.id)">
                   <div class="list_pic">
                     <img :src="course.uri"  >
                   </div>
                   <div class="list_detail">
-                    <div class="list_title">{{course.title}}</div>
+                    <div class="list_title" style="min-width: 220px;">{{course.title}}</div>
                     <div class="list_remark">{{course.content}}</div>
                     <div class="readerInfo">
                       <div class="read">
@@ -89,8 +89,8 @@
         <!--</el-col>-->
       <!--</el-row>-->
         <el-carousel :interval="5000" type="card" height="400px">
-          <el-carousel-item v-for="teacher in teacherStyles">
-            <img :src="teacher.uri" alt=""  @click="routerDetail(teacher.id)" >
+          <el-carousel-item v-for="teacher in teacherStyles" :key="teacher.id">
+            <img :src="teacher.uri"  @click="routerDetail(teacher.id)" >
           </el-carousel-item>
         </el-carousel>
     </div>

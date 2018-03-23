@@ -4,6 +4,7 @@
 const article = {
   state: {
     article_id :'',
+    module_type: '',
   },
   mutations: {
     // ADD_VISITED_VIEWS: (state, view) => {
@@ -19,15 +20,22 @@ const article = {
     },
     DELETE_ARTICLE_ID:(state)=>{
       state.article_id = '';
-    }
+    },
+    // 文章类型模块
+    MODULE_TYPE:(state,view)=>{
+      state.module_type = view;
+    },
   },
   actions: {
     articleId({commit},view){
-      commit('ARTICLE_ID',view)
+      commit('ARTICLE_ID',view);
     },
     deleteArticleId({commit}){
-      commit('DELETE_ARTICLE_ID')
-    }
+      commit('DELETE_ARTICLE_ID');
+    },
+    moduleType({commit},view){
+      commit('MODULE_TYPE',view);
+    },
   }
 };
 

@@ -6,5 +6,6 @@ const getters = {
   menuStatus: state => state.app.menuStatus,
   isLoading: state => state.app.isLoading,
   albumId: state => state.picture.albumId,
+  moduleType: state => state.article.moduleType,
 }
 export default getters

@@ -123,7 +123,7 @@
   import Organization from '../../../common/organization.vue'
 
   export default {
-    props: ['moduleType'],
+    props: ['type'],
     components: {RightMenu, Organization},
     data() {
       return {
@@ -158,6 +158,11 @@
     mounted() {
       this.myData(1);
       this.getDict();
+    },
+    computed: {
+      moduleType(val) {
+        return this.type ? this.type : this.$store.state.article.module_type;
+      }
     },
     methods: {
       getDict() {
@@ -240,7 +245,7 @@
       // 文章发布
       publicArticle() {
         this.$store.dispatch('deleteArticleId');
-        this.$router.push({path: '/publicArticle', query:{ moduleType: this.moduleType }});
+        this.$router.push({path: '/publicArticle',query:{moduleType: this.moduleType}});
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -428,12 +433,12 @@
     watch: {
       moduleType(val) {
         this.tableData = [];
-        this.moduleType = val;
         this.getDict();
         this.myData(1);
 
       }
-    }
+    },
+
 
   }
 </script>
