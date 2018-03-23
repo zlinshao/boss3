@@ -27,22 +27,22 @@
           </el-col>
           <el-col :span="15">
             <el-row>
-              <el-col :span="8" v-for="item in courseStatus">
-                <div class="list_frame" @click="routerDetail(item.id)">
+              <el-col :span="8" v-for="course in courseStatus">
+                <div class="list_frame" @click="routerDetail(course.id)">
                   <div class="list_pic">
-                    <img :src="item.uri"  >
+                    <img :src="course.uri"  >
                   </div>
                   <div class="list_detail">
-                    <div class="list_title">{{item.title}}</div>
-                    <div class="list_remark">{{item.content}}</div>
+                    <div class="list_title">{{course.title}}</div>
+                    <div class="list_remark">{{course.content}}</div>
                     <div class="readerInfo">
                       <div class="read">
                         <i class="iconfont icon-yanjing"></i>
-                        <span>{{item.read_num}}人</span>
+                        <span>{{course.read_num}}人</span>
                       </div>
                       <div class="critique">
                         <i class="el-icon-edit"></i>
-                        <span>{{item.favor_num}}人</span>
+                        <span>{{course.favor_num}}人</span>
                       </div>
                     </div>
                   </div>
@@ -89,8 +89,8 @@
         <!--</el-col>-->
       <!--</el-row>-->
         <el-carousel :interval="5000" type="card" height="400px">
-          <el-carousel-item v-for="item in teacherStyles">
-            <img :src="item.uri" alt=""  @click="routerDetail(item.id)" >
+          <el-carousel-item v-for="teacher in teacherStyles">
+            <img :src="teacher.uri" alt=""  @click="routerDetail(teacher.id)" >
           </el-carousel-item>
         </el-carousel>
     </div>

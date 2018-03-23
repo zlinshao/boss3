@@ -106,7 +106,7 @@
         this.pitch = ids;
       }
       if(ids){
-        this.$store.dispatch('articleId',ids)
+        this.$store.dispatch('articleId',ids);
       }
     },
     methods: {

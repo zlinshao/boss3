@@ -1,17 +1,17 @@
 <template>
   <div>
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tabs v-model="activeName" @tab-click="handleClick(activeName)">
       <el-tab-pane label="乐伽大学" name="first">
-        <StaffSquare moduleType="lejiaCollege"></StaffSquare>
+        <StaffSquare :moduleType="moduleType"></StaffSquare>
       </el-tab-pane>
       <el-tab-pane label="公司门户" name="second">
-        <StaffSquare moduleType="companyPortal"></StaffSquare>
+        <StaffSquare :moduleType="moduleType"></StaffSquare>
       </el-tab-pane>
       <el-tab-pane label="员工广场" name="third">
-        <StaffSquare moduleType="staffSquare"></StaffSquare>
+        <StaffSquare :moduleType="moduleType"></StaffSquare>
       </el-tab-pane>
       <el-tab-pane label="制度管理" name="fourth">
-        <StaffSquare moduleType="systemManageMent"></StaffSquare>
+        <StaffSquare :moduleType="moduleType"></StaffSquare>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -25,7 +25,8 @@
     components: {StaffSquare},
     data() {
       return {
-        activeName: 'first'
+        activeName: 'first',
+        moduleType: 'lejiaCollege',
       }
     },
     mounted() {
@@ -35,7 +36,21 @@
     },
     watch: {},
     methods: {
-      handleClick(tab, event) {
+      handleClick(val) {
+        switch (val) {
+          case 'first':
+            this.moduleType = 'lejiaCollege';
+            break;
+          case 'second':
+            this.moduleType = 'companyPortal';
+            break;
+          case 'third':
+            this.moduleType = 'staffSquare';
+            break;
+          case 'fourth':
+            this.moduleType = 'systemManageMent';
+            break;
+        }
 
       }
     },

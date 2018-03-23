@@ -56,7 +56,7 @@
             </el-col>
           </el-row>
           <div class="btnOperate">
-            <el-button size="mini" type="primary" @click="myData(1)">搜索</el-button>
+            <el-button size="mini" type="primary" @click="searchMyData(1)">搜索</el-button>
             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
             <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
           </div>
@@ -152,6 +152,7 @@
         pitch: '',
         if_shows: '',
         organizationDialog: false,
+        moduleId: 0,
       }
     },
     mounted() {
@@ -162,25 +163,25 @@
       getDict() {
         switch(this.moduleType){
           case 'lejiaCollege':  //乐伽大学
-            this.form.dict_id = 361;
+            this.moduleId = 361;
             this.$http.get(this.urls + 'setting/dictionary/361').then((res) => {
               this.dict.region = res.data.data;
             });
             break;
           case 'companyPortal':   //公司门户
-            this.form.dict_id = 377;
+            this.moduleId = 377;
             this.$http.get(this.urls + 'setting/dictionary/377').then((res) => {
               this.dict.region = res.data.data;
             });
             break;
           case 'staffSquare':    //员工广场
-            this.form.dict_id = 137;
+            this.moduleId = 137;
             this.$http.get(this.urls + 'setting/dictionary/137').then((res) => {
               this.dict.region = res.data.data;
             });
             break;
           case 'systemManageMent':   //制度管理
-            this.form.dict_id = 380;
+            this.moduleId = 380;
             this.$http.get(this.urls + 'setting/dictionary/380').then((res) => {
               this.dict.region = res.data.data;
             });
@@ -192,8 +193,22 @@
       },
       myData(page) {
         this.form.pages = page;
+        this.$http.get(this.urls + 'oa/portal/', { params:{dict_id: this.moduleId} }).then((res) => {
+          this.isHigh = false;
+          if (res.data.code === '80000') {
+            this.currentPage = page;
+            this.tableData = res.data.data.data;
+            this.paging = res.data.data.count;
+          } else {
+            this.tableData = [];
+            this.paging = 0;
+          }
+        })
+      },
+      searchMyData(page) {
+        this.form.pages = page;
         this.$http.get(this.urls + 'oa/portal/', {
-          params: this.form,
+          params:this.form,
         }).then((res) => {
           this.isHigh = false;
           if (res.data.code === '80000') {
@@ -224,6 +239,7 @@
       },
       // 文章发布
       publicArticle() {
+        this.$store.dispatch('deleteArticleId');
         this.$router.push({path: '/publicArticle', query:{ moduleType: this.moduleType }});
       },
       handleSizeChange(val) {
@@ -408,6 +424,15 @@
           }
         });
       },
+    },
+    watch: {
+      moduleType(val) {
+        this.tableData = [];
+        this.moduleType = val;
+        this.getDict();
+        this.myData(1);
+
+      }
     }
 
   }
