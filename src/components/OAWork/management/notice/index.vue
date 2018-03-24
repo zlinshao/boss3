@@ -108,10 +108,10 @@ export default {
       tableData: [],
       organizationDialog: false,
       noticeDialog: false,
-      warningDialog:false,
+      warningDialog: false,
       rightrow: {},
       rowneed: {},
-      look:{},
+      look: {},
       len: 0,
       depart: "",
       orgtype: "",
@@ -152,10 +152,9 @@ export default {
     closeNoticeResources() {
       this.rowneed = {};
       this.noticeDialog = false;
-     
     },
-    closeWarning(){
-      this.warningDialog=false;
+    closeWarning() {
+      this.warningDialog = false;
     },
     //右键回调时间
     clickEvent(index) {
@@ -240,7 +239,6 @@ export default {
         });
     },
     openModalDialog(index) {
-      console.log(this.rightrow);
       //右键编辑
       if (index == "noticeDialog") {
         if (this.rightrow.draft == "已发布") {
@@ -256,9 +254,8 @@ export default {
       }
       //右键预览
       if (index == "look") {
-        console.log(this.rightrow);
-        this.look=this.rightrow;
-        this.warningDialog=true;
+        this.look = this.rightrow;
+        this.warningDialog = true;
       }
       //右键删除
       if (index == "delete") {
@@ -328,7 +325,7 @@ export default {
           id: this.rightrow.id,
           draft: 0,
           department_id: this.rightrow.objid,
-          attachment:this.rightrow.attachment,
+          attachment: this.rightrow.attachment,
           previev: this.rightrow.preview
         })
         .then(res => {

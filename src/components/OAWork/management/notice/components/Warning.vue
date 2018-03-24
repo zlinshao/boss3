@@ -63,23 +63,19 @@ export default {
       }
     },
     lookat(val) {
-      console.log(111);
-      console.log(val);
       this.lookinfo = val;
       if (val.type == "表彰") {
         this.no1flag = true;
         this.no2flag = false;
         this.no3flag = false;
-      }
-      else if( val.type == "通知"){
+      } else if (val.type == "通知") {
         this.no1flag = false;
         this.no2flag = true;
-        this.no3flag = false;        
-      }
-      else{
+        this.no3flag = false;
+      } else {
         this.no1flag = false;
         this.no2flag = false;
-        this.no3flag = true; 
+        this.no3flag = true;
       }
     }
   },
@@ -101,9 +97,15 @@ export default {
 .no3 {
   background: url("../../../../../assets/images/shenp3.jpg") no-repeat;
 }
-.no1tit {color: #f36853}
-.no2tit {color: #39b1ff}
-.no3tit {color: #ff943e}
+.no1tit {
+  color: #f36853;
+}
+.no2tit {
+  color: #39b1ff;
+}
+.no3tit {
+  color: #ff943e;
+}
 
 .navTop {
   background-size: 620px 170px;
@@ -121,7 +123,7 @@ export default {
     }
     .top2 {
       width: 94%;
-      margin-left:20px;
+      margin-left: 20px;
       font-size: 16px;
       @include flex;
       justify-content: space-between;
