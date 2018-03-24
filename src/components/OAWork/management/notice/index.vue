@@ -5,7 +5,7 @@
       <div class="highSearch" style="width:244px">
         <el-form :inline="true" size="medium" >
           <el-form-item>
-            <el-input placeholder="公告主题/标题关键字" v-model="form.search" @keyup.enter.native="myData(1)" size="mini"
+            <el-input placeholder="公告主题/标题/内容关键字" v-model="form.search" @keyup.enter.native="myData(1)" size="mini"
                       clearable>
               <el-button slot="append" icon="el-icon-search" @click="myData(1)"></el-button>
               <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
@@ -328,6 +328,7 @@ export default {
           id: this.rightrow.id,
           draft: 0,
           department_id: this.rightrow.objid,
+          attachment:this.rightrow.attachment,
           previev: this.rightrow.preview
         })
         .then(res => {

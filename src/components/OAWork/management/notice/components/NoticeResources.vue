@@ -84,6 +84,7 @@ export default {
         obj: "",
         objid: [],
         context: "",
+        attachment:[],
         // fujian:'',
         preview: 0
       },
@@ -113,12 +114,14 @@ export default {
         this.form.context = val.content;
         this.form.obj = val.department_id;
         this.form.id = val.id;
+        this.form.attachment=val.attachment;
       } else {
         this.form.type = "";
         this.form.title = "";
         this.form.context = "";
         this.form.obj = "";
         this.form.objid = [];
+        this.form.attachment=[];
         this.firstflag = false;
       }
     }
@@ -126,6 +129,7 @@ export default {
   methods: {
     getImage(val) {
       console.log(val);
+      this.form.attachment=val[1];
     },
     //保存
     savex() {
@@ -168,7 +172,8 @@ export default {
             id: this.form.id,
             draft: this.form.draft,
             department_id: this.form.objid,
-            previev: this.form.preview
+            previev: this.form.preview,
+            attachment:this.form.attachment
           })
           .then(res => {
             if (res.data.code == "99910") {
