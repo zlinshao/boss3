@@ -1,8 +1,8 @@
 <template>
   <div id="increaseGoods">
-    <el-dialog title="公告发布" :visible.sync="increaseGoodsDialogVisible" width="42%">
+    <el-dialog title="公告发布" :visible.sync="increaseGoodsDialogVisible" width="60%">
       <div>
-        <el-form size="mini" :model="form" label-width="100px" >
+        <el-form :model="form" label-width="100px" >
           <el-row>
             <el-col :span="12">
               <el-form-item label="公告类型" required>
@@ -55,198 +55,214 @@
 </template>
 
 <script>
-  import Organization from '../../../../common/organization.vue'
-  import Upload from '../../../../common/UPLOAD.vue';
-  import {VueEditor} from 'vue2-editor'
-  export default {
-    props:['noticeDialog','rowneedx'],
-    components:{
-      Organization,
-      Upload,
-      VueEditor
-    },    
-    data() {
-      return {
-        increaseGoodsDialogVisible:false,
-        urls:globalConfig.server,
-        organizationDialog: false,
-        saveorsendflag:false,
-        lenx:7,
-        firstflag:false,  //编辑或新建标识
-        twoflag:false, //保存或发布标识
-        linelist:[{}],
-        form:{
-          title:'',
-          type:'', 
-          id:'',
-          draft:'', 
-          // obj:'',
-          // objid:[],
-          context:'',
-          // fujian:'',
-          preview:0
-        },
-        forms:[
-          {id:"1",name:"表彰"},
-          {id:"2",name:"批评"},
-          {id:"3",name:"通知"}
-        ],
-        houselist:[],
-        editorDisabled: false,
-      };
+import Organization from "../../../../common/organization.vue";
+import Upload from "../../../../common/UPLOAD.vue";
+import { VueEditor } from "vue2-editor";
+export default {
+  props: ["noticeDialog", "rowneedx"],
+  components: {
+    Organization,
+    Upload,
+    VueEditor
+  },
+  data() {
+    return {
+      increaseGoodsDialogVisible: false,
+      urls: globalConfig.server,
+      organizationDialog: false,
+      saveorsendflag: false,
+      lenx: 7,
+      firstflag: false, //编辑或新建标识
+      twoflag: false, //保存或发布标识
+      threeflag: false, //是否成功发布标识
+      linelist: [{}],
+      form: {
+        title: "",
+        type: "",
+        id: "",
+        draft: "",
+        obj: "",
+        objid: [],
+        context: "",
+        // fujian:'',
+        preview: 0
+      },
+      forms: [
+        { id: "1", name: "表彰" },
+        { id: "2", name: "批评" },
+        { id: "3", name: "通知" }
+      ],
+      houselist: [],
+      editorDisabled: false
+    };
+  },
+  watch: {
+    noticeDialog(val) {
+      this.increaseGoodsDialogVisible = val;
     },
-    watch:{
-      noticeDialog(val){
-        this.increaseGoodsDialogVisible = val
-      },
-      increaseGoodsDialogVisible(val){
-        if(!val){
-          this.$emit('close')
-        }
-      },
-      rowneedx(val){
-        this.firstflag=true;
-        if(val.content){
-          this.form.type=val.type;
-          this.form.title=val.title;
-          this.form.context=val.content;
-          this.form.id=val.id
-        }
-        else{
-          this.form.type='';
-          this.form.title='';
-          this.form.context='';
-          this.firstflag=false
-        }
+    increaseGoodsDialogVisible(val) {
+      if (!val) {
+        this.$emit("close");
       }
     },
-    methods:{
-       getImage(val) {
-        console.log(val);
-      },     
-      //保存
-      savex(){ 
-        this.twoflag=true;
-        this.midfunc();
-      },
-      //发布
-      sendx(){
-        this.twoflag=false;
-        this.midfunc();
-      },
-      midfunc(){
-        if(this.twoflag){
-          this.form.draft='1';
+    rowneedx(val) {
+      this.firstflag = true;
+      if (val.content) {
+        this.form.type = val.type;
+        this.form.title = val.title;
+        this.form.context = val.content;
+        this.form.obj = val.department_id;
+        this.form.id = val.id;
+      } else {
+        this.form.type = "";
+        this.form.title = "";
+        this.form.context = "";
+        this.form.obj = "";
+        this.form.objid = [];
+        this.firstflag = false;
+      }
+    }
+  },
+  methods: {
+    getImage(val) {
+      console.log(val);
+    },
+    //保存
+    savex() {
+      this.twoflag = true;
+      this.midfunc();
+    },
+    //发布
+    sendx() {
+      this.twoflag = false;
+      this.midfunc();
+    },
+    midfunc() {
+      if (this.twoflag) {
+        this.form.draft = "1";
+      } else {
+        this.form.draft = "0";
+      }
+      if (!this.firstflag) {
+        this.form.id = "";
+      }
+      this.saveorsend();
+      if (this.saveorsendflag) {
+        if (this.form.type == "表彰") {
+          this.form.type = 1;
         }
-        else{
-          this.form.draft='0';
+        if (this.form.type == "批评") {
+          this.form.type = 2;
         }
-        if(!this.firstflag) {
-            this.form.id='';
+        if (this.form.type == "通知") {
+          this.form.type = 3;
         }
-        this.saveorsend();
-        if(this.saveorsendflag){   
-          if(this.form.type=="表彰"){this.form.type=1}
-          if(this.form.type=="批评"){this.form.type=2}
-          if(this.form.type=="通知"){this.form.type=3}
-          if(this.form.type=="研发"){this.form.type=4}
-          this.$http.post(this.urls + 'announcement', {
-          title:this.form.title,
-          type:this.form.type,
-          content:this.form.context,
-          id:this.form.id,
-          draft:this.form.draft,
-          previev:this.form.preview}).then((res) => {
-          if(res.data.code == '99910'){
-             this.$notify({
-              title: '成功',
-              message: '操作成功',
-              type: 'success'
-            }); 
-         
-          }else{
-            this.$notify.error({
-              title: '错误',
-              message: '操作失败'
-            });  
-           
-          }
-        })
-        this.increaseGoodsDialogVisible=false;   
-        }      
-      },
-      openOrganizationModal() {
-        this.organizationDialog = true;
-      },
-      closeOrganization() {
-        this.organizationDialog = false;
-      },
-      coloseaa(val){
-        console.log(val)
-        this.form.obj='';
-        for(let i =0;i<val.length;i++){
-          this.form.obj += val[i].name+ ";"
+        if (this.form.type == "研发") {
+          this.form.type = 4;
         }
-      },
-
-      //保存或发布校验
-      saveorsend(){
-        this.saveorsendflag = true;
-        if(this.form.type == '' && this.saveorsendflag ==true){
-          this.saveorsendflag=false;
-          this.$notify({
-            title: '警告',
-            message: '公告类型不能为空',
-            type: 'warning'
-          }); 
-        }
-        if(this.form.title == '' && this.saveorsendflag ==true){
-          this.saveorsendflag=false;
-          this.$notify({
-            title: '警告',
-            message: '公告主题不能为空',
-            type: 'warning'
-          }); 
-        }
-        // if(this.form.obj == '' && this.saveorsendflag ==true){
-        //   this.saveorsendflag=false;
-        //   this.$notify({
-        //     title: '警告',
-        //     message: '对象不能为空',
-        //     type: 'warning'
-        //   }); 
-        // }
-        if(this.form.context == '' && this.saveorsendflag ==true){
-          this.saveorsendflag=false;
-          this.$notify({
-            title: '警告',
-            message: '正文内容不能为空',
-            type: 'warning'
-          }); 
-        }
-      },
-      handleImageAdded(file, Editor, cursorLocation, resetUploader) {
-        // An example of using FormData
-        // NOTE: Your key could be different such as:
-        // formData.append('file', file)
-        let formData = new FormData();
-        formData.append('image', file);
-        this.$http.post(this.address + 'api/v1/files', formData).then((res) => {
-          console.log(res.data.data);
-          let picId = res.data.data;
-          this.$http.post('picture/' + picId).then((res) => {
-            // Get url from response
-            let url = res.data.data;
-            Editor.insertEmbed(cursorLocation, 'image', url);
+        this.$http
+          .post(this.urls + "announcement", {
+            title: this.form.title,
+            type: this.form.type,
+            content: this.form.context,
+            id: this.form.id,
+            draft: this.form.draft,
+            department_id: this.form.objid,
+            previev: this.form.preview
           })
-        })
-      },
+          .then(res => {
+            if (res.data.code == "99910") {
+              this.$notify({
+                title: "成功",
+                message: "操作成功",
+                type: "success"
+              });
+              this.threeflag = true;
+              this.$emit("threeflag", this.threeflag);
+            } else {
+              this.$notify.error({
+                title: "错误",
+                message: "操作失败"
+              });
+              this.threeflag = false;
+              this.$emit("threeflag", this.threeflag);
+            }
+          });
+        this.increaseGoodsDialogVisible = false;
+      }
+    },
+    openOrganizationModal() {
+      this.organizationDialog = true;
+    },
+    closeOrganization() {
+      this.organizationDialog = false;
+    },
+    coloseaa(val) {
+      console.log(val);
+      this.form.obj = "";
+      this.form.objid = [];
+      for (let i = 0; i < val.length; i++) {
+        this.form.obj += val[i].name + ";";
+        this.form.objid[i] = val[i].id;
+      }
     },
 
-    created:function(){
-     
+    //保存或发布校验
+    saveorsend() {
+      this.saveorsendflag = true;
+      if (this.form.type == "" && this.saveorsendflag == true) {
+        this.saveorsendflag = false;
+        this.$notify({
+          title: "警告",
+          message: "公告类型不能为空",
+          type: "warning"
+        });
+      }
+      if (this.form.title == "" && this.saveorsendflag == true) {
+        this.saveorsendflag = false;
+        this.$notify({
+          title: "警告",
+          message: "公告主题不能为空",
+          type: "warning"
+        });
+      }
+      if (this.form.obj == "" && this.saveorsendflag == true) {
+        this.saveorsendflag = false;
+        this.$notify({
+          title: "警告",
+          message: "对象不能为空",
+          type: "warning"
+        });
+      }
+      if (this.form.context == "" && this.saveorsendflag == true) {
+        this.saveorsendflag = false;
+        this.$notify({
+          title: "警告",
+          message: "正文内容不能为空",
+          type: "warning"
+        });
+      }
+    },
+    handleImageAdded(file, Editor, cursorLocation, resetUploader) {
+      // An example of using FormData
+      // NOTE: Your key could be different such as:
+      // formData.append('file', file)
+      let formData = new FormData();
+      formData.append("image", file);
+      this.$http.post(this.address + "api/v1/files", formData).then(res => {
+        console.log(res.data.data);
+        let picId = res.data.data;
+        this.$http.post("picture/" + picId).then(res => {
+          // Get url from response
+          let url = res.data.data;
+          Editor.insertEmbed(cursorLocation, "image", url);
+        });
+      });
     }
-  };
+  },
+
+  created: function() {}
+};
 </script>
 <style lang="scss" scoped="">
 
