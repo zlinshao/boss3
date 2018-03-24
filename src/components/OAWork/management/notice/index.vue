@@ -64,7 +64,7 @@
               </el-table-column>
               <el-table-column
                 width="100px"  
-                prop="late"
+                prop="draft"
                 label="状态">
               </el-table-column>
             </el-table>
@@ -85,7 +85,7 @@
       </div>
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperate="clickEvent"></RightMenu>
-    <NoticeResources :noticeDialog="noticeDialog" :rowneedx="rowneed" @close="closeNoticeResources"></NoticeResources> 
+    <NoticeResources :noticeDialog="noticeDialog" :rowneedx="rowneed"  @close="closeNoticeResources"></NoticeResources> 
   </div>
 </template>
 
@@ -108,6 +108,7 @@
         tableData: [],
         organizationDialog: false,
         noticeDialog:false,
+        rightrow:{},
         rowneed:{},
         len:0,
         depart:'',
@@ -164,6 +165,7 @@
       }
     },
 
+
     methods: {
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -199,7 +201,7 @@
       },
       //公告右键
       noticeMenu(row, event){
-        this.rowneed=row;
+        this.rightrow=row;
         this.lists = [
           {clickIndex: 'noticeDialog', headIcon: 'el-icons-fa-edit', label: '编辑',},
           {clickIndex: 'look', headIcon: 'el-icons-fa-eye', label: '预览',},
@@ -224,6 +226,12 @@
                       this.tableData[j].type=this.forms[i].name;
                     }
                   }
+                  if(res.data.data[j].draft=='0'){
+                    this.tableData[j].draft="已发布";
+                  }
+                  else{
+                    this.tableData[j].draft="草稿";
+                  }
                 }
             }
             else{
@@ -233,14 +241,26 @@
          })
       },
       openModalDialog(index){
-        console.log(this.rowneed);
+        console.log(this.rightrow);
         //右键编辑
-        if(index == 'noticeDialog')
-        {  this.noticeDialog=true; }
+        if(index == 'noticeDialog'){  
+          if(this.rightrow.draft =='已发布'){
+            this.$notify({
+            title: '警告',
+            message: '该公告已发布不支持编辑',
+            type: 'warning'
+           });
+          }else{
+            this.rowneed=this.rightrow;
+            this.noticeDialog=true; 
+          }
+           
+        }
         
         //右键预览
         if(index == 'look'){
           console.log(4)
+          this.noticeDialog=true; 
         }
         //右键删除
         if(index == 'delete')
@@ -250,14 +270,14 @@
           cancelButtonText: '取消',
           type: 'warning'
           }).then(() => {
-          this.$http.put(this.urls + 'announcement/'+this.rowneed.id).then((res) => {
+          this.$http.put(this.urls + 'announcement/'+this.rightrow.id).then((res) => {
           if(res.data.code == '80010'){
             this.$notify({
             title: '成功',
             message: '操作成功',
             type: 'success'
           });           
-          this.myData(1)
+            this.myData(this.form.page);         
           }else{
             this.$notify.error({
             title: '错误',
@@ -271,37 +291,55 @@
           type: 'error'
           });      
         });    
-      }
-      
-      //右键发布
-      if(index == 'sendnotice')
-      {
-        console.log(3)
-      }
-    },
+      }   
+        //右键发布
+        if(index == 'sendnotice')
+        {
+          if(this.rightrow.draft =='已发布'){
+            this.$notify({
+            title: '警告',
+            message: '该公告已发布不用重复发布',
+            type: 'warning'
+           });
+          }else{
+            this.letsend(); 
+          }
+
+        }
+      },
+      //发布接口
+      letsend(){
+          if(this.rightrow.type=="表彰"){this.rightrow.type=1}
+          if(this.rightrow.type=="批评"){this.rightrow.type=2}
+          if(this.rightrow.type=="通知"){this.rightrow.type=3}
+          if(this.rightrow.type=="研发"){this.rightrow.type=4}
+          this.$http.post(this.urls + 'announcement', {
+          title:this.rightrow.title,
+          type:this.rightrow.type,
+          content:this.rightrow.content,
+          id:this.rightrow.id,
+          draft:0,
+          previev:this.rightrow.preview}).then((res) => {
+          if(res.data.code == '99910'){
+             this.$notify({
+              title: '成功',
+              message: '操作成功',
+              type: 'success'
+            }); 
+            this.myData(1);
+               
+          }else{
+            this.$notify.error({
+              title: '错误',
+              message: '操作失败'
+            });  
+              
+          }
+        })
+      },
       clickTable(row, event, column){
         console.log(row, event, column)
-      },
-      search() {
-        this.myData(1);
-        this.isHigh = false;
-      },
-      // 重置
-      resetting() {
-          this.form={
-          page:1,
-          limit:12,
-          type:'',
-          search:'',
-          },
-          this.departname='',
-          this.value4='',
-          this.myData(1);
-      },
-      // 高级筛选
-      highGrade() {
-        this.isHigh = !this.isHigh;
-      },
+      }
     },
     mounted() {
     this.myData(1);

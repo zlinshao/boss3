@@ -37,7 +37,7 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="附件" required >
+              <el-form-item label="附件" >
                 <div class="upload_div"><Upload :ID="'upload'" @getImg="getImage" ></Upload></div>
               </el-form-item>
             </el-col>
@@ -72,10 +72,14 @@
         organizationDialog: false,
         saveorsendflag:false,
         lenx:7,
+        firstflag:false,  //编辑或新建标识
+        twoflag:false, //保存或发布标识
         linelist:[{}],
         form:{
           title:'',
-          type:'',  
+          type:'', 
+          id:'',
+          draft:'', 
           // obj:'',
           // objid:[],
           context:'',
@@ -101,15 +105,20 @@
         }
       },
       rowneedx(val){
-        this.form.type=val.type;
-        this.form.title=val.title;
+        this.firstflag=true;
         if(val.content){
-         this.form.context=val.content;
+          this.form.type=val.type;
+          this.form.title=val.title;
+          this.form.context=val.content;
+          this.form.id=val.id
         }
         else{
+          this.form.type='';
+          this.form.title='';
           this.form.context='';
+          this.firstflag=false
         }
-      },
+      }
     },
     methods:{
        getImage(val) {
@@ -117,37 +126,50 @@
       },     
       //保存
       savex(){ 
-        this.saveorsend();
-        if(this.saveorsendflag){
-        this.increaseGoodsDialogVisible=false;   
-        }
+        this.twoflag=true;
+        this.midfunc();
       },
       //发布
       sendx(){
+        this.twoflag=false;
+        this.midfunc();
+      },
+      midfunc(){
+        if(this.twoflag){
+          this.form.draft='1';
+        }
+        else{
+          this.form.draft='0';
+        }
+        if(!this.firstflag) {
+            this.form.id='';
+        }
         this.saveorsend();
-        if(this.saveorsendflag){
-          debugger;
-        if(this.form.type=="表彰"){this.form.type=1}
-        if(this.form.type=="批评"){this.form.type=2}
-        if(this.form.type=="通知"){this.form.type=3}
-        if(this.form.type=="研发"){this.form.type=4}
-        this.$http.post(this.urls + 'announcement', {
+        if(this.saveorsendflag){   
+          if(this.form.type=="表彰"){this.form.type=1}
+          if(this.form.type=="批评"){this.form.type=2}
+          if(this.form.type=="通知"){this.form.type=3}
+          if(this.form.type=="研发"){this.form.type=4}
+          this.$http.post(this.urls + 'announcement', {
           title:this.form.title,
           type:this.form.type,
           content:this.form.context,
+          id:this.form.id,
+          draft:this.form.draft,
           previev:this.form.preview}).then((res) => {
-          console.log(res.data.data);
           if(res.data.code == '99910'){
              this.$notify({
               title: '成功',
               message: '操作成功',
               type: 'success'
-            });           
+            }); 
+         
           }else{
             this.$notify.error({
               title: '错误',
               message: '操作失败'
-            });              
+            });  
+           
           }
         })
         this.increaseGoodsDialogVisible=false;   
@@ -182,7 +204,7 @@
           this.saveorsendflag=false;
           this.$notify({
             title: '警告',
-            message: '公告类型不能为空',
+            message: '公告主题不能为空',
             type: 'warning'
           }); 
         }
