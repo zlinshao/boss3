@@ -140,7 +140,7 @@
         },
         form: {
           list: 12,
-          dict_id: '',
+          dict_id: 361,
           status: '',
           keywords: '',
           pages: this.currentPage,

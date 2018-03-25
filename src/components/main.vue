@@ -174,10 +174,6 @@
                           <i class="el-icon-edit"></i><span class="edit_word">{{lejiaCollege[0] && lejiaCollege[0].favor_num}}人</span>
                       </span>
                     </div>
-                    <!--<div style="display: inline-block;float: left;margin-top: 30px;">-->
-                      <!--&lt;!&ndash;<img v-if="lejiaCollege[0]" :src="lejiaCollege[0].uri" width="100" height="100" style="border-radius: 10px;"></div>&ndash;&gt;-->
-                    <!---->
-                  <!--</div>-->
                 </el-col>
                 <el-col :span="8" style="padding:0;">
                   <div class="hover_pic"><img :src="lejiaCollegeTop[1] && lejiaCollegeTop[1].uri" width="100%"  height="195"></div>
@@ -223,14 +219,14 @@
               <span style="border-left: 4px solid #7ee8a6;"></span>每周战报
             </div>
             <div class="zhanbao" style="height: 394px;">
-              <div><img src="./../assets/images/zhanbao1.png" style="width: 100%;height: 195px;"></div>
+              <div><img :src="weeklyReportTop[0] && weeklyReportTop[0].uri" style="width: 100%;height: 195px;"></div>
               <div style="padding:16px 20px 0px;">
-                <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
+                <p class="info_title text_over_norwap">{{weeklyReport[0] && weeklyReport[0].title}}</p>
                 <div class="clearfix">
-                  <div style="display: inline-block;float: left;"><img src="./../assets/images/gonggao_detail.png" height="100"></div>
-                  <div class="list_gonggao" style="padding-left: 200px;margin-top: -7px;">
-                    <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
-                    <div class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                  <div style="display: inline-block;float: left;"><img :src="weeklyReport[0] && weeklyReport[0].uri" height="100" width="180"></div>
+                  <div class="list_gonggao" style="padding-left: 200px;">
+                    <p class="info_title text_over_norwap">{{weeklyReport[0] && weeklyReport[0].title}}</p>
+                    <div class="second_line_camp">{{weeklyReport[0] && weeklyReport[0].content}}</div>
                     <div><em class="ix"></em></div>
                   </div>
                 </div>
@@ -264,6 +260,9 @@
         lejiaCollege: [],
         lejiaCollegeTop: [],
         lejiaCollegeFine: [],
+        weeklyReport: [],
+        weeklyReportTop: [],
+
       }
     },
     methods: {
@@ -440,12 +439,49 @@
           }
         });
       },
+      getPerWeeklyReport() {
+        this.$http.get(globalConfig.server + "oa/portal/?dict_id=383&pages=1").then((res) => {
+          let reportData = res && res.data && res.data.data && res.data.data.data;
+          this.weeklyReport = [];
+          this.weeklyReportTop = [];
+          if(typeof reportData === "undefined"){
+            return;
+          }
+          for (let i = 0; i < reportData.length; i++) {
+            let cover_pic = reportData[i].album.cover_pic;
+            let first = true;
+            for (let key in cover_pic) {
+              if(reportData[i].statuss == "已发布") {
+                if (first) {
+                  let pic = {};
+                  let top={};
+                  pic.id = reportData[i].id;
+                  pic.uri = cover_pic && cover_pic[key] && cover_pic[key][0].uri;
+                  pic.title = reportData[i].title;
+                  pic.content = reportData[i].content;
+                  pic.read_num = reportData[i].read_num;
+                  pic.favor_num = reportData[i].favor_num;
+                  this.weeklyReport.push(pic);
+                  if(reportData[i].top !== null) {
+                    top.id = reportData[i].id;
+                    top.title = reportData[i].title;
+                    top.uri = cover_pic && cover_pic[key] && cover_pic[key][0].uri;
+                    this.weeklyReportTop.push(top);
+                  }
+                }
+                first = false;
+              }
+            }
+          }
+        });
+      },
     },
     mounted() {
       this.getBanners();
       this.getStaffSquare();
       this.getNews();
       this.getLejiaCollege();
+      this.getPerWeeklyReport();
     },
   }
 </script>
