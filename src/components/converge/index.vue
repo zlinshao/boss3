@@ -237,6 +237,7 @@
                     <span v-for="pic in key.album.cover_pic">
                         <img v-for="p in pic" :src="p.uri">
                     </span>
+                    {{key.title}}
                   </div>
                 </div>
               </div>
@@ -288,6 +289,9 @@
                   <div class="bigPer2">
                     <span @click="routerDetail(key.id)" v-for="(key,index) in figureData.data"
                           v-if="index === 2 || index === 3 && figureData.data[0] !== ''">
+                      <div class="titleShow">
+                        <span>{{key.title}}</span>
+                      </div>
                       <a v-for="pic in key.album.cover_pic">
                         <img v-for="p in pic" :src="p.uri">
                       </a>
