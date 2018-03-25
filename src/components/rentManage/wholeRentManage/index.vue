@@ -619,8 +619,10 @@
         options: [],
       }
     },
-    created(){
-
+    mounted(){
+      $('tbody tr').click(function () {
+        $(this).addClass('selected_tr').siblings().removeClass('selected_tr');
+      });
     },
     methods: {
       handleSizeChange(val) {

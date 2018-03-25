@@ -1,13 +1,13 @@
 <template>
   <div>
-    <el-dialog title="领取合同详情" :visible.sync="contractDialogVisible">
-      <div class="scroll_bar">
+    <el-dialog title="作废合同详情" :visible.sync="contractCancelDialogVisible">
+      <div  class="scroll_bar">
         <div class="title">基本信息</div>
         <div class="form_border">
           <el-form size="mini" label-width="80px">
             <el-row>
               <el-col :span="8">
-                <el-form-item label="领用人">
+                <el-form-item label="申报人">
                   <div class="content" v-if="detailInfo.simple_staff">{{detailInfo.simple_staff.real_name}}</div>
                 </el-form-item>
               </el-col>
@@ -23,7 +23,7 @@
             </el-row>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="领取时间">
+                <el-form-item label="作废时间">
                   <div class="content">{{detailInfo.report_time}}</div>
                 </el-form-item>
               </el-col>
@@ -39,7 +39,7 @@
             </el-row>
           </el-form>
         </div>
-        <div class="title">已领取收房合同</div>
+        <div class="title">已作废收房合同</div>
         <div class="describe_border">
           <el-row>
             <el-col  v-for="item in detailInfo.collects" :key="item" :span="6">
@@ -48,7 +48,7 @@
           </el-row>
         </div>
 
-        <div class="title">已领取租房合同</div>
+        <div class="title">已作废租房合同</div>
         <div class="describe_border">
           <el-row>
             <el-col  v-for="item in detailInfo.rents" :key="item" :span="6">
@@ -66,8 +66,8 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="contractDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="contractDialogVisible = false">确 定</el-button>
+        <el-button size="small" @click="contractCancelDialogVisible = false">取 消</el-button>
+        <el-button size="small" type="primary" @click="contractCancelDialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -77,10 +77,10 @@
   import ElInput from "../../../../../../node_modules/element-ui/packages/input/src/input";
   export default {
     components: {ElInput},
-    props:['contractDialog','applyEditId_detail'],
+    props:['contractCancelDialog','cancelEditId_detail'],
     data() {
       return {
-        contractDialogVisible:false,
+        contractCancelDialogVisible:false,
         tableData:[],
         detailInfo:{},
         department:'',
@@ -89,15 +89,15 @@
       };
     },
     watch:{
-      contractDialog(val){
-        this.contractDialogVisible = val
+      contractCancelDialog(val){
+        this.contractCancelDialogVisible = val
       },
-      contractDialogVisible(val){
+      contractCancelDialogVisible(val){
         if(!val){
           this.$emit('close')
         }
       },
-      applyEditId_detail(val){
+      cancelEditId_detail(val){
         this.getDetail();
       },
     },
@@ -111,8 +111,8 @@
         });
       },
       getDetail(){
-        this.$http.get(globalConfig.server+'contract/apply/'+this.applyEditId_detail).then((res) => {
-          if(res.data.code === '20000'){
+        this.$http.get(globalConfig.server+'contract/invalidate/'+this.cancelEditId_detail).then((res) => {
+          if(res.data.code === '20010'){
             this.detailInfo = res.data.data.full;
             this.department = res.data.data.department.name;
             this.dictionary.forEach((item) => {
