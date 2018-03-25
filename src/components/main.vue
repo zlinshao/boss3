@@ -160,7 +160,7 @@
             <div class="lejia">
               <el-row>
                 <el-col :span="8" style="padding:0;">
-                  <div class="hover_pic"><img :src="lejiaCollegeTop[0] && lejiaCollegeTop[0].uri" width="100%"  height="195"></div>
+                  <div class="hover_pic"><img :src="lejiaCollegeTop[0] && lejiaCollegeTop[0].uri" width="100%"  height="195" @click="routerDetail(lejiaCollegeTop[0] && lejiaCollegeTop[0].id)"></div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
                   <div class="list_frame" @click="routerDetail(lejiaCollege[0] && lejiaCollege[0].id)">
@@ -177,7 +177,7 @@
                   </div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
-                  <div class="hover_pic"><img :src="lejiaCollegeTop[1] && lejiaCollegeTop[1].uri" width="100%"  height="195"></div>
+                  <div class="hover_pic"><img :src="lejiaCollegeTop[1] && lejiaCollegeTop[1].uri" width="100%"  height="195" @click="routerDetail(lejiaCollegeTop[1] && lejiaCollegeTop[1].id)"></div>
                 </el-col>
               </el-row>
               <el-row>
@@ -195,7 +195,7 @@
                   </div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
-                  <div class="hover_pic"><img :src="lejiaCollegeTop[2] && lejiaCollegeTop[2].uri" width="100%"  height="195"></div>
+                  <div class="hover_pic"><img :src="lejiaCollegeTop[2] && lejiaCollegeTop[2].uri" width="100%"  height="195" @click="routerDetail(lejiaCollegeTop[2] && lejiaCollegeTop[2].id)"></div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
                   <div class="list_frame" @click="routerDetail(lejiaCollege[2] && lejiaCollege[2].id)">
@@ -220,10 +220,10 @@
               <span style="border-left: 4px solid #7ee8a6;"></span>每周战报
             </div>
             <div class="zhanbao" style="height: 394px;">
-              <div><img :src="weeklyReportTop[0] && weeklyReportTop[0].uri" style="width: 100%;height: 195px;"></div>
+              <div><img :src="weeklyReportTop[0] && weeklyReportTop[0].uri" style="width: 100%;height: 195px;" @click="routerDetail(weeklyReportTop[0] && weeklyReportTop[0].id)"></div>
               <div style="padding:16px 20px 0px;">
                 <p class="info_title text_over_norwap">{{weeklyReport[0] && weeklyReport[0].title}}</p>
-                <div class="clearfix">
+                <div class="clearfix" @click="routerDetail(weeklyReport[0] && weeklyReport[0].id)">
                   <div style="display: inline-block;float: left;"><img :src="weeklyReport[0] && weeklyReport[0].uri" height="100" width="180" style="border-radius:5px;"></div>
                   <div class="list_gonggao" style="padding-left: 200px;">
                     <p class="info_title text_over_norwap">{{weeklyReport[0] && weeklyReport[0].title}}</p>
@@ -501,6 +501,9 @@
     white-space: nowrap;
     text-overflow: ellipsis;
   }
+  img{
+    cursor: pointer;
+  }
   .second_line_camp{
     overflow:hidden;
     text-overflow:ellipsis;
@@ -578,6 +581,7 @@
   .info_title{
     font-size: 16px;
     font-weight: bold;
+    cursor: pointer;
   }
   .ix {
     display: inline-block;

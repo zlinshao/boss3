@@ -205,7 +205,6 @@
       query(val){
         console.log("article_detail======="+JSON.stringify(this.$store.state.article.article_detail));
         return this.$store.state.article.article_detail;
-
       }
     },
     mounted() {
