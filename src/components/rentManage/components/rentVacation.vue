@@ -70,23 +70,23 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="所在区域" required>
-                  <el-input :readonly="true" placeholder="请输入内容"></el-input>
+                <el-form-item label="退款账号" required>
+                  <el-input placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="房屋地址" required>
-                  <el-input :readonly="true" placeholder="请输入内容"></el-input>
+                <el-form-item label="姓名" required>
+                  <el-input placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="开单人" required>
-                  <el-input :readonly="true" placeholder="请输入内容"></el-input>
+                <el-form-item label="开户行" required>
+                  <el-input placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="负责人" required>
-                  <el-input :readonly="true" placeholder="请输入内容"></el-input>
+                <el-form-item label="支行" required>
+                  <el-input placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -95,15 +95,21 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <div class="title">换房原因</div>
-            <div class="describe_border"></div>
+            <el-input type="textarea" resize="none" placeholder="请输入内容"></el-input>
           </el-col>
           <el-col :span="12">
             <div class="title">维修赔偿详情</div>
-            <div class="describe_border"></div>
+            <el-input type="textarea" resize="none" placeholder="请输入内容"></el-input>
           </el-col>
         </el-row>
-        <div class="title">换房水电气底数</div>
-        <div></div>
+
+        <div class="title">上传照片</div>
+        <div class="describe_border">
+          <UpLoad :ID="'rentingVacationId'" :isClear="isClear" @getImg="getImg"></UpLoad>
+        </div>
+
+
+
         <div class="title">应退还</div>
         <div class="form_border">
           <el-form size="mini" :model="formInline" label-width="100px">
@@ -424,14 +430,17 @@
 </template>
 
 <script>
+  import UpLoad from '../../common/UPLOAD.vue'
   export default {
     props:['rentVacationDialog'],
+    components:{UpLoad},
     data() {
       return {
         rentVacationDialogVisible:false,
         formInline: {region:''},
         tableData:[],
         value1:'',
+        isClear : false,
       };
     },
     watch:{
@@ -441,6 +450,8 @@
       rentVacationDialogVisible(val){
         if(!val){
           this.$emit('close')
+        }else {
+          this.isClear = false
         }
       }
     },
@@ -452,6 +463,11 @@
         this.$http.get(globalConfig.server+'customer/check_out/1').then((res) => {
           console.log(res.data.data)
         })
+      },
+
+      //上传图片
+      getImg(val){
+
       }
     }
   };
@@ -464,7 +480,7 @@
           padding: 15px;
           >div{
             padding-right: 10px;
-            max-height: 520px;
+            max-height: 580px;
             overflow-x: auto;
           }
 

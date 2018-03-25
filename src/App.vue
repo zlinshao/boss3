@@ -19,11 +19,6 @@
 
         }
       };
-      $(document).ready(function () {
-        $('tbody tr').click(function () {
-          $(this).addClass('selected_tr').siblings().removeClass('selected_tr');
-        });
-      })
     },
     computed:{
       isLoading(){

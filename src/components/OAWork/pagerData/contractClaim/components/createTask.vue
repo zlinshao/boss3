@@ -8,7 +8,7 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="任务类型">
-                  <el-select clearable v-model="taskType" placeholder="请选择任务类型">
+                  <el-select clearable v-model="taskType" placeholder="请选择任务类型" value="">
                     <el-option label="领取" value="1"></el-option>
                     <el-option label="作废" value="2"></el-option>
                     <el-option label="上缴" value="3"></el-option>
@@ -30,6 +30,9 @@
                   </el-select>
                 </el-form-item>
               </el-col>
+            </el-row>
+
+            <el-row>
               <el-col :span="8">
                 <el-form-item label="领用日期">
                   <el-date-picker
@@ -371,7 +374,7 @@
   import Upload from '../../../../common/UPLOAD.vue'
   export default {
     components:{Organization,Upload},
-    props:['createTaskDialog'],
+    props:['createTaskDialog','selectFlag'],
     data() {
       return {
         createTaskDialogVisible:false,
@@ -468,6 +471,15 @@
       createTaskDialogVisible(val){
         if(!val){
           this.$emit('close')
+        }
+      },
+      selectFlag(val){
+        if(val ===2){
+          this.taskType = '1';
+        }else if(val === 3){
+          this.taskType = '2';
+        }else if(val === 4){
+          this.taskType = '3';
         }
       }
     },

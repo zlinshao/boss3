@@ -369,7 +369,7 @@
       this.countTime();
       setInterval( ()=> {
         this.getUnReadMessage()
-      },10000);
+      },100000);
     },
     computed: {
       visitedViews() {

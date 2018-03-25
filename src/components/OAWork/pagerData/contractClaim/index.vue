@@ -18,16 +18,6 @@
     </div>
     <div class="filter">
       <el-form :inline="true" onsubmit="return false" size="mini" class="demo-form-inline" style="display: flex;justify-content:flex-end ">
-        <!--<el-form-item label="选择部门">-->
-          <!--<el-input readonly="" @focus="openOrganizationModal('department')" placeholder="点击选择"></el-input>-->
-        <!--</el-form-item>-->
-        <!--<el-form-item label="合同分类">-->
-          <!--<el-select clearable v-model="formInline.region" placeholder="请选择合同分类">-->
-            <!--<el-option label="领取" value="shanghai"></el-option>-->
-            <!--<el-option label="作废" value="beijing"></el-option>-->
-            <!--<el-option label="上缴" value="beijing"></el-option>-->
-          <!--</el-select>-->
-        <!--</el-form-item>-->
         <el-form-item v-if="selectFlag==4">
           <el-select v-model="params.proof" placeholder="请选择" clearable="" @change="search" value="">
             <el-option label="资料齐全" value="7"></el-option>
@@ -44,7 +34,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="createNewTask">创建任务</el-button>
+          <el-button v-show="selectFlag>1" type="primary" @click="createNewTask">创建任务</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -121,10 +111,6 @@
             prop="rent_contracts_count"
             label="领取合同数（租）">
           </el-table-column>
-          <el-table-column
-            prop="name"
-            label="备注">
-          </el-table-column>
         </el-table>
       </div>
 
@@ -137,7 +123,7 @@
           style="width: 100%">
           <el-table-column
             prop="report_time"
-            label="领取时间">
+            label="作废时间">
           </el-table-column>
           <el-table-column
             prop="department_name"
@@ -149,16 +135,11 @@
           </el-table-column>
           <el-table-column
             prop="collect_contracts_count"
-            label="领取合同数（收）">
+            label="作废合同数（收）">
           </el-table-column>
           <el-table-column
             prop="rent_contracts_count"
-            label="领取合同数（租）">
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            label="备注">
-
+            label="作废合同数（租）">
           </el-table-column>
         </el-table>
       </div>
@@ -172,7 +153,7 @@
           style="width: 100%">
           <el-table-column
             prop="report_time"
-            label="领取时间">
+            label="上缴时间">
           </el-table-column>
           <el-table-column
             prop="department_name"
@@ -184,15 +165,11 @@
           </el-table-column>
           <el-table-column
             prop="collect_contracts_count"
-            label="领取合同数（收）">
+            label="上缴合同数（收）">
           </el-table-column>
           <el-table-column
             prop="rent_contracts_count"
-            label="领取合同数（租）">
-          </el-table-column>
-          <el-table-column
-            prop="name"
-            label="备注">
+            label="上缴合同数（租）">
           </el-table-column>
         </el-table>
       </div>
@@ -213,16 +190,22 @@
                @clickOperate="clickEvent"></RightMenu>
 
     <Organization :organizationDialog="organizationDialog" @close="closeModalCallback"></Organization>
-    <Contact :contractDialog="contractDialog" @close="closeModalCallback"></Contact>
-    <CreateTask :createTaskDialog="createTaskDialog" @close="closeModalCallback"></CreateTask>
+
+    <Contact :contractDialog="contractDialog" :applyEditId_detail="applyEditId_detail" @close="closeModalCallback"></Contact>
+    <ContactCancel :contractCancelDialog="contractCancelDialog" :cancelEditId_detail="cancelEditId_detail" @close="closeModalCallback"></ContactCancel>
+    <ContactHandIn :contractHandInDialog="contractHandInDialog" :handInEditId_detail="handInEditId_detail" @close="closeModalCallback"></ContactHandIn>
+
+    <CreateTask :selectFlag="selectFlag" :createTaskDialog="createTaskDialog" @close="closeModalCallback"></CreateTask>
 
     <Dispatch :dispatchDialog="dispatchDialog" :dispatchObject="dispatchObject"
               :startOperate="startOperate" @close="closeModalCallback"></Dispatch>
 
     <EditApply :editApplyDialog="editApplyDialog" :applyEditId="applyEditId"
                :startOperate="startApplyOperate" @close="closeModalCallback"></EditApply>
+
     <EditCancel :editCancelDialog="editCancelDialog" :cancelEditId="cancelEditId"
                :startOperate="startCancelOperate" @close="closeModalCallback"></EditCancel>
+
     <EditHandIn :editHandInDialog="editHandInDialog" :handInEditId="handInEditId"
                :startOperate="startHandInOperate" @close="closeModalCallback"></EditHandIn>
 
@@ -232,6 +215,8 @@
 <script>
   import Organization from '../../../common/organization.vue'
   import Contact from './components/contractDetail.vue'
+  import ContactCancel from './components/cancelDeatail.vue'
+  import ContactHandIn from './components/handinDetail.vue'
   import CreateTask from './components/createTask.vue'
   import RightMenu from '../../../common/rightMenu.vue'    //右键
   import Dispatch from './components/dispatch.vue'
@@ -242,7 +227,8 @@
 
 
   export default {
-    components:{Organization,Contact,CreateTask,RightMenu,Dispatch,EditApply,EditCancel,EditHandIn},
+    components:{Organization,Contact,CreateTask,RightMenu,Dispatch,
+                EditApply,EditCancel,EditHandIn,ContactCancel,ContactHandIn},
     data () {
       return {
         rightMenuX: 0,
@@ -262,6 +248,8 @@
         organizationDialog:false,
         createTaskDialog : false,
         contractDialog: false,  //合同详情
+        contractCancelDialog: false,  //合同详情
+        contractHandInDialog: false,  //合同详情
         dispatchDialog:false,
 
         editApplyDialog:false,    //修改合同申领
@@ -278,7 +266,12 @@
         startHandInOperate:false,   //开始操作
         startCancelOperate:false,   //开始操作
         startApplyOperate:false,   //开始操作
+        showDetail:false,         //查看详情
         dispatchObject:{},
+        //详情
+        applyEditId_detail : '',
+        cancelEditId_detail : '',
+        handInEditId_detail : '',
       }
     },
     watch:{
@@ -418,12 +411,22 @@
       openOrganizationModal(){
         this.organizationDialog = true
       },
-      showContractDetail(){   //显示合同详情
-        this.contractDialog = true
+      //显示合同详情
+      showContractDetail(row,event){
+        if(this.selectFlag ===2){
+          this.contractDialog = true;
+          this.applyEditId_detail = row.id;
+        }else if(this.selectFlag === 3){
+           this.cancelEditId_detail = row.id;
+           this.contractCancelDialog = true;
+        }else if(this.selectFlag === 4){
+          this.handInEditId_detail = row.id;
+          this.contractHandInDialog = true;
+        }
       },
 
       createNewTask(){
-        this.createTaskDialog = true
+        this.createTaskDialog = true;
       },
 
 
@@ -451,11 +454,14 @@
         this.startApplyOperate = false;
         this.startHandInOperate = false;
         this.startCancelOperate = false;
+
         this.editApplyDialog = false;
         this.editCancelDialog = false;
         this.editHandInDialog = false;
         this.organizationDialog = false;
         this.contractDialog = false;
+        this.contractCancelDialog = false;
+        this.contractHandInDialog = false;
         this.createTaskDialog = false;
         this.dispatchDialog = false;
         this.search();
