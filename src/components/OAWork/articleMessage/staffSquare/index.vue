@@ -391,7 +391,11 @@
               title: '成功',
               message: res.data.msg
             });
-            this.getStaffTableData(1);
+            if(this.form.dict_id !== ''){
+              this.searchMyData()
+            }else{
+              this.getStaffTableData(1);
+            }
             this.getDict();
           }
         });
@@ -404,7 +408,11 @@
               title: '成功',
               message: res.data.msg
             });
-            this.getStaffTableData(1);
+            if(this.form.dict_id !== ''){
+              this.searchMyData()
+            }else{
+              this.getStaffTableData(1);
+            }
             this.getDict();
           }
         });
