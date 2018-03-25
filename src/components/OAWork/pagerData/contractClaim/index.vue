@@ -44,6 +44,7 @@
       <div v-show="selectFlag==1">
         <el-table
           :data="contractTotalData"
+          @row-dblclick = 'showContractDetail'
           @row-contextmenu='openTotalMenu'
           style="width: 100%">
           <el-table-column
@@ -194,6 +195,7 @@
     <Contact :contractDialog="contractDialog" :applyEditId_detail="applyEditId_detail" @close="closeModalCallback"></Contact>
     <ContactCancel :contractCancelDialog="contractCancelDialog" :cancelEditId_detail="cancelEditId_detail" @close="closeModalCallback"></ContactCancel>
     <ContactHandIn :contractHandInDialog="contractHandInDialog" :handInEditId_detail="handInEditId_detail" @close="closeModalCallback"></ContactHandIn>
+    <ContactTotal :totalDialog="totalDialog" :totalId_detail="totalId_detail" @close="closeModalCallback"></ContactTotal>
 
     <CreateTask :selectFlag="selectFlag" :createTaskDialog="createTaskDialog" @close="closeModalCallback"></CreateTask>
 
@@ -214,9 +216,12 @@
 
 <script>
   import Organization from '../../../common/organization.vue'
+
   import Contact from './components/contractDetail.vue'
   import ContactCancel from './components/cancelDeatail.vue'
   import ContactHandIn from './components/handinDetail.vue'
+  import ContactTotal from './components/totalDetail.vue'
+
   import CreateTask from './components/createTask.vue'
   import RightMenu from '../../../common/rightMenu.vue'    //右键
   import Dispatch from './components/dispatch.vue'
@@ -226,9 +231,10 @@
   import EditHandIn from './components/editHandin.vue'
 
 
+
   export default {
     components:{Organization,Contact,CreateTask,RightMenu,Dispatch,
-                EditApply,EditCancel,EditHandIn,ContactCancel,ContactHandIn},
+                EditApply,EditCancel,EditHandIn,ContactCancel,ContactHandIn,ContactTotal},
     data () {
       return {
         rightMenuX: 0,
@@ -250,6 +256,7 @@
         contractDialog: false,  //合同详情
         contractCancelDialog: false,  //合同详情
         contractHandInDialog: false,  //合同详情
+        totalDialog: false,  //合同详情
         dispatchDialog:false,
 
         editApplyDialog:false,    //修改合同申领
@@ -272,6 +279,7 @@
         applyEditId_detail : '',
         cancelEditId_detail : '',
         handInEditId_detail : '',
+        totalId_detail : '',
       }
     },
     watch:{
@@ -422,6 +430,10 @@
         }else if(this.selectFlag === 4){
           this.handInEditId_detail = row.id;
           this.contractHandInDialog = true;
+        }else if(this.selectFlag === 1){
+
+          this.totalId_detail = row.staff_id;
+          this.totalDialog = true;
         }
       },
 
@@ -449,7 +461,7 @@
 
 
       //修改合同相关回调
-      closeModalCallback(){
+      closeModalCallback(val){
         this.startOperate = false;
         this.startApplyOperate = false;
         this.startHandInOperate = false;
@@ -462,9 +474,13 @@
         this.contractDialog = false;
         this.contractCancelDialog = false;
         this.contractHandInDialog = false;
+        this.totalDialog = false;
         this.createTaskDialog = false;
         this.dispatchDialog = false;
-        this.search();
+
+        if(val === 'success'){
+          this.search();
+        }
       },
 
 
