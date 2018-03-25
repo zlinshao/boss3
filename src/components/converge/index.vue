@@ -231,13 +231,16 @@
                   </div>
                 </div>
 
-                <div class="bottomPic">
+                <div class="bottomPic module">
                   <div @click="routerDetail(key.id)" v-for="(key,index) in lifeData.data"
                        v-if="index !== 0 && lifeData.data[0] !== ''">
-                    <span v-for="pic in key.album.cover_pic">
+                    <span v-for="pic in key.album.cover_pic" class="">
                         <img v-for="p in pic" :src="p.uri">
+                        <div class="titleShow">
+                          <span style="font-size: 14px;">{{key.title}}</span>
+                        </div>
                     </span>
-                    {{key.title}}
+
                   </div>
                 </div>
               </div>
@@ -281,41 +284,56 @@
                        v-if="index === 1 && figureData.data[0] !== ''" @click="routerDetail(key.id)">
                     <span v-for="pic in key.album.cover_pic">
                       <img v-for="p in pic" :src="p.uri">
+                      <div class="titleShow">
+                        <span style="font-size: 14px;">{{key.title}}</span>
+                      </div>
                     </span>
-                    <div class="titleShow">
-                      <span>{{key.title}}</span>
-                    </div>
+
                   </div>
-                  <div class="bigPer2">
+                  <div class="bigPer2 module">
                     <span @click="routerDetail(key.id)" v-for="(key,index) in figureData.data"
                           v-if="index === 2 || index === 3 && figureData.data[0] !== ''">
-                      <div class="titleShow">
-                        <span>{{key.title}}</span>
-                      </div>
-                      <a v-for="pic in key.album.cover_pic">
+
+                      <a v-for="pic in key.album.cover_pic" class="">
                         <img v-for="p in pic" :src="p.uri">
+                        <div class="titleShow">
+                          <span style="font-size: 14px;">{{key.title}}</span>
+                        </div>
                       </a>
+
                     </span>
                   </div>
                 </el-col>
                 <el-col :span="8" class="per2">
-                  <div v-for="(key,index) in figureData.data"
+                  <div class="module" v-for="(key,index) in figureData.data"
                        v-if="index === 4 && figureData.data[0] !== ''">
                     <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
                      <img v-for="p in pic" :src="p.uri">
+                     <div class="titleShow">
+                      <span style="font-size: 14px;">{{key.title}}</span>
+                    </div>
                     </span>
+
                   </div>
-                  <div v-for="(key,index) in figureData.data"
+                  <div class="module" v-for="(key,index) in figureData.data"
                        v-if="index === 5 && figureData.data[0] !== ''">
                    <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
                      <img v-for="p in pic" :src="p.uri">
+                     <div class="titleShow">
+                        <span style="font-size: 14px;">{{key.title}}</span>
+                     </div>
                     </span>
+
                   </div>
-                  <div v-for="(key,index) in figureData.data"
+                  <div class="module" v-for="(key,index) in figureData.data"
                        v-if="index === 6 && figureData.data[0] !== ''">
                     <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
                       <img v-for="p in pic" :src="p.uri">
+                      <div class="titleShow">
+                        <span style="font-size: 14px;">{{key.title}}</span>
+                      </div>
                     </span>
+
                   </div>
                 </el-col>
               </el-row>
@@ -429,7 +447,9 @@
     methods: {
       // 详情
       routerDetail(id) {
-        this.$router.push({path: '/Infodetails', query: {ids: id, detail: 'converge'}})
+        let data = {ids: id, detail: 'converge'};
+        this.$router.push({path: '/Infodetails', query: data});
+        this.$store.dispatch('articleDetail', data);
       },
       addRegion() {
         // 主轮播
@@ -618,12 +638,13 @@
     .module {
       position: relative;
       .titleShow {
+        width: 100%;
         opacity: 0;
         position: absolute;
         top: 0;
         bottom: 0;
-        left: 0;
-        right: 0;
+        /*left: 0;*/
+        /*right: 0;*/
         background: rgba(0, 0, 0, .4);
         @include flex;
         align-items: flex-end;

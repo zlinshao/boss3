@@ -201,12 +201,19 @@
         loading: false,     //点赞
       }
     },
+    computed: {
+      query(val){
+        console.log("article_detail======="+JSON.stringify(this.$store.state.article.article_detail));
+        return this.$store.state.article.article_detail;
+
+      }
+    },
     mounted() {
       this.addRegion();
-      let query = this.$route.query;
-      if (JSON.stringify(query) !== '{}') {
-        this.publicDetail(query.ids);
-        if (query.detail === 'port') {
+      // let query = this.$route.query;
+      if (JSON.stringify(this.query) !== '{}') {
+        this.publicDetail(this.query.ids);
+        if (this.query.detail === 'port') {
           this.isShow = false;
           this.colNum = 24;
         } else {
@@ -219,6 +226,7 @@
       // 详情
       routerDetail(id) {
         this.$router.push({path: '/Infodetails', query: {ids: id, detail: 'converge'}});
+        this.$store.dispatch('articleDetailId',id);
         document.body.scrollTop = document.documentElement.scrollTop = 0;
         this.publicDetail(id);
         this.loading = true;
