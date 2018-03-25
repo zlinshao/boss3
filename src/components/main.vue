@@ -111,9 +111,9 @@
             <div class="yuangong">
               <div style="display: inline-block;float: left;font-size: 0;"><img v-if="staffSquareTop[0]" :src="staffSquareTop[0].uri" @click="routerDetail(staffSquareTop[0].id)" width="500" height="390"></div>
               <div class="clearfix" style="padding-left: 520px;">
-                <div style="padding-top:20px;">
-                  <div class="list_gonggao" v-for="(item, key) in staffSquares" :key="item.id" v-if="key < 3" @click="routerDetail(item.id)">
-                    <div style="display: inline-block;float: left;"><img :src="item.uri" height="100" width="180"></div>
+                <div>
+                  <div class="list_gonggao" v-for="(item, key) in staffSquares" :key="item.id" v-if="key < 3" @click="routerDetail(item.id)" style="padding-top:15px;">
+                    <div style="display: inline-block;float: left;"><img :src="item.uri" height="105" width="180" style="border-radius: 5px;"></div>
                     <div style="padding-left: 200px;">
                       <p class="info_title text_over_norwap">{{item.title}}</p>
                       <div class="second_line_camp">{{item.content}}</div>
@@ -132,7 +132,7 @@
             </div>
             <div class="news">
               <div class="list_gonggao" v-for="(item,key) in externalNews" :key="item.id" v-if="key<3" @click="routerDetail(item.id)">
-                <div style="display: inline-block;float: left;"><img :src="item.uri" height="100" width="120"></div>
+                <div style="display: inline-block;float: left;"><img :src="item.uri" height="105" width="120" style="border-radius: 5px;"></div>
                 <div style="padding-left: 130px;">
                   <p class="info_title text_over_norwap">{{item.title}}</p>
                   <div class="second_line_camp">{{item.content}}</div>
@@ -321,7 +321,7 @@
                 if (first) {
                   let pic = {};
                   pic.id = bannerData[i].id;
-                  pic.uri = cover_pic[key][0].uri;
+                  pic.uri = cover_pic && cover_pic[key] && cover_pic[key][0].uri;
                   this.banners.push(pic);
                 }
                 first = false;
@@ -348,14 +348,14 @@
                   let top={};
 
                   pic.id = staffData[i].id;
-                  pic.uri = cover_pic[key][0].uri;
+                  pic.uri = cover_pic && cover_pic[key] && cover_pic[key][0].uri;
                   pic.title = staffData[i].title;
                   pic.content = staffData[i].content;
                   this.staffSquares.push(pic);
                   if(staffData[i].top !== null) {
                     top.id = staffData[i].id;
                     top.title = staffData[i].title;
-                    top.uri = cover_pic[key][0].uri;
+                    top.uri = cover_pic && cover_pic[key] && cover_pic[key][0].uri;
                     this.staffSquareTop.push(top);
                   }
                 }
@@ -366,7 +366,7 @@
         });
       },
       getNews() {
-        this.$http.get(globalConfig.server + "oa/portal/?dict_id=378&pages=1").then((res) => {
+        this.$http.get(globalConfig.server + "oa/portal/?dict_id=379&pages=1").then((res) => {
           let newsData = res && res.data && res.data.data && res.data.data.data;
           this.externalNews = [];
           if(typeof newsData === "undefined"){
@@ -384,7 +384,7 @@
                   pic.content = newsData[i].content;
                   pic.favor_num = newsData[i].favor_num;
                   pic.read_num = newsData[i].read_num;
-                  pic.uri = cover_pic[key][0].uri;
+                  pic.uri = cover_pic && cover_pic[key] && cover_pic[key][0].uri;
                   this.externalNews.push(pic);
                 }
                 first = false;
@@ -412,7 +412,7 @@
                   let top={};
                   let fine={};
                   pic.id = lejiaData[i].id;
-                  pic.uri = cover_pic[key][0].uri;
+                  pic.uri = cover_pic && cover_pic[key] && cover_pic[key][0].uri;
                   pic.title = lejiaData[i].title;
                   pic.content = lejiaData[i].content;
                   pic.read_num = lejiaData[i].read_num;
@@ -421,13 +421,13 @@
                   if(lejiaData[i].top !== null) {
                     top.id = lejiaData[i].id;
                     top.title = lejiaData[i].title;
-                    top.uri = cover_pic[key][0].uri;
+                    top.uri = cover_pic && cover_pic[key] && cover_pic[key][0].uri;
                     this.lejiaCollegeTop.push(top);
                   }
                   if(lejiaData[i].fine !== null) {
                     fine.id = lejiaData[i].id;
                     fine.title = lejiaData[i].title;
-                    fine.uri = cover_pic[key][0].uri;
+                    fine.uri = cover_pic && cover_pic[key] && cover_pic[key][0].uri;
                     this.lejiaCollegeFine.push(fine);
                   }
                 }
@@ -502,12 +502,13 @@
   .yuangong{
     border: 1px solid #dfe6fb;
     border-radius: 5px;
+    height: 390px;
   }
   .news{
     border: 1px solid #dfe6fb;
-    padding: 12px 20px;
+    padding: 0px 20px;
     border-radius: 5px;
-    height: 367px;
+    height: 390px;
   }
   .lejia{
     border-radius: 5px;
@@ -576,6 +577,7 @@
         }
       }
       .list_gonggao{
+
         &:hover {
           .info_title {
             color: #6a8dfb;

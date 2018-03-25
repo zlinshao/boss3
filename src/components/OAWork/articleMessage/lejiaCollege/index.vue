@@ -64,7 +64,7 @@
       </div>
     </div>
     <div class="main">
-      <div class="blueTable">
+      <div class="blueTable left_table">
         <el-table
           :data="tableData"
           @row-contextmenu='openContextMenu'
