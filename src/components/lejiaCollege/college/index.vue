@@ -242,14 +242,14 @@
         this.$http.get(globalConfig.server + "oa/portal/?dict_id=363&pages=1").then((res) => {
           let teachers = res && res.data && res.data.data && res.data.data.data;
           this.teacherStyles = [];
-          if(typeof teacher === "undefined"){
+          if(typeof teachers === "undefined"){
             return;
           }
           for (let i = 0; i < teachers.length; i++) {
             let cover_pic = teachers[i].album.cover_pic;
             let first = true;
             for (let key in cover_pic) {
-              if(courses[i].statuss == "已发布") {
+              if(teachers[i].statuss == "已发布") {
                 if (first) {
                   let pic = {};
                   pic.id = teachers[i].id;
@@ -274,7 +274,7 @@
             let cover_pic = pictures[i].album.cover_pic;
             let first = true;
             for (let key in cover_pic) {
-              if(courses[i].statuss == "已发布"){
+              if(pictures[i].statuss == "已发布"){
                 if (first) {
                   let pic = {};
                   pic.id = pictures[i].id;
