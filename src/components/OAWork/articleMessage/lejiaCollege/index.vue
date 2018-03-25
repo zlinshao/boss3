@@ -140,7 +140,7 @@
         },
         form: {
           list: 12,
-          dict_id: 361,
+          dict_id: '',
           status: '',
           keywords: '',
           pages: this.currentPage,
@@ -391,7 +391,11 @@
               title: '成功',
               message: res.data.msg
             });
-            this.getLejiaTableData(1);
+            if(this.form.dict_id !== ''){
+              this.searchMyData()
+            }else{
+              this.getLejiaTableData(1);
+            }
             this.getDict();
           }
         });
@@ -404,7 +408,11 @@
               title: '成功',
               message: res.data.msg
             });
-            this.getLejiaTableData(1);
+            if(this.form.dict_id !== ''){
+              this.searchMyData()
+            }else{
+              this.getLejiaTableData(1);
+            }
             this.getDict();
           }
         });
