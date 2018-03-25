@@ -35,8 +35,8 @@
                   <div class="list_pic">
                     <img :data-src="course.uri"  style="border-radius:10px;">
                   </div>
-                  <div class="list_detail">
-                    <div class="list_title">{{course.title}}</div>
+                  <div class="list_detail" style="min-width: 130px;">
+                    <div class="list_title second_line_camp">{{course.title}}</div>
                     <div class="list_remark">{{course.content}}</div>
                     <div class="readerInfo">
                       <div class="read">
@@ -177,7 +177,9 @@
     methods: {
       // 详情
       routerDetail(id) {
-        this.$router.push({path: '/Infodetails', query: {ids: id, detail: 'converge'}})
+        let data = {ids: id, detail: 'converge'};
+        this.$router.push({path: '/Infodetails', query: data});
+        this.$store.dispatch('articleDetail', data);
       },
       showKey(val) {
         // if (val == 'left') {
@@ -336,6 +338,15 @@
 </script>
 
 <style scoped lang="scss">
+  .second_line_camp{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    font-size: 14px;
+    line-height: 20px;
+  }
   ul.el-carousel__indicators{
     display: none;
   }

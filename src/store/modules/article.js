@@ -5,16 +5,9 @@ const article = {
   state: {
     article_id :'',
     module_type: '',
+    article_detail: {},
   },
   mutations: {
-    // ADD_VISITED_VIEWS: (state, view) => {
-    //   if (state.visitedViews.some(v => v.path === view.path)) return;
-    //   state.visitedViews.push({
-    //     name: view.name,
-    //     path: view.path,
-    //   })
-    // },
-    //
     ARTICLE_ID:(state,view) => {
       state.article_id = view;
     },
@@ -24,6 +17,9 @@ const article = {
     // 文章类型模块
     MODULE_TYPE:(state,view)=>{
       state.module_type = view;
+    },
+    ARTICLE_DETAIL: (state, view) => {
+        state.article_detail= view;
     },
   },
   actions: {
@@ -35,6 +31,10 @@ const article = {
     },
     moduleType({commit},view){
       commit('MODULE_TYPE',view);
+    },
+    // 文章详情
+    articleDetail:({commit},view)=>{
+      commit('ARTICLE_DETAIL', view);
     },
   }
 };

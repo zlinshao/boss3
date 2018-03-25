@@ -269,7 +269,9 @@
     methods: {
       // 详情
       routerDetail(id) {
-        this.$router.push({path: '/Infodetails', query: {ids: id, detail: 'converge'}})
+        let data = {ids: id, detail: 'converge'};
+        this.$router.push({path: '/Infodetails', query: data});
+        this.$store.dispatch('articleDetail', data);
       },
       handleDayChanged(data) {
         console.log(data)
