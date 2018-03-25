@@ -33,7 +33,7 @@
             </el-row>
 
             <el-row>
-              <el-col :span="8">
+              <el-col :span="8"  v-if="taskType!=2 && taskType!=3">
                 <el-form-item label="领用日期">
                   <el-date-picker
                     type="datetime"
@@ -42,8 +42,36 @@
                   </el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="8"  v-if="taskType==2">
+                <el-form-item label="报备日期">
+                  <el-date-picker
+                    type="datetime"
+                    placeholder="选择日期时间"
+                    value-format="yyyy-MM-dd HH:mm:ss" v-model="params.report_time">
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8" v-if="taskType==3">
+                <el-form-item label="上缴日期">
+                  <el-date-picker
+                    type="datetime"
+                    placeholder="选择日期时间"
+                    value-format="yyyy-MM-dd HH:mm:ss" v-model="params.report_time">
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8" v-if="taskType!=2 && taskType!=3">
                 <el-form-item label="领用人">
+                  <el-input readonly="" v-model="staff_name" @focus="openOrganizeModal"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8" v-if="taskType==2">
+                <el-form-item label="报备人">
+                  <el-input readonly="" v-model="staff_name" @focus="openOrganizeModal"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8" v-if="taskType==3">
+                <el-form-item label="上缴人">
                   <el-input readonly="" v-model="staff_name" @focus="openOrganizeModal"></el-input>
                 </el-form-item>
               </el-col>
