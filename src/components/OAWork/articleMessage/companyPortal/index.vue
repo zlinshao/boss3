@@ -152,16 +152,12 @@
         if_shows: '',
         organizationDialog: false,
         moduleId: 377,
+        moduleType: 'companyPortal',
       }
     },
     mounted() {
       this.getCompanyTableData(1);
       this.getDict();
-    },
-    computed: {
-      moduleType(val) {
-        return this.type ? this.type : this.$store.state.article.module_type;
-      }
     },
     methods: {
       getDict() {
@@ -220,6 +216,7 @@
       publicArticle() {
         this.$store.dispatch('deleteArticleId');
         this.$router.push({path: '/publicArticle',query:{moduleType: this.moduleType}});
+        this.$store.dispatch('moduleType',this.moduleType);
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -282,6 +279,7 @@
         switch (val) {
           case 'revise':
             this.$router.push({path: '/publicArticle', query: {ids: this.pitch, moduleType: this.moduleType}});
+            this.$store.dispatch('moduleType',this.moduleType);
             break;
           case 'delete':
             this.deleteInfo(this.pitch);
