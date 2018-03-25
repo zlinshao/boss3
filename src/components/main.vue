@@ -86,10 +86,10 @@
                 </div>
                 <div style="margin-top: 10px;" class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
                 <div><em class="ix"></em></div>
-                <div style="border-bottom: 1px solid #eee;padding-bottom: 10px;"><el-button size="small" style="background: #6a8dfb;color: #fff;margin-top: 15px;">MORE</el-button></div>
+                <div style="border-bottom: 1px solid #eee;padding-bottom: 20px;"><el-button size="small" style="background: #6a8dfb;color: #fff;margin-top: 20px;">MORE</el-button></div>
 
                 <div class="clearfix list_gonggao" v-for="item in 4">
-                  <div style="display: inline-block;float: left;"><img src="./../assets/images/gonggao_detail.png" height="100"></div>
+                  <div style="display: inline-block;float: left;"><img src="./../assets/images/gonggao_detail.png" height="100" width="180"></div>
                   <div style="padding-left: 200px;">
                     <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
                     <div class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
@@ -132,7 +132,7 @@
             </div>
             <div class="news">
               <div class="list_gonggao" v-for="(item,key) in externalNews" :key="item.id" v-if="key<3" @click="routerDetail(item.id)">
-                <div style="display: inline-block;float: left;"><img :src="item.uri" height="105" width="120" style="border-radius: 5px;"></div>
+                <div style="display: inline-block;float: left;"><img :src="item.uri" height="106" width="120" style="border-radius: 5px;"></div>
                 <div style="padding-left: 130px;">
                   <p class="info_title text_over_norwap">{{item.title}}</p>
                   <div class="second_line_camp">{{item.content}}</div>
@@ -160,54 +160,57 @@
             <div class="lejia">
               <el-row>
                 <el-col :span="8" style="padding:0;">
-                  <div class="hover_pic" style="padding:0;border-radius: 10px;"><img src="./../assets/images/lejia1.png" width="100%" height="195"></div>
+                  <div class="hover_pic"><img :src="lejiaCollegeTop[0] && lejiaCollegeTop[0].uri" width="100%"  height="195"></div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
                   <div class="list_frame" @click="routerDetail(lejiaCollege[0] && lejiaCollege[0].id)">
-                    <div style="display: inline-block;float: left;margin-top: 30px;">
-                      <img v-if="lejiaCollege[0]" :src="lejiaCollege[0].uri" width="100" height="100" style="border-radius: 10px;"></div>
-                    <div style="padding: 12px 12px 34px 120px;">
+                    <img v-if="lejiaCollege[0]" :src="lejiaCollege[0].uri" width="100%" height="100%" style="border-radius: 10px;">
+                  </div>
+                    <div style="padding: 12px 12px 34px 150px;margin-top: -180px;">
                       <p class="info_title text_over_norwap">{{lejiaCollege[0] && lejiaCollege[0].title}}</p>
                       <div class="second_line_camp">{{lejiaCollege[0] && lejiaCollege[0].content}}</div>
-                      <span style="display: block;margin-top: 15px;">
-                      <i class="el-icon-view"></i><span class="view_word">{{lejiaCollege[0] && lejiaCollege[0].read_num}}人</span>&nbsp;&nbsp;&nbsp;
-                        <i class="el-icon-edit"></i><span class="edit_word">{{lejiaCollege[0] && lejiaCollege[0].favor_num}}人</span>
-                    </span>
+                      <span style="display: block;margin-top: 15px;font-size: 14px;">
+                        <i class="el-icon-view"></i><span class="view_word">{{lejiaCollege[0] && lejiaCollege[0].read_num}}人</span>&nbsp;&nbsp;&nbsp;
+                          <i class="el-icon-edit"></i><span class="edit_word">{{lejiaCollege[0] && lejiaCollege[0].favor_num}}人</span>
+                      </span>
                     </div>
-                  </div>
+                    <!--<div style="display: inline-block;float: left;margin-top: 30px;">-->
+                      <!--&lt;!&ndash;<img v-if="lejiaCollege[0]" :src="lejiaCollege[0].uri" width="100" height="100" style="border-radius: 10px;"></div>&ndash;&gt;-->
+                    <!---->
+                  <!--</div>-->
                 </el-col>
                 <el-col :span="8" style="padding:0;">
-                  <div class="hover_pic"><img src="./../assets/images/lejia1.png" width="100%"  height="195"></div>
+                  <div class="hover_pic"><img :src="lejiaCollegeTop[1] && lejiaCollegeTop[1].uri" width="100%"  height="195"></div>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="8" style="padding:0;">
                   <div class="list_frame" @click="routerDetail(lejiaCollege[1] && lejiaCollege[1].id)">
-                    <div style="display: inline-block;float: left;margin-top: 30px;"><img v-if="lejiaCollege[1]" :src="lejiaCollege[1].uri"  height="100" width="100" style="border-radius: 10px;"></div>
-                    <div style="padding: 12px 12px 34px 120px;">
-                      <p class="info_title text_over_norwap">{{lejiaCollege[1] && lejiaCollege[1].title}}</p>
-                      <div class="second_line_camp">{{lejiaCollege[1] && lejiaCollege[1].content}}</div>
-                      <span style="display: block;margin-top: 15px;">
+                    <img v-if="lejiaCollege[1]" :src="lejiaCollege[1].uri" width="100%" height="100%" style="border-radius: 10px;">
+                  </div>
+                  <div style="padding: 12px 12px 34px 150px;margin-top: -180px;">
+                    <p class="info_title text_over_norwap">{{lejiaCollege[1] && lejiaCollege[1].title}}</p>
+                    <div class="second_line_camp">{{lejiaCollege[1] && lejiaCollege[1].content}}</div>
+                    <span style="display: block;margin-top: 15px;font-size: 14px;">
                         <i class="el-icon-view"></i><span class="view_word">{{lejiaCollege[1] && lejiaCollege[1].read_num}}人</span>&nbsp;&nbsp;&nbsp;
-                        <i class="el-icon-edit"></i><span class="edit_word">{{lejiaCollege[1] && lejiaCollege[1].read_num}}人</span>
+                          <i class="el-icon-edit"></i><span class="edit_word">{{lejiaCollege[1] && lejiaCollege[1].favor_num}}人</span>
                     </span>
-                    </div>
                   </div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
-                  <div class="hover_pic"><img src="./../assets/images/lejia2.png" width="100%" height="195"></div>
+                  <div class="hover_pic"><img :src="lejiaCollegeTop[2] && lejiaCollegeTop[2].uri" width="100%"  height="195"></div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
                   <div class="list_frame" @click="routerDetail(lejiaCollege[2] && lejiaCollege[2].id)">
-                    <div style="display: inline-block;float: left;margin-top: 30px;"><img :src="lejiaCollege[2] && lejiaCollege[2].uri" height="100" width="100" style="border-radius: 10px;"></div>
-                    <div style="padding: 12px 12px 0px 120px;">
-                      <p class="info_title text_over_norwap">{{lejiaCollege[2] && lejiaCollege[2].title}}</p>
-                      <div class="second_line_camp">{{lejiaCollege[2] && lejiaCollege[2].content}}</div>
-                      <span style="display: block;margin-top: 15px;">
-                      <i class="el-icon-view"></i><span class="view_word">{{lejiaCollege[2] && lejiaCollege[1].read_num}}人</span>&nbsp;&nbsp;&nbsp;
-                      <i class="el-icon-edit" ></i><span class="edit_word">{{lejiaCollege[2] && lejiaCollege[1].favor_num}}人</span>
+                    <img v-if="lejiaCollege[2]" :src="lejiaCollege[2].uri" width="100%" height="100%" style="border-radius: 10px;">
+                  </div>
+                  <div style="padding: 12px 12px 34px 150px;margin-top: -180px;">
+                    <p class="info_title text_over_norwap">{{lejiaCollege[2] && lejiaCollege[2].title}}</p>
+                    <div class="second_line_camp">{{lejiaCollege[2] && lejiaCollege[2].content}}</div>
+                    <span style="display: block;margin-top: 15px;font-size: 14px;">
+                        <i class="el-icon-view"></i><span class="view_word">{{lejiaCollege[2] && lejiaCollege[2].read_num}}人</span>&nbsp;&nbsp;&nbsp;
+                          <i class="el-icon-edit"></i><span class="edit_word">{{lejiaCollege[2] && lejiaCollege[2].favor_num}}人</span>
                     </span>
-                    </div>
                   </div>
                 </el-col>
               </el-row>
@@ -585,10 +588,10 @@
         }
       }
       .list_frame{
-        padding: 16px;
+        /*padding: 16px;*/
         border: none;
         border-radius: 5px;
-        height: 180px;
+        height: 197px;
         padding-bottom: 0;
         font-size: 14px;
         &:hover {
