@@ -2,27 +2,36 @@
   <div>
     <el-tabs v-model="activeName" @tab-click="handleClick(activeName)">
       <el-tab-pane label="乐伽大学" name="first">
-        <StaffSquare :type="moduleType"></StaffSquare>
+        <LejiaCollege :type="moduleType"></LejiaCollege>
       </el-tab-pane>
       <el-tab-pane label="公司门户" name="second">
-        <StaffSquare :type="moduleType"></StaffSquare>
+        <companyPortal :type="moduleType"></companyPortal>
       </el-tab-pane>
       <el-tab-pane label="员工广场" name="third">
         <StaffSquare :type="moduleType"></StaffSquare>
       </el-tab-pane>
       <el-tab-pane label="制度管理" name="fourth">
-        <StaffSquare :type="moduleType"></StaffSquare>
+        <systemManageMent :type="moduleType"></systemManageMent>
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
-  import StaffSquare from './staffSquare/index.vue'
+  import LejiaCollege from './lejiaCollege/index.vue';
+  import companyPortal from './companyPortal/index.vue';
+  import StaffSquare from './staffSquare/index.vue';
+  import systemManageMent from './systemManageMent/index.vue';
+
 
   export default {
     name: "index",
-    components: {StaffSquare},
+    components: {
+      StaffSquare,
+      LejiaCollege,
+      companyPortal,
+      systemManageMent,
+    },
     data() {
       return {
         activeName: 'first',

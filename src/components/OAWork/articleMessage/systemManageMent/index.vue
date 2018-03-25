@@ -151,11 +151,11 @@
         pitch: '',
         if_shows: '',
         organizationDialog: false,
-        moduleId: 137,
+        moduleId: 380,
       }
     },
     mounted() {
-      this.getStaffTableData(1);
+      this.getSystemTableData(1);
       this.getDict();
     },
     computed: {
@@ -165,14 +165,14 @@
     },
     methods: {
       getDict() {
-        this.$http.get(this.urls + 'setting/dictionary/137').then((res) => {
+        this.$http.get(this.urls + 'setting/dictionary/380').then((res) => {
           this.dict.region = res.data.data;
         });
         this.$http.get(this.urls + 'setting/dictionary/147').then((res) => {
           this.dict.status = res.data.data;
         });
       },
-      getStaffTableData(page) {
+      getSystemTableData(page) {
         this.$http.get(this.urls + 'oa/portal/', { params:{dict_id: this.moduleId, list: this.form.list, pages: this.currentPage} }).then((res) => {
           this.isHigh = false;
           if (res.data.code === '80000') {
@@ -199,7 +199,6 @@
             this.totalNum = 0;
           }
         });
-
       },
       // 详情
       openDetail(row) {
@@ -215,7 +214,7 @@
         this.form.dict_id = '';
         this.form.status = '';
         this.form.keywords = '';
-        this.getStaffTableData(1);
+        this.getSystemTableData(1);
       },
       // 文章发布
       publicArticle() {
@@ -231,7 +230,7 @@
         if(this.form.dict_id !== ''){
           this.searchMyData(this.currentPage);
         }else{
-          this.getStaffTableData();
+          this.getSystemTableData();
         }
 
       },
@@ -333,7 +332,7 @@
         }).then(() => {
           this.$http.get(this.urls + 'oa/portal/delete/' + id).then((res) => {
             if (res.data.code === '80040') {
-              this.getStaffTableData(this.currentPage);
+              this.getSystemTableData(this.currentPage);
               this.prompt(1, res.data.msg);
             } else {
               this.prompt(2, res.data.msg);
@@ -356,7 +355,7 @@
         }).then(() => {
           this.$http.get(this.urls + 'oa/portal/if_show/' + id).then((res) => {
             if (res.data.code === '80080' || res.data.code === '80010') {
-              this.getStaffTableData(this.currentPage);
+              this.getSystemTableData(this.currentPage);
               this.prompt(1, res.data.msg);
             } else {
               this.prompt(2, res.data.msg);
@@ -393,7 +392,7 @@
               title: '成功',
               message: res.data.msg
             });
-            this.getStaffTableData(1);
+            this.getSystemTableData(1);
             this.getDict();
           }
         });
@@ -406,12 +405,14 @@
               title: '成功',
               message: res.data.msg
             });
-            this.getStaffTableData(1);
+            this.getSystemTableData(1);
             this.getDict();
           }
         });
       },
     },
+
+
   }
 </script>
 
@@ -423,8 +424,8 @@
   .el-table__body td {
     text-align: left !important;
   }
-  .btnStatus{
-    cursor: inherit;
-    min-width:   68px;
-  }
+ .btnStatus{
+   cursor: inherit;
+   min-width:   68px;
+ }
 </style>
