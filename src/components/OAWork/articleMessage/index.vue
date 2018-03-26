@@ -35,17 +35,55 @@
     data() {
       return {
         activeName: 'first',
+        moduleType: 'lejiaCollege',
       }
     },
     mounted() {
       if (this.$route.query.tabs !== undefined) {
         this.activeName = this.$route.query.tabs;
       }
+      switch (this.activeType) {
+        case 'lejiaCollege':
+          this.activeName = 'first';
+          break;
+        case 'companyPortal':
+          this.activeName = 'second';
+          break;
+        case 'staffSquare':
+          this.activeName = 'third';
+          break;
+        case 'systemManageMent':
+          this.activeName = 'fourth';
+          break;
+      }
+      console.log("active====="+this.activeType);
     },
-
+    watch: {
+      moduleType(val){
+        this.$store.dispatch('moduleType',this.moduleType);
+      }
+    },
+    computed: {
+      activeType() {
+        return this.$store.state.article.module_type;
+      }
+    },
     methods: {
       handleClick(val) {
-
+        switch (val) {
+          case 'first':
+            this.moduleType = 'lejiaCollege';
+            break;
+          case 'second':
+            this.moduleType = 'companyPortal';
+            break;
+          case 'third':
+            this.moduleType = 'staffSquare';
+            break;
+          case 'fourth':
+            this.moduleType = 'systemManageMent';
+            break;
+        }
       }
     },
   }

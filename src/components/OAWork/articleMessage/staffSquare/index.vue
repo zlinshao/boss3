@@ -203,7 +203,9 @@
       },
       // 详情
       openDetail(row) {
-        this.$router.push({path: '/Infodetails', query: {ids: row.id, detail: 'port'}});
+        var data = {ids: row.id, detail: 'port'};
+        this.$store.dispatch('articleDetail',data);
+        this.$router.push({path: '/Infodetails', query: data});
       },
       // 高级
       highGrade() {
