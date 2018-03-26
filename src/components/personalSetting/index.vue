@@ -264,11 +264,13 @@
         </el-col>
       </el-row>
        <el-row v-for="(item2) in dictionary2" :key="item2.id" >
-        <el-col class="leftTitle" :span="6" style="margin-top: 8px">
+        <el-col class="leftTitle" :span="6" style="margin-top: 4px">
           {{item2.dictionary_name}}
         </el-col>
         <el-col :span="6">
-          <el-button @click="openSecondPassword('secondPasswordDialog',item2.id)" style="width: 140px;" type="primary">设置二级密码</el-button>
+        
+          <el-button size="mini" v-if="secondary_pass.indexOf(item2.id)>-1" @click="openSecondPassword('secondPasswordDialog',item2.id)" type="success">修改二级密码</el-button>
+          <el-button size="mini" v-else @click="openSecondPassword('secondPasswordDialog',item2.id)" type="primary">设置二级密码</el-button>
         </el-col>
       </el-row>     
     </div>
@@ -319,257 +321,296 @@
 </template>
 
 <script>
-import secondPasswordRes from './secondPassword/index.vue' 
-  export default {
-    name: "index",
-     components: {
-      secondPasswordRes
-    },
-    data() {
-      return {
-        basicSet: true,
-        secondPassword: false,
-        lockScreen: false,
-        secondPasswordDialog:false,
-        form: {},
-        sendid:'',
-        checkList: [],
-        pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
+import secondPasswordRes from "./secondPassword/index.vue";
+export default {
+  name: "index",
+  components: {
+    secondPasswordRes
+  },
+  data() {
+    return {
+      basicSet: true,
+      secondPassword: false,
+      lockScreen: false,
+      secondPasswordDialog: false,
+      form: {},
+      sendid: "",
+      checkList: [],
+
+      secondary_password: {},
+      secondary_pass: [],
+      pickerOptions: {
+        shortcuts: [
+          {
+            text: "最近一周",
             onClick(picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
+              picker.$emit("pick", [start, end]);
             }
-          }, {
-            text: '最近一个月',
+          },
+          {
+            text: "最近一个月",
             onClick(picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
+              picker.$emit("pick", [start, end]);
             }
-          }, {
-            text: '最近三个月',
+          },
+          {
+            text: "最近三个月",
             onClick(picker) {
               const end = new Date();
               const start = new Date();
               start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
+              picker.$emit("pick", [start, end]);
             }
-          }]
-        },
-        //锁屏
-        isSending : 60,    //发送验证码
-        sms_lock_num:'',    //验证码
-        set_pwd_lock:'',    //锁屏密码
-        identify_pwd_lock:'',
-        dictionary:[],      //字典
-        dictionary2:[],      //字典
-        //个人基本设置
-        basicSetting:{
-          id: [],
-          type:1
-        }
+          }
+        ]
+      },
+      //锁屏
+      isSending: 60, //发送验证码
+      sms_lock_num: "", //验证码
+      set_pwd_lock: "", //锁屏密码
+      identify_pwd_lock: "",
+      dictionary: [], //字典
+      dictionary2: [], //字典
+      //个人基本设置
+      basicSetting: {
+        id: [],
+        type: 1
       }
-    },
-    mounted() {
-        this.getDictionary();
-        this.getDictionary2();
-    },
-    watch: {
+    };
+  },
+  mounted() {
+    this.getDictionary();
+    this.allinfo();
+    this.getDictionary2();
+  },
+  watch: {},
+  methods: {
+    allinfo() {
+      this.$http
+        .get(globalConfig.server + "setting/others/loginInfo")
+        .then(res => {
+          console.log(res);
 
-    },
-    methods: {
-      openSecondPassword(val,id){
-        this.sendid=id;  
-        this.secondPasswordDialog=true;
-      },
-      closesecondPassword(){
-        this.secondPasswordDialog=false;
-      },
-      getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/202').then((res) => {
-          if(res.data.code === '30010'){
-            this.dictionary = res.data.data;
-          }else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
-            });
-          }
-        })
-      },
-      getDictionary2(){
-        this.$http.get(globalConfig.server+'setting/dictionary/220').then((res) => {
-          console.log(res)
-          if(res.data.code === '30010'){
-            this.dictionary2 = res.data.data;
-          }else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
-            });
-          }
-        })
-      },  
-      showBasicset() {
-        this.basicSet = true;
-        this.secondPassword = false;
-        this.lockScreen = false;
-      },
-      showSecond() {
-        this.basicSet = false;
-        this.secondPassword = true;
-        this.lockScreen = false;
-      },
-      showLockscreen() {
-        this.basicSet = false;
-        this.secondPassword = false;
-        this.lockScreen = true;
-      },
-      //发送验证码
-      sendMessage(){
-        new Promise((resolve, reject) => {
-          let interval = setInterval(() => {
-            this.isSending--;
-            if(this.isSending<0){
-              clearInterval(interval)
-              resolve()
+          if (res.data.code === "100090") {
+            this.secondary_password =
+              res.data.data.data.detail.secondary_password;
+            for (let a in res.data.data.data.detail.secondary_password) {
+              this.secondary_pass.push(Number(a));
             }
-          }, 1000)
-        }).then((data) => {
-            this.isSending = 60;
+          }
         });
-        this.$http.get(globalConfig.server+'setting/others/sms_code').then((res)=>{
-            if(res.data.code === '100090'){
-              this.$notify({
-                title: '成功',
-                message: res.data.msg,
-                type: 'success'
-              });
-            }
-        })
-      },
-      setLockPassword(){
-        this.$http.get(globalConfig.server+'setting/others/lock_screen_status?sms_lock_num='+this.sms_lock_num +'&set_pwd_lock='+this.set_pwd_lock).then((res)=>{
-            if(res.data.code === '100000'){
-              this.$notify({
-                title: '成功',
-                message: res.data.msg,
-                type: 'success'
-              });
-            }else {
-              this.$notify({
-                title: '警告',
-                message: res.data.msg,
-                type: 'warning'
-              });
-            }
-        })
-      },
-      addBasicSetting(){
-        this.$http.post(globalConfig.server+'setting/setting/save',this.basicSetting).then((res)=>{
-          if(res.data.code === '50000'){
-            this.$notify({
-              title: '成功',
-              message: res.data.msg,
-              type: 'success'
-            });
-          }else {
-            this.$notify({
-              title: '警告',
-              message: res.data.msg,
-              type: 'warning'
+    },
+    openSecondPassword(val, id) {
+      this.sendid = id;
+      this.secondPasswordDialog = true;
+    },
+    closesecondPassword() {
+      this.secondPasswordDialog = false;
+    },
+    getDictionary() {
+      this.$http
+        .get(globalConfig.server + "setting/dictionary/202")
+        .then(res => {
+          if (res.data.code === "30010") {
+            this.dictionary = res.data.data;
+          } else {
+            this.$notify.warning({
+              title: "警告",
+              message: res.data.msg
             });
           }
-        })
-      }
+        });
     },
+    getDictionary2() {
+      this.$http
+        .get(globalConfig.server + "setting/dictionary/220")
+        .then(res => {
+          this.secondary_pass = [];
+          if (res.data.code === "30010") {
+            this.dictionary2 = res.data.data;
+          } else {
+            this.$notify.warning({
+              title: "警告",
+              message: res.data.msg
+            });
+          }
+        });
+    },
+    showBasicset() {
+      this.basicSet = true;
+      this.secondPassword = false;
+      this.lockScreen = false;
+    },
+    showSecond() {
+      this.basicSet = false;
+      this.secondPassword = true;
+      this.lockScreen = false;
+    },
+    showLockscreen() {
+      this.basicSet = false;
+      this.secondPassword = false;
+      this.lockScreen = true;
+    },
+    //发送验证码
+    sendMessage() {
+      new Promise((resolve, reject) => {
+        let interval = setInterval(() => {
+          this.isSending--;
+          if (this.isSending < 0) {
+            clearInterval(interval);
+            resolve();
+          }
+        }, 1000);
+      }).then(data => {
+        this.isSending = 60;
+      });
+      this.$http
+        .get(globalConfig.server + "setting/others/sms_code")
+        .then(res => {
+          if (res.data.code === "100090") {
+            this.$notify({
+              title: "成功",
+              message: res.data.msg,
+              type: "success"
+            });
+          }
+        });
+    },
+    setLockPassword() {
+      this.$http
+        .get(
+          globalConfig.server +
+            "setting/others/lock_screen_status?sms_lock_num=" +
+            this.sms_lock_num +
+            "&set_pwd_lock=" +
+            this.set_pwd_lock
+        )
+        .then(res => {
+          if (res.data.code === "100000") {
+            this.$notify({
+              title: "成功",
+              message: res.data.msg,
+              type: "success"
+            });
+          } else {
+            this.$notify({
+              title: "警告",
+              message: res.data.msg,
+              type: "warning"
+            });
+          }
+        });
+    },
+    addBasicSetting() {
+      this.$http
+        .post(globalConfig.server + "setting/setting/save", this.basicSetting)
+        .then(res => {
+          if (res.data.code === "50000") {
+            this.$notify({
+              title: "成功",
+              message: res.data.msg,
+              type: "success"
+            });
+          } else {
+            this.$notify({
+              title: "警告",
+              message: res.data.msg,
+              type: "warning"
+            });
+          }
+        });
+    }
   }
+};
 </script>
 
 <style scoped lang="scss">
-  @mixin flex {
-    display: -webkit-flex;
+@mixin flex {
+  display: -webkit-flex;
+  display: flex;
+}
+
+@mixin border_radius($n) {
+  -webkit-border-radius: $n;
+  -moz-border-radius: $n;
+  border-radius: $n;
+}
+.main {
+  padding: 40px 0;
+}
+
+.main > .el-row {
+  margin-bottom: 40px;
+  .el-col.el-col-20 {
+    label {
+      margin-bottom: 12px;
+    }
+  }
+  .el-col.el-col-20.collect_rent {
+    label {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.tool {
+  border-bottom: 1px solid #eee;
+  display: flex;
+  padding-bottom: 10px;
+  justify-content: space-between;
+  .tool_right {
     display: flex;
-  }
-
-  @mixin border_radius($n) {
-    -webkit-border-radius: $n;
-    -moz-border-radius: $n;
-    border-radius: $n;
-  }
-  .main {
-    padding: 40px 0;
-  }
-
-  .main > .el-row {
-    margin-bottom: 40px;
-    .el-col.el-col-20 {
-      label {
-        margin-bottom: 12px;
-      }
-    }
-    .el-col.el-col-20.collect_rent {
-      label {
-        margin-bottom: 0;
-      }
-    }
-  }
-
-  .tool {
-    border-bottom: 1px solid #eee;
-    display: flex;
-    padding-bottom: 10px;
-    justify-content: space-between;
-    .tool_right {
-      display: flex;
-      align-items: center;
-      div {
-        width: 100px;
-        text-align: center;
-        cursor: pointer;
-        i {
-          color: #409EFF;
-        }
-      }
-      div + div {
-        border-left: 1px solid #DDDDDD;
-      }
-    }
-  }
-
-  .leftTitle {
-    text-align: right;
-    padding-right: 40px;
-    color: #409EFF;
-  }
-
-  .remark {
-    color: #FDAECE;
-  }
-
-  .nowrap {
-    display: flex;
-    display: -webkit-flex;
-    align-items: center
-  }
-.el-dialog{width: 200px !important}
-  .validate {
-    @include flex;
-    margin-bottom: 12px;
-    :nth-child(2) {
-      margin: 0 10px;
-    }
-    .validateSign {
-      @include flex;
-      justify-content: center;
+    align-items: center;
+    div {
+      width: 100px;
+      text-align: center;
+      cursor: pointer;
       i {
-        line-height: 40px;
+        color: #409eff;
       }
     }
+    div + div {
+      border-left: 1px solid #dddddd;
+    }
   }
+}
+
+.leftTitle {
+  text-align: right;
+  padding-right: 40px;
+  color: #409eff;
+}
+
+.remark {
+  color: #fdaece;
+}
+
+.nowrap {
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+}
+.el-dialog {
+  width: 200px !important;
+}
+.validate {
+  @include flex;
+  margin-bottom: 12px;
+  :nth-child(2) {
+    margin: 0 10px;
+  }
+  .validateSign {
+    @include flex;
+    justify-content: center;
+    i {
+      line-height: 40px;
+    }
+  }
+}
 </style>

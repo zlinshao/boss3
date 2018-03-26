@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="设置二级密码" :visible.sync="increaseGoodsDialogVisiblex" width="25%">
+    <el-dialog title="二级密码设置" :visible.sync="increaseGoodsDialogVisiblex" width="25%">
       <div>
         <el-form :model="form" label-width="80px" >
           <el-row>
@@ -15,7 +15,7 @@
               <el-button size="mini"  @click="sendMessage" v-if="isSending>59" type="primary">获取验证码</el-button>
             </div>
             <div>
-              <el-button v-if="isSending<60" type="text">{{isSending}}后重新获取</el-button>
+              <el-button size="mini" v-if="isSending<60" type="primary" >{{isSending}}s后重新获取</el-button>
             </div>
           </div>
           <div class="validate">
@@ -33,14 +33,11 @@
               <i class="el-icon-success" style="color: #46ff53" v-show="form.passwordok.length>=6 && form.passwordnew == form.passwordok"></i>
             </div>
           </div>
-
           <div class="remark">
             备注：密码长度6-16位，数字、字母和符号至少包含两种。
           </div>
         </el-col>
           </el-row>
-
-
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -48,7 +45,6 @@
         <el-button size="small" type="primary" @click="savesendinfo()">保存</el-button>
       </span>
     </el-dialog>
-
   </div>
 </template>
 
