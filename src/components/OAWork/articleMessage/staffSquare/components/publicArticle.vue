@@ -91,27 +91,24 @@
         previewShow: true,
         tabIndex: '',
         editorDisabled: false,
+        moduleType:'',
       }
     },
-    computed:{
-      ids(val){
-        return this.$route.query.ids? this.$route.query.ids:this.$store.state.article.article_id;
-        console.log("article_id==="+this.$store.state.article.article_id);
-      },
-      moduleType() {
-        return this.$route.query.ModuleType ? this.$route.query.ModuleType : this.$store.state.article.module_type;
-      }
-    },
+
     mounted() {
+      if(!this.$route.query.ids){
+        this.$router.push({path:"/publicArticle",query:{ids:this.$store.state.article.article_id,moduleType:this.$store.state.article.module_type}});
+      }
+      let query = this.$route.query;
+      this.moduleType = query.moduleType;
       this.getDict();
       this.pitch = '';
-      if (this.ids !== undefined) {
-        this.publicDetail(this.ids);
-        this.pitch = this.ids;
+      if (query.ids !== undefined) {
+        this.publicDetail(query.ids);
+        this.pitch = query.ids;
       }
-      if(this.ids){
-        this.$store.dispatch('articleId',this.ids);
-        console.log("articleId======" + this.ids);
+      if(query.ids){
+        this.$store.dispatch('articleId',query.ids);
       }
     },
     methods: {
