@@ -214,11 +214,19 @@
         let config = {
           headers:{'Content-Type':'multipart/form-data'}
         };
-        this.$http.post(this.address + 'files', formData ,config).then((res) => {
+        if(file.size>1024.1024*2){
+            this.$notify.warning({
+              title:'警告',
+              message:'只能上传jpg/png文件，且不超过2M'
+            })
+        }else {
+          this.$http.post(this.address + 'files', formData ,config).then((res) => {
             if(res.data.status === 'success'){
               Editor.insertEmbed(cursorLocation, 'image', res.data.data.uri);
             }
-        })
+          })
+        }
+
       },
       // 上传成功
       photo_success(val) {
