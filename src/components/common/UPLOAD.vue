@@ -206,7 +206,6 @@
               let url = JSON.parse(info);
               let sourceLink = domain + "/" + url.key;
 
-//              _this.isUpId = file.id;
 
               _this.$http.post(globalConfig.server_user + 'files', {
                 url: sourceLink,
