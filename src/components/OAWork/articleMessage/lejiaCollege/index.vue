@@ -181,7 +181,7 @@
         });
       },
       searchMyData(page) {
-        if(this.form.dict_id !== ''&& (this.form.keywords !== '' || this.form.status !== '')){
+        if(this.form.dict_id !== ''){
           this.form.pages = page;
           this.$http.get(this.urls + 'oa/portal/', {
             params:this.form,
