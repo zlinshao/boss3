@@ -281,6 +281,7 @@
           case 'revise':
             this.$router.push({path: '/publicArticle', query: {ids: this.pitch, moduleType: this.moduleType}});
             this.$store.dispatch('moduleType',this.moduleType);
+            this.$store.dispatch('articleId', this.pitch);
             break;
           case 'delete':
             this.deleteInfo(this.pitch);

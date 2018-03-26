@@ -93,7 +93,7 @@
     },
     computed:{
       ids(val){
-        return this.$route.query? this.$route.query:this.$store.state.article.article_detail;
+        return this.$route.query.ids? this.$route.query.ids:this.$store.state.article.article_id;
       },
       moduleType() {
         return this.$route.query.ModuleType ? this.$route.query.ModuleType : this.$store.state.article.module_type;
