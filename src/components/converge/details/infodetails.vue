@@ -364,7 +364,7 @@
       width: 100%;
       height: 100%;
     }
-    .zan{
+    .icon-zan.zan{
       animation: color-me-in 1s;
       color: #fb4699;
     }
