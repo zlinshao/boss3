@@ -306,7 +306,7 @@
         }
       },
       search() {
-        this.$http.get(globalConfig.server_user + 'api/v1/houses?q=502').then((res) => {
+        this.$http.get(globalConfig.server_user + 'houses?q=502').then((res) => {
 
         })
         this.myData(1);

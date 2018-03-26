@@ -131,7 +131,7 @@
       // ===============系统新增/修改=================
       addPower(val) {
         if (val === '修改') {
-          this.$http.put(this.urls + 'api/v1/systems/' + this.form.ids, {
+          this.$http.put(this.urls + 'systems/' + this.form.ids, {
             name: this.form.name,
             display_name: this.form.display_name,
             description: this.form.content,
@@ -144,7 +144,7 @@
             }
           })
         } else {
-          this.$http.post(this.urls + 'api/v1/systems', {
+          this.$http.post(this.urls + 'systems', {
             name: this.form.name,
             display_name: this.form.display_name,
             description: this.form.content,
@@ -162,7 +162,7 @@
       // ====================新增/修改模块==============
       addModule(val) {
         if (val === '修改') {
-          this.$http.put(this.urls + 'api/v1/modules/' + this.form.ids, {
+          this.$http.put(this.urls + 'modules/' + this.form.ids, {
             name: this.form.name,
             display_name: this.form.display_name,
             description: this.form.content,
@@ -175,7 +175,7 @@
             }
           })
         } else {
-          this.$http.post(this.urls + 'api/v1/modules', {
+          this.$http.post(this.urls + 'modules', {
             sys_id: this.addID.firstID,
             name: this.form.name,
             display_name: this.form.display_name,
@@ -194,7 +194,7 @@
       // ===================新增/修改权限=================
       authorityModule(val) {
         if (val === '修改') {
-          this.$http.put(this.urls + 'api/v1/permissions/' + this.form.ids, {
+          this.$http.put(this.urls + 'permissions/' + this.form.ids, {
             mod_id: this.addID.secondID,
             name: this.form.name,
             display_name: this.form.display_name,
@@ -208,7 +208,7 @@
             }
           })
         } else {
-          this.$http.post(this.urls + 'api/v1/permissions', {
+          this.$http.post(this.urls + 'permissions', {
             type: this.form.radio,
             sys_id: this.addID.firstID,
             mod_id: this.addID.secondID,

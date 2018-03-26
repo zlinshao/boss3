@@ -208,7 +208,7 @@
     methods: {
       //获取员工数据列表
       getStaffData(){
-          this.$http.get(globalConfig.server_user+'api/v1/users?q='+this.formInline.keywords+'&page='+this.formInline.page
+          this.$http.get(globalConfig.server_user+'users?q='+this.formInline.keywords+'&page='+this.formInline.page
             +'&per_page_number='+this.formInline.pageNum+'&org_id='+this.formInline.org_id).then((res) => {
               if(res.data.status === 'success'){
                 this.tableData = res.data.data;
@@ -267,7 +267,7 @@
         this.show = false;
       },
       deleteStaff(){
-        this.$http.delete(globalConfig.server_user+'api/v1/users/'+this.editId).then((res) => {
+        this.$http.delete(globalConfig.server_user+'users/'+this.editId).then((res) => {
           if(res.data.status === 'success'){
             this.getStaffData();
             this.$message({
@@ -331,7 +331,7 @@
       //----------------部门增删改查------------------------
       //获取部门数据
       getDepart(){
-        this.$http.get(globalConfig.server_user+'api/v1/organizations').then((res) => {
+        this.$http.get(globalConfig.server_user+'organizations').then((res) => {
           this.arrList = res.data.data;
           this.setTree = this.recurrence(null);
           this.defaultExpandKeys=[];
@@ -413,7 +413,7 @@
       },
       //删除部门
       deleteDpr(id){
-          this.$http.delete(globalConfig.server_user+'api/v1/organizations/'+id).then((res) =>{
+          this.$http.delete(globalConfig.server_user+'organizations/'+id).then((res) =>{
               if(res.data.status === 'success'){
                 this.$message({
                   type: 'success',

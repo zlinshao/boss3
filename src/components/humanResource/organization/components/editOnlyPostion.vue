@@ -53,7 +53,7 @@
     methods:{
       //编辑时获取员工信息
       confirmAdd(){
-        this.$http.put(globalConfig.server_user+'api/v1/position/type/'+this.onlyPositionId,this.params).then((res) => {
+        this.$http.put(globalConfig.server_user+'position/type/'+this.onlyPositionId,this.params).then((res) => {
           if(res.data.status === 'success'){
             this.$emit('close','success');
             this.closeModal();

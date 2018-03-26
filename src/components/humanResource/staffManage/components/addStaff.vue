@@ -73,7 +73,7 @@
     methods:{
       //编辑时获取员工信息
       getStaffInfo(){
-        this.$http.get(globalConfig.server_user+'api/v1/users/'+this.editId).then((res) => {
+        this.$http.get(globalConfig.server_user+'users/'+this.editId).then((res) => {
           if(res.data.status === 'success'){
             this.params.name = res.data.data.name;
             this.params.phone = res.data.data.phone;
@@ -91,7 +91,7 @@
       },
       confirmAdd(){
         if(!this.isEdit){
-          this.$http.post(globalConfig.server_user+'api/v1/users',this.params).then((res) => {
+          this.$http.post(globalConfig.server_user+'users',this.params).then((res) => {
             if(res.data.status === 'success'){
               this.$emit('close','success');
               this.closeModal();
@@ -103,7 +103,7 @@
             }
           });
         }else {
-          this.$http.put(globalConfig.server_user+'api/v1/users/'+this.editId,this.params).then((res) => {
+          this.$http.put(globalConfig.server_user+'users/'+this.editId,this.params).then((res) => {
             if(res.data.status === 'success'){
               this.$emit('close','success');
               this.closeModal();

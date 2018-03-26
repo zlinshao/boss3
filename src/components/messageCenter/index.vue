@@ -90,7 +90,7 @@
         console.log(`当前页: ${val}`);
       },
       getMessage(){
-        this.$http.get(globalConfig.server_user+'api/v1/messages',{params:this.params}).then((res) => {
+        this.$http.get(globalConfig.server_user+'messages',{params:this.params}).then((res) => {
           if(res.data.status === 'success'){
             let arr = [];
             arr = res.data.data;
