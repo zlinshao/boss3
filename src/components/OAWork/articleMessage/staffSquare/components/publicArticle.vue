@@ -38,8 +38,8 @@
       </div>
       <div class="staff_name">
         <div class="staff_pic">
-          <img :src="personal.avatar" v-if="personal.avatar !== ''">
-          <img src="../../../../../assets/images/head.png">
+          <img  v-if="personal.avatar !== ''" :src="personal.avatar">
+          <img v-else src="../../../../../assets/images/head.png">
         </div>
         <div class="info">
           <span>
@@ -190,9 +190,10 @@
           status: val
         }).then((res) => {
           if (res.data.code === '80010' || res.data.code === '80030') {
+            // $('.el-tag__close.el-icon-close').trigger('click');
+            this.$store.dispatch('deleteArticleId');
             this.goBack();
             this.prompt(1, res.data.msg);
-            $('.el-tag__close.el-icon-close').trigger('click');
           } else {
             this.prompt(2, res.data.msg);
           }

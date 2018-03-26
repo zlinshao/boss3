@@ -92,9 +92,13 @@
           <!--</div>-->
         <!--</el-col>-->
       <!--</el-row>-->
-        <el-carousel :interval="5000" type="card" height="400px">
-          <el-carousel-item  v-for="teacher in teacherStyles" :key="teacher.id">
+
+        <el-carousel  :interval="5000" type="card" height="400px">
+          <el-carousel-item v-if="teacherStyles.length>0" v-for="teacher in teacherStyles" :key="teacher.id">
             <img :src="teacher.uri" @click="routerDetail(teacher.id)">
+          </el-carousel-item>
+          <el-carousel-item v-if="teacherStyles.length==0">
+            <img src="../../../assets/images/default.png">
           </el-carousel-item>
         </el-carousel>
 

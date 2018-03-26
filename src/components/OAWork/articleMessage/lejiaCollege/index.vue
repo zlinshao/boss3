@@ -27,7 +27,7 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">选择类别{{form.dict_id}}</div>
+                  <div class="el_col_label">选择类别</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
@@ -181,7 +181,7 @@
         })
       },
       searchMyData(page) {
-        if(this.form.keywords !== ''){
+        if(this.form.keywords !== '' || this.form.dict_id !== '' || this.form.status !== ''){
           this.form.pages = page;
           this.$http.get(this.urls + 'oa/portal/', {
             params:this.form,
