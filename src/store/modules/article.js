@@ -6,6 +6,7 @@ const article = {
     article_id :'',
     module_type: '',
     article_detail: {},
+    page: '',
   },
   mutations: {
     ARTICLE_ID:(state,view) => {
@@ -19,7 +20,10 @@ const article = {
       state.module_type = view;
     },
     ARTICLE_DETAIL: (state, view) => {
-        state.article_detail= view;
+      state.article_detail= view;
+    },
+    PAGE:(state,view) => {
+      state.page = view;
     },
   },
   actions: {
@@ -35,6 +39,9 @@ const article = {
     // 文章详情
     articleDetail:({commit},view)=>{
       commit('ARTICLE_DETAIL', view);
+    },
+    page({commit},view){
+      commit('PAGE',view);
     },
   }
 };
