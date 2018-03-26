@@ -214,7 +214,7 @@
         let config = {
           headers:{'Content-Type':'multipart/form-data'}
         };
-        if(file.size>1024.1024*2){
+        if(file.size > 1024 * 1024 * 2){
             this.$notify.warning({
               title:'警告',
               message:'只能上传jpg/png文件，且不超过2M'
