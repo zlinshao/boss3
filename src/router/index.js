@@ -203,7 +203,7 @@ export default new Router({
         {path: '/throwALease', component: throwALease, name: 'TEST_3'},
         {path: '/publicArticle', component: PublicArticle, name: '文章发布'},
         {path: '/individual', component: Individual, name: '个人门户'},
-        {path: '/infodetails', component: Infodetails, name: '员工广场详情'},
+        {path: '/infodetails', component: Infodetails, name: '详情'},
         {path: '/dailyRecord', component: DailyRecord, name: '日志管理'},
         {path: '/sthToDo', component: SthToDo, name: '待办事项'},
         {path: '/integraldetail', component: Integraldetail, name: '积分明细'},

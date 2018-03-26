@@ -6,7 +6,7 @@ const article = {
     article_id :'',
     module_type: '',
     article_detail: {},
-    page: '',
+    page: 1,
   },
   mutations: {
     ARTICLE_ID:(state,view) => {

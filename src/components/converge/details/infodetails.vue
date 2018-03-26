@@ -198,33 +198,34 @@
         hotData: [],
         assistId: false,     //点赞
         loading: false,     //点赞
+        query:{},
       }
     },
-    computed: {
-      query(val){
-        return this.$store.state.article.article_detail;
-      }
-    },
-
     mounted() {
+      //刷新保存
+      if(!this.$route.query.ids){
+        this.$router.push({path:"/Infodetails",query:{ids:this.$store.state.article.article_detail.ids,detail:this.$store.state.article.article_detail.detail}});
+      }
       this.addRegion();
-      // let query = this.$route.query;
-      if (JSON.stringify(this.query) !== '{}') {
-        this.publicDetail(this.query.ids);
-        if (this.query.detail === 'port') {
+      let query = this.$route.query;
+      this.$store.dispatch('articleDetail',query);
+      if (JSON.stringify(query) !== '{}') {
+        this.publicDetail(query.ids);
+        if (query.detail === 'port') {
           this.isShow = false;
           this.colNum = 24;
         } else {
           this.isShow = true;
           this.colNum = 16;
         }
-      }
+      };
+
     },
     methods: {
       // 详情
       routerDetail(id) {
         this.$router.push({path: '/Infodetails', query: {ids: id, detail: 'converge'}});
-        this.$store.dispatch('articleDetailId',id);
+        this.$store.dispatch('articleDetail',{ids: id, detail: 'converge'});
         document.body.scrollTop = document.documentElement.scrollTop = 0;
         this.publicDetail(id);
         this.loading = true;

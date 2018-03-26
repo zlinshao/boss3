@@ -114,7 +114,7 @@
               </div>
               <div class="clearfix" style="padding-left: 520px;">
                 <div>
-                  <div class="list_gonggao" v-for="(item, key) in staffSquares" :key="item.id" v-if="key < 3" @click="routerDetail(item.id)" style="padding-top:15px;">
+                  <div class="list_gonggao" v-for="(item, key) in staffSquares" :key="item.id" v-if="key < 3" @click="routerDetail(item.id)" style="padding-top:15px;height:110px;">
                     <div style="display: inline-block;float: left;">
                       <img v-if="item.uri" :src="item.uri" height="105" width="180" style="border-radius: 5px;">
                     </div>
