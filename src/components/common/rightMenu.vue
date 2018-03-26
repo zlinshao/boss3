@@ -48,12 +48,16 @@
       showList(index) {
         return this.showIndex === index;
       },
-      emitClick (index) {
+      emitClick (index,item) {
         this.$emit('clickOperate', index)
+      },
+      emitClickItem(item){
+        this.$emit('clickOperateMore', item)
       },
       emitClickEvent (event, item) {
         if (!this.showChildren(item)) {
           this.emitClick (item.clickIndex)
+          this.emitClickItem (item)
 				} else {
           event.cancelBubble = true;
           event.stopPropagation();

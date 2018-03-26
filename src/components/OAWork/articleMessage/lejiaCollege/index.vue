@@ -112,7 +112,7 @@
     </div>
 
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-               @clickOperate="clickEvent"></RightMenu>
+                @clickOperateMore="clickEvent"></RightMenu>
 
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
   </div>
@@ -178,10 +178,10 @@
             this.tableData = [];
             this.totalNum = 0;
           }
-        })
+        });
       },
       searchMyData(page) {
-        if(this.form.keywords !== '' || this.form.dict_id !== '' || this.form.status !== ''){
+        if(this.form.dict_id !== ''&& (this.form.keywords !== '' || this.form.status !== '')){
           this.form.pages = page;
           this.$http.get(this.urls + 'oa/portal/', {
             params:this.form,
@@ -189,6 +189,25 @@
             this.isHigh = false;
             if (res.data.code === '80000') {
               this.currentPage = page;
+              this.tableData = res.data.data.data;
+              this.totalNum = res.data.data.count;
+
+            } else {
+              this.tableData = [];
+              this.totalNum = 0;
+            }
+          });
+        }else if(this.form.dict_id === '' && (this.form.keywords !== ''|| this.form.status !== '')) {
+          this.$http.get(this.urls + 'oa/portal/', {
+            params:{
+              dict_id: this.moduleId,
+              list: this.form.list,
+              pages: this.currentPage,
+              status: this.form.status,
+              keywords: this.form.keywords,
+            } }).then((res) => {
+            this.isHigh = false;
+            if (res.data.code === '80000') {
               this.tableData = res.data.data.data;
               this.totalNum = res.data.data.count;
             } else {
@@ -253,25 +272,25 @@
           this.statuss = '已结束';
           if(row.top === null && row.fine === null){
             this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架',},
+              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架'},
               {clickIndex: 'top', headIcon: 'el-icon-edit-outline', label: '置顶',},
               {clickIndex: 'essence', headIcon: 'el-icon-edit-outline', label: '精华',},
             ];
           } else if(row.top !== null && row.fine === null){
             this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架',},
+              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架',top:true},
               {clickIndex: 'top', headIcon: 'el-icon-edit-outline', label: '取消置顶',},
               {clickIndex: 'essence', headIcon: 'el-icon-edit-outline', label: '精华',},
             ];
           } else if(row.top === null && row.fine !== null){
             this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架',},
+              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架',fine:true},
               {clickIndex: 'top', headIcon: 'el-icon-edit-outline', label: '置顶',},
               {clickIndex: 'essence', headIcon: 'el-icon-edit-outline', label: '取消精华',},
             ];
           }else{
             this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架',},
+              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架',top:true,fine:true},
               {clickIndex: 'top', headIcon: 'el-icon-edit-outline', label: '取消置顶',},
               {clickIndex: 'essence', headIcon: 'el-icon-edit-outline', label: '取消精华',},
             ];
@@ -282,7 +301,7 @@
       },
       // 右键回调
       clickEvent(val) {
-        switch (val) {
+        switch (val.clickIndex) {
           case 'revise':
             this.$router.push({path: '/publicArticle', query: {ids: this.pitch, moduleType: this.moduleType}});
             this.$store.dispatch('moduleType',this.moduleType);
@@ -291,10 +310,18 @@
             this.deleteInfo(this.pitch);
             break;
           case 'grounding':
-            this.upperShelf(this.pitch, '上架');
+            var top_fine={};
+            this.upperShelf(this.pitch, '上架',top_fine);
             break;
           case 'undercarriage':
-            this.upperShelf(this.pitch, '下架');
+            var top_fine={};
+            if(val.top){
+              top_fine.top = true;
+            }
+            if(val.fine){
+              top_fine.fine = true;
+            }
+            this.upperShelf(this.pitch, '下架',top_fine);
             break;
           case 'top':
             this.top(this.pitch,'置顶');
@@ -351,7 +378,8 @@
       },
 
       // 上架下架
-      upperShelf(id, title) {
+      upperShelf(id, title,status) {
+        console.log(status);
         this.$confirm('此操作将' + title + '文章, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -361,6 +389,14 @@
             if (res.data.code === '80080' || res.data.code === '80010') {
               this.getLejiaTableData(this.currentPage);
               this.prompt(1, res.data.msg);
+              if(title === '下架'){
+                if(status.top){
+                  this.top(id,'置顶');
+                }
+                if(status.fine){
+                  this.essence(id,'精华');
+                }
+              }
             } else {
               this.prompt(2, res.data.msg);
             }

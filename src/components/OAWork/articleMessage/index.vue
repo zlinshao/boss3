@@ -22,8 +22,6 @@
   import companyPortal from './companyPortal/index.vue';
   import StaffSquare from './staffSquare/index.vue';
   import systemManageMent from './systemManageMent/index.vue';
-
-
   export default {
     name: "index",
     components: {
@@ -56,7 +54,6 @@
           this.activeName = 'fourth';
           break;
       }
-      console.log("active====="+this.activeType);
     },
     watch: {
       moduleType(val){

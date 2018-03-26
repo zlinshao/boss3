@@ -111,7 +111,6 @@
             <div class="yuangong">
               <div style="display: inline-block;float: left;font-size: 0;">
                 <img v-if="staffSquareTop[0]" :src="staffSquareTop[0].uri" @click="routerDetail(staffSquareTop[0].id)" width="500" height="390">
-                <img v-else src="../assets/images/default.png" width="500" height="390"/>
               </div>
               <div class="clearfix" style="padding-left: 520px;">
                 <div>
@@ -169,7 +168,6 @@
                 <el-col :span="8" style="padding:0;">
                   <div class="hover_pic">
                     <img v-if="lejiaCollegeTop[0]" :src="lejiaCollegeTop[0].uri" width="100%"  height="195" @click="routerDetail(lejiaCollegeTop[0].id)">
-                    <img v-else src="../assets/images/default.png" width="100%"  height="195">
                   </div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
@@ -189,7 +187,6 @@
                 <el-col :span="8" style="padding:0;">
                   <div class="hover_pic">
                     <img v-if="lejiaCollegeTop[1]" :src="lejiaCollegeTop[1].uri" width="100%"  height="195" @click="routerDetail(lejiaCollegeTop[1].id)">
-                    <img v-else src="../assets/images/default.png" width="100%"  height="195">
                   </div>
                 </el-col>
               </el-row>
@@ -213,7 +210,6 @@
                 <el-col :span="8" style="padding:0;">
                   <div class="hover_pic">
                     <img v-if="lejiaCollegeTop[2]" :src="lejiaCollegeTop[2].uri" width="100%"  height="195" @click="routerDetail( lejiaCollegeTop[2].id)">
-                    <img v-else src="../assets/images/default.png" width="100%"  height="195">
                   </div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
@@ -241,7 +237,6 @@
             <div class="zhanbao" style="height: 394px;">
               <div>
                 <img v-if="weeklyReportTop[0]" :src="weeklyReportTop[0].uri" style="width: 100%;height: 195px;" @click="routerDetail(weeklyReportTop[0].id)">
-                <img v-else src="../assets/images/default.png" width="100%"  height="195">
               </div>
               <div style="padding:16px 20px 0px;">
                 <p class="info_title text_over_norwap">{{weeklyReport[0] && weeklyReport[0].title}}</p>
