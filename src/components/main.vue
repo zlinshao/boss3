@@ -171,15 +171,19 @@
                   </div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
-                  <div class="list_frame" @click="routerDetail(lejiaCollege[0] && lejiaCollege[0].id)">
+                  <div class="list_frame" v-if="lejiaCollege[0]" @click="routerDetail(lejiaCollege[0].id)">
                     <div style="display: inline-block;float: left;margin-top: 30px;">
                       <img v-if="lejiaCollege[0]" :src="lejiaCollege[0].uri" width="100" height="100" style="border-radius: 10px;"></div>
                     <div style="padding: 12px 12px 34px 120px;">
                       <p class="info_title text_over_norwap">{{lejiaCollege[0] && lejiaCollege[0].title}}</p>
                       <div class="second_line_camp">{{lejiaCollege[0] && lejiaCollege[0].content}}</div>
                       <span style="display: block;margin-top: 15px;">
-                      <i class="el-icon-view"></i><span class="view_word"> {{lejiaCollege[0] && lejiaCollege[0].read_num}}人</span>&nbsp;&nbsp;&nbsp;
-                        <i class="el-icon-edit"></i><span class="edit_word"> {{lejiaCollege[0] && lejiaCollege[0].favor_num}}人</span>
+                        <i class="el-icon-view"></i>
+                          <span class="view_word" v-if="lejiaCollege[0]"> {{lejiaCollege[0].read_num}}人</span>&nbsp;&nbsp;&nbsp;
+                          <span class="view_word" v-if="!lejiaCollege[0]"> 0人</span>&nbsp;&nbsp;&nbsp;
+                        <i class="el-icon-edit"></i>
+                          <span class="edit_word" v-if="lejiaCollege[0]"> {{lejiaCollege[0].favor_num}}人</span>
+                          <span class="edit_word" v-if="!lejiaCollege[0]"> 0人</span>
                     </span>
                     </div>
                   </div>
@@ -192,7 +196,7 @@
               </el-row>
               <el-row>
                 <el-col :span="8" style="padding:0;">
-                  <div class="list_frame" @click="routerDetail(lejiaCollege[1] && lejiaCollege[1].id)">
+                  <div class="list_frame" v-if="lejiaCollege[1]" @click="routerDetail(lejiaCollege[1].id)">
                     <div style="display: inline-block;float: left;margin-top: 30px;">
                       <img v-if="lejiaCollege[1]" :src="lejiaCollege[1].uri"  height="100" width="100" style="border-radius: 10px;">
 
@@ -201,8 +205,12 @@
                       <p class="info_title text_over_norwap">{{lejiaCollege[1] && lejiaCollege[1].title}}</p>
                       <div class="second_line_camp">{{lejiaCollege[1] && lejiaCollege[1].content}}</div>
                       <span style="display: block;margin-top: 15px;">
-                        <i class="el-icon-view"></i><span class="view_word"> {{lejiaCollege[1] && lejiaCollege[1].read_num}}人</span>&nbsp;&nbsp;&nbsp;
-                          <i class="el-icon-edit"></i><span class="edit_word"> {{lejiaCollege[1] && lejiaCollege[1].favor_num}}人</span>
+                        <i class="el-icon-view"></i>
+                          <span class="view_word" v-if="lejiaCollege[1]"> {{lejiaCollege[0].read_num}}人</span>&nbsp;&nbsp;&nbsp;
+                          <span class="view_word" v-if="!lejiaCollege[1]"> 0人</span>&nbsp;&nbsp;&nbsp;
+                        <i class="el-icon-edit"></i>
+                          <span class="edit_word" v-if="lejiaCollege[1]"> {{lejiaCollege[0].favor_num}}人</span>
+                          <span class="edit_word" v-if="!lejiaCollege[1]"> 0人</span>
                     </span>
                     </div>
                   </div>
@@ -213,14 +221,18 @@
                   </div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
-                  <div class="list_frame" @click="routerDetail(lejiaCollege[2] && lejiaCollege[2].id)">
+                  <div class="list_frame" v-if="lejiaCollege[2]" @click="routerDetail(lejiaCollege[2].id)">
                     <div style="display: inline-block;float: left;margin-top: 30px;"><img :src="lejiaCollege[2] && lejiaCollege[2].uri" height="100" width="100" style="border-radius: 10px;"></div>
                     <div style="padding: 12px 12px 0px 120px;">
                       <p class="info_title text_over_norwap">{{lejiaCollege[2] && lejiaCollege[2].title}}</p>
                       <div class="second_line_camp">{{lejiaCollege[2] && lejiaCollege[2].content}}</div>
                       <span style="display: block;margin-top: 15px;">
-                      <i class="el-icon-view"></i><span class="view_word"> {{lejiaCollege[2] && lejiaCollege[1].read_num}}人</span>&nbsp;&nbsp;&nbsp;
-                      <i class="el-icon-edit" ></i><span class="edit_word"> {{lejiaCollege[2] && lejiaCollege[1].favor_num}}人</span>
+                      <i class="el-icon-view"></i>
+                        <span class="view_word" v-if="lejiaCollege[2]"> {{lejiaCollege[2].read_num}}人</span>&nbsp;&nbsp;&nbsp;
+                        <span class="view_word" v-if="!lejiaCollege[2]"> 0人</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <i class="el-icon-edit" ></i>
+                        <span class="view_word" v-if="lejiaCollege[2]"> {{lejiaCollege[2].read_num}}人</span>&nbsp;&nbsp;&nbsp;
+                        <span class="view_word" v-if="!lejiaCollege[2]"> 0人</span>&nbsp;&nbsp;&nbsp;
                     </span>
                     </div>
                   </div>

@@ -4,7 +4,12 @@
       <el-col :span="colNum">
         <div style="padding: 20px 17px">
           <div class="newsMain">
-            <div class="newsTitle">{{formList.title}}</div>
+            <div class="newsTitle">
+              {{formList.title}}
+              <el-tag type="success" v-if="formList.top !== null ">置顶</el-tag>
+              <el-tag type="warning" v-if="formList.fine !==null ">精华</el-tag>
+            </div>
+
           </div>
           <div class="userInfo" style="margin-top: 18px">
             <div class="publishInfo">
@@ -555,7 +560,7 @@
         margin-bottom: 10px;
       }
       .commentOn {
-        padding: 6px;
+        padding: 15px;
         border-top: 1px solid #eeeeee;
         @include flex;
         align-items: center;
