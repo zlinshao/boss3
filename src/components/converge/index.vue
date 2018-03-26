@@ -231,13 +231,13 @@
                   </div>
                 </div>
 
-                <div class="bottomPic module">
+                <div class="bottomPic ">
                   <div @click="routerDetail(key.id)" v-for="(key,index) in lifeData.data"
                        v-if="index !== 0 && lifeData.data[0] !== ''">
-                    <span v-for="pic in key.album.cover_pic" class="">
+                    <span v-for="pic in key.album.cover_pic" class="module">
                         <img v-for="p in pic" :src="p.uri">
-                        <div class="titleShow">
-                          <span style="font-size: 14px;">{{key.title}}</span>
+                        <div class="titleShow1">
+                          <span>{{key.title}}</span>
                         </div>
                     </span>
 
@@ -290,14 +290,14 @@
                     </span>
 
                   </div>
-                  <div class="bigPer2 module">
+                  <div class="bigPer2 ">
                     <span @click="routerDetail(key.id)" v-for="(key,index) in figureData.data"
                           v-if="index === 2 || index === 3 && figureData.data[0] !== ''">
 
-                      <a v-for="pic in key.album.cover_pic" class="">
+                      <a v-for="pic in key.album.cover_pic" class="module">
                         <img v-for="p in pic" :src="p.uri">
-                        <div class="titleShow">
-                          <span style="font-size: 14px;">{{key.title}}</span>
+                        <div class="titleShow2">
+                          <span>{{key.title}}</span>
                         </div>
                       </a>
 
@@ -653,12 +653,62 @@
           color: rgba(255, 255, 255, .8);
           font-size: 20px;
           margin-bottom: 20px;
-          margin-left: 20px;
+          /*margin-left: 20px;*/
           @include text_overflow(1);
         }
       }
+      .titleShow1,.titleShow2 {
+        width: 100% !important;
+        opacity: 0;
+        position: absolute;
+        top: -83px;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.4);
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        -webkit-box-align: end;
+        -ms-flex-align: end;
+        align-items: flex-end;
+        left: 0;
+        right: 0;
+        color: #fff;
+      }
+      .titleShow2 {
+        top: -88px;
+      }
+      .titleShow1 span{
+        font-size: 14px;
+        padding: 10px 5px;
+        display: inline-block;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+      .titleShow2 span{
+        width: 100% !important;
+        font-size: 14px;
+        padding: 10px 5px;
+        display: inline-block;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        display: -webkit-flex;
+        -webkit-box-align: end;
+        -ms-flex-align: end;
+        align-items: flex-end;
+      }
       &:hover {
         .titleShow {
+          opacity: 1;
+          cursor: pointer;
+        }
+        .titleShow1 {
+          opacity: 1;
+          cursor: pointer;
+        }
+        .titleShow2 {
           opacity: 1;
           cursor: pointer;
         }
