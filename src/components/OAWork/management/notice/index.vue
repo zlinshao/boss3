@@ -63,8 +63,12 @@
               </el-table-column>
               <el-table-column
                 width="100px"  
-                prop="draft"
+            
                 label="状态">
+            <template slot-scope="scope">
+              <el-button class="btnStatus" v-if="scope.row.draft === '已发布'" type="primary" size="mini">已发布</el-button>
+              <el-button class="btnStatus" v-if="scope.row.draft === '草稿'" type="warning" size="mini">草稿</el-button>
+            </template>
               </el-table-column>
             </el-table>
           </div>
@@ -359,6 +363,10 @@ export default {
 .menu-ui {
   width: 80px;
 }
+ .btnStatus{
+   cursor: inherit;
+   min-width:   68px;
+ }
 .filter {
   /*padding: 10px 0;*/
 }
