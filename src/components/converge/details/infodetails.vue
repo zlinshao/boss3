@@ -46,7 +46,7 @@
                 <div>
                   <i class="iconfont icon-pinglun"></i>&nbsp;&nbsp;{{formList.comments_count}}
                 </div>
-                <div>
+                <div class="zan_div">
                   <i class="iconfont icon-zan" :class="{'zan': assistId}" @click="assist()"></i>&nbsp;{{formList.favor_num}}
                 </div>
                 <div>
@@ -325,6 +325,7 @@
 </script>
 
 <style lang="scss">
+
   #newsDetail {
     @mixin flex {
       display: -webkit-flex;
@@ -340,11 +341,33 @@
       width: 100%;
       height: 100%;
     }
+    .zan{
+      animation: color-me-in 3s;
+      color: #fb4699;
+    }
+    @keyframes color-me-in {
+      0% {
+        -moz-transform:scale(1,1);
+        -webkit-transform:scale(1,1);
+        -o-transform:scale(1,1);
+      }
+      50% {
+        -moz-transform:scale(2,2);
+        -webkit-transform:scale(2,2);
+        -o-transform:scale(2,2);
+      }
+      100% {
+        -moz-transform:scale(1,1);
+        -webkit-transform:scale(1,1);
+        -o-transform:scale(1,1);
+      }
+    }
     .el-loading-mask {
       .el-loading-spinner {
         top: 30%;
       }
     }
+
     .readers {
       div {
         @include flex;
