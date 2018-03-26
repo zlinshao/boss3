@@ -39,7 +39,7 @@
       <div class="staff_name">
         <div class="staff_pic">
           <img :src="personal.avatar" v-if="personal.avatar !== ''">
-          <img src="../../../../../assets/images/head.png">
+          <img v-else src="../../../../../assets/images/head.png">
         </div>
         <div class="info">
           <span>
