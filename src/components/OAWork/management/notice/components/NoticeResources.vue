@@ -1,93 +1,272 @@
 <template>
   <div id="increaseGoods">
-    <el-dialog title="增加物品" :visible.sync="increaseGoodsDialogVisible" width="28%">
+    <el-dialog title="公告发布" :visible.sync="increaseGoodsDialogVisible" width="60%">
       <div>
-        <el-form size="mini" :model="form" label-width="80px">
-          <el-row  :key="index" v-for="(line,index) in linelist">
+        <el-form :model="form" label-width="100px" >
+          <el-row>
             <el-col :span="12">
-              <el-form-item label="选择物品" >
-                <el-select v-model="form.hourse[index]" filterable placeholder="请选择物品">
-                  <el-option v-for="item in houselist" :label="item.dictionary_name" :key="item.id" :value="item.id"></el-option>
-                </el-select>       
-              </el-form-item> 
+              <el-form-item label="公告类型" required>
+               <el-select  v-model="form.type" placeholder="请选择">
+                  <el-option v-for="item in forms" :key="item.id" :label="item.name" :value="item.id">
+                  </el-option> 
+                </el-select>
+              </el-form-item>
             </el-col>
-            <el-col :span="6">
-              <span><i @click="addLine()" class="iconfont icon-zengjia" style="margin-left: 20px;cursor: pointer;color: #6a8dfb;font-size:19px; line-height:30px;"></i></span>
-              <span v-if="index !=0"><i @click="deletex(index)" class="iconfont icon-shibai" style="margin-left: 22px;cursor: pointer;color: #6a8dfb;font-size:22px; line-height:30px;"></i></span>
-              </el-col>
-            <el-col :span="6"><el-button size="small" type="primary" >增加物品</el-button></el-col>
-        
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="公告主题" required>
+                <el-input v-model="form.title" placeholder=""></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="对象" required >
+                 <el-input v-model="form.obj" @click.native="openOrganizationModal()" placeholder="点击选择" ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="正文" required>
+                <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
+                v-model="form.context" :disabled="editorDisabled"></vue-editor>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="附件" >
+                <div class="upload_div"><Upload :ID="'upload'" @getImg="getImage" ></Upload></div>
+              </el-form-item>
+            </el-col>
           </el-row>
         </el-form>
-     
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="increaseGoodsDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="savex">保 存</el-button>
+        <el-button size="small" type="primary" @click="savex">保存</el-button>
+        <el-button size="small" type="primary" @click="sendx">发布</el-button>
       </span>
     </el-dialog>
-
+    <Organization :organizationDialog="organizationDialog"  @close="closeOrganization"  @selectMember="coloseaa"></Organization>
   </div>
 </template>
 
 <script>
-
-
-  export default {
-    props:['noticeDialog'],
-    data() {
-      return {
-        increaseGoodsDialogVisible:false,
-        urls:globalConfig.server,
-        lenx:7,
-        linelist:[{}],
-        form:{
-          hourse:[],
-        },
-        
-        houselist:[]
-      };
+import Organization from "../../../../common/organization.vue";
+import Upload from "../../../../common/UPLOAD.vue";
+import { VueEditor } from "vue2-editor";
+export default {
+  props: ["noticeDialog", "rowneedx"],
+  components: {
+    Organization,
+    Upload,
+    VueEditor
+  },
+  data() {
+    return {
+      increaseGoodsDialogVisible: false,
+      urls: globalConfig.server,
+      organizationDialog: false,
+      saveorsendflag: false,
+      lenx: 7,
+      firstflag: false, //编辑或新建标识
+      twoflag: false, //保存或发布标识
+      threeflag: false, //是否成功发布标识
+      linelist: [{}],
+      form: {
+        title: "",
+        type: "",
+        id: "",
+        draft: "",
+        obj: "",
+        objid: [],
+        context: "",
+        attachment: [],
+        // fujian:'',
+        preview: 0
+      },
+      forms: [
+        { id: "1", name: "表彰" },
+        { id: "2", name: "批评" },
+        { id: "3", name: "通知" }
+      ],
+      houselist: [],
+      editorDisabled: false
+    };
+  },
+  watch: {
+    noticeDialog(val) {
+      this.increaseGoodsDialogVisible = val;
     },
-    watch:{
-
+    increaseGoodsDialogVisible(val) {
+      if (!val) {
+        this.$emit("close");
+      }
     },
-    methods:{
-      savex(){ 
-        this.increaseGoodsDialogVisible=false;   
-        this.$emit('addgoodsx', this.form.hourse);
-        this.linelist=[{}];
-        this.form={hourse:[]}
-      },
-
-      //物品设置成功
-      addGoodsOk(val){
-        if(val){
-           this.goodsmore()
-        }
-
-      },
-      goodsmore(){      
-      //物品类型       
-      this.$http.get(this.urls+'setting/dictionary/265').then((res) => {  
-          if (res.data.code === '30010') {
-            this.houselist=res.data.data;
-          }  
-      }) 
-      },
-      //增加行
-      addLine(){
-        this.linelist.push({});
-      },
-      //删除一行
-      deletex(index){
-        this.linelist.splice(index, 1); 
-        this.form.hourse.splice(index, 1);
-      },
-    },
-    created:function(){
-      this.goodsmore();
+    rowneedx(val) {
+      this.firstflag = true;
+      if (val.content) {
+        this.form.type = val.type;
+        this.form.title = val.title;
+        this.form.context = val.content;
+        this.form.obj = val.department_id;
+        this.form.id = val.id;
+        this.form.attachment = val.attachment;
+      } else {
+        this.form.type = "";
+        this.form.title = "";
+        this.form.context = "";
+        this.form.obj = "";
+        this.form.objid = [];
+        this.form.attachment = [];
+        this.firstflag = false;
+      }
     }
-  };
+  },
+  methods: {
+    getImage(val) {
+      console.log(val);
+      this.form.attachment = val[1];
+    },
+    //保存
+    savex() {
+      this.twoflag = true;
+      this.midfunc();
+    },
+    //发布
+    sendx() {
+      this.twoflag = false;
+      this.midfunc();
+    },
+    midfunc() {
+      if (this.twoflag) {
+        this.form.draft = "1";
+      } else {
+        this.form.draft = "0";
+      }
+      if (!this.firstflag) {
+        this.form.id = "";
+      }
+      this.saveorsend();
+      if (this.saveorsendflag) {
+        if (this.form.type == "表彰") {
+          this.form.type = 1;
+        }
+        if (this.form.type == "批评") {
+          this.form.type = 2;
+        }
+        if (this.form.type == "通知") {
+          this.form.type = 3;
+        }
+        if (this.form.type == "研发") {
+          this.form.type = 4;
+        }
+        this.$http
+          .post(this.urls + "announcement", {
+            title: this.form.title,
+            type: this.form.type,
+            content: this.form.context,
+            id: this.form.id,
+            draft: this.form.draft,
+            department_id: this.form.objid,
+            previev: this.form.preview,
+            attachment: this.form.attachment
+          })
+          .then(res => {
+            if (res.data.code == "99910") {
+              this.$notify({
+                title: "成功",
+                message: "操作成功",
+                type: "success"
+              });
+              this.threeflag = true;
+              this.$emit("threeflag", this.threeflag);
+            } else {
+              this.$notify.error({
+                title: "错误",
+                message: "操作失败"
+              });
+              this.threeflag = false;
+              this.$emit("threeflag", this.threeflag);
+            }
+          });
+        this.increaseGoodsDialogVisible = false;
+      }
+    },
+    openOrganizationModal() {
+      this.organizationDialog = true;
+    },
+    closeOrganization() {
+      this.organizationDialog = false;
+    },
+    coloseaa(val) {
+      this.form.obj = "";
+      this.form.objid = [];
+      for (let i = 0; i < val.length; i++) {
+        this.form.obj += val[i].name + ";";
+        this.form.objid[i] = val[i].id;
+      }
+    },
+
+    //保存或发布校验
+    saveorsend() {
+      this.saveorsendflag = true;
+      if (this.form.type == "" && this.saveorsendflag == true) {
+        this.saveorsendflag = false;
+        this.$notify({
+          title: "警告",
+          message: "公告类型不能为空",
+          type: "warning"
+        });
+      }
+      if (this.form.title == "" && this.saveorsendflag == true) {
+        this.saveorsendflag = false;
+        this.$notify({
+          title: "警告",
+          message: "公告主题不能为空",
+          type: "warning"
+        });
+      }
+      if (this.form.obj == "" && this.saveorsendflag == true) {
+        this.saveorsendflag = false;
+        this.$notify({
+          title: "警告",
+          message: "对象不能为空",
+          type: "warning"
+        });
+      }
+      if (this.form.context == "" && this.saveorsendflag == true) {
+        this.saveorsendflag = false;
+        this.$notify({
+          title: "警告",
+          message: "正文内容不能为空",
+          type: "warning"
+        });
+      }
+    },
+    handleImageAdded(file, Editor, cursorLocation, resetUploader) {
+      // An example of using FormData
+      // NOTE: Your key could be different such as:
+      // formData.append('file', file)
+      let formData = new FormData();
+      formData.append("image", file);
+      this.$http.post(this.address + "api/v1/files", formData).then(res => {
+        console.log(res.data.data);
+        let picId = res.data.data;
+        this.$http.post("picture/" + picId).then(res => {
+          // Get url from response
+          let url = res.data.data;
+          Editor.insertEmbed(cursorLocation, "image", url);
+        });
+      });
+    }
+  },
+
+  created: function() {}
+};
 </script>
 <style lang="scss" scoped="">
 

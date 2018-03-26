@@ -218,7 +218,7 @@
         this.depart="";
       },
       coloseaa(val){
-        console.log(val)
+        
         this.departname=val[0].name
         this.form.department_id=val[0].id
         this.len=0;
@@ -232,7 +232,7 @@
         this.$http.get(this.urls+'attendance/summary/', {
           params: this.form,
         }).then((res) => {
-            console.log(res);
+           
             if (res.data.code === '20010') {
                 this.tableData=res.data.data;
                 this.nowPage=val;

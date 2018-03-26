@@ -146,7 +146,7 @@
     },
     methods: {
       phoneLogin() {
-        this.$http.post(this.urls + 'sms', {
+        this.$http.post(this.urls + 'api/v1/sms', {
           phone: this.phone,
         }).then((res) => {
           let msg = res.data.message;
@@ -199,7 +199,7 @@
           let head = res.data.data;
           globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
 
-          this.$http.get(this.urls + 'session').then((res) => {
+          this.$http.get(this.urls + 'api/v1/session').then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
             globalConfig.personal = res.data.data;
 

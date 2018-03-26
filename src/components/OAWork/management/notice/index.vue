@@ -2,108 +2,68 @@
   <div @click="show=false" @contextmenu="closeMenu">
     <div>
     <div class="highRanking">    
-      <div class="highSearch" style="width:315px">
+      <div class="highSearch" style="width:244px">
         <el-form :inline="true" size="medium" >
           <el-form-item>
-            <el-input placeholder="标题/发布人/内容关键字" v-model="form.pename" @keyup.enter.native="myData(1)" size="mini"
+            <el-input placeholder="公告主题/标题/内容关键字" v-model="form.search" @keyup.enter.native="myData(1)" size="mini"
                       clearable>
               <el-button slot="append" icon="el-icon-search" @click="myData(1)"></el-button>
               <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
             </el-input>
           </el-form-item>
-          <el-form-item>
-            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
-          </el-form-item>
+
         </el-form>
         <el-button @click="openModalDialogx('noticeDialog')" class="sendnotice" size="mini" type="primary">发布公告</el-button>
       </div>
       
-      <div class="filter high_grade" :class="isHigh? 'highHide':''">
-        <el-form :inline="true" :model="form" size="mini" label-width="100px">
-          <div class="filterTitle">
-            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
-          </div>
-          <el-row class="el_row_border">
-            <el-col :span="12">
-              <el-row>
-                <el-col :span="8">
-                  <div class="el_col_label">部门搜索</div>
-                </el-col>
-                <el-col :span="16" class="el_col_option">
-                <el-form-item >
-                   <el-input readonly="" v-model="this.departname" @click.native="openOrganizationModal()" placeholder="点击选择"></el-input>
-                </el-form-item>
-                </el-col>
-              </el-row>
-            </el-col>
-            <el-col :span="12">
-              <el-row>
-                <el-col :span="8">
-                  <div class="el_col_label">时间</div>
-                </el-col>
-                <el-col :span="16" class="el_col_option">
-                  <el-date-picker
-                    size="mini"
-                    v-model="value4"
-                    type="datetimerange"
-                    :picker-options="pickerOptions2"
-                    value-format="yyyy-MM-dd"
-                    format="yyyy-MM-dd"
-                    range-separator="至"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期"
-                    align="right">
-                  </el-date-picker>
-                </el-col>
-              </el-row>
-            </el-col>
-          </el-row>
-          <div class="btnOperate">
-
-            <el-button size="mini" type="primary" @click="search()">搜索</el-button>
-            <el-button size="mini" type="primary" @click="resetting">重置</el-button>
-            <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
-          </div>
-        </el-form>
-      </div>
     </div>
       <div class="main">
         <div class="myHouse">
           <div class="blueTable">
             <el-table
               :data="tableData"
+              @row-click="clickTable"
               @row-contextmenu='noticeMenu'
               style="width: 100%">
               <el-table-column
-                prop="name"
+                prop="type"
+                width="80px"
                 label="公告主题">
               </el-table-column>
               <el-table-column
-                prop="dname"
+                width="160px"
+                prop="update_time"
                 label="发布时间">
               </el-table-column>
               <el-table-column
-                prop="last_date"
+                width="80px"
+                prop="real_name"
                 label="发布人">
               </el-table-column>
               <el-table-column
-                prop="last_on"
+                prop="title"
+                show-overflow-tooltip
+                width="200px"
                 label="标题">
               </el-table-column>
               <el-table-column
-                prop="last_off"
+                prop="content_without_table"         
+                show-overflow-tooltip
                 label="主要内容">
               </el-table-column>
               <el-table-column
-                prop="time_result"
+                width="100px"
+                prop="read_count"
                 label="已阅读人数">
               </el-table-column>
               <el-table-column
-                prop="attend"
+                width="100px"
+                prop="read_uncount"
                 label="未读人数">
               </el-table-column>
               <el-table-column
-                prop="late"
+                width="100px"  
+                prop="draft"
                 label="状态">
               </el-table-column>
             </el-table>
@@ -124,187 +84,298 @@
       </div>
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperate="clickEvent"></RightMenu>
-    <NoticeResources :noticeDialog="noticeDialog" @close="closeNoticeResources"></NoticeResources> 
+    <NoticeResources :noticeDialog="noticeDialog" :rowneedx="rowneed"  @close="closeNoticeResources" @threeflag="threeflag"></NoticeResources> 
+    <Warning :warningDialog="warningDialog" :lookat="look"  @close="closeWarning" ></Warning>
   </div>
 </template>
 
 <script>
+import RightMenu from "../../../common/rightMenu.vue"; //右键
+import NoticeResources from "./components/NoticeResources.vue"; //增加物品页面
+import Warning from "./components/Warning.vue"; //预览页面
+export default {
+  components: {
+    RightMenu,
+    NoticeResources,
+    Warning
+  },
+  data() {
+    return {
+      /***********/
+      urls: globalConfig.server,
+      departname: "",
+      pename: "",
+      tableData: [],
+      organizationDialog: false,
+      noticeDialog: false,
+      warningDialog: false,
+      rightrow: {},
+      rowneed: {},
+      look: {},
+      len: 0,
+      depart: "",
+      orgtype: "",
+      form: {
+        page: 1,
+        limit: 12,
+        type: "",
+        search: ""
+      },
+      isHigh: false,
+      nowPage: 1, //当前页
+      total: 0, //总条数
+      show: false,
+      rightMenuX: 0,
+      rightMenuY: 0,
+      lists: [],
+      forms: [
+        { id: "1", name: "表彰" },
+        { id: "2", name: "批评" },
+        { id: "3", name: "通知" },
+        { id: "4", name: "研发" }
+      ]
+    };
+  },
 
-  import RightMenu from '../../../common/rightMenu.vue'    //右键
-  import NoticeResources from './components/NoticeResources.vue' //增加物品页面
-  export default {
-    components:{
-      RightMenu,
-      NoticeResources
+  methods: {
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
     },
-    data () {
-      return {
-        /***********/
-        urls:globalConfig.server,    
-        departname:'', 
-        pename:'', 
-        value4:'',
-        tableData: [],
-        organizationDialog: false,
-        noticeDialog:false,
-        len:0,
-        depart:'',
-        orgtype:'',
-        form:{
-          page:1,
-          limit:12,
-          time:'',
-          pename:'',
-          year_month:'2018-03',  //TODO
-          department_id:''
-          },
-        isHigh: false,
-        nowPage: 1,   //当前页
-        total:0,      //总条数
-        show: false,
-        rightMenuX: 0,
-        rightMenuY: 0,
-        lists:[],
-        //模态框
-        instructionDialog: false,
-        pickerOptions2: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-          }]
-        },   
-        value4: ''
+    threeflag(val) {
+      if (val) {
+        this.myData(1);
       }
     },
-
-    methods: {
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      openModalDialogx(){       
-        this.noticeDialog=true;
-      },
-      closeNoticeResources(){
-        this.noticeDialog=false;
-      },
-      //右键回调时间
-      clickEvent (index) {
-        this.openModalDialog(index);
-      },
-      //关闭右键菜单
-      closeMenu(){
-        this.show = false;
-      },
-      //右键参数
-      contextMenuParam(event){
-        //param: user right param
-        let e = event || window.event;	//support firefox contextmenu
-        this.show = false;
-        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
-        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
-        event.preventDefault();
-        event.stopPropagation();
-        this.$nextTick(() => {
-          this.show = true
-        })
-      },
-      //公告右键
-      noticeMenu(row, event){
-        this.lists = [
-          {clickIndex: '', headIcon: 'el-icons-fa-edit', label: '编辑',},
-          {clickIndex: '', headIcon: 'el-icons-fa-trash-o', label: '删除',},
-          {clickIndex: '', headIcon: 'el-icons-fa-newspaper-o', label: '发布',},
-        ];
-        this.contextMenuParam(event);
-      },
-      myData(val) {
-        this.tableData = [];
-        this.form.page = val;
-        this.form.time=this.value4;
-       
-        this.$http.get(this.urls+'attendance/summary/', {
-          params: this.form,
-        }).then((res) => {
-            console.log(res);
-            if (res.data.code === '20010') {
-                this.tableData=res.data.data;
-                this.nowPage=val;
-                this.total=res.data.num;
-            }
-            else{
-              this.total=0;
-            }
-      
-         })
-      },
-      clickTable(row, event, column){
-        console.log(row, event, column)
-      },
-      search() {
-        this.myData(1);
-        this.isHigh = false;
-      },
-      // 重置
-      resetting() {
-          this.form={
-          page:1,
-          limit:12,
-          time:'',
-          pename:'',
-          department_id:''
-          },
-          this.departname='',
-          this.value4='',
-          this.myData(1);
-      },
-      // 高级筛选
-      highGrade() {
-        this.isHigh = !this.isHigh;
-      },
+    openModalDialogx() {
+      this.noticeDialog = true;
     },
-    mounted() {
-    this.myData(1);
+    closeNoticeResources() {
+      this.rowneed = {};
+      this.noticeDialog = false;
+    },
+    closeWarning() {
+      this.warningDialog = false;
+    },
+    //右键回调时间
+    clickEvent(index) {
+      this.openModalDialog(index);
+    },
+    //关闭右键菜单
+    closeMenu() {
+      this.show = false;
+    },
+    //右键参数
+    contextMenuParam(event) {
+      //param: user right param
+      let e = event || window.event; //support firefox contextmenu
+      this.show = false;
+      this.rightMenuX =
+        e.clientX +
+        document.documentElement.scrollLeft -
+        document.documentElement.clientLeft;
+      this.rightMenuY =
+        e.clientY +
+        document.documentElement.scrollTop -
+        document.documentElement.clientTop;
+      event.preventDefault();
+      event.stopPropagation();
+      this.$nextTick(() => {
+        this.show = true;
+      });
+    },
+    //公告右键
+    noticeMenu(row, event) {
+      this.rightrow = row;
+      this.lists = [
+        {
+          clickIndex: "noticeDialog",
+          headIcon: "el-icons-fa-edit",
+          label: "编辑"
+        },
+        { clickIndex: "look", headIcon: "el-icons-fa-eye", label: "预览" },
+        {
+          clickIndex: "delete",
+          headIcon: "el-icons-fa-trash-o",
+          label: "删除"
+        },
+        {
+          clickIndex: "sendnotice",
+          headIcon: "el-icons-fa-check-circle-o",
+          label: "发布"
+        }
+      ];
+      this.contextMenuParam(event);
+    },
+    myData(val) {
+      this.tableData = [];
+      this.form.page = val;
+      this.$http
+        .get(this.urls + "announcement", {
+          params: this.form
+        })
+        .then(res => {
+          if (res.data.code === "80010") {
+            this.tableData = res.data.data;
+            this.nowPage = val;
+            this.total = res.data.num;
+            for (let j = 0; j < res.data.data.length; j++) {
+              for (let i = 0; i < 4; i++) {
+                if (this.forms[i].id == res.data.data[j].type) {
+                  this.tableData[j].type = this.forms[i].name;
+                }
+              }
+              if (res.data.data[j].draft == "0") {
+                this.tableData[j].draft = "已发布";
+              } else {
+                this.tableData[j].draft = "草稿";
+              }
+              if (!res.data.data[j].real_name) {
+                this.tableData[j].real_name = "未知人员";
+              }
+            }
+          } else {
+            this.total = 0;
+          }
+        });
+    },
+    openModalDialog(index) {
+      //右键编辑
+      if (index == "noticeDialog") {
+        if (this.rightrow.draft == "已发布") {
+          this.$notify({
+            title: "警告",
+            message: "该公告已发布不支持编辑",
+            type: "warning"
+          });
+        } else {
+          this.rowneed = this.rightrow;
+          this.noticeDialog = true;
+        }
+      }
+      //右键预览
+      if (index == "look") {
+        this.look = this.rightrow;
+        this.warningDialog = true;
+      }
+      //右键删除
+      if (index == "delete") {
+        this.$confirm("确定要删除该公告吗？", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            this.$http
+              .put(this.urls + "announcement/" + this.rightrow.id)
+              .then(res => {
+                if (res.data.code == "80010") {
+                  this.$notify({
+                    title: "成功",
+                    message: "操作成功",
+                    type: "success"
+                  });
+                  this.myData(this.form.page);
+                } else {
+                  this.$notify.error({
+                    title: "错误",
+                    message: "操作失败"
+                  });
+                }
+              });
+          })
+          .catch(() => {
+            this.$alert("未删除", "提示", {
+              confirmButtonText: "确定",
+              type: "error"
+            });
+          });
+      }
+      //右键发布
+      if (index == "sendnotice") {
+        if (this.rightrow.draft == "已发布") {
+          this.$notify({
+            title: "警告",
+            message: "该公告已发布不用重复发布",
+            type: "warning"
+          });
+        } else {
+          this.letsend();
+        }
+      }
+    },
+    //发布接口
+    letsend() {
+      if (this.rightrow.type == "表彰") {
+        this.rightrow.type = 1;
+      }
+      if (this.rightrow.type == "批评") {
+        this.rightrow.type = 2;
+      }
+      if (this.rightrow.type == "通知") {
+        this.rightrow.type = 3;
+      }
+      if (this.rightrow.type == "研发") {
+        this.rightrow.type = 4;
+      }
+      this.$http
+        .post(this.urls + "announcement", {
+          title: this.rightrow.title,
+          type: this.rightrow.type,
+          content: this.rightrow.content,
+          id: this.rightrow.id,
+          draft: 0,
+          department_id: this.rightrow.objid,
+          attachment: this.rightrow.attachment,
+          previev: this.rightrow.preview
+        })
+        .then(res => {
+          if (res.data.code == "99910") {
+            this.$notify({
+              title: "成功",
+              message: "操作成功",
+              type: "success"
+            });
+            this.myData(1);
+          } else {
+            this.$notify.error({
+              title: "错误",
+              message: "操作失败"
+            });
+          }
+        });
+    },
+    clickTable(row, event, column) {
+      console.log(row, event, column);
     }
+  },
+  mounted() {
+    this.myData(1);
   }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped="">
-  .filter {
-    /*padding: 10px 0;*/
-  }
-  .sendnotice{ position: absolute;
-    right:0;
-    top:8px;
-  }
-  .main{margin-top:10px;}
-  .tableBottom {
-    padding: 8px;
-    display: flex;
-    justify-content: flex-end;
-  }
-  .el-table .cell{
-    text-align: center;
-  }
+.menu-ui {
+  width: 80px;
+}
+.filter {
+  /*padding: 10px 0;*/
+}
+.sendnotice {
+  position: absolute;
+  right: 0;
+  top: 8px;
+}
+.main {
+  margin-top: 10px;
+}
+.tableBottom {
+  padding: 8px;
+  display: flex;
+  justify-content: flex-end;
+}
+.el-table .cell {
+  text-align: center;
+}
 </style>

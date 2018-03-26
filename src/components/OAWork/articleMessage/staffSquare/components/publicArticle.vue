@@ -52,7 +52,6 @@
         </div>
       </div>
       <div class="ql-editor" v-html="form.htmlForEditor"></div>
-
       <div class="previewBtn">
         <el-button type="primary" size="small" @click="preBtn">返回上一步</el-button>
       </div>
@@ -76,7 +75,6 @@
         times: '',
         pitch: '',
         cover_pic: {},
-        file: {},
         cover_id: [],
         dict: {
           region: [],
@@ -208,16 +206,15 @@
         // NOTE: Your key could be different such as:
         // formData.append('file', file)
         let formData = new FormData();
-        formData.append('file', file);
-        console.log(file)
-
-        let config = {
-          headers:{'Content-Type':'multipart/form-data'}
-        };
-        this.$http.post(this.address + 'files', formData ,config).then((res) => {
-            if(res.data.status === 'success'){
-              Editor.insertEmbed(cursorLocation, 'image', res.data.data.uri);
-            }
+        formData.append('image', file);
+        this.$http.post(this.address + 'api/v1/files', formData).then((res) => {
+          console.log(res.data.data);
+          let picId = res.data.data;
+          this.$http.post('picture/' + picId).then((res) => {
+            // Get url from response
+            let url = res.data.data;
+            Editor.insertEmbed(cursorLocation, 'image', url);
+          })
         })
       },
       // 上传成功
@@ -237,10 +234,6 @@
             message: info,
           });
         }
-      },
-
-      upLoad(e){
-        console.log(e)
       },
       // 当前时间
       nowDate() {
