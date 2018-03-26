@@ -225,7 +225,7 @@
       // 系统列表
       powerList(val) {
         this.firstForm.page = val;
-        this.$http.get(this.urls + 'api/v1/systems?per_page_number=5', {
+        this.$http.get(this.urls + 'systems?per_page_number=5', {
           params: this.firstForm
         }).then((res) => {
           if (res.data.status === 'success') {
@@ -245,7 +245,7 @@
       // 模块列表
       moduleList(val, id) {
         this.secondForm.page = val;
-        this.$http.get(this.urls + 'api/v1/modules?per_page_number=5&sys_id=' + this.addID.firstID, {
+        this.$http.get(this.urls + 'modules?per_page_number=5&sys_id=' + this.addID.firstID, {
           params: this.secondForm
         }).then((res) => {
           if (res.data.status === 'success') {
@@ -263,7 +263,7 @@
       // ==============权限=================
       authority(val) {
         this.thirdForm.page = val;
-        this.$http.get(this.urls + 'api/v1/permissions?per_page_number=5&mod_id=' + this.addID.secondID, {
+        this.$http.get(this.urls + 'permissions?per_page_number=5&mod_id=' + this.addID.secondID, {
           params: this.thirdForm
         }).then((res) => {
           if (res.data.status === 'success') {
@@ -312,11 +312,11 @@
         }).then(() => {
           let address;
           if (val === 'first') {
-            address = this.urls + 'api/v1/systems/';
+            address = this.urls + 'systems/';
           } else if (val === 'second') {
-            address = this.urls + 'api/v1/modules/';
+            address = this.urls + 'modules/';
           } else {
-            address = this.urls + 'api/v1/permissions/';
+            address = this.urls + 'permissions/';
           }
           this.$http.delete(address + id.id).then((res) => {
             if (res.data.status === 'success') {

@@ -338,7 +338,7 @@
       document.getElementById('staffManage').style.minHeight = window.innerHeight - 160 + 'px';
       this.getDepart();
       this.activeName = 'first';
-      this.$http.get(globalConfig.server_user+'api/v1/organizations/1').then((res) => {
+      this.$http.get(globalConfig.server_user+'organizations/1').then((res) => {
         if(res.data.status === 'success'){
           let data = res.data.data;
           this.params.org_id = data.id;
@@ -382,7 +382,7 @@
       //**************部门操作函数********************
       //获取部门数据
       getDepart(){
-        this.$http.get(globalConfig.server_user+'api/v1/organizations?per_page_number=500').then((res) => {
+        this.$http.get(globalConfig.server_user+'organizations?per_page_number=500').then((res) => {
           this.arrList = res.data.data;
           this.setTree = this.recurrence(null);
           this.arrList.forEach((item) => {
@@ -459,7 +459,7 @@
       },
       //删除部门
       deleteDpr(id){
-        this.$http.delete(globalConfig.server_user+'api/v1/organizations/'+id).then((res) =>{
+        this.$http.delete(globalConfig.server_user+'organizations/'+id).then((res) =>{
           if(res.data.status === 'success'){
             this.$notify({
               title: '成功',
@@ -496,7 +496,7 @@
       //********************员工操作函数****************
       //获取员工数据列表
       getStaffData(){
-        this.$http.get(globalConfig.server_user+'api/v1/users?q='+this.params.keywords+'&page='+this.params.page
+        this.$http.get(globalConfig.server_user+'users?q='+this.params.keywords+'&page='+this.params.page
           +'&per_page_number='+this.params.pageNum+'&org_id='+this.params.org_id+'&is_recursion=1').then((res) => {
           if(res.data.status === 'success'){
             this.staffTableData = res.data.data;
@@ -540,7 +540,7 @@
       },
       //删除员工
       deleteStaff(){
-        this.$http.delete(globalConfig.server_user+'api/v1/users/'+this.editId).then((res) => {
+        this.$http.delete(globalConfig.server_user+'users/'+this.editId).then((res) => {
           if(res.data.status === 'success'){
             this.getStaffData();
             this.$notify({
@@ -578,7 +578,7 @@
       getOnlyPosition(){
         this.positionTableData = [];
         if(this.params.org_id){
-          this.$http.get(globalConfig.server_user+'api/v1/position/type?org_id='+this.params.org_id+'&page='+this.params.page
+          this.$http.get(globalConfig.server_user+'position/type?org_id='+this.params.org_id+'&page='+this.params.page
             +'&per_page_number='+this.params.pageNum).then((res) => {
             if(res.data.status === 'success'){
               let tableData = res.data.data;
@@ -665,7 +665,7 @@
       },
       //删除职位
       deleteOnlyPosition(){
-        this.$http.delete(globalConfig.server_user+'api/v1/position/type/'+this.onlyPositionId).then((res) =>{
+        this.$http.delete(globalConfig.server_user+'position/type/'+this.onlyPositionId).then((res) =>{
           if(res.data.status === 'success'){
             this.$notify({
               title: '消息',
@@ -686,7 +686,7 @@
       //********************岗位操作函数****************
       //根据职位获取岗位
       getPosition(){
-        this.$http.get(globalConfig.server_user+'api/v1/positions?type=' + this.onlyPositionId+'&page='+this.params.page
+        this.$http.get(globalConfig.server_user+'positions?type=' + this.onlyPositionId+'&page='+this.params.page
           +'&per_page_number='+this.params.pageNum).then((res) => {
           if(res.data.status === 'success'){
             let arr = res.data.data;
@@ -718,7 +718,7 @@
 //        let org_id = null;
 //        let org_name = null;
 //        //通过职位获取相关部门信息
-//        this.$http.get(globalConfig.server_user+'api/v1/position/type?org_id='+this.params.org_id).then((res) => {
+//        this.$http.get(globalConfig.server_user+'position/type?org_id='+this.params.org_id).then((res) => {
 //          if(res.data.status === 'success'){
 //            tableData = res.data.data;
 //            if(tableData.length>0) {
@@ -736,7 +736,7 @@
 //          }
 //        }).then((data)=>{
 //          //
-//          this.$http.get(globalConfig.server_user+'api/v1/positions?org_id=' + this.params.org_id+'&page='+this.params.page
+//          this.$http.get(globalConfig.server_user+'positions?org_id=' + this.params.org_id+'&page='+this.params.page
 //            +'&per_page_number='+this.params.pageNum).then((res) => {
 //            if(res.data.status === 'success'){
 //              let arr = res.data.data;
@@ -807,7 +807,7 @@
       },
       //删除岗位
       deletePosition(){
-        this.$http.delete(globalConfig.server_user+'api/v1/positions/'+this.positionId).then((res) =>{
+        this.$http.delete(globalConfig.server_user+'positions/'+this.positionId).then((res) =>{
           if(res.data.status === 'success'){
             this.$notify({
               title: '成功',

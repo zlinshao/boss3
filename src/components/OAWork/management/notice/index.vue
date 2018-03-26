@@ -1,7 +1,7 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div>
-    <div class="highRanking">    
+    <div class="highRanking">
       <div class="highSearch" style="width:95%">
         <el-form :inline="true" size="medium" >
           <el-form-item>
@@ -15,7 +15,7 @@
         </el-form>
         <el-button @click="openModalDialogx('noticeDialog')" class="sendnotice" size="mini" type="primary">发布公告</el-button>
       </div>
-      
+
     </div>
       <div class="main">
         <div class="myHouse">
@@ -50,7 +50,7 @@
                 </div>
                 </template>
               </el-table-column>
-              <el-table-column     
+              <el-table-column
                 label="主要内容">
                 <template slot-scope="scope">
                 <div style="display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
@@ -69,8 +69,8 @@
                 label="未读人数">
               </el-table-column>
               <el-table-column
-                width="140px"  
-            
+                width="140px"
+
                 label="状态">
               <template slot-scope="scope">
                <el-button class="btnStatus" v-if="scope.row.draft === '已发布'" type="primary" size="mini">已发布</el-button>
@@ -95,7 +95,7 @@
       </div>
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show" @clickOperate="clickEvent"></RightMenu>
-    <NoticeResources :noticeDialog="noticeDialog" :rowneedx="rowneed"  @close="closeNoticeResources" @threeflag="threeflag"></NoticeResources> 
+    <NoticeResources :noticeDialog="noticeDialog" :rowneedx="rowneed"  @close="closeNoticeResources" @threeflag="threeflag"></NoticeResources>
     <Warning :warningDialog="warningDialog" :lookat="look"  @close="closeWarning" ></Warning>
   </div>
 </template>

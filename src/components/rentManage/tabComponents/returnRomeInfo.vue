@@ -5,11 +5,11 @@
 
         style="width: 100%">
         <el-table-column
-          prop="contract_num"
+          prop="check_time"
           label="退房时间">
         </el-table-column>
         <el-table-column
-          prop="address"
+          prop="check_types"
           label="退房状态">
         </el-table-column>
         <el-table-column
@@ -53,18 +53,51 @@
           label="操作人">
         </el-table-column>
       </el-table>
+
+      <div class="pagination">
+        <el-pagination
+          @current-change="currentChange"
+          :current-page="params.pages"
+          :page-size="4"
+          layout="total, prev, pager, next, jumper"
+          :total="totalNumber">
+        </el-pagination>
+      </div>
     </div>
 </template>
 
 <script>
     export default {
-        name: 'hello',
-        data () {
-            return {
-              rentingData:[],
+      name: 'hello',
+      data () {
+          return {
+            rentingData:[],
+            params:{
+              limit:4,
+              pages:1,
+            },
+            totalNumber:0,
+          }
+      },
+      mounted(){
+        this.getData();
+      },
+      methods:{
+        getData(){
+          this.$http.get(globalConfig.server+'customer/check_out',{params:this.params}).then((res) => {
+              if(res.data.code === '20000'){
+                this.rentingData = res.data.data.data;
+                this.totalNumber = res.data.data.count;
+              }else {
+                this.rentingData = [];
+                this.totalNumber = 0;
+              }
+          })
+        },
+        currentChange(val){
 
-            }
         }
+      }
     }
 </script>
 

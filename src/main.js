@@ -67,21 +67,24 @@ axios.interceptors.response.use(function (response) {
 //   mode: 'history',
 //   router
 // });
+let i = 0;
+axios.interceptors.request.use((config) => {  //配置发送请求的信息
+  i++;
+  store.dispatch('showLoading');
+  return config;
+}, function (error) {
+  return Promise.reject(error);
+});
 
-//axios的一些配置，比如发送请求显示loading，请求回来loading消失之类的
-// axios.interceptors.request.use((config) => {  //配置发送请求的信息
-//   store.dispatch('showLoading');
-//   return config;
-// }, function (error) {
-//   return Promise.reject(error);
-// });
-//
-// axios.interceptors.response.use((response) => { //配置请求回来的信息
-//   store.dispatch('hideLoading');
-//   return response;
-// }, function (error) {
-//   return Promise.reject(error);
-// });
+axios.interceptors.response.use((response) => { //配置请求回来的信息
+  i--;
+  if(i<1){
+    store.dispatch('hideLoading');
+  }
+  return response;
+}, function (error) {
+  return Promise.reject(error);
+});
 
 
 //重定向
@@ -113,4 +116,4 @@ new Vue({
   store,
   template: '<App/>',
   components: {App}
-})
+});

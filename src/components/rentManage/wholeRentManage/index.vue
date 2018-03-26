@@ -677,7 +677,6 @@
 
       //详情表头右键
       detailMenu(e){
-          console.log(e.target.className)
         if (e.target.className.indexOf('el-tabs__item') > -1 || e.target.className.indexOf('el-tabs__nav-scroll') > -1) {
           this.lists = [
             {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
@@ -699,7 +698,6 @@
       },
       //租客右键
       clientMenu(row, event){
-        console.log(row)
         this.lists = [
           {
             clickIndex: '', headIcon: 'el-icons-fa-user', tailIcon: 'el-icon-arrow-right', label: '租客管理',

@@ -390,7 +390,7 @@
       showMessageDetail(val){
         this.messageDetail = val;
         this.messageDialog = true;
-        this.$http.put(globalConfig.server_user+'api/v1/messages/'+val.id).then((res) => {
+        this.$http.put(globalConfig.server_user+'messages/'+val.id).then((res) => {
           if(res.data.status === 'success'){
             this.getUnReadMessage();
           }
@@ -401,7 +401,7 @@
       },
       //获取未读消息
       getUnReadMessage(){
-          this.$http.get(globalConfig.server_user+'api/v1/messages?unread=1').then((res) => {
+          this.$http.get(globalConfig.server_user+'messages?unread=1').then((res) => {
             if(res.data.status === 'success'){
                 this.unReadMessageData = res.data.data;
             }
