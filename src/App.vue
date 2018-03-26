@@ -1,44 +1,35 @@
 <template>
   <div id="app" @contextmenu="prevent($event)" @click="closeMenu">
     <router-view></router-view>
+
+    <LOADING v-if="isLoading"></LOADING>
   </div>
 </template>
 
 <script>
+  import LOADING from './components/common/loading.vue'
   export default {
     name: 'app',
+    components: {LOADING},
     data(){
-        return{
-            loading:null
-        }
+      return {
+        loading: null
+      }
     },
     created(){
       document.onkeydown = function (e) {//键盘按键控制
         e = e || window.event;
-        if(e.keyCode == 116){
+        if (e.keyCode == 116) {
 
         }
       };
     },
-    computed:{
+    computed: {
       isLoading(){
-          return this.$store.state.app.isLoading;
+        return this.$store.state.app.isLoading;
       }
     },
-    watch:{
-      isLoading(val){
-//        if(val){
-//          this.loading = this.$loading({
-//            lock: true,
-//            text: '正在加载...',
-//            spinner: 'el-icon-loading',
-//            background: 'rgba(0, 0, 0, 0)'
-//          });
-//        }else {
-//          this.loading.close();
-//        }
-      },
-    },
+
     methods: {
       prevent(e) {
         e.preventDefault();
