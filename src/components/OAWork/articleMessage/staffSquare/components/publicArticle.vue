@@ -211,7 +211,7 @@
         this.$http.post(this.address + 'api/v1/files', formData).then((res) => {
           console.log(res.data.data);
           let picId = res.data.data;
-          this.$http.post('picture/' + picId).then((res) => {
+          this.$http.post(this.address + 'picture/' + picId).then((res) => {
             // Get url from response
             let url = res.data.data;
             Editor.insertEmbed(cursorLocation, 'image', url);

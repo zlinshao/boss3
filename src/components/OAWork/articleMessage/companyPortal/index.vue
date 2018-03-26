@@ -5,7 +5,7 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入内容" v-model="form.keywords" size="mini" clearable @keyup.enter.native="searchMyData(1)">
+            <el-input placeholder="请输入标题" v-model="form.keywords" size="mini" clearable @keyup.enter.native="searchMyData(1)">
               <el-button slot="append" icon="el-icon-search" @click="searchMyData(1)"></el-button>
             </el-input>
           </el-form-item>
@@ -84,7 +84,7 @@
           </el-table-column>
           <el-table-column
             prop="create_time"
-            label="发布时间">
+            label="创建时间">
           </el-table-column>
           <el-table-column
             label="状态">
