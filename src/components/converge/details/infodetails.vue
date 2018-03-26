@@ -68,14 +68,14 @@
         <div class="comment_box" v-if="isShow">
           <div class="publishComment">
             <div class="portrait">
-              <img :src="staffs.avatar" v-if="staffs.avatar !== ''">
+              <img :src="personal.avatar" v-if="personal.avatar !== ''">
               <img src="../../../assets/images/head.png" v-else>
             </div>
             <div class="comments">
               <div class="staff_name">
                 <div>
-                  <span>{{staffs.name}}</span>&nbsp;&nbsp;
-                  <span v-for="key in staffs.org">
+                  <span>{{personal.name}}</span>&nbsp;&nbsp;
+                  <span v-for="key in personal.org">
                     <span>{{key.name}}</span>
                   </span>
                 </div>
@@ -176,6 +176,7 @@
     name: "infodetails",
     data() {
       return {
+        personal: globalConfig.personal,
         urls: globalConfig.server,
         showUp: '',
         isShow: true,
@@ -527,6 +528,8 @@
         min-height: 40px;
         max-height: 40px;
         img {
+          width: 40px;
+          height: 40px;
           @include border_radius(50%);
         }
       }
