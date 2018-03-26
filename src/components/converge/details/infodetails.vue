@@ -237,8 +237,8 @@
         this.$http.get(this.urls + 'oa/portal/?dict_id=' + 142, {
           params: this.form
         }).then((res) => {
-          this.hotData.title = res.data.data.data[0].dict_ids;
-          this.hotData.data = res.data.data.data;
+          this.hotData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0].dict_ids;
+          this.hotData.data = res.data && res.data.data && res.data.data.data;
         })
       },
       // 详情
