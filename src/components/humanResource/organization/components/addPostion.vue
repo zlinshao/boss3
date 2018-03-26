@@ -122,7 +122,7 @@
 
       confirmAdd(){
         if(this.type==='position'){
-          this.$http.post(globalConfig.server_user+'api/v1/position/type',this.params).then((res) => {
+          this.$http.post(globalConfig.server_user+'position/type',this.params).then((res) => {
             if(res.data.status === 'success'){
               this.$emit('close','success');
               this.$notify.success({
@@ -139,7 +139,7 @@
             }
           });
         }else if(this.type==='post') {
-          this.$http.post(globalConfig.server_user+'api/v1/positions',this.params).then((res) => {
+          this.$http.post(globalConfig.server_user+'positions',this.params).then((res) => {
             if(res.data.status === 'success'){
               this.$emit('close','success');
               this.closeModal();
@@ -206,7 +206,7 @@
 
       //获取职位
       getPosition(){
-        this.$http.get(globalConfig.server_user+'api/v1/position/type?org_id='+this.params.org_id).then((res) => {
+        this.$http.get(globalConfig.server_user+'position/type?org_id='+this.params.org_id).then((res) => {
           if(res.data.status === 'success'){
             this.positionData = res.data.data;
           }else {
@@ -220,7 +220,7 @@
       },
       //获取岗位
       getPost(val){
-        this.$http.get(globalConfig.server_user+'api/v1/positions?type='+val).then((res) => {
+        this.$http.get(globalConfig.server_user+'positions?type='+val).then((res) => {
           if(res.data.status === 'success'){
             this.postData = res.data.data;
           }else {

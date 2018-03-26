@@ -110,7 +110,7 @@
         this.editImg = imgObject;
       },
       getTokenMessage() {
-        this.$http.get(globalConfig.server_user + 'api/v1/files').then((res) => {
+        this.$http.get(globalConfig.server_user + 'files').then((res) => {
           this.uploaderReady(res.data.data);
         })
       },
@@ -207,7 +207,7 @@
               let sourceLink = domain + "/" + url.key;
 
 
-              _this.$http.post(globalConfig.server_user + 'api/v1/files', {
+              _this.$http.post(globalConfig.server_user + 'files', {
                 url: sourceLink,
                 name: url.key,
                 raw_name : file.name,

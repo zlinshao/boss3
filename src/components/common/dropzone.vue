@@ -44,7 +44,7 @@
       const element = document.getElementById(this.id);
       const vm = this;
       this.dropzone = new Dropzone(element, {
-        url: vm.urls + 'api/v1/files',
+        url: vm.urls + 'files',
         // resizeWidth: 1000,
         addRemoveLinks: true,
         dictRemoveLinks: "x",
