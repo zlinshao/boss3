@@ -181,21 +181,24 @@
         })
       },
       searchMyData(page) {
-        this.form.pages = page;
-        this.$http.get(this.urls + 'oa/portal/', {
-          params:this.form,
-        }).then((res) => {
-          this.isHigh = false;
-          if (res.data.code === '80000') {
-            this.currentPage = page;
-            this.tableData = res.data.data.data;
-            this.totalNum = res.data.data.count;
-          } else {
-            this.tableData = [];
-            this.totalNum = 0;
-          }
-        });
-
+        if(this.form.keywords !== ''){
+          this.form.pages = page;
+          this.$http.get(this.urls + 'oa/portal/', {
+            params:this.form,
+          }).then((res) => {
+            this.isHigh = false;
+            if (res.data.code === '80000') {
+              this.currentPage = page;
+              this.tableData = res.data.data.data;
+              this.totalNum = res.data.data.count;
+            } else {
+              this.tableData = [];
+              this.totalNum = 0;
+            }
+          });
+        }else{
+          this.getLejiaTableData();
+        }
       },
       // 详情
       openDetail(row) {

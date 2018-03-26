@@ -192,6 +192,7 @@
           if (res.data.code === '80010' || res.data.code === '80030') {
             this.goBack();
             this.prompt(1, res.data.msg);
+            $('.el-tag__close.el-icon-close').trigger('click');
           } else {
             this.prompt(2, res.data.msg);
           }
