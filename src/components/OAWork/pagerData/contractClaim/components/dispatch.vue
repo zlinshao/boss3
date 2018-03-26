@@ -98,7 +98,6 @@
         handler(val,old){
           this.staff_name = val.simple_staff.real_name;
           this.staff_id = val.staff_id;
-          this.getStaffContract()
         }
       }
     },
