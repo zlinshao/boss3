@@ -10,23 +10,23 @@
   import LOADING from './components/common/loading.vue'
   export default {
     name: 'app',
-    components:{LOADING},
+    components: {LOADING},
     data(){
-        return{
-            loading:null
-        }
+      return {
+        loading: null
+      }
     },
     created(){
       document.onkeydown = function (e) {//键盘按键控制
         e = e || window.event;
-        if(e.keyCode == 116){
+        if (e.keyCode == 116) {
 
         }
       };
     },
-    computed:{
+    computed: {
       isLoading(){
-          return this.$store.state.app.isLoading;
+        return this.$store.state.app.isLoading;
       }
     },
 
