@@ -259,74 +259,18 @@
     <div class="main" v-if="secondPassword">
 
       <el-row>
-        <el-col class="leftTitle" :span="4">
-          设置二级密码
-        </el-col>
-        <el-col :span="20">
-          <div>
-            <el-checkbox-group v-model="checkList">
-              <el-checkbox label="租赁管理"></el-checkbox>
-              <el-checkbox label="财务账本"></el-checkbox>
-              <el-checkbox label="喜报管理"></el-checkbox>
-              <el-checkbox label="业绩工资"></el-checkbox>
-              <el-checkbox label="人资管理"></el-checkbox>
-              <el-checkbox label="OA办公"></el-checkbox>
-              <el-checkbox label="系统设置"></el-checkbox>
-            </el-checkbox-group>
-          </div>
-          <div class="remark">
-            备注：勾选后，查看此模块前，需输入二级密码。
-          </div>
-        </el-col>
-      </el-row>
-
-      <el-row>
         <el-col class="leftTitle" :span="4" style="margin-top: 5px">
-          密码设置
-        </el-col>
-        <el-col :span="20">
-          <div class="nowrap" style="margin-bottom: 12px;">
-            <!--<div>手机号码</div>-->
-            <div>
-              <el-input model="form" clearable placeholder="请输入手机号码"></el-input>
-            </div>
-          </div>
-          <div class="validate">
-            <div>
-              <el-input model="form" clearable placeholder="请输入验证码"></el-input>
-            </div>
-            <div>
-              <el-button type="primary">获取验证码</el-button>
-            </div>
-            <div>
-              <el-button type="text">60S后重新获取</el-button>
-            </div>
-          </div>
-          <div class="validate">
-            <div class="validateSign">
-              <el-input model="form" clearable placeholder="请输入新密码"></el-input>
-              <i class="el-icon-success"></i>
-            </div>
-          </div>
-          <div class="validate">
-            <div class="validateSign">
-              <el-input model="form" clearable placeholder="请确认新密码"></el-input>
-              <i class="el-icon-success"></i>
-            </div>
-          </div>
-
-          <div class="remark">
-            备注：密码长度6-16位，数字、字母和符号至少包含两种。
-          </div>
+          设置二级密码模块
         </el-col>
       </el-row>
-
-      <el-row>
-        <el-col :span="4">&nbsp;</el-col>
-        <el-col :span="20">
-          <el-button type="primary" size="small" style="padding: 10px 140px;">保存</el-button>
+       <el-row v-for="(item2) in dictionary2" :key="item2.id" >
+        <el-col class="leftTitle" :span="6" style="margin-top: 8px">
+          {{item2.dictionary_name}}
         </el-col>
-      </el-row>
+        <el-col :span="6">
+          <el-button @click="openSecondPassword('secondPasswordDialog',item2.id)" style="width: 140px;" type="primary">设置二级密码</el-button>
+        </el-col>
+      </el-row>     
     </div>
     <div class="main" v-if="lockScreen">
 
@@ -370,19 +314,25 @@
         </el-col>
       </el-row>
     </div>
+<secondPasswordRes :secondPasswordDialog="secondPasswordDialog" :sendid="sendid" @close="closesecondPassword" ></secondPasswordRes>    
   </div>
 </template>
 
 <script>
+import secondPasswordRes from './secondPassword/index.vue' 
   export default {
     name: "index",
+     components: {
+      secondPasswordRes
+    },
     data() {
       return {
         basicSet: true,
         secondPassword: false,
         lockScreen: false,
-
+        secondPasswordDialog:false,
         form: {},
+        sendid:'',
         checkList: [],
         pickerOptions: {
           shortcuts: [{
@@ -417,6 +367,7 @@
         set_pwd_lock:'',    //锁屏密码
         identify_pwd_lock:'',
         dictionary:[],      //字典
+        dictionary2:[],      //字典
         //个人基本设置
         basicSetting:{
           id: [],
@@ -426,11 +377,19 @@
     },
     mounted() {
         this.getDictionary();
+        this.getDictionary2();
     },
     watch: {
 
     },
     methods: {
+      openSecondPassword(val,id){
+        this.sendid=id;  
+        this.secondPasswordDialog=true;
+      },
+      closesecondPassword(){
+        this.secondPasswordDialog=false;
+      },
       getDictionary(){
         this.$http.get(globalConfig.server+'setting/dictionary/202').then((res) => {
           if(res.data.code === '30010'){
@@ -443,6 +402,19 @@
           }
         })
       },
+      getDictionary2(){
+        this.$http.get(globalConfig.server+'setting/dictionary/220').then((res) => {
+          console.log(res)
+          if(res.data.code === '30010'){
+            this.dictionary2 = res.data.data;
+          }else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
+          }
+        })
+      },  
       showBasicset() {
         this.basicSet = true;
         this.secondPassword = false;
@@ -585,7 +557,7 @@
     display: -webkit-flex;
     align-items: center
   }
-
+.el-dialog{width: 200px !important}
   .validate {
     @include flex;
     margin-bottom: 12px;

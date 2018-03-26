@@ -2,7 +2,7 @@
   <div @click="show=false" @contextmenu="closeMenu">
     <div>
     <div class="highRanking">    
-      <div class="highSearch" style="width:244px">
+      <div class="highSearch" style="width:95%">
         <el-form :inline="true" size="medium" >
           <el-form-item>
             <el-input placeholder="公告主题/标题/内容关键字" v-model="form.search" @keyup.enter.native="myData(1)" size="mini"
@@ -27,46 +27,53 @@
               style="width: 100%">
               <el-table-column
                 prop="type"
-                width="80px"
+                width="120px"
                 label="公告主题">
               </el-table-column>
               <el-table-column
-                width="160px"
+                width="200px"
                 prop="update_time"
                 label="发布时间">
               </el-table-column>
               <el-table-column
-                width="80px"
+                width="120px"
                 prop="real_name"
                 label="发布人">
               </el-table-column>
               <el-table-column
                 prop="title"
-                show-overflow-tooltip
-                width="200px"
+                width="260px"
                 label="标题">
+                <template slot-scope="scope">
+                <div style="display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                {{scope.row.title}}
+                </div>
+                </template>
               </el-table-column>
-              <el-table-column
-                prop="content_without_table"         
-                show-overflow-tooltip
+              <el-table-column     
                 label="主要内容">
+                <template slot-scope="scope">
+                <div style="display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                {{scope.row.content_without_table}}
+                </div>
+                </template>
               </el-table-column>
               <el-table-column
-                width="100px"
+                width="140px"
                 prop="read_count"
                 label="已阅读人数">
               </el-table-column>
               <el-table-column
-                width="100px"
+                width="140px"
                 prop="read_uncount"
                 label="未读人数">
               </el-table-column>
               <el-table-column
-                width="100px"  
+                width="140px"  
             
                 label="状态">
-            <template slot-scope="scope">
-              <el-button class="btnStatus" v-if="scope.row.draft === '已发布'" type="primary" size="mini">已发布</el-button>
+              <template slot-scope="scope">
+               <el-button class="btnStatus" v-if="scope.row.draft === '已发布'" type="primary" size="mini">已发布</el-button>
               <el-button class="btnStatus" v-if="scope.row.draft === '草稿'" type="warning" size="mini">草稿</el-button>
             </template>
               </el-table-column>
@@ -363,17 +370,17 @@ export default {
 .menu-ui {
   width: 80px;
 }
- .btnStatus{
-   cursor: inherit;
-   min-width:   68px;
- }
+.btnStatus {
+  cursor: inherit;
+  min-width: 68px;
+}
 .filter {
   /*padding: 10px 0;*/
 }
 .sendnotice {
   position: absolute;
   right: 0;
-  top: 8px;
+  top: 4px;
 }
 .main {
   margin-top: 10px;
