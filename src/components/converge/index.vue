@@ -459,42 +459,42 @@
         this.$http.get(this.urls + 'oa/portal/?dict_id=144', {
           params: this.form
         }).then((res) => {
-          this.hostData.title = res.data && res.data.data &&  res.data.data.data[0].dict_ids;
+          this.hostData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].dict_ids;
           this.hostData.data = res.data && res.data.data && res.data.data.data;
           // 次标题1
 
           this.$http.get(this.urls + 'oa/portal/?dict_id=145', {
             params: this.form
           }).then((res) => {
-            this.lessData.title = res.data && res.data.data &&  res.data.data.data[0].dict_ids;
+            this.lessData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].dict_ids;
             this.lessData.data = res.data && res.data.data && res.data.data.data;
             // 次标题2
 
             this.$http.get(this.urls + 'oa/portal/?dict_id=146', {
               params: this.form
             }).then((res) => {
-              this.lowData.title = res.data && res.data.data &&  res.data.data.data[0].dict_ids;
+              this.lowData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].dict_ids;
               this.lowData.data = res.data && res.data.data && res.data.data.data;
               // 乐伽新闻
 
               this.$http.get(this.urls + 'oa/portal/?dict_id=138', {
                 params: this.form
               }).then((res) => {
-                this.newsData.title = res.data && res.data.data &&  res.data.data.data[0].dict_ids;
+                this.newsData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].dict_ids;
                 this.newsData.data = res.data && res.data.data && res.data.data.data;
 
                 // 员工风采
                 this.$http.get(this.urls + 'oa/portal/?dict_id=139', {
                   params: this.form
                 }).then((res) => {
-                  this.staffData.title = res.data && res.data.data &&  res.data.data.data[0].dict_ids;
+                  this.staffData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].dict_ids;
                   this.staffData.data = res.data && res.data.data && res.data.data.data;
 
                   // 客户纪实
                   this.$http.get(this.urls + 'oa/portal/?dict_id=140', {
                     params: this.form
                   }).then((res) => {
-                    this.cusData.title = res.data && res.data.data &&  res.data.data.data[0].dict_ids;
+                    this.cusData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].dict_ids;
                     this.cusData.data = res.data && res.data.data && res.data.data.data;
                   });
 
@@ -502,7 +502,7 @@
                   this.$http.get(this.urls + 'oa/portal/?dict_id=142', {
                     params: this.form
                   }).then((res) => {
-                    this.hotData.title = res.data && res.data.data &&  res.data.data.data[0].dict_ids;
+                    this.hotData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].dict_ids;
                     this.hotData.data = res.data && res.data.data && res.data.data.data;
                   });
 
@@ -510,14 +510,14 @@
                   this.$http.get(this.urls + 'oa/portal/?dict_id=141', {
                     params: this.form
                   }).then((res) => {
-                    this.lifeData.title = res.data && res.data.data &&  res.data.data.data[0].dict_ids;
+                    this.lifeData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].dict_ids;
                     this.lifeData.data = res.data && res.data.data && res.data.data.data;
 
                     // 人物志
                     this.$http.get(this.urls + 'oa/portal/?dict_id=143', {
                       params: this.form
                     }).then((res) => {
-                      this.figureData.title = res.data && res.data.data &&  res.data.data.data[0].dict_ids;
+                      this.figureData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].dict_ids;
                       this.figureData.data = res.data && res.data.data && res.data.data.data;
                     })
 
