@@ -79,9 +79,9 @@
                 <div class="clearfix">
                   <span>2017-01-17</span>
                   <span style="float: right;">
-                    <i class="iconfont icon-xinxi" style="margin-right: -7px;"></i>22 &nbsp;&nbsp;&nbsp;
-                    <i class="iconfont icon-zan" style="margin-right: -7px;"></i>143 &nbsp;&nbsp;&nbsp;
-                    <i class="el-icon-view">15</i>
+                    <i class="iconfont icon-xinxi" style="margin-right: -7px;vertical-align: middle"></i> 22 &nbsp;&nbsp;&nbsp;
+                    <i class="iconfont icon-zan" style="margin-right: -7px;"></i> 143 &nbsp;&nbsp;&nbsp;
+                    <i class="el-icon-view"> 15</i>
                   </span>
                 </div>
                 <div style="margin-top: 10px;" class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
@@ -131,17 +131,17 @@
               <span style="border-left: 4px solid #fb4699;"></span>外部消息
             </div>
             <div class="news">
-              <div class="list_gonggao" v-for="(item,key) in externalNews" :key="item.id" v-if="key<3" @click="routerDetail(item.id)">
-                <div style="display: inline-block;float: left;"><img :src="item.uri" height="106" width="120" style="border-radius: 5px;"></div>
+              <div class="list_gonggao" sty v-for="(item,key) in externalNews" :key="item.id" v-if="key<3" @click="routerDetail(item.id)">
+                <div style="display: inline-block;float: left;"><img :src="item.uri" height="100" width="100" style="border-radius: 5px;"></div>
                 <div style="padding-left: 130px;">
                   <p class="info_title text_over_norwap">{{item.title}}</p>
                   <div class="second_line_camp">{{item.content}}</div>
                   <div class="clearfix" style="margin-top: 10px;">
                     <span>2017-01-17</span>
                     <span style="float: right;">
-                    <i class="iconfont icon-xinxi" style="margin-right: -7px;"></i>{{item.favor_num}} &nbsp;&nbsp;
-                    <i class="iconfont icon-zan" style="margin-right: -7px;"></i>{{item.favor_num}} &nbsp;&nbsp;
-                    <i class="el-icon-view">{{item.read_num}}</i>
+                    <i class="iconfont icon-xinxi" style="margin-right: -7px;vertical-align: middle;"></i> {{item.favor_num}} &nbsp;&nbsp;
+                    <i class="iconfont icon-zan" style="margin-right: -7px;"></i> {{item.favor_num}} &nbsp;&nbsp;
+                    <i class="el-icon-view"> {{item.read_num}}</i>
                   </span>
                   </div>
                 </div>
@@ -170,8 +170,8 @@
                       <p class="info_title text_over_norwap">{{lejiaCollege[0] && lejiaCollege[0].title}}</p>
                       <div class="second_line_camp">{{lejiaCollege[0] && lejiaCollege[0].content}}</div>
                       <span style="display: block;margin-top: 15px;">
-                      <i class="el-icon-view"></i><span class="view_word">{{lejiaCollege[0] && lejiaCollege[0].read_num}}人</span>&nbsp;&nbsp;&nbsp;
-                        <i class="el-icon-edit"></i><span class="edit_word">{{lejiaCollege[0] && lejiaCollege[0].favor_num}}人</span>
+                      <i class="el-icon-view"></i><span class="view_word"> {{lejiaCollege[0] && lejiaCollege[0].read_num}}人</span>&nbsp;&nbsp;&nbsp;
+                        <i class="el-icon-edit"></i><span class="edit_word"> {{lejiaCollege[0] && lejiaCollege[0].favor_num}}人</span>
                     </span>
                     </div>
                   </div>
@@ -188,8 +188,8 @@
                       <p class="info_title text_over_norwap">{{lejiaCollege[1] && lejiaCollege[1].title}}</p>
                       <div class="second_line_camp">{{lejiaCollege[1] && lejiaCollege[1].content}}</div>
                       <span style="display: block;margin-top: 15px;">
-                        <i class="el-icon-view"></i><span class="view_word">{{lejiaCollege[1] && lejiaCollege[1].read_num}}人</span>&nbsp;&nbsp;&nbsp;
-                          <i class="el-icon-edit"></i><span class="edit_word">{{lejiaCollege[1] && lejiaCollege[1].favor_num}}人</span>
+                        <i class="el-icon-view"></i><span class="view_word"> {{lejiaCollege[1] && lejiaCollege[1].read_num}}人</span>&nbsp;&nbsp;&nbsp;
+                          <i class="el-icon-edit"></i><span class="edit_word"> {{lejiaCollege[1] && lejiaCollege[1].favor_num}}人</span>
                     </span>
                     </div>
                   </div>
@@ -204,8 +204,8 @@
                       <p class="info_title text_over_norwap">{{lejiaCollege[2] && lejiaCollege[2].title}}</p>
                       <div class="second_line_camp">{{lejiaCollege[2] && lejiaCollege[2].content}}</div>
                       <span style="display: block;margin-top: 15px;">
-                      <i class="el-icon-view"></i><span class="view_word">{{lejiaCollege[2] && lejiaCollege[1].read_num}}人</span>&nbsp;&nbsp;&nbsp;
-                      <i class="el-icon-edit" ></i><span class="edit_word">{{lejiaCollege[2] && lejiaCollege[1].favor_num}}人</span>
+                      <i class="el-icon-view"></i><span class="view_word"> {{lejiaCollege[2] && lejiaCollege[1].read_num}}人</span>&nbsp;&nbsp;&nbsp;
+                      <i class="el-icon-edit" ></i><span class="edit_word"> {{lejiaCollege[2] && lejiaCollege[1].favor_num}}人</span>
                     </span>
                     </div>
                   </div>
@@ -503,6 +503,9 @@
   }
   img{
     cursor: pointer;
+  }
+  .news .list_gonggao {
+    height: 110px;
   }
   .second_line_camp{
     overflow:hidden;

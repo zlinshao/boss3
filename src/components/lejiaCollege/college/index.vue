@@ -36,7 +36,7 @@
                     <img :src="course.uri"  style="border-radius:10px;">
                   </div>
                   <div class="list_detail" style="min-width: 130px;">
-                    <div class="list_title second_line_camp">{{course.title}}</div>
+                    <div class="list_title space_nowarp">{{course.title}}</div>
                     <div class="list_remark">{{course.content}}</div>
                     <div class="readerInfo">
                       <div class="read">
@@ -338,14 +338,13 @@
 </script>
 
 <style scoped lang="scss">
-  .second_line_camp{
+  .space_nowarp{
     overflow:hidden;
     text-overflow:ellipsis;
-    display:-webkit-box;
-    -webkit-box-orient:vertical;
-    -webkit-line-clamp:2;
     font-size: 14px;
     line-height: 20px;
+    min-width: 130px;
+    white-space: nowrap;
   }
   ul.el-carousel__indicators{
     display: none;
