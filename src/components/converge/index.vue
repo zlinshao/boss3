@@ -74,7 +74,8 @@
                 </div>
                 <div class="titleImg">
                   <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
-                    <img v-for="p in pic" :src="p.uri">
+                    <img v-if="p.uri" v-for="p in pic" :src="p.uri">
+                    <img v-else src="../../assets/images/default.png">
                   </span>
                 </div>
                 <div class="titleMain text" v-html="key.content">
@@ -114,7 +115,8 @@
             <div v-for="(key,index) in staffData.data" v-if="index === 0 && staffData.data[0] !== ''">
               <div class="titleImg box">
                  <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
-                    <img v-for="p in pic" :src="p.uri">
+                    <img v-if="p.uri" v-for="p in pic" :src="p.uri">
+                    <img v-else src="../../assets/images/default.png">
                   </span>
               </div>
               <div class="headline box" @click="routerDetail(key.id)">{{key.title}}</div>
@@ -188,8 +190,8 @@
                            v-if="index !== 0">
                         <div>
                            <span v-for="pic in key.album.cover_pic">
-                    <img v-for="p in pic" :src="p.uri">
-                  </span>
+                            <img v-for="p in pic" :src="p.uri">
+                          </span>
                         </div>
                         <div>
                           <p class="headline">{{key.title}}</p>
