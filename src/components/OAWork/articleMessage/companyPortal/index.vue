@@ -143,7 +143,7 @@
           dict_id: '',
           status: '',
           keywords: '',
-          pages: this.currentPage,
+          pages: this.currentPages,
         },
         totalNum: 0,
         currentPage: 1,
@@ -248,6 +248,8 @@
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
         this.currentPage = val;
+        this.$store.dispatch("page",val);
+        console.log("page===",val);
         if(this.form.dict_id !== ''){
           this.searchMyData(this.currentPage);
         }else{
@@ -457,7 +459,12 @@
         });
       },
     },
-
+    computed: {
+      currentPages() {
+        console.log(this.$store.state.article.page);
+        return this.$store.state.article.page;
+      }
+    },
 
   }
 </script>
