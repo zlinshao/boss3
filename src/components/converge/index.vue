@@ -533,63 +533,6 @@
 
         })
 
-        // this.$http.get(this.urls + 'setting/dictionary/137').then((res) => {
-        //   this.dict = res.data.data;
-        // let d = res.data.data;
-        // for (let i = 0; i < d.length; i++) {
-        //   console.log(d[i].id,d[i].dictionary_name);
-        //   let name = d[i].dictionary_name;
-        //   this.$http.get(this.urls + 'oa/portal/?dict_id=' + d[i].id, {
-        //     params: this.form
-        //   }).then((res) => {
-        //     if (name === '主轮播') {
-        //       // 主轮播
-        //       this.hostData.title = name;
-        //       this.hostData.data = res.data.data.data;
-        //     }
-        //     if (name === '次标题1') {
-        //       // 次标题1
-        //       this.lessData.title = name;
-        //       this.lessData.data = res.data.data.data;
-        //     }
-        //     if (name === '次标题2') {
-        //       // 次标题2
-        //       this.lowData.title = name;
-        //       this.lowData.data = res.data.data.data;
-        //     }
-        //     if (name === '乐伽新闻') {
-        //       // 乐伽新闻
-        //       this.newsData.title = name;
-        //       this.newsData.data = res.data.data.data;
-        //     }
-        //     if (name === '员工风采') {
-        //       // 员工风采
-        //       this.staffData.title = name;
-        //       this.staffData.data = res.data.data.data;
-        //     }
-        //     if (name === '客户纪实') {
-        //       // 客户纪实
-        //       this.cusData.title = name;
-        //       this.cusData.data = res.data.data.data;
-        //     }
-        //     if (name === '公司生活') {
-        //       // 公司生活
-        //       this.lifeData.title = name;
-        //       this.lifeData.data = res.data.data.data;
-        //     }
-        //     if (name === '热门导读') {
-        //       // 热门导读
-        //       this.hotData.title = name;
-        //       this.hotData.data = res.data.data.data;
-        //     }
-        //     if (name === '人物志') {
-        //       // 人物志
-        //       this.figureData.title = name;
-        //       this.figureData.data = res.data.data.data;
-        //     }
-        //   })
-        // }
-        // })
       }
     },
   }
