@@ -13,8 +13,3 @@ globalConfig = {
     'Accept': 'application/json',
   }
 };
-
-
-config = {
-  headers:{'Content-Type':'multipart/form-data'}
-};  //添加请求头
