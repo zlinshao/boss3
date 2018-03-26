@@ -38,8 +38,8 @@
       </div>
       <div class="staff_name">
         <div class="staff_pic">
-          <img :src="personal.avatar" v-if="personal.avatar !== ''">
-          <img src="../../../../../assets/images/head.png">
+          <img  v-if="personal.avatar !== ''" :src="personal.avatar">
+          <img v-else src="../../../../../assets/images/head.png">
         </div>
         <div class="info">
           <span>
@@ -190,6 +190,8 @@
           status: val
         }).then((res) => {
           if (res.data.code === '80010' || res.data.code === '80030') {
+            // $('.el-tag__close.el-icon-close').trigger('click');
+            this.$store.dispatch('deleteArticleId');
             this.goBack();
             this.prompt(1, res.data.msg);
           } else {
@@ -209,7 +211,7 @@
         this.$http.post(this.address + 'api/v1/files', formData).then((res) => {
           console.log(res.data.data);
           let picId = res.data.data;
-          this.$http.post('picture/' + picId).then((res) => {
+          this.$http.post(this.address + 'picture/' + picId).then((res) => {
             // Get url from response
             let url = res.data.data;
             Editor.insertEmbed(cursorLocation, 'image', url);

@@ -5,7 +5,7 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入内容" v-model="form.keywords" size="mini" clearable @keyup.enter.native="searchMyData(1)">
+            <el-input placeholder="请输入标题" v-model="form.keywords" size="mini" clearable @keyup.enter.native="searchMyData(1)">
               <el-button slot="append" icon="el-icon-search" @click="searchMyData(1)"></el-button>
             </el-input>
           </el-form-item>
@@ -27,7 +27,7 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">选择类别{{form.dict_id}}</div>
+                  <div class="el_col_label">选择类别</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
@@ -84,7 +84,7 @@
           </el-table-column>
           <el-table-column
             prop="create_time"
-            label="发布时间">
+            label="创建时间">
           </el-table-column>
           <el-table-column
             label="状态">
@@ -181,25 +181,31 @@
         })
       },
       searchMyData(page) {
-        this.form.pages = page;
-        this.$http.get(this.urls + 'oa/portal/', {
-          params:this.form,
-        }).then((res) => {
-          this.isHigh = false;
-          if (res.data.code === '80000') {
-            this.currentPage = page;
-            this.tableData = res.data.data.data;
-            this.totalNum = res.data.data.count;
-          } else {
-            this.tableData = [];
-            this.totalNum = 0;
-          }
-        });
+        if(this.form.keywords !== '' || this.form.dict_id !== '' || this.form.status !== ''){
+          this.form.pages = page;
+          this.$http.get(this.urls + 'oa/portal/', {
+            params: this.form,
+          }).then((res) => {
+            this.isHigh = false;
+            if (res.data.code === '80000') {
+              this.currentPage = page;
+              this.tableData = res.data.data.data;
+              this.totalNum = res.data.data.count;
+            } else {
+              this.tableData = [];
+              this.totalNum = 0;
+            }
+          });
+        }else{
+          this.getStaffTableData();
+        }
 
       },
       // 详情
       openDetail(row) {
-        this.$router.push({path: '/Infodetails', query: {ids: row.id, detail: 'port'}});
+        var data = {ids: row.id, detail: 'port'};
+        this.$store.dispatch('articleDetail',data);
+        this.$router.push({path: '/Infodetails', query: data});
       },
       // 高级
       highGrade() {

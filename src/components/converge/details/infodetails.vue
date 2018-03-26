@@ -1,5 +1,5 @@
 <template>
-  <div id="newsDetail" v-loading="loading">
+  <div id="newsDetail" v-loading="loading" ref="detail">
     <el-row>
       <el-col :span="colNum">
         <div style="padding: 20px 17px">
@@ -165,7 +165,9 @@
         </div>
       </el-col>
     </el-row>
-
+    <div class="return_top">
+      <img src="../../../assets/images/置顶.svg" width="50">
+    </div>
   </div>
 </template>
 
@@ -183,30 +185,26 @@
         staffs: {},
         addContent: '',
         commentOn: [],
-
         cover_pic: [],
-
         currentPage: 1,
         paging: 0,
         page: 1,
-
         form: {
           status: 149,
           keywords: '',
           pages: 1,
         },
         hotData: [],
-
         assistId: false,     //点赞
         loading: false,     //点赞
       }
     },
     computed: {
       query(val){
-        console.log("article_detail======="+JSON.stringify(this.$store.state.article.article_detail));
         return this.$store.state.article.article_detail;
       }
     },
+
     mounted() {
       this.addRegion();
       // let query = this.$route.query;
@@ -320,12 +318,36 @@
           });
         }
       },
-    }
+    },
+  }
+  window.onload = function(){
+    $("body").on("click",".return_top",function(){
+      document.body.scrollTop = 0;
+    });
+    $("body").scroll(function() {
+      var scrollTop = document.body.scrollTop;
+      if(scrollTop > 0){
+        $(".return_top").css('display','block');
+      }else{
+        $(".return_top").css('display','none');
+      }
+    });
   }
 </script>
 
 <style lang="scss">
-
+  .return_top{
+    position: fixed;
+    right: 35px;
+    bottom: 100px;
+  }
+  .return_top img {
+    width: 50px;
+    height: 50px;
+    background: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+  }
   #newsDetail {
     @mixin flex {
       display: -webkit-flex;
@@ -342,7 +364,7 @@
       height: 100%;
     }
     .zan{
-      animation: color-me-in 3s;
+      animation: color-me-in 1s;
       color: #fb4699;
     }
     @keyframes color-me-in {

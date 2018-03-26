@@ -25,6 +25,7 @@
           <el-col :span="9">
             <div class="list_left" @mouseover="showKey('top')" @mouseout="outHide('top')">
               <img v-if="courseStatusTop[0]" :src="courseStatusTop[0].uri" @click="routerDetail(courseStatusTop[0].id)">
+              <img v-else src="../../../assets/images/default.png">
               <div class="shade" v-if="isTopShow" >{{courseStatusTop[0] && courseStatusTop[0].title}}</div>
             </div>
           </el-col>
@@ -91,11 +92,16 @@
           <!--</div>-->
         <!--</el-col>-->
       <!--</el-row>-->
-        <el-carousel :interval="5000" type="card" height="400px">
-          <el-carousel-item v-for="teacher in teacherStyles" :key="teacher.id">
-            <img :src="teacher.uri"  @click="routerDetail(teacher.id)" >
+
+        <el-carousel  :interval="5000" type="card" height="400px">
+          <el-carousel-item v-if="teacherStyles.length>0" v-for="teacher in teacherStyles" :key="teacher.id">
+            <img :src="teacher.uri" @click="routerDetail(teacher.id)">
+          </el-carousel-item>
+          <el-carousel-item v-if="teacherStyles.length==0">
+            <img src="../../../assets/images/default.png">
           </el-carousel-item>
         </el-carousel>
+
     </div>
     <!--图片赏析-->
     <div class="img_appreciation">
@@ -107,8 +113,8 @@
         <el-row :gutter="2"  style="margin-top: 10px">
           <el-col :span="10">
             <div class="img_left">
-              <!--<img src="../../../assets/images/university/f0097148.png" alt="">-->
               <img v-if="pictureAppreciation[0]" :src="pictureAppreciation[0].uri" @click="routerDetail(pictureAppreciation[0].id)">
+              <img v-else src="../../../assets/images/default.png" >
             </div>
           </el-col>
           <el-col :span="4">
@@ -118,8 +124,8 @@
           </el-col>
           <el-col :span="10">
             <div class="img_left">
-              <!--<img src="../../../assets/images/university/tip034t018298.png" alt="">-->
               <img v-if="pictureAppreciation[1]" :src="pictureAppreciation[1].uri" @click="routerDetail(pictureAppreciation[1].id)">
+              <img v-else src="../../../assets/images/default.png" >
             </div>
           </el-col>
         </el-row>
@@ -133,8 +139,8 @@
             </el-col>
             <el-col :span="9">
               <div class="img_left">
-                <!--<img src="../../../assets/images/university/tis022b13040057.png" alt="">-->
                 <img v-if="pictureAppreciation[2]" :src="pictureAppreciation[2].uri" @click="routerDetail(pictureAppreciation[2].id)">
+                <img v-else src="../../../assets/images/default.png" >
               </div>
             </el-col>
             <el-col :span="5">
@@ -144,8 +150,8 @@
             </el-col>
             <el-col :span="5">
               <div class="img_left">
-                <!--<img src="../../../assets/images/university/ph1852-p01924.png" alt="">-->
                 <img v-if="pictureAppreciation[3]" :src="pictureAppreciation[3].uri" @click="routerDetail(pictureAppreciation[3].id)">
+                <img v-else  src="../../../assets/images/default.png" >
               </div>
             </el-col>
           </el-row>

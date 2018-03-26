@@ -109,11 +109,16 @@
               <span style="border-left: 4px solid #6a8dfb;"></span>员工广场
             </div>
             <div class="yuangong">
-              <div style="display: inline-block;float: left;font-size: 0;"><img v-if="staffSquareTop[0]" :src="staffSquareTop[0].uri" @click="routerDetail(staffSquareTop[0].id)" width="500" height="390"></div>
+              <div style="display: inline-block;float: left;font-size: 0;">
+                <img v-if="staffSquareTop[0]" :src="staffSquareTop[0].uri" @click="routerDetail(staffSquareTop[0].id)" width="500" height="390">
+                <img v-else src="../assets/images/default.png" width="500" height="390"/>
+              </div>
               <div class="clearfix" style="padding-left: 520px;">
                 <div>
                   <div class="list_gonggao" v-for="(item, key) in staffSquares" :key="item.id" v-if="key < 3" @click="routerDetail(item.id)" style="padding-top:15px;">
-                    <div style="display: inline-block;float: left;"><img :src="item.uri" height="105" width="180" style="border-radius: 5px;"></div>
+                    <div style="display: inline-block;float: left;">
+                      <img v-if="item.uri" :src="item.uri" height="105" width="180" style="border-radius: 5px;">
+                    </div>
                     <div style="padding-left: 200px;">
                       <p class="info_title text_over_norwap">{{item.title}}</p>
                       <div class="second_line_camp">{{item.content}}</div>
@@ -132,7 +137,9 @@
             </div>
             <div class="news">
               <div class="list_gonggao" sty v-for="(item,key) in externalNews" :key="item.id" v-if="key<3" @click="routerDetail(item.id)">
-                <div style="display: inline-block;float: left;"><img :src="item.uri" height="100" width="100" style="border-radius: 5px;"></div>
+                <div style="display: inline-block;float: left;">
+                  <img v-if="item.uri" :src="item.uri" height="100" width="100" style="border-radius: 5px;">
+                </div>
                 <div style="padding-left: 130px;">
                   <p class="info_title text_over_norwap">{{item.title}}</p>
                   <div class="second_line_camp">{{item.content}}</div>
@@ -160,7 +167,10 @@
             <div class="lejia">
               <el-row>
                 <el-col :span="8" style="padding:0;">
-                  <div class="hover_pic"><img :src="lejiaCollegeTop[0] && lejiaCollegeTop[0].uri" width="100%"  height="195" @click="routerDetail(lejiaCollegeTop[0] && lejiaCollegeTop[0].id)"></div>
+                  <div class="hover_pic">
+                    <img v-if="lejiaCollegeTop[0]" :src="lejiaCollegeTop[0].uri" width="100%"  height="195" @click="routerDetail(lejiaCollegeTop[0].id)">
+                    <img v-else src="../assets/images/default.png" width="100%"  height="195">
+                  </div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
                   <div class="list_frame" @click="routerDetail(lejiaCollege[0] && lejiaCollege[0].id)">
@@ -177,13 +187,19 @@
                   </div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
-                  <div class="hover_pic"><img :src="lejiaCollegeTop[1] && lejiaCollegeTop[1].uri" width="100%"  height="195" @click="routerDetail(lejiaCollegeTop[1] && lejiaCollegeTop[1].id)"></div>
+                  <div class="hover_pic">
+                    <img v-if="lejiaCollegeTop[1]" :src="lejiaCollegeTop[1].uri" width="100%"  height="195" @click="routerDetail(lejiaCollegeTop[1].id)">
+                    <img v-else src="../assets/images/default.png" width="100%"  height="195">
+                  </div>
                 </el-col>
               </el-row>
               <el-row>
                 <el-col :span="8" style="padding:0;">
                   <div class="list_frame" @click="routerDetail(lejiaCollege[1] && lejiaCollege[1].id)">
-                    <div style="display: inline-block;float: left;margin-top: 30px;"><img v-if="lejiaCollege[1]" :src="lejiaCollege[1].uri"  height="100" width="100" style="border-radius: 10px;"></div>
+                    <div style="display: inline-block;float: left;margin-top: 30px;">
+                      <img v-if="lejiaCollege[1]" :src="lejiaCollege[1].uri"  height="100" width="100" style="border-radius: 10px;">
+
+                    </div>
                     <div style="padding: 12px 12px 34px 120px;">
                       <p class="info_title text_over_norwap">{{lejiaCollege[1] && lejiaCollege[1].title}}</p>
                       <div class="second_line_camp">{{lejiaCollege[1] && lejiaCollege[1].content}}</div>
@@ -195,7 +211,10 @@
                   </div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
-                  <div class="hover_pic"><img :src="lejiaCollegeTop[2] && lejiaCollegeTop[2].uri" width="100%"  height="195" @click="routerDetail(lejiaCollegeTop[2] && lejiaCollegeTop[2].id)"></div>
+                  <div class="hover_pic">
+                    <img v-if="lejiaCollegeTop[2]" :src="lejiaCollegeTop[2].uri" width="100%"  height="195" @click="routerDetail( lejiaCollegeTop[2].id)">
+                    <img v-else src="../assets/images/default.png" width="100%"  height="195">
+                  </div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
                   <div class="list_frame" @click="routerDetail(lejiaCollege[2] && lejiaCollege[2].id)">
@@ -220,7 +239,10 @@
               <span style="border-left: 4px solid #7ee8a6;"></span>每周战报
             </div>
             <div class="zhanbao" style="height: 394px;">
-              <div><img :src="weeklyReportTop[0] && weeklyReportTop[0].uri" style="width: 100%;height: 195px;" @click="routerDetail(weeklyReportTop[0] && weeklyReportTop[0].id)"></div>
+              <div>
+                <img v-if="weeklyReportTop[0]" :src="weeklyReportTop[0].uri" style="width: 100%;height: 195px;" @click="routerDetail(weeklyReportTop[0].id)">
+                <img v-else src="../assets/images/default.png" width="100%"  height="195">
+              </div>
               <div style="padding:16px 20px 0px;">
                 <p class="info_title text_over_norwap">{{weeklyReport[0] && weeklyReport[0].title}}</p>
                 <div class="clearfix" @click="routerDetail(weeklyReport[0] && weeklyReport[0].id)">
