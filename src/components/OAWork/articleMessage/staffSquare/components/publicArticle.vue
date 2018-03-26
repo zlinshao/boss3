@@ -38,8 +38,8 @@
       </div>
       <div class="staff_name">
         <div class="staff_pic">
-          <img  v-if="personal.avatar !== ''" :src="personal.avatar">
-          <img v-else src="../../../../../assets/images/head.png">
+          <img :src="personal.avatar" v-if="personal.avatar !== ''">
+          <img src="../../../../../assets/images/head.png">
         </div>
         <div class="info">
           <span>
@@ -52,6 +52,7 @@
         </div>
       </div>
       <div class="ql-editor" v-html="form.htmlForEditor"></div>
+
       <div class="previewBtn">
         <el-button type="primary" size="small" @click="preBtn">返回上一步</el-button>
       </div>
@@ -75,6 +76,7 @@
         times: '',
         pitch: '',
         cover_pic: {},
+        file: {},
         cover_id: [],
         dict: {
           region: [],
@@ -94,6 +96,7 @@
     computed:{
       ids(val){
         return this.$route.query.ids? this.$route.query.ids:this.$store.state.article.article_id;
+        console.log("article_id==="+this.$store.state.article.article_id);
       },
       moduleType() {
         return this.$route.query.ModuleType ? this.$route.query.ModuleType : this.$store.state.article.module_type;
@@ -190,8 +193,6 @@
           status: val
         }).then((res) => {
           if (res.data.code === '80010' || res.data.code === '80030') {
-            // $('.el-tag__close.el-icon-close').trigger('click');
-            this.$store.dispatch('deleteArticleId');
             this.goBack();
             this.prompt(1, res.data.msg);
           } else {
@@ -207,16 +208,25 @@
         // NOTE: Your key could be different such as:
         // formData.append('file', file)
         let formData = new FormData();
-        formData.append('image', file);
-        this.$http.post(this.address + 'api/v1/files', formData).then((res) => {
-          console.log(res.data.data);
-          let picId = res.data.data;
-          this.$http.post(this.address + 'picture/' + picId).then((res) => {
-            // Get url from response
-            let url = res.data.data;
-            Editor.insertEmbed(cursorLocation, 'image', url);
+        formData.append('file', file);
+        console.log(file)
+
+        let config = {
+          headers:{'Content-Type':'multipart/form-data'}
+        };
+        if(file.size>1024.1024*2){
+            this.$notify.warning({
+              title:'警告',
+              message:'只能上传jpg/png文件，且不超过2M'
+            })
+        }else {
+          this.$http.post(this.address + 'files', formData ,config).then((res) => {
+            if(res.data.status === 'success'){
+              Editor.insertEmbed(cursorLocation, 'image', res.data.data.uri);
+            }
           })
-        })
+        }
+
       },
       // 上传成功
       photo_success(val) {
@@ -235,6 +245,10 @@
             message: info,
           });
         }
+      },
+
+      upLoad(e){
+        console.log(e)
       },
       // 当前时间
       nowDate() {
