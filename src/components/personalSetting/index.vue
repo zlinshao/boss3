@@ -49,7 +49,7 @@
 
       <el-row>
         <el-col class="leftTitle" :span="4" style="margin-top: 5px; color:#6a8dfb;">
-          二级密码设置
+          二级密码设置{{secondary_pass}}
         </el-col>
       </el-row>
        <el-row style="margin-left:136px;">
@@ -173,8 +173,8 @@ export default {
   mounted() {
     
     this.getDictionary();
-    
-    this.getDictionary2();
+   
+    this.allinfo();
   },
   watch: {},
   methods: {
@@ -186,12 +186,12 @@ export default {
           if (res.data.code === "100090") {
             this.secondary_password =
               res.data.data.data.detail.secondary_password;
-            for (let a in res.data.data.data.detail.secondary_password) {
-              
+            for (let a in res.data.data.data.detail.secondary_password) {       
               this.secondary_pass.push(Number(a));
             }
+             
           }
-        });
+        });this.getDictionary2();
     },
     openSecondPassword(val, id) {
       this.sendid = id;
@@ -217,7 +217,7 @@ export default {
         });
     },
     getDictionary2() {
-       this.allinfo();
+     
       this.$http
         .get(globalConfig.server + "setting/dictionary/220")
         .then(res => {
