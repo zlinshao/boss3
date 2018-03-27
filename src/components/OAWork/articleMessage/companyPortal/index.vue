@@ -158,6 +158,10 @@
       this.getCompanyTableData();
       this.getDict();
     },
+    activated() {
+      this.getCompanyTableData();
+      this.getDict();
+    },
     created() {
       this.form.pages = this.currentPage;
     },

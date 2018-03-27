@@ -1,5 +1,5 @@
 <template>
-  <div id="newsDetail" v-loading="loading" ref="detail">
+  <div id="newsDetail">
     <el-row>
       <el-col :span="colNum">
         <div style="padding: 20px 17px">
@@ -170,9 +170,10 @@
         </div>
       </el-col>
     </el-row>
-    <div class="return_top">
-      <img src="../../../assets/images/置顶.svg" width="50">
-    </div>
+
+      <div v-show="loading" class="loadingDiv">
+        <img src="../../../assets/images/loading1.gif"  style=" width: initial;height: initial;">
+      </div>
   </div>
 </template>
 
@@ -204,6 +205,7 @@
         assistId: false,     //点赞
         loading: false,     //点赞
         query:{},
+        ids: '',
       }
     },
     created() {
@@ -220,11 +222,21 @@
         this.staffs = JSON.parse(localStorage.getItem('detailStaffs'));
       }
     },
+    activated() {
+      this.infoDetail();
+    },
     mounted() {
       this.infoDetail();
     },
-    activated() {
-      this.infoDetail();
+    watch: {
+      ids(val) {
+        if(val){
+          this.loading=true;
+          setTimeout(() => {
+            this.loading = false;
+          }, 1000)
+        }
+      }
     },
     methods: {
       infoDetail(){
@@ -236,6 +248,7 @@
         let query = this.$route.query;
         this.$store.dispatch('articleDetail',query);
         if (JSON.stringify(query) !== '{}') {
+          this.ids = query.ids;
           this.publicDetail(query.ids);
           if (query.detail === 'port') {
             this.isShow = false;
@@ -262,6 +275,7 @@
         this.$http.get(this.urls + 'oa/portal/?dict_id=' + 142, {
           params: this.form
         }).then((res) => {
+
           let title,data = {};
           title = res.data && res.data.data && res.data.data.data && res.data.data.data[0].title;
           data = res.data && res.data.data && res.data.data.data;
@@ -356,33 +370,23 @@
       },
     },
   }
-  window.onload = function() {
-    $("body").on("click",".return_top",function(){
-      document.body.scrollTop = 0;
-    });
-    $("body").scroll(function() {
-      var scrollTop = document.body.scrollTop;
-      if(scrollTop > 0){
-        $(".return_top").css('display','block');
-      }else{
-        $(".return_top").css('display','none');
-      }
-    });
-  }
 </script>
 
 <style lang="scss">
-  .return_top{
+  .loadingDiv{
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3);
     position: fixed;
-    right: 35px;
-    bottom: 50px;
+    top: 0;
+    left: 0;
   }
-  .return_top img {
-    width: 50px;
-    height: 50px;
-    background: #fff;
-    border-radius: 50%;
-    cursor: pointer;
+  .loadingDiv img{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 999;
+    display: block;
   }
   #newsDetail {
     @mixin flex {
@@ -420,11 +424,11 @@
         -o-transform:scale(1,1);
       }
     }
-    .el-loading-mask {
-      .el-loading-spinner {
-        top: 30%;
-      }
-    }
+    /*.el-loading-mask {*/
+      /*.el-loading-spinner {*/
+        /*top: 30%;*/
+      /*}*/
+    /*}*/
 
     .readers {
       div {

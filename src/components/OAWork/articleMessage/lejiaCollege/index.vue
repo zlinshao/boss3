@@ -155,7 +155,11 @@
       }
     },
     mounted() {
-      this.getLejiaTableData(1);
+      this.getLejiaTableData();
+      this.getDict();
+    },
+    activated() {
+      this.getLejiaTableData();
       this.getDict();
     },
     created() {
@@ -198,7 +202,7 @@
         this.form.dict_id = '';
         this.form.status = '';
         this.form.keywords = '';
-        this.getLejiaTableData(1);
+        this.getLejiaTableData();
       },
       // 文章发布
       publicArticle() {
@@ -392,7 +396,7 @@
               title: '成功',
               message: res.data.msg
             });
-            this.getLejiaTableData(1);
+            this.getLejiaTableData();
             this.getDict();
           }
         });
@@ -425,6 +429,7 @@
         return this.$store.state.article.lejia_page;
       }
     },
+
   }
 </script>
 

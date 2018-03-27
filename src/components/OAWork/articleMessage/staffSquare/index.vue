@@ -158,6 +158,10 @@
       this.getStaffTableData();
       this.getDict();
     },
+    activated() {
+      this.getStaffTableData();
+      this.getDict();
+    },
     created() {
       this.form.pages = this.currentPage;
     },
