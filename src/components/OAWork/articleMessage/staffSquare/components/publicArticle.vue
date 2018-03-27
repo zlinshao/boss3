@@ -97,7 +97,7 @@
 
     mounted() {
       if(!this.$route.query.ids){
-        this.$router.push({path:"/publicArticle",query:{ids:this.$store.state.article.article_id,moduleType:this.$store.state.article.module_type}});
+        this.$router.push({path:"/publicArticle",query:{ids:this.$store.state.article.article_id, moduleType:this.$store.state.article.module_type}});
       }
       let query = this.$route.query;
       this.moduleType = query.moduleType;
@@ -108,8 +108,9 @@
         this.pitch = query.ids;
       }
       if(query.ids){
-        this.$store.dispatch('articleId',query.ids);
+        this.$store.dispatch('articleId', query.ids);
       }
+      this.$store.dispatch('moduleType', query.moduleType);
     },
     methods: {
       publicDetail(id) {
@@ -190,6 +191,8 @@
           status: val
         }).then((res) => {
           if (res.data.code === '80010' || res.data.code === '80030') {
+            //点击发布或者草稿清掉ids
+            this.$store.dispatch('deleteArticleId');
             this.goBack();
             this.prompt(1, res.data.msg);
           } else {
