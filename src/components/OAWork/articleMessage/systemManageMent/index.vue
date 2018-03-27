@@ -158,6 +158,10 @@
       this.getSystemTableData(1);
       this.getDict();
     },
+    activated() {
+      this.getSystemTableData(1);
+      this.getDict();
+    },
     created() {
       this.form.pages = this.currentPage;
     },
