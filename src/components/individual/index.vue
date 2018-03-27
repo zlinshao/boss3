@@ -12,7 +12,7 @@
             <span></span>
           </p>
           <p>
-            分行贷款发货的时刻范德萨
+            {{}}
           </p>
         </div>
       </div>
@@ -33,7 +33,7 @@
           <div class="mainLeft">
             <div class="title">个人主页</div>
             <div class="ingress">
-              <div class="a" @click="routerLink('/sthToDo')">
+              <div class="a" @click="routerLink('/examineAndApprove')">
                 <div class="aLeft">
                   <i class="iconfont icon-daiban"></i>
                 </div>

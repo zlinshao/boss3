@@ -2,15 +2,15 @@
   <div>
     <div class="tool">
       <div class="tool_left">
-        <el-button type="primary" size="mini" @click="showBasicset()">
+        <el-button type="primary" style="background:#6a8dfb;border:0 none; width:130px; height:32px;" size="small" @click="showBasicset()">
           <!--<i class="el-icon-document"></i>&nbsp;-->
           基本设置
         </el-button>
-        <el-button type="primary" size="mini" @click="showSecond()">
+        <el-button type="success" style="background:#58d788;border:0 none; width:130px; height:32px;"  size="small" @click="showSecond()">
           <!--<i class="el-icon-document"></i>&nbsp;-->
           二级密码设置
         </el-button>
-        <el-button type="primary" size="mini" @click="showLockscreen()">
+        <el-button type="warning" style="background:#fdca41;border:0 none; width:130px; height:32px;"  size="small" @click="showLockscreen()">
           <!--<i class="el-icon-document"></i>&nbsp;-->
           锁屏密码设置
         </el-button>
@@ -21,156 +21,10 @@
           <i class="el-icon-tickets"></i>
           &nbsp;使用说明
         </div>
-        <!--<div>-->
-        <!--<i class="el-icon-setting"></i>-->
-        <!--&nbsp;设置-->
-        <!--</div>-->
+
       </div>
     </div>
-    <!--<div class="main">-->
-    <!--<el-row>-->
-    <!--<el-col class="leftTitle" :span="4">-->
-    <!--退房提醒设置-->
-    <!--</el-col>-->
-    <!--<el-col :span="20">-->
-    <!--<div>-->
-    <!--<el-checkbox-group v-model="checkList">-->
-    <!--<el-checkbox label="收房业务人员1"></el-checkbox>-->
-    <!--<el-checkbox label="收房业务人员2"></el-checkbox>-->
-    <!--<el-checkbox label="收房业务人员3"></el-checkbox>-->
-    <!--<el-checkbox label="收房业务人员4"></el-checkbox>-->
-    <!--<el-checkbox label="收房业务人员5"></el-checkbox>-->
-    <!--<el-checkbox label="收房业务人员6"></el-checkbox>-->
-    <!--<el-checkbox label="收房业务人员7"></el-checkbox>-->
-    <!--<el-checkbox label="收房业务人员8"></el-checkbox>-->
-    <!--</el-checkbox-group>-->
-    <!--</div>-->
-    <!--<div class="remark">-->
-    <!--备注：勾选职务后，只要有租客退房，系统会自动发送待办提醒给该职位下的所有员工-->
-    <!--</div>-->
-    <!--</el-col>-->
-    <!--</el-row>-->
-
-    <!--<el-row>-->
-    <!--<el-col class="leftTitle" :span="4">-->
-    <!--租房将近提醒设置-->
-    <!--</el-col>-->
-    <!--<el-col :span="20">-->
-    <!--<div class="nowrap">-->
-    <!--<el-checkbox-group v-model="checkList">-->
-    <!--<el-checkbox label="启用房东/租客合同到期自动提醒"></el-checkbox>-->
-    <!--</el-checkbox-group>-->
-    <!--&nbsp;&nbsp;-->
-    <!--<div style="margin-bottom: 10px;">-->
-    <!--，提前-->
-    <!--<el-select v-model="form.banks" clearable size="mini">-->
-    <!--<el-option label="请选择" value=""></el-option>-->
-    <!--<el-option v-for="key in 30" :label="key" :value="key" :key="key"></el-option>-->
-    <!--</el-select>-->
-    <!--天-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="remark">-->
-    <!--<el-checkbox-group v-model="checkList">-->
-    <!--<el-checkbox label="收房业务人员11"></el-checkbox>-->
-    <!--<el-checkbox label="收房业务人员22"></el-checkbox>-->
-    <!--<el-checkbox label="收房业务人员33"></el-checkbox>-->
-    <!--<el-checkbox label="收房业务人员44"></el-checkbox>-->
-    <!--<el-checkbox label="收房业务人员55"></el-checkbox>-->
-    <!--<el-checkbox label="收房业务人员66"></el-checkbox>-->
-    <!--</el-checkbox-group>-->
-    <!--</div>-->
-    <!--</el-col>-->
-    <!--</el-row>-->
-
-    <!--<el-row>-->
-    <!--<el-col class="leftTitle" :span="4">-->
-    <!--房东租客录入保存后弹出设置-->
-    <!--</el-col>-->
-    <!--<el-col :span="20" class="collect_rent">-->
-    <!--<div>-->
-    <!--<el-checkbox-group v-model="checkList">-->
-    <!--<el-checkbox label="房东"></el-checkbox>-->
-    <!--</el-checkbox-group>-->
-    <!--<div style="padding-left: 22px;">-->
-    <!--<p>勾选：在录入或修改房东信息后会自动弹出已经生成好的应支房租计划表，对不稳定的可以随时修改，这种适合免租期模式经常变化的情况。</p>-->
-    <!--<p>不勾选：则直接按照设定好的免租期生成模式自动保存，这种适合免租期比较固定的情况。</p>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div>-->
-    <!--<el-checkbox-group v-model="checkList">-->
-    <!--<el-checkbox label="租客"></el-checkbox>-->
-    <!--</el-checkbox-group>-->
-    <!--<div style="padding-left: 22px;">-->
-    <!--<p>勾选：在录入或修改租客信息后自动弹出已经生成好的应支房租计划表，以便于修改，若需要经常修改，就勾选。</p>-->
-    <!--<p>不勾选：由于租客没有那么多模式，生成出来的一般不需要修改，所以建议不勾选。</p>-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</el-col>-->
-    <!--</el-row>-->
-
-    <!--<el-row>-->
-    <!--<el-col class="leftTitle" :span="4">-->
-    <!--补齐合同时间-->
-    <!--</el-col>-->
-    <!--<el-col :span="20">-->
-    <!--<div class="nowrap">-->
-    <!--<el-checkbox-group v-model="checkList">-->
-    <!--<el-checkbox label="合同开始后"></el-checkbox>-->
-    <!--</el-checkbox-group>-->
-    <!--&nbsp;&nbsp;-->
-    <!--<div style="margin-bottom: 10px;">-->
-    <!--<el-select v-model="form.banks" clearable size="mini">-->
-    <!--<el-option label="请选择" value=""></el-option>-->
-    <!--<el-option v-for="key in 30" :label="key" :value="key" :key="key"></el-option>-->
-    <!--</el-select>-->
-    <!--天内-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--</el-col>-->
-    <!--</el-row>-->
-
-    <!--<el-row>-->
-    <!--<el-col class="leftTitle" :span="4">-->
-    <!--房屋管理领取/放弃时间设置-->
-    <!--</el-col>-->
-    <!--<el-col :span="20">-->
-    <!--<div class="nowrap">-->
-    <!--<el-checkbox-group v-model="checkList">-->
-    <!--<el-checkbox label="每月"></el-checkbox>-->
-    <!--</el-checkbox-group>-->
-    <!--&nbsp;&nbsp;-->
-    <!--<div class="block" style="margin-bottom: 10px;">-->
-    <!--<el-date-picker-->
-    <!--size="mini"-->
-    <!--v-model="form.dates"-->
-    <!--type="daterange"-->
-    <!--align="right"-->
-    <!--unlink-panels-->
-    <!--range-separator="至"-->
-    <!--start-placeholder="开始日期"-->
-    <!--end-placeholder="结束日期"-->
-    <!--:picker-options="pickerOptions">-->
-    <!--</el-date-picker>-->
-    <!--</div>-->
-    <!--&nbsp;&nbsp;-->
-    <!--<div style="margin-bottom: 10px;">-->
-    <!--可领取房源-->
-    <!--</div>-->
-    <!--</div>-->
-    <!--<div class="remark">-->
-    <!--备注：当设置成功后，除设置内的时间外，其余时间均不可领取/放弃房源-->
-    <!--</div>-->
-    <!--</el-col>-->
-    <!--</el-row>-->
-
-    <!--<el-row>-->
-    <!--<el-col :span="4">&nbsp;</el-col>-->
-    <!--<el-col :span="20">-->
-    <!--<el-button type="primary" size="small" style="padding: 10px 140px;">保存</el-button>-->
-    <!--</el-col>-->
-    <!--</el-row>-->
-    <!--</div>-->
+ 
     <div class="main" v-if="basicSet">
       <el-form label-width="200px">
         <el-form-item v-for="(item,index) in dictionary" :key="item.id" :label="item.dictionary_name" v-if="index<1">
@@ -183,75 +37,10 @@
             </el-option>
           </el-select>
         </el-form-item>
+
       </el-form>
-      <!--<el-row>-->
-        <!--<el-col class="leftTitle" :span="4" style="margin-top: 5px">-->
-          <!--首页倒计时-->
-        <!--</el-col>-->
-        <!--<el-col :span="20">-->
-          <!--<div class="nowrap" style="margin-bottom: 12px;">-->
-            <!--<div>倒计时设置</div>-->
-            <!--&nbsp;&nbsp;-->
-            <!--<div>-->
-              <!---->
-            <!--</div>-->
-          <!--</div>-->
-          <!--<div class="remark">-->
-            <!--备注：法大师傅士大夫的撒范德萨范德萨范德萨发幅度萨芬安德森-->
-          <!--</div>-->
-        <!--</el-col>-->
-      <!--</el-row>-->
-
-      <!--<el-row>-->
-        <!--<el-col class="leftTitle" :span="4">-->
-          <!--喜报弹窗设置-->
-        <!--</el-col>-->
-        <!--<el-col :span="20">-->
-          <!--<div>-->
-            <!--<el-checkbox-group v-model="checkList">-->
-              <!--<el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>-->
-            <!--</el-checkbox-group>-->
-          <!--</div>-->
-          <!--<div class="remark">-->
-            <!--备注：法大师傅士大夫的撒范德萨范德萨范德萨发幅度萨芬安德森-->
-          <!--</div>-->
-        <!--</el-col>-->
-      <!--</el-row>-->
-
-      <!--<el-row>-->
-        <!--<el-col class="leftTitle" :span="4">-->
-          <!--喜报弹窗设置-->
-        <!--</el-col>-->
-        <!--<el-col :span="20">-->
-          <!--<div>-->
-            <!--<el-checkbox-group v-model="checkList">-->
-              <!--<el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>-->
-            <!--</el-checkbox-group>-->
-          <!--</div>-->
-          <!--<div class="remark">-->
-            <!--备注：法大师傅士大夫的撒范德萨范德萨范德萨发幅度萨芬安德森-->
-          <!--</div>-->
-        <!--</el-col>-->
-      <!--</el-row>-->
-
-
-      <!--<el-row>-->
-        <!--<el-col class="leftTitle" :span="4">-->
-          <!--喜报弹窗设置-->
-        <!--</el-col>-->
-        <!--<el-col :span="20">-->
-          <!--<div>-->
-            <!--<el-checkbox-group v-model="checkList">-->
-              <!--<el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>-->
-              <!--<el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>-->
-              <!--<el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>-->
-              <!--<el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>-->
-              <!--<el-checkbox label="勾选后不显示喜报弹窗"></el-checkbox>-->
-            <!--</el-checkbox-group>-->
-          <!--</div>-->
-        <!--</el-col>-->
-      <!--</el-row>-->
-      <div style="text-align: center;margin-top: 200px">
+      <span style="color:#f00;margin-left:126px;">备注:首页倒计时时间设置,当合计时结束后,将自动进入锁屏模式</span>
+      <div style="text-align: center;margin-top: 180px">
         <el-button @click="addBasicSetting" type="primary" size="small" style="padding: 10px 140px;">保存</el-button>
       </div>
 
@@ -259,18 +48,15 @@
     <div class="main" v-if="secondPassword">
 
       <el-row>
-        <el-col class="leftTitle" :span="4" style="margin-top: 5px">
-          设置二级密码模块
+        <el-col class="leftTitle" :span="4" style="margin-top: 5px; color:#6a8dfb;">
+          二级密码设置
         </el-col>
       </el-row>
-       <el-row v-for="(item2) in dictionary2" :key="item2.id" >
-        <el-col class="leftTitle" :span="6" style="margin-top: 4px">
-          {{item2.dictionary_name}}
-        </el-col>
-        <el-col :span="6">
-        
-          <el-button size="mini" v-if="secondary_pass.indexOf(item2.id)>-1" @click="openSecondPassword('secondPasswordDialog',item2.id)" type="success">修改二级密码</el-button>
-          <el-button size="mini" v-else @click="openSecondPassword('secondPasswordDialog',item2.id)" type="primary">设置二级密码</el-button>
+       <el-row style="margin-left:136px;">
+        <el-col class="leftTitle"   v-for="(item2) in dictionary2" :key="item2.id"  :span="3" style="margin-top: 4px">
+          <div style="margin-right:36px; color:#787a7e;"> {{item2.dictionary_name}}</div><br />
+          <el-button style="background:#6a8dfb;width:130px;height:32px;"  size="mini" v-if="secondary_pass.indexOf(item2.id)>-1" @click="openSecondPassword('secondPasswordDialog',item2.id)" type="primary">修改二级密码</el-button>
+          <el-button style="background:#6a8dfb;width:130px; height:32px;" size="mini" v-else @click="openSecondPassword('secondPasswordDialog',item2.id)" type="primary">设置二级密码</el-button>
         </el-col>
       </el-row>     
     </div>
@@ -385,8 +171,9 @@ export default {
     };
   },
   mounted() {
+    
     this.getDictionary();
-    this.allinfo();
+    
     this.getDictionary2();
   },
   watch: {},
@@ -395,12 +182,12 @@ export default {
       this.$http
         .get(globalConfig.server + "setting/others/loginInfo")
         .then(res => {
-          console.log(res);
 
           if (res.data.code === "100090") {
             this.secondary_password =
               res.data.data.data.detail.secondary_password;
             for (let a in res.data.data.data.detail.secondary_password) {
+              console.log(1)
               this.secondary_pass.push(Number(a));
             }
           }
@@ -414,10 +201,12 @@ export default {
       this.secondPasswordDialog = false;
     },
     getDictionary() {
+     
       this.$http
         .get(globalConfig.server + "setting/dictionary/202")
         .then(res => {
           if (res.data.code === "30010") {
+            console.log(2)
             this.dictionary = res.data.data;
           } else {
             this.$notify.warning({
@@ -428,6 +217,7 @@ export default {
         });
     },
     getDictionary2() {
+       this.allinfo();
       this.$http
         .get(globalConfig.server + "setting/dictionary/220")
         .then(res => {
@@ -583,7 +373,7 @@ export default {
 
 .leftTitle {
   text-align: right;
-  padding-right: 40px;
+
   color: #409eff;
 }
 

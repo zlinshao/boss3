@@ -146,7 +146,7 @@
     },
     methods: {
       phoneLogin() {
-        this.$http.post(this.urls + 'sms', {
+        this.$http.post(globalConfig.server_token + 'api/v1/sms', {
           phone: this.phone,
         }).then((res) => {
           let msg = res.data.message;
