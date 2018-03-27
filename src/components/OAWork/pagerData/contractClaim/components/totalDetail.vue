@@ -20,10 +20,12 @@
                   width="400"
                   trigger="click">
                   <div style="text-align: center;" v-if="scope.row.collect.concat(scope.row.collect_allocated).length<1">暂无数据</div>
-                  <span v-if="scope.row.collect.concat(scope.row.collect_allocated).length>0"
-                        v-for="item in scope.row.collect.concat(scope.row.collect_allocated)">
-                    {{item}} &nbsp;&nbsp;
-                  </span>
+                  <el-row>
+                    <el-col :span="8" v-if="scope.row.collect.concat(scope.row.collect_allocated).length>0"
+                            v-for="item in scope.row.collect.concat(scope.row.collect_allocated)" :key="item">
+                      {{item}}
+                    </el-col>
+                  </el-row>
                 </el-popover>
                 <el-button size="mini" type="text" v-popover:popover2>
                   详情
@@ -40,10 +42,12 @@
                   width="400"
                   trigger="click">
                   <div style="text-align: center;" v-if="scope.row.rent.concat(scope.row.rent_allocated).length<1">暂无数据</div>
-                  <span v-if="scope.row.rent.concat(scope.row.rent_allocated).length>0"
-                        v-for="item in scope.row.rent.concat(scope.row.rent_allocated)">
-                    {{item}} &nbsp;&nbsp;
-                  </span>
+                  <el-row>
+                    <el-col :span="8"  v-if="scope.row.rent.concat(scope.row.rent_allocated).length>0"
+                            v-for="item in scope.row.rent.concat(scope.row.rent_allocated)" :key="item">
+                      {{item}}
+                    </el-col>
+                  </el-row>
                 </el-popover>
 
                 <el-button size="mini" type="text" v-popover:popover3>

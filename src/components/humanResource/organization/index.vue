@@ -85,10 +85,12 @@
                   @row-contextmenu="openContextMenu"
                   style="width: 100%">
 
-                  <el-table-column>
+                  <el-table-column width="60px">
                     <template slot-scope="scope">
-                      <img v-if="scope.row.avatar" :src="scope.row.avatar" style="width: 30px;height: 30px;border-radius: 50%;">
-                      <img v-else="" src="../../../assets/images/head.jpg" style="width: 30px;height: 30px;border-radius: 50%;filter: grayscale(100%);">
+                      <img data-card="" v-if="scope.row.avatar" :data-src="JSON.stringify(scope.row)"
+                           :src="scope.row.avatar" style="width: 30px;height: 30px;border-radius: 50%;">
+                      <img v-else="" src="../../../assets/images/defaultHead.png" data-card="" :data-src="JSON.stringify(scope.row)"
+                           style="width: 30px;height: 30px;border-radius: 50%;filter: grayscale(100%);">
                     </template>
                   </el-table-column>
 

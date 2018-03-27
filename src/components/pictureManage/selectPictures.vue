@@ -31,25 +31,25 @@
     import Upload from '../common/UPLOAD.vue';
     import ImproveImgInfo from './improveImage.vue';
     export default {
-        name: "choose-pictures",
-        props: ['choosePicturesDialog','albumId'],
-        components:{
-          Upload,
-          ImproveImgInfo,
-        },
-        data() {
-          return {
-            choosePicturesDialogVisible: false,
-            improveImgInfoDialog: false,
-            form: {
-              album_id: '',
-              picture_ids: [],
-            },
-            albumData: [],
-            uploadImgLength: 0,
-            isClear: false,
-          }
-        },
+      name: "choose-pictures",
+      props: ['choosePicturesDialog','albumId'],
+      components:{
+        Upload,
+        ImproveImgInfo,
+      },
+      data() {
+        return {
+          choosePicturesDialogVisible: false,
+          improveImgInfoDialog: false,
+          form: {
+            album_id: '',
+            picture_ids: [],
+          },
+          albumData: [],
+          uploadImgLength: 0,
+          isClear: false,
+        }
+      },
       methods: {
         saveImages() {
           this.$http.post(globalConfig.server + 'photo',this.form).then((res)=>{
@@ -57,8 +57,6 @@
               this.$emit("close");
               this.choosePicturesDialogVisible = false;
               this.improveImgInfoDialog = true;  //显示完善照片信息界面
-              this.isClear = true;
-
             }else{
               this.$notify.warning({
                 title: "警告",

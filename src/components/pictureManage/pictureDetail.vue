@@ -1,31 +1,31 @@
 <template>
   <div id="pictureDetail">
-    <div class="topBack">
-      <div class="topBackLeft">
-        <div class="leftPic">
-          <img src="../../assets/images/individual/touxiang.png" alt="">
-        </div>
-        <div class="rightPic">
-          <p>
-            <span>姓名姓名</span>
-            <span></span>
-          </p>
-          <p>
-            个人签名个人签名个人签名个人签名
-          </p>
-        </div>
-      </div>
-      <div class="topBackRight">
-        <div @click="routerLink('/pictureManage')">
-          <span class="iconfont icon-shiyongshouce"></span>
-          <span>照片</span>
-        </div>
-        <div>
-          <span class="iconfont icon-shiyongshouce"></span>
-          <span>收藏夹</span>
-        </div>
-      </div>
-    </div>
+    <!--<div class="topBack">-->
+      <!--<div class="topBackLeft">-->
+        <!--<div class="leftPic">-->
+          <!--<img src="../../assets/images/individual/touxiang.png" alt="">-->
+        <!--</div>-->
+        <!--<div class="rightPic">-->
+          <!--<p>-->
+            <!--<span>姓名姓名</span>-->
+            <!--<span></span>-->
+          <!--</p>-->
+          <!--<p>-->
+            <!--个人签名个人签名个人签名个人签名-->
+          <!--</p>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="topBackRight">-->
+        <!--<div @click="routerLink('/pictureManage')">-->
+          <!--<span class="iconfont icon-shiyongshouce"></span>-->
+          <!--<span>照片</span>-->
+        <!--</div>-->
+        <!--<div>-->
+          <!--<span class="iconfont icon-shiyongshouce"></span>-->
+          <!--<span>收藏夹</span>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
     <div class="main">
       <el-row>
         <el-col :span="24">
@@ -68,7 +68,6 @@
                       <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item @click.native="editPhoto(item)">编辑</el-dropdown-item>
                         <el-dropdown-item @click.native="setCoverImg(item)">设为封面</el-dropdown-item>
-                        <!--<el-dropdown-item @click.native="movePhoto(item.id)">移动到相册</el-dropdown-item>-->
                         <el-dropdown-item @click.native="deletePhoto(item.id)">删除</el-dropdown-item>
                       </el-dropdown-menu>
                     </el-dropdown>

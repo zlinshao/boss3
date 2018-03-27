@@ -74,28 +74,6 @@
                   </el-row>
                 </div>
               </el-dropdown-item>
-
-              <!--<el-dropdown-item>-->
-                <!--<div class="first">-->
-                  <!--<el-row>-->
-                    <!--<el-col :span="4">-->
-                      <!--<div class="picSign" style="background: #58d788;">-->
-                        <!--<i class="el-icon-edit-outline"></i>-->
-                      <!--</div>-->
-                    <!--</el-col>-->
-                    <!--<el-col :span="20">-->
-                      <!--<div class="public" @click="routers('messageCenter')">-->
-                        <!--<div class="signOne" style="color: #58d788;">审批提醒</div>-->
-                        <!--<div class="limits">Lorem ipsum dolor23r23222222222222222 Lorem ipsum dolor sit amet,-->
-                          <!--consectetur adipisicing elit. Ad aperiam architecto aspernatur dignissimos dolor dolorem-->
-                          <!--doloremque ex facere facilis in minima mollitia, nihil nostrum quo ratione saepe tempore-->
-                          <!--totam voluptatem?-->
-                        <!--</div>-->
-                      <!--</div>-->
-                    <!--</el-col>-->
-                  <!--</el-row>-->
-                <!--</div>-->
-              <!--</el-dropdown-item>-->
             </el-dropdown-menu>
           </el-dropdown>
 
@@ -758,11 +736,7 @@ this.allinfo();
         }
       }
       div.contents {
-        /*display: flex;*/
-        /*display: -webkit-flex;*/
-        /*align-items: center;*/
-        /*flex-wrap: wrap;*/
-        /*padding-left: 10px;*/
+
         @include box_sizing;
         margin: 10px 0 0 85px;
       }
