@@ -6,7 +6,10 @@ const article = {
     article_id :'',
     module_type: '',
     article_detail: {},
-    page: '',
+    lejia_page: 1,
+    company_page: 1,
+    staff_page: 1,
+    system_page: 1,
   },
   mutations: {
     ARTICLE_ID:(state,view) => {
@@ -22,8 +25,17 @@ const article = {
     ARTICLE_DETAIL: (state, view) => {
       state.article_detail= view;
     },
-    PAGE:(state,view) => {
-      state.page = view;
+    LEJIA_PAGE:(state,view) => {
+      state.lejia_page = view;
+    },
+    COMPANY_PAGE:(state,view) => {
+      state.company_page = view;
+    },
+    STAFF_PAGE:(state,view) => {
+      state.staff_page = view;
+    },
+    SYSTEM_PAGE:(state,view) => {
+      state.system_page = view;
     },
   },
   actions: {
@@ -40,8 +52,17 @@ const article = {
     articleDetail:({commit},view)=>{
       commit('ARTICLE_DETAIL', view);
     },
-    page({commit},view){
-      commit('PAGE',view);
+    lejiaPage({commit},view){
+      commit('LEJIA_PAGE',view);
+    },
+    companyPage({commit},view){
+      commit('COMPANY_PAGE',view);
+    },
+    staffPage({commit},view){
+      commit('STAFF_PAGE',view);
+    },
+    systemPage({commit},view){
+      commit('SYSTEM_PAGE',view);
     },
   }
 };

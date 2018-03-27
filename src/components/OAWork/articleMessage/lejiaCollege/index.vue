@@ -5,8 +5,8 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入标题" v-model="form.keywords" size="mini" clearable @keyup.enter.native="searchMyData(1)">
-              <el-button slot="append" icon="el-icon-search" @click="searchMyData(1)"></el-button>
+            <el-input placeholder="请输入标题" v-model="form.keywords" size="mini" clearable @keyup.enter.native="getLejiaTableData()">
+              <el-button slot="append" icon="el-icon-search" @click="getLejiaTableData()"></el-button>
             </el-input>
           </el-form-item>
           <el-form-item>
@@ -31,7 +31,7 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.dict_id" clearable placeholder="请选择类别">
+                    <el-select v-model="moduleId" clearable placeholder="请选择类别">
                       <el-option v-for="(key,index) in dict.region" :label="key.dictionary_name" :value="key.id"
                                  :key="index"></el-option>
                     </el-select>
@@ -56,7 +56,7 @@
             </el-col>
           </el-row>
           <div class="btnOperate">
-            <el-button size="mini" type="primary" @click="searchMyData(1)">搜索</el-button>
+            <el-button size="mini" type="primary" @click="getLejiaTableData()">搜索</el-button>
             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
             <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
           </div>
@@ -103,7 +103,7 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="currentPage"
+          :current-page="form.pages"
           :page-size="form.list"
           layout="total, prev, pager, next, jumper"
           :total="totalNum">
@@ -123,7 +123,6 @@
   import Organization from '../../../common/organization.vue'
 
   export default {
-    props: ['type'],
     components: {RightMenu, Organization},
     data() {
       return {
@@ -140,24 +139,26 @@
         },
         form: {
           list: 12,
-          dict_id: '',
+          dict_id: 361,
           status: '',
           keywords: '',
-          pages: this.currentPage,
+          pages: 1,
         },
         totalNum: 0,
-        currentPage: 1,
         tableData: [],
         pitch: '',
         if_shows: '',
         organizationDialog: false,
-        moduleId: 361,
+        moduleId: '',
         moduleType: 'lejiaCollege',
       }
     },
     mounted() {
       this.getLejiaTableData(1);
       this.getDict();
+    },
+    created() {
+      this.form.pages = this.currentPage;
     },
     methods: {
       getDict() {
@@ -168,8 +169,8 @@
           this.dict.status = res.data.data;
         });
       },
-      getLejiaTableData(page) {
-        this.$http.get(this.urls + 'oa/portal/', { params:{dict_id: this.moduleId, list: this.form.list, pages: this.currentPage} }).then((res) => {
+      getLejiaTableData() {
+        this.$http.get(this.urls + 'oa/portal/', { params: this.form }).then((res) => {
           this.isHigh = false;
           if (res.data.code === '80000') {
             this.tableData = res.data.data.data;
@@ -179,45 +180,6 @@
             this.totalNum = 0;
           }
         });
-      },
-      searchMyData(page) {
-        if(this.form.dict_id !== ''){
-          this.form.pages = page;
-          this.$http.get(this.urls + 'oa/portal/', {
-            params:this.form,
-          }).then((res) => {
-            this.isHigh = false;
-            if (res.data.code === '80000') {
-              this.currentPage = page;
-              this.tableData = res.data.data.data;
-              this.totalNum = res.data.data.count;
-
-            } else {
-              this.tableData = [];
-              this.totalNum = 0;
-            }
-          });
-        }else if(this.form.dict_id === '' && (this.form.keywords !== ''|| this.form.status !== '')) {
-          this.$http.get(this.urls + 'oa/portal/', {
-            params:{
-              dict_id: this.moduleId,
-              list: this.form.list,
-              pages: this.currentPage,
-              status: this.form.status,
-              keywords: this.form.keywords,
-            } }).then((res) => {
-            this.isHigh = false;
-            if (res.data.code === '80000') {
-              this.tableData = res.data.data.data;
-              this.totalNum = res.data.data.count;
-            } else {
-              this.tableData = [];
-              this.totalNum = 0;
-            }
-          });
-        }else{
-          this.getLejiaTableData();
-        }
       },
       // 详情
       openDetail(row) {
@@ -248,12 +210,9 @@
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
-        this.currentPage = val;
-        if(this.form.dict_id !== ''){
-          this.searchMyData(this.currentPage);
-        }else{
-          this.getLejiaTableData();
-        }
+        this.form.pages = val;
+        this.$store.dispatch('lejiaPage',val);
+        this.getLejiaTableData();
 
       },
 
@@ -363,7 +322,7 @@
         }).then(() => {
           this.$http.get(this.urls + 'oa/portal/delete/' + id).then((res) => {
             if (res.data.code === '80040') {
-              this.getLejiaTableData(this.currentPage);
+              this.getLejiaTableData();
               this.prompt(1, res.data.msg);
             } else {
               this.prompt(2, res.data.msg);
@@ -387,7 +346,7 @@
         }).then(() => {
           this.$http.get(this.urls + 'oa/portal/if_show/' + id).then((res) => {
             if (res.data.code === '80080' || res.data.code === '80010') {
-              this.getLejiaTableData(this.currentPage);
+              this.getLejiaTableData();
               this.prompt(1, res.data.msg);
               if(title === '下架'){
                 if(status.top){
@@ -432,11 +391,7 @@
               title: '成功',
               message: res.data.msg
             });
-            if(this.form.dict_id !== ''){
-              this.searchMyData()
-            }else{
-              this.getLejiaTableData(1);
-            }
+            this.getLejiaTableData(1);
             this.getDict();
           }
         });
@@ -449,18 +404,25 @@
               title: '成功',
               message: res.data.msg
             });
-            if(this.form.dict_id !== ''){
-              this.searchMyData()
-            }else{
-              this.getLejiaTableData(1);
-            }
+            this.getLejiaTableData();
             this.getDict();
           }
         });
       },
     },
     watch: {
-
+      moduleId(val){
+        if(!val){
+          this.form.dict_id = 361;
+        }else{
+          this.form.dict_id = val;
+        }
+      },
+    },
+    computed: {
+      currentPage() {
+        return this.$store.state.article.lejia_page;
+      }
     },
   }
 </script>

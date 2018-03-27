@@ -8,7 +8,7 @@
               <el-form-item label="公告类型" required>
                <el-select  v-model="form.type" placeholder="请选择">
                   <el-option v-for="item in forms" :key="item.id" :label="item.name" :value="item.id">
-                  </el-option> 
+                  </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -253,7 +253,7 @@ export default {
       // formData.append('file', file)
       let formData = new FormData();
       formData.append("image", file);
-      this.$http.post(this.address + "api/v1/files", formData).then(res => {
+      this.$http.post(this.address + "files", formData).then(res => {
         console.log(res.data.data);
         let picId = res.data.data;
         this.$http.post("picture/" + picId).then(res => {

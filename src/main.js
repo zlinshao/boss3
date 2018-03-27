@@ -83,6 +83,10 @@ axios.interceptors.response.use((response) => { //配置请求回来的信息
   }
   return response;
 }, function (error) {
+  i--;
+  if(i<1){
+    store.dispatch('hideLoading');
+  }
   return Promise.reject(error);
 });
 

@@ -8,6 +8,6 @@ const getters = {
   albumId: state => state.picture.albumId,
   articleId: state => state.article.articleId,
   moduleType: state => state.article.moduleType,
-  articleDetailId: state => state.article.articleDetailId,
+  articleDetail: state => state.article.articleDetail,
 }
 export default getters

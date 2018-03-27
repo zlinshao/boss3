@@ -137,7 +137,7 @@
       },
       keywords(val){
         if (val){
-          this.$http.get(globalConfig.server_user+'api/v1/users?q='+this.keywords).then((res) => {
+          this.$http.get(globalConfig.server_user+'users?q='+this.keywords).then((res) => {
             if(res.data.status === 'success'){
               this.searchItems = res.data.data;
             }
@@ -194,17 +194,17 @@
     methods:{
       getDepartment(id){
           //获取顶级部门名称
-        this.$http.get(globalConfig.server_user+'api/v1/organizations/1').then((res) => {
+        this.$http.get(globalConfig.server_user+'organizations/1').then((res) => {
           if(res.data.status === 'success'){
             this.highestDepart = res.data.data.name;
           }
         });
-        this.$http.get(globalConfig.server_user+'api/v1/organizations?parent_id='+id).then((res) => {
+        this.$http.get(globalConfig.server_user+'organizations?parent_id='+id).then((res) => {
           if(res.data.status === 'success'){
             this.organizeList = res.data.data;
           }
         });
-        this.$http.get(globalConfig.server_user+'api/v1/users?org_id='+id).then((res) => {
+        this.$http.get(globalConfig.server_user+'users?org_id='+id).then((res) => {
           if(res.data.status === 'success'){
             this.departmentStaff = res.data.data;
           }

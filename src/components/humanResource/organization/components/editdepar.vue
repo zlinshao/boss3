@@ -67,13 +67,13 @@
     methods:{
       //编辑时获取员工信息
       getStaffInfo(){
-        this.$http.get(globalConfig.server_user+'api/v1/organizations/'+this.departId).then((res) => {
+        this.$http.get(globalConfig.server_user+'organizations/'+this.departId).then((res) => {
           if(res.data.status === 'success'){
             this.params.name = res.data.data.name;
             this.params.order = res.data.data.order;
             this.params.parent_id = res.data.data.parent_id;
             this.department = '';
-            this.$http.get(globalConfig.server_user+'api/v1/organizations/'+this.params.parent_id).then((res) => {
+            this.$http.get(globalConfig.server_user+'organizations/'+this.params.parent_id).then((res) => {
               if(res.data.status === 'success'){
                 this.department = res.data.data.name;
               }
@@ -88,7 +88,7 @@
         });
       },
       confirmEdit(){
-        this.$http.put(globalConfig.server_user+'api/v1/organizations/'+this.departId,this.params).then((res) => {
+        this.$http.put(globalConfig.server_user+'organizations/'+this.departId,this.params).then((res) => {
           if(res.data.status === 'success'){
             this.$emit('close','success');
             this.closeModal();
