@@ -72,6 +72,7 @@
         urls: globalConfig.server,
         address: globalConfig.server_user,
         personal: {},
+        loadingPic: false,
         times: '',
         pitch: '',
         cover_pic: {},
@@ -92,9 +93,9 @@
         editorDisabled: false,
       }
     },
-    computed:{
-      ids(val){
-        return this.$route.query.ids? this.$route.query.ids:this.$store.state.article.article_id;
+    computed: {
+      ids(val) {
+        return this.$route.query.ids ? this.$route.query.ids : this.$store.state.article.article_id;
       }
     },
     mounted() {
@@ -105,8 +106,8 @@
         this.publicDetail(ids);
         this.pitch = ids;
       }
-      if(ids){
-        this.$store.dispatch('articleId',ids)
+      if (ids) {
+        this.$store.dispatch('articleId', ids)
       }
     },
     methods: {
@@ -131,7 +132,7 @@
         })
       },
       getDict() {
-        switch(this.moduleType){
+        switch (this.moduleType) {
           case 'lejiaCollege':  //乐伽大学
             this.tabIndex = 'first';
             this.$http.get(this.urls + 'setting/dictionary/361').then((res) => {
@@ -182,27 +183,32 @@
         this.previewShow = true;
       },
       onSubmit(val) {
-        let type;
-        if (this.pitch !== '') {
-          type = this.$http.put;
-        } else {
-          type = this.$http.post;
-        }
-        type(this.urls + 'oa/portal', {
-          id: this.pitch,
-          title: this.form.name,
-          dict_id: this.form.region,
-          content: this.form.htmlForEditor,
-          cover_pic: this.cover_id,
-          status: val
-        }).then((res) => {
-          if (res.data.code === '80010' || res.data.code === '80030') {
-            this.goBack();
-            this.prompt(1, res.data.msg);
+        if (!this.loadingPic) {
+          let type;
+          if (this.pitch !== '') {
+            type = this.$http.put;
           } else {
-            this.prompt(2, res.data.msg);
+            type = this.$http.post;
           }
-        })
+
+          type(this.urls + 'oa/portal', {
+            id: this.pitch,
+            title: this.form.name,
+            dict_id: this.form.region,
+            content: this.form.htmlForEditor,
+            cover_pic: this.cover_id,
+            status: val
+          }).then((res) => {
+            if (res.data.code === '80010' || res.data.code === '80030') {
+              this.goBack();
+              this.prompt(1, res.data.msg);
+            } else {
+              this.prompt(2, res.data.msg);
+            }
+          })
+        } else {
+          this.prompt(2, '图片正在上传');
+        }
       },
       goBack() {
         this.$router.push({path: '/articleMessage', query: {tabs: this.tabIndex}})
@@ -225,6 +231,7 @@
       },
       // 上传成功
       photo_success(val) {
+        this.loadingPic = val[2];
         this.cover_id = val[1];
       },
 
@@ -269,15 +276,15 @@
       }
     },
     watch: {
-      'form.region':{
-        handler(val){
-          if(val == '363' || val == '364') {
+      'form.region': {
+        handler(val) {
+          if (val == '363' || val == '364') {
             this.editorDisabled = true;  //图片赏析和教师风采时富文本框禁用
-            $("#editor").css("background","#eae9e985");
-            this.form.htmlForEditor='';
-          }else{
+            $("#editor").css("background", "#eae9e985");
+            this.form.htmlForEditor = '';
+          } else {
             this.editorDisabled = false;
-            $("#editor").css("background","initial");
+            $("#editor").css("background", "initial");
           }
         }
       }

@@ -28,6 +28,7 @@ import vueEventCalendar from 'vue-event-calendar'
 
 // 地图
 import AMap from 'vue-amap'
+
 Vue.use(AMap);
 
 Vue.use(vueEventCalendar, {locale: 'zh',});
@@ -90,18 +91,19 @@ router.beforeEach((to, from, next) => {
   if (to.path === '/login') {
     localStorage.removeItem('myData');
     localStorage.removeItem('personal');
+    globalConfig.header.Authorization = '';
   }
 
   let data = localStorage.getItem("myData");
   if (!data && to.path !== '/login') {
     next({path: '/login'})
-  }else if(data&&to.path === '/'){
+  } else if (data && to.path === '/') {
     next({path: '/main'})
-  }else if(Number(sessionStorage.getItem('lockStatus'))===1 && to.path!=='/lock'){
-    next({path:'/lock'});
-  }else if(Number(sessionStorage.getItem('lockStatus'))===0 && to.path === '/lock'){
-    next({path:from.path});
-  }else {
+  } else if (Number(sessionStorage.getItem('lockStatus')) === 1 && to.path !== '/lock') {
+    next({path: '/lock'});
+  } else if (Number(sessionStorage.getItem('lockStatus')) === 0 && to.path === '/lock') {
+    next({path: from.path});
+  } else {
     next();
   }
 });
