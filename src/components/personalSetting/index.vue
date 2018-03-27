@@ -182,12 +182,12 @@ export default {
       this.$http
         .get(globalConfig.server + "setting/others/loginInfo")
         .then(res => {
-
+         console.log(res)
           if (res.data.code === "100090") {
             this.secondary_password =
               res.data.data.data.detail.secondary_password;
             for (let a in res.data.data.data.detail.secondary_password) {
-              console.log(1)
+              
               this.secondary_pass.push(Number(a));
             }
           }
@@ -206,7 +206,7 @@ export default {
         .get(globalConfig.server + "setting/dictionary/202")
         .then(res => {
           if (res.data.code === "30010") {
-            console.log(2)
+     
             this.dictionary = res.data.data;
           } else {
             this.$notify.warning({

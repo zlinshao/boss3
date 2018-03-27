@@ -180,9 +180,10 @@
 
               <div class="progressBar">
                 <!--<el-progress :percentage="50" :show-text="false"></el-progress>-->
-                <div class="progress">
-                  <span></span>
-                </div>
+              <el-popover ref="popover1"  placement="top-start"  width="200"  trigger="hover">
+                <span> 已连续登录{{loginday}}天 &nbsp;&nbsp;</span>
+              </el-popover>               
+              <el-progress :percentage="logindaycer" :show-text="false" v-popover:popover1></el-progress>
                 <div class="round roundLeft"></div>
                 <div class="round roundRight"></div>
               </div>
@@ -357,6 +358,8 @@
         Countdown: 0,  //倒计时
         defaultTime: 0,  //倒计时
         screenStatus: false,
+      loginday: 0, //连续登陆天数
+      logindaycer: 0, //连续登录百分比
         defaultArray: [],
         object:{
             name:'zhanglin',
@@ -374,6 +377,7 @@
       setInterval( ()=> {
         this.getUnReadMessage()
       },100000);
+this.allinfo();
     },
     computed: {
       visitedViews() {
@@ -389,6 +393,17 @@
       routers(url) {
         this.$router.push(url);
       },
+    allinfo() {
+      this.$http
+        .get(globalConfig.server + "setting/others/loginInfo")
+        .then(res => {
+          if (res.data.code === "100090") {
+            this.loginday = res.data.data.loginday;
+            this.logindaycer = res.data.data.loginday /180;
+            console.log(this.loginday);
+          }
+        });
+    },
 
       //显示消息详情
       showMessageDetail(val){
