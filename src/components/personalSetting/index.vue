@@ -49,7 +49,7 @@
 
       <el-row>
         <el-col class="leftTitle" :span="4" style="margin-top: 5px; color:#6a8dfb;">
-          二级密码设置{{secondary_pass}}
+          二级密码设置
         </el-col>
       </el-row>
        <el-row style="margin-left:136px;">
