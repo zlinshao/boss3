@@ -93,11 +93,11 @@ axios.interceptors.response.use((response) => { //配置请求回来的信息
 
 //重定向
 router.beforeEach((to, from, next) => {
-
   let lockStatus = true;
   if (to.path === '/login') {
     localStorage.removeItem('myData');
     localStorage.removeItem('personal');
+    globalConfig.header.Authorization = '';
   }
 
   let data = localStorage.getItem("myData");
@@ -120,4 +120,4 @@ new Vue({
   store,
   template: '<App/>',
   components: {App}
-});
+}).$mount('#app');

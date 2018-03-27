@@ -393,17 +393,17 @@ export default new Router({
       ]
     },
 
-    // {
-    //   path: '/',
-    //   component: Index,
-    //   name: '业绩工资',
-    //   icon: 'el-icons-fa-money',
-    //   children: [
-    //     {path: '/periodicTable', component: PeriodicTable, name: '周期表',},
-    //     {path: '/achievement', component: Achievement, name: '业绩',},
-    //     {path: '/personalSalary', component: PersonalSalary, name: '工资',},
-    //   ]
-    // },
+    {
+      path: '/',
+      component: Index,
+      name: '业绩工资',
+      icon: 'el-icons-fa-money',
+      children: [
+        {path: '/periodicTable', component: PeriodicTable, name: '周期表',},
+        {path: '/achievement', component: Achievement, name: '业绩',},
+        {path: '/personalSalary', component: PersonalSalary, name: '工资',},
+      ]
+    },
 
   ]
 })
