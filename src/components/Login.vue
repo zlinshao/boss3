@@ -188,7 +188,7 @@
       },
 
       sureLogin(a, b) {
-        this.$http.post(this.urls + 'oauth/token', {
+        this.$http.post(globalConfig.server_token+ 'oauth/token', {
           client_secret: 'udMntGnEJBgsevojFrMicLuW8G2ABBAsmRlK9fIC',
           grant_type: 'password',
           client_id: '2',

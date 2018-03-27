@@ -279,7 +279,7 @@
     <div class="contentBox" :class="isCollapse? 'hideSidebar' : ''">
       <el-container>
         <div class="aside scroll_bar" id="isCollapse">
-          <el-menu :default-active="$route.path" class="el-menu-vertical-demo" unique-opened
+          <el-menu mode="vertical" :default-active="$route.path" class="el-menu-vertical-demo" unique-opened
                    :defaultOpeneds=defaultArray
                    :collapse="isCollapse" router @open="handleOpen" @close="handleClose"
                    background-color="#6a8dfb" text-color="#fff" active-text-color="#ffd04b">
