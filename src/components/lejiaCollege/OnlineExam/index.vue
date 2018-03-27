@@ -78,7 +78,7 @@
         <div>
           <div style="color: #6a8dfb;">新建考试信息</div>
           <div class="exam_content">
-            <el-form size="mini" onsubmit="return false;" :model="formExam" label-width="70px">
+            <el-form size="mini" onsubmit="return false;" :model="formExam" label-width="70px" >
               <el-row :gutter="50">
                 <el-col :span="12">
                   <el-form-item label="场次名称" required>
@@ -101,26 +101,54 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-form-item>
-                  <el-input v-model="formExam.name" type="checkbox" ></el-input>
-                  <el-label>试卷随机</el-label>
-                </el-form-item>
+                <el-checkbox label="试卷随机"></el-checkbox>
               </el-row>
-              <el-row>
-                <el-form-item label="主题:" required>
-                  <el-radio-group v-model="formExam.theme">
-                    <el-radio label="1" :key="1">个人</el-radio>
-                    <el-radio label="2" :key="2">房屋</el-radio>
-                    <el-radio label="3" :key="3">部门</el-radio>
-                  </el-radio-group>
-                </el-form-item>
+              <el-row :gutter="50">
+                <el-col :span="12">
+                  <el-form-item label="开考时间">
+                    <el-date-picker v-model="formExam.name" type="datetime" placeholder="请选择"></el-date-picker>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="试卷时长">
+                    <el-input placeholder="请输入分钟" v-model="formExam.name"><template slot="append">分钟</template></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="50">
+                <el-col :span="12">
+                  <el-form-item label="开考后">
+                    <el-input placeholder="请输入分钟" v-model="formExam.name"> <template slot="append">分钟</template></el-input>
+                  </el-form-item>
+                </el-col>
+                <span class="vt_align">设定时间后不能在登陆考试系统</span>
+
+              </el-row>
+              <el-row :gutter="50">
+                <el-col :span="12">
+                  <el-form-item label="考生选择">
+                    <el-select v-model="formExam.name" size="mini" placeholder="请选择类型" clearable>
+                      <el-option v-for="item in 4" :key="item.id" label="C语言" :value="item.value"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
               </el-row>
             </el-form>
           </div>
-
+          <span slot="footer" class="dialog-footer">
+            <el-button size="small" type="primary" @click="saveExam" style="padding: 10px 20px;">保存</el-button>
+          </span>
         </div>
       </el-dialog>
     </div>
+    <!--<div id="testPaperDialog">-->
+      <!--<el-dialog :visible.sync="testPaperDialog" title="新建试卷" width="50%">-->
+        <!--<el-row :gutter="30">-->
+          <!--<el-col :span="12"></el-col>-->
+          <!--<el-col :span="12"></el-col>-->
+        <!--</el-row>-->
+      <!--</el-dialog>-->
+    <!--</div>-->
   </div>
 </template>
 
@@ -147,6 +175,9 @@
     },
     watch: {},
     methods: {
+      saveExam() {
+        this.examDialog = false;
+      },
       dblClickTable(){
 
       },
@@ -160,6 +191,7 @@
             break;
         }
       },
+
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
@@ -197,6 +229,15 @@
     .exam_content{
       border: 1px solid #dfe6fb;
       padding: 10px;
+    }
+    .vt_align{
+      vertical-align: middle;
+      vertical-align: -webkit-baseline-middle;
+    }
+    .dialog-footer{
+      text-align: center;
+      display: block;
+      margin-top: 20px;
     }
   }
 
