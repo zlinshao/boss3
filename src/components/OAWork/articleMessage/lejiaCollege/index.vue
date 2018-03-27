@@ -124,6 +124,7 @@
 
   export default {
     components: {RightMenu, Organization},
+    name: 'lejia-college',
     data() {
       return {
         urls: globalConfig.server,

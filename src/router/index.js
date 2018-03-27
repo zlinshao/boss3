@@ -218,10 +218,10 @@ export default new Router({
         {path: '/improveImgInfo', component: ImproveImgInfo, name: "完善照片信息",},
         {path: '/pictureDetail', component: PictureDetail, name: "相册详情",},
         {path: '/visitRecord', component: VisitRecord, name: "回访记录"},
-        {path: '/LejiaCollege', component: LejiaCollege, name: '乐伽大学', meta:{keepAlive: false}},
-        {path: '/CompanyPortal', component: CompanyPortal, name: '公司门户', meta:{keepAlive: false}},
-        {path: '/StaffSquare', component: StaffSquare, name: '员工广场', meta:{keepAlive: false}},
-        {path: '/SystemManageMent', component: SystemManageMent, name: '制度管理', meta:{keepAlive: false}},
+        {path: '/LejiaCollege', component: LejiaCollege, meta:{keepAlive: false}},
+        {path: '/CompanyPortal', component: CompanyPortal, meta:{keepAlive: false}},
+        {path: '/StaffSquare', component: StaffSquare, meta:{keepAlive: false}},
+        {path: '/SystemManageMent', component: SystemManageMent, meta:{keepAlive: false}},
       ]
     },
     // 详情路由

@@ -124,6 +124,7 @@
 
   export default {
     components: {RightMenu, Organization},
+    name: 'company-portal',
     data() {
       return {
         urls: globalConfig.server,

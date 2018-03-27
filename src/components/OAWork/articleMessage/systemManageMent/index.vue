@@ -123,6 +123,7 @@
   import Organization from '../../../common/organization.vue'
 
   export default {
+    name: 'system-management',
     components: {RightMenu, Organization},
     data() {
       return {

@@ -2,13 +2,13 @@
   <div>
     <el-tabs v-model="activeName" @tab-click="handleClick(activeName)">
       <el-tab-pane label="乐伽大学" name="first">
-        <LejiaCollege></LejiaCollege>
+        <lejiaCollege></lejiaCollege>
       </el-tab-pane>
       <el-tab-pane label="公司门户" name="second">
         <companyPortal></companyPortal>
       </el-tab-pane>
       <el-tab-pane label="员工广场" name="third">
-        <StaffSquare></StaffSquare>
+        <staffSquare></staffSquare>
       </el-tab-pane>
       <el-tab-pane label="制度管理" name="fourth">
         <systemManageMent></systemManageMent>
@@ -19,16 +19,16 @@
 
 <script>
   import LejiaCollege from './lejiaCollege/index.vue';
-  import ompanyPortal from './companyPortal/index.vue';
+  import CompanyPortal from './companyPortal/index.vue';
   import StaffSquare from './staffSquare/index.vue';
-  import ystemManageMent from './systemManageMent/index.vue';
+  import SystemManageMent from './systemManageMent/index.vue';
   export default {
     name: "index",
     components: {
       StaffSquare,
       LejiaCollege,
-      ompanyPortal,
-      ystemManageMent,
+      CompanyPortal,
+      SystemManageMent,
     },
     data() {
       return {
