@@ -3,11 +3,12 @@
     <div class="topBack">
       <div class="topBackLeft">
         <div class="leftPic">
-          <img src="../../assets/images/individual/touxiang.png" alt="">
+          <img :src="landholder.avatar" v-if="landholder.avatar !== ''">
+          <img src="../../assets/images/individual/touxiang.png" v-else>
         </div>
         <div class="rightPic">
           <p>
-            <span>我去犯得上发</span>
+            <span>{{landholder.name}}</span>
             <span></span>
           </p>
           <p>
@@ -17,13 +18,13 @@
       </div>
       <div class="topBackRight">
         <div @click="routerLink('/pictureManage')">
-          <span class="iconfont icon-shiyongshouce"></span>
+          <span class="iconfont icon-zhaopian"></span>
           <span>照片</span>
         </div>
-        <div>
-          <span class="iconfont icon-shiyongshouce"></span>
-          <span>收藏夹</span>
-        </div>
+        <!--<div>-->
+        <!--<span class="iconfont icon-shiyongshouce"></span>-->
+        <!--<span>收藏夹</span>-->
+        <!--</div>-->
       </div>
     </div>
     <div class="main">
@@ -32,29 +33,37 @@
           <div class="mainLeft">
             <div class="title">个人主页</div>
             <div class="ingress">
-              <div class="a">
-                <div class="aLeft"></div>
+              <div class="a" @click="routerLink('/sthToDo')">
+                <div class="aLeft">
+                  <i class="iconfont icon-daiban"></i>
+                </div>
                 <div class="aRight">
                   <p>BACKLOG</p>
                   <p>代办事项<span>24</span></p>
                 </div>
               </div>
               <div class="a" @click="routerLink('/dailyRecord')">
-                <div class="aLeft"></div>
+                <div class="aLeft">
+                  <i class="iconfont icon-richengguanli"></i>
+                </div>
                 <div class="aRight">
                   <p>JOURNAL</p>
                   <p>日志管理<span>24</span></p>
                 </div>
               </div>
               <div class="a">
-                <div class="aLeft"></div>
+                <div class="aLeft">
+                  <i class="iconfont icon-tongxunlu"></i>
+                </div>
                 <div class="aRight">
                   <p>MAIL&nbsp;LIST</p>
                   <p>通讯录<span>24</span></p>
                 </div>
               </div>
-              <div class="a">
-                <div class="aLeft"></div>
+              <div class="a" @click="routerLink('/management')">
+                <div class="aLeft">
+                  <i class="iconfont icon-wodericheng"></i>
+                </div>
                 <div class="aRight">
                   <p>SCHEDULE</p>
                   <p>日程管理<span>24</span></p>
@@ -63,57 +72,61 @@
             </div>
             <div class="messageTab">
               <div class="achievementTab">
-                <div class="titles">
+                <div class="titles" @click="routerLink('/checkWork')">
                   <div>PFREORMANCE MANAGEMENT</div>
                   <div>考勤管理</div>
                 </div>
                 <div class="months">
-                  <div class="monthTime">0000-00-00</div>
+                  <div class="monthTime">2018年03月考勤</div>
                   <div class="month1">
                     <div>
                       <p class="monthP">
                         <span>迟到</span>
-                        <i class="iconfont icon-shiyongshouce"></i>
+                        <i class="iconfont icon-shijian"></i>
                       </p>
-                      <p><b>19</b>次</p>
+                      <p><b>19</b>
+                        <span>次</span></p>
                     </div>
                     <div>
                       <p class="monthP">
-                        <span>迟到</span>
-                        <i class="iconfont icon-shiyongshouce"></i>
+                        <span>早退</span>
+                        <i class="iconfont icon-chidao"></i>
                       </p>
                       <p>
-                        <b>19</b>次
-                      </p>
-                    </div>
-                    <div>
-                      <p class="monthP">
-                        <span>迟到</span>
-                        <i class="iconfont icon-shiyongshouce"></i>
-                      </p>
-                      <p>
-                        <b>19</b>次
+                        <b>19</b>
+                        <span>次</span>
                       </p>
                     </div>
                     <div>
                       <p class="monthP">
-                        <span>迟到</span>
-                        <i class="iconfont icon-shiyongshouce"></i>
+                        <span>旷工</span>
+                        <i class="iconfont icon-qingzhou-gantanhao"></i>
                       </p>
                       <p>
-                        <b>19</b>次
+                        <b>19</b>
+                        <span>次</span>
+                      </p>
+                    </div>
+                    <div>
+                      <p class="monthP" style="margin-top: 10px;">
+                        <span>出勤天数</span>
+                        <i class="iconfont icon-kaoqin1" style="font-size: 24px"></i>
+                      </p>
+                      <p>
+                        <b>19</b>
+                        <span>次</span>
                       </p>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="checkTab">
+              <div class="checkTab" @click="routerLink('/integraldetail')">
                 <div class="titles">
                   <div>RNTEGAL GETAIL</div>
-                  <div @click="routerLink('/integraldetail')" style="cursor: pointer;">积分明细</div>
+                  <div>积分明细</div>
                 </div>
                 <div class="checkNum">
-                  <i class="el-icon-plus"></i> 1289
+                  <i class="iconfont icon-jifen1"></i> 1289
                 </div>
               </div>
               <div class="integralTab">
@@ -134,7 +147,7 @@
                 </div>
               </div>
               <div class="check">
-                <div class="titles">
+                <div class="titles" @click="routerLink('/checkWork')">
                   <div>RNTEGAL GETAIL</div>
                   <div>考勤管理</div>
                 </div>
@@ -143,21 +156,25 @@
                     2018-12考勤
                   </div>
                   <div class="beLate">
-                    <i class="el-icon-plus"></i>&nbsp;&nbsp;迟到<b>&nbsp;2&nbsp;次</b>
+                    <i class="iconfont icon-shijian"></i>
+                    <span>&nbsp;&nbsp;迟到<b>&nbsp;2&nbsp;次</b></span>
                   </div>
                   <div class="leave">
-                    <i class="el-icon-plus"></i>&nbsp;&nbsp;早退<b>&nbsp;6&nbsp;次</b>
+                    <i class="iconfont icon-chidao"></i>
+                    <span>&nbsp;&nbsp;早退<b>&nbsp;6&nbsp;次</b></span>
                   </div>
                   <div class="workman">
-                    <i class="el-icon-plus"></i>&nbsp;&nbsp;矿工<b>&nbsp;0&nbsp;次</b>
+                    <i class="iconfont icon-qingzhou-gantanhao"></i>
+                    <span>&nbsp;&nbsp;矿工<b>&nbsp;0&nbsp;次</b></span>
                   </div>
                   <div class="dates">
-                    <i class="el-icon-plus"></i>&nbsp;&nbsp;考勤天数<b>&nbsp;4&nbsp;天</b>
+                    <i class="iconfont icon-kaoqin1"></i>
+                    <span>&nbsp;&nbsp;考勤天数<b>&nbsp;4&nbsp;天</b></span>
                   </div>
                 </div>
               </div>
               <div class="integral">
-                <div class="integralTop">
+                <div class="integralTop" @click="routerLink('/integraldetail')">
                   <div class="titles">
                     <div>RNTEGAL GETAIL</div>
                     <div>明细积分</div>
@@ -231,7 +248,12 @@
   export default {
     name: "index",
     data() {
-      return {}
+      return {
+        landholder: {},
+      }
+    },
+    mounted() {
+      this.landholder = JSON.parse(localStorage.personal);
     },
     methods: {
       routerLink(val) {
@@ -270,6 +292,7 @@
     img {
       width: 100%;
       height: 100%;
+      @include border_radius(50%);
     }
 
     @font-face {
@@ -319,13 +342,15 @@
           margin-left: 20px;
         }
         div {
+          cursor: pointer;
           font-size: 18px;
           color: $colorBor;
           @include flex;
           align-items: center;
           span:first-of-type {
             font-size: 24px;
-            padding-top: 6px;
+            margin-right: 16px;
+            padding-top: 2px;
           }
         }
         div:nth-of-type(1) {
@@ -348,7 +373,7 @@
 
     .main {
       .title {
-        color: #C0CAE9;
+        color: #409EFF;
         font-size: 14px;
         margin: 12px 0;
       }
@@ -375,11 +400,17 @@
               height: 52px;
             }
             .aLeft {
+              text-align: center;
+              line-height: 52px;
+              color: #ffffff;
               min-width: 52px;
               max-width: 52px;
               margin: 0 20px;
               @include border_radius(50%);
               border: 1px solid $colorBor;
+              i {
+                font-size: 24px;
+              }
             }
             .aRight {
               width: 100%;
@@ -445,6 +476,7 @@
           height: 446px;
           margin-top: 12px;
           .titles {
+            cursor: pointer;
             margin: 43px 41px;
             div:first-of-type {
               font-size: 16px;
@@ -463,30 +495,36 @@
           }
           .achievementTab {
             .months {
-              padding: 40px 0 0 40px;
+              padding: 22px 0 0 40px;
               .monthTime {
-                color: #E69FBF;
+                color: #FC6AAD;
                 border-bottom: 1px solid #DDDDDD;;
                 padding: 10px;
                 padding-left: 0;
               }
               .month1 {
-                color: #E69FBF;
+                color: #409EFF;
                 @include flex;
                 flex-wrap: wrap;
                 div {
                   @include border_radius(6px);
-                  border: 1px solid #DDDDDD;
+                  border: 1px solid #409EFF;
                   width: 45%;
-                  margin: 1.6% 1.6% 0 0;
+                  margin: 2.4% 3% 0 0;
                   height: 108px;
                   box-sizing: border-box;
                   padding: 0 20px;
+                  span {
+                    color: #4E4F50;
+                  }
                   .monthP {
                     @include flex;
-                    align-items: flex-end;
+                    align-items: center;
                     justify-content: space-between;
                     text-align: center;
+                    i {
+                      font-size: 20px;
+                    }
                   }
                   p {
                     text-align: center;
@@ -496,6 +534,12 @@
                       padding-right: 6px;
                     }
                   }
+                }
+              }
+              .month1 {
+                div:nth-of-type(3) {
+                  color: #FC6AAD;
+                  border: 1px solid #FC6AAD;
                 }
               }
             }
@@ -510,11 +554,18 @@
             @include back("../../assets/images/individual/jifeng.png");
             background-size: 101% 101%;
             background-position: -1px -1px;
+            cursor: pointer;
             .checkNum {
               text-align: right;
               color: #E69FBF;
               margin-right: 35px;
               font-size: 24px;
+              i {
+                font-size: 20px;
+                border: 1px solid #E69FBF;
+                border-radius: 50%;
+                padding: 3px;
+              }
             }
           }
           .integralTab {
@@ -523,7 +574,7 @@
                 color: #E69FBF;
               }
             }
-            .integralBack{
+            .integralBack {
               width: 100%;
               height: 240px;
               @include back("../../assets/images/individual/jingshen.png");
@@ -540,9 +591,18 @@
           .check {
             .checkWork {
               div:first-child {
+                padding-left: 40px;
+                color: #74dc91;
                 height: 40px;
                 line-height: 43px;
                 border-bottom: 1px solid #DDDDDD;
+              }
+              div {
+                @include flex;
+                align-items: center;
+                i {
+                  font-size: 20px;
+                }
               }
               margin-top: 81px;
               div + div {
@@ -556,20 +616,32 @@
                 i, b {
                   color: #F6CF78;
                 }
+                i {
+                  font-size: 25px;
+                }
               }
               .leave {
                 i, b {
                   color: #788DE5;
+                }
+                i {
+                  padding-right: 4px;
                 }
               }
               .workman {
                 i, b {
                   color: #E375A3;
                 }
+                i {
+                  padding-right: 4px;
+                }
               }
               .dates {
                 i, b {
                   color: #788DE5;
+                }
+                i {
+                  font-size: 25px;
                 }
               }
             }
@@ -578,6 +650,7 @@
             border: 0;
             .integralTop, .integralBottom {
               height: 215px;
+              cursor: pointer;
               border: 1px solid #DDDDDD;
               @include border_radius(6px);
               @include back("../../assets/images/individual/jifeng.png");
