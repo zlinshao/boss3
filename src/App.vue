@@ -1,7 +1,7 @@
 <template>
   <div id="app" @contextmenu="prevent($event)" @click="closeMenu">
     <router-view></router-view>
-    <LOADING v-if="isLoading"></LOADING>
+    <!--<LOADING v-if="isLoading"></LOADING>-->
 
     <el-tooltip placement="top" content="返回顶部">
       <back-to-top transitionName="fade" :customStyle="myBackToTopStyle" :visibilityHeight="300" :backPosition="50"></back-to-top>
