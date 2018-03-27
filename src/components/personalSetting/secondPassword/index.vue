@@ -7,7 +7,7 @@
         <el-col :span="20">
           <div class="validate">
             <div>
-              <el-form-item label="验证码" required size="mini">
+              <el-form-item label="验证码" required size="mini" >
               <el-input v-model="form.sms_code" clearable placeholder="请输入验证码"></el-input>
               </el-form-item>
             </div>
@@ -20,7 +20,7 @@
           </div>
           <div class="validate">
             <div class="validateSign">
-              <el-form-item label="新密码" required size="mini">
+              <el-form-item label="输入密码" required size="mini">
               <el-input @change="checkNo(form.passwordnew)" :maxlength="16" type="password" v-model="form.passwordnew" :minlength="6" clearable placeholder="请输入新密码"></el-input>           
               </el-form-item><i class="el-icon-success" :maxlength="16" style="color: #46ff53" v-show="form.passwordnew.length>=6"></i>
             </div>
@@ -263,6 +263,7 @@ export default {
 }
 .remark {
   color: #fdaece;
+  margin-left:20px;
 }
 
 .nowrap {
