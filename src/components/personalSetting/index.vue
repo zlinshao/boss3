@@ -2,15 +2,15 @@
   <div>
     <div class="tool">
       <div class="tool_left">
-        <el-button type="primary" size="mini" @click="showBasicset()">
+        <el-button type="primary" style="background:#6a8dfb;border:0 none; width:130px; height:32px;" size="small" @click="showBasicset()">
           <!--<i class="el-icon-document"></i>&nbsp;-->
           基本设置
         </el-button>
-        <el-button type="success" size="mini" @click="showSecond()">
+        <el-button type="success" style="background:#58d788;border:0 none; width:130px; height:32px;"  size="small" @click="showSecond()">
           <!--<i class="el-icon-document"></i>&nbsp;-->
           二级密码设置
         </el-button>
-        <el-button type="warning" size="mini" @click="showLockscreen()">
+        <el-button type="warning" style="background:#fdca41;border:0 none; width:130px; height:32px;"  size="small" @click="showLockscreen()">
           <!--<i class="el-icon-document"></i>&nbsp;-->
           锁屏密码设置
         </el-button>
@@ -47,15 +47,15 @@
     <div class="main" v-if="secondPassword">
 
       <el-row>
-        <el-col class="leftTitle" :span="4" style="margin-top: 5px">
+        <el-col class="leftTitle" :span="4" style="margin-top: 5px;margin-left:24px; color:#6a8dfb;">
           二级密码设置
         </el-col>
       </el-row>
-       <el-row >
+       <el-row style="margin-left:130px;">
         <el-col class="leftTitle"   v-for="(item2) in dictionary2" :key="item2.id"  :span="3" style="margin-top: 4px">
-          <div style="margin-right:24px;"> {{item2.dictionary_name}}</div><br />
-          <el-button size="mini" v-if="secondary_pass.indexOf(item2.id)>-1" @click="openSecondPassword('secondPasswordDialog',item2.id)" type="success">修改二级密码</el-button>
-          <el-button size="mini" v-else @click="openSecondPassword('secondPasswordDialog',item2.id)" type="primary">设置二级密码</el-button>
+          <div style="margin-right:36px; color:#787a7e;"> {{item2.dictionary_name}}</div><br />
+          <el-button style="background:#6a8dfb;width:130px;height:32px;"  size="mini" v-if="secondary_pass.indexOf(item2.id)>-1" @click="openSecondPassword('secondPasswordDialog',item2.id)" type="primary">修改二级密码</el-button>
+          <el-button style="background:#6a8dfb;width:130px; height:32px;" size="mini" v-else @click="openSecondPassword('secondPasswordDialog',item2.id)" type="primary">设置二级密码</el-button>
         </el-col>
       </el-row>     
     </div>
