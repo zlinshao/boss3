@@ -326,7 +326,7 @@
         <el-main :class="isFull? 'mainHide':'' ">
           <TagsView></TagsView>
           <div style="padding: 10px;background: #fff">
-            <router-view></router-view>
+            <keep-alive><router-view></router-view></keep-alive>
           </div>
         </el-main>
       </el-container>
