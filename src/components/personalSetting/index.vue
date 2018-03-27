@@ -37,9 +37,10 @@
             </el-option>
           </el-select>
         </el-form-item>
-      </el-form>
 
-      <div style="text-align: center;margin-top: 200px">
+      </el-form>
+      <span style="color:#f00;margin-left:126px;">备注:首页倒计时时间设置,当合计时结束后,将自动进入锁屏模式</span>
+      <div style="text-align: center;margin-top: 180px">
         <el-button @click="addBasicSetting" type="primary" size="small" style="padding: 10px 140px;">保存</el-button>
       </div>
 
@@ -47,11 +48,11 @@
     <div class="main" v-if="secondPassword">
 
       <el-row>
-        <el-col class="leftTitle" :span="4" style="margin-top: 5px;margin-left:24px; color:#6a8dfb;">
+        <el-col class="leftTitle" :span="4" style="margin-top: 5px; color:#6a8dfb;">
           二级密码设置
         </el-col>
       </el-row>
-       <el-row style="margin-left:130px;">
+       <el-row style="margin-left:136px;">
         <el-col class="leftTitle"   v-for="(item2) in dictionary2" :key="item2.id"  :span="3" style="margin-top: 4px">
           <div style="margin-right:36px; color:#787a7e;"> {{item2.dictionary_name}}</div><br />
           <el-button style="background:#6a8dfb;width:130px;height:32px;"  size="mini" v-if="secondary_pass.indexOf(item2.id)>-1" @click="openSecondPassword('secondPasswordDialog',item2.id)" type="primary">修改二级密码</el-button>
@@ -170,8 +171,9 @@ export default {
     };
   },
   mounted() {
+    
     this.getDictionary();
-    this.allinfo();
+    
     this.getDictionary2();
   },
   watch: {},
@@ -180,12 +182,12 @@ export default {
       this.$http
         .get(globalConfig.server + "setting/others/loginInfo")
         .then(res => {
-          console.log(res);
 
           if (res.data.code === "100090") {
             this.secondary_password =
               res.data.data.data.detail.secondary_password;
             for (let a in res.data.data.data.detail.secondary_password) {
+              console.log(1)
               this.secondary_pass.push(Number(a));
             }
           }
@@ -199,10 +201,12 @@ export default {
       this.secondPasswordDialog = false;
     },
     getDictionary() {
+     
       this.$http
         .get(globalConfig.server + "setting/dictionary/202")
         .then(res => {
           if (res.data.code === "30010") {
+            console.log(2)
             this.dictionary = res.data.data;
           } else {
             this.$notify.warning({
@@ -213,6 +217,7 @@ export default {
         });
     },
     getDictionary2() {
+       this.allinfo();
       this.$http
         .get(globalConfig.server + "setting/dictionary/220")
         .then(res => {
@@ -368,7 +373,7 @@ export default {
 
 .leftTitle {
   text-align: right;
-  padding-right: 40px;
+
   color: #409eff;
 }
 
