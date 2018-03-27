@@ -25,8 +25,10 @@
     <!--</div>-->
     <!--</div>-->
 
-    <div class="load-container load7">
-      <div class="loader">Loading...</div>
+    <div class="load-container load7" style="width: 100%;height: 100%; background: rgba(0,0,0,0.3);">
+      <div>
+        <img src="../../assets/images/loading1.gif" alt="" style="position: absolute;top: 50%;left: 50%;z-index: 999;display: block;">
+      </div>
     </div>
   </div>
 </template>
@@ -42,6 +44,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
   /*@-webkit-keyframes rotate-animation {*/
   /*0% {*/
   /*-webkit-transform: rotate(0deg);*/
