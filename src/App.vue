@@ -43,8 +43,11 @@
 </script>
 
 <style lang="scss">
-
-  body, html {
+  html {
+    height: 100%;
+    box-sizing: border-box;
+  }
+  body {
     margin: 0;
     padding: 0;
     height: 100%;

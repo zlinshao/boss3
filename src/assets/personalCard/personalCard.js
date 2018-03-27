@@ -1,21 +1,24 @@
 /**
  * Created by AigLe on 2018/3/11 0011.
  */
+import img from '../images/defaultHead.png'
 
 let isClickHead = false;
 $(document).on('click', '[data-card]', function (e) {
   let personal = JSON.parse($(e.target).attr('data-src'));
-  console.log()
-  let offsetLeft = e.target.offsetLeft;
-  let offsetTop = e.target.offsetTop;
+  if(!personal.avatar){
+    personal.avatar = img;
+  }
+  let offsetLeft = e.clientX;
+  let offsetTop = e.clientY;
   //定位名片顯示位置
   if(offsetLeft+294>window.innerWidth){
     offsetLeft = window.innerWidth - 334
   }
   if(offsetTop+194>window.innerHeight){
-    offsetTop = window.innerHeight - 194 - e.target.width -30;
+    offsetTop = window.innerHeight - 194 - e.target.width;
   }else {
-    offsetTop =offsetTop + e.target.width+10;
+    offsetTop =offsetTop + e.target.width;
   }
   insertHtml(offsetTop,offsetLeft,personal);
   e.stopPropagation();
