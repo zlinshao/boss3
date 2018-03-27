@@ -78,15 +78,32 @@
         <div>
           <div style="color: #6a8dfb;">新建考试信息</div>
           <div class="exam_content">
-            <el-form size="mini" onsubmit="return false;" :model="formExam" label-width="100px">
-              <el-row>
-                <el-form-item label="相册名称:" required>
-                  <el-input v-model="formExam.name" placeholder="请输入相册名称" ></el-input>
-                </el-form-item>
+            <el-form size="mini" onsubmit="return false;" :model="formExam" label-width="70px">
+              <el-row :gutter="50">
+                <el-col :span="12">
+                  <el-form-item label="场次名称" required>
+                    <el-input v-model="formExam.name" placeholder="请输入场次"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="试卷类型" required>
+                    <el-select v-model="formExam.name" size="mini" placeholder="请选择类型" clearable>
+                      <el-option v-for="item in 4" :key="item.id" label="C语言" :value="item.value"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
               </el-row>
-              <el-row>
-                <el-form-item label="相册说明:">
-                  <el-input v-model="formExam.description" type="textarea" placeholder="请输入相册说明"></el-input>
+              <el-row :gutter="50">
+                <el-col :span="12">
+                  <el-form-item label="使用试卷">
+                    <el-select v-model="formExam.name" size="mini" placeholder="请选择试卷" clearable>
+                      <el-option v-for="item in 4" :key="item.id" label="C语言" :value="item.value"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-form-item>
+                  <el-input v-model="formExam.name" type="checkbox" ></el-input>
+                  <el-label>试卷随机</el-label>
                 </el-form-item>
               </el-row>
               <el-row>
@@ -174,9 +191,12 @@
     }
   }
   #examDialog {
+   .el-dialog__title{
+      color: #6a8dfb !important;
+    }
     .exam_content{
-
       border: 1px solid #dfe6fb;
+      padding: 10px;
     }
   }
 

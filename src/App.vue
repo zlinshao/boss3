@@ -13,7 +13,7 @@
     components: {LOADING},
     data(){
       return {
-        loading: null
+        loading: false
       }
     },
     created(){
