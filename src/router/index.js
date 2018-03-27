@@ -141,6 +141,11 @@ import ChoosePictures from '../components/pictureManage/selectPictures.vue'     
 import ImproveImgInfo from '../components/pictureManage/improveImage.vue'                //完善照片信息
 import PictureDetail from '../components/pictureManage/pictureDetail.vue';               //相册详情
 import VisitRecord from '../components/rentManage/components/visitRecord.vue';               //回访记录
+
+import LejiaCollege from '../components/OAWork/articleMessage/lejiaCollege/index.vue';
+import CompanyPortal from '../components/OAWork/articleMessage/companyPortal/index.vue';
+import StaffSquare from '../components/OAWork/articleMessage/staffSquare/index.vue';
+import SystemManageMent from '../components/OAWork/articleMessage/systemManageMent/index.vue';
 Vue.use(Router);
 
 export default new Router({
@@ -201,9 +206,9 @@ export default new Router({
         {path: '/contractChange', component: ContractChange, name: 'TEST_1'},
         {path: '/deliver', component: Deliver, name: 'TEST_2'},
         {path: '/throwALease', component: throwALease, name: 'TEST_3'},
-        {path: '/publicArticle', component: PublicArticle, name: '文章发布'},
+        {path: '/publicArticle', component: PublicArticle, name: '文章发布', meta:{keepAlive: false}},
         {path: '/individual', component: Individual, name: '个人门户'},
-        {path: '/infodetails', component: Infodetails, name: '详情'},
+        {path: '/infodetails', component: Infodetails, name: '详情', meta:{keepAlive: false}},
         {path: '/dailyRecord', component: DailyRecord, name: '日志管理'},
         {path: '/sthToDo', component: SthToDo, name: '待办事项'},
         {path: '/integraldetail', component: Integraldetail, name: '积分明细'},
@@ -213,6 +218,10 @@ export default new Router({
         {path: '/improveImgInfo', component: ImproveImgInfo, name: "完善照片信息",},
         {path: '/pictureDetail', component: PictureDetail, name: "相册详情",},
         {path: '/visitRecord', component: VisitRecord, name: "回访记录"},
+        {path: '/LejiaCollege', component: LejiaCollege, name: '乐伽大学', meta:{keepAlive: false}},
+        {path: '/CompanyPortal', component: CompanyPortal, name: '公司门户', meta:{keepAlive: false}},
+        {path: '/StaffSquare', component: StaffSquare, name: '员工广场', meta:{keepAlive: false}},
+        {path: '/SystemManageMent', component: SystemManageMent, name: '制度管理', meta:{keepAlive: false}},
       ]
     },
     // 详情路由

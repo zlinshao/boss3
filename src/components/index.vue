@@ -326,7 +326,11 @@
         <el-main :class="isFull? 'mainHide':'' ">
           <TagsView></TagsView>
           <div style="padding: 10px;background: #fff">
-            <keep-alive><router-view></router-view></keep-alive>
+            <!--<keep-alive><router-view></router-view></keep-alive>-->
+            <keep-alive>
+              <router-view v-if="$route.meta.keepAlive"></router-view>
+            </keep-alive>
+            <router-view v-if="!$route.meta.keepAlive"></router-view>
           </div>
         </el-main>
       </el-container>

@@ -19,16 +19,16 @@
 
 <script>
   import LejiaCollege from './lejiaCollege/index.vue';
-  import companyPortal from './companyPortal/index.vue';
+  import ompanyPortal from './companyPortal/index.vue';
   import StaffSquare from './staffSquare/index.vue';
-  import systemManageMent from './systemManageMent/index.vue';
+  import ystemManageMent from './systemManageMent/index.vue';
   export default {
     name: "index",
     components: {
       StaffSquare,
       LejiaCollege,
-      companyPortal,
-      systemManageMent,
+      ompanyPortal,
+      ystemManageMent,
     },
     data() {
       return {
