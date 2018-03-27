@@ -76,7 +76,7 @@
                   <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
                     <img v-for="p in pic" :src="p.uri">
                   </span>
-                  <img v-if="key.album.cover_pic.length==0" src="../../assets/images/default.png">
+                  <!--<img v-if="key.album.cover_pic.length==0" src="../../assets/images/default.png">-->
                 </div>
                 <div class="titleMain text" v-html="key.content">
                 </div>
@@ -87,7 +87,7 @@
               </div>
             </el-col>
             <el-col :span="12">
-              <div class="mainRight" v-if="newsData.data.length>0">
+              <div class="mainRight" >
                 <div  class="a" @click="routerDetail(key.id)" v-for="(key,index) in newsData.data"
                      v-if="index !== 0 && newsData.data[0] !== ''">
                   <div>
@@ -406,46 +406,49 @@
           keywords: '',
           pages: 1,
         },
-        newsData: {
-          title: '',// 乐伽新闻
-          data: [],
-        },
-        staffData: {
-          title: '',// 员工风采
-          data: [''],
-        },
-        cusData: {
-          title: '',// 客户纪实
-          data: [''],
-        },
-        lifeData: {
-          title: '',// 公司生活
-          data: [''],
-        },
-        hotData: {
-          title: '',// 热门导读
-          data: [''],
-        },
-        figureData: {
-          title: '',// 人物志
-          data: [''],
-        },
-        hostData: {
-          title: '',// 主轮播
-          data: [''],
-        },
-        lessData: {
-          title: '',// 次标题1
-          data: [''],
-        },
-        lowData: {
-          title: '',// 次标题2
-          data: [''],
-        },
+        newsData: {}, // 乐伽新闻
+        staffData: {}, // 员工风采
+        cusData: {}, // 客户纪实
+        lifeData: {}, // 公司生活
+        hotData: {},  // 热门导读
+        figureData: {},  // 人物志
+        hostData: {},   // 主轮播
+        lessData: {}, // 次标题1
+        lowData: {},  // 次标题2
       }
     },
     mounted() {
       this.addRegion();
+    },
+    created() {
+      if(localStorage.getItem('convergeHostData')){
+        this.hostData = JSON.parse(localStorage.getItem('convergeHostData'));
+      }
+      if(localStorage.getItem('convergeLessData')){
+        this.lessData = JSON.parse(localStorage.getItem('convergeLessData'));
+      }
+      if(localStorage.getItem('convergeLowData')){
+        this.lowData = JSON.parse(localStorage.getItem('convergeLowData'));
+      }
+      if(localStorage.getItem('convergeNewsData')){
+        this.newsData = JSON.parse(localStorage.getItem('convergeNewsData'));
+      }
+      if(localStorage.getItem('convergeStaffData')){
+        this.staffData = JSON.parse(localStorage.getItem('convergeStaffData'));
+      }
+      if(localStorage.getItem('convergeCusData')){
+        this.cusData = JSON.parse(localStorage.getItem('convergeCusData'));
+      }
+      if(localStorage.getItem('convergeHotData')){
+        this.hotData = JSON.parse(localStorage.getItem('convergeHotData'));
+      }
+      if(localStorage.getItem('convergeLifeData')){
+        this.lifeData = JSON.parse(localStorage.getItem('convergeLifeData'));
+      }
+      if(localStorage.getItem('convergeFigureData')){
+        this.figureData = JSON.parse(localStorage.getItem('convergeFigureData'));
+      }
+
     },
     methods: {
       // 详情
@@ -459,66 +462,93 @@
         this.$http.get(this.urls + 'oa/portal/?dict_id=144', {
           params: this.form
         }).then((res) => {
-          this.hostData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].dict_ids;
-          this.hostData.data = res.data && res.data.data && res.data.data.data;
-          // 次标题1
+          let title,data = {};
+          title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].title;
+          data = res.data && res.data.data && res.data.data.data;
+          this.hostData = Object.assign({},this.hostData,{title:title,data:data});
+          localStorage.setItem('convergeHostData',JSON.stringify(this.hostData));
 
+          // 次标题1
           this.$http.get(this.urls + 'oa/portal/?dict_id=145', {
             params: this.form
           }).then((res) => {
-            this.lessData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].dict_ids;
-            this.lessData.data = res.data && res.data.data && res.data.data.data;
-            // 次标题2
+            let title,data = {};
+            title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].title;
+            data = res.data && res.data.data && res.data.data.data;
+            this.lessData = Object.assign({},this.lessData,{title:title,data:data});
+            localStorage.setItem('convergeLessData',JSON.stringify(this.lessData));
 
+            // 次标题2
             this.$http.get(this.urls + 'oa/portal/?dict_id=146', {
               params: this.form
             }).then((res) => {
-              this.lowData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].dict_ids;
-              this.lowData.data = res.data && res.data.data && res.data.data.data;
-              // 乐伽新闻
+              let title,data = {};
+              title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].title;
+              data = res.data && res.data.data && res.data.data.data;
+              this.lowData = Object.assign({},this.lowData,{title:title,data:data});
+              localStorage.setItem('convergeLowData',JSON.stringify(this.lowData));
 
+              // 乐伽新闻
               this.$http.get(this.urls + 'oa/portal/?dict_id=138', {
                 params: this.form
               }).then((res) => {
-                this.newsData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].dict_ids;
-                this.newsData.data = res.data && res.data.data && res.data.data.data;
+                let title,data = {};
+                title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].title;
+                data = res.data && res.data.data && res.data.data.data;
+                this.newsData = Object.assign({},this.newsData,{title:title,data:data});
+                localStorage.setItem('convergeNewsData',JSON.stringify(this.newsData));
 
                 // 员工风采
                 this.$http.get(this.urls + 'oa/portal/?dict_id=139', {
                   params: this.form
                 }).then((res) => {
-                  this.staffData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].dict_ids;
-                  this.staffData.data = res.data && res.data.data && res.data.data.data;
+                  let title,data = {};
+                  title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].title;
+                  data = res.data && res.data.data && res.data.data.data;
+                  this.staffData = Object.assign({},this.staffData,{title:title,data:data});
+                  localStorage.setItem('convergeStaffData',JSON.stringify(this.staffData));
 
                   // 客户纪实
                   this.$http.get(this.urls + 'oa/portal/?dict_id=140', {
                     params: this.form
                   }).then((res) => {
-                    this.cusData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].dict_ids;
-                    this.cusData.data = res.data && res.data.data && res.data.data.data;
+                    let title,data = {};
+                    title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].title;
+                    data = res.data && res.data.data && res.data.data.data;
+                    this.cusData = Object.assign({},this.cusData,{title:title,data:data});
+                    localStorage.setItem('convergeCusData',JSON.stringify(this.cusData));
                   });
 
                   // 热门导读
                   this.$http.get(this.urls + 'oa/portal/?dict_id=142', {
                     params: this.form
                   }).then((res) => {
-                    this.hotData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].dict_ids;
-                    this.hotData.data = res.data && res.data.data && res.data.data.data;
+                    let title,data = {};
+                    title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].title;
+                    data = res.data && res.data.data && res.data.data.data;
+                    this.hotData = Object.assign({},this.hotData,{title:title,data:data});
+                    localStorage.setItem('convergeHotData',JSON.stringify(this.hotData));
                   });
 
                   // 公司生活
                   this.$http.get(this.urls + 'oa/portal/?dict_id=141', {
                     params: this.form
                   }).then((res) => {
-                    this.lifeData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].dict_ids;
-                    this.lifeData.data = res.data && res.data.data && res.data.data.data;
+                    let title,data = {};
+                    title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].title;
+                    data = res.data && res.data.data && res.data.data.data;
+                    this.lifeData = Object.assign({},this.lifeData,{title:title,data:data});
+                    localStorage.setItem('convergeLifeData',JSON.stringify(this.lifeData));
 
                     // 人物志
                     this.$http.get(this.urls + 'oa/portal/?dict_id=143', {
                       params: this.form
                     }).then((res) => {
-                      this.figureData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].dict_ids;
-                      this.figureData.data = res.data && res.data.data && res.data.data.data;
+                      let title,data = {};
+                      title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].title;
+                      data = res.data && res.data.data && res.data.data.data;
+                      this.figureData = Object.assign({},this.figureData,{title:title,data:data});
+                      localStorage.setItem('convergeFigureData',JSON.stringify(this.figureData));
                     })
 
                   });

@@ -260,6 +260,7 @@
               }
             }
           }
+          localStorage.setItem('collegeTeacherStyles',JSON.stringify(this.teacherStyles));
         });
       },
       //请求图片赏析的图片
@@ -285,6 +286,7 @@
               }
             }
           }
+          localStorage.setItem('collegePictureAppreciation',JSON.stringify(this.pictureAppreciation));
         });
       },
       //请求课程状态的数据
@@ -323,6 +325,8 @@
               }
             }
           }
+          localStorage.setItem('collegeCourseStatus',JSON.stringify(this.courseStatus));
+          localStorage.setItem('collegeCourseStatusTop',JSON.stringify(this.courseStatusTop));
         });
       }
     },
@@ -331,6 +335,20 @@
       this.getTeachers();
       this.getPictureAppreciation();
       $("ul.el-carousel__indicators").css("display", "none");
+    },
+    created() {
+        if(localStorage.getItem('collegeCourseStatus')){
+          this.courseStatus = JSON.parse(localStorage.getItem('collegeCourseStatus'));
+        }
+        if(localStorage.getItem('collegeCourseStatusTop')){
+          this.courseStatusTop = JSON.parse(localStorage.getItem('collegeCourseStatusTop'));
+        }
+        if(localStorage.getItem('collegePictureAppreciation')){
+          this.pictureAppreciation = JSON.parse(localStorage.getItem('collegePictureAppreciation'));
+        }
+        if(localStorage.getItem('collegeTeacherStyles')){
+          this.teacherStyles = JSON.parse(localStorage.getItem('collegeTeacherStyles'));
+        }
     },
   }
 </script>

@@ -35,7 +35,7 @@
             <el-table
               :data="quizData"
               @row-dblclick="dblClickTable"
-              @row-contextmenu='houseMenu'
+              @row-contextmenu=''
               style="width: 100%">
               <el-table-column
                 prop="contract_num"
@@ -73,31 +73,37 @@
           </div>
         </div>
       </div>
-    <el-dialog  v-show="examDialog" title="新建试卷" width="50%">
-      <div class="">
-        <el-form size="mini" onsubmit="return false;" :model="formExam" label-width="100px">
-          <el-row >
-            <el-form-item label="相册名称:" required>
-              <el-input v-model="formExam.name" placeholder="请输入相册名称" ></el-input>
-            </el-form-item>
-          </el-row>
-          <el-row>
-            <el-form-item label="相册说明:">
-              <el-input v-model="formExam.description" type="textarea" placeholder="请输入相册说明"></el-input>
-            </el-form-item>
-          </el-row>
-          <el-row>
-            <el-form-item label="主题:" required>
-              <el-radio-group v-model="formExam.theme">
-                <el-radio label="1" :key="1">个人</el-radio>
-                <el-radio label="2" :key="2">房屋</el-radio>
-                <el-radio label="3" :key="3">部门</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-row>
-        </el-form>
-      </div>
-    </el-dialog>
+    <div id="examDialog">
+      <el-dialog  :visible.sync="examDialog" title="新建考试" width="50%">
+        <div>
+          <div style="color: #6a8dfb;">新建考试信息</div>
+          <div class="exam_content">
+            <el-form size="mini" onsubmit="return false;" :model="formExam" label-width="100px">
+              <el-row>
+                <el-form-item label="相册名称:" required>
+                  <el-input v-model="formExam.name" placeholder="请输入相册名称" ></el-input>
+                </el-form-item>
+              </el-row>
+              <el-row>
+                <el-form-item label="相册说明:">
+                  <el-input v-model="formExam.description" type="textarea" placeholder="请输入相册说明"></el-input>
+                </el-form-item>
+              </el-row>
+              <el-row>
+                <el-form-item label="主题:" required>
+                  <el-radio-group v-model="formExam.theme">
+                    <el-radio label="1" :key="1">个人</el-radio>
+                    <el-radio label="2" :key="2">房屋</el-radio>
+                    <el-radio label="3" :key="3">部门</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+              </el-row>
+            </el-form>
+          </div>
+
+        </div>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
@@ -114,8 +120,10 @@
         examDialog: false,
         testPaperDialog: false,
         formExam:{
-
+          name: '',
+          description: '',
         },
+        currentPage: 1,
       }
     },
     mounted() {
@@ -134,7 +142,17 @@
             this.testPaperDialog = true;
             break;
         }
-      }
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.form.pages = val;
+        this.$store.dispatch('companyPage',val);
+        this.getCompanyTableData();
+
+      },
     },
   }
 </script>
@@ -143,12 +161,10 @@
   #onlineExam {
     .tool{
       .tool_right {
-
         .search_input{
           margin-left: 10px;
           /*border: 1px solid #6a8dfb;*/
           color: #6a8dfb;
-
             .search_button{
               /*background: #6a8dfb;*/
               /*color: #fff;*/
@@ -156,7 +172,12 @@
          }
         }
     }
+  }
+  #examDialog {
+    .exam_content{
 
+      border: 1px solid #dfe6fb;
+    }
   }
 
 

@@ -39,7 +39,7 @@
               <img :src="pic.uri" v-for="pic in key">
             </h1>
           </div>
-          <div id="htmlForEditor">
+          <div id="htmlForEditor" v-html="formList.content">
 
           </div>
 
@@ -191,7 +191,7 @@
         staffs: {},
         addContent: '',
         commentOn: [],
-        cover_pic: [],
+        cover_pic: {},
         currentPage: 1,
         paging: 0,
         page: 1,
@@ -200,15 +200,29 @@
           keywords: '',
           pages: 1,
         },
-        hotData: [],
+        hotData: {},
         assistId: false,     //点赞
         loading: false,     //点赞
         query:{},
       }
     },
+    created() {
+      if(localStorage.getItem('detailHotData')){
+        this.hotData = JSON.parse(localStorage.getItem('detailHotData'));
+      }
+      if(localStorage.getItem('detailFormList')){
+        this.formList = JSON.parse(localStorage.getItem('detailFormList'));
+      }
+      if(localStorage.getItem('detailCoverPic')){
+        this.cover_pic = JSON.parse(localStorage.getItem('detailCoverPic'));
+      }
+      if(localStorage.getItem('detailStaffs')){
+        this.staffs = JSON.parse(localStorage.getItem('detailStaffs'));
+      }
+    },
     mounted() {
       //刷新保存
-      if(!this.$route.query.ids){
+      if(!this.$route.query.ids) {
         this.$router.push({path:"/Infodetails",query:{ids:this.$store.state.article.article_detail.ids,detail:this.$store.state.article.article_detail.detail}});
       }
       this.addRegion();
@@ -224,7 +238,6 @@
           this.colNum = 16;
         }
       };
-
     },
     methods: {
       // 详情
@@ -243,19 +256,29 @@
         this.$http.get(this.urls + 'oa/portal/?dict_id=' + 142, {
           params: this.form
         }).then((res) => {
-          this.hotData.title = res.data && res.data.data && res.data.data.data && res.data.data.data[0].dict_ids;
-          this.hotData.data = res.data && res.data.data && res.data.data.data;
-        })
+          let title,data = {};
+          title = res.data && res.data.data && res.data.data.data && res.data.data.data[0].title;
+          data = res.data && res.data.data && res.data.data.data;
+          this.hotData = Object.assign({},this.hotData,{title:title,data:data});
+          localStorage.setItem('detailHotData',JSON.stringify(this.hotData));
+        });
+
       },
       // 详情
       publicDetail(id) {
         this.$http.get(this.urls + 'oa/portal/' + id).then((res) => {
           if (res.data.code === '80020') {
             this.formList = res.data.data;
+            this.formList = Object.assign({},this.formList,res.data.data);
+            localStorage.setItem('detailFormList',JSON.stringify(this.formList));
+
             this.cover_pic = res.data.data.album.cover_pic;
-            let detail = res.data.data;
-            document.getElementById('htmlForEditor').innerHTML = detail.content;
-            this.staffs = detail.staffs[0];
+            this.cover_pic = Object.assign({},this.cover_pic,res.data.data.album.cover_pic);
+            localStorage.setItem('detailCoverPic',JSON.stringify(this.cover_pic));
+
+            this.staffs = res.data.data.staffs[0];
+            this.staffs = Object.assign({},this.staffs,res.data.data.staffs[0]);
+            localStorage.setItem('detailStaffs',JSON.stringify(this.staffs));
             this.myData(id, 1);
           }
         })
@@ -327,7 +350,7 @@
       },
     },
   }
-  window.onload = function(){
+  window.onload = function() {
     $("body").on("click",".return_top",function(){
       document.body.scrollTop = 0;
     });
@@ -346,7 +369,7 @@
   .return_top{
     position: fixed;
     right: 35px;
-    bottom: 100px;
+    bottom: 50px;
   }
   .return_top img {
     width: 50px;

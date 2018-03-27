@@ -289,7 +289,6 @@
         externalNews: [],
         lejiaCollege: [],
         lejiaCollegeTop: [],
-        lejiaCollegeFine: [],
         weeklyReport: [],
         weeklyReportTop: [],
 
@@ -362,6 +361,8 @@
               }
             }
           }
+          //存本地缓存
+          localStorage.setItem('mainBanners',JSON.stringify(this.banners));
         });
       },
       getStaffSquare() {
@@ -397,6 +398,8 @@
               }
             }
           }
+          localStorage.setItem('mainStaffSquares',JSON.stringify(this.staffSquares));
+          localStorage.setItem('mainStaffSquareTop',JSON.stringify(this.staffSquareTop));
         });
       },
       getNews() {
@@ -425,6 +428,7 @@
               }
             }
           }
+          localStorage.setItem('mainExternalNews',JSON.stringify(this.externalNews));
         });
       },
       getLejiaCollege() {
@@ -432,7 +436,6 @@
           let lejiaData = res && res.data && res.data.data && res.data.data.data;
           this.lejiaCollege = [];
           this.lejiaCollegeTop = [];
-          this.lejiaCollegeFine = [];
           if(typeof lejiaData === "undefined"){
             return;
           }
@@ -458,17 +461,14 @@
                     top.uri = cover_pic && cover_pic[key] && cover_pic[key][0].uri;
                     this.lejiaCollegeTop.push(top);
                   }
-                  if(lejiaData[i].fine !== null) {
-                    fine.id = lejiaData[i].id;
-                    fine.title = lejiaData[i].title;
-                    fine.uri = cover_pic && cover_pic[key] && cover_pic[key][0].uri;
-                    this.lejiaCollegeFine.push(fine);
-                  }
                 }
                 first = false;
               }
             }
           }
+          localStorage.setItem('mainLejiaCollege',JSON.stringify(this.lejiaCollege));
+          localStorage.setItem('mainLejiaCollegeTop',JSON.stringify(this.lejiaCollegeTop));
+
         });
       },
       getPerWeeklyReport() {
@@ -505,6 +505,8 @@
               }
             }
           }
+          localStorage.setItem('mainWeeklyReport',JSON.stringify(this.weeklyReport));
+          localStorage.setItem('mainWeeklyReportTop',JSON.stringify(this.weeklyReportTop));
         });
       },
     },
@@ -514,6 +516,34 @@
       this.getNews();
       this.getLejiaCollege();
       this.getPerWeeklyReport();
+    },
+    created(){
+      //取出本地缓存数据
+      if(localStorage.getItem('mainBanners')){
+        this.banners = JSON.parse(localStorage.getItem('mainBanners'));
+      }
+      if(localStorage.getItem('mainStaffSquares')){
+        this.staffSquares = JSON.parse(localStorage.getItem('mainStaffSquares'));
+      }
+      if(localStorage.getItem('mainStaffSquareTop')){
+        this.staffSquareTop = JSON.parse(localStorage.getItem('mainStaffSquareTop'));
+      }
+      if(localStorage.getItem('mainExternalNews')){
+        this.externalNews = JSON.parse(localStorage.getItem('mainExternalNews'));
+      }
+      if(localStorage.getItem('mainLejiaCollege')){
+        this.lejiaCollege = JSON.parse(localStorage.getItem('mainLejiaCollege'));
+      }
+      if(localStorage.getItem('mainLejiaCollegeTop')){
+        this.lejiaCollegeTop = JSON.parse(localStorage.getItem('mainLejiaCollegeTop'));
+      }
+      if(localStorage.getItem('mainWeeklyReport')){
+        this.weeklyReport = JSON.parse(localStorage.getItem('mainWeeklyReport'));
+      }
+      if(localStorage.getItem('mainWeeklyReportTop')){
+        this.weeklyReportTop = JSON.parse(localStorage.getItem('mainWeeklyReportTop'));
+      }
+
     },
   }
 </script>
