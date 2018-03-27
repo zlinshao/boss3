@@ -43,7 +43,7 @@
       </div>
       <div class="right">
         <div class="countdown" style="border-right: 1px solid #DDDDDD">
-          <span style="line-height: 20px;color: #409EFF;"  @click="fullScreen(1)">精简模式</span>
+          <span style="line-height: 20px;color: #409EFF;" @click="fullScreen(1)">精简模式</span>
         </div>
         <div class="countdown">
           <i class="el-icon-time"></i>
@@ -59,7 +59,7 @@
               <!--消息图标-->
               <el-dropdown-item v-for="(item,index) in unReadMessageData" v-if="index<2" :key="index">
                 <div class="first">
-                  <el-row   @click.native="showMessageDetail(item)">
+                  <el-row @click.native="showMessageDetail(item)">
                     <el-col :span="4">
                       <div class="picSign">
                         <i class="el-icon-bell"></i>
@@ -158,10 +158,10 @@
 
               <div class="progressBar">
                 <!--<el-progress :percentage="50" :show-text="false"></el-progress>-->
-              <el-popover ref="popover1"  placement="top-start"  width="200"  trigger="hover">
-                <span> 已连续登录{{loginday}}天 &nbsp;&nbsp;</span>
-              </el-popover>
-              <el-progress :percentage="logindaycer" :show-text="false" v-popover:popover1></el-progress>
+                <el-popover ref="popover1" placement="top-start" width="200" trigger="hover">
+                  <span> 已连续登录{{loginday}}天 &nbsp;&nbsp;</span>
+                </el-popover>
+                <el-progress :percentage="logindaycer" :show-text="false" v-popover:popover1></el-progress>
                 <div class="round roundLeft"></div>
                 <div class="round roundRight"></div>
               </div>
@@ -297,7 +297,7 @@
           </el-menu>
         </div>
 
-        <div style="position: fixed;bottom: 10px;left: 36px;z-index: 99999;"  v-if="!isCollapse">
+        <div style="position: fixed;bottom: 10px;left: 36px;z-index: 99999;" v-if="!isCollapse">
           <div style="color: #ffffff;">业务咨询&nbsp;&nbsp;陆经理</div>
           <div style="color: #ffffff;">版本信息&nbsp;&nbsp;BOSS&nbsp;3.0</div>
         </div>
@@ -305,7 +305,9 @@
         <el-main :class="isFull? 'mainHide':'' ">
           <TagsView></TagsView>
           <div style="padding: 10px;background: #fff">
-            <keep-alive><router-view></router-view></keep-alive>
+            <keep-alive>
+              <router-view></router-view>
+            </keep-alive>
           </div>
         </el-main>
       </el-container>
@@ -323,7 +325,7 @@
 
   export default {
     name: 'Index',
-    components: {TagsView,MessageDetail},
+    components: {TagsView, MessageDetail},
     data() {
       return {
         personal: globalConfig.personal,
@@ -332,26 +334,26 @@
         Countdown: 0,  //倒计时
         defaultTime: 0,  //倒计时
         screenStatus: false,
-      loginday: 0, //连续登陆天数
-      logindaycer: 0, //连续登录百分比
+        loginday: 0, //连续登陆天数
+        logindaycer: 0, //连续登录百分比
         defaultArray: [],
-        object:{
-            name:'zhanglin',
-            year:123
+        object: {
+          name: 'zhanglin',
+          year: 123
         },
-        sendObject:null,
-        messageDialog:false,
+        sendObject: null,
+        messageDialog: false,
 
-        unReadMessageData:[],
-        messageDetail:[],
+        unReadMessageData: [],
+        messageDetail: [],
       }
     },
     mounted() {
       this.countTime();
-      setInterval( ()=> {
+      setInterval(() => {
         this.getUnReadMessage()
-      },100000);
-this.allinfo();
+      }, 100000);
+      this.allinfo();
     },
     computed: {
       visitedViews() {
@@ -367,24 +369,23 @@ this.allinfo();
       routers(url) {
         this.$router.push(url);
       },
-    allinfo() {
-      this.$http
-        .get(globalConfig.server + "setting/others/loginInfo")
-        .then(res => {
-          if (res.data.code === "100090") {
-            this.loginday = res.data.data.loginday;
-            this.logindaycer = res.data.data.loginday /180;
-            console.log(this.loginday);
-          }
-        });
-    },
+      allinfo() {
+        this.$http
+          .get(globalConfig.server + "setting/others/loginInfo")
+          .then(res => {
+            if (res.data.code === "100090") {
+              this.loginday = res.data.data.loginday;
+              this.logindaycer = res.data.data.loginday / 180;
+            }
+          });
+      },
 
       //显示消息详情
       showMessageDetail(val){
         this.messageDetail = val;
         this.messageDialog = true;
-        this.$http.put(globalConfig.server_user+'messages/'+val.id).then((res) => {
-          if(res.data.status === 'success'){
+        this.$http.put(globalConfig.server_user + 'messages/' + val.id).then((res) => {
+          if (res.data.status === 'success') {
             this.getUnReadMessage();
           }
         })
@@ -394,11 +395,11 @@ this.allinfo();
       },
       //获取未读消息
       getUnReadMessage(){
-          this.$http.get(globalConfig.server_user+'messages?unread=1').then((res) => {
-            if(res.data.status === 'success'){
-                this.unReadMessageData = res.data.data;
-            }
-          })
+        this.$http.get(globalConfig.server_user + 'messages?unread=1').then((res) => {
+          if (res.data.status === 'success') {
+            this.unReadMessageData = res.data.data;
+          }
+        })
       },
 
       // 全屏
@@ -417,15 +418,15 @@ this.allinfo();
       },
       countTime() {
         let countDown = [];
-        this.$http.get(globalConfig.server+'setting/dictionary/203').then((res)=>{
-          if(res.data.code === '30010'){
+        this.$http.get(globalConfig.server + 'setting/dictionary/203').then((res) => {
+          if (res.data.code === '30010') {
             countDown = res.data.data;
-            this.$http.get(globalConfig.server+'setting/setting/read?type=1&staff_id='+globalConfig.personal.id).then((res)=>{
-              if(res.data.code === '50010'){
+            this.$http.get(globalConfig.server + 'setting/setting/read?type=1&staff_id=' + globalConfig.personal.id).then((res) => {
+              if (res.data.code === '50010') {
                 let array = res.data.data;
-                for(let i=0;i<array.length;i++){
-                  countDown.forEach((item)=>{
-                    if(array[i].dict_id == item.id){
+                for (let i = 0; i < array.length; i++) {
+                  countDown.forEach((item) => {
+                    if (array[i].dict_id == item.id) {
                       this.defaultTime = this.Countdown = Number(item.dictionary_name);
                       this.startCount();
                     }
@@ -464,7 +465,7 @@ this.allinfo();
       lockScreen() {
         this.$http.get(globalConfig.server + 'setting/others/lock_screen_status?lock_status=1').then((res) => {
           if (res.data.code === '100003') {
-            localStorage.setItem('beforePath',this.$route.path);
+            localStorage.setItem('beforePath', this.$route.path);
 
             localStorage.setItem('lockStatus', 1);
             this.$router.push({path: '/lock'});
@@ -776,7 +777,7 @@ this.allinfo();
     }
     .navBarRight {
       left: 0;
-//      @include transition;
+      //      @include transition;
       p {
         width: 27px;
         height: 20px;
@@ -792,8 +793,8 @@ this.allinfo();
       top: 0;
       left: 0;
       z-index: 66;
-      border: 1px solid rgba(64,158,255,.12);
-      box-shadow: 0 2px 4px 0 rgba(64,158,255,.12), 0 0 6px 0 rgba(64,158,255,.04);
+      border: 1px solid rgba(64, 158, 255, .12);
+      box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);
       display: flex;
       @include transition;
       .left {
@@ -970,7 +971,7 @@ this.allinfo();
 
     .navBarHide {
       top: -66px;
-//      @include transition;
+      //      @include transition;
     }
 
     .contentBox {
@@ -1016,7 +1017,7 @@ this.allinfo();
         }
         .mainHide {
           margin-top: 0 !important;
-//          @include transition;
+          //          @include transition;
         }
       }
     }

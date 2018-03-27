@@ -28,6 +28,7 @@ import vueEventCalendar from 'vue-event-calendar'
 
 // 地图
 import AMap from 'vue-amap'
+Vue.use(Fun);
 Vue.use(AMap);
 
 Vue.use(vueEventCalendar, {locale: 'zh',});

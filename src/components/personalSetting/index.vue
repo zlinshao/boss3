@@ -24,7 +24,7 @@
 
       </div>
     </div>
- 
+
     <div class="main" v-if="basicSet">
       <el-form label-width="200px">
         <el-form-item v-for="(item,index) in dictionary" :key="item.id" :label="item.dictionary_name" v-if="index<1">
@@ -58,13 +58,13 @@
           <el-button style="background:#6a8dfb;width:130px;height:32px;"  size="mini" v-if="secondary_pass.indexOf(item2.id)>-1" @click="openSecondPassword('secondPasswordDialog',item2.id)" type="primary">修改二级密码</el-button>
           <el-button style="background:#6a8dfb;width:130px; height:32px;" size="mini" v-else @click="openSecondPassword('secondPasswordDialog',item2.id)" type="primary">设置二级密码</el-button>
         </el-col>
-      </el-row>     
+      </el-row>
     </div>
     <div class="main" v-if="lockScreen">
 
-      <el-row>
+      <el-row :gutter="20">
         <el-col class="leftTitle" :span="4" style="margin-top: 5px">
-          锁屏密码设置/修改
+          锁屏密码设置/修改：
         </el-col>
         <el-col :span="20">
           <div class="validate">
@@ -78,16 +78,16 @@
           </div>
           <div class="validate">
             <div class="validateSign">
-              <el-input v-model="set_pwd_lock" placeholder="请输入新密码"></el-input>
+              <el-input type="password" @keyup.native="identify_pwd_lock = ''"  v-model="set_pwd_lock" placeholder="请输入新密码"></el-input>
               <i class="el-icon-success" style="color: #46ff53" v-show="set_pwd_lock.length>6"></i>
             </div>
           </div>
-          <!--<div class="validate">-->
-            <!--<div class="validateSign">-->
-              <!--<el-input type="password" v-model="identify_pwd_lock" placeholder="请确认新密码"></el-input>-->
-              <!--<i class="el-icon-success" style="color: #46ff53" v-show="false"></i>-->
-            <!--</div>-->
-          <!--</div>-->
+          <div class="validate">
+            <div class="validateSign">
+              <el-input type="password" v-model="identify_pwd_lock" @blur="testPassword" placeholder="请确认新密码"></el-input>
+              <i class="el-icon-success" style="color: #46ff53" v-show="false"></i>
+            </div>
+          </div>
 
           <div class="remark">
             备注：密码长度6-16位，数字、字母和符号至少包含两种。
@@ -98,11 +98,12 @@
       <el-row>
         <el-col :span="4">&nbsp;</el-col>
         <el-col :span="20">
-          <el-button type="primary" size="small" @click="setLockPassword" style="padding: 10px 140px;">保存</el-button>
+          <el-button type="primary" :disabled="!sms_lock_num || identify_pwd_lock !== set_pwd_lock || !identify_pwd_lock || !set_pwd_lock"
+                     size="small" @click="setLockPassword" style="padding: 10px 140px;">保存</el-button>
         </el-col>
       </el-row>
     </div>
-<secondPasswordRes :secondPasswordDialog="secondPasswordDialog" :sendid="sendid" @close="closesecondPassword" ></secondPasswordRes>    
+<secondPasswordRes :secondPasswordDialog="secondPasswordDialog" :sendid="sendid" @close="closesecondPassword" ></secondPasswordRes>
   </div>
 </template>
 
@@ -171,9 +172,9 @@ export default {
     };
   },
   mounted() {
-    
+
     this.getDictionary();
-    
+
     this.getDictionary2();
   },
   watch: {},
@@ -187,7 +188,7 @@ export default {
             this.secondary_password =
               res.data.data.data.detail.secondary_password;
             for (let a in res.data.data.data.detail.secondary_password) {
-              
+
               this.secondary_pass.push(Number(a));
             }
           }
@@ -201,12 +202,12 @@ export default {
       this.secondPasswordDialog = false;
     },
     getDictionary() {
-     
+
       this.$http
         .get(globalConfig.server + "setting/dictionary/202")
         .then(res => {
           if (res.data.code === "30010") {
-     
+
             this.dictionary = res.data.data;
           } else {
             this.$notify.warning({
@@ -272,6 +273,14 @@ export default {
           }
         });
     },
+    testPassword(){
+        if(this.set_pwd_lock !== this.identify_pwd_lock){
+          this.$notify.warning({
+            title:"警告",
+            message:"两次输入密码不相同！"
+          })
+        }
+    },
     setLockPassword() {
       this.$http
         .get(
@@ -288,6 +297,10 @@ export default {
               message: res.data.msg,
               type: "success"
             });
+            this.sms_lock_num = '';
+            this.set_pwd_lock = '';
+            this.identify_pwd_lock = '';
+            this.isSending = 60;
           } else {
             this.$notify({
               title: "警告",
