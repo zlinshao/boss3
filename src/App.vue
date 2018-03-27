@@ -1,19 +1,32 @@
 <template>
   <div id="app" @contextmenu="prevent($event)" @click="closeMenu">
     <router-view></router-view>
-
     <LOADING v-if="isLoading"></LOADING>
+
+    <el-tooltip placement="top" content="返回顶部">
+      <back-to-top transitionName="fade" :customStyle="myBackToTopStyle" :visibilityHeight="300" :backPosition="50"></back-to-top>
+    </el-tooltip>
   </div>
 </template>
 
 <script>
   import LOADING from './components/common/loading.vue'
+  import BackToTop from './components/common/backToTop.vue'
   export default {
     name: 'app',
-    components: {LOADING},
+    components: {LOADING,BackToTop},
     data(){
       return {
-        loading: false
+        loading: false,
+        myBackToTopStyle: {
+          right: '50px',
+          bottom: '50px',
+          width: '40px',
+          height: '40px',
+          'border-radius': '4px',
+          'line-height': '45px', // 请保持与高度一致以垂直居中
+          background: '#ecf5ffe8'// 按钮的背景颜色
+        }
       }
     },
     created(){

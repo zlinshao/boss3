@@ -160,7 +160,7 @@
                 <!--<el-progress :percentage="50" :show-text="false"></el-progress>-->
               <el-popover ref="popover1"  placement="top-start"  width="200"  trigger="hover">
                 <span> 已连续登录{{loginday}}天 &nbsp;&nbsp;</span>
-              </el-popover>               
+              </el-popover>
               <el-progress :percentage="logindaycer" :show-text="false" v-popover:popover1></el-progress>
                 <div class="round roundLeft"></div>
                 <div class="round roundRight"></div>
@@ -305,11 +305,7 @@
         <el-main :class="isFull? 'mainHide':'' ">
           <TagsView></TagsView>
           <div style="padding: 10px;background: #fff">
-            <!--<keep-alive><router-view></router-view></keep-alive>-->
-            <keep-alive>
-              <router-view v-if="$route.meta.keepAlive"></router-view>
-            </keep-alive>
-            <router-view v-if="!$route.meta.keepAlive"></router-view>
+            <keep-alive><router-view></router-view></keep-alive>
           </div>
         </el-main>
       </el-container>
@@ -796,6 +792,8 @@ this.allinfo();
       top: 0;
       left: 0;
       z-index: 66;
+      border: 1px solid rgba(64,158,255,.12);
+      box-shadow: 0 2px 4px 0 rgba(64,158,255,.12), 0 0 6px 0 rgba(64,158,255,.04);
       display: flex;
       @include transition;
       .left {

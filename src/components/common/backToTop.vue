@@ -31,7 +31,7 @@ export default {
         height: '40px',
         'border-radius': '4px',
         'line-height': '45px',
-        background: '#e7eaf1'
+        background: '#ecf5ffe8'
       }
     },
     transitionName: {
