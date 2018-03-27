@@ -254,4 +254,8 @@
 .selected_tr {
   color: #6a8dfb !important; }
 
+.el-dropdown-menu .el-popper .personal {
+  position:fixed;
+  top: 50px !important; }
+
 /*# sourceMappingURL=reset.css.map */
