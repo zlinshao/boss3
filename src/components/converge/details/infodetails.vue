@@ -462,8 +462,8 @@
     border-left: 25px solid #6a8dfb;
     border-bottom: 25px solid #6a8dfb;
     border-radius: 25px;
-    /*-webkit-animation: rotate_pacman_half_down 0.5s 0s infinite;*/
-    /*animation: rotate_pacman_half_down 0.5s 0s infinite;*/
+    -webkit-animation: rotate_pacman_half_down 0.5s 0s infinite;
+    animation: rotate_pacman_half_down 0.5s 0s infinite;
     margin-top: -50px;
     position: relative;
     left: -30px;
