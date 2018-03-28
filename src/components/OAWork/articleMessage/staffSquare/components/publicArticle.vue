@@ -215,6 +215,12 @@
         })
       },
       goBack() {
+        //点击取消清掉ids
+        this.$store.dispatch('deleteArticleId');
+        this.form.name= '';
+        this.form.region= '';
+        this.form.htmlForEditor= '';
+        this.isClear = true;
         this.$router.push({path: '/articleMessage', query: {tabs: this.tabIndex}})
       },
       handleImageAdded(file, Editor, cursorLocation, resetUploader) {
