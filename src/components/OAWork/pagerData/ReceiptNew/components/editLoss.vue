@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="领取收据修改" :visible.sync="editApplyDialogVisible">
+    <el-dialog title="丢失收据修改" :visible.sync="editlossDialogVisible">
       <div class="scroll_bar">
         <div class="title">基本信息</div>
         <div class="form_border">
@@ -12,17 +12,12 @@
                     <el-option label="领取" value="1"></el-option>
                     <el-option label="作废" value="2"></el-option>
                     <el-option label="上缴" value="3"></el-option>
+                    <el-option label="丢失" value="4"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="城市">
-                  <el-input disabled="" v-model="params.city_name"></el-input>
-                </el-form-item>
-              </el-col>
-
-              <el-col :span="8">
-                <el-form-item label="领用日期">
+                <el-form-item label="报备日期">
                   <el-date-picker
                     type="datetime"
                     placeholder="选择日期时间"
@@ -32,7 +27,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="领用人">
+                <el-form-item label="报备人">
                   <el-input disabled="" v-model="staff_name" @focus="openOrganizeModal"></el-input>
                 </el-form-item>
               </el-col>
@@ -49,7 +44,7 @@
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="120px">
             <div class="title">
-              收房收据领取（取消勾选则不再选择）
+              收房收据丢失（取消勾选则不再选择）
             </div>
             <el-row>
               <el-checkbox-group v-model="params.candidate">
@@ -96,7 +91,7 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="editApplyDialogVisible = false">取 消</el-button>
+        <el-button size="small" @click="editlossDialogVisible = false">取 消</el-button>
         <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
@@ -110,22 +105,22 @@
   import Upload from '../../../../common/UPLOAD.vue'
   export default {
     components:{Organization,Upload},
-    props:['editApplyDialog','applyEditId','startOperate'],
+    props:['editlossDialog','lostEditId','startOperate'],
     data() {
       return {
-        editApplyDialogVisible:false,
+        editlossDialogVisible:false,
         params: {
           city_code:'',
+//          category:'',
           report_time:'',
-          city_name:'',
           staff_id:'',
           department_id:'1',
           remark:'',
           screenshot:[],
+          //zuofei
           candidate:[],
         },
-        refresh: 0,
-        taskType:'1',
+        taskType:'4',
         dictionary:[],
         length:0,
         type:'',
@@ -134,9 +129,10 @@
         depart_name : '',
         collect : '',
         rent : '',
+        refresh:0,
         upStatus:false,
-
         editImage:{},
+
 
 //        已经选取的收据编号
         isSelectCollect: [],
@@ -148,22 +144,21 @@
 
     },
     watch:{
-      editApplyDialog(val){
-        this.editApplyDialogVisible = val
+      editlossDialog(val){
+        this.editlossDialogVisible = val
       },
-      editApplyDialogVisible(val){
+      editlossDialogVisible(val){
         if(!val){
           this.$emit('close')
         }
       },
       startOperate(val){
         if(val){
-            this.getDictionary();
+          this.getDictionary();
         }
       }
     },
     methods:{
-
       getDictionary(){
         this.$http.get(globalConfig.server+'setting/dictionary/306').then((res) => {
           this.dictionary = res.data.data;
@@ -172,17 +167,18 @@
       },
       //获取详情
       getApplyDetail(){
-        this.$http.get(globalConfig.server+'receipt/apply/'+this.applyEditId).then((res) => {
-            if(res.data.code === '21000'){
-                let applyInfo = res.data.data;
-                this.params.report_time = applyInfo.report_time;
-                this.params.staff_id = applyInfo.staff_id;
-                this.params.department_id = applyInfo.department_id;
+        this.$http.get(globalConfig.server+'receipt/loss/'+this.lostEditId).then((res) => {
+          if(res.data.code === '21000'){
+            let applyInfo = res.data.data;
+            this.params.report_time = applyInfo.report_time;
+            this.params.staff_id = applyInfo.staff_id;
+            this.params.department_id = applyInfo.department_id;
 
-                this.depart_name = res.data.data.department.name;
-                if(applyInfo.simple_staff){
-                  this.staff_name = applyInfo.simple_staff.real_name;
-                }
+
+            this.depart_name = res.data.data.department.name;
+            if(applyInfo.simple_staff){
+              this.staff_name = applyInfo.simple_staff.real_name;
+            }
 
                 //照片修改
                 let picObject = {};
@@ -192,21 +188,15 @@
                   this.params.screenshot.push(item.id)
                 });
                 this.editImage = picObject;
-                this.isSelectCollect = applyInfo.receipt_numbers;
-                this.params.candidate = [];
 
-                for(let key in this.isSelectCollect){
-                  this.params.candidate.push(key)
-                }
-                this.params.city_code=applyInfo.city_code;
-                this.dictionary.forEach(item => {
-                 if (item.variable.city_abbr === applyInfo.city_code) {
-                   this.params.city_name = item.dictionary_name;
-                   return false;
-              }
-            });
-
+            this.isSelectCollect = applyInfo.receipt_numbers;
+            this.params.candidate = [];
+            for(let key in this.isSelectCollect){
+              this.params.candidate.push(key)
             }
+
+
+          }
         });
       },
 
@@ -233,7 +223,6 @@
       },
 
       getImg(val){
-        console.log(val)
         this.upStatus = val[2];
         this.params.screenshot = val[1];
       },
@@ -246,17 +235,16 @@
             message:'图片正在上传'
           })
         }else {
-          this.$http.put(globalConfig.server+'receipt/apply/'+this.applyEditId,this.params).then((res) => {
+          this.$http.put(globalConfig.server+'receipt/loss/'+this.lostEditId,this.params).then((res) => {
             if(res.data.code ==='21010'){
               this.$notify.success({
                 title:'成功',
                 message:res.data.msg
               });
               this.$emit('close');
-              this.refresh =1;
+              this.refresh =4;
               this.$emit('Refreshxx', this.refresh)
               this.closeAddModal();
-              
             }else {
               this.$notify.warning({
                 title:'警告',
@@ -268,7 +256,7 @@
       },
       closeAddModal(){
         $('.imgItem').remove();
-        this.editApplyDialogVisible = false;
+        this.editlossDialogVisible = false;
         this.params = {
           city_code:'',
 //          category:'',
@@ -279,7 +267,7 @@
           screenshot:[],
           candidate:[],
         };
-        this.taskType = '1';
+        this.taskType = '4';
         this.dictionary = [];
         this.length = '';
         this.type = '';
@@ -291,17 +279,18 @@
         this.upStatus = false;
         this.isSelectCollect = [];
         this.isSelectRent = [];
+        this.editImage={}
       }
     }
   };
 </script>
 <style lang="scss" scoped="">
-.addMore{
-  text-align: right;
-  i{
-    font-size: 18px;
+  .addMore{
+    text-align: right;
+    i{
+      font-size: 18px;
+    }
   }
-}
   .deleteNumber{
     text-align: center;
     cursor: pointer;

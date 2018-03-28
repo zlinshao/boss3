@@ -15,11 +15,7 @@
                 <el-form-item label="部门">
                   <div class="content">{{department}}</div>
                 </el-form-item>
-              </el-col><el-col :span="8">
-              <el-form-item label="城市">
-                <div class="content">{{city_name}}</div>
-              </el-form-item>
-            </el-col>
+              </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
@@ -42,7 +38,7 @@
         <div class="title">已作废收房收据</div>
         <div class="describe_border">
           <el-row>
-            <el-col  v-for="item in detailInfo.collects" :key="item" :span="6">
+            <el-col  v-for="item in detailInfo.receipt_numbers" :key="item" :span="6">
               {{item}}
             </el-col>
           </el-row>
@@ -102,16 +98,10 @@
         });
       },
       getDetail(){
-        this.$http.get(globalConfig.server+'contract/invalidate/'+this.cancelEditId_detail).then((res) => {
-          if(res.data.code === '20010'){
-            this.detailInfo = res.data.data.full;
+        this.$http.get(globalConfig.server+'receipt/invalidate/'+this.cancelEditId_detail).then((res) => {
+          if(res.data.code === '21000'){
+            this.detailInfo = res.data.data;
             this.department = res.data.data.department.name;
-            this.dictionary.forEach((item) => {
-              if(item.variable.city_code === this.detailInfo.city_code){
-                this.city_name = item.dictionary_name;
-                return false;
-              }
-            })
           }
         });
       }

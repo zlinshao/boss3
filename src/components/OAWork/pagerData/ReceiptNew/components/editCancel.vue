@@ -15,14 +15,6 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="城市">
-                  <el-select clearable v-model="params.city_code" disabled="" placeholder="请选择城市" value="">
-                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.variable.city_code"
-                               :key="item.id"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
 
               <el-col :span="8">
                 <el-form-item label="报备日期">
@@ -67,23 +59,11 @@
         <div class="title">剩余收据</div>
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="120px">
-            <!--<el-row>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="剩余收据数（收）">-->
-                  <!--<el-input disabled="" v-model="collect"></el-input>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="剩余收据数（租）">-->
-                  <!--<el-input disabled="" v-model="rent"></el-input>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-            <!--</el-row>-->
 
             <el-row>
               <el-col>
                 <el-form-item label="截图">
-                  <Upload :ID="'jieTu'" @getImg="getImg"></Upload>
+                  <Upload :ID="'jieTu'" :editImage="editImage" @getImg="getImg"></Upload>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -118,7 +98,7 @@
       return {
         editCancelDialogVisible:false,
         params: {
-          city_code:'01',
+          city_code:'',
 //          category:'',
           report_time:'',
           staff_id:'',
@@ -129,6 +109,7 @@
           candidate:[],
         },
         taskType:'2',
+        refresh:0,
         dictionary:[],
         length:0,
         type:'',
@@ -138,7 +119,7 @@
         collect : '',
         rent : '',
         upStatus:false,
-
+        editImage:{},
 
 
 //        已经选取的收据编号
@@ -174,9 +155,9 @@
       },
       //获取详情
       getApplyDetail(){
-        this.$http.get(globalConfig.server+'contract/invalidate/'+this.cancelEditId).then((res) => {
-          if(res.data.code === '20010'){
-            let applyInfo = res.data.data.full;
+        this.$http.get(globalConfig.server+'receipt/invalidate/'+this.cancelEditId).then((res) => {
+          if(res.data.code === '21000'){
+            let applyInfo = res.data.data;
             this.params.report_time = applyInfo.report_time;
             this.params.staff_id = applyInfo.staff_id;
             this.params.department_id = applyInfo.department_id;
@@ -187,21 +168,21 @@
               this.staff_name = applyInfo.simple_staff.real_name;
             }
 
-            this.params.screenshot = applyInfo.screenshot;
+                //照片修改
+                let picObject = {};
+                this.params.screenshot = [];
+                applyInfo.screenshot.forEach((item) =>{
+                  picObject[item.id] = item.uri;
+                  this.params.screenshot.push(item.id)
+                });
+                this.editImage = picObject;
 
-            this.isSelectCollect = applyInfo.collects;
-            this.isSelectRent = applyInfo.rents;
+            this.isSelectCollect = applyInfo.receipt_numbers;
             this.params.candidate = [];
-
             for(let key in this.isSelectCollect){
               this.params.candidate.push(key)
             }
-            for(let key in this.isSelectRent){
-              this.params.candidate.push(key)
-            }
-            this.collect = applyInfo.collect_remain;
-            this.rent = applyInfo.rent_remain;
-            this.params.city_code = applyInfo.city_code;
+
 
           }
         });
@@ -242,13 +223,15 @@
             message:'图片正在上传'
           })
         }else {
-          this.$http.put(globalConfig.server+'contract/invalidate/'+this.cancelEditId,this.params).then((res) => {
-            if(res.data.code ==='20000'){
+          this.$http.put(globalConfig.server+'receipt/invalidate/'+this.cancelEditId,this.params).then((res) => {
+            if(res.data.code ==='21010'){
               this.$notify.success({
                 title:'成功',
                 message:res.data.msg
               });
               this.$emit('close');
+              this.refresh=2;
+              this.$emit('Refreshxx', this.refresh)
               this.closeAddModal();
             }else {
               this.$notify.warning({
@@ -284,6 +267,7 @@
         this.upStatus = false;
         this.isSelectCollect = [];
         this.isSelectRent = [];
+        this.editImage={}
       }
     }
   };

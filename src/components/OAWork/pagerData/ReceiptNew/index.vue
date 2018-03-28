@@ -21,15 +21,6 @@
     </div>
     <div class="filter">
       <el-form :inline="true" onsubmit="return false" size="mini" class="demo-form-inline" style="display: flex;justify-content:flex-end ">
-        <el-form-item v-if="selectFlag==4">
-          <el-select v-model="params.proof" placeholder="请选择" clearable="" @change="search" value="">
-            <el-option label="资料齐全" value="7"></el-option>
-            <el-option label="交接单" value="1"></el-option>
-            <el-option label="收据" value="2"></el-option>
-            <el-option label="钥匙" value="4"></el-option>
-          </el-select>
-        </el-form-item>
-
         <el-form-item>
           <el-input v-model="params.search" placeholder="搜索" @keydown.enter.native="search">
             <el-button slot="append" type="primary" @click="search" icon="el-icon-search"></el-button>
@@ -55,20 +46,24 @@
             label="姓名">
           </el-table-column>
           <el-table-column
-            prop="collect_count"
+            prop="available_sum"
             label="剩余收据书">
           </el-table-column>
           <el-table-column
-            prop="collect_apply"
+            prop="apply_sum"
             label="已领取收据数">
           </el-table-column>
           <el-table-column
-            prop="collect_invalidate"
+            prop="invalidate_sum"
             label="已作废收据数">
           </el-table-column>
           <el-table-column
-            prop="collect_handin"
+            prop="handin_sum"
             label="已上缴收据数">
+          </el-table-column>
+          <el-table-column
+            prop="loss_sum"
+            label="已丢失收据数">
           </el-table-column>
         </el-table>
       </div>
@@ -118,7 +113,7 @@
             label="姓名">
           </el-table-column>
           <el-table-column
-            prop="collect_contracts_count"
+            prop="receipts_count"
             label="作废收据数">
           </el-table-column>
         </el-table>
@@ -144,7 +139,7 @@
             label="姓名">
           </el-table-column>
           <el-table-column
-            prop="collect_contracts_count"
+            prop="receipts_count"
             label="上缴收据数">
           </el-table-column>
         </el-table>
@@ -153,9 +148,9 @@
       <!--收据丢失-->
       <div v-show="selectFlag==5">
         <el-table
-          :data="contractHandInData"
+          :data="contractLossData"
           @row-dblclick = 'showContractDetail'
-          @row-contextmenu='openHandInMenu'
+          @row-contextmenu='openLossMenu'
           style="width: 100%">
           <el-table-column
             prop="report_time"
@@ -170,7 +165,7 @@
             label="姓名">
           </el-table-column>
           <el-table-column
-            prop="collect_contracts_count"
+            prop="receipts_count"
             label="丢失收据数">
           </el-table-column>
         </el-table>
@@ -197,21 +192,25 @@
     <Contact :contractDialog="contractDialog" :applyEditId_detail="applyEditId_detail" @close="closeModalCallback"></Contact>
     <ContactCancel :contractCancelDialog="contractCancelDialog" :cancelEditId_detail="cancelEditId_detail" @close="closeModalCallback"></ContactCancel>
     <ContactHandIn :contractHandInDialog="contractHandInDialog" :handInEditId_detail="handInEditId_detail" @close="closeModalCallback"></ContactHandIn>
+    <ContactLoss :contractLossDialog="contractLossDialog" :lossEditId_detail="lossEditId_detail" @close="closeModalCallback"></ContactLoss>
     <ContactTotal :totalDialog="totalDialog" :totalId_detail="totalId_detail" @close="closeModalCallback"></ContactTotal>
 
-    <CreateTask :selectFlag="selectFlag" :createTaskDialog="createTaskDialog" @close="closeModalCallback"></CreateTask>
+    <CreateTask :selectFlag="selectFlag" :createTaskDialog="createTaskDialog" @close="closeModalCallback" @RefreshTask="RefreshTask"></CreateTask>
 
     <Dispatch :dispatchDialog="dispatchDialog" :dispatchObject="dispatchObject"
-              :startOperate="startOperate" @close="closeModalCallback"></Dispatch>
+              :startOperate="startOperate" @close="closeModalCallback" @DispatchOK="DispatchOK"></Dispatch>
 
     <EditApply :editApplyDialog="editApplyDialog" :applyEditId="applyEditId"
-               :startOperate="startApplyOperate" @close="closeModalCallback"></EditApply>
+               :startOperate="startApplyOperate" @close="closeModalCallback" @Refreshxx="refreshxx"></EditApply>
 
     <EditCancel :editCancelDialog="editCancelDialog" :cancelEditId="cancelEditId"
-               :startOperate="startCancelOperate" @close="closeModalCallback"></EditCancel>
+               :startOperate="startCancelOperate" @close="closeModalCallback" @Refreshxx="refreshxx"></EditCancel>
 
     <EditHandIn :editHandInDialog="editHandInDialog" :handInEditId="handInEditId"
-               :startOperate="startHandInOperate" @close="closeModalCallback"></EditHandIn>
+               :startOperate="startHandInOperate" @close="closeModalCallback" @Refreshxx="refreshxx"></EditHandIn>
+
+    <EditLoss :editlossDialog="editlossDialog" :lostEditId="lostEditId"
+               :startOperate="startLossOperate" @close="closeModalCallback" @Refreshxx="refreshxx"></EditLoss>
 
   </div>
 </template>
@@ -222,6 +221,7 @@
   import Contact from './components/contractDetail.vue'
   import ContactCancel from './components/cancelDeatail.vue'
   import ContactHandIn from './components/handinDetail.vue'
+  import ContactLoss from './components/lossDeatail.vue'
   import ContactTotal from './components/totalDetail.vue'
 
   import CreateTask from './components/createTask.vue'
@@ -231,12 +231,12 @@
   import EditApply from './components/editApply.vue'
   import EditCancel from './components/editCancel.vue'
   import EditHandIn from './components/editHandin.vue'
-
+  import EditLoss from './components/editLoss.vue'
 
 
   export default {
     components:{Organization,Contact,CreateTask,RightMenu,Dispatch,
-                EditApply,EditCancel,EditHandIn,ContactCancel,ContactHandIn,ContactTotal},
+                EditApply,EditCancel,EditHandIn,ContactCancel,ContactHandIn,ContactTotal,ContactLoss,EditLoss},
     data () {
       return {
         rightMenuX: 0,
@@ -258,29 +258,35 @@
         contractDialog: false,  //收据详情
         contractCancelDialog: false,  //收据详情
         contractHandInDialog: false,  //收据详情
+        contractLossDialog:false,   //收据详情
         totalDialog: false,  //收据详情
         dispatchDialog:false,
 
         editApplyDialog:false,    //修改收据申领
         editCancelDialog:false,    //修改收据作废
         editHandInDialog:false,    //修改收据上缴
+        editlossDialog: false,     //修改收据丢失
         contractTotalData:[],    //汇总列表列表数据
         contractApplyData:[],    //领取列表数据
         contractCancelData:[],    //作废列表数据
         contractHandInData:[],    //上缴列表数据
+        contractLossData:[],    //丢失列表数据
         applyEditId:'',     //领取收据id
         cancelEditId:'',     //作废收据id
         handInEditId:'',     //上缴收据id
+        lostEditId:'',      //丢失收据id
         startOperate:false,   //开始操作
         startHandInOperate:false,   //开始操作
         startCancelOperate:false,   //开始操作
         startApplyOperate:false,   //开始操作
+        startLossOperate:false,   //开始操作
         showDetail:false,         //查看详情
         dispatchObject:{},
         //详情
         applyEditId_detail : '',
         cancelEditId_detail : '',
         handInEditId_detail : '',
+        lossEditId_detail : '',
         totalId_detail : '',
       }
     },
@@ -295,8 +301,10 @@
           this.getHandInList();
         }else if(val === 1){
           this.getTotalList();
+        }else if(val === 5){
+          this.getLossList();
         }
-      }
+      },
     },
     mounted(){
       this.getTotalList();
@@ -317,6 +325,9 @@
         }else if(this.selectFlag === 1){
           this.getTotalList();
         }
+        else if(this.selectFlag === 5){
+          this.getLossList();
+        }
       },
 
       search(){
@@ -329,6 +340,8 @@
           this.getHandInList();
         }else if(this.selectFlag === 1){
           this.getTotalList();
+        }else if(this.selectFlag === 5){
+          this.getLossList();
         }
       },
       selectStatus(flag){
@@ -376,6 +389,16 @@
         ];
         this.contextMenuParam(event);
       },
+
+      openLossMenu(row,event){
+        this.lostEditId = row.id;
+         this.lists = [
+          {clickIndex: 'editLoss', headIcon: 'el-icon-edit', label: '修改',},
+//          {clickIndex: 'deleteHandIn', headIcon: 'el-icon-delete', label: '删除',},
+        ];
+        this.contextMenuParam(event);       
+      },
+
       //右键回调时间
       clickEvent (index) {
         this.applyMenuCallback(index);
@@ -413,6 +436,9 @@
               this.startHandInOperate = true;
               this.editHandInDialog = true;
               break;
+            case 'editLoss' :
+            this.startLossOperate =true;
+            this.editlossDialog = true;
           }
       },
 
@@ -433,9 +459,11 @@
           this.handInEditId_detail = row.id;
           this.contractHandInDialog = true;
         }else if(this.selectFlag === 1){
-
           this.totalId_detail = row.staff_id;
           this.totalDialog = true;
+        }else if(this.selectFlag === 5){
+          this.lossEditId_detail = row.id;
+          this.contractLossDialog = true;
         }
       },
 
@@ -446,9 +474,10 @@
 
       //****************************汇总***************************//
 
+
       getTotalList(){
-        this.$http.get(globalConfig.server+'contract/mission',{params:this.params}).then((res) => {
-          if(res.data.code === '20000'){
+        this.$http.get(globalConfig.server+'receipt/mission',{params:this.params}).then((res) => {
+          if(res.data.code === '21000'){
             this.contractTotalData = res.data.data.data;
             this.totalNumbers =res.data.data.count;
           }else {
@@ -468,14 +497,17 @@
         this.startApplyOperate = false;
         this.startHandInOperate = false;
         this.startCancelOperate = false;
+        this.startLossOperate = false;
 
         this.editApplyDialog = false;
         this.editCancelDialog = false;
         this.editHandInDialog = false;
+        this.editlossDialog = false;
         this.organizationDialog = false;
         this.contractDialog = false;
         this.contractCancelDialog = false;
         this.contractHandInDialog = false;
+        this.contractLossDialog = false;
         this.totalDialog = false;
         this.createTaskDialog = false;
         this.dispatchDialog = false;
@@ -484,8 +516,38 @@
           this.search();
         }
       },
-
-
+      refreshxx(val){
+          if(val === 1){
+            this.getApplyList();
+          }else if(val === 2){
+            this.getCancelList();
+          }else if(val === 3){
+           this.getHandInList();
+          }else if(val === 4){
+            this.getLossList();
+          }else {
+             this.getTotalList();
+          }
+      },
+      RefreshTask(val){
+        
+          if(val === 1){
+            this.getApplyList();
+          }else if(val === 2){
+            this.getCancelList();
+          }else if(val === 3){
+           this.getHandInList();
+          }else if(val === 4){
+            this.getLossList();
+          }else {
+             this.getTotalList();
+          }
+                 
+      },
+      //分配成功后页面刷新
+      DispatchOK(val){
+        this.getTotalList();
+      },
       getApplyList(){
         this.$http.get(globalConfig.server+'receipt/apply',{params:this.params}).then((res) => {
           if(res.data.code === '21000'){
@@ -512,8 +574,8 @@
       },
       //****************************收据作废***********************//
       getCancelList(){
-        this.$http.get(globalConfig.server+'contract/invalidate',{params:this.params}).then((res) => {
-          if(res.data.code === '20000'){
+        this.$http.get(globalConfig.server+'receipt/invalidate',{params:this.params}).then((res) => {
+          if(res.data.code === '21000'){
             this.contractCancelData = res.data.data.data;
             this.totalNumbers =res.data.data.count;
           }else {
@@ -526,12 +588,26 @@
       //***************************收据上缴**************************//
 
       getHandInList(){
-        this.$http.get(globalConfig.server+'contract/handin',{params:this.params}).then((res) => {
-          if(res.data.code === '20000'){
+        this.$http.get(globalConfig.server+'receipt/handin',{params:this.params}).then((res) => {
+          if(res.data.code === '21000'){
             this.contractHandInData = res.data.data.data;
             this.totalNumbers =res.data.data.count;
           }else {
             this.contractHandInData =[];
+            this.totalNumbers =0;
+          }
+        })
+      },
+
+      //***************************收据丢失**************************//
+
+      getLossList(){
+        this.$http.get(globalConfig.server+'receipt/loss',{params:this.params}).then((res) => {
+          if(res.data.code === '21000'){
+            this.contractLossData = res.data.data.data;
+            this.totalNumbers =res.data.data.count;
+          }else {
+            this.contractLossData =[];
             this.totalNumbers =0;
           }
         })

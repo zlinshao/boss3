@@ -12,21 +12,15 @@
                     <el-option label="领取" value="1"></el-option>
                     <el-option label="作废" value="2"></el-option>
                     <el-option label="上缴" value="3"></el-option>
+                    <el-option label="丢失" value="4"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="城市">
                   <el-select clearable v-model="params.city_code" placeholder="请选择城市" @change="selectCity" value="">
-                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.variable.city_code"
+                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.variable.city_abbr"
                                :key="item.id"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8" v-if="taskType==3">
-                <el-form-item label="收据类型">
-                  <el-select clearable v-model="params.contract_type" placeholder="请选择收据类型" @change="selectContractType">
-                    <el-option v-for="item in contractDictionary" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -86,21 +80,21 @@
 
         <div class="title">操作信息</div>
         <div class="form_border">
-          <el-form v-if="taskType!=2 && taskType!=3" size="mini" :model="params" label-width="120px">
+          <el-form v-if="taskType==1" size="mini" :model="params" label-width="120px">
             <el-row class="noMarginForm">
               <el-col :span="8">
                 <el-form-item label="领取收据数">
-                  <el-input v-model="params.collect_amount" @blur="computeContractEnd('collect')"></el-input>
+                  <el-input v-model="params.amount" @blur="computeContractEnd('collect')"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="收据编号">
-                  <el-input v-model="params.collect_start" @blur="computeContractEnd('collect')"></el-input>
+                  <el-input v-model="params.start" @blur="computeContractEnd('collect')"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="到">
-                  <el-input disabled="" v-model="params.collect_end"></el-input>
+                  <el-input disabled="" v-model="params.end"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -117,115 +111,17 @@
               </el-col>
             </el-row>
           </el-form>
-          <el-form v-if="taskType==2" size="mini" :model="params" label-width="120px">
+          <el-form v-if="taskType!=1" size="mini" :model="params" label-width="120px">
             <div class="title">
               收房收据作废(请勾选)
             </div>
             <el-row>
               <el-checkbox-group v-model="params.candidate">
                 <el-col :span="6" v-for="(val,key) in collectCancelCollect" :key="key">
-                  <el-checkbox :label="key" name="type">{{val}}</el-checkbox>
+                  <el-checkbox :label="val.id" name="type">{{val.full_text}}</el-checkbox>
                 </el-col>
               </el-checkbox-group>
             </el-row>
-          </el-form>
-          <el-form v-if="taskType==3" size="mini" :model="params" label-width="120px">
-            <!--公司收据类型-->
-            <div v-if="params.contract_type == '108'">
-              <div class="title">
-                收房收据上缴(请勾选)
-              </div>
-
-              <div v-for="(item,index) in Object.keys(collectCancelCollect)" >
-                <el-row >
-                  <el-col :span="6">
-                    <el-checkbox-group v-model="checkBox">
-                      <el-checkbox :label="item" name="type">{{collectCancelCollect[item]}}</el-checkbox>
-                    </el-checkbox-group>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="房屋地址">
-                      <el-input v-model="rentHandinAddress[item]"></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8" :offset="2">
-                    <el-checkbox v-model="handover[item]" label="1" value="1" name="type">交接单</el-checkbox>
-                    <el-checkbox v-model="receipt[item]" label="2" value="2" name="type">收据</el-checkbox>
-                    <el-checkbox v-model="keyCode[item]" label="4" value="4" name="type">钥匙</el-checkbox>
-                  </el-col>
-                </el-row>
-
-              </div>
-            </div>
-
-            <!--公司收据类型-->
-            <div v-if="params.contract_type == '109'">
-
-              <div class="title">
-                收房收据上缴(中介)
-              </div>
-
-              <el-row v-for="item in mediumNumberCollect" :key="item">
-                <el-col :span="7">
-                  <el-form-item label="收据编号（收）">
-                    <el-input v-model="medi_contracts_number[item-1]"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col  :span="7">
-                  <el-form-item label="房屋地址">
-                    <el-input v-model="medi_contracts_address[item-1]"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="7" :offset="1">
-                  <el-checkbox v-model="medi_contracts_proof_1[item-1]" label="1" value="1" name="type">交接单</el-checkbox>
-                  <el-checkbox v-model="medi_contracts_proof_2[item-1]" label="2" value="2" name="type">收据</el-checkbox>
-                  <el-checkbox v-model="medi_contracts_proof_3[item-1]" label="4" value="4" name="type">钥匙</el-checkbox>
-                </el-col>
-                <el-col  :span="2">
-                  <div v-if="mediumNumberCollect>1" class="deleteNumber" @click="deleteMediumNumberCollect(item-1)">删除</div>
-                </el-col>
-              </el-row>
-              <div style="text-align: center">
-                <el-button type="text" @click="addMediumNumberCollect">
-                  <i class="el-icon-circle-plus"></i>增加中介收据编号
-                </el-button>
-              </div>
-
-            </div>
-
-            <!--公司收据类型-->
-            <div v-if="params.contract_type == '110'">
-
-              <div class="title">
-                收房收据上缴(个人)
-              </div>
-
-              <el-row v-for="item in personal_mediumNumberCollect" :key="item">
-                <el-col :span="7">
-                  <el-form-item label="收据编号（收）">
-                    <el-input v-model="personal_contracts_number[item-1]"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col  :span="7">
-                  <el-form-item label="房屋地址">
-                    <el-input v-model="personal_contracts_address[item-1]"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="7" :offset="1">
-                  <el-checkbox v-model="personal_contracts_proof_1[item-1]" label="1" value="1" name="type">交接单</el-checkbox>
-                  <el-checkbox v-model="personal_contracts_proof_2[item-1]" label="2" value="2" name="type">收据</el-checkbox>
-                  <el-checkbox v-model="personal_contracts_proof_3[item-1]" label="4" value="4" name="type">钥匙</el-checkbox>
-                </el-col>
-                <el-col  :span="2">
-                  <div v-if="personal_mediumNumberCollect>1" class="deleteNumber" @click="personal_deleteMediumNumberCollect(item-1)">删除</div>
-                </el-col>
-              </el-row>
-              <div style="text-align: center">
-                <el-button type="text" @click="personal_addMediumNumberCollect">
-                  <i class="el-icon-circle-plus"></i>增加个人收据编号(收)
-                </el-button>
-              </div>
-            </div>
           </el-form>
         </div>
 
@@ -282,21 +178,17 @@
     data() {
       return {
         createTaskDialogVisible:false,
+        RefreshTask:0,
         params: {
           city_code:'',
 //          category:'',
           report_time:'',
           contract_type:'',
-          staff_id:'',
+          staff_id:'',    
           department_id:'',
-          collect_amount:'',
-          collect_start:'',
-          collect_end:'',
-          rent_amount:'',
-          rent_start:'',
-          rent_end:'',
-          rent_extra:[],
-          collect_extra:[],
+          amount:'',
+          start:'',
+          end:'',
           remark:'',
           screenshot:[],
 
@@ -321,47 +213,7 @@
 
         //作废
         collectCancelCollect:[],
-        collectCancelRent:[],
 
-        //公司收据备用字段
-        rentHandinAddress:{},
-        handover:{},
-        receipt:{},
-        keyCode:{},
-        checkBox:[],
-
-        //中介收据备用字段（shou）
-        medi_contracts_number:[],
-        medi_contracts_address:[],
-        medi_contracts_proof_1:[false],
-        medi_contracts_proof_2:[false],
-        medi_contracts_proof_3:[false],
-        mediumNumberCollect:1,
-
-        //中介收据备用字段（zu）
-        mediumNumberRent:1,
-        medi_contracts_proof_1_rent:[false],
-        medi_contracts_proof_2_rent:[false],
-        medi_contracts_proof_3_rent:[false],
-        medi_contracts_number_rent:[],
-        medi_contracts_address_rent:[],
-
-
-        //个人收据备用字段（shou）
-        personal_contracts_number:[],
-        personal_contracts_address:[],
-        personal_contracts_proof_1:[false],
-        personal_contracts_proof_2:[false],
-        personal_contracts_proof_3:[false],
-        personal_mediumNumberCollect:1,
-
-        //个人收据备用字段（zu）
-        personal_mediumNumberRent:1,
-        personal_contracts_proof_1_rent:[false],
-        personal_contracts_proof_2_rent:[false],
-        personal_contracts_proof_3_rent:[false],
-        personal_contracts_number_rent:[],
-        personal_contracts_address_rent:[],
       };
     },
     mounted(){
@@ -384,6 +236,8 @@
           this.taskType = '2';
         }else if(val === 4){
           this.taskType = '3';
+        }else if(val === 5){
+          this.taskType = '4';
         }
       }
     },
@@ -419,17 +273,13 @@
       },
       //获取作废收据信息
       getCancel(id){
-        this.$http.get(globalConfig.server+'contract/staff/'+id).then((res) => {
-          if(res.data.code === '20000'){
-            this.collectCancelCollect = res.data.data.collect;
-            this.collectCancelRent = res.data.data.rent;
+        this.$http.get(globalConfig.server+'receipt/available/'+id).then((res) => {
+          console.log(res)
+          if(res.data.code === '21000'){
+
+            this.collectCancelCollect = res.data.data         
           }else {
             this.collectCancelCollect = [];
-            this.collectCancelRent = [];
-//            this.$notify.warning({
-//              title:'警告',
-//              message:res.data.msg
-//            })
           }
         })
       },
@@ -463,9 +313,9 @@
       //      //selectCity
 
       selectCity(){
-        this.$http.get(globalConfig.server+'contract/max/'+this.params.city_code).then((res) => {
-          this.params.collect_start = res.data.data.collect;
-          this.params.rent_start = res.data.data.rent;
+        this.$http.get(globalConfig.server+'receipt/max/'+this.params.city_code).then((res) => {
+          console.log(res)
+          this.params.start = res.data.data;
         })
       },
 
@@ -475,85 +325,15 @@
       },
 
       computeContractEnd(val){
-        if(val === 'collect'){
-          this.$http.get(globalConfig.server+'contract/end?start='+this.params.collect_start+'&count='+this.params.collect_amount).then((res) => {
-            this.params.collect_end = res.data.data;
+          this.$http.post(globalConfig.server+'receipt/calculate',{
+            start:this.params.start,
+            amount:this.params.amount
+          }).then((res) => {
+            console.log(res)
+            this.params.end = res.data.data;
           })
-        }else {
-          this.$http.get(globalConfig.server+'contract/end?start='+this.params.rent_start+'&count='+this.params.rent_amount).then((res) => {
-            this.params.rent_end = res.data.data;
-          })
-        }
 
       },
-
-      //新增更多中介收据作废编号
-      addMediumNumberCollect(){
-        this.mediumNumberCollect ++;
-        this.medi_contracts_proof_1.push(false);
-        this.medi_contracts_proof_2.push(false);
-        this.medi_contracts_proof_3.push(false);
-      },
-      //删除中介收据编号
-      deleteMediumNumberCollect(item){
-        this.medi_contracts_number.splice(item,1);
-        this.medi_contracts_address.splice(item,1);
-        this.medi_contracts_proof_1.splice(item,1);
-        this.medi_contracts_proof_2.splice(item,1);
-        this.medi_contracts_proof_3.splice(item,1);
-        this.mediumNumberCollect --;
-      },
-      //新增更多中介收据作废编号（zu）
-      addMediumNumberRent(){
-        this.mediumNumberRent ++;
-        this.medi_contracts_proof_1_rent.push(false);
-        this.medi_contracts_proof_2_rent.push(false);
-        this.medi_contracts_proof_3_rent.push(false);
-      },
-      //删除中介收据编号(zu)
-      deleteMediumNumberRent(item){
-        this.medi_contracts_number_rent.splice(item,1);
-        this.medi_contracts_address_rent.splice(item,1);
-        this.medi_contracts_proof_1_rent.splice(item,1);
-        this.medi_contracts_proof_2_rent.splice(item,1);
-        this.medi_contracts_proof_3_rent.splice(item,1);
-        this.mediumNumberRent --;
-      },
-
-
-      //新增更多个人收据作废编号
-      personal_addMediumNumberCollect(){
-        this.personal_mediumNumberCollect ++;
-        this.personal_contracts_proof_1.push(false);
-        this.personal_contracts_proof_2.push(false);
-        this.personal_contracts_proof_3.push(false);
-      },
-      //删除中个人号
-      personal_deleteMediumNumberCollect(item){
-        this.personal_contracts_number.splice(item,1);
-        this.personal_contracts_address.splice(item,1);
-        this.personal_contracts_proof_1.splice(item,1);
-        this.personal_contracts_proof_2.splice(item,1);
-        this.personal_contracts_proof_3.splice(item,1);
-        this.personal_mediumNumberCollect --;
-      },
-      //新增更多个人收据作废编号（zu）
-      personal_addMediumNumberRent(){
-        this.personal_mediumNumberRent ++;
-        this.personal_contracts_proof_1_rent.push(false);
-        this.personal_contracts_proof_2_rent.push(false);
-        this.personal_contracts_proof_3_rent.push(false);
-      },
-      //删除个人收据编号(zu)
-      personal_deleteMediumNumberRent(item){
-        this.personal_contracts_number_rent.splice(item,1);
-        this.personal_contracts_address_rent.splice(item,1);
-        this.personal_contracts_proof_1_rent.splice(item,1);
-        this.personal_contracts_proof_2_rent.splice(item,1);
-        this.personal_contracts_proof_3_rent.splice(item,1);
-        this.personal_mediumNumberRent --;
-      },
-
 
       //确认提交
       confirmAdd(){
@@ -563,14 +343,17 @@
             message:'图片正在上传'
           })
         }else {
+          //新增领取
           if(this.taskType === '1'){
-            this.$http.post(globalConfig.server+'contract/apply',this.params).then((res) => {
-              if(res.data.code ==='20010'){
+            this.$http.post(globalConfig.server+'receipt/apply',this.params).then((res) => {
+              if(res.data.code ==='21010'){
                 this.$notify.success({
                   title:'成功',
                   message:res.data.msg
                 });
                 this.closeAddModal();
+                this.RefreshTask=1;
+                this.$emit('RefreshTask',this.RefreshTask)
                 this.$emit('close');
               }else {
                 this.$notify.warning({
@@ -580,13 +363,16 @@
               }
             })
           }else if(this.taskType === '2') {
-            this.$http.post(globalConfig.server+'contract/invalidate',this.params).then((res) => {
-              if(res.data.code ==='20000'){
+            //新增作废
+            this.$http.post(globalConfig.server+'receipt/invalidate',this.params).then((res) => {
+              if(res.data.code ==='21010'){
                 this.$notify.success({
                   title:'成功',
                   message:res.data.msg
                 });
                 this.closeAddModal();
+                this.RefreshTask=2;
+                this.$emit('RefreshTask',this.RefreshTask)
                 this.$emit('close');
               }else {
                 this.$notify.warning({
@@ -597,117 +383,34 @@
             })
           }else if(this.taskType === '3'){
 
-            if(Number(this.params.contract_type) === 108){
-              this.params.candidate = {};
-              let candidateArray = {};
-              let candidateItem = {
-                address:'',
-                proof:0,
-              };
-              this.checkBox.forEach((item) => {
-                candidateItem = {};
-                candidateItem.address = this.rentHandinAddress[item];
-                candidateItem.proof = 0;
-                if(this.handover[item]){
-                  candidateItem.proof+=1;
-                }
-                if(this.receipt[item]){
-                  candidateItem.proof+=2;
-                }
-                if(this.keyCode[item]){
-                  candidateItem.proof+=4;
-                }
-                candidateArray[item] = candidateItem;
-              });
-              //计算出最终结果
-
-              this.params.candidate = Object.assign({},this.params.candidate,candidateArray);
-            }else if(Number(this.params.contract_type) === 109){
-              this.params.candidate = {};
-              let contentItem = {};
-              this.params.medi_contracts = [];
-              for(let i=0;i<this.mediumNumberCollect;i++){
-                contentItem = {};
-                contentItem.category = 1;
-                contentItem.address = this.medi_contracts_address[i]?this.medi_contracts_address[i]:'';
-                contentItem.number = this.medi_contracts_number[i]?this.medi_contracts_number[i]:'';
-                contentItem.proof = 0;
-                if(this.medi_contracts_proof_1[i]){
-                  contentItem.proof+=1;
-                }
-                if(this.medi_contracts_proof_2[i]){
-                  contentItem.proof+=2;
-                }
-                if(this.medi_contracts_proof_3[i]){
-                  contentItem.proof+=4;
-                }
-                this.params.medi_contracts.push(contentItem);
-              }
-              for(let i=0;i<this.mediumNumberRent;i++){
-                contentItem = {};
-                contentItem.category = 2;
-                contentItem.address = this.medi_contracts_address_rent[i]?this.medi_contracts_address_rent[i]:'';
-                contentItem.number = this.medi_contracts_number_rent[i]?this.medi_contracts_number_rent[i]:'';
-                contentItem.proof = 0;
-                if(this.medi_contracts_proof_1_rent[i]){
-                  contentItem.proof+=1;
-                }
-                if(this.medi_contracts_proof_2_rent[i]){
-                  contentItem.proof+=2;
-                }
-                if(this.medi_contracts_proof_3_rent[i]){
-                  contentItem.proof+=4;
-                }
-                this.params.medi_contracts.push(contentItem);
-              }
-            }else if(Number(this.params.contract_type) === 110){
-              this.params.candidate = {};
-              //个人
-              let contentItem = {};
-              this.params.personal_contracts = [];
-              for(let i=0;i<this.personal_mediumNumberCollect;i++){
-                contentItem = {};
-                contentItem.category = 1;
-                contentItem.address = this.personal_contracts_address[i]?this.personal_contracts_address[i]:'';
-                contentItem.number = this.personal_contracts_number[i]?this.personal_contracts_number[i]:'';
-                contentItem.proof = 0;
-                if(this.personal_contracts_proof_1[i]){
-                  contentItem.proof+=1;
-                }
-                if(this.personal_contracts_proof_2[i]){
-                  contentItem.proof+=2;
-                }
-                if(this.personal_contracts_proof_3[i]){
-                  contentItem.proof+=4;
-                }
-                this.params.personal_contracts.push(contentItem);
-              }
-              for(let i=0;i<this.personal_mediumNumberRent;i++){
-                contentItem = {};
-                contentItem.category = 2;
-                contentItem.address = this.personal_contracts_address_rent[i]?this.personal_contracts_address_rent[i]:'';
-                contentItem.number = this.personal_contracts_number_rent[i]?this.personal_contracts_number_rent[i]:'';
-                contentItem.proof = 0;
-                if(this.personal_contracts_proof_1_rent[i]){
-                  contentItem.proof+=1;
-                }
-                if(this.personal_contracts_proof_2_rent[i]){
-                  contentItem.proof+=2;
-                }
-                if(this.personal_contracts_proof_3_rent[i]){
-                  contentItem.proof+=4;
-                }
-                this.params.personal_contracts.push(contentItem);
-              }
-            }
-
-            this.$http.post(globalConfig.server+'contract/handin',this.params).then((res) => {
-              if(res.data.code ==='20010'){
+            this.$http.post(globalConfig.server+'receipt/handin',this.params).then((res) => {
+              if(res.data.code ==='21010'){
                 this.$notify.success({
                   title:'成功',
                   message:res.data.msg
                 });
                 this.$emit('close');
+                this.RefreshTask=3;
+                this.$emit('RefreshTask',this.RefreshTask)
+                this.closeAddModal();
+              }else {
+                this.$notify.warning({
+                  title:'警告',
+                  message:res.data.msg
+                })
+              }
+            })
+          }else if(this.taskType === '4'){
+
+            this.$http.post(globalConfig.server+'receipt/loss',this.params).then((res) => {
+              if(res.data.code ==='21010'){
+                this.$notify.success({
+                  title:'成功',
+                  message:res.data.msg
+                });
+                this.$emit('close');
+                this.RefreshTask=4;
+                this.$emit('RefreshTask',this.RefreshTask)
                 this.closeAddModal();
               }else {
                 this.$notify.warning({
@@ -729,14 +432,9 @@
             contract_type:'',
             staff_id:'',
             department_id:'',
-            collect_amount:'',
-            collect_start:'',
-            collect_end:'',
-            rent_amount:'',
-            rent_start:'',
-            rent_end:'',
-            rent_extra:[],
-            collect_extra:[],
+            amount:'',
+            start:'',
+            end:'',
             remark:'',
             screenshot:[],
             candidate:[],
@@ -758,47 +456,7 @@
 
         //作废
         this.collectCancelCollect = [];
-        this.collectCancelRent = [];
 
-          //公司收据备用字段
-        this.rentHandinAddress = {};
-        this.handover = {};
-        this.receipt = {};
-        this.keyCode = {};
-        this.checkBox = [];
-
-        //中介收据备用字段（shou）
-        this.medi_contracts_number = [];
-        this.medi_contracts_address = [];
-        this.medi_contracts_proof_1 = [false];
-        this.medi_contracts_proof_2 = [false];
-        this.medi_contracts_proof_3 = [false];
-        this.mediumNumberCollect = 1;
-
-        //中介收据备用字段（zu）
-        this.mediumNumberRent = 1;
-        this.medi_contracts_proof_1_rent = [false];
-        this.medi_contracts_proof_2_rent = [false];
-        this.medi_contracts_proof_3_rent = [false];
-        this.medi_contracts_number_rent = [];
-        this.medi_contracts_address_rent = [];
-
-
-        //个人收据备用字段（shou）
-        this.personal_contracts_number = [];
-        this.personal_contracts_address = [];
-        this.personal_contracts_proof_1 = [false];
-        this.personal_contracts_proof_2 = [false];
-        this.personal_contracts_proof_3 = [false];
-        this.personal_mediumNumberCollect = 1;
-
-        //个人收据备用字段（zu）
-        this.personal_mediumNumberRent = 1;
-        this.personal_contracts_proof_1_rent = [false];
-        this.personal_contracts_proof_2_rent = [false];
-        this.personal_contracts_proof_3_rent = [false];
-        this.personal_contracts_number_rent = [];
-        this.personal_contracts_address_rent = [];
       }
     }
   };

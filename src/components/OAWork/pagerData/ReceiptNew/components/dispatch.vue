@@ -23,7 +23,7 @@
             <el-row>
               <el-col :span="6" v-for="(val,key) in contractCancelCollect" :key="key">
                 <el-checkbox-group v-model="params.candidate">
-                  <el-checkbox :label="key" name="type">{{val}}</el-checkbox>
+                  <el-checkbox :label="val.id" name="type">{{val.full_text}}</el-checkbox>
                 </el-checkbox-group>
               </el-col>
             </el-row>
@@ -55,9 +55,9 @@
     data() {
       return {
         dispatchDialogVisible:false,
+        dispatchOK:true,
         params: {candidate:[]},
         contractCancelCollect:[],
-        contractCancelRent:[],
         staff_name : '',
         staff_id : '',
         dispatchId : '',
@@ -93,18 +93,15 @@
     methods:{
       getStaffContract(){
         this.contractCancelCollect = [];
-        this.contractCancelRent = [];
-        this.$http.get(globalConfig.server+'contract/staff/'+this.staff_id).then((res) => {
-          if(res.data.code === '20000'){
-            this.contractCancelCollect = Object.assign({},this.contractCancelCollect,res.data.data.collect);
-            this.contractCancelRent = Object.assign({},this.contractCancelRent,res.data.data.rent);
+        this.$http.get(globalConfig.server+'receipt/available/'+this.staff_id).then((res) => {
+          if(res.data.code === '21000'){
+            this.contractCancelCollect = Object.assign({},this.contractCancelCollect,res.data.data);
           }else {
             this.$notify.warning({
               title:'警告',
               message:res.data.msg
             });
             this.contractCancelCollect = [];
-            this.contractCancelRent = [];
           }
         });
       },
@@ -128,9 +125,10 @@
 
       confirmAdd(){
 
-        this.$http.post(globalConfig.server+'contract/allocate/'+this.dispatchId,this.params).then((res) => {
-          if(res.data.code === '20010'){
+        this.$http.post(globalConfig.server+'receipt/allocate/'+this.dispatchId,this.params).then((res) => {
+          if(res.data.code === '21010'){
             this.$emit('close');
+            this.$emit('DispatchOK',this.dispatchOK)
             this.$notify.success({
               title:'成功',
               message:res.data.msg
@@ -150,7 +148,6 @@
         this.dispatchDialogVisible = false;
 
         this.contractCancelCollect = [];
-        this.contractCancelRent = [];
         this.params = {candidate:[]};
         this.staff_name = '';
         this.department_name = '';

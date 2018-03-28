@@ -19,15 +19,15 @@
                   ref="popover2"
                   width="400"
                   trigger="click">
-                  <div style="text-align: center;" v-if="scope.row.collect.concat(scope.row.collect_allocated).length<1">暂无数据</div>
-                  <span v-if="scope.row.collect.concat(scope.row.collect_allocated).length>0"
-                        v-for="item in scope.row.collect.concat(scope.row.collect_allocated)">
+                  <div style="text-align: center;" v-if="(scope.row.allocated).length<1">暂无数据</div>
+                  <span v-if="(scope.row.allocated).length>0"
+                        v-for="item in (scope.row.allocated)">
                     {{item}} &nbsp;&nbsp;
                   </span>
                 </el-popover>
                 <el-button size="mini" type="text" v-popover:popover2>
                   详情
-                  ({{scope.row.collect.concat(scope.row.collect_allocated).length}}份)
+                  ({{(scope.row.allocated).length}}份)
                 </el-button>
               </template>
             </el-table-column>
@@ -79,8 +79,8 @@
     },
     methods:{
       getDetail(){
-        this.$http.get(globalConfig.server + 'contract/mission/' + this.totalId_detail).then((res) => {
-          if (res.data.code === '20000') {
+        this.$http.get(globalConfig.server + 'receipt/mission/' + this.totalId_detail).then((res) => {
+          if (res.data.code === '21000') {
             this.collectArray = res.data.data.data;
             this.operateArray = res.data.data.extra;
           }else {

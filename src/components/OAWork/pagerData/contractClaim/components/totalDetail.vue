@@ -107,6 +107,7 @@
         this.$http.get(globalConfig.server + 'contract/mission/' + this.totalId_detail).then((res) => {
           if (res.data.code === '20000') {
             this.collectArray = res.data.data.data;
+            console.log(this.collectArray)
             this.operateArray = res.data.data.extra;
           }else {
             this.collectArray = [];
