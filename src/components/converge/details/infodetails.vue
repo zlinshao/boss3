@@ -274,7 +274,9 @@
       },
       // 详情
       routerDetail(id) {
+        this.ids = id;
         this.$router.push({path: '/Infodetails', query: {ids: id, detail: 'converge'}});
+
         this.$store.dispatch('articleDetail',{ids: id, detail: 'converge'});
         document.body.scrollTop = document.documentElement.scrollTop = 0;
         this.publicDetail(id);
@@ -504,7 +506,7 @@
     width: 100%;
     height: 100%;
     /*background: rgba(0, 0, 0, 0.3);*/
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 1);
     position: fixed;
     top: 0;
     left: 0;
