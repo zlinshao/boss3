@@ -367,7 +367,7 @@
 //          {clickIndex: 'dispatchApply', headIcon: 'el-icon-menu', label: '分配',},
           {clickIndex: 'editApply', headIcon: 'el-icon-edit', label: '修改',},
 //          {clickIndex: 'addRemarkApply', headIcon: 'el-icon-edit-outline', label: '添加备注',},
-          {clickIndex: 'deleteApply', headIcon: 'el-icon-delete', label: '删除',},
+          // {clickIndex: 'deleteApply', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },
