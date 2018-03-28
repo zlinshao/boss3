@@ -200,19 +200,12 @@
           status: val
         }).then((res) => {
           if (res.data.code === '80010' || res.data.code === '80030') {
-            //点击发布或者草稿清掉ids
-            this.$store.dispatch('deleteArticleId');
-            this.form.name= '';
-            this.form.region= '';
-            this.form.htmlForEditor= '';
-            this.isClear = true;
             this.goBack();
-
             this.prompt(1, res.data.msg);
           } else {
             this.prompt(2, res.data.msg);
           }
-        })
+        });
       },
       goBack() {
         //点击取消清掉ids
@@ -221,7 +214,9 @@
         this.form.region= '';
         this.form.htmlForEditor= '';
         this.isClear = true;
-        this.$router.push({path: '/articleMessage', query: {tabs: this.tabIndex}})
+        setTimeout( () => {
+          this.$router.push({path: '/articleMessage', query: {tabs: this.tabIndex}})
+        },0);
       },
       handleImageAdded(file, Editor, cursorLocation, resetUploader) {
         // An example of using FormData
