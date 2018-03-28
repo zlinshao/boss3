@@ -18,7 +18,7 @@
               <el-col :span="8">
                 <el-form-item label="城市">
                   <el-select clearable v-model="params.city_code" placeholder="请选择城市" @change="selectCity" value="">
-                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.variable.city_code"
+                    <el-option v-for="item in cityDictionary" :label="item.dictionary_name" :value="item.variable.city_code"
                                :key="item.id"></el-option>
                   </el-select>
                 </el-form-item>
@@ -430,7 +430,7 @@
           personal_contracts:[],//s上缴个人合同
         },
         taskType:'1',
-        dictionary:[],
+        cityDictionary:[],
         contractDictionary:[],    //合同类型字典
         length:0,
         type:'',
@@ -513,12 +513,8 @@
     },
     methods:{
       getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/306').then((res) => {
-          this.dictionary = res.data.data;
-        });
-        this.$http.get(globalConfig.server+'setting/dictionary/107').then((res) => {
-          this.contractDictionary = res.data.data;
-        })
+        this.dictionary(306,1).then((res) => {this.cityDictionary = res.data;});
+        this.dictionary(107,1).then((res) => {this.contractDictionary = res.data;});
       },
       //调出选人组件
       openOrganizeModal(){
@@ -868,7 +864,7 @@
             personal_contracts:[],//s上缴个人合同
         };
         this.taskType = '1';
-        this.dictionary = [];
+        this.cityDictionary = [];
         this.length = '';
         this.type = '';
         this.organizationDialog = false;

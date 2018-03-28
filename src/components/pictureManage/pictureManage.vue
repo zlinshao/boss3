@@ -1,18 +1,23 @@
 <template>
-  <div id="pictureManage">
+  <div id="pictureManage" @click="editPersonalSign($event)">
     <div class="topBack">
       <div class="topBackLeft">
         <div class="leftPic">
-          <img src="../../assets/images/individual/touxiang.png" alt="">
+          <img :src="landholder.avatar" v-if="landholder.avatar !== ''">
+          <img src="../../assets/images/individual/touxiang.png" v-else>
         </div>
         <div class="rightPic">
-          <p>
-            <span>姓名姓名</span>
+          <div class="landName">
+            <span>{{landholder.name}}</span>
             <span></span>
-          </p>
-          <p>
-            个人签名个人签名个人签名个人签名
-          </p>
+          </div>
+          <div class="personalSign">
+            <span v-if="!isEdit && landholder.data">{{landholder.data.signature.content}}</span>
+            <el-input size="mini" v-if="isEdit" v-model="params.content"></el-input>
+            <el-button size="medium" v-if="!isEdit" @click.stop="showInput" type="text">
+              <i class="el-icon-edit"></i>
+            </el-button>
+          </div>
         </div>
       </div>
       <div class="topBackRight">
@@ -51,7 +56,7 @@
                       </el-dropdown-menu>
                     </el-dropdown>
                     <img v-if="item.cover_path" :src="item.cover_path" style="height:160px;" @click="goPictureDetail(item.id)">
-                    <img v-else src="../../assets/images/university/caia412-34427.png" style="height:160px;"  @click="goPictureDetail(item.id)">
+                    <img src="../../assets/images/university/caia412-34427.png" v-else style="height:160px;">
                   <div class="clearfix">
                     <span class="text_over_norwap">{{item.name}}</span>
                     <span style="float: right;">{{item.photo_count}}张</span>
@@ -98,9 +103,26 @@
         createAlbumDialog: false,
         albumData: [],
         albumId: '',
-        coverImg: 'this.src="' + globalConfig.server + require('../../assets/images/university/caia412-34427.png') + '"' ,
         totalNum: 0,
         currentPage: 1,
+        landholder:{},
+        isEdit:false,
+        params:{
+          content:''
+        },
+        isChanged:false,
+      }
+    },
+    created(){
+      this.landholder = JSON.parse(localStorage.personal);
+    },
+    watch:{
+      'params.content':{
+        handler(val,oldVal){
+          if(val!==oldVal&&oldVal){
+            this.isChanged = true;
+          }
+        }
       }
     },
     methods: {
@@ -138,7 +160,7 @@
       },
       getImgData(){
         this.$http.get(globalConfig.server + "album?page="+ this.currentPage+"&limit=12").then((res) =>{
-          if (res.data.code == "20110") {
+          if (res.data.code === "20110") {
             this.albumData = res.data.data;
             this.totalNum = res.data.num;
           }
@@ -155,7 +177,7 @@
           type: 'warning'
         }).then(() => {
           this.$http.put(globalConfig.server + 'album/delete/' + id).then((res) => {
-            if(res.data.code == "20110") {
+            if(res.data.code ==="20110") {
               this.getImgData();
               this.$notify.success({
                 title:"成功",
@@ -170,6 +192,34 @@
           });
         })
       },
+      //修改个性签名
+      showInput(){
+        this.isEdit = true;
+        this.params.content = this.landholder.data.signature.content;
+        setTimeout(()=>{
+          this.isChanged = false;
+        })
+      },
+      editPersonalSign(e){
+        if(e.target.nodeName !== 'INPUT'){
+          this.isEdit = false;
+          if(this.isChanged){
+            this.$http.post(globalConfig.server+'manager/staff_record',this.params).then((res) =>{
+              let personal =  JSON.parse(localStorage.personal);
+              if(res.data.code === '30010'){
+                personal.data.signature = res.data.data;
+                localStorage.setItem('personal', JSON.stringify(personal));
+                this.landholder = JSON.parse(localStorage.personal);
+              }else {
+                this.$notify.warning({
+                  title:'警告',
+                  message:res.data.msg
+                })
+              }
+            })
+          }
+        }
+      }
     },
     mounted() {
       this.getImgData();
@@ -236,9 +286,17 @@
           width: 120px;
           height: 120px;
           @include border_radius(50%);
+          img{
+            @include border_radius(50%);
+          }
         }
         .rightPic {
-          p {
+          @include flex;
+          align-content: center;
+          flex-wrap: wrap;
+          .landName {
+            width: 100%;
+            margin: 5px 0;
             @include flex;
             align-items: center;
             font-size: 21px;
@@ -250,8 +308,16 @@
               @include back("../../assets/images/individual/1.png");
             }
           }
-          p:last-of-type {
-            font-size: 18px;
+          .personalSign{
+            font-size: 16px;
+            color: $colorBor;
+            i{
+              color: white;
+              margin-left: 5px;
+              &:hover{
+                color: #0db6ff;
+              }
+            }
           }
         }
       }

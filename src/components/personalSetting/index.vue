@@ -79,7 +79,7 @@
           <div class="validate">
             <div class="validateSign">
               <el-input type="password" @keyup.native="identify_pwd_lock = ''"  v-model="set_pwd_lock" placeholder="请输入新密码"></el-input>
-              <i class="el-icon-success" style="color: #46ff53" v-show="set_pwd_lock.length>6"></i>
+              <i class="el-icon-success" style="color: #46ff53" v-show="set_pwd_lock.length>5"></i>
             </div>
           </div>
           <div class="validate">

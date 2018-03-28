@@ -133,42 +133,17 @@
                 {{personal.name}}<i class="el-icon-arrow-down el-icon--right" style="margin-left: 25px"></i>
               </span>
             <el-dropdown-menu slot="dropdown" class="personal">
-              <el-row>
-                <el-col :span="12">
-                  <div class="signCount" style="margin-left: 4px">
-                    <div class="personalSign">
-                      <i class="el-icon-star-off"></i>
-                    </div>
-                    <div class="signNumber">9999</div>
-                    <div class="signUnit">分</div>
-                  </div>
-                </el-col>
-                <el-col :span="12">
-                  <div class="signCount" style="margin-left: 15px">
-                    <div class="personalSign" style="background: #409EFF">
-                      <i class="el-icon-star-off"></i>
-                    </div>
-                    <div class="signNumber" style="color: #409eff">9999</div>
-                    <div class="signUnit">币</div>
-                  </div>
-                </el-col>
-              </el-row>
-
+              <div><i style="color: #fb509f;margin-right: 5px" class="iconfont icon-jifen"></i>9999分</div>
               <div class="rank">等级</div>
-
               <div class="progressBar">
-                <!--<el-progress :percentage="50" :show-text="false"></el-progress>-->
-                <el-popover ref="popover1" placement="top-start" width="200" trigger="hover">
-                  <span> 已连续登录{{loginday}}天 &nbsp;&nbsp;</span>
-                </el-popover>
-                <el-progress :percentage="logindaycer" :show-text="false" v-popover:popover1></el-progress>
-                <div class="round roundLeft"></div>
-                <div class="round roundRight"></div>
+                <div class="percent"></div>
               </div>
 
               <div class="level">
                 <div>A</div>
                 <div>B</div>
+                <div>C</div>
+                <div>D</div>
               </div>
 
               <div class="navigation">
@@ -328,14 +303,13 @@
     components: {TagsView, MessageDetail},
     data() {
       return {
-        personal: globalConfig.personal,
+        personal: {},
         isCollapse: true,
         isFull: false,
         Countdown: 0,  //倒计时
         defaultTime: 0,  //倒计时
         screenStatus: false,
-        loginday: 0, //连续登陆天数
-        logindaycer: 0, //连续登录百分比
+
         defaultArray: [],
         object: {
           name: 'zhanglin',
@@ -349,11 +323,11 @@
       }
     },
     mounted() {
+      this.personal = JSON.parse(localStorage.personal);
       this.countTime();
       setInterval(() => {
         this.getUnReadMessage()
       }, 100000);
-      this.allinfo();
     },
     computed: {
       visitedViews() {
@@ -368,16 +342,6 @@
     methods: {
       routers(url) {
         this.$router.push(url);
-      },
-      allinfo() {
-        this.$http
-          .get(globalConfig.server + "setting/others/loginInfo")
-          .then(res => {
-            if (res.data.code === "100090") {
-              this.loginday = res.data.data.loginday;
-              this.logindaycer = res.data.data.loginday / 180;
-            }
-          });
       },
 
       //显示消息详情
@@ -490,9 +454,9 @@
   }
 
   @mixin box_shadow($n) {
-    -webkit-box-shadow: 0 0 16px 0 $n;
-    -moz-box-shadow: 0 0 16px 0 $n;
-    box-shadow: 0 0 16px 0 $n;
+    -webkit-box-shadow: 0 0 12px 0 $n;
+    -moz-box-shadow: 0 0 12px 0 $n;
+    box-shadow: 0 0 12px 0 $n;
   }
 
   @mixin box_sizing {
@@ -512,120 +476,27 @@
 
   .personal {
     width: 200px;
+    background: #f9fbff;
     padding: 18px 16px;
-    .personalList {
-      float: left;
-      @include box_sizing;
-      @include border_radius(6px);
-      padding: 0;
-      width: 80px;
-      height: 80px;
-      margin: 10px 10px 0;
-      color: #7394FB;
-      @include box_shadow(#dddddd);
-      .el-dropdown-menu__item {
-        line-height: 0;
-      }
-      div {
-        font-size: 12px;
-        height: 27px;
-        line-height: 27px;
-      }
-      p {
-        @include box_sizing;
-        margin: 0 auto;
-        height: 50px;
-        text-align: center;
-        padding-top: 10px;
-        i {
-          font-size: 30px;
-        }
-      }
-      div {
-        text-align: center;
-      }
-    }
-    .personalList:nth-of-type(1) {
-      border-top: 3px solid #6A8DFB;
-      p {
-        color: #6A8DFB;
-      }
-    }
-    .personalList:nth-of-type(2) {
-      border-top: 3px solid #58D788;
-      p {
-        color: #58D788;
-      }
-    }
-    .personalList:nth-of-type(3) {
-      border-top: 3px solid #FB4699;
-      p {
-        color: #FB4699;
-      }
-    }
-    .personalList:nth-of-type(4) {
-      border-top: 3px solid #C0C4CC;
-      p {
-        color: #C0C4CC;
-      }
-    }
-    .personalList:nth-of-type(5) {
-      border-top: 3px solid #58D788;
-      p {
-        color: #58D788;
-      }
-    }
-    .personalList:nth-of-type(6) {
-      border-top: 3px solid #6A8DFB;
-      p {
-        color: #6A8DFB;
-      }
-    }
-    .personalList:hover {
-      border-top-color: #409EFF;
-      background: #409EFF;
-      color: #ffffff;
-      @include box_shadow(#6A8DFB);
-      div {
-        font-size: 12px;
-        height: 30px;
-        line-height: 30px;
-      }
-      p {
-        color: #ffffff;
-      }
-    }
-
     /*修改*/
-    .signCount {
-      @include flex;
-      .personalSign {
-        width: 25px;
-        height: 25px;
-        font-size: 22px;
-        text-align: center;
-        color: #FFFFFF;
-        background: #fb4699;
-        @include border_radius(50%);
-      }
-      .signNumber {
-        color: #fb4699;
-        margin: 5px 0 0 8px;
-        font-size: 13px;
-      }
-      .signUnit {
-        margin: 3px;
-        font-size: 13px;
-      }
-    }
     .rank {
       font-size: 13px;
-      margin-top: 20px;
+      margin-top: 10px;
     }
     .progressBar {
       margin-top: 10px;
       position: relative;
-      .progress {
+      height: 4px;
+      width: 100%;
+      background: #e8e9e9;
+      border-radius: 2px;
+      .percent{
+        width: 70%;
+        height: 4px;
+        border-radius: 2px;
+        background: linear-gradient(to right, #7796f9 , #f856a1); /* 标准的语法（必须放在最后） */
+      }
+      /*.progress {
         width: 100%;
         height: 5px;
         border-radius: 5px;
@@ -658,7 +529,7 @@
         border: 5px solid #D6D7DB;
         top: -5px;
         right: -3px;
-      }
+      }*/
     }
     .level {
       @include flex;
@@ -717,7 +588,6 @@
       display: -webkit-flex;
       position: relative;
       @include transition;
-      /*background-color: #6a8dfb;*/
       background: url("../assets/images/peosonal.png") no-repeat;
       -moz-background-size: 100% 100%;
       background-size: 100% 100%;
@@ -793,8 +663,7 @@
       top: 0;
       left: 0;
       z-index: 66;
-      border: 1px solid rgba(64, 158, 255, .12);
-      box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);
+     border-bottom: 1px solid #f4f3f6;
       display: flex;
       @include transition;
       .left {

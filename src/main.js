@@ -53,25 +53,18 @@ if (localStorage.personal !== undefined) {
 }
 
 Vue.config.productionTip = false;
-
-// 拦截器
-axios.interceptors.response.use(function (response) {
-  // 对响应数据做点什么
-  // console.log(response);
-  return response;
-}, function (error) {
-  // 对响应错误做点什么
-  return Promise.reject(error);
-});
-
 // const router = new VueRouter({
 //   mode: 'history',
 //   router
 // });
+
+//axios全局配置
 let i = 0;
 axios.interceptors.request.use((config) => {  //配置发送请求的信息
-  i++;
-  store.dispatch('showLoading');
+  if(config.url !== 'http://test.boss-support.lejias.cn/api/s1/messages?unread=1'){
+    i++;
+    store.dispatch('showLoading');
+  }
   return config;
 }, function (error) {
   return Promise.reject(error);
@@ -92,7 +85,7 @@ axios.interceptors.response.use((response) => { //配置请求回来的信息
 });
 
 
-//重定向
+//重定向router
 router.beforeEach((to, from, next) => {
   let lockStatus = true;
   if (to.path === '/login') {
