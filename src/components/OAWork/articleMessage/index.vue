@@ -13,7 +13,12 @@
       <el-tab-pane label="制度管理" name="fourth">
         <systemManageMent></systemManageMent>
       </el-tab-pane>
+
     </el-tabs>
+    <el-button type="success" size="mini" @click="openModalDialog('instructionDialog')" class="user_introction">
+      <i class="el-icon-tickets"></i>&nbsp;功能说明
+    </el-button>
+    <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
   </div>
 </template>
 
@@ -22,6 +27,8 @@
   import CompanyPortal from './companyPortal/index.vue';
   import StaffSquare from './staffSquare/index.vue';
   import SystemManageMent from './systemManageMent/index.vue';
+  import Instruction from '../../rentManage/wholeRentManage/components/instruction.vue'            //使用说明
+
   export default {
     name: "index",
     components: {
@@ -29,11 +36,13 @@
       LejiaCollege,
       CompanyPortal,
       SystemManageMent,
+      Instruction,
     },
     data() {
       return {
         activeName: 'first',
         moduleType: 'lejiaCollege',
+        instructionDialog: false,
       }
     },
     mounted() {
@@ -66,6 +75,16 @@
       }
     },
     methods: {
+      openModalDialog(type) {
+        switch (type) {
+          case 'instructionDialog':   //说明书
+            this.instructionDialog = true;
+            break;
+        }
+      },
+      closeModal() {
+        this.instructionDialog = false;
+      },
       handleClick(val) {
         switch (val) {
           case 'first':
@@ -87,5 +106,10 @@
 </script>
 
 <style scoped>
+  .user_introction{
+    position: absolute;
+    top: 122px;
+    right: 42px;
+  }
 
 </style>

@@ -31,7 +31,7 @@
         <div class="sendLog">
           <div class="sendTitle">备注</div>
           <el-form-item>
-            <el-input v-model="dayForm.need_coordinate_job" type="textarea" placeholder="请输入文字"></el-input>
+            <el-input v-model="dayForm.need_coordinate_job" type="textarea" placeholder="请填写备注"></el-input>
           </el-form-item>
         </div>
         <div class="sendLog">
@@ -77,7 +77,7 @@
         <div class="sendLog">
           <div class="sendTitle">备注</div>
           <el-form-item>
-            <el-input v-model="weekForm.remark" type="textarea" placeholder="请输入文字"></el-input>
+            <el-input v-model="weekForm.remark" type="textarea" placeholder="请填写备注"></el-input>
           </el-form-item>
         </div>
         <div class="sendLog">
@@ -123,7 +123,7 @@
         <div class="sendLog">
           <div class="sendTitle">备注</div>
           <el-form-item>
-            <el-input v-model="monthForm.remark" type="textarea" placeholder="请输入文字"></el-input>
+            <el-input v-model="monthForm.remark" type="textarea" placeholder="请填写备注"></el-input>
           </el-form-item>
         </div>
         <div class="sendLog">
