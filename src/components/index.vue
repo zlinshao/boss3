@@ -161,7 +161,7 @@
                 <el-popover ref="popover1" placement="top-start" width="200" trigger="hover">
                   <span> 已连续登录{{loginday}}天 &nbsp;&nbsp;</span>
                 </el-popover>
-                <el-progress :percentage="logindaycer" :show-text="false" v-popover:popover1></el-progress>
+                <!--<el-progress :percentage="logindaycer" :show-text="false" v-popover:popover1></el-progress>-->
                 <div class="round roundLeft"></div>
                 <div class="round roundRight"></div>
               </div>
