@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="lookLog" v-for="key in 5">
+    <div class="lookLog" v-for="item in lookLogData">
       <div class="pic">
         <img src="../../../assets/images/head.jpg" alt="">
       </div>
@@ -40,14 +40,30 @@
 </template>
 
 <script>
-    export default {
+  export default {
+    data () {
+      return {
+        lookLogData: [],
+      }
+    },
+    methods: {
+      getLookLog() {
+        this.$http.get(globalConfig.server+ 'oa/day/?staff_id=&pages=1').then((res) => {
+          if(res.data.code === '100000') {
+            this.lookLogData = res.data.data.data;
+            console.log(this.lookLogData);
+          }
+        });
+      },
 
-        data () {
-            return {
-                msg: 'Welcome to Your Vue.js App'
-            }
-        }
-    }
+    },
+    mounted() {
+      this.getLookLog();
+    },
+    activated() {
+      this.getLookLog();
+    },
+  }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

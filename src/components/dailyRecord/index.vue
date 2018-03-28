@@ -13,7 +13,6 @@
           </el-form-item>
         </el-form>
       </div>
-
       <div class="filter high_grade" :class="isHigh? 'highHide':''">
         <el-form :inline="true" :model="form" size="mini" label-width="100px">
           <div class="filterTitle">
@@ -57,9 +56,8 @@
         </el-form>
       </div>
     </div>
-
     <div class="topTabs">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs v-model="activeName" @tab-click="handleClick(activeName)">
         <el-tab-pane label="看日志" name="first">
           <LookLog></LookLog>
         </el-tab-pane>
@@ -90,10 +88,9 @@
       return {
         form: {},
         active: 0,
-        isHigh: false,
-        activeName: 'fourth',
-
+        activeName: 'first',
         comments: '',
+        isHigh: false,
       }
     },
     mounted() {
@@ -110,7 +107,7 @@
       },
       // tag切换
       handleClick(val) {
-
+        console.log("index-activeName==="+val);
       },
 
     },

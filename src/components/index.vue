@@ -136,6 +136,13 @@
               <div><i style="color: #fb509f;margin-right: 5px" class="iconfont icon-jifen"></i>9999分</div>
               <div class="rank">等级</div>
               <div class="progressBar">
+                <!--<el-progress :percentage="50" :show-text="false"></el-progress>-->
+                <el-popover ref="popover1" placement="top-start" width="200" trigger="hover">
+                  <span> 已连续登录{{loginday}}天 &nbsp;&nbsp;</span>
+                </el-popover>
+                <!--<el-progress :percentage="logindaycer" :show-text="false" v-popover:popover1></el-progress>-->
+                <div class="round roundLeft"></div>
+                <div class="round roundRight"></div>
                 <div class="percent"></div>
               </div>
 
