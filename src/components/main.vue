@@ -26,9 +26,9 @@
                   <img src="./../assets/images/paiming11.png" @click="selectRanking('person')" width="100%" height="90">
                   <div class="rank_word" :class="{'select_person_word':person_ranking == 9}">个人排名</div>
                 </el-col>
-                <el-col :span="city_ranking">
-                  <img src="./../assets/images/paiming22.png" @click="selectRanking('city')" width="100%" height="90">
-                  <div class="rank_word" :class="{'select_city_word':city_ranking == 9}">城市排名</div>
+                <el-col :span="achieve_ranking">
+                  <img src="./../assets/images/paiming22.png" @click="selectRanking('achieve')" width="100%" height="90">
+                  <div class="rank_word" :class="{'select_achieve_word':achieve_ranking == 9}">业绩排名</div>
                 </el-col>
                 <el-col :span="region_ranking">
                   <img src="./../assets/images/paiming33.png" @click="selectRanking('region')" width="100%" height="90">
@@ -43,25 +43,27 @@
               <div class="paiming">
                 <div>
                   <el-row class="header" :style="bg_color">
-                    <el-col :span="4"><span>排名</span></el-col>
-                    <el-col :span="4"><span>姓名</span></el-col>
-                    <el-col :span="4"><span>部门</span></el-col>
-                    <el-col :span="4"><span>当前业绩</span></el-col>
-                    <el-col :span="4"><span>收租套数</span></el-col>
-                    <el-col :span="4"><span>负责人</span></el-col>
+                    <el-col :span="3"><span>排名</span></el-col>
+                    <el-col :span="4"><span>{{table.first}}</span></el-col>
+                    <el-col :span="4"><span>{{table.second}}</span></el-col>
+                    <el-col :span="4"><span>{{table.third}}</span></el-col>
+                    <el-col :span="3"><span>收房套数</span></el-col>
+                    <el-col :span="3"><span>租房套数</span></el-col>
+                    <el-col :span="3"><span>负责人</span></el-col>
                   </el-row>
                 </div>
                 <div class="item_list scroll_bar">
                   <div v-for="item in 10">
-                    <el-col :span="4" class="longLuOrder t_center" >{{item}}</el-col>
+                    <el-col :span="3" class="longLuOrder t_center" >{{item}}</el-col>
                     <el-col :span="4" class="longHuPic t_center">
                       <img src="../assets/images/head.jpg" alt="">
                     </el-col>
                     <div class="longHuName">陆宣羽</div>
                     <el-col :span="4" class="t_right">南京一区 - 百万一组</el-col>
                     <el-col :span="4" class="achievement" style="padding-right:45px;">212.222.00元</el-col>
-                    <el-col :span="4" class=" t_center" style="padding-right:0px;">37套</el-col>
-                    <el-col :span="4" class=" t_center" style="padding-left:13px;">汪玉睿</el-col>
+                    <el-col :span="3" class=" t_center" style="padding-right:0px;">37套</el-col>
+                    <el-col :span="3" class=" t_center" style="padding-right:0px;">37套</el-col>
+                    <el-col :span="3" class=" t_center" style="padding-left:13px;">汪玉睿</el-col>
                   </div>
                 </div>
               </div>
@@ -279,7 +281,7 @@
       return {
         urls: globalConfig.server_user,
         person_ranking: 5,
-        city_ranking: 9,
+        achieve_ranking: 9,
         region_ranking: 5,
         group_ranking: 5,
         bg_color: '',
@@ -291,7 +293,27 @@
         lejiaCollegeTop: [],
         weeklyReport: [],
         weeklyReportTop: [],
-
+        table: {},
+        personTable:{
+          first: '姓名',
+          second: '部门',
+          third: '当前业绩',
+        },
+        achieveTable:{
+          first: '城市',
+          second: '当前业绩',
+          third: '占公司总业绩百分比',
+        },
+        regionTable:{
+          first: '区域',
+          second: '当前业绩',
+          third: '占公司总业绩百分比',
+        },
+        groupTable:{
+          first: '小区',
+          second: '当前业绩',
+          third: '占公司总业绩百分比',
+        },
       }
     },
     methods: {
@@ -318,23 +340,27 @@
         switch(val){
           case "person":
             this.person_ranking = 9;
-            this.city_ranking = this.region_ranking = this.group_ranking = 5;
+            this.achieve_ranking = this.region_ranking = this.group_ranking = 5;
             this.bg_color = 'background: #b4c6fd';
+            this.table = this.personTable;
             break;
-          case "city":
-            this.city_ranking = 9;
+          case "achieve":
+            this.achieve_ranking = 9;
             this.person_ranking = this.region_ranking = this.group_ranking = 5;
             this.bg_color = 'background: #8ae3ab';
+            this.table = this.achieveTable;
             break;
           case "region":
             this.region_ranking = 9;
-            this.city_ranking = this.person_ranking = this.group_ranking = 5;
+            this.achieve_ranking = this.person_ranking = this.group_ranking = 5;
             this.bg_color = 'background: #fee4a0';
+            this.table = this.regionTable;
             break;
           case "group":
             this.group_ranking = 9;
-            this.city_ranking = this.region_ranking = this.person_ranking = 5;
+            this.achieve_ranking = this.region_ranking = this.person_ranking = 5;
             this.bg_color = 'background: #fda2cc';
+            this.table = this.groupTable;
             break;
         }
       },
@@ -516,8 +542,10 @@
       this.getNews();
       this.getLejiaCollege();
       this.getPerWeeklyReport();
+      this.table = this.achieveTable;
     },
     created(){
+      this.table = this.achieveTable;
       //取出本地缓存数据
       if(localStorage.getItem('mainBanners')){
         this.banners = JSON.parse(localStorage.getItem('mainBanners'));
@@ -593,7 +621,7 @@
       color: #fff;
       background: linear-gradient(-45deg, transparent 10px, #6a8dfb 0);
     }
-  .select_city_word {
+  .select_achieve_word {
     color: #fff;
     background: linear-gradient(-45deg, transparent 10px, #58d788 0);
   }

@@ -249,6 +249,7 @@
     }
   }
   #testPaperDialog {
+    padding: 25px 15px;
     .import_questions {
       border: 1px solid #b4c6fd;
       -webkit-box-shadow: 0 0 3px 1px #b4c6fd;
