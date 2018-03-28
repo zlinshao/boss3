@@ -13,22 +13,13 @@
           </div>
           <div class="personalSign">
             <span v-if="!isEdit && landholder.data">{{landholder.data.signature.content}}</span>
+            <span v-if="!isEdit && !landholder.data">添加工作状态...</span>
             <el-input size="mini" v-if="isEdit" v-model="params.content"></el-input>
             <el-button size="medium" v-if="!isEdit" @click.stop="showInput" type="text">
               <i class="el-icon-edit"></i>
             </el-button>
           </div>
         </div>
-      </div>
-      <div class="topBackRight">
-        <div @click="routerLink('/pictureManage')">
-          <span class="iconfont icon-zhaopian"></span>
-          <span>照片</span>
-        </div>
-        <!--<div>-->
-        <!--<span class="iconfont icon-shiyongshouce"></span>-->
-        <!--<span>收藏夹</span>-->
-        <!--</div>-->
       </div>
     </div>
     <div class="main">
@@ -43,7 +34,7 @@
                 </div>
                 <div class="aRight">
                   <p>BACKLOG</p>
-                  <p>代办事项<span>24</span></p>
+                  <p>待办事项</p>
                 </div>
               </div>
               <div class="a" @click="routerLink('/dailyRecord')">
@@ -52,16 +43,16 @@
                 </div>
                 <div class="aRight">
                   <p>JOURNAL</p>
-                  <p>日志管理<span>24</span></p>
+                  <p>日志管理</p>
                 </div>
               </div>
-              <div class="a">
+              <div class="a" @click="routerLink('/pictureManage')">
                 <div class="aLeft">
-                  <i class="iconfont icon-tongxunlu"></i>
+                  <i class="iconfont icon-zhaopian"></i>
                 </div>
                 <div class="aRight">
-                  <p>MAIL&nbsp;LIST</p>
-                  <p>通讯录<span>24</span></p>
+                  <p>PHOTO&nbsp;ALBUM</p>
+                  <p>相 册</p>
                 </div>
               </div>
               <div class="a" @click="routerLink('/management')">
@@ -345,7 +336,7 @@
       src: url(../../assets/font/impact-2.ttf);   //字体路径
     }
 
-    .topBack, .topBackLeft, .topBackRight {
+    .topBack, .topBackLeft{
       @include flex;
     }
 
@@ -391,39 +382,6 @@
                 color: #0db6ff;
               }
             }
-          }
-        }
-      }
-      .topBackRight {
-        margin-right: 220px;
-        div + div {
-          margin-left: 20px;
-        }
-        div {
-          cursor: pointer;
-          font-size: 18px;
-          color: $colorBor;
-          @include flex;
-          align-items: center;
-          span:first-of-type {
-            font-size: 24px;
-            margin-right: 16px;
-            padding-top: 2px;
-          }
-        }
-        div:nth-of-type(1) {
-          span:first-of-type {
-            color: #6abdfd;
-          }
-        }
-        div:nth-of-type(2) {
-          span:first-of-type {
-            color: #fb4699;
-          }
-        }
-        div:nth-of-type(3) {
-          span:first-of-type {
-            color: #f0c044;
           }
         }
       }

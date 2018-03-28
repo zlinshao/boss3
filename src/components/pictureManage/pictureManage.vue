@@ -13,21 +13,12 @@
           </div>
           <div class="personalSign">
             <span v-if="!isEdit && landholder.data">{{landholder.data.signature.content}}</span>
+            <span v-if="!isEdit && !landholder.data">添加工作状态...</span>
             <el-input size="mini" v-if="isEdit" v-model="params.content"></el-input>
             <el-button size="medium" v-if="!isEdit" @click.stop="showInput" type="text">
               <i class="el-icon-edit"></i>
             </el-button>
           </div>
-        </div>
-      </div>
-      <div class="topBackRight">
-        <div @click="routerLink('/pictureManage')">
-          <span class="iconfont icon-shiyongshouce"></span>
-          <span>照片</span>
-        </div>
-        <div>
-          <span class="iconfont icon-shiyongshouce"></span>
-          <span>收藏夹</span>
         </div>
       </div>
     </div>
@@ -270,7 +261,7 @@
       src: url(../../assets/font/impact-2.ttf);   //字体路径
     }
 
-    .topBack, .topBackLeft, .topBackRight {
+    .topBack, .topBackLeft {
       @include flex;
     }
 
@@ -319,37 +310,6 @@
                 color: #0db6ff;
               }
             }
-          }
-        }
-      }
-      .topBackRight {
-        margin-right: 220px;
-        div + div {
-          margin-left: 20px;
-        }
-        div {
-          font-size: 18px;
-          color: $colorBor;
-          @include flex;
-          align-items: center;
-          span:first-of-type {
-            font-size: 24px;
-            padding-top: 6px;
-          }
-        }
-        div:nth-of-type(1) {
-          span:first-of-type {
-            color: #6abdfd;
-          }
-        }
-        div:nth-of-type(2) {
-          span:first-of-type {
-            color: #fb4699;
-          }
-        }
-        div:nth-of-type(3) {
-          span:first-of-type {
-            color: #f0c044;
           }
         }
       }

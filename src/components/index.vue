@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-popover="http://www.w3.org/1999/xhtml">
   <div id="index" @click="clickScreen">
     <div class="navBarLeft" :class="isFull? 'navBarRight':'' ">
       <p @click="fullScreen(2)"></p>
@@ -42,14 +42,34 @@
         </div>
       </div>
       <div class="right">
-        <div class="countdown" style="border-right: 1px solid #DDDDDD">
-          <span style="line-height: 20px;color: #409EFF;" @click="fullScreen(1)">精简模式</span>
+        <div class="guide" style="border: none">
+          <span style="line-height: 20px;color: #409EFF;" @click="fullScreen(1)"><i class="iconfont icon-quanping"></i>全屏</span>
         </div>
-        <div class="countdown">
+
+        <div class="guide">
           <i class="el-icon-time"></i>
           {{Countdown}}
         </div>
-        <div class="message" style="position: relative">
+
+        <div class="guide">
+          <el-dropdown trigger="click">
+            <span class="el-dropdown-link topFlex">
+              <i class="iconfont icon-qita1"></i><span>快捷入口</span>
+            </span>
+            <el-dropdown-menu slot="dropdown" class="shortcutList">
+              <el-dropdown-item v-for="(item,index) in isShortcutPath" :key="index" :class="{'border_top': index > 3}">
+                <router-link :to="item.path">
+                  <b :class="{'backColor1': -1 < index,'backColor2': index === 3 || index === 11 || index === 13,
+                   'backColor3': index === 5 || index === 14,'backColor4':index === 4}">
+                    <i :class="item.icon"></i>
+                  </b>
+                  <span>{{item.name}}</span>
+                </router-link>
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+        <div class="message" style="position: relative;margin-right: 50px">
           <el-dropdown>
             <el-badge :value="unReadMessageData.length" class="item">
               <i class="el-icons-fa-comment-o"></i>
@@ -113,11 +133,6 @@
             <div class="gladBackground"></div>
           </div>
         </div>
-
-        <div class="guide">
-          <i class="el-icon-warning"></i>
-          使用指南
-        </div>
         <div class="personInfo">
           <div class="head" style="cursor: pointer">
             <span v-if="personal.avatar !== ''">
@@ -129,29 +144,19 @@
 
           </div>
           <el-dropdown trigger="click">
-              <span class="el-dropdown-link" v-if="personal  !== undefined">
+              <span class="el-dropdown-link" v-if="personal !== undefined">
                 {{personal.name}}<i class="el-icon-arrow-down el-icon--right" style="margin-left: 25px"></i>
               </span>
             <el-dropdown-menu slot="dropdown" class="personal">
               <div><i style="color: #fb509f;margin-right: 5px" class="iconfont icon-jifen"></i>9999分</div>
-              <div class="rank">等级</div>
-              <div class="progressBar">
-                <!--<el-progress :percentage="50" :show-text="false"></el-progress>-->
-                <el-popover ref="popover1" placement="top-start" width="200" trigger="hover">
-                  <!--<span> 已连续登录{{loginday}}天 &nbsp;&nbsp;</span>-->
-                </el-popover>
-                <!--<el-progress :percentage="logindaycer" :show-text="false" v-popover:popover1></el-progress>-->
-                <div class="round roundLeft"></div>
-                <div class="round roundRight"></div>
+              <div class="rank">连续登录时长</div>
+              <el-popover ref="popover1"  placement="top-start"  width="100"  trigger="hover">
+                <span> 已连续登录{{loginDay}}天 &nbsp;&nbsp;</span>
+              </el-popover>
+              <div class="progressBar" v-popover:popover1>
                 <div class="percent"></div>
               </div>
 
-              <div class="level">
-                <div>A</div>
-                <div>B</div>
-                <div>C</div>
-                <div>D</div>
-              </div>
 
               <div class="navigation">
                 <el-row>
@@ -316,41 +321,60 @@
         Countdown: 0,  //倒计时
         defaultTime: 0,  //倒计时
         screenStatus: false,
-
         defaultArray: [],
-        object: {
-          name: 'zhanglin',
-          year: 123
-        },
-        sendObject: null,
         messageDialog: false,
 
         unReadMessageData: [],
         messageDetail: [],
+        interval:null,
+        messageInterval :null,
+        loginDay:0,
+        loginPercent:0
       }
     },
+
     mounted() {
-      this.personal = JSON.parse(localStorage.personal);
-      this.countTime();
-      setInterval(() => {
-        this.getUnReadMessage()
-      }, 100000);
+      this.initData();
     },
     computed: {
       visitedViews() {
         return this.$store
       },
+      isShortcutPath(){
+        let isShortcutPath = [];
+        this.$router.options.routes.forEach((item) =>{
+          if(item.isShortcut){
+            isShortcutPath = item.children;
+          }
+        });
+        return isShortcutPath;
+      }
     },
     watch: {
       isCollapse(val) {
         document.getElementById('isCollapse').style.overflow = val ? 'visible' : 'auto';
       },
+      '$store.state.app.isBasicChange':{
+          handler(val,oldVal){
+            this.countTime();
+          }
+      }
     },
     methods: {
+      initData(){
+        this.personal = JSON.parse(localStorage.personal);
+        this.loginDay = this.personal.data.loginday;
+        this.loginPercent = Number(this.loginDay/180);
+        $('.percent').css('width',this.loginPercent);
+        this.countTime();
+        clearInterval(this.messageInterval);
+        this.messageInterval = setInterval(() => {
+          this.getUnReadMessage()
+        }, 100000);
+      },
       routers(url) {
         this.$router.push(url);
       },
-
       //显示消息详情
       showMessageDetail(val){
         this.messageDetail = val;
@@ -376,13 +400,11 @@
       // 全屏
       fullScreen(val) {
         screenfull.toggle();
-
       },
       handleOpen(key, keyPath) {
 
       },
       handleClose(key, keyPath) {
-        console.log(key, keyPath);
       },
       clickScreen() {
         this.screenStatus = true;
@@ -392,7 +414,7 @@
         this.$http.get(globalConfig.server + 'setting/dictionary/203').then((res) => {
           if (res.data.code === '30010') {
             countDown = res.data.data;
-            this.$http.get(globalConfig.server + 'setting/setting/read?type=1&staff_id=' + globalConfig.personal.id).then((res) => {
+            this.$http.get(globalConfig.server + 'setting/setting/read?type=1&staff_id=' + this.personal.id).then((res) => {
               if (res.data.code === '50010') {
                 let array = res.data.data;
                 for (let i = 0; i < array.length; i++) {
@@ -410,16 +432,17 @@
       },
 
       startCount(){
+        clearInterval(this.interval);
         new Promise((resolve, reject) => {
-          let interval = setInterval(() => {
+          this.interval = setInterval(() => {
             this.Countdown--;
             if (this.Countdown < 1) {
               resolve('锁屏');
-              clearInterval(interval)
+              clearInterval(this.interval)
             }
             if (this.screenStatus) {
               reject('重新计数');
-              clearInterval(interval)
+              clearInterval(this.interval)
             }
           }, 1000)
         }).then((data) => {
@@ -437,7 +460,6 @@
         this.$http.get(globalConfig.server + 'setting/others/lock_screen_status?lock_status=1').then((res) => {
           if (res.data.code === '100003') {
             localStorage.setItem('beforePath', this.$route.path);
-
             localStorage.setItem('lockStatus', 1);
             this.$router.push({path: '/lock'});
           } else {
@@ -449,6 +471,7 @@
           }
         })
       },
+
     }
   }
 </script>
@@ -480,7 +503,10 @@
     display: -webkit-flex;
     display: flex;
   }
-
+  $color1: #409EFF;
+  $color2: #58D788;
+  $color3: #FB4699;
+  $color4: #FDCA41;
   .personal {
     width: 200px;
     background: #f9fbff;
@@ -498,7 +524,6 @@
       background: #e8e9e9;
       border-radius: 2px;
       .percent{
-        width: 70%;
         height: 4px;
         border-radius: 2px;
         background: linear-gradient(to right, #7796f9 , #f856a1); /* 标准的语法（必须放在最后） */
@@ -815,9 +840,7 @@
 
         }
 
-        .countdown {
-          border: none;
-        }
+
         .guide {
           width: 150px;
         }
@@ -902,6 +925,55 @@
         margin-left: 64px !important;
       }
     }
+  }
+  /*----------------------  快捷入口*-------------------*/
+  .shortcutList {
+    padding: 0 !important;
+    .backColor1 {
+      background: $color1;
+    }
+    .backColor2 {
+      background: $color2;
+    }
+    .backColor3 {
+      background: $color3;
+    }
+    .backColor4 {
+      background: $color4;
+    }
+
+    width: 362px;
+    box-sizing: border-box;
+    .el-dropdown-menu__item {
+      line-height: 20px;
+      width: 90px;
+      float: left;
+      text-align: center;
+      padding: 12px 0 6px;
+      b {
+        @include border_radius(6px);
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        color: #ffff;
+        line-height: 50px;
+        font-size: 22px;
+      }
+      span {
+        color: #575859;
+        margin: 6px 0;
+        display: block;
+      }
+    }
+    .border_top {
+      border-top: 1px solid #e5e5e5;
+    }
+  }
+
+  .topFlex {
+    @include flex;
+    align-items: center;
   }
 
   /*----------------------  消息列表*-------------------*/

@@ -8,7 +8,7 @@
               <el-tag type="info" closable size="medium" @close="handleClose(item)" style="margin-left:10px">{{item.name}}</el-tag>
             </div>
             <div style="flex-grow:1">
-              <el-input id="search" placeholder="请输入企业联系人" @keyup.native="remoteMethod"
+              <el-input id="search" placeholder="请输入企业联系人" @keyup.native="keywordsSearch"
                         @keydown.8.native="backSpace" v-model="keywords" style="border: none"
                         @keydown.down.native="changeDown" @keydown.up.native="changeUp" @keydown.13.native='keyDownAdd'></el-input>
             </div>
@@ -135,17 +135,6 @@
           this.$emit('close')
         }
       },
-      keywords(val){
-        if (val){
-          this.$http.get(globalConfig.server_user+'users?q='+this.keywords).then((res) => {
-            if(res.data.status === 'success'){
-              this.searchItems = res.data.data;
-            }
-          })
-        }else {
-          this.searchItems = [];
-        }
-      },
       type(val){
         if(val){
           if(val==='depart'){
@@ -219,8 +208,10 @@
         if(isExist){
           this.filterSelectMember(item);
         }else {
-          this.selectMember.push(item)
-          this.selectIdMember.push(item.id)
+          this.selectMember.push(item);
+          this.selectIdMember.push(item.id);
+          this.keywords = '';
+          this.keywordsSearch();
         }
       },
 
@@ -268,8 +259,9 @@
           if(isExist){
             this.filterSelectMember(this.hoverMember);
           }else {
-            this.selectMember.push(this.hoverMember)
-            this.selectIdMember.push(this.hoverMember.id)
+            this.selectMember.push(this.hoverMember);
+            this.selectIdMember.push(this.hoverMember.id);
+            this.keywords = '';
           }
         }
       },
@@ -285,8 +277,8 @@
       filterSelectMember(item){
         for(let i=0; i<this.selectMember.length;i++){
           if(item.id===this.selectMember[i].id && item.name===this.selectMember[i].name){
-            this.selectMember.splice(i,1)
-            this.selectIdMember.splice(i,1)
+            this.selectMember.splice(i,1);
+            this.selectIdMember.splice(i,1);
             this.checkedIdBox.splice(i,1)
           }
         }
@@ -311,7 +303,15 @@
       getNextLevel(item,event){
         if(event.target.className!=='el-checkbox__inner'&&event.target.className!=='el-checkbox__original'){
           this.getDepartment(item.id);
-          this.breadcrumbList.push(item)
+          let isExist = false;
+          this.breadcrumbList.forEach((x) =>{
+            if(item.id === x.id){
+              isExist =  true
+            }
+          });
+          if(!isExist){
+            this.breadcrumbList.push(item)
+          }
         }
       },
       //面包屑搜索
@@ -324,8 +324,16 @@
           this.breadcrumbList.splice(index + 1, this.breadcrumbList.length);
         }
       },
-      remoteMethod() {
-
+      keywordsSearch() {
+        if (this.keywords){
+          this.$http.get(globalConfig.server_user+'users?q='+this.keywords).then((res) => {
+            if(res.data.status === 'success'){
+              this.searchItems = res.data.data;
+            }
+          })
+        }else {
+          this.searchItems = [];
+        }
       },
 
       inputFocus(){
@@ -398,7 +406,7 @@
               }
               .searchItems{
                 ul {
-                  height: 396px;
+                  height: 377px;
                   overflow: auto;
                   background: #fff;
                   border: 1px solid #ccc;

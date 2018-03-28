@@ -12,10 +12,10 @@ import Lock from '../components/common/lockScreen/components/lockedScreen.vue'
 import WholeRentManage from '../components/rentManage/wholeRentManage/index.vue'
 import JointRentManage from '../components/rentManage/jointRentManage/index.vue'
 
-// import ContractManage from '../comments/rentManage/datumMessage/contractManage/index.vue'
-// import ClientManage from '../comments/rentManage/datumMessage/clientManage/index.vue'
-// import HousesManage from '../comments/rentManage/datumMessage/housesManage/index.vue'
-// import RepairManage from '../comments/rentManage/repairManage/index.vue'
+import ContractManage from '../components/rentManage/datumMessage/contractManage/index.vue'
+import ClientManage from '../components/rentManage/datumMessage/clientManage/index.vue'
+import HousesManage from '../components/rentManage/datumMessage/housesManage/index.vue'
+// import RepairManage from '../components/rentManage/repairManage/index.vue'
 import DatumMessage from '../components/rentManage/datumMessage/index.vue'                    //资料管理
 
 
@@ -53,10 +53,10 @@ import IntegralManage from '../components/humanResource/integralManage/index.vue
 
 //OA办公
 // import Communication from '../comments/OAWork/communication/index.vue'                 //通讯管理
-// import Programme from '../comments/OAWork/programme/index.vue'                         //日程管理
-// import Institution from '../comments/OAWork/institution/index.vue'                     //制度管理
+import Programme from '../components/OAWork/management/programme/index.vue'                         //日程管理
+import Institution from '../components/OAWork/management/institution/index.vue'                     //制度管理
 // import Vote from '../comments/OAWork/vote/index.vue'                                   //投票管理
-// import Counter from '../comments/meritPay/counter/index'                               //业绩计算器
+import Counter from '../components/OAWork/management/counter/index.vue'                               //业绩计算器
 import Management from '../components/OAWork/management/index.vue'                          //办公管理
 
 // import SuppliesUse from '../comments/OAWork/property/items/officeSuppliesUse.vue'                       //办公用品申领
@@ -181,8 +181,7 @@ export default new Router({
       hidden: true,
       name: '',
       children: [
-        {path: '/main', component: Main, name: '主页', icon: 'el-icon-menu'},
-        {path: '/converge', component: Converge, name: '员工广场', icon: 'el-icon-menu',},
+        {path: '/main', component: Main, name: '公司门户', icon: 'el-icon-menu'},
       ]
     },
 
@@ -214,6 +213,32 @@ export default new Router({
         {path: '/improveImgInfo', component: ImproveImgInfo, name: "完善照片信息",},
         {path: '/pictureDetail', component: PictureDetail, name: "相册详情",},
         {path: '/visitRecord', component: VisitRecord, name: "回访记录"},
+      ]
+    },
+    //快捷入口
+    {
+      path: '/',
+      component: Index,
+      name: '',
+      abnormal: true,
+      isShortcut:true,
+      children: [
+        {path: '/clientManage', component: ClientManage, name: '客户 管理',icon:"iconfont icon-kehu"},
+        {path: '/programme', component: Programme, name: '日程 管理', icon:"iconfont icon-wodericheng"},
+        {path: '/institution', component: Institution, name: '制度 管理', icon:"iconfont icon-guizhangzhidu"},
+        {path: '/counter', component: Counter, name: '业绩计算器', icon:"iconfont icon-jisuanqi"},
+        {path: '/college', component: College, name: '乐伽 大学 ' ,icon:"iconfont icon-leqiedaxue"},
+        {path: '/LineCollege', component: LineCollege, name: '在线 考试', icon:"iconfont icon-zaixiankaoshi"},
+        {path: '/converge', component: Converge, name: '员工 广场',  icon:"iconfont icon-yuangongguangchang"},
+        {path: '/individual', component: Individual, name: '个人 门户',icon:"iconfont icon-yuangongguangchang"},
+        {path: '/wholeRentManage', component: WholeRentManage, name: '整租 管理', icon:"iconfont icon-pinzhizhengzu"},
+        {path: '/jointRentManage', component: JointRentManage, name: '合租 管理', icon:"iconfont icon-hezu"},
+        {path: '/datumMessage/housesManage', component: HousesManage, name: '房屋 管理',icon:"iconfont icon-fangzu"},
+        {path: '/datumMessage/contractManage', component: ContractManage, name: '合同 管理',icon:"iconfont icon-hetong1"},
+        {path: '/sthToDo', component: SthToDo, name: '待办 事项', icon:"iconfont icon-daiban"},
+        {path: '/examineAndApprove', component: ExamineAndApprove, name: '审 批', icon:"iconfont icon-xiugai"},
+        {path: '/sthToDoDetail_2', component: SthToDoDetail_2, name: '喜 报', icon:"iconfont icon-xibaoguanli"},
+        {path: '/integralManage', component: IntegralManage, name: '积分 管理',icon:"iconfont icon-jifen"},
 
       ]
     },

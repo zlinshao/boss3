@@ -6,6 +6,7 @@ const app = {
     visitedViews: [],
     menuStatus : false,
     isLoading:false,
+    isBasicChange:false,
   },
   mutations: {
     ADD_VISITED_VIEWS: (state, view) => {
@@ -45,6 +46,9 @@ const app = {
     HIDE_LOADING:(state,view) => {
       state.isLoading = false;
     },
+    CHANGE_BASIC_SETTING:(state) => {
+      state.isBasicChange = !state.isBasicChange;
+    }
   },
   actions: {
     addVisitedViews({ commit }, view) {
@@ -76,6 +80,10 @@ const app = {
     },
     hideLoading({ commit }, view){
       commit('HIDE_LOADING', view)
+    },
+    //改变基本设置
+    changeBasicSetting({commit}){
+      commit('CHANGE_BASIC_SETTING')
     },
   }
 };
