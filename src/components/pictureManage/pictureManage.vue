@@ -56,7 +56,7 @@
                       </el-dropdown-menu>
                     </el-dropdown>
                     <img v-if="item.cover_path" :src="item.cover_path" style="height:160px;" @click="goPictureDetail(item.id)">
-                    <img src="../../assets/images/university/caia412-34427.png" v-else style="height:160px;">
+                    <img src="../../assets/images/university/caia412-34427.png" v-else style="height:160px;" @click="goPictureDetail(item.id)">
                   <div class="clearfix">
                     <span class="text_over_norwap">{{item.name}}</span>
                     <span style="float: right;">{{item.photo_count}}张</span>
@@ -115,6 +115,7 @@
     },
     created(){
       this.landholder = JSON.parse(localStorage.personal);
+      this.getImgData();
     },
     watch:{
       'params.content':{

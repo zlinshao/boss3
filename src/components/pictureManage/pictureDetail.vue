@@ -144,13 +144,14 @@
         totalNum: 0,
         currentPage: 1,
         saveItemId: '',
+        albumId: '',
       }
     },
-    computed:{
-      albumId(){
-        return  this.$route.query.albumId ? this.$route.query.albumId : this.$store.state.picture.albumId;
-      }
-    },
+    // computed:{
+    //   albumId(){
+    //     return  this.$route.query.albumId ? this.$route.query.albumId : this.$store.state.picture.albumId;
+    //   }
+    // },
     methods: {
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -285,11 +286,25 @@
             }
         });
       },
+      getAlbumId() {
+        //刷新保存
+        if(!this.$route.query.albumId) {
+          this.$router.push({path:"/pictureDetail",query:{albumId:this.$store.state.picture.albumId}});
+        }
+        let query = this.$route.query;
+        this.albumId = query.albumId;
+        this.$store.dispatch('saveAlbumId',query.albumId);
+      },
     },
     mounted() {
+      this.getAlbumId();
       this.getAllPhotos();
       this.getAlbumDetail();
-      this.$store.dispatch('saveAlbumId',this.$route.query.albumId);
+    },
+    activated(){
+      this.getAlbumId();
+      this.getAllPhotos();
+      this.getAlbumDetail();
     }
   }
 </script>

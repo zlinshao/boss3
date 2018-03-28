@@ -138,7 +138,7 @@
               <div class="progressBar">
                 <!--<el-progress :percentage="50" :show-text="false"></el-progress>-->
                 <el-popover ref="popover1" placement="top-start" width="200" trigger="hover">
-                  <span> 已连续登录{{loginday}}天 &nbsp;&nbsp;</span>
+                  <!--<span> 已连续登录{{loginday}}天 &nbsp;&nbsp;</span>-->
                 </el-popover>
                 <!--<el-progress :percentage="logindaycer" :show-text="false" v-popover:popover1></el-progress>-->
                 <div class="round roundLeft"></div>
