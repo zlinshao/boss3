@@ -3,32 +3,28 @@
     <div class="tool">
       <div class="tool_left">
         <el-button type="primary" style="background:#6a8dfb;border:0 none; width:130px; height:32px;" size="small" @click="showBasicset()">
-          <!--<i class="el-icon-document"></i>&nbsp;-->
           基本设置
         </el-button>
         <el-button type="success" style="background:#58d788;border:0 none; width:130px; height:32px;"  size="small" @click="showSecond()">
-          <!--<i class="el-icon-document"></i>&nbsp;-->
           二级密码设置
         </el-button>
         <el-button type="warning" style="background:#fdca41;border:0 none; width:130px; height:32px;"  size="small" @click="showLockscreen()">
-          <!--<i class="el-icon-document"></i>&nbsp;-->
           锁屏密码设置
         </el-button>
       </div>
 
-      <div class="tool_right">
-        <div>
-          <i class="el-icon-tickets"></i>
-          &nbsp;使用说明
-        </div>
-
-      </div>
+      <!--<div class="tool_right">-->
+        <!--<div>-->
+          <!--<i class="el-icon-tickets"></i>-->
+          <!--&nbsp;使用说明-->
+        <!--</div>-->
+      <!--</div>-->
     </div>
 
     <div class="main" v-if="basicSet">
-      <el-form label-width="200px">
+      <el-form size="small" label-width="200px">
         <el-form-item v-for="(item,index) in dictionary" :key="item.id" :label="item.dictionary_name" v-if="index<1">
-          <el-select v-model="basicSetting.id[0]" size="medium" clearable="" placeholder="请选择">
+          <el-select v-model="basicSetting.id[0]" size="medium" clearable="" placeholder="请选择" value="">
             <el-option
               v-for="item in item.children"
               :key="item.id"
@@ -37,10 +33,9 @@
             </el-option>
           </el-select>
         </el-form-item>
-
       </el-form>
       <span style="color:#f00;margin-left:126px;">备注:首页倒计时时间设置,当合计时结束后,将自动进入锁屏模式</span>
-      <div style="text-align: center;margin-top: 180px">
+      <div style="text-align: center;margin-top: 120px">
         <el-button @click="addBasicSetting" type="primary" size="small" style="padding: 10px 140px;">保存</el-button>
       </div>
 
@@ -55,7 +50,8 @@
        <el-row style="margin-left:136px;">
         <el-col class="leftTitle"   v-for="(item2) in dictionary2" :key="item2.id"  :span="3" style="margin-top: 4px">
           <div style="margin-right:36px; color:#787a7e;"> {{item2.dictionary_name}}</div><br />
-          <el-button style="background:#6a8dfb;width:130px;height:32px;"  size="mini" v-if="secondary_pass.indexOf(item2.id)>-1" @click="openSecondPassword('secondPasswordDialog',item2.id)" type="primary">修改二级密码</el-button>
+          <el-button style="background:#6a8dfb;width:130px;height:32px;"  size="mini" v-if="secondary_pass.indexOf(item2.id)>-1"
+                     @click="openSecondPassword('secondPasswordDialog',item2.id)" type="primary">修改二级密码</el-button>
           <el-button style="background:#6a8dfb;width:130px; height:32px;" size="mini" v-else @click="openSecondPassword('secondPasswordDialog',item2.id)" type="primary">设置二级密码</el-button>
         </el-col>
       </el-row>
@@ -69,22 +65,22 @@
         <el-col :span="20">
           <div class="validate">
             <div>
-              <el-input placeholder="请输入验证码" v-model="sms_lock_num"></el-input>
+              <el-input size="small" placeholder="请输入验证码" v-model="sms_lock_num"></el-input>
             </div>
             <div>
-              <el-button @click="sendMessage" v-if="isSending>59" style="width: 140px;" type="primary">获取验证码</el-button>
-              <el-button v-if="isSending<60" disabled="" style="width: 140px;" type="primary">{{isSending}}s后重新发送</el-button>
+              <el-button size="small" @click="sendMessage" v-if="isSending>59" style="width: 140px;" type="primary">获取验证码</el-button>
+              <el-button size="small" v-if="isSending<60" disabled="" style="width: 140px;" type="primary">{{isSending}}s后重新发送</el-button>
             </div>
           </div>
           <div class="validate">
             <div class="validateSign">
-              <el-input type="password" @keyup.native="identify_pwd_lock = ''"  v-model="set_pwd_lock" placeholder="请输入新密码"></el-input>
+              <el-input size="small" type="password" @keyup.native="identify_pwd_lock = ''"  v-model="set_pwd_lock" placeholder="请输入新密码"></el-input>
               <i class="el-icon-success" style="color: #46ff53" v-show="set_pwd_lock.length>5"></i>
             </div>
           </div>
           <div class="validate">
             <div class="validateSign">
-              <el-input type="password" v-model="identify_pwd_lock" @blur="testPassword" placeholder="请确认新密码"></el-input>
+              <el-input size="small" type="password" v-model="identify_pwd_lock" @blur="testPassword" placeholder="请确认新密码"></el-input>
               <i class="el-icon-success" style="color: #46ff53" v-show="false"></i>
             </div>
           </div>
@@ -124,7 +120,6 @@ export default {
       sendid: "",
       checkList: [],
 
-      secondary_password: {},
       secondary_pass: [],
       pickerOptions: {
         shortcuts: [
@@ -172,28 +167,11 @@ export default {
     };
   },
   mounted() {
-
     this.getDictionary();
-
     this.getDictionary2();
   },
   watch: {},
   methods: {
-    allinfo() {
-      this.$http
-        .get(globalConfig.server + "setting/others/loginInfo")
-        .then(res => {
-         console.log(res)
-          if (res.data.code === "100090") {
-            this.secondary_password =
-              res.data.data.data.detail.secondary_password;
-            for (let a in res.data.data.data.detail.secondary_password) {
-
-              this.secondary_pass.push(Number(a));
-            }
-          }
-        });
-    },
     openSecondPassword(val, id) {
       this.sendid = id;
       this.secondPasswordDialog = true;
@@ -203,8 +181,7 @@ export default {
     },
     getDictionary() {
 
-      this.$http
-        .get(globalConfig.server + "setting/dictionary/202")
+      this.$http.get(globalConfig.server + "setting/dictionary/202")
         .then(res => {
           if (res.data.code === "30010") {
 
@@ -218,7 +195,6 @@ export default {
         });
     },
     getDictionary2() {
-       this.allinfo();
       this.$http
         .get(globalConfig.server + "setting/dictionary/220")
         .then(res => {
@@ -283,14 +259,12 @@ export default {
     },
     setLockPassword() {
       this.$http
-        .get(
-          globalConfig.server +
+        .get(globalConfig.server +
             "setting/others/lock_screen_status?sms_lock_num=" +
             this.sms_lock_num +
             "&set_pwd_lock=" +
             this.set_pwd_lock
-        )
-        .then(res => {
+        ).then(res => {
           if (res.data.code === "100000") {
             this.$notify({
               title: "成功",
@@ -312,14 +286,14 @@ export default {
     },
     addBasicSetting() {
       this.$http
-        .post(globalConfig.server + "setting/setting/save", this.basicSetting)
-        .then(res => {
+        .post(globalConfig.server + "setting/setting/save", this.basicSetting).then(res => {
           if (res.data.code === "50000") {
             this.$notify({
               title: "成功",
               message: res.data.msg,
               type: "success"
             });
+            this.$store.dispatch('changeBasicSetting')
           } else {
             this.$notify({
               title: "警告",
