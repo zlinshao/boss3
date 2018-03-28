@@ -5,7 +5,7 @@
         <div class="tool_left">
           <el-button type="success" size="mini" @click="openModalDialog('examDialog')">
             <!--<i class="el-icon-tickets"></i>-->
-            <img src="../../../assets/images/examination/create_exam.svg" style="width: 11px;">&nbsp;新建考试
+            <!--<img src="../../../assets/images/examination/create_exam.svg" style="width: 11px;">&nbsp;新建考试-->
           </el-button>
           <el-button type="danger" size="mini" style="background: #fb4699;" @click="openModalDialog('testPaperDialog')">
             <i class="el-icon-document"></i>&nbsp;新建试卷
@@ -146,12 +146,12 @@
         <el-row :gutter="30">
           <el-col :span="12">
             <div class="import_questions">
-              <div><img src="../../../assets/images/examination/import_question.svg"><br/>批量导入试题</div>
+              <!--<div><img src="../../../assets/images/examination/import_question.svg"><br/>批量导入试题</div>-->
             </div>
           </el-col>
           <el-col :span="12">
             <div class="import_questions" style="border: 1px solid #fda2cc;box-shadow: 0 0 3px 1px #fda2cc;">
-              <div><img src="../../../assets/images/examination/self_entry.svg"><br/>自己录入</div>
+              <!--<div><img src="../../../assets/images/examination/self_entry.svg"><br/>自己录入</div>-->
             </div>
           </el-col>
         </el-row>
