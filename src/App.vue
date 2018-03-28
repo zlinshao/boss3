@@ -37,11 +37,11 @@
         }
       };
 
-//      this.dictionary(60).then((res) => {
-//        console.log(res.data)
-//      }, (err) => {
-//        console.log(err)
-//      })
+      this.dictionary(60).then((res) => {
+        console.log(res.data)
+      }, (err) => {
+        console.log(err)
+      })
     },
     computed: {
       isLoading(){

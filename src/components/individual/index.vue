@@ -1,5 +1,5 @@
 <template>
-  <div id="individual">
+  <div id="individual" @click="editPersonalSign($event)">
     <div class="topBack">
       <div class="topBackLeft">
         <div class="leftPic">
@@ -7,13 +7,17 @@
           <img src="../../assets/images/individual/touxiang.png" v-else>
         </div>
         <div class="rightPic">
-          <p>
+          <div class="landName">
             <span>{{landholder.name}}</span>
             <span></span>
-          </p>
-          <p>
-            {{}}
-          </p>
+          </div>
+          <div class="personalSign">
+            <span v-if="!isEdit && landholder.data">{{landholder.data.signature.content}}</span>
+            <el-input size="mini" v-if="isEdit" v-model="params.content"></el-input>
+            <el-button size="medium" v-if="!isEdit" @click.stop="showInput" type="text">
+              <i class="el-icon-edit"></i>
+            </el-button>
+          </div>
         </div>
       </div>
       <div class="topBackRight">
@@ -62,11 +66,11 @@
               </div>
               <div class="a" @click="routerLink('/management')">
                 <div class="aLeft">
-                  <i class="iconfont icon-wodericheng"></i>
+                  <i class="iconfont icon-qita1"></i>
                 </div>
                 <div class="aRight">
-                  <p>SCHEDULE</p>
-                  <p>日程管理<span>24</span></p>
+                  <p>WATING</p>
+                  <p>敬请期待<span>...</span></p>
                 </div>
               </div>
             </div>
@@ -250,14 +254,55 @@
     data() {
       return {
         landholder: {},
+        isEdit:false,
+        params:{
+          content:'',
+        },
+        isChanged:false,
       }
     },
     mounted() {
       this.landholder = JSON.parse(localStorage.personal);
     },
+    watch:{
+      'params.content':{
+        handler(val,oldVal){
+          if(val!==oldVal&&oldVal){
+            this.isChanged = true;
+          }
+        }
+      }
+    },
     methods: {
       routerLink(val) {
         this.$router.push({path: val})
+      },
+      showInput(){
+        this.isEdit = true;
+        this.params.content = this.landholder.data.signature.content;
+        setTimeout(()=>{
+          this.isChanged = false;
+        })
+      },
+      editPersonalSign(e){
+        if(e.target.nodeName !== 'INPUT'){
+          this.isEdit = false;
+          if(this.isChanged){
+            this.$http.post(globalConfig.server+'manager/staff_record',this.params).then((res) =>{
+              let personal =  JSON.parse(localStorage.personal);
+              if(res.data.code === '30010'){
+                personal.data.signature = res.data.data;
+                localStorage.setItem('personal', JSON.stringify(personal));
+                this.landholder = JSON.parse(localStorage.personal);
+              }else {
+                this.$notify.warning({
+                  title:'警告',
+                  message:res.data.msg
+                })
+              }
+            })
+          }
+        }
       }
     }
   }
@@ -319,7 +364,12 @@
           @include border_radius(50%);
         }
         .rightPic {
-          p {
+          @include flex;
+          align-content: center;
+          flex-wrap: wrap;
+          .landName {
+            width: 100%;
+            margin: 5px 0;
             @include flex;
             align-items: center;
             font-size: 21px;
@@ -331,8 +381,16 @@
               @include back("../../assets/images/individual/1.png");
             }
           }
-          p:last-of-type {
-            font-size: 18px;
+          .personalSign{
+            font-size: 16px;
+            color: $colorBor;
+            i{
+              color: white;
+              margin-left: 5px;
+              &:hover{
+                color: #0db6ff;
+              }
+            }
           }
         }
       }
@@ -459,7 +517,7 @@
             }
           }
           div.a:nth-of-type(4) {
-            @include backLiner(#8480ED, #D691E1);
+            @include backLiner(#d4d9df, #b0b3b9);
             .aLeft {
 
             }

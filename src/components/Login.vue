@@ -198,11 +198,9 @@
           localStorage.setItem('myData', JSON.stringify(res.data.data));
           let head = res.data.data;
           globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
-
-          this.$http.get(this.urls + 'session').then((res) => {
+          this.$http.get(globalConfig.server + "setting/others/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
-            globalConfig.personal = res.data.data;
-
+            globalConfig.personal = res.data.data.data;
             this.$router.push({path: '/main'});
           });
         });
