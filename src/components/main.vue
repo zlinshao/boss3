@@ -59,11 +59,11 @@
                       <img src="../assets/images/head.jpg" alt="">
                     </el-col>
                     <div class="longHuName">陆宣羽</div>
-                    <el-col :span="4" class="t_right">南京一区 - 百万一组</el-col>
+                    <el-col :span="4" class="t_right" style="padding-left: 0;padding-right: 23px;">南京一区 - 百万一组</el-col>
                     <el-col :span="4" class="achievement" style="padding-right:45px;">212.222.00元</el-col>
-                    <el-col :span="3" class=" t_center" style="padding-right:0px;">37套</el-col>
-                    <el-col :span="3" class=" t_center" style="padding-right:0px;">37套</el-col>
-                    <el-col :span="3" class=" t_center" style="padding-left:13px;">汪玉睿</el-col>
+                    <el-col :span="3" class=" t_center" style="padding-right: 15px;">42套</el-col>
+                    <el-col :span="3" class=" t_center" style="padding-right: 5px;">37套</el-col>
+                    <el-col :span="3" class=" t_center" style="padding:0;">汪玉睿</el-col>
                   </div>
                 </div>
               </div>
@@ -233,8 +233,8 @@
                         <span class="view_word" v-if="lejiaCollege[2]"> {{lejiaCollege[2].read_num}}人</span>&nbsp;&nbsp;&nbsp;
                         <span class="view_word" v-if="!lejiaCollege[2]"> 0人</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       <i class="el-icon-edit" ></i>
-                        <span class="view_word" v-if="lejiaCollege[2]"> {{lejiaCollege[2].read_num}}人</span>&nbsp;&nbsp;&nbsp;
-                        <span class="view_word" v-if="!lejiaCollege[2]"> 0人</span>&nbsp;&nbsp;&nbsp;
+                        <span class="edit_word" v-if="lejiaCollege[2]"> {{lejiaCollege[2].favor_num}}人</span>&nbsp;&nbsp;&nbsp;
+                        <span class="edit_word" v-if="!lejiaCollege[2]"> 0人</span>&nbsp;&nbsp;&nbsp;
                     </span>
                     </div>
                   </div>

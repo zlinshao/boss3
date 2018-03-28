@@ -14,11 +14,12 @@
 
       <el-form-item label="内容" required="">
         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
-                    v-model="form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
+                  v-model="form && form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
+
       </el-form-item>
 
       <el-form-item label="封面图片">
-        <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic"></Dropzone>
+        <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
 
       <el-form-item style="text-align: center;">
@@ -86,33 +87,41 @@
           name: '',
           region: '',
           htmlForEditor: '',
-          type: '',
         },
         previewShow: true,
         tabIndex: '',
         editorDisabled: false,
         moduleType:'',
+        isClear: false,
       }
     },
-
+    activated() {
+      console.log(this.$store.state.article.article_id)
+      this.getParams();
+    },
     mounted() {
-      if(!this.$route.query.ids){
-        this.$router.push({path:"/publicArticle",query:{ids:this.$store.state.article.article_id, moduleType:this.$store.state.article.module_type}});
-      }
-      let query = this.$route.query;
-      this.moduleType = query.moduleType;
-      this.getDict();
-      this.pitch = '';
-      if (query.ids !== undefined) {
-        this.publicDetail(query.ids);
-        this.pitch = query.ids;
-      }
-      if(query.ids){
-        this.$store.dispatch('articleId', query.ids);
-      }
-      this.$store.dispatch('moduleType', query.moduleType);
+      this.getParams();
     },
     methods: {
+      getParams() {
+        if(!this.$route.query.ids){
+          this.$router.push({path:"/publicArticle",query:{ids:this.$store.state.article.article_id, moduleType:this.$store.state.article.module_type}});
+        }
+        let query = this.$route.query;
+        this.moduleType = query.moduleType;
+        this.getDict();
+        this.pitch = '';
+        if (query.ids !== undefined) {
+          this.publicDetail(query.ids);
+          this.pitch = query.ids;
+        }
+        if(query.ids){
+          this.$store.dispatch('articleId', query.ids);
+        }
+        if(query.moduleType) {
+          this.$store.dispatch('moduleType', query.moduleType);
+        }
+      },
       publicDetail(id) {
         this.$http.get(this.urls + 'oa/portal/' + id).then((res) => {
           if (res.data.code === '80020') {
@@ -193,7 +202,12 @@
           if (res.data.code === '80010' || res.data.code === '80030') {
             //点击发布或者草稿清掉ids
             this.$store.dispatch('deleteArticleId');
+            this.form.name= '';
+            this.form.region= '';
+            this.form.htmlForEditor= '';
+            this.isClear = true;
             this.goBack();
+
             this.prompt(1, res.data.msg);
           } else {
             this.prompt(2, res.data.msg);

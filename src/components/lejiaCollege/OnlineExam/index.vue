@@ -145,7 +145,7 @@
       <el-dialog :visible.sync="testPaperDialog" title="新建试卷" width="50%">
         <el-row :gutter="30">
           <el-col :span="12">
-            <div class="import_questions">
+            <div class="import_questions" @click="importQuestion">
               <div><img src="../../../assets/images/examination/import_question.svg"><br/>批量导入试题</div>
             </div>
           </el-col>
@@ -185,6 +185,9 @@
     methods: {
       saveExam() {
         this.examDialog = false;
+      },
+      importQuestion() {
+        // this.$route.push({path:'batchImportQuestios'});
       },
       dblClickTable(){
 
