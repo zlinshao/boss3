@@ -220,18 +220,18 @@
       }
     },
     created() {
-      if(localStorage.getItem('detailHotData')){
-        this.hotData = JSON.parse(localStorage.getItem('detailHotData'));
-      }
-      if(localStorage.getItem('detailFormList')){
-        this.formList = JSON.parse(localStorage.getItem('detailFormList'));
-      }
-      if(localStorage.getItem('detailCoverPic')){
-        this.cover_pic = JSON.parse(localStorage.getItem('detailCoverPic'));
-      }
-      if(localStorage.getItem('detailStaffs')){
-        this.staffs = JSON.parse(localStorage.getItem('detailStaffs'));
-      }
+      // if(localStorage.getItem('detailHotData')){
+      //   this.hotData = JSON.parse(localStorage.getItem('detailHotData'));
+      // }
+      // if(localStorage.getItem('detailFormList')){
+      //   this.formList = JSON.parse(localStorage.getItem('detailFormList'));
+      // }
+      // if(localStorage.getItem('detailCoverPic')){
+      //   this.cover_pic = JSON.parse(localStorage.getItem('detailCoverPic'));
+      // }
+      // if(localStorage.getItem('detailStaffs')){
+      //   this.staffs = JSON.parse(localStorage.getItem('detailStaffs'));
+      // }
     },
     activated() {
       this.infoDetail();
@@ -243,9 +243,11 @@
       ids(val) {
         if(val){
           this.loading=true;
-          setTimeout(() => {
-            this.loading = false;
-          }, 1000)
+        }
+      },
+      formList(val) {
+        if(val){
+          this.loading = false;
         }
       }
     },
@@ -277,23 +279,21 @@
         document.body.scrollTop = document.documentElement.scrollTop = 0;
         this.publicDetail(id);
         this.loading = true;
-        setTimeout(() => {
-          this.loading = false;
-        }, 600)
+        // setTimeout(() => {
+        //   this.loading = false;
+        // }, 1000)
       },
       // 热门导读
       addRegion() {
         this.$http.get(this.urls + 'oa/portal/?dict_id=' + 142, {
           params: this.form
         }).then((res) => {
-
           let title,data = {};
           title = res.data && res.data.data && res.data.data.data && res.data.data.data[0].title;
           data = res.data && res.data.data && res.data.data.data;
           this.hotData = Object.assign({},this.hotData,{title:title,data:data});
-          localStorage.setItem('detailHotData',JSON.stringify(this.hotData));
+          // localStorage.setItem('detailHotData',JSON.stringify(this.hotData));
         });
-
       },
       // 详情
       publicDetail(id) {
@@ -301,17 +301,18 @@
           if (res.data.code === '80020') {
             this.formList = res.data.data;
             this.formList = Object.assign({},this.formList,res.data.data);
-            localStorage.setItem('detailFormList',JSON.stringify(this.formList));
+            // localStorage.setItem('detailFormList',JSON.stringify(this.formList));
 
             this.cover_pic = res.data.data.album.cover_pic;
             this.cover_pic = Object.assign({},this.cover_pic,res.data.data.album.cover_pic);
-            localStorage.setItem('detailCoverPic',JSON.stringify(this.cover_pic));
+            // localStorage.setItem('detailCoverPic',JSON.stringify(this.cover_pic));
 
             this.staffs = res.data.data.staffs[0];
             this.staffs = Object.assign({},this.staffs,res.data.data.staffs[0]);
-            localStorage.setItem('detailStaffs',JSON.stringify(this.staffs));
+            // localStorage.setItem('detailStaffs',JSON.stringify(this.staffs));
             this.myData(id, 1);
           }
+          this.loading = false;
         })
       },
       search(val) {
@@ -397,7 +398,7 @@
     align-items: center;
     justify-content: center;
     position: absolute;
-    top: 50%;
+    top: 43%;
     left: 50%;
     z-index: 999;
   }

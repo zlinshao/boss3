@@ -141,14 +141,22 @@
         </div>
       </el-dialog>
     </div>
-    <!--<div id="testPaperDialog">-->
-      <!--<el-dialog :visible.sync="testPaperDialog" title="新建试卷" width="50%">-->
-        <!--<el-row :gutter="30">-->
-          <!--<el-col :span="12"></el-col>-->
-          <!--<el-col :span="12"></el-col>-->
-        <!--</el-row>-->
-      <!--</el-dialog>-->
-    <!--</div>-->
+    <div id="testPaperDialog">
+      <el-dialog :visible.sync="testPaperDialog" title="新建试卷" width="50%">
+        <el-row :gutter="30">
+          <el-col :span="12">
+            <div class="import_questions">
+              <div><img src="../../../assets/images/examination/批量导入试题.svg"><br/>批量导入试题</div>
+            </div>
+          </el-col>
+          <el-col :span="12">
+            <div class="import_questions" style="border: 1px solid #fda2cc;box-shadow: 0 0 3px 1px #fda2cc;">
+              <div><img src="../../../assets/images/examination/自己录入.svg"><br/>自己录入</div>
+            </div>
+          </el-col>
+        </el-row>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
@@ -240,6 +248,20 @@
       margin-top: 20px;
     }
   }
+  #testPaperDialog {
+    .import_questions {
+      border: 1px solid #b4c6fd;
+      -webkit-box-shadow: 0 0 3px 1px #b4c6fd;
+      box-shadow: 0 0 3px 1px #b4c6fd;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 180px;
+      border-radius: 5px;
+    }
+  }
+
 
 
 </style>
