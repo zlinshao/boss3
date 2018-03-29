@@ -61,7 +61,7 @@
                 <router-link :to="item.path">
                   <b :class="{'backColor1': -1 < index,'backColor2': index === 3 || index === 11 || index === 13,
                    'backColor3': index === 5 || index === 14,'backColor4':index === 4}">
-                    <i :class="item.icon"></i>
+                    <i :class="item.icon" style="font-size: 22px"></i>
                   </b>
                   <span>{{item.name}}</span>
                 </router-link>
@@ -156,8 +156,6 @@
               <div class="progressBar" v-popover:popover1>
                 <div class="percent"></div>
               </div>
-
-
               <div class="navigation">
                 <el-row>
                   <el-col :span="10" class="checkUp">
@@ -457,19 +455,20 @@
         this.isCollapse = !this.isCollapse;
       },
       lockScreen() {
-        this.$http.get(globalConfig.server + 'setting/others/lock_screen_status?lock_status=1').then((res) => {
-          if (res.data.code === '100003') {
-            localStorage.setItem('beforePath', this.$route.path);
-            localStorage.setItem('lockStatus', 1);
-            this.$router.push({path: '/lock'});
-          } else {
-            this.$notify({
-              title: '警告',
-              message: res.data.msg,
-              type: 'warning'
-            });
-          }
-        })
+          alert(2)
+//        this.$http.get(globalConfig.server + 'setting/others/lock_screen_status?lock_status=1').then((res) => {
+//          if (res.data.code === '100003') {
+//            localStorage.setItem('beforePath', this.$route.path);
+//            localStorage.setItem('lockStatus', 1);
+//            this.$router.push({path: '/lock'});
+//          } else {
+//            this.$notify({
+//              title: '警告',
+//              message: res.data.msg,
+//              type: 'warning'
+//            });
+//          }
+//        })
       },
 
     }
@@ -890,11 +889,6 @@
           }
           .developBack {
             background: #405597 !important;
-          }
-          .el-menu {
-            i {
-              color: #fff !important;
-            }
           }
           .el-menu--collapse {
             width: 64px;

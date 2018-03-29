@@ -1,5 +1,5 @@
 <template>
-  <div id="individual" @click="editPersonalSign($event)">
+  <div id="individual">
     <div class="topBack">
       <div class="topBackLeft">
         <div class="leftPic">
@@ -14,7 +14,7 @@
           <div class="personalSign">
             <span v-if="!isEdit && landholder.data">{{landholder.data.signature.content}}</span>
             <span v-if="!isEdit && !landholder.data">添加工作状态...</span>
-            <el-input size="mini" v-if="isEdit" v-model="params.content"></el-input>
+            <el-input id="editInput" size="mini" v-if="isEdit" @blur="editPersonalSign($event)" v-model="params.content"></el-input>
             <el-button size="medium" v-if="!isEdit" @click.stop="showInput" type="text">
               <i class="el-icon-edit"></i>
             </el-button>
@@ -272,27 +272,26 @@
         this.isEdit = true;
         this.params.content = this.landholder.data.signature.content;
         setTimeout(()=>{
+          $('#editInput').focus();
           this.isChanged = false;
         })
       },
-      editPersonalSign(e){
-        if(e.target.nodeName !== 'INPUT'){
-          this.isEdit = false;
-          if(this.isChanged){
-            this.$http.post(globalConfig.server+'manager/staff_record',this.params).then((res) =>{
-              let personal =  JSON.parse(localStorage.personal);
-              if(res.data.code === '30010'){
-                personal.data.signature = res.data.data;
-                localStorage.setItem('personal', JSON.stringify(personal));
-                this.landholder = JSON.parse(localStorage.personal);
-              }else {
-                this.$notify.warning({
-                  title:'警告',
-                  message:res.data.msg
-                })
-              }
-            })
-          }
+      editPersonalSign(){
+        this.isEdit = false;
+        if(this.isChanged){
+          this.$http.post(globalConfig.server+'manager/staff_record',this.params).then((res) =>{
+            let personal =  JSON.parse(localStorage.personal);
+            if(res.data.code === '30010'){
+              personal.data.signature = res.data.data;
+              localStorage.setItem('personal', JSON.stringify(personal));
+              this.landholder = JSON.parse(localStorage.personal);
+            }else {
+              this.$notify.warning({
+                title:'警告',
+                message:res.data.msg
+              })
+            }
+          })
         }
       }
     }
