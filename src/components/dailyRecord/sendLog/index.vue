@@ -35,13 +35,26 @@
           </el-form-item>
         </div>
         <div class="sendLog">
-          <div class="sendTitle">增加照片或附件</div>
+          <div class="sendTitle">增加照片</div>
           <el-form-item>
-            <Upload :ID="'day_record_upload'" @getImg="getImage" :isClear="isClear"></Upload>
+            <Upload :ID="'record_img'" @getImg="getImage" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
-          <div class="sendTitle">发送给</div>
+          <div class="sendTitle">增加附件</div>
+          <el-form-item>
+            <Upload :ID="'record_file'" @getImg="getFile" :isClear="isClear"></Upload>
+          </el-form-item>
+        </div>
+        <div class="sendLog">
+          <div class="sendTitle">发给谁 <span style="color: #cdcdcd;">（默认通过工作通知发送给对方，点击头像删除）</span></div>
+          <div>
+            <span v-for="item in sendPeople" class="send_people">
+              <img :src="item.avatar" v-if="item.avatar">
+              <img src="../../../assets/images/head.jpg" v-else>
+            </span>
+            <img src="../../../assets/images/add.svg" @click="choosePeople">
+          </div>
         </div>
         <div style="text-align: center;">
           <el-button type="primary" @click="dayRecordSubmit">提交</el-button>
@@ -81,16 +94,29 @@
           </el-form-item>
         </div>
         <div class="sendLog">
-          <div class="sendTitle">增加照片或附件</div>
+          <div class="sendTitle">增加照片</div>
           <el-form-item>
-            <Upload :ID="'week_record_upload'" @getImg="getImage" :isClear="isClear"></Upload>
+            <Upload :ID="'record_img'" @getImg="getImage" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
-          <div class="sendTitle">发送给</div>
+          <div class="sendTitle">增加附件</div>
+          <el-form-item>
+            <Upload :ID="'record_file'" @getImg="getFile" :isClear="isClear"></Upload>
+          </el-form-item>
+        </div>
+        <div class="sendLog">
+          <div class="sendTitle">发给谁 <span style="color: #cdcdcd;">（默认通过工作通知发送给对方，点击头像删除）</span></div>
+          <div>
+            <span v-for="item in sendPeople" class="send_people">
+              <img :src="item.avatar" v-if="item.avatar">
+              <img src="../../../assets/images/head.jpg" v-else>
+            </span>
+            <img src="../../../assets/images/add.svg" @click="choosePeople">
+          </div>
         </div>
         <div style="text-align: center;">
-          <el-button type="primary" >提交</el-button>
+          <el-button type="primary" @click="weekRecordSubmit">提交</el-button>
         </div>
       </el-form>
     </div>
@@ -127,16 +153,29 @@
           </el-form-item>
         </div>
         <div class="sendLog">
-          <div class="sendTitle">增加照片或附件</div>
+          <div class="sendTitle">增加照片</div>
           <el-form-item>
-            <Upload :ID="'month_record_upload'" @getImg="getImage" :isClear="isClear"></Upload>
+            <Upload :ID="'record_img'" @getImg="getImage" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
-          <div class="sendTitle">发送给</div>
+          <div class="sendTitle">增加附件</div>
+          <el-form-item>
+            <Upload :ID="'record_file'" @getImg="getFile" :isClear="isClear"></Upload>
+          </el-form-item>
+        </div>
+        <div class="sendLog">
+          <div class="sendTitle">发给谁 <span style="color: #cdcdcd;">（默认通过工作通知发送给对方，点击头像删除）</span></div>
+          <div>
+            <span v-for="item in sendPeople" class="send_people">
+              <img :src="item.avatar" v-if="item.avatar">
+              <img src="../../../assets/images/head.jpg" v-else>
+            </span>
+            <img src="../../../assets/images/add.svg" @click="choosePeople">
+          </div>
         </div>
         <div style="text-align: center;">
-          <el-button type="primary" >提交</el-button>
+          <el-button type="primary" @click="monthRecordSubmit">提交</el-button>
         </div>
       </el-form>
     </div>
@@ -179,31 +218,46 @@
           </el-form-item>
         </div>
         <div class="sendLog">
-          <div class="sendTitle">增加照片或附件</div>
+          <div class="sendTitle">增加照片</div>
           <el-form-item>
-            <Upload :ID="'month_record_upload'" @getImg="getImage" :isClear="isClear"></Upload>
+            <Upload :ID="'record_img'" @getImg="getImage" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
-          <div class="sendTitle">发送给</div>
+          <div class="sendTitle">增加照片或附件</div>
+          <el-form-item>
+            <Upload :ID="'record_file'" @getImg="getFile" :isClear="isClear"></Upload>
+          </el-form-item>
+        </div>
+        <div class="sendLog">
+          <div class="sendTitle">发给谁 <span style="color: #cdcdcd;">（默认通过工作通知发送给对方，点击头像删除）</span></div>
+          <div>
+            <span v-for="item in sendPeople" class="send_people">
+              <img :src="item.avatar" v-if="item.avatar">
+              <img src="../../../assets/images/head.jpg" v-else>
+            </span>
+            <img src="../../../assets/images/add.svg" @click="choosePeople">
+          </div>
         </div>
         <div style="text-align: center;">
-          <el-button type="primary" >提交</el-button>
+          <el-button type="primary" @click="achieveDayRecordSubmit">提交</el-button>
         </div>
       </el-form>
     </div>
+    <Organization :organizationDialog="organizationDialog" :type="selectType" @close="closeOrganization" @selectMember="selectMember"></Organization>
   </div>
 </template>
 
 <script>
   import Upload from '../../common/UPLOAD.vue';
+  import Organization from '../../common/organization.vue'
   export default {
     name: 'hello',
-    components:{Upload},
+    components:{Upload, Organization},
     data () {
       return {
         personnal: globalConfig.personal,
-        buttonVal: ['日报', '周报', '月报', '业绩日报'],  // 0 1 2 3
+        buttonVal: ['日报', '周报', '月报', '业绩日报'],  // active 0 1 2 3
         active: 0,
         dayRecord: true,
         weekRecord: false,
@@ -226,14 +280,22 @@
           next_plan: '',
           need_coordinate_job: '',
           remark: '',
+          image_pic: [],
+          annex_file: [],
+          receivers_id: [],
         },
+        // 月报
         monthForm: {
           finish_job: '',
           job_summary: '',
           next_plan: '',
           need_coordinate_job: '',
           remark: '',
+          image_pic: [],
+          annex_file: [],
+          receivers_id: [],
         },
+        // 业绩日报
         achieveForm: {
           turnover_today: '',
           customer_num: '',
@@ -241,8 +303,14 @@
           month_achievement_goals: '',
           thinking_today: '',
           remark: '',
+          image_pic: [],
+          annex_file: [],
+          receivers_id: [],
         },
+        organizationDialog: false,
         isClear: false,
+        selectType: '',
+        sendPeople: [],
       }
     },
     methods:{
@@ -270,14 +338,49 @@
 
       },
       getImage(val) {
-        console.log(val);
-        this.dayForm.image_pic = val[1]; //选择的图片数组ids
-        // this.uploadImgLength = val[1].length;
+        switch(this.active){
+          case 0:
+            this.dayForm.image_pic = val[1]; //选择的图片数组ids
+            break;
+          case 1:
+            this.weekForm.image_pic = val[1]; //选择的图片数组ids
+            break;
+          case 2:
+            this.monthForm.image_pic = val[1]; //选择的图片数组ids
+            break;
+          case 3:
+            this.achieveForm.image_pic = val[1]; //选择的图片数组ids
+            break;
+        }
       },
+      getFile(val) {
+        switch(this.active){
+          case 0:
+            this.dayForm.annex_file = val[1]; //选择的文件数组ids
+            break;
+          case 1:
+            this.weekForm.annex_file = val[1]; //选择的文件数组ids
+            break;
+          case 2:
+            this.monthForm.annex_file = val[1]; //选择的文件数组ids
+            break;
+          case 3:
+            this.achieveForm.annex_file = val[1]; //选择的文件数组ids
+            break;
+        }
+      },
+      // 提交日报
       dayRecordSubmit(){
         this.$http.post(globalConfig.server+ 'oa/day',this.dayForm).then((res) => {
-            if(res.data.code === '100000') {
+            if(res.data.code === '100010') {
               this.dayForm = {};
+              this.isClear = true;
+              this.sendPeople = [];
+              this.$emit('appointLookLog'); //发完日志跳转到我发的日志标签页
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              })
             } else {
               this.$notify.warning({
                 title: '警告',
@@ -285,6 +388,102 @@
               })
             }
         });
+      },
+      // 提交周报
+      weekRecordSubmit() {
+        this.$http.post(globalConfig.server+ 'oa/week',this.weekForm).then((res) => {
+          if(res.data.code === '110010') {
+            this.weekForm = {};
+            this.isClear = true;
+            this.sendPeople = [];
+            this.$emit('appointLookLog');
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            })
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            })
+          }
+        });
+      },
+      // 提交月报
+      monthRecordSubmit() {
+        this.$http.post(globalConfig.server+ 'oa/month',this.monthForm).then((res) => {
+          if(res.data.code === '120010') {
+            this.monthForm = {};
+            this.isClear = true;
+            this.sendPeople = [];
+            this.$emit('appointLookLog');
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
+      // 提交业绩日报
+      achieveDayRecordSubmit(){
+        this.$http.post(globalConfig.server+ 'oa/achievement',this.achieveForm).then((res) => {
+          if(res.data.code === '130010') {
+            this.achieveForm = {};
+            this.isClear = true;
+            this.sendPeople = [];
+            this.$emit('appointLookLog');
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
+      choosePeople() {
+        this.organizationDialog = true;
+        this.selectType = 'staff';
+      },
+      //关闭选人框回调
+      closeOrganization(){
+        this.organizationDialog = false;
+      },
+      selectMember(val){
+        console.log("selectMember==="+JSON.stringify(val));
+        this.organizationDialog = false;
+        this.sendPeople = val;
+        switch(this.active){
+          case 0:
+            for(var i=0; i<this.sendPeople.length;i++){
+              this.dayForm.receivers_id.push(this.sendPeople[i].id);
+            }
+            break;
+          case 1:
+            for(var i=0; i<this.sendPeople.length;i++){
+              this.weekForm.receivers_id.push(this.sendPeople[i].id);
+            }
+            break;
+          case 2:
+            for(var i=0; i<this.sendPeople.length;i++){
+              this.monthForm.receivers_id.push(this.sendPeople[i].id);
+            }
+            break;
+          case 3:
+            for(var i=0; i<this.sendPeople.length;i++){
+              this.achieveForm.receivers_id.push(this.sendPeople[i].id);
+            }
+            break;
+        }
+
       },
     },
     mounted() {
@@ -318,5 +517,11 @@
     div.sendTitle {
       margin: 18px 0 6px;
     }
+  }
+  .send_people img{
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-left: 5px;
   }
 </style>

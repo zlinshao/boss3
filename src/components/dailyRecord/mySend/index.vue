@@ -33,6 +33,105 @@
         <span @click="goDayRecordDetail(item.id)">查看详情</span>
       </div>
     </div>
+    <div class="meSend" v-for="item in weekRecordData">
+      <div class="meSendTop">
+        <div>
+          <span>
+            <img :src="personal.avatar" v-if="personal.avatar">
+            <img src="../../../assets/images/head.jpg" v-else>
+
+          </span>
+          <span>{{personal.name}}</span>
+        </div>
+        <span>周报</span>
+      </div>
+      <div class="mainTitle">
+        <div>
+          <span>今日完成工作：</span>
+          <span>{{item.finish_job}}</span>
+        </div>
+        <div>
+          <span>未完成工作：</span>
+          <span>{{item.unfinished_job}}</span>
+        </div>
+        <div>
+          <span>需协调工作：</span>
+          <span>{{item.need_coordinate_job}}</span>
+        </div>
+      </div>
+      <div class="footer">
+        <span class="times">{{item.create_time}}</span>
+        <span @click="deleteDayRecord(item.id)">删除</span>
+        <span @click="editDayRecord(item.id)">修改</span>
+        <span @click="goDayRecordDetail(item.id)">查看详情</span>
+      </div>
+    </div>
+    <div class="meSend" v-for="item in monthRecordData">
+      <div class="meSendTop">
+        <div>
+          <span>
+            <img :src="personal.avatar" v-if="personal.avatar">
+            <img src="../../../assets/images/head.jpg" v-else>
+
+          </span>
+          <span>{{personal.name}}</span>
+        </div>
+        <span>月报</span>
+      </div>
+      <div class="mainTitle">
+        <div>
+          <span>今日完成工作：</span>
+          <span>{{item.finish_job}}</span>
+        </div>
+        <div>
+          <span>未完成工作：</span>
+          <span>{{item.unfinished_job}}</span>
+        </div>
+        <div>
+          <span>需协调工作：</span>
+          <span>{{item.need_coordinate_job}}</span>
+        </div>
+      </div>
+      <div class="footer">
+        <span class="times">{{item.create_time}}</span>
+        <span @click="deleteDayRecord(item.id)">删除</span>
+        <span @click="editDayRecord(item.id)">修改</span>
+        <span @click="goDayRecordDetail(item.id)">查看详情</span>
+      </div>
+    </div>
+    <div class="meSend" v-for="item in achieveDayRecordData">
+      <div class="meSendTop">
+        <div>
+          <span>
+            <img :src="personal.avatar" v-if="personal.avatar">
+            <img src="../../../assets/images/head.jpg" v-else>
+
+          </span>
+          <span>{{personal.name}}</span>
+        </div>
+        <span>业绩日报</span>
+      </div>
+      <div class="mainTitle">
+        <div>
+          <span>今日完成工作：</span>
+          <span>{{item.finish_job}}</span>
+        </div>
+        <div>
+          <span>未完成工作：</span>
+          <span>{{item.unfinished_job}}</span>
+        </div>
+        <div>
+          <span>需协调工作：</span>
+          <span>{{item.need_coordinate_job}}</span>
+        </div>
+      </div>
+      <div class="footer">
+        <span class="times">{{item.create_time}}</span>
+        <span @click="deleteDayRecord(item.id)">删除</span>
+        <span @click="editDayRecord(item.id)">修改</span>
+        <span @click="goDayRecordDetail(item.id)">查看详情</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -43,6 +142,9 @@
       return {
         personal: globalConfig.personal,
         dayRecordData: {},
+        weekRecordData: {},
+        monthRecordData: {},
+        achieveDayRecordData: {},
       }
     },
     methods: {
@@ -50,6 +152,21 @@
         this.$http.get(globalConfig.server+ 'oa/day/',{params:{pages:1}}).then( (res)=> {
           if(res.data.code === '100000') {
             this.dayRecordData = res.data.data && res.data.data.data;
+          }
+        });
+        this.$http.get(globalConfig.server+ 'oa/week/',{params:{pages:1}}).then( (res)=> {
+          if(res.data.code === '110000') {
+            this.weekRecordData = res.data.data && res.data.data.data;
+          }
+        });
+        this.$http.get(globalConfig.server+ 'oa/month/',{params:{pages:1}}).then( (res)=> {
+          if(res.data.code === '120000') {
+            this.monthRecordData = res.data.data && res.data.data.data;
+          }
+        });
+        this.$http.get(globalConfig.server+ 'oa/achievement/',{params:{pages:1}}).then( (res)=> {
+          if(res.data.code === '130000') {
+            this.achieveDayRecordData = res.data.data && res.data.data.data;
           }
         });
       },

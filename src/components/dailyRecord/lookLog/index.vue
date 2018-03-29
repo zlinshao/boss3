@@ -1,25 +1,82 @@
 <template>
   <div>
+    <div style="margin: 15px 10px">
+      <el-row >
+        <el-col :span="2">发送人</el-col>
+        <el-col :span="7"><el-input type="text" size="mini" placeholder="请选择发送人"></el-input></el-col>
+        <el-col :span="3" style="margin-left: 38px;"><el-button class="primary" size="mini">搜索</el-button></el-col>
+      </el-row>
+      <el-row style="margin: 20px 0;">
+        <el-col :span="2"> 时间</el-col>
+        <el-date-picker v-model="form.start_time" type="date" size="mini" placeholder="选择日期"></el-date-picker> ——
+        <el-date-picker v-model="form.end_time" type="date" size="mini"  placeholder="选择日期"></el-date-picker>
+      </el-row>
+    </div>
+    <div style="margin: 10px 0;">
+      <el-button :class="{'primary': active === index}" @click="tagClick(index)" size="mini"
+                 v-for="(key,index) in buttonVal" :key="index">{{key}}
+      </el-button>
+    </div>
     <div class="lookLog" v-for="item in lookLogData">
       <div class="pic">
-        <img src="../../../assets/images/head.jpg" alt="">
+        <img :src="item.creator_id.avatar" v-if="item.creator_id.avatar">
+        <img src="../../../assets/images/head.jpg" v-else>
       </div>
       <div style="width: 100%">
         <div class="titles">
-          <div class="a">到付快递费好看多啦</div>
-          <div class="b">0000-00-00</div>
-          <p>今日营业额：<span>1000</span></p>
-          <p>今日客户数：<span>1000</span></p>
-          <p>月累计营业额：<span>1000</span></p>
-          <p>本月业绩目标：<span>1000</span></p>
+          <div class="a">{{item.creator_id.name}}
+            的<span v-if="item.module === 'app\\oa\\model\\DailyDay'">日报</span>
+            <span v-if="item.module === 'app\\oa\\model\\DailyWeek'">周报</span>
+            <span v-if="item.module === 'app\\oa\\model\\DailyMonth'">月报</span>
+            <span v-if="item.module === 'app\\oa\\model\\DailyAchievement'">业绩日报</span>
+          </div>
+          <div class="b">{{item.create_time}}</div>
+          <div v-if="item.module === 'app\\oa\\model\\DailyDay'">
+            <p>今日完成工作：<span>{{item.daily.finish_job}}</span></p>
+            <p>未完成工作：<span>{{item.daily.unfinished_job}}</span></p>
+            <p>需协调工作：<span>{{item.daily.need_coordinate_job}}</span></p>
+            <p>备注：<span>{{item.daily.remark}}</span></p>
+          </div>
+          <div v-if="item.module === 'app\\oa\\model\\DailyWeek'">
+            <p>本周完成工作：<span>{{item.daily.finish_job}}</span></p>
+            <p>本周工作总结：<span>{{item.daily.job_summary}}</span></p>
+            <p>下周工作计划：<span>{{item.daily.next_plan}}</span></p>
+            <p>需协调与帮助：<span>{{item.daily.need_coordinate_job}}</span></p>
+            <p>备注：<span>{{item.daily.remark}}</span></p>
+          </div>
+          <div v-if="item.module === 'app\\oa\\model\\DailyMonth'">
+            <p>本月完成工作：<span>{{item.daily.finish_job}}</span></p>
+            <p>本月工作总结：<span>{{item.daily.job_summary}}</span></p>
+            <p>下月工作计划：<span>{{item.daily.next_plan}}</span></p>
+            <p>需帮助与支持：<span>{{item.daily.need_coordinate_job}}</span></p>
+            <p>备注：<span>{{item.daily.remark}}</span></p>
+          </div>
+          <div v-if="item.module === 'app\\oa\\model\\DailyAchievement'">
+            <p>今日营业额：<span>{{item.daily.turnover_today}}</span></p>
+            <p>今日客户数：<span>{{item.daily.customer_num}}</span></p>
+            <p>月累计营业额：<span>{{item.daily.month_total_turnover}}</span></p>
+            <p>本月业绩目标：<span>{{item.daily.month_achievement_goals}}</span></p>
+            <p>今日思考：<span>{{item.daily.thinking_today}}</span></p>
+            <p>备注：<span>{{item.daily.remark}}</span></p>
+          </div>
+          <div  class="image_file">
+            <span v-for="pic in item.daily.album.image_pic" v-if="item.daily && item.daily.album">
+              <img :src="pic[0].uri">
+            </span>
+            <span v-for="pic in item.daily.album.annex_file" v-if="item.daily && item.daily.album">
+              <img :src="pic[0].uri">附件
+            </span>
+          </div>
         </div>
         <div class="lookPeople">
-          <div><span>1223</span>人已读</div>
-          <span v-for="key in 12">
-                  <img src="../../../assets/images/head.jpg" alt="">
+          <div><span v-if="item.receivers">{{item.receivers.length}}</span> <span v-else>0</span>人已读</div>
+          <span v-for="(value,key) in item.receivers" v-if="key<=12">
+                  <img :src="value.avatar" v-if="value.avatar">
+                  <img src="../../../assets/images/head.jpg" v-else>
                 </span>
-          <p>●●●</p>
+          <p v-if="item.receivers && item.receivers.length>12">●●●</p>
         </div>
+
         <div class="commentContent" v-if="false">
           <div v-for="key in 3">
             <span>习大大：</span>
@@ -44,18 +101,60 @@
     data () {
       return {
         lookLogData: [],
+        form: {
+          staff_id: '',
+          start_time: '',
+          end_time: '',
+          limit: 12,
+          page: 1,
+          type: '', // 1 2 3 4 日周月业绩
+          style: '',  //看日志 list 日志列表count
+          self: 1,
+        },
+        buttonVal: ['全部','我发出的','日报', '周报', '月报', '业绩日报'],
+        active: 0,
       }
     },
     methods: {
       getLookLog() {
-        this.$http.get(globalConfig.server+ 'oa/day/?staff_id=&pages=1').then((res) => {
-          if(res.data.code === '100000') {
+        this.$http.get(globalConfig.server+ 'oa/daily_tmp/index?page=1&limit=12&self='+this.form.self+'&type='+this.form.type).then((res) => {
+          if(res.data.code === '80000') {
             this.lookLogData = res.data.data.data;
-            console.log(this.lookLogData);
           }
         });
       },
+      // 按钮切换
+      tagClick(val) {
+        this.active = val;
+        switch(val) {
+          case 0:  //全部
 
+            this.getLookLog();
+            break;
+          case 1:  //我发出的
+            this.form.self = 1;
+            this.getLookLog();
+            break;
+          case 2:  //日报
+            this.form.type = 1;
+            this.getLookLog();
+            break;
+          case 3:  //月报
+            this.form.type = 2;
+            this.getLookLog();
+            break;
+          case 4:  //周报
+            this.form.type = 3;
+            this.getLookLog();
+            break;
+          case 5:  //业绩日报
+            this.form.type = 4;
+            this.getLookLog();
+            break;
+
+        }
+
+      },
     },
     mounted() {
       this.getLookLog();
@@ -68,7 +167,15 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-
+  .image_file img{
+    width: 50px;
+    height: 50px;
+  }
+  .primary {
+    background: #409EFF;
+    border-color: #409EFF;
+    color: #ffffff;
+  }
   @mixin flex {
     display: flex;
     display: -webkit-flex;
