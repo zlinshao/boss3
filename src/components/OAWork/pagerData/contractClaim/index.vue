@@ -364,7 +364,7 @@
           this.getHandInList();
         }else if(this.selectFlag === 1){
           this.getTotalList();
-        }else if(val === 5){
+        }else if(this.selectFlag === 5){
           this.getLossList();
         }
       },
@@ -379,7 +379,7 @@
           this.getHandInList();
         }else if(this.selectFlag === 1){
           this.getTotalList();
-        }else if(val === 5){
+        }else if(this.selectFlag === 5){
           this.getLossList();
         }
       },
