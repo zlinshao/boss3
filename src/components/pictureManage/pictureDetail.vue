@@ -30,7 +30,7 @@
                 <el-card :body-style="{ padding: '0px'}">
                   <img :src="item.picture_path" data-magnify="" :data-src="item.picture_path" class="imageItem">
                   <div style="padding: 14px;">
-                    <span>{{item.name}}</span>
+                    <span style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{item.name}}</span>
                     <div class="bottom clearfix">
                       <time class="time">{{item.created_at.split(' ')[0]}}</time>
                       <el-tooltip content="删除" placement="bottom" effect="light">

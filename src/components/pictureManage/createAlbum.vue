@@ -13,15 +13,15 @@
                 <el-input v-model="form.description" type="textarea" placeholder="请输入相册说明"></el-input>
               </el-form-item>
           </el-row>
-          <el-row>
-            <el-form-item label="主题:" required>
-              <el-radio-group v-model="form.theme">
-                <el-radio label="1" :key="1">个人</el-radio>
-                <el-radio label="2" :key="2">房屋</el-radio>
-                <el-radio label="3" :key="3">部门</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-row>
+          <!--<el-row>-->
+            <!--<el-form-item label="主题:" required>-->
+              <!--<el-radio-group v-model="form.theme">-->
+                <!--<el-radio label="1" :key="1">个人</el-radio>-->
+                <!--<el-radio label="2" :key="2">房屋</el-radio>-->
+                <!--<el-radio label="3" :key="3">部门</el-radio>-->
+              <!--</el-radio-group>-->
+            <!--</el-form-item>-->
+          <!--</el-row>-->
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
