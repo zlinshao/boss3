@@ -59,8 +59,8 @@
                       <img src="../assets/images/head.jpg" alt="">
                     </el-col>
                     <div class="longHuName">陆宣羽</div>
-                    <el-col :span="4" class="t_right" style="padding-left: 0;padding-right: 23px;">南京一区 - 百万一组</el-col>
-                    <el-col :span="4" class="achievement" style="padding-right:45px;">212.222.00元</el-col>
+                    <el-col :span="4" class="t_right" style="padding-left: 0;padding-right: 23px;min-width: 145px;">南京一区 - 百万一组</el-col>
+                    <el-col :span="4" class="achievement" style="padding-right:45px;min-width: 120px;padding-left: 0;">212.222.00元</el-col>
                     <el-col :span="3" class=" t_center" style="padding-right: 15px;">42套</el-col>
                     <el-col :span="3" class=" t_center" style="padding-right: 5px;">37套</el-col>
                     <el-col :span="3" class=" t_center" style="padding:0;">汪玉睿</el-col>
@@ -685,8 +685,8 @@
   }
   #main {
     width: 100%;
-    min-width: 1500px;
-    overflow: hidden;
+    min-width: 900px;
+    /*overflow: hidden;*/
 
     @font-face {
       font-family: Impact;//////字体名称
@@ -825,7 +825,7 @@
                 font-weight: bold;
                 color: #747576;
                 margin: 0 35px 0 10px;
-                width: 65px;
+                min-width: 65px;
               }
               &:nth-child(1) {
                 .longLuOrder, .achievement {
