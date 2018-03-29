@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tabs v-model="activeName" @tab-click="handleClick(activeName)">
+    <el-tabs v-model="activeName">
       <el-tab-pane label="乐伽大学" name="first">
         <lejiaCollege></lejiaCollege>
       </el-tab-pane>
@@ -13,7 +13,6 @@
       <el-tab-pane label="制度管理" name="fourth">
         <systemManageMent></systemManageMent>
       </el-tab-pane>
-
     </el-tabs>
     <el-button type="success" size="mini" @click="openModalDialog('instructionDialog')" class="user_introction">
       <i class="el-icon-tickets"></i>&nbsp;功能说明
@@ -40,40 +39,45 @@
     },
     data() {
       return {
-        activeName: 'first',
-        moduleType: 'lejiaCollege',
         instructionDialog: false,
+        activeName: 'first',
+//        moduleType: 'lejiaCollege',
       }
     },
     mounted() {
-      if (this.$route.query.tabs !== undefined) {
-        this.activeName = this.$route.query.tabs;
+      if (this.$route.query.type !== undefined) {
+        this.activeName = this.$route.query.type;
       }
-      switch (this.activeType) {
-        case 'lejiaCollege':
-          this.activeName = 'first';
-          break;
-        case 'companyPortal':
-          this.activeName = 'second';
-          break;
-        case 'staffSquare':
-          this.activeName = 'third';
-          break;
-        case 'systemManageMent':
-          this.activeName = 'fourth';
-          break;
+//      switch (this.activeType) {
+//        case 'lejiaCollege':
+//          this.activeName = 'first';
+//          break;
+//        case 'companyPortal':
+//          this.activeName = 'second';
+//          break;
+//        case 'staffSquare':
+//          this.activeName = 'third';
+//          break;
+//        case 'systemManageMent':
+//          this.activeName = 'fourth';
+//          break;
+//      }
+    },
+    activated(){
+      if (this.$route.query.type !== undefined) {
+        this.activeName = this.$route.query.type;
       }
     },
-    watch: {
-      moduleType(val){
-        this.$store.dispatch('moduleType',this.moduleType);
-      }
-    },
-    computed: {
-      activeType() {
-        return this.$store.state.article.module_type;
-      }
-    },
+//    watch: {
+//      moduleType(val){
+//        this.$store.dispatch('moduleType',this.moduleType);
+//      }
+//    },
+//    computed: {
+//      activeType() {
+//        return this.$store.state.article.module_type;
+//      }
+//    },
     methods: {
       openModalDialog(type) {
         switch (type) {
@@ -85,22 +89,22 @@
       closeModal() {
         this.instructionDialog = false;
       },
-      handleClick(val) {
-        switch (val) {
-          case 'first':
-            this.moduleType = 'lejiaCollege';
-            break;
-          case 'second':
-            this.moduleType = 'companyPortal';
-            break;
-          case 'third':
-            this.moduleType = 'staffSquare';
-            break;
-          case 'fourth':
-            this.moduleType = 'systemManageMent';
-            break;
-        }
-      }
+//      handleClick(val) {
+//        switch (val) {
+//          case 'first':
+//            this.moduleType = 'lejiaCollege';
+//            break;
+//          case 'second':
+//            this.moduleType = 'companyPortal';
+//            break;
+//          case 'third':
+//            this.moduleType = 'staffSquare';
+//            break;
+//          case 'fourth':
+//            this.moduleType = 'systemManageMent';
+//            break;
+//        }
+//      }
     },
   }
 </script>
