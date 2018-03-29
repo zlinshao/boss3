@@ -19,15 +19,15 @@
                   ref="popover2"
                   width="400"
                   trigger="click">
-                  <div style="text-align: center;" v-if="(scope.row.allocated).length<1">暂无数据</div>
-                  <span v-if="(scope.row.allocated).length>0"
-                        v-for="item in (scope.row.allocated)">
-                    {{item}} &nbsp;&nbsp;
+                  <div style="text-align: center;" v-if="(scope.row.applied).length<1">暂无数据</div>
+                  <span style="min-width:82px; float:left;" v-if="(scope.row.applied).length>0"
+                        v-for="item in (scope.row.applied)">
+                    {{item}} 
                   </span>
                 </el-popover>
                 <el-button size="mini" type="text" v-popover:popover2>
                   详情
-                  ({{(scope.row.allocated).length}}份)
+                  ({{(scope.row.applied).length}}份)
                 </el-button>
               </template>
             </el-table-column>
