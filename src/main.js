@@ -32,6 +32,7 @@ Vue.use(AMap);
 
 Vue.use(vueEventCalendar, {locale: 'zh',});
 Vue.use(Boss);
+
 Vue.use(ElementUI);
 Vue.use(VueRouter);
 Vue.use(Vuex);
@@ -41,6 +42,7 @@ axios.defaults.withCredentials = true;
 axios.defaults.headers.common['Env'] = globalConfig.env;
 axios.defaults.headers = globalConfig.header;
 
+Vue.use(Fun);
 
 if (localStorage.myData !== undefined) {
   let head = JSON.parse(localStorage.myData);
@@ -53,13 +55,24 @@ if (localStorage.personal !== undefined) {
 
 Vue.config.productionTip = false;
 
-// 拦截器
+// // 拦截器发送
+// axios.interceptors.request.use(function (config) {
+//   // Do something before request is sent
+//   console.log(config)
+//   return config;
+// }, function (error) {
+//   // Do something with request error
+//   return Promise.reject(error);
+// });
+
+// 拦截器响应
 axios.interceptors.response.use(function (response) {
   // 对响应数据做点什么
   // console.log(response);
   return response;
 }, function (error) {
   // 对响应错误做点什么
+  // console.log(error);
   return Promise.reject(error);
 });
 

@@ -514,6 +514,7 @@
       this.getNews();
       this.getLejiaCollege();
       this.getPerWeeklyReport();
+      console.log(this.dictionary());
     },
   }
 </script>
