@@ -1,5 +1,5 @@
 <template>
-<el-dialog title="公告预览" :visible.sync="increaseGoodsDialogVisible" width="650px">
+<el-dialog title="公告" :visible.sync="warningDialogVisible">
   <div >
     <div class="navTop" v-bind:class="{ no1: no1flag, no2: no2flag, no3: no3flag }">
       <div class="top0">
@@ -23,7 +23,7 @@
     <div class="main scroll_bar" >
       <div class="mainTop">公司各部门：</div>
       <div class="mainTitle" v-html="lookinfo.content">
-       
+
       </div>
       <div class="mainFooter">
         <div>
@@ -34,7 +34,7 @@
     </div>
   </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" type="primary" @click="increaseGoodsDialogVisible = false">关闭</el-button>
+        <el-button size="small" type="primary" @click="warningDialogVisible = false">关闭</el-button>
       </span>
     </el-dialog>
 </template>
@@ -45,7 +45,7 @@ export default {
   name: "index",
   data() {
     return {
-      increaseGoodsDialogVisible: false,
+      warningDialogVisible: false,
       lookinfo: {},
       no1flag: false,
       no2flag: false,
@@ -55,9 +55,9 @@ export default {
   mounted() {},
   watch: {
     warningDialog(val) {
-      this.increaseGoodsDialogVisible = val;
+      this.warningDialogVisible = val;
     },
-    increaseGoodsDialogVisible(val) {
+    warningDialogVisible(val) {
       if (!val) {
         this.$emit("close");
       }

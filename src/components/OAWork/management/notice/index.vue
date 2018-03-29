@@ -103,7 +103,7 @@
 <script>
 import RightMenu from "../../../common/rightMenu.vue"; //右键
 import NoticeResources from "./components/NoticeResources.vue"; //增加物品页面
-import Warning from "./components/Warning.vue"; //预览页面
+import Warning from "./components/announcementDetail.vue"; //预览页面
 export default {
   components: {
     RightMenu,

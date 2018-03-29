@@ -40,7 +40,7 @@
       <div class="staff_name">
         <div class="staff_pic">
           <img :src="personal.avatar" v-if="personal.avatar !== ''">
-          <img v-else src="../../../../../assets/images/head.png">
+          <img src="../../../../../assets/images/head.png" v-else >
         </div>
         <div class="info">
           <span>
@@ -215,16 +215,13 @@
         this.form.htmlForEditor= '';
         this.isClear = true;
         setTimeout( () => {
-          this.$router.push({path: '/articleMessage', query: {tabs: this.tabIndex}})
+          this.$router.push({path: '/articleMessage'})
         },0);
       },
       handleImageAdded(file, Editor, cursorLocation, resetUploader) {
-        // An example of using FormData
-        // NOTE: Your key could be different such as:
-        // formData.append('file', file)
+
         let formData = new FormData();
         formData.append('file', file);
-        console.log(file)
 
         let config = {
           headers:{'Content-Type':'multipart/form-data'}

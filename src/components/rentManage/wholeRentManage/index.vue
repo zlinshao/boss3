@@ -378,7 +378,7 @@
   import OwnerInfoTab from '../tabComponents/ownerInfo.vue'
   import RentInfoTab from '../tabComponents/rentInfo.vue'
   import InDebtInfoTab from '../tabComponents/InDebtInfo.vue'
-  import ReturnRomeInfoTab from '../tabComponents/returnRomeInfo.vue'
+  import ReturnRomeInfoTab from '../tabComponents/returnRoomInfo/index.vue'   //退还房
   import RenewContractTab from '../tabComponents/renewContract.vue'
   import subletRecordTab from '../tabComponents/subletRecord.vue'
   import ReceivableItemTab from '../tabComponents/receivableItem.vue'

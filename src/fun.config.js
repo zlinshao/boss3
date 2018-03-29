@@ -1,10 +1,10 @@
 
-
 document.body.addEventListener('DOMSubtreeModified',function (e) {
   if(document.getElementsByClassName('v-modal').length>0){
     document.body.scrollTop = document.documentElement.scrollTop = 0;
   }
 });
+
 export default {
   install(Vue, options) {
     Vue.prototype.dictionary = function (data,flag) {
