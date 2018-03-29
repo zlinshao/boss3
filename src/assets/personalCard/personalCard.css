@@ -4,6 +4,7 @@
 #personalCard{
   width: 314px;
   height: 194px;
+  font-size: 12px;
   /*box-sizing: border-box;*/
   z-index: 1000;
   background: url("../images/card.png");
