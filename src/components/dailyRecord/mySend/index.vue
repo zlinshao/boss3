@@ -1,34 +1,36 @@
 <template>
   <div id="mySend">
-    <div class="meSend" v-for="key in 12">
+    <div class="meSend" v-for="item in dayRecordData">
       <div class="meSendTop">
         <div>
           <span>
-            <img src="../../../assets/images/head.jpg" alt="">
+            <img :src="personal.avatar" v-if="personal.avatar">
+            <img src="../../../assets/images/head.jpg" v-else>
+
           </span>
-          <span>米见过</span>
+          <span>{{personal.name}}</span>
         </div>
         <span>日报</span>
       </div>
       <div class="mainTitle">
         <div>
           <span>今日完成工作：</span>
-          <span>DSFDSFDSAFFDSFDSFSAFSAFSDFSDA</span>
+          <span>{{item.finish_job}}</span>
         </div>
         <div>
           <span>未完成工作：</span>
-          <span>DSFDSFDSAFFDSFDSFSAFSAFSDFSDA</span>
+          <span>{{item.unfinished_job}}</span>
         </div>
         <div>
           <span>需协调工作：</span>
-          <span>DSFDSFDSAFFDSFDSFSAFSAFSDFSDA</span>
+          <span>{{item.need_coordinate_job}}</span>
         </div>
       </div>
       <div class="footer">
-        <span class="times">0000-00-00 00:00:00</span>
-        <span>删除</span>
-        <span>修改</span>
-        <span>查看详情</span>
+        <span class="times">{{item.create_time}}</span>
+        <span @click="deleteDayRecord(item.id)">删除</span>
+        <span @click="editDayRecord(item.id)">修改</span>
+        <span @click="goDayRecordDetail(item.id)">查看详情</span>
       </div>
     </div>
   </div>
@@ -36,12 +38,62 @@
 
 <script>
   export default {
-    name: 'hello',
+    name: 'my-send',
     data () {
       return {
-        msg: 'Welcome to Your Vue.js App'
+        personal: globalConfig.personal,
+        dayRecordData: {},
       }
-    }
+    },
+    methods: {
+      getDayRecord() {
+        this.$http.get(globalConfig.server+ 'oa/day/',{params:{pages:1}}).then( (res)=> {
+          if(res.data.code === '100000') {
+            this.dayRecordData = res.data.data && res.data.data.data;
+          }
+        });
+      },
+      deleteDayRecord(id) {
+        this.$confirm('确认删除日报？','删除日报',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.get(globalConfig.server+ 'oa/day/delete/'+id).then((res)=>{
+            if(res.data.code === '100040') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.getDayRecord();
+            }
+          });
+        });
+      },
+      editDayRecord(id) {
+        this.$router.push({path: '/dailyRecord', query: {tabs: 'second'}});
+      },
+      goDayRecordDetail(id){
+
+      },
+      getWeekRecord() {
+
+      },
+      getMonthRecord() {
+
+      },
+      getAchieveRecord() {
+
+      },
+
+
+    },
+    mounted() {
+      this.getDayRecord();
+    },
+    activated() {
+      this.getDayRecord();
+    },
   }
 </script>
 
@@ -112,6 +164,7 @@
           span:last-of-type {
             overflow: hidden;
             text-overflow: ellipsis;
+            white-space: nowrap;
           }
         }
       }

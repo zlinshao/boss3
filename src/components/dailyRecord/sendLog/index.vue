@@ -31,7 +31,7 @@
         <div class="sendLog">
           <div class="sendTitle">备注</div>
           <el-form-item>
-            <el-input v-model="dayForm.need_coordinate_job" type="textarea" placeholder="请填写备注"></el-input>
+            <el-input v-model="dayForm.remark" type="textarea" placeholder="请填写备注"></el-input>
           </el-form-item>
         </div>
         <div class="sendLog">
@@ -44,7 +44,7 @@
           <div class="sendTitle">发送给</div>
         </div>
         <div style="text-align: center;">
-          <el-button type="primary" >提交</el-button>
+          <el-button type="primary" @click="dayRecordSubmit">提交</el-button>
         </div>
       </el-form>
     </div>
@@ -215,7 +215,9 @@
           unfinished_job:'',
           need_coordinate_job: '',
           remark: '',
-          picture_ids: [],
+          image_pic: [],
+          annex_file: [],
+          receivers_id: [],
         },
         //周报
         weekForm: {
@@ -269,8 +271,20 @@
       },
       getImage(val) {
         console.log(val);
-        this.dayForm.picture_ids = val[1]; //选择的图片数组ids
+        this.dayForm.image_pic = val[1]; //选择的图片数组ids
         // this.uploadImgLength = val[1].length;
+      },
+      dayRecordSubmit(){
+        this.$http.post(globalConfig.server+ 'oa/day',this.dayForm).then((res) => {
+            if(res.data.code === '100000') {
+              this.dayForm = {};
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              })
+            }
+        });
       },
     },
     mounted() {

@@ -94,6 +94,12 @@
       }
     },
     mounted() {
+      if (this.$route.query.tabs !== undefined) {
+        this.activeName = this.$route.query.tabs;
+      }
+    },
+    activated() {
+
     },
     watch: {},
     methods: {
