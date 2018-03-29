@@ -191,6 +191,7 @@
                 let applyInfo = res.data.data.full;
                 this.params.report_time = applyInfo.report_time;
                 this.params.staff_id = applyInfo.staff_id;
+                this.params.city_code = applyInfo.city_code;
                 this.params.department_id = applyInfo.department_id;
 
                 this.depart_name = res.data.data.department.name;
@@ -269,7 +270,7 @@
                 title:'成功',
                 message:res.data.msg
               });
-              this.$emit('close');
+              this.$emit('close','success');
               this.closeAddModal();
             }else {
               this.$notify.warning({

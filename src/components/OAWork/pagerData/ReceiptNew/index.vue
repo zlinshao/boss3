@@ -396,7 +396,7 @@
           {clickIndex: 'editLoss', headIcon: 'el-icon-edit', label: '修改',},
 //          {clickIndex: 'deleteHandIn', headIcon: 'el-icon-delete', label: '删除',},
         ];
-        this.contextMenuParam(event);       
+        this.contextMenuParam(event);
       },
 
       //右键回调时间
@@ -530,7 +530,7 @@
           }
       },
       RefreshTask(val){
-        
+
           if(val === 1){
             this.getApplyList();
           }else if(val === 2){
@@ -542,7 +542,7 @@
           }else {
              this.getTotalList();
           }
-                 
+
       },
       //分配成功后页面刷新
       DispatchOK(val){

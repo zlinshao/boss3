@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="作废合同修改" :visible.sync="editCancelDialogVisible">
+    <el-dialog title="丢失合同修改" :visible.sync="editLossDialogVisible">
       <div class="scroll_bar">
         <div class="title">基本信息</div>
         <div class="form_border">
@@ -12,20 +12,21 @@
                     <el-option label="领取" value="1"></el-option>
                     <el-option label="作废" value="2"></el-option>
                     <el-option label="上缴" value="3"></el-option>
+                    <el-option label="丢失" value="4"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="城市">
                   <el-select clearable v-model="params.city_code" disabled="" placeholder="请选择城市" value="">
-                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.variable.city_code"
+                    <el-option v-for="item in cityDictionary" :label="item.dictionary_name" :value="item.variable.city_code"
                                :key="item.id"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
 
               <el-col :span="8">
-                <el-form-item label="报备日期">
+                <el-form-item label="丢失日期">
                   <el-date-picker
                     type="datetime"
                     placeholder="选择日期时间"
@@ -35,7 +36,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="报备人">
+                <el-form-item label="丢失人">
                   <el-input disabled="" v-model="staff_name" @focus="openOrganizeModal"></el-input>
                 </el-form-item>
               </el-col>
@@ -52,7 +53,7 @@
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="120px">
             <div class="title">
-              收房合同作废（取消勾选则不再选择）
+              收房合同丢失（取消勾选则不再选择）
             </div>
             <el-row>
               <el-checkbox-group v-model="params.candidate">
@@ -63,7 +64,7 @@
             </el-row>
 
             <div class="title">
-              租房合同作废（取消勾选则不再选择）
+              租房合同丢失（取消勾选则不再选择）
             </div>
             <el-row>
               <el-checkbox-group v-model="params.candidate">
@@ -110,7 +111,7 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="editCancelDialogVisible = false">取 消</el-button>
+        <el-button size="small" @click="editLossDialogVisible = false">取 消</el-button>
         <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
@@ -124,23 +125,21 @@
   import Upload from '../../../../common/UPLOAD.vue'
   export default {
     components:{Organization,Upload},
-    props:['editCancelDialog','cancelEditId','startOperate'],
+    props:['editLossDialog','lostEditId','startOperate'],
     data() {
       return {
-        editCancelDialogVisible:false,
+        editLossDialogVisible:false,
         params: {
           city_code:'',
-//          category:'',
           report_time:'',
           staff_id:'',
           department_id:'1',
           remark:'',
           screenshot:[],
-          //zuofei
           candidate:[],
         },
-        taskType:'2',
-        dictionary:[],
+        taskType:'4',
+        cityDictionary:[],
         length:0,
         type:'',
         organizationDialog:false,
@@ -149,9 +148,6 @@
         collect : '',
         rent : '',
         upStatus:false,
-
-
-
 //        已经选取的合同编号
         isSelectCollect: [],
         isSelectRent: [],
@@ -162,10 +158,10 @@
 
     },
     watch:{
-      editCancelDialog(val){
-        this.editCancelDialogVisible = val
+      editLossDialog(val){
+        this.editLossDialogVisible = val
       },
-      editCancelDialogVisible(val){
+      editLossDialogVisible(val){
         if(!val){
           this.$emit('close')
         }
@@ -178,14 +174,11 @@
     },
     methods:{
       getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/306').then((res) => {
-          this.dictionary = res.data.data;
-          this.getApplyDetail();
-        });
+        this.dictionary(306,1).then((res) => {this.cityDictionary = res.data;this.getApplyDetail();});
       },
       //获取详情
       getApplyDetail(){
-        this.$http.get(globalConfig.server+'contract/invalidate/'+this.cancelEditId).then((res) => {
+        this.$http.get(globalConfig.server+'contract/loss/'+this.lostEditId).then((res) => {
           if(res.data.code === '20010'){
             let applyInfo = res.data.data.full;
             this.params.report_time = applyInfo.report_time;
@@ -254,7 +247,7 @@
             message:'图片正在上传'
           })
         }else {
-          this.$http.put(globalConfig.server+'contract/invalidate/'+this.cancelEditId,this.params).then((res) => {
+          this.$http.put(globalConfig.server+'contract/loss/'+this.lostEditId,this.params).then((res) => {
             if(res.data.code ==='20000'){
               this.$notify.success({
                 title:'成功',
@@ -273,7 +266,7 @@
       },
       closeAddModal(){
         $('.imgItem').remove();
-        this.editCancelDialogVisible = false;
+        this.editLossDialogVisible = false;
         this.params = {
           city_code:'',
 //          category:'',
@@ -285,7 +278,7 @@
           candidate:[],
         };
         this.taskType = '2';
-        this.dictionary = [];
+        this.cityDictionary = [];
         this.length = '';
         this.type = '';
         this.organizationDialog = false;

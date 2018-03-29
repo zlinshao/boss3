@@ -59,7 +59,7 @@
             <el-dropdown-menu slot="dropdown" class="shortcutList">
               <el-dropdown-item v-for="(item,index) in isShortcutPath" :key="index" :class="{'border_top': index > 3}">
                 <router-link :to="item.path">
-                  <b :class="{'backColor1': -1 < index,'backColor2': index === 3 || index === 11 || index === 13,
+                  <b style="font-weight: 100" :class="{'backColor1': -1 < index,'backColor2': index === 3 || index === 11 || index === 13,
                    'backColor3': index === 5 || index === 14,'backColor4':index === 4}">
                     <i :class="item.icon" style="font-size: 22px"></i>
                   </b>
@@ -455,20 +455,19 @@
         this.isCollapse = !this.isCollapse;
       },
       lockScreen() {
-          alert(2)
-//        this.$http.get(globalConfig.server + 'setting/others/lock_screen_status?lock_status=1').then((res) => {
-//          if (res.data.code === '100003') {
-//            localStorage.setItem('beforePath', this.$route.path);
-//            localStorage.setItem('lockStatus', 1);
-//            this.$router.push({path: '/lock'});
-//          } else {
-//            this.$notify({
-//              title: '警告',
-//              message: res.data.msg,
-//              type: 'warning'
-//            });
-//          }
-//        })
+        this.$http.get(globalConfig.server + 'setting/others/lock_screen_status?lock_status=1').then((res) => {
+          if (res.data.code === '100003') {
+            localStorage.setItem('beforePath', this.$route.path);
+            localStorage.setItem('lockStatus', 1);
+            this.$router.push({path: '/lock'});
+          } else {
+            this.$notify({
+              title: '警告',
+              message: res.data.msg,
+              type: 'warning'
+            });
+          }
+        })
       },
 
     }
