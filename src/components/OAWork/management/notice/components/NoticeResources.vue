@@ -254,7 +254,6 @@ export default {
       let formData = new FormData();
       formData.append("image", file);
       this.$http.post(this.address + "files", formData).then(res => {
-        console.log(res.data.data);
         let picId = res.data.data;
         this.$http.post("picture/" + picId).then(res => {
           // Get url from response

@@ -50,7 +50,7 @@
           <div class="validate">
             <div class="validateSign">
               <el-input size="mini" @change="checkNo2(form.passwordok)" type="password" v-model="form.passwordok" :minlength="6" clearable placeholder="请确认新密码"></el-input>
-             <i class="el-icon-success" style="color: #46ff53" v-show="form.passwordok.length>=6 && form.passwordnew == form.passwordok"></i>
+             <i class="el-icon-success" style="color: #46ff53" v-show="form.passwordok.length>=6 && form.passwordnew == form.passwordok &&truefalg"></i>
             </div>
           </div>
 
@@ -160,7 +160,8 @@ export default {
       this.truefalg=true;
       let reg = /^(?![\d]+$)(?![a-zA-Z]+$)(?![!#$%^&*]+$)[\da-zA-Z!#$%^&*]/;
       if (value) {
-        if (new RegExp(reg).test(value) == false) {
+        if (new RegExp(reg).test(value) == false ) {
+          this.validateinput = false;
           this.truefalg=false;
           this.$notify({
             title: "警告",
@@ -172,16 +173,21 @@ export default {
     },
     //密码验证
     checkNo2(value) {
+      this.truefalg=true;
       let reg = /^(?![\d]+$)(?![a-zA-Z]+$)(?![!#$%^&*]+$)[\da-zA-Z!#$%^&*]/;
       if (value) {
         if (new RegExp(reg).test(value) == false) {
+          this.validateinput = false;
+          this.truefalg=false;
           this.$notify({
             title: "警告",
             message: "二次密码格式有问题",
             type: "warning"
           });
-        }else if(this.form.passwordok != this.form.passwordnew){
-           this.$notify({
+        }else if(this.form.passwordok != this.form.passwordnew ){
+          this.validateinput = false;
+          this.truefalg=false;
+          this.$notify({
             title: "警告",
             message: "二次密码不一致",
             type: "warning"
@@ -191,8 +197,9 @@ export default {
     },
     //二级密码保存
     savesendinfo() {
+      
+      this.validateinput = true; 
 
-      this.validateinput = true;
       if(this.checkList =="" && this.validateinput == true){
         this.validateinput = false;
         this.$notify({
@@ -250,6 +257,12 @@ export default {
           type: "warning"
         });
       }
+      if(this.validateinput == true){
+        this.checkNo(this.form.passwordnew)
+      }
+      if(this.validateinput == true){
+        this.checkNo2(this.form.passwordok)
+      }
       if (this.validateinput) {
         this.$http
           .put(globalConfig.server + "setting/others/password", {
@@ -259,7 +272,7 @@ export default {
             sms_code_pwd: this.form.sms_code
           })
           .then(res => {
-            console.log(res);
+            
             if (res.data.code === "100030") {
               this.$notify({
                 title: "成功",

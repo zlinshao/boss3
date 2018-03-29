@@ -34,7 +34,7 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <span style="color:#fdaece;margin-left:126px;">备注:首页倒计时时间设置,当合计时结束后,将自动进入锁屏模式</span>
+      <span style="color:#fdaece;margin-left:200px;">备注:首页倒计时时间设置,当合计时结束后,将自动进入锁屏模式</span>
       <div style="text-align: center;margin-top: 120px">
         <el-button @click="addBasicSetting" type="primary" size="small" style="padding: 10px 140px;">保存</el-button>
       </div>
