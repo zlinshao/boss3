@@ -12,12 +12,10 @@
             <span></span>
           </div>
           <div class="personalSign">
-            <span v-if="!isEdit && landholder.data">{{landholder.data.signature.content}}</span>
-            <span v-if="!isEdit && !landholder.data">添加工作状态...</span>
-            <el-input id="editInput" size="mini" @blur="editPersonalSign($event)" v-if="isEdit" v-model="params.content"></el-input>
-            <el-button size="medium" v-if="!isEdit" @click.stop="showInput" type="text">
-              <i class="el-icon-edit"></i>
-            </el-button>
+            <span v-if="!isEdit && landholder.data" style="cursor: pointer" @click.stop="showInput">{{landholder.data.signature.content}}</span>
+            <span v-if="!isEdit && !landholder.data" style="cursor: pointer" @click.stop="showInput">添加工作状态...</span>
+            <el-input id="editInput" size="mini" @blur="editPersonalSign($event)" @keyup.enter.native="editPersonalSign($event)"
+                      v-if="isEdit" v-model="params.content"></el-input>
           </div>
         </div>
       </div>

@@ -869,7 +869,7 @@
                   title:'成功',
                   message:res.data.msg
                 });
-                this.$emit('close');
+                this.$emit('close','success');
                 this.closeAddModal();
               }else {
                 this.$notify.warning({
