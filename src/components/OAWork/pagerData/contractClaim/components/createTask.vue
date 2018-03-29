@@ -12,6 +12,7 @@
                     <el-option label="领取" value="1"></el-option>
                     <el-option label="作废" value="2"></el-option>
                     <el-option label="上缴" value="3"></el-option>
+                    <el-option label="丢失" value="4"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -33,7 +34,7 @@
             </el-row>
 
             <el-row>
-              <el-col :span="8"  v-if="taskType!=2 && taskType!=3">
+              <el-col :span="8"  v-if="taskType==1">
                 <el-form-item label="领用日期">
                   <el-date-picker
                     type="datetime"
@@ -60,7 +61,16 @@
                   </el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col :span="8" v-if="taskType!=2 && taskType!=3">
+              <el-col :span="8" v-if="taskType==4">
+                <el-form-item label="丢失日期">
+                  <el-date-picker
+                    type="datetime"
+                    placeholder="选择日期时间"
+                    value-format="yyyy-MM-dd HH:mm:ss" v-model="params.report_time">
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8" v-if="taskType ==1">
                 <el-form-item label="领用人">
                   <el-input readonly="" v-model="staff_name" @focus="openOrganizeModal"></el-input>
                 </el-form-item>
@@ -75,6 +85,11 @@
                   <el-input readonly="" v-model="staff_name" @focus="openOrganizeModal"></el-input>
                 </el-form-item>
               </el-col>
+              <el-col :span="8" v-if="taskType==4">
+                <el-form-item label="丢失人">
+                  <el-input readonly="" v-model="staff_name" @focus="openOrganizeModal"></el-input>
+                </el-form-item>
+              </el-col>
               <el-col :span="8">
                 <el-form-item label="所属部门">
                   <el-input disabled="" v-model="depart_name"></el-input>
@@ -86,7 +101,7 @@
 
         <div class="title">操作信息</div>
         <div class="form_border">
-          <el-form v-if="taskType!=2 && taskType!=3" size="mini" :model="params" label-width="120px">
+          <el-form v-if="taskType==1" size="mini" :model="params" label-width="120px">
             <el-row class="noMarginForm">
               <el-col :span="8">
                 <el-form-item label="领取合同数（收）">
@@ -351,9 +366,34 @@
 
             </div>
           </el-form>
+
+          <el-form v-if="taskType==4" size="mini" :model="params" label-width="120px">
+            <div class="title">
+              收房合同丢失(请勾选)
+            </div>
+            <el-row>
+              <el-checkbox-group v-model="params.candidate">
+                <el-col :span="6" v-for="(val,key) in collectCancelCollect" :key="key">
+                  <el-checkbox :label="key" name="type">{{val}}</el-checkbox>
+                </el-col>
+              </el-checkbox-group>
+            </el-row>
+
+            <div class="title">
+              租房合同丢失(请勾选)
+            </div>
+            <el-row>
+              <el-checkbox-group v-model="params.candidate">
+                <el-col :span="6" v-for="(val,key) in collectCancelRent" :key="key">
+                  <el-checkbox :label="key" name="type">{{val}}</el-checkbox>
+                </el-col>
+              </el-checkbox-group>
+            </el-row>
+          </el-form>
+
         </div>
 
-        <div class="title">剩余合同</div>
+        <div class="title">其他</div>
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="120px">
             <!--<el-row>-->
@@ -508,6 +548,8 @@
           this.taskType = '2';
         }else if(val === 4){
           this.taskType = '3';
+        }else if(val === 5){
+          this.taskType = '4';
         }
       }
     },
@@ -827,7 +869,7 @@
                   title:'成功',
                   message:res.data.msg
                 });
-                this.$emit('close');
+                this.$emit('close','success');
                 this.closeAddModal();
               }else {
                 this.$notify.warning({

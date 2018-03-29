@@ -1,5 +1,5 @@
 <template>
-  <div id="individual" @click="editPersonalSign($event)">
+  <div id="individual">
     <div class="topBack">
       <div class="topBackLeft">
         <div class="leftPic">
@@ -12,12 +12,11 @@
             <span></span>
           </div>
           <div class="personalSign">
-            <span v-if="!isEdit && landholder.data">{{landholder.data.signature.content}}</span>
-            <span v-if="!isEdit && !landholder.data">添加工作状态...</span>
-            <el-input size="mini" v-if="isEdit" v-model="params.content"></el-input>
-            <el-button size="medium" v-if="!isEdit" @click.stop="showInput" type="text">
-              <i class="el-icon-edit"></i>
-            </el-button>
+            <span v-if="!isEdit && landholder.data" style="cursor: pointer"
+                  @click.stop="showInput">{{landholder.data.signature.content}}</span>
+            <span v-if="!isEdit && !landholder.data" style="cursor: pointer" @click.stop="showInput">添加工作状态...</span>
+            <el-input id="editInput" size="mini" v-if="isEdit" @blur="editPersonalSign($event)"
+                      @keyup.enter.native="editPersonalSign($event)" v-model="params.content"></el-input>
           </div>
         </div>
       </div>
@@ -34,7 +33,7 @@
                 </div>
                 <div class="aRight">
                   <p>BACKLOG</p>
-                  <p>待办事项</p>
+                  <p>待办事项<span>&nbsp;0</span></p>
                 </div>
               </div>
               <div class="a" @click="routerLink('/dailyRecord')">
@@ -43,7 +42,7 @@
                 </div>
                 <div class="aRight">
                   <p>JOURNAL</p>
-                  <p>日志管理</p>
+                  <p>日志管理<span>&nbsp;0</span></p>
                 </div>
               </div>
               <div class="a" @click="routerLink('/pictureManage')">
@@ -51,8 +50,8 @@
                   <i class="iconfont icon-zhaopian"></i>
                 </div>
                 <div class="aRight">
-                  <p>PHOTO&nbsp;ALBUM</p>
-                  <p>相 册</p>
+                  <p>ALBUM</p>
+                  <p>相 册<span>&nbsp;{{albumNum}}</span></p>
                 </div>
               </div>
               <div class="a" @click="routerLink('/management')">
@@ -66,8 +65,8 @@
               </div>
             </div>
             <div class="messageTab">
-              <div class="achievementTab">
-                <div class="titles" @click="routerLink('/checkWork')">
+              <div class="achievementTab" @click="routerLink('/checkWork')">
+                <div class="titles">
                   <div>PFREORMANCE MANAGEMENT</div>
                   <div>考勤管理</div>
                 </div>
@@ -79,7 +78,7 @@
                         <span>迟到</span>
                         <i class="iconfont icon-shijian"></i>
                       </p>
-                      <p><b>19</b>
+                      <p><b>0</b>
                         <span>次</span></p>
                     </div>
                     <div>
@@ -88,7 +87,7 @@
                         <i class="iconfont icon-chidao"></i>
                       </p>
                       <p>
-                        <b>19</b>
+                        <b>0</b>
                         <span>次</span>
                       </p>
                     </div>
@@ -98,7 +97,7 @@
                         <i class="iconfont icon-qingzhou-gantanhao"></i>
                       </p>
                       <p>
-                        <b>19</b>
+                        <b>0</b>
                         <span>次</span>
                       </p>
                     </div>
@@ -108,7 +107,7 @@
                         <i class="iconfont icon-kaoqin1" style="font-size: 24px"></i>
                       </p>
                       <p>
-                        <b>19</b>
+                        <b>0</b>
                         <span>次</span>
                       </p>
                     </div>
@@ -121,10 +120,10 @@
                   <div>积分明细</div>
                 </div>
                 <div class="checkNum">
-                  <i class="iconfont icon-jifen1"></i> 1289
+                  <i class="iconfont icon-jifen1"></i> 0
                 </div>
               </div>
-              <div class="integralTab">
+              <div class="integralTab" @click="routerLink('/articleMessage','fourth')">
                 <div class="titles">
                   <div>RNTEGAL GETAIL</div>
                   <div>晋升通道</div>
@@ -140,9 +139,14 @@
                   <div>PFREORMANCE MANAGEMENT</div>
                   <div>业绩管理</div>
                 </div>
+                <el-row>
+                  <el-col :span="24" style="overflow: hidden">
+                    <div id="chartLine" style="width:100%;height: 320px;padding: 0 15px;box-sizing: border-box;"></div>
+                  </el-col>
+                </el-row>
               </div>
-              <div class="check">
-                <div class="titles" @click="routerLink('/checkWork')">
+              <div class="check" @click="routerLink('/checkWork')">
+                <div class="titles">
                   <div>RNTEGAL GETAIL</div>
                   <div>考勤管理</div>
                 </div>
@@ -175,7 +179,7 @@
                     <div>明细积分</div>
                   </div>
                 </div>
-                <div class="integralBottom">
+                <div class="integralBottom" @click="routerLink('/articleMessage','fourth')">
                   <div class="titles">
                     <div>RNTEGAL GETAIL</div>
                     <div>晋升通道</div>
@@ -193,38 +197,37 @@
             <div class="company1">
               <div class="com"></div>
               <div class="caption">
-                <span>恭喜我公司企业logo注册成功顶顶顶顶顶顶顶顶顶顶顶顶顶</span>
-                <span class="times">0000-00-00</span>
+                <span>{{praiseData.title}}</span>
+                <span class="times">{{praiseData.create_time}}</span>
               </div>
               <div class="mainTitle">
-                犯得上发厉害了可适当放宽道路浇洒发货看见了十大发和看见了十大发看后决定是否房贷还款时间发的时刻就疯狂的吉萨疯狂的吉萨付好款了撒
+                {{praiseData.content_without_table}}
               </div>
               <div class="buttonNew">
                 <div>
-                  <el-button size="mini" type="primary">新闻</el-button>
+                  <el-button size="small" type="text" @click="showAnnouncement(praiseData)">详情</el-button>
                 </div>
                 <div>
                   <i class="el-icon-info"></i>123
                   <i class="el-icon-info"></i>124
                 </div>
               </div>
-
             </div>
             <div class="title">
-              公司活动
+              公司公告
             </div>
             <div class="company2">
               <div class="com"></div>
               <div class="caption">
-                <span>恭喜我公司企业logo注册成功顶顶顶顶顶顶顶顶顶顶顶顶</span>
-                <span class="times">0000-00-00</span>
+                <span>{{punishmentData.title}}</span>
+                <span class="times">{{punishmentData.create_time}}</span>
               </div>
               <div class="mainTitle">
-                犯得上发厉害了可适当放宽道路浇洒发货看见了十大发和看见了十大发看后决定是否房贷还款时间发的时刻就疯狂的吉萨疯狂的吉萨付好款了撒
+                {{punishmentData.content_without_table}}
               </div>
               <div class="buttonNew">
                 <div>
-                  <el-button size="mini" type="primary">新闻</el-button>
+                  <el-button size="small" type="text" @click="showAnnouncement(punishmentData)">详情</el-button>
                 </div>
                 <div>
                   <i class="el-icon-info"></i>123
@@ -236,65 +239,192 @@
         </el-col>
       </el-row>
     </div>
+
+    <Announcement :warningDialog="warningDialog" :lookat="announcementData"  @close="closeWarning" ></Announcement>
   </div>
 </template>
 
 <script>
+  import ECharts from 'echarts'
+  import EChartTheme from 'echarts/theme/macarons'
+  import Announcement from "../OAWork/management/notice/components/announcementDetail.vue"; //预览页面
   export default {
     name: "index",
+    components:{Announcement},
     data() {
       return {
+        warningDialog:false,
         landholder: {},
-        isEdit:false,
-        params:{
-          content:'',
+        isEdit: false,
+        params: {
+          content: '',
         },
-        isChanged:false,
+        isChanged: false,
+        albumNum:0, //相册数量
+        chartLine: null,
+        praiseData:{},
+        punishmentData:{},
+        announcementData:{},
       }
     },
     mounted() {
       this.landholder = JSON.parse(localStorage.personal);
+      this.getAlbumNum();
+      this.drawLineChart();
+      this.getPraise();
+      this.getPunishment();
     },
-    watch:{
-      'params.content':{
-        handler(val,oldVal){
-          if(val!==oldVal&&oldVal){
+    watch: {
+      'params.content': {
+        handler(val, oldVal){
+          if (val !== oldVal && oldVal) {
             this.isChanged = true;
           }
         }
       }
     },
     methods: {
-      routerLink(val) {
-        this.$router.push({path: val})
+      routerLink(val,type) {
+        this.$router.push({path: val,query:{type:type}})
       },
+
+      getAlbumNum(){
+        this.$http.get(globalConfig.server + "album?page="+ this.currentPage+"&limit=16").then((res) =>{
+          if (res.data.code === "20110") {
+            this.albumNum = res.data.num;
+          }
+        });
+      },
+
+      //显示个人签名的input
       showInput(){
         this.isEdit = true;
         this.params.content = this.landholder.data.signature.content;
-        setTimeout(()=>{
+        setTimeout(() => {
+          $('#editInput').focus();
           this.isChanged = false;
         })
       },
-      editPersonalSign(e){
-        if(e.target.nodeName !== 'INPUT'){
-          this.isEdit = false;
-          if(this.isChanged){
-            this.$http.post(globalConfig.server+'manager/staff_record',this.params).then((res) =>{
-              let personal =  JSON.parse(localStorage.personal);
-              if(res.data.code === '30010'){
-                personal.data.signature = res.data.data;
-                localStorage.setItem('personal', JSON.stringify(personal));
-                this.landholder = JSON.parse(localStorage.personal);
-              }else {
-                this.$notify.warning({
-                  title:'警告',
-                  message:res.data.msg
-                })
-              }
-            })
-          }
+      //编辑个人签名
+      editPersonalSign(){
+        this.isEdit = false;
+        if (this.isChanged) {
+          this.$http.post(globalConfig.server + 'manager/staff_record', this.params).then((res) => {
+            let personal = JSON.parse(localStorage.personal);
+            if (res.data.code === '30010') {
+              personal.data.signature = res.data.data;
+              localStorage.setItem('personal', JSON.stringify(personal));
+              this.landholder = JSON.parse(localStorage.personal);
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              })
+            }
+          })
         }
-      }
+      },
+
+      //getAnnouncement
+      getPraise(){
+        this.$http.get(globalConfig.server +'announcement/Praise', this.params).then((res) => {
+          if(res.data.code === '80010'){
+            this.praiseData = res.data.data;
+          }
+        })
+      },
+      getPunishment(){
+        this.$http.get(globalConfig.server +'announcement/Punishment', this.params).then((res) => {
+          if(res.data.code === '80010'){
+            this.punishmentData = res.data.data;
+          }
+        })
+      },
+      //查看公告详情
+      showAnnouncement(val){
+        this.announcementData = val;
+        this.warningDialog = true;
+      },
+      closeWarning(){
+        this.warningDialog = false;
+      },
+      //折线图
+      drawLineChart() {
+        this.chartLine = ECharts.init(document.getElementById('chartLine'),'macarons');
+        this.chartLine.setOption({
+          title: {
+            text: '个人业绩'
+          },
+          tooltip: {
+            trigger: 'axis'
+          },
+//          legend: {
+//            data:['最高气温','最低气温']
+//          },
+          grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'category',
+            boundaryGap: false,
+            data: ['一月', '二月', '三月','四月', '五月', '六月', '七月']
+          },
+          yAxis: {
+            type: 'value'
+          },
+          series: [
+            {
+              name:'业绩',
+              type:'line',
+              data:[100000, 110000, 150000, 300000, 200000, 430000, 300000],
+              markPoint: {
+                data: [
+                  {type: 'max', name: '最大值'},
+                  {type: 'min', name: '最小值'}
+                ]
+              },
+              markLine: {
+                data: [
+                  {type: 'average', name: '平均值'}
+                ]
+              }
+            },
+//            {
+//              name:'最低气温',
+//              type:'line',
+//              data:[1, -2, 2, 5, 3, 2, 0],
+//              markPoint: {
+//                data: [
+//                  {name: '周最低', value: -2, xAxis: 1, yAxis: -1.5}
+//                ]
+//              },
+//              markLine: {
+//                data: [
+//                  {type: 'average', name: '平均值'},
+//                  [{
+//                    symbol: 'none',
+//                    x: '90%',
+//                    yAxis: 'max'
+//                  }, {
+//                    symbol: 'circle',
+//                    label: {
+//                      normal: {
+//                        position: 'start',
+//                        formatter: '最大值'
+//                      }
+//                    },
+//                    type: 'max',
+//                    name: '最高点'
+//                  }]
+//                ]
+//              }
+//            }
+          ]
+        });
+      },
     }
   }
 </script>
@@ -336,7 +466,7 @@
       src: url(../../assets/font/impact-2.ttf);   //字体路径
     }
 
-    .topBack, .topBackLeft{
+    .topBack, .topBackLeft {
       @include flex;
     }
 
@@ -372,13 +502,13 @@
               @include back("../../assets/images/individual/1.png");
             }
           }
-          .personalSign{
+          .personalSign {
             font-size: 16px;
             color: $colorBor;
-            i{
+            i {
               color: white;
               margin-left: 5px;
-              &:hover{
+              &:hover {
                 color: #0db6ff;
               }
             }
@@ -390,8 +520,15 @@
     .main {
       .title {
         color: #409EFF;
-        font-size: 14px;
+        opacity: .7;
         margin: 12px 0;
+        &:before {
+          border-radius: 2px;
+          margin-right: 5px;
+          background: #409EFF;
+          border-left: 1px solid #409EFF;
+          content: '|';
+        }
       }
       .mainLeft {
         .ingress {
@@ -601,8 +738,12 @@
         }
         .message {
           .achievement {
-            @include back("../../assets/images/individual/yeji.png");
-            background-size: 100% 100%;
+            border: 1px solid #DDDDDD;
+            border-radius: 6px;
+            .achieveContent{
+              width: 100%;
+              /*padding: 0 10px*/
+            }
           }
           .check {
             .checkWork {
@@ -697,7 +838,6 @@
             justify-content: space-between;
             padding: 10px;
             span:first-child {
-              width: 100%;
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;

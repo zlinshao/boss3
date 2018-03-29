@@ -1,86 +1,84 @@
 <template>
   <div id="pictureDetail">
-    <!--<div class="topBack">-->
-      <!--<div class="topBackLeft">-->
-        <!--<div class="leftPic">-->
-          <!--<img src="../../assets/images/individual/touxiang.png" alt="">-->
-        <!--</div>-->
-        <!--<div class="rightPic">-->
-          <!--<p>-->
-            <!--<span>姓名姓名</span>-->
-            <!--<span></span>-->
-          <!--</p>-->
-          <!--<p>-->
-            <!--个人签名个人签名个人签名个人签名-->
-          <!--</p>-->
-        <!--</div>-->
-      <!--</div>-->
-      <!--<div class="topBackRight">-->
-        <!--<div @click="routerLink('/pictureManage')">-->
-          <!--<span class="iconfont icon-shiyongshouce"></span>-->
-          <!--<span>照片</span>-->
-        <!--</div>-->
-        <!--<div>-->
-          <!--<span class="iconfont icon-shiyongshouce"></span>-->
-          <!--<span>收藏夹</span>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
     <div class="main">
       <el-row>
         <el-col :span="24">
           <div class="myPicture">
-            <div>
-              <el-button type="text" class="title" @click="routerLink('/pictureManage')">我的相册</el-button>
+            <div class="title">
+              <el-button type="text" size="mini" @click="routerLink('/pictureManage')">我的相册</el-button>
             </div>
             <div>
               <el-row :gutter="20">
                 <el-col :span="3">
-                  <img v-if="albumDetail.cover_path" :src="albumDetail.cover_path" style="height:180px;width: 180px;" />
-                  <img v-else src="../../assets/images/university/caia412-34427.png" style="height:180px;width:180px;" />
+                  <img v-if="albumDetail.cover_path" :src="albumDetail.cover_path" style="height:180px;width: 180px;border-radius: 5px" />
+                  <img  src="../../assets/images/university/caia412-34427.png" v-else style="height:180px;width:180px;border-radius: 5px" />
                 </el-col>
                 <el-col :span="10">
-                  <div style="font-size: 30px;color: #393939;padding-top: 30px;">{{albumDetail.name}}&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 18px;">{{albumDetail.photo_count}}张</span></div>
-                  <el-button icon="el-icon-picture-outline" type="primary" class="upload_photo" size="medium" @click="openModalDialog('choosePicturesDialog')" >上传照片</el-button>
+                  <div style="font-size: 30px;color: #393939;padding-top: 30px;">
+                    {{albumDetail.name}}&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-size: 18px;">{{albumDetail.photo_count}}张</span>
+                  </div>
+                  <el-button icon="el-icon-picture-outline" type="primary" class="upload_photo"
+                             size="small" @click="openModalDialog('choosePicturesDialog')" >上传照片</el-button>
                   <el-button size="small" @click="editAlbum(albumDetail.id)">编辑相册信息</el-button>
-                  <!--<el-button size="small">批量管理</el-button>-->
-                  <!--<el-dropdown trigger="click" >-->
-                    <!--<el-button size="small">更多</el-button>-->
-                    <!--<el-dropdown-menu slot="dropdown">-->
-                      <!--<el-dropdown-item>编辑相册信息</el-dropdown-item>-->
-                      <!--<el-dropdown-item>设置相册封面</el-dropdown-item>-->
-                      <!--<el-dropdown-item>删除相册</el-dropdown-item>-->
-                    <!--</el-dropdown-menu>-->
-                  <!--</el-dropdown>-->
                 </el-col>
               </el-row>
             </div>
           </div>
           <div class="pictures">
-            <el-row :gutter="40" >
-              <div v-for="item in photoData">
-                <el-col :span="3" style="margin-bottom:20px;">
-                  <div class="pictureDetail">
-                    <el-dropdown style="float: right;position: relative;background: #fff;display: inline;margin-bottom: -15px;">
-                      <span class="el-dropdown-link">
-                        <i class="el-icon-arrow-down el-icon--right"></i>
-                      </span>
-                      <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item @click.native="editPhoto(item)">编辑</el-dropdown-item>
-                        <el-dropdown-item @click.native="setCoverImg(item)">设为封面</el-dropdown-item>
-                        <el-dropdown-item @click.native="deletePhoto(item.id)">删除</el-dropdown-item>
-                      </el-dropdown-menu>
-                    </el-dropdown>
-                    <img :src="item.picture_path" data-magnify="" :data-src="item.picture_path" style="height: 140px;">
-                    <div class="clearfix t_center">
-                      <span class="text_over_ellipsis">{{item.name}}</span>
+            <el-row :gutter="20">
+              <el-col :span="3" v-for="(item,index) in photoData" :key="index"  style="margin-bottom: 20px">
+                <el-card :body-style="{ padding: '0px'}">
+                  <img :src="item.picture_path" data-magnify="" :data-src="item.picture_path" class="imageItem">
+                  <div style="padding: 14px;">
+                    <span style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{item.name}}</span>
+                    <div class="bottom clearfix">
+                      <time class="time">{{item.created_at.split(' ')[0]}}</time>
+                      <el-tooltip content="删除" placement="bottom" effect="light">
+                        <el-button type="text" class="button" @click="deletePhoto(item.id)">
+                          <i class="el-icon-delete"></i>
+                        </el-button>
+                      </el-tooltip>
+
+                      <el-tooltip content="封面" placement="bottom" effect="light">
+                        <el-button type="text" class="button">
+                          <i class="el-icon-picture" @click="setCoverImg(item)"></i>
+                        </el-button>
+                      </el-tooltip>
+
+                      <el-tooltip content="编辑" placement="bottom" effect="light">
+                        <el-button type="text" class="button" @click="editPhoto(item)">
+                          <i  class="el-icon-edit"></i>
+                        </el-button>
+                      </el-tooltip>
                     </div>
                   </div>
-                </el-col>
-              </div>
+                </el-card>
+              </el-col>
             </el-row>
+              <!--<el-row :gutter="40" >-->
+                <!--<div >-->
+                  <!--<el-col :span="3" style="margin-bottom:20px;">-->
+                    <!--<div class="pictureDetail">-->
+                      <!--<el-dropdown style="float: right;position: relative;background: #fff;display: inline;margin-bottom: -15px;">-->
+                        <!--<span class="el-dropdown-link">-->
+                          <!--<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
+                        <!--</span>-->
+                        <!--<el-dropdown-menu slot="dropdown">-->
+                          <!--<el-dropdown-item @click.native="editPhoto(item)">编辑</el-dropdown-item>-->
+                          <!--<el-dropdown-item @click.native="setCoverImg(item)">设为封面</el-dropdown-item>-->
+                          <!--<el-dropdown-item @click.native="deletePhoto(item.id)">删除</el-dropdown-item>-->
+                        <!--</el-dropdown-menu>-->
+                      <!--</el-dropdown>-->
+                      <!--<img :src="item.picture_path" data-magnify="" :data-src="item.picture_path" style="height: 140px;">-->
+                      <!--<div class="clearfix t_center">-->
+                        <!--<span class="text_over_ellipsis">{{item.name}}</span>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                <!--</el-col>-->
+              <!--</div>-->
+            <!--</el-row>-->
           </div>
-          <div style="text-align: center;">
+          <div style="text-align: center;margin-bottom: 20px">
             <div v-if="totalNum==0">暂无数据</div>
             <el-pagination v-else
               @size-change="handleSizeChange"
@@ -152,6 +150,18 @@
     //     return  this.$route.query.albumId ? this.$route.query.albumId : this.$store.state.picture.albumId;
     //   }
     // },
+    mounted() {
+      this.getAlbumId();
+      this.getAllPhotos();
+      this.getAlbumDetail();
+      console.log($('.imageItem').css('margin','-50px'))
+    },
+    activated(){
+      this.getAlbumId();
+      this.getAllPhotos();
+      this.getAlbumDetail();
+    },
+
     methods: {
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -296,16 +306,7 @@
         this.$store.dispatch('saveAlbumId',query.albumId);
       },
     },
-    mounted() {
-      this.getAlbumId();
-      this.getAllPhotos();
-      this.getAlbumDetail();
-    },
-    activated(){
-      this.getAlbumId();
-      this.getAllPhotos();
-      this.getAlbumDetail();
-    }
+
   }
 </script>
 
@@ -318,6 +319,8 @@
   }
   #pictureDetail {
     min-width: 1500px;
+    margin: -10px;
+    background: #ffffff;
     .el-row {
       margin-bottom: 20px;
       &:last-child {
@@ -348,8 +351,8 @@
       background: linear-gradient(left, $a, $b);
     }
     img {
-      width: 100%;
-      height: 100%;
+      /*width: 100%;*/
+      /*height: 100%;*/
     }
 
     @font-face {
@@ -430,7 +433,7 @@
     }
     .main {
       .myPicture{
-        margin-left: 17px;
+        margin: 0 17px;
         color: #6a8dfb;
         padding-top: 10px;
         padding-bottom: 20px;
@@ -439,35 +442,69 @@
       .title {
         font-size: 14px;
         margin: 12px 0;
+        border-bottom: 1px solid #e4e4e4;
       }
       .pictures{
         margin: 17px;
       }
-      .pictures {
-        .pictureDetail {
-          background: #eee;
-          padding: 10px;
-          -webkit-border-radius: 5px;
-          -moz-border-radius: 5px;
-          border-radius: 5px;
-        }
-        .clearfix{
-          margin: 8px 0 3px;
-          content:"";
-          display: block;
-          clear:both;
-          height: 19px;
-        }
-        .text_over_ellipsis{
-          width: 150px;
-          overflow: hidden;
-          white-space: nowrap;
-          display: inline-block;
-          text-overflow: ellipsis;
-        }
-      }
+      /*.pictures {*/
+        /*.pictureDetail {*/
+          /*background: #eee;*/
+          /*padding: 10px;*/
+          /*-webkit-border-radius: 5px;*/
+          /*-moz-border-radius: 5px;*/
+          /*border-radius: 5px;*/
+        /*}*/
+        /*.clearfix{*/
+          /*margin: 8px 0 3px;*/
+          /*content:"";*/
+          /*display: block;*/
+          /*clear:both;*/
+          /*height: 19px;*/
+        /*}*/
+        /*.text_over_ellipsis{*/
+          /*width: 150px;*/
+          /*overflow: hidden;*/
+          /*white-space: nowrap;*/
+          /*display: inline-block;*/
+          /*text-overflow: ellipsis;*/
+        /*}*/
+      /*}*/
 
     }
+  }
+  //card
+  .time {
+    font-size: 13px;
+    color: #999;
+  }
 
+  .bottom {
+    margin-top: 13px;
+    line-height: 12px;
+  }
+
+  .button {
+    padding: 0;
+    margin-left: 5px;
+    float: right;
+  }
+  .el-button+.el-button {
+     margin-left: 0 !important;
+  }
+  .imageItem {
+    width: 100%;
+    height: 180px;
+    display: block;
+  }
+
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+
+  .clearfix:after {
+    clear: both
   }
 </style>

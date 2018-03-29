@@ -1,33 +1,33 @@
 <template xmlns:v-popover="http://www.w3.org/1999/xhtml">
   <div id="index" @click="clickScreen">
-    <div class="navBarLeft" :class="isFull? 'navBarRight':'' ">
-      <p @click="fullScreen(2)"></p>
-    </div>
-    <div id="KeFuDiv" style="position: fixed;top: 30px;right: 20px;z-index: 1000000;"
-         onmousedown="MoveDiv(KeFuDiv,event);">
-      <el-collapse-transition>
-        <div v-show="isFull">
-          <div class="transition-box">
-            <div>
-              <img src="../assets/images/head.jpg" style="border-radius: 20px" alt="">
-            </div>
-            <div class="contents">
-              <el-row>
-                <el-col :span="24">
-                  <div style="font-size: 16px">回复的咖</div>
-                </el-col>
-              </el-row>
+    <!--<div class="navBarLeft" :class="isFull? 'navBarRight':'' ">-->
+      <!--<p @click="fullScreen(2)"></p>-->
+    <!--</div>-->
+    <!--<div id="KeFuDiv" style="position: fixed;top: 30px;right: 20px;z-index: 1000000;"-->
+         <!--onmousedown="MoveDiv(KeFuDiv,event);">-->
+      <!--<el-collapse-transition>-->
+        <!--<div v-show="isFull">-->
+          <!--<div class="transition-box">-->
+            <!--<div>-->
+              <!--<img src="../assets/images/head.jpg" style="border-radius: 20px" alt="">-->
+            <!--</div>-->
+            <!--<div class="contents">-->
+              <!--<el-row>-->
+                <!--<el-col :span="24">-->
+                  <!--<div style="font-size: 16px">回复的咖</div>-->
+                <!--</el-col>-->
+              <!--</el-row>-->
 
-              <el-row>
-                <el-col :span="24">
-                  <div style="font-size: 13px;margin-top: 3px;">80秒</div>
-                </el-col>
-              </el-row>
-            </div>
-          </div>
-        </div>
-      </el-collapse-transition>
-    </div>
+              <!--<el-row>-->
+                <!--<el-col :span="24">-->
+                  <!--<div style="font-size: 13px;margin-top: 3px;">80秒</div>-->
+                <!--</el-col>-->
+              <!--</el-row>-->
+            <!--</div>-->
+          <!--</div>-->
+        <!--</div>-->
+      <!--</el-collapse-transition>-->
+    <!--</div>-->
 
 
     <div class="navBar" :class="isFull? 'navBarHide':'' ">
@@ -59,9 +59,9 @@
             <el-dropdown-menu slot="dropdown" class="shortcutList">
               <el-dropdown-item v-for="(item,index) in isShortcutPath" :key="index" :class="{'border_top': index > 3}">
                 <router-link :to="item.path">
-                  <b :class="{'backColor1': -1 < index,'backColor2': index === 3 || index === 11 || index === 13,
+                  <b style="font-weight: 100" :class="{'backColor1': -1 < index,'backColor2': index === 3 || index === 11 || index === 13,
                    'backColor3': index === 5 || index === 14,'backColor4':index === 4}">
-                    <i :class="item.icon"></i>
+                    <i :class="item.icon" style="font-size: 22px"></i>
                   </b>
                   <span>{{item.name}}</span>
                 </router-link>
@@ -148,7 +148,7 @@
                 {{personal.name}}<i class="el-icon-arrow-down el-icon--right" style="margin-left: 25px"></i>
               </span>
             <el-dropdown-menu slot="dropdown" class="personal">
-              <div><i style="color: #fb509f;margin-right: 5px" class="iconfont icon-jifen"></i>9999分</div>
+              <div><i style="color: #fb509f;margin-right: 5px" class="iconfont icon-jifen"></i>{{creditTotal}}分</div>
               <div class="rank">连续登录时长</div>
               <el-popover ref="popover1"  placement="top-start"  width="100"  trigger="hover">
                 <span> 已连续登录{{loginDay}}天 &nbsp;&nbsp;</span>
@@ -156,8 +156,6 @@
               <div class="progressBar" v-popover:popover1>
                 <div class="percent"></div>
               </div>
-
-
               <div class="navigation">
                 <el-row>
                   <el-col :span="10" class="checkUp">
@@ -290,8 +288,10 @@
         </div>
 
         <el-main :class="isFull? 'mainHide':'' ">
-          <TagsView></TagsView>
-          <div style="padding: 10px;background: #fff">
+          <div style="min-width: 1200px">
+            <TagsView></TagsView>
+          </div>
+          <div style="padding: 10px;background: #fff;min-width: 1200px">
             <keep-alive>
               <router-view></router-view>
             </keep-alive>
@@ -329,7 +329,8 @@
         interval:null,
         messageInterval :null,
         loginDay:0,
-        loginPercent:0
+        loginPercent:0,
+        creditTotal:0, // 积分总数
       }
     },
 
@@ -371,6 +372,10 @@
         this.messageInterval = setInterval(() => {
           this.getUnReadMessage()
         }, 100000);
+        //获取积分明细
+        this.getCredit();
+        //获取登陆时长
+        this.getLoginDay();
       },
       routers(url) {
         this.$router.push(url);
@@ -471,7 +476,22 @@
           }
         })
       },
-
+      //获取积分总数
+      getCredit(){
+        this.$http.get(globalConfig.server + 'credit/manage/self').then((res) => {
+          if (res.data.code === '30310') {
+            this.creditTotal = res.data.data;
+          }
+        })
+      },
+      //获取登陆时长
+      getLoginDay(){
+        this.$http.get(globalConfig.server + 'special/special/time').then((res) => {
+          if (res.data.code === '30310') {
+            this.creditTotal = res.data.data;
+          }
+        })
+      }
     }
   }
 </script>
@@ -658,7 +678,7 @@
       @include transition;
       cursor: pointer;
     }
-
+    /*
     .navBarLeft {
       position: fixed;
       top: 0;
@@ -685,10 +705,11 @@
         height: 20px;
         background: url('../assets/images/boss.svg') no-repeat;
       }
-    }
+    }*/
 
     .navBar {
       width: 100%;
+      min-width: 1200px;
       height: 66px;
       background: #fff;
       position: fixed;
@@ -890,11 +911,6 @@
           }
           .developBack {
             background: #405597 !important;
-          }
-          .el-menu {
-            i {
-              color: #fff !important;
-            }
           }
           .el-menu--collapse {
             width: 64px;

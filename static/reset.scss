@@ -404,3 +404,14 @@
 .el-dropdown-menu .el-popper .personal{
   top: 50px !important;
 }
+.contentBox {
+  .el-container {
+    .aside {
+      .el-menu {
+        i {
+          color: #fff !important;
+        }
+      }
+    }
+  }
+}

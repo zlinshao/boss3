@@ -20,7 +20,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="操作人:">
-                {{this.personal.name}}
+                {{personal.name}}
               </el-form-item>
             </el-col>
           </el-row>
@@ -102,9 +102,9 @@
             }
           }]
         },
-       
+
         value2: '',
-    
+
       };
     },
     watch:{
@@ -118,7 +118,7 @@
       }
     },
     methods:{
-      openModalDialog(){      
+      openModalDialog(){
         this.goodsConfigDialog=true;
       },
       closeGoodsConfigResources(){
@@ -126,7 +126,7 @@
       },
       goodsconfigformchange(data){
         this.data=data;
-        
+
         let len =this.goods.length;
         this.allall='';
         for(let i=0 ; i<data.good.length;i++)
@@ -149,7 +149,7 @@
         for(let i=0;i<this.data.good.length;i++)
         {
           this.list.push({"room":this.data.house[i],"category":this.data.good[i],"amount":this.data.num[i]})
-          
+
         }}
         this.saveflag=true;
         if(this.value2 =='' && this.saveflag==true){
@@ -158,7 +158,7 @@
             title: '警告',
             message: '增配时间不能为空',
             type: 'warning'
-          });         
+          });
         }
         if(this.form.come =='' && this.saveflag==true){
           this.saveflag=false;
@@ -166,7 +166,7 @@
             title: '警告',
             message: '物品来源不能为空',
             type: 'warning'
-          });         
+          });
         }
         if(this.list =='' && this.saveflag==true){
           this.saveflag=false;
@@ -174,7 +174,7 @@
             title: '警告',
             message: '物品名称不能为空',
             type: 'warning'
-          });         
+          });
         }
         if(this.form.gone =='' && this.saveflag==true){
           this.saveflag=false;
@@ -182,7 +182,7 @@
             title: '警告',
             message: '原物品去向不能为空',
             type: 'warning'
-          });         
+          });
         }
         if(this.saveflag){
          this.$http.post(this.urls+'house/asset_in', {
@@ -193,7 +193,7 @@
            content:this.list,
            "dest": this.form.gone
         }).then((res) => {
-          
+
           if(res.data.code == "20010"){
             this.$notify({
               title: '成功',
@@ -205,51 +205,51 @@
               this.$notify.error({
               title: '错误',
               message: '操作失败'
-              });     
+              });
             }
             this.increaseGoodsDialogVisible=false;
             this.allall='';
             this.value2='';
             this.form={come:'',time:'', gone:''}
             this.list='';
-              
-              
-         }) 
+
+
+         })
         }
-      
+
       }
     },
     created:function(){
 
       this.personal = JSON.parse(localStorage.getItem("personal"));
-            //物品来源       
-      this.$http.get(this.urls+'setting/dictionary/319').then((res) => {  
+            //物品来源
+      this.$http.get(this.urls+'setting/dictionary/319').then((res) => {
           if (res.data.code === '30010') {
               this.forms=res.data.data;
-          }  
+          }
       })
       //房间编号
-      this.$http.get(this.urls+'setting/dictionary/298').then((res) => {  
+      this.$http.get(this.urls+'setting/dictionary/298').then((res) => {
         if (res.data.code === '30010') {
-        this.houselist=res.data.data;                
-            }  
+        this.houselist=res.data.data;
+            }
          })
 
-      //物品类型       
-      this.$http.get(this.urls+'setting/dictionary/265').then((res) => {  
+      //物品类型
+      this.$http.get(this.urls+'setting/dictionary/265').then((res) => {
           if (res.data.code === '30010') {
             this.goods=res.data.data;
-          }  
+          }
       })
-      //物品去向       
-      this.$http.get(this.urls+'setting/dictionary/323').then((res) => {  
-       
+      //物品去向
+      this.$http.get(this.urls+'setting/dictionary/323').then((res) => {
+
           if (res.data.code === '30010') {
               this.goodsgoing=res.data.data;
-          }  
-      }) 
+          }
+      })
     }
-    
+
 
   };
 </script>

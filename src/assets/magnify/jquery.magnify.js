@@ -550,7 +550,7 @@ Magnify.prototype = {
 
       self.groupData.push({
         src: src,
-        caption: $(this).attr('data-caption')
+        caption: $(this).attr('data-caption')?$(this).attr('data-caption'):'图片查看器'
       });
       // Get image index
       if (imgSrc === src) {

@@ -8,7 +8,7 @@
         LEJIA
       </div>
       <div class="input">
-        <el-input placeholder="请输入密码" @keyup.enter.native="btnClick" v-model="keywords"></el-input>
+        <el-input placeholder="请输入密码" type="password" @keyup.enter.native="btnClick" v-model="keywords"></el-input>
       </div>
     </div>
 

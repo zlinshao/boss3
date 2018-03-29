@@ -11,6 +11,10 @@ $(document).on('click', '[data-card]', function (e) {
   }
   let offsetLeft = e.clientX;
   let offsetTop = e.clientY;
+
+  let inner_width = window.innerWidth;
+  let inner_height = window.innerHeight;
+
   //定位名片顯示位置
   if(offsetLeft+294>window.innerWidth){
     offsetLeft = window.innerWidth - 334
@@ -23,7 +27,26 @@ $(document).on('click', '[data-card]', function (e) {
   insertHtml(offsetTop,offsetLeft,personal);
   e.stopPropagation();
   isClickHead = true;
+
+
+  window.onresize = function () {
+
+    let offsetLeft = e.clientX;
+    let offsetTop = e.clientY;
+    //定位名片顯示位置
+    if(offsetLeft+294>window.innerWidth){
+      offsetLeft = window.innerWidth - 334
+    }
+    if(offsetTop+194>window.innerHeight){
+      offsetTop = window.innerHeight - 194 - e.target.width;
+    }else {
+      offsetTop =offsetTop + e.target.width;
+    }
+    insertHtml(offsetTop,offsetLeft,personal);
+  }
 });
+
+
 
 
 function insertHtml(offsetTop,offsetLeft,personal) {

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <el-dialog title="租客换房" :visible.sync="rentChangeRoomDialogVisible" width="60%">
+  <div id="rentVacation">
+    <el-dialog title="租客换房修改" :visible.sync="editRentChangeDialogVisible" width="60%">
       <div class="scroll_bar">
         <div class="title">客户-信息</div>
         <div class="table_border" >
@@ -398,7 +398,7 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="rentChangeRoomDialogVisible = false">取 消</el-button>
+        <el-button size="small" @click="editRentChangeDialogVisible = false">取 消</el-button>
         <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
@@ -406,13 +406,13 @@
 </template>
 
 <script>
-  import UpLoad from '../../common/UPLOAD.vue'
+  import UpLoad from '../../../../common/UPLOAD.vue'
   export default {
-    props:['rentChangeRoomDialog'],
+    props:['editRentChangeDialog'],
     components:{UpLoad},
     data() {
       return {
-        rentChangeRoomDialogVisible:false,
+        editRentChangeDialogVisible:false,
         params: {
           contract_id : 1,
           check_time : '',
@@ -512,10 +512,10 @@
       },
     },
     watch:{
-      rentChangeRoomDialog(val){
-        this.rentChangeRoomDialogVisible = val
+      editRentChangeDialog(val){
+        this.editRentChangeDialogVisible = val
       },
-      rentChangeRoomDialogVisible(val){
+      editRentChangeDialogVisible(val){
         if(!val){
           this.$emit('close')
         }else {
@@ -549,7 +549,7 @@
       },
 
       confirmAdd(){
-//        this.rentChangeRoomDialogVisible = false;
+//        this.editRentChangeDialogVisible = false;
         this.$http.post(globalConfig.server+'customer/check_out',this.params).then((res) => {
           if(res.data.code === '20010'){
             this.$notify.success({

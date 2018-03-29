@@ -57,6 +57,7 @@
               this.$emit("close");
               this.choosePicturesDialogVisible = false;
               this.improveImgInfoDialog = true;  //显示完善照片信息界面
+              this.isClear = true;
             }else{
               this.$notify.warning({
                 title: "警告",

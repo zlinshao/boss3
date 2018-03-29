@@ -348,7 +348,7 @@
       position: absolute;
       top: -10px;
       right: -10px;
-      z-index: 503333333;
+      z-index: 5;
       color: #6a8dfb;
       background: #ffffff;
       padding: 0;

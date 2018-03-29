@@ -179,7 +179,7 @@
         <!--<el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>-->
       </span>
     </el-dialog>
-    <EditWork :editWorkDialog="editWorkDialog" :activeId="activeId" :startEdit="startEdit" @close="closeModal"></EditWork>
+    <EditWork :editWorkDialog="editWorkDialog" :activeId="editId" :startEdit="startEdit" @close="closeModal"></EditWork>
 
     <AddResult :addResultDialog="addResultDialog" :startAddResult="startAddResult" :activeId="addResultId" @close="closeModal"></AddResult>
   </div>

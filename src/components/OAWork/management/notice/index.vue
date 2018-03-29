@@ -74,7 +74,7 @@
                 label="状态">
               <template slot-scope="scope">
                <el-button class="btnStatus" v-if="scope.row.draft === '已发布'" type="primary" size="mini">已发布</el-button>
-              <el-button class="btnStatus" v-if="scope.row.draft === '草稿'" type="warning" size="mini">草稿</el-button>
+              <el-button class="btnStatus" v-if="scope.row.draft === '草稿'" type="info" size="mini">草稿</el-button>
             </template>
               </el-table-column>
             </el-table>
@@ -103,7 +103,7 @@
 <script>
 import RightMenu from "../../../common/rightMenu.vue"; //右键
 import NoticeResources from "./components/NoticeResources.vue"; //增加物品页面
-import Warning from "./components/Warning.vue"; //预览页面
+import Warning from "./components/announcementDetail.vue"; //预览页面
 export default {
   components: {
     RightMenu,
@@ -197,24 +197,22 @@ export default {
     //公告右键
     noticeMenu(row, event) {
       this.rightrow = row;
+
+      if(row.draft=="草稿"){
       this.lists = [
-        {
-          clickIndex: "noticeDialog",
-          headIcon: "el-icons-fa-edit",
-          label: "编辑"
-        },
+        { clickIndex: "noticeDialog", headIcon: "el-icons-fa-edit", label: "编辑" },
         { clickIndex: "look", headIcon: "el-icons-fa-eye", label: "预览" },
-        {
-          clickIndex: "delete",
-          headIcon: "el-icons-fa-trash-o",
-          label: "删除"
-        },
-        {
-          clickIndex: "sendnotice",
-          headIcon: "el-icons-fa-check-circle-o",
-          label: "发布"
-        }
+        { clickIndex: "delete",  headIcon: "el-icons-fa-trash-o", label: "删除" },
+        { clickIndex: "sendnotice",  headIcon: "el-icons-fa-check-circle-o",   label: "发布"   }
       ];
+      }
+      else if(row.draft=="已发布"){
+      this.lists = [
+        { clickIndex: "look", headIcon: "el-icons-fa-eye", label: "预览" },
+        { clickIndex: "delete",  headIcon: "el-icons-fa-trash-o", label: "删除" },
+        { clickIndex: "sendnotice",  headIcon: "el-icons-fa-check-circle-o",   label: "发布"   }
+      ];
+      }
       this.contextMenuParam(event);
     },
     myData(val) {

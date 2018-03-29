@@ -17,6 +17,7 @@
     "dropzone": "^5.2.0",
     "echarts": "^3.8.5",
     "element-ui": "^2.2.0",
+    "fastclick": "^1.0.6",
     "jquery": "^2.2.4",
     "js-cookie": "^2.2.0",
     "screenfull": "^3.3.2",

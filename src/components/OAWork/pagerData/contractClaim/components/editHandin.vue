@@ -723,7 +723,7 @@
                 title:'成功',
                 message:res.data.msg
               });
-              this.$emit('close');
+              this.$emit('close','success');
               this.editHandInDialogVisible = false;
               this.init();
             }else {
