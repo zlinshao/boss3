@@ -54,7 +54,7 @@
                   </el-date-picker>
                 </el-form-item>
               </el-col>
-              <el-col :span="8" v-if="taskType!=2 && taskType!=3">
+              <el-col :span="8" v-if="taskType!=2 && taskType!=3 && taskType!=4 ">
                 <el-form-item label="领用人">
                   <el-input readonly="" v-model="staff_name" @focus="openOrganizeModal"></el-input>
                 </el-form-item>
@@ -66,6 +66,11 @@
               </el-col>
               <el-col :span="8" v-if="taskType==3">
                 <el-form-item label="上缴人">
+                  <el-input readonly="" v-model="staff_name" @focus="openOrganizeModal"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8" v-if="taskType==4">
+                <el-form-item label="报备人">
                   <el-input readonly="" v-model="staff_name" @focus="openOrganizeModal"></el-input>
                 </el-form-item>
               </el-col>
@@ -112,8 +117,14 @@
             </el-row>
           </el-form>
           <el-form v-if="taskType!=1" size="mini" :model="params" label-width="120px">
-            <div class="title">
+            <div class="title" v-if="taskType==2">
               收房收据作废(请勾选)
+            </div>
+            <div class="title" v-if="taskType==3">
+              收房收据上缴(请勾选)
+            </div>
+            <div class="title" v-if="taskType==4">
+              收房收据丢失(请勾选)
             </div>
             <el-row>
               <el-checkbox-group v-model="params.candidate">

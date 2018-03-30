@@ -71,9 +71,9 @@
                   <el-col :span="8">
                     <div class="el_col_label">积分范围止</div>
                   </el-col>
-                  <el-col :span="16" class="el_col_option" placeholder="请输入积分范围止">
+                  <el-col :span="16" class="el_col_option" >
                     <el-form-item>
-                      <el-input v-model="form.credit_to" >
+                      <el-input v-model="form.credit_to" placeholder="请输入积分范围止">
                       </el-input>
                     </el-form-item>
                   </el-col>

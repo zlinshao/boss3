@@ -17,7 +17,7 @@
               </el-col>
 
               <el-col :span="8">
-                <el-form-item label="作废日期">
+                <el-form-item label="上缴日期">
                   <el-date-picker
                     type="datetime"
                     placeholder="选择日期时间"
@@ -26,7 +26,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="作废人">
+                <el-form-item label="上缴人">
                   <el-input disabled="" v-model="staff_name"  @focus="openOrganizeModal"></el-input>
                 </el-form-item>
               </el-col>
