@@ -22,7 +22,7 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="对象" >{{form}}
+              <el-form-item label="对象" >
                  <el-input v-model="form.obj" @click.native="openOrganizationModal()" placeholder="点击选择" ></el-input>
               </el-form-item>
             </el-col>
@@ -142,6 +142,44 @@ export default {
     //预览
     look(){
       this.form.preview=1;
+      if (this.twoflag) {
+        this.form.draft = "1";
+      } else {
+        this.form.draft = "0";
+      }
+      if (!this.firstflag) {
+        this.form.id = "";
+      }
+      this.saveorsend();
+      if (this.saveorsendflag) {
+        if (this.form.type == "表彰") {
+          this.form.type = 1;
+        }
+        if (this.form.type == "批评") {
+          this.form.type = 2;
+        }
+        if (this.form.type == "通知") {
+          this.form.type = 3;
+        }
+        if (this.form.type == "研发") {
+          this.form.type = 4;
+        }
+        this.$http
+          .post(this.urls + "announcement", {
+            title: this.form.title,
+            type: this.form.type,
+            content: this.form.context,
+            id: this.form.id,
+            draft: this.form.draft,
+            staff_id:this.form.staff_id,
+            department_id: this.form.objid,
+            preview: this.form.preview,
+            attachment: this.form.attachment
+          })
+          .then(res => {
+          });
+
+      }    
     },
     //发布
     sendx() {
@@ -149,6 +187,7 @@ export default {
       this.midfunc();
     },
     midfunc() {
+      this.form.preview=0;
       if (this.twoflag) {
         this.form.draft = "1";
       } else {
