@@ -71,7 +71,7 @@
                  v-for="(key,index) in buttonVal" :key="index">{{key}}
       </el-button>
     </div>
-    <div class="lookLog" v-for="item in lookLogData">
+    <div class="lookLog" v-for="item in lookLogData" v-if="lookLogData.length>0">
       <div class="pic">
         <img :src="item.creator_id.avatar" v-if="item.creator_id.avatar">
         <img src="../../../assets/images/head.jpg" v-else>
@@ -85,7 +85,7 @@
             <span v-if="item.module === 'app\\oa\\model\\DailyAchievement'">业绩日报</span>
           </div>
           <div style="display: inline-block;float: right;cursor: pointer;">
-            <i class="el-icon-edit"  @click="editLog(item)"></i>
+            <i class="el-icon-edit" style="font-size: 16px;" @click="editLog(item)"></i>
           </div>
           <div class="b">{{item.create_time}}</div>
           <div v-if="item.module === 'app\\oa\\model\\DailyDay'">
@@ -121,7 +121,7 @@
               <img :src="pic[0].uri">
             </span>
             <span v-for="pic in item.daily.album.annex_file" v-if="item.daily && item.daily.album">
-              <img :src="pic[0].uri">附件
+              <img src="../../../assets/images/file.svg" style="width: 30px;background: aliceblue;border-radius: 5px;padding: 0 10px;">
             </span>
           </div>
         </div>
@@ -149,6 +149,7 @@
         <!--</div>-->
       </div>
     </div>
+    <div v-if="lookLogData.length===0" style="text-align: center;height: 100px;">暂无数据</div>
     <!--组织架构-->
     <organization :organizationDialog="organizeVisible" :type="organizaType" @close="closeOrganize" @selectMember="selectMember"></organization>
   </div>
@@ -234,7 +235,6 @@
       },
       selectMember(val){
         this.organizationDialog = false;
-        console.log(val)
         this.selectMemberName = val[0].name;
         this.form.staff_id = val[0].id;
       },
@@ -253,7 +253,6 @@
         this.selectMemberName = '';
       },
       editLog(val) {
-        console.log("editLog===="+val.id);
         this.$emit("editLog",val);
       },
       // 按钮切换
@@ -269,6 +268,9 @@
             break;
           case 1:  //我发出的
             this.form.self = 1;
+            this.form.type = '';
+            this.form.start_time='';
+            this.form.end_time='';
             this.getLookLog();
             break;
           case 2:  //日报
@@ -330,9 +332,13 @@
     opacity: 1;
     /* transition: all .4s; */
   }
+  .image_file{
+    margin-top: 10px;
+  }
   .image_file img{
     width: 50px;
     height: 50px;
+    margin-left: 5px;
   }
   .primary {
     background: #409EFF;
