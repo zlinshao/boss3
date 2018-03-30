@@ -195,6 +195,12 @@ export default {
     submitIntegral() {
       let typesubmit = [];
       let typesubmitot = [];
+      if(typeof (this.form.name) === 'string'){
+                this.$notify.warning({
+                  title: "警告",
+                  message: "数据未发生改变"
+                });
+      }else{
       if (this.newAdd == "新增") {
         if (this.form.name === "other") {
           this.$http
@@ -296,6 +302,7 @@ export default {
               }
             });
         }
+      }
       }
     },
     //调出选人组件
