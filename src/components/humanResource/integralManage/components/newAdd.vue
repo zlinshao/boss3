@@ -133,7 +133,11 @@ export default {
           params: this.formList
         })
         .then(res => {
+          if(res.data.code=='30310'){
           this.form.existing = res.data.data[0].amount;
+          }else{
+            this.form.existing=0
+          }
         });
     },
     newAdd(val) {
@@ -316,8 +320,21 @@ export default {
       this.type = "";
       this.length = "";
       this.form.staff_id = val[0].id;
+      this.formList.staff_id=val[0].id
+      this.$http
+        .get(globalConfig.server + "credit/manage/summary", {
+          params: this.formList
+        })
+        .then(res => {
+          if(res.data.code=='30310'){
+          this.form.existing = res.data.data[0].amount;
+          }else{
+            this.form.existing=0
+          }
+        });
       this.form.sname = val[0].name;
       this.form.dname = val[0].org[0].name;
+
     },
     closeModal() {
       this.organizationDialog = false;

@@ -308,6 +308,7 @@ export default {
       }
     },
     searchtop() {
+      this.isHigh = !this.isHigh;
       this.getTableData();
     },
     handleSizeChange(val) {
