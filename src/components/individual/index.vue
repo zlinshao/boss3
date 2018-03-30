@@ -190,7 +190,7 @@
           </div>
         </el-col>
         <el-col :span="6">
-          <div class="mainRight">
+          <div class="mainRight"  @click="showAnnouncement(praiseData)">
             <div class="title">
               公司公告
             </div>
@@ -205,7 +205,7 @@
               </div>
               <div class="buttonNew">
                 <div>
-                  <el-button size="small" type="text" @click="showAnnouncement(praiseData)">详情</el-button>
+                  <el-button size="small" type="text">详情</el-button>
                 </div>
                 <div>
                   <i class="el-icon-info"></i>123
@@ -216,7 +216,7 @@
             <div class="title">
               公司公告
             </div>
-            <div class="company2">
+            <div class="company2" @click="showAnnouncement(punishmentData)">
               <div class="com"></div>
               <div class="caption">
                 <span>{{punishmentData.title}}</span>
@@ -227,7 +227,7 @@
               </div>
               <div class="buttonNew">
                 <div>
-                  <el-button size="small" type="text" @click="showAnnouncement(punishmentData)">详情</el-button>
+                  <el-button size="small" type="text">详情</el-button>
                 </div>
                 <div>
                   <i class="el-icon-info"></i>123
@@ -240,20 +240,20 @@
       </el-row>
     </div>
 
-    <Announcement :warningDialog="warningDialog" :lookat="announcementData"  @close="closeWarning" ></Announcement>
+    <Announcement :announcementDialog="announcementDialog" :announcementData="announcementData"  @close="closeWarning" ></Announcement>
   </div>
 </template>
 
 <script>
   import ECharts from 'echarts'
   import EChartTheme from 'echarts/theme/macarons'
-  import Announcement from "../OAWork/management/notice/components/announcementDetail.vue"; //预览页面
+  import Announcement from "./components/announcement.vue"; //预览页面
   export default {
     name: "index",
     components:{Announcement},
     data() {
       return {
-        warningDialog:false,
+        announcementDialog:false,
         landholder: {},
         isEdit: false,
         params: {
@@ -343,10 +343,10 @@
       //查看公告详情
       showAnnouncement(val){
         this.announcementData = val;
-        this.warningDialog = true;
+        this.announcementDialog = true;
       },
       closeWarning(){
-        this.warningDialog = false;
+        this.announcementDialog = false;
       },
       //折线图
       drawLineChart() {
