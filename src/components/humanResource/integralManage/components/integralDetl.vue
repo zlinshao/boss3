@@ -5,16 +5,16 @@
       :visible.sync="integralDetail"
       width="40%">
       <div class="scroll_bar">
-        <el-form :model="form" size="mini" label-width="80px">
+        <el-form  size="mini" label-width="80px">
           <el-row>
             <el-col :span="12">
               <el-form-item label="姓名">
-                <el-input size="mini" readonly></el-input>
+                <el-input size="mini" disabled="" v-model="integralInfo.sname"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="部门">
-                <el-input size="mini" readonly></el-input>
+                 <el-input size="mini" v-model="integralInfo.dname"  disabled="" ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -22,12 +22,12 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="日期">
-                <el-input size="mini" readonly></el-input>
+                <el-input size="mini" v-model="integralInfo.date"  disabled="" ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="积分分数">
-                <el-input size="mini" readonly></el-input>
+                <el-input size="mini" v-model="integralInfo.amount_str"  disabled="" ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -35,24 +35,25 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="项目类别">
-                <el-input size="mini" readonly></el-input>
+                <el-input size="mini" v-model="integralInfo.minus"  disabled="" ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="项目名称">
-                <el-input size="mini" readonly></el-input>
+                <el-input size="mini" v-model="integralInfo.name"  disabled="" ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item label="积分变动">
-                <el-input size="mini" readonly></el-input>
+                <el-input size="mini" v-model="integralInfo.amount"  disabled="" ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-          <el-form-item label="备注">
-            <el-input size="mini" readonly></el-input>
+          <el-form-item label="备注" >
+            <!-- <el-input size="mini"   clearable disabled="" ></el-input> -->
+            <el-input size="mini"  v-model="remark" clearable disabled="" ></el-input>
           </el-form-item>
         </el-form>
       </div>
@@ -65,49 +66,69 @@
 </template>
 
 <script>
-  export default {
-    name: "integralDetl",
-    props: ['module'],
-    data () {
-      return {
-        integralDetail: false,
-        form: {},
-        id: '',
+export default {
+  name: "integralDetl",
+  props: ["module", "rowid"],
+  data() {
+    return {
+      integralDetail: false,
+      form: {},
+      id: "",
+      integralInfo: [],
+      remark: ""
+    };
+  },
+  watch: {
+    module(val) {
+      this.integralDetail = val;
+    },
+    integralDetail(val) {
+      if (!val) {
+        this.$emit("close");
       }
     },
-    watch:{
-      module(val){
-        this.integralDetail = val;
-      },
-      integralDetail(val){
-        if(!val){
-          this.$emit('close');
-        }
-      }
-    },
-    mounted(){
-      // this.getIntegralDetl();
-    },
-    methods: {
-      getIntegralDetl () {
-        // this.$http.get(globalConfig.server + '/credit/manage/'+this.id).then((res) => {
-        //   console.log(res);
-        // })
-      }
+    rowid(val) {
+      this.getIntegralDetl(val);
+    }
+  },
+  mounted() {},
+  methods: {
+    getIntegralDetl(val) {
+      this.$http
+        .get(globalConfig.server + "/credit/manage/" + val)
+        .then(res => {
+          if (res.data.code == "30310") {
+            this.integralInfo = res.data.data;
+            if (res.data.data.minus == 0) {
+              this.integralInfo.minus = "得分";
+            } else {
+              this.integralInfo.minus = "失分";
+            }
+            if (res.data.data.last_remark.length > 0) {
+              if (res.data.data.last_remark[0].content) {
+                this.remark = res.data.data.last_remark[0].content;
+              }
+            } else {
+              this.remark = "";
+            }
+          } else {
+            this.integralInfo = [];
+          }
+        });
     }
   }
+};
 </script>
 
 <style scoped lang="scss">
-  @mixin flex {
-    display: -webkit-flex;
-    display: flex;
-  }
+@mixin flex {
+  display: -webkit-flex;
+  display: flex;
+}
 
-  @mixin border_radius($n) {
-    -webkit-border-radius: $n;
-    -moz-border-radius: $n;
-    border-radius: $n;
-  }
-
+@mixin border_radius($n) {
+  -webkit-border-radius: $n;
+  -moz-border-radius: $n;
+  border-radius: $n;
+}
 </style>

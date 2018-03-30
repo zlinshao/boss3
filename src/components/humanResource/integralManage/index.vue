@@ -3,11 +3,11 @@
     <div id="clientContainer">
       <div class="highRanking">
         <div class="tabsSearch">
-          <el-form :inline="true" size="mini">
+          <el-form :inline="true" :model="form" size="mini">
             <el-form-item>
-              <el-input placeholder="请输入内容" @clear="search" clearable v-model="form.item_name"
+              <el-input placeholder="请输入项目名称" @clear="searchtop" clearable v-model="form.item_name"
                         @keyup.enter.native="search" size="mini">
-                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+                <el-button slot="append" icon="el-icon-search" @click="searchtop"></el-button>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -19,7 +19,7 @@
           </el-form>
         </div>
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
-          <el-form :inline="true" size="mini" label-width="100px">
+          <el-form :inline="true" :model="form" size="mini" label-width="100px">
             <div class="filterTitle">
               <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>
@@ -52,15 +52,43 @@
                 </el-row>
               </el-col>
             </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">积分范围起</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-input v-model="form.credit_from" placeholder="请输入积分范围起">
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">积分范围止</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option" placeholder="请输入积分范围止">
+                    <el-form-item>
+                      <el-input v-model="form.credit_to" >
+                      </el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
             <div class="btnOperate">
-              <el-button size="mini" type="primary">搜索</el-button>
+              <el-button size="mini" type="primary" @click="searchtop">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
               <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
             </div>
           </el-form>
         </div>
       </div>
-      <el-tabs v-model="activeName">
+      <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="明细" name="first">
           <el-table
             :data="tableData"
@@ -97,7 +125,7 @@
 
         <el-tab-pane label="汇总" name="second">
           <el-table
-            :data="tableData"
+            :data="tableData2"
             style="width: 100%">
             <el-table-column
               prop="date"
@@ -141,261 +169,304 @@
                   @selectMember="selectMember"></Organization>
 
     <!--积分详情-->
-    <IntegralDetail :module="integralDetail" @close="integralDetail = false"></IntegralDetail>
-
+    <IntegralDetail :module="integralDetail" :rowid="rowid" @close="integralDetail = false"></IntegralDetail>
+    <NewAdd :newAddDialog="newAddDialog" :newAdd="newAdd" :formDetail="formDetail" @newAddBack="newAddBack" @close="newAddDialog = false"></NewAdd>
   </div>
 </template>
 
 <script>
-  import RightMenu from '../../common/rightMenu.vue'
-  import Organization from '../../common/organization.vue'
-  import IntegralDetail from './components/integralDetl.vue'
+import RightMenu from "../../common/rightMenu.vue";
+import Organization from "../../common/organization.vue";
+import IntegralDetail from "./components/integralDetl.vue";
+import NewAdd from "./components/newAdd.vue";
 
-  export default {
-    name: 'hello',
-    components: {RightMenu, Organization, IntegralDetail},
-    data() {
-      return {
-        activeName: 'first',
-        rightMenuX: 0,
-        rightMenuY: 0,
-        show: false,
-        lists: [],
-        newAdd: '',
-        /***********/
-        selectFlag: 1,
-        statisticDate: '',
-        paging: 0,
-        currentPages: 1,
+export default {
+  name: "hello",
+  components: { RightMenu, Organization, NewAdd, IntegralDetail },
+  data() {
+    return {
+      activeName: "first",
+      rightMenuX: 0,
+      rightMenuY: 0,
+      show: false,
+      lists: [],
+      newAdd: "",
+      /***********/
+      selectFlag: 1,
+      statisticDate: "",
+      paging: 0,
+      currentPages: 1,
 
-        form: {
-          page: 1,
-          limit: 10,
-          item_name: '',
-          staff_id: '',
-          credit_from: '',
-          credit_to: '',
-          department_id: '',
-        },
+      form: {
+        page: 1,
+        limit: 10,
+        item_name: "",
+        staff_id: "",
+        credit_from: "",
+        credit_to: "",
+        department_id: ""
+      },
 
-        staff_name: '',
-        department_name: '',
-        length: '',
-        type: '',
+      staff_name: "",
+      department_name: "",
+      length: "",
+      type: "",
 
-        activeId: '',
-        formDetail: {},
+      activeId: "",
+      formDetail: {},
 
-        totalNumber: 0,
-        tableData: [],            //明细列表
-        remark: [],
-        tableData2: [],           //汇总列表
+      totalNumber: 0,
+      tableData: [], //明细列表
+      remark: [],
+      tableData2: [], //汇总列表
+      rowid: "",
+      //模态框
+      organizeDialog: false,
 
-        //模态框
-        organizeDialog: false,
-
-        isActive: 0,
-        isHigh: false,
-        integralDetail: false,
+      isActive: 0,
+      isHigh: false,
+      integralDetail: false,
+      newAddDialog: false
+    };
+  },
+  mounted() {
+    this.getTableData();
+  },
+  watch: {},
+  methods: {
+    newAddBack(val) {
+      if (val == "新增") {
+        this.form.page = 1;
+        this.getTableData();
+      } else {
+        this.getTableData();
       }
     },
-    mounted() {
-      this.getTableData();
+    // tabs标签页
+    handleClick(tab, event) {
+      if (this.activeName == "first") {
+        this.getTableData();
+      } else if (this.activeName == "second") {
+        this.getGatherList();
+      }
     },
-    methods: {
-      getTableData() {
-        this.$http.get(globalConfig.server + 'credit/manage', {params: this.form}).then((res) => {
-          // console.log(res.data.data);
-          if (res.data.code === '30310') {
+    getTableData() {
+      this.$http
+        .get(globalConfig.server + "credit/manage", { params: this.form })
+        .then(res => {
+          if (res.data.code === "30310") {
             this.totalNumber = res.data.num;
             this.tableData = res.data.data;
             // this.remark = res.data.data.last_remark;
             // res.data.data.last_remark[0].content = this.remark;
           } else {
             this.$notify.warning({
-              title: '警告',
+              title: "警告",
               message: res.data.msg
-            })
+            });
           }
+        });
+    },
+    // 获取汇总列表
+    getGatherList() {
+      this.$http
+        .get(globalConfig.server + "credit/manage/summary", {
+          params: this.form
         })
-      },
-      // 获取汇总列表
-      getGatherList() {
-        this.$http.get(globalConfig.server + 'credit/manage/summary', {params: this.form}).then((res) => {
-          // console.log(res);
+        .then(res => {
           if (res.data.code === "30310") {
-            this.paging = res.data.num;
+            this.totalNumber = res.data.num;
             this.tableData2 = res.data.data;
-
           } else {
             this.tableData2 = [];
-            this.paging = 0;
+            this.totalNumber = 0;
           }
+        });
+    },
+    // 新增
+    newList() {
+      this.newAdd = "新增";
+      this.newAddDialog = true;
+    },
+    // 修改
+    revise() {
+      this.newAddDialog = true;
+      this.newAdd = "修改";
+    },
+    // 积分详情
+    dblClickTable(row) {
+      this.rowid = row.id;
+      this.integralDetail = true;
+    },
+
+    search(val) {
+      this.form.page = val;
+      if (this.activeName == "first") {
+        this.getTableData();
+      } else if (this.activeName == "second") {
+        this.getGatherList();
+      }
+    },
+    searchtop() {
+      this.getTableData();
+    },
+    handleSizeChange(val) {
+      console.log(val);
+    },
+
+    //右键
+    rightMenu(row, event) {
+      this.activeId = row;
+      this.formDetail = row;
+      this.lists = [
+        { clickIndex: "edit", headIcon: "el-icon-edit", label: "修改" },
+        { clickIndex: "delete", headIcon: "el-icon-delete", label: "删除" }
+      ];
+      this.contextMenuParam(event);
+    },
+
+    //右键回调时间
+    clickEvent(index) {
+      if (index === "delete") {
+        this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
         })
-      },
-
-      // 积分详情
-      dblClickTable() {
-        this.integralDetail = true;
-      },
-
-      search(val) {
-        console.log(val);
-      },
-
-      handleSizeChange(val) {
-        console.log(val);
-      },
-
-      //右键
-      rightMenu(row, event) {
-        this.activeId = row.id;
-        this.lists = [
-          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-          {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
-        ];
-        this.contextMenuParam(event);
-      },
-
-      // 新增
-      newList() {
-        this.newAdd = '新增';
-        this.newAddDialog = true;
-      },
-      // 修改
-      revise() {
-        this.$http.get(globalConfig.server + 'credit/manage/' + this.activeId).then((res) => {
-          this.formDetail = res.data.data;
-          this.newAddDialog = true;
-          this.newAdd = '修改';
-        })
-      },
-
-      //右键回调时间
-      clickEvent(index) {
-        if (index === 'delete') {
-          this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
+          .then(() => {
             this.deleteIntegral();
-          }).catch(() => {
+          })
+          .catch(() => {
             this.$message({
-              type: 'info',
-              message: '已取消删除'
+              type: "info",
+              message: "已取消删除"
             });
           });
-        } else if (index === 'edit') {
-          this.revise();
-        }
-      },
+      } else if (index === "edit") {
+        this.revise();
+      }
+    },
 
-      //deleteIntegral
-      deleteIntegral() {
-        this.$http.put(globalConfig.server + 'credit/manage/delete/' + this.activeId).then((res) => {
-          if (res.data.code === '30310') {
+    //deleteIntegral
+    deleteIntegral() {
+      this.$http
+        .put(globalConfig.server + "credit/manage/delete/" + this.activeId.id)
+        .then(res => {
+          if (res.data.code === "30310") {
             this.getTableData();
           } else {
             this.$notify.warning({
-              title: '警告',
+              title: "警告",
               message: res.data.msg
-            })
+            });
           }
-        })
-      },
-      //关闭右键菜单
-      closeMenu() {
-        this.show = false;
-      },
+        });
+    },
+    //关闭右键菜单
+    closeMenu() {
+      this.show = false;
+    },
 
-      //右键参数
-      contextMenuParam(event) {
-        //param: user right param
-        let e = event || window.event;	//support firefox contextmenu
-        this.show = false;
-        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
-        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
-        event.preventDefault();
-        event.stopPropagation();
-        this.$nextTick(() => {
-          this.show = true
-        })
-      },
-      // 人资搜索
-      selectDep(val) {
-        this.organizeDialog = true;
-        this.length = 1;
-        this.type = val;
-      },
-      // 确认部门
-      selectMember(val) {
-        this.organizeDialog = false;
-        if (val[0].hasOwnProperty('avatar')) {
-          this.staff_name = val[0].name;
-          this.staff_id = val[0].id;
-        } else {
-          this.department_name = val[0].name;
-          this.department_id = val[0].id;
-        }
-      },
-      // 高级搜索
-      highGrade() {
-        this.isHigh = !this.isHigh;
-      },
-      resetting() {
-
-      },
-
+    //右键参数
+    contextMenuParam(event) {
+      //param: user right param
+      let e = event || window.event; //support firefox contextmenu
+      this.show = false;
+      this.rightMenuX =
+        e.clientX +
+        document.documentElement.scrollLeft -
+        document.documentElement.clientLeft;
+      this.rightMenuY =
+        e.clientY +
+        document.documentElement.scrollTop -
+        document.documentElement.clientTop;
+      event.preventDefault();
+      event.stopPropagation();
+      this.$nextTick(() => {
+        this.show = true;
+      });
+    },
+    // 人资搜索
+    selectDep(val) {
+      this.organizeDialog = true;
+      this.length = 1;
+      this.type = val;
+    },
+    // 确认部门
+    selectMember(val) {
+      this.organizeDialog = false;
+      if (val[0].hasOwnProperty("avatar")) {
+        this.staff_name = val[0].name;
+        this.form.staff_id = val[0].id;
+      } else {
+        this.department_name = val[0].name;
+        this.form.department_id = val[0].id;
+      }
+    },
+    // 高级搜索
+    highGrade() {
+      this.isHigh = !this.isHigh;
+    },
+    resetting() {
+      this.form = {
+        page: 1,
+        limit: 10,
+        item_name: "",
+        staff_id: "",
+        credit_from: "",
+        credit_to: "",
+        department_id: ""
+      };
+      (this.department_name = ""), (this.staff_id = "");
     }
   }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped="">
-  #clientContainer {
-    .selectButton {
-      color: #fff;
-      background: #66b1ff;
-    }
-    .tool {
-      border-bottom: 1px solid #eee;
-
-    }
-    .filter {
-      padding-top: 10px;
-    }
-    .main {
-      font-size: 12px;
-      .myHouse {
-        margin-bottom: 20px;
-        .myTable {
-          .el-table {
-            th {
-              background-color: #dfe6fb;
-            }
+#clientContainer {
+  .selectButton {
+    color: #fff;
+    background: #66b1ff;
+  }
+  .tool {
+    border-bottom: 1px solid #eee;
+  }
+  .filter {
+    padding-top: 10px;
+  }
+  .main {
+    font-size: 12px;
+    .myHouse {
+      margin-bottom: 20px;
+      .myTable {
+        .el-table {
+          th {
+            background-color: #dfe6fb;
           }
         }
-        .tableBottom {
-          padding: 8px;
+      }
+      .tableBottom {
+        padding: 8px;
+        display: flex;
+        justify-content: flex-end;
+        .right {
           display: flex;
-          justify-content: flex-end;
-          .right {
-            display: flex;
-            align-items: center;
-            div {
-              width: 100px;
-              text-align: center;
-              span {
-                color: #fb529f;
-              }
-              &:first-child {
-                border-right: 1px solid #ccc;
-              }
+          align-items: center;
+          div {
+            width: 100px;
+            text-align: center;
+            span {
+              color: #fb529f;
+            }
+            &:first-child {
+              border-right: 1px solid #ccc;
             }
           }
         }
       }
     }
   }
+}
 </style>
