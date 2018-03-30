@@ -114,10 +114,42 @@
       increaseGoodsDialogVisible(val){
         if(!val){
           this.$emit('close')
+        }else{
+          this.getInfo()
         }
       }
     },
     methods:{
+      getInfo(){
+
+      this.personal = JSON.parse(localStorage.getItem("personal"));
+            //物品来源
+      this.$http.get(this.urls+'setting/dictionary/319').then((res) => {
+          if (res.data.code === '30010') {
+              this.forms=res.data.data;
+          }
+      })
+      //房间编号
+      this.$http.get(this.urls+'setting/dictionary/298').then((res) => {
+        if (res.data.code === '30010') {
+        this.houselist=res.data.data;
+            }
+         })
+
+      //物品类型
+      this.$http.get(this.urls+'setting/dictionary/265').then((res) => {
+          if (res.data.code === '30010') {
+            this.goods=res.data.data;
+          }
+      })
+      //物品去向
+      this.$http.get(this.urls+'setting/dictionary/323').then((res) => {
+
+          if (res.data.code === '30010') {
+              this.goodsgoing=res.data.data;
+          }
+      })
+      },
       openModalDialog(){
         this.goodsConfigDialog=true;
       },
@@ -221,33 +253,6 @@
     },
     created:function(){
 
-      this.personal = JSON.parse(localStorage.getItem("personal"));
-            //物品来源
-      this.$http.get(this.urls+'setting/dictionary/319').then((res) => {
-          if (res.data.code === '30010') {
-              this.forms=res.data.data;
-          }
-      })
-      //房间编号
-      this.$http.get(this.urls+'setting/dictionary/298').then((res) => {
-        if (res.data.code === '30010') {
-        this.houselist=res.data.data;
-            }
-         })
-
-      //物品类型
-      this.$http.get(this.urls+'setting/dictionary/265').then((res) => {
-          if (res.data.code === '30010') {
-            this.goods=res.data.data;
-          }
-      })
-      //物品去向
-      this.$http.get(this.urls+'setting/dictionary/323').then((res) => {
-
-          if (res.data.code === '30010') {
-              this.goodsgoing=res.data.data;
-          }
-      })
     }
 
 

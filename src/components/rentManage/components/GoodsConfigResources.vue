@@ -125,10 +125,39 @@
       increaseGoodsDialogVisible(val){
         if(!val){
           this.$emit('close')
+        }else{
+          this.getInfo()
         }
       }
     },
       methods:{
+        getInfo(){
+      let date = new Date();
+      let seperator1 = "-";
+      let year = date.getFullYear();
+      let day = date.getDay()
+      let month = date.getMonth() + 1;
+      if (month >= 1 && month <= 9) {
+          month = "0" + month;
+      }
+
+      this.time = year + seperator1 + month + seperator1 + day;
+        
+      this.personal = JSON.parse(localStorage.getItem("personal"));
+      //房间编号
+      this.$http.get(this.urls+'setting/dictionary/298').then((res) => {  
+        if (res.data.code === '30010') {
+        this.houselist=res.data.data;                
+            }  
+         })
+      //物品来源       
+      this.$http.get(this.urls+'setting/dictionary/319').then((res) => {  
+          if (res.data.code === '30010') {
+              this.forms=res.data.data;
+          }  
+      })
+      this.goodsmore();
+        },
       openModalDialogx(){       
         this.addGoodsDialog=true;
       },
@@ -284,31 +313,7 @@
       }
     },
     created:function(){
-      let date = new Date();
-      let seperator1 = "-";
-      let year = date.getFullYear();
-      let day = date.getDay()
-      let month = date.getMonth() + 1;
-      if (month >= 1 && month <= 9) {
-          month = "0" + month;
-      }
 
-      this.time = year + seperator1 + month + seperator1 + day;
-        
-      this.personal = JSON.parse(localStorage.getItem("personal"));
-      //房间编号
-      this.$http.get(this.urls+'setting/dictionary/298').then((res) => {  
-        if (res.data.code === '30010') {
-        this.houselist=res.data.data;                
-            }  
-         })
-      //物品来源       
-      this.$http.get(this.urls+'setting/dictionary/319').then((res) => {  
-          if (res.data.code === '30010') {
-              this.forms=res.data.data;
-          }  
-      })
-      this.goodsmore();
     },
     computed:{
 

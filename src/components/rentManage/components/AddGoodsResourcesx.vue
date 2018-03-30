@@ -72,6 +72,7 @@ import AddGoodsResources from '../components/AddGoodsResources.vue' //增加物�
       },
       openModalDialogx(){       
         this.addGoodsDialog=true;
+         this.goodsmore();
       },
       closeAddGoodsResources(){
         this.addGoodsDialog=false;
@@ -101,8 +102,8 @@ import AddGoodsResources from '../components/AddGoodsResources.vue' //增加物�
         this.form.hourse.splice(index, 1);
       },
     },
-    created:function(){
-      this.goodsmore();
+    mounted(){
+     
     }
   };
 </script>

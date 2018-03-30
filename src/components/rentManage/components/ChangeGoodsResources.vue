@@ -59,10 +59,23 @@
       increaseGoodsDialogVisible(val){
         if(!val){
           this.$emit('close')
+        }else{
+          this.getRoom()
         }
       }
     },
       methods:{
+      getRoom(){
+              //房间编号
+      this.$http.get(this.urls+'setting/dictionary/298').then((res) => {
+        if (res.data.code === '30010') {
+        this.houseList=res.data.data;
+        this.hosueLength=this.houseList.length;
+            }
+         })
+      this.delivery()
+      },
+      
       openModalDialog(){
         this.deliveryDialog=true;
       },
@@ -87,14 +100,7 @@
 
     },
     created:function(){
-      //房间编号
-      this.$http.get(this.urls+'setting/dictionary/298').then((res) => {
-        if (res.data.code === '30010') {
-        this.houseList=res.data.data;
-        this.hosueLength=this.houseList.length;
-            }
-         })
-      this.delivery()
+
 
     }
   };

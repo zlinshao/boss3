@@ -99,10 +99,20 @@
       increaseGoodsDialogVisible(val){
         if(!val){
           this.$emit('close')
+        }else{
+          this.getInfo();
         }
       }
     },
     methods:{
+      getInfo(){
+              //物品来源       
+      this.$http.get(this.urls+'setting/dictionary/298').then((res) => {  
+          if (res.data.code === '30010') {
+              this.houselist=res.data.data;
+          }  
+      })
+      },
       savex(){ 
          this.$http.post(this.urls+'house/asset/add', {
            name:this.form.name,
@@ -128,12 +138,7 @@
 
     },
     created:function(){
-      //物品来源       
-      this.$http.get(this.urls+'setting/dictionary/298').then((res) => {  
-          if (res.data.code === '30010') {
-              this.houselist=res.data.data;
-          }  
-      })
+
     }
   };
 </script>

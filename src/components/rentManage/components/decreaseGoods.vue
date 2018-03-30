@@ -122,16 +122,20 @@
     watch:{
       decreaseGoodsDialog(val){
         this.decreaseGoodsDialogVisible = val
+
       },
       decreaseGoodsDialogVisible(val){
         if(!val){
           this.$emit('close')
+        }else{
+          this.getGoods();
         }
       }
     },
     methods:{
       openModalDialog(){
         this.changeGoodsDialog=true;
+        
       },
       closeChangeGoodsResources(){
         this.changeGoodsDialog=false;
@@ -219,11 +223,9 @@
             }
          })
         }
-      }
-    },
-    created:function(){
-      this.personal = JSON.parse(localStorage.getItem("personal"));
-      //物品去向
+      },
+      getGoods(){
+              //物品去向
       this.$http.get(this.urls+'setting/dictionary/323').then((res) => {
 
           if (res.data.code === '30010') {
@@ -243,6 +245,14 @@
         this.houselist=res.data.data;
             }
          })
+      }
+    },
+    mounted(){
+      
+    },
+    created:function(){
+      this.personal = JSON.parse(localStorage.getItem("personal"));
+
     }
   };
 </script>
