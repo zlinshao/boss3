@@ -1,9 +1,9 @@
 <template>
   <div id="examineAndApprove">
-    <el-tabs v-model="activeName" @tab-click="handleClick">
+    <el-tabs v-model="activeName" @tab-click="tabActive(activeName)">
       <el-tab-pane label="发起审批" name="first">
         <div class="myApplication">
-<!--积分-->
+          <!--积分-->
           <div>
             <div class="head">
               <div class="title">积分申请（1）</div>
@@ -21,7 +21,7 @@
               </div>
             </div>
           </div>
-<!--住宿-->
+          <!--住宿-->
           <div>
             <div class="head">
               <div class="title">住宿（2）</div>
@@ -31,7 +31,7 @@
               </div>
             </div>
             <div class="content" v-if="isOpen_2">
-              <div class="content_item"  @click="openFrames('lisuVisible')" v-if="showUp">
+              <div class="content_item" @click="openFrames('lisuVisible')" v-if="showUp">
                 <div>
                   <div class="item_icon">
                     <i class="iconfont icon-daqia"></i>
@@ -39,7 +39,7 @@
                   <div class="item_name">离宿申请</div>
                 </div>
               </div>
-              <div class="content_item"  @click="openFrames('zhusuVisible')" v-if="showUp">
+              <div class="content_item" @click="openFrames('zhusuVisible')" v-if="showUp">
                 <div>
                   <div class="item_icon"></div>
                   <div class="item_name">住宿申请</div>
@@ -47,7 +47,7 @@
               </div>
             </div>
           </div>
-<!--报销-->
+          <!--报销-->
           <div>
             <div class="head">
               <div class="title">报销</div>
@@ -60,7 +60,7 @@
               <div class="content_item" @click="openFrames('baoxiaoVisible')">
                 <div>
                   <div class="item_icon">
-                    <i class="iconfont icon-liuchengxiangdao"></i>
+                    <i class="iconfont icon-jinbi"></i>
                   </div>
                   <div class="item_name">报销流程</div>
                 </div>
@@ -105,7 +105,7 @@
               </div>
             </div>
           </div>
- <!--离职-->
+          <!--离职-->
           <div>
             <div class="head">
               <div class="title">离职申请</div>
@@ -123,7 +123,7 @@
               </div>
             </div>
           </div>
-<!--交通工具-->
+          <!--交通工具-->
           <div>
             <div class="head">
               <div class="title">交通工具申请</div>
@@ -141,7 +141,7 @@
               </div>
             </div>
           </div>
-<!--请假-->
+          <!--请假-->
           <div>
             <div class="head">
               <div class="title">请假</div>
@@ -175,7 +175,7 @@
               </div>
             </div>
           </div>
-<!--客服部-->
+          <!--客服部-->
           <div>
             <div class="head">
               <div class="title">客服部问题申报</div>
@@ -267,7 +267,7 @@
               </div>
             </div>
           </div>
-<!--休假-->
+          <!--休假-->
           <div>
             <div class="head">
               <div class="title">出勤休假</div>
@@ -301,7 +301,7 @@
               </div>
             </div>
           </div>
-<!--其他-->
+          <!--其他-->
           <div>
             <div class="head">
               <div class="title">其他</div>
@@ -386,370 +386,198 @@
 
         </div>
       </el-tab-pane>
-      <el-tab-pane name="second">
+      <el-tab-pane label="待办事项" name="second">
         <el-badge slot="label" is-dot="" class="item">待办事项</el-badge>
         <div class="myTable">
-<!--报销-->
           <el-table
             :data="tableData"
-            @row-dblclick="dblClickTable('reimbursedetail')"
+            @row-dblclick="dblClickTable"
             style="width: 100%">
             <el-table-column
-              prop="date"
-              v-if="isCheckbox"
-              type="selection">
-            </el-table-column>
-            <el-table-column
-              prop="date"
+              prop="title"
               label="审批标题">
             </el-table-column>
             <el-table-column
+              prop="summary"
               label="审批摘要">
-              <template slot-scope="scope">
-                <div>{{scope.row.city}}</div>
-                <div>{{scope.row.address}}</div>
-                <div>{{scope.row.zip}}</div>
-              </template>
             </el-table-column>
             <el-table-column
-              prop="province"
+              prop="created_at"
               label="发起时间">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="finish_at"
               label="完成时间">
             </el-table-column>
             <el-table-column
-              prop="zip"
-              label="状态">
-            </el-table-column>
-          </el-table>
-<!--备用金-->
-          <el-table
-            :data="tableData"
-            @row-dblclick="dblClickTable('reservedetail')"
-            style="width: 100%">
-            <el-table-column
-              prop="date"
-              v-if="isCheckbox"
-              type="selection">
-            </el-table-column>
-            <el-table-column
-              prop="date"
-              label="审批标题">
-            </el-table-column>
-            <el-table-column
-              label="审批摘要">
-              <template slot-scope="scope">
-                <div>{{scope.row.city}}</div>
-                <div>{{scope.row.address}}</div>
-                <div>{{scope.row.zip}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="province"
-              label="发起时间">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="完成时间">
-            </el-table-column>
-            <el-table-column
-              prop="zip"
-              label="状态">
-            </el-table-column>
-          </el-table>
-<!--请假-->
-          <el-table
-            :data="tableData"
-            @row-dblclick="dblClickTable('leavedetail')"
-            style="width: 100%">
-            <el-table-column
-              prop="date"
-              v-if="isCheckbox"
-              type="selection">
-            </el-table-column>
-            <el-table-column
-              prop="date"
-              label="审批标题">
-            </el-table-column>
-            <el-table-column
-              label="审批摘要">
-              <template slot-scope="scope">
-                <div>{{scope.row.city}}</div>
-                <div>{{scope.row.address}}</div>
-                <div>{{scope.row.zip}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="province"
-              label="发起时间">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="完成时间">
-            </el-table-column>
-            <el-table-column
-              prop="zip"
-              label="状态">
-            </el-table-column>
-          </el-table>
-<!--调休-->
-          <el-table
-            :data="tableData"
-            @row-dblclick="dblClickTable('takeworkdetail')"
-            style="width: 100%">
-            <el-table-column
-              prop="date"
-              v-if="isCheckbox"
-              type="selection">
-            </el-table-column>
-            <el-table-column
-              prop="date"
-              label="审批标题">
-            </el-table-column>
-            <el-table-column
-              label="审批摘要">
-              <template slot-scope="scope">
-                <div>{{scope.row.city}}</div>
-                <div>{{scope.row.address}}</div>
-                <div>{{scope.row.zip}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="province"
-              label="发起时间">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="完成时间">
-            </el-table-column>
-            <el-table-column
-              prop="zip"
-              label="状态">
-            </el-table-column>
-          </el-table>
-<!--补卡-->
-          <el-table
-            :data="tableData"
-            @row-dblclick="dblClickTable('replenishmentdetail')"
-            style="width: 100%">
-            <el-table-column
-              prop="date"
-              v-if="isCheckbox"
-              type="selection">
-            </el-table-column>
-            <el-table-column
-              prop="date"
-              label="审批标题">
-            </el-table-column>
-            <el-table-column
-              label="审批摘要">
-              <template slot-scope="scope">
-                <div>{{scope.row.city}}</div>
-                <div>{{scope.row.address}}</div>
-                <div>{{scope.row.zip}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="province"
-              label="发起时间">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="完成时间">
-            </el-table-column>
-            <el-table-column
-              prop="zip"
-              label="状态">
-            </el-table-column>
-          </el-table>
-<!--采购-->
-          <el-table
-            :data="tableData"
-            @row-dblclick="dblClickTable('purchasedetail')"
-            style="width: 100%">
-            <el-table-column
-              prop="date"
-              v-if="isCheckbox"
-              type="selection">
-            </el-table-column>
-            <el-table-column
-              prop="date"
-              label="审批标题">
-            </el-table-column>
-            <el-table-column
-              label="审批摘要">
-              <template slot-scope="scope">
-                <div>{{scope.row.city}}</div>
-                <div>{{scope.row.address}}</div>
-                <div>{{scope.row.zip}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="province"
-              label="发起时间">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="完成时间">
-            </el-table-column>
-            <el-table-column
-              prop="zip"
-              label="状态">
-            </el-table-column>
-          </el-table>
-<!--收据-->
-          <el-table
-            :data="tableData"
-            @row-dblclick="dblClickTable('receiptdetail')"
-            style="width: 100%">
-            <el-table-column
-              prop="date"
-              v-if="isCheckbox"
-              type="selection">
-            </el-table-column>
-            <el-table-column
-              prop="date"
-              label="审批标题">
-            </el-table-column>
-            <el-table-column
-              label="审批摘要">
-              <template slot-scope="scope">
-                <div>{{scope.row.city}}</div>
-                <div>{{scope.row.address}}</div>
-                <div>{{scope.row.zip}}</div>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="province"
-              label="发起时间">
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="完成时间">
-            </el-table-column>
-            <el-table-column
-              prop="zip"
+              prop="status"
               label="状态">
             </el-table-column>
           </el-table>
         </div>
       </el-tab-pane>
-      <el-tab-pane name="third">
-        <el-badge slot="label" :is-dot="false" class="item">已完成事项</el-badge>
+      <el-tab-pane label="我审批的" name="third">
+        <el-badge slot="label" :is-dot="false" class="item">我审批的</el-badge>
         <el-table
           :data="tableData"
-          @row-dblclick="dblClickTable('reimbursedone')"
+          @row-dblclick="dblClickTable"
           style="width: 100%">
           <el-table-column
-            prop="date"
-            v-if="isCheckbox"
-            type="selection">
-          </el-table-column>
-          <el-table-column
-            prop="date"
+            prop="title"
             label="审批标题">
           </el-table-column>
           <el-table-column
+            prop="summary"
             label="审批摘要">
-            <template slot-scope="scope">
-              <div>{{scope.row.city}}</div>
-              <div>{{scope.row.address}}</div>
-              <div>{{scope.row.zip}}</div>
-            </template>
           </el-table-column>
           <el-table-column
-            prop="province"
+            prop="created_at"
             label="发起时间">
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="finish_at"
             label="完成时间">
           </el-table-column>
           <el-table-column
-            prop="zip"
+            prop="status"
             label="状态">
           </el-table-column>
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="我发起的" name="fourth">
         <el-badge slot="label" is-dot="" class="item">我发起的</el-badge>
-        <el-table
-          :data="tableData"
-          @row-dblclick="dblClickTable"
-          style="width: 100%">
-          <el-table-column
-            prop="date"
-            v-if="isCheckbox"
-            type="selection">
-          </el-table-column>
-          <el-table-column
-            prop="date"
-            label="审批标题">
-          </el-table-column>
-          <el-table-column
-            label="审批摘要">
-            <template slot-scope="scope">
-              <div>{{scope.row.city}}</div>
-              <div>{{scope.row.address}}</div>
-              <div>{{scope.row.zip}}</div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="province"
-            label="发起时间">
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="完成时间">
-          </el-table-column>
-          <el-table-column
-            prop="zip"
-            label="状态">
-          </el-table-column>
-        </el-table>
+        <el-tabs v-model="finActive" @tab-click="childActive(activeName,finActive)">
+          <el-tab-pane label="未完成" name="unfinished">
+            <el-badge slot="label" :is-dot="false" class="item">未完成({{amount}})</el-badge>
+            <el-table
+              :data="tableData"
+              @row-dblclick="dblClickTable"
+              style="width: 100%">
+              <el-table-column
+                prop="title"
+                label="审批标题">
+              </el-table-column>
+              <el-table-column
+                prop="summary"
+                label="审批摘要">
+              </el-table-column>
+              <el-table-column
+                prop="created_at"
+                label="发起时间">
+              </el-table-column>
+              <el-table-column
+                prop="finish_at"
+                label="完成时间">
+              </el-table-column>
+              <el-table-column
+                prop="status"
+                label="状态">
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
+          <el-tab-pane label="已完成" name="finish">
+            <el-badge slot="label" :is-dot="false" class="item">已完成</el-badge>
+            <el-table
+              :data="tableData"
+              @row-dblclick="dblClickTable"
+              style="width: 100%">
+              <el-table-column
+                prop="title"
+                label="审批标题">
+              </el-table-column>
+              <el-table-column
+                prop="summary"
+                label="审批摘要">
+              </el-table-column>
+              <el-table-column
+                prop="created_at"
+                label="发起时间">
+              </el-table-column>
+              <el-table-column
+                prop="finish_at"
+                label="完成时间">
+              </el-table-column>
+              <el-table-column
+                prop="status"
+                label="状态">
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
+        </el-tabs>
       </el-tab-pane>
       <el-tab-pane label="抄送我的" name="fifth">
         <el-badge slot="label" :is-dot="false" class="item">抄送我的</el-badge>
-        <el-table
-          :data="tableData"
-          @row-dblclick="dblClickTable"
-          style="width: 100%">
-          <el-table-column
-            prop="date"
-            v-if="isCheckbox"
-            type="selection">
-          </el-table-column>
-          <el-table-column
-            prop="date"
-            label="审批标题">
-          </el-table-column>
-          <el-table-column
-            label="审批摘要">
-            <template slot-scope="scope">
-              <div>{{scope.row.city}}</div>
-              <div>{{scope.row.address}}</div>
-              <div>{{scope.row.zip}}</div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="province"
-            label="发起时间">
-          </el-table-column>
-          <el-table-column
-            prop="address"
-            label="完成时间">
-          </el-table-column>
-          <el-table-column
-            label="审批摘要">
-            <template slot-scope="scope">
-              <div>{{scope.row.city}}</div>
-            </template>
-          </el-table-column>
-        </el-table>
+        <el-tabs v-model="readActive" @tab-click="childActive(activeName,readActive)">
+          <el-tab-pane label="未读" name="unread">
+            <el-badge slot="label" :is-dot="false" class="item">未读({{amount}})</el-badge>
+            <el-table
+              :data="tableData"
+              @row-dblclick="dblClickTable"
+              style="width: 100%">
+              <el-table-column
+                prop="title"
+                label="审批标题">
+              </el-table-column>
+              <el-table-column
+                prop="summary"
+                label="审批摘要">
+              </el-table-column>
+              <el-table-column
+                prop="created_at"
+                label="发起时间">
+              </el-table-column>
+              <el-table-column
+                prop="finish_at"
+                label="完成时间">
+              </el-table-column>
+              <el-table-column
+                prop="status"
+                label="状态">
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
+          <el-tab-pane label="已读" name="read">
+            <el-badge slot="label" :is-dot="false" class="item">已读</el-badge>
+            <el-table
+              :data="tableData"
+              @row-dblclick="dblClickTable"
+              style="width: 100%">
+              <el-table-column
+                prop="title"
+                label="审批标题">
+              </el-table-column>
+              <el-table-column
+                prop="summary"
+                label="审批摘要">
+              </el-table-column>
+              <el-table-column
+                prop="created_at"
+                label="发起时间">
+              </el-table-column>
+              <el-table-column
+                prop="finish_at"
+                label="完成时间">
+              </el-table-column>
+              <el-table-column
+                prop="status"
+                label="状态">
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
+        </el-tabs>
       </el-tab-pane>
     </el-tabs>
+
+    <div class="block pages">
+      <el-pagination
+        @current-change="search"
+        :current-page="params.page"
+        :page-size="15"
+        layout="total, prev, pager, next, jumper"
+        :total="paging">
+      </el-pagination>
+    </div>
+
     <Frames :module="frameVisible" @close='closeFrame'></Frames>
     <Lisu :module="lisuVisible" @close='closeFrame'></Lisu>
     <Zhusu :module="zhusuVisible" @close='closeFrame'></Zhusu>
@@ -775,7 +603,8 @@
     <ProblemReport :module="problemReportVisible" @close='closeFrame'></ProblemReport>
     <Repair :module="repairVisible" @close='closeFrame'></Repair>
     <MiscellaneousExpenses :module="miscellaneousExpensesVisible" @close='closeFrame'></MiscellaneousExpenses>
-    <MiscellaneousExpensesOfficial :module="miscellaneousExpensesOfficialVisible" @close='closeFrame'></MiscellaneousExpensesOfficial>
+    <MiscellaneousExpensesOfficial :module="miscellaneousExpensesOfficialVisible"
+                                   @close='closeFrame'></MiscellaneousExpensesOfficial>
 
   </div>
 </template>
@@ -810,9 +639,9 @@
   import Purchasedetail from './comments/details/purchasedetail.vue'
   import Receiptdetail from './comments/details/receiptdetail.vue'
 
-
   export default {
-    components: { Frames,
+    components: {
+      Frames,
       Lisu,
       Zhusu,
       Baoxiao,
@@ -830,7 +659,6 @@
       MiscellaneousExpenses,
       MiscellaneousExpensesOfficial,
 
-
       Reimbursement,
       Reimbursedone,
       Reservedetail,
@@ -842,8 +670,17 @@
     },
     data() {
       return {
+        address: globalConfig.server_user,
+        paging: 0,
+        amount: 0,
+        params: {
+          page: 1,
+        },
+        activeName: 'fourth',
+        finActive: 'unfinished',
+        readActive: 'unread',
+
         showUp: false,    //暂时隐藏
-        activeName: 'first',
         isOpen_1: true,
         isOpen_2: true,
         isOpen_3: true,
@@ -853,50 +690,121 @@
         isOpen_7: true,
         isOpen_8: true,
         isOpen_9: true,
-        tableData: [
-          {
-            date: '报销审批',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-        ],
-        isCheckbox: 'true',
-// 模态框
-        frameVisible: false,              //积分申请
-        lisuVisible: false,               //离宿申请
-        zhusuVisible: false,              //住宿申请
-        baoxiaoVisible: false,            //报销申请
-        shiyebuVisible: false,            //事业部报销申请
-        gaocengVisible: false,            //高层报销申请
-        chuchaiVisible: false,            //出差报销申请
-        reserveVisible: false,            //备用金申请
-        purchaseVisible: false,           //采购申请
-        leaveVisible: false,              //请假审批
-        takeworkVisible: false,           //调休审批
-        replenishmentVisible: false,      //补卡申请
-        receiptVisible: false,            //收据领用
-        reimbursedetail: false,            //报销详情待审批
-        reimbursedone: false,            //报销详情审批完成
-        reservedetail: false,            //备用金申领待审批
-        leavedetail: false,            //请假待审批
-        takeworkdetail: false,            //调休待审批
-        replenishmentdetail: false,            //补卡待审批
-        purchasedetail: false,            //采购待审批
-        receiptdetail: false,            //收据领用待审批
-        problemReportVisible: false,            //客服部问题申报
-        repairVisible: false,            //客服部问题申报
-        miscellaneousExpensesVisible: false,            //客服部问题申报
-        miscellaneousExpensesOfficialVisible: false,            //客服部问题申报
+
+        tableData: [],
+
+        // 模态框
+        frameVisible: false,                              //积分申请
+        lisuVisible: false,                               //离宿申请
+        zhusuVisible: false,                              //住宿申请
+        baoxiaoVisible: false,                            //报销申请
+        shiyebuVisible: false,                            //事业部报销申请
+        gaocengVisible: false,                            //高层报销申请
+        chuchaiVisible: false,                            //出差报销申请
+        reserveVisible: false,                            //备用金申请
+        purchaseVisible: false,                           //采购申请
+        leaveVisible: false,                              //请假审批
+        takeworkVisible: false,                           //调休审批
+        replenishmentVisible: false,                      //补卡申请
+        receiptVisible: false,                            //收据领用
+        reimbursedetail: false,                           //报销详情待审批
+        reimbursedone: false,                             //报销详情审批完成
+        reservedetail: false,                             //备用金申领待审批
+        leavedetail: false,                               //请假待审批
+        takeworkdetail: false,                            //调休待审批
+        replenishmentdetail: false,                       //补卡待审批
+        purchasedetail: false,                            //采购待审批
+        receiptdetail: false,                             //收据领用待审批
+        problemReportVisible: false,                      //客服部问题申报
+        repairVisible: false,                             //客服部问题申报
+        miscellaneousExpensesVisible: false,              //客服部问题申报
+        miscellaneousExpensesOfficialVisible: false,      //客服部问题申报
 
 
       };
     },
     methods: {
-      handleClick(tab, event) {
-        console.log(tab, event);
+      close_() {
+        this.tableData = [];
+        this.paging = 0;
+        this.params = {};
+      },
+      tabActive(val) {
+        this.close_();
+        this.finActive = 'unfinished';
+        this.readActive = 'unread';
+        switch (val) {
+          case 'third':
+            this.params.type = 1;
+            this.myData(this.params, 1);
+            break;
+          case 'second':
+            this.params.type = 2;
+            this.myData(this.params, 1);
+            break;
+          case 'fourth':
+            // 我发起的
+            this.params.type = 3;
+            this.params.published = 0;
+            this.myData(this.params, 1);
+            break;
+          // 抄送我的
+          case 'fifth':
+            this.params.type = 4;
+            this.params.read_at = 0;
+            this.myData(this.params, 1);
+            break;
+        }
+      },
+      childActive(val, read) {
+        this.close_();
+        switch (val) {
+          case 'fourth':
+            // 我发起的
+            this.params.type = 3;
+            this.params.published = read === 'unfinished' ? 0 : 1;
+            this.myData(this.params, 1);
+            break;
+          // 抄送我的
+          case 'fifth':
+            this.params.type = 4;
+            this.params.read_at = read === 'unread' ? 0 : 1;
+            this.myData(this.params, 1);
+            break;
+        }
+      },
+      search(val) {
+        this.myData(this.params, val);
+      },
+      // 待办事项
+      myData(val, page) {
+        this.params.page = page;
+        this.$http.get(this.address + 'process', {
+          params: val,
+        }).then((res) => {
+          let data = res.data.data;
+          if ((val.type === 3 && val.published === 0) || (val.type === 4 && val.read_at === 0)) {
+            this.amount = res.data.meta.total;
+          }
+          this.paging = res.data.meta.total;
+          for (let i = 0; i < data.length; i++) {
+            let list = {};
+            list.id = data[i].id;
+            list.created_at = data[i].created_at;
+            list.finish_at = data[i].finish_at !== null ? data[i].finish_at : '未完成';
+            if (val.type === 3) {
+              list.title = data[i].user.name + '发起的' + data[i].content.type.name + '报备';
+              list.summary = data[i].user.name + '摘要';
+              list.status = data[i].place.display_name;
+            } else {
+              list.title = data[i].title;
+              if (data[i].flow !== null) {
+                list.status = data[i].flow.place.display_name;
+              }
+            }
+            this.tableData.push(list);
+          }
+        })
       },
       retract(flag) {
         if (flag === 1) {
@@ -1005,7 +913,7 @@
             break;
         }
       },
-      closeFrame(){
+      closeFrame() {
         this.frameVisible = false;
         this.lisuVisible = false;
         this.zhusuVisible = false;
@@ -1092,7 +1000,7 @@
           .item_icon {
             width: 40px;
             height: 40px;
-            line-height:40px;
+            line-height: 40px;
             border-radius: 50%;
             margin: 5px auto;
             background: #6a8dfb;
@@ -1109,7 +1017,4 @@
       }
     }
   }
-
-
-
 </style>
