@@ -125,6 +125,15 @@ export default {
       this.form.minus = String(val.minus);
       this.formList.staff_id = val.staff_id;
       this.integral(val.minus);
+      this.form.remark=""
+        if(val.remarks){
+            if(val.remarks[0]){
+            if(val.remarks[0].content){
+                for(let i=0;i<val.remarks.length;i++){
+                this.form.remark +=val.remarks[i].content +";"
+                }
+            }}
+        }
       this.form.amount_str = val.amount_str;
       this.form.name = val.name;
       this.form.staff_id = val.staff_id;

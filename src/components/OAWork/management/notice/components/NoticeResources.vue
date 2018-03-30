@@ -250,7 +250,6 @@ export default {
       this.organizationDialog = false;
     },
     coloseaa(val) {
-      console.log(val)
       this.form.obj = "";
       this.form.staff_id=[]
       this.form.objid = [];

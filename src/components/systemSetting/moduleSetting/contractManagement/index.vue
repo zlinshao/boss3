@@ -1,11 +1,11 @@
 <template>
   <div>
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="积分管理" name="first">
-        <IntegralManagement></IntegralManagement>
+      <el-tab-pane label="微信报销" name="first">
+
       </el-tab-pane>
-      <el-tab-pane label="合同管理" name="second">
-        <ContractManagement></ContractManagement>
+      <el-tab-pane label="微信投诉" name="second">
+
       </el-tab-pane>
       <el-tab-pane label="预约看房" name="third">
 
@@ -21,12 +21,10 @@
 </template>
 
 <script>
-  import IntegralManagement from './integralManagement/index.vue'
-  import ContractManagement from './contractManagement/index.vue'
+
   export default {
- 
     name: "index",
-    components: {IntegralManagement,ContractManagement},
+    components: {},
     data() {
       return {
         activeName: 'first'
