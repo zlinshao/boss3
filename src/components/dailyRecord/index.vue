@@ -63,6 +63,13 @@
         this.edit = val;
       }
     },
+    watch: {
+      activeName(val){
+        if(val === 'first' || val === 'third'){
+          this.edit = '';
+        }
+      }
+    },
   }
 </script>
 

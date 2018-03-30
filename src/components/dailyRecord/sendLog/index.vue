@@ -56,10 +56,10 @@
           <div class="sendTitle">发给谁 <span style="color: #cdcdcd;">（默认通过工作通知发送给对方，点击头像删除）</span></div>
           <div>
             <span v-for="item in sendPeople" class="send_people">
-              <img :src="item.avatar" v-if="item.avatar">
-              <img src="../../../assets/images/head.jpg" v-else>
+              <img :src="item.avatar" v-if="item.avatar" @click="deletePeople(item)">
+              <img src="../../../assets/images/head.jpg" @click="deletePeople(item)" v-else>
             </span>
-            <img src="../../../assets/images/add.svg" @click="choosePeople">
+            <img src="../../../assets/images/add.svg" @click="choosePeople" >
           </div>
         </div>
         <div style="text-align: center;">
@@ -406,12 +406,12 @@
         if(this.logId){
           this.dayForm.id = this.logId;
           this.$http.put(globalConfig.server+ 'oa/day',this.dayForm).then((res) => {
-            if(res.data.code === '100010') {
+            if(res.data.code === '100030') {
               this.dayForm = {};
-              this.isClear = true;
               this.sendPeople = [];
               this.editImages = [];
               this.editFiles = [];
+              this.isClear = true;
               this.$emit('appointLookLog'); //发完日志跳转到我发的日志标签页
               this.$notify.success({
                 title: '成功',
@@ -429,15 +429,15 @@
           this.$http.post(globalConfig.server+ 'oa/day',this.dayForm).then((res) => {
             if(res.data.code === '100010') {
               this.dayForm = {};
-              this.isClear = true;
               this.sendPeople = [];
               this.editImages = [];
               this.editFiles = [];
+              this.isClear = true;
               this.$emit('appointLookLog'); //发完日志跳转到我发的日志标签页
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
-              })
+              });
             } else {
               this.$notify.warning({
                 title: '警告',
@@ -451,13 +451,14 @@
       // 提交周报
       weekRecordSubmit() {
         if(this.logId){
+          this.weekForm.id = this.logId;
           this.$http.put(globalConfig.server+ 'oa/week',this.weekForm).then((res) => {
             if(res.data.code === '110010') {
               this.weekForm = {};
-              this.isClear = true;
               this.sendPeople = [];
               this.editImages = [];
               this.editFiles = [];
+              this.isClear = true;
               this.$emit('appointLookLog');
               this.$notify.success({
                 title: '成功',
@@ -471,13 +472,14 @@
             }
           });
         }else{
+          this.weekForm.id = '';
           this.$http.post(globalConfig.server+ 'oa/week',this.weekForm).then((res) => {
             if(res.data.code === '110010') {
               this.weekForm = {};
-              this.isClear = true;
               this.sendPeople = [];
               this.editImages = [];
               this.editFiles = [];
+              this.isClear = true;
               this.$emit('appointLookLog');
               this.$notify.success({
                 title: '成功',
@@ -495,13 +497,14 @@
       // 提交月报
       monthRecordSubmit() {
         if(this.logId){
+          this.monthForm.id = this.logId;
           this.$http.put(globalConfig.server+ 'oa/month',this.monthForm).then((res) => {
             if(res.data.code === '120010') {
               this.monthForm = {};
-              this.isClear = true;
               this.sendPeople = [];
               this.editImages = [];
               this.editFiles = [];
+              this.isClear = true;
               this.$emit('appointLookLog');
               this.$notify.success({
                 title: '成功',
@@ -515,13 +518,14 @@
             }
           });
         }else{
+          this.monthForm.id = '';
           this.$http.post(globalConfig.server+ 'oa/month',this.monthForm).then((res) => {
             if(res.data.code === '120010') {
               this.monthForm = {};
-              this.isClear = true;
               this.sendPeople = [];
               this.editImages = [];
               this.editFiles = [];
+              this.isClear = true;
               this.$emit('appointLookLog');
               this.$notify.success({
                 title: '成功',
@@ -539,13 +543,14 @@
       // 提交业绩日报
       achieveDayRecordSubmit(){
         if(this.logId){
+          this.achieveForm.id = this.logId;
           this.$http.put(globalConfig.server+ 'oa/achievement',this.achieveForm).then((res) => {
             if(res.data.code === '130010') {
               this.achieveForm = {};
-              this.isClear = true;
               this.sendPeople = [];
               this.editImages = [];
               this.editFiles = [];
+              this.isClear = true;
               this.$emit('appointLookLog');
               this.$notify.success({
                 title: '成功',
@@ -559,13 +564,14 @@
             }
           });
         }else{
+          this.achieveForm.id = '';
           this.$http.post(globalConfig.server+ 'oa/achievement',this.achieveForm).then((res) => {
             if(res.data.code === '130010') {
               this.achieveForm = {};
-              this.isClear = true;
               this.sendPeople = [];
               this.editImages = [];
               this.editFiles = [];
+              this.isClear = true;
               this.$emit('appointLookLog');
               this.$notify.success({
                 title: '成功',
@@ -590,7 +596,9 @@
       },
       selectMember(val){
         this.organizationDialog = false;
-        this.sendPeople = val;
+        for (var i=0;i<val.length;i++){
+          this.sendPeople.push(val[i]);
+        }
         switch(this.active){
           case 0:
             for(var i=0; i<this.sendPeople.length;i++){
@@ -615,7 +623,77 @@
         }
 
       },
+      initialData(){
+        //初始化
+        this.dayForm.id = '';
+        this.dayForm.finish_job = '';
+        this.dayForm.unfinished_job = '';
+        this.dayForm.need_coordinate_job = '';
+        this.dayForm.remark = '';
+        this.dayForm.image_pic = [];
+        this.dayForm.annex_file = [];
+        this.dayForm.receivers_id = [];
 
+        this.weekForm.id = '';
+        this.weekForm.finish_job = '';
+        this.weekForm.job_summary = '';
+        this.weekForm.next_plan = '';
+        this.weekForm.need_coordinate_job = '';
+        this.weekForm.remark = '';
+        this.weekForm.image_pic = [];
+        this.weekForm.annex_file = [];
+        this.weekForm.receivers_id = [];
+
+        this.monthForm.id = '';
+        this.monthForm.finish_job = '';
+        this.monthForm.job_summary = '';
+        this.monthForm.next_plan = '';
+        this.monthForm.need_coordinate_job = '';
+        this.monthForm.remark = '';
+        this.monthForm.image_pic = [];
+        this.monthForm.annex_file = [];
+        this.monthForm.receivers_id = [];
+
+        this.achieveForm.id = '';
+        this.achieveForm.turnover_today = '';
+        this.achieveForm.customer_num = '';
+        this.achieveForm.month_total_turnover = '';
+        this.achieveForm.month_achievement_goals = '';
+        this.achieveForm.thinking_today = '';
+        this.achieveForm.remark = '';
+        this.achieveForm.image_pic = [];
+        this.achieveForm.annex_file = [];
+        this.achieveForm.receivers_id = [];
+        this.sendPeople = [];
+        this.editImages = [];
+        this.editFiles = [];
+        this.isClear = true;
+      },
+      deletePeople(val){
+        console.log(JSON.stringify(val))
+        var index = ''
+        switch(this.active){
+          case 0:
+            index = this.dayForm.receivers_id.indexOf(Number(val.id));
+            this.dayForm.receivers_id.splice(index,1);
+            break;
+          case 1:
+            index = this.dayForm.receivers_id.indexOf(Number(val.id));
+            this.weekForm.receivers_id.splice(index,1);
+            break;
+          case 2:
+            index = this.dayForm.receivers_id.indexOf(Number(val.id));
+            this.monthForm.receivers_id.splice(index,1);
+            break;
+          case 3:
+            index = this.dayForm.receivers_id.indexOf(Number(val.id));
+            this.achieveForm.receivers_id.splice(index,1);
+            break;
+        }
+        console.log("index==="+index);
+        this.sendPeople.splice(index,1);
+        console.log(this.sendPeople);
+      }
     },
     mounted() {
 
@@ -625,15 +703,13 @@
     },
     watch:{
       edit(val) {
-        console.log("editData=========="+JSON.stringify(val));
-        this.logId = val.id;
-        this.sendPeople = [];
-        this.editImages = [];
-        this.editFiles = [];
+        console.log(val)
+        this.logId = val.daily_id;
+        this.initialData();
         if(val.module === 'app\\oa\\model\\DailyDay'){  //日报
           this.active = 0;
           this.tagClick(0);
-          this.$http.get(globalConfig.server+ 'oa/day/'+val.id).then((res)=>{
+          this.$http.get(globalConfig.server+ 'oa/day/'+this.logId).then((res)=>{
             if(res.data.code === '100020'){
               var logData = res.data.data;
               this.dayForm.finish_job = logData.finish_job;
@@ -676,7 +752,7 @@
         }else if(val.module === 'app\\oa\\model\\DailyWeek') {   //周报
           this.active = 1;
           this.tagClick(1);
-          this.$http.get(globalConfig.server+ 'oa/week/'+val.id).then((res)=>{
+          this.$http.get(globalConfig.server+ 'oa/week/'+this.logId).then((res)=>{
             if(res.data.code === '110020'){
               var logData = res.data.data;
               this.weekForm.finish_job = logData.finish_job;
@@ -719,7 +795,7 @@
         } else if(val.module === 'app\\oa\\model\\DailyMonth') {   //月报
           this.active = 2;
           this.tagClick(2);
-          this.$http.get(globalConfig.server+ 'oa/week/'+val.id).then((res)=>{
+          this.$http.get(globalConfig.server+ 'oa/month/'+this.logId).then((res)=>{
             if(res.data.code === '120020'){
               var logData = res.data.data;
               this.monthForm.finish_job = logData.finish_job;
@@ -763,7 +839,7 @@
         } else if(val.module === 'app\\oa\\model\\DailyAchievement'){   //业绩日报
           this.active = 3;
           this.tagClick(3);
-          this.$http.get(globalConfig.server+ 'oa/week/'+val.id).then((res)=>{
+          this.$http.get(globalConfig.server+ 'oa/achievement/'+this.logId).then((res)=>{
             if(res.data.code === '130020'){
               var logData = res.data.data;
               this.achieveForm.turnover_today = logData.turnover_today;
