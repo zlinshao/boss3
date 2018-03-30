@@ -37,12 +37,18 @@
         <div class="sendLog">
           <div class="sendTitle">增加照片</div>
           <el-form-item>
+            <span v-if="editImages" v-for="img in editImages">
+              <img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">
+            </span>
             <Upload :ID="'record_img'" @getImg="getImage" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
           <div class="sendTitle">增加附件</div>
           <el-form-item>
+            <span v-if="editFiles" v-for="file in editFiles">
+              <img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">
+            </span>
             <Upload :ID="'record_file'" @getImg="getFile" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
@@ -96,12 +102,18 @@
         <div class="sendLog">
           <div class="sendTitle">增加照片</div>
           <el-form-item>
+            <span v-if="editImages" v-for="img in editImages">
+              <img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">
+            </span>
             <Upload :ID="'record_img'" @getImg="getImage" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
           <div class="sendTitle">增加附件</div>
           <el-form-item>
+            <span v-if="editFiles" v-for="file in editFiles">
+              <img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">
+            </span>
             <Upload :ID="'record_file'" @getImg="getFile" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
@@ -155,12 +167,18 @@
         <div class="sendLog">
           <div class="sendTitle">增加照片</div>
           <el-form-item>
+            <span v-if="editImages" v-for="img in editImages">
+              <img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">
+            </span>
             <Upload :ID="'record_img'" @getImg="getImage" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
           <div class="sendTitle">增加附件</div>
           <el-form-item>
+            <span v-if="editFiles" v-for="file in editFiles">
+              <img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">
+            </span>
             <Upload :ID="'record_file'" @getImg="getFile" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
@@ -220,12 +238,18 @@
         <div class="sendLog">
           <div class="sendTitle">增加照片</div>
           <el-form-item>
+            <span v-if="editImages" v-for="img in editImages">
+              <img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">
+            </span>
             <Upload :ID="'record_img'" @getImg="getImage" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
           <div class="sendTitle">增加照片或附件</div>
           <el-form-item>
+            <span v-if="editFiles" v-for="file in editFiles">
+              <img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">
+            </span>
             <Upload :ID="'record_file'" @getImg="getFile" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
@@ -254,6 +278,7 @@
   export default {
     name: 'hello',
     components:{Upload, Organization},
+    props: ['edit'],
     data () {
       return {
         personnal: globalConfig.personal,
@@ -265,6 +290,7 @@
         achieveDayRecord: false,
         // 日报
         dayForm: {
+          id: '',
           finish_job: '',
           unfinished_job:'',
           need_coordinate_job: '',
@@ -275,6 +301,7 @@
         },
         //周报
         weekForm: {
+          id: '',
           finish_job: '',
           job_summary: '',
           next_plan: '',
@@ -286,6 +313,7 @@
         },
         // 月报
         monthForm: {
+          id: '',
           finish_job: '',
           job_summary: '',
           next_plan: '',
@@ -297,6 +325,7 @@
         },
         // 业绩日报
         achieveForm: {
+          id: '',
           turnover_today: '',
           customer_num: '',
           month_total_turnover: '',
@@ -309,8 +338,11 @@
         },
         organizationDialog: false,
         isClear: false,
-        selectType: '',
+        selectType: '',  //选人
         sendPeople: [],
+        editImages: [], //编辑时候的初始图片
+        editFiles: [],  //编辑时候的初始文件
+        logId: '',
       }
     },
     methods:{
@@ -371,11 +403,15 @@
       },
       // 提交日报
       dayRecordSubmit(){
-        this.$http.post(globalConfig.server+ 'oa/day',this.dayForm).then((res) => {
+        if(this.logId){
+          this.dayForm.id = this.logId;
+          this.$http.put(globalConfig.server+ 'oa/day',this.dayForm).then((res) => {
             if(res.data.code === '100010') {
               this.dayForm = {};
               this.isClear = true;
               this.sendPeople = [];
+              this.editImages = [];
+              this.editFiles = [];
               this.$emit('appointLookLog'); //发完日志跳转到我发的日志标签页
               this.$notify.success({
                 title: '成功',
@@ -387,67 +423,162 @@
                 message: res.data.msg
               })
             }
-        });
+          });
+        }else{
+          this.dayForm.id = '';
+          this.$http.post(globalConfig.server+ 'oa/day',this.dayForm).then((res) => {
+            if(res.data.code === '100010') {
+              this.dayForm = {};
+              this.isClear = true;
+              this.sendPeople = [];
+              this.editImages = [];
+              this.editFiles = [];
+              this.$emit('appointLookLog'); //发完日志跳转到我发的日志标签页
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              })
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              })
+            }
+          });
+        }
+
       },
       // 提交周报
       weekRecordSubmit() {
-        this.$http.post(globalConfig.server+ 'oa/week',this.weekForm).then((res) => {
-          if(res.data.code === '110010') {
-            this.weekForm = {};
-            this.isClear = true;
-            this.sendPeople = [];
-            this.$emit('appointLookLog');
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            })
-          } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            })
-          }
-        });
+        if(this.logId){
+          this.$http.put(globalConfig.server+ 'oa/week',this.weekForm).then((res) => {
+            if(res.data.code === '110010') {
+              this.weekForm = {};
+              this.isClear = true;
+              this.sendPeople = [];
+              this.editImages = [];
+              this.editFiles = [];
+              this.$emit('appointLookLog');
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              })
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              })
+            }
+          });
+        }else{
+          this.$http.post(globalConfig.server+ 'oa/week',this.weekForm).then((res) => {
+            if(res.data.code === '110010') {
+              this.weekForm = {};
+              this.isClear = true;
+              this.sendPeople = [];
+              this.editImages = [];
+              this.editFiles = [];
+              this.$emit('appointLookLog');
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              })
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              })
+            }
+          });
+        }
       },
       // 提交月报
       monthRecordSubmit() {
-        this.$http.post(globalConfig.server+ 'oa/month',this.monthForm).then((res) => {
-          if(res.data.code === '120010') {
-            this.monthForm = {};
-            this.isClear = true;
-            this.sendPeople = [];
-            this.$emit('appointLookLog');
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
-          } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            });
-          }
-        });
+        if(this.logId){
+          this.$http.put(globalConfig.server+ 'oa/month',this.monthForm).then((res) => {
+            if(res.data.code === '120010') {
+              this.monthForm = {};
+              this.isClear = true;
+              this.sendPeople = [];
+              this.editImages = [];
+              this.editFiles = [];
+              this.$emit('appointLookLog');
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }else{
+          this.$http.post(globalConfig.server+ 'oa/month',this.monthForm).then((res) => {
+            if(res.data.code === '120010') {
+              this.monthForm = {};
+              this.isClear = true;
+              this.sendPeople = [];
+              this.editImages = [];
+              this.editFiles = [];
+              this.$emit('appointLookLog');
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }
       },
       // 提交业绩日报
       achieveDayRecordSubmit(){
-        this.$http.post(globalConfig.server+ 'oa/achievement',this.achieveForm).then((res) => {
-          if(res.data.code === '130010') {
-            this.achieveForm = {};
-            this.isClear = true;
-            this.sendPeople = [];
-            this.$emit('appointLookLog');
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
-          } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            });
-          }
-        });
+        if(this.logId){
+          this.$http.put(globalConfig.server+ 'oa/achievement',this.achieveForm).then((res) => {
+            if(res.data.code === '130010') {
+              this.achieveForm = {};
+              this.isClear = true;
+              this.sendPeople = [];
+              this.editImages = [];
+              this.editFiles = [];
+              this.$emit('appointLookLog');
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }else{
+          this.$http.post(globalConfig.server+ 'oa/achievement',this.achieveForm).then((res) => {
+            if(res.data.code === '130010') {
+              this.achieveForm = {};
+              this.isClear = true;
+              this.sendPeople = [];
+              this.editImages = [];
+              this.editFiles = [];
+              this.$emit('appointLookLog');
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }
       },
       choosePeople() {
         this.organizationDialog = true;
@@ -458,7 +589,6 @@
         this.organizationDialog = false;
       },
       selectMember(val){
-        console.log("selectMember==="+JSON.stringify(val));
         this.organizationDialog = false;
         this.sendPeople = val;
         switch(this.active){
@@ -485,12 +615,199 @@
         }
 
       },
+
     },
     mounted() {
 
     },
     activated() {
 
+    },
+    watch:{
+      edit(val) {
+        console.log("editData=========="+JSON.stringify(val));
+        this.logId = val.id;
+        this.sendPeople = [];
+        this.editImages = [];
+        this.editFiles = [];
+        if(val.module === 'app\\oa\\model\\DailyDay'){  //日报
+          this.active = 0;
+          this.tagClick(0);
+          this.$http.get(globalConfig.server+ 'oa/day/'+val.id).then((res)=>{
+            if(res.data.code === '100020'){
+              var logData = res.data.data;
+              this.dayForm.finish_job = logData.finish_job;
+              this.dayForm.unfinished_job = logData.unfinished_job;
+              this.dayForm.need_coordinate_job = logData.need_coordinate_job;
+              this.dayForm.remark = logData.remark;
+
+              var img_pic = logData.album.image_pic;
+              if(img_pic){
+                for(var item in img_pic){
+                  this.dayForm.image_pic.push(Number(item));
+                  let img = {};
+                  img.id = img_pic[item][0].id;
+                  img.uri = img_pic[item][0].uri;
+                  this.editImages.push(img);
+                }
+              }
+              var file_pic = logData.album.annex_file;
+              if(file_pic) {
+                for(var item in file_pic){
+                  this.dayForm.annex_file.push(Number(item));
+                  let file = {};
+                  file.id = file_pic[item][0].id;
+                  file.uri = file_pic[item][0].uri;
+                  this.editFiles.push(file);
+                }
+              }
+              var receivers = logData.receivers;
+              if(receivers) {
+                for(var i=0; i<receivers.length; i++) {
+                  let people ={};
+                  people.id = receivers[i].id;
+                  people.avatar = receivers[i].avatar;
+                  this.sendPeople.push(people);
+                  this.dayForm.receivers_id.push(Number(receivers[i].id));
+                }
+              }
+            }
+          });
+        }else if(val.module === 'app\\oa\\model\\DailyWeek') {   //周报
+          this.active = 1;
+          this.tagClick(1);
+          this.$http.get(globalConfig.server+ 'oa/week/'+val.id).then((res)=>{
+            if(res.data.code === '110020'){
+              var logData = res.data.data;
+              this.weekForm.finish_job = logData.finish_job;
+              this.weekForm.job_summary = logData.job_summary;
+              this.weekForm.next_plan = logData.next_plan;
+              this.weekForm.need_coordinate_job = logData.need_coordinate_job;
+              this.weekForm.remark = logData.remark;
+              var img_pic = logData.album.image_pic;
+              if(img_pic) {
+                for(var item in img_pic){
+                  this.weekForm.image_pic.push(Number(item));
+                  let img = {};
+                  img.id = img_pic[item][0].id;
+                  img.uri = img_pic[item][0].uri;
+                  this.editImages.push(img);
+                }
+              }
+              var file_pic = logData.album.annex_file;
+              if(file_pic) {
+                for(var item in file_pic){
+                  this.weekForm.annex_file.push(Number(item));
+                  let file = {};
+                  file.id = file_pic[item][0].id;
+                  file.uri = file_pic[item][0].uri;
+                  this.editFiles.push(file);
+                }
+              }
+              var receivers = logData.receivers;
+              if(receivers) {
+                for(var i=0; i<receivers.length; i++) {
+                  let people ={};
+                  people.id = receivers[i].id;
+                  people.avatar = receivers[i].avatar;
+                  this.sendPeople.push(people);
+                  this.weekForm.receivers_id.push(Number(receivers[i].id));
+                }
+              }
+            }
+          });
+        } else if(val.module === 'app\\oa\\model\\DailyMonth') {   //月报
+          this.active = 2;
+          this.tagClick(2);
+          this.$http.get(globalConfig.server+ 'oa/week/'+val.id).then((res)=>{
+            if(res.data.code === '120020'){
+              var logData = res.data.data;
+              this.monthForm.finish_job = logData.finish_job;
+              this.monthForm.job_summary = logData.job_summary;
+              this.monthForm.next_plan = logData.next_plan;
+              this.monthForm.need_coordinate_job = logData.need_coordinate_job;
+              this.monthForm.remark = logData.remark;
+
+              var img_pic = logData.album.image_pic;
+              if(img_pic){
+                for(var item in img_pic){
+                  this.monthForm.image_pic.push(Number(item));
+                  let img = {};
+                  img.id = img_pic[item][0].id;
+                  img.uri = img_pic[item][0].uri;
+                  this.editImages.push(img);
+                }
+              }
+              var file_pic = logData.album.annex_file;
+              if(file_pic){
+                for(var item in file_pic){
+                  this.monthForm.annex_file.push(Number(item));
+                  let file = {};
+                  file.id = file_pic[item][0].id;
+                  file.uri = file_pic[item][0].uri;
+                  this.editFiles.push(file);
+                }
+              }
+              var receivers = logData.receivers;
+              if(receivers) {
+                for(var i=0; i<receivers.length; i++) {
+                  let people ={};
+                  people.id = receivers[i].id;
+                  people.avatar = receivers[i].avatar;
+                  this.sendPeople.push(people);
+                  this.monthForm.receivers_id.push(Number(receivers[i].id));
+                }
+              }
+            }
+          });
+        } else if(val.module === 'app\\oa\\model\\DailyAchievement'){   //业绩日报
+          this.active = 3;
+          this.tagClick(3);
+          this.$http.get(globalConfig.server+ 'oa/week/'+val.id).then((res)=>{
+            if(res.data.code === '130020'){
+              var logData = res.data.data;
+              this.achieveForm.turnover_today = logData.turnover_today;
+              this.achieveForm.customer_num = logData.customer_num;
+              this.achieveForm.month_total_turnover = logData.month_total_turnover;
+              this.achieveForm.month_achievement_goals = logData.month_achievement_goals;
+              this.achieveForm.thinking_today = logData.thinking_today;
+              this.achieveForm.remark = logData.remark;
+
+              var img_pic = logData.album.image_pic;
+              if(img_pic){
+                for(var item in img_pic){
+                  this.achieveForm.image_pic.push(Number(item));
+                  let img = {};
+                  img.id = img_pic[item][0].id;
+                  img.uri = img_pic[item][0].uri;
+                  this.editImages.push(img);
+                }
+              }
+              var file_pic = logData.album.annex_file;
+              if(file_pic){
+                for(var item in file_pic){
+                  this.achieveForm.annex_file.push(Number(item));
+                  let file = {};
+                  file.id = file_pic[item][0].id;
+                  file.uri = file_pic[item][0].uri;
+                  this.editFiles.push(file);
+                }
+              }
+              var receivers = logData.receivers;
+              if(receivers) {
+                for(var i=0; i<receivers.length; i++) {
+                  let people ={};
+                  people.id = receivers[i].id;
+                  people.avatar = receivers[i].avatar;
+                  this.sendPeople.push(people);
+                  this.achieveForm.receivers_id.push(Number(receivers[i].id));
+                }
+              }
+            }
+          });
+
+        }
+      },
     },
   }
 </script>

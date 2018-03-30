@@ -1,16 +1,71 @@
 <template>
    <div>
-     <div style="margin: 15px 10px">
-       <el-row >
-         <el-col :span="2">发送人</el-col>
-         <el-col :span="7"><el-input type="text" size="mini" placeholder="请选择发送人"></el-input></el-col>
-         <el-col :span="3" style="margin-left: 38px;"><el-button class="primary" size="mini">搜索</el-button></el-col>
-       </el-row>
-       <el-row style="margin: 20px 0;">
-         <el-col :span="2"> 时间</el-col>
-         <el-date-picker v-model="form.start_time" type="date" size="mini" placeholder="选择日期"></el-date-picker> ——
-         <el-date-picker v-model="form.end_time" type="date" size="mini"  placeholder="选择日期"></el-date-picker>
-       </el-row>
+     <div class="highRanking">
+       <div class="highSearch">
+         <el-form :inline="true" size="mini">
+           <el-form-item>
+             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+           </el-form-item>
+         </el-form>
+       </div>
+
+       <div class="filter high_grade" :class="isHigh? 'highHide':''">
+         <el-form :inline="true" :model="form" size="mini" label-width="100px">
+           <div class="filterTitle">
+             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+           </div>
+           <el-row class="el_row_border">
+             <el-col :span="12">
+               <el-row>
+                 <el-col :span="8">
+                   <div class="el_col_label">发送人</div>
+                 </el-col>
+                 <el-col :span="16" class="el_col_option">
+                   <el-form-item>
+                     <el-input v-model="form.staff_id" @focus="openOrganize" placeholder="点击选择发送人"
+                               readonly>
+                       <template slot="append">
+                         <div style="cursor: pointer;" @click="close_">清空</div>
+                       </template>
+                     </el-input>
+                   </el-form-item>
+                 </el-col>
+               </el-row>
+             </el-col>
+             <el-col :span="12">
+               <el-row>
+                 <el-col :span="8">
+                   <div class="el_col_label">选择时间</div>
+                 </el-col>
+                 <el-col :span="16" class="el_col_option">
+                   <el-form-item>
+                     <el-date-picker
+                       v-model="form.date"
+                       type="daterange"
+                       align="right"
+                       unlink-panels
+                       range-separator="至"
+                       start-placeholder="开始日期"
+                       end-placeholder="结束日期"
+                       :picker-options="pickerOptions"
+                     >
+                     </el-date-picker>
+                     <!--<el-date-picker v-model="form.start_time" type="date" size="mini" placeholder="选择日期" style="width:160px;"></el-date-picker>至-->
+                   </el-form-item>
+                   <!--<el-form-item>-->
+                   <!--<el-date-picker v-model="form.end_time" type="date" size="mini"  placeholder="选择日期" style="width:160px;"></el-date-picker>-->
+                   <!--</el-form-item>-->
+                 </el-col>
+               </el-row>
+             </el-col>
+           </el-row>
+           <div class="btnOperate">
+             <el-button size="mini" type="primary" @click="getLookLog">搜索</el-button>
+             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+             <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+           </div>
+         </el-form>
+       </div>
      </div>
      <div style="margin: 10px 0;">
        <el-button :class="{'primary': active === index}" @click="tagClick(index)" size="mini"
@@ -137,16 +192,51 @@
          </el-table-column>
        </el-table>
      </div>
+     <!--组织架构-->
+     <organization :organizationDialog="organizeVisible" :type="organizaType" @close="closeOrganize"></organization>
    </div>
 </template>
 
 <script>
+  import Organization from '../../common/organization.vue'
     export default {
         name: 'hello',
+        components: {Organization},
         data () {
             return {
+              pickerOptions: {
+                shortcuts: [
+                  {
+                    text: '最近一天',
+                    onClick(picker) {
+                      const end = new Date();
+                      const start = new Date();
+                      start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
+                      picker.$emit('pick', [start, end]);
+                    }
+                  },
+                  {
+                    text: '最近一周',
+                    onClick(picker) {
+                      const end = new Date();
+                      const start = new Date();
+                      start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                      picker.$emit('pick', [start, end]);
+                    }
+                  },
+                  {
+                    text: '最近一个月',
+                    onClick(picker) {
+                      const end = new Date();
+                      const start = new Date();
+                      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                      picker.$emit('pick', [start, end]);
+                    }
+                  }]
+              },
               form: {
                 staff_id: '',
+                date: '',
                 start_time: '',
                 end_time: '',
                 limit: 12,
@@ -158,15 +248,36 @@
               buttonVal: ['日报', '周报', '月报', '业绩日报'],
               active: 0,
               logData: [],
+              isHigh: false,
+              organizeVisible: false,
+              organizaType: '',
             }
         },
       methods: {
+        // 重置
+        resetting() {
+          // this.form.keywords = '';
+        },
+        // 高级
+        highGrade() {
+          this.isHigh = !this.isHigh;
+        },
+        close_() {
+          console.log(1);
+        },
         getLookLog() {
           this.$http.get(globalConfig.server+ 'oa/daily_tmp/index?style=count&self=1&page=1&type='+(this.active+1) ).then((res) => {
             if(res.data.code === '80000') {
               this.logData = res.data.data.data;
             }
           });
+        },
+        openOrganize() {
+          this.organizeVisible = true;
+          this.organizaType = 'staff';
+        },
+        closeOrganize() {
+          this.organizeVisible = false;
         },
         // 按钮切换
         tagClick(val) {
