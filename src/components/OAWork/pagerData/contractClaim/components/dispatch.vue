@@ -142,7 +142,7 @@
 
         this.$http.post(globalConfig.server+'contract/allocate/'+this.dispatchId,this.params).then((res) => {
           if(res.data.code === '20010'){
-            this.$emit('close');
+            this.$emit('close','success');
             this.$notify.success({
               title:'成功',
               message:res.data.msg
@@ -159,8 +159,8 @@
 
       initData(){
         $('.imgItem').remove();
-        this.dispatchDialogVisible = false;
 
+        this.dispatchDialogVisible = false;
         this.contractCancelCollect = [];
         this.contractCancelRent = [];
         this.params = {candidate:[]};

@@ -733,7 +733,7 @@
                   message:res.data.msg
                 });
                 this.closeAddModal();
-                this.$emit('close');
+                this.$emit('close','success');
               }else {
                 this.$notify.warning({
                   title:'警告',
@@ -749,7 +749,7 @@
                   message:res.data.msg
                 });
                 this.closeAddModal();
-                this.$emit('close');
+                this.$emit('close','success');
               }else {
                 this.$notify.warning({
                   title:'警告',
@@ -871,6 +871,22 @@
                 });
                 this.$emit('close','success');
                 this.closeAddModal();
+              }else {
+                this.$notify.warning({
+                  title:'警告',
+                  message:res.data.msg
+                })
+              }
+            })
+          }else if(this.taskType === '4') {
+            this.$http.post(globalConfig.server+'contract/loss',this.params).then((res) => {
+              if(res.data.code ==='20000'){
+                this.$notify.success({
+                  title:'成功',
+                  message:res.data.msg
+                });
+                this.closeAddModal();
+                this.$emit('close','success');
               }else {
                 this.$notify.warning({
                   title:'警告',
