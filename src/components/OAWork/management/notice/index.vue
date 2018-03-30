@@ -335,7 +335,7 @@ export default {
           draft: 0,
           department_id: this.rightrow.objid,
           attachment: this.rightrow.attachment,
-          previev: this.rightrow.preview
+          preview: this.rightrow.preview
         })
         .then(res => {
           if (res.data.code == "99910") {

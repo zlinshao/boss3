@@ -15,14 +15,14 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="公告主题" required>
+              <el-form-item label="公告标题" required>
                 <el-input v-model="form.title" placeholder=""></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="对象" required >
+              <el-form-item label="对象" >{{form}}
                  <el-input v-model="form.obj" @click.native="openOrganizationModal()" placeholder="点击选择" ></el-input>
               </el-form-item>
             </el-col>
@@ -46,6 +46,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="increaseGoodsDialogVisible = false">取 消</el-button>
+        <el-button size="small" type="primary" @click="look">预览</el-button>
         <el-button size="small" type="primary" @click="savex">保存</el-button>
         <el-button size="small" type="primary" @click="sendx">发布</el-button>
       </span>
@@ -81,6 +82,7 @@ export default {
         type: "",
         id: "",
         draft: "",
+        staff_id:[],
         obj: "",
         objid: [],
         context: "",
@@ -120,6 +122,7 @@ export default {
         this.form.title = "";
         this.form.context = "";
         this.form.obj = "";
+        this.form.staff_id=[];
         this.form.objid = [];
         this.form.attachment = [];
         this.firstflag = false;
@@ -135,6 +138,10 @@ export default {
     savex() {
       this.twoflag = true;
       this.midfunc();
+    },
+    //预览
+    look(){
+      this.form.preview=1;
     },
     //发布
     sendx() {
@@ -171,8 +178,9 @@ export default {
             content: this.form.context,
             id: this.form.id,
             draft: this.form.draft,
+            staff_id:this.form.staff_id,
             department_id: this.form.objid,
-            previev: this.form.preview,
+            preview: this.form.preview,
             attachment: this.form.attachment
           })
           .then(res => {
@@ -203,11 +211,20 @@ export default {
       this.organizationDialog = false;
     },
     coloseaa(val) {
+      console.log(val)
       this.form.obj = "";
+      this.form.staff_id=[]
       this.form.objid = [];
+      let k=0;
+      let j=0;
       for (let i = 0; i < val.length; i++) {
         this.form.obj += val[i].name + ";";
-        this.form.objid[i] = val[i].id;
+        if(val[i].org!==undefined){
+          this.form.staff_id[k++]=val[i].id
+        }
+        else{
+          this.form.objid[j++]=val[i].id
+        }
       }
     },
 
@@ -227,14 +244,6 @@ export default {
         this.$notify({
           title: "警告",
           message: "公告主题不能为空",
-          type: "warning"
-        });
-      }
-      if (this.form.obj == "" && this.saveorsendflag == true) {
-        this.saveorsendflag = false;
-        this.$notify({
-          title: "警告",
-          message: "对象不能为空",
           type: "warning"
         });
       }
