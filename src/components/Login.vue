@@ -68,7 +68,7 @@
               <span class="china">中国</span> +86
             </template>
           </el-input>
-          <el-input placeholder="请输入6位短信验证码" @keyup.enter.native="sureLogin(phone, identifyingCode)"
+          <el-input placeholder="请输入4位短信验证码" @keyup.enter.native="sureLogin(phone, identifyingCode)"
                     v-model="identifyingCode">
 
             <el-button slot="append" style="width: 102px;" size="small" v-if="!loading" type="success"
@@ -136,7 +136,6 @@
     },
     mounted() {
 //      this.getBackground();
-
       if (JSON.stringify(this.$route.query) !== '{}') {
         let phone = this.$route.query.phone;
         let code = this.$route.query.code;
@@ -198,6 +197,7 @@
           localStorage.setItem('myData', JSON.stringify(res.data.data));
           let head = res.data.data;
           globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
+
           this.$http.get(globalConfig.server + "setting/others/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
             globalConfig.personal = res.data.data.data;

@@ -36,7 +36,7 @@
       </el-form>
       <span style="color:#fdaece;margin-left:200px;">备注:首页倒计时时间设置,当合计时结束后,将自动进入锁屏模式</span>
       <div style="text-align: center;margin-top: 120px">
-        <el-button @click="addBasicSetting" type="primary" size="small" style="padding: 10px 140px;">保存</el-button>
+        <el-button @click="addBasicSetting" :disabled="!basicSetting.id[0]" type="primary" size="small" style="padding: 10px 140px;">保存</el-button>
       </div>
 
     </div>
@@ -73,9 +73,9 @@
             </div>
           </div>
 
-          <div class="remark">
-            备注：密码长度6-16位，数字、字母和符号至少包含两种。
-          </div>
+          <!--<div class="remark">-->
+            <!--备注：密码长度6-16位，数字、字母和符号至少包含两种。-->
+          <!--</div>-->
         </el-col>
       </el-row>
 

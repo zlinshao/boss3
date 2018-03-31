@@ -88,7 +88,7 @@
                     <el-col :span="20">
                       <div class="public">
                         <div class="signOne">系统公告</div>
-                        <div class="limits">{{item.content.content}}</div>
+                        <div class="limits">{{item.content}}</div>
                       </div>
                     </el-col>
                   </el-row>
@@ -221,7 +221,7 @@
                     <div class="navigationLeft">
                       <el-dropdown-item @click.native="routers('individual')" style="padding: 0">
                         <div class="msgCenter">
-                          <i class="el-icon-setting" style="color: #58D788;"></i>
+                          <i class="el-icons-fa-user" style="color: #58D788;"></i>
                           <div class="msgTitle">个人门户</div>
                         </div>
                       </el-dropdown-item>
@@ -486,11 +486,11 @@
       },
       //获取登陆时长
       getLoginDay(){
-        this.$http.get(globalConfig.server + 'special/special/time').then((res) => {
-          if (res.data.code === '30310') {
-            this.creditTotal = res.data.data;
-          }
-        })
+//        this.$http.get(globalConfig.server + 'special/special/time').then((res) => {
+//          if (res.data.code === '30310') {
+//            this.creditTotal = res.data.data;
+//          }
+//        })
       }
     }
   }
@@ -972,7 +972,7 @@
         width: 50px;
         height: 50px;
         text-align: center;
-        color: #ffff;
+        color: #fff;
         line-height: 50px;
         font-size: 22px;
       }
