@@ -115,16 +115,18 @@
                @clickOperateMore="clickEvent"></RightMenu>
 
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
+    <eat-loading :loading="loading"></eat-loading>
   </div>
 </template>
 
 <script>
   import RightMenu from '../../../common/rightMenu.vue'    //右键
   import Organization from '../../../common/organization.vue'
+  import EatLoading from '../../../common/eatLoading.vue'
 
   export default {
     name: 'staff-square',
-    components: {RightMenu, Organization},
+    components: {RightMenu, Organization,EatLoading},
     data() {
       return {
         urls: globalConfig.server,
@@ -152,6 +154,7 @@
         organizationDialog: false,
         moduleId: '',
         moduleType: 'staffSquare',
+        loading: false,
       }
     },
     mounted() {
@@ -189,18 +192,19 @@
         });
       },
       getStaffTableData() {
+        this.loading = true;
         this.$http.get(this.urls + 'oa/portal/', { params:this.form }).then((res) => {
           this.isHigh = false;
           if (res.data.code === '80000') {
             this.tableData = res.data.data.data;
             this.totalNum = res.data.data.count;
+            this.loading = false;
           } else {
             this.tableData = [];
             this.totalNum = 0;
           }
         })
       },
-
       // 详情
       openDetail(row) {
         var data = {ids: row.id, detail: 'port'};
