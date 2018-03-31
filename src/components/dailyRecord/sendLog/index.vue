@@ -63,7 +63,7 @@
           </div>
         </div>
         <div style="text-align: center;">
-          <el-button type="primary" @click="dayRecordSubmit">提交</el-button>
+          <el-button type="primary" @click="dayRecordSubmit" :disabled="first">提交</el-button>
         </div>
       </el-form>
     </div>
@@ -128,7 +128,7 @@
           </div>
         </div>
         <div style="text-align: center;">
-          <el-button type="primary" @click="weekRecordSubmit">提交</el-button>
+          <el-button type="primary" @click="weekRecordSubmit" :disabled="first">提交</el-button>
         </div>
       </el-form>
     </div>
@@ -193,7 +193,7 @@
           </div>
         </div>
         <div style="text-align: center;">
-          <el-button type="primary" @click="monthRecordSubmit">提交</el-button>
+          <el-button type="primary" @click="monthRecordSubmit" :disabled="first">提交</el-button>
         </div>
       </el-form>
     </div>
@@ -264,7 +264,7 @@
           </div>
         </div>
         <div style="text-align: center;">
-          <el-button type="primary" @click="achieveDayRecordSubmit">提交</el-button>
+          <el-button type="primary" @click="achieveDayRecordSubmit" :disabled="first">提交</el-button>
         </div>
       </el-form>
     </div>
@@ -344,6 +344,7 @@
         editFiles: [],  //编辑时候的初始文件
         logId: '',
         editImgToUpload: {},
+        first: false,
       }
     },
     methods:{
@@ -406,6 +407,7 @@
       // 提交日报
       dayRecordSubmit(){
         if(this.logId){
+          this.first = true;
           this.dayForm.id = this.logId;
           this.$http.put(globalConfig.server+ 'oa/day',this.dayForm).then((res) => {
             if(res.data.code === '100030') {
@@ -420,15 +422,17 @@
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
-              })
+              });
             } else {
+              this.first = false;
               this.$notify.warning({
                 title: '警告',
                 message: res.data.msg
-              })
+              });
             }
           });
         }else{
+          this.first = true;
           this.dayForm.id = '';
           this.$http.post(globalConfig.server+ 'oa/day',this.dayForm).then((res) => {
             if(res.data.code === '100010') {
@@ -445,6 +449,7 @@
                 message: res.data.msg
               });
             } else {
+              this.first = false;
               this.$notify.warning({
                 title: '警告',
                 message: res.data.msg
@@ -457,6 +462,7 @@
       // 提交周报
       weekRecordSubmit() {
         if(this.logId){
+          this.first = true;
           this.weekForm.id = this.logId;
           this.$http.put(globalConfig.server+ 'oa/week',this.weekForm).then((res) => {
             if(res.data.code === '110030') {
@@ -473,13 +479,15 @@
                 message: res.data.msg
               })
             } else {
+              this.first = false;
               this.$notify.warning({
                 title: '警告',
                 message: res.data.msg
-              })
+              });
             }
           });
         }else{
+          this.first = true;
           this.weekForm.id = '';
           this.$http.post(globalConfig.server+ 'oa/week',this.weekForm).then((res) => {
             if(res.data.code === '110010') {
@@ -496,10 +504,11 @@
                 message: res.data.msg
               })
             } else {
+              this.first = false;
               this.$notify.warning({
                 title: '警告',
                 message: res.data.msg
-              })
+              });
             }
           });
         }
@@ -507,6 +516,7 @@
       // 提交月报
       monthRecordSubmit() {
         if(this.logId){
+          this.first = true;
           this.monthForm.id = this.logId;
           this.$http.put(globalConfig.server+ 'oa/month',this.monthForm).then((res) => {
             if(res.data.code === '120030') {
@@ -521,6 +531,7 @@
                 message: res.data.msg
               });
             } else {
+              this.first = false;
               this.$notify.warning({
                 title: '警告',
                 message: res.data.msg
@@ -528,6 +539,7 @@
             }
           });
         }else{
+          this.first = true;
           this.monthForm.id = '';
           this.$http.post(globalConfig.server+ 'oa/month',this.monthForm).then((res) => {
             if(res.data.code === '120010') {
@@ -544,6 +556,7 @@
                 message: res.data.msg
               });
             } else {
+              this.first = false;
               this.$notify.warning({
                 title: '警告',
                 message: res.data.msg
@@ -555,6 +568,7 @@
       // 提交业绩日报
       achieveDayRecordSubmit(){
         if(this.logId){
+          this.first = true;
           this.achieveForm.id = this.logId;
           this.$http.put(globalConfig.server+ 'oa/achievement',this.achieveForm).then((res) => {
             if(res.data.code === '130030') {
@@ -571,6 +585,7 @@
                 message: res.data.msg
               });
             } else {
+              this.first = false;
               this.$notify.warning({
                 title: '警告',
                 message: res.data.msg
@@ -578,6 +593,7 @@
             }
           });
         }else{
+          this.first = true;
           this.achieveForm.id = '';
           this.$http.post(globalConfig.server+ 'oa/achievement',this.achieveForm).then((res) => {
             if(res.data.code === '130010') {
@@ -594,6 +610,7 @@
                 message: res.data.msg
               });
             } else {
+              this.first = false;
               this.$notify.warning({
                 title: '警告',
                 message: res.data.msg
@@ -710,12 +727,6 @@
         this.sendPeople.splice(index,1);
         console.log(this.sendPeople);
       }
-    },
-    mounted() {
-
-    },
-    activated() {
-
     },
     watch:{
       edit(val) {
