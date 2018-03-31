@@ -37,19 +37,19 @@
         <div class="sendLog">
           <div class="sendTitle">增加照片</div>
           <el-form-item>
-            <span v-if="editImages" v-for="img in editImages">
-              <img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">
-            </span>
-            <Upload :ID="'record_img'" @getImg="getImage" :isClear="isClear"></Upload>
+            <!--<span v-if="editImages" v-for="img in editImages">-->
+              <!--<img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
+            <!--</span>-->
+            <Upload :ID="'record_img'" @getImg="getImage" :editImage="editImgToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
           <div class="sendTitle">增加附件</div>
           <el-form-item>
-            <span v-if="editFiles" v-for="file in editFiles">
-              <img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">
-            </span>
-            <Upload :ID="'record_file'" @getImg="getFile" :isClear="isClear"></Upload>
+            <!--<span v-if="editFiles" v-for="file in editFiles">-->
+              <!--<img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
+            <!--</span>-->
+            <Upload :ID="'record_file'" @getImg="getFile" :editImage="editFiles" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
@@ -102,19 +102,19 @@
         <div class="sendLog">
           <div class="sendTitle">增加照片</div>
           <el-form-item>
-            <span v-if="editImages" v-for="img in editImages">
-              <img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">
-            </span>
-            <Upload :ID="'record_img'" @getImg="getImage" :isClear="isClear"></Upload>
+            <!--<span v-if="editImages" v-for="img in editImages">-->
+              <!--<img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
+            <!--</span>-->
+            <Upload :ID="'record_img'" @getImg="getImage" :editImage="editImgToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
           <div class="sendTitle">增加附件</div>
           <el-form-item>
-            <span v-if="editFiles" v-for="file in editFiles">
-              <img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">
-            </span>
-            <Upload :ID="'record_file'" @getImg="getFile" :isClear="isClear"></Upload>
+            <!--<span v-if="editFiles" v-for="file in editFiles">-->
+              <!--<img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
+            <!--</span>-->
+            <Upload :ID="'record_file'" @getImg="getFile" :editImage="editFiles" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
@@ -167,19 +167,19 @@
         <div class="sendLog">
           <div class="sendTitle">增加照片</div>
           <el-form-item>
-            <span v-if="editImages" v-for="img in editImages">
-              <img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">
-            </span>
-            <Upload :ID="'record_img'" @getImg="getImage" :isClear="isClear"></Upload>
+            <!--<span v-if="editImages" v-for="img in editImages">-->
+              <!--<img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
+            <!--</span>-->
+            <Upload :ID="'record_img'" @getImg="getImage" :editImage="editImgToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
           <div class="sendTitle">增加附件</div>
           <el-form-item>
-            <span v-if="editFiles" v-for="file in editFiles">
-              <img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">
-            </span>
-            <Upload :ID="'record_file'" @getImg="getFile" :isClear="isClear"></Upload>
+            <!--<span v-if="editFiles" v-for="file in editFiles">-->
+              <!--<img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
+            <!--</span>-->
+            <Upload :ID="'record_file'" @getImg="getFile" :editImage="editFiles" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
@@ -238,19 +238,19 @@
         <div class="sendLog">
           <div class="sendTitle">增加照片</div>
           <el-form-item>
-            <span v-if="editImages" v-for="img in editImages">
-              <img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">
-            </span>
-            <Upload :ID="'record_img'" @getImg="getImage" :isClear="isClear"></Upload>
+            <!--<span v-if="editImages" v-for="img in editImages">-->
+              <!--<img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
+            <!--</span>-->
+            <Upload :ID="'record_img'" @getImg="getImage" :editImage="editImgToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
           <div class="sendTitle">增加照片或附件</div>
           <el-form-item>
-            <span v-if="editFiles" v-for="file in editFiles">
-              <img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">
-            </span>
-            <Upload :ID="'record_file'" @getImg="getFile" :isClear="isClear"></Upload>
+            <!--<span v-if="editFiles" v-for="file in editFiles">-->
+              <!--<img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
+            <!--</span>-->
+            <Upload :ID="'record_file'" @getImg="getFile" :editImage="editFiles" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
@@ -343,12 +343,14 @@
         editImages: [], //编辑时候的初始图片
         editFiles: [],  //编辑时候的初始文件
         logId: '',
+        editImgToUpload: {},
       }
     },
     methods:{
       // 按钮切换
       tagClick(val) {
         this.active = val;
+        this.isClear = false;
         switch(val) {
           case 0:  //日报
             this.dayRecord = true;
@@ -412,7 +414,9 @@
               this.editImages = [];
               this.editFiles = [];
               this.isClear = true;
-              this.$emit('appointLookLog'); //发完日志跳转到我发的日志标签页
+              setTimeout( ()=> {
+                this.$emit('appointLookLog');
+              },0);
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
@@ -433,7 +437,9 @@
               this.editImages = [];
               this.editFiles = [];
               this.isClear = true;
-              this.$emit('appointLookLog'); //发完日志跳转到我发的日志标签页
+              setTimeout( ()=> {
+                this.$emit('appointLookLog');
+              },0);
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
@@ -453,13 +459,15 @@
         if(this.logId){
           this.weekForm.id = this.logId;
           this.$http.put(globalConfig.server+ 'oa/week',this.weekForm).then((res) => {
-            if(res.data.code === '110010') {
+            if(res.data.code === '110030') {
               this.weekForm = {};
               this.sendPeople = [];
               this.editImages = [];
               this.editFiles = [];
               this.isClear = true;
-              this.$emit('appointLookLog');
+              setTimeout( ()=> {
+                this.$emit('appointLookLog');
+              },0);
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
@@ -480,7 +488,9 @@
               this.editImages = [];
               this.editFiles = [];
               this.isClear = true;
-              this.$emit('appointLookLog');
+              setTimeout( ()=> {
+                this.$emit('appointLookLog');
+              },0);
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
@@ -499,7 +509,7 @@
         if(this.logId){
           this.monthForm.id = this.logId;
           this.$http.put(globalConfig.server+ 'oa/month',this.monthForm).then((res) => {
-            if(res.data.code === '120010') {
+            if(res.data.code === '120030') {
               this.monthForm = {};
               this.sendPeople = [];
               this.editImages = [];
@@ -526,7 +536,9 @@
               this.editImages = [];
               this.editFiles = [];
               this.isClear = true;
-              this.$emit('appointLookLog');
+              setTimeout( ()=> {
+                this.$emit('appointLookLog');
+              },0);
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
@@ -545,13 +557,15 @@
         if(this.logId){
           this.achieveForm.id = this.logId;
           this.$http.put(globalConfig.server+ 'oa/achievement',this.achieveForm).then((res) => {
-            if(res.data.code === '130010') {
+            if(res.data.code === '130030') {
               this.achieveForm = {};
               this.sendPeople = [];
               this.editImages = [];
               this.editFiles = [];
               this.isClear = true;
-              this.$emit('appointLookLog');
+              setTimeout( ()=> {
+                this.$emit('appointLookLog');
+              },0);
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
@@ -572,7 +586,9 @@
               this.editImages = [];
               this.editFiles = [];
               this.isClear = true;
-              this.$emit('appointLookLog');
+              setTimeout( ()=> {
+                this.$emit('appointLookLog');
+              },0);
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
@@ -671,7 +687,7 @@
       },
       deletePeople(val){
         console.log(JSON.stringify(val))
-        var index = ''
+        var index = '';
         switch(this.active){
           case 0:
             index = this.dayForm.receivers_id.indexOf(Number(val.id));
@@ -726,6 +742,14 @@
                   img.uri = img_pic[item][0].uri;
                   this.editImages.push(img);
                 }
+
+                //照片修改
+                let picObject = {};
+                this.editImages.forEach((item) =>{
+                  picObject[item.id] = item.uri;
+                });
+                this.editImgToUpload = picObject;
+
               }
               var file_pic = logData.album.annex_file;
               if(file_pic) {
@@ -769,6 +793,12 @@
                   img.uri = img_pic[item][0].uri;
                   this.editImages.push(img);
                 }
+                //照片修改
+                let picObject = {};
+                this.editImages.forEach((item) =>{
+                  picObject[item.id] = item.uri;
+                });
+                this.editImgToUpload = picObject;
               }
               var file_pic = logData.album.annex_file;
               if(file_pic) {
@@ -813,6 +843,12 @@
                   img.uri = img_pic[item][0].uri;
                   this.editImages.push(img);
                 }
+                //照片修改
+                let picObject = {};
+                this.editImages.forEach((item) =>{
+                  picObject[item.id] = item.uri;
+                });
+                this.editImgToUpload = picObject;
               }
               var file_pic = logData.album.annex_file;
               if(file_pic){
@@ -858,6 +894,12 @@
                   img.uri = img_pic[item][0].uri;
                   this.editImages.push(img);
                 }
+                //照片修改
+                let picObject = {};
+                this.editImages.forEach((item) =>{
+                  picObject[item.id] = item.uri;
+                });
+                this.editImgToUpload = picObject;
               }
               var file_pic = logData.album.annex_file;
               if(file_pic){

@@ -47,6 +47,7 @@
                       start-placeholder="开始日期"
                       end-placeholder="结束日期"
                       :picker-options="pickerOptions"
+                      value-format="yyyy-MM-dd"
                       >
                     </el-date-picker>
                     <!--<el-date-picker v-model="form.start_time" type="date" size="mini" placeholder="选择日期" style="width:160px;"></el-date-picker>至-->
@@ -150,6 +151,16 @@
       </div>
     </div>
     <div v-if="lookLogData.length===0" style="text-align: center;height: 100px;">暂无数据</div>
+    <div class="block pages">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="form.page"
+        :page-size="6"
+        layout="total, prev, pager, next, jumper"
+        :total="totalNum">
+      </el-pagination>
+    </div>
     <!--组织架构-->
     <organization :organizationDialog="organizeVisible" :type="organizaType" @close="closeOrganize" @selectMember="selectMember"></organization>
   </div>
@@ -203,6 +214,7 @@
           // style: '',  //看日志 list 日志列表count
           self: '',
         },
+        totalNum: 0,
         buttonVal: ['全部','我发出的','日报', '周报', '月报', '业绩日报'],
         active: 0,
         isHigh: false,
@@ -212,6 +224,14 @@
       }
     },
     methods: {
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.form.page = val;
+        this.getLookLog();
+      },
       openOrganize() {
         this.organizeVisible = true;
         this.organizaType = 'staff';
@@ -221,15 +241,18 @@
       },
       getLookLog() {
         if(this.form.date){
-          this.form.start_time = (new Date(this.form.date[0]).toLocaleDateString().replace('/','-').replace('/','-'));
-          this.form.end_time = (new Date(this.form.date[1]).toLocaleDateString().replace('/','-').replace('/','-'));
+          this.form.start_time = this.form.date[0];
+          this.form.end_time = this.form.date[1];
+        }else{
+          this.form.start_time = '';
+          this.form.end_time = '';
         }
-        console.log(this.form.start_time+"---"+this.form.end_time);
-        this.$http.get(globalConfig.server+ 'oa/daily_tmp/index?page=1&limit=&self='+this.form.self+'&staff_id='+this.form.staff_id+
+        this.$http.get(globalConfig.server+ 'oa/daily_tmp/index?limit=6&page='+this.form.page+'&self='+this.form.self+'&staff_id='+this.form.staff_id+
           '&type='+this.form.type+'&start_time='+this.form.start_time+'&end_time='+this.form.end_time).then((res) => {
           if(res.data.code === '80000') {
             this.lookLogData = res.data.data.data;
             this.isHigh = false;
+            this.totalNum = res.data.data.count;
           }
         });
       },
@@ -303,7 +326,7 @@
     watch:{
       getData(val) {
         this.getLookLog();
-      }
+      },
     }
   }
 </script>
