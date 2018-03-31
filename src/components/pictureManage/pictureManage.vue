@@ -14,7 +14,7 @@
           <div class="personalSign">
             <span v-if="!isEdit && landholder.data && landholder.data.signature" style="cursor: pointer"
                   @click.stop="showInput">{{landholder.data.signature.content}}</span>
-            <span v-else="" style="cursor: pointer" @click.stop="showInput">添加工作状态...</span>
+            <span v-if="!isEdit && (!landholder.data || !landholder.data.signature)" style="cursor: pointer" @click.stop="showInput">添加工作状态...</span>
             <el-input id="editInput" size="mini" @blur="editPersonalSign($event)" @keyup.enter.native="editPersonalSign($event)"
                       v-if="isEdit" v-model="params.content"></el-input>
           </div>
