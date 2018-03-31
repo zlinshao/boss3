@@ -9,13 +9,13 @@
         <periodic-person></periodic-person>
       </el-tab-pane>
       <el-tab-pane label="组" name="second">
-
+        <periodic-group></periodic-group>
       </el-tab-pane>
       <el-tab-pane label="区" name="third">
-
+        <periodic-region></periodic-region>
       </el-tab-pane>
       <el-tab-pane label="城市" name="fourth">
-
+        <periodic-city></periodic-city>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -23,9 +23,12 @@
 
 <script>
   import periodicPerson from './periodicPerson.vue';
+  import periodicGroup from './periodicGroup.vue';
+  import periodicRegion from './periodicRegion.vue';
+  import periodicCity from './periodicCity.vue';
   export default {
     name: 'index',
-    components: {periodicPerson},
+    components: {periodicPerson,periodicGroup,periodicRegion,periodicCity},
     data() {
       return {
         isHigh: false,
@@ -40,7 +43,7 @@
 
       // tabs标签页
       handleClick(tab, event) {
-        console.log(tab, event);
+        // console.log(tab, event);
       },
       querySearch(queryString, cb) {
         let restaurants = this.restaurants;
@@ -54,7 +57,7 @@
         };
       },
       handleSelect(item) {
-        console.log(item);
+        // console.log(item);
       },
       loadAll() {
         return [

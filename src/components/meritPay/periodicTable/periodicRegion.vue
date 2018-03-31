@@ -7,11 +7,10 @@
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary"  size="mini" @click="exportData">导出</el-button>
+            <el-button type="primary" size="mini" @click="exportData">导出</el-button>
           </el-form-item>
         </el-form>
       </div>
-
       <div class="filter high_grade" :class="isHigh? 'highHide':''">
         <el-form :inline="true" :model="form" size="mini" label-width="100px">
           <div class="filterTitle">
@@ -35,25 +34,6 @@
                 </el-col>
               </el-row>
             </el-col>
-            <el-col :span="12">
-              <el-row>
-                <el-col :span="8">
-                  <div class="el_col_label">员工</div>
-                </el-col>
-                <el-col :span="16" class="el_col_option">
-                  <el-form-item>
-                    <el-input v-model="staff_name" @focus="chooseStaff" placeholder="请选择员工"
-                              readonly>
-                      <template slot="append">
-                        <div style="cursor: pointer;" @click="closeStaff">清空</div>
-                      </template>
-                    </el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-col>
-          </el-row>
-          <el-row class="el_row_border" style="margin-top: 10px;">
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
@@ -94,7 +74,7 @@
           width="100%">
           <el-table-column
             label="名称"
-            prop="simple_staff.real_name">
+            prop="department">
           </el-table-column>
           <el-table-column
             label="收房(套)"
@@ -112,10 +92,6 @@
             label="溢出业绩"
             prop="achv_overflow">
           </el-table-column>
-          <el-table-column
-            label="所属部门"
-            prop="department">
-          </el-table-column>
         </el-table>
       </div>
       <div class="block pages">
@@ -130,7 +106,7 @@
       </div>
     </div>
     <!--组织架构-->
-    <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize" @selectMember="selectMember"></organization>
+    <organization :organizationDialog="organizeVisible"  :type="organizeType" @close="closeOrganize" @selectMember="selectMember"></organization>
   </div>
 </template>
 
@@ -143,13 +119,11 @@
         return {
           tableData: [],
           depart_name: '',
-          staff_name: '',
           form: {
             page: 1,
             limit: 12,
             date: '',
             depart_ids: [],
-            staff_ids: [],
             start_time: '',
             end_time: '',
           },
@@ -195,9 +169,9 @@
             this.form.start_time = '';
             this.form.end_time = '';
           }
-          this.$http.get(globalConfig.server+'salary/periodic/personal?limit=12&page='+this.form.page
+          this.$http.get(globalConfig.server+'salary/periodic/region?limit=12&page='+this.form.page
             +'&start_time='+this.form.start_time+'&end_time='+this.form.end_time
-          +'&depart_ids='+this.form.depart_ids+'&staff_ids='+this.form.staff_ids).then((res)=>{
+            +'&depart_ids='+this.form.depart_ids).then((res)=>{
               if(res.data.code === '88810'){
                 this.tableData = res.data.data.data;
                 this.totalNum = res.data.data.count;
@@ -232,11 +206,7 @@
           this.organizeVisible = true;
           this.organizeType = 'depart';
         },
-        // 员工筛选
-        chooseStaff() {
-          this.organizeVisible = true;
-          this.organizeType = 'staff';
-        },
+
         closeOrganize() {
           this.organizeVisible = false;
         },
@@ -245,39 +215,29 @@
           this.form.depart_ids = [];
           this.depart_name = '';
         },
-        // 清空员工
-        closeStaff(){
-          this.form.staff_ids = [];
-          this.staff_name = '';
-        },
+
         selectMember(val){
           if(this.organizeType === 'depart'){
             for(var i=0;i<val.length;i++){
               this.depart_name = this.depart_name==="" ? val[i].name: this.depart_name+","+val[i].name;
               this.form.depart_ids.push(val[i].id);
             }
-          } else if (this.organizeType === 'staff'){
-            for(var i=0;i<val.length;i++){
-              this.staff_name = this.staff_name==="" ? val[i].name: this.staff_name+","+val[i].name;
-              this.form.staff_ids.push(val[i].id);
-            }
           }
         },
         // 导出
         exportData() {
-            this.$http.get(globalConfig.server+'salary/periodic/export/personal', { responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
-              if (!res.data) {
-                return;
-              }
-              let url = window.URL.createObjectURL(new Blob([res.data]));
-              let link = document.createElement('a');
-              link.style.display = 'a';
-              link.href = url;
-              link.setAttribute('download', 'excel.xlsx');
-              document.body.appendChild(link);
-              link.click();
-            });
-
+          this.$http.get(globalConfig.server+'salary/periodic/export/region', { responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
+            if (!res.data) {
+              return;
+            }
+            let url = window.URL.createObjectURL(new Blob([res.data]));
+            let link = document.createElement('a');
+            link.style.display = 'a';
+            link.href = url;
+            link.setAttribute('download', 'excel.xlsx');
+            document.body.appendChild(link);
+            link.click();
+          });
         },
       },
       mounted() {
