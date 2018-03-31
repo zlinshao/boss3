@@ -22,7 +22,7 @@
         <div class="highSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input placeholder="请输入内容" v-model="formInline.keyWords" size="mini" clearable>
+              <el-input placeholder="请输入内容" v-model="collectParams.keyWords" size="mini" clearable>
                 <el-button slot="append" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
@@ -36,7 +36,7 @@
         </div>
 
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
-          <el-form :inline="true" :model="formInline" size="mini" label-width="100px">
+          <el-form :inline="true" :model="collectParams" size="mini" label-width="100px">
             <div class="filterTitle">
               <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>
@@ -48,7 +48,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="formInline.house" clearable placeholder="请选择">
+                      <el-select v-model="collectParams.house" clearable placeholder="请选择"  value="">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                       </el-select>
@@ -63,7 +63,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="formInline.a" clearable placeholder="请选择" value="">
+                      <el-select v-model="collectParams.a" clearable placeholder="请选择" value="">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                       </el-select>
@@ -80,7 +80,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="formInline.house" clearable placeholder="请选择">
+                      <el-select v-model="collectParams.house" clearable placeholder="请选择" value="">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                       </el-select>
@@ -104,14 +104,17 @@
             <el-table
               :data="collectData"
               @row-dblclick="dblClickTable"
+              @row-click="clickCollectTable"
+              :row-class-name="tableRowClassName"
               @row-contextmenu='houseMenu'
               style="width: 100%">
               <el-table-column
-                prop="contract_num"
+                prop="contract_number"
                 label="合同编号">
               </el-table-column>
               <el-table-column
                 prop="address"
+                width="160px"
                 label="房屋地址">
               </el-table-column>
               <el-table-column
@@ -119,7 +122,7 @@
                 label="房屋类型">
               </el-table-column>
               <el-table-column
-                prop="deposit"
+                prop="deposit_collect"
                 label="收房押金">
               </el-table-column>
               <el-table-column
@@ -127,23 +130,29 @@
                 label="收房价格">
               </el-table-column>
               <el-table-column
-                prop="pay_type"
+                prop="pay_way"
                 label="付款方式">
               </el-table-column>
+              <!--<el-table-column-->
+                <!--label="付款方式">-->
+                <!--<template slot-scope="scope">-->
+                  <!--{{scope.row.pay_way}}-->
+                <!--</template>-->
+              <!--</el-table-column>-->
               <el-table-column
                 prop="vacancy"
-                label="空置期">
+                label="空置期(天)">
               </el-table-column>
               <el-table-column
-                prop="contract_year"
-                label="签约时长">
+                prop="month"
+                label="签约时长（月）">
               </el-table-column>
               <el-table-column
-                prop="start_time"
+                prop="begin_date"
                 label="开始日期">
               </el-table-column>
               <el-table-column
-                prop="end_time"
+                prop="end_date"
                 label="结束日期">
               </el-table-column>
               <el-table-column
@@ -151,7 +160,7 @@
                 label="中介费">
               </el-table-column>
               <el-table-column
-                prop="department"
+                prop="department_name"
                 label="所属部门">
               </el-table-column>
               <el-table-column
@@ -159,7 +168,7 @@
                 label="签约人">
               </el-table-column>
               <el-table-column
-                prop="charge_name"
+                prop="leader_name"
                 label="负责人">
               </el-table-column>
               <el-table-column
@@ -176,13 +185,13 @@
 
             <div class="left">
               <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[10, 20, 30, 40]"
-                :page-size="10"
+                @size-change="collectSizeChange"
+                @current-change="collectPageChange"
+                :current-page="collectParams.page"
+                :page-sizes="[5, 10, 15, 20]"
+                :page-size="5"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="collectTotalNum">
               </el-pagination>
             </div>
           </div>
@@ -191,11 +200,11 @@
           <div class="greenTable" @contextmenu="houseHeadMenu($event)">
             <el-table
               :data="rentingData"
-              @row-click="clickTable"
+              @row-click="clickRentTable"
               @row-contextmenu='clientMenu'
               style="width: 100%">
               <el-table-column
-                prop="contract_num"
+                prop="contract_number"
                 label="合同编号">
               </el-table-column>
               <el-table-column
@@ -207,39 +216,31 @@
                 label="房屋类型">
               </el-table-column>
               <el-table-column
-                prop="deposit"
-                label="价格差">
-              </el-table-column>
-              <el-table-column
                 prop="price"
                 label="出租价格">
               </el-table-column>
               <el-table-column
-                prop="pay_type"
+                prop="pay_way"
                 label="付款方式">
               </el-table-column>
               <el-table-column
-                prop="vacancy"
-                label="空置期">
+                prop="month"
+                label="签约时长(月)">
               </el-table-column>
               <el-table-column
-                prop="contract_year"
-                label="签约时长">
-              </el-table-column>
-              <el-table-column
-                prop="start_time"
+                prop="begin_date"
                 label="开始日期">
               </el-table-column>
               <el-table-column
-                prop="end_time"
+                prop="end_date"
                 label="结束日期">
               </el-table-column>
               <el-table-column
-                prop="medium_price"
+                prop="agency"
                 label="中介费">
               </el-table-column>
               <el-table-column
-                prop="department"
+                prop="department_name"
                 label="所属部门">
               </el-table-column>
               <el-table-column
@@ -247,7 +248,7 @@
                 label="签约人">
               </el-table-column>
               <el-table-column
-                prop="charge_name"
+                prop="leader_name"
                 label="负责人">
               </el-table-column>
             </el-table>
@@ -260,13 +261,13 @@
 
             <div class="left">
               <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[10, 20, 30, 40]"
-                :page-size="10"
+                @size-change="rentSizeChange"
+                @current-change="rentPageChange"
+                :current-page="rentParams.page"
+                :page-sizes="[3, 6, 9, 12]"
+                :page-size="3"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="0">
+                :total="rentTotalNum">
               </el-pagination>
             </div>
           </div>
@@ -465,177 +466,107 @@
         visitRecordDialog: false,    //回访记录
 
         isHigh: false,
-
-        formInline: {},
-        collectData: [
-          {
-            id: '1',
-            contract_num: 'LJSF0000001',
-            address: '天华硅谷',
-            house_type: '三室一厅',
-            deposit: '8888',
-            price: '3500',
-            pay_type: '月付',
-            vacancy: '30',
-            contract_year: '3年',
-            start_time: '2018-1-1',
-            end_time: '2021-1-1',
-            medium_price: '2000',
-            department: '市场部',
-            staff_name: '陆宣羽',
-            charge_name: '陆宣羽',
-            phone: '15800008888',
-          },
-          {
-            id: '1',
-            contract_num: 'LJSF0000001',
-            address: '天华硅谷',
-            house_type: '三室一厅',
-            deposit: '8888',
-            price: '3500',
-            pay_type: '月付',
-            vacancy: '30',
-            contract_year: '3年',
-            start_time: '2018-1-1',
-            end_time: '2021-1-1',
-            medium_price: '2000',
-            department: '市场部',
-            staff_name: '陆宣羽',
-            charge_name: '陆宣羽',
-            phone: '15800008888',
-          },
-          {
-            id: '1',
-            contract_num: 'LJSF0000001',
-            address: '天华硅谷',
-            house_type: '三室一厅',
-            deposit: '8888',
-            price: '3500',
-            pay_type: '月付',
-            vacancy: '30',
-            contract_year: '3年',
-            start_time: '2018-1-1',
-            end_time: '2021-1-1',
-            medium_price: '2000',
-            department: '市场部',
-            staff_name: '陆宣羽',
-            charge_name: '陆宣羽',
-            phone: '15800008888',
-          },
-          {
-            id: '1',
-            contract_num: 'LJSF0000001',
-            address: '天华硅谷',
-            house_type: '三室一厅',
-            deposit: '8888',
-            price: '3500',
-            pay_type: '月付',
-            vacancy: '30',
-            contract_year: '3年',
-            start_time: '2018-1-1',
-            end_time: '2021-1-1',
-            medium_price: '2000',
-            department: '市场部',
-            staff_name: '陆宣羽',
-            charge_name: '陆宣羽',
-            phone: '15800008888',
-          },
-          {
-            id: '1',
-            contract_num: 'LJSF0000001',
-            address: '天华硅谷',
-            house_type: '三室一厅',
-            deposit: '8888',
-            price: '3500',
-            pay_type: '月付',
-            vacancy: '30',
-            contract_year: '3年',
-            start_time: '2018-1-1',
-            end_time: '2021-1-1',
-            medium_price: '2000',
-            department: '市场部',
-            staff_name: '陆宣羽',
-            charge_name: '陆宣羽',
-            phone: '15800008888',
-          },
-        ],
-        rentingData: [
-          {
-            id: '1',
-            contract_num: 'LJSF0000001',
-            address: '天华硅谷',
-            house_type: '三室一厅',
-            deposit: '8888',
-            price: '3500',
-            pay_type: '月付',
-            vacancy: '30',
-            contract_year: '3年',
-            start_time: '2018-1-1',
-            end_time: '2021-1-1',
-            medium_price: '2000',
-            department: '市场部',
-            staff_name: '陆宣羽',
-            charge_name: '陆宣羽',
-            phone: '15800008888',
-          },
-          {
-            id: '1',
-            contract_num: 'LJSF0000001',
-            address: '天华硅谷',
-            house_type: '三室一厅',
-            deposit: '8888',
-            price: '3500',
-            pay_type: '月付',
-            vacancy: '30',
-            contract_year: '3年',
-            start_time: '2018-1-1',
-            end_time: '2021-1-1',
-            medium_price: '2000',
-            department: '市场部',
-            staff_name: '陆宣羽',
-            charge_name: '陆宣羽',
-            phone: '15800008888',
-          },
-          {
-            id: '1',
-            contract_num: 'LJSF0000001',
-            address: '天华硅谷',
-            house_type: '三室一厅',
-            deposit: '8888',
-            price: '3500',
-            pay_type: '月付',
-            vacancy: '30',
-            contract_year: '3年',
-            start_time: '2018-1-1',
-            end_time: '2021-1-1',
-            medium_price: '2000',
-            department: '市场部',
-            staff_name: '陆宣羽',
-            charge_name: '陆宣羽',
-            phone: '15800008888',
-          }
-        ],
-        currentPage: 1,
-        options: [],
+        /*******************收房*********************/
+        collectParams: {
+          page:1,
+          limit:5,
+          search:'',
+        },
+        collectTotalNum:0,
+        collectData: [],    //收房列表数据
+        collectHouseId:'',   //房屋id
+        collectContractId:'', //  收房合同id
+        //*******************租房*******************//
+        rentParams:{
+          page:1,
+          limit:3,
+        },
+        rentingData:[],     //租房列表数据
+        rentTotalNum:0,
+        rentHouseId : '',
+        rentContractId : '',
       }
     },
     mounted(){
-      $('tbody tr').click(function () {
-        $(this).addClass('selected_tr').siblings().removeClass('selected_tr');
-      });
+      this.initData();
     },
+
+    watch:{
+      collectHouseId(val){
+        this.getRentData(val);
+      }
+    },
+
     methods: {
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+      //数据初始化
+      initData(){
+        this.getCollectData();
       },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+      /*****************************收房*********************************************************/
+      getCollectData(){
+        this.$http.get(globalConfig.server+'lease/entire/collect',{params:this.collectParams}).then((res) => {
+          if(res.data.code === '60110'){
+            this.collectData = res.data.data;
+            this.collectTotalNum = res.data.meta.total;
+            this.collectHouseId = this.collectData[0].house_id;
+          }else {
+            this.collectData = [];
+            this.collectTotalNum = 0;
+          }
+        })
       },
-      clickTable(row, event, column){
-        console.log(row, event, column)
+      //单机收房列表
+      clickCollectTable(row, event, column){
+        this.collectHouseId = row.house_id;
+        this.collectContractId = row.contract_id;
       },
+
+      //收房列表选中状态
+      tableRowClassName({row, rowIndex}) {
+        if (row.contract_id === this.collectContractId) {
+          return 'selected_tr';
+        }
+        return '';
+      },
+
+      collectSizeChange(val) {
+        this.collectParams.limit = val;
+        this.getCollectData();
+      },
+      collectPageChange(val) {
+        this.collectParams.page = val;
+        this.getCollectData();
+      },
+
+      //*********************************租房*******************************************************//
+      getRentData(id){
+        this.$http.get(globalConfig.server+'lease/entire/rent/' + id,{params:this.rentParams}).then((res) => {
+          if(res.data.code === '60110'){
+            this.rentingData = res.data.data;
+            this.rentTotalNum = res.data.meta.total;
+          }else {
+            this.rentingData = [];
+            this.rentTotalNum = 0;
+          }
+        })
+      },
+      rentSizeChange(val) {
+        this.rentParams.limit = val;
+      },
+      rentPageChange(val) {
+        this.rentParams.page = val;
+      },
+      //单机租房列表
+      clickRentTable(row, event, column){
+        this.rentHouseId = row.house_id;
+        this.rentContractId = row.contract_id;
+      },
+      /*********************************************************************************************/
+
+
       //房屋右键
       houseMenu(row, event){
+        this.collectContractId = row.contract_id;
         this.lists = [
           {clickIndex: 'addHouseResourcesDialog', headIcon: 'el-icons-fa-home', label: '修改房源',},
           {
@@ -871,6 +802,8 @@
       resetting(){
 
       },
+
+
     },
   }
 </script>

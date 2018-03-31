@@ -18,9 +18,9 @@
             <el-form-item>
               <el-input v-model="form.contract_id" type="hidden"></el-input>
             </el-form-item>
-            <el-for-item>
+            <el-form-item>
               <el-input v-model="form.category" type="hidden"></el-input>
-            </el-for-item>
+            </el-form-item>
           </el-row>
         </el-form>
       </div>

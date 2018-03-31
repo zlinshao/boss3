@@ -12,9 +12,9 @@
             <span></span>
           </div>
           <div class="personalSign">
-            <span v-if="!isEdit && landholder.data" style="cursor: pointer"
+            <span v-if="!isEdit && landholder.data && landholder.data.signature" style="cursor: pointer"
                   @click.stop="showInput">{{landholder.data.signature.content}}</span>
-            <span v-if="!isEdit && !landholder.data" style="cursor: pointer" @click.stop="showInput">添加工作状态...</span>
+            <span v-else="" style="cursor: pointer" @click.stop="showInput">添加工作状态...</span>
             <el-input id="editInput" size="mini" v-if="isEdit" @blur="editPersonalSign($event)"
                       @keyup.enter.native="editPersonalSign($event)" v-model="params.content"></el-input>
           </div>
@@ -54,7 +54,7 @@
                   <p>相 册<span>&nbsp;{{albumNum}}</span></p>
                 </div>
               </div>
-              <div class="a" @click="routerLink('/management')">
+              <div class="a">
                 <div class="aLeft">
                   <i class="iconfont icon-qita1"></i>
                 </div>
@@ -120,7 +120,7 @@
                   <div>积分明细</div>
                 </div>
                 <div class="checkNum">
-                  <i class="iconfont icon-jifen1"></i> 0
+                  <i class="iconfont icon-jifen1"></i> {{creditTotal}}
                 </div>
               </div>
               <div class="integralTab" @click="routerLink('/articleMessage','fourth')">
@@ -190,11 +190,11 @@
           </div>
         </el-col>
         <el-col :span="6">
-          <div class="mainRight"  @click="showAnnouncement(praiseData)">
+          <div class="mainRight">
             <div class="title">
-              公司公告
+              表彰公告
             </div>
-            <div class="company1">
+            <div class="company1" @click="showAnnouncement(praiseData)">
               <div class="com"></div>
               <div class="caption">
                 <span>{{praiseData.title}}</span>
@@ -208,13 +208,13 @@
                   <el-button size="small" type="text">详情</el-button>
                 </div>
                 <div>
-                  <i class="el-icon-info"></i>123
-                  <i class="el-icon-info"></i>124
+                  <i class="iconfont icon-yanjing"></i>{{praiseData.read_count}}
+                  <i class="iconfont icon-yanjingclose"></i>{{praiseData.unread_count}}
                 </div>
               </div>
             </div>
             <div class="title">
-              公司公告
+              批评公告
             </div>
             <div class="company2" @click="showAnnouncement(punishmentData)">
               <div class="com"></div>
@@ -230,8 +230,8 @@
                   <el-button size="small" type="text">详情</el-button>
                 </div>
                 <div>
-                  <i class="el-icon-info"></i>123
-                  <i class="el-icon-info"></i>124
+                  <i class="iconfont icon-yanjing"></i>{{punishmentData.read_count}}
+                  <i class="iconfont icon-yanjingclose"></i>{{punishmentData.unread_count}}
                 </div>
               </div>
             </div>
@@ -240,14 +240,14 @@
       </el-row>
     </div>
 
-    <Announcement :announcementDialog="announcementDialog" :announcementData="announcementData"  @close="closeWarning" ></Announcement>
+    <Announcement :announcementDialog="announcementDialog" :announcementId="announcementId"  @close="closeWarning" ></Announcement>
   </div>
 </template>
 
 <script>
   import ECharts from 'echarts'
   import EChartTheme from 'echarts/theme/macarons'
-  import Announcement from "./components/announcement.vue"; //预览页面
+  import Announcement from "./components/announcement.vue"; //announcement detail page
   export default {
     name: "index",
     components:{Announcement},
@@ -264,15 +264,19 @@
         chartLine: null,
         praiseData:{},
         punishmentData:{},
-        announcementData:{},
+        announcementId:'',
+        creditTotal:'',     //总积分
       }
     },
     mounted() {
       this.landholder = JSON.parse(localStorage.personal);
+      console.log(this.landholder)
       this.getAlbumNum();
       this.drawLineChart();
       this.getPraise();
       this.getPunishment();
+      //获取积分明细
+      this.getCredit();
     },
     watch: {
       'params.content': {
@@ -342,11 +346,20 @@
       },
       //查看公告详情
       showAnnouncement(val){
-        this.announcementData = val;
         this.announcementDialog = true;
+        this.announcementId = val.id;
       },
       closeWarning(){
         this.announcementDialog = false;
+      },
+
+      //获取积分总数
+      getCredit(){
+        this.$http.get(globalConfig.server + 'credit/manage/self').then((res) => {
+          if (res.data.code === '30310') {
+            this.creditTotal = res.data.data;
+          }
+        })
       },
       //折线图
       drawLineChart() {
@@ -429,7 +442,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped="">
   #individual {
 
     $colorBor: rgba(255, 255, 255, .8);

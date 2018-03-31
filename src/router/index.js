@@ -230,7 +230,7 @@ export default new Router({
         {path: '/college', component: College, name: ' 乐伽大学 ' ,icon:"iconfont icon-leqiedaxue"},
         {path: '/LineCollege', component: LineCollege, name: ' 在线考试 ', icon:"iconfont icon-zaixiankaoshi"},
         {path: '/converge', component: Converge, name: ' 员工广场 ',  icon:"iconfont icon-yuangongguangchang"},
-        {path: '/individual', component: Individual, name: ' 个人门户 ',icon:"iconfont icon-yuangongguangchang"},
+        {path: '/individual', component: Individual, name: ' 个人门户 ',icon:"el-icons-fa-user"},
         {path: '/wholeRentManage', component: WholeRentManage, name: ' 整租管理 ', icon:"iconfont icon-pinzhizhengzu"},
         {path: '/jointRentManage', component: JointRentManage, name: ' 合租管理 ', icon:"iconfont icon-hezu"},
         {path: '/datumMessage/housesManage', component: HousesManage, name: ' 房屋管理 ',icon:"iconfont icon-fangzu"},
