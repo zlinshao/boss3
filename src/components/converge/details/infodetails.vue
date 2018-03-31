@@ -92,7 +92,7 @@
             <el-form-item>
               <el-input type="textarea" :rows="3" v-model="addContent" placeholder="请输入评论内容"></el-input>
             </el-form-item>
-            <span  v-if="landholder.data" style="float: left">{{landholder.data.signature.content}}</span>
+            <span  v-if="landholder.data" style="float: left">{{landholder.data.signature && landholder.data.signature.content}}</span>
             <el-form-item>
               <div class="submitButt">
                 <el-button type="success" size="mini" @click="addReply(formList.id)">发表</el-button>
