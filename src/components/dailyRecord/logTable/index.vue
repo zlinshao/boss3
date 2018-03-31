@@ -48,6 +48,7 @@
                        start-placeholder="开始日期"
                        end-placeholder="结束日期"
                        :picker-options="pickerOptions"
+                       value-format="yyyy-MM-dd"
                      >
                      </el-date-picker>
                      <!--<el-date-picker v-model="form.start_time" type="date" size="mini" placeholder="选择日期" style="width:160px;"></el-date-picker>至-->
@@ -203,7 +204,7 @@
        </el-pagination>
      </div>
      <!--组织架构-->
-     <organization :organizationDialog="organizeVisible" :type="organizaType" @close="closeOrganize"></organization>
+     <organization :organizationDialog="organizeVisible" :type="organizaType" @close="closeOrganize" @selectMember="selectMember"></organization>
    </div>
 </template>
 
@@ -269,7 +270,8 @@
         resetting() {
           this.form.staff_id = '';
           this.selectMemberName = '';
-          this.form.start_time =this.end_time = '';
+          this.form.date = '';
+          this.form.start_time = this.form.end_time = '';
         },
         // 高级
         highGrade() {
@@ -287,11 +289,12 @@
             this.form.start_time = '';
             this.form.end_time = '';
           }
-          this.$http.get(globalConfig.server+ 'oa/daily_tmp/index?style=count&self=1&limit=12&type='+(this.active+1)+'&page='+this.form.page
+          this.$http.get(globalConfig.server+ 'oa/daily_tmp/index?style=count&self=1&limit=12&type='+(this.active+1)+'&staff_id='+this.form.staff_id+'&page='+this.form.page
             +'&start_time='+this.form.start_time+'&end_time='+this.form.end_time).then((res) => {
             if(res.data.code === '80000') {
               this.logData = res.data.data.data;
               this.totalNum = res.data.data.count;
+              this.isHigh = false;
             }
           });
         },
@@ -314,6 +317,7 @@
           this.organizationDialog = false;
           this.selectMemberName = val[0].name;
           this.form.staff_id = val[0].id;
+
         },
         // 按钮切换
         tagClick(val) {
