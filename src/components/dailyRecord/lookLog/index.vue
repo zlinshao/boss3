@@ -121,7 +121,7 @@
             <span v-for="pic in item.daily.album.image_pic" v-if="item.daily && item.daily.album">
               <img :src="pic[0].uri">
             </span>
-            <span v-for="pic in item.daily.album.annex_file" v-if="item.daily && item.daily.album">
+            <span v-for="pic in item.daily.album.annex_file" @click="downLoad(pic)" v-if="item.daily && item.daily.album">
               <img src="../../../assets/images/file.svg" style="width: 30px;background: aliceblue;border-radius: 5px;padding: 0 10px;">
             </span>
           </div>
@@ -224,6 +224,12 @@
       }
     },
     methods: {
+      downLoad(val){
+        console.log(val);
+        // window.location.href = val[0].uri;
+        window.open(val[0].uri);
+
+      },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
@@ -265,7 +271,8 @@
       resetting() {
         this.form.staff_id = '';
         this.selectMemberName = '';
-        this.form.start_time =this.end_time = '';
+        this.form.date = '';
+        this.form.start_time = this.form.end_time = '';
       },
       // 高级
       highGrade() {
