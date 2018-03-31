@@ -22,7 +22,7 @@
                  </el-col>
                  <el-col :span="16" class="el_col_option">
                    <el-form-item>
-                     <el-input v-model="form.staff_id" @focus="openOrganize" placeholder="点击选择发送人"
+                     <el-input v-model="selectMemberName" @focus="openOrganize" placeholder="点击选择发送人"
                                readonly>
                        <template slot="append">
                          <div style="cursor: pointer;" @click="close_">清空</div>
@@ -192,6 +192,16 @@
          </el-table-column>
        </el-table>
      </div>
+     <div class="block pages">
+       <el-pagination
+         @size-change="handleSizeChange"
+         @current-change="handleCurrentChange"
+         :current-page="form.page"
+         :page-size="12"
+         layout="total, prev, pager, next, jumper"
+         :total="totalNum">
+       </el-pagination>
+     </div>
      <!--组织架构-->
      <organization :organizationDialog="organizeVisible" :type="organizaType" @close="closeOrganize"></organization>
    </div>
@@ -239,7 +249,6 @@
                 date: '',
                 start_time: '',
                 end_time: '',
-                limit: 12,
                 page: 1,
                 type: 1, // 1 2 3 4 日周月业绩
                 style: 'count',
@@ -251,26 +260,48 @@
               isHigh: false,
               organizeVisible: false,
               organizaType: '',
+              totalNum: 0,
+              selectMemberName: '',
             }
         },
       methods: {
         // 重置
         resetting() {
-          // this.form.keywords = '';
+          this.form.staff_id = '';
+          this.selectMemberName = '';
+          this.form.start_time =this.end_time = '';
         },
         // 高级
         highGrade() {
           this.isHigh = !this.isHigh;
         },
         close_() {
-          console.log(1);
+          this.form.staff_id = '';
+          this.selectMemberName = '';
         },
         getLookLog() {
-          this.$http.get(globalConfig.server+ 'oa/daily_tmp/index?style=count&self=1&page=1&type='+(this.active+1) ).then((res) => {
+          if(this.form.date){
+            this.form.start_time = this.form.date[0];
+            this.form.end_time = this.form.date[1];
+          }else{
+            this.form.start_time = '';
+            this.form.end_time = '';
+          }
+          this.$http.get(globalConfig.server+ 'oa/daily_tmp/index?style=count&self=1&limit=12&type='+(this.active+1)+'&page='+this.form.page
+            +'&start_time='+this.form.start_time+'&end_time='+this.form.end_time).then((res) => {
             if(res.data.code === '80000') {
               this.logData = res.data.data.data;
+              this.totalNum = res.data.data.count;
             }
           });
+        },
+        handleSizeChange(val) {
+          console.log(`每页 ${val} 条`);
+        },
+        handleCurrentChange(val) {
+          console.log(`当前页: ${val}`);
+          this.form.page = val;
+          this.getLookLog();
         },
         openOrganize() {
           this.organizeVisible = true;
@@ -279,28 +310,15 @@
         closeOrganize() {
           this.organizeVisible = false;
         },
+        selectMember(val){
+          this.organizationDialog = false;
+          this.selectMemberName = val[0].name;
+          this.form.staff_id = val[0].id;
+        },
         // 按钮切换
         tagClick(val) {
           this.active = val;
           this.getLookLog();
-          // switch(val) {
-          //   case 0:  //日报
-          //     this.form.type = 1;
-          //     this.getLookLog();
-          //     break;
-          //   case 1:  //月报
-          //     this.form.type = 2;
-          //     this.getLookLog();
-          //     break;
-          //   case 2:  //周报
-          //     this.form.type = 3;
-          //     this.getLookLog();
-          //     break;
-          //   case 3:  //业绩日报
-          //     this.form.type = 4;
-          //     this.getLookLog();
-          //     break;
-          // }
         },
       },
       mounted() {
