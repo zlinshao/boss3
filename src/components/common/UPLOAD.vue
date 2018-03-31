@@ -19,7 +19,7 @@
 </template>
 
 <script>
-
+  import fileImage from '../../assets/images/file.png'
   export default {
     name: 'hello',
     props: ['ID','editImage','isClear'],
@@ -76,7 +76,7 @@
           this.editImg = this.editImage;
           this.imgId = [];
           for(let key in val){
-            this.imgId.push(key)
+            this.imgId.push(  key)
           }
         }
       },
@@ -141,17 +141,18 @@
             },
 
             'FilesAdded': function (up, files) {
-
-              console.log(files)
               _this.isUploading = true;
               _this.$emit('getImg', [_this.ID, _this.imgId, _this.isUploading]);
 
               plupload.each(files, function (file) {
+
+                console.log(file);
+
                 if (!file || !/image\//.test(file.type) || /photoshop/.test(file.type)) {
                   $('#pickfiles' + _this.ID).prepend(`
                     <div class="imgItem" id="${file.id}">
                       <div style=" width: 120px;  height: 120px; border-radius:6px;position: relative;">
-                        <img src="">
+                        <img src="${fileImage}">
                         <div class="progress"><p></p></div>
                         <div class="remove pic_delete el-icon-circle-close" data-val=${file.id}>
 

@@ -35,60 +35,12 @@
           </el-form>
         </div>
 
+        <!--高級搜索-->
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
           <el-form :inline="true" :model="collectParams" size="mini" label-width="100px">
             <div class="filterTitle">
               <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>
-            <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">店面</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select v-model="collectParams.house" clearable placeholder="请选择"  value="">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">户型</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select v-model="collectParams.a" clearable placeholder="请选择" value="">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
-            <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">状态</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select v-model="collectParams.house" clearable placeholder="请选择" value="">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
@@ -201,6 +153,7 @@
             <el-table
               :data="rentingData"
               @row-click="clickRentTable"
+              @row-dblclick="dblClickRentTable"
               @row-contextmenu='clientMenu'
               style="width: 100%">
               <el-table-column
@@ -258,7 +211,6 @@
               <div>本套相差 <span>0&nbsp;元</span></div>
               <div>押金差 <span>0&nbsp;元</span></div>
             </div>
-
             <div class="left">
               <el-pagination
                 @size-change="rentSizeChange"
@@ -280,17 +232,20 @@
             <el-tab-pane label="租客信息">
               <RentInfoTab></RentInfoTab>
             </el-tab-pane>
-            <el-tab-pane label="欠费信息">
-              <InDebtInfoTab></InDebtInfoTab>
-            </el-tab-pane>
             <el-tab-pane label="物品增减">
               <GoodsChangeTab></GoodsChangeTab>
             </el-tab-pane>
-            <el-tab-pane label="退/换房记录">
-              <ReturnRomeInfoTab></ReturnRomeInfoTab>
+            <el-tab-pane label="房东退房记录">
+              <CollectReturnRomeInfoTab></CollectReturnRomeInfoTab>
             </el-tab-pane>
-            <el-tab-pane label="续约/延期">
-              <RenewContractTab></RenewContractTab>
+            <el-tab-pane label="退/换房记录(租)">
+              <rentReturnRomeInfoTab></rentReturnRomeInfoTab>
+            </el-tab-pane>
+            <el-tab-pane label="续约/延期(收)">
+              <CollectRenewContractTab></CollectRenewContractTab>
+            </el-tab-pane>
+            <el-tab-pane label="续约/延期(租)">
+              <RentRenewContractTab></RentRenewContractTab>
             </el-tab-pane>
             <el-tab-pane label="转租记录">
               <subletRecordTab></subletRecordTab>
@@ -301,17 +256,23 @@
             <el-tab-pane label="应付款项">
               <PayableItemTab></PayableItemTab>
             </el-tab-pane>
-            <el-tab-pane label="资料备忘">
-              <MemorandumTab></MemorandumTab>
+            <el-tab-pane label="资料备忘(收)">
+              <CollectMemorandumTab></CollectMemorandumTab>
             </el-tab-pane>
-            <el-tab-pane label="回访记录">
-              <returnVisitRecordTab></returnVisitRecordTab>
+            <el-tab-pane label="资料备忘(租)">
+              <RentMemorandumTab></RentMemorandumTab>
             </el-tab-pane>
-            <el-tab-pane label="跟进记录">
-              <followRecordTab></followRecordTab>
+            <el-tab-pane label="回访记录(收)">
+              <CollectReturnVisitRecordTab></CollectReturnVisitRecordTab>
             </el-tab-pane>
-            <el-tab-pane label="维修">
-              <ServiceRecordTab></ServiceRecordTab>
+            <el-tab-pane label="回访记录(租)">
+              <RentReturnVisitRecordTab></RentReturnVisitRecordTab>
+            </el-tab-pane>
+            <el-tab-pane label="跟进记录(收)">
+              <CollectFollowRecordTab></CollectFollowRecordTab>
+            </el-tab-pane>
+            <el-tab-pane label="跟进记录(租)">
+              <RentFollowRecordTab></RentFollowRecordTab>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -378,16 +339,21 @@
   import GoodsChangeTab from '../tabComponents/goodsChange.vue'
   import OwnerInfoTab from '../tabComponents/ownerInfo.vue'
   import RentInfoTab from '../tabComponents/rentInfo.vue'
-  import InDebtInfoTab from '../tabComponents/InDebtInfo.vue'
-  import ReturnRomeInfoTab from '../tabComponents/returnRoomInfo/index.vue'   //退还房
-  import RenewContractTab from '../tabComponents/renewContract.vue'
+//  import InDebtInfoTab from '../tabComponents/InDebtInfo.vue'
+  import CollectReturnRomeInfoTab from '../tabComponents/returnRoomInfo/index.vue'   //退还房
+  import rentReturnRomeInfoTab from '../tabComponents/rentReturnInfo.vue'   //退还房
+  import CollectRenewContractTab from '../tabComponents/collcetRenewContract.vue'
+  import RentRenewContractTab from '../tabComponents/rentRenewContract.vue'
   import subletRecordTab from '../tabComponents/subletRecord.vue'
   import ReceivableItemTab from '../tabComponents/receivableItem.vue'
   import PayableItemTab from '../tabComponents/payableItem.vue'
-  import MemorandumTab from '../tabComponents/memorandum.vue'
-  import returnVisitRecordTab from '../tabComponents/returnVistitRecord.vue'
-  import followRecordTab from '../tabComponents/followRecord.vue'
-  import ServiceRecordTab from '../tabComponents/serviceRecord.vue'
+  import CollectMemorandumTab from '../tabComponents/collectMemorandum.vue'
+  import RentMemorandumTab from '../tabComponents/rentMemorandum.vue'
+  import CollectReturnVisitRecordTab from '../tabComponents/collectReturnVistitRecord.vue'
+  import RentReturnVisitRecordTab from '../tabComponents/rentReturnVistitRecord.vue'
+  import CollectFollowRecordTab from '../tabComponents/collectFollowRecord.vue'
+  import RentFollowRecordTab from '../tabComponents/rentFollowRecord.vue'
+//  import ServiceRecordTab from '../tabComponents/serviceRecord.vue'
   export default {
     name: 'hello',
     components: {
@@ -421,16 +387,21 @@
       GoodsChangeTab,
       OwnerInfoTab,
       RentInfoTab,
-      InDebtInfoTab,
-      ReturnRomeInfoTab,
-      RenewContractTab,
+//      InDebtInfoTab,
+      CollectReturnRomeInfoTab,
+      rentReturnRomeInfoTab,
+      CollectRenewContractTab,
+      RentRenewContractTab,
       subletRecordTab,
       ReceivableItemTab,
       PayableItemTab,
-      MemorandumTab,
-      returnVisitRecordTab,
-      followRecordTab,
-      ServiceRecordTab,
+      CollectMemorandumTab,
+      RentMemorandumTab,
+      CollectReturnVisitRecordTab,
+      RentReturnVisitRecordTab,
+      CollectFollowRecordTab,
+      RentFollowRecordTab,
+//      ServiceRecordTab,
     },
     data () {
       return {
@@ -537,7 +508,10 @@
         this.collectParams.page = val;
         this.getCollectData();
       },
-
+      dblClickTable(row, event){   //双击
+        const {href} = this.$router.resolve({path: '/collectDetail',query:{id:row.contract_id,type:0}});
+        window.open(href,'_blank','width=1920,height=1080');
+      },
       //*********************************租房*******************************************************//
       getRentData(id){
         this.$http.get(globalConfig.server+'lease/entire/rent/' + id,{params:this.rentParams}).then((res) => {
@@ -560,6 +534,10 @@
       clickRentTable(row, event, column){
         this.rentHouseId = row.house_id;
         this.rentContractId = row.contract_id;
+      },
+      dblClickRentTable(row, event){
+        const {href} = this.$router.resolve({path: '/rentingDetail',query:{id:row.contract_id,type:1}});
+        window.open(href,'_blank','width=1920,height=1080');
       },
       /*********************************************************************************************/
 
@@ -615,10 +593,7 @@
           this.contextMenuParam(event);
         }
       },
-      dblClickTable(row, event){   //双击
-        const {href} = this.$router.resolve({path: '/rentingDetail',query:{id:'1'}});
-        window.open(href,'_blank','width=1920,height=1080');
-      },
+
       //右键回调时间
       clickEvent (index) {
         this.openModalDialog(index);

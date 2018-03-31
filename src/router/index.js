@@ -113,7 +113,7 @@ import PeriodicTable from '../components/meritPay/periodicTable/index'
 import Achievement from '../components/meritPay/achievement/index'
 import PersonalSalary from '../components/meritPay/personalSalary/index'
 
-
+import CollectDetail from '../components/rentManage/collectDetail.vue'
 import RentingDetail from '../components/rentManage/rentingDetail.vue'
 
 import MessageCenter from '../components/messageCenter/index.vue'                         //消息中心
@@ -171,6 +171,12 @@ export default new Router({
     {
       path: '/rentingDetail',
       component: RentingDetail,
+      name: '',
+      hidden: true
+    },
+    {
+      path: '/collectDetail',
+      component: CollectDetail,
       name: '',
       hidden: true
     },
