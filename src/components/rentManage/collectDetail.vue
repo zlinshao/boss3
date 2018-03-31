@@ -125,7 +125,7 @@
         </div>
 
         <div id="ownerId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
-          <div class="title">租客</div>
+          <div class="title">业主信息</div>
         </div>
 
         <div class="ownerInfo">
@@ -230,41 +230,41 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <!--<el-row>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="空置时长">-->
-                  <!--<div class="content">{{contractInfo.vacancy}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="空置开始时间">-->
-                  <!--<div class="content">{{contractInfo.begin_date}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="空置结束时间">-->
-                  <!--<div class="content">{{contractInfo.vacancy_end_date}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-            <!--</el-row>-->
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="空置时长">
+                  <div class="content">{{contractInfo.vacancy}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="空置开始时间">
+                  <div class="content">{{contractInfo.begin_date}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="空置结束时间">
+                  <div class="content">{{contractInfo.vacancy_end_date}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
 
-            <!--<el-row>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="空置期安置方式">-->
-                  <!--<div class="content">{{contractInfo.vacancy}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="保修期">-->
-                  <!--<div class="content">{{contractInfo.warranty_month}}{{contractInfo.warranty_day}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="订单来源">-->
-                  <!--<div class="content">{{contractInfo.from}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-            <!--</el-row>-->
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="空置期安置方式">
+                  <div class="content">{{contractInfo.vacancy}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="保修期">
+                  <div class="content">{{contractInfo.warranty_month}}{{contractInfo.warranty_day}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="订单来源">
+                  <div class="content">{{contractInfo.from}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
 
             <el-row>
               <el-col :span="8">
@@ -283,62 +283,67 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <!--<el-row>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="第一次打房租时间">-->
-                  <!--<div class="content">{{contractInfo.pay_first_date}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="第二次打房租时间">-->
-                  <!--<div class="content">{{contractInfo.pay_second_date}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="收款人姓名">-->
-                  <!--<div class="content">{{contractInfo.account_name}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-            <!--</el-row>-->
-
-            <!--<el-row>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="收款人与房东关系">-->
-                  <!--<div class="content">{{contractInfo.account_name}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="汇款方式">-->
-                  <!--<div class="content">{{contractInfo.purchase_way}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="账号">-->
-                  <!--<div class="content">{{contractInfo.account}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-            <!--</el-row>-->
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="第一次打房租时间">
+                  <div class="content">{{contractInfo.pay_first_date}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="第二次打房租时间">
+                  <div class="content">{{contractInfo.pay_second_date}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="收款人姓名">
+                  <div class="content">{{contractInfo.account_name}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
 
             <el-row>
               <el-col :span="8">
-                <el-form-item label="总收入金额">
+                <el-form-item label="收款人与房东关系">
+                  <div class="content">{{contractInfo.account_name}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="汇款方式">
+                  <div class="content">{{contractInfo.purchase_way}}</div>
+                </el-form-item>
+              </el-col>
+
+              <el-col :span="8">
+                <el-form-item label="账号">
+                  <div class="content">{{contractInfo.account}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="开户行">
                   <div class="content">{{contractInfo.bank}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="金额（付款方式）">
+                <el-form-item label="支行">
                   <div class="content">{{contractInfo.subbranch}}</div>
                 </el-form-item>
               </el-col>
-
-            </el-row>
-            <el-row>
               <el-col :span="8">
                 <el-form-item label="资料补齐时间">
                   <div class="content">{{contractInfo.data_date}}</div>
                 </el-form-item>
               </el-col>
+            </el-row>
+
+            <el-row>
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="个人/中介">-->
+                  <!--<div class="content">{{contractInfo.from}}</div>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
               <el-col :span="8">
                 <el-form-item label="中介费">
                   <div class="content">{{contractInfo.agency}}</div>
@@ -349,6 +354,7 @@
                   <div class="content">{{contractInfo.penalty}}</div>
                 </el-form-item>
               </el-col>
+
             </el-row>
             <el-row>
               <el-col :span="8">
