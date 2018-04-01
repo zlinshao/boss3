@@ -38,8 +38,10 @@
           <img src="../../../assets/images/doc.png" v-if="item.name.indexOf('doc')>-1" alt="">
           <img src="../../../assets/images/txt.png" v-if="item.name.indexOf('txt')>-1" alt="">
           <img src="../../../assets/images/pdf.png" v-if="item.name.indexOf('pdf')>-1" alt="">
-          <img src="../../../assets/images/file.png" v-else="" alt="">{{item.raw_name}}
-          <a class="downLoad" :href="item.uri">下载</a>
+          <img src="../../../assets/images/file.png" alt="" v-if="item.name.indexOf('xls')<0&&item.name.indexOf('doc')<0
+               &&item.name.indexOf('txt')<0 && item.name.indexOf('pdf')<0">
+          {{item.raw_name}}
+          <a class="downLoad" :href="item.uri" target="_blank" :download="item.raw_name">下载</a>
         </div>
       </div>
     </div>
@@ -59,7 +61,7 @@
         no1flag: false,
         no2flag: false,
         no3flag: false,
-        detailData:{},
+        detailData: {},
       };
     },
     mounted() {
@@ -71,12 +73,12 @@
       announcementDialogVisible(val) {
         if (!val) {
           this.$emit("close");
-        }else {
+        } else {
 
         }
       },
       announcementId(val){
-        if(val){
+        if (val) {
           this.getDetail();
         }
       }
@@ -98,15 +100,16 @@
     },
     methods: {
       getDetail(){
-        this.$http.get(globalConfig.server+'announcement/' + this.announcementId).then((res) => {
-           if(res.data.code === '80010'){
-             this.detailData = res.data.data;
-             this.no1flag = this.detailData.type === 1;  //
-             this.no3flag = this.detailData.type === 2;
-             this.no2flag = this.detailData.type === 3;
-           }
+        this.$http.get(globalConfig.server + 'announcement/' + this.announcementId).then((res) => {
+          if (res.data.code === '80010') {
+            this.detailData = res.data.data;
+            this.no1flag = this.detailData.type === 1;  //
+            this.no3flag = this.detailData.type === 2;
+            this.no2flag = this.detailData.type === 3;
+          }
         })
-      }
+      },
+
     }
   };
 </script>
@@ -140,12 +143,13 @@
   .no3tit {
     color: #ff943e;
   }
+
   .headContainer {
     background-size: 100% 100%;
     height: 170px;
     padding: 10px;
-    border-top:1px solid #ddd;
-    border-bottom:1px solid #ddd;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
     @include flex;
     flex-wrap: wrap;
     align-content: space-between;
@@ -200,14 +204,15 @@
       }
     }
   }
-  .file{
-    .downLoad{
+
+  .file {
+    .downLoad {
       color: #409EFF;
-      &:hover{
+      &:hover {
         color: #6a8dfb;
       }
     }
-    img{
+    img {
       width: 40px;
       height: 40px;
       vertical-align: middle;

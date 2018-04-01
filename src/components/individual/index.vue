@@ -209,7 +209,7 @@
                 </div>
                 <div>
                   <i class="iconfont icon-yanjing"></i>{{praiseData.read_count}}
-                  <i class="iconfont icon-yanjingclose"></i>{{praiseData.unread_count}}
+                  <i class="iconfont icon-yanjingclose"></i>{{praiseData.read_uncount}}
                 </div>
               </div>
             </div>
@@ -231,7 +231,7 @@
                 </div>
                 <div>
                   <i class="iconfont icon-yanjing"></i>{{punishmentData.read_count}}
-                  <i class="iconfont icon-yanjingclose"></i>{{punishmentData.unread_count}}
+                  <i class="iconfont icon-yanjingclose"></i>{{punishmentData.read_uncount}}
                 </div>
               </div>
             </div>

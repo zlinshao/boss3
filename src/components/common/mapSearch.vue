@@ -83,11 +83,7 @@
         }
       },
       selectMember(val){
-        if(val.length){
-          this.buttonStatus = false
-        }else {
-          this.buttonStatus = true
-        }
+        this.buttonStatus = !val.length;
       }
     },
     methods:{

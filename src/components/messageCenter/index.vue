@@ -28,7 +28,7 @@
             <div class="circle"></div>
             <div class="stretchLine"></div>
           </div>
-          <div class="itemMain">
+          <div class="itemMain" @dblclick="showMessageDetail(item)">
             <div class="itemMainHead">
               <img src="../../assets/images/head.jpg" alt="" data-card>
             </div>
@@ -59,13 +59,14 @@
         已经到最底部了
       </div>
     </div>
+    <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeMessage"></MessageDetail>
   </div>
 </template>
 
 <script>
-  import ElButton from "../../../node_modules/element-ui/packages/button/src/button";
+  import MessageDetail from '../common/messageDetail.vue'
   export default {
-    components: {ElButton},
+    components: {MessageDetail},
     data () {
       return {
         params:{
@@ -77,18 +78,14 @@
         currentPage:1,
         messageTable:[],
         isLastPage:false,
+        messageDialog:false,
+        messageDetail:[],
       }
     },
     mounted(){
         this.getMessage();
     },
     methods: {
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      },
       getMessage(){
         this.$http.get(globalConfig.server_user+'messages',{params:this.params}).then((res) => {
           if(res.data.status === 'success'){
@@ -119,6 +116,19 @@
       },
       search(){
 
+      },
+      //显示消息详情
+      showMessageDetail(val){
+        this.messageDetail = val;
+        this.messageDialog = true;
+        this.$http.put(globalConfig.server_user + 'messages/' + val.id).then((res) => {
+          if (res.data.status === 'success') {
+            this.getMessage();
+          }
+        })
+      },
+      closeMessage(){
+        this.messageDialog = false;
       },
     }
   }

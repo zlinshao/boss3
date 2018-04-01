@@ -678,7 +678,6 @@
             }
           }else if(Number(this.params.contract_type) === 110){
             this.params.candidate = {};
-            //个人
             let contentItem = {};
             this.params.personal_contracts = [];
             for(let i=0;i<this.personal_mediumNumberCollect;i++){
