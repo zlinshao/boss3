@@ -2,15 +2,13 @@
   <div @click="show=false" @contextmenu="show=false">
 
     <div class="highRanking">
-      <div style="float:left">
-        <el-form :inline="true" size="mini">
+      <div class="highSearch">
+        <el-form :inline="true" size="mini" style="margin-right:30px;">
           <el-select size="mini" v-model="type"  @change="integral" clearable="" placeholder="请选择积分项">
             <el-option label="得分项目" value="0"></el-option>
             <el-option label="失分项目" value="1"></el-option>
           </el-select>
         </el-form>
-      </div>
-      <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-button size="mini" @click="newList" type="primary">新增项目</el-button>
         </el-form>

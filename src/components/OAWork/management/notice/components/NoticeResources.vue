@@ -38,7 +38,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="附件" >
-                <div class="upload_div"><Upload :ID="'upload'" @getImg="getImage"  :editImage="screenshots" :isClear="secondfalg" ></Upload></div>
+                <div class="upload_div"><Upload :ID="'upload'" @getImg="getImage"   :isClear="secondfalg" ></Upload></div>
               </el-form-item>
             </el-col>
           </el-row>
@@ -74,6 +74,7 @@ export default {
       saveorsendflag: false,
       lenx: 7,
       screenshots:[],
+      screensho:[],
       secondfalg:false,
       firstflag: false, //编辑或新建标识
       twoflag: false, //保存或发布标识
@@ -122,6 +123,7 @@ export default {
         this.form.obj = val.department_id;
         this.form.id = val.id;
         this.form.attachment = val.attachment;
+
         this.screenshots= val.attachment;
 
       } else {
@@ -138,10 +140,10 @@ export default {
     }
   },
   methods: {
-    getImage(val) {
-      console.log(val);
+    getImage(val) {    
       this.form.attachment = val[1];
     },
+
     //保存
     savex() {
       this.twoflag = true;
