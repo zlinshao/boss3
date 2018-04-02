@@ -116,6 +116,7 @@
              this.$emit('close',this.selectedItem);
              this.villageDialogVisible = false;
              this.selectedItem = [];
+             this.radio = '';
            } else {
              this.$notify.warning({
                title:'警告',
