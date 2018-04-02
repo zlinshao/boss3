@@ -3,17 +3,17 @@
     <div class="highRanking">
       <div class="highSearch">
         <el-form :inline="true" size="mini">
-          <el-form-item>
-            <el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" clearable>
-              <el-button slot="append" icon="el-icon-search"></el-button>
-              <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
-            </el-input>
-          </el-form-item>
+          <!--<el-form-item>-->
+            <!--<el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" clearable>-->
+              <!--<el-button slot="append" icon="el-icon-search"></el-button>-->
+              <!--&lt;!&ndash;<el-button slot="append" icon="el-icons-fa-bars"></el-button>&ndash;&gt;-->
+            <!--</el-input>-->
+          <!--</el-form-item>-->
           <el-form-item>
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
           <el-form-item>
-            <el-form-item @click="leadingOut">
+            <el-form-item @click="exportData">
               <el-button type="primary">导出</el-button>
             </el-form-item>
           </el-form-item>
@@ -29,22 +29,16 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">日期</div>
+                  <div class="el_col_label">部门</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <div class="block">
-                      <el-date-picker
-                        v-model="form.dates"
-                        type="daterange"
-                        align="right"
-                        unlink-panels
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        :picker-options="pickerOptions">
-                      </el-date-picker>
-                    </div>
+                    <el-input v-model="depart_name" @focus="chooseDepart" placeholder="请选择部门"
+                              readonly>
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="closeDepart">清空</div>
+                      </template>
+                    </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -52,14 +46,14 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">部门</div>
+                  <div class="el_col_label">员工</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-input v-model="form.organize" @focus="openOrganize" placeholder="请选择部门/员工"
+                    <el-input v-model="staff_name" @focus="chooseStaff" placeholder="请选择员工"
                               readonly>
                       <template slot="append">
-                        <div style="cursor: pointer;" @click="close_">清空</div>
+                        <div style="cursor: pointer;" @click="closeStaff">清空</div>
                       </template>
                     </el-input>
                   </el-form-item>
@@ -67,37 +61,34 @@
               </el-row>
             </el-col>
           </el-row>
-          <el-row class="el_row_border">
+          <el-row class="el_row_border" style="margin-top: 10px;">
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">标签选择</div>
+                  <div class="el_col_label">日期</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select
-                      @remove-tag="remChange"
-                      @change="checkChange"
-                      v-model="form.checkValue"
-                      multiple
-                      filterable
-                      allow-create
-                      default-first-option
-                      placeholder="请选择文章标签">
-                      <el-option
-                        v-for="item in options"
-                        :key="item.label"
-                        :label="item.label"
-                        :value="item.label">
-                      </el-option>
-                    </el-select>
+                    <div class="block">
+                      <el-date-picker
+                        v-model="form.date"
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        :picker-options="pickerOptions"
+                        value-format="yyyy-MM-dd">
+                      </el-date-picker>
+                    </div>
                   </el-form-item>
                 </el-col>
               </el-row>
             </el-col>
           </el-row>
           <div class="btnOperate">
-            <el-button size="mini" type="primary">搜索</el-button>
+            <el-button size="mini" type="primary" @click="getTableData">搜索</el-button>
             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
             <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
           </div>
@@ -197,7 +188,7 @@
       </el-row>
       <el-row style="margin: 0 20px;">
         <el-col :span="6">业绩包：</el-col>
-        <el-col :span="18">{{dblRowData.package.name}}</el-col>
+        <el-col :span="18">{{dblRowData && dblRowData.package && dblRowData.package.name}}</el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
           <!--<el-button @click="dialogVisible = false" size="mini">取 消</el-button>-->
@@ -205,7 +196,7 @@
         </span>
     </el-dialog>
     <!--组织架构-->
-    <organization :organizationDialog="organizeVisible" @close="closeOrganize"></organization>
+    <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize" @selectMember="selectMember"></organization>
     <right-menu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                 @clickOperateMore="clickEvent"></right-menu>
   </div>
@@ -224,14 +215,18 @@
         isHigh: false,
         totalNum: 0,
         values: ['出租', '提前一个月出租', '提前二个月以上续租'],
+        depart_name: '',
+        staff_name: '',
         form: {
           status: '',
-          organize: '',
-          dates: '',
-          subject: '',
           keywords: '',
-          checkValue: [],
           page: 1,
+          limit: 12,
+          date: '',
+          depart_ids: [],
+          staff_ids: [],
+          start_time: '',
+          end_time: '',
         },
         options: [
           {label: '双方业绩为零'},
@@ -239,6 +234,7 @@
           {label: '二次出租'},
           {label: '鸡腿包'}
         ],
+        organizeType: '',
         organizeVisible: false,
         pickerOptions: {
           shortcuts: [{
@@ -285,7 +281,16 @@
     },
     methods: {
       getTableData(){
-        this.$http.get(globalConfig.server+ 'salary/achv').then((res) => {
+        if(this.form.date){
+          this.form.start_time = this.form.date[0];
+          this.form.end_time = this.form.date[1];
+        }else{
+          this.form.start_time = '';
+          this.form.end_time = '';
+        }
+        this.$http.get(globalConfig.server+ 'salary/achv?limit=12&page='+this.form.page
+          +'&start_time='+this.form.start_time+'&end_time='+this.form.end_time
+          +'&depart_ids='+this.form.depart_ids).then((res) => {
           this.isHigh = false;
           if(res.data.code === '88800'){
             this.tableData = res.data.data.data;
@@ -299,6 +304,10 @@
       // 右键
       openContextMenu(row, event) {
         this.pitch = row.id;
+        this.lists = [
+          {clickIndex: 'confiscation', headIcon: 'el-icon-edit-outline', label: '是否充公'},
+          {clickIndex: 'editOverAchv', headIcon: 'el-icon-edit-outline', label: '编辑溢出业绩'},
+        ];
         this.contextMenuParam(event);
       },
       openDetail(row){
@@ -328,36 +337,67 @@
       },
       // 重置
       resetting() {
-        this.form.organize = '';
         this.form.dates = '';
+        this.form.start_time = '';
+        this.form.end_time = '';
+        this.closeDepart();
+        this.closeStaff();
         this.form.keywords = '';
       },
       // 高级筛选
       highGrade() {
         this.isHigh = !this.isHigh;
       },
-      checkChange(val) {
-        console.log(val);
-      },
-      remChange(val) {
-        console.log(val);
-      },
-      // 部门员工筛选
-      openOrganize() {
+      // 部门筛选
+      chooseDepart() {
         this.organizeVisible = true;
+        this.organizeType = 'depart';
       },
-      // 部门员工筛选
+      // 员工筛选
+      chooseStaff() {
+        this.organizeVisible = true;
+        this.organizeType = 'staff';
+      },
       closeOrganize() {
         this.organizeVisible = false;
       },
       // 清空部门
-      close_() {
-        console.log(1);
+      closeDepart() {
+        this.form.depart_ids = [];
+        this.depart_name = '';
       },
-
+      // 清空员工
+      closeStaff(){
+        this.form.staff_ids = [];
+        this.staff_name = '';
+      },
+      selectMember(val){
+        if(this.organizeType === 'depart'){
+          for(var i=0;i<val.length;i++){
+            this.depart_name = this.depart_name==="" ? val[i].name: this.depart_name+","+val[i].name;
+            this.form.depart_ids.push(val[i].id);
+          }
+        } else if (this.organizeType === 'staff'){
+          for(var i=0;i<val.length;i++){
+            this.staff_name = this.staff_name==="" ? val[i].name: this.staff_name+","+val[i].name;
+            this.form.staff_ids.push(val[i].id);
+          }
+        }
+      },
       // 导出
-      leadingOut(val) {
-        console.log(val);
+      exportData(val) {
+        // this.$http.get(globalConfig.server+'salary/periodic/export/achv', { responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
+        //   if (!res.data) {
+        //     return;
+        //   }
+        //   let url = window.URL.createObjectURL(new Blob([res.data]));
+        //   let link = document.createElement('a');
+        //   link.style.display = 'a';
+        //   link.href = url;
+        //   link.setAttribute('download', 'excel.xlsx');
+        //   document.body.appendChild(link);
+        //   link.click();
+        // });
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);

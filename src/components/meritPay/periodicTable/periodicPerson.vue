@@ -195,17 +195,16 @@
             this.form.start_time = '';
             this.form.end_time = '';
           }
+          this.isHigh = false;
           this.$http.get(globalConfig.server+'salary/periodic/personal?limit=12&page='+this.form.page
             +'&start_time='+this.form.start_time+'&end_time='+this.form.end_time
           +'&depart_ids='+this.form.depart_ids+'&staff_ids='+this.form.staff_ids).then((res)=>{
               if(res.data.code === '88810'){
                 this.tableData = res.data.data.data;
                 this.totalNum = res.data.data.count;
-                this.isHigh = false;
               }else if(res.data.code === '88811'){
                 this.tableData = [];
                 this.totalNum = 0;
-                this.isHigh = false;
               }
           });
         },
@@ -219,9 +218,11 @@
         },
         // 重置
         resetting() {
-          this.form.organize = '';
           this.form.dates = '';
-          this.form.keywords = '';
+          this.form.start_time = '';
+          this.form.end_time = '';
+          this.closeDepart();
+          this.closeStaff();
         },
         // 高级筛选
         highGrade() {
