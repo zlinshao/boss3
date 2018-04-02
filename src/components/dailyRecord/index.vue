@@ -3,10 +3,10 @@
     <div class="topTabs">
       <el-tabs v-model="activeName" @tab-click="handleClick(activeName)">
         <el-tab-pane label="看日志" name="first" >
-          <LookLog @editLog="editLog" :getData="getNewData"></LookLog>
+          <LookLog @editLog="editLog" :getData="getNewData" ></LookLog>
         </el-tab-pane>
         <el-tab-pane label="发日志" name="second">
-          <SendLog @appointLookLog="appointLookLog" :edit="edit"></SendLog>
+          <SendLog @appointLookLog="appointLookLog" :edit="edit" :getData="getNewData"></SendLog>
         </el-tab-pane>
         <!--<el-tab-pane label="我发出的" name="third">-->
           <!--<MySend></MySend>-->
@@ -67,6 +67,9 @@
       activeName(val){
         if(val === 'first' || val === 'third'){
           this.edit = '';
+        }
+        if(val === 'second'){
+          this.getNewData = new Date();
         }
       }
     },
