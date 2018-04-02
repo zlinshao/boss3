@@ -308,8 +308,8 @@
                     <el-col :span="6">
                       <el-form-item label="订单来源">
                         <el-select clearable v-model="params.is_agency" placeholder="请选择订单来源" value="">
-                          <el-option label="个人" value="1"></el-option>
-                          <el-option label="中介" value="2"></el-option>
+                          <el-option label="个人" value="'0'"></el-option>
+                          <el-option label="中介" value="'1'"></el-option>
                         </el-select>
                       </el-form-item>
                     </el-col>
