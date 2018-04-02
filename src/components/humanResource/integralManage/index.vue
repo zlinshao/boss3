@@ -56,29 +56,25 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">积分范围起</div>
+                    <div class="el_col_label">积分范围</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input v-model="form.credit_from" placeholder="请输入积分范围起">
+                  
+                      <el-col style="padding:0 " :span="11" class="el_col_option">
+                      <el-input  v-model="form.credit_from" placeholder="请输入最小积分">
                       </el-input>
+                      </el-col>
+                      <el-col style="padding:0; margin-left:30px;"  :span="11" class="el_col_option">
+                      <el-input  v-model="form.credit_to" placeholder="请输入最大积分">
+                      </el-input>
+                      </el-col>
+                     
                     </el-form-item>
                   </el-col>
                 </el-row>
               </el-col>
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">积分范围止</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option" >
-                    <el-form-item>
-                      <el-input v-model="form.credit_to" placeholder="请输入积分范围止">
-                      </el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
+
             </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="searchtop">搜索</el-button>
@@ -418,7 +414,8 @@ export default {
         credit_to: "",
         department_id: ""
       };
-      (this.department_name = ""), (this.staff_id = "");
+      this.department_name = ""; 
+      this.staff_name="";
     }
   }
 };

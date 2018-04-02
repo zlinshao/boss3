@@ -38,7 +38,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="附件" >
-                <div class="upload_div"><Upload :ID="'upload'" @getImg="getImage" ></Upload></div>
+                <div class="upload_div"><Upload :ID="'upload'" @getImg="getImage" :isClear="secondfalg" ></Upload></div>
               </el-form-item>
             </el-col>
           </el-row>
@@ -73,6 +73,7 @@ export default {
       organizationDialog: false,
       saveorsendflag: false,
       lenx: 7,
+      secondfalg:false,
       firstflag: false, //编辑或新建标识
       twoflag: false, //保存或发布标识
       threeflag: false, //是否成功发布标识
@@ -117,6 +118,7 @@ export default {
         this.form.obj = val.department_id;
         this.form.id = val.id;
         this.form.attachment = val.attachment;
+        this.secondfalg=false;
       } else {
         this.form.type = "";
         this.form.title = "";
@@ -126,6 +128,7 @@ export default {
         this.form.objid = [];
         this.form.attachment = [];
         this.firstflag = false;
+        this.secondfalg = true
       }
     }
   },

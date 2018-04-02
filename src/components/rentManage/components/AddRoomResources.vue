@@ -102,7 +102,18 @@
         }
       }
     },
+    mounted(){
+      this.start()
+    },
     methods: {
+      start(){
+              //物品来源
+      this.$http.get(this.urls + 'setting/dictionary/298').then((res) => {
+        if (res.data.code === '30010') {
+          this.houselist = res.data.data;
+        }
+      })
+      },
       savex(){
         this.$http.post(this.urls + 'house/asset/add', {
           name: this.form.name,
@@ -111,29 +122,21 @@
           if (res.data.code == "20010") {
             this.addGoodsFlag = true;
             this.$emit('addGoodsOk', this.addGoodsFlag)
-            this.$alert('添加成功', '提示', {
-              confirmButtonText: '确定',
-              type: 'success'
-            })
+            this.$notify.success({
+              title: "成功",
+              message: "增加成功"
+            });
             this.increaseGoodsDialogVisible = false;
           }
           else {
-            this.$alert('添加失败', '提示', {
-              confirmButtonText: '确定',
-              type: 'error'
-            })
+            this.$notify.warning({
+              title: "警告",
+              message: "增加失败"
+            });
           }
         })
       }
 
-    },
-    created: function () {
-      //物品来源
-      this.$http.get(this.urls + 'setting/dictionary/298').then((res) => {
-        if (res.data.code === '30010') {
-          this.houselist = res.data.data;
-        }
-      })
     }
   };
 </script>
