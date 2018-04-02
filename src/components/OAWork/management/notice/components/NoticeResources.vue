@@ -38,7 +38,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="附件" >
-                <div class="upload_div"><Upload :ID="'upload'" @getImg="getImage" :isClear="secondfalg" ></Upload></div>
+                <div class="upload_div"><Upload :ID="'upload'" @getImg="getImage"  :editImage="screenshots" :isClear="secondfalg" ></Upload></div>
               </el-form-item>
             </el-col>
           </el-row>
@@ -73,6 +73,7 @@ export default {
       organizationDialog: false,
       saveorsendflag: false,
       lenx: 7,
+      screenshots:[],
       secondfalg:false,
       firstflag: false, //编辑或新建标识
       twoflag: false, //保存或发布标识
@@ -107,6 +108,9 @@ export default {
     increaseGoodsDialogVisible(val) {
       if (!val) {
         this.$emit("close");
+        this.secondfalg = true
+      }else{
+        this.secondfalg = false
       }
     },
     rowneedx(val) {
@@ -118,7 +122,8 @@ export default {
         this.form.obj = val.department_id;
         this.form.id = val.id;
         this.form.attachment = val.attachment;
-        this.secondfalg=false;
+        this.screenshots= val.attachment;
+
       } else {
         this.form.type = "";
         this.form.title = "";
@@ -127,8 +132,8 @@ export default {
         this.form.staff_id=[];
         this.form.objid = [];
         this.form.attachment = [];
-        this.firstflag = false;
-        this.secondfalg = true
+        this.firstflag = true;
+       
       }
     }
   },
@@ -233,6 +238,7 @@ export default {
                 type: "success"
               });
               this.threeflag = true;
+              this.firstflag = true;
               this.$emit("threeflag", this.threeflag);
             } else {
               this.$notify.error({
@@ -251,6 +257,7 @@ export default {
     },
     closeOrganization() {
       this.organizationDialog = false;
+      
     },
     coloseaa(val) {
       this.form.obj = "";
