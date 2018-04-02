@@ -77,90 +77,10 @@
 
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="个人工资" name="first">
-        <el-table
-          :data="tableData"
-          width="100%"
-          @row-contextmenu="personalMenu"
-          @row-dblclick="salaryDetail">
-          <el-table-column
-            label="开单人"
-            prop="id">
-          </el-table-column>
-          <el-table-column
-            label="时间"
-            prop="id">
-          </el-table-column>
-          <el-table-column
-            label="底薪"
-            prop="describe">
-          </el-table-column>
-          <el-table-column
-            label="业绩提成"
-            prop="module">
-          </el-table-column>
-          <el-table-column
-            label="收房奖励"
-            prop="module">
-          </el-table-column>
-          <el-table-column
-            label="租房奖励"
-            prop="module">
-          </el-table-column>
-          <el-table-column
-            label="本月未发金额"
-            prop="module">
-          </el-table-column>
-          <el-table-column
-            label="认责"
-            prop="module">
-          </el-table-column>
-          <el-table-column
-            label="中介费"
-            prop="module">
-          </el-table-column>
-          <el-table-column
-            label="行政扣款"
-            prop="module">
-          </el-table-column>
-          <el-table-column
-            label="社保扣款"
-            prop="module">
-          </el-table-column>
-          <el-table-column
-            label="财务扣款"
-            prop="module">
-          </el-table-column>
-          <el-table-column
-            label="住宿扣款"
-            prop="module">
-          </el-table-column>
-          <el-table-column
-            label="购车扣款"
-            prop="module">
-          </el-table-column>
-          <el-table-column
-            label="其他扣款"
-            prop="module">
-          </el-table-column>
-          <el-table-column
-            label="套餐类型"
-            prop="module">
-          </el-table-column>
-          <el-table-column
-            label="应发工资"
-            prop="module">
-          </el-table-column>
-          <el-table-column
-            label="实发工资"
-            prop="module">
-          </el-table-column>
-          <el-table-column
-            label="工资状态"
-            prop="module">
-          </el-table-column>
-        </el-table>
+       <pay-roll></pay-roll>
       </el-tab-pane>
       <el-tab-pane label="历史未结" name="second">
+
         <el-table
           :data="tableData"
           ref="multipleTable"
@@ -331,14 +251,15 @@
 </template>
 
 <script>
-  import RightMenu from '../../common/rightMenu.vue'    //右键
-  import Remarks from '../../common/remarks.vue'
-  import Freeze from './components/freeze.vue'
-  import Badge from './components/badge.vue'
+  import RightMenu from '../../common/rightMenu.vue';    //右键
+  import Remarks from '../../common/remarks.vue';
+  import Freeze from './components/freeze.vue';
+  import Badge from './components/badge.vue';
+  import PayRoll from './payroll';   //工资条
 
   export default {
     name: "index",
-    components: {RightMenu, Remarks, Freeze, Badge},
+    components: {RightMenu, Remarks, Freeze, Badge,PayRoll},
     data() {
       return {
         rightMenuX: 0,
