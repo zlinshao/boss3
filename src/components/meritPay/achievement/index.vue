@@ -154,10 +154,6 @@
         prop="department">
       </el-table-column>
       <el-table-column
-        label="已收金额"
-        prop="module">
-      </el-table-column>
-      <el-table-column
         label="政务不齐"
         prop="module">
       </el-table-column>
