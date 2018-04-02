@@ -1,13 +1,13 @@
 <template>
   <div id="mapSearchId">
-    <el-dialog title="地图" :visible.sync="villageDialogVisible" width="785px" :before-close="closeDialog">
+    <el-dialog title="小区选择" :visible.sync="villageDialogVisible" width="40%" :before-close="closeDialog">
       <div class="content">
         <div class="filter-container">
           <el-form :inline="true" size="mini" class="demo-form-inline">
             <el-form-item label="城市">
               <el-select clearable v-model="params.city" placeholder="请选择城市" value="">
-                <el-option v-for="item in cityDictionary" :label="item.dictionary_name" :value="item.id"
-                           :key="item.id"></el-option>
+                <el-option v-if="cityDictionary.length>0" v-for="item in cityDictionary" :label="item.dictionary_name"
+                           :value="item.variable.city_id" :key="item.id"></el-option>
               </el-select>
             </el-form-item>
             <el-form-item>
@@ -38,8 +38,8 @@
               label="省份">
             </el-table-column>
             <el-table-column
-              prop="城市"
-              label="city_name">
+              prop="city_name"
+              label="城市">
             </el-table-column>
 
           </el-table>
@@ -87,7 +87,9 @@
         if (!val) {
           this.$emit('close');
         }else {
-          this.getDictionary();
+          if(!this.isDictionary){
+            this.getDictionary();
+          }
         }
       },
       selectMember(val){
