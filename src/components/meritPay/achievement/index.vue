@@ -142,8 +142,11 @@
         prop="achv_real">
       </el-table-column>
       <el-table-column
-        label="溢出业绩"
-        prop="achv_overflow">
+        label="溢出业绩">
+        <template slot-scope="scope" >
+          <span v-if="!editAble">{{scope.row.achv_overflow}}</span>
+          <span v-if="editAble"><input v-model="scope.row.achv_overflow" type="text" @blur="onsubmit(scope.row)" style="border: none;" ></span>
+        </template>
       </el-table-column>
       <el-table-column
         label="姓名"
@@ -267,6 +270,8 @@
         pitch: '',
         dialogVisible: false,
         dblRowData: [],
+        editAble: false,
+        achvOverflow: '',
       }
     },
     activated() {
@@ -276,6 +281,23 @@
       this.getTableData();
     },
     methods: {
+      //编辑溢出业绩
+      onsubmit(val){
+        this.editAble = false;
+        this.$http.put(globalConfig.server+ '/salary/achv/'+val.id, {achv_overflow:val.achv_overflow}).then((res) => {
+            if(res.data.code === '88830'){
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+            }else{
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+        });
+      },
       getTableData(){
         if(this.form.date){
           this.form.start_time = this.form.date[0];
@@ -313,7 +335,15 @@
       },
       // 右键回调
       clickEvent(val) {
+        switch(val.clickIndex) {
+          case 'confiscation':
 
+            break;
+          case 'editOverAchv':
+            this.editAble = true;
+            break;
+
+        }
       },
       //右键参数
       contextMenuParam(event) {
