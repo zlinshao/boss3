@@ -57,7 +57,7 @@
               :data="collectData"
               @row-dblclick="dblClickTable"
               @row-click="clickCollectTable"
-              :row-class-name="tableRowClassName"
+              :row-class-name="tableRowCollectName"
               @row-contextmenu='houseMenu'
               style="width: 100%">
               <el-table-column
@@ -155,6 +155,7 @@
               @row-click="clickRentTable"
               @row-dblclick="dblClickRentTable"
               @row-contextmenu='clientMenu'
+              :row-class-name="tableRowRentName"
               style="width: 100%">
               <el-table-column
                 prop="contract_number"
@@ -224,7 +225,7 @@
             </div>
           </div>
         </div>
-        <div class="myDetail" @contextmenu="detailMenu($event)">
+        <div class="myDetail">
           <el-tabs type="border-card">
             <el-tab-pane label="房东信息">
               <OwnerInfoTab></OwnerInfoTab>
@@ -420,7 +421,7 @@
         decreaseGoodsDialog: false,  //物品搬出
         increaseGoodsDialog: false,  //物品增加
         ownerArrearsDialog: false,   //房东欠款
-        addFollowUpDialog :false,     //添加跟进
+        addFollowUpDialog :false,     //添加工单
         collectVacationDialog:false,     //房东退房
         addCollectRepairDialog:false,    //房东添加维修
         addRentRepairDialog:false,       //租客添加维修
@@ -486,6 +487,38 @@
           }
         })
       },
+
+      //房屋右键
+      houseMenu(row, event){
+        this.collectHouseId = row.house_id;
+        this.collectContractId = row.contract_id;
+        this.lists = [
+          {clickIndex: 'addHouseResourcesDialog', headIcon: 'el-icons-fa-home', label: '修改房源',},
+          {
+            clickIndex: '', headIcon: 'el-icons-fa-pencil-square-o', tailIcon: 'el-icon-arrow-right', label: '房东续约/延期',
+            children: [
+              {clickIndex: 'ownerRenewDialog', label: '续约',},
+              {clickIndex: 'ownerDelayDialog', label: '延期',}
+            ]
+          },
+          {clickIndex: 'collectVacationDialog', headIcon: 'el-icons-fa-reply', label: '房东退房',},
+          {clickIndex: 'switchToJoint', headIcon :' el-icons-fa-refresh', label: '转到合租',},
+          {clickIndex: 'addFollowUpDialog',headIcon :' el-icons-fa-plus', label: '添加工单',},
+          {clickIndex: 'ownerArrearsDialog', headIcon: 'el-icons-fa-cny', label: '房东欠款',},
+          {
+            clickIndex: '', headIcon: 'el-icons-fa-inbox', tailIcon: 'el-icon-arrow-right', label: '物品增减',
+            children: [
+              {clickIndex: 'decreaseGoodsDialog', label: '物品搬出',},
+              {clickIndex: 'increaseGoodsDialog', label: '物品增进',}
+            ]
+          },
+//          {clickIndex: 'addCollectRepairDialog', headIcon: 'el-icons-fa-gear', label: '维修',},
+//          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
+          {clickIndex: 'visitRecordDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '回访记录',},
+        ];
+        this.contextMenuParam(event);
+      },
+
       //单机收房列表
       clickCollectTable(row, event, column){
         this.collectHouseId = row.house_id;
@@ -493,7 +526,7 @@
       },
 
       //收房列表选中状态
-      tableRowClassName({row, rowIndex}) {
+      tableRowCollectName({row, rowIndex}) {
         if (row.contract_id === this.collectContractId) {
           return 'selected_tr';
         }
@@ -530,80 +563,10 @@
       rentPageChange(val) {
         this.rentParams.page = val;
       },
-      //单机租房列表
-      clickRentTable(row, event, column){
-        this.rentHouseId = row.house_id;
-        this.rentContractId = row.contract_id;
-      },
-      dblClickRentTable(row, event){
-        const {href} = this.$router.resolve({path: '/rentingDetail',query:{id:row.contract_id,type:1}});
-        window.open(href,'_blank','width=1920,height=1080');
-      },
-      /*********************************************************************************************/
 
-
-      //房屋右键
-      houseMenu(row, event){
-        this.collectContractId = row.contract_id;
-        this.lists = [
-          {clickIndex: 'addHouseResourcesDialog', headIcon: 'el-icons-fa-home', label: '修改房源',},
-          {
-            clickIndex: '', headIcon: 'el-icons-fa-pencil-square-o', tailIcon: 'el-icon-arrow-right', label: '房东续约/延期',
-            children: [
-              {clickIndex: 'ownerRenewDialog', label: '续约',},
-              {clickIndex: 'ownerDelayDialog', label: '延期',}
-            ]
-          },
-          {clickIndex: 'collectVacationDialog', headIcon: 'el-icons-fa-reply', label: '房东退房',},
-          {
-            clickIndex: '', headIcon: 'el-icons-fa-folder-o', tailIcon: 'el-icon-arrow-right', label: '其他',
-            children: [
-              {clickIndex: 'switchToJoint', label: '转到合租',},
-              {clickIndex: 'addFollowUpDialog', label: '添加跟进',}
-            ]
-          },
-          {clickIndex: 'ownerArrearsDialog', headIcon: 'el-icons-fa-cny', label: '房东欠款',},
-          {
-            clickIndex: '', headIcon: 'el-icons-fa-inbox', tailIcon: 'el-icon-arrow-right', label: '物品增减',
-            children: [
-              {clickIndex: 'decreaseGoodsDialog', label: '物品搬出',},
-              {clickIndex: 'increaseGoodsDialog', label: '物品增进',}
-            ]
-          },
-          {clickIndex: 'addCollectRepairDialog', headIcon: 'el-icons-fa-gear', label: '维修',},
-          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
-          {clickIndex: 'visitRecordDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '回访记录',},
-        ];
-        this.contextMenuParam(event);
-      },
-      //合同表头右键
-      houseHeadMenu(e){
-        this.lists = [
-          {clickIndex: 'topFormSetDialog', headIcon: 'el-icons-fa-home', label: '选择列选项',},
-        ];
-        this.contextMenuParam(event);
-      },
-
-      //详情表头右键
-      detailMenu(e){
-        if (e.target.className.indexOf('el-tabs__item') > -1 || e.target.className.indexOf('el-tabs__nav-scroll') > -1) {
-          this.lists = [
-            {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
-          ];
-          this.contextMenuParam(event);
-        }
-      },
-
-      //右键回调时间
-      clickEvent (index) {
-        this.openModalDialog(index);
-      },
-      //关闭右键菜单
-      closeMenu(){
-        this.show = false;
-      },
       //租客右键
       clientMenu(row, event){
+        this.rentContractId = row.contract_id;
         this.lists = [
           {
             clickIndex: '', headIcon: 'el-icons-fa-user', tailIcon: 'el-icon-arrow-right', label: '租客管理',
@@ -622,12 +585,57 @@
           },
           {clickIndex: 'subleaseDialog', headIcon: 'el-icons-fa-refresh', label: '转租',},
           {clickIndex: 'ownerArrearsDialog', headIcon: 'el-icons-fa-cny', label: '租客欠款',},
-          {clickIndex: 'addRentRepairDialog', headIcon: 'el-icons-fa-gear', label: '报修',},
-          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
-          {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加跟进',},
+//          {clickIndex: 'addRentRepairDialog', headIcon: 'el-icons-fa-gear', label: '报修',},
+//          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
+          {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单',},
           {clickIndex: 'visitRecordDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '回访记录',},
         ];
         this.contextMenuParam(event);
+      },
+
+      //租列表选中状态
+      tableRowRentName({row, rowIndex}) {
+        if (row.contract_id === this.rentContractId) {
+          return 'selected_tr';
+        }
+        return '';
+      },
+      //单机租房列表
+      clickRentTable(row, event, column){
+        this.rentHouseId = row.house_id;
+        this.rentContractId = row.contract_id;
+      },
+      dblClickRentTable(row, event){
+        const {href} = this.$router.resolve({path: '/rentingDetail',query:{id:row.contract_id,type:1}});
+        window.open(href,'_blank','width=1920,height=1080');
+      },
+
+      /*****************************************右键处理函数******************************************/
+      //合同表头右键
+      houseHeadMenu(e){
+//        this.lists = [
+//          {clickIndex: 'topFormSetDialog', headIcon: 'el-icons-fa-home', label: '选择列选项',},
+//        ];
+//        this.contextMenuParam(event);
+      },
+
+      //详情表头右键
+      detailMenu(e){
+//        if (e.target.className.indexOf('el-tabs__item') > -1 || e.target.className.indexOf('el-tabs__nav-scroll') > -1) {
+//          this.lists = [
+//            {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
+//          ];
+//          this.contextMenuParam(event);
+//        }
+      },
+
+      //右键回调时间
+      clickEvent (index) {
+        this.openModalDialog(index);
+      },
+      //关闭右键菜单
+      closeMenu(){
+        this.show = false;
       },
 
       //右键参数
@@ -771,6 +779,8 @@
         this.visitRecordDialog = false;
       },
 
+
+      //****************************高级搜索函数**************************//
       highGrade(){
         this.isHigh = !this.isHigh;
       },

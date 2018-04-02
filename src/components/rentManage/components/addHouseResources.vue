@@ -353,7 +353,7 @@
                         </el-col>
                         <el-col :span="6">
                           <el-form-item label="变化周期(月)">
-                            <el-input placeholder="请输入内容" v-model="periodArray[item-1]"></el-input>
+                            <el-input placeholder="请输入内容" :disabled="priceChangeAmount<2" v-model="periodArray[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
                         <el-col :span="6" v-if="item>1">
@@ -381,7 +381,7 @@
                         </el-col>
                         <el-col :span="6">
                           <el-form-item label="变化周期(月)">
-                            <el-input placeholder="请输入内容" v-model="payPeriodArray[item-1]"></el-input>
+                            <el-input placeholder="请输入内容" :disabled="payWayChangeAmount<2" v-model="payPeriodArray[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
                         <el-col :span="6" v-if="item>1">
@@ -512,17 +512,17 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="开单人">
-                        <el-input placeholder="请输入内容" readonly="" v-model="params.staff_name"></el-input>
+                        <el-input placeholder="请输入内容" @focus="openOrganizeModal('staff')" readonly="" v-model="staff_name"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="负责人">
-                        <el-input placeholder="请输入内容" readonly="" v-model="params.leader_name"></el-input>
+                        <el-input placeholder="请输入内容" @focus="openOrganizeModal('leader')" readonly="" v-model="leader_name"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="部门">
-                        <el-input placeholder="请输入内容" readonly="" v-model="params.department_name"></el-input>
+                        <el-input placeholder="请输入内容" @focus="openOrganizeModal('depart')" readonly="" v-model="department_name"></el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -612,14 +612,18 @@
       </span>
     </el-dialog>
     <VillageModal :villageDialog="villageDialog" @close="closeVillageModal"></VillageModal>
+    <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
+                  @close='closeModal' @selectMember="selectMember"></Organization>
   </div>
 </template>
 
 <script>
   import UpLoad from '../../common/UPLOAD.vue'
   import VillageModal from '../../common/villageSearch.vue'
+  import Organization from '../../common/organization.vue'
+
   export default {
-    components: {UpLoad,VillageModal},
+    components: {UpLoad,VillageModal,Organization},
     props:['addHouseResourcesDialog','VillageModal'],
     data() {
       return {
@@ -627,6 +631,9 @@
         activeName : 'first',
         isClear:false,
         villageDialog:false,
+        organizationDialog:false,
+        length:0,
+        type:'',
 
         params: {
           draft:'',
@@ -760,6 +767,22 @@
         handler(val,oldVal){
           this.periodArray[0] = val;
           this.payPeriodArray[0] = val;
+          this.priceArray.splice(1,this.priceArray.length);
+          this.periodArray.splice(1,this.periodArray.length);
+          this.payWayArray.splice(1,this.payWayArray.length);
+          this.payPeriodArray.splice(1,this.payPeriodArray.length);
+          this.priceChangeAmount = 1;
+          this.payWayChangeAmount = 1;
+        }
+      },
+      priceChangeAmount(val){
+        if(val===1){
+          this.periodArray[0] = this.params.month;
+        }
+      },
+      payWayChangeAmount(val){
+        if(val===1){
+          this.periodArray[0] = this.params.month;
         }
       }
     },
@@ -775,7 +798,38 @@
         this.dictionary(437,1).then((res) => {this.vacancy_way_dic = res.data;this.isDictionary = true});
         this.dictionary(443,1).then((res) => {this.pay_way_dic = res.data;this.isDictionary = true});
         this.dictionary(449,1).then((res) => {this.property_payer_dic = res.data;this.isDictionary = true});
+      },
 
+      //选入组件
+      //调出选人组件
+      openOrganizeModal(val){
+        this.selectType = val;
+        this.type = val==='depart'?'depart':'staff';
+        this.organizationDialog = true;
+        this.length = 1;
+      },
+      selectMember(val){
+        this.organizationDialog = false;
+//        this.type = '';
+//        this.length = '';
+        if(this.selectType === 'staff'){
+          this.params.staff_id = val[0].id;
+          this.params.leader_id = val[0].id;
+          this.params.department_id = val[0].org[0].id;
+          this.staff_name = val[0].name;
+          this.leader_name =  val[0].name;
+          this.department_name =  val[0].org[0].name;
+        }else if(this.selectType === 'leader'){
+          this.params.leader_id = val[0].id;
+          this.leader_name =  val[0].name;
+        }else if(this.selectType === 'depart'){
+          this.params.department_id = val[0].org[0].id;
+          this.department_name =  val[0].org[0].name;
+        }
+      },
+
+      closeModal(){
+        this.organizationDialog = false
       },
 
       //打开小区模态框
@@ -891,7 +945,19 @@
 
         if(!this.isUpPic){
           this.$http.post(globalConfig.server+'lease/collect',this.params).then((res) => {
-
+            if(res.data.code === '61010'){
+              this.clearData();
+              this.addHouseResourcesDialogVisible = false;
+              this.$notify.success({
+                title: '成功',
+                message:res.data.msg
+              })
+            }else {
+              this.$notify.warning({
+                title: '警告',
+                message:res.data.msg
+              })
+            }
           })
         }else {
           this.$notify.warning({
@@ -899,11 +965,116 @@
             message:'图片正在上传！'
           })
         }
+      },
+      clearData(){
+        this.params = {
+          draft:'',
+          //------------------小区详情--------------------//
+          community_id : '',            //小区id
+          community_nickname : '',      //小区昵称
+          building : '',                //栋
+          unit : '',                    //单元
+          doorplate : '',               //门牌号
+          house_type : ['','',''],              //房型
+          property_number : '',         //房产证号
+          mound_number : '',            //丘号
+          area : '',                    //面积
+          decorate : '',                //装修
+          floor : '',                   //楼层
+          floors : '',                  //层数
+          property_type : '',           //房屋类型
+          house_feature : '',           //房屋特色
+
+          customers : [],               //房东数组
+          //-------------------合同详情--------------------//
+          contract_type : '',           // 订单性质（合同种类）
+          contract_number : '',         // 合同编号
+          month : '',                   // 租房月数
+          day : '',                     // 租房天数
+          sign_date : '',               // 签约日期
+          begin_date : '',              // 空置期开始时间
+          vacancy_end_date : '',        // 空置期结束时间
+          end_date : '',                // 合同结束时间
+          vacancy : '',                 // 空置期
+          vacancy_way : '',             // 空置期安置方式
+          warranty_month : '',          // 保修期月数
+          warranty_day : '',            // 保修期天数
+          from : '',                    // 来源
+          deposit : '',                 // 押金
+          price : '',                   // 月单价
+          pay_way : '',                 // 付款方式
+          pay_first_date : '',          // 第一次打款时间
+          pay_second_date : '',         // 第二次打款时间
+          account_name : '',            // 帐户名
+          relationship : '',            // 关系
+          purchase_way : '',            // 汇款方式
+          account : '',                 // 帐户
+          bank : '',                    // 银行
+          subbranch : '',               // 支行
+          agency : '',                  // 中介费
+          penalty : '',                 // 赔偿金
+          property : '',                // 物业费
+          property_payer : '',          // 物业费付款方
+          water : '',                   // 水
+          electricity_peak : '',        // 电峰
+          electricity_vally : '',       // 电谷
+          gas : '',                     // 气
+          public_fee : '',                  // 公摊
+          data_date : '',               // 资料补齐时间
+          staff_id : '',                // 开单人
+          leader_id : '',               // 负责人
+          department_id : '',           // 部门
+          decorate_allow : [],          // 装修批准
+          remark_terms : '',            // 备注条款
+          remark : '',                  // 备注
+          //----------------照片----------------//
+          identity_photo : [],
+          bank_photo : [],
+          photo : [],
+          water_photo : [],
+          electricity_photo : [],
+          gas_photo : [],
+          checkin_photo : [],
+          auth_photo : [],
+          deposit_photo : [],
+          promise : [],
+          other_photo : [],
+          checkout_photo : [],
+          checkout_settle_photo : [],
+        };
+        this.community_name = '';           //小区名
+        this.community_address = '';        //小区地址
+        this.staff_name = '';                //组件选中显示名字
+        this.leader_name = '';               //组件选中显示名字
+        this.department_name = '';           //组件选中显示名字
+        this.customersAmount=1;
+        this.nameArray = [];
+        this.sexArray = [];
+        this.id_typeArray = [];
+        this.id_numberArray = [];
+        this.phoneArray = [];
+        this.//-----------------字典----------------------//
+        this.property_type_dic = [];   //房屋类型
+        this.house_feature_dic = [];   //房屋特色
+        this.decorate_dic = [];        //装修
+        this.id_type_dic = [];         //证件类型
+        this.contract_type_dic = [];
+        this.from_dic = [];
+        this.vacancy_way_dic = [];
+        this.pay_way_dic = [];
+        this.property_payer_dic = [];
+        this.isUpPic=false;
+        this.priceChangeAmount = 1;
+        this.priceArray = [];
+        this.periodArray = [];
+        this.payWayChangeAmount = 1;
+        this.payWayArray = [];
+        this.payPeriodArray = [];
       }
     }
   };
 </script>
-<style lang="scss">
+<style lang="scss" scoped="">
   #addHouseResources{
     .el-dialog__wrapper{
       .el-dialog{
