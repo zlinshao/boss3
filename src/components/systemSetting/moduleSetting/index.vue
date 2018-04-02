@@ -4,17 +4,8 @@
       <el-tab-pane label="积分管理" name="first">
         <IntegralManagement></IntegralManagement>
       </el-tab-pane>
-      <el-tab-pane label="合同管理" name="second">
+      <el-tab-pane label="合同编号管理" name="second">
         <ContractManagement></ContractManagement>
-      </el-tab-pane>
-      <el-tab-pane label="预约看房" name="third">
-
-      </el-tab-pane>
-      <el-tab-pane label="房东加盟" name="fourth">
-
-      </el-tab-pane>
-      <el-tab-pane label="意见反馈" name="fifth">
-
       </el-tab-pane>
     </el-tabs>
   </div>
