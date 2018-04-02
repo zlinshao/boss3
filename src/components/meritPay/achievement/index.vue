@@ -1,5 +1,5 @@
-1<template>
-  <div id="periodicTable">
+<template>
+  <div id="periodicTable" @click="show=false" @contextmenu="closeMenu">
     <div class="highRanking">
       <div class="highSearch">
         <el-form :inline="true" size="mini">
@@ -107,6 +107,8 @@
 
     <el-table
       :data="tableData"
+      @row-contextmenu='openContextMenu'
+      @cell-dblclick='openDetail'
       width="100%">
       <el-table-column
         label="发喜报日期"
@@ -118,7 +120,7 @@
       </el-table-column>
       <el-table-column
         label="收房状态"
-        prop="module">
+        prop="contract_category">
       </el-table-column>
       <el-table-column
         label="付款方式"
@@ -130,34 +132,42 @@
       </el-table-column>
       <el-table-column
         label="单价"
-        prop="module">
+        prop="price">
       </el-table-column>
       <el-table-column
         label="总金额"
-        prop="module">
+        prop="total_price">
       </el-table-column>
       <el-table-column
         label="空置期"
-        prop="module">
+        prop="vacancy">
       </el-table-column>
       <el-table-column
         label="中介费"
-        prop="module">
+        prop="agency">
       </el-table-column>
       <el-table-column
         label="实际业绩"
-        prop="module">
+        prop="achv_real">
       </el-table-column>
       <el-table-column
         label="溢出业绩"
-        prop="module">
+        prop="achv_overflow">
       </el-table-column>
       <el-table-column
         label="姓名"
-        prop="module">
+        prop="staff_name">
       </el-table-column>
       <el-table-column
         label="所属部门"
+        prop="department">
+      </el-table-column>
+      <el-table-column
+        label="已收金额"
+        prop="module">
+      </el-table-column>
+      <el-table-column
+        label="政务不齐"
         prop="module">
       </el-table-column>
     </el-table>
@@ -172,21 +182,45 @@
         :total="totalNum">
       </el-pagination>
     </div>
-
+    <el-dialog  title="业绩详情" :visible.sync="dialogVisible" width="30%">
+      <el-row style="margin: 0 20px;">
+        <el-col :span="6">个人提成：</el-col>
+        <el-col :span="18">{{dblRowData.achv}}</el-col>
+      </el-row>
+      <el-row style="margin: 0 20px;">
+        <el-col :span="6">奖励：</el-col>
+        <el-col :span="18">{{dblRowData.bonus}}</el-col>
+      </el-row>
+      <el-row style="margin: 0 20px;">
+        <el-col :span="6">认责：</el-col>
+        <el-col :span="18">{{dblRowData.penalty}}</el-col>
+      </el-row>
+      <el-row style="margin: 0 20px;">
+        <el-col :span="6">业绩包：</el-col>
+        <el-col :span="18">{{dblRowData.package.name}}</el-col>
+      </el-row>
+      <span slot="footer" class="dialog-footer">
+          <!--<el-button @click="dialogVisible = false" size="mini">取 消</el-button>-->
+          <el-button type="primary" @click="dialogVisible = false" size="mini">确 定</el-button>
+        </span>
+    </el-dialog>
     <!--组织架构-->
     <organization :organizationDialog="organizeVisible" @close="closeOrganize"></organization>
+    <right-menu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+                @clickOperateMore="clickEvent"></right-menu>
   </div>
 </template>
 
 <script>
-  import organization from '../../common/organization.vue'
-
+  import Organization from '../../common/organization.vue'
+  import RightMenu from '../../common/rightMenu.vue'    //右键
 
   export default {
     name: 'index',
-    components: {organization},
+    components: {Organization,RightMenu},
     data() {
       return {
+        show: false,
         isHigh: false,
         totalNum: 0,
         values: ['出租', '提前一个月出租', '提前二个月以上续租'],
@@ -199,7 +233,6 @@
           checkValue: [],
           page: 1,
         },
-
         options: [
           {label: '双方业绩为零'},
           {label: '已充公'},
@@ -235,8 +268,13 @@
           }]
         },
         tableData: [],
-        restaurants: [],
         state: '',
+        rightMenuX: 0,
+        rightMenuY: 0,
+        lists: [],
+        pitch: '',
+        dialogVisible: false,
+        dblRowData: [],
       }
     },
     activated() {
@@ -244,7 +282,6 @@
     },
     mounted() {
       this.getTableData();
-      this.restaurants = this.loadAll();
     },
     methods: {
       getTableData(){
@@ -258,6 +295,36 @@
             this.totalNum = 0;
           }
         });
+      },
+      // 右键
+      openContextMenu(row, event) {
+        this.pitch = row.id;
+        this.contextMenuParam(event);
+      },
+      openDetail(row){
+        console.log(row);
+        this.dblRowData = row;
+        this.dialogVisible = true;
+      },
+      // 右键回调
+      clickEvent(val) {
+
+      },
+      //右键参数
+      contextMenuParam(event) {
+        let e = event || window.event;
+        this.show = false;
+        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true
+        })
+      },
+      //关闭右键菜单
+      closeMenu() {
+        this.show = false;
       },
       // 重置
       resetting() {
@@ -287,41 +354,7 @@
       close_() {
         console.log(1);
       },
-      querySearch(queryString, cb) {
-        let restaurants = this.restaurants;
-        let results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-        // 调用 callback 返回建议列表的数据
-        cb(results);
-      },
-      createFilter(queryString) {
-        return (restaurant) => {
-          return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-        };
-      },
-      handleSelect(item) {
-        console.log(item);
-      },
-      loadAll() {
-        return [
-          {"value": "三全鲜食（北新泾店）", "address": "长宁区新渔路144号"},
-          {"value": "Hot honey 首尔炸鸡（仙霞路）", "address": "上海市长宁区淞虹路661号"},
-          {"value": "新旺角茶餐厅", "address": "上海市普陀区真北路988号创邑金沙谷6号楼113"},
-          {"value": "泷千家(天山西路店)", "address": "天山西路438号"},
-          {"value": "胖仙女纸杯蛋糕（上海凌空店）", "address": "上海市长宁区金钟"},
-          {"value": "贡茶", "address": "上海市长宁区金钟路633号"},
-          {"value": "豪大大香鸡排超级奶爸", "address": "上海市嘉定区曹安公路曹安路1685号"},
-          {"value": "茶芝兰（奶茶，手抓饼）", "address": "上海市普陀区同普路1435号"},
-          {"value": "十二泷町", "address": "上海市北翟路1444弄81号B幢-107"},
-          {"value": "星移浓缩咖啡", "address": "上海市嘉定区新郁路817号"},
-          {"value": "阿姨奶茶/豪大大", "address": "嘉定区曹安路1611号"},
-        ]
-      },
-      onSubmit(val) {
-        this.isActive = val;
-        if (val === 0) {
 
-        }
-      },
       // 导出
       leadingOut(val) {
         console.log(val);
