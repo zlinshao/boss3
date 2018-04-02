@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="show=false" @contextmenu="closeMenu">
     <div class="highRanking">
       <div class="highSearch">
         <el-form :inline="true" size="mini">
@@ -91,6 +91,7 @@
       <div style="height:120px;">
         <el-table
           :data="tableData"
+          @row-contextmenu='openContextMenu'
           width="100%">
           <el-table-column
             label="名称"
@@ -129,16 +130,26 @@
         </el-pagination>
       </div>
     </div>
+    <el-dialog  title="选择套餐" :visible.sync="packageDialogVisible" width="30%">
+        <span>选择套餐</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="packageDialogVisible = false" size="mini">取 消</el-button>
+          <el-button type="primary" @click="savePackage" size="mini">确 定</el-button>
+        </span>
+    </el-dialog>
     <!--组织架构-->
     <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize" @selectMember="selectMember"></organization>
+    <right-menu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+               @clickOperateMore="clickEvent"></right-menu>
   </div>
 </template>
 
 <script>
-  import organization from '../../common/organization.vue';
+  import Organization from '../../common/organization.vue';
+  import RightMenu from '../../common/rightMenu.vue'    //右键
     export default {
       name: "periodic-person",
-      components: {organization},
+      components: {Organization,RightMenu},
       data() {
         return {
           tableData: [],
@@ -184,6 +195,12 @@
               }
             }]
           },
+          rightMenuX: 0,
+          rightMenuY: 0,
+          lists: [],
+          show: false,
+          pitch: '',
+          packageDialogVisible: false,
         }
       },
       methods: {
@@ -216,6 +233,45 @@
           console.log(`当前页: ${val}`);
           this.form.page = val;
           this.getTableData();
+        },
+        savePackage(){
+          this.packageDialogVisible = false;
+        },
+        // 右键
+        openContextMenu(row, event) {
+          console.log(row);
+          this.pitch = row.id;
+          if (row.simple_staff.id) {
+            this.lists = [
+              {clickIndex: 'package', headIcon: 'el-icon-edit-outline', label: '选择套餐'},
+            ];
+          }
+          this.contextMenuParam(event);
+        },
+        // 右键回调
+        clickEvent(val) {
+          switch (val.clickIndex) {
+            case 'package':
+              this.packageDialogVisible = true;
+              break;
+
+          }
+        },
+        //关闭右键菜单
+        closeMenu() {
+          this.show = false;
+        },
+        //右键参数
+        contextMenuParam(event) {
+          let e = event || window.event;
+          this.show = false;
+          this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+          this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+          event.preventDefault();
+          event.stopPropagation();
+          this.$nextTick(() => {
+            this.show = true
+          })
         },
         // 重置
         resetting() {

@@ -278,7 +278,7 @@
   export default {
     name: 'hello',
     components:{Upload, Organization},
-    props: ['edit'],
+    props: ['edit','getData'],
     data () {
       return {
         personnal: globalConfig.personal,
@@ -350,6 +350,7 @@
     methods:{
       // 按钮切换
       tagClick(val) {
+        this.first = false;
         this.active = val;
         this.isClear = false;
         switch(val) {
@@ -936,6 +937,10 @@
           });
 
         }
+      },
+      getData(val) {
+        console.log('getData============'+val)
+        this.first = false;
       },
     },
   }

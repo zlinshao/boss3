@@ -110,11 +110,11 @@
       width="100%">
       <el-table-column
         label="发喜报日期"
-        prop="id">
+        prop="generate_date">
       </el-table-column>
       <el-table-column
         label="房屋地址"
-        prop="describe">
+        prop="address">
       </el-table-column>
       <el-table-column
         label="收房状态"
@@ -122,11 +122,11 @@
       </el-table-column>
       <el-table-column
         label="付款方式"
-        prop="module">
+        prop="pay_type">
       </el-table-column>
       <el-table-column
         label="签约月数"
-        prop="module">
+        prop="month">
       </el-table-column>
       <el-table-column
         label="单价"
@@ -166,11 +166,10 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[20, 100, 200, 300, 400]"
-        :page-size="20"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="400">
+        :current-page="form.page"
+        :page-size="12"
+        layout="total, prev, pager, next, jumper"
+        :total="totalNum">
       </el-pagination>
     </div>
 
@@ -189,7 +188,7 @@
     data() {
       return {
         isHigh: false,
-        currentPage: 1,
+        totalNum: 0,
         values: ['出租', '提前一个月出租', '提前二个月以上续租'],
         form: {
           status: '',
@@ -198,6 +197,7 @@
           subject: '',
           keywords: '',
           checkValue: [],
+          page: 1,
         },
 
         options: [
@@ -206,9 +206,7 @@
           {label: '二次出租'},
           {label: '鸡腿包'}
         ],
-
         organizeVisible: false,
-
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -236,27 +234,31 @@
             }
           }]
         },
-
-        tableData: [
-          {
-            id: 1,
-            describe: '1发挥到了萨菲航空斯大林饭卡上的',
-            module: '1Manger',
-          }, {
-            id: 2,
-            describe: '1发挥到了萨菲航空斯大林饭卡上的',
-            module: '1Manger',
-          },
-        ],
-
+        tableData: [],
         restaurants: [],
-        state: ''
+        state: '',
       }
     },
+    activated() {
+      this.getTableData();
+    },
     mounted() {
+      this.getTableData();
       this.restaurants = this.loadAll();
     },
     methods: {
+      getTableData(){
+        this.$http.get(globalConfig.server+ 'salary/achv').then((res) => {
+          this.isHigh = false;
+          if(res.data.code === '88800'){
+            this.tableData = res.data.data.data;
+            this.totalNum = Number(res.data.data.count);
+          }else{
+            this.tableData = [];
+            this.totalNum = 0;
+          }
+        });
+      },
       // 重置
       resetting() {
         this.form.organize = '';
@@ -285,7 +287,6 @@
       close_() {
         console.log(1);
       },
-
       querySearch(queryString, cb) {
         let restaurants = this.restaurants;
         let results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
@@ -330,6 +331,8 @@
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
+        this.form.page = val;
+        this.getTableData();
       },
     }
   }
