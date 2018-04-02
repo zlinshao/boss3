@@ -242,7 +242,7 @@
                     <el-col :span="6">
                       <el-form-item label="签约时长" required>
                         <el-col :span="12" style="padding-right: 10px">
-                          <el-input placeholder="月数" v-model="params.month"></el-input>
+                          <el-input placeholder="月数" @blur="changeMonth" v-model="params.month"></el-input>
                         </el-col>
                         <el-col :span="12">
                           <el-input placeholder="天数" v-model="params.day"></el-input>
@@ -259,7 +259,8 @@
                   <el-row >
                     <el-col :span="6">
                       <el-form-item label="合同开始时间">
-                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期" v-model="params.begin_date"></el-date-picker>
+                        <el-date-picker @blur="computedEndDate" value-format="yyyy-MM-dd"
+                                        type="date" placeholder="选择日期" v-model="params.begin_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -281,7 +282,7 @@
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="空置期天数">
-                        <el-input placeholder="请输入内容" v-model="params.vacancy"></el-input>
+                        <el-input placeholder="请输入内容" @blur="computedEndDate" v-model="params.vacancy"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -306,8 +307,9 @@
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="订单来源">
-                        <el-select clearable v-model="params.from" placeholder="请选择订单来源" value="">
-                          <el-option v-for="item in from_dic" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                        <el-select clearable v-model="params.is_agency " placeholder="请选择订单来源" value="">
+                          <el-option label="个人" :value="0"></el-option>
+                          <el-option label="中介" :value="1"></el-option>
                         </el-select>
                       </el-form-item>
                     </el-col>
@@ -499,7 +501,7 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="公摊费用" required>
-                        <el-input placeholder="请输入内容" v-model="params.public"></el-input>
+                        <el-input placeholder="请输入内容" v-model="params.public_fee"></el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -562,43 +564,43 @@
               <!--<div class="title">合同信息</div>-->
               <el-form label-width="100px">
                 <el-form-item label="证件照片" required="">
-                  <UpLoad :ID="'addHouse_id_card'" :isClear="isClear" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'addHouse_id_card'" :isClear="isClear" :editImage="identity_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="银行卡照片" required="">
-                  <UpLoad :ID="'addHouse_bank_card'" :isClear="isClear" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'addHouse_bank_card'" :isClear="isClear" :editImage="bank_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="合同照片" required="">
-                  <UpLoad :ID="'addHouse_contract_card'" :isClear="isClear" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'addHouse_contract_card'" :isClear="isClear" :editImage="photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="水表照片">
-                  <UpLoad :ID="'addHouse_water_card'" :isClear="isClear" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'addHouse_water_card'" :isClear="isClear" :editImage="water_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="电表照片">
-                  <UpLoad :ID="'addHouse_ele_card'" :isClear="isClear" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'addHouse_ele_card'" :isClear="isClear" :editImage="electricity_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="燃气表照片">
-                  <UpLoad :ID="'addHouse_gas_card'" :isClear="isClear" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'addHouse_gas_card'" :isClear="isClear" :editImage="gas_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="交接单照片">
-                  <UpLoad :ID="'addHouse_hand_over_card'" :isClear="isClear" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'addHouse_hand_over_card'" :isClear="isClear" :editImage="checkin_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
-                <el-form-item label="委托书">
-                  <UpLoad :ID="'addHouse_proxy_card'" :isClear="isClear" @getImg="getImg"></UpLoad>
+                <el-form-item label="委托书" required="">
+                  <UpLoad :ID="'addHouse_proxy_card'" :isClear="isClear" :editImage="auth_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
-                <el-form-item label="押金收条">
-                  <UpLoad :ID="'addHouse_deposit_card'" :isClear="isClear" @getImg="getImg"></UpLoad>
+                <el-form-item label="押金收条" required="">
+                  <UpLoad :ID="'addHouse_deposit_card'" :isClear="isClear" :editImage="deposit_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
-                <el-form-item label="承诺书">
-                  <UpLoad :ID="'addHouse_commitment_card'" :isClear="isClear" @getImg="getImg"></UpLoad>
+                <el-form-item label="承诺书" required="">
+                  <UpLoad :ID="'addHouse_commitment_card'" :isClear="isClear" :editImage="promise" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="补充照片">
-                  <UpLoad :ID="'addHouse_other_card'" :isClear="isClear" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'addHouse_other_card'" :isClear="isClear" :editImage="other_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="退租交接单照片">
-                  <UpLoad :ID="'checkout_card'" :isClear="isClear" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'checkout_card'" :isClear="isClear" :editImage="checkout_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="退租结算照片">
-                  <UpLoad :ID="'checkout_settle_card'" :isClear="isClear" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'checkout_settle_card'" :isClear="isClear" :editImage="checkout_settle_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
               </el-form>
             </div>
@@ -636,6 +638,7 @@
         type:'',
 
         params: {
+          id : '',      //草稿id
           draft:'',
           //------------------小区详情--------------------//
           community_id : '',            //小区id
@@ -667,7 +670,7 @@
           vacancy_way : '',             // 空置期安置方式
           warranty_month : '',          // 保修期月数
           warranty_day : '',            // 保修期天数
-          from : '',                    // 来源
+          is_agency  : '',              // 来源
           deposit : '',                 // 押金
           price : '',                   // 月单价
           pay_way : '',                 // 付款方式
@@ -729,7 +732,6 @@
         decorate_dic : [],        //装修
         id_type_dic : [],         //证件类型
         contract_type_dic : [],
-        from_dic : [],
         vacancy_way_dic : [],
         pay_way_dic : [],
         property_payer_dic : [],
@@ -742,6 +744,21 @@
         payWayChangeAmount : 1,
         payWayArray : [],
         payPeriodArray : [],
+
+        //照片修改
+        identity_photo : {},
+        bank_photo : {},
+        photo : {},
+        water_photo : {},
+        electricity_photo : {},
+        gas_photo : {},
+        checkin_photo : {},
+        auth_photo : {},
+        deposit_photo : {},
+        promise : {},
+        other_photo : {},
+        checkout_photo : {},
+        checkout_settle_photo : {},
       };
     },
     watch:{
@@ -752,8 +769,11 @@
         if(!val){
           this.$emit('close')
         }else {
-          this.isClear = false;
-          this.getDictionary();
+          this.isClear = true;
+          this.getDraft();
+          if(!this.isDictionary){
+            this.getDictionary();
+          }
         }
       },
       'params.purchase_way':{
@@ -763,28 +783,6 @@
           this.subbranch = '';
         }
       },
-      'params.month' : {
-        handler(val,oldVal){
-          this.periodArray[0] = val;
-          this.payPeriodArray[0] = val;
-          this.priceArray.splice(1,this.priceArray.length);
-          this.periodArray.splice(1,this.periodArray.length);
-          this.payWayArray.splice(1,this.payWayArray.length);
-          this.payPeriodArray.splice(1,this.payPeriodArray.length);
-          this.priceChangeAmount = 1;
-          this.payWayChangeAmount = 1;
-        }
-      },
-      priceChangeAmount(val){
-        if(val===1){
-          this.periodArray[0] = this.params.month;
-        }
-      },
-      payWayChangeAmount(val){
-        if(val===1){
-          this.periodArray[0] = this.params.month;
-        }
-      }
     },
     methods:{
       getDictionary(){
@@ -794,13 +792,170 @@
         this.dictionary(409,1).then((res) => {this.id_type_dic = res.data;this.isDictionary = true});
 
         this.dictionary(430,1).then((res) => {this.contract_type_dic = res.data;this.isDictionary = true});
-        this.dictionary(434,1).then((res) => {this.from_dic = res.data;this.isDictionary = true});
         this.dictionary(437,1).then((res) => {this.vacancy_way_dic = res.data;this.isDictionary = true});
         this.dictionary(443,1).then((res) => {this.pay_way_dic = res.data;this.isDictionary = true});
         this.dictionary(449,1).then((res) => {this.property_payer_dic = res.data;this.isDictionary = true});
       },
+      //获取草稿
+      getDraft(){
+        this.$http.get(globalConfig.server+'lease/collect').then((res) => {
+          if(res.data.code === '61010'){
 
-      //选入组件
+            this.nameArray = [];
+            this.sexArray = [];
+            this.id_typeArray = [];
+            this.id_numberArray = [];
+            this.phoneArray = [];
+
+            this.params.id = res.data.id;
+            let data = res.data.data;
+            //房屋信息
+            this.params.community_id = data.community_id;
+            this.community_name = data.community_name;
+            this.community_address = data.community_address;
+            this.params.community_nickname = data.community_nickname;
+            this.params.building = data.building;
+            this.params.unit = data.unit;
+            this.params.doorplate = data.doorplate;
+            this.params.house_type = data.house_type;
+            this.params.property_number = data.property_number;
+            this.params.mound_number = data.mound_number;
+            this.params.area = data.area;
+            this.params.decorate = data.decorate;
+            this.params.floor = data.floor;
+            this.params.floors = data.floors;
+            this.params.property_type = data.property_type;
+            this.params.house_feature = data.house_feature;
+            //房东信息
+            this.customersAmount = data.customers.length;
+            data.customers.forEach((item) => {
+              this.nameArray.push(item.name);
+              this.sexArray.push(item.sex);
+              this.id_typeArray.push(item.id_type);
+              this.id_numberArray.push(item.id_number);
+              this.phoneArray.push(item.phone);
+            });
+            //合同信息
+            this.params.contract_type = data.contract_type;
+            this.params.contract_number = data.contract_number;
+            this.params.month = data.month;
+            this.params.day = data.day;
+            this.params.sign_date = data.sign_date;
+            this.params.begin_date = data.begin_date;
+            this.params.vacancy_end_date = data.vacancy_end_date;
+            this.params.end_date = data.end_date;
+            this.params.vacancy = data.vacancy;
+            this.params.vacancy_way = data.vacancy_way;
+            this.params.warranty_month = data.warranty_month;
+            this.params.warranty_day = data.warranty_day;
+            this.params.is_agency = data.is_agency;
+            this.params.deposit = data.deposit;
+            //------------月单价和付款方式-----------------------//
+            this.priceChangeAmount = data.price.length;
+            this.priceArray = [];
+            this.periodArray = [];
+            data.price.forEach((item,index) => {
+              this.priceArray.push(item.price);
+              this.periodArray.push(item.period);
+            });
+            this.payWayChangeAmount = data.pay_way.length;
+            this.payWayArray = [];
+            this.payPeriodArray = [];
+            data.pay_way.forEach((item,index) => {
+              this.payWayArray.push(item.pay_way);
+              this.payPeriodArray.push(item.period);
+            });
+            //--------------------------------------------------//
+            this.params.pay_first_date = data.pay_first_date;
+            this.params.pay_second_date = data.pay_second_date;
+            this.params.account_name = data.account_name;
+            this.params.relationship = data.relationship;
+            this.params.purchase_way = data.purchase_way;
+            this.params.account = data.account;
+            this.params.bank = data.bank;
+            this.params.subbranch = data.subbranch;
+            this.params.agency = data.agency;
+            this.params.penalty = data.penalty;
+            this.params.property = data.property;
+            this.params.property_payer = data.property_payer;
+            this.params.water = data.water;
+            this.params.electricity_peak = data.electricity_peak;
+            this.params.electricity_vally = data.electricity_vally;
+            this.params.gas = data.gas;
+            this.params.public_fee = data.public_fee;
+            this.params.data_date = data.data_date;
+            this.params.staff_id = data.staff_id;
+            this.params.leader_id = data.leader_id;
+            this.params.department_id = data.department_id;
+            this.params.decorate_allow = data.decorate_allow;
+            this.params.remark_terms = data.remark_terms;
+            this.params.remark = data.remark;
+            //照片
+            this.identity_photo = data.identity_photo;
+            this.bank_photo = data.bank_photo;
+            this.photo = data.photo;
+            this.water_photo = data.water_photo;
+            this.electricity_photo = data.electricity_photo;
+            this.gas_photo = data.gas_photo;
+            this.checkin_photo = data.checkin_photo;
+            this.auth_photo = data.auth_photo;
+            this.deposit_photo = data.deposit_photo;
+            this.promise = data.promise;
+            this.other_photo = data.other_photo;
+            this.checkout_photo = data.checkout_photo;
+            this.checkout_settle_photo = data.checkout_settle_photo;
+
+            //先清空图片数组id
+            this.params.identity_photo = [];
+            this.params.bank_photo = [];
+            this.params.photo = [];
+            this.params.water_photo = [];
+            this.params.electricity_photo = [];
+            this.params.gas_photo = [];
+            this.params.checkin_photo = [];
+            this.params.auth_photo = [];
+            this.params.deposit_photo = [];
+            this.params.promise = [];
+            this.params.other_photo = [];
+            this.params.checkout_photo = [];
+            this.params.checkout_settle_photo = [];
+            this.imageArray(data.identity_photo,this.params.identity_photo);
+            this.imageArray(data.bank_photo,this.params.bank_photo);
+            this.imageArray(data.photo,this.params.photo);
+            this.imageArray(data.water_photo,this.params.water_photo);
+            this.imageArray(data.electricity_photo,this.params.electricity_photo);
+            this.imageArray(data.gas_photo,this.params.gas_photo);
+            this.imageArray(data.checkin_photo,this.params.checkin_photo);
+            this.imageArray(data.auth_photo,this.params.auth_photo);
+            this.imageArray(data.deposit_photo,this.params.deposit_photo);
+            this.imageArray(data.promise,this.params.promise);
+            this.imageArray(data.other_photo,this.params.other_photo);
+            this.imageArray(data.checkout_photo,this.params.checkout_photo);
+            this.imageArray(data.checkout_settle_photo,this.params.checkout_settle_photo);
+          }
+        })
+      },
+
+      imageArray(data,array){
+        if(!Array.isArray(data)){
+          for(let key in data){
+            array.push(key)
+          }
+        }
+      },
+
+      //改变收房月数
+      changeMonth(){
+        this.periodArray[0] = this.params.month;
+        this.payPeriodArray[0] = this.params.month;
+        this.priceArray.splice(1,this.priceArray.length);
+        this.periodArray.splice(1,this.periodArray.length);
+        this.payWayArray.splice(1,this.payWayArray.length);
+        this.payPeriodArray.splice(1,this.payPeriodArray.length);
+        this.priceChangeAmount = 1;
+        this.payWayChangeAmount = 1;
+      },
+
       //调出选人组件
       openOrganizeModal(val){
         this.selectType = val;
@@ -810,8 +965,6 @@
       },
       selectMember(val){
         this.organizationDialog = false;
-//        this.type = '';
-//        this.length = '';
         if(this.selectType === 'staff'){
           this.params.staff_id = val[0].id;
           this.params.leader_id = val[0].id;
@@ -823,8 +976,8 @@
           this.params.leader_id = val[0].id;
           this.leader_name =  val[0].name;
         }else if(this.selectType === 'depart'){
-          this.params.department_id = val[0].org[0].id;
-          this.department_name =  val[0].org[0].name;
+          this.params.department_id = val[0].id;
+          this.department_name =  val[0].name;
         }
       },
 
@@ -878,6 +1031,17 @@
         this.payWayChangeAmount --;
       },
 
+      //计算空置期结束时间
+      computedEndDate(){
+        let timestamp = Date.parse(new Date(this.params.begin_date))+ Number(this.params.vacancy)*24*60*60*1000;
+        this.params.vacancy_end_date = this.formatDate(new Date(timestamp));
+      },
+      formatDate(now) {
+        let year=now.getFullYear();
+        let month=now.getMonth()+1;
+        let date=now.getDate();
+        return year+"-"+month+"-"+date;
+      },
       getImg(val){
         this.isUpPic = val[2];
         if(val[0] === 'addHouse_id_card'){
@@ -967,6 +1131,7 @@
         }
       },
       clearData(){
+        this.isClear = false;
         this.params = {
           draft:'',
           //------------------小区详情--------------------//
@@ -999,7 +1164,7 @@
           vacancy_way : '',             // 空置期安置方式
           warranty_month : '',          // 保修期月数
           warranty_day : '',            // 保修期天数
-          from : '',                    // 来源
+          is_agency  : '',                    // 来源
           deposit : '',                 // 押金
           price : '',                   // 月单价
           pay_way : '',                 // 付款方式
@@ -1053,16 +1218,8 @@
         this.id_typeArray = [];
         this.id_numberArray = [];
         this.phoneArray = [];
-        this.//-----------------字典----------------------//
-        this.property_type_dic = [];   //房屋类型
-        this.house_feature_dic = [];   //房屋特色
-        this.decorate_dic = [];        //装修
-        this.id_type_dic = [];         //证件类型
-        this.contract_type_dic = [];
-        this.from_dic = [];
-        this.vacancy_way_dic = [];
-        this.pay_way_dic = [];
-        this.property_payer_dic = [];
+        //-----------------字典----------------------//
+
         this.isUpPic=false;
         this.priceChangeAmount = 1;
         this.priceArray = [];

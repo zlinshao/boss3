@@ -59,7 +59,7 @@
                     <el-col :span="20">
                       <div class="public">
                         <div class="signOne">系统公告</div>
-                        <div class="limits">{{item.content}}</div>
+                        <div class="limits">{{item.content.content}}</div>
                       </div>
                     </el-col>
                   </el-row>

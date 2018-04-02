@@ -132,7 +132,10 @@
       },
       organizationVisible(val){
         if(!val){
-          this.$emit('close')
+          this.$emit('close');
+          this.selectMember = [];       //已选数组
+          this.selectIdMember = [];     //左侧选择id
+          this.checkedIdBox = [];       //已选部门id数组
         }
       },
       type(val){
@@ -361,9 +364,6 @@
       confirmSelect(){
         this.organizationVisible = false;
         this.$emit('selectMember',this.selectMember);
-        this.selectMember = [];       //已选数组
-        this.selectIdMember = [];     //左侧选择id
-        this.checkedIdBox = [];       //已选部门id数组
       }
     }
   }
