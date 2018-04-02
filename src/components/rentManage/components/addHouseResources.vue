@@ -310,18 +310,6 @@
                         <el-select clearable v-model="params.is_agency" placeholder="请选择订单来源" value="">
                           <el-option label="个人" value="1"></el-option>
                           <el-option label="中介" value="2"></el-option>
-                          <el-option label="支付宝" value="3"></el-option>
-                          <el-option label="微信" value="4"></el-option>
-                        </el-select>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                      <el-form-item label="汇款方式">
-                        <el-select clearable v-model="params.purchase_way" placeholder="请选择汇款方式" value="">
-                          <el-option label="银行卡" value="1"></el-option>
-                          <el-option label="存折" value="2"></el-option>
-                          <el-option label="支付宝" value="3"></el-option>
-                          <el-option label="微信" value="4"></el-option>
                         </el-select>
                       </el-form-item>
                     </el-col>
@@ -331,26 +319,7 @@
                       </el-form-item>
                     </el-col>
                   </el-row>
-                  <el-col :span="6">
-                    <el-form-item label="汇款方式">
-                      <el-select clearable v-model="params.purchase_way" placeholder="请选择汇款方式" value="">
-                        <el-option label="银行卡" value="1"></el-option>
-                        <el-option label="存折" value="2"></el-option>
-                        <el-option label="支付宝" value="3"></el-option>
-                        <el-option label="微信" value="4"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="6">
-                    <el-form-item label="汇款方式">
-                      <el-select clearable v-model="params.purchase_way" placeholder="请选择汇款方式" value="">
-                        <el-option label="银行卡" value="1"></el-option>
-                        <el-option label="存折" value="2"></el-option>
-                        <el-option label="支付宝" value="3"></el-option>
-                        <el-option label="微信" value="4"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
+
                   <!--<el-row>-->
                     <!--<el-col :span="6">-->
                       <!--<el-form-item label="月单价">-->
