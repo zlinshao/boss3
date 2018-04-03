@@ -49,7 +49,7 @@
             <!--<span v-if="editFiles" v-for="file in editFiles">-->
               <!--<img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
             <!--</span>-->
-            <Upload :ID="'record_file'" @getImg="getFile" :editImage="editFiles" :isClear="isClear"></Upload>
+            <Upload :ID="'record_file'" @getImg="getFile" :editImage="editFileToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
@@ -114,7 +114,7 @@
             <!--<span v-if="editFiles" v-for="file in editFiles">-->
               <!--<img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
             <!--</span>-->
-            <Upload :ID="'record_file'" @getImg="getFile" :editImage="editFiles" :isClear="isClear"></Upload>
+            <Upload :ID="'record_file'" @getImg="getFile" :editImage="editFileToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
@@ -179,7 +179,7 @@
             <!--<span v-if="editFiles" v-for="file in editFiles">-->
               <!--<img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
             <!--</span>-->
-            <Upload :ID="'record_file'" @getImg="getFile" :editImage="editFiles" :isClear="isClear"></Upload>
+            <Upload :ID="'record_file'" @getImg="getFile" :editImage="editFileToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
@@ -250,7 +250,7 @@
             <!--<span v-if="editFiles" v-for="file in editFiles">-->
               <!--<img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
             <!--</span>-->
-            <Upload :ID="'record_file'" @getImg="getFile" :editImage="editFiles" :isClear="isClear"></Upload>
+            <Upload :ID="'record_file'" @getImg="getFile" :editImage="editFileToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
@@ -269,15 +269,17 @@
       </el-form>
     </div>
     <Organization :organizationDialog="organizationDialog" :type="selectType" @close="closeOrganization" @selectMember="selectMember"></Organization>
+    <eat-loading :loading="loading"></eat-loading>
   </div>
 </template>
 
 <script>
   import Upload from '../../common/UPLOAD.vue';
-  import Organization from '../../common/organization.vue'
+  import Organization from '../../common/organization.vue';
+  import EatLoading from '../../common/eatLoading.vue'
   export default {
     name: 'hello',
-    components:{Upload, Organization},
+    components:{Upload, Organization, EatLoading},
     props: ['edit','getData'],
     data () {
       return {
@@ -344,7 +346,9 @@
         editFiles: [],  //编辑时候的初始文件
         logId: '',
         editImgToUpload: {},
+        editFileToUpload: {},
         first: false,
+        loading: false,
       }
     },
     methods:{
@@ -371,7 +375,9 @@
             this.dayRecord = this.monthRecord = this.weekRecord = false;
             break;
         }
-
+        // setTimeout( ()=> {
+        //   this.isClear = true;
+        // },0);
       },
       getImage(val) {
         switch(this.active){
@@ -741,7 +747,9 @@
     },
     watch:{
       edit(val) {
-        console.log(val)
+        if(val){
+          this.loading = true;
+        }
         this.logId = val.daily_id;
         this.initialData();
         if(val.module === 'app\\oa\\model\\DailyDay'){  //日报
@@ -749,6 +757,7 @@
           this.tagClick(0);
           this.$http.get(globalConfig.server+ 'oa/day/'+this.logId).then((res)=>{
             if(res.data.code === '100020'){
+              this.loading = false;
               var logData = res.data.data;
               this.dayForm.finish_job = logData.finish_job;
               this.dayForm.unfinished_job = logData.unfinished_job;
@@ -765,7 +774,7 @@
                   this.editImages.push(img);
                 }
 
-                //照片修改
+                //图片传给upload组件
                 let picObject = {};
                 this.editImages.forEach((item) =>{
                   picObject[item.id] = item.uri;
@@ -782,6 +791,13 @@
                   file.uri = file_pic[item][0].uri;
                   this.editFiles.push(file);
                 }
+                //附件传给upload组件
+                let fileObject = {};
+                this.editFiles.forEach((item) =>{
+                  fileObject[item.id] = item.uri;
+                });
+                this.editFileToUpload = fileObject;
+
               }
               var receivers = logData.receivers;
               if(receivers) {
@@ -800,6 +816,7 @@
           this.tagClick(1);
           this.$http.get(globalConfig.server+ 'oa/week/'+this.logId).then((res)=>{
             if(res.data.code === '110020'){
+              this.loading = false;
               var logData = res.data.data;
               this.weekForm.finish_job = logData.finish_job;
               this.weekForm.job_summary = logData.job_summary;
@@ -831,6 +848,14 @@
                   file.uri = file_pic[item][0].uri;
                   this.editFiles.push(file);
                 }
+
+                //附件传给upload组件
+                let fileObject = {};
+                this.editFiles.forEach((item) =>{
+                  fileObject[item.id] = item.uri;
+                });
+                this.editFileToUpload = fileObject;
+
               }
               var receivers = logData.receivers;
               if(receivers) {
@@ -849,6 +874,7 @@
           this.tagClick(2);
           this.$http.get(globalConfig.server+ 'oa/month/'+this.logId).then((res)=>{
             if(res.data.code === '120020'){
+              this.loading = false;
               var logData = res.data.data;
               this.monthForm.finish_job = logData.finish_job;
               this.monthForm.job_summary = logData.job_summary;
@@ -881,6 +907,13 @@
                   file.uri = file_pic[item][0].uri;
                   this.editFiles.push(file);
                 }
+                //附件传给upload组件
+                let fileObject = {};
+                this.editFiles.forEach((item) =>{
+                  fileObject[item.id] = item.uri;
+                });
+                this.editFileToUpload = fileObject;
+
               }
               var receivers = logData.receivers;
               if(receivers) {
@@ -899,6 +932,7 @@
           this.tagClick(3);
           this.$http.get(globalConfig.server+ 'oa/achievement/'+this.logId).then((res)=>{
             if(res.data.code === '130020'){
+              this.loading = false;
               var logData = res.data.data;
               this.achieveForm.turnover_today = logData.turnover_today;
               this.achieveForm.customer_num = logData.customer_num;
@@ -932,6 +966,13 @@
                   file.uri = file_pic[item][0].uri;
                   this.editFiles.push(file);
                 }
+                //附件传给upload组件
+                let fileObject = {};
+                this.editFiles.forEach((item) =>{
+                  fileObject[item.id] = item.uri;
+                });
+                this.editFileToUpload = fileObject;
+
               }
               var receivers = logData.receivers;
               if(receivers) {

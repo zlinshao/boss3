@@ -4,38 +4,16 @@
         <div class="tabsSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input placeholder="请输入内容" v-model="form.selects" class="input-with-select">
-                <el-select v-model="form.keyWords" slot="prepend" placeholder="请选择" clearable>
-                  <el-option label="收房" value="1"></el-option>
-                  <el-option label="租房" value="2"></el-option>
-                </el-select>
-                <el-button slot="append" icon="el-icon-search"></el-button>
-              </el-input>
-            </el-form-item>
-            <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="importData">导入</el-button>
               <input type="file" id="import" style="display:none;">
+              <upload :ID="'upload'" @getImg="getImg" style="display:none;" :isClear="isClear"></upload>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="exportData">导出</el-button>
             </el-form-item>
-            <!--<el-form-item>-->
-              <!--<el-dropdown trigger="click" @command="leadingOut">-->
-                <!--<el-button type="primary" size="mini" @click="">-->
-                  <!--导出<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
-                <!--</el-button>-->
-                <!--<el-dropdown-menu slot="dropdown">-->
-                  <!--<el-dropdown-item command="one">工资条</el-dropdown-item>-->
-                  <!--<el-dropdown-item command="tow">详情</el-dropdown-item>-->
-                <!--</el-dropdown-menu>-->
-              <!--</el-dropdown>-->
-            <!--</el-form-item>-->
-            <!--<el-form-item v-if="multipleSelection.length > 0">-->
-              <!--<el-button type="primary" size="mini" @click="openBadge">标记</el-button>-->
-            <!--</el-form-item>-->
           </el-form>
         </div>
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
@@ -53,14 +31,10 @@
                     <el-form-item>
                       <div class="block">
                         <el-date-picker
-                          v-model="form.date"
-                          type="daterange"
-                          align="right"
-                          unlink-panels
-                          range-separator="至"
-                          start-placeholder="开始日期"
-                          end-placeholder="结束日期"
-                          :picker-options="pickerOptions">
+                          v-model="form.month"
+                          type="month"
+                          placeholder="选择月"
+                          value-format="yyyy-MM">
                         </el-date-picker>
                       </div>
                     </el-form-item>
@@ -69,7 +43,7 @@
               </el-col>
             </el-row>
             <div class="btnOperate">
-              <el-button size="mini" type="primary">搜索</el-button>
+              <el-button size="mini" type="primary" @click="getTableData">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
               <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
             </div>
@@ -93,6 +67,7 @@
               </el-table-column>
             </el-table>
           </div>
+          <div v-if="tableData.length===0" style="text-align: center;background: #fff;margin: 25px 0;height: 40px;">暂无数据</div>
         </div>
       </div>
       <div class="block pages">
@@ -109,8 +84,10 @@
 </template>
 
 <script>
+  import Upload from '../../common/UPLOAD.vue'
   export default {
     name: "payroll",
+    components: {Upload},
     data() {
       return {
         isHigh: false,
@@ -120,49 +97,30 @@
         active: 0,
         form: {
           category: 1,
-          keyWords: '',
-          date: '',
+          month: '',
           page: 1,
         },
-        pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-          }]
-        },
-        importFile: {},
-        header: [],
+        // importFile: {},
+        isClear: false,
       }
     },
     mounted() {
       this.getTableData();
-
     },
     activated() {
       this.getTableData();
     },
     methods:{
+      getImg(val) {
+        this.isClear = false;
+        console.log(val[1])
+        let config = {
+          headers:{'Content-Type':'multipart/form-data'}
+        };
+        this.$http.post(globalConfig.server+ 'salary/dashboard/import/'+ this.form.category, val[1], config).then((res) => {
+
+        });
+      },
       // 按钮切换
       tagClick(val) {
         this.active = val;
@@ -177,8 +135,12 @@
             break;
         }
       },
-      getTableData(){
-        this.$http.get(globalConfig.server+ 'salary/dashboard?category='+this.form.category+'&page='+this.form.page).then((res) => {
+      getTableData() {
+        if(!this.form.month){
+          this.form.month = '';
+        }
+        this.$http.get(globalConfig.server+ 'salary/dashboard?category='+this.form.category+'&page='+this.form.page+
+        '&month='+this.form.month).then((res) => {
           this.isHigh = false;
             if(res.data.code === '88800'){
               this.header = res.data.data.data[0].header;
@@ -200,31 +162,33 @@
       },
       // 重置
       resetting() {
+        this.form.month = '';
       },
       // 高级筛选
       highGrade() {
         this.isHigh = !this.isHigh;
       },
       importData(){
-        $('#import').click();
-        var self = this;
-        $('#import').on('change',function(){
-          self.importFile = this.files;
-          let data = {};
-          data = this.files;
-          let formData = new FormData();
-          formData.append('file', data);
-          if(self.importFile){
-            let config = {
-              headers:{'Content-Type':'multipart/form-data'}
-            };
-            console.log(data)
-            self.$http.post(globalConfig.server+ 'salary/dashboard/import/'+ self.form.category, formData, config).then((res) => {
-
-            });
-          }
-        });
-
+        this.isClear = true;
+        // $('#import').click();
+        // var self = this;
+        // $('#import').on('change',function(){
+        //   self.importFile = this.files;
+        //   let data = {};
+        //   data = this.files;
+        //   let formData = new FormData();
+        //   formData.append('file', data);
+        //   if(self.importFile){
+        //     let config = {
+        //       headers:{'Content-Type':'multipart/form-data'}
+        //     };
+        //     console.log(data)
+        //     self.$http.post(globalConfig.server+ 'salary/dashboard/import/'+ self.form.category, formData, config).then((res) => {
+        //
+        //     });
+        //   }
+        // });
+        $('#upload').click();
 
       },
       exportData() {

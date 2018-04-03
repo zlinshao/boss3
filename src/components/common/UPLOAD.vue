@@ -294,7 +294,7 @@
         position: absolute;
         top: -10px;
         right: -10px;
-        z-index: 503333333;
+        z-index: 0;
         color: #6a8dfb;
         background: #ffffff;
         padding: 0;
@@ -309,6 +309,7 @@
       display: flex;
       display: -webkit-flex; /* Safari */
       flex-wrap: wrap;
+      z-index: 0;
       > div {
         margin-right: 15px;
         margin-top: 15px;
@@ -349,7 +350,7 @@
       position: absolute;
       top: -10px;
       right: -10px;
-      z-index: 5;
+      z-index: 0;
       color: #6a8dfb;
       background: #ffffff;
       padding: 0;
