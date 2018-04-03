@@ -1,15 +1,15 @@
 <template>
-    <div id="HistoryUnclear"  @click="show=false" @contextmenu="closeMenu">
+    <div id="SalaryDetails"  @click="show=false" @contextmenu="closeMenu">
       <div class="highRanking">
         <div class="tabsSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input placeholder="请输入内容" v-model="form.keyWords" class="input-with-select">
-                <el-select v-model="form.category" slot="prepend" placeholder="请选择" clearable>
+              <el-input placeholder="请输入内容" v-model="form.selects" class="input-with-select">
+                <el-select v-model="form.keyWords" slot="prepend" placeholder="请选择" clearable>
                   <el-option label="收房" value="1"></el-option>
                   <el-option label="租房" value="2"></el-option>
                 </el-select>
-                <el-button slot="append" icon="el-icon-search" @click="getTableData"></el-button>
+                <el-button slot="append" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -20,7 +20,7 @@
             </el-form-item>
           </el-form>
         </div>
-        <div class="filter high_grade" :class="isHigh? 'highHide': ''">
+        <div class="filter high_grade" :class="isHigh? 'highHide':''">
           <el-form :inline="true" :model="form" size="mini" label-width="100px">
             <div class="filterTitle">
               <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
@@ -35,10 +35,14 @@
                     <el-form-item>
                       <div class="block">
                         <el-date-picker
-                          v-model="form.month"
-                          type="month"
-                          placeholder="选择月"
-                          value-format="yyyy-MM">
+                          v-model="form.date"
+                          type="daterange"
+                          align="right"
+                          unlink-panels
+                          range-separator="至"
+                          start-placeholder="开始日期"
+                          end-placeholder="结束日期"
+                          :picker-options="pickerOptions">
                         </el-date-picker>
                       </div>
                     </el-form-item>
@@ -47,7 +51,7 @@
               </el-col>
             </el-row>
             <div class="btnOperate">
-              <el-button size="mini" type="primary" @click="getTableData">搜索</el-button>
+              <el-button size="mini" type="primary">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
               <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
             </div>
@@ -71,37 +75,78 @@
           </el-table-column>
           <el-table-column
             label="收/租状态"
-            prop="contract_category">
-            <template slot-scope="scope">
-              <div>
-                <span v-if="scope.row.contract_category === 1">收</span>
-                <span v-if="scope.row.contract_category === 2">租</span>
-              </div>
-            </template>
+            prop="id">
+          </el-table-column>
+          <el-table-column
+            label="月份"
+            prop="id">
           </el-table-column>
           <el-table-column
             label="房屋地址"
-            prop="address">
+            prop="id">
           </el-table-column>
           <el-table-column
-            label="政务不齐"
-            prop="incomplete_info">
-            <template slot-scope="scope">
-              <div :class="{'bgColor':scope.row.incomplete_info.length < 5 }">
-                <span v-for="val in scope.row.incomplete_info">{{val}}</span>
-              </div>
-            </template>
+            label="空置期奖励"
+            prop="id">
           </el-table-column>
           <el-table-column
-            label="开单人"
-            prop="staff_name">
+            label="价格差奖励"
+            prop="id">
           </el-table-column>
           <el-table-column
-            label="负责人"
-            prop="leader">
+            label="收房付款方式奖励"
+            prop="id">
           </el-table-column>
           <el-table-column
-            label="所属部门"
+            label="收房年限奖励"
+            prop="id">
+          </el-table-column>
+          <el-table-column
+            label="保修期奖励"
+            prop="id">
+          </el-table-column>
+          <el-table-column
+            label="业绩提成"
+            prop="id">
+          </el-table-column>
+          <el-table-column
+            label="合同"
+            prop="describe">
+          </el-table-column>
+          <el-table-column
+            label="资料"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="交接"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="客诉"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="尾款"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="未发比例"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="年限(涨价)扣款"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="空置期奖励"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="中介费"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="共计"
             prop="module">
           </el-table-column>
         </el-table>
@@ -111,34 +156,17 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="form.page"
-          :page-size="12"
+          :page-size="6"
           layout="total, prev, pager, next, jumper"
           :total="totalNum">
         </el-pagination>
       </div>
-      <!--右键-->
-      <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-                 @clickOperate="clickEvent"></RightMenu>
-
-      <!--备注-->
-      <Remarks :module="remarkVisible" @close="closeRemark"></Remarks>
-
-      <!--冻结-->
-      <Freeze :module="freezeVisible" @close="closeFreeze"></Freeze>
-
-      <!--标记-->
-      <Badge :module="badgeVisible" @close="closeBadge"></Badge>
     </div>
 </template>
 
 <script>
-  import RightMenu from '../../common/rightMenu.vue';    //右键
-  import Remarks from '../../common/remarks.vue';
-  import Freeze from './components/freeze.vue';
-  import Badge from './components/badge.vue';
   export default {
     name: "payroll",
-    components: {RightMenu, Remarks, Freeze, Badge},
     data() {
       return {
         isHigh: false,
@@ -147,23 +175,42 @@
         buttonVal: ['业务员','管理层'],
         active: 0,
         form: {
-          category: '',
+          category: 1,
           keyWords: '',
+          date: '',
           page: 1,
-          month: '',
+        },
+        pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
         },
         importFile: {},
+        header: [],
         multipleSelection: [],
-        rightMenuX: 0,
-        rightMenuY: 0,
-        show: false,
-        lists: [],
-        batch: false,             //批量
-        freezeVisible: false,
-        badgeVisible: false,
-        remarkVisible: false,
-        values: [],
-
+        batch: false,
       }
     },
     mounted() {
@@ -189,20 +236,7 @@
         }
       },
       getTableData(){
-        if(!this.form.month){
-          this.form.month = '';
-        }
-        this.$http.get(globalConfig.server+ 'salary/achv/history?category='+this.form.category+'&page='+this.form.page+
-          '&month='+this.form.month).then((res) => {
-          this.isHigh = false;
-          if(res.data.code === '88800'){
-            this.tableData = res.data.data.data;
-            this.totalNum = Number(res.data.data.count);
-          }else{
-            this.tableData = [];
-            this.totalNum = 0;
-          }
-        });
+
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -241,42 +275,30 @@
       },
       // 标记
       openBadge() {
-        this.badgeVisible = true;
-      },
-      closeBadge(){
-        this.badgeVisible = false;
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;
-      },
-      onSubmit(val) {
-        this.batch = false;
-        this.multipleSelection = [];
-        this.isActive = val;
-        if (val === 0) {
-
-        }
-        if (val === 1) {
-          this.values = ['收房', '租房'];
-        }
-        if (val === 2) {
-          this.values = ['出租', '提前一个月续租'];
-        }
       },
       // 双击
       salaryDetail(row) {
         console.log(row)
       },
-      // 右键
+      // 右键 个人工资
+      personalMenu(row, event) {
+        this.lists = [
+          {clickIndex: 'remark', headIcon: 'el-icon-edit', label: '备注',},
+        ];
+        this.contextMenuParam(event);
+      },
+      // 右键 历史未结/本月工资明细
       detailMenu(row, event) {
         this.lists = [
           {
-            clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '未发标记',
-            // clickIndex: 'revise', tailIcon: 'el-icon-arrow-right', headIcon: 'el-icon-edit-outline', label: '未发标记',
-            // children: [
-            //   {clickIndex: 'one', label: '单条',},
-            //   {clickIndex: 'more', label: '批量',}
-            // ]
+            clickIndex: 'revise', tailIcon: 'el-icon-arrow-right', headIcon: 'el-icon-edit-outline', label: '未发标记',
+            children: [
+              {clickIndex: 'one', label: '单条',},
+              {clickIndex: 'more', label: '批量',}
+            ]
           },
           {clickIndex: 'remark', headIcon: 'el-icon-edit', label: '备注',},
         ];
@@ -284,12 +306,12 @@
       },
       // 右键回调
       clickEvent(val) {
-        if (val === 'revise') {
+        if (val === 'one') {
           this.openBadge();
         }
-        // if (val === 'more') {
-        //   this.batch = true;
-        // }
+        if (val === 'more') {
+          this.batch = true;
+        }
         if (val === 'remark') {
           this.remarkVisible = true;
         }
