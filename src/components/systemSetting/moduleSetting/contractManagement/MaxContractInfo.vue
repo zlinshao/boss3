@@ -7,12 +7,7 @@
       <div class="highSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input  placeholder="搜索">
-                <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
-              </el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+              <el-button type="primary" size="mini" @click="highGrade">高级搜索</el-button>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="openModalDialog()">增加</el-button>
@@ -70,15 +65,14 @@
         <el-table
           :data="contractionList"
           style="width: 100%">
-          <el-table-column label="城市" prop="">
-          </el-table-column>
+
           <el-table-column label="操作对象" prop="simple_staff.real_name">
           </el-table-column>
           <el-table-column label="领取上限(收/租)" prop="max_count">
           </el-table-column>
           <el-table-column label="操作人" prop="operator.real_name">
           </el-table-column>
-          <el-table-column label="操作人" prop="operate_time">
+          <el-table-column label="操作时间" prop="operate_time">
           </el-table-column>
         </el-table>
       </div>
@@ -185,6 +179,7 @@ export default {
         this.length = 1;
       },
       selectMember(val){
+        console.log(val)
         this.type = '';
         this.length = '';
         this.form.follow_id = val[0].id;

@@ -55,7 +55,7 @@
             :current-page="form.page"
             :page-size="12"
             layout="total, prev, pager, next, jumper"
-            :total="totalNumber">
+            :total="parseInt(totalNumber)">
           </el-pagination>
         </div>
       </div>
@@ -190,6 +190,6 @@ export default {
     padding: 8px;
     display: flex;
     justify-content: flex-end;
-
+    padding-right:40px;
   }
 </style>

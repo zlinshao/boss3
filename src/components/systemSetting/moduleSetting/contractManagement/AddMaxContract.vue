@@ -112,6 +112,7 @@
         this.type = 'staff';
       },
       selectMember(val){
+
         for(let i =0;i<val.length;i++){
           this.follow_name += val[i].name + ';';
           this.form.staff_ids.push(val[i].id);
