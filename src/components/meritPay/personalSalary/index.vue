@@ -1,6 +1,5 @@
 <template>
   <div id="personal">
-
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="个人工资" name="first">
        <pay-roll></pay-roll>
@@ -12,14 +11,10 @@
         <salary-details></salary-details>
       </el-tab-pane>
     </el-tabs>
-
-
   </div>
 </template>
 
 <script>
-
-
   import PayRoll from './payroll';   //工资条
   import HistoryUnclear from './historyUnclear'; //历史未结
   import SalaryDetails from './salaryDetails';  //工资明细
@@ -36,13 +31,10 @@
     },
     watch: {},
     methods: {
-
       // tabs标签页
       handleClick(tab, event) {
-        console.log(tab, event);
+        // console.log(tab, event);
       },
-
-
       // 删除
       openDelete() {
         this.$confirm('您确定要冻结' + this.form.months + '的工资吗', '提示', {

@@ -4,8 +4,8 @@
         <div class="tabsSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input placeholder="请输入内容" v-model="form.keyWords" class="input-with-select">
-                <el-select v-model="form.category" slot="prepend" placeholder="请选择" clearable>
+              <el-input placeholder="请输入内容" v-model="form.search" class="input-with-select" clearable>
+                <el-select v-model="form.category" slot="prepend" placeholder="请选择" >
                   <el-option label="收房" value="1"></el-option>
                   <el-option label="租房" value="2"></el-option>
                 </el-select>
@@ -58,12 +58,9 @@
         <div style="margin: 0 0 10px;height: 28px;"></div>
         <el-table
           :data="tableData"
-          ref="multipleTable"
           tooltip-effect="dark"
           style="width: 100%"
-          @selection-change="handleSelectionChange"
-          @row-contextmenu="detailMenu"
-          @row-dblclick="salaryDetail">
+          @row-contextmenu="detailMenu">
           <el-table-column
             v-if="batch"
             type="selection"
@@ -118,24 +115,21 @@
       </div>
       <!--右键-->
       <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-                 @clickOperate="clickEvent"></RightMenu>
+                 @clickOperateMore="clickEvent"></RightMenu>
 
       <!--备注-->
-      <Remarks :module="remarkVisible" @close="closeRemark"></Remarks>
-
-      <!--冻结-->
-      <Freeze :module="freezeVisible" @close="closeFreeze"></Freeze>
+      <Remarks :module="remarkVisible" @close="closeRemark" ></Remarks>
 
       <!--标记-->
-      <Badge :module="badgeVisible" @close="closeBadge"></Badge>
+      <Badge :module="badgeVisible" @close="closeBadge" :incompleteInfo="incompleteInfo" :salaryId="salaryId"></Badge>
     </div>
 </template>
 
 <script>
   import RightMenu from '../../common/rightMenu.vue';    //右键
-  import Remarks from '../../common/remarks.vue';
-  import Freeze from './components/freeze.vue';
-  import Badge from './components/badge.vue';
+  import Remarks from '../../common/remarks.vue';  //备注
+  import Freeze from './components/freeze.vue';  //冻结
+  import Badge from './components/badge.vue';  //标记
   export default {
     name: "payroll",
     components: {RightMenu, Remarks, Freeze, Badge},
@@ -148,12 +142,10 @@
         active: 0,
         form: {
           category: '',
-          keyWords: '',
+          search: '',
           page: 1,
           month: '',
         },
-        importFile: {},
-        multipleSelection: [],
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
@@ -162,38 +154,23 @@
         freezeVisible: false,
         badgeVisible: false,
         remarkVisible: false,
-        values: [],
-
+        incompleteInfo: [],
+        salaryId: '',
       }
     },
     mounted() {
       this.getTableData();
-
     },
     activated() {
       this.getTableData();
     },
     methods:{
-      // 按钮切换
-      tagClick(val) {
-        this.active = val;
-        switch(val) {
-          case 0:  //业务员
-            this.form.category = 1;
-            this.getTableData();
-            break;
-          case 1:  //管理层
-            this.form.category = 2;
-            this.getTableData();
-            break;
-        }
-      },
       getTableData(){
         if(!this.form.month){
           this.form.month = '';
         }
         this.$http.get(globalConfig.server+ 'salary/achv/history?category='+this.form.category+'&page='+this.form.page+
-          '&month='+this.form.month).then((res) => {
+          '&month='+this.form.month+'&search='+this.form.search).then((res) => {
           this.isHigh = false;
           if(res.data.code === '88800'){
             this.tableData = res.data.data.data;
@@ -214,6 +191,7 @@
       },
       // 重置
       resetting() {
+        this.form.month = '';
       },
       // 高级筛选
       highGrade() {
@@ -234,63 +212,42 @@
           link.click();
         });
       },
-      // 冻结工资
-      openFreeze() {
-      },
-      closeFreeze() {
-      },
+
       // 标记
       openBadge() {
         this.badgeVisible = true;
       },
       closeBadge(){
         this.badgeVisible = false;
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
-      onSubmit(val) {
-        this.batch = false;
-        this.multipleSelection = [];
-        this.isActive = val;
-        if (val === 0) {
-
-        }
-        if (val === 1) {
-          this.values = ['收房', '租房'];
-        }
-        if (val === 2) {
-          this.values = ['出租', '提前一个月续租'];
-        }
-      },
-      // 双击
-      salaryDetail(row) {
-        console.log(row)
+        this.getTableData();
       },
       // 右键
       detailMenu(row, event) {
         this.lists = [
           {
-            clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '未发标记',
+            clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '未发标记',incompleteInfo: row.incomplete_info,id:row.id
             // clickIndex: 'revise', tailIcon: 'el-icon-arrow-right', headIcon: 'el-icon-edit-outline', label: '未发标记',
             // children: [
             //   {clickIndex: 'one', label: '单条',},
             //   {clickIndex: 'more', label: '批量',}
             // ]
           },
-          {clickIndex: 'remark', headIcon: 'el-icon-edit', label: '备注',},
+          // {clickIndex: 'remark', headIcon: 'el-icon-edit', label: '备注',},
         ];
         this.contextMenuParam(event);
       },
       // 右键回调
       clickEvent(val) {
-        if (val === 'revise') {
+        console.log(val)
+        if (val.clickIndex === 'revise') {
           this.openBadge();
+          this.incompleteInfo = val.incompleteInfo;
+          this.salaryId = val.id;
         }
         // if (val === 'more') {
         //   this.batch = true;
         // }
-        if (val === 'remark') {
+        if (val.clickIndex === 'remark') {
           this.remarkVisible = true;
         }
       },
