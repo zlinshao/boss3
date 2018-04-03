@@ -84,6 +84,7 @@
         lists: [],
         formDetail:{},
         newAdd: "",
+        getlost:"",
         newAddDialog: false,
         addNoteDialog:false,
         /***********/
@@ -129,7 +130,12 @@ this.itemAll();
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
         this.params.page=val;
-        this.itemAll();
+        if(this.getlost){
+            this.integral(this.getlost)
+        }else{
+           this.itemAll();
+        }
+       
       },
       clickTable(row, event, column) {
         console.log(row, event, column)
@@ -177,8 +183,9 @@ this.itemAll();
         });
       },
     integral(val) {
+      this.getlost=val;
       let typeGet = [];
-
+      console.log(val)
       if(val){
       if (val == "0") {
         typeGet = "credit/manage/item/gain";
@@ -187,7 +194,6 @@ this.itemAll();
       }
 
       this.params.limit=15;
-      this.totalNumber=0;
       this.integralList = [];
       this.$http
         .get(globalConfig.server + typeGet, {
@@ -225,10 +231,11 @@ this.itemAll();
       },
 
       itemAll(){
+
         this.integralList = [];
         this.params.limit=15;
 
-        this.$http.get(globalConfig.server + '/credit/manage/item', {
+        this.$http.get(globalConfig.server + 'credit/manage/item', {
           params: this.params
         }).then(res => {
           if (res.data.code === "30210") {
