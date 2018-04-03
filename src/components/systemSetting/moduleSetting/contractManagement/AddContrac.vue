@@ -114,7 +114,7 @@
             });
             this.$emit("cityCodeflag",this.form.city_code);
             this.increaseGoodsDialogVisible=false;
-            
+            this.close();
           }else{
                  this.$notify.warning({
                   title: "警告",

@@ -38,7 +38,7 @@
             label="操作"
             width="150px">
             <template slot-scope="scope">
-              <el-button
+              <el-button class="buttonself"
                 size="mini"
                 type="text"
                 @click="handleEdit(scope.$index, scope.row)">编辑
@@ -191,5 +191,10 @@ export default {
     display: flex;
     justify-content: flex-end;
     padding-right:40px;
+  }
+  .buttonself {display: none;}
+  tbody tr:first-child .buttonself {
+    display: block !important;
+    padding-left: 50px;
   }
 </style>
