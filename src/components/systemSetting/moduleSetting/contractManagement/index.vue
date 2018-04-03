@@ -14,7 +14,7 @@
           <el-row>
             <el-form-item >
               <el-col :span="2" style="color:#409EFF;">总合同数</el-col>
-              <el-col :span="10"><el-col v-for="val in consractList" :key="val.id">{{val.city_name}}&nbsp;&nbsp;&nbsp;&nbsp;总合同数（收）：{{val.collect_sum}}（租）：{{val.rent_sum}} ；  剩余合同数（收）：{{val.collect_remain}}（租）：{{val.rent_remain}}</el-col></el-col>
+              <el-col :span="10"><el-col v-for="val in consractList" :key="val.id"><el-col :span="2">{{val.city_name}}</el-col><el-col :span="6">总合同数（收）：{{val.collect_sum}}</el-col><el-col :span="4">（租）：{{val.rent_sum}} ；</el-col><el-col :span="6">  剩余合同数（收）：{{val.collect_remain}}</el-col><el-col :span="4">（租）：{{val.rent_remain}}</el-col></el-col></el-col>
               <el-col :span="2">
                 <el-button size="mini" @click="contractInfo()" type="primary">编辑</el-button>
               </el-col>
@@ -26,7 +26,7 @@
           </el-row>
         </el-form>
   <!-- <CityInfo :cityInfoDialog="cityInfoDialog" :ToCityList="ToCityList" @newAddBack="newAddBack" @close="cityInfoDialog = false"></CityInfo> -->
-  <contractInfo :contractInfoDialog="contractInfoDialog" :ToCityList="consractList"  @close="contractInfoDialog = false"></contractInfo>       
+  <contractInfo :contractInfoDialog="contractInfoDialog" :ToCityList="cityList"   @close="contractInfoDialog = false"></contractInfo>       
   <MaxContractInfo :maxContractInfoDialog="maxContractInfoDialog" :ToCityList="cityList"  @close="maxContractInfoDialog = false"></MaxContractInfo>  
   </div>
 </template>
