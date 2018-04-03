@@ -1,86 +1,14 @@
 <template>
-  <div id="personal" @click="show=false" @contextmenu="closeMenu">
-
-    <div class="highRanking">
-      <div class="tabsSearch">
-        <el-form :inline="true" size="mini">
-          <el-form-item>
-            <el-input placeholder="请输入内容" v-model="form.selects" class="input-with-select">
-              <el-select v-model="form.keyWords" slot="prepend" placeholder="请选择" clearable>
-                <el-option label="收房" value="1"></el-option>
-                <el-option label="租房" value="2"></el-option>
-              </el-select>
-              <el-button slot="append" icon="el-icon-search"></el-button>
-            </el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
-          </el-form-item>
-          <el-form-item>
-            <el-dropdown trigger="click" @command="leadingOut">
-              <el-button type="primary" size="mini">
-                导出<i class="el-icon-arrow-down el-icon--right"></i>
-              </el-button>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item command="one">工资条</el-dropdown-item>
-                <el-dropdown-item command="tow">详情</el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" size="mini" @click="openFreeze">冻结工资</el-button>
-          </el-form-item>
-          <el-form-item v-if="multipleSelection.length > 0">
-            <el-button type="primary" size="mini" @click="openBadge">标记</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-
-      <div class="filter high_grade" :class="isHigh? 'highHide':''">
-        <el-form :inline="true" :model="form" size="mini" label-width="100px">
-          <div class="filterTitle">
-            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
-          </div>
-          <el-row class="el_row_border">
-            <el-col :span="12">
-              <el-row>
-                <el-col :span="8">
-                  <div class="el_col_label">日期</div>
-                </el-col>
-                <el-col :span="16" class="el_col_option">
-                  <el-form-item>
-                    <div class="block">
-                      <el-date-picker
-                        v-model="form.dates"
-                        type="daterange"
-                        align="right"
-                        unlink-panels
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        :picker-options="pickerOptions">
-                      </el-date-picker>
-                    </div>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-col>
-          </el-row>
-          <div class="btnOperate">
-            <el-button size="mini" type="primary">搜索</el-button>
-            <el-button size="mini" type="primary" @click="resetting">重置</el-button>
-            <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
-          </div>
-        </el-form>
-      </div>
-    </div>
+  <div id="personal">
 
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="个人工资" name="first">
        <pay-roll></pay-roll>
       </el-tab-pane>
       <el-tab-pane label="历史未结" name="second">
-
+        <history-unclear></history-unclear>
+      </el-tab-pane>
+      <el-tab-pane label="本月工资明细" name="third">
         <el-table
           :data="tableData"
           ref="multipleTable"
@@ -140,8 +68,7 @@
             prop="module">
           </el-table-column>
         </el-table>
-      </el-tab-pane>
-      <el-tab-pane label="本月工资明细" name="third">
+
         <el-table
           :data="tableData"
           ref="multipleTable"
@@ -255,11 +182,13 @@
   import Remarks from '../../common/remarks.vue';
   import Freeze from './components/freeze.vue';
   import Badge from './components/badge.vue';
+
   import PayRoll from './payroll';   //工资条
+  import HistoryUnclear from './HistoryUnclear'; //历史未结
 
   export default {
     name: "index",
-    components: {RightMenu, Remarks, Freeze, Badge,PayRoll},
+    components: {RightMenu, Remarks, Freeze, Badge,PayRoll,HistoryUnclear},
     data() {
       return {
         rightMenuX: 0,

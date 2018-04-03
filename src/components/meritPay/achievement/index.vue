@@ -13,8 +13,8 @@
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
           <el-form-item>
-            <el-form-item @click="exportData">
-              <el-button type="primary">导出</el-button>
+            <el-form-item >
+              <el-button type="primary" @click="exportData">导出</el-button>
             </el-form-item>
           </el-form-item>
         </el-form>
@@ -411,19 +411,20 @@
         }
       },
       // 导出
-      exportData(val) {
-        // this.$http.get(globalConfig.server+'salary/periodic/export/achv', { responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
-        //   if (!res.data) {
-        //     return;
-        //   }
-        //   let url = window.URL.createObjectURL(new Blob([res.data]));
-        //   let link = document.createElement('a');
-        //   link.style.display = 'a';
-        //   link.href = url;
-        //   link.setAttribute('download', 'excel.xlsx');
-        //   document.body.appendChild(link);
-        //   link.click();
-        // });
+      exportData() {
+        this.$http.get(globalConfig.server+'salary/achv/export', { responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
+          if (!res.data) {
+            return;
+          }
+          console.log(res);
+          let url = window.URL.createObjectURL(new Blob([res.data]));
+          let link = document.createElement('a');
+          link.style.display = 'a';
+          link.href = url;
+          link.setAttribute('download', 'excel.xlsx');
+          document.body.appendChild(link);
+          link.click();
+        });
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);

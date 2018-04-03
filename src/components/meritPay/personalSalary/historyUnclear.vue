@@ -1,5 +1,5 @@
 <template>
-    <div id="Payroll">
+    <div id="Payroll"  @click="show=false" @contextmenu="closeMenu">
       <div class="highRanking">
         <div class="tabsSearch">
           <el-form :inline="true" size="mini">
@@ -22,20 +22,6 @@
             <el-form-item>
               <el-button type="primary" size="mini" @click="exportData">导出</el-button>
             </el-form-item>
-            <!--<el-form-item>-->
-              <!--<el-dropdown trigger="click" @command="leadingOut">-->
-                <!--<el-button type="primary" size="mini" @click="">-->
-                  <!--导出<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
-                <!--</el-button>-->
-                <!--<el-dropdown-menu slot="dropdown">-->
-                  <!--<el-dropdown-item command="one">工资条</el-dropdown-item>-->
-                  <!--<el-dropdown-item command="tow">详情</el-dropdown-item>-->
-                <!--</el-dropdown-menu>-->
-              <!--</el-dropdown>-->
-            <!--</el-form-item>-->
-            <!--<el-form-item v-if="multipleSelection.length > 0">-->
-              <!--<el-button type="primary" size="mini" @click="openBadge">标记</el-button>-->
-            <!--</el-form-item>-->
           </el-form>
         </div>
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
@@ -77,23 +63,66 @@
         </div>
       </div>
       <div class="main">
-        <div style="margin: 0 0 10px;">
-          <el-button :class="{'primary': active === index}" @click="tagClick(index)" size="mini"
-                     v-for="(key,index) in buttonVal" :key="index">{{key}}
-          </el-button>
-        </div>
-        <div>
-          <div v-for="value in tableData" >
-            <el-table :data="value.data" v-for="val in value.data" :key="val.id" width="100%" stripe>
-              <el-table-column
-                 v-for="(item, index) in val.header" :key="index" :label="item">
-                <template slot-scope="scope">
-                  <span>{{scope.row.body[index]}}</span>
-                </template>
-              </el-table-column>
-            </el-table>
-          </div>
-        </div>
+        <div style="margin: 0 0 10px;height: 28px;"></div>
+        <el-table
+          :data="tableData"
+          ref="multipleTable"
+          tooltip-effect="dark"
+          style="width: 100%"
+          @selection-change="handleSelectionChange"
+          @row-contextmenu="detailMenu"
+          @row-dblclick="salaryDetail">
+          <el-table-column
+            v-if="batch"
+            type="selection"
+            width="55">
+          </el-table-column>
+          <el-table-column
+            label="收/租状态"
+            prop="id">
+          </el-table-column>
+          <el-table-column
+            label="房屋地址"
+            prop="id">
+          </el-table-column>
+          <el-table-column
+            label="合同"
+            prop="describe">
+            <template slot-scope="scope">
+              <div :class="{'bgColor':scope.row.describe == '3213gg2'}">
+                {{scope.row.describe}}
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="资料"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="交接"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="客诉"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="尾款"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="开单人"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="负责人"
+            prop="module">
+          </el-table-column>
+          <el-table-column
+            label="所属部门"
+            prop="module">
+          </el-table-column>
+        </el-table>
       </div>
       <div class="block pages">
         <el-pagination
@@ -153,6 +182,8 @@
         },
         importFile: {},
         header: [],
+        multipleSelection: [],
+        batch: false,
       }
     },
     mounted() {
@@ -178,17 +209,7 @@
         }
       },
       getTableData(){
-        this.$http.get(globalConfig.server+ 'salary/dashboard?category='+this.form.category+'&page='+this.form.page).then((res) => {
-          this.isHigh = false;
-            if(res.data.code === '88800'){
-              this.header = res.data.data.data[0].header;
-              this.tableData = res.data.data.data;
-              this.totalNum = Number(res.data.data.count);
-            }else{
-              this.tableData = [];
-              this.totalNum = 0;
-            }
-        });
+
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -250,6 +271,66 @@
       // 标记
       openBadge() {
       },
+      handleSelectionChange(val) {
+        this.multipleSelection = val;
+      },
+      // 双击
+      salaryDetail(row) {
+        console.log(row)
+      },
+      // 右键 个人工资
+      personalMenu(row, event) {
+        this.lists = [
+          {clickIndex: 'remark', headIcon: 'el-icon-edit', label: '备注',},
+        ];
+        this.contextMenuParam(event);
+      },
+      // 右键 历史未结/本月工资明细
+      detailMenu(row, event) {
+        this.lists = [
+          {
+            clickIndex: 'revise', tailIcon: 'el-icon-arrow-right', headIcon: 'el-icon-edit-outline', label: '未发标记',
+            children: [
+              {clickIndex: 'one', label: '单条',},
+              {clickIndex: 'more', label: '批量',}
+            ]
+          },
+          {clickIndex: 'remark', headIcon: 'el-icon-edit', label: '备注',},
+        ];
+        this.contextMenuParam(event);
+      },
+      // 右键回调
+      clickEvent(val) {
+        if (val === 'one') {
+          this.openBadge();
+        }
+        if (val === 'more') {
+          this.batch = true;
+        }
+        if (val === 'remark') {
+          this.remarkVisible = true;
+        }
+      },
+      // 关闭备注
+      closeRemark() {
+        this.remarkVisible = false;
+      },
+      //关闭右键菜单
+      closeMenu() {
+        this.show = false;
+      },
+      //右键参数
+      contextMenuParam(event) {
+        let e = event || window.event;
+        this.show = false;
+        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true
+        })
+      },
 
     },
   }
@@ -260,5 +341,16 @@
     background: #409EFF;
     border-color: #409EFF;
     color: #ffffff;
+  }
+  .roll_table table{
+    width: 100%;
+    /*border-collapse:collapse;*/
+  }
+  .roll_table table thead th{
+    background: #ebeef5;
+
+  }
+  .roll_table table tbody td{
+    background: #fafafa;
   }
 </style>
