@@ -26,8 +26,8 @@
           </el-row>
         </el-form>
   <!-- <CityInfo :cityInfoDialog="cityInfoDialog" :ToCityList="ToCityList" @newAddBack="newAddBack" @close="cityInfoDialog = false"></CityInfo> -->
-  <contractInfo :contractInfoDialog="contractInfoDialog" :ToCityList="cityList"   @close="contractInfoDialog = false"></contractInfo>       
-  <MaxContractInfo :maxContractInfoDialog="maxContractInfoDialog" :ToCityList="cityList"  @close="maxContractInfoDialog = false"></MaxContractInfo>  
+  <contractInfo :contractInfoDialog="contractInfoDialog" :ToCityList="cityList" @contratcadd="contratcadd"  @close="contractInfoDialog = false"></contractInfo>       
+  <MaxContractInfo :maxContractInfoDialog="maxContractInfoDialog" :ToCityList="cityList"   @close="maxContractInfoDialog = false"></MaxContractInfo>  
   </div>
 </template>
 
@@ -86,10 +86,14 @@
       maxcontractInfo(){
         this.maxContractInfoDialog=true;
       },
-      //新增完以后刷新
-      newAddBack(){
-
-      },
+      contratcadd(val){
+        console.log(1111)
+          if(val){
+        this.dictionary(306,1).then((res) => {this.cityList = res.data;
+       this.getContract(this.cityList);
+       });           
+          }
+      }
     }
   }
 </script>

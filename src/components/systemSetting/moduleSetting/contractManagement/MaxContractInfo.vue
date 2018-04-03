@@ -90,10 +90,7 @@
       </div>
     </div>
       </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="maxContractInfoDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" >保 存</el-button>
-      </span>
+
     </el-dialog>
  <AddMaxContract :addMaxContracDialog="addMaxContracDialog" @configflag="configflag"  @close="addMaxContracDialog = false"></AddMaxContract>
      <Organization :organizationDialog="organizationDialog" :length="length" :type="type"

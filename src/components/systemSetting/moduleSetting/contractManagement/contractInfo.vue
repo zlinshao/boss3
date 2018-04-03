@@ -61,10 +61,7 @@
       </div>
     </div>
       </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="contractInfoDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" >保 存</el-button>
-      </span>
+
     </el-dialog>
  <AddContrac :addContracDialog="addContracDialog" :newOrChange="newOrChange" :formDetail="formDetail"  @cityCodeflag="cityCodeflag" :cityList="cityList" @close="addContracDialog = false"></AddContrac>
   </div>
@@ -88,6 +85,7 @@ export default {
       cityCode:'01',
       newOrChange:'',
       formDetail:[],
+      contratcadd:true,
       firstcode:'01',
       consractList:[],
       totalNumber:0,
@@ -107,7 +105,7 @@ export default {
     contractInfoDialogVisible(val) {
       if (!val) {
         this.$emit("close");
-
+        this.$emit('contratcadd',this.contratcadd)
       }
     }
   },
@@ -159,12 +157,14 @@ export default {
             this.form.page=1;
             this.totalNumber=0;
           }
+          
         }); 
       }, 
     //新增完以后的回调
     cityCodeflag(val){
       if(val){
         this.integral(val);
+        
       }
     },       
     }
