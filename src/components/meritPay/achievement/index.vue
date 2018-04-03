@@ -110,8 +110,14 @@
         prop="address">
       </el-table-column>
       <el-table-column
-        label="收房状态"
+        label="收租状态"
         prop="contract_category">
+        <templete slot-scope="scope">
+          <div>
+            <span v-if="scope.row.contract_category === 1">收</span>
+            <span v-if="scope.row.contract_category === 2">租</span>
+          </div>
+        </templete>
       </el-table-column>
       <el-table-column
         label="付款方式"
