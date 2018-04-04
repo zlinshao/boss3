@@ -230,9 +230,7 @@
     methods: {
       downLoad(val){
         console.log(val);
-        // window.location.href = val[0].uri;
         window.open(val[0].uri);
-
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -326,10 +324,11 @@
             this.form.type = 4;
             this.getLookLog();
             break;
-
         }
-
       },
+    },
+    created(){
+      this.personal = JSON.parse(localStorage.personal);
     },
     mounted() {
       this.getLookLog();
