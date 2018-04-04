@@ -226,54 +226,54 @@
           </div>
         </div>
         <div class="myDetail">
-          <el-tabs type="border-card">
-            <el-tab-pane label="房东信息">
-              <OwnerInfoTab></OwnerInfoTab>
+          <el-tabs type="border-card" v-model="activeName">
+            <el-tab-pane label="房东信息" name="OwnerInfoTab">
+              <OwnerInfoTab :collectContractId="collectContractId" :activeName="activeName"></OwnerInfoTab>
             </el-tab-pane>
-            <el-tab-pane label="租客信息">
-              <RentInfoTab></RentInfoTab>
+            <el-tab-pane label="租客信息" name="RentInfoTab">
+              <RentInfoTab :rentContractId="rentContractId" :activeName="activeName"></RentInfoTab>
             </el-tab-pane>
-            <el-tab-pane label="物品增减">
-              <GoodsChangeTab></GoodsChangeTab>
+            <el-tab-pane label="物品增减" name="GoodsChangeTab">
+              <GoodsChangeTab :collectHouseId="collectHouseId" :activeName="activeName"></GoodsChangeTab>
             </el-tab-pane>
-            <el-tab-pane label="房东退房记录">
-              <CollectReturnRomeInfoTab></CollectReturnRomeInfoTab>
+            <el-tab-pane label="房东退房记录" name="CollectReturnRomeInfoTab">
+              <CollectReturnRomeInfoTab :collectContractId="collectContractId" :activeName="activeName"></CollectReturnRomeInfoTab>
             </el-tab-pane>
-            <el-tab-pane label="退/换房记录(租)">
-              <rentReturnRomeInfoTab></rentReturnRomeInfoTab>
+            <el-tab-pane label="退/换房记录(租)" name="rentReturnRomeInfoTab">
+              <rentReturnRomeInfoTab :rentContractId="rentContractId" :activeName="activeName"></rentReturnRomeInfoTab>
             </el-tab-pane>
-            <el-tab-pane label="续约/延期(收)">
+            <el-tab-pane label="续约/延期(收)" name="CollectRenewContractTab">
               <CollectRenewContractTab></CollectRenewContractTab>
             </el-tab-pane>
-            <el-tab-pane label="续约/延期(租)">
+            <el-tab-pane label="续约/延期(租)" name="RentRenewContractTab">
               <RentRenewContractTab></RentRenewContractTab>
             </el-tab-pane>
-            <el-tab-pane label="转租记录">
+            <el-tab-pane label="转租记录" name="subletRecordTab">
               <subletRecordTab></subletRecordTab>
             </el-tab-pane>
-            <el-tab-pane label="应收款项">
+            <el-tab-pane label="应收款项" name="ReceivableItemTab">
               <ReceivableItemTab></ReceivableItemTab>
             </el-tab-pane>
-            <el-tab-pane label="应付款项">
+            <el-tab-pane label="应付款项" name="PayableItemTab">
               <PayableItemTab></PayableItemTab>
             </el-tab-pane>
-            <el-tab-pane label="资料备忘(收)">
+            <el-tab-pane label="资料备忘(收)" name="CollectMemorandumTab">
               <CollectMemorandumTab></CollectMemorandumTab>
             </el-tab-pane>
-            <el-tab-pane label="资料备忘(租)">
+            <el-tab-pane label="资料备忘(租)" name="RentMemorandumTab">
               <RentMemorandumTab></RentMemorandumTab>
             </el-tab-pane>
-            <el-tab-pane label="回访记录(收)">
+            <el-tab-pane label="回访记录(收)" name="CollectReturnVisitRecordTab">
               <CollectReturnVisitRecordTab></CollectReturnVisitRecordTab>
             </el-tab-pane>
-            <el-tab-pane label="回访记录(租)">
+            <el-tab-pane label="回访记录(租)" name="RentReturnVisitRecordTab">
               <RentReturnVisitRecordTab></RentReturnVisitRecordTab>
             </el-tab-pane>
-            <el-tab-pane label="跟进记录(收)">
-              <CollectFollowRecordTab></CollectFollowRecordTab>
+            <el-tab-pane label="跟进记录(收)" name="CollectFollowRecordTab">
+              <CollectFollowRecordTab :collectContractId="collectContractId" :activeName="activeName"></CollectFollowRecordTab>
             </el-tab-pane>
-            <el-tab-pane label="跟进记录(租)">
-              <RentFollowRecordTab></RentFollowRecordTab>
+            <el-tab-pane label="跟进记录(租)" name="RentFollowRecordTab">
+              <RentFollowRecordTab :rentContractId="rentContractId" :activeName="activeName"></RentFollowRecordTab>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -290,14 +290,15 @@
     <DecreaseGoods :decreaseGoodsDialog="decreaseGoodsDialog" @close="closeModal"></DecreaseGoods>
     <OwnerArrears :ownerArrearsDialog="ownerArrearsDialog" @close="closeModal"></OwnerArrears>
     <OwnerRenew :ownerRenewDialog="ownerRenewDialog" @close="closeModal"></OwnerRenew>
-    <AddFollowUp :addFollowUpDialog="addFollowUpDialog" @close="closeModal"></AddFollowUp>
+    <AddFollowUp :addFollowUpDialog="addFollowUpDialog" :contractModule="contractModule"
+                 :contractOperateId="contractOperateId" @close="closeModal"></AddFollowUp>
     <CollectVacation :collectVacationDialog="collectVacationDialog" @close="closeModal"></CollectVacation>
     <AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" @close="closeModal"></AddCollectRepair>
     <AddRentRepair :addRentRepairDialog="addRentRepairDialog" @close="closeModal"></AddRentRepair>
     <RentChangeRoom :rentChangeRoomDialog="rentChangeRoomDialog" @close="closeModal"></RentChangeRoom>
     <Sublease :subleaseDialog="subleaseDialog" @close="closeModal"></Sublease>
     <RentRenew :rentRenewDialog="rentRenewDialog" @close="closeModal"></RentRenew>
-    <AddRentInfo :addRentInfoDialog="addRentInfoDialog" @close="closeModal"></AddRentInfo>
+    <AddRentInfo :addRentInfoDialog="addRentInfoDialog" :collectContractId="collectContractId" @close="closeModal"></AddRentInfo>
     <SendMessage :sendMessageDialog="sendMessageDialog" @close="closeModal"></SendMessage>
     <AddHouseResources :addHouseResourcesDialog="addHouseResourcesDialog" @close="closeModal"></AddHouseResources>
     <Repayment :repaymentDialog="repaymentDialog" @close="closeModal"></Repayment>
@@ -457,6 +458,11 @@
         rentTotalNum:0,
         rentHouseId : '',
         rentContractId : '',
+
+        contractModule : '',
+        contractOperateId : '',
+
+        activeName:'OwnerInfoTab',    //tab name
       }
     },
     mounted(){
@@ -480,7 +486,10 @@
           if(res.data.code === '60110'){
             this.collectData = res.data.data;
             this.collectTotalNum = res.data.meta.total;
-            this.collectHouseId = this.collectData[0].house_id;
+            if(res.data.data.length>0){
+              this.collectHouseId = this.collectData[0].house_id;
+              this.collectContractId = this.collectData[0].contract_id;
+            }
           }else {
             this.collectData = [];
             this.collectTotalNum = 0;
@@ -491,9 +500,12 @@
       //房屋右键
       houseMenu(row, event){
         this.collectHouseId = row.house_id;
-        this.collectContractId = row.contract_id;
+        this.collectContractId = row.contract_id;   //收房id
+        this.contractOperateId = row.contract_id;   //通用合同ID
+        this.contractModule = 1;
         this.lists = [
           {clickIndex: 'addHouseResourcesDialog', headIcon: 'el-icons-fa-home', label: '修改房源',},
+          {clickIndex: 'addRentInfoDialog', headIcon :'el-icons-fa-plus', label: '登记租客信息',},
           {
             clickIndex: '', headIcon: 'el-icons-fa-pencil-square-o', tailIcon: 'el-icon-arrow-right', label: '房东续约/延期',
             children: [
@@ -503,7 +515,7 @@
           },
           {clickIndex: 'collectVacationDialog', headIcon: 'el-icons-fa-reply', label: '房东退房',},
           {clickIndex: 'switchToJoint', headIcon :' el-icons-fa-refresh', label: '转到合租',},
-          {clickIndex: 'addFollowUpDialog',headIcon :' el-icons-fa-plus', label: '添加工单',},
+          {clickIndex: 'addFollowUpDialog',headIcon :'el-icons-fa-plus', label: '添加工单',},
           {clickIndex: 'ownerArrearsDialog', headIcon: 'el-icons-fa-cny', label: '房东欠款',},
           {
             clickIndex: '', headIcon: 'el-icons-fa-inbox', tailIcon: 'el-icon-arrow-right', label: '物品增减',
@@ -551,6 +563,9 @@
           if(res.data.code === '60110'){
             this.rentingData = res.data.data;
             this.rentTotalNum = res.data.meta.total;
+            if(res.data.data.length>0){
+              this.rentContractId = res.data.data[0].contract_id;
+            }
           }else {
             this.rentingData = [];
             this.rentTotalNum = 0;
@@ -567,14 +582,10 @@
       //租客右键
       clientMenu(row, event){
         this.rentContractId = row.contract_id;
+        this.contractOperateId = row.contract_id;   //通用合同ID
+        this.contractModule = 2;
         this.lists = [
-          {
-            clickIndex: '', headIcon: 'el-icons-fa-user', tailIcon: 'el-icon-arrow-right', label: '租客管理',
-            children: [
-              {clickIndex: 'addRentInfoDialog', label: '登记租客信息',},
-              {clickIndex: 'addRentInfoDialog', label: '修改租客信息',},
-            ]
-          },
+          {clickIndex: 'addRentInfoDialog',headIcon: 'el-icon-edit', label: '修改租客信息',},
           {clickIndex: 'rentRenewDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '租客续约',},
           {
             clickIndex: '', headIcon: 'el-icons-fa-home', tailIcon: 'el-icon-arrow-right', label: '退房/调房',
@@ -777,6 +788,9 @@
         this.topFormSetDialog = false;
         this.settingDialog = false;
         this.visitRecordDialog = false;
+
+        this.contractModule = '';
+        this.contractOperateId = '';
       },
 
 

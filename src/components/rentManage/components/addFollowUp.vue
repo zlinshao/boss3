@@ -11,7 +11,6 @@
                 </el-select>
               </el-form-item>
             </el-col>
-
             <el-col :span="12">
               <el-form-item label="跟进人" required="">
                 <el-input  v-model="follow_name" @focus="openOrganizeModal"></el-input>
@@ -65,15 +64,15 @@
   import UPLOAD from '../../common/UPLOAD.vue'
   export default {
     name:'addFollowUp',
-    props:['addFollowUpDialog'],
+    props:['addFollowUpDialog','contractOperateId','contractModule'],
     components:{Organization,UPLOAD},
     data() {
       return {
         addFollowUpDialogVisible:false,
         params:{
-          module:'1',                        //'关联模型', 1-收房  2-租房
+          contract_id : '',                 //'合同id',
+          module: '',                        //'关联模型', 1-收房  2-租房
           matters:'',                        //跟进事项
-          contract_id : '1',                 //'合同id',
           type : '',                         //'事件类型',
           follow_id : '',                    // '跟进人',
           expect_time  : '',                 //'期待维修时间',
@@ -100,6 +99,12 @@
         }else {
           this.isClear = false
         }
+      },
+      contractOperateId(val){
+        this.params.contract_id = val;
+      },
+      contractModule(val){
+        this.params.module = val
       }
     },
     mounted(){
@@ -161,15 +166,15 @@
       },
       init(){
         this.params = {
-          module:'1',                      //'关联模型', 1-收房  2-租房
+          contract_id : '',
+          module : '',
           matters:'',                     //跟进事项
-          contract_id : '1',               //'合同id',
           type : '',                      //'事件类型',
           follow_id : '',                 // '跟进人',
           expect_time  : '',              //'预计完成时间',
           expected_finish_time : '',      //'预计完成时间',
           follow_time : '',               //'跟进时间',
-//          follow_content : '',            //'跟进内容',
+//          follow_content : '',           //'跟进内容',
           image_pic:[]
         };
         this.follow_name = '';

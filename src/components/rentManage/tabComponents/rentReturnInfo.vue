@@ -57,7 +57,7 @@
         <el-pagination
           @current-change="currentChange"
           :current-page="params.pages"
-          :page-size="4"
+          :page-size="3"
           layout="total, prev, pager, next, jumper"
           :total="totalNumber">
         </el-pagination>
@@ -67,6 +67,7 @@
 
 <script>
     export default {
+      props:['rentContractId','activeName'],
       data () {
           return {
             /***********/
@@ -75,13 +76,31 @@
             params:{
               limit:3,
               page:1,
+              contract_id :'',
             },
             totalNumber:0,
             editId:'',      //编辑id
+
+            isRequestData : false,
           }
       },
       mounted(){
-        this.getData();
+      },
+      watch:{
+        rentContractId(val){
+          this.params.contract_id = val;
+          this.isRequestData = false;
+          if(this.activeName === 'rentReturnRomeInfoTab'){
+            this.getData();
+            this.isRequestData = true;
+          }
+        },
+        activeName(val){
+          if(!this.isRequestData && val=== 'rentReturnRomeInfoTab' && this.rentContractId){
+            this.getData();
+            this.isRequestData = true;
+          }
+        }
       },
       methods:{
         getData(){

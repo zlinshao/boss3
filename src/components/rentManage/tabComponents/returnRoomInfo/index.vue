@@ -58,13 +58,13 @@
         <el-pagination
           @current-change="currentChange"
           :current-page="params.pages"
-          :page-size="4"
+          :page-size="3"
           layout="total, prev, pager, next, jumper"
           :total="totalNumber">
         </el-pagination>
       </div>
-      <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-                 @clickOperate="clickEvent"></RightMenu>
+      <!--<RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"-->
+                 <!--@clickOperate="clickEvent"></RightMenu>-->
       <EditRentChange :editRentChangeDialog="editRentChangeDialog" @close="closeModal"></EditRentChange>
     </div>
 </template>
@@ -74,6 +74,7 @@
   import EditRentChange from './components/editRentChange.vue'
     export default {
       components:{RightMenu,EditRentChange},
+      props:['collectContractId','activeName'],
       data () {
           return {
             rightMenuX: 0,
@@ -86,13 +87,31 @@
             params:{
               limit:3,
               page:1,
+              contract_id : '',
             },
             totalNumber:0,
             editId:'',      //编辑id
+            isRequestData : false,
           }
       },
       mounted(){
-        this.getData();
+
+      },
+      watch:{
+        collectContractId(val){
+          this.params.contract_id = val;
+          this.isRequestData = false;
+          if(this.activeName === 'CollectReturnRomeInfoTab'){
+            this.getData();
+            this.isRequestData = true;
+          }
+        },
+        activeName(val){
+          if(!this.isRequestData && val=== 'CollectReturnRomeInfoTab' && this.collectContractId){
+            this.getData();
+            this.isRequestData = true;
+          }
+        }
       },
       methods:{
         getData(){

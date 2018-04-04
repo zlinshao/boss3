@@ -127,44 +127,6 @@
                   </el-col>
                 </el-row>
 
-                <!--<el-row >-->
-                  <!--<el-col :span="6">-->
-                    <!--<el-form-item label="水表卡号" required>-->
-                      <!--<el-input placeholder="请输入内容">换房</el-input>-->
-                    <!--</el-form-item>-->
-                  <!--</el-col>-->
-                  <!--<el-col :span="6">-->
-                    <!--<el-form-item label="燃气表卡号" required>-->
-                      <!--<el-input placeholder="请输入内容">换房</el-input>-->
-                    <!--</el-form-item>-->
-                  <!--</el-col>-->
-                  <!--<el-col :span="6">-->
-                    <!--<el-form-item label="电表卡号" required>-->
-                      <!--<el-input placeholder="请输入内容"></el-input>-->
-                    <!--</el-form-item>-->
-                  <!--</el-col>-->
-                  <!--<el-col :span="6">-->
-                    <!--<el-form-item label="卫生情况">-->
-                      <!--<el-select clearable v-model="params.region" placeholder="请选择卫生情况">-->
-                        <!--<el-option label="一般" value="shanghai"></el-option>-->
-                        <!--<el-option label="良好" value="beijing"></el-option>-->
-                      <!--</el-select>-->
-                    <!--</el-form-item>-->
-                  <!--</el-col>-->
-                <!--</el-row>-->
-
-                <!--<el-row>-->
-                  <!--<el-col :span="12">-->
-                    <!--<el-form-item label="配套设施">-->
-                      <!--<el-input type="textarea"></el-input>-->
-                    <!--</el-form-item>-->
-                  <!--</el-col>-->
-                  <!--<el-col :span="12">-->
-                    <!--<el-form-item label="备注">-->
-                      <!--<el-input type="textarea"></el-input>-->
-                    <!--</el-form-item>-->
-                  <!--</el-col>-->
-                <!--</el-row>-->
               </el-form>
             </div>
           </el-tab-pane>
@@ -242,10 +204,14 @@
                     <el-col :span="6">
                       <el-form-item label="签约时长" required>
                         <el-col :span="12" style="padding-right: 10px">
-                          <el-input placeholder="月数" @blur="changeMonth" v-model="params.month"></el-input>
+                          <el-input placeholder="月数" @blur="changeMonth" v-model="params.month">
+                            <template slot="append">月</template>
+                          </el-input>
                         </el-col>
                         <el-col :span="12">
-                          <el-input placeholder="天数" v-model="params.day"></el-input>
+                          <el-input placeholder="天数" v-model="params.day">
+                            <template slot="append">天</template>
+                          </el-input>
                         </el-col>
                       </el-form-item>
                     </el-col>
@@ -256,29 +222,6 @@
                     </el-col>
                   </el-row>
 
-                  <el-row >
-                    <el-col :span="6">
-                      <el-form-item label="合同开始时间">
-                        <el-date-picker @blur="computedEndDate" value-format="yyyy-MM-dd"
-                                        type="date" placeholder="选择日期" v-model="params.begin_date"></el-date-picker>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                      <el-form-item label="合同结束时间">
-                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期" v-model="params.end_date"></el-date-picker>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                      <el-form-item label="空置开始时间">
-                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期" disabled="" v-model="params.begin_date"></el-date-picker>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                      <el-form-item label="空置结束时间">
-                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期" disabled="" v-model="params.vacancy_end_date"></el-date-picker>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="空置期天数">
@@ -287,22 +230,60 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="空置安置方式" required>
-                        <el-select clearable v-model="params.vacancy_way" placeholder="请选择安置方式" value="">
+                        <el-select clearable v-model="params.vacancy_way" @change="vacancyWay" placeholder="请选择安置方式" value="">
                           <el-option v-for="item in vacancy_way_dic" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
                         </el-select>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6" v-if="params.vacancy_way == 442">
+                      <el-form-item label="其他" required="">
+                        <el-input placeholder="请输入内容" v-model="params.vacancy_other"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="保修期">
                         <el-col :span="12" style="padding-right: 10px">
-                          <el-input placeholder="月数" v-model="params.warranty_month"></el-input>
+                          <el-input placeholder="月数" v-model="params.warranty_month">
+                            <template slot="append">月</template>
+                          </el-input>
                         </el-col>
                         <el-col :span="12">
-                          <el-input placeholder="天数" v-model="params.warranty_day"></el-input>
+                          <el-input placeholder="天数" v-model="params.warranty_day">
+                            <template slot="append">天</template>
+                          </el-input>
                         </el-col>
                       </el-form-item>
                     </el-col>
                   </el-row>
+
+                  <el-row >
+
+                    <el-col :span="6">
+                      <el-form-item label="空置开始时间">
+                        <el-date-picker  @blur="computedEndDate"  value-format="yyyy-MM-dd" type="date"
+                                         placeholder="选择日期" v-model="params.begin_date"></el-date-picker>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="空置结束时间">
+                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期" disabled="" v-model="params.vacancy_end_date"></el-date-picker>
+                      </el-form-item>
+                    </el-col>
+
+                    <el-col :span="6">
+                      <el-form-item label="合同开始时间">
+                        <el-date-picker value-format="yyyy-MM-dd"
+                                        type="date" placeholder="选择日期" disabled="" v-model="params.begin_date"></el-date-picker>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="合同结束时间">
+                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期" v-model="params.end_date"></el-date-picker>
+                      </el-form-item>
+                    </el-col>
+
+                  </el-row>
+
 
                   <el-row>
                     <el-col :span="6">
@@ -320,30 +301,6 @@
                     </el-col>
                   </el-row>
 
-                  <!--<el-row>-->
-                    <!--<el-col :span="6">-->
-                      <!--<el-form-item label="月单价">-->
-                        <!--<el-input placeholder="请输入内容" v-model="params.price"></el-input>-->
-                      <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :span="6">-->
-                      <!--<el-form-item label="" label-width="20px">-->
-                        <!--<el-checkbox v-model="priceChange"><span style="font-size: 12px">月单价不固定</span></el-checkbox>-->
-                      <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :span="6">-->
-                      <!--<el-form-item label="付款方式">-->
-                        <!--<el-select clearable v-model="params.pay_way" placeholder="请选择付款方式" value="">-->
-                          <!--<el-option v-for="item in pay_way_dic" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>-->
-                        <!--</el-select>-->
-                      <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :span="6">-->
-                      <!--<el-form-item label="" label-width="20px">-->
-                        <!--<el-checkbox v-model="payWayChange"><span style="font-size: 12px">付款方式不固定</span></el-checkbox>-->
-                      <!--</el-form-item>-->
-                    <!--</el-col>-->
-                  <!--</el-row>-->
                   <div class="title">月单价</div>
                   <div class="form_border">
                     <div v-for="item in priceChangeAmount">
@@ -462,7 +419,9 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="物业费金额">
-                        <el-input placeholder="请输入内容" v-model="params.property"></el-input>
+                        <el-input placeholder="请输入内容" v-model="params.property">
+                          <template slot="append">元/m²</template>
+                        </el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -559,9 +518,6 @@
           </el-tab-pane>
           <el-tab-pane label="合同照片" name="fourth">
             <div class="scroll_bar">
-              <!--<div class="title">房源信息</div>-->
-              <!--<div class="title">房东信息</div>-->
-              <!--<div class="title">合同信息</div>-->
               <el-form label-width="100px">
                 <el-form-item label="证件照片" required="">
                   <UpLoad :ID="'addHouse_id_card'" :isClear="isClear" :editImage="identity_photo" @getImg="getImg"></UpLoad>
@@ -640,6 +596,7 @@
         params: {
           id : '',      //草稿id
           draft:'',
+          type: 1,
           //------------------小区详情--------------------//
           community_id : '',            //小区id
           community_nickname : '',      //小区昵称
@@ -668,6 +625,7 @@
           end_date : '',                // 合同结束时间
           vacancy : '',                 // 空置期
           vacancy_way : '',             // 空置期安置方式
+          vacancy_other : '',           //空置期安置方式(其他)
           warranty_month : '',          // 保修期月数
           warranty_day : '',            // 保修期天数
           is_agency  : '',              // 来源
@@ -690,7 +648,7 @@
           electricity_peak : '',        // 电峰
           electricity_vally : '',       // 电谷
           gas : '',                     // 气
-          public_fee : '',                  // 公摊
+          public_fee : '',              // 公摊
           data_date : '',               // 资料补齐时间
           staff_id : '',                // 开单人
           leader_id : '',               // 负责人
@@ -846,9 +804,10 @@
             this.params.end_date = data.end_date;
             this.params.vacancy = data.vacancy;
             this.params.vacancy_way = data.vacancy_way;
+            this.params.vacancy_other = data.vacancy_other;
             this.params.warranty_month = data.warranty_month;
             this.params.warranty_day = data.warranty_day;
-            this.params.is_agency = data.is_agency;
+            this.params.is_agency = String(data.is_agency);
             this.params.deposit = data.deposit;
             //------------月单价和付款方式-----------------------//
             this.priceChangeAmount = data.price.length;
@@ -955,7 +914,9 @@
         this.priceChangeAmount = 1;
         this.payWayChangeAmount = 1;
       },
-
+      vacancyWay(){
+        this.params.vacancy_other = '';
+      },
       //调出选人组件
       openOrganizeModal(val){
         this.selectType = val;
@@ -1000,7 +961,7 @@
 
       //增加附属租客
       addMoreCustoms(){
-          this.customersAmount ++;
+        this.customersAmount ++;
       },
       deleteCustoms(item){
         this.nameArray.splice(item,1);
@@ -1045,7 +1006,7 @@
       getImg(val){
         this.isUpPic = val[2];
         if(val[0] === 'addHouse_id_card'){
-            this.params.identity_photo = val[1];
+          this.params.identity_photo = val[1];
         }else if(val[0] === 'addHouse_bank_card'){
           this.params.bank_photo = val[1];
         }else if(val[0] === 'addHouse_contract_card'){
@@ -1162,6 +1123,7 @@
           end_date : '',                // 合同结束时间
           vacancy : '',                 // 空置期
           vacancy_way : '',             // 空置期安置方式
+          vacancy_other : '',           // 空置期安置方式(其他)
           warranty_month : '',          // 保修期月数
           warranty_day : '',            // 保修期天数
           is_agency  : '',                    // 来源
@@ -1273,6 +1235,7 @@
               text-align: right;
             }
           }
+
           .deleteNumber{
             text-align: center;
             cursor: pointer;

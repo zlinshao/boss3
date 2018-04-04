@@ -17,7 +17,9 @@
                 <el-input  v-model="follow_name" @focus="openOrganizeModal"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
 
+          <el-row>
             <el-col :span="12">
               <el-form-item label="跟进时间">
                 <el-date-picker type="datetime" placeholder="选择日期时间"
@@ -31,9 +33,7 @@
                                 value-format="yyyy-MM-dd HH:mm:ss" v-model="params.expected_finish_time"></el-date-picker>
               </el-form-item>
             </el-col>
-
           </el-row>
-
 
           <el-row>
             <el-col :span="24">
