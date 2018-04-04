@@ -10,35 +10,11 @@
               </li>
               <li v-for="(item,index) in tabs" :class="{active:index == num}"  @click="tab(index)" :key="index">{{item}}</li>
             </ul>
-            <ul class="instruct_ul">
-              <li class="step_basic">
-                <span>技巧介绍</span>
-              </li>
-              <li>1. 如何登记房源？</li>
-              <li>2. 如何登记租客？</li>
-              <li>3. 租客如何退房？</li>
-              <li>4. 租客如何转租？</li>
-              <li>5. 如何下载房东合同？</li>
-              <li>6. 租客如何续约？</li>
-              <li>7. 如何设置定价？</li>
-            </ul>
-            <ul class="instruct_ul">
-              <li class="step_basic">
-                <span>功能介绍</span>
-              </li>
-              <li>1. 如何登记房源？</li>
-              <li>2. 如何登记租客？</li>
-              <li>3. 租客如何退房？</li>
-              <li>4. 租客如何转租？</li>
-              <li>5. 如何下载房东合同？</li>
-              <li>6. 租客如何续约？</li>
-              <li>7. 如何设置定价？</li>
-            </ul>
           </el-col>
           <el-col :span="18" class="instruct_left">
             <div v-show=" 0 == num" class="imgdiv">
-              <el-button v-show="article == 1" class="elbuttom1" size="mini" @click="preimg" type="primary">上一张</el-button>
-              <el-button v-show="article == 0" class="elbuttom2" size="mini" @click="nextimg" type="primary">下一张</el-button>
+              <el-button v-show="article == 1" class="elbuttom1" size="small" @click="preimg" type="primary">上一张</el-button>
+              <el-button v-show="article == 0" class="elbuttom2" size="small" @click="nextimg" type="primary">下一张</el-button>
               <img v-show="article == 0" src="../../../../assets/images/article1.jpg" />
               <img v-show="article == 1" src="../../../../assets/images/article2.jpg" />
             </div>  
@@ -47,8 +23,8 @@
               <img src="../../../../assets/images/highsearch.jpg" />
             </div> 
             <div v-show=" 2 == num" class="imgdiv">
-              <el-button v-show="articlemanagement != 0" class="elbuttom3" size="mini" @click="premanimg" type="primary">上一张</el-button>
-              <el-button v-show="articlemanagement != 2" class="elbuttom4" size="mini" @click="nextnamimg" type="primary">下一张</el-button>
+              <el-button v-show="articlemanagement != 0" class="elbuttom3" size="small" @click="premanimg" type="primary">上一张</el-button>
+              <el-button v-show="articlemanagement != 2" class="elbuttom4" size="small" @click="nextnamimg" type="primary">下一张</el-button>
               <img v-show="articlemanagement == 0" src="../../../../assets/images/articlemanagement1.jpg" />
               <img v-show="articlemanagement == 1" src="../../../../assets/images/articlemanagement2.jpg" />    
               <img v-show="articlemanagement == 2" src="../../../../assets/images/articlemanagement3.jpg" />          
@@ -63,10 +39,9 @@
         </el-row>
 
       </div>
-      <div style="text-align: center;padding: 10px;">
+      <div style="text-align: center;padding: 20px;">
         <span slot="footer" class="dialog-footer" >
-        <!--<el-button size="small" @click="instructionDialogVisible = false">取 消</el-button>-->
-        <el-button size="small" type="primary" @click="instructionDialogVisible = false">确 定</el-button>
+
       </span>
       </div>
 
@@ -177,9 +152,9 @@
   } 
   .imgdiv{
     position: relative;
-    .elbuttom1{ position: absolute; bottom:30px; left:390px;margin:0}
-    .elbuttom2{ position: absolute; bottom:30px; left:390px;margin:0}
-    .elbuttom3{ position: absolute; bottom:30px; left:300px;margin:0}
-    .elbuttom4{ position: absolute; bottom:30px; left:460px;margin:0}
+    .elbuttom1{ position: absolute; bottom:-34px; left:390px;margin:0}
+    .elbuttom2{ position: absolute; bottom:-34px; left:390px;margin:0}
+    .elbuttom3{ position: absolute; bottom:-34px; left:330px;margin:0}
+    .elbuttom4{ position: absolute; bottom:-34px; left:420px;margin:0}
   } 
 </style>
