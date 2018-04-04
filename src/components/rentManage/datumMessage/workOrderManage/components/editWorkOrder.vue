@@ -97,7 +97,8 @@
         type:'',
         detailInfo:{},
         editImage:{},
-        upStatus:false
+        upStatus:false,
+        isDictionary : false,
       };
     },
     watch:{
@@ -108,7 +109,10 @@
         if(!val){
           this.$emit('close');
         }else {
-          this.isClear = false
+          this.isClear = false;
+          if(!this.isDictionary){
+            this.getDictionary();
+          }
         }
       },
       startEdit(val){
@@ -118,18 +122,19 @@
       }
     },
     mounted(){
-      this.getDictionary();
     },
     methods:{
       getDictionary(){
         this.$http.get(globalConfig.server+'setting/dictionary/255').then((res) => {
           if(res.data.code === "30010"){
             this.dictionary = res.data.data;
+            this.isDictionary = true
           }
         });
         this.$http.get(globalConfig.server+'setting/dictionary/335').then((res) => {
           if(res.data.code === "30010"){
             this.dictionary_follow = res.data.data;
+            this.isDictionary = true
           }
         });
       },
