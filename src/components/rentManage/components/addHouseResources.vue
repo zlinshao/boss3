@@ -202,7 +202,7 @@
                         <el-input placeholder="请输入内容" v-model="params.contract_number"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="6" class="unitMessage">
                       <el-form-item label="签约时长" required>
                         <el-col :span="12" style="padding-right: 10px">
                           <el-input placeholder="月数" @blur="changeMonth" v-model="params.month">
@@ -241,7 +241,7 @@
                         <el-input placeholder="请输入内容" v-model="params.vacancy_other"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="6" class="unitMessage">
                       <el-form-item label="保修期">
                         <el-col :span="12" style="padding-right: 10px">
                           <el-input placeholder="月数" v-model="params.warranty_month">
@@ -757,9 +757,8 @@
       },
       //获取草稿
       getDraft(){
-        this.$http.get(globalConfig.server+'lease/collect/draft').then((res) => {
+        this.$http.get(globalConfig.server+'lease/collect/draft?type=1').then((res) => {
           if(res.data.code === '61010'){
-
             this.nameArray = [];
             this.sexArray = [];
             this.id_typeArray = [];
@@ -1095,7 +1094,9 @@
       clearData(){
         this.isClear = false;
         this.params = {
+          id : '',      //草稿id
           draft:'',
+          type: 1,
           //------------------小区详情--------------------//
           community_id : '',            //小区id
           community_nickname : '',      //小区昵称

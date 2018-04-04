@@ -152,7 +152,7 @@
                                         type="date" placeholder="选择日期" v-model="params.begin_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="6" class="unitMessage">
                       <el-form-item label="签约月数" required>
                         <el-input placeholder="月数" @blur="changeMonth" v-model="params.month">
                           <template slot="append">月</template>
@@ -470,7 +470,6 @@
         houseInfo: {},                //房屋相关信息
         params: {
           contract_id: this.collectContractId,   //合同id
-          draft: '',
           type: 1,
           //------------------小区详情--------------------//
           customers: [],               //租客数组
@@ -858,7 +857,9 @@
       clearData(){
         this.isClear = false;
         this.params = {
-          draft: '',
+          contract_id: this.collectContractId,   //合同id
+          type: 1,
+
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
           contract_type: '',           // 订单性质（合同种类）
