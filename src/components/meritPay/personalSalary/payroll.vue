@@ -117,7 +117,7 @@
         let config = {
           headers:{'Content-Type':'multipart/form-data'}
         };
-        this.$http.post(globalConfig.server+ 'salary/dashboard/import/'+ this.form.category, val[1], config).then((res) => {
+        this.$http.post(globalConfig.server+ 'salary/dashboard/import/'+ this.form.category, {doc_id: val[1][0]}, config).then((res) => {
 
         });
       },
