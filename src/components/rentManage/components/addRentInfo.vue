@@ -7,45 +7,48 @@
             <div class="form_border">
               <el-form size="mini" :model="params" label-width="100px">
                 <el-row>
-                  <el-col :span="6">
+                  <el-col :span="8">
                     <el-form-item label="房屋地址">
                       <div class="content">{{houseInfo.community_address}}</div>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="6">
+                  <el-col :span="8">
                     <el-form-item label="房型">
                       <div class="content">{{houseInfo.house_type}}</div>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="6">
+                  <el-col :span="8">
                     <el-form-item label="面积">
                       <div class="content">{{houseInfo.area}}</div>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="6">
-                    <el-form-item label="装修">
-                      <div class="content">{{houseInfo.remark}}</div>
                     </el-form-item>
                   </el-col>
                 </el-row>
 
                 <el-row>
-                  <el-col :span="6">
+                  <el-col :span="8">
+                    <el-form-item label="装修">
+                      <div class="content">{{houseInfo.remark}}</div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
                     <el-form-item label="收房价格">
                       <div class="content">{{houseInfo.remark}}</div>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="6">
+                  <el-col :span="8">
                     <el-form-item label="楼层">
                       <div class="content">{{houseInfo.floor}}</div>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="6">
+                </el-row>
+
+                <el-row>
+                  <el-col :span="8">
                     <el-form-item label="房屋到期时间">
                       <div class="content">{{houseInfo.remark}}</div>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="6">
+                  <el-col :span="8">
                     <el-form-item label="房屋类型">
                       <div class="content">{{houseInfo.property_type}}</div>
                     </el-form-item>
@@ -130,11 +133,12 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="订单来源">
-                        <el-select clearable v-model="params.is_agency" placeholder="请选择订单来源" value="">
-                          <el-option label="个人" value="'0'"></el-option>
-                          <el-option label="中介" value="'1'"></el-option>
-                        </el-select>
+                      <el-form-item label="是否中介">
+                        <el-switch
+                          v-model="params.is_agency"
+                          active-text="个人"
+                          inactive-text="中介" active-value="0" inactive-value="1">
+                        </el-switch>
                       </el-form-item>
                     </el-col>
 
@@ -278,7 +282,7 @@
                         <el-input placeholder="请输入内容" v-model="params.penalty"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="6" class="unitMessage">
                       <el-form-item label="物业费金额">
                         <el-input placeholder="请输入内容" v-model="params.property">
                           <template slot="append">元/m²</template>
@@ -310,7 +314,7 @@
                         </el-col>
                         <el-col :span="12">
                           <el-form-item label="谷" label-width="15px" style="margin-bottom: 0;">
-                            <el-input placeholder="请输入内容" v-model="params.electricity_vally"></el-input>
+                            <el-input placeholder="请输入内容" v-model="params.electricity_valley"></el-input>
                           </el-form-item>
                         </el-col>
                       </el-form-item>
@@ -441,7 +445,7 @@
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="addRentInfoDialogVisible = false">取 消</el-button>
         <!--<el-button size="small" type="primary" @click="confirmAdd(1)">草 稿</el-button>-->
-        <el-button size="small" type="primary" @click="confirmAdd(0)">发 布</el-button>
+        <el-button size="small" type="primary" @click="confirmAdd">发 布</el-button>
       </span>
     </el-dialog>
     <VillageModal :villageDialog="villageDialog" @close="closeVillageModal"></VillageModal>
@@ -470,18 +474,18 @@
 
         houseInfo: {},                //房屋相关信息
         params: {
-          contract_id: this.collectContractId,   //合同id
+          contract_id: '',   //合同id
           type: 1,
           //------------------小区详情--------------------//
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
-          contract_type: '',           // 订单性质（合同种类）
+          contract_type: 1,           // 订单性质（合同种类）
           contract_number: '',         // 合同编号
           month: '',                   // 租房月数
           sign_date: '',               // 签约日期
           begin_date: '',              // 合同开始时间
           end_date: '',                // 合同结束时间
-          is_agency: '',               // 来源
+          is_agency: 1,               // 来源
           deposit: '',                 // 押金
           price: [],                   // 月单价
           pay_way: [],                 // 付款方式
@@ -498,7 +502,7 @@
           property_payer: '',          // 物业费付款方
           water: '',                   // 水
           electricity_peak: '',        // 电峰
-          electricity_vally: '',       // 电谷
+          electricity_valley: '',       // 电谷
           gas: '',                     // 气
           public_fee: '',              // 公摊
           manage_fee: '',
@@ -588,6 +592,9 @@
           }
         }
       },
+      collectContractId(val){
+        this.params.contract_id = val;
+      },
       'params.purchase_way': {
         handler(val, oldVal){
           this.account = '';
@@ -675,13 +682,16 @@
       },
       selectMember(val){
         this.organizationDialog = false;
+        console.log(val)
         if (this.selectType === 'staff') {
           this.params.staff_id = val[0].id;
           this.params.leader_id = val[0].id;
-          this.params.department_id = val[0].org[0].id;
           this.staff_name = val[0].name;
           this.leader_name = val[0].name;
-          this.department_name = val[0].org[0].name;
+          if(val[0].org.length>0){
+            this.params.department_id = val[0].org[0].id;
+            this.department_name = val[0].org[0].name;
+          }
         } else if (this.selectType === 'leader') {
           this.params.leader_id = val[0].id;
           this.leader_name = val[0].name;
@@ -788,8 +798,7 @@
         }
       },
 
-      confirmAdd(val){
-        this.params.draft = val;
+      confirmAdd(){
         //租客
         let customItem = {};
         this.params.customers = [];
@@ -858,18 +867,17 @@
       clearData(){
         this.isClear = false;
         this.params = {
-          contract_id: this.collectContractId,   //合同id
+          contract_id: '',   //合同id
           type: 1,
-
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
-          contract_type: '',           // 订单性质（合同种类）
+          contract_type: 1,           // 订单性质（合同种类）
           contract_number: '',         // 合同编号
           month: '',                   // 租房月数
           sign_date: '',               // 签约日期
           begin_date: '',              // 空置期开始时间
           end_date: '',                // 合同结束时间
-          is_agency: '',               // 来源
+          is_agency: 1,               // 来源
           deposit: '',                 // 押金
           price: [],                   // 月单价
           pay_way: [],                 // 付款方式
@@ -884,7 +892,7 @@
           property_payer: '',          // 物业费付款方
           water: '',                   // 水
           electricity_peak: '',        // 电峰
-          electricity_vally: '',       // 电谷
+          electricity_valley: '',       // 电谷
           gas: '',                     // 气
           public_fee: '',                  // 公摊
           manage_fee: '',
@@ -977,7 +985,8 @@
           }
           .content {
             padding: 0 10px;
-            min-height: 32px;
+            height: 32px;
+            overflow: hidden;
             background: #eef3fc;
             border-radius: 4px;
             font-size: 12px;

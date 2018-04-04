@@ -80,7 +80,6 @@
               <el-table-column
                 label="收房价格">
                 <template slot-scope="scope">
-
                   <el-popover
                     ref="popover4"
                     placement="bottom"
@@ -91,8 +90,8 @@
                       <el-table-column width="150" property="period" label="变化周期(月)"></el-table-column>
                     </el-table>
                   </el-popover>
-                  <!--{{scope.row.pay_way}}-->
-                  <el-button v-popover:popover4 size="mini" type="text">查看</el-button>
+                  {{scope.row.price[0].price}}&nbsp;
+                  <el-button v-popover:popover4 size="mini" type="text">变化</el-button>
                 </template>
               </el-table-column>
               <el-table-column
@@ -109,8 +108,8 @@
                       <el-table-column width="150" property="period" label="变化周期(月)"></el-table-column>
                     </el-table>
                   </el-popover>
-                  <!--{{scope.row.pay_way}}-->
-                  <el-button size="mini" type="text"  v-popover:payWay>查看</el-button>
+                  {{scope.row.pay_way[0].pay_way}}&nbsp;
+                  <el-button size="mini" type="text"  v-popover:payWay>变化</el-button>
                 </template>
               </el-table-column>
               <el-table-column
@@ -194,10 +193,39 @@
               <el-table-column
                 prop="price"
                 label="出租价格">
+                <template slot-scope="scope">
+
+                  <el-popover
+                    ref="rentPrice"
+                    placement="bottom"
+                    width="300"
+                    trigger="click">
+                    <el-table :data="scope.row.price">
+                      <el-table-column width="150" property="price" label="价格(元)"></el-table-column>
+                      <el-table-column width="150" property="period" label="变化周期(月)"></el-table-column>
+                    </el-table>
+                  </el-popover>
+                  {{scope.row.price[0].price}}&nbsp;
+                  <el-button v-popover:rentPrice size="mini" type="text">变化</el-button>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="pay_way"
                 label="付款方式">
+                <template slot-scope="scope">
+                  <!--{{scope.row.pay_way}}-->
+                  <el-popover
+                    ref="payWayRent"
+                    placement="bottom"
+                    width="300"
+                    trigger="click">
+                    <el-table :data="scope.row.pay_way">
+                      <el-table-column width="150" property="pay_way" label="付款方式"></el-table-column>
+                      <el-table-column width="150" property="period" label="变化周期(月)"></el-table-column>
+                    </el-table>
+                  </el-popover>
+                  {{scope.row.pay_way[0].pay_way}}&nbsp;
+                  <el-button size="mini" type="text"  v-popover:payWayRent>变化</el-button>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="month"
@@ -215,18 +243,19 @@
                 prop="agency"
                 label="中介费">
               </el-table-column>
-              <el-table-column
-                prop="department_name"
-                label="所属部门">
-              </el-table-column>
+
               <el-table-column
                 prop="staff_name"
                 label="签约人">
               </el-table-column>
               <el-table-column
-                prop="leader_name"
-                label="负责人">
+                prop="department_name"
+                label="所属部门">
               </el-table-column>
+              <!--<el-table-column-->
+                <!--prop="leader_name"-->
+                <!--label="负责人">-->
+              <!--</el-table-column>-->
             </el-table>
           </div>
           <div class="tableBottom">
@@ -323,6 +352,8 @@
     <AddRentInfo :addRentInfoDialog="addRentInfoDialog" :collectContractId="collectContractId" @close="closeModal"></AddRentInfo>
     <SendMessage :sendMessageDialog="sendMessageDialog" @close="closeModal"></SendMessage>
     <AddHouseResources :addHouseResourcesDialog="addHouseResourcesDialog" @close="closeModal"></AddHouseResources>
+    <EditHouseResources :editHouseResourcesDialog="editHouseResourcesDialog"
+                        :collectContractId="collectContractId" @close="closeModal"></EditHouseResources>
     <Repayment :repaymentDialog="repaymentDialog" @close="closeModal"></Repayment>
     <ReturnVisit :returnVisitDialog="returnVisitDialog" @close="closeModal"></ReturnVisit>
     <TopForm :topFormSetDialog="topFormSetDialog" @close="closeModal"></TopForm>
@@ -354,6 +385,7 @@
   import AddRentInfo from '../components/addRentInfo.vue' //登记租客
   import SendMessage from '../../common/sendMessage.vue'  //发送短信
   import AddHouseResources from '../components/addHouseResources.vue' //登记房源
+  import EditHouseResources from '../components/editHouseResources.vue' //修改房源
   import Repayment from '../components/rentRepayment.vue'
   import ReturnVisit from '../components/returnVisit.vue'   //查看回访
   import TopForm from '../components/topFormSet.vue'    //表头列表
@@ -401,6 +433,7 @@
       AddRentInfo,
       SendMessage,
       AddHouseResources,
+      EditHouseResources,
       Repayment,
       ReturnVisit,
       TopForm,
@@ -454,6 +487,7 @@
         addRentInfoDialog:false,      //登记租客信息
         sendMessageDialog:false,      //发送短信
         addHouseResourcesDialog:false,  //登记房源
+        editHouseResourcesDialog:false,  //修改房源
         repaymentDialog:false,        //还款
         returnVisitDialog:false,      //查看回访
         topFormSetDialog:false,       //选择列
@@ -504,6 +538,7 @@
       },
       /*****************************收房*********************************************************/
       getCollectData(){
+        this.$loading.show();
         this.$http.get(globalConfig.server+'lease/entire/collect',{params:this.collectParams}).then((res) => {
           if(res.data.code === '60110'){
             this.collectData = res.data.data;
@@ -526,7 +561,7 @@
         this.contractOperateId = row.contract_id;   //通用合同ID
         this.contractModule = 1;
         this.lists = [
-          {clickIndex: 'addHouseResourcesDialog', headIcon: 'el-icons-fa-home', label: '修改房源',},
+          {clickIndex: 'editHouseResourcesDialog', headIcon: 'el-icons-fa-home', label: '修改房源',},
           {clickIndex: 'addRentInfoDialog', headIcon :'el-icons-fa-plus', label: '登记租客信息',},
           {
             clickIndex: '', headIcon: 'el-icons-fa-pencil-square-o', tailIcon: 'el-icon-arrow-right', label: '房东续约/延期',
@@ -582,6 +617,7 @@
       //*********************************租房*******************************************************//
       getRentData(id){
         this.$http.get(globalConfig.server+'lease/entire/rent/' + id,{params:this.rentParams}).then((res) => {
+          this.$loading.hide();
           if(res.data.code === '60110'){
             this.rentingData = res.data.data;
             this.rentTotalNum = res.data.meta.total;
@@ -749,6 +785,9 @@
           case 'addHouseResourcesDialog':     //登记房源
             this.addHouseResourcesDialog = true;
             break;
+          case 'editHouseResourcesDialog':     //修改房源
+            this.editHouseResourcesDialog = true;
+            break;
           case 'repaymentDialog':     //还款
             this.repaymentDialog = true;
             break;
@@ -788,7 +827,7 @@
         });
       },
       closeModal(){
-        this.instructionDialog = false
+        this.instructionDialog = false;
         this.backUpDialog = false;
         this.advancedDialog = false;
         this.ownerDelayDialog = false;
@@ -807,6 +846,7 @@
         this.addRentInfoDialog = false;
         this.sendMessageDialog = false;
         this.addHouseResourcesDialog = false;
+        this.editHouseResourcesDialog = false;
         this.repaymentDialog = false;
         this.returnVisitDialog = false;
         this.topFormSetDialog = false;
