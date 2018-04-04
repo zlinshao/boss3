@@ -379,27 +379,24 @@
                   </el-row>
                   <el-row>
                     <el-col :span="6">
-                      <el-form-item label="汇款方式">
-                        <el-select clearable v-model="params.purchase_way" placeholder="请选择汇款方式" value="">
-                          <el-option label="银行卡" value="1"></el-option>
-                          <el-option label="存折" value="2"></el-option>
-                          <el-option label="支付宝" value="3"></el-option>
-                          <el-option label="微信" value="4"></el-option>
+                      <el-form-item label="支付方式" required="">
+                        <el-select clearable v-model="params.purchase_way" placeholder="请选择支付方式" value="">
+                          <el-option v-for="item in purchase_way_dic" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
                         </el-select>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="账号">
+                      <el-form-item label="账号" required="">
                         <el-input placeholder="请输入内容" v-model="params.account"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="开户行" v-if="params.purchase_way<3">
+                      <el-form-item label="开户行" v-if="params.purchase_way == 509 || params.purchase_way == 510">
                         <el-input placeholder="请输入内容" v-model="params.bank"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="支行" v-if="params.purchase_way<3">
+                      <el-form-item label="支行" v-if="params.purchase_way == 509 || params.purchase_way == 510">
                         <el-input placeholder="请输入内容" v-model="params.subbranch"></el-input>
                       </el-form-item>
                     </el-col>
@@ -630,13 +627,13 @@
           warranty_day : '',            // 保修期天数
           is_agency  : '',              // 来源
           deposit : '',                 // 押金
-          price : '',                   // 月单价
-          pay_way : '',                 // 付款方式
+          price : [],                   // 月单价
+          pay_way : [],                 // 付款方式
           pay_first_date : '',          // 第一次打款时间
           pay_second_date : '',         // 第二次打款时间
           account_name : '',            // 帐户名
           relationship : '',            // 关系
-          purchase_way : '',            // 汇款方式
+          purchase_way : '',            // 支付方式
           account : '',                 // 帐户
           bank : '',                    // 银行
           subbranch : '',               // 支行
@@ -693,6 +690,7 @@
         vacancy_way_dic : [],
         pay_way_dic : [],
         property_payer_dic : [],
+        purchase_way_dic : [],
         isUpPic:false,
 
         priceChangeAmount : 1,
@@ -753,10 +751,12 @@
         this.dictionary(437,1).then((res) => {this.vacancy_way_dic = res.data;this.isDictionary = true});
         this.dictionary(443,1).then((res) => {this.pay_way_dic = res.data;this.isDictionary = true});
         this.dictionary(449,1).then((res) => {this.property_payer_dic = res.data;this.isDictionary = true});
+        this.dictionary(508,1).then((res) => {this.purchase_way_dic = res.data;this.isDictionary = true});
+
       },
       //获取草稿
       getDraft(){
-        this.$http.get(globalConfig.server+'lease/collect').then((res) => {
+        this.$http.get(globalConfig.server+'lease/collect/draft').then((res) => {
           if(res.data.code === '61010'){
 
             this.nameArray = [];
@@ -1128,13 +1128,13 @@
           warranty_day : '',            // 保修期天数
           is_agency  : '',                    // 来源
           deposit : '',                 // 押金
-          price : '',                   // 月单价
-          pay_way : '',                 // 付款方式
+          price : [],                   // 月单价
+          pay_way : '[]',                 // 付款方式
           pay_first_date : '',          // 第一次打款时间
           pay_second_date : '',         // 第二次打款时间
           account_name : '',            // 帐户名
           relationship : '',            // 关系
-          purchase_way : '',            // 汇款方式
+          purchase_way : '',            // 支付方式
           account : '',                 // 帐户
           bank : '',                    // 银行
           subbranch : '',               // 支行

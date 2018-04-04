@@ -237,6 +237,35 @@
                     </div>
                   </div>
 
+                  <div class="title">金额+支付方式</div>
+                  <div class="form_border">
+                    <div v-for="item in moneyTableChangeAmount">
+                      <el-row>
+                        <el-col :span="6">
+                          <el-form-item label="支付方式">
+                            <el-select clearable v-model="moneyWayArray[item-1]" placeholder="请选择支付方式" value="">
+                              <el-option v-for="item in purchase_way_dic" :label="item.dictionary_name" :value="item.id"
+                                         :key="item.id"></el-option>
+                            </el-select>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                          <el-form-item label="金额（元）">
+                            <el-input placeholder="请输入内容" v-model="moneySepArray[item-1]"></el-input>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="6" v-if="item>1">
+                          <div class="deleteNumber" @click="deleteMoneyTableChange(item-1)">删除</div>
+                        </el-col>
+                      </el-row>
+                    </div>
+                    <div style="text-align: center">
+                      <el-button type="text" @click="addMoreMoneyTableChange">
+                        <i class="el-icon-circle-plus"></i>添加付款方式变化条目
+                      </el-button>
+                    </div>
+                  </div>
+
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="中介费">
@@ -440,7 +469,7 @@
 
         houseInfo: {},                //房屋相关信息
         params: {
-          contract_id:this.collectContractId,   //合同id
+          contract_id: this.collectContractId,   //合同id
           draft: '',
           type: 1,
           //------------------小区详情--------------------//
@@ -454,13 +483,14 @@
           end_date: '',                // 合同结束时间
           is_agency: '',               // 来源
           deposit: '',                 // 押金
-          price: '',                   // 月单价
-          pay_way: '',                 // 付款方式
+          price: [],                   // 月单价
+          pay_way: [],                 // 付款方式
 
-          money_sum : '',              //收款总金额
-          money_table : [],            //金额+付款方式
-          retainage_date : '',         //尾款补齐时间
-          receipt : '',                 //收据编号
+          money_sum: '',              //收款总金额
+
+          money_table: [],            //金额+付款方式
+          retainage_date: '',         //尾款补齐时间
+          receipt: '',                 //收据编号
 
           agency: '',                  // 中介费
           penalty: '',                 // 赔偿金
@@ -471,7 +501,7 @@
           electricity_vally: '',       // 电谷
           gas: '',                     // 气
           public_fee: '',              // 公摊
-          manage_fee : '',
+          manage_fee: '',
           data_date: '',               // 资料补齐时间
           staff_id: '',                // 开单人
           leader_id: '',               // 负责人
@@ -514,6 +544,7 @@
         vacancy_way_dic: [],
         pay_way_dic: [],
         property_payer_dic: [],
+        purchase_way_dic: [],
         isUpPic: false,
 
         priceChangeAmount: 1,
@@ -523,6 +554,10 @@
         payWayChangeAmount: 1,
         payWayArray: [],
         payPeriodArray: [],
+
+        moneyTableChangeAmount: 1,
+        moneyWayArray: [],
+        moneySepArray: [],
 
         //照片修改
         identity_photo: {},
@@ -596,11 +631,15 @@
           this.property_payer_dic = res.data;
           this.isDictionary = true
         });
+        this.dictionary(508, 1).then((res) => {
+          this.purchase_way_dic = res.data;
+          this.isDictionary = true
+        });
       },
 
       getHouseInfo(){
-        this.$http.get(globalConfig.server+'lease/detail/'+this.collectContractId +'?collect_or_rent=0').then((res) =>{
-          if(res.data.code === '60010'){
+        this.$http.get(globalConfig.server + 'lease/detail/' + this.collectContractId + '?collect_or_rent=0').then((res) => {
+          if (res.data.code === '60010') {
             this.houseInfo = res.data.data.house;
           }
         })
@@ -701,6 +740,15 @@
         this.payPeriodArray.splice(item, 1);
         this.payWayChangeAmount--;
       },
+      //jine bianhua
+      deleteMoneyTableChange(){
+        this.moneyTableChangeAmount++;
+      },
+      addMoreMoneyTableChange(item){
+        this.moneyWayArray.splice(item, 1);
+        this.moneySepArray.splice(item, 1);
+        this.moneyTableChangeAmount--;
+      },
 
       //计算空置期结束时间
       computedEndDate(){
@@ -774,6 +822,16 @@
           this.params.pay_way.push(payWayItem);
         }
 
+        //money_table
+        let moneyTableItem = {};
+        this.params.money_table = [];
+        for (let i = 0; i < this.moneyTableChangeAmount; i++) {
+          payWayItem = {};
+          moneyTableItem.money_way = this.moneyWayArray[i] ? this.moneyWayArray[i] : '';
+          moneyTableItem.money_sep = this.moneySepArray[i] ? this.moneySepArray[i] : '';
+          this.params.money_table.push(moneyTableItem);
+        }
+
         if (!this.isUpPic) {
           this.$http.post(globalConfig.server + 'lease/rent', this.params).then((res) => {
             if (res.data.code === '61110') {
@@ -811,12 +869,12 @@
           end_date: '',                // 合同结束时间
           is_agency: '',               // 来源
           deposit: '',                 // 押金
-          price: '',                   // 月单价
-          pay_way: '',                 // 付款方式
+          price: [],                   // 月单价
+          pay_way: [],                 // 付款方式
 
-          money_sum : '',              //收款总金额
-          money_table : [],            //金额+付款方式
-          retainage_date : '',         //尾款补齐时间
+          money_sum: '',              //收款总金额
+          money_table: [],            //金额+付款方式
+          retainage_date: '',         //尾款补齐时间
 
           agency: '',                  // 中介费
           penalty: '',                 // 赔偿金
@@ -827,7 +885,7 @@
           electricity_vally: '',       // 电谷
           gas: '',                     // 气
           public_fee: '',                  // 公摊
-          manage_fee : '',
+          manage_fee: '',
 
           data_date: '',               // 资料补齐时间
           staff_id: '',                // 开单人
