@@ -146,7 +146,7 @@
       <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                  @clickOperateMore="clickEvent"></RightMenu>
       <!--标记-->
-      <Badge :module="badgeVisible" @close="closeBadge" :incompleteInfo="incompleteInfo" :salaryId="salaryId"></Badge>
+      <Badge :module="badgeVisible" @close="closeBadge" :incompleteList="incompleteList" :salaryId="salaryId"></Badge>
     </div>
 </template>
 
@@ -175,7 +175,7 @@
         freezeVisible: false,
         badgeVisible: false,
         remarkVisible: false,
-        incompleteInfo: [],
+        incompleteList: [],
         salaryId: '',
       }
     },
@@ -247,7 +247,7 @@
       detailMenu(row, event) {
         this.lists = [
           {
-            clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '未发标记',incompleteInfo: row.incomplete_info,id:row.id
+            clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '未发标记',incompleteList: row.incomplete_list,id:row.id
             // clickIndex: 'revise', tailIcon: 'el-icon-arrow-right', headIcon: 'el-icon-edit-outline', label: '未发标记',
             // children: [
             //   {clickIndex: 'one', label: '单条',},
@@ -262,8 +262,8 @@
       clickEvent(val) {
         if (val.clickIndex === 'revise') {
           this.openBadge();
-          this.incompleteInfo = val.incompleteInfo;
-          this.salaryId = val.salaryId;
+          this.incompleteList = val.incompleteList;
+          this.salaryId = val.id;
 
         }
         // if (val === 'more') {

@@ -3,7 +3,7 @@
 
     <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
       <el-checkbox-group v-model="checkList" >
-        <el-checkbox v-for="item in data" :label="item.dictionary_name" :key="item.id"></el-checkbox>
+        <el-checkbox v-for="item in data" :label="item.id" :key="item.id">{{item.dictionary_name}}</el-checkbox>
       </el-checkbox-group>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="dialogVisible = false">取 消</el-button>
@@ -16,7 +16,7 @@
 <script>
   export default {
     name: "badge",
-    props: ['module','incompleteInfo','salaryId'],
+    props: ['module','incompleteList','salaryId'],
     data() {
       return {
         dialogVisible: false,
@@ -41,23 +41,25 @@
         }
       },
       salaryId(val){
-        console.log(val)
         this.id = val;
       },
-      incompleteInfo(val){
+      incompleteList(val){
         this.checkList = val;
+      },
+      checkList(val) {
+        console.log(val)
       }
     },
     methods: {
       //保存未发标记
       saveBadge() {
-        this.dialogVisible = false;
-        this.$http.post(globalConfig.server+ 'salary/achv/mark/'+this.salaryId).then((res)=>{
-          if(res.data.id === '88810'){
+        this.$http.post(globalConfig.server+ 'salary/achv/mark/'+this.salaryId,{incomplete: this.checkList}).then((res)=>{
+          this.dialogVisible = false;
+          if(res.data.code === '88810') {
             this.$notify.success({
               title: '成功',
               message: res.data.msg
-            })
+            });
           }
         });
       },
