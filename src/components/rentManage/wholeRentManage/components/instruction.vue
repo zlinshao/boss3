@@ -14,7 +14,9 @@
           <el-col :span="18" class="instruct_left">
             <div v-show=" 0 == num" class="imgdiv">
               <el-button v-show="article == 1" class="elbuttom1" size="small" @click="preimg" type="primary">上一张</el-button>
+              <el-button v-show="article == 0" class="elbuttom1" size="small" type="info">上一张</el-button>
               <el-button v-show="article == 0" class="elbuttom2" size="small" @click="nextimg" type="primary">下一张</el-button>
+              <el-button v-show="article == 1" class="elbuttom2" size="small"  type="info">下一张</el-button>
               <img v-show="article == 0" src="../../../../assets/images/article1.jpg" />
               <img v-show="article == 1" src="../../../../assets/images/article2.jpg" />
             </div>  
@@ -24,7 +26,9 @@
             </div> 
             <div v-show=" 2 == num" class="imgdiv">
               <el-button v-show="articlemanagement != 0" class="elbuttom3" size="small" @click="premanimg" type="primary">上一张</el-button>
+              <el-button v-show="articlemanagement == 0" class="elbuttom3" size="small" type="info">上一张</el-button>
               <el-button v-show="articlemanagement != 2" class="elbuttom4" size="small" @click="nextnamimg" type="primary">下一张</el-button>
+              <el-button v-show="articlemanagement == 2" class="elbuttom4" size="small" type="info">下一张</el-button>
               <img v-show="articlemanagement == 0" src="../../../../assets/images/articlemanagement1.jpg" />
               <img v-show="articlemanagement == 1" src="../../../../assets/images/articlemanagement2.jpg" />    
               <img v-show="articlemanagement == 2" src="../../../../assets/images/articlemanagement3.jpg" />          
@@ -152,8 +156,8 @@
   } 
   .imgdiv{
     position: relative;
-    .elbuttom1{ position: absolute; bottom:-34px; left:390px;margin:0}
-    .elbuttom2{ position: absolute; bottom:-34px; left:390px;margin:0}
+    .elbuttom1{ position: absolute; bottom:-34px; left:330px;margin:0}
+    .elbuttom2{ position: absolute; bottom:-34px; left:420px;margin:0}
     .elbuttom3{ position: absolute; bottom:-34px; left:330px;margin:0}
     .elbuttom4{ position: absolute; bottom:-34px; left:420px;margin:0}
   } 

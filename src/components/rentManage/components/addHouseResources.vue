@@ -190,10 +190,12 @@
                 <el-form size="mini" :model="params" label-width="100px">
                   <el-row >
                     <el-col :span="6">
-                      <el-form-item label="订单性质">
-                        <el-select clearable v-model="params.contract_type" placeholder="请选择订单性质" value="">
-                          <el-option v-for="item in contract_type_dic" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
-                        </el-select>
+                      <el-form-item label="是否公司单">
+                        <el-switch
+                          v-model="params.contract_type"
+                          active-text="非公司单"
+                          inactive-text="公司单" active-value="0" inactive-value="1">
+                        </el-switch>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -201,7 +203,7 @@
                         <el-input placeholder="请输入内容" v-model="params.contract_number"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="6" class="unitMessage">
                       <el-form-item label="签约时长" required>
                         <el-col :span="12" style="padding-right: 10px">
                           <el-input placeholder="月数" @blur="changeMonth" v-model="params.month">
@@ -240,7 +242,7 @@
                         <el-input placeholder="请输入内容" v-model="params.vacancy_other"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="6" class="unitMessage">
                       <el-form-item label="保修期">
                         <el-col :span="12" style="padding-right: 10px">
                           <el-input placeholder="月数" v-model="params.warranty_month">
@@ -287,11 +289,12 @@
 
                   <el-row>
                     <el-col :span="6">
-                      <el-form-item label="订单来源">
-                        <el-select clearable v-model="params.is_agency" placeholder="请选择订单来源" value="">
-                          <el-option label="个人" value="'0'"></el-option>
-                          <el-option label="中介" value="'1'"></el-option>
-                        </el-select>
+                      <el-form-item label="是否中介">
+                        <el-switch
+                          v-model="params.is_agency"
+                          active-text="个人"
+                          inactive-text="中介" active-value="0" inactive-value="1">
+                        </el-switch>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -756,9 +759,8 @@
       },
       //获取草稿
       getDraft(){
-        this.$http.get(globalConfig.server+'lease/collect/draft').then((res) => {
+        this.$http.get(globalConfig.server+'lease/collect/draft?type=1').then((res) => {
           if(res.data.code === '61010'){
-
             this.nameArray = [];
             this.sexArray = [];
             this.id_typeArray = [];
@@ -1094,7 +1096,9 @@
       clearData(){
         this.isClear = false;
         this.params = {
+          id : '',      //草稿id
           draft:'',
+          type: 1,
           //------------------小区详情--------------------//
           community_id : '',            //小区id
           community_nickname : '',      //小区昵称

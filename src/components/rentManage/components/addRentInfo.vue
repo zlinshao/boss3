@@ -116,11 +116,12 @@
                 <el-form size="mini" :model="params" label-width="100px">
                   <el-row>
                     <el-col :span="6">
-                      <el-form-item label="订单性质">
-                        <el-select clearable v-model="params.contract_type" placeholder="请选择订单性质" value="">
-                          <el-option v-for="item in contract_type_dic" :label="item.dictionary_name" :value="item.id"
-                                     :key="item.id"></el-option>
-                        </el-select>
+                      <el-form-item label="是否公司单">
+                        <el-switch
+                          v-model="params.contract_type"
+                          active-text="非公司单"
+                          inactive-text="公司单" active-value="0" inactive-value="1">
+                        </el-switch>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -152,7 +153,7 @@
                                         type="date" placeholder="选择日期" v-model="params.begin_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="6" class="unitMessage">
                       <el-form-item label="签约月数" required>
                         <el-input placeholder="月数" @blur="changeMonth" v-model="params.month">
                           <template slot="append">月</template>
@@ -470,7 +471,6 @@
         houseInfo: {},                //房屋相关信息
         params: {
           contract_id: this.collectContractId,   //合同id
-          draft: '',
           type: 1,
           //------------------小区详情--------------------//
           customers: [],               //租客数组
@@ -858,7 +858,9 @@
       clearData(){
         this.isClear = false;
         this.params = {
-          draft: '',
+          contract_id: this.collectContractId,   //合同id
+          type: 1,
+
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
           contract_type: '',           // 订单性质（合同种类）
