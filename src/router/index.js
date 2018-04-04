@@ -14,7 +14,7 @@ import JointRentManage from '../components/rentManage/jointRentManage/index.vue'
 
 import ContractManage from '../components/rentManage/datumMessage/contractManage/index.vue'
 import ClientManage from '../components/rentManage/datumMessage/clientManage/index.vue'
-import HousesManage from '../components/rentManage/datumMessage/housesManage/index.vue'
+import HousesManage from '../components/rentManage/housesManage/index.vue'
 // import RepairManage from '../components/rentManage/repairManage/index.vue'
 import DatumMessage from '../components/rentManage/datumMessage/index.vue'                    //资料管理
 
@@ -240,7 +240,7 @@ export default new Router({
         {path: '/individual', component: Individual, name: ' 个人门户 ',icon:"el-icons-fa-user"},
         {path: '/wholeRentManage', component: WholeRentManage, name: ' 整租管理 ', icon:"iconfont icon-pinzhizhengzu"},
         {path: '/jointRentManage', component: JointRentManage, name: ' 合租管理 ', icon:"iconfont icon-hezu"},
-        {path: '/datumMessage/housesManage', component: HousesManage, name: ' 房屋管理 ',icon:"iconfont icon-fangzu"},
+        {path: '/housesManage', component: HousesManage, name: ' 产品管控中心 ',icon:"iconfont icon-fangzu"},
         {path: '/datumMessage/contractManage', component: ContractManage, name: ' 合同管理 ',icon:"iconfont icon-hetong1"},
         {path: '/sthToDo', component: SthToDo, name: ' 待办事项 ', icon:"iconfont icon-daiban"},
         {path: '/examineAndApprove', component: ExamineAndApprove, name:  ' 审批 ', icon:"el-icon-edit-outline"},
@@ -268,11 +268,12 @@ export default new Router({
       children: [
         {path: '/wholeRentManage', component: WholeRentManage, name: '整租管理',},
         {path: '/jointRentManage', component: JointRentManage, name: '合租管理',},
+        {path: '/housesManage', component: HousesManage, name: '产品管控中心',},
         {path: '/datumMessage', component: DatumMessage, name: '资料管理',},
         // {
         //   path: '/datumMessage', component: DatumMessage, icon: 'el-icons-fa-money', name: '资料管理',
         //   children: [
-        //     {path: '/datumMessage/housesManage', component: HousesManage, name: '房屋管理',},
+        //     {path: '/datumMessage/housesManage', component: HousesManage, name: '产品管控中心',},
         //     {path: '/datumMessage/clientManage', component: ClientManage, name: '客户管理',},
         //     {path: '/datumMessage/contractManage', component: ContractManage, name: '合同管理',},
         //   ]
