@@ -190,11 +190,12 @@
                 <el-form size="mini" :model="params" label-width="100px">
                   <el-row >
                     <el-col :span="6">
-                      <el-form-item label="订单性质">
-                        <el-select clearable v-model="params.contract_type" placeholder="请选择订单性质" value="">
-                          <el-option label="非公司单" value="'0'"></el-option>
-                          <el-option label="公司单" value="'1'"></el-option>
-                        </el-select>
+                      <el-form-item label="是否公司单">
+                        <el-switch
+                          v-model="params.contract_type"
+                          active-text="非公司单"
+                          inactive-text="公司单" active-value="0" inactive-value="1">
+                        </el-switch>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -288,11 +289,12 @@
 
                   <el-row>
                     <el-col :span="6">
-                      <el-form-item label="订单来源">
-                        <el-select clearable v-model="params.is_agency" placeholder="请选择订单来源" value="">
-                          <el-option label="个人" value="'0'"></el-option>
-                          <el-option label="中介" value="'1'"></el-option>
-                        </el-select>
+                      <el-form-item label="是否中介">
+                        <el-switch
+                          v-model="params.is_agency"
+                          active-text="个人"
+                          inactive-text="中介" active-value="0" inactive-value="1">
+                        </el-switch>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">

@@ -78,19 +78,41 @@
                 label="收房押金">
               </el-table-column>
               <el-table-column
-                prop="price"
                 label="收房价格">
+                <template slot-scope="scope">
+
+                  <el-popover
+                    ref="popover4"
+                    placement="bottom"
+                    width="300"
+                    trigger="click">
+                    <el-table :data="scope.row.price">
+                      <el-table-column width="150" property="price" label="价格(元)"></el-table-column>
+                      <el-table-column width="150" property="period" label="变化周期(月)"></el-table-column>
+                    </el-table>
+                  </el-popover>
+                  <!--{{scope.row.pay_way}}-->
+                  <el-button v-popover:popover4 size="mini" type="text">查看</el-button>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="pay_way"
                 label="付款方式">
-              </el-table-column>
-              <!--<el-table-column-->
-                <!--label="付款方式">-->
-                <!--<template slot-scope="scope">-->
+                <template slot-scope="scope">
                   <!--{{scope.row.pay_way}}-->
-                <!--</template>-->
-              <!--</el-table-column>-->
+                  <el-popover
+                    ref="payWay"
+                    placement="bottom"
+                    width="300"
+                    trigger="click">
+                    <el-table :data="scope.row.pay_way">
+                      <el-table-column width="150" property="pay_way" label="付款方式"></el-table-column>
+                      <el-table-column width="150" property="period" label="变化周期(月)"></el-table-column>
+                    </el-table>
+                  </el-popover>
+                  <!--{{scope.row.pay_way}}-->
+                  <el-button size="mini" type="text"  v-popover:payWay>查看</el-button>
+                </template>
+              </el-table-column>
               <el-table-column
                 prop="vacancy"
                 label="空置期(天)">
@@ -119,10 +141,10 @@
                 prop="staff_name"
                 label="签约人">
               </el-table-column>
-              <el-table-column
-                prop="leader_name"
-                label="负责人">
-              </el-table-column>
+              <!--<el-table-column-->
+                <!--prop="leader_name"-->
+                <!--label="负责人">-->
+              <!--</el-table-column>-->
               <el-table-column
                 prop="phone"
                 label="电话">
