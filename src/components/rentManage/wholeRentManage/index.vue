@@ -565,6 +565,8 @@
             this.rentTotalNum = res.data.meta.total;
             if(res.data.data.length>0){
               this.rentContractId = res.data.data[0].contract_id;
+            }else {
+              this.rentContractId = '';
             }
           }else {
             this.rentingData = [];

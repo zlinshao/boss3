@@ -1,7 +1,7 @@
 <template>
     <div>
       <el-table
-        :data="rentingData"
+        :data="tableData"
         style="width: 100%">
         <el-table-column
           prop="check_time"
@@ -72,7 +72,7 @@
           return {
             /***********/
             editRentChangeDialog:false,
-            rentingData:[],
+            tableData:[],
             params:{
               limit:3,
               page:1,
@@ -91,14 +91,22 @@
           this.params.contract_id = val;
           this.isRequestData = false;
           if(this.activeName === 'rentReturnRomeInfoTab'){
-            this.getData();
-            this.isRequestData = true;
+            if(val){
+              this.getData();
+              this.isRequestData = true;
+            }else {
+              this.tableData = [];
+            }
           }
         },
         activeName(val){
           if(!this.isRequestData && val=== 'rentReturnRomeInfoTab' && this.rentContractId){
-            this.getData();
-            this.isRequestData = true;
+            if(this.rentContractId){
+              this.getData();
+              this.isRequestData = true;
+            }else {
+              this.tableData = [];
+            }
           }
         }
       },
@@ -106,10 +114,10 @@
         getData(){
           this.$http.get(globalConfig.server+'customer/check_out',{params:this.params}).then((res) => {
               if(res.data.code === '20000'){
-                this.rentingData = res.data.data.data;
+                this.tableData = res.data.data.data;
                 this.totalNumber = res.data.data.count;
               }else {
-                this.rentingData = [];
+                this.tableData = [];
                 this.totalNumber = 0;
               }
           })

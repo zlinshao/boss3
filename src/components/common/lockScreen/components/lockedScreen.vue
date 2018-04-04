@@ -2,11 +2,11 @@
   <div id="locking">
     <div class="lock_container">
       <div class="header">
-        <img src="../../../../assets/images/head.jpg" alt="">
+        <img v-if="personal && personal.avatar" :src="personal.avatar" alt="">
+        <img src="../../../../assets/images/head.jpg" v-else="" alt="">
       </div>
-      <div class="name">
-        LEJIA
-      </div>
+      <div v-if="personal && personal.name" class="name">{{personal.name}}</div>
+      <div class="name" v-else="">LEJIA</div>
       <div class="input">
         <el-input placeholder="请输入密码" type="password" @keyup.enter.native="btnClick" v-model="keywords"></el-input>
       </div>
@@ -21,10 +21,12 @@
     name: 'hello',
     data () {
       return {
-        keywords: ''
+        keywords: '',
+        personal:{}
       }
     },
     mounted(){
+      this.personal = JSON.parse(localStorage.personal);
       let height = window.innerHeight;
       let lock_div  = document.getElementById('locking');
       window.onresize = function(){

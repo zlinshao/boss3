@@ -78,14 +78,22 @@
         this.params.contract_id = val;
         this.isRequestData = false;
         if(this.activeName === 'RentFollowRecordTab'){
-          this.getData();
-          this.isRequestData = true;
+          if(val){
+            this.getData();
+            this.isRequestData = true;
+          }else {
+            this.tableData = [];
+          }
         }
       },
       activeName(val){
         if(!this.isRequestData && val=== 'RentFollowRecordTab' && this.rentContractId){
-          this.getData();
-          this.isRequestData = true;
+          if(this.rentContractId){
+            this.getData();
+            this.isRequestData = true;
+          }else {
+            this.tableData = [];
+          }
         }
       }
     },
