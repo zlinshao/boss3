@@ -8,9 +8,6 @@
         <el-tab-pane label="发日志" name="second">
           <SendLog @appointLookLog="appointLookLog" :edit="edit" :getData="getNewData"></SendLog>
         </el-tab-pane>
-        <!--<el-tab-pane label="我发出的" name="third">-->
-          <!--<MySend></MySend>-->
-        <!--</el-tab-pane>-->
         <el-tab-pane label="日志报表" name="third">
           <LogTable></LogTable>
         </el-tab-pane>
@@ -20,14 +17,12 @@
 </template>
 
 <script>
-
-  import LookLog from './lookLog/index.vue'
-  import SendLog from './sendLog/index.vue'
-  import MySend from './mySend/index.vue'
-  import LogTable from './logTable/index.vue'
+  import LookLog from './lookLog/index.vue';
+  import SendLog from './sendLog/index.vue';
+  import LogTable from './logTable/index.vue';
   export default {
     name: "index",
-    components:{LookLog,SendLog,MySend,LogTable},
+    components:{LookLog,SendLog,LogTable},
     data() {
       return {
         form: {},
@@ -64,7 +59,7 @@
       }
     },
     watch: {
-      activeName(val){
+      activeName(val) {
         if(val === 'first' || val === 'third'){
           this.edit = '';
         }

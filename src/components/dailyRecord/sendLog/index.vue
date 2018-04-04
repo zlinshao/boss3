@@ -4,11 +4,11 @@
       <div>选择模板</div>
       <div style="margin: 10px 0;">
         <el-button :class="{'primary': active === index}" @click="tagClick(index)" size="mini"
-                   v-for="(key,index) in buttonVal" :key="index">{{key}}
+                   v-for="(key,index) in buttonVal" :key="index" :disabled="active === editType">{{key}}
         </el-button>
       </div>
     </div>
-    <div v-if="dayRecord">
+    <div v-show="dayRecord">
       <el-form size="mini" onsubmit="return false;" :model="dayForm" >
         <div class="sendLog">
           <div class="sendTitle">今日完成工作</div>
@@ -67,7 +67,7 @@
         </div>
       </el-form>
     </div>
-    <div v-if="weekRecord">
+    <div v-show="weekRecord">
       <el-form size="mini" onsubmit="return false;" :model="weekForm"  >
         <div class="sendLog">
           <div class="sendTitle">本周完成工作</div>
@@ -132,7 +132,7 @@
         </div>
       </el-form>
     </div>
-    <div v-if="monthRecord">
+    <div v-show="monthRecord">
       <el-form size="mini" onsubmit="return false;" :model="monthForm" >
         <div class="sendLog">
           <div class="sendTitle">本月完成工作</div>
@@ -197,7 +197,7 @@
         </div>
       </el-form>
     </div>
-    <div v-if="achieveDayRecord">
+    <div v-show="achieveDayRecord">
       <el-form size="mini" onsubmit="return false;" :model="achieveForm" >
         <div class="sendLog">
           <div class="sendTitle">今日营业额</div>
@@ -349,6 +349,7 @@
         editFileToUpload: {},
         first: false,
         loading: false,
+        editType: -1,
       }
     },
     methods:{
@@ -375,9 +376,7 @@
             this.dayRecord = this.monthRecord = this.weekRecord = false;
             break;
         }
-        // setTimeout( ()=> {
-        //   this.isClear = true;
-        // },0);
+
       },
       getImage(val) {
         switch(this.active){
@@ -750,10 +749,15 @@
         if(val){
           this.loading = true;
         }
+        if(!val){
+          this.editType = -1;
+
+        }
         this.logId = val.daily_id;
         this.initialData();
         if(val.module === 'app\\oa\\model\\DailyDay'){  //日报
           this.active = 0;
+          this.editType = 0;
           this.tagClick(0);
           this.$http.get(globalConfig.server+ 'oa/day/'+this.logId).then((res)=>{
             if(res.data.code === '100020'){
@@ -813,6 +817,7 @@
           });
         }else if(val.module === 'app\\oa\\model\\DailyWeek') {   //周报
           this.active = 1;
+          this.editType = 1;
           this.tagClick(1);
           this.$http.get(globalConfig.server+ 'oa/week/'+this.logId).then((res)=>{
             if(res.data.code === '110020'){
@@ -871,6 +876,7 @@
           });
         } else if(val.module === 'app\\oa\\model\\DailyMonth') {   //月报
           this.active = 2;
+          this.editType = 2;
           this.tagClick(2);
           this.$http.get(globalConfig.server+ 'oa/month/'+this.logId).then((res)=>{
             if(res.data.code === '120020'){
@@ -929,6 +935,7 @@
           });
         } else if(val.module === 'app\\oa\\model\\DailyAchievement'){   //业绩日报
           this.active = 3;
+          this.editType = 3;
           this.tagClick(3);
           this.$http.get(globalConfig.server+ 'oa/achievement/'+this.logId).then((res)=>{
             if(res.data.code === '130020'){
