@@ -8,7 +8,7 @@
         </el-button>
       </div>
     </div>
-    <div v-show="dayRecord">
+    <div v-if="dayRecord">
       <el-form size="mini" onsubmit="return false;" :model="dayForm" >
         <div class="sendLog">
           <div class="sendTitle">今日完成工作</div>
@@ -40,7 +40,7 @@
             <!--<span v-if="editImages" v-for="img in editImages">-->
               <!--<img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
             <!--</span>-->
-            <Upload :ID="'record_img'" @getImg="getImage" :editImage="editImgToUpload" :isClear="isClear"></Upload>
+            <Upload :ID="'record_img'" @getImg="getImage" :editImage="dayEditImgToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
@@ -49,7 +49,7 @@
             <!--<span v-if="editFiles" v-for="file in editFiles">-->
               <!--<img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
             <!--</span>-->
-            <Upload :ID="'record_file'" @getImg="getFile" :editImage="editFileToUpload" :isClear="isClear"></Upload>
+            <Upload :ID="'record_file'" @getImg="getFile" :editImage="dayEditFileToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
@@ -67,7 +67,7 @@
         </div>
       </el-form>
     </div>
-    <div v-show="weekRecord">
+    <div v-if="weekRecord">
       <el-form size="mini" onsubmit="return false;" :model="weekForm"  >
         <div class="sendLog">
           <div class="sendTitle">本周完成工作</div>
@@ -105,7 +105,7 @@
             <!--<span v-if="editImages" v-for="img in editImages">-->
               <!--<img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
             <!--</span>-->
-            <Upload :ID="'record_img'" @getImg="getImage" :editImage="editImgToUpload" :isClear="isClear"></Upload>
+            <Upload :ID="'record_img'" @getImg="getImage" :editImage="weekEditImgToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
@@ -114,7 +114,7 @@
             <!--<span v-if="editFiles" v-for="file in editFiles">-->
               <!--<img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
             <!--</span>-->
-            <Upload :ID="'record_file'" @getImg="getFile" :editImage="editFileToUpload" :isClear="isClear"></Upload>
+            <Upload :ID="'record_file'" @getImg="getFile" :editImage="weekEditFileToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
@@ -132,7 +132,7 @@
         </div>
       </el-form>
     </div>
-    <div v-show="monthRecord">
+    <div v-if="monthRecord">
       <el-form size="mini" onsubmit="return false;" :model="monthForm" >
         <div class="sendLog">
           <div class="sendTitle">本月完成工作</div>
@@ -170,7 +170,7 @@
             <!--<span v-if="editImages" v-for="img in editImages">-->
               <!--<img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
             <!--</span>-->
-            <Upload :ID="'record_img'" @getImg="getImage" :editImage="editImgToUpload" :isClear="isClear"></Upload>
+            <Upload :ID="'record_img'" @getImg="getImage" :editImage="monthEditImgToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
@@ -179,7 +179,7 @@
             <!--<span v-if="editFiles" v-for="file in editFiles">-->
               <!--<img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
             <!--</span>-->
-            <Upload :ID="'record_file'" @getImg="getFile" :editImage="editFileToUpload" :isClear="isClear"></Upload>
+            <Upload :ID="'record_file'" @getImg="getFile" :editImage="monthEditFileToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
@@ -197,7 +197,7 @@
         </div>
       </el-form>
     </div>
-    <div v-show="achieveDayRecord">
+    <div v-if="achieveDayRecord">
       <el-form size="mini" onsubmit="return false;" :model="achieveForm" >
         <div class="sendLog">
           <div class="sendTitle">今日营业额</div>
@@ -241,7 +241,7 @@
             <!--<span v-if="editImages" v-for="img in editImages">-->
               <!--<img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
             <!--</span>-->
-            <Upload :ID="'record_img'" @getImg="getImage" :editImage="editImgToUpload" :isClear="isClear"></Upload>
+            <Upload :ID="'record_img'" @getImg="getImage" :editImage="achieveEditImgToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
@@ -250,7 +250,7 @@
             <!--<span v-if="editFiles" v-for="file in editFiles">-->
               <!--<img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
             <!--</span>-->
-            <Upload :ID="'record_file'" @getImg="getFile" :editImage="editFileToUpload" :isClear="isClear"></Upload>
+            <Upload :ID="'record_file'" @getImg="getFile" :editImage="achieveEditFileToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
@@ -345,8 +345,14 @@
         editImages: [], //编辑时候的初始图片
         editFiles: [],  //编辑时候的初始文件
         logId: '',
-        editImgToUpload: {},
-        editFileToUpload: {},
+        dayEditImgToUpload: {},
+        weekEditImgToUpload: {},
+        monthEditImgToUpload: {},
+        achieveEditImgToUpload: {},
+        dayEditFileToUpload: {},
+        weekEditFileToUpload: {},
+        monthEditFileToUpload: {},
+        achieveEditFileToUpload: {},
         first: false,
         loading: false,
         editType: -1,
@@ -720,6 +726,14 @@
         this.editImages = [];
         this.editFiles = [];
         this.isClear = true;
+        this.dayEditImgToUpload ={};
+        this.weekEditImgToUpload ={};
+        this.monthEditImgToUpload ={};
+        this.achieveEditImgToUpload ={};
+        this.dayEditFileToUpload = {};
+        this.weekEditFileToUpload = {};
+        this.monthEditFileToUpload = {};
+        this.achieveEditFileToUpload = {};
       },
       deletePeople(val){
         var index = '';
@@ -783,7 +797,7 @@
                 this.editImages.forEach((item) =>{
                   picObject[item.id] = item.uri;
                 });
-                this.editImgToUpload = picObject;
+                this.dayEditImgToUpload = picObject;
 
               }
               var file_pic = logData.album.annex_file;
@@ -800,7 +814,7 @@
                 this.editFiles.forEach((item) =>{
                   fileObject[item.id] = item.uri;
                 });
-                this.editFileToUpload = fileObject;
+                this.dayEditFileToUpload = fileObject;
 
               }
               var receivers = logData.receivers;
@@ -842,7 +856,7 @@
                 this.editImages.forEach((item) =>{
                   picObject[item.id] = item.uri;
                 });
-                this.editImgToUpload = picObject;
+                this.weekEditImgToUpload = picObject;
               }
               var file_pic = logData.album.annex_file;
               if(file_pic) {
@@ -859,7 +873,7 @@
                 this.editFiles.forEach((item) =>{
                   fileObject[item.id] = item.uri;
                 });
-                this.editFileToUpload = fileObject;
+                this.weekEditFileToUpload = fileObject;
 
               }
               var receivers = logData.receivers;
@@ -902,7 +916,7 @@
                 this.editImages.forEach((item) =>{
                   picObject[item.id] = item.uri;
                 });
-                this.editImgToUpload = picObject;
+                this.monthEditImgToUpload = picObject;
               }
               var file_pic = logData.album.annex_file;
               if(file_pic){
@@ -918,7 +932,7 @@
                 this.editFiles.forEach((item) =>{
                   fileObject[item.id] = item.uri;
                 });
-                this.editFileToUpload = fileObject;
+                this.monthEditFileToUpload = fileObject;
 
               }
               var receivers = logData.receivers;
@@ -962,7 +976,7 @@
                 this.editImages.forEach((item) =>{
                   picObject[item.id] = item.uri;
                 });
-                this.editImgToUpload = picObject;
+                this.achieveEditImgToUpload = picObject;
               }
               var file_pic = logData.album.annex_file;
               if(file_pic){
@@ -978,7 +992,7 @@
                 this.editFiles.forEach((item) =>{
                   fileObject[item.id] = item.uri;
                 });
-                this.editFileToUpload = fileObject;
+                this.achieveEditFileToUpload = fileObject;
 
               }
               var receivers = logData.receivers;

@@ -151,7 +151,7 @@
       </div>
     </div>
     <div v-if="lookLogData.length===0" style="text-align: center;height: 100px;">暂无数据</div>
-    <div class="block pages">
+    <div class="block pages" v-if="lookLogData.length>0">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
