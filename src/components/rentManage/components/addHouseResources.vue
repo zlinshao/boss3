@@ -192,7 +192,8 @@
                     <el-col :span="6">
                       <el-form-item label="订单性质">
                         <el-select clearable v-model="params.contract_type" placeholder="请选择订单性质" value="">
-                          <el-option v-for="item in contract_type_dic" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                          <el-option label="非公司单" value="'0'"></el-option>
+                          <el-option label="公司单" value="'1'"></el-option>
                         </el-select>
                       </el-form-item>
                     </el-col>
