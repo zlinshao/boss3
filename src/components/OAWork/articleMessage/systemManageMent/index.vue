@@ -202,6 +202,7 @@
           } else {
             this.tableData = [];
             this.totalNum = 0;
+            this.loading = false;
           }
         })
       },

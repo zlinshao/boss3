@@ -194,6 +194,7 @@
       },
       getCompanyTableData() {
         this.loading = true;
+        console.log(111)
         this.$http.get(this.urls + 'oa/portal/', { params:this.form }).then((res) => {
           this.isHigh = false;
           if (res.data.code === '80000') {
@@ -203,7 +204,9 @@
           } else {
             this.tableData = [];
             this.totalNum = 0;
+            this.loading = false;
           }
+
         })
       },
       openDetail(row) {

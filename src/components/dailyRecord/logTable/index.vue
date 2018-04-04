@@ -193,7 +193,7 @@
          </el-table-column>
        </el-table>
      </div>
-     <div class="block pages">
+     <div class="block pages" v-show="totalNum>0">
        <el-pagination
          @size-change="handleSizeChange"
          @current-change="handleCurrentChange"
