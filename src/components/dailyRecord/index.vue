@@ -3,7 +3,7 @@
     <div class="topTabs">
       <el-tabs v-model="activeName" @tab-click="handleClick(activeName)">
         <el-tab-pane label="看日志" name="first" >
-          <LookLog @editLog="editLog" :getData="getNewData" ></LookLog>
+          <LookLog @editLog="editLog" :getData="getNewData"></LookLog>
         </el-tab-pane>
         <el-tab-pane label="发日志" name="second">
           <SendLog @appointLookLog="appointLookLog" :edit="edit" :getData="getNewData"></SendLog>
@@ -31,13 +31,16 @@
         comments: '',
         edit: '',
         getNewData: '',
+        // personal: {},
       }
     },
     mounted() {
       this.getCurrentTab();
+      // this.personal = JSON.parse(localStorage.personal);
     },
     activated() {
       this.getCurrentTab();
+      // this.personal = JSON.parse(localStorage.personal);
     },
     methods: {
       // tag切换

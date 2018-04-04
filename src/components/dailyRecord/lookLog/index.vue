@@ -151,7 +151,7 @@
       </div>
     </div>
     <div v-if="lookLogData.length===0" style="text-align: center;height: 100px;">暂无数据</div>
-    <div class="block pages" v-show="totalNum>0">
+    <div class="block pages">
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -175,7 +175,6 @@
     props: ['getData'],
     data () {
       return {
-        personal: globalConfig.personal,
         lookLogData: [],
         pickerOptions: {
           shortcuts: [
@@ -225,6 +224,7 @@
         organizaType: '',
         selectMemberName: '',
         loading: false,
+        personal: {},
       }
     },
     methods: {
@@ -333,15 +333,17 @@
     },
     mounted() {
       this.getLookLog();
+      this.personal = JSON.parse(localStorage.personal);
     },
     activated() {
       this.getLookLog();
+      this.personal = JSON.parse(localStorage.personal);
     },
     watch:{
       getData(val) {
         this.getLookLog();
       },
-    }
+    },
   }
 </script>
 

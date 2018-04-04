@@ -193,7 +193,7 @@
          </el-table-column>
        </el-table>
      </div>
-     <div class="block pages" v-show="totalNum>0">
+     <div class="block pages">
        <el-pagination
          @size-change="handleSizeChange"
          @current-change="handleCurrentChange"
@@ -213,61 +213,61 @@
   import Organization from '../../common/organization.vue'
   import EatLoading from '../../common/eatLoading.vue'
     export default {
-        name: 'hello',
-        components: {Organization,EatLoading},
-        data () {
-            return {
-              pickerOptions: {
-                shortcuts: [
-                  {
-                    text: '最近一天',
-                    onClick(picker) {
-                      const end = new Date();
-                      const start = new Date();
-                      start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
-                      picker.$emit('pick', [start, end]);
-                    }
-                  },
-                  {
-                    text: '最近一周',
-                    onClick(picker) {
-                      const end = new Date();
-                      const start = new Date();
-                      start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                      picker.$emit('pick', [start, end]);
-                    }
-                  },
-                  {
-                    text: '最近一个月',
-                    onClick(picker) {
-                      const end = new Date();
-                      const start = new Date();
-                      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                      picker.$emit('pick', [start, end]);
-                    }
-                  }]
-              },
-              form: {
-                staff_id: '',
-                date: '',
-                start_time: '',
-                end_time: '',
-                page: 1,
-                type: 1, // 1 2 3 4 日周月业绩
-                style: 'count',
-                self: '',
-              },
-              buttonVal: ['日报', '周报', '月报', '业绩日报'],
-              active: 0,
-              logData: [],
-              isHigh: false,
-              organizeVisible: false,
-              organizaType: '',
-              totalNum: 0,
-              selectMemberName: '',
-              loading: false,
-            }
-        },
+      name: 'hello',
+      components: {Organization,EatLoading},
+      data () {
+          return {
+            pickerOptions: {
+              shortcuts: [
+                {
+                  text: '最近一天',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
+                    picker.$emit('pick', [start, end]);
+                  }
+                },
+                {
+                  text: '最近一周',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                    picker.$emit('pick', [start, end]);
+                  }
+                },
+                {
+                  text: '最近一个月',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                    picker.$emit('pick', [start, end]);
+                  }
+                }]
+            },
+            form: {
+              staff_id: '',
+              date: '',
+              start_time: '',
+              end_time: '',
+              page: 1,
+              type: 1, // 1 2 3 4 日周月业绩
+              style: 'count',
+              self: '',
+            },
+            buttonVal: ['日报', '周报', '月报', '业绩日报'],
+            active: 0,
+            logData: [],
+            isHigh: false,
+            organizeVisible: false,
+            organizaType: '',
+            totalNum: 0,
+            selectMemberName: '',
+            loading: false,
+          }
+      },
       methods: {
         // 重置
         resetting() {
