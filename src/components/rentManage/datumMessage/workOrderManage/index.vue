@@ -97,7 +97,6 @@
               prop="follow_statuss"
               label="跟进状态">
             </el-table-column>
-
           </el-table>
         </div>
         <div class="tableBottom">

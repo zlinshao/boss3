@@ -414,3 +414,9 @@
     }
   }
 }
+//input框padding
+#addHouseResources{
+  .el-input-group__append{
+    padding: 0 3px !important;
+  }
+}

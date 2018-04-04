@@ -1,75 +1,119 @@
 <template>
     <div>
       <el-table
-        :data="rentingData"
+        :data="tableData"
+        @row-dblclick="dblClickTable"
         style="width: 100%">
         <el-table-column
-          prop="contract_num"
-          label="跟进时间">
+          prop="create_time"
+          label="创建时间">
         </el-table-column>
         <el-table-column
-          prop="address"
-          label="录入时间">
+          prop="name"
+          label="房屋地址">
         </el-table-column>
         <el-table-column
-          prop="house_type"
-          label="跟进方式">
+          prop="child_count"
+          label="事件数">
         </el-table-column>
         <el-table-column
-          prop="deposit"
-          label="身份">
+          prop="child.length"
+          label="包含跟进项">
         </el-table-column>
         <el-table-column
-          prop="contract_num"
-          label="事件类型">
-        </el-table-column>
-        <el-table-column
-          prop="address"
-          label="时间等级">
-        </el-table-column>
-        <el-table-column
-          prop="house_type"
-          label="具体时间">
-        </el-table-column>
-        <el-table-column
-          prop="deposit"
+          prop="expected_finish_time"
           label="预计完成时间">
         </el-table-column>
         <el-table-column
-          prop="contract_num"
-          label="跟进结果">
+          prop="creator_id"
+          label="创建人">
         </el-table-column>
         <el-table-column
-          prop="address"
-          label="认责人">
+          prop="follow_id"
+          label="跟进人">
         </el-table-column>
         <el-table-column
-          prop="house_type"
-          label="时间转交">
-        </el-table-column>
-        <el-table-column
-          prop="deposit"
-          label="上传图片">
-        </el-table-column>
-        <el-table-column
-          prop="house_type"
-          label="上传录音">
-        </el-table-column>
-        <el-table-column
-          prop="deposit"
-          label="录入人">
+          prop="follow_statuss"
+          label="跟进状态">
         </el-table-column>
       </el-table>
+
+      <div class="pagination">
+        <el-pagination
+          @current-change="currentChange"
+          :current-page="params.page"
+          :page-size="3"
+          layout="total, prev, pager, next, jumper"
+          :total="totalNumber">
+        </el-pagination>
+      </div>
+      <OrderDetail :orderDetailDialog="orderDetailDialog" :activeId="activeId" :startDetail="startDetail" @close="closeModal"></OrderDetail>
     </div>
 </template>
 
 <script>
+  import OrderDetail from '../datumMessage/workOrderManage/components/workOrderDetail.vue'
     export default {
-        name: 'hello',
+        props:['collectContractId','activeName'],
+        components: {OrderDetail},
         data () {
             return {
-              rentingData:[],
+              tableData:[],
+              params: {
+                pages: 1,
+                limit: 3,
+                module:1,
+                contract_id : ''
+              },
+              totalNumber:0,
+              activeId : '',
+              startDetail : false,
+              orderDetailDialog : false,
+
+              isRequestData : false,
             }
+        },
+        watch:{
+          collectContractId(val){
+            this.params.contract_id = val;
+            this.isRequestData = false;
+            if(this.activeName === 'CollectFollowRecordTab'){
+              this.getData();
+              this.isRequestData = true;
+            }
+          },
+          activeName(val){
+            if(!this.isRequestData && val=== 'CollectFollowRecordTab' && this.collectContractId){
+              this.getData();
+              this.isRequestData = true;
+            }
+          }
+        },
+        methods:{
+          getData(){
+            this.$http.get(globalConfig.server+'customer/work_order',{params:this.params}).then((res) => {
+              if(res.data.code === '10000'){
+                this.tableData = res.data.data.data;
+                this.totalNumber = res.data.data.count;
+              }else {
+                this.tableData = [];
+                this.totalNumber = 0;
+              }
+            })
+          },
+          currentChange(val) {
+            this.params.page = val;
+            this.getData();
+          } ,
+          dblClickTable(row, event){
+            this.activeId = row.id;
+            this.startDetail = true;
+            this.orderDetailDialog = true;
+          },
+          closeModal(){
+            this.orderDetailDialog = false;
+            this.startDetail = false;
+          },
         }
     }
 </script>

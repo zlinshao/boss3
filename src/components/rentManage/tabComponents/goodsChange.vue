@@ -46,7 +46,7 @@
       <el-pagination
         @current-change="currentChange"
         :current-page="params.page"
-        :page-size="2"
+        :page-size="3"
         layout="total, prev, pager, next, jumper"
         :total="total">
       </el-pagination>
@@ -56,6 +56,7 @@
 
 <script>
     export default {
+      prop:['collectHouseId','activeName'],
       data () {
           return {
             goodsChangeData:[], //物品增减
@@ -63,15 +64,33 @@
             urls:globalConfig.server,
             total:0,      //物品增减总条数
             params:{
-              house_id:1,
+              house_id:'',
               page:1,
-              limit:2,
-            }
+              limit:3,
+            },
+            isRequestData : false,
           }
       },
       created() {
         this.getData();
       },
+
+      watch:{
+        collectHouseId(val){
+          this.isRequestData = false;
+          if(this.activeName === 'GoodsChangeTab'){
+            this.getData();
+            this.isRequestData = true;
+          }
+        },
+        activeName(val){
+          if(!this.isRequestData && val=== 'GoodsChangeTab' && this.collectHouseId){
+            this.getData();
+            this.isRequestData = true;
+          }
+        }
+      },
+
       methods:{
         currentChange(val) {
           this.params.page = val;

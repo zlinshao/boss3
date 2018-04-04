@@ -1,5 +1,7 @@
 <template>
     <div>
+      <!--
+
       <div class="content">
         <table class="tableDetail">
           <tr>
@@ -61,19 +63,92 @@
         </table>
       </div>
       <div class="remarks">备注：</div>
+      -->
+      <el-table
+        :data="rentData"
+        style="width: 100%">
+        <el-table-column
+          prop="name"
+          label="房东姓名">
+        </el-table-column>
+        <el-table-column
+          label="性别">
+          <template slot-scope="scope">
+            <span v-if="scope.row.sex == 1">男</span>
+            <span v-else="">女</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="created_at"
+          label="录入时间">
+        </el-table-column>
+        <el-table-column
+          prop="idcard"
+          label="证件号码">
+        </el-table-column>
+        <el-table-column
+          prop="phone"
+          label="手机号码">
+        </el-table-column>
+      </el-table>
+
+      <!--<div class="pagination">-->
+      <!--<el-pagination-->
+      <!--@current-change="currentChange"-->
+      <!--:current-page="params.pages"-->
+      <!--:page-size="3"-->
+      <!--layout="total, prev, pager, next, jumper"-->
+      <!--:total="totalNumber">-->
+      <!--</el-pagination>-->
+      <!--</div>-->
     </div>
 </template>
 
 <script>
-    export default {
-        name: 'hello',
-        data () {
-            return {
-                msg: 'Welcome to Your Vue.js App'
-            }
+  export default {
+    props:['rentContractId','activeName'],
+    data () {
+      return {
+        /***********/
+        rentData:[],
+        isRequestData : false,
+      }
+    },
+    mounted(){
+    },
+    watch:{
+      rentContractId(val){
+        this.isRequestData = false;
+        if(this.activeName === 'OwnerInfoTab'){
+          this.getData();
+          this.isRequestData = true;
         }
+      },
+      activeName(val){
+        if(!this.isRequestData && val=== 'OwnerInfoTab' && this.rentContractId){
+          this.getData();
+          this.isRequestData = true;
+        }
+      }
+    },
+    methods:{
+      getData(){
+        this.$http.get(globalConfig.server+'lease/detail/'+this.rentContractId +'?collect_or_rent=1').then((res) =>{
+          if(res.data.code === '60010'){
+            this.rentData = res.data.data.customer;
+          }else {
+            this.rentData = [];
+          }
+        })
+      },
+      currentChange(val){
+        this.params.page = val;
+        this.getData();
+      },
     }
+  }
 </script>
+
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">

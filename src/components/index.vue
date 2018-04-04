@@ -113,7 +113,7 @@
         <div class="personInfo">
           <div class="head" style="cursor: pointer">
             <span v-if="personal.avatar !== ''">
-              <img data-card="" :data-src="JSON.stringify(personal)" :src="personal.avatar">
+              <img data-card="" :data-src="personal.id" :src="personal.avatar">
             </span>
             <span v-else>
               <img src="../assets/images/head.jpg">
@@ -349,9 +349,13 @@
         this.loginPercent = Number(this.loginDay / 180*100) + '%';
         $('.percent').css('width', this.loginPercent);
         this.countTime();
+
         clearInterval(this.messageInterval);
+
         this.messageInterval = setInterval(() => {
-          this.getUnReadMessage()
+          if(localStorage.personal){
+            this.getUnReadMessage()
+          }
         }, 100000);
         //获取积分明细
         this.getCredit();

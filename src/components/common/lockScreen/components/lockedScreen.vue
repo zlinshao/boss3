@@ -36,7 +36,7 @@
     methods: {
       btnClick(){
         this.$http.get(globalConfig.server+'special/special/unlock_screen?pwd_lock='+this.keywords).then((res)=>{
-          if(res.data.code === '10010'){
+          if(res.data.code === '100200'){
             new Promise((resolve,reject) =>{
               localStorage.setItem('lockStatus', 0);
               if(Number(localStorage.getItem('lockStatus')) !== 1){
@@ -45,14 +45,19 @@
             }).then((data)=>{
               this.$router.push({path: localStorage.getItem('beforePath')});
             });
-          }else if(res.data.code === '10015'){
+          }else if(res.data.code === '100202'){
             new Promise((resolve,reject) =>{
               localStorage.setItem('lockStatus', 0);
               if(Number(localStorage.getItem('lockStatus')) !== 1){
                 resolve();
               }
             }).then((data)=>{
-              this.$router.push({path: '/main'});
+              this.$notify({
+                title: '警告',
+                message: '登陆已过期，请重新登陆！',
+                type: 'warning'
+              });
+              this.$router.push({path: '/login'});
             });
           }else {
             this.$notify({
