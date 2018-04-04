@@ -121,7 +121,7 @@
       <Remarks :module="remarkVisible" @close="closeRemark" ></Remarks>
 
       <!--标记-->
-      <Badge :module="badgeVisible" @close="closeBadge" :incompleteInfo="incompleteInfo" :salaryId="salaryId"></Badge>
+      <Badge :module="badgeVisible" @close="closeBadge" :incompleteList="incompleteList" :salaryId="salaryId"></Badge>
     </div>
 </template>
 
@@ -154,7 +154,7 @@
         freezeVisible: false,
         badgeVisible: false,
         remarkVisible: false,
-        incompleteInfo: [],
+        incompleteList: [],  //政务不齐的id
         salaryId: '',
       }
     },
@@ -225,7 +225,7 @@
       detailMenu(row, event) {
         this.lists = [
           {
-            clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '未发标记',incompleteInfo: row.incomplete_info,id:row.id
+            clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '未发标记',incompleteList: row.incomplete_list,id:row.id
             // clickIndex: 'revise', tailIcon: 'el-icon-arrow-right', headIcon: 'el-icon-edit-outline', label: '未发标记',
             // children: [
             //   {clickIndex: 'one', label: '单条',},
@@ -241,7 +241,7 @@
         console.log(val)
         if (val.clickIndex === 'revise') {
           this.openBadge();
-          this.incompleteInfo = val.incompleteInfo;
+          this.incompleteList = val.incompleteList;
           this.salaryId = val.id;
         }
         // if (val === 'more') {
