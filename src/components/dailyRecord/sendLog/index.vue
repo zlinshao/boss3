@@ -121,8 +121,8 @@
           <div class="sendTitle">发给谁 <span style="color: #cdcdcd;">（默认通过工作通知发送给对方，点击头像删除）</span></div>
           <div>
             <span v-for="item in sendPeople" class="send_people">
-              <img :src="item.avatar" v-if="item.avatar">
-              <img src="../../../assets/images/head.jpg" v-else>
+              <img :src="item.avatar" v-if="item.avatar" @click="deletePeople(item)">
+              <img src="../../../assets/images/head.jpg" @click="deletePeople(item)" v-else>
             </span>
             <img src="../../../assets/images/add.svg" @click="choosePeople">
           </div>
@@ -186,8 +186,8 @@
           <div class="sendTitle">发给谁 <span style="color: #cdcdcd;">（默认通过工作通知发送给对方，点击头像删除）</span></div>
           <div>
             <span v-for="item in sendPeople" class="send_people">
-              <img :src="item.avatar" v-if="item.avatar">
-              <img src="../../../assets/images/head.jpg" v-else>
+              <img :src="item.avatar" v-if="item.avatar" @click="deletePeople(item)">
+              <img src="../../../assets/images/head.jpg" @click="deletePeople(item)" v-else>
             </span>
             <img src="../../../assets/images/add.svg" @click="choosePeople">
           </div>
@@ -257,8 +257,8 @@
           <div class="sendTitle">发给谁 <span style="color: #cdcdcd;">（默认通过工作通知发送给对方，点击头像删除）</span></div>
           <div>
             <span v-for="item in sendPeople" class="send_people">
-              <img :src="item.avatar" v-if="item.avatar">
-              <img src="../../../assets/images/head.jpg" v-else>
+              <img :src="item.avatar" v-if="item.avatar" @click="deletePeople(item)">
+              <img src="../../../assets/images/head.jpg" @click="deletePeople(item)" v-else>
             </span>
             <img src="../../../assets/images/add.svg" @click="choosePeople">
           </div>
@@ -736,6 +736,7 @@
         this.achieveEditFileToUpload = {};
       },
       deletePeople(val){
+        console.log(val)
         var index = '';
         switch(this.active){
           case 0:
