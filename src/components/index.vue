@@ -113,7 +113,7 @@
         <div class="personInfo">
           <div class="head" style="cursor: pointer">
             <span v-if="personal.avatar !== ''">
-              <img data-card="" :data-src="personal.id" :src="personal.avatar">
+              <img data-card="" :data-src="JSON.stringify(personal)" :src="personal.avatar">
             </span>
             <span v-else>
               <img src="../assets/images/head.jpg">
@@ -428,11 +428,13 @@
             this.Countdown--;
             if (this.Countdown < 1) {
               resolve('锁屏');
-              clearInterval(this.interval)
+              clearInterval(this.interval);
+              this.interval = null;
             }
             if (this.screenStatus) {
               reject('重新计数');
-              clearInterval(this.interval)
+              clearInterval(this.interval);
+              this.interval = null;
             }
           }, 1000)
         }).then((data) => {
@@ -447,6 +449,8 @@
         this.isCollapse = !this.isCollapse;
       },
       lockScreen() {
+        clearInterval(this.interval);
+        this.interval = null;
         this.$http.get(globalConfig.server + 'setting/others/lock_screen_status?lock_status=1').then((res) => {
           if (res.data.code === '100003') {
             localStorage.setItem('beforePath', this.$route.path);
