@@ -58,7 +58,7 @@
       <el-row style="display: -webkit-flex;display: flex;">
         <el-col :span="16" class="lejiaNews">
           <div class="title color1 a1">
-            {{newsData.title}}
+            乐伽新闻
           </div>
           <el-row class="elPadding">
             <el-col :span="12">
@@ -109,7 +109,7 @@
         <!--员工风采-->
         <el-col :span="8" class="appearance">
           <div class="title color3 a3">
-            {{staffData.title}}
+            员工风采
           </div>
           <div class="elPadding">
             <div v-for="(key,index) in staffData.data" v-if="index === 0 && staffData.data[0] !== ''">
@@ -160,7 +160,7 @@
           <el-row style="display: -webkit-flex;display: flex;">
             <!--客户纪实-->
             <el-col :span="12" style="margin-right: 10px;" class="customer">
-              <div class="title color2 a2">{{cusData.title}}</div>
+              <div class="title color2 a2">客户纪实</div>
 
               <div class="elPadding box">
                 <div v-for="(key,index) in cusData.data" v-if="index === 0 && cusData.data[0] !== ''">
@@ -208,7 +208,7 @@
 
             <!--公司生活-->
             <el-col :span="12">
-              <div class="title color1 a1">{{lifeData.title}}</div>
+              <div class="title color1 a1">公司生活</div>
               <div class="companyLife elPadding box">
                 <div class="mainLeft" v-for="(key,index) in lifeData.data"
                      v-if="index === 0 && lifeData.data[0] !== ''">
@@ -252,7 +252,7 @@
 
           <!--人物志-->
           <div class="title color1 a1">
-            {{figureData.title}}
+            人物志
           </div>
           <el-row class="elPadding personage">
             <el-col :span="12">
@@ -346,7 +346,7 @@
 
         <!--热门导读-->
         <el-col :span="8">
-          <div class="title color4 a4">{{hotData.title}}</div>
+          <div class="title color4 a4">热门导读</div>
           <div class="hotReady" v-for="(key,index) in hotData.data" v-if="index === 0 && hotData.data[0] !== ''">
             <div class="elPadding">
               <div class="titleImg box">

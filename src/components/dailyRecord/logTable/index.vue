@@ -1,16 +1,72 @@
 <template>
    <div>
-     <div style="margin: 15px 10px">
-       <el-row >
-         <el-col :span="2">发送人</el-col>
-         <el-col :span="7"><el-input type="text" size="mini" placeholder="请选择发送人"></el-input></el-col>
-         <el-col :span="3" style="margin-left: 38px;"><el-button class="primary" size="mini">搜索</el-button></el-col>
-       </el-row>
-       <el-row style="margin: 20px 0;">
-         <el-col :span="2"> 时间</el-col>
-         <el-date-picker v-model="form.start_time" type="date" size="mini" placeholder="选择日期"></el-date-picker> ——
-         <el-date-picker v-model="form.end_time" type="date" size="mini"  placeholder="选择日期"></el-date-picker>
-       </el-row>
+     <div class="highRanking">
+       <div class="highSearch">
+         <el-form :inline="true" size="mini">
+           <el-form-item>
+             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+           </el-form-item>
+         </el-form>
+       </div>
+
+       <div class="filter high_grade" :class="isHigh? 'highHide':''">
+         <el-form :inline="true" :model="form" size="mini" label-width="100px">
+           <div class="filterTitle">
+             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+           </div>
+           <el-row class="el_row_border">
+             <el-col :span="12">
+               <el-row>
+                 <el-col :span="8">
+                   <div class="el_col_label">发送人</div>
+                 </el-col>
+                 <el-col :span="16" class="el_col_option">
+                   <el-form-item>
+                     <el-input v-model="selectMemberName" @focus="openOrganize" placeholder="点击选择发送人"
+                               readonly>
+                       <template slot="append">
+                         <div style="cursor: pointer;" @click="close_">清空</div>
+                       </template>
+                     </el-input>
+                   </el-form-item>
+                 </el-col>
+               </el-row>
+             </el-col>
+             <el-col :span="12">
+               <el-row>
+                 <el-col :span="8">
+                   <div class="el_col_label">选择时间</div>
+                 </el-col>
+                 <el-col :span="16" class="el_col_option">
+                   <el-form-item>
+                     <el-date-picker
+                       v-model="form.date"
+                       type="daterange"
+                       align="right"
+                       unlink-panels
+                       range-separator="至"
+                       start-placeholder="开始日期"
+                       end-placeholder="结束日期"
+                       :picker-options="pickerOptions"
+                       value-format="yyyy-MM-dd"
+                     >
+                     </el-date-picker>
+                     <!--<el-date-picker v-model="form.start_time" type="date" size="mini" placeholder="选择日期" style="width:160px;"></el-date-picker>至-->
+                   </el-form-item>
+                   <!--<el-form-item>-->
+                   <!--<el-date-picker v-model="form.end_time" type="date" size="mini"  placeholder="选择日期" style="width:160px;"></el-date-picker>-->
+                   <!--</el-form-item>-->
+                 </el-col>
+               </el-row>
+             </el-col>
+           </el-row>
+           <div class="btnOperate">
+             <el-button size="mini" type="primary" @click="getLookLog">搜索</el-button>
+             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+             <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+           </div>
+         </el-form>
+       </div>
      </div>
      <div style="margin: 10px 0;">
        <el-button :class="{'primary': active === index}" @click="tagClick(index)" size="mini"
@@ -137,59 +193,142 @@
          </el-table-column>
        </el-table>
      </div>
+     <div class="block pages">
+       <el-pagination
+         @size-change="handleSizeChange"
+         @current-change="handleCurrentChange"
+         :current-page="form.page"
+         :page-size="12"
+         layout="total, prev, pager, next, jumper"
+         :total="totalNum">
+       </el-pagination>
+     </div>
+     <!--组织架构-->
+     <organization :organizationDialog="organizeVisible" :type="organizaType" @close="closeOrganize" @selectMember="selectMember"></organization>
+     <eat-loading :loading="loading"></eat-loading>
    </div>
 </template>
 
 <script>
+  import Organization from '../../common/organization.vue'
+  import EatLoading from '../../common/eatLoading.vue'
     export default {
-        name: 'hello',
-        data () {
-            return {
-              form: {
-                staff_id: '',
-                start_time: '',
-                end_time: '',
-                limit: 12,
-                page: 1,
-                type: 1, // 1 2 3 4 日周月业绩
-                style: 'count',
-                self: '',
-              },
-              buttonVal: ['日报', '周报', '月报', '业绩日报'],
-              active: 0,
-              logData: [],
-            }
-        },
+      name: 'hello',
+      components: {Organization,EatLoading},
+      data () {
+          return {
+            pickerOptions: {
+              shortcuts: [
+                {
+                  text: '最近一天',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 1);
+                    picker.$emit('pick', [start, end]);
+                  }
+                },
+                {
+                  text: '最近一周',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                    picker.$emit('pick', [start, end]);
+                  }
+                },
+                {
+                  text: '最近一个月',
+                  onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                    picker.$emit('pick', [start, end]);
+                  }
+                }]
+            },
+            form: {
+              staff_id: '',
+              date: '',
+              start_time: '',
+              end_time: '',
+              page: 1,
+              type: 1, // 1 2 3 4 日周月业绩
+              style: 'count',
+              self: '',
+            },
+            buttonVal: ['日报', '周报', '月报', '业绩日报'],
+            active: 0,
+            logData: [],
+            isHigh: false,
+            organizeVisible: false,
+            organizaType: '',
+            totalNum: 0,
+            selectMemberName: '',
+            loading: false,
+          }
+      },
       methods: {
+        // 重置
+        resetting() {
+          this.form.staff_id = '';
+          this.selectMemberName = '';
+          this.form.date = '';
+          this.form.start_time = this.form.end_time = '';
+        },
+        // 高级
+        highGrade() {
+          this.isHigh = !this.isHigh;
+        },
+        close_() {
+          this.form.staff_id = '';
+          this.selectMemberName = '';
+        },
         getLookLog() {
-          this.$http.get(globalConfig.server+ 'oa/daily_tmp/index?style=count&self=1&page=1&type='+(this.active+1) ).then((res) => {
+          this.loading = true;
+          if(this.form.date){
+            this.form.start_time = this.form.date[0];
+            this.form.end_time = this.form.date[1];
+          }else{
+            this.form.start_time = '';
+            this.form.end_time = '';
+          }
+          this.$http.get(globalConfig.server+ 'oa/daily_tmp/index?style=count&self=1&limit=12&type='+(this.active+1)+'&staff_id='+this.form.staff_id+'&page='+this.form.page
+            +'&start_time='+this.form.start_time+'&end_time='+this.form.end_time).then((res) => {
             if(res.data.code === '80000') {
               this.logData = res.data.data.data;
+              this.totalNum = res.data.data.count;
+              this.isHigh = false;
+              this.loading = false;
             }
           });
         },
+        handleSizeChange(val) {
+          console.log(`每页 ${val} 条`);
+        },
+        handleCurrentChange(val) {
+          console.log(`当前页: ${val}`);
+          this.form.page = val;
+          this.getLookLog();
+        },
+        openOrganize() {
+          this.organizeVisible = true;
+          this.organizaType = 'staff';
+        },
+        closeOrganize() {
+          this.organizeVisible = false;
+        },
+        selectMember(val){
+          this.organizationDialog = false;
+          this.selectMemberName = val[0].name;
+          this.form.staff_id = val[0].id;
+
+        },
         // 按钮切换
         tagClick(val) {
+          this.loading = true;
           this.active = val;
           this.getLookLog();
-          // switch(val) {
-          //   case 0:  //日报
-          //     this.form.type = 1;
-          //     this.getLookLog();
-          //     break;
-          //   case 1:  //月报
-          //     this.form.type = 2;
-          //     this.getLookLog();
-          //     break;
-          //   case 2:  //周报
-          //     this.form.type = 3;
-          //     this.getLookLog();
-          //     break;
-          //   case 3:  //业绩日报
-          //     this.form.type = 4;
-          //     this.getLookLog();
-          //     break;
-          // }
         },
       },
       mounted() {
@@ -202,7 +341,7 @@
 </script>
 
 <style scoped>
-  .primary {
+   .primary {
     background: #409EFF;
     border-color: #409EFF;
     color: #ffffff;

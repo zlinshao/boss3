@@ -2,62 +2,55 @@
     <div>
       <el-table
         :data="rentingData"
+
         style="width: 100%">
         <el-table-column
           prop="contract_num"
-          label="跟进时间">
-        </el-table-column>
-        <el-table-column
-          prop="address"
           label="录入时间">
         </el-table-column>
         <el-table-column
-          prop="house_type"
-          label="跟进方式">
-        </el-table-column>
-        <el-table-column
-          prop="deposit"
-          label="身份">
-        </el-table-column>
-        <el-table-column
-          prop="contract_num"
-          label="事件类型">
-        </el-table-column>
-        <el-table-column
           prop="address"
-          label="时间等级">
+          label="操作类型">
         </el-table-column>
         <el-table-column
           prop="house_type"
-          label="具体时间">
+          label="对象">
         </el-table-column>
         <el-table-column
           prop="deposit"
-          label="预计完成时间">
+          label="续约前合同周期">
         </el-table-column>
         <el-table-column
-          prop="contract_num"
-          label="跟进结果">
+          prop="price"
+          label="续约后合同周期">
         </el-table-column>
         <el-table-column
-          prop="address"
-          label="认责人">
+          prop="pay_type"
+          label="签约时长">
         </el-table-column>
         <el-table-column
-          prop="house_type"
-          label="时间转交">
+          prop="vacancy"
+          label="月单价">
         </el-table-column>
         <el-table-column
-          prop="deposit"
-          label="上传图片">
+          prop="contract_year"
+          label="付款方式">
         </el-table-column>
         <el-table-column
-          prop="house_type"
-          label="上传录音">
+          prop="start_time"
+          label="开单人">
         </el-table-column>
         <el-table-column
-          prop="deposit"
-          label="录入人">
+          prop="start_time"
+          label="负责人">
+        </el-table-column>
+        <el-table-column
+          prop="start_time"
+          label="部门">
+        </el-table-column>
+        <el-table-column
+          prop="start_time"
+          label="操作人">
         </el-table-column>
       </el-table>
     </div>
@@ -69,6 +62,7 @@
         data () {
             return {
               rentingData:[],
+
             }
         }
     }

@@ -209,8 +209,7 @@ export default {
       else if(row.draft=="已发布"){
       this.lists = [
         { clickIndex: "look", headIcon: "el-icons-fa-eye", label: "预览" },
-        { clickIndex: "delete",  headIcon: "el-icons-fa-trash-o", label: "删除" },
-        { clickIndex: "sendnotice",  headIcon: "el-icons-fa-check-circle-o",   label: "发布"   }
+        { clickIndex: "delete",  headIcon: "el-icons-fa-trash-o", label: "删除" }
       ];
       }
       this.contextMenuParam(event);
@@ -335,7 +334,7 @@ export default {
           draft: 0,
           department_id: this.rightrow.objid,
           attachment: this.rightrow.attachment,
-          previev: this.rightrow.preview
+          preview: this.rightrow.preview
         })
         .then(res => {
           if (res.data.code == "99910") {

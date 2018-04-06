@@ -1,0 +1,136 @@
+<template>
+    <div>
+      <el-table
+        :data="tableData"
+        style="width: 100%">
+        <el-table-column
+          prop="check_time"
+          label="退/换房时间">
+        </el-table-column>
+        <el-table-column
+          prop="check_types"
+          label="退/换房状态">
+        </el-table-column>
+        <el-table-column
+          prop="house_type"
+          label="退/换房方">
+        </el-table-column>
+        <el-table-column
+          prop="create_time"
+          label="合同开始时间">
+        </el-table-column>
+        <el-table-column
+          prop="price"
+          label="合同结束时间">
+        </el-table-column>
+        <el-table-column
+          prop="pay_type"
+          label="结算详情">
+        </el-table-column>
+        <el-table-column
+          prop="vacancy"
+          label="应退费用">
+        </el-table-column>
+        <el-table-column
+          prop="contract_year"
+          label="扣款金额">
+        </el-table-column>
+        <el-table-column
+          prop="start_time"
+          label="实际退款">
+        </el-table-column>
+        <el-table-column
+          prop="start_time"
+          label="退租状态">
+        </el-table-column>
+        <el-table-column
+          prop="start_time"
+          label="结算人">
+        </el-table-column>
+        <el-table-column
+          prop="start_time"
+          label="操作人">
+        </el-table-column>
+      </el-table>
+
+      <div class="pagination">
+        <el-pagination
+          @current-change="currentChange"
+          :current-page="params.pages"
+          :page-size="3"
+          layout="total, prev, pager, next, jumper"
+          :total="totalNumber">
+        </el-pagination>
+      </div>
+    </div>
+</template>
+
+<script>
+    export default {
+      props:['rentContractId','activeName'],
+      data () {
+          return {
+            /***********/
+            editRentChangeDialog:false,
+            tableData:[],
+            params:{
+              limit:3,
+              page:1,
+              contract_id :'',
+            },
+            totalNumber:0,
+            editId:'',      //编辑id
+
+            isRequestData : false,
+          }
+      },
+      mounted(){
+      },
+      watch:{
+        rentContractId(val){
+          this.params.contract_id = val;
+          this.isRequestData = false;
+          if(this.activeName === 'rentReturnRomeInfoTab'){
+            if(val){
+              this.getData();
+              this.isRequestData = true;
+            }else {
+              this.tableData = [];
+            }
+          }
+        },
+        activeName(val){
+          if(!this.isRequestData && val=== 'rentReturnRomeInfoTab' && this.rentContractId){
+            if(this.rentContractId){
+              this.getData();
+              this.isRequestData = true;
+            }else {
+              this.tableData = [];
+            }
+          }
+        }
+      },
+      methods:{
+        getData(){
+          this.$http.get(globalConfig.server+'customer/check_out',{params:this.params}).then((res) => {
+              if(res.data.code === '20000'){
+                this.tableData = res.data.data.data;
+                this.totalNumber = res.data.data.count;
+              }else {
+                this.tableData = [];
+                this.totalNumber = 0;
+              }
+          })
+        },
+        currentChange(val){
+          this.params.page = val;
+          this.getData();
+        },
+      }
+    }
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+
+</style>

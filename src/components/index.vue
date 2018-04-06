@@ -1,35 +1,5 @@
 <template xmlns:v-popover="http://www.w3.org/1999/xhtml">
   <div id="index" @click="clickScreen">
-    <!--<div class="navBarLeft" :class="isFull? 'navBarRight':'' ">-->
-      <!--<p @click="fullScreen(2)"></p>-->
-    <!--</div>-->
-    <!--<div id="KeFuDiv" style="position: fixed;top: 30px;right: 20px;z-index: 1000000;"-->
-         <!--onmousedown="MoveDiv(KeFuDiv,event);">-->
-      <!--<el-collapse-transition>-->
-        <!--<div v-show="isFull">-->
-          <!--<div class="transition-box">-->
-            <!--<div>-->
-              <!--<img src="../assets/images/head.jpg" style="border-radius: 20px" alt="">-->
-            <!--</div>-->
-            <!--<div class="contents">-->
-              <!--<el-row>-->
-                <!--<el-col :span="24">-->
-                  <!--<div style="font-size: 16px">回复的咖</div>-->
-                <!--</el-col>-->
-              <!--</el-row>-->
-
-              <!--<el-row>-->
-                <!--<el-col :span="24">-->
-                  <!--<div style="font-size: 13px;margin-top: 3px;">80秒</div>-->
-                <!--</el-col>-->
-              <!--</el-row>-->
-            <!--</div>-->
-          <!--</div>-->
-        <!--</div>-->
-      <!--</el-collapse-transition>-->
-    <!--</div>-->
-
-
     <div class="navBar" :class="isFull? 'navBarHide':'' ">
       <div class="left">
         <div class="logo" :class="isCollapse? 'isCollapse_logo':'' ">
@@ -46,7 +16,7 @@
           <span style="line-height: 20px;color: #409EFF;" @click="fullScreen(1)"><i class="iconfont icon-quanping"></i>全屏</span>
         </div>
 
-        <div class="guide">
+        <div class="guide" style="cursor: default">
           <i class="el-icon-time"></i>
           {{Countdown}}
         </div>
@@ -69,8 +39,9 @@
             </el-dropdown-menu>
           </el-dropdown>
         </div>
+        <!--消息-->
         <div class="message" style="position: relative;margin-right: 50px">
-          <el-dropdown>
+          <el-dropdown v-if="unReadMessageData.length">
             <el-badge :value="unReadMessageData.length" class="item">
               <i class="el-icons-fa-comment-o"></i>
               消 息
@@ -97,6 +68,11 @@
             </el-dropdown-menu>
           </el-dropdown>
 
+          <!--//没有消息展现方式-->
+          <span v-else="" style="cursor: default">
+            <i class="el-icons-fa-comment-o"></i>
+            消 息
+          </span>
           <!--//喜报名片-->
           <div v-if="false">
             <div class="gladBulletin">
@@ -133,6 +109,7 @@
             <div class="gladBackground"></div>
           </div>
         </div>
+        <!--个人信息-->
         <div class="personInfo">
           <div class="head" style="cursor: pointer">
             <span v-if="personal.avatar !== ''">
@@ -150,11 +127,15 @@
             <el-dropdown-menu slot="dropdown" class="personal">
               <div><i style="color: #fb509f;margin-right: 5px" class="iconfont icon-jifen"></i>{{creditTotal}}分</div>
               <div class="rank">连续登录时长</div>
-              <el-popover ref="popover1"  placement="top-start"  width="100"  trigger="hover">
+              <el-popover ref="popover1" placement="top-start" width="100" trigger="hover">
                 <span> 已连续登录{{loginDay}}天 &nbsp;&nbsp;</span>
               </el-popover>
               <div class="progressBar" v-popover:popover1>
                 <div class="percent"></div>
+              </div>
+              <div class="level">
+                <div>0</div>
+                <div>180</div>
               </div>
               <div class="navigation">
                 <el-row>
@@ -221,7 +202,7 @@
                     <div class="navigationLeft">
                       <el-dropdown-item @click.native="routers('individual')" style="padding: 0">
                         <div class="msgCenter">
-                          <i class="el-icon-setting" style="color: #58D788;"></i>
+                          <i class="el-icons-fa-user" style="color: #58D788;"></i>
                           <div class="msgTitle">个人门户</div>
                         </div>
                       </el-dropdown-item>
@@ -307,7 +288,7 @@
 
 <script>
   import TagsView from './common/tagsView.vue'
-  import screenfull from 'screenfull'
+  import screenFull from 'screenfull'
   import MessageDetail from './common/messageDetail.vue'
 
   export default {
@@ -326,11 +307,11 @@
 
         unReadMessageData: [],
         messageDetail: [],
-        interval:null,
-        messageInterval :null,
-        loginDay:0,
-        loginPercent:0,
-        creditTotal:0, // 积分总数
+        interval: null,
+        messageInterval: null,
+        loginDay: 0,
+        loginPercent: 0,
+        creditTotal: 0, // 积分总数
       }
     },
 
@@ -343,8 +324,8 @@
       },
       isShortcutPath(){
         let isShortcutPath = [];
-        this.$router.options.routes.forEach((item) =>{
-          if(item.isShortcut){
+        this.$router.options.routes.forEach((item) => {
+          if (item.isShortcut) {
             isShortcutPath = item.children;
           }
         });
@@ -355,22 +336,27 @@
       isCollapse(val) {
         document.getElementById('isCollapse').style.overflow = val ? 'visible' : 'auto';
       },
-      '$store.state.app.isBasicChange':{
-          handler(val,oldVal){
-            this.countTime();
-          }
+      '$store.state.app.isBasicChange': {
+        handler(val, oldVal){
+          this.countTime();
+        }
       }
     },
     methods: {
       initData(){
         this.personal = JSON.parse(localStorage.personal);
         this.loginDay = this.personal.data.loginday;
-        this.loginPercent = Number(this.loginDay/180);
-        $('.percent').css('width',this.loginPercent);
+        this.loginPercent = Number(this.loginDay / 180*100) + '%';
+        $('.percent').css('width', this.loginPercent);
         this.countTime();
+
         clearInterval(this.messageInterval);
+        this.messageInterval = null;
+
         this.messageInterval = setInterval(() => {
-          this.getUnReadMessage()
+          if(localStorage.personal){
+            this.getUnReadMessage()
+          }
         }, 100000);
         //获取积分明细
         this.getCredit();
@@ -404,7 +390,7 @@
 
       // 全屏
       fullScreen(val) {
-        screenfull.toggle();
+        screenFull.toggle();
       },
       handleOpen(key, keyPath) {
 
@@ -443,11 +429,11 @@
             this.Countdown--;
             if (this.Countdown < 1) {
               resolve('锁屏');
-              clearInterval(this.interval)
             }
             if (this.screenStatus) {
               reject('重新计数');
-              clearInterval(this.interval)
+              clearInterval(this.interval);
+              this.interval = null;
             }
           }, 1000)
         }).then((data) => {
@@ -462,6 +448,10 @@
         this.isCollapse = !this.isCollapse;
       },
       lockScreen() {
+        clearInterval(this.interval);
+        this.interval = null;
+        clearInterval(this.messageInterval);
+        this.messageInterval = null;
         this.$http.get(globalConfig.server + 'setting/others/lock_screen_status?lock_status=1').then((res) => {
           if (res.data.code === '100003') {
             localStorage.setItem('beforePath', this.$route.path);
@@ -486,11 +476,11 @@
       },
       //获取登陆时长
       getLoginDay(){
-        this.$http.get(globalConfig.server + 'special/special/time').then((res) => {
-          if (res.data.code === '30310') {
-            this.creditTotal = res.data.data;
-          }
-        })
+//        this.$http.get(globalConfig.server + 'special/special/time').then((res) => {
+//          if (res.data.code === '30310') {
+//            this.creditTotal = res.data.data;
+//          }
+//        })
       }
     }
   }
@@ -523,6 +513,7 @@
     display: -webkit-flex;
     display: flex;
   }
+
   $color1: #409EFF;
   $color2: #58D788;
   $color3: #FB4699;
@@ -543,10 +534,10 @@
       width: 100%;
       background: #e8e9e9;
       border-radius: 2px;
-      .percent{
+      .percent {
         height: 4px;
         border-radius: 2px;
-        background: linear-gradient(to right, #7796f9 , #f856a1); /* 标准的语法（必须放在最后） */
+        background: linear-gradient(to right, #7796f9, #f856a1); /* 标准的语法（必须放在最后） */
       }
       /*.progress {
         width: 100%;
@@ -716,7 +707,7 @@
       top: 0;
       left: 0;
       z-index: 66;
-     border-bottom: 1px solid #f4f3f6;
+      border-bottom: 1px solid #f4f3f6;
       display: flex;
       @include transition;
       .left {
@@ -861,7 +852,6 @@
 
         }
 
-
         .guide {
           width: 150px;
         }
@@ -942,6 +932,7 @@
       }
     }
   }
+
   /*----------------------  快捷入口*-------------------*/
   .shortcutList {
     padding: 0 !important;
@@ -972,7 +963,7 @@
         width: 50px;
         height: 50px;
         text-align: center;
-        color: #ffff;
+        color: #fff;
         line-height: 50px;
         font-size: 22px;
       }

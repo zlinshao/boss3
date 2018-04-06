@@ -6,8 +6,8 @@
           <div class="newsMain">
             <div class="newsTitle">
               {{formList.title}}
-              <el-tag type="success" v-if="formList.top !== null ">置顶</el-tag>
-              <el-tag type="warning" v-if="formList.fine !==null ">精华</el-tag>
+              <el-tag type="success" v-if="formList.top !== null" style="vertical-align: middle;">置顶</el-tag>
+              <el-tag type="warning" v-if="formList.fine !==null" style="vertical-align: middle;">精华</el-tag>
             </div>
 
           </div>
@@ -92,7 +92,7 @@
             <el-form-item>
               <el-input type="textarea" :rows="3" v-model="addContent" placeholder="请输入评论内容"></el-input>
             </el-form-item>
-            <span  v-if="landholder.data" style="float: left">{{landholder.data.signature.content}}</span>
+            <span  v-if="landholder.data" style="float: left">{{landholder.data.signature && landholder.data.signature.content}}</span>
             <el-form-item>
               <div class="submitButt">
                 <el-button type="success" size="mini" @click="addReply(formList.id)">发表</el-button>
@@ -139,7 +139,7 @@
       <!--热门导读-->
       <el-col :span="8" v-if="isShow">
         <div class="ingreat">
-          <div class="title">{{hotData.title}}</div>
+          <div class="title">热门导读</div>
           <div class="ingreatNews" v-for="(key,index) in hotData.data" v-if="index < 3">
             <div class="ingreat_title" @click="routerDetail(key.id)">{{key.title}}</div>
             <div class="subhead">

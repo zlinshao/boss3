@@ -125,6 +125,15 @@ export default {
       this.form.minus = String(val.minus);
       this.formList.staff_id = val.staff_id;
       this.integral(val.minus);
+      this.form.remark=""
+        if(val.remarks){
+            if(val.remarks[0]){
+            if(val.remarks[0].content){
+                for(let i=0;i<val.remarks.length;i++){
+                this.form.remark +=val.remarks[i].content +";"
+                }
+            }}
+        }
       this.form.amount_str = val.amount_str;
       this.form.name = val.name;
       this.form.staff_id = val.staff_id;
@@ -133,7 +142,11 @@ export default {
           params: this.formList
         })
         .then(res => {
+          if(res.data.code=='30310'){
           this.form.existing = res.data.data[0].amount;
+          }else{
+            this.form.existing=0
+          }
         });
     },
     newAdd(val) {
@@ -316,8 +329,21 @@ export default {
       this.type = "";
       this.length = "";
       this.form.staff_id = val[0].id;
+      this.formList.staff_id=val[0].id
+      this.$http
+        .get(globalConfig.server + "credit/manage/summary", {
+          params: this.formList
+        })
+        .then(res => {
+          if(res.data.code=='30310'){
+          this.form.existing = res.data.data[0].amount;
+          }else{
+            this.form.existing=0
+          }
+        });
       this.form.sname = val[0].name;
       this.form.dname = val[0].org[0].name;
+
     },
     closeModal() {
       this.organizationDialog = false;

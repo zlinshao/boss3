@@ -104,13 +104,17 @@ export default {
             } else {
               this.integralInfo.minus = "失分";
             }
-            if (res.data.data.last_remark.length > 0) {
-              if (res.data.data.last_remark[0].content) {
-                this.remark = res.data.data.last_remark[0].content;
-              }
-            } else {
-              this.remark = "";
-            }
+        this.remark="";
+        if(res.data.data.remarks){
+            if(res.data.data.remarks[0]){
+            if(res.data.data.remarks[0].content){
+                for(let i=0;i<res.data.data.remarks.length;i++){
+                this.remark +=res.data.data.remarks[i].content +";"
+                }}else{this.remark="";}
+            }else{this.remark="";}
+        }else{
+          this.remark="";
+        }
           } else {
             this.integralInfo = [];
           }

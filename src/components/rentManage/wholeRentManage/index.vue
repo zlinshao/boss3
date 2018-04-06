@@ -22,7 +22,7 @@
         <div class="highSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input placeholder="请输入内容" v-model="formInline.keyWords" size="mini" clearable>
+              <el-input placeholder="请输入内容" v-model="collectParams.keyWords" size="mini" clearable>
                 <el-button slot="append" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
@@ -35,60 +35,12 @@
           </el-form>
         </div>
 
+        <!--高級搜索-->
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
-          <el-form :inline="true" :model="formInline" size="mini" label-width="100px">
+          <el-form :inline="true" :model="collectParams" size="mini" label-width="100px">
             <div class="filterTitle">
               <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>
-            <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">店面</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select v-model="formInline.house" clearable placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">户型</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select v-model="formInline.a" clearable placeholder="请选择" value="">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
-            <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">状态</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select v-model="formInline.house" clearable placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
@@ -104,14 +56,17 @@
             <el-table
               :data="collectData"
               @row-dblclick="dblClickTable"
+              @row-click="clickCollectTable"
+              :row-class-name="tableRowCollectName"
               @row-contextmenu='houseMenu'
               style="width: 100%">
               <el-table-column
-                prop="contract_num"
+                prop="contract_number"
                 label="合同编号">
               </el-table-column>
               <el-table-column
                 prop="address"
+                width="160px"
                 label="房屋地址">
               </el-table-column>
               <el-table-column
@@ -119,31 +74,58 @@
                 label="房屋类型">
               </el-table-column>
               <el-table-column
-                prop="deposit"
+                prop="deposit_collect"
                 label="收房押金">
               </el-table-column>
               <el-table-column
-                prop="price"
                 label="收房价格">
+                <template slot-scope="scope">
+                  <el-popover
+                    ref="popover4"
+                    placement="bottom"
+                    width="300"
+                    trigger="click">
+                    <el-table :data="scope.row.price">
+                      <el-table-column width="150" property="price" label="价格(元)"></el-table-column>
+                      <el-table-column width="150" property="period" label="变化周期(月)"></el-table-column>
+                    </el-table>
+                  </el-popover>
+                  {{scope.row.price[0].price}}&nbsp;
+                  <el-button v-popover:popover4 size="mini" type="text">变化</el-button>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="pay_type"
                 label="付款方式">
+                <template slot-scope="scope">
+                  <!--{{scope.row.pay_way}}-->
+                  <el-popover
+                    ref="payWay"
+                    placement="bottom"
+                    width="300"
+                    trigger="click">
+                    <el-table :data="scope.row.pay_way">
+                      <el-table-column width="150" property="pay_way" label="付款方式"></el-table-column>
+                      <el-table-column width="150" property="period" label="变化周期(月)"></el-table-column>
+                    </el-table>
+                  </el-popover>
+                  {{scope.row.pay_way[0].pay_way}}&nbsp;
+                  <el-button size="mini" type="text"  v-popover:payWay>变化</el-button>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="vacancy"
-                label="空置期">
+                label="空置期(天)">
               </el-table-column>
               <el-table-column
-                prop="contract_year"
-                label="签约时长">
+                prop="month"
+                label="签约时长（月）">
               </el-table-column>
               <el-table-column
-                prop="start_time"
+                prop="begin_date"
                 label="开始日期">
               </el-table-column>
               <el-table-column
-                prop="end_time"
+                prop="end_date"
                 label="结束日期">
               </el-table-column>
               <el-table-column
@@ -151,17 +133,17 @@
                 label="中介费">
               </el-table-column>
               <el-table-column
-                prop="department"
+                prop="department_name"
                 label="所属部门">
               </el-table-column>
               <el-table-column
                 prop="staff_name"
                 label="签约人">
               </el-table-column>
-              <el-table-column
-                prop="charge_name"
-                label="负责人">
-              </el-table-column>
+              <!--<el-table-column-->
+                <!--prop="leader_name"-->
+                <!--label="负责人">-->
+              <!--</el-table-column>-->
               <el-table-column
                 prop="phone"
                 label="电话">
@@ -176,13 +158,13 @@
 
             <div class="left">
               <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[10, 20, 30, 40]"
-                :page-size="10"
+                @size-change="collectSizeChange"
+                @current-change="collectPageChange"
+                :current-page="collectParams.page"
+                :page-sizes="[5, 10, 15, 20]"
+                :page-size="5"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="collectTotalNum">
               </el-pagination>
             </div>
           </div>
@@ -191,11 +173,13 @@
           <div class="greenTable" @contextmenu="houseHeadMenu($event)">
             <el-table
               :data="rentingData"
-              @row-click="clickTable"
+              @row-click="clickRentTable"
+              @row-dblclick="dblClickRentTable"
               @row-contextmenu='clientMenu'
+              :row-class-name="tableRowRentName"
               style="width: 100%">
               <el-table-column
-                prop="contract_num"
+                prop="contract_number"
                 label="合同编号">
               </el-table-column>
               <el-table-column
@@ -207,49 +191,71 @@
                 label="房屋类型">
               </el-table-column>
               <el-table-column
-                prop="deposit"
-                label="价格差">
-              </el-table-column>
-              <el-table-column
                 prop="price"
                 label="出租价格">
+                <template slot-scope="scope">
+
+                  <el-popover
+                    ref="rentPrice"
+                    placement="bottom"
+                    width="300"
+                    trigger="click">
+                    <el-table :data="scope.row.price">
+                      <el-table-column width="150" property="price" label="价格(元)"></el-table-column>
+                      <el-table-column width="150" property="period" label="变化周期(月)"></el-table-column>
+                    </el-table>
+                  </el-popover>
+                  {{scope.row.price[0].price}}&nbsp;
+                  <el-button v-popover:rentPrice size="mini" type="text">变化</el-button>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="pay_type"
                 label="付款方式">
+                <template slot-scope="scope">
+                  <!--{{scope.row.pay_way}}-->
+                  <el-popover
+                    ref="payWayRent"
+                    placement="bottom"
+                    width="300"
+                    trigger="click">
+                    <el-table :data="scope.row.pay_way">
+                      <el-table-column width="150" property="pay_way" label="付款方式"></el-table-column>
+                      <el-table-column width="150" property="period" label="变化周期(月)"></el-table-column>
+                    </el-table>
+                  </el-popover>
+                  {{scope.row.pay_way[0].pay_way}}&nbsp;
+                  <el-button size="mini" type="text"  v-popover:payWayRent>变化</el-button>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="vacancy"
-                label="空置期">
+                prop="month"
+                label="签约时长(月)">
               </el-table-column>
               <el-table-column
-                prop="contract_year"
-                label="签约时长">
-              </el-table-column>
-              <el-table-column
-                prop="start_time"
+                prop="begin_date"
                 label="开始日期">
               </el-table-column>
               <el-table-column
-                prop="end_time"
+                prop="end_date"
                 label="结束日期">
               </el-table-column>
               <el-table-column
-                prop="medium_price"
+                prop="agency"
                 label="中介费">
               </el-table-column>
-              <el-table-column
-                prop="department"
-                label="所属部门">
-              </el-table-column>
+
               <el-table-column
                 prop="staff_name"
                 label="签约人">
               </el-table-column>
               <el-table-column
-                prop="charge_name"
-                label="负责人">
+                prop="department_name"
+                label="所属部门">
               </el-table-column>
+              <!--<el-table-column-->
+                <!--prop="leader_name"-->
+                <!--label="负责人">-->
+              <!--</el-table-column>-->
             </el-table>
           </div>
           <div class="tableBottom">
@@ -257,60 +263,68 @@
               <div>本套相差 <span>0&nbsp;元</span></div>
               <div>押金差 <span>0&nbsp;元</span></div>
             </div>
-
             <div class="left">
               <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[10, 20, 30, 40]"
-                :page-size="10"
+                @size-change="rentSizeChange"
+                @current-change="rentPageChange"
+                :current-page="rentParams.page"
+                :page-sizes="[3, 6, 9, 12]"
+                :page-size="3"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="0">
+                :total="rentTotalNum">
               </el-pagination>
             </div>
           </div>
         </div>
-        <div class="myDetail" @contextmenu="detailMenu($event)">
-          <el-tabs type="border-card">
-            <el-tab-pane label="房东信息">
-              <OwnerInfoTab></OwnerInfoTab>
+        <div class="myDetail">
+          <el-tabs type="border-card" v-model="activeName">
+            <el-tab-pane label="房东信息" name="OwnerInfoTab">
+              <OwnerInfoTab :collectContractId="collectContractId" :activeName="activeName"></OwnerInfoTab>
             </el-tab-pane>
-            <el-tab-pane label="租客信息">
-              <RentInfoTab></RentInfoTab>
+            <el-tab-pane label="租客信息" name="RentInfoTab">
+              <RentInfoTab :rentContractId="rentContractId" :activeName="activeName"></RentInfoTab>
             </el-tab-pane>
-            <el-tab-pane label="欠费信息">
-              <InDebtInfoTab></InDebtInfoTab>
+            <el-tab-pane label="物品增减" name="GoodsChangeTab">
+              <GoodsChangeTab :collectHouseId="collectHouseId" :activeName="activeName"></GoodsChangeTab>
             </el-tab-pane>
-            <el-tab-pane label="物品增减">
-              <GoodsChangeTab></GoodsChangeTab>
+            <el-tab-pane label="房东退房记录" name="CollectReturnRomeInfoTab">
+              <CollectReturnRomeInfoTab :collectContractId="collectContractId" :activeName="activeName"></CollectReturnRomeInfoTab>
             </el-tab-pane>
-            <el-tab-pane label="退/换房记录">
-              <ReturnRomeInfoTab></ReturnRomeInfoTab>
+            <el-tab-pane label="退/换房记录(租)" name="rentReturnRomeInfoTab">
+              <rentReturnRomeInfoTab :rentContractId="rentContractId" :activeName="activeName"></rentReturnRomeInfoTab>
             </el-tab-pane>
-            <el-tab-pane label="续约/延期">
-              <RenewContractTab></RenewContractTab>
+            <el-tab-pane label="续约/延期(收)" name="CollectRenewContractTab">
+              <CollectRenewContractTab></CollectRenewContractTab>
             </el-tab-pane>
-            <el-tab-pane label="转租记录">
+            <el-tab-pane label="续约/延期(租)" name="RentRenewContractTab">
+              <RentRenewContractTab></RentRenewContractTab>
+            </el-tab-pane>
+            <el-tab-pane label="转租记录" name="subletRecordTab">
               <subletRecordTab></subletRecordTab>
             </el-tab-pane>
-            <el-tab-pane label="应收款项">
+            <el-tab-pane label="应收款项" name="ReceivableItemTab">
               <ReceivableItemTab></ReceivableItemTab>
             </el-tab-pane>
-            <el-tab-pane label="应付款项">
+            <el-tab-pane label="应付款项" name="PayableItemTab">
               <PayableItemTab></PayableItemTab>
             </el-tab-pane>
-            <el-tab-pane label="资料备忘">
-              <MemorandumTab></MemorandumTab>
+            <el-tab-pane label="资料备忘(收)" name="CollectMemorandumTab">
+              <CollectMemorandumTab></CollectMemorandumTab>
             </el-tab-pane>
-            <el-tab-pane label="回访记录">
-              <returnVisitRecordTab></returnVisitRecordTab>
+            <el-tab-pane label="资料备忘(租)" name="RentMemorandumTab">
+              <RentMemorandumTab></RentMemorandumTab>
             </el-tab-pane>
-            <el-tab-pane label="跟进记录">
-              <followRecordTab></followRecordTab>
+            <el-tab-pane label="回访记录(收)" name="CollectReturnVisitRecordTab">
+              <CollectReturnVisitRecordTab></CollectReturnVisitRecordTab>
             </el-tab-pane>
-            <el-tab-pane label="维修">
-              <ServiceRecordTab></ServiceRecordTab>
+            <el-tab-pane label="回访记录(租)" name="RentReturnVisitRecordTab">
+              <RentReturnVisitRecordTab></RentReturnVisitRecordTab>
+            </el-tab-pane>
+            <el-tab-pane label="跟进记录(收)" name="CollectFollowRecordTab">
+              <CollectFollowRecordTab :collectContractId="collectContractId" :activeName="activeName"></CollectFollowRecordTab>
+            </el-tab-pane>
+            <el-tab-pane label="跟进记录(租)" name="RentFollowRecordTab">
+              <RentFollowRecordTab :rentContractId="rentContractId" :activeName="activeName"></RentFollowRecordTab>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -327,16 +341,19 @@
     <DecreaseGoods :decreaseGoodsDialog="decreaseGoodsDialog" @close="closeModal"></DecreaseGoods>
     <OwnerArrears :ownerArrearsDialog="ownerArrearsDialog" @close="closeModal"></OwnerArrears>
     <OwnerRenew :ownerRenewDialog="ownerRenewDialog" @close="closeModal"></OwnerRenew>
-    <AddFollowUp :addFollowUpDialog="addFollowUpDialog" @close="closeModal"></AddFollowUp>
+    <AddFollowUp :addFollowUpDialog="addFollowUpDialog" :contractModule="contractModule"
+                 :contractOperateId="contractOperateId" @close="closeModal"></AddFollowUp>
     <CollectVacation :collectVacationDialog="collectVacationDialog" @close="closeModal"></CollectVacation>
     <AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" @close="closeModal"></AddCollectRepair>
     <AddRentRepair :addRentRepairDialog="addRentRepairDialog" @close="closeModal"></AddRentRepair>
     <RentChangeRoom :rentChangeRoomDialog="rentChangeRoomDialog" @close="closeModal"></RentChangeRoom>
     <Sublease :subleaseDialog="subleaseDialog" @close="closeModal"></Sublease>
     <RentRenew :rentRenewDialog="rentRenewDialog" @close="closeModal"></RentRenew>
-    <AddRentInfo :addRentInfoDialog="addRentInfoDialog" @close="closeModal"></AddRentInfo>
+    <AddRentInfo :addRentInfoDialog="addRentInfoDialog" :collectContractId="collectContractId" @close="closeModal"></AddRentInfo>
     <SendMessage :sendMessageDialog="sendMessageDialog" @close="closeModal"></SendMessage>
     <AddHouseResources :addHouseResourcesDialog="addHouseResourcesDialog" @close="closeModal"></AddHouseResources>
+    <EditHouseResources :editHouseResourcesDialog="editHouseResourcesDialog"
+                        :collectContractId="collectContractId" @close="closeModal"></EditHouseResources>
     <Repayment :repaymentDialog="repaymentDialog" @close="closeModal"></Repayment>
     <ReturnVisit :returnVisitDialog="returnVisitDialog" @close="closeModal"></ReturnVisit>
     <TopForm :topFormSetDialog="topFormSetDialog" @close="closeModal"></TopForm>
@@ -368,6 +385,7 @@
   import AddRentInfo from '../components/addRentInfo.vue' //登记租客
   import SendMessage from '../../common/sendMessage.vue'  //发送短信
   import AddHouseResources from '../components/addHouseResources.vue' //登记房源
+  import EditHouseResources from '../components/editHouseResources.vue' //修改房源
   import Repayment from '../components/rentRepayment.vue'
   import ReturnVisit from '../components/returnVisit.vue'   //查看回访
   import TopForm from '../components/topFormSet.vue'    //表头列表
@@ -377,16 +395,21 @@
   import GoodsChangeTab from '../tabComponents/goodsChange.vue'
   import OwnerInfoTab from '../tabComponents/ownerInfo.vue'
   import RentInfoTab from '../tabComponents/rentInfo.vue'
-  import InDebtInfoTab from '../tabComponents/InDebtInfo.vue'
-  import ReturnRomeInfoTab from '../tabComponents/returnRoomInfo/index.vue'   //退还房
-  import RenewContractTab from '../tabComponents/renewContract.vue'
+//  import InDebtInfoTab from '../tabComponents/InDebtInfo.vue'
+  import CollectReturnRomeInfoTab from '../tabComponents/returnRoomInfo/index.vue'   //退还房
+  import rentReturnRomeInfoTab from '../tabComponents/rentReturnInfo.vue'   //退还房
+  import CollectRenewContractTab from '../tabComponents/collcetRenewContract.vue'
+  import RentRenewContractTab from '../tabComponents/rentRenewContract.vue'
   import subletRecordTab from '../tabComponents/subletRecord.vue'
   import ReceivableItemTab from '../tabComponents/receivableItem.vue'
   import PayableItemTab from '../tabComponents/payableItem.vue'
-  import MemorandumTab from '../tabComponents/memorandum.vue'
-  import returnVisitRecordTab from '../tabComponents/returnVistitRecord.vue'
-  import followRecordTab from '../tabComponents/followRecord.vue'
-  import ServiceRecordTab from '../tabComponents/serviceRecord.vue'
+  import CollectMemorandumTab from '../tabComponents/collectMemorandum.vue'
+  import RentMemorandumTab from '../tabComponents/rentMemorandum.vue'
+  import CollectReturnVisitRecordTab from '../tabComponents/collectReturnVistitRecord.vue'
+  import RentReturnVisitRecordTab from '../tabComponents/rentReturnVistitRecord.vue'
+  import CollectFollowRecordTab from '../tabComponents/collectFollowRecord.vue'
+  import RentFollowRecordTab from '../tabComponents/rentFollowRecord.vue'
+//  import ServiceRecordTab from '../tabComponents/serviceRecord.vue'
   export default {
     name: 'hello',
     components: {
@@ -410,6 +433,7 @@
       AddRentInfo,
       SendMessage,
       AddHouseResources,
+      EditHouseResources,
       Repayment,
       ReturnVisit,
       TopForm,
@@ -420,16 +444,21 @@
       GoodsChangeTab,
       OwnerInfoTab,
       RentInfoTab,
-      InDebtInfoTab,
-      ReturnRomeInfoTab,
-      RenewContractTab,
+//      InDebtInfoTab,
+      CollectReturnRomeInfoTab,
+      rentReturnRomeInfoTab,
+      CollectRenewContractTab,
+      RentRenewContractTab,
       subletRecordTab,
       ReceivableItemTab,
       PayableItemTab,
-      MemorandumTab,
-      returnVisitRecordTab,
-      followRecordTab,
-      ServiceRecordTab,
+      CollectMemorandumTab,
+      RentMemorandumTab,
+      CollectReturnVisitRecordTab,
+      RentReturnVisitRecordTab,
+      CollectFollowRecordTab,
+      RentFollowRecordTab,
+//      ServiceRecordTab,
     },
     data () {
       return {
@@ -448,7 +477,7 @@
         decreaseGoodsDialog: false,  //物品搬出
         increaseGoodsDialog: false,  //物品增加
         ownerArrearsDialog: false,   //房东欠款
-        addFollowUpDialog :false,     //添加跟进
+        addFollowUpDialog :false,     //添加工单
         collectVacationDialog:false,     //房东退房
         addCollectRepairDialog:false,    //房东添加维修
         addRentRepairDialog:false,       //租客添加维修
@@ -458,6 +487,7 @@
         addRentInfoDialog:false,      //登记租客信息
         sendMessageDialog:false,      //发送短信
         addHouseResourcesDialog:false,  //登记房源
+        editHouseResourcesDialog:false,  //修改房源
         repaymentDialog:false,        //还款
         returnVisitDialog:false,      //查看回访
         topFormSetDialog:false,       //选择列
@@ -465,179 +495,74 @@
         visitRecordDialog: false,    //回访记录
 
         isHigh: false,
+        /*******************收房*********************/
+        collectParams: {
+          page:1,
+          limit:5,
+          search:'',
+        },
+        collectTotalNum:0,
+        collectData: [],    //收房列表数据
+        collectHouseId:'',   //房屋id
+        collectContractId:'', //  收房合同id
+        //*******************租房*******************//
+        rentParams:{
+          page:1,
+          limit:3,
+        },
+        rentingData:[],     //租房列表数据
+        rentTotalNum:0,
+        rentHouseId : '',
+        rentContractId : '',
 
-        formInline: {},
-        collectData: [
-          {
-            id: '1',
-            contract_num: 'LJSF0000001',
-            address: '天华硅谷',
-            house_type: '三室一厅',
-            deposit: '8888',
-            price: '3500',
-            pay_type: '月付',
-            vacancy: '30',
-            contract_year: '3年',
-            start_time: '2018-1-1',
-            end_time: '2021-1-1',
-            medium_price: '2000',
-            department: '市场部',
-            staff_name: '陆宣羽',
-            charge_name: '陆宣羽',
-            phone: '15800008888',
-          },
-          {
-            id: '1',
-            contract_num: 'LJSF0000001',
-            address: '天华硅谷',
-            house_type: '三室一厅',
-            deposit: '8888',
-            price: '3500',
-            pay_type: '月付',
-            vacancy: '30',
-            contract_year: '3年',
-            start_time: '2018-1-1',
-            end_time: '2021-1-1',
-            medium_price: '2000',
-            department: '市场部',
-            staff_name: '陆宣羽',
-            charge_name: '陆宣羽',
-            phone: '15800008888',
-          },
-          {
-            id: '1',
-            contract_num: 'LJSF0000001',
-            address: '天华硅谷',
-            house_type: '三室一厅',
-            deposit: '8888',
-            price: '3500',
-            pay_type: '月付',
-            vacancy: '30',
-            contract_year: '3年',
-            start_time: '2018-1-1',
-            end_time: '2021-1-1',
-            medium_price: '2000',
-            department: '市场部',
-            staff_name: '陆宣羽',
-            charge_name: '陆宣羽',
-            phone: '15800008888',
-          },
-          {
-            id: '1',
-            contract_num: 'LJSF0000001',
-            address: '天华硅谷',
-            house_type: '三室一厅',
-            deposit: '8888',
-            price: '3500',
-            pay_type: '月付',
-            vacancy: '30',
-            contract_year: '3年',
-            start_time: '2018-1-1',
-            end_time: '2021-1-1',
-            medium_price: '2000',
-            department: '市场部',
-            staff_name: '陆宣羽',
-            charge_name: '陆宣羽',
-            phone: '15800008888',
-          },
-          {
-            id: '1',
-            contract_num: 'LJSF0000001',
-            address: '天华硅谷',
-            house_type: '三室一厅',
-            deposit: '8888',
-            price: '3500',
-            pay_type: '月付',
-            vacancy: '30',
-            contract_year: '3年',
-            start_time: '2018-1-1',
-            end_time: '2021-1-1',
-            medium_price: '2000',
-            department: '市场部',
-            staff_name: '陆宣羽',
-            charge_name: '陆宣羽',
-            phone: '15800008888',
-          },
-        ],
-        rentingData: [
-          {
-            id: '1',
-            contract_num: 'LJSF0000001',
-            address: '天华硅谷',
-            house_type: '三室一厅',
-            deposit: '8888',
-            price: '3500',
-            pay_type: '月付',
-            vacancy: '30',
-            contract_year: '3年',
-            start_time: '2018-1-1',
-            end_time: '2021-1-1',
-            medium_price: '2000',
-            department: '市场部',
-            staff_name: '陆宣羽',
-            charge_name: '陆宣羽',
-            phone: '15800008888',
-          },
-          {
-            id: '1',
-            contract_num: 'LJSF0000001',
-            address: '天华硅谷',
-            house_type: '三室一厅',
-            deposit: '8888',
-            price: '3500',
-            pay_type: '月付',
-            vacancy: '30',
-            contract_year: '3年',
-            start_time: '2018-1-1',
-            end_time: '2021-1-1',
-            medium_price: '2000',
-            department: '市场部',
-            staff_name: '陆宣羽',
-            charge_name: '陆宣羽',
-            phone: '15800008888',
-          },
-          {
-            id: '1',
-            contract_num: 'LJSF0000001',
-            address: '天华硅谷',
-            house_type: '三室一厅',
-            deposit: '8888',
-            price: '3500',
-            pay_type: '月付',
-            vacancy: '30',
-            contract_year: '3年',
-            start_time: '2018-1-1',
-            end_time: '2021-1-1',
-            medium_price: '2000',
-            department: '市场部',
-            staff_name: '陆宣羽',
-            charge_name: '陆宣羽',
-            phone: '15800008888',
-          }
-        ],
-        currentPage: 1,
-        options: [],
+        contractModule : '',
+        contractOperateId : '',
+
+        activeName:'OwnerInfoTab',    //tab name
       }
     },
     mounted(){
-      $('tbody tr').click(function () {
-        $(this).addClass('selected_tr').siblings().removeClass('selected_tr');
-      });
+      this.initData();
     },
+
+    watch:{
+      collectHouseId(val){
+        this.getRentData(val);
+      }
+    },
+
     methods: {
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+      //数据初始化
+      initData(){
+        this.getCollectData();
       },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
+      /*****************************收房*********************************************************/
+      getCollectData(){
+        this.$loading.show();
+        this.$http.get(globalConfig.server+'lease/entire/collect',{params:this.collectParams}).then((res) => {
+          if(res.data.code === '60110'){
+            this.collectData = res.data.data;
+            this.collectTotalNum = res.data.meta.total;
+            if(res.data.data.length>0){
+              this.collectHouseId = this.collectData[0].house_id;
+              this.collectContractId = this.collectData[0].contract_id;
+            }
+          }else {
+            this.collectData = [];
+            this.collectTotalNum = 0;
+          }
+        })
       },
-      clickTable(row, event, column){
-        console.log(row, event, column)
-      },
+
       //房屋右键
       houseMenu(row, event){
+        this.collectHouseId = row.house_id;
+        this.collectContractId = row.contract_id;   //收房id
+        this.contractOperateId = row.contract_id;   //通用合同ID
+        this.contractModule = 1;
         this.lists = [
-          {clickIndex: 'addHouseResourcesDialog', headIcon: 'el-icons-fa-home', label: '修改房源',},
+          {clickIndex: 'editHouseResourcesDialog', headIcon: 'el-icons-fa-home', label: '修改房源',},
+          {clickIndex: 'addRentInfoDialog', headIcon :'el-icons-fa-plus', label: '登记租客信息',},
           {
             clickIndex: '', headIcon: 'el-icons-fa-pencil-square-o', tailIcon: 'el-icon-arrow-right', label: '房东续约/延期',
             children: [
@@ -646,13 +571,8 @@
             ]
           },
           {clickIndex: 'collectVacationDialog', headIcon: 'el-icons-fa-reply', label: '房东退房',},
-          {
-            clickIndex: '', headIcon: 'el-icons-fa-folder-o', tailIcon: 'el-icon-arrow-right', label: '其他',
-            children: [
-              {clickIndex: 'switchToJoint', label: '转到合租',},
-              {clickIndex: 'addFollowUpDialog', label: '添加跟进',}
-            ]
-          },
+          {clickIndex: 'switchToJoint', headIcon :' el-icons-fa-refresh', label: '转到合租',},
+          {clickIndex: 'addFollowUpDialog',headIcon :'el-icons-fa-plus', label: '添加工单',},
           {clickIndex: 'ownerArrearsDialog', headIcon: 'el-icons-fa-cny', label: '房东欠款',},
           {
             clickIndex: '', headIcon: 'el-icons-fa-inbox', tailIcon: 'el-icon-arrow-right', label: '物品增减',
@@ -661,51 +581,71 @@
               {clickIndex: 'increaseGoodsDialog', label: '物品增进',}
             ]
           },
-          {clickIndex: 'addCollectRepairDialog', headIcon: 'el-icons-fa-gear', label: '维修',},
-          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
+//          {clickIndex: 'addCollectRepairDialog', headIcon: 'el-icons-fa-gear', label: '维修',},
+//          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
           {clickIndex: 'visitRecordDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '回访记录',},
         ];
         this.contextMenuParam(event);
       },
-      //合同表头右键
-      houseHeadMenu(e){
-        this.lists = [
-          {clickIndex: 'topFormSetDialog', headIcon: 'el-icons-fa-home', label: '选择列选项',},
-        ];
-        this.contextMenuParam(event);
+
+      //单机收房列表
+      clickCollectTable(row, event, column){
+        this.collectHouseId = row.house_id;
+        this.collectContractId = row.contract_id;
       },
 
-      //详情表头右键
-      detailMenu(e){
-        if (e.target.className.indexOf('el-tabs__item') > -1 || e.target.className.indexOf('el-tabs__nav-scroll') > -1) {
-          this.lists = [
-            {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
-          ];
-          this.contextMenuParam(event);
+      //收房列表选中状态
+      tableRowCollectName({row, rowIndex}) {
+        if (row.contract_id === this.collectContractId) {
+          return 'selected_tr';
         }
+        return '';
+      },
+
+      collectSizeChange(val) {
+        this.collectParams.limit = val;
+        this.getCollectData();
+      },
+      collectPageChange(val) {
+        this.collectParams.page = val;
+        this.getCollectData();
       },
       dblClickTable(row, event){   //双击
-        const {href} = this.$router.resolve({path: '/rentingDetail',query:{id:'1'}});
+        const {href} = this.$router.resolve({path: '/collectDetail',query:{id:row.contract_id,type:0}});
         window.open(href,'_blank','width=1920,height=1080');
       },
-      //右键回调时间
-      clickEvent (index) {
-        this.openModalDialog(index);
+      //*********************************租房*******************************************************//
+      getRentData(id){
+        this.$http.get(globalConfig.server+'lease/entire/rent/' + id,{params:this.rentParams}).then((res) => {
+          this.$loading.hide();
+          if(res.data.code === '60110'){
+            this.rentingData = res.data.data;
+            this.rentTotalNum = res.data.meta.total;
+            if(res.data.data.length>0){
+              this.rentContractId = res.data.data[0].contract_id;
+            }else {
+              this.rentContractId = '';
+            }
+          }else {
+            this.rentingData = [];
+            this.rentTotalNum = 0;
+          }
+        })
       },
-      //关闭右键菜单
-      closeMenu(){
-        this.show = false;
+      rentSizeChange(val) {
+        this.rentParams.limit = val;
       },
+      rentPageChange(val) {
+        this.rentParams.page = val;
+      },
+
       //租客右键
       clientMenu(row, event){
+        this.rentContractId = row.contract_id;
+        this.contractOperateId = row.contract_id;   //通用合同ID
+        this.contractModule = 2;
         this.lists = [
-          {
-            clickIndex: '', headIcon: 'el-icons-fa-user', tailIcon: 'el-icon-arrow-right', label: '租客管理',
-            children: [
-              {clickIndex: 'addRentInfoDialog', label: '登记租客信息',},
-              {clickIndex: 'addRentInfoDialog', label: '修改租客信息',},
-            ]
-          },
+          {clickIndex: 'addRentInfoDialog',headIcon: 'el-icon-edit', label: '修改租客信息',},
           {clickIndex: 'rentRenewDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '租客续约',},
           {
             clickIndex: '', headIcon: 'el-icons-fa-home', tailIcon: 'el-icon-arrow-right', label: '退房/调房',
@@ -716,12 +656,57 @@
           },
           {clickIndex: 'subleaseDialog', headIcon: 'el-icons-fa-refresh', label: '转租',},
           {clickIndex: 'ownerArrearsDialog', headIcon: 'el-icons-fa-cny', label: '租客欠款',},
-          {clickIndex: 'addRentRepairDialog', headIcon: 'el-icons-fa-gear', label: '报修',},
-          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
-          {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加跟进',},
+//          {clickIndex: 'addRentRepairDialog', headIcon: 'el-icons-fa-gear', label: '报修',},
+//          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
+          {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单',},
           {clickIndex: 'visitRecordDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '回访记录',},
         ];
         this.contextMenuParam(event);
+      },
+
+      //租列表选中状态
+      tableRowRentName({row, rowIndex}) {
+        if (row.contract_id === this.rentContractId) {
+          return 'selected_tr';
+        }
+        return '';
+      },
+      //单机租房列表
+      clickRentTable(row, event, column){
+        this.rentHouseId = row.house_id;
+        this.rentContractId = row.contract_id;
+      },
+      dblClickRentTable(row, event){
+        const {href} = this.$router.resolve({path: '/rentingDetail',query:{id:row.contract_id,type:1}});
+        window.open(href,'_blank','width=1920,height=1080');
+      },
+
+      /*****************************************右键处理函数******************************************/
+      //合同表头右键
+      houseHeadMenu(e){
+//        this.lists = [
+//          {clickIndex: 'topFormSetDialog', headIcon: 'el-icons-fa-home', label: '选择列选项',},
+//        ];
+//        this.contextMenuParam(event);
+      },
+
+      //详情表头右键
+      detailMenu(e){
+//        if (e.target.className.indexOf('el-tabs__item') > -1 || e.target.className.indexOf('el-tabs__nav-scroll') > -1) {
+//          this.lists = [
+//            {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
+//          ];
+//          this.contextMenuParam(event);
+//        }
+      },
+
+      //右键回调时间
+      clickEvent (index) {
+        this.openModalDialog(index);
+      },
+      //关闭右键菜单
+      closeMenu(){
+        this.show = false;
       },
 
       //右键参数
@@ -800,6 +785,9 @@
           case 'addHouseResourcesDialog':     //登记房源
             this.addHouseResourcesDialog = true;
             break;
+          case 'editHouseResourcesDialog':     //修改房源
+            this.editHouseResourcesDialog = true;
+            break;
           case 'repaymentDialog':     //还款
             this.repaymentDialog = true;
             break;
@@ -839,7 +827,7 @@
         });
       },
       closeModal(){
-        this.instructionDialog = false
+        this.instructionDialog = false;
         this.backUpDialog = false;
         this.advancedDialog = false;
         this.ownerDelayDialog = false;
@@ -858,19 +846,27 @@
         this.addRentInfoDialog = false;
         this.sendMessageDialog = false;
         this.addHouseResourcesDialog = false;
+        this.editHouseResourcesDialog = false;
         this.repaymentDialog = false;
         this.returnVisitDialog = false;
         this.topFormSetDialog = false;
         this.settingDialog = false;
         this.visitRecordDialog = false;
+
+        this.contractModule = '';
+        this.contractOperateId = '';
       },
 
+
+      //****************************高级搜索函数**************************//
       highGrade(){
         this.isHigh = !this.isHigh;
       },
       resetting(){
 
       },
+
+
     },
   }
 </script>

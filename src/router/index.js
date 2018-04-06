@@ -14,7 +14,7 @@ import JointRentManage from '../components/rentManage/jointRentManage/index.vue'
 
 import ContractManage from '../components/rentManage/datumMessage/contractManage/index.vue'
 import ClientManage from '../components/rentManage/datumMessage/clientManage/index.vue'
-import HousesManage from '../components/rentManage/datumMessage/housesManage/index.vue'
+import HousesManage from '../components/rentManage/housesManage/index.vue'
 // import RepairManage from '../components/rentManage/repairManage/index.vue'
 import DatumMessage from '../components/rentManage/datumMessage/index.vue'                    //资料管理
 
@@ -49,6 +49,7 @@ import WechatMessage from '../components/wechatMessage/index.vue'               
 import Organization from '../components/humanResource/organization/index.vue'
 // import Achievement from '../comments/humanResource/achievement/index.vue'
 import IntegralManage from '../components/humanResource/integralManage/index.vue'
+import OrganizationNew from '../components/humanResource/organizationNew/index.vue' // add by cj 组织架构
 
 
 //OA办公
@@ -113,7 +114,7 @@ import PeriodicTable from '../components/meritPay/periodicTable/index'
 import Achievement from '../components/meritPay/achievement/index'
 import PersonalSalary from '../components/meritPay/personalSalary/index'
 
-
+import CollectDetail from '../components/rentManage/collectDetail.vue'
 import RentingDetail from '../components/rentManage/rentingDetail.vue'
 
 import MessageCenter from '../components/messageCenter/index.vue'                         //消息中心
@@ -174,6 +175,12 @@ export default new Router({
       name: '',
       hidden: true
     },
+    {
+      path: '/collectDetail',
+      component: CollectDetail,
+      name: '',
+      hidden: true
+    },
 
     {
       path: '/',
@@ -230,10 +237,10 @@ export default new Router({
         {path: '/college', component: College, name: ' 乐伽大学 ' ,icon:"iconfont icon-leqiedaxue"},
         {path: '/LineCollege', component: LineCollege, name: ' 在线考试 ', icon:"iconfont icon-zaixiankaoshi"},
         {path: '/converge', component: Converge, name: ' 员工广场 ',  icon:"iconfont icon-yuangongguangchang"},
-        {path: '/individual', component: Individual, name: ' 个人门户 ',icon:"iconfont icon-yuangongguangchang"},
+        {path: '/individual', component: Individual, name: ' 个人门户 ',icon:"el-icons-fa-user"},
         {path: '/wholeRentManage', component: WholeRentManage, name: ' 整租管理 ', icon:"iconfont icon-pinzhizhengzu"},
         {path: '/jointRentManage', component: JointRentManage, name: ' 合租管理 ', icon:"iconfont icon-hezu"},
-        {path: '/datumMessage/housesManage', component: HousesManage, name: ' 房屋管理 ',icon:"iconfont icon-fangzu"},
+        {path: '/housesManage', component: HousesManage, name: ' 产品管控中心 ',icon:"iconfont icon-fangzu"},
         {path: '/datumMessage/contractManage', component: ContractManage, name: ' 合同管理 ',icon:"iconfont icon-hetong1"},
         {path: '/sthToDo', component: SthToDo, name: ' 待办事项 ', icon:"iconfont icon-daiban"},
         {path: '/examineAndApprove', component: ExamineAndApprove, name:  ' 审批 ', icon:"el-icon-edit-outline"},
@@ -261,11 +268,12 @@ export default new Router({
       children: [
         {path: '/wholeRentManage', component: WholeRentManage, name: '整租管理',},
         {path: '/jointRentManage', component: JointRentManage, name: '合租管理',},
+        {path: '/housesManage', component: HousesManage, name: '产品管控中心',},
         {path: '/datumMessage', component: DatumMessage, name: '资料管理',},
         // {
         //   path: '/datumMessage', component: DatumMessage, icon: 'el-icons-fa-money', name: '资料管理',
         //   children: [
-        //     {path: '/datumMessage/housesManage', component: HousesManage, name: '房屋管理',},
+        //     {path: '/datumMessage/housesManage', component: HousesManage, name: '产品管控中心',},
         //     {path: '/datumMessage/clientManage', component: ClientManage, name: '客户管理',},
         //     {path: '/datumMessage/contractManage', component: ContractManage, name: '合同管理',},
         //   ]
@@ -334,6 +342,7 @@ export default new Router({
       children: [
         // {path: '/staffManage', component: StaffManage, name: '用户管理',},
         {path: '/organization', component: Organization, name: '组织架构',},
+        {path: '/OrganizationNew', component: OrganizationNew, name: '组织架构2',},
         {path: '/integralManage', component: IntegralManage, name: '积分管理',},
         // {path: '/achievement', component: Achievement, name: '业绩工资',},
       ]

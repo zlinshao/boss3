@@ -1,17 +1,13 @@
 <template>
   <div>
-    <!--冻结工资-->
+
     <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
-      <el-checkbox-group v-model="checkList">
-        <el-checkbox label="复选框 A"></el-checkbox>
-        <el-checkbox label="复选框 B"></el-checkbox>
-        <el-checkbox label="复选框 C"></el-checkbox>
-        <el-checkbox label="禁用" disabled></el-checkbox>
-        <el-checkbox label="选中且禁用" disabled></el-checkbox>
+      <el-checkbox-group v-model="checkList" >
+        <el-checkbox v-for="item in data" :label="item.id" :key="item.id">{{item.dictionary_name}}</el-checkbox>
       </el-checkbox-group>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="dialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button size="small" type="primary" @click="saveBadge">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -20,14 +16,20 @@
 <script>
   export default {
     name: "badge",
-    props: ['module'],
+    props: ['module','incompleteList','salaryId'],
     data() {
       return {
         dialogVisible: false,
-        checkList: ['选中且禁用','复选框 A']
+        checkList: [],
+        data: [],
+        id: this.salaryId,
       }
     },
     mounted() {
+      this.getData();
+    },
+    activated(){
+      this.getData();
     },
     watch: {
       module(val) {
@@ -37,9 +39,38 @@
         if (!val) {
           this.$emit('close');
         }
+      },
+      salaryId(val){
+        this.id = val;
+      },
+      incompleteList(val){
+        this.checkList = val;
+      },
+      checkList(val) {
+        console.log(val)
       }
     },
-    methods: {},
+    methods: {
+      //保存未发标记
+      saveBadge() {
+        this.$http.post(globalConfig.server+ 'salary/achv/mark/'+this.salaryId,{incomplete: this.checkList}).then((res)=>{
+          this.dialogVisible = false;
+          if(res.data.code === '88810') {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+          }
+        });
+      },
+      getData(){
+        this.$http.get(globalConfig.server+ 'setting/dictionary/502').then((res) => {
+          if(res.data.code === '30010'){
+            this.data = res.data.data;
+          }
+        });
+      }
+    },
   }
 </script>
 

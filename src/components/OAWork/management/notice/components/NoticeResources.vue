@@ -15,14 +15,14 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="公告主题" required>
+              <el-form-item label="公告标题" required>
                 <el-input v-model="form.title" placeholder=""></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="对象" required >
+              <el-form-item label="对象" >
                  <el-input v-model="form.obj" @click.native="openOrganizationModal()" placeholder="点击选择" ></el-input>
               </el-form-item>
             </el-col>
@@ -38,7 +38,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="附件" >
-                <div class="upload_div"><Upload :ID="'upload'" @getImg="getImage" ></Upload></div>
+                <div class="upload_div"><Upload :ID="'upload'" @getImg="getImage"   :isClear="secondfalg" ></Upload></div>
               </el-form-item>
             </el-col>
           </el-row>
@@ -46,6 +46,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="increaseGoodsDialogVisible = false">取 消</el-button>
+        <el-button size="small" type="primary" @click="look">预览</el-button>
         <el-button size="small" type="primary" @click="savex">保存</el-button>
         <el-button size="small" type="primary" @click="sendx">发布</el-button>
       </span>
@@ -72,6 +73,9 @@ export default {
       organizationDialog: false,
       saveorsendflag: false,
       lenx: 7,
+      screenshots:[],
+      screensho:[],
+      secondfalg:false,
       firstflag: false, //编辑或新建标识
       twoflag: false, //保存或发布标识
       threeflag: false, //是否成功发布标识
@@ -81,6 +85,7 @@ export default {
         type: "",
         id: "",
         draft: "",
+        staff_id:[],
         obj: "",
         objid: [],
         context: "",
@@ -104,6 +109,9 @@ export default {
     increaseGoodsDialogVisible(val) {
       if (!val) {
         this.$emit("close");
+        this.secondfalg = true
+      }else{
+        this.secondfalg = false
       }
     },
     rowneedx(val) {
@@ -115,33 +123,35 @@ export default {
         this.form.obj = val.department_id;
         this.form.id = val.id;
         this.form.attachment = val.attachment;
+
+        this.screenshots= val.attachment;
+
       } else {
         this.form.type = "";
         this.form.title = "";
         this.form.context = "";
         this.form.obj = "";
+        this.form.staff_id=[];
         this.form.objid = [];
         this.form.attachment = [];
-        this.firstflag = false;
+        this.firstflag = true;
+       
       }
     }
   },
   methods: {
-    getImage(val) {
-      console.log(val);
+    getImage(val) {    
       this.form.attachment = val[1];
     },
+
     //保存
     savex() {
       this.twoflag = true;
       this.midfunc();
     },
-    //发布
-    sendx() {
-      this.twoflag = false;
-      this.midfunc();
-    },
-    midfunc() {
+    //预览
+    look(){
+      this.form.preview=1;
       if (this.twoflag) {
         this.form.draft = "1";
       } else {
@@ -171,8 +181,55 @@ export default {
             content: this.form.context,
             id: this.form.id,
             draft: this.form.draft,
+            staff_id:this.form.staff_id,
             department_id: this.form.objid,
-            previev: this.form.preview,
+            preview: this.form.preview,
+            attachment: this.form.attachment
+          })
+          .then(res => {
+          });
+
+      }    
+    },
+    //发布
+    sendx() {
+      this.twoflag = false;
+      this.midfunc();
+    },
+    midfunc() {
+      this.form.preview=0;
+      if (this.twoflag) {
+        this.form.draft = "1";
+      } else {
+        this.form.draft = "0";
+      }
+      if (!this.firstflag) {
+        this.form.id = "";
+      }
+      this.saveorsend();
+      if (this.saveorsendflag) {
+        if (this.form.type == "表彰") {
+          this.form.type = 1;
+        }
+        if (this.form.type == "批评") {
+          this.form.type = 2;
+        }
+        if (this.form.type == "通知") {
+          this.form.type = 3;
+        }
+        if (this.form.type == "研发") {
+          this.form.type = 4;
+        }
+        this.$http
+          .post(this.urls + "announcement", {
+            title: this.form.title,
+            type: this.form.type,
+            content: this.form.context,
+            id: this.form.id,
+            draft: this.form.draft,
+            staff_id:this.form.staff_id,
+            department_id: this.form.objid,
+            preview: this.form.preview,
             attachment: this.form.attachment
           })
           .then(res => {
@@ -183,6 +240,7 @@ export default {
                 type: "success"
               });
               this.threeflag = true;
+              this.firstflag = true;
               this.$emit("threeflag", this.threeflag);
             } else {
               this.$notify.error({
@@ -201,13 +259,22 @@ export default {
     },
     closeOrganization() {
       this.organizationDialog = false;
+      
     },
     coloseaa(val) {
       this.form.obj = "";
+      this.form.staff_id=[]
       this.form.objid = [];
+      let k=0;
+      let j=0;
       for (let i = 0; i < val.length; i++) {
         this.form.obj += val[i].name + ";";
-        this.form.objid[i] = val[i].id;
+        if(val[i].org!==undefined){
+          this.form.staff_id[k++]=val[i].id
+        }
+        else{
+          this.form.objid[j++]=val[i].id
+        }
       }
     },
 
@@ -227,14 +294,6 @@ export default {
         this.$notify({
           title: "警告",
           message: "公告主题不能为空",
-          type: "warning"
-        });
-      }
-      if (this.form.obj == "" && this.saveorsendflag == true) {
-        this.saveorsendflag = false;
-        this.$notify({
-          title: "警告",
-          message: "对象不能为空",
           type: "warning"
         });
       }

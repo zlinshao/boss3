@@ -4,7 +4,7 @@
       <div>选择模板</div>
       <div style="margin: 10px 0;">
         <el-button :class="{'primary': active === index}" @click="tagClick(index)" size="mini"
-                   v-for="(key,index) in buttonVal" :key="index">{{key}}
+                   v-for="(key,index) in buttonVal" :key="index" :disabled="active === editType">{{key}}
         </el-button>
       </div>
     </div>
@@ -37,27 +37,33 @@
         <div class="sendLog">
           <div class="sendTitle">增加照片</div>
           <el-form-item>
-            <Upload :ID="'record_img'" @getImg="getImage" :isClear="isClear"></Upload>
+            <!--<span v-if="editImages" v-for="img in editImages">-->
+              <!--<img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
+            <!--</span>-->
+            <Upload :ID="'record_img'" @getImg="getImage" :editImage="dayEditImgToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
           <div class="sendTitle">增加附件</div>
           <el-form-item>
-            <Upload :ID="'record_file'" @getImg="getFile" :isClear="isClear"></Upload>
+            <!--<span v-if="editFiles" v-for="file in editFiles">-->
+              <!--<img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
+            <!--</span>-->
+            <Upload :ID="'record_file'" @getImg="getFile" :editImage="dayEditFileToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
           <div class="sendTitle">发给谁 <span style="color: #cdcdcd;">（默认通过工作通知发送给对方，点击头像删除）</span></div>
           <div>
             <span v-for="item in sendPeople" class="send_people">
-              <img :src="item.avatar" v-if="item.avatar">
-              <img src="../../../assets/images/head.jpg" v-else>
+              <img :src="item.avatar" v-if="item.avatar" @click="deletePeople(item)">
+              <img src="../../../assets/images/head.jpg" @click="deletePeople(item)" v-else>
             </span>
-            <img src="../../../assets/images/add.svg" @click="choosePeople">
+            <img src="../../../assets/images/add.svg" @click="choosePeople" >
           </div>
         </div>
         <div style="text-align: center;">
-          <el-button type="primary" @click="dayRecordSubmit">提交</el-button>
+          <el-button type="primary" @click="dayRecordSubmit" :disabled="first">提交</el-button>
         </div>
       </el-form>
     </div>
@@ -96,27 +102,33 @@
         <div class="sendLog">
           <div class="sendTitle">增加照片</div>
           <el-form-item>
-            <Upload :ID="'record_img'" @getImg="getImage" :isClear="isClear"></Upload>
+            <!--<span v-if="editImages" v-for="img in editImages">-->
+              <!--<img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
+            <!--</span>-->
+            <Upload :ID="'record_img'" @getImg="getImage" :editImage="weekEditImgToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
           <div class="sendTitle">增加附件</div>
           <el-form-item>
-            <Upload :ID="'record_file'" @getImg="getFile" :isClear="isClear"></Upload>
+            <!--<span v-if="editFiles" v-for="file in editFiles">-->
+              <!--<img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
+            <!--</span>-->
+            <Upload :ID="'record_file'" @getImg="getFile" :editImage="weekEditFileToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
           <div class="sendTitle">发给谁 <span style="color: #cdcdcd;">（默认通过工作通知发送给对方，点击头像删除）</span></div>
           <div>
             <span v-for="item in sendPeople" class="send_people">
-              <img :src="item.avatar" v-if="item.avatar">
-              <img src="../../../assets/images/head.jpg" v-else>
+              <img :src="item.avatar" v-if="item.avatar" @click="deletePeople(item)">
+              <img src="../../../assets/images/head.jpg" @click="deletePeople(item)" v-else>
             </span>
             <img src="../../../assets/images/add.svg" @click="choosePeople">
           </div>
         </div>
         <div style="text-align: center;">
-          <el-button type="primary" @click="weekRecordSubmit">提交</el-button>
+          <el-button type="primary" @click="weekRecordSubmit" :disabled="first">提交</el-button>
         </div>
       </el-form>
     </div>
@@ -155,27 +167,33 @@
         <div class="sendLog">
           <div class="sendTitle">增加照片</div>
           <el-form-item>
-            <Upload :ID="'record_img'" @getImg="getImage" :isClear="isClear"></Upload>
+            <!--<span v-if="editImages" v-for="img in editImages">-->
+              <!--<img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
+            <!--</span>-->
+            <Upload :ID="'record_img'" @getImg="getImage" :editImage="monthEditImgToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
           <div class="sendTitle">增加附件</div>
           <el-form-item>
-            <Upload :ID="'record_file'" @getImg="getFile" :isClear="isClear"></Upload>
+            <!--<span v-if="editFiles" v-for="file in editFiles">-->
+              <!--<img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
+            <!--</span>-->
+            <Upload :ID="'record_file'" @getImg="getFile" :editImage="monthEditFileToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
           <div class="sendTitle">发给谁 <span style="color: #cdcdcd;">（默认通过工作通知发送给对方，点击头像删除）</span></div>
           <div>
             <span v-for="item in sendPeople" class="send_people">
-              <img :src="item.avatar" v-if="item.avatar">
-              <img src="../../../assets/images/head.jpg" v-else>
+              <img :src="item.avatar" v-if="item.avatar" @click="deletePeople(item)">
+              <img src="../../../assets/images/head.jpg" @click="deletePeople(item)" v-else>
             </span>
             <img src="../../../assets/images/add.svg" @click="choosePeople">
           </div>
         </div>
         <div style="text-align: center;">
-          <el-button type="primary" @click="monthRecordSubmit">提交</el-button>
+          <el-button type="primary" @click="monthRecordSubmit" :disabled="first">提交</el-button>
         </div>
       </el-form>
     </div>
@@ -220,40 +238,49 @@
         <div class="sendLog">
           <div class="sendTitle">增加照片</div>
           <el-form-item>
-            <Upload :ID="'record_img'" @getImg="getImage" :isClear="isClear"></Upload>
+            <!--<span v-if="editImages" v-for="img in editImages">-->
+              <!--<img :src="img.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
+            <!--</span>-->
+            <Upload :ID="'record_img'" @getImg="getImage" :editImage="achieveEditImgToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
           <div class="sendTitle">增加照片或附件</div>
           <el-form-item>
-            <Upload :ID="'record_file'" @getImg="getFile" :isClear="isClear"></Upload>
+            <!--<span v-if="editFiles" v-for="file in editFiles">-->
+              <!--<img :src="file.uri" style="width: 120px;height: 120px;border-radius: 5px;">-->
+            <!--</span>-->
+            <Upload :ID="'record_file'" @getImg="getFile" :editImage="achieveEditFileToUpload" :isClear="isClear"></Upload>
           </el-form-item>
         </div>
         <div class="sendLog">
           <div class="sendTitle">发给谁 <span style="color: #cdcdcd;">（默认通过工作通知发送给对方，点击头像删除）</span></div>
           <div>
             <span v-for="item in sendPeople" class="send_people">
-              <img :src="item.avatar" v-if="item.avatar">
-              <img src="../../../assets/images/head.jpg" v-else>
+              <img :src="item.avatar" v-if="item.avatar" @click="deletePeople(item)">
+              <img src="../../../assets/images/head.jpg" @click="deletePeople(item)" v-else>
             </span>
             <img src="../../../assets/images/add.svg" @click="choosePeople">
           </div>
         </div>
         <div style="text-align: center;">
-          <el-button type="primary" @click="achieveDayRecordSubmit">提交</el-button>
+          <el-button type="primary" @click="achieveDayRecordSubmit" :disabled="first">提交</el-button>
         </div>
       </el-form>
     </div>
     <Organization :organizationDialog="organizationDialog" :type="selectType" @close="closeOrganization" @selectMember="selectMember"></Organization>
+    <eat-loading :loading="loading"></eat-loading>
   </div>
 </template>
 
 <script>
   import Upload from '../../common/UPLOAD.vue';
-  import Organization from '../../common/organization.vue'
+  import Organization from '../../common/organization.vue';
+  import EatLoading from '../../common/eatLoading.vue'
   export default {
     name: 'hello',
-    components:{Upload, Organization},
+    components:{Upload, Organization, EatLoading},
+    props: ['edit','getData'],
     data () {
       return {
         personnal: globalConfig.personal,
@@ -265,6 +292,7 @@
         achieveDayRecord: false,
         // 日报
         dayForm: {
+          id: '',
           finish_job: '',
           unfinished_job:'',
           need_coordinate_job: '',
@@ -275,6 +303,7 @@
         },
         //周报
         weekForm: {
+          id: '',
           finish_job: '',
           job_summary: '',
           next_plan: '',
@@ -286,6 +315,7 @@
         },
         // 月报
         monthForm: {
+          id: '',
           finish_job: '',
           job_summary: '',
           next_plan: '',
@@ -297,6 +327,7 @@
         },
         // 业绩日报
         achieveForm: {
+          id: '',
           turnover_today: '',
           customer_num: '',
           month_total_turnover: '',
@@ -309,14 +340,30 @@
         },
         organizationDialog: false,
         isClear: false,
-        selectType: '',
+        selectType: '',  //选人
         sendPeople: [],
+        editImages: [], //编辑时候的初始图片
+        editFiles: [],  //编辑时候的初始文件
+        logId: '',
+        dayEditImgToUpload: {},
+        weekEditImgToUpload: {},
+        monthEditImgToUpload: {},
+        achieveEditImgToUpload: {},
+        dayEditFileToUpload: {},
+        weekEditFileToUpload: {},
+        monthEditFileToUpload: {},
+        achieveEditFileToUpload: {},
+        first: false,
+        loading: false,
+        editType: -1,
       }
     },
     methods:{
       // 按钮切换
       tagClick(val) {
+        this.first = false;
         this.active = val;
+        this.isClear = false;
         switch(val) {
           case 0:  //日报
             this.dayRecord = true;
@@ -371,83 +418,218 @@
       },
       // 提交日报
       dayRecordSubmit(){
-        this.$http.post(globalConfig.server+ 'oa/day',this.dayForm).then((res) => {
-            if(res.data.code === '100010') {
+        if(this.logId){
+          this.first = true;
+          this.dayForm.id = this.logId;
+          this.$http.put(globalConfig.server+ 'oa/day',this.dayForm).then((res) => {
+            if(res.data.code === '100030') {
               this.dayForm = {};
-              this.isClear = true;
               this.sendPeople = [];
-              this.$emit('appointLookLog'); //发完日志跳转到我发的日志标签页
+              this.editImages = [];
+              this.editFiles = [];
+              this.isClear = true;
+              setTimeout( ()=> {
+                this.$emit('appointLookLog');
+              },0);
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
-              })
+              });
             } else {
+              this.first = false;
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }else{
+          this.first = true;
+          this.dayForm.id = '';
+          this.$http.post(globalConfig.server+ 'oa/day',this.dayForm).then((res) => {
+            if(res.data.code === '100010') {
+              this.dayForm = {};
+              this.sendPeople = [];
+              this.editImages = [];
+              this.editFiles = [];
+              this.isClear = true;
+              setTimeout( ()=> {
+                this.$emit('appointLookLog');
+              },0);
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+            } else {
+              this.first = false;
               this.$notify.warning({
                 title: '警告',
                 message: res.data.msg
               })
             }
-        });
+          });
+        }
+
       },
       // 提交周报
       weekRecordSubmit() {
-        this.$http.post(globalConfig.server+ 'oa/week',this.weekForm).then((res) => {
-          if(res.data.code === '110010') {
-            this.weekForm = {};
-            this.isClear = true;
-            this.sendPeople = [];
-            this.$emit('appointLookLog');
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            })
-          } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            })
-          }
-        });
+        if(this.logId){
+          this.first = true;
+          this.weekForm.id = this.logId;
+          this.$http.put(globalConfig.server+ 'oa/week',this.weekForm).then((res) => {
+            if(res.data.code === '110030') {
+              this.weekForm = {};
+              this.sendPeople = [];
+              this.editImages = [];
+              this.editFiles = [];
+              this.isClear = true;
+              setTimeout( ()=> {
+                this.$emit('appointLookLog');
+              },0);
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              })
+            } else {
+              this.first = false;
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }else{
+          this.first = true;
+          this.weekForm.id = '';
+          this.$http.post(globalConfig.server+ 'oa/week',this.weekForm).then((res) => {
+            if(res.data.code === '110010') {
+              this.weekForm = {};
+              this.sendPeople = [];
+              this.editImages = [];
+              this.editFiles = [];
+              this.isClear = true;
+              setTimeout( ()=> {
+                this.$emit('appointLookLog');
+              },0);
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              })
+            } else {
+              this.first = false;
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }
       },
       // 提交月报
       monthRecordSubmit() {
-        this.$http.post(globalConfig.server+ 'oa/month',this.monthForm).then((res) => {
-          if(res.data.code === '120010') {
-            this.monthForm = {};
-            this.isClear = true;
-            this.sendPeople = [];
-            this.$emit('appointLookLog');
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
-          } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            });
-          }
-        });
+        if(this.logId){
+          this.first = true;
+          this.monthForm.id = this.logId;
+          this.$http.put(globalConfig.server+ 'oa/month',this.monthForm).then((res) => {
+            if(res.data.code === '120030') {
+              this.monthForm = {};
+              this.sendPeople = [];
+              this.editImages = [];
+              this.editFiles = [];
+              this.isClear = true;
+              this.$emit('appointLookLog');
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+            } else {
+              this.first = false;
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }else{
+          this.first = true;
+          this.monthForm.id = '';
+          this.$http.post(globalConfig.server+ 'oa/month',this.monthForm).then((res) => {
+            if(res.data.code === '120010') {
+              this.monthForm = {};
+              this.sendPeople = [];
+              this.editImages = [];
+              this.editFiles = [];
+              this.isClear = true;
+              setTimeout( ()=> {
+                this.$emit('appointLookLog');
+              },0);
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+            } else {
+              this.first = false;
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }
       },
       // 提交业绩日报
       achieveDayRecordSubmit(){
-        this.$http.post(globalConfig.server+ 'oa/achievement',this.achieveForm).then((res) => {
-          if(res.data.code === '130010') {
-            this.achieveForm = {};
-            this.isClear = true;
-            this.sendPeople = [];
-            this.$emit('appointLookLog');
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
-          } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            });
-          }
-        });
+        if(this.logId){
+          this.first = true;
+          this.achieveForm.id = this.logId;
+          this.$http.put(globalConfig.server+ 'oa/achievement',this.achieveForm).then((res) => {
+            if(res.data.code === '130030') {
+              this.achieveForm = {};
+              this.sendPeople = [];
+              this.editImages = [];
+              this.editFiles = [];
+              this.isClear = true;
+              setTimeout( ()=> {
+                this.$emit('appointLookLog');
+              },0);
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+            } else {
+              this.first = false;
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }else{
+          this.first = true;
+          this.achieveForm.id = '';
+          this.$http.post(globalConfig.server+ 'oa/achievement',this.achieveForm).then((res) => {
+            if(res.data.code === '130010') {
+              this.achieveForm = {};
+              this.sendPeople = [];
+              this.editImages = [];
+              this.editFiles = [];
+              this.isClear = true;
+              setTimeout( ()=> {
+                this.$emit('appointLookLog');
+              },0);
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+            } else {
+              this.first = false;
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }
       },
       choosePeople() {
         this.organizationDialog = true;
@@ -458,26 +640,40 @@
         this.organizationDialog = false;
       },
       selectMember(val){
-        console.log("selectMember==="+JSON.stringify(val));
         this.organizationDialog = false;
-        this.sendPeople = val;
+        for (var i=0;i<val.length;i++){
+          let hasSamePeople = false;
+          for(var j=0; j<this.sendPeople.length; j++){
+            if(val[i].id === this.sendPeople[j].id){
+              hasSamePeople = true;
+              return;
+            }
+          }
+          if(!hasSamePeople){
+            this.sendPeople.push(val[i]);
+          }
+        }
         switch(this.active){
           case 0:
+            this.dayForm.receivers_id = [];
             for(var i=0; i<this.sendPeople.length;i++){
               this.dayForm.receivers_id.push(this.sendPeople[i].id);
             }
             break;
           case 1:
+            this.weekForm.receivers_id = [];
             for(var i=0; i<this.sendPeople.length;i++){
               this.weekForm.receivers_id.push(this.sendPeople[i].id);
             }
             break;
           case 2:
+            this.monthForm.receivers_id = [];
             for(var i=0; i<this.sendPeople.length;i++){
               this.monthForm.receivers_id.push(this.sendPeople[i].id);
             }
             break;
           case 3:
+            this.achieveForm.receivers_id = [];
             for(var i=0; i<this.sendPeople.length;i++){
               this.achieveForm.receivers_id.push(this.sendPeople[i].id);
             }
@@ -485,12 +681,339 @@
         }
 
       },
-    },
-    mounted() {
+      initialData(){
+        //初始化
+        this.dayForm.id = '';
+        this.dayForm.finish_job = '';
+        this.dayForm.unfinished_job = '';
+        this.dayForm.need_coordinate_job = '';
+        this.dayForm.remark = '';
+        this.dayForm.image_pic = [];
+        this.dayForm.annex_file = [];
+        this.dayForm.receivers_id = [];
 
-    },
-    activated() {
+        this.weekForm.id = '';
+        this.weekForm.finish_job = '';
+        this.weekForm.job_summary = '';
+        this.weekForm.next_plan = '';
+        this.weekForm.need_coordinate_job = '';
+        this.weekForm.remark = '';
+        this.weekForm.image_pic = [];
+        this.weekForm.annex_file = [];
+        this.weekForm.receivers_id = [];
 
+        this.monthForm.id = '';
+        this.monthForm.finish_job = '';
+        this.monthForm.job_summary = '';
+        this.monthForm.next_plan = '';
+        this.monthForm.need_coordinate_job = '';
+        this.monthForm.remark = '';
+        this.monthForm.image_pic = [];
+        this.monthForm.annex_file = [];
+        this.monthForm.receivers_id = [];
+
+        this.achieveForm.id = '';
+        this.achieveForm.turnover_today = '';
+        this.achieveForm.customer_num = '';
+        this.achieveForm.month_total_turnover = '';
+        this.achieveForm.month_achievement_goals = '';
+        this.achieveForm.thinking_today = '';
+        this.achieveForm.remark = '';
+        this.achieveForm.image_pic = [];
+        this.achieveForm.annex_file = [];
+        this.achieveForm.receivers_id = [];
+        this.sendPeople = [];
+        this.editImages = [];
+        this.editFiles = [];
+        this.isClear = true;
+        this.dayEditImgToUpload ={};
+        this.weekEditImgToUpload ={};
+        this.monthEditImgToUpload ={};
+        this.achieveEditImgToUpload ={};
+        this.dayEditFileToUpload = {};
+        this.weekEditFileToUpload = {};
+        this.monthEditFileToUpload = {};
+        this.achieveEditFileToUpload = {};
+      },
+      deletePeople(val){
+        console.log(val)
+        var index = '';
+        switch(this.active){
+          case 0:
+            index = this.dayForm.receivers_id.indexOf(Number(val.id));
+            this.dayForm.receivers_id.splice(index,1);
+            break;
+          case 1:
+            index = this.dayForm.receivers_id.indexOf(Number(val.id));
+            this.weekForm.receivers_id.splice(index,1);
+            break;
+          case 2:
+            index = this.dayForm.receivers_id.indexOf(Number(val.id));
+            this.monthForm.receivers_id.splice(index,1);
+            break;
+          case 3:
+            index = this.dayForm.receivers_id.indexOf(Number(val.id));
+            this.achieveForm.receivers_id.splice(index,1);
+            break;
+        }
+        this.sendPeople.splice(index,1);
+      }
+    },
+    watch:{
+      edit(val) {
+        if(val){
+          this.loading = true;
+        }
+        if(!val){
+          this.editType = -1;
+
+        }
+        this.logId = val.daily_id;
+        this.initialData();
+        if(val.module === 'app\\oa\\model\\DailyDay'){  //日报
+          this.active = 0;
+          this.editType = 0;
+          this.tagClick(0);
+          this.$http.get(globalConfig.server+ 'oa/day/'+this.logId).then((res)=>{
+            if(res.data.code === '100020'){
+              this.loading = false;
+              var logData = res.data.data;
+              this.dayForm.finish_job = logData.finish_job;
+              this.dayForm.unfinished_job = logData.unfinished_job;
+              this.dayForm.need_coordinate_job = logData.need_coordinate_job;
+              this.dayForm.remark = logData.remark;
+
+              var img_pic = logData.album.image_pic;
+              if(img_pic){
+                for(var item in img_pic){
+                  this.dayForm.image_pic.push(Number(item));
+                  let img = {};
+                  img.id = img_pic[item][0].id;
+                  img.uri = img_pic[item][0].uri;
+                  this.editImages.push(img);
+                }
+
+                //图片传给upload组件
+                let picObject = {};
+                this.editImages.forEach((item) =>{
+                  picObject[item.id] = item.uri;
+                });
+                this.dayEditImgToUpload = picObject;
+
+              }
+              var file_pic = logData.album.annex_file;
+              if(file_pic) {
+                for(var item in file_pic){
+                  this.dayForm.annex_file.push(Number(item));
+                  let file = {};
+                  file.id = file_pic[item][0].id;
+                  file.uri = file_pic[item][0].uri;
+                  this.editFiles.push(file);
+                }
+                //附件传给upload组件
+                let fileObject = {};
+                this.editFiles.forEach((item) =>{
+                  fileObject[item.id] = item.uri;
+                });
+                this.dayEditFileToUpload = fileObject;
+
+              }
+              var receivers = logData.receivers;
+              if(receivers) {
+                for(var i=0; i<receivers.length; i++) {
+                  let people ={};
+                  people.id = receivers[i].id;
+                  people.avatar = receivers[i].avatar;
+                  this.sendPeople.push(people);
+                  this.dayForm.receivers_id.push(Number(receivers[i].id));
+                }
+              }
+            }
+          });
+        }else if(val.module === 'app\\oa\\model\\DailyWeek') {   //周报
+          this.active = 1;
+          this.editType = 1;
+          this.tagClick(1);
+          this.$http.get(globalConfig.server+ 'oa/week/'+this.logId).then((res)=>{
+            if(res.data.code === '110020'){
+              this.loading = false;
+              var logData = res.data.data;
+              this.weekForm.finish_job = logData.finish_job;
+              this.weekForm.job_summary = logData.job_summary;
+              this.weekForm.next_plan = logData.next_plan;
+              this.weekForm.need_coordinate_job = logData.need_coordinate_job;
+              this.weekForm.remark = logData.remark;
+              var img_pic = logData.album.image_pic;
+              if(img_pic) {
+                for(var item in img_pic){
+                  this.weekForm.image_pic.push(Number(item));
+                  let img = {};
+                  img.id = img_pic[item][0].id;
+                  img.uri = img_pic[item][0].uri;
+                  this.editImages.push(img);
+                }
+                //照片修改
+                let picObject = {};
+                this.editImages.forEach((item) =>{
+                  picObject[item.id] = item.uri;
+                });
+                this.weekEditImgToUpload = picObject;
+              }
+              var file_pic = logData.album.annex_file;
+              if(file_pic) {
+                for(var item in file_pic){
+                  this.weekForm.annex_file.push(Number(item));
+                  let file = {};
+                  file.id = file_pic[item][0].id;
+                  file.uri = file_pic[item][0].uri;
+                  this.editFiles.push(file);
+                }
+
+                //附件传给upload组件
+                let fileObject = {};
+                this.editFiles.forEach((item) =>{
+                  fileObject[item.id] = item.uri;
+                });
+                this.weekEditFileToUpload = fileObject;
+
+              }
+              var receivers = logData.receivers;
+              if(receivers) {
+                for(var i=0; i<receivers.length; i++) {
+                  let people ={};
+                  people.id = receivers[i].id;
+                  people.avatar = receivers[i].avatar;
+                  this.sendPeople.push(people);
+                  this.weekForm.receivers_id.push(Number(receivers[i].id));
+                }
+              }
+            }
+          });
+        } else if(val.module === 'app\\oa\\model\\DailyMonth') {   //月报
+          this.active = 2;
+          this.editType = 2;
+          this.tagClick(2);
+          this.$http.get(globalConfig.server+ 'oa/month/'+this.logId).then((res)=>{
+            if(res.data.code === '120020'){
+              this.loading = false;
+              var logData = res.data.data;
+              this.monthForm.finish_job = logData.finish_job;
+              this.monthForm.job_summary = logData.job_summary;
+              this.monthForm.next_plan = logData.next_plan;
+              this.monthForm.need_coordinate_job = logData.need_coordinate_job;
+              this.monthForm.remark = logData.remark;
+
+              var img_pic = logData.album.image_pic;
+              if(img_pic){
+                for(var item in img_pic){
+                  this.monthForm.image_pic.push(Number(item));
+                  let img = {};
+                  img.id = img_pic[item][0].id;
+                  img.uri = img_pic[item][0].uri;
+                  this.editImages.push(img);
+                }
+                //照片修改
+                let picObject = {};
+                this.editImages.forEach((item) =>{
+                  picObject[item.id] = item.uri;
+                });
+                this.monthEditImgToUpload = picObject;
+              }
+              var file_pic = logData.album.annex_file;
+              if(file_pic){
+                for(var item in file_pic){
+                  this.monthForm.annex_file.push(Number(item));
+                  let file = {};
+                  file.id = file_pic[item][0].id;
+                  file.uri = file_pic[item][0].uri;
+                  this.editFiles.push(file);
+                }
+                //附件传给upload组件
+                let fileObject = {};
+                this.editFiles.forEach((item) =>{
+                  fileObject[item.id] = item.uri;
+                });
+                this.monthEditFileToUpload = fileObject;
+
+              }
+              var receivers = logData.receivers;
+              if(receivers) {
+                for(var i=0; i<receivers.length; i++) {
+                  let people ={};
+                  people.id = receivers[i].id;
+                  people.avatar = receivers[i].avatar;
+                  this.sendPeople.push(people);
+                  this.monthForm.receivers_id.push(Number(receivers[i].id));
+                }
+              }
+            }
+          });
+        } else if(val.module === 'app\\oa\\model\\DailyAchievement'){   //业绩日报
+          this.active = 3;
+          this.editType = 3;
+          this.tagClick(3);
+          this.$http.get(globalConfig.server+ 'oa/achievement/'+this.logId).then((res)=>{
+            if(res.data.code === '130020'){
+              this.loading = false;
+              var logData = res.data.data;
+              this.achieveForm.turnover_today = logData.turnover_today;
+              this.achieveForm.customer_num = logData.customer_num;
+              this.achieveForm.month_total_turnover = logData.month_total_turnover;
+              this.achieveForm.month_achievement_goals = logData.month_achievement_goals;
+              this.achieveForm.thinking_today = logData.thinking_today;
+              this.achieveForm.remark = logData.remark;
+
+              var img_pic = logData.album.image_pic;
+              if(img_pic){
+                for(var item in img_pic){
+                  this.achieveForm.image_pic.push(Number(item));
+                  let img = {};
+                  img.id = img_pic[item][0].id;
+                  img.uri = img_pic[item][0].uri;
+                  this.editImages.push(img);
+                }
+                //照片修改
+                let picObject = {};
+                this.editImages.forEach((item) =>{
+                  picObject[item.id] = item.uri;
+                });
+                this.achieveEditImgToUpload = picObject;
+              }
+              var file_pic = logData.album.annex_file;
+              if(file_pic){
+                for(var item in file_pic){
+                  this.achieveForm.annex_file.push(Number(item));
+                  let file = {};
+                  file.id = file_pic[item][0].id;
+                  file.uri = file_pic[item][0].uri;
+                  this.editFiles.push(file);
+                }
+                //附件传给upload组件
+                let fileObject = {};
+                this.editFiles.forEach((item) =>{
+                  fileObject[item.id] = item.uri;
+                });
+                this.achieveEditFileToUpload = fileObject;
+
+              }
+              var receivers = logData.receivers;
+              if(receivers) {
+                for(var i=0; i<receivers.length; i++) {
+                  let people ={};
+                  people.id = receivers[i].id;
+                  people.avatar = receivers[i].avatar;
+                  this.sendPeople.push(people);
+                  this.achieveForm.receivers_id.push(Number(receivers[i].id));
+                }
+              }
+            }
+          });
+
+        }
+      },
+      getData(val) {
+        this.first = false;
+      },
     },
   }
 </script>

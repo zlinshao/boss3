@@ -115,15 +115,17 @@
                @clickOperateMore="clickEvent"></RightMenu>
 
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
+    <eat-loading :loading="loading"></eat-loading>
   </div>
 </template>
 
 <script>
   import RightMenu from '../../../common/rightMenu.vue'    //右键
   import Organization from '../../../common/organization.vue'
+  import EatLoading from '../../../common/eatLoading.vue'
 
   export default {
-    components: {RightMenu, Organization},
+    components: {RightMenu, Organization,EatLoading},
     name: 'company-portal',
     data() {
       return {
@@ -152,6 +154,7 @@
         organizationDialog: false,
         moduleId: '',
         moduleType: 'companyPortal',
+        loading: false,
       }
     },
     mounted() {
@@ -190,15 +193,20 @@
         });
       },
       getCompanyTableData() {
+        this.loading = true;
+        console.log(111)
         this.$http.get(this.urls + 'oa/portal/', { params:this.form }).then((res) => {
           this.isHigh = false;
           if (res.data.code === '80000') {
             this.tableData = res.data.data.data;
             this.totalNum = res.data.data.count;
+            this.loading = false;
           } else {
             this.tableData = [];
             this.totalNum = 0;
+            this.loading = false;
           }
+
         })
       },
       openDetail(row) {

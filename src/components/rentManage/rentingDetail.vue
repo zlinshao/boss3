@@ -14,7 +14,7 @@
 
     <div class="container">
       <div class="top">
-        <h3>仙居雅苑8-104详情</h3>
+        <h3>仙居雅苑8-104详情 {{steps}}</h3>
         <h3>
           <el-button size="mini" type="primary" v-if="false">已回访</el-button>
           <el-button size="mini" type="danger">未回访</el-button>
@@ -23,123 +23,85 @@
         </h3>
       </div>
       <div id="mainContent" class="main scroll_bar" @click.stop="getText($event)">
+
+        <div id="houseId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
+          <div class="title">房屋信息</div>
+        </div>
+
         <div class="houseInfo">
           <el-form size="small" label-width="180px">
             <el-row>
               <el-col :span="8">
                 <el-form-item label="小区名称">
-                  <div class="content">仙居雅苑</div>
+                  <div class="content">{{houseInfo.community_name}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="小区地址">
-                  <div class="content">玄武湖125-5号</div>
+                  <div class="content">{{houseInfo.community_address}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="门牌地址">
-                  <div class="content">8-104</div>
+                <el-form-item label="小区别名">
+                  <div class="content">{{houseInfo.community_nickname}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
+                <el-form-item label="门牌地址">
+                  <div class="content">{{houseInfo.doorplate_address}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
                 <el-form-item label="房型">
-                  <div class="content">仙居雅苑</div>
+                  <div class="content">{{houseInfo.house_type}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="房产证号">
+                  <div class="content">{{houseInfo.property_number}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="丘号">
+                  <div class="content">{{houseInfo.mound_number}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="建筑面积">
-                  <div class="content">玄武湖125-5号</div>
+                  <div class="content">{{houseInfo.area}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="装修">
-                  <div class="content">8-104</div>
+                  <div class="content">{{houseInfo.decorate}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
                 <el-form-item label="楼层">
-                  <div class="content">仙居雅苑</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="房屋类型">
-                  <div class="content">玄武湖125-5号</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="房屋特色">
-                  <div class="content">8-104</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="建筑类型">
-                  <div class="content">仙居雅苑</div>
+                  <div class="content">{{houseInfo.floor}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="楼层数">
-                  <div class="content">玄武湖125-5号</div>
+                  <div class="content">{{houseInfo.floors}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="门卡数">
-                  <div class="content">8-104</div>
+                <el-form-item label="房屋类型">
+                  <div class="content">{{houseInfo.property_type}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="水表卡号">
-                  <div class="content">仙居雅苑</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="电表卡号">
-                  <div class="content">玄武湖125-5号</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="气表卡号">
-                  <div class="content">8-104</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="水表底数">
-                  <div class="content">仙居雅苑</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="电表底数">
-                  <div class="content">玄武湖125-5号</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="气表底数">
-                  <div class="content">8-104</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="卫生情况">
-                  <div class="content">仙居雅苑</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="小区名称">
-                  <div class="content">
-                    仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑仙居雅苑
-                  </div>
+                <el-form-item label="房屋特色">
+                  <div class="content">{{houseInfo.property_feature}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -152,17 +114,19 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="备注">
-                  <div class="content">仙居雅苑</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
+            <!--<el-row>-->
+              <!--<el-col :span="24">-->
+                <!--<el-form-item label="备注">-->
+                  <!--<div class="content">仙居雅苑</div>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
           </el-form>
         </div>
 
-        <div style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;"></div>
+        <div id="ownerId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
+          <div class="title">租客</div>
+        </div>
 
         <div class="ownerInfo">
           <el-form size="small" label-width="180px">
@@ -226,158 +190,227 @@
           </el-form>
         </div>
 
-        <div style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;"></div>
-
+        <div id="contractId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
+          <div class="title">合同信息</div>
+        </div>
         <div class="contractInfo">
           <el-form size="small" label-width="180px">
             <el-row>
               <el-col :span="8">
+                <el-form-item label="订单性质">
+                  <div class="content">{{contractInfo.type}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
                 <el-form-item label="合同编号">
-                  <div class="content">仙居雅苑</div>
+                  <div class="content">{{contractInfo.contract_number}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="合同性质">
-                  <div class="content">玄武湖125-5号</div>
+                <el-form-item label="签约时长(月)">
+                  <div class="content">{{contractInfo.month}}</div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="付款方式">
-                  <div class="content">8-104</div>
-                </el-form-item>
-              </el-col>
+
             </el-row>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="签约时长">
-                  <div class="content">仙居雅苑</div>
+                <el-form-item label="合同签约时间">
+                  <div class="content">{{contractInfo.sign_date}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="合同开始时间">
-                  <div class="content">玄武湖125-5号</div>
+                  <div class="content">{{contractInfo.begin_date}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="合同结束时间">
-                  <div class="content">8-104</div>
+                  <div class="content">{{contractInfo.end_date}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
+            <!--<el-row>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="空置时长">-->
+                  <!--<div class="content">{{contractInfo.vacancy}}</div>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="空置开始时间">-->
+                  <!--<div class="content">{{contractInfo.begin_date}}</div>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="空置结束时间">-->
+                  <!--<div class="content">{{contractInfo.vacancy_end_date}}</div>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
+
+            <!--<el-row>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="空置期安置方式">-->
+                  <!--<div class="content">{{contractInfo.vacancy}}</div>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="保修期">-->
+                  <!--<div class="content">{{contractInfo.warranty_month}}{{contractInfo.warranty_day}}</div>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="订单来源">-->
+                  <!--<div class="content">{{contractInfo.from}}</div>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
+
             <el-row>
               <el-col :span="8">
-                <el-form-item label="空置时长">
-                  <div class="content">仙居雅苑</div>
+                <el-form-item label="押金">
+                  <div class="content">{{contractInfo.deposit}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="空置开始时间">
-                  <div class="content">玄武湖125-5号</div>
+                <el-form-item label="月单价">
+                  <div class="content">{{contractInfo.price}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="空置结束时间">
-                  <div class="content">8-104</div>
+                <el-form-item label="付款方式">
+                  <div class="content">{{contractInfo.pay_way}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
+            <!--<el-row>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="第一次打房租时间">-->
+                  <!--<div class="content">{{contractInfo.pay_first_date}}</div>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="第二次打房租时间">-->
+                  <!--<div class="content">{{contractInfo.pay_second_date}}</div>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="收款人姓名">-->
+                  <!--<div class="content">{{contractInfo.account_name}}</div>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
+
+            <!--<el-row>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="收款人与房东关系">-->
+                  <!--<div class="content">{{contractInfo.account_name}}</div>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="汇款方式">-->
+                  <!--<div class="content">{{contractInfo.purchase_way}}</div>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="账号">-->
+                  <!--<div class="content">{{contractInfo.account}}</div>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
+
             <el-row>
               <el-col :span="8">
-                <el-form-item label="个人/中介">
-                  <div class="content">仙居雅苑</div>
+                <el-form-item label="总收入金额">
+                  <div class="content">{{contractInfo.bank}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="金额（付款方式）">
+                  <div class="content">{{contractInfo.subbranch}}</div>
+                </el-form-item>
+              </el-col>
+
+            </el-row>
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="资料补齐时间">
+                  <div class="content">{{contractInfo.data_date}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="中介费">
-                  <div class="content">玄武湖125-5号</div>
+                  <div class="content">{{contractInfo.agency}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="资料补齐时间">
-                  <div class="content">8-104</div>
+                <el-form-item label="违约金">
+                  <div class="content">{{contractInfo.penalty}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="月单价">
-                  <div class="content">仙居雅苑</div>
+                <el-form-item label="物业费">
+                  <div class="content">{{contractInfo.property}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="押金">
-                  <div class="content">玄武湖125-5号</div>
+                <el-form-item label="物业费付款方">
+                  <div class="content">{{contractInfo.property}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="打房租日期">
-                  <div class="content">8-104</div>
+                <el-form-item label="水表底数">
+                  <div class="content">{{contractInfo.property_payer}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="第一次打房租时间">
-                  <div class="content">仙居雅苑</div>
+                <el-form-item label="电表底数">
+                  <div class="content">{{contractInfo.electricity_peak+contractInfo.electricity_vally}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="第二次打房租时间">
-                  <div class="content">玄武湖125-5号</div>
+                <el-form-item label="气表底数">
+                  <div class="content">{{contractInfo.gas}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="尾款补齐时间">
-                  <div class="content">8-104</div>
+                <el-form-item label="物业及公摊费用">
+                  <div class="content">{{contractInfo.public}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
+
             <el-row>
-              <el-col :span="8">
-                <el-form-item label="待签约日期">
-                  <div class="content">仙居雅苑</div>
-                </el-form-item>
-              </el-col>
+
               <el-col :span="8">
                 <el-form-item label="开单人">
-                  <div class="content">仙居雅苑</div>
+                  <div class="content">{{contractInfo.staff_name}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="审核人">
-                  <div class="content">仙居雅苑</div>
+                <el-form-item label="负责人">
+                  <div class="content">{{contractInfo.leader_name}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="8">
-                <el-form-item label="汇款方式">
-                  <div class="content">仙居雅苑</div>
+              <el-col :span="12">
+                <el-form-item label="备注条款">
+                  <div class="content">{{contractInfo.remark_terms}}</div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="收款人姓名">
-                  <div class="content">仙居雅苑</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="开户行">
-                  <div class="content">仙居雅苑</div>
+              <el-col :span="12">
+                <el-form-item label="备注">
+                  <div class="content">{{contractInfo.remark}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="支行">
-                  <div class="content">仙居雅苑</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="账号">
-                  <div class="content">仙居雅苑</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
+
             <el-row>
               <el-col :span="24">
                 <el-form-item label="合同照片">
@@ -462,88 +495,85 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="备注">
-                  <div class="content">仙居雅苑</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
           </el-form>
         </div>
 
-        <div style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;"></div>
+        <div id="financeId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
+          <div class="title">财务信息</div>
+        </div>
 
         <div class="financialInfo">
           <el-form size="small" label-width="180px">
             <el-row>
               <el-col :span="8">
                 <el-form-item label="房租期数">
-                  <div class="content">仙居雅苑</div>
+                  <div class="content">{{financeInfo.term_rent}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="已结算期数">
-                  <div class="content">玄武湖125-5号</div>
+                  <div class="content">{{financeInfo.term_received}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="剩余期数">
-                  <div class="content">8-104</div>
+                  <div class="content">{{financeInfo.term_left}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="上次付/收款时间">
-                  <div class="content">仙居雅苑</div>
+                <el-form-item label="上次付款时间">
+                  <div class="content">{{financeInfo.last_money_date}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="应收/付款金额">
-                  <div class="content">玄武湖125-5号</div>
+                <el-form-item label="下次付款时间">
+                  <div class="content">{{financeInfo.next_money_date}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="实付/收款金额">
-                  <div class="content">8-104</div>
+                <el-form-item label="实付金额">
+                  <div class="content">{{financeInfo.amount_actual}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
                 <el-form-item label="剩余金额">
-                  <div class="content">仙居雅苑</div>
+                  <div class="content">{{financeInfo.amount_left}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="下次付/收款时间">
-                  <div class="content">仙居雅苑</div>
+                <el-form-item label="应付金额">
+                  <div class="content">{{financeInfo.amount_should}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="下次应付/收款时间">
-                  <div class="content">仙居雅苑</div>
+                <el-form-item label="下次应付时间">
+                  <div class="content">{{financeInfo.next_should_money_date}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="24">
                 <el-form-item label="备注">
-                  <div class="content">仙居雅苑</div>
+                  <div class="content">{{financeInfo.remark}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
           </el-form>
         </div>
 
-        <div style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;"></div>
+        <div id="returnId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
+          <div class="title">回访信息</div>
+        </div>
 
         <div class="returnVisitInfo">
           <el-form size="small" label-width="180px">
             <el-row>
               <el-col :span="8">
-                <el-form-item label="回访时间">
+                  <el-form-item label="回访时间">
                   <div class="content">仙居雅苑</div>
                 </el-form-item>
               </el-col>
@@ -568,7 +598,9 @@
           </el-form>
         </div>
 
-        <div style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;"></div>
+        <div id="historyId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
+          <div class="title">操作历史</div>
+        </div>
 
         <div class="operateHistoryInfo">
           <el-form size="small" label-width="180px">
@@ -631,51 +663,83 @@
         steps: 0,
         sizeForm: {},
         isPanel: false,
+        houseInfo : [],
+        contractInfo : [],
+        financeInfo : [],
+        returnInfo : [],
+        historyInfo : [],
+        houseId : '',
+        ownerId : '',
+        contractId : '',
+        financeId : '',
+        returnId : '',
+        historyId : '',
       }
     },
     mounted(){
-      document.getElementById('mainContent').addEventListener('scroll', () => {
-        let scroll_top = document.getElementById('mainContent').scrollTop;
-        if (scroll_top > 500 && scroll_top < 760) {
-          this.steps = 1;
-        } else if (scroll_top > 760 && scroll_top < 1530) {
-          this.steps = 2;
-        } else if (scroll_top > 1530 && scroll_top < 1700) {
-          this.steps = 3;
-        } else if (scroll_top > 1700 && scroll_top < 1750) {
-          this.steps = 4;
-        } else if (scroll_top > 1700) {
-          this.steps = 5;
-        } else {
-          this.steps = 0;
-        }
-      });
-      document.getElementById('mainContent').style.height = window.innerHeight - 240 + 'px';
-      window.onresize = function () {
-        document.getElementById('mainContent').style.height = window.innerHeight - 240 + 'px';
-      }
+      this.initData();
+      this.getContractDetail();
+      this.houseId = document.getElementById('houseId').offsetTop -201;
+      this.ownerId = document.getElementById('ownerId').offsetTop -201;
+      this.contractId = document.getElementById('contractId').offsetTop -201;
+      this.financeId = document.getElementById('financeId').offsetTop -201;
+      this.returnId = document.getElementById('returnId').offsetTop -201;
+      this.historyId = document.getElementById('historyId').offsetTop -201;
     },
     methods: {
+      getContractDetail(){
+         this.$http.get(globalConfig.server+'lease/detail/'+this.$route.query.id +'?collect_or_rent='+this.$route.query.type).then((res) =>{
+            if(res.data.code === '60010'){
+              this.houseInfo = res.data.data.house;
+              this.contractInfo = res.data.data.contract;
+              this.financeInfo = res.data.data.finance;
+              this.returnInfo = res.data.data.return;
+              this.historyInfo = res.data.data.contract;
+            }
+         })
+      },
+      initData(){
+        document.getElementById('mainContent').addEventListener('scroll', () => {
+          let scroll_top = document.getElementById('mainContent').scrollTop;
+          if(scroll_top >= this.ownerId && scroll_top<this.contractId){
+            this.steps =1;
+          }else if(scroll_top >= this.contractId && scroll_top<this.financeId){
+            this.steps =2;
+          }else if(scroll_top >= this.financeId && scroll_top<this.returnId-201){
+            this.steps =3;
+          }else if(scroll_top >= this.returnId-201 && scroll_top<this.historyId-201){
+            this.steps =4;
+          }else if(scroll_top>this.historyId-201){
+            this.steps =5;
+          }else if(scroll_top < this.ownerId){
+            this.steps = 0;
+          }
+        });
+        document.getElementById('mainContent').style.height = window.innerHeight - 240 + 'px';
+        window.onresize = function () {
+          document.getElementById('mainContent').style.height = window.innerHeight - 240 + 'px';
+        }
+      },
       changeStep(step){
         this.steps = step;
         switch (step) {
           case 0:
-            document.getElementById('mainContent').scrollTop = 0;
+            document.getElementById('mainContent').scrollTop = this.houseId;
             break;
           case 1:
-            document.getElementById('mainContent').scrollTop = 540;
+            document.getElementById('mainContent').scrollTop = this.ownerId;
             break;
           case 2:
-            document.getElementById('mainContent').scrollTop = 800;
+            document.getElementById('mainContent').scrollTop = this.contractId;
             break;
           case 3:
-            document.getElementById('mainContent').scrollTop = 1560;
+            document.getElementById('mainContent').scrollTop = this.financeId;
             break;
           case 4:
-            document.getElementById('mainContent').scrollTop = 1710;
+            document.getElementById('mainContent').scrollTop = this.returnId;
             break;
           case 5:
-            document.getElementById('mainContent').scrollTop = 1800;
+            document.getElementById('mainContent').scrollTop = this.historyId;
             break;
         }
       },
@@ -815,6 +879,7 @@
         }
         .content {
           padding: 0 10px;
+          min-height: 32px;
           background: #eef3fc;
           border-radius: 4px;
           font-size: 12px;

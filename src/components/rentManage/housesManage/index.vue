@@ -2,7 +2,6 @@
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="houseContainer">
 
-
       <div class="highRanking">
         <div class="highSearch">
           <el-form :inline="true" size="mini">
@@ -33,7 +32,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="formInline.house" clearable placeholder="请选择">
+                      <el-select v-model="formInline.house" clearable placeholder="请选择" value="">
                         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                         </el-option>
                       </el-select>
@@ -91,7 +90,7 @@
               style="width: 100%">
               <el-table-column
                 type="selection"
-                width="55">
+                width="30">
               </el-table-column>
               <el-table-column
                 prop="name"
@@ -102,12 +101,16 @@
                 label="房型">
               </el-table-column>
               <el-table-column
-                prop="province"
-                label="面积">
-              </el-table-column>
-              <el-table-column
                 prop="name"
                 label="装修">
+              </el-table-column>
+              <el-table-column
+                prop="province"
+                label="出租性质">
+              </el-table-column>
+              <el-table-column
+                prop="province"
+                label="房屋评分">
               </el-table-column>
               <el-table-column
                 prop="date"
@@ -115,35 +118,27 @@
               </el-table-column>
               <el-table-column
                 prop="province"
-                label="参考租金">
+                label="参考价格">
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="剩余空置期（天）">
+                label="空置时长">
               </el-table-column>
               <el-table-column
                 prop="date"
-                label="房屋状态">
-              </el-table-column>
-              <el-table-column
-                prop="province"
-                label="房屋所属">
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="所属部门">
+                label="预警状态">
               </el-table-column>
               <el-table-column
                 prop="date"
                 label="负责人">
               </el-table-column>
               <el-table-column
-                prop="province"
-                label="置顶">
+                prop="name"
+                label="所属部门">
               </el-table-column>
               <el-table-column
                 prop="province"
-                label="认领状态">
+                label="备注">
               </el-table-column>
             </el-table>
           </div>
@@ -259,8 +254,8 @@
 </template>
 
 <script>
-  import RightMenu from '../../../common/rightMenu.vue'
-  import Organization from '../../../common/organization.vue'
+  import RightMenu from '../../common/rightMenu.vue'
+  import Organization from '../../common/organization.vue'
   export default {
     name: 'hello',
     components: {RightMenu,Organization},
@@ -318,23 +313,7 @@
           }
         ],
         currentPage: 1,
-        options: [
-          {
-            value: '选项1',
-            label: '黄金糕'
-          }, {
-            value: '选项2',
-            label: '双皮奶'
-          }, {
-            value: '选项3',
-            label: '蚵仔煎'
-          }, {
-            value: '选项4',
-            label: '龙须面'
-          }, {
-            value: '选项5',
-            label: '北京烤鸭'
-          }],
+        options: [],
 
         //模态框
         organizationDialog: false,
@@ -409,7 +388,9 @@
         })
       },
 
-      openOrganizationModal(type){
+      openOrganizationModal(val){
+        if(val === 'dispatch'){
+        }
         this.organizationDialog = true;
       },
       closeOrganization(){

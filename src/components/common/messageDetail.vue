@@ -80,7 +80,7 @@
         }
       }
       .messageBody{
-        margin: 20px 10px 0 60px;
+        margin: 20px 20px 0 60px;
         border-top: 1px solid #eee;
 
         .bodyTitle{

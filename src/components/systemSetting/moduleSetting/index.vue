@@ -1,30 +1,23 @@
 <template>
   <div>
     <el-tabs v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="微信报销" name="first">
-
+      <el-tab-pane label="积分管理" name="first">
+        <IntegralManagement></IntegralManagement>
       </el-tab-pane>
-      <el-tab-pane label="微信投诉" name="second">
-
-      </el-tab-pane>
-      <el-tab-pane label="预约看房" name="third">
-
-      </el-tab-pane>
-      <el-tab-pane label="房东加盟" name="fourth">
-
-      </el-tab-pane>
-      <el-tab-pane label="意见反馈" name="fifth">
-
+      <el-tab-pane label="合同编号管理" name="second">
+        <ContractManagement></ContractManagement>
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
-
+  import IntegralManagement from './integralManagement/index.vue'
+  import ContractManagement from './contractManagement/index.vue'
   export default {
+ 
     name: "index",
-    components: {},
+    components: {IntegralManagement,ContractManagement},
     data() {
       return {
         activeName: 'first'

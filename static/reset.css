@@ -10,6 +10,15 @@
   font-size: 12px !important; }
   .el-dialog__wrapper .el-dialog .el-dialog__body .el-form .el-form-item--small.el-form-item {
     margin-bottom: 18px; }
+  .el-dialog__wrapper .el-dialog .el-dialog__body .title {
+    color: #409EFF;
+    opacity: .7; }
+    .el-dialog__wrapper .el-dialog .el-dialog__body .title:before {
+      border-radius: 2px;
+      margin-right: 5px;
+      background: #409EFF;
+      border-left: 1px solid #409EFF;
+      content: '|'; }
   .el-dialog__wrapper .el-dialog .el-dialog__body .el-input, .el-dialog__wrapper .el-dialog .el-dialog__body .el-select, .el-dialog__wrapper .el-dialog .el-dialog__body .el-date-editor {
     width: 100%; }
   .el-dialog__wrapper .el-dialog .el-dialog__body .describe_border {
@@ -250,5 +259,8 @@
 
 .contentBox .el-container .aside .el-menu i {
   color: #fff !important; }
+
+.unitMessage .el-input-group__append {
+  padding: 0 3px !important; }
 
 /*# sourceMappingURL=reset.css.map */

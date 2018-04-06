@@ -17,7 +17,9 @@
                 <el-input  v-model="follow_name" @focus="openOrganizeModal"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
 
+          <el-row>
             <el-col :span="12">
               <el-form-item label="跟进时间">
                 <el-date-picker type="datetime" placeholder="选择日期时间"
@@ -31,9 +33,7 @@
                                 value-format="yyyy-MM-dd HH:mm:ss" v-model="params.expected_finish_time"></el-date-picker>
               </el-form-item>
             </el-col>
-
           </el-row>
-
 
           <el-row>
             <el-col :span="24">
@@ -89,6 +89,7 @@
         follow_name:'',
         length:0,
         type:'',
+        isDictionary :false,
       };
     },
     watch:{
@@ -99,7 +100,10 @@
         if(!val){
           this.$emit('close');
         }else {
-          this.isClear = false
+          this.isClear = false;
+          if(!this.isDictionary){
+            this.getDictionary();
+          }
         }
       },
       startEdit(val){
@@ -112,13 +116,13 @@
       }
     },
     mounted(){
-      this.getDictionary();
     },
     methods:{
       getDictionary(){
         this.$http.get(globalConfig.server+'setting/dictionary/255').then((res) => {
           if(res.data.code === "30010"){
             this.dictionary = res.data.data;
+            this.isDictionary = true
           }
         });
       },

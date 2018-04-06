@@ -399,7 +399,6 @@
 
 .selected_tr{
   color: #6a8dfb !important;
-
 }
 .el-dropdown-menu .el-popper .personal{
   top: 50px !important;
@@ -413,5 +412,11 @@
         }
       }
     }
+  }
+}
+//input框padding
+.unitMessage{
+  .el-input-group__append{
+    padding: 0 3px !important;
   }
 }

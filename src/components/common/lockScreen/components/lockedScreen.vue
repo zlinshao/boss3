@@ -2,11 +2,11 @@
   <div id="locking">
     <div class="lock_container">
       <div class="header">
-        <img src="../../../../assets/images/head.jpg" alt="">
+        <img v-if="personal && personal.avatar" :src="personal.avatar" alt="">
+        <img src="../../../../assets/images/head.jpg" v-else="" alt="">
       </div>
-      <div class="name">
-        LEJIA
-      </div>
+      <div v-if="personal && personal.name" class="name">{{personal.name}}</div>
+      <div class="name" v-else="">LEJIA</div>
       <div class="input">
         <el-input placeholder="请输入密码" type="password" @keyup.enter.native="btnClick" v-model="keywords"></el-input>
       </div>
@@ -21,10 +21,12 @@
     name: 'hello',
     data () {
       return {
-        keywords: ''
+        keywords: '',
+        personal:{}
       }
     },
     mounted(){
+      this.personal = JSON.parse(localStorage.personal);
       let height = window.innerHeight;
       let lock_div  = document.getElementById('locking');
       window.onresize = function(){
@@ -36,7 +38,7 @@
     methods: {
       btnClick(){
         this.$http.get(globalConfig.server+'special/special/unlock_screen?pwd_lock='+this.keywords).then((res)=>{
-          if(res.data.code === '10010'){
+          if(res.data.code === '100200'){
             new Promise((resolve,reject) =>{
               localStorage.setItem('lockStatus', 0);
               if(Number(localStorage.getItem('lockStatus')) !== 1){
@@ -45,14 +47,19 @@
             }).then((data)=>{
               this.$router.push({path: localStorage.getItem('beforePath')});
             });
-          }else if(res.data.code === '10015'){
+          }else if(res.data.code === '100202'){
             new Promise((resolve,reject) =>{
               localStorage.setItem('lockStatus', 0);
               if(Number(localStorage.getItem('lockStatus')) !== 1){
                 resolve();
               }
             }).then((data)=>{
-              this.$router.push({path: '/main'});
+              this.$notify({
+                title: '警告',
+                message: '登陆已过期，请重新登陆！',
+                type: 'warning'
+              });
+              this.$router.push({path: '/login'});
             });
           }else {
             this.$notify({
