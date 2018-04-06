@@ -1,5 +1,5 @@
 <template>
-  <div class="loading-box" v-show="show">
+  <div class="loadingDiv" v-show="show">
     <div class="loader">
       <div class="loader-inner pacman">
         <div></div>
@@ -133,4 +133,15 @@
     -webkit-animation: pacman-balls 1s 0s infinite linear;
     animation: pacman-balls 1s 0s infinite linear;
   }
+
+  /*.loadingDiv{*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*!*background: rgba(0, 0, 0, 0.3);*!*/
+    /*background: rgba(255, 255, 255, .8);*/
+    /*position: fixed;*/
+    /*top: 0;*/
+    /*left: 0;*/
+    /*z-index: 9999;*/
+  /*}*/
 </style>

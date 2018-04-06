@@ -91,7 +91,7 @@
                     </el-table>
                   </el-popover>
                   {{scope.row.price[0].price}}&nbsp;
-                  <el-button v-popover:popover4 size="mini" type="text">变化</el-button>
+                  <el-button v-popover:popover4 size="mini" v-show="scope.row.price.length>1" type="text">变化</el-button>
                 </template>
               </el-table-column>
               <el-table-column
@@ -109,7 +109,7 @@
                     </el-table>
                   </el-popover>
                   {{scope.row.pay_way[0].pay_way}}&nbsp;
-                  <el-button size="mini" type="text"  v-popover:payWay>变化</el-button>
+                  <el-button size="mini" type="text" v-show="scope.row.pay_way.length>1" v-popover:payWay>变化</el-button>
                 </template>
               </el-table-column>
               <el-table-column
@@ -206,7 +206,7 @@
                     </el-table>
                   </el-popover>
                   {{scope.row.price[0].price}}&nbsp;
-                  <el-button v-popover:rentPrice size="mini" type="text">变化</el-button>
+                  <el-button v-popover:rentPrice size="mini"  v-show="scope.row.price.length>1" type="text">变化</el-button>
                 </template>
               </el-table-column>
               <el-table-column
@@ -224,7 +224,7 @@
                     </el-table>
                   </el-popover>
                   {{scope.row.pay_way[0].pay_way}}&nbsp;
-                  <el-button size="mini" type="text"  v-popover:payWayRent>变化</el-button>
+                  <el-button size="mini" type="text" v-show="scope.row.pay_way.length>1" v-popover:payWayRent>变化</el-button>
                 </template>
               </el-table-column>
               <el-table-column
@@ -336,17 +336,17 @@
     <BackUp :backUpDialog="backUpDialog" @close="closeModal"></BackUp>
     <Advanced :advancedDialog="advancedDialog" @close="closeModal"></Advanced>
     <OwnerDelay :ownerDelayDialog="ownerDelayDialog" @close="closeModal"></OwnerDelay>
-    <RentVacation :rentVacationDialog="rentVacationDialog" @close="closeModal"></RentVacation>
+    <RentVacation :rentVacationDialog="rentVacationDialog" :rentContractId="rentContractId" @close="closeModal"></RentVacation>
     <IncreaseGoods :increaseGoodsDialog="increaseGoodsDialog" @close="closeModal"></IncreaseGoods>
     <DecreaseGoods :decreaseGoodsDialog="decreaseGoodsDialog" @close="closeModal"></DecreaseGoods>
     <OwnerArrears :ownerArrearsDialog="ownerArrearsDialog" @close="closeModal"></OwnerArrears>
     <OwnerRenew :ownerRenewDialog="ownerRenewDialog" @close="closeModal"></OwnerRenew>
     <AddFollowUp :addFollowUpDialog="addFollowUpDialog" :contractModule="contractModule"
                  :contractOperateId="contractOperateId" @close="closeModal"></AddFollowUp>
-    <CollectVacation :collectVacationDialog="collectVacationDialog" @close="closeModal"></CollectVacation>
+    <CollectVacation :collectVacationDialog="collectVacationDialog" :collectContractId="collectContractId" @close="closeModal"></CollectVacation>
     <AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" @close="closeModal"></AddCollectRepair>
     <AddRentRepair :addRentRepairDialog="addRentRepairDialog" @close="closeModal"></AddRentRepair>
-    <RentChangeRoom :rentChangeRoomDialog="rentChangeRoomDialog" @close="closeModal"></RentChangeRoom>
+    <RentChangeRoom :rentChangeRoomDialog="rentChangeRoomDialog" :rentContractId="rentContractId" @close="closeModal"></RentChangeRoom>
     <Sublease :subleaseDialog="subleaseDialog" @close="closeModal"></Sublease>
     <RentRenew :rentRenewDialog="rentRenewDialog" @close="closeModal"></RentRenew>
     <AddRentInfo :addRentInfoDialog="addRentInfoDialog" :collectContractId="collectContractId" @close="closeModal"></AddRentInfo>
@@ -717,8 +717,6 @@
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
 
-
-//        console.log(this.rightMenuX,this.rightMenuY)
         event.preventDefault();
         event.stopPropagation();
         this.$nextTick(() => {

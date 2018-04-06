@@ -413,13 +413,13 @@
 <script>
   import UpLoad from '../../common/UPLOAD.vue'
   export default {
-    props:['collectVacationDialog'],
+    props:['collectVacationDialog','collectContractId'],
     components:{UpLoad},
     data() {
       return {
         collectVacationDialogVisible:false,
         params: {
-          contract_id : 1,
+          contract_id : '',
           module : '2',
 
           check_time : '',
@@ -532,6 +532,9 @@
             this.getDictionary();
           }
         }
+      },
+      collectContractId(val){
+        this.params.contract_id = val;
       }
     },
     mounted(){
@@ -558,7 +561,9 @@
             this.$notify.success({
               title:'成功',
               message:res.data.msg
-            })
+            });
+            this.collectVacationDialogVisible = false;
+            this.$emit('close','success');
           }else {
             this.$notify.warning({
               title:'警告',

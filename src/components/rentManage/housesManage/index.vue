@@ -3,7 +3,16 @@
     <div id="houseContainer">
 
       <div class="highRanking">
-        <div class="highSearch">
+        <div class="highSearch" style="justify-content: space-between">
+
+          <div>
+            <el-button type="text">空置房源: xx套</el-button>
+            <el-button type="text">黄色预警房源:xx套</el-button>
+            <el-button type="text">橙色预警房源:xx套</el-button>
+            <el-button type="text">红色预警房源:xx套</el-button>
+            <el-button type="text">现有房源: xx套</el-button>
+          </div>
+
           <el-form :inline="true" size="mini">
             <el-form-item>
               <el-input placeholder="请输入内容" v-model="formInline.keyWords" size="mini" clearable>
@@ -15,6 +24,9 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="openOrganizationModal('dispatch')">分配</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary"><i class="el-icon-sort"></i></el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -87,6 +99,7 @@
             <el-table
               :data="tableData"
               @row-click="clickTable"
+              @row-contextmenu="houseMenu"
               style="width: 100%">
               <el-table-column
                 type="selection"
@@ -105,6 +118,10 @@
                 label="装修">
               </el-table-column>
               <el-table-column
+                prop="name"
+                label="房屋类型">
+              </el-table-column>
+              <el-table-column
                 prop="province"
                 label="出租性质">
               </el-table-column>
@@ -119,6 +136,10 @@
               <el-table-column
                 prop="province"
                 label="参考价格">
+              </el-table-column>
+              <el-table-column
+                prop="name"
+                label="房屋状态">
               </el-table-column>
               <el-table-column
                 prop="name"
@@ -158,90 +179,15 @@
           </div>
         </div>
         <div class="myDetail">
-          <el-tabs type="border-card">
-            <el-tab-pane label="房源信息">
-              <div class="content">
-                <table class="houseList">
-                  <tr>
-                    <td>房源</td>
-                    <td></td>
-                    <td>房源</td>
-                    <td></td>
-                    <td>房源</td>
-                    <td></td>
-                    <td>
-                      <span>跟进人：</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>房源</td>
-                    <td></td>
-                    <td>房源</td>
-                    <td></td>
-                    <td>房源</td>
-                    <td></td>
-                    <td>
-                      <span>跟进时间：</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>房源</td>
-                    <td></td>
-                    <td>房源</td>
-                    <td></td>
-                    <td>房源</td>
-                    <td></td>
-                    <td rowspan="4">
-                      <span>跟进记录：</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>房源</td>
-                    <td></td>
-                    <td>房源</td>
-                    <td colspan="3">
-
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>房源</td>
-                    <td></td>
-                    <td>房源</td>
-                    <td></td>
-                    <td>房源</td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td>房源</td>
-                    <td></td>
-                    <td>房源</td>
-                    <td></td>
-                    <td>房源</td>
-                    <td></td>
-                  </tr>
-                </table>
-              </div>
+          <el-tabs type="border-card" v-model="activeName">
+            <el-tab-pane name="first" label="跟进记录">
+              <FollowRecordTab></FollowRecordTab>
             </el-tab-pane>
-            <el-tab-pane label="跟进记录">
-              <div>
-                <el-table
-                  :data="tableData"
-                  @row-click="clickTable">
-                  <el-table-column
-                    prop="name"
-                    label="跟进人">
-                  </el-table-column>
-                  <el-table-column
-                    prop="date"
-                    label="跟进时间">
-                  </el-table-column>
-                  <el-table-column
-                    prop="province"
-                    label="跟进记录">
-                  </el-table-column>
-                </el-table>
-              </div>
-
+            <el-tab-pane name="second" label="装修记录">
+              <DecorateRecordTab></DecorateRecordTab>
+            </el-tab-pane>
+            <el-tab-pane name="third" label="预警状态调整记录">
+              <EarlyWarning></EarlyWarning>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -249,16 +195,32 @@
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
-    <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
+    <Organization :organizationDialog="organizationDialog" @close="closeModal"></Organization>
+
+    <EditHouseInfo :editHouseDialog="editHouseDialog" @close="closeModal"></EditHouseInfo>
+    <AddFollow :addFollowDialog="addFollowDialog" @close="closeModal"></AddFollow>
+    <UpLoadPic :upLoadDialog="upLoadDialog" @close="closeModal"></UpLoadPic>
+    <AddEarlyWarning :addEarlyWarningDialog="addEarlyWarningDialog" @close="closeModal"></AddEarlyWarning>
+    <AddDecorate :addDecorateDialog="addDecorateDialog" @close="closeModal"></AddDecorate>
   </div>
 </template>
 
 <script>
   import RightMenu from '../../common/rightMenu.vue'
   import Organization from '../../common/organization.vue'
+  import FollowRecordTab from './components/followRecordTab.vue'
+  import DecorateRecordTab from './components/decorateRecordTab.vue'
+  import EarlyWarning from './components/earlyWarningTab.vue'
+
+  import EditHouseInfo from './components/editHouseInfo.vue'
+  import AddFollow from './components/addFollowRecord.vue'
+  import UpLoadPic from './components/upLoadPic.vue'
+  import AddEarlyWarning from './components/addEarlyWarning.vue'
+  import AddDecorate from './components/addDecorateRecord.vue'
   export default {
     name: 'hello',
-    components: {RightMenu,Organization},
+    components: {RightMenu,Organization,FollowRecordTab,DecorateRecordTab,EarlyWarning,EditHouseInfo,AddFollow,UpLoadPic
+                ,AddEarlyWarning,AddDecorate},
     data () {
       return {
         rightMenuX: 0,
@@ -270,54 +232,27 @@
           name: '',
           house: ''
         },
-        tableData: [
-          {
-            date: '2016-05-03',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-          {
-            date: '2016-05-04',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-          {
-            date: '2016-05-01',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-          {
-            date: '2016-05-01',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          }
-        ],
+        tableData: [{
+          date: '2016-05-03',
+          name: '王小虎',
+          province: '上海',
+          city: '普陀区',
+          address: '上海市普陀区金沙江路 1518 弄',
+          zip: 200333
+        },],
         currentPage: 1,
         options: [],
 
         //模态框
         organizationDialog: false,
+        editHouseDialog : false,
+        addFollowDialog : false,
+        upLoadDialog : false,
+        addEarlyWarningDialog : false,
+        addDecorateDialog : false,
         isHigh :false,
+
+        activeName:'first',
       }
     },
 
@@ -331,18 +266,16 @@
       clickTable(row, event, column){
         console.log(row, event, column)
       },
+
       //房屋右键
       houseMenu(row, event){
         this.lists = [
-          {clickIndex: 'stick', headIcon: 'el-icons-fa-arrow-up', label: '置顶',},
-          {clickIndex: 'dispatch', headIcon: 'el-icon-menu', label: '分配',},
-        ];
-        this.contextMenuParam(event);
-      },
-      //合同表头右键
-      houseHeadMenu(e){
-        this.lists = [
-          {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
+          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '编辑房屋信息',},
+          {clickIndex: 'upLoadDialog', headIcon: 'el-icon-upload2', label: '上传房屋照片',},
+          {clickIndex: 'addFollowDialog', headIcon: 'el-icon-circle-plus-outline', label: '添加跟进记录',},
+          {clickIndex: 'addDecorateDialog', headIcon: 'el-icon-circle-plus-outline', label: '添加装修记录',},
+          {clickIndex: 'addEarlyWarningDialog', headIcon: 'el-icon-circle-plus-outline', label: '添加预警状态',},
+//          {clickIndex: 'dispatch', headIcon: 'el-icon-menu', label: '分配',},
         ];
         this.contextMenuParam(event);
       },
@@ -350,24 +283,29 @@
       //右键回调时间
       clickEvent (index) {
         switch (index){
-          case 'stick' :
-            this.$confirm('您确定将其置顶吗', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              this.$message({
-                type: 'success',
-                message: '置顶成功!'
-              });
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消置顶'
-              });
-            });
+          case 'edit' :
+            this.editHouseDialog = true;
+            break;
+          case 'addFollowDialog' :
+            this.addFollowDialog = true;
+            break;
+          case 'upLoadDialog' :
+            this.upLoadDialog = true;
+            break;
+          case 'addEarlyWarningDialog' :
+            this.addEarlyWarningDialog = true;
+            break;
+          case 'addDecorateDialog' :
+            this.addDecorateDialog = true;
             break;
         }
+      },
+      closeModal(){
+        this.editHouseDialog = false;
+        this.addFollowDialog = false;
+        this.upLoadDialog = false;
+        this.addEarlyWarningDialog = false;
+        this.addDecorateDialog = false;
       },
       //关闭右键菜单
       closeMenu(){
@@ -443,55 +381,6 @@
         }
       }
 
-      .myDetail {
-        margin-bottom: 15px;
-        .el-tabs {
-          border: 1px solid #d4f0de;
-          .el-tabs__content {
-            .el-tab-pane {
-              .content {
-                min-height: 100px;
-                .houseList {
-                  width: 100%;
-                  border-collapse: collapse;
-                  tr {
-                    td {
-                      border: 1px solid #ebeef5;
-                      padding: 8px 0;
-                      color: #606266;
-                      text-align: center;
-                      &:nth-child(1) {
-                        width: 8%;
-                      }
-                      &:nth-child(2) {
-                        width: 12%;
-                      }
-                      &:nth-child(3) {
-                        width: 8%;
-                      }
-                      &:nth-child(4) {
-                        width: 12%;
-                      }
-                      &:nth-child(5) {
-                        width: 8%;
-                      }
-                      &:nth-child(6) {
-                        width: 12%;
-                      }
-                      &:nth-child(7) {
-                        width: 40%;
-                        text-align: left;
-                        vertical-align: top;
-                        padding-left: 8px
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
     }
   }
 </style>
