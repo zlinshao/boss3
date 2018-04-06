@@ -606,10 +606,14 @@
     <MiscellaneousExpensesOfficial :module="miscellaneousExpensesOfficialVisible"
                                    @close='closeFrame'></MiscellaneousExpensesOfficial>
 
+    <!--报备详情-->
+    <ReportDetail :module="reportModule" :ids="reportID" @close="closeFrame"></ReportDetail>
   </div>
 </template>
 
 <script>
+
+  import ReportDetail from './components/reportDetail.vue'          //报备详情
 
   import Frames from './comments/frames.vue'
   import Lisu from './comments/lisu.vue'
@@ -641,6 +645,8 @@
 
   export default {
     components: {
+      ReportDetail,
+
       Frames,
       Lisu,
       Zhusu,
@@ -679,6 +685,9 @@
         activeName: 'fourth',
         finActive: 'unfinished',
         readActive: 'unread',
+
+        reportModule: false,
+        reportID: '',
 
         showUp: false,    //暂时隐藏
         isOpen_1: true,
@@ -779,6 +788,7 @@
       // 待办事项
       myData(val, page) {
         this.params.page = page;
+        this.tableData = [];
         this.$http.get(this.address + 'process', {
           params: val,
         }).then((res) => {
@@ -793,8 +803,8 @@
             list.created_at = data[i].created_at;
             list.finish_at = data[i].finish_at !== null ? data[i].finish_at : '未完成';
             if (val.type === 3) {
-              list.title = data[i].user.name + '发起的' + data[i].content.type.name + '报备';
-              list.summary = data[i].user.name + '摘要';
+              list.title = '发起的XXXXXX报备';
+              list.summary = '摘要';
               list.status = data[i].place.display_name;
             } else {
               list.title = data[i].title;
@@ -828,7 +838,8 @@
         }
       },
       dblClickTable(type) {
-        // this.$router.push('/sthToDoDetail')
+        this.reportID = type.id;
+        this.reportModule = true;
         switch (type) {
           case 'reimbursedetail':          //报销详情待审批
             this.reimbursedetail = true;
@@ -914,6 +925,8 @@
         }
       },
       closeFrame() {
+        this.reportModule = false;
+
         this.frameVisible = false;
         this.lisuVisible = false;
         this.zhusuVisible = false;

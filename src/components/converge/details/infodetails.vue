@@ -356,6 +356,7 @@
         this.$http.post(this.urls + 'oa/portal/comment', {
           obj_id: this.formList.id,
           content: this.addContent,
+          video_file: this.addContent,
           parent_id: id,
         }).then((res) => {
           this.addContent = '';

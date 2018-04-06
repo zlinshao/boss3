@@ -3,8 +3,6 @@
     <div class="scroll_bar">
       <div class="personalInfo" style="">
         <div class="title">个人信息</div>
-        <router-link :to="{path: '/villageManage', query: {term: this.terms,status: 1}}">返回上一页
-        </router-link>
       </div>
       <div class="form_border">
         <el-form size="mini" label-width="110px">
@@ -24,8 +22,7 @@
                 <div class="special">{{myData.address}}</div>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
+
             <el-col :span="8">
               <el-form-item label="房屋类型">
                 <div class="special">{{myData.house_types}}</div>
@@ -41,8 +38,7 @@
                 <div class="special">{{myData.property_fee}}</div>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
+
             <el-col :span="8">
               <el-form-item label="建造年限">
                 <div class="special">{{myData.built_year}}</div>
@@ -109,34 +105,40 @@
       }
     },
     mounted() {
-      this.terms = this.$route.query.term;
-      this.$http.get(this.urls + 'setting/community/' + this.$route.query.ids).then((res) => {
-        this.myData = res.data.data;
-        this.house_pic = res.data.data.album.house_pic;
-      });
-
-
-      var map = new AMap.Map("container", {
-        resizeEnable: true
-      });
-      AMap.service(["AMap.PlaceSearch"], function () {
-        var placeSearch = new AMap.PlaceSearch({ //构造地点查询类
-          pageSize: 5,
-          type: '餐饮服务',
-          pageIndex: 1,
-          city: "010", //城市
-          map: map,
-          panel: "panel"
-        });
-
-        var cpoint = [116.405467, 39.907761]; //中心点坐标
-        placeSearch.searchNearBy('', cpoint, 500, function (status, result) {
-
-        });
-      });
+      this.details();
+    },
+    activated() {
+      this.details();
     },
     watch: {},
-    methods: {},
+    methods: {
+      details() {
+        this.terms = this.$route.query.term;
+        this.$http.get(this.urls + 'setting/community/' + this.$route.query.ids).then((res) => {
+          this.myData = res.data.data;
+          this.house_pic = res.data.data.album.house_pic;
+        });
+
+        let map = new AMap.Map("container", {
+          resizeEnable: true
+        });
+        AMap.service(["AMap.PlaceSearch"], function () {
+          let placeSearch = new AMap.PlaceSearch({ //构造地点查询类
+            pageSize: 5,
+            type: '餐饮服务',
+            pageIndex: 1,
+            city: "010", //城市
+            map: map,
+            panel: "panel"
+          });
+
+          let cpoint = [116.405467, 39.907761]; //中心点坐标
+          placeSearch.searchNearBy('', cpoint, 500, function (status, result) {
+
+          });
+        });
+      }
+    },
   }
 </script>
 

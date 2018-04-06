@@ -5,7 +5,7 @@
         <el-form :model="form" size="mini" label-width="80px">
           <el-row>
             <el-col :span="12">
-              <el-form-item label="省">
+              <el-form-item label="省" required>
                 <el-select v-model="form.province" clearable @change="choose('city',form.province)">
                   <el-option v-for="(item,index) in province" :label="item.province_name"
                              :value="item.province_id" :key="index"></el-option>
@@ -13,7 +13,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="市">
+              <el-form-item label="市" required>
                 <el-select v-model="form.city" clearable @change="choose('area',form.city)">
                   <el-option v-for="(item,index) in cityList" :label="item.city_name" :value="item.city_id"
                              :key="index"></el-option>
@@ -23,7 +23,7 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="区/县">
+              <el-form-item label="区/县" required>
                 <el-select v-model="form.area" clearable @change="choose('region',form.area)">
                   <el-option v-for="(item,index) in areaList" :label="item.area_name" :value="item.area_id"
                              :key="index"></el-option>
@@ -31,7 +31,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="区域">
+              <el-form-item label="区域" required>
                 <el-select v-model="form.region" clearable>
                   <el-option v-for="(item,index) in regionList" :label="item.region_name" :value="item.id"
                              :key="index"></el-option>
@@ -41,7 +41,7 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="小区名称">
+              <el-form-item label="小区名称" required>
                 <el-input @focus="openAddress" v-model="form.villageName" placeholder="请选择小区" readonly></el-input>
               </el-form-item>
             </el-col>
@@ -65,7 +65,7 @@
 
           <el-row>
             <el-col :span="12">
-              <el-form-item label="建筑年限">
+              <el-form-item label="建筑年限" required>
                 <el-select v-model="form.built_year" clearable>
                   <el-option v-for="(key,index) in 51" :label="key + 1969" :value="index + 1970"
                              :key="index"></el-option>
@@ -73,7 +73,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="房屋类型">
+              <el-form-item label="房屋类型" required>
                 <el-select v-model="form.houseType" clearable>
                   <el-option v-for="(key,index) in dict" :label="key.dictionary_name" :value="key.id"
                              :key="index"></el-option>
