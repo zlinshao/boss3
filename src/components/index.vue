@@ -27,14 +27,15 @@
               <i class="iconfont icon-qita1"></i><span>快捷入口</span>
             </span>
             <el-dropdown-menu slot="dropdown" class="shortcutList">
-              <el-dropdown-item v-for="(item,index) in isShortcutPath" :key="index" :class="{'border_top': index > 3}">
-                <router-link :to="item.path">
+              <el-dropdown-item v-for="(item,index) in isShortcutPath"  :key="index"
+                                @click.native="routers(item.path)" :class="{'border_top': index > 3}">
+                <div>
                   <b style="font-weight: 100" :class="{'backColor1': -1 < index,'backColor2': index === 3 || index === 11 || index === 13,
                    'backColor3': index === 5 || index === 14,'backColor4':index === 4}">
                     <i :class="item.icon" style="font-size: 22px"></i>
                   </b>
                   <span>{{item.name}}</span>
-                </router-link>
+                </div>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>

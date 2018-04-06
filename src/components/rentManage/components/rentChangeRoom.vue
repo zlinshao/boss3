@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="rentChange">
     <el-dialog title="租客换房" :visible.sync="rentChangeRoomDialogVisible" width="60%">
       <div class="scroll_bar">
         <div class="title">客户-信息</div>
@@ -408,13 +408,13 @@
 <script>
   import UpLoad from '../../common/UPLOAD.vue'
   export default {
-    props:['rentChangeRoomDialog'],
+    props:['rentChangeRoomDialog','rentContractId'],
     components:{UpLoad},
     data() {
       return {
         rentChangeRoomDialogVisible:false,
         params: {
-          contract_id : 1,
+          contract_id : '',
           check_time : '',
           check_type : 333,
           department_id : "1",
@@ -525,6 +525,9 @@
             this.getDictionary();
           }
         }
+      },
+      rentContractId(val){
+        this.params.contract_id = val;
       }
     },
     mounted(){
@@ -567,8 +570,8 @@
     }
   };
 </script>
-<style lang="scss">
-  #rentVacation{
+<style lang="scss" scoped="">
+  #rentChange{
     .el-dialog__wrapper{
       .el-dialog{
         .el-dialog__body{

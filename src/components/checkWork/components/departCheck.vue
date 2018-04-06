@@ -140,7 +140,7 @@
 
 <script>
 
- import Organization from '../../../common/organization.vue'
+ import Organization from '../../common/organization.vue'
   export default {
     components:{
       Organization

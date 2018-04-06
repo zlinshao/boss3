@@ -29,11 +29,11 @@
       }
     },
     mounted(){
-      this.innerWidth = window.innerWidth;
-      this.innerHeight = window.innerHeight;
+      this.innerWidth = document.documentElement.clientWidth;
+      this.innerHeight = document.documentElement.clientHeight;
       window.onresize = function(){
-        this.innerWidth = window.innerWidth;
-        this.innerHeight = window.innerHeight;
+        this.innerWidth = document.documentElement.clientWidth;
+        this.innerHeight = document.documentElement.clientHeight;
       };
     },
     computed:{

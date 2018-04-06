@@ -408,7 +408,7 @@
 <script>
   import UpLoad from '../../common/UPLOAD.vue'
   export default {
-    props:['rentVacationDialog'],
+    props:['rentVacationDialog','rentContractId'],
     components:{UpLoad},
     data() {
       return {
@@ -526,6 +526,9 @@
             this.getDictionary();
           }
         }
+      },
+      rentContractId(val){
+        this.params.contract_id = val;
       }
     },
     mounted(){
@@ -565,7 +568,7 @@
     }
   };
 </script>
-<style lang="scss">
+<style lang="scss" scoped="">
   #rentVacation{
     .el-dialog__wrapper{
       .el-dialog{

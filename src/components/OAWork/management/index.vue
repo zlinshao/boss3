@@ -16,9 +16,9 @@
       <el-tab-pane label="业绩计算器" name="fifth">
         <Counter></Counter>
       </el-tab-pane>
-      <el-tab-pane label="部门考勤" name="six">
-        <department></department>
-      </el-tab-pane>
+      <!--<el-tab-pane label="部门考勤" name="six">-->
+        <!--<department></department>-->
+      <!--</el-tab-pane>-->
       <el-tab-pane label="公告管理" name="seven">
         <notice></notice>
       </el-tab-pane>
@@ -32,12 +32,12 @@
   import Institution from './institution/index.vue'
   import Vote from './vote/index.vue'
   import Counter from './counter/index.vue'
-  import department from './department/index.vue'
+//  import department from './department/index.vue'
   import Notice from './Notice/index.vue'
 
   export default {
     name: "index",
-    components: {Communication, Programme, Institution, Vote, Counter,department,Notice},
+    components: {Communication, Programme, Institution, Vote, Counter,Notice},
     data() {
       return {
         activeName: 'first'

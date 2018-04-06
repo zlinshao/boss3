@@ -260,6 +260,17 @@ export default new Router({
       ]
     },
 
+
+    {
+      path: '/',
+      component: Index,
+      hidden: true,
+      name: '',
+      children: [
+        {path: '/housesManage', component: HousesManage, name: '产品管控中心', icon: 'iconfont icon-zhuye'},
+      ]
+    },
+
     {
       path: '/',
       component: Index,
@@ -268,7 +279,6 @@ export default new Router({
       children: [
         {path: '/wholeRentManage', component: WholeRentManage, name: '整租管理',},
         {path: '/jointRentManage', component: JointRentManage, name: '合租管理',},
-        {path: '/housesManage', component: HousesManage, name: '产品管控中心',},
         {path: '/datumMessage', component: DatumMessage, name: '资料管理',},
         // {
         //   path: '/datumMessage', component: DatumMessage, icon: 'el-icons-fa-money', name: '资料管理',
