@@ -426,7 +426,7 @@
                       </el-tab-pane>
                       <el-tab-pane label="电表照片">
                         <div class="image">
-                          <img v-for="(value,key) in contractInfo.pelectricity_phototo" :src="value" data-magnify="" :data-src="value">
+                          <img v-for="(value,key) in contractInfo.electricity_photo" :src="value" data-magnify="" :data-src="value">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane label="燃气表照片">

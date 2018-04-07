@@ -70,11 +70,11 @@
                 label="房屋地址">
               </el-table-column>
               <el-table-column
-                prop="house_type"
+                prop="property_type"
                 label="房屋类型">
               </el-table-column>
               <el-table-column
-                prop="deposit_collect"
+                prop="deposit"
                 label="收房押金">
               </el-table-column>
               <el-table-column
@@ -117,19 +117,21 @@
                 label="空置期(天)">
               </el-table-column>
               <el-table-column
-                prop="month"
+                prop="duration"
                 label="签约时长（月）">
               </el-table-column>
               <el-table-column
                 prop="begin_date"
+                width="180px"
                 label="开始日期">
               </el-table-column>
               <el-table-column
                 prop="end_date"
+                width="180px"
                 label="结束日期">
               </el-table-column>
               <el-table-column
-                prop="medium_price"
+                prop="agency"
                 label="中介费">
               </el-table-column>
               <el-table-column
@@ -539,8 +541,8 @@
       /*****************************收房*********************************************************/
       getCollectData(){
         this.$loading.show();
-        this.$http.get(globalConfig.server+'lease/entire/collect',{params:this.collectParams}).then((res) => {
-          if(res.data.code === '60110'){
+        this.$http.get(globalConfig.server+'lease/collect',{params:this.collectParams}).then((res) => {
+          if(res.data.code === '61010'){
             this.collectData = res.data.data;
             this.collectTotalNum = res.data.meta.total;
             if(res.data.data.length>0){
