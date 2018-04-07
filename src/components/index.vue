@@ -112,7 +112,7 @@
         <!--个人信息-->
         <div class="personInfo">
           <div class="head" style="cursor: pointer">
-            <span v-if="personal.avatar !== ''">
+            <span v-if="personal.avatar !== '' && personal.avatar !== null">
               <img data-card="" :data-src="JSON.stringify(personal)" :src="personal.avatar">
             </span>
             <span v-else>

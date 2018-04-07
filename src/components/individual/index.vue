@@ -3,7 +3,7 @@
     <div class="topBack">
       <div class="topBackLeft">
         <div class="leftPic">
-          <img :src="landholder.avatar" v-if="landholder.avatar !== ''">
+          <img :src="landholder.avatar" v-if="landholder.avatar !== '' && landholder.avatar !== null">
           <img src="../../assets/images/individual/touxiang.png" v-else>
         </div>
         <div class="rightPic">
