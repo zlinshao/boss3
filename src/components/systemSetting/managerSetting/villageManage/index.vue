@@ -249,7 +249,6 @@
     },
     methods: {
       myData(val) {
-        this.tableData = [];
         this.form.pages = val;
         this.$http.get(this.urls + 'setting/community/', {
           params: this.form,
@@ -259,6 +258,7 @@
             this.tableData = res.data.data.list;
             this.paging = res.data.data.count;
           } else {
+            this.tableData = [];
             this.paging = 0;
           }
         })
@@ -306,9 +306,6 @@
         }
       },
       search() {
-        this.$http.get(globalConfig.server_user + 'houses?q=502').then((res) => {
-
-        })
         this.myData(1);
         this.isHigh = false;
       },
@@ -322,6 +319,7 @@
         this.form.city = '';
         this.form.area = '';
         this.form.region = '';
+        this.isHigh = false;
         this.myData(1);
       },
       // 高级筛选

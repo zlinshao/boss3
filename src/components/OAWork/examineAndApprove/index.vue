@@ -1,391 +1,395 @@
 <template>
   <div id="examineAndApprove">
     <el-tabs v-model="activeName" @tab-click="tabActive(activeName)">
-      <el-tab-pane label="发起审批" name="first">
-        <div class="myApplication">
-          <!--积分-->
-          <div>
-            <div class="head">
-              <div class="title">积分申请（1）</div>
-              <div class="open_close" @click="retract(1)">
-                <span v-if="isOpen_1">收起</span>
-                <span v-else="">展开</span>
-              </div>
-            </div>
-            <div class="content" v-if="isOpen_1">
-              <div class="content_item" @click="openFrames('frameVisible')" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">积分申请</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--住宿-->
-          <div>
-            <div class="head">
-              <div class="title">住宿（2）</div>
-              <div class="open_close" @click="retract(2)">
-                <span v-if="isOpen_2">收起</span>
-                <span v-else="">展开</span>
-              </div>
-            </div>
-            <div class="content" v-if="isOpen_2">
-              <div class="content_item" @click="openFrames('lisuVisible')" v-if="showUp">
-                <div>
-                  <div class="item_icon">
-                    <i class="iconfont icon-daqia"></i>
-                  </div>
-                  <div class="item_name">离宿申请</div>
-                </div>
-              </div>
-              <div class="content_item" @click="openFrames('zhusuVisible')" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">住宿申请</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--报销-->
-          <div>
-            <div class="head">
-              <div class="title">报销</div>
-              <div class="open_close" @click="retract(3)">
-                <span v-if="isOpen_3">收起</span>
-                <span v-else="">展开</span>
-              </div>
-            </div>
-            <div class="content" v-if="isOpen_3">
-              <div class="content_item" @click="openFrames('baoxiaoVisible')">
-                <div>
-                  <div class="item_icon">
-                    <i class="iconfont icon-jinbi"></i>
-                  </div>
-                  <div class="item_name">报销流程</div>
-                </div>
-              </div>
-              <div class="content_item" @click="openFrames('shiyebuVisible')" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">事业部报销</div>
-                </div>
-              </div>
-              <div class="content_item" @click="openFrames('gaocengVisible')" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">高层报销</div>
-                </div>
-              </div>
-              <div class="content_item" @click="openFrames('chuchaiVisible')" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">出差报销</div>
-                </div>
-              </div>
-              <div class="content_item" @click="openFrames('reserveVisible')">
-                <div>
-                  <div class="item_icon">
-                    <i class="iconfont icon-jinbi"></i>
-                  </div>
-                  <div class="item_name">备用金申领</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">新增办公室费用审批</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">开发票申请专用</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--离职-->
-          <div>
-            <div class="head">
-              <div class="title">离职申请</div>
-              <div class="open_close" @click="retract(4)">
-                <span v-if="isOpen_4">收起</span>
-                <span v-else="">展开</span>
-              </div>
-            </div>
-            <div class="content" v-if="isOpen_4">
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">离职申请</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--交通工具-->
-          <div>
-            <div class="head">
-              <div class="title">交通工具申请</div>
-              <div class="open_close" @click="retract(5)">
-                <span v-if="isOpen_5">收起</span>
-                <span v-else="">展开</span>
-              </div>
-            </div>
-            <div class="content" v-if="isOpen_5">
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">交通工具申请</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--请假-->
-          <div>
-            <div class="head">
-              <div class="title">请假</div>
-              <div class="open_close" @click="retract(6)">
-                <span v-if="isOpen_6">收起</span>
-                <span v-else="">展开</span>
-              </div>
-            </div>
-            <div class="content" v-if="isOpen_6">
-              <div class="content_item" @click="openFrames('leaveVisible')">
-                <div>
-                  <div class="item_icon">
-                    <i class="iconfont icon-qingjia"></i>
-                  </div>
-                  <div class="item_name">请假审批</div>
-                </div>
-              </div>
-              <div class="content_item" @click="openFrames('takeworkVisible')">
-                <div>
-                  <div class="item_icon">
-                    <i class="iconfont icon-tiaoxiushenqing"></i>
-                  </div>
-                  <div class="item_name">调休申请</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">部门负责人请假专申请</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--客服部-->
-          <div>
-            <div class="head">
-              <div class="title">客服部问题申报</div>
-              <div class="open_close" @click="retract(7)">
-                <span v-if="isOpen_7">收起</span>
-                <span v-else="">展开</span>
-              </div>
-            </div>
-            <div class="content" v-if="isOpen_7">
-              <div class="content_item" @click="openFrames('repair')">
-                <div>
-                  <div class="item_icon">
-                    <i class="iconfont icon-jinbi"></i>
-                  </div>
-                  <div class="item_name">房屋维修申报</div>
-                </div>
-              </div>
-              <div class="content_item" @click="openFrames('problemReport')">
-                <div>
-                  <div class="item_icon">
-                    <i class="iconfont icon-jinbi"></i>
-                  </div>
-                  <div class="item_name">客服部问题申报</div>
-                </div>
-              </div>
-              <div class="content_item" @click="openFrames('miscellaneousExpenses')">
-                <div>
-                  <div class="item_icon">
-                    <i class="iconfont icon-jinbi"></i>
-                  </div>
-                  <div class="item_name">水电燃物业费、公摊费</div>
-                </div>
-              </div>
-              <div class="content_item" @click="openFrames('miscellaneousExpensesOfficial')">
-                <div>
-                  <div class="item_icon">
-                    <i class="iconfont icon-jinbi"></i>
-                  </div>
-                  <div class="item_name">水电燃报销（官网）</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">客服部转租问题申报</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">客服部退租问题申报</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">客服部续租问题申报</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">客服部调房问题申报</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">客服部房屋维修申报</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">客服部问题申报</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">水电燃物业费、公摊费</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">水电燃报销(官网)</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--休假-->
-          <div>
-            <div class="head">
-              <div class="title">出勤休假</div>
-              <div class="open_close" @click="retract(8)">
-                <span v-if="isOpen_8">收起</span>
-                <span v-else="">展开</span>
-              </div>
-            </div>
-            <div class="content" v-if="isOpen_8">
-              <div class="content_item" @click="openFrames('replenishmentVisible')">
-                <div>
-                  <div class="item_icon">
-                    <i class="iconfont icon-buqia1"></i>
-                  </div>
-                  <div class="item_name">补卡申请</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon">
-                    <i class="iconfont icon-jiaban"></i>
-                  </div>
-                  <div class="item_name">加班审批</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">出差审批</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--其他-->
-          <div>
-            <div class="head">
-              <div class="title">其他</div>
-              <div class="open_close" @click="retract(9)">
-                <span v-if="isOpen_9">收起</span>
-                <span v-else="">展开</span>
-              </div>
-            </div>
-            <div class="content" v-if="isOpen_9">
-              <div class="content_item" @click="openFrames('purchaseVisible')">
-                <div>
-                  <div class="item_icon">
-                    <i class="iconfont icon-chucha"></i>
-                  </div>
-                  <div class="item_name">采购申请</div>
-                </div>
-              </div>
-              <div class="content_item" @click="openFrames('receiptVisible')">
-                <div>
-                  <div class="item_icon">
-                    <i class="iconfont icon-caiwu"></i>
-                  </div>
-                  <div class="item_name">收据领用</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">物品申购</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">物品领用</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">工作请示</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">调岗申请单</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">招聘</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">研发部加班审批</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">测试审批</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">研发部补卡申请</div>
-                </div>
-              </div>
-              <div class="content_item" v-if="showUp">
-                <div>
-                  <div class="item_icon"></div>
-                  <div class="item_name">新增宿舍审批</div>
-                </div>
-              </div>
-            </div>
-          </div>
 
-        </div>
-      </el-tab-pane>
+      <div>
+      <!--<el-tab-pane label="发起审批" name="first">-->
+        <!--<div class="myApplication">-->
+          <!--&lt;!&ndash;积分&ndash;&gt;-->
+          <!--<div>-->
+            <!--<div class="head">-->
+              <!--<div class="title">积分申请（1）</div>-->
+              <!--<div class="open_close" @click="retract(1)">-->
+                <!--<span v-if="isOpen_1">收起</span>-->
+                <!--<span v-else="">展开</span>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="content" v-if="isOpen_1">-->
+              <!--<div class="content_item" @click="openFrames('frameVisible')" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">积分申请</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--&lt;!&ndash;住宿&ndash;&gt;-->
+          <!--<div>-->
+            <!--<div class="head">-->
+              <!--<div class="title">住宿（2）</div>-->
+              <!--<div class="open_close" @click="retract(2)">-->
+                <!--<span v-if="isOpen_2">收起</span>-->
+                <!--<span v-else="">展开</span>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="content" v-if="isOpen_2">-->
+              <!--<div class="content_item" @click="openFrames('lisuVisible')" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon">-->
+                    <!--<i class="iconfont icon-daqia"></i>-->
+                  <!--</div>-->
+                  <!--<div class="item_name">离宿申请</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" @click="openFrames('zhusuVisible')" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">住宿申请</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--&lt;!&ndash;报销&ndash;&gt;-->
+          <!--<div>-->
+            <!--<div class="head">-->
+              <!--<div class="title">报销</div>-->
+              <!--<div class="open_close" @click="retract(3)">-->
+                <!--<span v-if="isOpen_3">收起</span>-->
+                <!--<span v-else="">展开</span>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="content" v-if="isOpen_3">-->
+              <!--<div class="content_item" @click="openFrames('baoxiaoVisible')">-->
+                <!--<div>-->
+                  <!--<div class="item_icon">-->
+                    <!--<i class="iconfont icon-jinbi"></i>-->
+                  <!--</div>-->
+                  <!--<div class="item_name">报销流程</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" @click="openFrames('shiyebuVisible')" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">事业部报销</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" @click="openFrames('gaocengVisible')" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">高层报销</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" @click="openFrames('chuchaiVisible')" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">出差报销</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" @click="openFrames('reserveVisible')">-->
+                <!--<div>-->
+                  <!--<div class="item_icon">-->
+                    <!--<i class="iconfont icon-jinbi"></i>-->
+                  <!--</div>-->
+                  <!--<div class="item_name">备用金申领</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">新增办公室费用审批</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">开发票申请专用</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--&lt;!&ndash;离职&ndash;&gt;-->
+          <!--<div>-->
+            <!--<div class="head">-->
+              <!--<div class="title">离职申请</div>-->
+              <!--<div class="open_close" @click="retract(4)">-->
+                <!--<span v-if="isOpen_4">收起</span>-->
+                <!--<span v-else="">展开</span>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="content" v-if="isOpen_4">-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">离职申请</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--&lt;!&ndash;交通工具&ndash;&gt;-->
+          <!--<div>-->
+            <!--<div class="head">-->
+              <!--<div class="title">交通工具申请</div>-->
+              <!--<div class="open_close" @click="retract(5)">-->
+                <!--<span v-if="isOpen_5">收起</span>-->
+                <!--<span v-else="">展开</span>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="content" v-if="isOpen_5">-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">交通工具申请</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--&lt;!&ndash;请假&ndash;&gt;-->
+          <!--<div>-->
+            <!--<div class="head">-->
+              <!--<div class="title">请假</div>-->
+              <!--<div class="open_close" @click="retract(6)">-->
+                <!--<span v-if="isOpen_6">收起</span>-->
+                <!--<span v-else="">展开</span>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="content" v-if="isOpen_6">-->
+              <!--<div class="content_item" @click="openFrames('leaveVisible')">-->
+                <!--<div>-->
+                  <!--<div class="item_icon">-->
+                    <!--<i class="iconfont icon-qingjia"></i>-->
+                  <!--</div>-->
+                  <!--<div class="item_name">请假审批</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" @click="openFrames('takeworkVisible')">-->
+                <!--<div>-->
+                  <!--<div class="item_icon">-->
+                    <!--<i class="iconfont icon-tiaoxiushenqing"></i>-->
+                  <!--</div>-->
+                  <!--<div class="item_name">调休申请</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">部门负责人请假专申请</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--&lt;!&ndash;客服部&ndash;&gt;-->
+          <!--<div>-->
+            <!--<div class="head">-->
+              <!--<div class="title">客服部问题申报</div>-->
+              <!--<div class="open_close" @click="retract(7)">-->
+                <!--<span v-if="isOpen_7">收起</span>-->
+                <!--<span v-else="">展开</span>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="content" v-if="isOpen_7">-->
+              <!--<div class="content_item" @click="openFrames('repair')">-->
+                <!--<div>-->
+                  <!--<div class="item_icon">-->
+                    <!--<i class="iconfont icon-jinbi"></i>-->
+                  <!--</div>-->
+                  <!--<div class="item_name">房屋维修申报</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" @click="openFrames('problemReport')">-->
+                <!--<div>-->
+                  <!--<div class="item_icon">-->
+                    <!--<i class="iconfont icon-jinbi"></i>-->
+                  <!--</div>-->
+                  <!--<div class="item_name">客服部问题申报</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" @click="openFrames('miscellaneousExpenses')">-->
+                <!--<div>-->
+                  <!--<div class="item_icon">-->
+                    <!--<i class="iconfont icon-jinbi"></i>-->
+                  <!--</div>-->
+                  <!--<div class="item_name">水电燃物业费、公摊费</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" @click="openFrames('miscellaneousExpensesOfficial')">-->
+                <!--<div>-->
+                  <!--<div class="item_icon">-->
+                    <!--<i class="iconfont icon-jinbi"></i>-->
+                  <!--</div>-->
+                  <!--<div class="item_name">水电燃报销（官网）</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">客服部转租问题申报</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">客服部退租问题申报</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">客服部续租问题申报</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">客服部调房问题申报</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">客服部房屋维修申报</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">客服部问题申报</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">水电燃物业费、公摊费</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">水电燃报销(官网)</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--&lt;!&ndash;休假&ndash;&gt;-->
+          <!--<div>-->
+            <!--<div class="head">-->
+              <!--<div class="title">出勤休假</div>-->
+              <!--<div class="open_close" @click="retract(8)">-->
+                <!--<span v-if="isOpen_8">收起</span>-->
+                <!--<span v-else="">展开</span>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="content" v-if="isOpen_8">-->
+              <!--<div class="content_item" @click="openFrames('replenishmentVisible')">-->
+                <!--<div>-->
+                  <!--<div class="item_icon">-->
+                    <!--<i class="iconfont icon-buqia1"></i>-->
+                  <!--</div>-->
+                  <!--<div class="item_name">补卡申请</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon">-->
+                    <!--<i class="iconfont icon-jiaban"></i>-->
+                  <!--</div>-->
+                  <!--<div class="item_name">加班审批</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">出差审批</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+          <!--&lt;!&ndash;其他&ndash;&gt;-->
+          <!--<div>-->
+            <!--<div class="head">-->
+              <!--<div class="title">其他</div>-->
+              <!--<div class="open_close" @click="retract(9)">-->
+                <!--<span v-if="isOpen_9">收起</span>-->
+                <!--<span v-else="">展开</span>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="content" v-if="isOpen_9">-->
+              <!--<div class="content_item" @click="openFrames('purchaseVisible')">-->
+                <!--<div>-->
+                  <!--<div class="item_icon">-->
+                    <!--<i class="iconfont icon-chucha"></i>-->
+                  <!--</div>-->
+                  <!--<div class="item_name">采购申请</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" @click="openFrames('receiptVisible')">-->
+                <!--<div>-->
+                  <!--<div class="item_icon">-->
+                    <!--<i class="iconfont icon-caiwu"></i>-->
+                  <!--</div>-->
+                  <!--<div class="item_name">收据领用</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">物品申购</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">物品领用</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">工作请示</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">调岗申请单</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">招聘</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">研发部加班审批</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">测试审批</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">研发部补卡申请</div>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="content_item" v-if="showUp">-->
+                <!--<div>-->
+                  <!--<div class="item_icon"></div>-->
+                  <!--<div class="item_name">新增宿舍审批</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
+
+        <!--</div>-->
+      <!--</el-tab-pane>-->
+      </div>
+
       <el-tab-pane label="待办事项" name="second">
         <el-badge slot="label" is-dot="" class="item">待办事项</el-badge>
         <div class="myTable">
@@ -682,7 +686,7 @@
         params: {
           page: 1,
         },
-        activeName: 'fourth',
+        activeName: 'second',
         finActive: 'unfinished',
         readActive: 'unread',
 
@@ -728,9 +732,10 @@
         repairVisible: false,                             //客服部问题申报
         miscellaneousExpensesVisible: false,              //客服部问题申报
         miscellaneousExpensesOfficialVisible: false,      //客服部问题申报
-
-
       };
+    },
+    mounted(){
+      this.tabActive('second');
     },
     methods: {
       close_() {
@@ -788,7 +793,6 @@
       // 待办事项
       myData(val, page) {
         this.params.page = page;
-        this.tableData = [];
         this.$http.get(this.address + 'process', {
           params: val,
         }).then((res) => {
@@ -797,6 +801,7 @@
             this.amount = res.data.meta.total;
           }
           this.paging = res.data.meta.total;
+          let dataList = [];
           for (let i = 0; i < data.length; i++) {
             let list = {};
             list.id = data[i].id;
@@ -812,8 +817,9 @@
                 list.status = data[i].flow.place.display_name;
               }
             }
-            this.tableData.push(list);
+            dataList.push(list);
           }
+          this.tableData = dataList;
         })
       },
       retract(flag) {

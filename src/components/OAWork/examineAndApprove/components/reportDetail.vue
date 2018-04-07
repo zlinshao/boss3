@@ -28,6 +28,9 @@
         </el-row>
         <div v-else style="text-align: center">无相关记录</div>
       </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="small" type="primary" @click="reportVisible = false">关&nbsp;闭</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
