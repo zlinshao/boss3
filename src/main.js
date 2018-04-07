@@ -90,27 +90,27 @@ axios.interceptors.response.use((response) => { //配置请求回来的信息
 
 
 //重定向router
-router.beforeEach((to, from, next) => {
-  let lockStatus = true;
-  if (to.path === '/login') {
-    localStorage.removeItem('myData');
-    localStorage.removeItem('personal');
-    globalConfig.header.Authorization = '';
-  }
-
-  let data = localStorage.getItem("myData");
-  if (!data && to.path !== '/login') {
-    next({path: '/login'})
-  }else if(data&&to.path === '/'){
-    next({path: '/main'})
-  }else if(Number(localStorage.getItem('lockStatus'))===1 && to.path!=='/lock'){
-    next({path:'/lock'});
-  }else if(Number(localStorage.getItem('lockStatus'))===0 && to.path === '/lock'){
-    next({path:from.path});
-  }else {
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+  // let lockStatus = true;
+  // if (to.path === '/login') {
+  //   localStorage.removeItem('myData');
+  //   localStorage.removeItem('personal');
+  //   globalConfig.header.Authorization = '';
+  // }
+  //
+  // let data = localStorage.getItem("myData");
+  // if (!data && to.path !== '/login') {
+  //   next({path: '/login'})
+  // }else if(data&&to.path === '/'){
+  //   next({path: '/main'})
+  // }else if(Number(localStorage.getItem('lockStatus'))===1 && to.path!=='/lock'){
+  //   next({path:'/lock'});
+  // }else if(Number(localStorage.getItem('lockStatus'))===0 && to.path === '/lock'){
+  //   next({path:from.path});
+  // }else {
+  //   next();
+  // }
+// });
 
 new Vue({
   el: '#app',

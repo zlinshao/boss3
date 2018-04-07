@@ -5,12 +5,12 @@
       <div class="highRanking">
         <div class="highSearch" style="justify-content: space-between">
 
-          <div>
-            <el-button type="text">空置房源: xx套</el-button>
-            <el-button type="text">黄色预警房源:xx套</el-button>
-            <el-button type="text">橙色预警房源:xx套</el-button>
-            <el-button type="text">红色预警房源:xx套</el-button>
-            <el-button type="text">现有房源: xx套</el-button>
+          <div class="earlyWarning">
+            <el-button class="warningItem" type="text">空置房源: xx套</el-button>
+            <el-button class="warningItem" type="text">黄色预警房源:xx套</el-button>
+            <el-button class="warningItem" type="text">橙色预警房源:xx套</el-button>
+            <el-button class="warningItem" type="text">红色预警房源:xx套</el-button>
+            <el-button class="warningItem" type="text">现有房源: xx套</el-button>
           </div>
 
           <el-form :inline="true" size="mini">
@@ -255,7 +255,11 @@
         activeName:'first',
       }
     },
-
+    mounted(){
+      $('.earlyWarning .warningItem').click(function () {
+        $(this).addClass('selected_tr').siblings().removeClass('selected_tr');
+      });
+    },
     methods: {
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -347,6 +351,15 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped="">
   #houseContainer {
+    .earlyWarning{
+      button{
+        color: #666;
+        :hover{
+          color: #6a8dfb;
+        }
+      }
+    }
+
     .main {
       font-size: 12px;
       .tableBox {

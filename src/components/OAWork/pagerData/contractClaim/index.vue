@@ -86,6 +86,14 @@
             prop="rent_handin"
             label="已上缴合同数（租）">
           </el-table-column>
+          <el-table-column
+            prop="collect_loss"
+            label="已丢失合同数（收）">
+          </el-table-column>
+          <el-table-column
+            prop="rent_loss"
+            label="已丢失合同数（租）">
+          </el-table-column>
         </el-table>
       </div>
       <!--合同申领-->

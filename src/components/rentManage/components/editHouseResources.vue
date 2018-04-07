@@ -448,7 +448,7 @@
                         </el-col>
                         <el-col :span="12">
                           <el-form-item label="谷" label-width="15px" style="margin-bottom: 0;">
-                            <el-input placeholder="请输入内容" v-model="params.electricity_vally"></el-input>
+                            <el-input placeholder="请输入内容" v-model="params.electricity_valley"></el-input>
                           </el-form-item>
                         </el-col>
                       </el-form-item>
@@ -476,11 +476,11 @@
                         <el-input placeholder="请输入内容" @focus="openOrganizeModal('staff')" readonly="" v-model="staff_name"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
-                      <el-form-item label="负责人">
-                        <el-input placeholder="请输入内容" @focus="openOrganizeModal('leader')" readonly="" v-model="leader_name"></el-input>
-                      </el-form-item>
-                    </el-col>
+                    <!--<el-col :span="6">-->
+                      <!--<el-form-item label="负责人">-->
+                        <!--<el-input placeholder="请输入内容" @focus="openOrganizeModal('leader')" readonly="" v-model="leader_name"></el-input>-->
+                      <!--</el-form-item>-->
+                    <!--</el-col>-->
                     <el-col :span="6">
                       <el-form-item label="部门">
                         <el-input placeholder="请输入内容" @focus="openOrganizeModal('depart')" readonly="" v-model="department_name"></el-input>
@@ -593,6 +593,7 @@
         type:'',
 
         params: {
+          type : '',
           //------------------小区详情--------------------//
           community_id : '',            //小区id
           community_nickname : '',      //小区昵称
@@ -642,7 +643,7 @@
           property_payer : '',          // 物业费付款方
           water : '',                   // 水
           electricity_peak : '',        // 电峰
-          electricity_vally : '',       // 电谷
+          electricity_valley : '',       // 电谷
           gas : '',                     // 气
           public_fee : '',              // 公摊
           data_date : '',               // 资料补齐时间
@@ -753,142 +754,150 @@
         this.dictionary(508,1).then((res) => {this.purchase_way_dic = res.data;this.isDictionary = true});
 
       },
-      //获取草稿
+      //获取详情
       getDraft(){
-        this.$http.get(globalConfig.server+'lease/collect/'+ this.collectContractId).then((res) => {
-//          if(res.data.code === '61010'){
-//            this.nameArray = [];
-//            this.sexArray = [];
-//            this.id_typeArray = [];
-//            this.id_numberArray = [];
-//            this.phoneArray = [];
-//
-//            let data = res.data.data;
-//            //房屋信息
-//            this.params.community_id = data.community_id;
-//            this.community_name = data.community_name;
-//            this.community_address = data.community_address;
-//            this.params.community_nickname = data.community_nickname;
-//            this.params.building = data.building;
-//            this.params.unit = data.unit;
-//            this.params.doorplate = data.doorplate;
-//            this.params.house_type = data.house_type;
-//            this.params.property_number = data.property_number;
-//            this.params.mound_number = data.mound_number;
-//            this.params.area = data.area;
-//            this.params.decorate = data.decorate;
-//            this.params.floor = data.floor;
-//            this.params.floors = data.floors;
-//            this.params.property_type = data.property_type;
-//            this.params.house_feature = data.house_feature;
-//            //房东信息
-//            this.customersAmount = data.customers.length;
-//            data.customers.forEach((item) => {
-//              this.nameArray.push(item.name);
-//              this.sexArray.push(item.sex);
-//              this.id_typeArray.push(item.id_type);
-//              this.id_numberArray.push(item.id_number);
-//              this.phoneArray.push(item.phone);
-//            });
-//            //合同信息
-//            this.params.contract_type = data.contract_type;
-//            this.params.contract_number = data.contract_number;
-//            this.params.month = data.month;
-//            this.params.day = data.day;
-//            this.params.sign_date = data.sign_date;
-//            this.params.begin_date = data.begin_date;
-//            this.params.vacancy_end_date = data.vacancy_end_date;
-//            this.params.end_date = data.end_date;
-//            this.params.vacancy = data.vacancy;
-//            this.params.vacancy_way = data.vacancy_way;
-//            this.params.vacancy_other = data.vacancy_other;
-//            this.params.warranty_month = data.warranty_month;
-//            this.params.warranty_day = data.warranty_day;
-//            this.params.is_agency = String(data.is_agency);
-//            this.params.deposit = data.deposit;
-//            //------------月单价和付款方式-----------------------//
-//            this.priceChangeAmount = data.price.length;
-//            this.priceArray = [];
-//            this.periodArray = [];
-//            data.price.forEach((item,index) => {
-//              this.priceArray.push(item.price);
-//              this.periodArray.push(item.period);
-//            });
-//            this.payWayChangeAmount = data.pay_way.length;
-//            this.payWayArray = [];
-//            this.payPeriodArray = [];
-//            data.pay_way.forEach((item,index) => {
-//              this.payWayArray.push(item.pay_way);
-//              this.payPeriodArray.push(item.period);
-//            });
-//            //--------------------------------------------------//
-//            this.params.pay_first_date = data.pay_first_date;
-//            this.params.pay_second_date = data.pay_second_date;
-//            this.params.account_name = data.account_name;
-//            this.params.relationship = data.relationship;
-//            this.params.purchase_way = data.purchase_way;
-//            this.params.account = data.account;
-//            this.params.bank = data.bank;
-//            this.params.subbranch = data.subbranch;
-//            this.params.agency = data.agency;
-//            this.params.penalty = data.penalty;
-//            this.params.property = data.property;
-//            this.params.property_payer = data.property_payer;
-//            this.params.water = data.water;
-//            this.params.electricity_peak = data.electricity_peak;
-//            this.params.electricity_vally = data.electricity_vally;
-//            this.params.gas = data.gas;
-//            this.params.public_fee = data.public_fee;
-//            this.params.data_date = data.data_date;
-//            this.params.staff_id = data.staff_id;
-//            this.params.leader_id = data.leader_id;
-//            this.params.department_id = data.department_id;
-//            this.params.decorate_allow = data.decorate_allow;
-//            this.params.remark_terms = data.remark_terms;
-//            this.params.remark = data.remark;
-//            //照片
-//            this.identity_photo = data.identity_photo;
-//            this.bank_photo = data.bank_photo;
-//            this.photo = data.photo;
-//            this.water_photo = data.water_photo;
-//            this.electricity_photo = data.electricity_photo;
-//            this.gas_photo = data.gas_photo;
-//            this.checkin_photo = data.checkin_photo;
-//            this.auth_photo = data.auth_photo;
-//            this.deposit_photo = data.deposit_photo;
-//            this.promise = data.promise;
-//            this.other_photo = data.other_photo;
-//            this.checkout_photo = data.checkout_photo;
-//            this.checkout_settle_photo = data.checkout_settle_photo;
-//
-//            //先清空图片数组id
-//            this.params.identity_photo = [];
-//            this.params.bank_photo = [];
-//            this.params.photo = [];
-//            this.params.water_photo = [];
-//            this.params.electricity_photo = [];
-//            this.params.gas_photo = [];
-//            this.params.checkin_photo = [];
-//            this.params.auth_photo = [];
-//            this.params.deposit_photo = [];
-//            this.params.promise = [];
-//            this.params.other_photo = [];
-//            this.params.checkout_photo = [];
-//            this.params.checkout_settle_photo = [];
-//            this.imageArray(data.identity_photo,this.params.identity_photo);
-//            this.imageArray(data.bank_photo,this.params.bank_photo);
-//            this.imageArray(data.photo,this.params.photo);
-//            this.imageArray(data.water_photo,this.params.water_photo);
-//            this.imageArray(data.electricity_photo,this.params.electricity_photo);
-//            this.imageArray(data.gas_photo,this.params.gas_photo);
-//            this.imageArray(data.checkin_photo,this.params.checkin_photo);
-//            this.imageArray(data.auth_photo,this.params.auth_photo);
-//            this.imageArray(data.deposit_photo,this.params.deposit_photo);
-//            this.imageArray(data.promise,this.params.promise);
-//            this.imageArray(data.other_photo,this.params.other_photo);
-//            this.imageArray(data.checkout_photo,this.params.checkout_photo);
-//            this.imageArray(data.checkout_settle_photo,this.params.checkout_settle_photo);
-//          }
+        this.$http.get(globalConfig.server+'lease/collect/'+this.collectContractId).then((res) => {
+          if(res.data.code === '61010'){
+            this.nameArray = [];
+            this.sexArray = [];
+            this.id_typeArray = [];
+            this.id_numberArray = [];
+            this.phoneArray = [];
+
+            let data = res.data.data;
+            //房屋信息
+            this.params.type = data.type;
+            this.params.community_id = data.community_id;
+            this.community_name = data.community_name;
+            this.community_address = data.community_address;
+            this.params.community_nickname = data.community_nickname;
+            this.params.building = data.building;
+            this.params.unit = data.unit;
+            this.params.doorplate = data.doorplate;
+            this.params.house_type = data.house_type;
+            this.params.property_number = data.property_number;
+            this.params.mound_number = data.mound_number;
+            this.params.area = data.area;
+            this.params.decorate = Number(data.decorate);
+            this.params.floor = data.floor;
+            this.params.floors = data.floors;
+            this.params.property_type = Number(data.property_type);
+            this.params.house_feature = Number(data.house_feature);
+            //房东信息
+            this.customersAmount = data.customers.length;
+            data.customers.forEach((item) => {
+              this.nameArray.push(item.name);
+              this.sexArray.push(String(item.sex));
+              this.id_typeArray.push(item.idtype);
+              this.id_numberArray.push(item.idcard);
+              this.phoneArray.push(item.phone);
+            });
+
+            //合同信息
+            this.params.contract_type = data.contract_type;
+            this.params.contract_number = data.contract_number;
+            this.params.month = data.month;
+            this.params.day = data.day;
+            this.params.sign_date = data.sign_date;
+            this.params.begin_date = data.begin_date;
+            this.params.vacancy_end_date = data.vacancy_end_date;
+            this.params.end_date = data.end_date;
+            this.params.vacancy = data.vacancy;
+            this.params.vacancy_way = data.vacancy_way;
+            this.params.vacancy_other = data.vacancy_other;
+            this.params.warranty_month = data.warranty_month;
+            this.params.warranty_day = data.warranty_day;
+            this.params.is_agency = String(data.is_agency);
+            this.params.deposit = data.deposit;
+            //------------月单价和付款方式-----------------------//
+            this.priceChangeAmount = data.price.length;
+            this.priceArray = [];
+            this.periodArray = [];
+            data.price.forEach((item,index) => {
+              this.priceArray.push(item.price);
+              this.periodArray.push(item.period);
+            });
+            this.payWayChangeAmount = data.pay_way.length;
+            this.payWayArray = [];
+            this.payPeriodArray = [];
+            data.pay_way.forEach((item,index) => {
+              this.payWayArray.push(Number(item.pay_way));
+              this.payPeriodArray.push(item.period);
+            });
+            //--------------------------------------------------//
+            this.params.pay_first_date = data.pay_first_date;
+            this.params.pay_second_date = data.pay_second_date;
+            this.params.account_name = data.account_name;
+            this.params.relationship = data.relationship;
+            this.params.purchase_way = Number(data.purchase_way);
+            this.params.account = data.account;
+            this.params.bank = data.bank;
+            this.params.subbranch = data.subbranch;
+            this.params.agency = data.agency;
+            this.params.penalty = data.penalty;
+            this.params.property = data.property;
+            this.params.property_payer = Number(data.property_payer);
+            this.params.water = data.water;
+            this.params.electricity_peak = data.electricity_peak;
+            this.params.electricity_valley = data.electricity_valley;
+            this.params.gas = data.gas;
+            this.params.public_fee = data.public_fee;
+            this.params.data_date = data.data_date;
+
+            this.params.staff_id = data.staff_id;
+            this.staff_name = data.staff_name;
+
+            this.params.leader_id = data.leader_id;
+
+            this.params.department_id = data.department_id;
+            this.department_name = data.department_name;
+
+            this.params.decorate_allow = data.decorate_allow;
+            this.params.remark_terms = data.remark_terms;
+            this.params.remark = data.remark;
+            //照片
+            this.identity_photo = data.identity_photo;
+            this.bank_photo = data.bank_photo;
+            this.photo = data.photo;
+            this.water_photo = data.water_photo;
+            this.electricity_photo = data.electricity_photo;
+            this.gas_photo = data.gas_photo;
+            this.checkin_photo = data.checkin_photo;
+            this.auth_photo = data.auth_photo;
+            this.deposit_photo = data.deposit_photo;
+            this.promise = data.promise;
+            this.other_photo = data.other_photo;
+            this.checkout_photo = data.checkout_photo;
+            this.checkout_settle_photo = data.checkout_settle_photo;
+
+            //先清空图片数组id
+            this.params.identity_photo = [];
+            this.params.bank_photo = [];
+            this.params.photo = [];
+            this.params.water_photo = [];
+            this.params.electricity_photo = [];
+            this.params.gas_photo = [];
+            this.params.checkin_photo = [];
+            this.params.auth_photo = [];
+            this.params.deposit_photo = [];
+            this.params.promise = [];
+            this.params.other_photo = [];
+            this.params.checkout_photo = [];
+            this.params.checkout_settle_photo = [];
+            this.imageArray(data.identity_photo,this.params.identity_photo);
+            this.imageArray(data.bank_photo,this.params.bank_photo);
+            this.imageArray(data.photo,this.params.photo);
+            this.imageArray(data.water_photo,this.params.water_photo);
+            this.imageArray(data.electricity_photo,this.params.electricity_photo);
+            this.imageArray(data.gas_photo,this.params.gas_photo);
+            this.imageArray(data.checkin_photo,this.params.checkin_photo);
+            this.imageArray(data.auth_photo,this.params.auth_photo);
+            this.imageArray(data.deposit_photo,this.params.deposit_photo);
+            this.imageArray(data.promise,this.params.promise);
+            this.imageArray(data.other_photo,this.params.other_photo);
+            this.imageArray(data.checkout_photo,this.params.checkout_photo);
+            this.imageArray(data.checkout_settle_photo,this.params.checkout_settle_photo);
+          }
         })
       },
 
@@ -1065,7 +1074,7 @@
         }
 
         if(!this.isUpPic){
-          this.$http.post(globalConfig.server+'lease/collect',this.params).then((res) => {
+          this.$http.put(globalConfig.server+'lease/collect/'+this.collectContractId,this.params).then((res) => {
             if(res.data.code === '61010'){
               this.clearData();
               this.editHouseResourcesDialogVisible = false;
@@ -1090,6 +1099,7 @@
       clearData(){
         this.isClear = false;
         this.params = {
+          type : '',
           //------------------小区详情--------------------//
           community_id : '',            //小区id
           community_nickname : '',      //小区昵称
@@ -1139,7 +1149,7 @@
           property_payer : '',          // 物业费付款方
           water : '',                   // 水
           electricity_peak : '',        // 电峰
-          electricity_vally : '',       // 电谷
+          electricity_valley : '',       // 电谷
           gas : '',                     // 气
           public_fee : '',                  // 公摊
           data_date : '',               // 资料补齐时间
