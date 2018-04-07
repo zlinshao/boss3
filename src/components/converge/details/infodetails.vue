@@ -14,7 +14,7 @@
           <div class="userInfo" style="margin-top: 18px">
             <div class="publishInfo">
               <div class="headPic">
-                <img :src="staffs.avatar" v-if="staffs.avatar !== ''">
+                <img :src="staffs.avatar" v-if="staffs.avatar !== '' && staffs.avatar !== null">
                 <img src="../../../assets/images/head.png" v-else>
               </div>
               <div class="publishName">{{staffs.name}}</div>
@@ -73,14 +73,14 @@
         <div class="comment_box" v-if="isShow">
           <div class="publishComment">
             <div class="portrait">
-              <img :src="personal.avatar" v-if="personal.avatar !== ''">
+              <img :src="landholder.avatar" v-if="landholder.avatar !== '' && landholder.avatar !== null">
               <img src="../../../assets/images/head.png" v-else>
             </div>
             <div class="comments">
               <div class="staff_name">
                 <div>
-                  <span>{{personal.name}}</span>&nbsp;&nbsp;
-                  <span v-for="key in personal.org">
+                  <span>{{landholder.name}}</span>&nbsp;&nbsp;
+                  <span v-for="key in landholder.org">
                     <span>{{key.name}}</span>
                   </span>
                 </div>
@@ -102,7 +102,7 @@
 
           <div class="commentOn" v-for="key in commentOn">
             <div class="portrait">
-              <img :src="key.staffs.avatar" v-if="key.staffs.avatar !== null">
+              <img :src="key.staffs.avatar" v-if="key.staffs.avatar !== '' && key.staffs.avatar !== null">
               <img src="../../../assets/images/head.png" v-else>
             </div>
             <div class="comments">
@@ -194,7 +194,6 @@
     name: "infodetails",
     data() {
       return {
-        personal: globalConfig.personal,
         urls: globalConfig.server,
         showUp: '',
         isShow: true,
@@ -218,7 +217,7 @@
         loading: false,     //点赞
         query:{},
         ids: '',
-        landholder:{}
+        landholder:{}     //个人信息
       }
     },
     created() {
@@ -710,7 +709,7 @@
         line-height: 24px;
         width: 100%;
         .staff_name {
-          color: #2d64b3;
+          color: #579cff;
           @include flex;
           justify-content: space-between;
           .staffBefore + .staffBefore:before {
@@ -718,7 +717,7 @@
           }
         }
         .commentContent {
-          color: #000;
+          color: #676767;
         }
       }
       .publishComment {
