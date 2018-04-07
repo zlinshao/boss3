@@ -26,13 +26,13 @@ import Foundation from '../components/finance/foundation/index'                 
 
 // import RoomCharge from '../comments/finance/roomCharge/index'                            //房租总汇
 // import OtherSum from '../comments/finance/otherSum/index'                                //剩余款项总汇
-import FundMessage from '../components/finance/fundMessage/index.vue'                         //款项管理
+import FundMessage from '../components/finance/fundMessage/index.vue'                       //款项管理
 
 // import BudgetManage from '../comments/finance/budgetManage/index'                        //预算管理
 // import EndPayment from '../comments/finance/endPayment/index'                            //尾款报备
-import StaticDetail from '../components/finance/statistics/components/staticDetail'           //统计详情
-import Statistics from '../components/finance/statistics/index.vue'                           //数据统计
-import IncomeFlow from '../components/finance/incomeFlow/index'                               //收支流水
+import StaticDetail from '../components/finance/statistics/components/staticDetail'         //统计详情
+import Statistics from '../components/finance/statistics/index.vue'                         //数据统计
+import IncomeFlow from '../components/finance/incomeFlow/index'                             //收支流水
 
 
 // 微信管理
@@ -41,7 +41,7 @@ import IncomeFlow from '../components/finance/incomeFlow/index'                 
 // import LookHouse from '../comments/wechatMessage/lookHouse/index.vue'                    //预约看房
 // import League from '../comments/wechatMessage/league/index.vue'                          //房东加盟
 // import Feedback from '../comments/wechatMessage/feedback/index.vue'                      //意见反馈
-import WechatMessage from '../components/wechatMessage/index.vue'                             //微信管理
+import WechatMessage from '../components/wechatMessage/index.vue'                           //微信管理
 
 
 //人资管理
@@ -49,16 +49,16 @@ import WechatMessage from '../components/wechatMessage/index.vue'               
 import Organization from '../components/humanResource/organization/index.vue'
 // import Achievement from '../comments/humanResource/achievement/index.vue'
 import IntegralManage from '../components/humanResource/integralManage/index.vue'
-import OrganizationNew from '../components/humanResource/organizationNew/index.vue' // add by cj 组织架构
+import OrganizationNew from '../components/humanResource/organizationNew/index.vue'       // add by cj 组织架构
 
 
 //OA办公
 // import Communication from '../comments/OAWork/communication/index.vue'                 //通讯管理
-import Programme from '../components/OAWork/management/programme/index.vue'                         //日程管理
-import Institution from '../components/OAWork/management/institution/index.vue'                     //制度管理
+import Programme from '../components/OAWork/management/programme/index.vue'               //日程管理
+import Institution from '../components/OAWork/management/institution/index.vue'           //制度管理
 // import Vote from '../comments/OAWork/vote/index.vue'                                   //投票管理
-import Counter from '../components/OAWork/management/counter/index.vue'                               //业绩计算器
-import Management from '../components/OAWork/management/index.vue'                          //办公管理
+import Counter from '../components/OAWork/management/counter/index.vue'                   //业绩计算器
+import Management from '../components/OAWork/management/index.vue'                        //办公管理
 
 // import SuppliesUse from '../comments/OAWork/property/items/officeSuppliesUse.vue'                       //办公用品申领
 // import SuppliesGather from '../comments/OAWork/property/officeSuppliesGather/officeSuppliesGather.vue'  //办公用品汇总
