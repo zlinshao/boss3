@@ -27,7 +27,7 @@
           <div class="pictures">
             <el-row :gutter="20">
               <el-col :span="3" v-for="(item,index) in photoData" :key="index"  style="margin-bottom: 20px">
-                <el-card :body-style="{ padding: '0px'}">
+                <el-card :body-style="{ padding: '0px'}" shadow="hover">
                   <img :src="item.picture_path" data-magnify="" :data-src="item.picture_path" class="imageItem">
                   <div style="padding: 14px;">
                     <span style="overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{item.name}}</span>
@@ -55,28 +55,6 @@
                 </el-card>
               </el-col>
             </el-row>
-              <!--<el-row :gutter="40" >-->
-                <!--<div >-->
-                  <!--<el-col :span="3" style="margin-bottom:20px;">-->
-                    <!--<div class="pictureDetail">-->
-                      <!--<el-dropdown style="float: right;position: relative;background: #fff;display: inline;margin-bottom: -15px;">-->
-                        <!--<span class="el-dropdown-link">-->
-                          <!--<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
-                        <!--</span>-->
-                        <!--<el-dropdown-menu slot="dropdown">-->
-                          <!--<el-dropdown-item @click.native="editPhoto(item)">编辑</el-dropdown-item>-->
-                          <!--<el-dropdown-item @click.native="setCoverImg(item)">设为封面</el-dropdown-item>-->
-                          <!--<el-dropdown-item @click.native="deletePhoto(item.id)">删除</el-dropdown-item>-->
-                        <!--</el-dropdown-menu>-->
-                      <!--</el-dropdown>-->
-                      <!--<img :src="item.picture_path" data-magnify="" :data-src="item.picture_path" style="height: 140px;">-->
-                      <!--<div class="clearfix t_center">-->
-                        <!--<span class="text_over_ellipsis">{{item.name}}</span>-->
-                    <!--</div>-->
-                  <!--</div>-->
-                <!--</el-col>-->
-              <!--</div>-->
-            <!--</el-row>-->
           </div>
           <div style="text-align: center;margin-bottom: 20px">
             <div v-if="totalNum==0">暂无数据</div>

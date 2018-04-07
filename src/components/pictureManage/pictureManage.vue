@@ -32,7 +32,6 @@
             <el-button icon="el-icon-picture-outline" type="success" size="small" @click="openModalDialog('createAlbumDialog')">创建相册</el-button>
         </div>
           <div class="pictures">
-
             <el-row :gutter="20">
               <el-col :span="3" v-for="(item,index) in albumData" :key="index"  style="margin-bottom: 20px">
                 <el-card :body-style="{ padding: '0px'}">
@@ -58,30 +57,6 @@
                 </el-card>
               </el-col>
             </el-row>
-
-            <!--<el-row :gutter="30" >-->
-              <!--<div v-for="item in albumData">-->
-                <!--<el-col :span="4" style="margin-bottom:30px;">-->
-                  <!--<div class="pictureDetail" >-->
-                   <!--<el-dropdown style="float: right;position: relative;background: #fff;padding-right:3px;display: inline;margin-bottom: -15px;">-->
-                      <!--<span class="el-dropdown-link">-->
-                        <!--<i class="el-icon-arrow-down el-icon&#45;&#45;right"></i>-->
-                      <!--</span>-->
-                      <!--<el-dropdown-menu slot="dropdown">-->
-                        <!--<el-dropdown-item @click.native="editAlbum(item.id)">编辑</el-dropdown-item>-->
-                        <!--<el-dropdown-item @click.native="deleteAlbum(item.id)">删除</el-dropdown-item>-->
-                      <!--</el-dropdown-menu>-->
-                    <!--</el-dropdown>-->
-                    <!--<img v-if="item.cover_path" :src="item.cover_path" style="height:160px;" @click="goPictureDetail(item.id)">-->
-                    <!--<img src="../../assets/images/university/caia412-34427.png" v-else style="height:160px;" @click="goPictureDetail(item.id)">-->
-                  <!--<div class="clearfix">-->
-                    <!--<span class="text_over_norwap">{{item.name}}</span>-->
-                    <!--<span style="float: right;">{{item.photo_count}}张</span>-->
-                  <!--</div>-->
-                <!--</div>-->
-                <!--</el-col>-->
-              <!--</div>-->
-            <!--</el-row>-->
           </div>
           <div style="text-align: center;margin-bottom: 20px;">
             <div v-if="totalNum==0">暂无数据</div>

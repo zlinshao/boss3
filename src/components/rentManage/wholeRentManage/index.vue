@@ -573,7 +573,7 @@
           {clickIndex: 'collectVacationDialog', headIcon: 'el-icons-fa-reply', label: '房东退房',},
           {clickIndex: 'switchToJoint', headIcon :' el-icons-fa-refresh', label: '转到合租',},
           {clickIndex: 'addFollowUpDialog',headIcon :'el-icons-fa-plus', label: '添加工单',},
-          {clickIndex: 'ownerArrearsDialog', headIcon: 'el-icons-fa-cny', label: '房东欠款',},
+//          {clickIndex: 'ownerArrearsDialog', headIcon: 'el-icons-fa-cny', label: '房东欠款',},
           {
             clickIndex: '', headIcon: 'el-icons-fa-inbox', tailIcon: 'el-icon-arrow-right', label: '物品增减',
             children: [
@@ -655,7 +655,7 @@
             ]
           },
           {clickIndex: 'subleaseDialog', headIcon: 'el-icons-fa-refresh', label: '转租',},
-          {clickIndex: 'ownerArrearsDialog', headIcon: 'el-icons-fa-cny', label: '租客欠款',},
+//          {clickIndex: 'ownerArrearsDialog', headIcon: 'el-icons-fa-cny', label: '租客欠款',},
 //          {clickIndex: 'addRentRepairDialog', headIcon: 'el-icons-fa-gear', label: '报修',},
 //          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
           {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单',},
