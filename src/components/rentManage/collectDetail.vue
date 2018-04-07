@@ -14,7 +14,7 @@
 
     <div class="container">
       <div class="top">
-        <h3>仙居雅苑8-104详情 {{steps}}</h3>
+        <h3>{{contractInfo.community_name}} 详情</h3>
         <h3>
           <el-button size="mini" type="primary" v-if="false">已回访</el-button>
           <el-button size="mini" type="danger">未回访</el-button>
