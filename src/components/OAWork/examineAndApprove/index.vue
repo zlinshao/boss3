@@ -391,7 +391,7 @@
       </div>
 
       <el-tab-pane label="待办事项" name="second">
-        <el-badge slot="label" is-dot="" class="item">待办事项</el-badge>
+        <el-badge slot="label" :is-dot="false" class="item">待办事项</el-badge>
         <div class="myTable">
           <el-table
             :data="tableData"
@@ -449,7 +449,7 @@
         </el-table>
       </el-tab-pane>
       <el-tab-pane label="我发起的" name="fourth">
-        <el-badge slot="label" is-dot="" class="item">我发起的</el-badge>
+        <el-badge slot="label" :is-dot="false"  class="item">我发起的</el-badge>
         <el-tabs v-model="finActive" @tab-click="childActive(activeName,finActive)">
           <el-tab-pane label="未完成" name="unfinished">
             <el-badge slot="label" :is-dot="false" class="item">未完成({{amount}})</el-badge>
@@ -689,6 +689,7 @@
         activeName: 'second',
         finActive: 'unfinished',
         readActive: 'unread',
+        tableData: [],
 
         reportModule: false,
         reportID: '',
@@ -703,8 +704,6 @@
         isOpen_7: true,
         isOpen_8: true,
         isOpen_9: true,
-
-        tableData: [],
 
         // 模态框
         frameVisible: false,                              //积分申请
