@@ -726,7 +726,7 @@
           this.$emit('close')
         }else {
           this.isClear = true;
-          this.getDraft();
+          this.getDetail();
           if(!this.isDictionary){
             this.getDictionary();
           }
@@ -755,7 +755,7 @@
 
       },
       //获取详情
-      getDraft(){
+      getDetail(){
         this.$http.get(globalConfig.server+'lease/collect/'+this.collectContractId).then((res) => {
           if(res.data.code === '61010'){
             this.nameArray = [];

@@ -351,7 +351,11 @@
     <RentChangeRoom :rentChangeRoomDialog="rentChangeRoomDialog" :rentContractId="rentContractId" @close="closeModal"></RentChangeRoom>
     <Sublease :subleaseDialog="subleaseDialog" @close="closeModal"></Sublease>
     <RentRenew :rentRenewDialog="rentRenewDialog" @close="closeModal"></RentRenew>
+
     <AddRentInfo :addRentInfoDialog="addRentInfoDialog" :collectContractId="collectContractId" @close="closeModal"></AddRentInfo>
+    <EditRentInfo :editRentInfoDialog="editRentInfoDialog" :rentContractId="rentContractId"
+                  :collectContractId="collectContractId" @close="closeModal"></EditRentInfo>
+
     <SendMessage :sendMessageDialog="sendMessageDialog" @close="closeModal"></SendMessage>
     <AddHouseResources :addHouseResourcesDialog="addHouseResourcesDialog" @close="closeModal"></AddHouseResources>
     <EditHouseResources :editHouseResourcesDialog="editHouseResourcesDialog"
@@ -385,6 +389,7 @@
   import Sublease from '../components/sublease.vue'     //转租
   import RentRenew from '../components/rentRenew.vue'     //租客续约
   import AddRentInfo from '../components/addRentInfo.vue' //登记租客
+  import EditRentInfo from '../components/editRentInfo.vue' //修改租客信息
   import SendMessage from '../../common/sendMessage.vue'  //发送短信
   import AddHouseResources from '../components/addHouseResources.vue' //登记房源
   import EditHouseResources from '../components/editHouseResources.vue' //修改房源
@@ -433,6 +438,7 @@
       Sublease,
       RentRenew,
       AddRentInfo,
+      EditRentInfo,
       SendMessage,
       AddHouseResources,
       EditHouseResources,
@@ -487,6 +493,7 @@
         subleaseDialog:false,           //转租
         rentRenewDialog:false,          //租客续约
         addRentInfoDialog:false,      //登记租客信息
+        editRentInfoDialog:false,      //修改租客信息
         sendMessageDialog:false,      //发送短信
         addHouseResourcesDialog:false,  //登记房源
         editHouseResourcesDialog:false,  //修改房源
@@ -613,7 +620,7 @@
         this.getCollectData();
       },
       dblClickTable(row, event){   //双击
-        const {href} = this.$router.resolve({path: '/collectDetail',query:{id:row.contract_id,type:0}});
+        const {href} = this.$router.resolve({path: '/collectDetail',query:{id:row.contract_id}});
         window.open(href,'_blank','width=1920,height=1080');
       },
       //*********************************租房*******************************************************//
@@ -647,7 +654,7 @@
         this.contractOperateId = row.contract_id;   //通用合同ID
         this.contractModule = 2;
         this.lists = [
-          {clickIndex: 'addRentInfoDialog',headIcon: 'el-icon-edit', label: '修改租客信息',},
+          {clickIndex: 'editRentInfoDialog',headIcon: 'el-icon-edit', label: '修改租客信息',},
           {clickIndex: 'rentRenewDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '租客续约',},
           {
             clickIndex: '', headIcon: 'el-icons-fa-home', tailIcon: 'el-icon-arrow-right', label: '退房/调房',
@@ -679,7 +686,7 @@
         this.rentContractId = row.contract_id;
       },
       dblClickRentTable(row, event){
-        const {href} = this.$router.resolve({path: '/rentingDetail',query:{id:row.contract_id,type:1}});
+        const {href} = this.$router.resolve({path: '/rentingDetail',query:{id:row.contract_id,collectId:this.collectContractId}});
         window.open(href,'_blank','width=1920,height=1080');
       },
 
@@ -779,6 +786,9 @@
           case 'addRentInfoDialog':     //登记租客信息
             this.addRentInfoDialog = true;
             break;
+          case 'editRentInfoDialog':     //修改租客信息
+            this.editRentInfoDialog = true;
+            break;
           case 'sendMessageDialog':     //登记租客信息
             this.sendMessageDialog = true;
             break;
@@ -844,6 +854,7 @@
         this.subleaseDialog = false;
         this.rentRenewDialog = false;
         this.addRentInfoDialog = false;
+        this.editRentInfoDialog = false;
         this.sendMessageDialog = false;
         this.addHouseResourcesDialog = false;
         this.editHouseResourcesDialog = false;

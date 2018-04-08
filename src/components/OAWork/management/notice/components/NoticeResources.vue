@@ -51,7 +51,7 @@
         <el-button size="small" type="primary" @click="sendx">发布</el-button>
       </span>
     </el-dialog>
-    <Organization :organizationDialog="organizationDialog"  @close="closeOrganization"  @selectMember="coloseaa"></Organization>
+    <Organization :organizationDialog="organizationDialog" :type="type"  @close="closeOrganization"  @selectMember="coloseaa"></Organization>
   </div>
 </template>
 
@@ -73,6 +73,7 @@ export default {
       organizationDialog: false,
       saveorsendflag: false,
       lenx: 7,
+      type:'depart',
       screenshots:[],
       screensho:[],
       secondfalg:false,
@@ -85,9 +86,9 @@ export default {
         type: "",
         id: "",
         draft: "",
-        staff_id:[],
         obj: "",
-        objid: [],
+
+        departmentInfo:[],
         context: "",
         attachment: [],
         // fujian:'',
@@ -120,7 +121,11 @@ export default {
         this.form.type = val.type;
         this.form.title = val.title;
         this.form.context = val.content;
-        this.form.obj = val.department_id;
+
+        for(let i =0; i<val.department_id.length;i++){
+          this.form.obj += val.department_id[i].name+";";
+        }
+        
         this.form.id = val.id;
         this.form.attachment = val.attachment;
 
@@ -131,8 +136,7 @@ export default {
         this.form.title = "";
         this.form.context = "";
         this.form.obj = "";
-        this.form.staff_id=[];
-        this.form.objid = [];
+
         this.form.attachment = [];
         this.firstflag = true;
        
@@ -181,8 +185,6 @@ export default {
             content: this.form.context,
             id: this.form.id,
             draft: this.form.draft,
-            staff_id:this.form.staff_id,
-            department_id: this.form.objid,
             preview: this.form.preview,
             attachment: this.form.attachment
           })
@@ -227,8 +229,7 @@ export default {
             content: this.form.context,
             id: this.form.id,
             draft: this.form.draft,
-            staff_id:this.form.staff_id,
-            department_id: this.form.objid,
+            department_id: this.form.departmentInfo,
             preview: this.form.preview,
             attachment: this.form.attachment
           })
@@ -262,20 +263,10 @@ export default {
       
     },
     coloseaa(val) {
-      this.form.obj = "";
-      this.form.staff_id=[]
-      this.form.objid = [];
-      let k=0;
-      let j=0;
-      for (let i = 0; i < val.length; i++) {
-        this.form.obj += val[i].name + ";";
-        if(val[i].org!==undefined){
-          this.form.staff_id[k++]=val[i].id
+      this.form.departmentInfo=val;
+        for(let i =0; i<val.length;i++){
+          this.form.obj += val[i].name+";";
         }
-        else{
-          this.form.objid[j++]=val[i].id
-        }
-      }
     },
 
     //保存或发布校验
@@ -306,21 +297,28 @@ export default {
         });
       }
     },
-    handleImageAdded(file, Editor, cursorLocation, resetUploader) {
-      // An example of using FormData
-      // NOTE: Your key could be different such as:
-      // formData.append('file', file)
-      let formData = new FormData();
-      formData.append("image", file);
-      this.$http.post(this.address + "files", formData).then(res => {
-        let picId = res.data.data;
-        this.$http.post("picture/" + picId).then(res => {
-          // Get url from response
-          let url = res.data.data;
-          Editor.insertEmbed(cursorLocation, "image", url);
-        });
-      });
-    }
+      handleImageAdded(file, Editor, cursorLocation, resetUploader) {
+
+        let formData = new FormData();
+        formData.append('file', file);
+
+        let config = {
+          headers:{'Content-Type':'multipart/form-data'}
+        };
+        if(file.size > 1024 * 1024 * 2){
+            this.$notify.warning({
+              title:'警告',
+              message:'只能上传jpg/png文件，且不超过2M'
+            })
+        }else {
+          this.$http.post(globalConfig.server_user + 'files', formData ,config).then((res) => {
+            if(res.data.status === 'success'){
+              Editor.insertEmbed(cursorLocation, 'image', res.data.data.uri);
+            }
+          })
+        }
+
+      },
   },
 
   created: function() {}

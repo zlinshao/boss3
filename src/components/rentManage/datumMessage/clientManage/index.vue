@@ -1,27 +1,27 @@
 <template>
-  <div @click="show=false" @contextmenu="closeMenu">
-    <div id="clientContainer">
+  <div>
+    <div id="clientContainer" @click="show=false" @contextmenu="closeMenu">
 
       <div class="highRanking">
         <div class="highSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input v-model="formInline.name" placeholder="搜索">
-                <el-select v-model="formInline.select" clearable  slot="prepend" placeholder="请选择">
+              <el-input v-model="formInline.search" placeholder="搜索" @clear="search" clearable  >
+                <!-- <el-select v-model="formInline.select" clearable style="width:100px"  slot="prepend" placeholder="请选择">
                   <el-option label="客户" value="1"></el-option>
                   <el-option label="负责人" value="2"></el-option>
                   <el-option label="用户电话" value="3"></el-option>
                   <el-option label="证件号" value="4"></el-option>
-                </el-select>
-                <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
+                </el-select> -->
+                <el-button slot="append" type="primary" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
-            <el-form-item>
+            <!-- <el-form-item>
               <el-button type="success">导出房源</el-button>
-            </el-form-item>
+            </el-form-item> -->
           </el-form>
         </div>
 
@@ -34,85 +34,19 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">客户状态</div>
+                    <div class="el_col_label">选择负责人</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="formInline.house" clearable placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">客户意向</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select v-model="formInline.a" clearable placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
-            <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">客户身份</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select v-model="formInline.house" clearable placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">客户来源</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select v-model="formInline.a" clearable placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
-            <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">个人/中介</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select v-model="formInline.house" clearable placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                      </el-select>
+                      <el-input  v-model="staff_name" @focus="selectDep('staff')" placeholder="请选择负责人" readonly>
+                      </el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
               </el-col>
             </el-row>
             <div class="btnOperate">
-              <el-button size="mini" type="primary">搜索</el-button>
+              <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
               <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
             </div>
@@ -121,14 +55,15 @@
       </div>
       <div class="main">
         <div class="tableBox">
-          <div class="myTable" @contextmenu="houseHeadMenu($event)">
+          <div class="myTable">
             <el-table
               :data="tableData"
-              @row-click="clickTable"
+              @row-dblclick="dblClickTable"
               @row-contextmenu='openContextMenu'
+              @row-click="clickTable"
               style="width: 100%">
               <el-table-column
-                prop="date"
+                prop="created_at"
                 label="录入时间">
               </el-table-column>
               <el-table-column
@@ -136,48 +71,31 @@
                 label="客户名称">
               </el-table-column>
               <el-table-column
-                prop="province"
-                label="尊称">
-              </el-table-column>
-              <el-table-column
-                prop="city"
+                prop="phone"
                 label="手机号">
               </el-table-column>
               <el-table-column
-                prop="city"
-                label="地址客户意向">
-              </el-table-column>
-              <el-table-column
-                prop="zip"
-                label="跟进进度">
-              </el-table-column>
-              <el-table-column
-                prop="date"
-                label="来源">
-              </el-table-column>
-              <el-table-column
-                prop="date"
+                prop="identity"
                 label="客户身份">
               </el-table-column>
               <el-table-column
-                prop="date"
+                prop="idcard"
                 label="证件号">
               </el-table-column>
               <el-table-column
-                prop="date"
                 label="个人/中介">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.is_agent == 0">个人</span>
+                  <span v-if="scope.row.is_agent == 1">中介</span>
+                </template>                 
               </el-table-column>
               <el-table-column
-                prop="date"
+                prop="detail.name"
                 label="负责人">
               </el-table-column>
               <el-table-column
                 prop="date"
                 label="所属部门">
-              </el-table-column>
-              <el-table-column
-                prop="date"
-                label="置顶">
               </el-table-column>
             </el-table>
           </div>
@@ -186,293 +104,195 @@
               <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[10, 20, 30, 40]"
-                :page-size="10"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :current-page="formInline.page"
+                :page-size="12"
+                layout="total, prev, pager, next, jumper"
+                :total="parseInt(totalNumber)">
               </el-pagination>
             </div>
           </div>
         </div>
-        <div class="myDetail" @contextmenu="detailMenu($event)">
-          <el-tabs type="border-card">
-            <el-tab-pane label="客户资料">
-              <div class="content">
-                <table class="clientDetail">
-                    <tr>
-                      <td>客户姓名</td>
-                      <td></td>
-                      <td>登记时间</td>
-                      <td></td>
-                      <td>登记人</td>
-                      <td></td>
-                      <td>跟进时间：</td>
-                    </tr>
-                  <tr>
-                    <td>客户姓名</td>
-                    <td></td>
-                    <td>登记时间</td>
-                    <td></td>
-                    <td>登记人</td>
-                    <td></td>
-                    <td>跟进人：</td>
-                  </tr>
-                  <tr>
-                    <td>客户姓名</td>
-                    <td></td>
-                    <td>登记时间</td>
-                    <td></td>
-                    <td>登记人</td>
-                    <td></td>
-                    <td>跟进内容：</td>
-                  </tr>
-                </table>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="跟进记录">
 
-            </el-tab-pane>
-          </el-tabs>
-        </div>
       </div>
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-               @clickOperate="clickEvent"></RightMenu>
-    <Remind :remindDialog="remindDialog" @close="closeRemind"></Remind>
+               @clickOperate="clickEvent"></RightMenu>    
+    <Remind :remindDialog="remindDialog" :sendId="sendId" :totalNumber="totalNumber" :sendName="sendName" @close="closeRemind"></Remind>
+    <CustomerDetail :customerDetailDialog="customerDetailDialog" :activeId="activeId" @close="closeModal"></CustomerDetail>
+    <Organization :organizationDialog="organizeDialog" :length="length" :type="type" 
+                  @selectMember="selectMember"></Organization>
   </div>
 </template>
 
 <script>
-  import RightMenu from '../../../common/rightMenu.vue'
-  import Remind from './components/remind.vue'
-  export default {
-    name: 'hello',
-    components: {RightMenu,Remind},
-    data () {
-      return {
-        rightMenuX: 0,
-        rightMenuY: 0,
-        show: false,
-        lists: [],
-        /***********/
-        formInline: {
-          name: '',
-          house: ''
-        },
-        tableData: [
-          {
-            date: '2016-05-03',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-          {
-            date: '2016-05-02',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-          {
-            date: '2016-05-04',
-            name: '王小虎',
-            province: '上海',
-            city: '普陀区',
-            address: '上海市普陀区金沙江路 1518 弄',
-            zip: 200333
-          },
-        ],
-        currentPage: 1,
-        options: [
-          {
-            value: '选项1',
-            label: '黄金糕'
-          }, {
-            value: '选项2',
-            label: '双皮奶'
-          }, {
-            value: '选项3',
-            label: '蚵仔煎'
-          }, {
-            value: '选项4',
-            label: '龙须面'
-          }, {
-            value: '选项5',
-            label: '北京烤鸭'
-          }],
+import RightMenu from "../../../common/rightMenu.vue";
+import Remind from "./components/remind.vue";
+import CustomerDetail from "./components/customerDetail.vue";
+import Organization from "../../../common/organization.vue";
+export default {
+  name: "hello",
+  components: { RightMenu,Organization, Remind, CustomerDetail },
+  data() {
+    return {
+      rightMenuX: 0,
+      rightMenuY: 0,
+      show: false,
+      lists: [],
+      /***********/
+      //模态框
+      organizeDialog: false,
+      type:'',
+      formInline: {
+        search: "",
+        limit: 12,
+        page: 1 ,
+        user_id:''
+      },
+      staff_name:'',
+      sendId: "",
+      sendName:"",
+      totalNumber: 0,
+      tableData: [],
+      length:"",
 
-        //模态框
-        instructionDialog: false,
-        remindDialog:false,
-        isHigh:false,
+      //模态框
+      isHigh: false,
+      remindDialog: false,
+      customerDetailDialog: false,
+      activeId: ""
+    };
+  },
+  mounted() {
+    this.getCustomer();
+  },
+  methods: {
+    handleSizeChange(val) {
+      //console.log(`每页 ${val} 条`);
+    },
+    handleCurrentChange(val) {
+      //console.log(`当前页: ${val}`);
+      this.formInline.page = val;
+      this.getCustomer();
+    },
+    clickTable(row, event, column) {
+      //console.log(row, event, column)
+    },
+    closeRemind() {
+      this.remindDialog = false;
+    },
+    highGrade() {
+      this.isHigh = !this.isHigh;
+    },
+    resetting() {
+      this.formInline= {
+        search: "",
+        limit: 12,
+        page: 1 ,
+        user_id:''
+      }
+      this.staff_name= '';
+         this.sendId = "";
+        this.sendName = "";     
+    },
+    // 人资搜索
+    selectDep(val) {
+      this.organizeDialog = true;
+      this.type = val;
+      this.length = 1;
+    },
+    // 确认部门
+    selectMember(val) {
+      this.organizeDialog = false;
+      if (val[0].hasOwnProperty("avatar")) {
+        this.staff_name = val[0].name;
+        this.formInline.user_id = val[0].id;
+        this.sendId = val[0].id;
+        this.sendName = val[0].name;
       }
     },
+    //右键
+    openContextMenu(row, event) {
+      console.log(row)
+      this.lists = [
+        { clickIndex: "remindDialog", headIcon: "el-icon-bell", label: "提醒" }
+      ];
+      this.contextMenuParam(event);
+    },
 
-    methods: {
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      },
-      clickTable(row, event, column){
-        console.log(row, event, column)
-      },
-      //房屋右键
-      openContextMenu(row, event){
-        this.lists = [
-          {clickIndex: 'remindDialog', headIcon: 'el-icon-bell', label: '提醒',},
-          {clickIndex: '', headIcon: 'el-icon-edit-outline', label: '增加沟通日志',},
-          {clickIndex: 'stick', headIcon: 'el-icons-fa-arrow-up', label: '置顶',},
-        ];
-        this.contextMenuParam(event);
-      },
-      //合同表头右键
-      houseHeadMenu(e){
-        this.lists = [
-          {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
-        ];
-        this.contextMenuParam(event);
-      },
+    //右键回调时间
+    clickEvent(index) {
+      this.show = false;
+      this.remindDialog = true;
+    },
+    closeRemind() {
+      this.remindDialog = false;
+    },
+    //关闭右键菜单
+    closeMenu() {
+      this.show = false;
+    },
 
-      //详情表头右键
-      detailMenu(e){
-        console.log(e.target.className)
-        if (e.target.className.indexOf('el-tabs') > -1) {
-          this.lists = [
-            {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
-          ];
-          this.contextMenuParam(event);
-        }
-      },
-
-      //右键回调时间
-      clickEvent (index) {
-        switch (index){
-          case 'stick' :
-            this.$confirm('您确定将其置顶吗', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              this.$message({
-                type: 'success',
-                message: '置顶成功!'
-              });
-            }).catch(() => {
-              this.$message({
-                type: 'info',
-                message: '已取消置顶'
-              });
-            });
-            break;
-          case 'remindDialog':
-              this.remindDialog = true;
-              break;
-        }
-      },
-      closeRemind(){
-          this.remindDialog = false;
-      },
-      //关闭右键菜单
-      closeMenu(){
-        this.show = false;
-      },
-
-      //右键参数
-      contextMenuParam(event){
-        //param: user right param
-        let e = event || window.event;	//support firefox contextmenu
-        this.show = false;
-        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
-        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
-        event.preventDefault();
-        event.stopPropagation();
-        this.$nextTick(() => {
-          this.show = true
-        })
-      },
-      highGrade(){
-        this.isHigh = !this.isHigh;
-      },
-      resetting(){
-
-      }
+    //右键参数
+    contextMenuParam(event) {
+      //param: user right param
+      let e = event || window.event; //support firefox contextmenu
+      this.show = false;
+      this.rightMenuX =
+        e.clientX +
+        document.documentElement.scrollLeft -
+        document.documentElement.clientLeft;
+      this.rightMenuY =
+        e.clientY +
+        document.documentElement.scrollTop -
+        document.documentElement.clientTop;
+      event.preventDefault();
+      event.stopPropagation();
+      this.$nextTick(() => {
+        this.show = true;
+      });
+    },
+    //客户信息
+    getCustomer() {
+      this.$http
+        .get(globalConfig.server + "core/customer", { params: this.formInline })
+        .then(res => {
+          if (res.data.code === "10000") {
+            this.tableData = res.data.data.data;
+            this.totalNumber = res.data.data.total;
+          }
+        });
+    },
+    search() {
+      this.formInline.page = 1;
+      this.isHigh = false;
+      this.getCustomer();
+    },
+    dblClickTable(row, event) {
+      this.activeId = row.id;
+      this.customerDetailDialog = true;
+    },
+    closeModal(val) {
+      this.customerDetailDialog = false;
     }
   }
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped="">
-  #clientContainer {
-    .main {
-      font-size: 12px;
-      .tableBox {
-        border: 1px solid #dfe6fb;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .12), 0 0 6px 0 rgba(0, 0, 0, .04);
-        .tableBottom {
-          padding: 8px;
-          display: flex;
-          justify-content: flex-end;
-        }
-      }
-
-      .myDetail {
-        margin-bottom: 15px;
-        .el-tabs {
-          border: 1px solid #d4f0de;
-          .el-tabs__header {
-            background-color: #d4f0de;
-          }
-          .el-tabs__content {
-            .el-tab-pane {
-              .content {
-                min-height: 100px;
-                .clientDetail{
-                  width: 100%;
-                  border-collapse: collapse;
-                  tr{
-                    td{
-                      border: 1px solid #ebeef5;
-                      padding: 8px 0;
-                      color: #606266;
-                      text-align: center;
-                      &:nth-child(1) {
-                        width: 8%;
-                      }
-                      &:nth-child(2) {
-                        width: 12%;
-                      }
-                      &:nth-child(3) {
-                        width: 8%;
-                      }
-                      &:nth-child(4) {
-                        width: 12%;
-                      }
-                      &:nth-child(5) {
-                        width: 8%;
-                      }
-                      &:nth-child(6) {
-                        width: 12%;
-                      }
-                      &:nth-child(7) {
-                        width: 40%;
-                        text-align: left;
-                        padding-left: 8px
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+#clientContainer {
+  .main {
+    font-size: 12px;
+    .tableBox {
+      border: 1px solid #dfe6fb;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.12), 0 0 6px 0 rgba(0, 0, 0, 0.04);
+      .tableBottom {
+        padding: 8px;
+        display: flex;
+        justify-content: flex-end;
       }
     }
   }
+}
 </style>

@@ -133,7 +133,8 @@
                 </div>
               </div>
             </div>
-            <div class="message">
+            <!--业务员-->
+            <div class="message" v-show="false">
               <div class="achievement">
                 <div class="titles">
                   <div>PFREORMANCE MANAGEMENT</div>

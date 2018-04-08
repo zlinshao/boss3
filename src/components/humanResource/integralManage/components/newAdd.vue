@@ -10,20 +10,20 @@
             <!--</el-form-item>-->
             <!--</el-col>-->
             <el-col :span="24">
-              <el-form-item label="姓名" v-if="newAdd === '新增' ">
+              <el-form-item label="姓名" v-if="newAdd === '新增' " required >
                 <el-input readonly="" v-model="form.sname" @focus="openOrganizeModal"></el-input>
               </el-form-item>
-              <el-form-item label="姓名" v-if="newAdd === '修改' ">
+              <el-form-item label="姓名" v-if="newAdd === '修改' " required>
                  <el-input  placeholder="请输入内容" readonly  v-model="form.sname"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="24">
-              <el-form-item label="部门">
+              <el-form-item label="部门" required>
                 <el-input placeholder="请输入内容" readonly v-model="form.dname"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="10">
-              <el-form-item label="积分项">
+              <el-form-item label="积分项" required>
                 <el-select v-model="form.minus" @change="integral" clearable="" placeholder="请选择积分项">
                   <el-option label="得分项目" value="0"></el-option>
                   <el-option label="失分项目" value="1"></el-option>

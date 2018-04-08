@@ -556,24 +556,24 @@
             <el-row>
               <el-col :span="8">
                   <el-form-item label="回访时间">
-                  <div class="content">仙居雅苑</div>
+                  <div class="content"></div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="回访结果">
-                  <div class="content">玄武湖125-5号</div>
+                  <div class="content"></div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="回访满意度">
-                  <div class="content">8-104</div>
+                  <div class="content"></div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="24">
                 <el-form-item label="备注">
-                  <div class="content">仙居雅苑</div>
+                  <div class="content"></div>
                 </el-form-item>
               </el-col>
             </el-row>
