@@ -115,6 +115,7 @@ export default {
         remark: ""
       },
       otherType: false,
+      midobj:"",
       integralList: []
     };
   },
@@ -213,7 +214,10 @@ export default {
 
       if (this.newAdd == "新增") {
       if(typeof (this.form.name) === 'string'){
-          this.form.name=this.form.credit_item_id
+          this.midobj=this.form.credit_item_id
+      }
+      else{
+        this.midobj = this.form.name
       }
         if (this.form.name === "other") {
           this.$http
@@ -222,7 +226,7 @@ export default {
               gain_or_lose: Number(this.form.minus),
               amount: this.form.amount_str,
               name: this.form.integralPro,
-              credit_item_id: this.form.name,
+              credit_item_id: this.midobj,
               remark: this.form.remark
             })
             .then(res => {
@@ -245,7 +249,7 @@ export default {
           this.$http
             .post(globalConfig.server + "credit/manage", {
               staff_id: this.form.staff_id,
-              credit_item_id: this.form.name,
+              credit_item_id: this.midobj,
               remark: this.form.remark
             })
             .then(res => {
@@ -267,7 +271,10 @@ export default {
         }
       } else {
       if(typeof (this.form.name) === 'string'){
-          this.form.name=this.form.credit_item_id
+          this.midobj=this.form.credit_item_id
+      }
+      else{
+        this.midobj = this.form.name
       }
         if (this.form.name === "other") {
           this.$http
@@ -277,7 +284,7 @@ export default {
               gain_or_lose: Number(this.form.minus),
               amount: this.form.amount_str,
               name: this.form.integralPro,
-              credit_item_id: this.form.name,
+              credit_item_id: this.midobj,
               remark: this.form.remark
             })
             .then(res => {
@@ -299,7 +306,7 @@ export default {
           this.$http
             .put(globalConfig.server + "credit/manage/" + this.form.id, {
               staff_id: this.form.staff_id,
-              credit_item_id: this.form.name,
+              credit_item_id: this.midobj,
               remark: this.form.remark
             })
             .then(res => {

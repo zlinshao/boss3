@@ -21,7 +21,7 @@
 
             <el-col :span="24">
               <el-form-item label="对应积分">
-                <el-input placeholder="请输入内容"  v-model="form.amount"></el-input>
+                <el-input placeholder="请输入内容" v-model="form.amount" @change="checkNo(form.amount)"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -157,7 +157,15 @@ export default {
         minus: "",
         remark:""
       }
-    }
+    },
+        checkNo(value){
+        let reg = /^[1-9]\d*$/;
+          if (value) {
+            if (value > 999999 || new  RegExp(reg).test(value) == false) {
+            this.form.amount =''
+            }
+          }
+        }
   }
 };
 </script>

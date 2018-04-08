@@ -53,13 +53,13 @@
             </el-table-column>
             <el-table-column label="单价（元）">
               <template slot-scope="scope">
-                <el-input v-model="form.price[scope.$index]" v-on:input="pricechange(scope.$index)"
+                <el-input v-model="form.price[scope.$index]" @change="checkNo(form.price[scope.$index],index)" v-on:input="pricechange(scope.$index)"
                           placeholder=""></el-input>
               </template>
             </el-table-column>
             <el-table-column label="数量">
               <template slot-scope="scope">
-                <el-input v-model="form.num[scope.$index]" v-on:input="numchange(scope.$index)"
+                <el-input v-model="form.num[scope.$index]" @change="checkNo2(form.num[scope.$index],index)" v-on:input="numchange(scope.$index)"
                           placeholder=""></el-input>
               </template>
             </el-table-column>
@@ -320,7 +320,25 @@
             this.goods = res.data.data;
           }
         })
-      }
+      },
+        checkNo(value,index){
+
+        let reg = /^[1-9]\d*$/;
+          if (value) {
+            if (value > 999999 || new  RegExp(reg).test(value) == false) {
+            this.form.price[index] =''
+            }
+          }
+        },
+        checkNo2(value,index){
+
+        let reg = /^[1-9]\d*$/;
+          if (value) {
+            if (value > 999999 || new  RegExp(reg).test(value) == false) {
+            this.form.num[index] =''
+            }
+          }
+        }
     },
     created: function () {
 
