@@ -1,37 +1,83 @@
 <template>
     <div>
       <el-table
-        :data="rentingData"
+        :data="tableData"
         style="width: 100%">
         <el-table-column
-          prop="contract_num"
-          label="服务态度">
-        </el-table-column>
-        <el-table-column
-          prop="address"
+          prop="simple_staff.real_name"
           label="回访人">
         </el-table-column>
         <el-table-column
-          prop="house_type"
+          prop="create_time"
           label="回访时间">
         </el-table-column>
         <el-table-column
-          prop="deposit"
-          label="回访状态">
+          prop="content"
+          label="回访内容">
         </el-table-column>
       </el-table>
+      <div class="pagination">
+        <el-pagination
+          @current-change="currentChange"
+          :current-page="params.page"
+          :page-size="3"
+          layout="total, prev, pager, next, jumper"
+          :total="totalNumber">
+        </el-pagination>
+      </div>
     </div>
 </template>
 
 <script>
     export default {
-        name: 'hello',
-        data () {
-            return {
-              rentingData:[],
-
-            }
+      name: 'hello',
+      props:['collectContractId','activeName'],
+      data () {
+        return {
+          tableData:[],
+          params:{
+            pages: 1,
+            limit: 3,
+            category:1,
+            contract_id : ''
+          },
+          isRequestData:false,
+          totalNumber:0,
         }
+      },
+      watch:{
+        collectContractId(val){
+          this.params.contract_id = val;
+          this.isRequestData = false;
+          if(this.activeName === 'CollectReturnVisitRecordTab'){
+            this.getData();
+            this.isRequestData = true;
+          }
+        },
+        activeName(val){
+          if(!this.isRequestData && val=== 'CollectReturnVisitRecordTab' && this.collectContractId){
+            this.getData();
+            this.isRequestData = true;
+          }
+        }
+      },
+      methods:{
+        getData(){
+          this.$http.get(globalConfig.server+'contract/feedback',{params:this.params}).then((res) => {
+            if(res.data.code === '20000'){
+              this.tableData = res.data.data.data;
+              this.totalNumber = res.data.data.count;
+            }else {
+              this.tableData = [];
+              this.totalNumber = 0;
+            }
+          })
+        },
+        currentChange(val) {
+          this.params.page = val;
+          this.getData();
+        } ,
+      }
     }
 </script>
 

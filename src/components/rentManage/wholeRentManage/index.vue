@@ -324,10 +324,10 @@
               <RentMemorandumTab></RentMemorandumTab>
             </el-tab-pane>
             <el-tab-pane label="回访记录(收)" name="CollectReturnVisitRecordTab">
-              <CollectReturnVisitRecordTab></CollectReturnVisitRecordTab>
+              <CollectReturnVisitRecordTab :collectContractId="collectContractId" :activeName="activeName"></CollectReturnVisitRecordTab>
             </el-tab-pane>
             <el-tab-pane label="回访记录(租)" name="RentReturnVisitRecordTab">
-              <RentReturnVisitRecordTab></RentReturnVisitRecordTab>
+              <RentReturnVisitRecordTab :rentContractId="rentContractId" :activeName="activeName"></RentReturnVisitRecordTab>
             </el-tab-pane>
             <el-tab-pane label="跟进记录(收)" name="CollectFollowRecordTab">
               <CollectFollowRecordTab :collectContractId="collectContractId" :activeName="activeName"></CollectFollowRecordTab>
@@ -357,7 +357,7 @@
 
     <!--租客调房-->
     <RentChangeRoom :rentChangeRoomDialog="rentChangeRoomDialog" :rentContractId="rentContractId" :collectHouseId="collectHouseId"
-                    :collectContractId="collectContractId" @close="closeModal"></RentChangeRoom>
+                    :rentContractInfo="rentContractInfo" @close="closeModal"></RentChangeRoom>
     <!--房屋转租-->
     <Sublease :subleaseDialog="subleaseDialog" :rentContractId="rentContractId" :collectHouseId="collectHouseId"
               :collectContractId="collectContractId" @close="closeModal"></Sublease>
@@ -382,7 +382,8 @@
     <ReturnVisit :returnVisitDialog="returnVisitDialog" @close="closeModal"></ReturnVisit>
     <TopForm :topFormSetDialog="topFormSetDialog" @close="closeModal"></TopForm>
     <Setting :settingDialog="settingDialog" @close="closeModal"></Setting>
-    <visit-record :visitRecordDialog="visitRecordDialog" @close="closeModal"></visit-record>
+    <visit-record :visitRecordDialog="visitRecordDialog" :contractId="contractOperateId"
+                  :category="contractModule" @close="closeModal"></visit-record>
 
 
   </div>
@@ -811,7 +812,7 @@
           case 'addRentRepairDialog':     //租客保修
             this.addRentRepairDialog = true;
             break;
-          case 'rentChangeRoomDialog':     //租客换房
+          case 'rentChangeRoomDialog':     //租客调房
             this.rentChangeRoomDialog = true;
             break;
           case 'subleaseDialog':     //转租

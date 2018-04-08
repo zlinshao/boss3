@@ -1,6 +1,6 @@
 <template>
   <div id="addHouseResources">
-    <el-dialog title="租客续约" :visible.sync="rentRenewDialogVisible" width="60%">
+    <el-dialog title="房屋转租" :visible.sync="subleaseDialogVisible" width="60%">
       <div>
         <el-tabs v-model="activeName">
           <el-tab-pane label="房源信息" name="first">
@@ -459,7 +459,7 @@
         </el-tabs>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="rentRenewDialogVisible = false">取 消</el-button>
+        <el-button size="small" @click="subleaseDialogVisible = false">取 消</el-button>
         <!--<el-button size="small" type="primary" @click="confirmAdd(1)">草 稿</el-button>-->
         <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
@@ -477,10 +477,10 @@
 
   export default {
     components: {UpLoad, VillageModal, Organization},
-    props: ['rentRenewDialog', 'collectContractId', 'rentContractId', 'collectHouseId'],
+    props: ['subleaseDialog', 'collectContractId', 'rentContractId', 'collectHouseId'],
     data() {
       return {
-        rentRenewDialogVisible: false,
+        subleaseDialogVisible: false,
         activeName: 'first',
         isClear: false,
         villageDialog: false,
@@ -594,10 +594,10 @@
       };
     },
     watch: {
-      rentRenewDialog(val){
-        this.rentRenewDialogVisible = val
+      subleaseDialog(val){
+        this.subleaseDialogVisible = val
       },
-      rentRenewDialogVisible(val){
+      subleaseDialogVisible(val){
         if (!val) {
           this.$emit('close');
           this.isClear = false;
@@ -832,10 +832,10 @@
         this.payWayChangeAmount--;
       },
       //jine bianhua
-      deleteMoneyTableChange(){
+      addMoreMoneyTableChange(item){
         this.moneyTableChangeAmount++;
       },
-      addMoreMoneyTableChange(item){
+      deleteMoneyTableChange(){
         this.moneyWayArray.splice(item, 1);
         this.moneySepArray.splice(item, 1);
         this.moneyTableChangeAmount--;
@@ -927,7 +927,7 @@
           this.$http.post(globalConfig.server + 'lease/rent', this.params).then((res) => {
             if (res.data.code === '61110') {
               this.clearData();
-              this.rentRenewDialogVisible = false;
+              this.subleaseDialogVisible = false;
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
