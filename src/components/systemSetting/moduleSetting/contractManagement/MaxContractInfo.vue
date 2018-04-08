@@ -164,6 +164,7 @@ export default {
         this.getInfo()
       },
       openModalDialog(){
+        this.isHigh = false;
         this.addMaxContracDialog =true;
       },
       closeModal(val){

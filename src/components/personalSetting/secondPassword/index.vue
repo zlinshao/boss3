@@ -26,7 +26,7 @@
           <div class="nowrap" style="margin-bottom: 12px;">
             <!--<div>手机号码</div>-->
             <div>
-              <el-input size="mini" v-model="form.phone" clearable disabled="" placeholder="请输入手机号码"></el-input>
+              <el-input size="mini" v-model="form.phone"  disabled="" placeholder="请输入手机号码"></el-input>
             </div>
           </div>
           <div class="validate">
@@ -63,7 +63,7 @@
       <el-row>
         <el-col :span="4">&nbsp;</el-col>
         <el-col :span="20">
-          <el-button type="primary" @click="savesendinfo" size="small" style="padding: 10px 140px;">保存</el-button>
+          <el-button type="primary" @click="savesendinfo" :disabled="!checkList || !form.sms_code || !form.passwordnew || !form.passwordok" size="small" style="padding: 10px 140px;">保存</el-button>
         </el-col>
       </el-row>
   </div>

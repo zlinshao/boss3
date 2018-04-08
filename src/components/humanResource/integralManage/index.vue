@@ -107,6 +107,10 @@
               prop="name"
               label="项目名称">
             </el-table-column>
+            <el-table-column
+              prop="amount_str"
+              label="对应分值">
+            </el-table-column>
             <!--<el-table-column-->
               <!--prop="remark"-->
               <!--label="备注">-->
@@ -253,6 +257,7 @@ export default {
           if (res.data.code === "30310") {
             this.totalNumber = res.data.num;
             this.tableData = res.data.data;
+            console.log(res.data.data)
             // this.remark = res.data.data.last_remark;
             // res.data.data.last_remark[0].content = this.remark;
           } else {

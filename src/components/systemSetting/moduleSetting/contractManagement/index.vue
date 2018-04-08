@@ -21,7 +21,7 @@
             </el-form-item>  
           </el-row>
           <el-row>
-            <el-col :span="2" style="color:#409EFF">合同领取上限</el-col>
+            <el-col :span="2" style="color:#409EFF">总合同领取上限</el-col>
             <el-col :span="2"><el-button size="mini" @click="maxcontractInfo()" type="primary">编辑</el-button></el-col>
           </el-row>
         </el-form>

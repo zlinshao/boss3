@@ -264,6 +264,7 @@ export default {
       
     },
     coloseaa(val) {
+      this.form.obj=""
       this.form.departmentInfo=val;
         for(let i =0; i<val.length;i++){
           this.form.obj += val[i].name+";";
