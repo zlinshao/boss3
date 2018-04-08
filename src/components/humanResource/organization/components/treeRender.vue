@@ -50,11 +50,11 @@
 
 <style scoped="">
 
-  .totalNumber{
-    font-family: 'Impact', sans-serif;
-    color: #ccc;
-    font-size: 14px;
-  }
+  /*.totalNumber{*/
+    /*font-family: 'Impact', sans-serif;*/
+    /*color: #ccc;*/
+    /*font-size: 14px;*/
+  /*}*/
 	.tree-expand{
 		overflow:hidden;
     display: inline-block;

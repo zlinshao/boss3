@@ -413,6 +413,7 @@
                   countDown.forEach((item) => {
                     if (array[i].dict_id == item.id) {
                       this.defaultTime = this.Countdown = Number(item.dictionary_name);
+                      localStorage.setItem('countdownTime',item.id);
                       this.startCount();
                     }
                   })

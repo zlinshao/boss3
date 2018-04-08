@@ -50,12 +50,18 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="门牌地址">
-                  <div class="content">{{houseInfo.doorplate_address}}</div>
+                  <div class="content">
+                    {{houseInfo.building}}-{{houseInfo.unit}}-{{houseInfo.doorplate}}
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="房型">
-                  <div class="content">{{houseInfo.house_type}}</div>
+                  <div class="content" v-if="houseInfo.house_type">
+                    <span>{{houseInfo.house_type[0]}}</span>室
+                    <span>{{houseInfo.house_type[1]}}</span>厅
+                    <span>{{houseInfo.house_type[2]}}</span>卫
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -77,7 +83,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="装修">
-                  <div class="content">{{houseInfo.decorate}}</div>
+                  <div class="content">{{matchDictionary(houseInfo.decorate)}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -94,99 +100,59 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="房屋类型">
-                  <div class="content">{{houseInfo.property_type}}</div>
+                  <div class="content">{{matchDictionary(houseInfo.property_type)}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
                 <el-form-item label="房屋特色">
-                  <div class="content">{{houseInfo.property_feature}}</div>
+                  <div class="content">{{matchDictionary(houseInfo.house_feature)}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="房屋照片">
-                  <div class="image">
-                    <img src="../../assets/images/head.jpg" v-for="item in 8">
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <!--<el-row>-->
-              <!--<el-col :span="24">-->
-                <!--<el-form-item label="备注">-->
-                  <!--<div class="content">仙居雅苑</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-            <!--</el-row>-->
           </el-form>
         </div>
 
         <div id="ownerId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
-          <div class="title">租客</div>
+          <div class="title">租客信息</div>
         </div>
 
         <div class="ownerInfo">
           <el-form size="small" label-width="180px">
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="房东姓名">
-                  <div class="content">仙居雅苑</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="尊称">
-                  <div class="content">玄武湖125-5号</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="附属房东">
-                  <div class="content">8-104</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="联系电话">
-                  <div class="content">仙居雅苑</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="证件类型">
-                  <div class="content">玄武湖125-5号</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="证件号码">
-                  <div class="content">8-104</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="国籍">
-                  <div class="content">仙居雅苑</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="房屋照片">
-                  <div class="image">
-                    <img src="../../assets/images/head.jpg" v-for="item in 3">
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="备注">
-                  <div class="content">仙居雅苑</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
+            <div v-for="(item,index) in customersInfo">
+              <div class="title" style="margin-left: 150px" v-if="index>0">附属租客信息（{{index}}）</div>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="租客姓名">
+                    <div class="content">{{item.name}}</div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="尊称">
+                    <div class="content" v-if="item.sex==1">先生</div>
+                    <div class="content" v-else="">女士</div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="联系电话">
+                    <div class="content">{{item.phone}}</div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="证件类型">
+                    <div class="content">{{matchDictionary(item.idtype)}}</div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="证件号码">
+                    <div class="content">{{item.idcard}}</div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </div>
           </el-form>
         </div>
 
@@ -198,7 +164,8 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="订单性质">
-                  <div class="content">{{contractInfo.type}}</div>
+                  <div class="content" v-if="contractInfo.type">公司单</div>
+                  <div class="content" v-else="">非公司单</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -230,105 +197,44 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <!--<el-row>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="空置时长">-->
-                  <!--<div class="content">{{contractInfo.vacancy}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="空置开始时间">-->
-                  <!--<div class="content">{{contractInfo.begin_date}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="空置结束时间">-->
-                  <!--<div class="content">{{contractInfo.vacancy_end_date}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-            <!--</el-row>-->
-
-            <!--<el-row>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="空置期安置方式">-->
-                  <!--<div class="content">{{contractInfo.vacancy}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="保修期">-->
-                  <!--<div class="content">{{contractInfo.warranty_month}}{{contractInfo.warranty_day}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="订单来源">-->
-                  <!--<div class="content">{{contractInfo.from}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-            <!--</el-row>-->
-
             <el-row>
               <el-col :span="8">
-                <el-form-item label="押金">
+                <el-form-item label="押金(元)">
                   <div class="content">{{contractInfo.deposit}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="月单价">
-                  <div class="content">{{contractInfo.price}}</div>
+                <el-form-item label="月单价(元)">
+                  <div class="content">
+                    <span v-for="(item,index) in contractInfo.price">
+                      {{item.price}}元，{{item.period}}个月 <span v-show="index<contractInfo.price-1">;</span>
+                    </span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="付款方式">
-                  <div class="content">{{contractInfo.pay_way}}</div>
+                  <div class="content">
+                    <span v-for="(item,index) in contractInfo.pay_way">
+                      {{item.pay_way}}元，{{item.period}}个月 <span v-show="index<contractInfo.pay_way-1">;</span>
+                    </span>
+                  </div>
                 </el-form-item>
               </el-col>
             </el-row>
-            <!--<el-row>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="第一次打房租时间">-->
-                  <!--<div class="content">{{contractInfo.pay_first_date}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="第二次打房租时间">-->
-                  <!--<div class="content">{{contractInfo.pay_second_date}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="收款人姓名">-->
-                  <!--<div class="content">{{contractInfo.account_name}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-            <!--</el-row>-->
-
-            <!--<el-row>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="收款人与房东关系">-->
-                  <!--<div class="content">{{contractInfo.account_name}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="汇款方式">-->
-                  <!--<div class="content">{{contractInfo.purchase_way}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="账号">-->
-                  <!--<div class="content">{{contractInfo.account}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-            <!--</el-row>-->
-
             <el-row>
               <el-col :span="8">
                 <el-form-item label="总收入金额">
-                  <div class="content">{{contractInfo.bank}}</div>
+                  <div class="content">{{contractInfo.money_sum}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="金额（付款方式）">
-                  <div class="content">{{contractInfo.subbranch}}</div>
+                <el-form-item label="金额（支付方式）">
+                  <div class="content">
+                     <span v-for="(item,index) in contractInfo.money_table">
+                      {{item.money_sep}}元，{{matchDictionary(item.money_way)}} <span v-show="index<contractInfo.money_table-1">;</span>
+                    </span>
+                  </div>
                 </el-form-item>
               </el-col>
 
@@ -350,51 +256,56 @@
                 </el-form-item>
               </el-col>
             </el-row>
+
             <el-row>
               <el-col :span="8">
-                <el-form-item label="物业费">
+                <el-form-item label="物业费(元)">
                   <div class="content">{{contractInfo.property}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="物业费付款方">
-                  <div class="content">{{contractInfo.property}}</div>
+                  <div class="content">{{matchDictionary(contractInfo.property)}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="水表底数">
+                <el-form-item label="水表底数(度)">
                   <div class="content">{{contractInfo.property_payer}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="电表底数">
-                  <div class="content">{{contractInfo.electricity_peak+contractInfo.electricity_vally}}</div>
+                <el-form-item label="电表底数(度)">
+                  <div class="content">
+                    <el-col :span="12">峰：{{contractInfo.electricity_peak}}</el-col>
+                    <el-col :span="12">谷：{{contractInfo.electricity_valley}}</el-col>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="气表底数">
+                <el-form-item label="气表底数(度)">
                   <div class="content">{{contractInfo.gas}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="物业及公摊费用">
-                  <div class="content">{{contractInfo.public}}</div>
+                <el-form-item label="物业及公摊费用(元)">
+                  <div class="content">{{contractInfo.public_fee}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
+
 
             <el-row>
 
               <el-col :span="8">
                 <el-form-item label="开单人">
-                  <div class="content">{{contractInfo.staff_name}}</div>
+                  <div class="content">{{contractInfo.staff_name}}</div>；
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="负责人">
-                  <div class="content">{{contractInfo.leader_name}}</div>
+                <el-form-item label="所属部门">
+                  <div class="content">{{contractInfo.department_name}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -415,7 +326,7 @@
               <el-col :span="24">
                 <el-form-item label="合同照片">
                   <div class="image">
-                    <img src="../../assets/images/head.jpg" v-for="item in 8">
+                    <img v-for="(value,key) in contractInfo.photo" :src="value" data-magnify="" :data-src="value">
                   </div>
                 </el-form-item>
               </el-col>
@@ -425,69 +336,56 @@
                 <el-form-item label="证件照片">
                   <div>
                     <el-tabs type="border-card">
+                      <el-tab-pane label="证件照片">
+                        <div class="image">
+                          <img v-for="(value,key) in contractInfo.identity_photo" :src="value" data-magnify="" :data-src="value">
+                        </div>
+                      </el-tab-pane>
                       <el-tab-pane label="水表照片">
                         <div class="image">
-                          <img src="../../assets/images/head.jpg" v-for="item in 3">
+                          <img v-for="(value,key) in contractInfo.water_photo" :src="value" data-magnify="" :data-src="value">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane label="电表照片">
                         <div class="image">
-                          <img src="../../assets/images/head.jpg" v-for="item in 2">
+                          <img v-for="(value,key) in contractInfo.electricity_photo" :src="value" data-magnify="" :data-src="value">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane label="燃气表照片">
                         <div class="image">
-                          <img src="../../assets/images/head.jpg" v-for="item in 1">
-                        </div>
-                      </el-tab-pane>
-                      <el-tab-pane label="产权证照片">
-                        <div class="image">
-                          <img src="../../assets/images/head.jpg" v-for="item in 4">
-                        </div>
-                      </el-tab-pane>
-                      <el-tab-pane label="水卡照片">
-                        <div class="image">
-                          <img src="../../assets/images/head.jpg" v-for="item in 3">
-                        </div>
-                      </el-tab-pane>
-                      <el-tab-pane label="电卡照片">
-                        <div class="image">
-                          <img src="../../assets/images/head.jpg" v-for="item in 2">
-                        </div>
-                      </el-tab-pane>
-                      <el-tab-pane label="燃气卡照片">
-                        <div class="image">
-                          <img src="../../assets/images/head.jpg" v-for="item in 5">
+                          <img v-for="(value,key) in contractInfo.gas_photo" :src="value" data-magnify="" :data-src="value">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane label="交接单">
                         <div class="image">
-                          <img src="../../assets/images/head.jpg" v-for="item in 2">
+                          <img v-for="(value,key) in contractInfo.checkin_photo" :src="value" data-magnify="" :data-src="value">
+                        </div>
+                      </el-tab-pane>
+
+                      <el-tab-pane label="凭证照片">
+                        <div class="image">
+                          <img v-for="(value,key) in contractInfo.certificate_photo" :src="value" data-magnify="" :data-src="value">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane label="押金收条">
                         <div class="image">
-                          <img src="../../assets/images/head.jpg" v-for="item in 1">
+                          <img v-for="(value,key) in contractInfo.deposit_photo" :src="value" data-magnify="" :data-src="value">
                         </div>
                       </el-tab-pane>
-                      <el-tab-pane label="委托书">
+                      <el-tab-pane label="补充照片">
                         <div class="image">
-                          <img src="../../assets/images/head.jpg" v-for="item in 3">
+                          <img v-for="(value,key) in contractInfo.other_photo" :src="value" data-magnify="" :data-src="value">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane label="退租交接单">
                         <div class="image">
-                          <img src="../../assets/images/head.jpg" v-for="item in 3">
+                          <img v-for="(value,key) in contractInfo.checkout_photo" :src="value" data-magnify="" :data-src="value">
                         </div>
                       </el-tab-pane>
+
                       <el-tab-pane label="退租结算单">
                         <div class="image">
-                          <img src="../../assets/images/head.jpg" v-for="item in 3">
-                        </div>
-                      </el-tab-pane>
-                      <el-tab-pane label="银行卡照片">
-                        <div class="image">
-                          <img src="../../assets/images/head.jpg" v-for="item in 3">
+                          <img v-for="(value,key) in contractInfo.checkout_settle_photo" :src="value" data-magnify="" :data-src="value">
                         </div>
                       </el-tab-pane>
                     </el-tabs>
@@ -574,24 +472,24 @@
             <el-row>
               <el-col :span="8">
                   <el-form-item label="回访时间">
-                  <div class="content">仙居雅苑</div>
+                  <div class="content"></div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="回访结果">
-                  <div class="content">玄武湖125-5号</div>
+                  <div class="content"></div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="回访满意度">
-                  <div class="content">8-104</div>
+                  <div class="content"></div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="24">
                 <el-form-item label="备注">
-                  <div class="content">仙居雅苑</div>
+                  <div class="content"></div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -608,7 +506,7 @@
               <el-col :span="24">
                 <el-form-item label="操作历史">
                   <div class="content">
-                    操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史操作历史
+
                   </div>
                 </el-form-item>
               </el-col>
@@ -674,7 +572,11 @@
         financeId : '',
         returnId : '',
         historyId : '',
+        all_dic:[],
       }
+    },
+    created(){
+      this.getDictionary();
     },
     mounted(){
       this.initData();
@@ -688,15 +590,35 @@
     },
     methods: {
       getContractDetail(){
-         this.$http.get(globalConfig.server+'lease/detail/'+this.$route.query.id +'?collect_or_rent='+this.$route.query.type).then((res) =>{
-            if(res.data.code === '60010'){
-              this.houseInfo = res.data.data.house;
-              this.contractInfo = res.data.data.contract;
-              this.financeInfo = res.data.data.finance;
-              this.returnInfo = res.data.data.return;
-              this.historyInfo = res.data.data.contract;
-            }
-         })
+        this.$http.get(globalConfig.server+'lease/collect/'+this.$route.query.collectId).then((res) =>{
+          if(res.data.code === '61010'){
+            this.houseInfo = res.data.data;
+
+          }
+        });
+        this.$http.get(globalConfig.server+'lease/rent/'+this.$route.query.id).then((res) =>{
+          if(res.data.code === '61110'){
+            this.contractInfo = res.data.data;
+            this.customersInfo = res.data.data.customers;
+
+          }
+        })
+      },
+
+      getDictionary(){
+        this.$http.get(globalConfig.server+'setting/dictionary/all').then( (res) => {
+          this.all_dic = res.data.data;
+        })
+      },
+
+      matchDictionary(id){
+        let dictionary_name = null;
+        this.all_dic.map((item) => {
+          if(item.id == id ){
+            dictionary_name = item.dictionary_name;
+          }
+        });
+        return dictionary_name;
       },
       initData(){
         document.getElementById('mainContent').addEventListener('scroll', () => {
@@ -755,7 +677,17 @@
     height: 100%;
     overflow: hidden;
     background: #ffffff;
-
+    .title {
+      color: #409EFF;
+      margin: 18px 0 10px 0;
+      &:before {
+        border-radius: 2px;
+        margin-right: 5px;
+        background: #409EFF;
+        border-left: 1px solid #409EFF;
+        content: '|';
+      }
+    }
     .panelContent {
       width: 500px;
       height: 375px;
@@ -776,17 +708,7 @@
         box-sizing: border-box;
         border-bottom: 1px solid #E1E1E1;
       }
-      .title {
-        color: #409EFF;
-        margin: 18px 0 10px 0;
-        &:before {
-          border-radius: 2px;
-          margin-right: 5px;
-          background: #409EFF;
-          border-left: 1px solid #409EFF;
-          content: '|';
-        }
-      }
+
       .textBox{
         margin-bottom: 15px;
       }

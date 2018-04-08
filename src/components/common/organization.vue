@@ -26,9 +26,7 @@
                     <div class="info">{{item.phone}}</div>
                   </div>
                 </div>
-
                 <i class="el-icon-check" style="float: right" v-if="selectIdMember.indexOf(item.id)>-1"></i>
-
               </li>
             </ul>
           </div>
@@ -51,13 +49,7 @@
                   <!--<li>-->
                     <!--<el-checkbox>全选</el-checkbox>-->
                   <!--</li>-->
-                  <li v-for="item in organizeList">
-                    <!--<div @click="getNextLevel(item,$event)">-->
-                    <!--<el-checkbox ></el-checkbox>-->
-                    <!--<span style="margin-left: 6px">{{item.name}}</span>-->
-                    <!--</div>-->
-                    <!--<div>({{item.users}}人)</div>-->
-
+                  <li v-for="item in departmentList">
                     <el-checkbox-group v-model="checkedIdBox" @change="checkDepart(item,$event)">
                       <el-checkbox  :disabled="noDepart" :label="item.id" :key="item.id">{{item.name}} ({{item.users}}人)</el-checkbox>
                     </el-checkbox-group>
@@ -77,7 +69,7 @@
                       </div>
                       <div class="infoBox">
                         <div class="info">{{item.name}}</div>
-                        <div class="info">{{item.org[0].name}}</div>
+                        <div class="info" v-if="item.org">{{item.org[0].name}}</div>
                       </div>
                     </div>
                   </li>
@@ -105,7 +97,7 @@
         searchItems: [],    //搜索到人员
         keywords : '',
 
-        organizeList:[],    //组织架构部门列表
+        departmentList:[],    //组织架构部门列表
         departmentStaff:[],//右侧员工聊表
         breadcrumbList:[],  //面包屑列表
 
@@ -193,7 +185,7 @@
         });
         this.$http.get(globalConfig.server_user+'organizations?parent_id='+id).then((res) => {
           if(res.data.status === 'success'){
-            this.organizeList = res.data.data;
+            this.departmentList = res.data.data;
           }
         });
         this.$http.get(globalConfig.server_user+'users?org_id='+id).then((res) => {
