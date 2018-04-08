@@ -470,6 +470,9 @@
 <style lang="scss" scoped="">
   #individual {
 
+    .integralTab{
+      cursor: pointer;
+    }
     $colorBor: rgba(255, 255, 255, .8);
 
     @mixin flex {
