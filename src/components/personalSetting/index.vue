@@ -36,7 +36,8 @@
       </el-form>
       <span style="color:#fdaece;margin-left:200px;">备注:首页倒计时时间设置,当合计时结束后,将自动进入锁屏模式</span>
       <div style="text-align: center;margin-top: 120px">
-        <el-button @click="addBasicSetting" :disabled="!basicSetting.id[0]" type="primary" size="small" style="padding: 10px 140px;">保存</el-button>
+        <el-button @click="addBasicSetting" :disabled="!basicSetting.id[0] || basicSetting.id[0]==defaultCountdown"
+                   type="primary" size="small" style="padding: 10px 140px;">保存</el-button>
       </div>
 
     </div>
@@ -150,17 +151,17 @@ export default {
       basicSetting: {
         id: [],
         type: 1
-      }
+      },
+      defaultCountdown:'',
     };
   },
   mounted() {
     this.getDictionary();
+    this.defaultCountdown = this.basicSetting.id[0] = localStorage.getItem('countdownTime');
   },
   watch: {},
   methods: {
-
     getDictionary() {
-
       this.$http.get(globalConfig.server + "setting/dictionary/202")
         .then(res => {
           if (res.data.code === "30010") {

@@ -1,6 +1,6 @@
 <template>
   <div id="addHouseResources">
-    <el-dialog title="登记租客信息" :visible.sync="addRentInfoDialogVisible" width="60%">
+    <el-dialog title="修改租客信息" :visible.sync="editRentInfoDialogVisible" width="60%">
       <div>
         <el-tabs v-model="activeName">
           <el-tab-pane label="房源信息" name="first">
@@ -371,12 +371,12 @@
                                   v-model="staff_name"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
-                      <el-form-item label="负责人">
-                        <el-input placeholder="请输入内容" @focus="openOrganizeModal('leader')" readonly=""
-                                  v-model="leader_name"></el-input>
-                      </el-form-item>
-                    </el-col>
+                    <!--<el-col :span="6">-->
+                      <!--<el-form-item label="负责人">-->
+                        <!--<el-input placeholder="请输入内容" @focus="openOrganizeModal('leader')" readonly=""-->
+                                  <!--v-model="leader_name"></el-input>-->
+                      <!--</el-form-item>-->
+                    <!--</el-col>-->
                     <el-col :span="6">
                       <el-form-item label="部门">
                         <el-input placeholder="请输入内容" @focus="openOrganizeModal('depart')" readonly=""
@@ -453,7 +453,7 @@
         </el-tabs>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="addRentInfoDialogVisible = false">取 消</el-button>
+        <el-button size="small" @click="editRentInfoDialogVisible = false">取 消</el-button>
         <!--<el-button size="small" type="primary" @click="confirmAdd(1)">草 稿</el-button>-->
         <el-button size="small" type="primary" @click="confirmAdd">发 布</el-button>
       </span>
@@ -471,10 +471,10 @@
 
   export default {
     components: {UpLoad, VillageModal, Organization},
-    props: ['addRentInfoDialog', 'collectContractId'],
+    props: ['editRentInfoDialog', 'collectContractId','rentContractId'],
     data() {
       return {
-        addRentInfoDialogVisible: false,
+        editRentInfoDialogVisible: false,
         activeName: 'first',
         isClear: false,
         villageDialog: false,
@@ -484,8 +484,8 @@
 
         houseInfo: {},                //房屋相关信息
         params: {
-          contract_id: '',   //合同id
-          type: 1,
+          id: '',   //合同id
+          house_id:'',
           //------------------小区详情--------------------//
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
@@ -497,15 +497,14 @@
           end_date: '',                // 合同结束时间
           is_agency: 1,               // 来源
           deposit: '',                 // 押金
+
           price: [],                   // 月单价
           pay_way: [],                 // 付款方式
-
           money_sum: '',              //收款总金额
-
           money_table: [],            //金额+付款方式
+
           retainage_date: '',         //尾款补齐时间
           receipt: '',                 //收据编号
-
           agency: '',                  // 中介费
           penalty: '',                 // 赔偿金
           property: '',                // 物业费
@@ -518,7 +517,6 @@
           manage_fee: '',
           data_date: '',               // 资料补齐时间
           staff_id: '',                // 开单人
-          leader_id: '',               // 负责人
           department_id: '',           // 部门
 
           remark_terms: '',            // 备注条款
@@ -539,7 +537,7 @@
         community_name: '',           //小区名
         community_address: '',        //小区地址
         staff_name: '',                //组件选中显示名字
-        leader_name: '',               //组件选中显示名字
+//        leader_name: '',               //组件选中显示名字
         department_name: '',           //组件选中显示名字
 
         customersAmount: 1,
@@ -588,22 +586,23 @@
       };
     },
     watch: {
-      addRentInfoDialog(val){
-        this.addRentInfoDialogVisible = val
+      editRentInfoDialog(val){
+        this.editRentInfoDialogVisible = val
       },
-      addRentInfoDialogVisible(val){
+      editRentInfoDialogVisible(val){
         if (!val) {
           this.$emit('close')
         } else {
           this.getHouseInfo();
+          this.getDetail();
           this.isClear = true;
           if (!this.isDictionary) {
             this.getDictionary();
           }
         }
       },
-      collectContractId(val){
-        this.params.contract_id = val;
+      rentContractId(val){
+        this.params.id = val;
       },
       'params.purchase_way': {
         handler(val, oldVal){
@@ -661,6 +660,119 @@
           }
         })
       },
+
+      //获取详情
+      getDetail(){
+        this.$http.get(globalConfig.server+'lease/rent/'+this.rentContractId).then((res) => {
+          if(res.data.code === '61110'){
+            this.nameArray = [];
+            this.sexArray = [];
+            this.id_typeArray = [];
+            this.id_numberArray = [];
+            this.phoneArray = [];
+
+            let data = res.data.data;
+
+            //租客信息
+            this.customersAmount = data.customers.length;
+            data.customers.forEach((item) => {
+              this.nameArray.push(item.name);
+              this.sexArray.push(String(item.sex));
+              this.id_typeArray.push(item.idtype);
+              this.id_numberArray.push(item.idcard);
+              this.phoneArray.push(item.phone);
+            });
+
+            //合同信息
+            this.params.contract_type = data.contract_type;
+            this.params.contract_number = data.contract_number;
+            this.params.month = data.month;
+            this.params.sign_date = data.sign_date;
+            this.params.begin_date = data.begin_date;
+            this.params.end_date = data.end_date;
+            this.params.is_agency = data.is_agency;
+            this.params.deposit = data.deposit;
+            this.params.money_sum = data.money_sum;
+
+            //------------月单价和付款方式-----------------------//
+            this.priceChangeAmount = data.price.length;
+            this.priceArray = [];
+            this.periodArray = [];
+            data.price.forEach((item,index) => {
+              this.priceArray.push(item.price);
+              this.periodArray.push(item.period);
+            });
+            this.payWayChangeAmount = data.pay_way.length;
+            this.payWayArray = [];
+            this.payPeriodArray = [];
+            data.pay_way.forEach((item,index) => {
+              this.payWayArray.push(Number(item.pay_way));
+              this.payPeriodArray.push(item.period);
+            });
+            //--------------------------------------------------//
+            this.params.retainage_date = data.retainage_date;
+            this.params.receipt = data.receipt;
+            this.params.agency = data.agency;
+            this.params.penalty = data.penalty;
+            this.params.property = Number(data.property);
+            this.params.property_payer = data.property_payer;
+            this.params.water = data.water;
+            this.params.electricity_peak = data.electricity_peak;
+            this.params.electricity_valley = data.electricity_valley;
+            this.params.gas = data.gas;
+            this.params.public_fee = data.public_fee;
+            this.params.manage_fee = Number(data.manage_fee);
+            this.params.data_date = data.data_date;
+
+            this.params.staff_id = data.staff_id;
+            this.staff_name = data.staff_name;
+
+            this.params.department_id = data.department_id;
+            this.department_name = data.department_name;
+
+            this.params.remark_terms = data.remark_terms;
+            this.params.remark = data.remark;
+
+            //照片
+            this.identity_photo = data.identity_photo;
+            this.photo = data.photo;
+            this.water_photo = data.water_photo;
+            this.electricity_photo = data.electricity_photo;
+            this.gas_photo = data.gas_photo;
+            this.checkin_photo = data.checkin_photo;
+            this.certificate_photo = data.certificate_photo;
+            this.deposit_photo = data.deposit_photo;
+            this.other_photo = data.other_photo;
+            this.checkout_photo = data.checkout_photo;
+            this.checkout_settle_photo = data.checkout_settle_photo;
+
+            //先清空图片数组id
+            this.params.identity_photo= [];
+            this.params.photo= [];
+            this.params.water_photo= [];
+            this.params.electricity_photo= [];
+            this.params.gas_photo= [];
+            this.params.checkin_photo= [];
+            this.params.certificate_photo= [];
+            this.params.deposit_photo= [];
+            this.params.other_photo= [];
+            this.params.checkout_photo= [];
+            this.params.checkout_settle_photo= [];
+            this.imageArray(data.identity_photo,this.params.identity_photo);
+            this.imageArray(data.photo,this.params.photo);
+            this.imageArray(data.water_photo,this.params.water_photo);
+            this.imageArray(data.electricity_photo,this.params.electricity_photo);
+            this.imageArray(data.gas_photo,this.params.gas_photo);
+            this.imageArray(data.checkin_photo,this.params.checkin_photo);
+            this.imageArray(data.certificate_photo,this.params.certificate_photo);
+            this.imageArray(data.deposit_photo,this.params.deposit_photo);
+            this.imageArray(data.other_photo,this.params.other_photo);
+            this.imageArray(data.checkout_photo,this.params.checkout_photo);
+            this.imageArray(data.checkout_settle_photo,this.params.checkout_settle_photo)
+          }
+        })
+      },
+
       imageArray(data, array){
         if (!Array.isArray(data)) {
           for (let key in data) {
@@ -695,16 +807,11 @@
         console.log(val)
         if (this.selectType === 'staff') {
           this.params.staff_id = val[0].id;
-          this.params.leader_id = val[0].id;
           this.staff_name = val[0].name;
-          this.leader_name = val[0].name;
           if(val[0].org.length>0){
             this.params.department_id = val[0].org[0].id;
             this.department_name = val[0].org[0].name;
           }
-        } else if (this.selectType === 'leader') {
-          this.params.leader_id = val[0].id;
-          this.leader_name = val[0].name;
         } else if (this.selectType === 'depart') {
           this.params.department_id = val[0].id;
           this.department_name = val[0].name;
@@ -852,10 +959,10 @@
         }
 
         if (!this.isUpPic) {
-          this.$http.post(globalConfig.server + 'lease/rent', this.params).then((res) => {
+          this.$http.put(globalConfig.server + 'lease/rent/'+this.rentContractId, this.params).then((res) => {
             if (res.data.code === '61110') {
               this.clearData();
-              this.addRentInfoDialogVisible = false;
+              this.editRentInfoDialogVisible = false;
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
@@ -877,8 +984,8 @@
       clearData(){
         this.isClear = false;
         this.params = {
-          contract_id: '',   //合同id
-          type: 1,
+          id: '',   //合同id
+          house_id : '',
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
           contract_type: 1,           // 订单性质（合同种类）
@@ -908,7 +1015,6 @@
           manage_fee: '',
 
           data_date: '',               // 资料补齐时间
-          staff_id: '',                // 开单人
           leader_id: '',               // 负责人
           department_id: '',           // 部门
           remark_terms: '',            // 备注条款
@@ -930,7 +1036,6 @@
         this.community_name = '';           //小区名
         this.community_address = '';        //小区地址
         this.staff_name = '';                //组件选中显示名字
-        this.leader_name = '';               //组件选中显示名字
         this.department_name = '';           //组件选中显示名字
         this.customersAmount = 1;
         this.nameArray = [];
