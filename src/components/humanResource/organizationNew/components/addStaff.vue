@@ -259,7 +259,6 @@
           account_name: '',
           status: '',
           enroll: '',
-          salary_level: '1',
           salary: '',
           entry_materials: [],
           origin_addr: '',
@@ -341,41 +340,48 @@
     methods:{
       //编辑时获取员工信息
       getStaffInfo() {
-        console.log(this.editId);
         this.$http.get(globalConfig.server+'manager/staff/'+this.editId).then((res) => {
           if(res.data.code === '10020'){
-            this.params.position_id = res.data.data.position_id;
-            this.params.department_id = res.data.data.department_id;
-            this.params.real_name = res.data.data.real_name;
-            this.params.gender = res.data.data.gender;
-            this.params.phone = res.data.data.phone;
-            this.params.home_addr = res.data.data.home_addr;
-            this.params.fertility_status = res.data.data.fertility_status;
-            this.params.id_num = res.data.data.id_num;
-            this.params.birthday = res.data.data.birthday;
-            this.params.bank_num = res.data.data.bank_num;
-            this.params.account_bank = res.data.data.account_bank;
-            this.params.emergency_call = res.data.data.emergency_call;
-            this.params.level = res.data.data.level;
-            this.params.account_name = res.data.data.account_name;
-            this.params.status = res.data.data.status;
-            this.params.enroll = res.data.data.enroll;
-            this.params.salary = res.data.data.salary;
-            this.params.entry_materials = res.data.data.entry_materials;
-            this.params.salary = res.data.data.salary;
-            this.params.origin_addr = res.data.data.origin_addr;
-            this.params.marital_status = res.data.data.marital_status;
-            this.params.political_status = res.data.data.political_status;
-            this.params.forward_time = res.data.data.forward_time;
-            this.params.mail = res.data.data.mail;
-            this.params.education = res.data.data.education;
-            this.params.school = res.data.data.school;
-            this.params.major = res.data.data.major;
-            this.params.graduation_time = res.data.data.graduation_time;
-            this.params.agreement_first_time = res.data.data.agreement_first_time;
-            this.params.agreement_first_end_time = res.data.data.agreement_first_end_time;
-            this.params.agreement_second_time = res.data.data.agreement_second_time;
-            this.params.remark = res.data.data.remark;
+            let detail = res.data.data.data.detail;
+            this.params.position_id = detail.position_id;
+            this.params.department_id = detail.department_id;
+            this.params.real_name = detail.real_name;
+            this.params.gender = detail.gender;
+            this.params.phone = detail.phone;
+            this.params.home_addr = detail.home_addr;
+            this.params.fertility_status = detail.fertility_status;
+            this.params.id_num = detail.id_num;
+            this.params.birthday = detail.birthday;
+            this.params.bank_num = detail.bank_num;
+            this.params.account_bank = detail.account_bank;
+            this.params.branch_bank = detail.branch_bank;
+            this.params.emergency_call = detail.emergency_call;
+            this.params.level = detail.level;
+            this.params.account_name = detail.account_name;
+            this.params.status = detail.status;
+            this.params.enroll = detail.enroll;
+            this.params.salary = detail.salary;
+            this.params.entry_materials = detail.entry_materials;
+            this.params.entry_materials = [];
+            if(detail && detail.entry_materials && detail.entry_materials.length>0){
+              for(var i=0;i<detail.entry_materials.length;i++){
+                this.params.entry_materials.push(Number(detail.entry_materials[i]));
+              }
+            }
+            this.params.salary = detail.salary;
+            this.params.origin_addr = detail.origin_addr;
+            this.params.marital_status = detail.marital_status;
+            this.params.political_status = detail.political_status;
+            this.params.forward_time = detail.forward_time;
+            this.params.mail = detail.mail;
+            this.params.education = detail.education;
+            this.params.school = detail.school;
+            this.params.major = detail.major;
+            this.params.graduation_time = detail.graduation_time;
+            this.params.agreement_first_time = detail.agreement_first_time;
+            this.params.agreement_first_end_time = detail.agreement_first_end_time;
+            this.params.agreement_second_time = detail.agreement_second_time;
+            this.params.remark = detail.remark;
 
             let departNameArray = [];
             this.params.department_id = [];
@@ -417,11 +423,10 @@
       confirmAdd(){
         if(this.isEdit) {
             //修改
-            this.$http.put(globalConfig.server+ 'manager/staff', this.params).then((res) => {
-              if(res.data.code === '10010') {
+            this.$http.put(globalConfig.server+ 'manager/staff/'+this.editId, this.params).then((res) => {
+              if(res.data.code === '10030') {
                 this.$emit('close','success');
                 this.closeModal();
-
               } else {
                 this.$notify.warning({
                   title: '警告',

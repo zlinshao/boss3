@@ -83,8 +83,8 @@
                 <el-table
                   :data="staffTableData"
                   @row-contextmenu="openContextMenu"
+                  @cell-dblclick="openDetail"
                   style="width: 100%">
-
                   <el-table-column width="60px">
                     <template slot-scope="scope">
                       <img data-card="" v-if="scope.row.avatar" :data-src="JSON.stringify(scope.row)"
@@ -208,6 +208,231 @@
         </div>
       </el-col>
     </el-row>
+    <!--<el-dialog title="员工详情" :visible.sync="staffDetail" width="60%" >-->
+      <!--<div>-->
+        <!--<el-form size="mini" :model="params" label-width="120px" style="padding: 0 20px;">-->
+          <!--<el-tabs v-model="activeName">-->
+            <!--<el-tab-pane  label="基本信息" name="first">-->
+              <!--<el-row :gutter="20">-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="真实姓名" required>-->
+                    <!--<el-input placeholder="请输入真实姓名" v-model="params.real_name"></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item label="性别" required>-->
+                    <!--<el-radio-group  v-model="params.gender">-->
+                      <!--<el-radio v-for="item in sexCategory" :label="item.id" :key="item.id">{{item.dictionary_name}}</el-radio>-->
+                    <!--</el-radio-group>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item label="手机号码"  required>-->
+                    <!--<el-input placeholder="请输入手机号码" v-model="params.phone"></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+              <!--</el-row>-->
+              <!--<el-row :gutter="20">-->
+                <!--<el-col :span="16">-->
+                  <!--<el-form-item  label="家庭住址" required>-->
+                    <!--<el-input placeholder="请输入家庭住址" v-model="params.home_addr"></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item label="生育状况">-->
+                    <!--<el-radio-group  v-model="params.fertility_status">-->
+                      <!--<el-radio v-for="item in fertilityStatusCategory" :label="item.id" :key="item.id">{{item.dictionary_name}}</el-radio>-->
+                    <!--</el-radio-group>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+              <!--</el-row>-->
+              <!--<el-row :gutter="20">-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="身份证号" required>-->
+                    <!--<el-input placeholder="请输入身份证号" v-model="params.id_num" @blur="checkIDNumData"></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="生日">-->
+                    <!--<el-input placeholder="请输入生日" v-model="params.birthday"></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="推荐人">-->
+                    <!--<el-input placeholder="请填写推荐人" v-model="params.recommender"></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+              <!--</el-row>-->
+              <!--<el-row :gutter="20">-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="银行卡号" required>-->
+                    <!--<el-input placeholder="请输入银行卡号" v-model="params.bank_num" @blur="checkBankData"></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="开户行" required>-->
+                    <!--<el-input placeholder="请输入开户行" v-model="params.account_bank"></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="紧急电话" required>-->
+                    <!--<el-input placeholder="请输入紧急电话" v-model="params.emergency_call"></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+              <!--</el-row>-->
+              <!--<el-row :gutter="20">-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="支行">-->
+                    <!--<el-input placeholder="请输入支行" v-model="params.branch_bank"></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="开户名">-->
+                    <!--<el-input placeholder="请输入开户名" v-model="params.account_name"></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8"></el-col>-->
+              <!--</el-row>-->
+              <!--<el-row :gutter="20">-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="职位" required>-->
+                    <!--<el-input placeholder="请选择职位" v-model="params.position_id[0]" clearable></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="等级" required>-->
+                    <!--<el-select v-model="params.level">-->
+                      <!--<el-option v-for="item in branchBankCategory" :value="item.id" :key="item.id" :label="item.dictionary_name">{{item.dictionary_name}}</el-option>-->
+                    <!--</el-select>-->
+
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="部门" required>-->
+                    <!--<el-input placeholder="请选择部门" v-model="department_name" @focus="selectDepart" ></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+              <!--</el-row>-->
+              <!--<el-row :gutter="20">-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="账号状态" required>-->
+                    <!--<el-select v-model="params.status">-->
+                      <!--<el-option v-for="item in accountStatusCategory" :value="item.id" :key="item.id" :label="item.dictionary_name">{{item.dictionary_name}}</el-option>-->
+                    <!--</el-select>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="入职时间" required>-->
+                    <!--<el-date-picker v-model="params.enroll" type="date" placeholder="请选择入职时间" value-format="yyyy-MM-dd">-->
+                    <!--</el-date-picker>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="薪资">-->
+                    <!--<el-input placeholder="请输入薪资" v-model="params.salary"></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+              <!--</el-row>-->
+              <!--<el-row :gutter="20">-->
+                <!--<el-form-item label="入职材料">-->
+                  <!--<el-checkbox-group v-model="params.entry_materials">-->
+                    <!--<el-checkbox  v-for="item in entryMaterialsCategory" :label="item.id" :key="item.id" :value="item.id">{{item.dictionary_name}}</el-checkbox>-->
+                  <!--</el-checkbox-group>-->
+                <!--</el-form-item>-->
+              <!--</el-row>-->
+            <!--</el-tab-pane>-->
+            <!--<el-tab-pane  label="辅助信息" name="second">-->
+              <!--<el-row :gutter="20">-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="籍贯">-->
+                    <!--<el-input placeholder="请输入籍贯" v-model="params.origin_addr"></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="婚姻状况">-->
+                    <!--<el-select v-model="params.marital_status">-->
+                      <!--<el-option v-for="item in maritalStatusCategory" :label="item.dictionary_name" :key="item.id" :value="item.id">{{item.dictionary_name}}</el-option>-->
+                    <!--</el-select>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item label="政治面貌">-->
+                    <!--<el-select v-model="params.political_status">-->
+                      <!--<el-option  v-for="item in politicalStatusCategoey" :label="item.dictionary_name" :key="item.id" :value="item.id">{{item.dictionary_name}}</el-option>-->
+                    <!--</el-select>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+              <!--</el-row>-->
+              <!--<el-row :gutter="20">-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="转正时间">-->
+                    <!--<el-date-picker v-model="params.forward_time" type="date" placeholder="请选择转正时间" value-format="yyyy-MM-dd">-->
+                    <!--</el-date-picker>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="企业邮箱">-->
+                    <!--<el-input placeholder="请输入企业邮箱" v-model="params.mail"></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item label="学历">-->
+                    <!--<el-select v-model="params.education">-->
+                      <!--<el-option v-for="item in educationCategory" :label="item.dictionary_name" :key="item.id" :value="item.id" >{{item.dictionary_name}}</el-option>-->
+                    <!--</el-select>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+              <!--</el-row>-->
+              <!--<el-row :gutter="20">-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="毕业院校">-->
+                    <!--<el-input placeholder="请输入毕业院校" v-model="params.school"></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="专业">-->
+                    <!--<el-input placeholder="请输入专业" v-model="params.major"></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item label="毕业时间">-->
+                    <!--<el-date-picker v-model="params.graduation_time" type="date" placeholder="请选择毕业时间" value-format="yyyy-MM-dd"></el-date-picker>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+              <!--</el-row>-->
+              <!--<el-row :gutter="20">-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="第一次签合同时间">-->
+                    <!--<el-date-picker v-model="params.agreement_first_time" type="date" placeholder="请选择时间" value-format="yyyy-MM-dd"></el-date-picker>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item  label="第一次合同到期时间">-->
+                    <!--<el-date-picker v-model="params.agreement_first_end_time" type="date" placeholder="请选择时间" value-format="yyyy-MM-dd"></el-date-picker>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item label="第二次签合同时间">-->
+                    <!--<el-date-picker v-model="params.agreement_second_time" type="date" placeholder="请选择时间" value-format="yyyy-MM-dd"></el-date-picker>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+              <!--</el-row>-->
+              <!--<el-row :gutter="20">-->
+                <!--<el-col :span="24">-->
+                  <!--<el-form-item label="备注">-->
+                    <!--<el-input type="textarea" v-model="params.remark" placeholder="请填写备注"></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+              <!--</el-row>-->
+            <!--</el-tab-pane>-->
+          <!--</el-tabs>-->
+        <!--</el-form>-->
+      <!--</div>-->
+      <!--<span slot="footer" class="dialog-footer">-->
+        <!--<el-button size="small" @click="beforeCloseModal">取 消</el-button>-->
+        <!--<el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>-->
+      <!--</span>-->
+    <!--</el-dialog>-->
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
     <EditDepart :editDepartDialog="editDepartDialog" :departId="departId" @close="closeEditDepart"></EditDepart>
     <AddStaff :addStaffDialog="addStaffDialog" :isEdit="isEdit" :editId="editId" @close="closeAddStaff"></AddStaff>
@@ -252,6 +477,7 @@
     },
     data() {
       return {
+        staffDetail: false,
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
@@ -358,6 +584,10 @@
       }
     },
     methods: {
+      openDetail(row) {
+        console.log(row);
+        this.staffDetail = true;
+      },
       getDefaultData() {
         this.$http.get(globalConfig.server+'manager/department/1').then((res) => {
           if(res.data.code === '20020') {
@@ -559,7 +789,8 @@
             if(res.data.code === '20000'){
               this.positionList = res.data.data.data;
               this.totalOnlyPositionNum = res.data.data.count;
-              if(this.totalOnlyPositionNum > 0){
+              if(res.data.data.count > 0){
+                this.onlyPositionId = res.data.data && res.data.data.data[0].id;
                 this.getPosition();
               }
             }else {
@@ -590,10 +821,11 @@
       },
       //职位单击
       clickOnlyPositionMenu(row,event){
+        console.log(row);
         this.onlyPositionId = row.id;
         this.onlyPositionName = row.name;
-        this.department_id = row.org_id;
-        this.department_name = row.orgName;
+        this.department_id = row.org.id;
+        this.department_name = row.org.name;
 
         this.getPosition();
       },
@@ -656,7 +888,7 @@
                 if(item.parent_id === arr[i].id){
                   item.parent_name = arr[i].name;
                 }
-              })
+              });
             }
             arr.forEach((item) => {
               item.pName = this.onlyPositionName;
@@ -671,62 +903,6 @@
           }
         })
       },
-      //根据部门获取岗位
-//      getPosition(){
-//        let tableData = [];
-//        let org_id = null;
-//        let org_name = null;
-//        //通过职位获取相关部门信息
-//        this.$http.get(globalConfig.server_user+'position/type?org_id='+this.params.org_id).then((res) => {
-//          if(res.data.status === 'success'){
-//            tableData = res.data.data;
-//            if(tableData.length>0) {
-//              tableData.forEach((data) => {
-//                org_id = data.org_id;
-//                org_name = null;
-//                //遍历部门部门数组 根据org_id获取部门名称
-//                this.arrList.forEach((x) => {
-//                  if (x.id === org_id) {
-//                    org_name = x.name
-//                  }
-//                });
-//              });
-//            }
-//          }
-//        }).then((data)=>{
-//          //
-//          this.$http.get(globalConfig.server_user+'positions?org_id=' + this.params.org_id+'&page='+this.params.page
-//            +'&per_page_number='+this.params.pageNum).then((res) => {
-//            if(res.data.status === 'success'){
-//              let arr = res.data.data;
-//
-//              for(let i=0;i<arr.length;i++){
-//                arr.forEach((item) => {
-//                  if(item.parent_id === arr[i].id){
-//                    item.parent_name = arr[i].name;
-//                  }
-//                })
-//              }
-//
-//              for(let i=0;i<tableData.length;i++){
-//                arr.forEach((item) => {
-//                  if(item.type === tableData[i].id){
-//                    item.pName = tableData[i].name;
-//                    item.orgId = org_id;
-//                    item.orgName = org_name;
-//                  }
-//                })
-//              }
-//              this.totalPositionNum = res.data.meta.total;
-//              this.positionTableData = arr;
-//            }else {
-//              this.totalPositionNum = 0;
-//              this.positionTableData = [];
-//            }
-//          })
-//        })
-//
-//      },
       //岗位右键菜单
       openPositionMenu(row, event){
         this.positionId = row.id;
