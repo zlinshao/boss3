@@ -6,7 +6,7 @@
         <div class="highSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input v-model="formInline.search" placeholder="搜索" clearable  >
+              <el-input v-model="formInline.search" placeholder="搜索" @clear="search" clearable  >
                 <!-- <el-select v-model="formInline.select" clearable style="width:100px"  slot="prepend" placeholder="请选择">
                   <el-option label="客户" value="1"></el-option>
                   <el-option label="负责人" value="2"></el-option>
