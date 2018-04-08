@@ -33,7 +33,7 @@
   import Vote from './vote/index.vue'
   import Counter from './counter/index.vue'
 //  import department from './department/index.vue'
-  import Notice from './Notice/index.vue'
+  import Notice from './notice/index.vue'
 
   export default {
     name: "index",
