@@ -325,6 +325,7 @@ export default {
       if (this.rightrow.type == "研发") {
         this.rightrow.type = 4;
       }
+      console.log(this.rightrow)
       this.$http
         .post(this.urls + "announcement", {
           title: this.rightrow.title,
@@ -332,7 +333,7 @@ export default {
           content: this.rightrow.content,
           id: this.rightrow.id,
           draft: 0,
-          department_id: this.rightrow.objid,
+          department_id: this.rightrow.department_id,
           attachment: this.rightrow.attachment,
           preview: this.rightrow.preview
         })
