@@ -14,7 +14,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="editPositionDialogVisible=false">取 消</el-button>
-        <el-button size="small" type="primary" @click.native="confirmAdd">确 定</el-button>
+        <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -53,15 +53,14 @@
     methods:{
       //编辑时获取员工信息
       confirmAdd(){
-        this.$http.put(globalConfig.server_user+'positions/'+this.positionId,this.params).then((res) => {
-          if(res.data.status === 'success'){
+        this.$http.put(globalConfig.server+'manager/position'+this.positionId,this.params).then((res) => {
+          if(res.data.code === '20010'){
             this.$emit('close','success');
             this.closeModal();
           }else {
-            this.$notify({
+            this.$notify.warning({
               title: '警告',
               message: res.data.msg,
-              type: 'warning'
             });
           }
         });

@@ -52,7 +52,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item  label="推荐人">
-                    <el-input placeholder="请选择推荐人" v-model="params.recommender"></el-input>
+                    <el-input placeholder="请填写推荐人" v-model="params.recommender"></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -63,8 +63,8 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item  label="开户行">
-                    <el-input placeholder="请输入生日" v-model="params.account_bank"></el-input>
+                  <el-form-item  label="开户行" required>
+                    <el-input placeholder="请输入开户行" v-model="params.account_bank"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -88,16 +88,20 @@
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="8">
-                  <el-form-item  label="职位">
-                    <el-input placeholder="请选择职位" v-model="params.position_id[0]"></el-input>
+                  <el-form-item  label="职位" required>
+                    <el-input placeholder="请选择职位" v-model="params.position_id[0]" clearable></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item  label="等级">
+                  <el-form-item  label="等级" required>
                     <el-input placeholder="请选择等级" v-model="params.level"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8"></el-col>
+                <el-col :span="8">
+                  <el-form-item  label="部门" required>
+                    <el-input placeholder="请选择部门" v-model="department_name" @focus="selectDepart" ></el-input>
+                  </el-form-item>
+                </el-col>
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="8">
@@ -108,7 +112,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item  label="入职时间">
+                  <el-form-item  label="入职时间" required>
                     <el-date-picker v-model="params.enroll" type="date" placeholder="请选择入职时间" value-format="yyyy-MM-dd">
                     </el-date-picker>
                   </el-form-item>
@@ -227,18 +231,16 @@
 <script>
   import Organization from '../../../common/organization.vue'
   export default {
-    props:['addStaffDialog','isEdit','editId','addStaffParams'],
+    props:['addStaffDialog','isEdit','editId'],
     components:{ Organization },
     data() {
       return {
         addStaffDialogVisible:false,
         activeName: 'first',
+        department_name: '',
         params: {
-          position_id: [92],
-          org_id: [],
-          name: '',
-
-          department_id: [38],
+          position_id: [],
+          department_id: [],
           phone: '',
           real_name: '',
           gender: '',
@@ -290,7 +292,7 @@
     },
     watch:{
       addStaffDialog(val){
-        this.addStaffDialogVisible = val
+        this.addStaffDialogVisible = val;
       },
       addStaffDialogVisible(val){
         if(!val){
@@ -305,21 +307,10 @@
           this.getStaffInfo();
         }
       },
-      'addStaffParams':{
+      'params.department_id':{
         deep:true,
         handler(val,oldVal){
-          if(!this.isEdit){
-            this.params.org_id = [];
-            this.params.org_id.push(val.depart_id);
-            this.department = val.depart_name;
-            this.getPosition(this.params.org_id);
-          }
-        }
-      },
-      'params.org_id':{
-        deep:true,
-        handler(val,oldVal){
-          this.getPosition(this.params.org_id);
+          this.getPosition(this.params.department_id);
         }
       }
     },
@@ -345,28 +336,60 @@
     },
     methods:{
       //编辑时获取员工信息
-      getStaffInfo(){
-        this.$http.get(globalConfig.server_user+'users/'+this.editId).then((res) => {
-          if(res.data.status === 'success'){
-            this.params.name = res.data.data.name;
+      getStaffInfo() {
+        this.$http.get(globalConfig.server+'manager/staff/'+this.editId).then((res) => {
+          if(res.data.code === '10020'){
+            this.params.position_id = res.data.data.position_id;
+            this.params.department_id = res.data.data.department_id;
+            this.params.real_name = res.data.data.real_name;
+            this.params.gender = res.data.data.gender;
             this.params.phone = res.data.data.phone;
+            this.params.home_addr = res.data.data.home_addr;
+            this.params.fertility_status = res.data.data.fertility_status;
+            this.params.id_num = res.data.data.id_num;
+            this.params.birthday = res.data.data.birthday;
+            this.params.bank_num = res.data.data.bank_num;
+            this.params.account_bank = res.data.data.account_bank;
+            this.params.emergency_call = res.data.data.emergency_call;
+            this.params.level = res.data.data.level;
+            this.params.account_name = res.data.data.account_name;
+            this.params.status = res.data.data.status;
+            this.params.enroll = res.data.data.enroll;
+            this.params.salary = res.data.data.salary;
+            this.params.entry_materials = res.data.data.entry_materials;
+            this.params.salary = res.data.data.salary;
+            this.params.origin_addr = res.data.data.origin_addr;
+            this.params.marital_status = res.data.data.marital_status;
+            this.params.political_status = res.data.data.political_status;
+            this.params.forward_time = res.data.data.forward_time;
+            this.params.mail = res.data.data.mail;
+            this.params.education = res.data.data.education;
+            this.params.school = res.data.data.school;
+            this.params.major = res.data.data.major;
+            this.params.graduation_time = res.data.data.graduation_time;
+            this.params.agreement_first_time = res.data.data.agreement_first_time;
+            this.params.agreement_first_end_time = res.data.data.agreement_first_end_time;
+            this.params.agreement_second_time = res.data.data.agreement_second_time;
+            this.params.remark = res.data.data.remark;
+
             let departNameArray = [];
-            this.params.org_id = [];
+            this.params.department_id = [];
             this.params.position_id = [];
-            if(res.data.data.org.length>0){
+
+            if(res.data.data && res.data.data.org && res.data.data.org.length>0) {
               res.data.data.org.forEach((item) => {
-                this.params.org_id.push(item.id);
+                this.params.department_id.push(item.id);
                 departNameArray.push(item.name);
               })
             }
             this.department = departNameArray.join(',');
             this.roleArray = res.data.data.role;
-            if(this.roleArray.length>0){
+            if(this.roleArray && this.roleArray.length>0){
               this.roleArray.forEach((item) => {
                 this.params.position_id.push(item.position_id)
               })
             }
-            this.getPosition(this.params.org_id);
+            this.getPosition(this.params.department_id);
           }else {
             this.$notify({
               title: '警告',
@@ -387,34 +410,21 @@
         })
       },
       confirmAdd(){
-        // if(!this.isEdit){
-        //   this.$http.post(globalConfig.server_user+'users',this.params).then((res) => {
-        //     if(res.data.status === 'success'){
-        //       this.$emit('close','success');
-        //       this.closeModal();
-        //     }else {
-        //       this.$notify({
-        //         title: '警告',
-        //         message: res.data.message,
-        //         type:'warning'
-        //       });
-        //     }
-        //   });
-        // }else {
-        //   this.$http.put(globalConfig.server_user+'users/'+this.editId,this.params).then((res) => {
-        //     if(res.data.status === 'success'){
-        //       this.$emit('close','success');
-        //       this.closeModal();
-        //     }else {
-        //       this.$notify({
-        //         title: '警告',
-        //         message: res.data.message,
-        //         type:'warning'
-        //       });
-        //     }
-        //   });
-        // }
-        if(!this.isEdit){
+        if(this.isEdit) {
+            //修改
+            this.$http.put(globalConfig.server+ 'manager/staff', this.params).then((res) => {
+              if(res.data.code === '10010') {
+                this.$emit('close','success');
+                this.closeModal();
+              } else {
+                this.$notify.warning({
+                  title: '警告',
+                  message: res.data.msg,
+                });
+              }
+            });
+          }else{
+            //新增
             this.$http.post(globalConfig.server+ 'manager/staff', this.params).then((res) => {
               if(res.data.code === '10010') {
                 this.$emit('close','success');
@@ -428,9 +438,8 @@
             });
           }
 
-
       },
-      selectDepart(){
+      selectDepart() {
         this.organizationDialog = true;
         this.type = 'depart';
       },
@@ -440,14 +449,15 @@
         this.type = null;
         this.length = null;
       },
-      selectMember(val){
-        this.params.org_id = [];
+      selectMember(val) {
+        this.params.department_id = [];
+        this.department_name = val[0].name;
         let departNameArray = [];
         if(val.length>0){
           val.forEach((item) => {
-            this.params.org_id.push(item.id);
+            this.params.department_id.push(item.id);
             departNameArray.push(item.name);
-          })
+          });
         }
         this.department = departNameArray.join(',');
         this.type = null;
@@ -458,7 +468,7 @@
         if(this.isEdit){
           this.params = {
             position_id:[],
-            org_id:'',
+            department_id:'',
             name:'',
             phone:''
           };
@@ -472,7 +482,7 @@
         this.addStaffDialogVisible = false;
         this.params = {
           position_id:[],
-          org_id:'',
+          department_id:'',
           name:'',
           phone:''
 

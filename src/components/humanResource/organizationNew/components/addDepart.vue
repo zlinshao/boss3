@@ -25,7 +25,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="addDepartDialogVisible=false">取 消</el-button>
-        <el-button size="small" type="primary" @click.native="confirmEdit">确 定</el-button>
+        <el-button size="small" type="primary" @click="confirmEdit">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -66,12 +66,15 @@
       }
     },
     methods:{
-      //编辑时获取员工信息
       confirmEdit(){
-        this.$http.post(globalConfig.server_user+'organizations',this.params).then((res) => {
-          if(res.data.status === 'success'){
+        this.$http.post(globalConfig.server+'/manager/department',this.params).then((res) => {
+          if(res.data.code === '20010'){
             this.$emit('close','success');
             this.closeModal();
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg,
+            });
           }else {
             this.$notify({
               title: '警告',

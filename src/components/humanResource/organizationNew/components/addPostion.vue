@@ -118,34 +118,31 @@
       }
     },
     methods:{
-      //编辑时获取员工信息
-
       confirmAdd(){
         if(this.type==='position'){
-          this.$http.post(globalConfig.server_user+'position/type',this.params).then((res) => {
-            if(res.data.status === 'success'){
+          this.$http.post(globalConfig.server+'manager/position',this.params).then((res) => {
+            if(res.data.code === '20010'){
               this.$emit('close','success');
               this.$notify.success({
                 title: '成功',
-                message: res.data.message,
+                message: res.data.msg,
               });
               this.closeModal();
             }else {
-              this.$notify({
+              this.$notify.warning({
                 title: '警告',
-                message: res.data.message,
-                type: 'warning'
+                message: res.data.msg,
               });
             }
           });
         }else if(this.type==='post') {
           this.$http.post(globalConfig.server_user+'positions',this.params).then((res) => {
-            if(res.data.status === 'success'){
+            if(res.data.code === '20010'){
               this.$emit('close','success');
               this.closeModal();
               this.$notify.success({
                 title: '成功',
-                message: res.data.message,
+                message: res.data.msg,
               });
             }else {
               let msgData=res.data.message;
@@ -158,10 +155,9 @@
                 }
                 new Promise((resolve,reject)=>{
                   interval=setInterval( () => {
-                    this.$notify({
+                    this.$notify.warning({
                       title: '警告',
                       message: dataList[index],
-                      type: 'warning'
                     });
                     index++;
                     if(index===dataList.length){
@@ -173,19 +169,17 @@
                   interval=null;
                 })
               }else {
-                this.$notify({
+                this.$notify.warning({
                   title: '警告',
-                  message: res.data.message,
-                  type: 'warning'
+                  message: res.data.msg,
                 });
               }
             }
           });
         }else {
-          this.$notify({
+          this.$notify.warning({
             title: '警告',
             message: '请选择类目',
-            type: 'warning'
           });
         }
 
@@ -207,12 +201,12 @@
       //获取职位
       getPosition(){
         this.$http.get(globalConfig.server_user+'position/type?org_id='+this.params.org_id).then((res) => {
-          if(res.data.status === 'success'){
+          if(res.data.code === '20010'){
             this.positionData = res.data.data;
           }else {
             this.$notify.info({
               title: '消息',
-              message: res.data.message,
+              message: res.data.msg,
             });
             this.positionTableData = [];
           }
