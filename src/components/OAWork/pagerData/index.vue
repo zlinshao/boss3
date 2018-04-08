@@ -13,7 +13,7 @@
 
 <script>
   import ContractClaim from './contractClaim/index.vue'
-  import ReceiptNew from './receiptnew/index.vue'
+  import ReceiptNew from './ReceiptNew/index.vue'
   export default {
     name: "index",
     components: {ContractClaim,ReceiptNew},

@@ -10,12 +10,12 @@
       <el-tab-pane label="制度管理" name="third">
         <Institution></Institution>
       </el-tab-pane>
-      <!--<el-tab-pane label="投票管理" name="fourth">-->
-        <!--<Vote></Vote>-->
-      <!--</el-tab-pane>-->
-      <!--<el-tab-pane label="业绩计算器" name="fifth">-->
-        <!--<Counter></Counter>-->
-      <!--</el-tab-pane>-->
+      <el-tab-pane label="投票管理" name="fourth">
+        <Vote></Vote>
+      </el-tab-pane>
+      <el-tab-pane label="业绩计算器" name="fifth">
+        <Counter></Counter>
+      </el-tab-pane>
       <!--<el-tab-pane label="部门考勤" name="six">-->
         <!--<department></department>-->
       <!--</el-tab-pane>-->
@@ -32,12 +32,12 @@
   import Institution from './institution/index.vue'
   import Vote from './vote/index.vue'
   import Counter from './counter/index.vue'
-  import department from './department/index.vue'
-  import Notice from './Notice/index.vue'
+//  import department from './department/index.vue'
+  import Notice from './notice/index.vue'
 
   export default {
     name: "index",
-    components: {Communication, Programme, Institution, Vote, Counter,department,Notice},
+    components: {Communication, Programme, Institution, Vote, Counter,Notice},
     data() {
       return {
         activeName: 'first'
