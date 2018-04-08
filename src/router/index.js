@@ -423,7 +423,7 @@ export default new Router({
       name: '系统设置',
       icon: 'iconfont icon-shezhi1',
       children: [
-        {path: 'moduleSetting', component: ModuleSetting, name: '模块设置'},
+        {path: '/moduleSetting', component: ModuleSetting, name: '模块设置'},
 
         // {path: '/message/message', component: Message, name: '短信模板'},
         // {path: '/loginRecord', component: LoginRecord, name: '登陆日志',},
@@ -431,7 +431,7 @@ export default new Router({
         // {path: '/roleManage', component: RoleManage, name: '角色管理',},
         // {path: '/powerManage', component: PowerManage, name: '权限管理',},
         // {path: '/villageManage', component: VillageManage, name: '小区管理',},
-        {path: 'managerSetting', component: ManagerSetting, name: '管理员设置'},
+        {path: '/managerSetting', component: ManagerSetting, name: '管理员设置'},
 
         // {path: '/recycle', component: Recycle, name: '回收站',},
         // {path: '/contractModule', component: ContractModule, name: '合同模板',},
