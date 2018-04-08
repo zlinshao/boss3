@@ -1,588 +1,1044 @@
 <template>
-  <div id="rentChange">
-    <el-dialog title="租客换房" :visible.sync="rentChangeRoomDialogVisible" width="60%">
-      <div class="scroll_bar">
-        <div class="title">客户-信息</div>
-        <div class="table_border" >
-          <table class="tableDetail">
-            <tr>
-              <td>合同编号</td>
-              <td></td>
-              <td>地址</td>
-              <td></td>
-              <td>户型</td>
-              <td></td>
-              <td>姓名</td>
-              <td></td>
-              <td>电话</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>身份证</td>
-              <td></td>
-              <td>建筑面积</td>
-              <td></td>
-              <td>押金</td>
-              <td></td>
-              <td>月单价</td>
-              <td></td>
-              <td>合同期限</td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>合同开始时间</td>
-              <td></td>
-              <td>合同结束时间</td>
-              <td></td>
-              <td>门禁卡</td>
-              <td></td>
-              <td>钥匙数</td>
-              <td colspan="3"></td>
-              <!--<td>证件号码</td>-->
-              <!--<td></td>-->
-            </tr>
-            <tr>
-              <td>水表底数</td>
-              <td></td>
-              <td>燃气表底数</td>
-              <td></td>
-              <td>电表底数</td>
-              <td colspan="5"></td>
-            </tr>
-            <tr>
-              <td>备注</td>
-              <td colspan="9"></td>
-            </tr>
-          </table>
-        </div>
-        <div class="title">换房信息</div>
-        <div class="form_border">
-          <el-form size="mini" :model="params" label-width="100px">
-            <el-row >
-              <el-col :span="8">
-                <el-form-item label="退房时间" required>
-                  <el-date-picker type="date" v-model="params.check_time" placeholder="选择日期" style="width: 100%;"></el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="退房性质" required>
-                  <el-select v-model="params.check_type" clearable="" placeholder="请选择退房性质" value="">
-                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :key="item.id" :value="item.id"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="所在区域" required>
-                  <el-input v-model="params.department_id" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="房屋地址" required>
-                  <el-input v-model="params.address" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="开单人" required>
-                  <el-input v-model="params.biller_id" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="负责人" required>
-                  <el-input v-model="params.leader_id" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </div>
-        <el-row :gutter="20">
-          <el-col :span="12">
-            <div class="title">换房原因</div>
-            <el-input type="textarea" resize="none" v-model="params.reason" placeholder="请输入内容"></el-input>
-          </el-col>
-          <el-col :span="12">
-            <div class="title">维修赔偿详情</div>
-            <el-input type="textarea" resize="none" v-model="params.compensation" placeholder="请输入内容"></el-input>
-          </el-col>
-        </el-row>
+  <div id="addHouseResources">
+    <el-dialog title="租客续约" :visible.sync="rentChangeRoomDialogVisible" width="60%">
+      <div>
+        <el-tabs v-model="activeName">
+          <el-tab-pane label="房源信息" name="first">
+            <div class="form_border">
+              <el-form size="mini" :model="params" label-width="100px">
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label="小区名称">
+                      <div class="content">{{houseInfo.community_name}}</div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="小区地址">
+                      <div class="content">{{houseInfo.community_address}}</div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="小区别名">
+                      <div class="content">{{houseInfo.community_nickname}}</div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label="门牌地址">
+                      <div class="content">
+                        {{houseInfo.building}}-{{houseInfo.unit}}-{{houseInfo.doorplate}}
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="房型">
+                      <div class="content" v-if="houseInfo.house_type">
+                        <span>{{houseInfo.house_type[0]}}</span>室
+                        <span>{{houseInfo.house_type[1]}}</span>厅
+                        <span>{{houseInfo.house_type[2]}}</span>卫
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="房产证号">
+                      <div class="content">{{houseInfo.property_number}}</div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label="建筑面积">
+                      <div class="content">{{houseInfo.area}}</div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="楼层">
+                      <div class="content">{{houseInfo.floor}}</div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="楼层数">
+                      <div class="content">{{houseInfo.floors}}</div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
 
-        <div class="title">上传照片</div>
-        <div class="describe_border">
-          <UpLoad :ID="'rentingVacationId'" :isClear="isClear" @getImg="getImg"></UpLoad>
-        </div>
+              </el-form>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="租客信息" name="second">
+            <div class="scroll_bar">
+              <div v-for="item in customersAmount">
+                <div style="display: flex;justify-content: space-between">
+                  <div class="title" v-if="item == 1">租客信息</div>
+                  <div class="title" v-else="">附属租客信息({{item - 1}})</div>
+                  <div v-if="item>1" class="deleteNumber" @click="deleteCustoms(item-1)">删除</div>
+                </div>
+                <div class="form_border">
+                  <el-form size="mini" :model="params" label-width="100px">
+                    <el-row>
+                      <el-col :span="8">
+                        <el-form-item label="姓名" required>
+                          <el-input placeholder="请输入内容" v-model="nameArray[item-1]"></el-input>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="8">
+                        <el-form-item label="尊称" required>
+                          <el-radio-group v-model="sexArray[item-1]">
+                            <el-radio label="1">先生</el-radio>
+                            <el-radio label="2">女士</el-radio>
+                          </el-radio-group>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="8">
+                        <el-form-item label="联系电话" required>
+                          <el-input placeholder="请输入内容" v-model="phoneArray[item-1]"></el-input>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span="8">
+                        <el-form-item label="证件类型">
+                          <el-select clearable v-model="id_typeArray[item-1]" placeholder="请选择装修类型" value="">
+                            <el-option v-for="item in id_type_dic" :label="item.dictionary_name" :value="item.id"
+                                       :key="item.id"></el-option>
+                          </el-select>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="8">
+                        <el-form-item label="证件号码" required>
+                          <el-input placeholder="请输入内容" v-model="id_numberArray[item-1]"></el-input>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                  </el-form>
+                </div>
+              </div>
+              <div style="text-align: center">
+                <el-button type="text" @click="addMoreCustoms">
+                  <i class="el-icon-circle-plus"></i>新增附属租客信息
+                </el-button>
+              </div>
+            </div>
+          </el-tab-pane>
 
+          <el-tab-pane label="合同信息" name="third">
+            <div class="scroll_bar">
+              <div class="form_border ">
+                <el-form size="mini" :model="params" label-width="100px">
+                  <el-row>
+                    <el-col :span="6">
+                      <el-form-item label="是否公司单">
+                        <el-switch
+                          v-model="params.contract_type"
+                          active-text="非公司单"
+                          inactive-text="公司单" active-value="0" inactive-value="1">
+                        </el-switch>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="合同编号" required>
+                        <el-input placeholder="请输入内容" v-model="params.contract_number"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="是否中介">
+                        <el-switch
+                          v-model="params.is_agency"
+                          active-text="个人"
+                          inactive-text="中介" active-value="0" inactive-value="1">
+                        </el-switch>
+                      </el-form-item>
+                    </el-col>
 
+                  </el-row>
 
-        <div class="title">应退还</div>
-        <div class="form_border">
-          <el-form size="mini" label-width="100px">
-            <el-row >
-              <el-col :span="6">
-                <el-form-item label="退还押金">
-                  <el-input v-model="params.refund_deposit" type="number" placeholder="请输入内容">换房</el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="剩余房租">
-                  <el-input v-model="params.residual_rent" type="number" placeholder="请输入内容">换房</el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="收视费">
-                  <el-input v-model="params.viewing_fee" type="number" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="预存物管费">
-                  <el-input v-model="params.property_management_fee" type="number" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="预存水费">
-                  <el-input v-model="params.water_fee" type="number" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="预存电费">
-                  <el-input v-model="params.electricity_fee"  type="number" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="预存气费">
-                  <el-input v-model="params.gas_fee" type="number" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="应退还">
-                  <el-input :disabled="true" v-model="reimbursementTotal" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </div>
+                  <el-row>
+                    <el-col :span="6">
+                      <el-form-item label="签约日期">
+                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
+                                        v-model="params.sign_date"></el-date-picker>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="合同开始时间">
+                        <el-date-picker @blur="computedEndDate" value-format="yyyy-MM-dd"
+                                        type="date" placeholder="选择日期" v-model="params.begin_date"></el-date-picker>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6" class="unitMessage">
+                      <el-form-item label="签约月数" required>
+                        <el-input placeholder="月数" @blur="changeMonth" v-model="params.month">
+                          <template slot="append">月</template>
+                        </el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="合同结束时间">
+                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
+                                        v-model="params.end_date"></el-date-picker>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
 
-        <div class="title">应扣除源能费</div>
-        <div class="form_border">
-          <el-form size="mini" :model="params" label-width="80px">
-            <el-row>
-              <el-col :span="2" style="text-align: right">
-                <el-form-item label="水费：" label-width="100px">
-                </el-form-item>
-              </el-col>
-              <el-col :span="5">
-                <el-form-item label="上次底数">
-                  <el-input v-model="params.water_last"  placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="5">
-                <el-form-item label="本次底数">
-                  <el-input v-model="params.water_now" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="单价">
-                  <el-input v-model="params.water_unit_price" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="滞纳金">
-                  <el-input v-model="params.water_late_payment" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="合计">
-                  <el-input v-model="waterTotal" disabled="" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <!--<el-col :span="2" style="text-align: right">-->
-              <!--<el-button size="mini" type="primary">计 算</el-button>-->
-              <!--</el-col>-->
-            </el-row>
-            <el-row>
-              <el-col :span="2" style="text-align: right">
-                <el-form-item label="电费（峰）：" label-width="100px">
-                </el-form-item>
-              </el-col>
-              <el-col :span="5">
-                <el-form-item label="上次底数">
-                  <el-input v-model="params.electricity_peak_last" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="5">
-                <el-form-item label="本次底数">
-                  <el-input v-model="params.electricity_peak_now" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="单价">
-                  <el-input v-model="params.electricity_peak_unit_price" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="滞纳金">
-                  <el-input v-model="params.electricity_peak_late_payment" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="合计">
-                  <el-input v-model="elePeakTotal" disabled="" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <!--<el-col :span="2" style="text-align: right">-->
-              <!--<el-button size="mini" type="primary">计 算</el-button>-->
-              <!--</el-col>-->
-            </el-row>
+                  <el-row>
+                    <el-col :span="6">
+                      <el-form-item label="押金" required>
+                        <el-input placeholder="请输入内容" v-model="params.deposit"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="总收款金额" required>
+                        <el-input placeholder="请输入内容" v-model="params.money_sum"></el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
 
-            <el-row>
-              <el-col :span="2" style="text-align: right">
-                <el-form-item label="电费（谷）：" label-width="100px">
-                </el-form-item>
-              </el-col>
-              <el-col :span="5">
-                <el-form-item label="上次底数">
-                  <el-input v-model="params.electricity_valley_last" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="5">
-                <el-form-item label="本次底数">
-                  <el-input v-model="params.electricity_valley_now" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="单价">
-                  <el-input v-model="params.electricity_valley_unit_price" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="滞纳金">
-                  <el-input v-model="params.electricity_valley_late_payment" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="合计">
-                  <el-input v-model="eleValTotal" disabled="" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <!--<el-col :span="2" style="text-align: right">-->
-              <!--<el-button size="mini" type="primary">计 算</el-button>-->
-              <!--</el-col>-->
-            </el-row>
-            <el-row>
-              <el-col :span="2" style="text-align: right">
-                <el-form-item label="燃气费：" label-width="100px">
-                </el-form-item>
-              </el-col>
-              <el-col :span="5">
-                <el-form-item label="上次底数">
-                  <el-input v-model="params.gas_last" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="5">
-                <el-form-item label="本次底数">
-                  <el-input v-model="params.gas_now" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="单价">
-                  <el-input v-model="params.gas_unit_price" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="滞纳金">
-                  <el-input v-model="params.gas_late_payment" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="合计">
-                  <el-input v-model="gasTotal" disabled="" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <!--<el-col :span="2" style="text-align: right">-->
-              <!--<el-button size="mini" type="primary">计 算</el-button>-->
-              <!--</el-col>-->
-            </el-row>
-            <el-row>
-              <el-col :span="2" style="text-align: right">
-                <el-form-item label="物管费：" label-width="100px">
-                </el-form-item>
-              </el-col>
-              <el-col :span="10">
-                <el-form-item label="上次交到">
-                  <el-date-picker type="date" v-model="params.property_management_last" placeholder="选择日期"></el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="本次交到">
-                  <el-date-picker type="date" v-model="params.property_management_now" placeholder="选择日期"></el-date-picker>
-                </el-form-item>
-              </el-col>
+                  <div class="title">月单价</div>
+                  <div class="form_border">
+                    <div v-for="item in priceChangeAmount">
+                      <el-row>
+                        <el-col :span="6">
+                          <el-form-item label="月单价">
+                            <el-input placeholder="请输入内容" v-model="priceArray[item-1]"></el-input>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                          <el-form-item label="变化周期(月)">
+                            <el-input placeholder="请输入内容" :disabled="priceChangeAmount<2"
+                                      v-model="periodArray[item-1]"></el-input>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="6" v-if="item>1">
+                          <div class="deleteNumber" @click="deletePriceChange(item-1)">删除</div>
+                        </el-col>
+                      </el-row>
+                    </div>
+                    <div style="text-align: center">
+                      <el-button type="text" :disabled="!params.month" @click="addMorePriceChange">
+                        <i class="el-icon-circle-plus"></i>添加月单价变化条目
+                      </el-button>
+                    </div>
+                  </div>
 
-              <el-col :span="5" :offset="2">
-                <el-form-item label="公摊水费">
-                  <el-input v-model="params.property_management_electricity" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="5">
-                <el-form-item label="公摊电费">
-                  <el-input v-model="params.property_management_water" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="物业费">
-                  <el-input v-model="params.property_management_total_fees" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="4">
-                <el-form-item label="合计">
-                  <el-input v-model="managementTotal" disabled="" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <!--<el-col :span="2" style="text-align: right">-->
-              <!--<el-button size="mini" type="primary">计 算</el-button>-->
-              <!--</el-col>-->
-            </el-row>
-          </el-form>
-        </div>
+                  <div class="title">付款方式</div>
+                  <div class="form_border">
+                    <div v-for="item in payWayChangeAmount">
+                      <el-row>
+                        <el-col :span="6">
+                          <el-form-item label="押">
+                            <el-select clearable v-model="payWayArray[item-1]" placeholder="请选择付款方式" value="">
+                              <el-option v-for="item in 3" :value="item-1"
+                                         :key="item-1"></el-option>
+                            </el-select>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                          <el-form-item label="付">
+                            <el-input placeholder="请输入内容"
+                                      v-model="pay_way_bet[item-1]"></el-input>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                          <el-form-item label="变化周期(月)">
+                            <el-input placeholder="请输入内容" :disabled="payWayChangeAmount<2"
+                                      v-model="payPeriodArray[item-1]"></el-input>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="6" v-if="item>1">
+                          <div class="deleteNumber" @click="deletePayWayChange(item-1)">删除</div>
+                        </el-col>
+                      </el-row>
+                    </div>
+                    <div style="text-align: center">
+                      <el-button type="text" :disabled="!params.month" @click="addMorePayWayChange">
+                        <i class="el-icon-circle-plus"></i>添加付款方式变化条目
+                      </el-button>
+                    </div>
+                  </div>
 
-        <div class="title">应扣其他费用</div>
-        <div class="form_border">
-          <el-form size="mini" :model="params" label-width="80px">
-            <el-row >
-              <el-col :span="6">
-                <el-form-item label="违约金">
-                  <el-input v-model="params.liquidated_damages" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="垃圾费">
-                  <el-input v-model="params.trash_fees" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="清洁费">
-                  <el-input v-model="params.cleaning_fees" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="维修赔偿">
-                  <el-input v-model="params.repair_compensation_fees" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="其他费用">
-                  <el-input v-model="params.other_fees" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="超期房时">
-                  <el-input v-model="params.overtime_rent" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="超期房费">
-                  <el-input v-model="params.TV_fees" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="超期网费">
-                  <el-input v-model="params.network_fees" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </div>
+                  <div class="title">金额+支付方式</div>
+                  <div class="form_border">
+                    <div v-for="item in moneyTableChangeAmount">
+                      <el-row>
+                        <el-col :span="6">
+                          <el-form-item label="支付方式">
+                            <el-select clearable v-model="moneyWayArray[item-1]" placeholder="请选择支付方式" value="">
+                              <el-option v-for="item in purchase_way_dic" :label="item.dictionary_name" :value="item.id"
+                                         :key="item.id"></el-option>
+                            </el-select>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                          <el-form-item label="金额（元）">
+                            <el-input placeholder="请输入内容" v-model="moneySepArray[item-1]"></el-input>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="6" v-if="item>1">
+                          <div class="deleteNumber" @click="deleteMoneyTableChange(item-1)">删除</div>
+                        </el-col>
+                      </el-row>
+                    </div>
+                    <div style="text-align: center">
+                      <el-button type="text" @click="addMoreMoneyTableChange">
+                        <i class="el-icon-circle-plus"></i>添加付款方式变化条目
+                      </el-button>
+                    </div>
+                  </div>
 
+                  <el-row>
+                    <el-col :span="6">
+                      <el-form-item label="中介费">
+                        <el-input placeholder="请输入内容" v-model="params.agency"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="违约金">
+                        <el-input placeholder="请输入内容" v-model="params.penalty"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6" class="unitMessage">
+                      <el-form-item label="物业费金额">
+                        <el-input placeholder="请输入内容" v-model="params.property">
+                          <template slot="append">元/m²</template>
+                        </el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="物业费承担方">
+                        <el-select clearable v-model="params.property_payer" placeholder="请选择承担方" value="">
+                          <el-option v-for="item in property_payer_dic" :label="item.dictionary_name" :value="item.id"
+                                     :key="item.id"></el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
 
-        <div class="title">实际退还</div>
-        <div class="describe_border">
-          实际退还：{{realTotal}}
-        </div>
+                  <el-row>
+                    <el-col :span="6">
+                      <el-form-item label="水表底数" required>
+                        <el-input placeholder="请输入内容" v-model="params.water"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="电表底数">
+                        <el-col :span="12">
+                          <el-form-item label="峰" label-width="15px" style="margin-bottom: 0;">
+                            <el-input placeholder="请输入内容" v-model="params.electricity_peak"></el-input>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                          <el-form-item label="谷" label-width="15px" style="margin-bottom: 0;">
+                            <el-input placeholder="请输入内容" v-model="params.electricity_valley"></el-input>
+                          </el-form-item>
+                        </el-col>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="燃气表底数" required>
+                        <el-input placeholder="请输入内容" v-model="params.gas"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="公摊费用" required>
+                        <el-input placeholder="请输入内容" v-model="params.public_fee"></el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="6">
+                      <el-form-item label="管理费" required>
+                        <el-input placeholder="请输入内容" v-model="params.manage_fee"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="收据编号" required>
+                        <el-input placeholder="请输入内容" v-model="params.receipt"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="尾款补齐时间">
+                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
+                                        v-model="params.retainage_date"></el-date-picker>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="资料补齐时间">
+                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
+                                        v-model="params.data_date"></el-date-picker>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="6">
+                      <el-form-item label="开单人">
+                        <el-input placeholder="请输入内容" @focus="openOrganizeModal('staff')" readonly=""
+                                  v-model="staff_name"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <!--<el-col :span="6">-->
+                    <!--<el-form-item label="负责人">-->
+                    <!--<el-input placeholder="请输入内容" @focus="openOrganizeModal('leader')" readonly=""-->
+                    <!--v-model="leader_name"></el-input>-->
+                    <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <el-col :span="6">
+                      <el-form-item label="部门">
+                        <el-input placeholder="请输入内容" @focus="openOrganizeModal('depart')" readonly=""
+                                  v-model="department_name"></el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                  <el-row>
+                    <el-col :span="12">
+                      <el-form-item label="备注条款">
+                        <el-input type="textarea" v-model="params.remark_terms"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="备注">
+                        <el-input type="textarea" v-model="params.remark"></el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+                </el-form>
+              </div>
+            </div>
+          </el-tab-pane>
+
+          <el-tab-pane label="合同照片" name="fourth">
+            <div class="scroll_bar">
+              <el-form label-width="100px">
+                <el-form-item label="证件照片" required="">
+                  <UpLoad :ID="'addRent_id_card'" :isClear="isClear" :editImage="identity_photo"
+                          @getImg="getImg"></UpLoad>
+                </el-form-item>
+                <el-form-item label="合同照片" required="">
+                  <UpLoad :ID="'addRent_contract_card'" :isClear="isClear" :editImage="photo" @getImg="getImg"></UpLoad>
+                </el-form-item>
+                <el-form-item label="水表照片">
+                  <UpLoad :ID="'addRent_water_card'" :isClear="isClear" :editImage="water_photo"
+                          @getImg="getImg"></UpLoad>
+                </el-form-item>
+                <el-form-item label="电表照片">
+                  <UpLoad :ID="'addRent_ele_card'" :isClear="isClear" :editImage="electricity_photo"
+                          @getImg="getImg"></UpLoad>
+                </el-form-item>
+                <el-form-item label="燃气表照片">
+                  <UpLoad :ID="'addRent_gas_card'" :isClear="isClear" :editImage="gas_photo" @getImg="getImg"></UpLoad>
+                </el-form-item>
+                <el-form-item label="交接单照片">
+                  <UpLoad :ID="'addRent_hand_over_card'" :isClear="isClear" :editImage="checkin_photo"
+                          @getImg="getImg"></UpLoad>
+                </el-form-item>
+                <el-form-item label="委托书" required="">
+                  <UpLoad :ID="'addRent_certificate_photo'" :isClear="isClear" :editImage="certificate_photo"
+                          @getImg="getImg"></UpLoad>
+                </el-form-item>
+                <el-form-item label="押金收条" required="">
+                  <UpLoad :ID="'addRent_deposit_card'" :isClear="isClear" :editImage="deposit_photo"
+                          @getImg="getImg"></UpLoad>
+                </el-form-item>
+
+                <el-form-item label="补充照片">
+                  <UpLoad :ID="'addRent_other_card'" :isClear="isClear" :editImage="other_photo"
+                          @getImg="getImg"></UpLoad>
+                </el-form-item>
+                <el-form-item label="退租交接单照片">
+                  <UpLoad :ID="'checkout_card'" :isClear="isClear" :editImage="checkout_photo"
+                          @getImg="getImg"></UpLoad>
+                </el-form-item>
+                <el-form-item label="退租结算照片">
+                  <UpLoad :ID="'checkout_settle_card'" :isClear="isClear" :editImage="checkout_settle_photo"
+                          @getImg="getImg"></UpLoad>
+                </el-form-item>
+              </el-form>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="rentChangeRoomDialogVisible = false">取 消</el-button>
+        <!--<el-button size="small" type="primary" @click="confirmAdd(1)">草 稿</el-button>-->
         <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
+    <VillageModal :villageDialog="villageDialog" @close="closeVillageModal"></VillageModal>
+    <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
+                  @close='closeModal' @selectMember="selectMember"></Organization>
   </div>
 </template>
 
 <script>
   import UpLoad from '../../common/UPLOAD.vue'
+  import VillageModal from '../../common/villageSearch.vue'
+  import Organization from '../../common/organization.vue'
+
   export default {
-    props:['rentChangeRoomDialog','rentContractId'],
-    components:{UpLoad},
+    components: {UpLoad, VillageModal, Organization},
+    props: ['rentChangeRoomDialog', 'collectContractId', 'rentContractId', 'collectHouseId'],
     data() {
       return {
-        rentChangeRoomDialogVisible:false,
+        rentChangeRoomDialogVisible: false,
+        activeName: 'first',
+        isClear: false,
+        villageDialog: false,
+        organizationDialog: false,
+        length: 0,
+        type: '',
+
+        houseInfo: {},                //房屋相关信息
         params: {
-          contract_id : '',
-          check_time : '',
-          check_type : 333,
-          department_id : "1",
-          address : "1",
-          biller_id : "103",
-          leader_id : "103",
-          reason : '',
-          compensation : '',
-          image_pic : [],
+          id: '',   //合同id
+          house_id: '',
+          type: 3,
+          //------------------小区详情--------------------//
+          customers: [],               //租客数组
+          //-------------------合同详情--------------------//
+          contract_type: 1,           // 订单性质（合同种类）
+          contract_number: '',         // 合同编号
+          month: '',                   // 租房月数
+          sign_date: '',               // 签约日期
+          begin_date: '',              // 合同开始时间
+          end_date: '',                // 合同结束时间
+          is_agency: 1,               // 来源
+          deposit: '',                 // 押金
 
-          refund_deposit : '',
-          residual_rent : '',
-          viewing_fee : '',
-          property_management_fee : '',
-          water_fee : '',
-          electricity_fee : '',
-          gas_fee : '',
+          price: [],                   // 月单价
+          pay_way: [],                 // 付款方式
+          money_sum: '',              //收款总金额
+          money_table: [],            //金额+付款方式
 
-          water_last : '',
-          water_now : '',
-          water_unit_price : '',
-          water_late_payment : '',
+          retainage_date: '',         //尾款补齐时间
+          receipt: '',                 //收据编号
+          agency: '',                  // 中介费
+          penalty: '',                 // 赔偿金
+          property: '',                // 物业费
+          property_payer: '',          // 物业费付款方
+          water: '',                   // 水
+          electricity_peak: '',        // 电峰
+          electricity_valley: '',       // 电谷
+          gas: '',                     // 气
+          public_fee: '',              // 公摊
+          manage_fee: '',
+          data_date: '',               // 资料补齐时间
+          staff_id: '',                // 开单人
+          department_id: '',           // 部门
 
-          electricity_peak_last : '',
-          electricity_peak_now : '',
-          electricity_peak_unit_price : '',
-          electricity_peak_late_payment : '',
-
-          electricity_valley_last : '',
-          electricity_valley_now : '',
-          electricity_valley_unit_price : '',
-          electricity_valley_late_payment : '',
-
-          gas_last : '',
-          gas_now : '',
-          gas_unit_price : '',
-          gas_late_payment : '',
-
-          property_management_last : '',
-          property_management_now : '',
-          property_management_electricity : '',
-          property_management_water : '',
-          property_management_total_fees : '',
-
-          liquidated_damages : '',
-          trash_fees : '',
-          cleaning_fees : '',
-          repair_compensation_fees : '',
-          other_fees : '',
-          overtime_rent : '',
-          TV_fees : '',
-          network_fees : '',
+          remark_terms: '',            // 备注条款
+          remark: '',                  // 备注
+          //----------------照片----------------//
+          identity_photo: [],
+          photo: [],
+          water_photo: [],
+          electricity_photo: [],
+          gas_photo: [],
+          checkin_photo: [],
+          certificate_photo: [],
+          deposit_photo: [],
+          other_photo: [],
+          checkout_photo: [],
+          checkout_settle_photo: [],
         },
-        tableData:[],
-        value1:'',
-        isClear : false,
-        isDictionary:false,
-        dictionary:[],
+        community_name: '',           //小区名
+        community_address: '',        //小区地址
+        staff_name: '',                //组件选中显示名字
+//        leader_name: '',               //组件选中显示名字
+        department_name: '',           //组件选中显示名字
+
+        customersAmount: 1,
+        nameArray: [],
+        sexArray: [],
+        id_typeArray: [],
+        id_numberArray: [],
+        phoneArray: [],
+
+        //-----------------字典----------------------//
+        property_type_dic: [],   //房屋类型
+        house_feature_dic: [],   //房屋特色
+        decorate_dic: [],        //装修
+        id_type_dic: [],         //证件类型
+        contract_type_dic: [],
+        vacancy_way_dic: [],
+        pay_way_dic: [],
+        property_payer_dic: [],
+        purchase_way_dic: [],
+        isUpPic: false,
+
+        priceChangeAmount: 1,
+        priceArray: [],
+        periodArray: [],
+
+        payWayChangeAmount: 1,
+        payWayArray: [],
+        pay_way_bet: [],
+        payPeriodArray: [],
+
+        moneyTableChangeAmount: 1,
+        moneyWayArray: [],
+        moneySepArray: [],
+
+        //照片修改
+        identity_photo: {},
+        photo: {},
+        water_photo: {},
+        electricity_photo: {},
+        gas_photo: {},
+        checkin_photo: {},
+        certificate_photo: {},
+        deposit_photo: {},
+        other_photo: {},
+        checkout_photo: {},
+        checkout_settle_photo: {},
       };
     },
-    computed:{
-      reimbursementTotal(){
-        return Number(this.params.refund_deposit)+Number(this.params.residual_rent)+Number(this.params.viewing_fee)
-          +Number(this.params.property_management_fee)+
-          Number(this.params.water_fee)+Number(this.params.electricity_fee)+Number(this.params.gas_fee);
-      },
-      waterTotal(){
-        return (Number(this.params.water_now)-Number(this.params.water_last))*Number(this.params.water_unit_price)
-          +Number(this.params.water_late_payment);
-      },
-      elePeakTotal(){
-        return (Number(this.params.electricity_peak_now)-Number(this.params.electricity_peak_last))*Number(this.params.electricity_peak_unit_price)
-          +Number(this.params.electricity_peak_late_payment);
-      },
-      eleValTotal(){
-        return (Number(this.params.electricity_valley_now)-Number(this.params.electricity_valley_last))*Number(this.params.electricity_valley_unit_price)
-          +Number(this.params.electricity_valley_late_payment);
-      },
-      gasTotal(){
-        return (Number(this.params.gas_now)-Number(this.params.gas_last))*Number(this.params.gas_unit_price)
-          +Number(this.params.gas_late_payment);
-      },
-      managementTotal(){
-        return Number(this.params.property_management_electricity)+Number(this.params.property_management_water)
-          +Number(this.params.property_management_total_fees);
-      },
-      otherTotal(){
-        return Number(this.params.liquidated_damages)+Number(this.params.trash_fees)+Number(this.params.cleaning_fees)
-          +Number(this.params.repair_compensation_fees)+Number(this.params.other_fees)+
-          Number(this.params.overtime_rent)+Number(this.params.TV_fees)+Number(this.params.network_fees);
-      },
-      realTotal(){
-        return Number(this.reimbursementTotal)-Number(this.waterTotal)-Number(this.elePeakTotal)-
-          Number(this.eleValTotal)-Number(this.gasTotal)-Number(this.managementTotal)-Number(this.otherTotal)
-      },
-    },
-    watch:{
+    watch: {
       rentChangeRoomDialog(val){
         this.rentChangeRoomDialogVisible = val
       },
       rentChangeRoomDialogVisible(val){
-        if(!val){
-          this.$emit('close')
-        }else {
+        if (!val) {
+          this.$emit('close');
           this.isClear = false;
-          this.getData();
-          if(!this.isDictionary){
+        } else {
+          this.getHouseInfo();
+          this.getDetail();
+          this.isClear = true;
+          if (!this.isDictionary) {
             this.getDictionary();
           }
         }
       },
       rentContractId(val){
-        this.params.contract_id = val;
-      }
-    },
-    mounted(){
-
-    },
-    methods:{
-      getData(){
-        this.$http.get(globalConfig.server+'customer/check_out/1').then((res) => {
-        })
+        this.params.id = val;
       },
+      collectHouseId(val){
+        this.params.house_id = val;
+      },
+      'params.purchase_way': {
+        handler(val, oldVal){
+          this.account = '';
+          this.bank = '';
+          this.subbranch = '';
+        }
+      },
+    },
+    methods: {
       getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/328').then((res) => {
-          if(res.data.code === '30010'){
-            this.dictionary=res.data.data;
-            this.isDictionary = true;
+        this.dictionary(410, 1).then((res) => {
+          this.property_type_dic = res.data;
+          this.isDictionary = true
+        });
+        this.dictionary(425, 1).then((res) => {
+          this.house_feature_dic = res.data;
+          this.isDictionary = true
+        });
+        this.dictionary(404, 1).then((res) => {
+          this.decorate_dic = res.data;
+          this.isDictionary = true
+        });
+        this.dictionary(409, 1).then((res) => {
+          this.id_type_dic = res.data;
+          this.isDictionary = true
+        });
+
+        this.dictionary(430, 1).then((res) => {
+          this.contract_type_dic = res.data;
+          this.isDictionary = true
+        });
+        this.dictionary(437, 1).then((res) => {
+          this.vacancy_way_dic = res.data;
+          this.isDictionary = true
+        });
+        this.dictionary(443, 1).then((res) => {
+          this.pay_way_dic = res.data;
+          this.isDictionary = true
+        });
+        this.dictionary(449, 1).then((res) => {
+          this.property_payer_dic = res.data;
+          this.isDictionary = true
+        });
+        this.dictionary(508, 1).then((res) => {
+          this.purchase_way_dic = res.data;
+          this.isDictionary = true
+        });
+      },
+
+      getHouseInfo(){
+        this.$http.get(globalConfig.server + 'lease/collect/' + this.collectContractId).then((res) => {
+          if (res.data.code === '61010') {
+            this.houseInfo = res.data.data;
           }
         })
       },
-      //上传图片
+
+      //获取详情
+      getDetail(){
+        this.$http.get(globalConfig.server + 'lease/rent/' + this.rentContractId).then((res) => {
+          if (res.data.code === '61110') {
+            this.nameArray = [];
+            this.sexArray = [];
+            this.id_typeArray = [];
+            this.id_numberArray = [];
+            this.phoneArray = [];
+
+            let data = res.data.data;
+
+            //租客信息
+            this.customersAmount = data.customers.length;
+            data.customers.forEach((item) => {
+              this.nameArray.push(item.name);
+              this.sexArray.push(String(item.sex));
+              this.id_typeArray.push(item.idtype);
+              this.id_numberArray.push(item.idcard);
+              this.phoneArray.push(item.phone);
+            });
+
+
+            //照片
+            this.identity_photo = data.identity_photo;
+//            this.photo = data.photo;
+            this.water_photo = data.water_photo;
+            this.electricity_photo = data.electricity_photo;
+            this.gas_photo = data.gas_photo;
+            this.checkin_photo = data.checkin_photo;
+            this.certificate_photo = data.certificate_photo;
+            this.deposit_photo = data.deposit_photo;
+            this.other_photo = data.other_photo;
+            this.checkout_photo = data.checkout_photo;
+            this.checkout_settle_photo = data.checkout_settle_photo;
+
+            //先清空图片数组id
+            this.params.identity_photo = [];
+//            this.params.photo= [];
+            this.params.water_photo = [];
+            this.params.electricity_photo = [];
+            this.params.gas_photo = [];
+            this.params.checkin_photo = [];
+            this.params.certificate_photo = [];
+            this.params.deposit_photo = [];
+            this.params.other_photo = [];
+            this.params.checkout_photo = [];
+            this.params.checkout_settle_photo = [];
+            this.imageArray(data.identity_photo, this.params.identity_photo);
+//            this.imageArray(data.photo,this.params.photo);
+            this.imageArray(data.water_photo, this.params.water_photo);
+            this.imageArray(data.electricity_photo, this.params.electricity_photo);
+            this.imageArray(data.gas_photo, this.params.gas_photo);
+            this.imageArray(data.checkin_photo, this.params.checkin_photo);
+            this.imageArray(data.certificate_photo, this.params.certificate_photo);
+            this.imageArray(data.deposit_photo, this.params.deposit_photo);
+            this.imageArray(data.other_photo, this.params.other_photo);
+            this.imageArray(data.checkout_photo, this.params.checkout_photo);
+            this.imageArray(data.checkout_settle_photo, this.params.checkout_settle_photo)
+          }
+        })
+      },
+
+      imageArray(data, array){
+        if (!Array.isArray(data)) {
+          for (let key in data) {
+            array.push(key)
+          }
+        }
+      },
+
+      //改变收房月数
+      changeMonth(){
+        this.periodArray[0] = this.params.month;
+        this.payPeriodArray[0] = this.params.month;
+        this.priceArray.splice(1, this.priceArray.length);
+        this.periodArray.splice(1, this.periodArray.length);
+        this.payWayArray.splice(1, this.payWayArray.length);
+        this.pay_way_bet.splice(1, this.pay_way_bet.length);
+        this.payPeriodArray.splice(1, this.payPeriodArray.length);
+        this.priceChangeAmount = 1;
+        this.payWayChangeAmount = 1;
+      },
+      vacancyWay(){
+        this.params.vacancy_other = '';
+      },
+      //调出选人组件
+      openOrganizeModal(val){
+        this.selectType = val;
+        this.type = val === 'depart' ? 'depart' : 'staff';
+        this.organizationDialog = true;
+        this.length = 1;
+      },
+      selectMember(val){
+        this.organizationDialog = false;
+        if (this.selectType === 'staff') {
+          this.params.staff_id = val[0].id;
+          this.staff_name = val[0].name;
+          if (val[0].org.length > 0) {
+            this.params.department_id = val[0].org[0].id;
+            this.department_name = val[0].org[0].name;
+          }
+        } else if (this.selectType === 'depart') {
+          this.params.department_id = val[0].id;
+          this.department_name = val[0].name;
+        }
+      },
+
+      closeModal(){
+        this.organizationDialog = false
+      },
+
+      //打开小区模态框
+      openVillageModal(){
+        this.villageDialog = true
+      },
+      closeVillageModal(val){
+        this.villageDialog = false;
+        if (val) {
+          this.params.community_id = val.id;
+          this.community_name = val.village_name;
+          this.community_address = val.address;
+        }
+      },
+
+      //增加附属租客
+      addMoreCustoms(){
+        this.customersAmount++;
+      },
+      deleteCustoms(item){
+        this.nameArray.splice(item, 1);
+        this.sexArray.splice(item, 1);
+        this.id_typeArray.splice(item, 1);
+        this.id_numberArray.splice(item, 1);
+        this.phoneArray.splice(item, 1);
+        this.customersAmount--;
+      },
+
+      //月单价变化
+      addMorePriceChange(){
+        this.priceChangeAmount++;
+      },
+      deletePriceChange(item){
+        this.priceArray.splice(item, 1);
+        this.periodArray.splice(item, 1);
+        this.priceChangeAmount--;
+      },
+
+      //付款方式变化
+      addMorePayWayChange(){
+        this.payWayChangeAmount++;
+      },
+      deletePayWayChange(item){
+        this.payWayArray.splice(item, 1);
+        this.pay_way_bet.splice(item, 1);
+        this.payPeriodArray.splice(item, 1);
+        this.payWayChangeAmount--;
+      },
+      //jine bianhua
+      deleteMoneyTableChange(){
+        this.moneyTableChangeAmount++;
+      },
+      addMoreMoneyTableChange(item){
+        this.moneyWayArray.splice(item, 1);
+        this.moneySepArray.splice(item, 1);
+        this.moneyTableChangeAmount--;
+      },
+
+      //计算空置期结束时间
+      computedEndDate(){
+//        let timestamp = Date.parse(new Date(this.params.begin_date)) + Number(this.params.vacancy) * 24 * 60 * 60 * 1000;
+//        this.params.vacancy_end_date = this.formatDate(new Date(timestamp));
+      },
+      formatDate(now) {
+        let year = now.getFullYear();
+        let month = now.getMonth() + 1;
+        let date = now.getDate();
+        return year + "-" + month + "-" + date;
+      },
       getImg(val){
-        this.params.image_pic = val[1];
+        this.isUpPic = val[2];
+        if (val[0] === 'addRent_id_card') {
+          this.params.identity_photo = val[1];
+        } else if (val[0] === 'addRent_contract_card') {
+          this.params.photo = val[1];
+        } else if (val[0] === 'addRent_water_card') {
+          this.params.water_photo = val[1];
+        } else if (val[0] === 'addRent_ele_card') {
+          this.params.electricity_photo = val[1];
+        } else if (val[0] === 'addRent_gas_card') {
+          this.params.gas_photo = val[1];
+        } else if (val[0] === 'addRent_hand_over_card') {
+          this.params.checkin_photo = val[1];
+        } else if (val[0] === 'addRent_certificate_photo') {
+          this.params.certificate_photo = val[1];
+        } else if (val[0] === 'addRent_deposit_card') {
+          this.params.deposit_photo = val[1];
+        } else if (val[0] === 'addRent_other_card') {
+          this.params.other_photo = val[1];
+        } else if (val[0] === 'checkout_card') {
+          this.params.checkout_photo = val[1];
+        } else if (val[0] === 'checkout_settle_card') {
+          this.params.checkout_settle_photo = val[1];
+        }
       },
 
       confirmAdd(){
-//        this.rentChangeRoomDialogVisible = false;
-        this.$http.post(globalConfig.server+'customer/check_out',this.params).then((res) => {
-          if(res.data.code === '20010'){
-            this.$notify.success({
-              title:'成功',
-              message:res.data.msg
-            })
-          }else {
-            this.$notify.warning({
-              title:'警告',
-              message:res.data.msg
-            })
-          }
-        })
+        //租客
+        let customItem = {};
+        this.params.customers = [];
+        for (let i = 0; i < this.customersAmount; i++) {
+          customItem = {};
+          customItem.name = this.nameArray[i] ? this.nameArray[i] : '';
+          customItem.sex = this.sexArray[i] ? this.sexArray[i] : '';
+          customItem.id_type = this.id_typeArray[i] ? this.id_typeArray[i] : '';
+          customItem.id_number = this.id_numberArray[i] ? this.id_numberArray[i] : '';
+          customItem.phone = this.phoneArray[i] ? this.phoneArray[i] : '';
+          this.params.customers.push(customItem);
+        }
+        //月单价
+        let priceItem = {};
+        this.params.price = [];
+        for (let i = 0; i < this.priceChangeAmount; i++) {
+          priceItem = {};
+          priceItem.price = this.priceArray[i] ? this.priceArray[i] : '';
+          priceItem.period = this.periodArray[i] ? this.periodArray[i] : '';
+          this.params.price.push(priceItem);
+        }
+
+        //付款方式
+        let payWayItem = {};
+        this.params.pay_way = [];
+        for (let i = 0; i < this.payWayChangeAmount; i++) {
+          payWayItem = {};
+          payWayItem.pay_way = this.payWayArray[i] ? this.payWayArray[i] : '';
+          payWayItem.pay_way_bet = this.pay_way_bet[i] ? this.pay_way_bet[i] : '';
+          payWayItem.period = this.payPeriodArray[i] ? this.payPeriodArray[i] : '';
+          this.params.pay_way.push(payWayItem);
+        }
+
+        //money_table
+        let moneyTableItem = {};
+        this.params.money_table = [];
+        for (let i = 0; i < this.moneyTableChangeAmount; i++) {
+          payWayItem = {};
+          moneyTableItem.money_way = this.moneyWayArray[i] ? this.moneyWayArray[i] : '';
+          moneyTableItem.money_sep = this.moneySepArray[i] ? this.moneySepArray[i] : '';
+          this.params.money_table.push(moneyTableItem);
+        }
+
+        if (!this.isUpPic) {
+          this.$http.post(globalConfig.server + 'lease/rent', this.params).then((res) => {
+            if (res.data.code === '61110') {
+              this.clearData();
+              this.rentChangeRoomDialogVisible = false;
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              })
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              })
+            }
+          })
+        } else {
+          this.$notify.warning({
+            title: '警告',
+            message: '图片正在上传！'
+          })
+        }
+      },
+      clearData(){
+        this.isClear = false;
+        this.params = {
+          id: this.rentContractId,   //合同id
+          house_id: this.collectHouseId,
+          type: 3,
+          customers: [],               //租客数组
+          //-------------------合同详情--------------------//
+          contract_type: 1,           // 订单性质（合同种类）
+          contract_number: '',         // 合同编号
+          month: '',                   // 租房月数
+          sign_date: '',               // 签约日期
+          begin_date: '',              // 空置期开始时间
+          end_date: '',                // 合同结束时间
+          is_agency: 1,               // 来源
+          deposit: '',                 // 押金
+          price: [],                   // 月单价
+          pay_way: [],                 // 付款方式
+
+          money_sum: '',              //收款总金额
+          money_table: [],            //金额+付款方式
+          retainage_date: '',         //尾款补齐时间
+
+          agency: '',                  // 中介费
+          penalty: '',                 // 赔偿金
+          property: '',                // 物业费
+          property_payer: '',          // 物业费付款方
+          water: '',                   // 水
+          electricity_peak: '',        // 电峰
+          electricity_valley: '',       // 电谷
+          gas: '',                     // 气
+          public_fee: '',                  // 公摊
+          manage_fee: '',
+
+          data_date: '',               // 资料补齐时间
+          leader_id: '',               // 负责人
+          department_id: '',           // 部门
+          remark_terms: '',            // 备注条款
+          remark: '',                  // 备注
+          //----------------照片----------------//
+          identity_photo: [],
+          photo: [],
+          water_photo: [],
+          electricity_photo: [],
+          gas_photo: [],
+          checkin_photo: [],
+          certificate_photo: [],
+          deposit_photo: [],
+
+          other_photo: [],
+          checkout_photo: [],
+          checkout_settle_photo: [],
+        };
+        this.community_name = '';           //小区名
+        this.community_address = '';        //小区地址
+        this.staff_name = '';                //组件选中显示名字
+        this.department_name = '';           //组件选中显示名字
+        this.customersAmount = 1;
+        this.nameArray = [];
+        this.sexArray = [];
+        this.id_typeArray = [];
+        this.id_numberArray = [];
+        this.phoneArray = [];
+        //-----------------字典----------------------//
+
+        this.isUpPic = false;
+        this.priceChangeAmount = 1;
+        this.priceArray = [];
+        this.periodArray = [];
+        this.payWayChangeAmount = 1;
+        this.payWayArray = [];
+        this.pay_way_bet = [];
+        this.payPeriodArray = [];
       }
     }
   };
 </script>
 <style lang="scss" scoped="">
-  #rentChange{
-    .el-dialog__wrapper{
-      .el-dialog{
-        .el-dialog__body{
+  #addHouseResources {
+    .el-dialog__wrapper {
+      .el-dialog {
+        .el-dialog__body {
           padding: 15px;
-          >div{
+          > div {
             padding-right: 10px;
-            max-height: 580px;
+            max-height: 550px;
+            /*overflow-x: auto;*/
+          }
+          .scroll_bar {
+            max-height: 450px;
             overflow-x: auto;
           }
-
-          .table_border{
+          .table_border {
             .tableDetail {
               width: 100%;
               border-collapse: collapse;
@@ -602,12 +1058,30 @@
               }
             }
           }
-
-          .form_border{
-            .total{
+          .form_border {
+            .total {
               border-top: 1px solid #dfe6fb;
               padding: 5px;
               text-align: right;
+            }
+          }
+          .content {
+            padding: 0 10px;
+            height: 32px;
+            overflow: hidden;
+            background: #eef3fc;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #727479;
+          }
+          .deleteNumber {
+            text-align: center;
+            cursor: pointer;
+            margin-top: 2px;
+            color: #409EFF;
+            &:hover {
+              color: #6a8dfb;
+
             }
           }
         }
