@@ -267,7 +267,7 @@ export default new Router({
       hidden: true,
       name: '',
       children: [
-        {path: '/housesManage', component: HousesManage, name: '产品管控中心', icon: 'iconfont icon-zhuye'},
+        {path: '/housesManage', component: HousesManage, name: '产品管控中心', icon: 'iconfont icon-chanpinguankongzhongxin'},
       ]
     },
 
