@@ -13,7 +13,7 @@
           <el-row>
             <el-col :span="18">
               <el-form-item label="设置上限">
-                <el-input v-model="form.max_count" placeholder="请输入上限范围"></el-input>
+                <el-input v-model="form.max_count" @change="checkNo(form.max_count)" placeholder="请输入上限范围"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -112,15 +112,20 @@
         this.type = 'staff';
       },
       selectMember(val){
-
         for(let i =0;i<val.length;i++){
           this.follow_name += val[i].name + ';';
           this.form.staff_ids.push(val[i].id);
         }
         this.type = '';
-
       },
-
+checkNo(value){
+let reg = /^[1-9]\d*$/;
+if (value) {
+if (value > 999999 || new RegExp(reg).test(value) == false) {
+this.form.max_count =''
+}
+}
+} ,
     },
     mounted(){
       this.personal = JSON.parse(localStorage.personal);

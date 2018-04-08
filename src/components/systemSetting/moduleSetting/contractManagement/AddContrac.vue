@@ -15,7 +15,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="数量(收):">
-                <el-input v-model="form.collect_amount"></el-input>
+                <el-input v-model="form.collect_amount" @change="checkNo(form.collect_amount)"></el-input>
               </el-form-item>
             </el-col>
             <span class="addstyle">现剩余:{{form.collect_remain}}</span>
@@ -23,7 +23,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="数量(租):" >
-                <el-input v-model="form.rent_amount"></el-input>
+                <el-input v-model="form.rent_amount" @change="checkNo2(form.rent_amount)"></el-input>
               </el-form-item>
             </el-col>
             <span class="addstyle">现剩余:{{form.rent_remain}}</span>
@@ -171,6 +171,22 @@
             }
           this.operate_name=this.personal.name;         
       },
+checkNo(value){
+let reg = /^[1-9]\d*$/;
+if (value) {
+if (value > 999999 || new RegExp(reg).test(value) == false) {
+this.form.collect_amount =''
+}
+}
+} ,
+checkNo2(value){
+let reg = /^[1-9]\d*$/;
+if (value) {
+if (value > 999999 || new RegExp(reg).test(value) == false) {
+this.form.rent_amount =''
+}
+}
+} 
     },
     mounted(){
       this.personal = JSON.parse(localStorage.personal);
