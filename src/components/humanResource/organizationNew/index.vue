@@ -1,5 +1,5 @@
 <template>
-  <div id="staffManage"  @click="show=false" @contextmenu="closeMenu">
+  <div id="staffManage" @click="show=false" @contextmenu="closeMenu">
     <el-row :gutter="20">
       <el-col :span="6">
         <div class="border left">
@@ -203,14 +203,46 @@
                   </div>
                 </div>
               </el-tab-pane>
+
+              <!--<el-tab-pane label="岗位管理" name="third">-->
+                <!--<el-table-->
+                  <!--:data="positionTableData"-->
+                  <!--@row-contextmenu="openPositionMenu"-->
+                  <!--style="width: 100%">-->
+                  <!--<el-table-column-->
+                    <!--prop="name"-->
+                    <!--label="岗位">-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--label="上级岗位">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>-->
+                      <!--<span v-else=""> &nbsp;暂无&nbsp; </span>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--prop="pName"-->
+                    <!--label="职位">-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--prop="orgName"-->
+                    <!--label="部门">-->
+                  <!--</el-table-column>-->
+                <!--</el-table>-->
+              <!--</el-tab-pane>-->
+
             </el-tabs>
+
+
+
           </div>
+
         </div>
       </el-col>
     </el-row>
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
     <EditDepart :editDepartDialog="editDepartDialog" :departId="departId" @close="closeEditDepart"></EditDepart>
-    <AddStaff :addStaffDialog="addStaffDialog" :isEdit="isEdit" :editId="editId" @close="closeAddStaff"></AddStaff>
+    <AddStaff :addStaffDialog="addStaffDialog" :addStaffParams="addStaffParams" :isEdit="isEdit" :editId="editId" @close="closeAddStaff"></AddStaff>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
     <AddDepart :addDepartDialog="addDepartDialog" :parentId="parentId" :parentName="parentName" @close="closeAddDepart"></AddDepart>
@@ -219,7 +251,7 @@
     <EditPosition :editPositionDialog="editPositionDialog" :positionId="positionId" :positionName="positionName" @close="closeEditPosition"></EditPosition>
     <EditOnlyPosition :editOnlyPositionDialog="editOnlyPositionDialog" :onlyPositionId="onlyPositionId"
                       :onlyPositionName="onlyPositionName" @close="closeEditOnlyPosition"></EditOnlyPosition>
-
+    <AddPower :module="powerModule" @close="closePower"></AddPower>
   </div>
 </template>
 
@@ -235,11 +267,23 @@
   import AddPosition from './components/addPostion.vue'
   import EditPosition from './components/editPostion.vue'
   import EditOnlyPosition from './components/editOnlyPostion.vue'
-  export default{
+
+  import AddPower from './components/addPower.vue'   //权限
+  export default {
     name: 'tree',
-    components:{Organization,AddStaff,RightMenu,EditDepart,AddDepart,AddPosition,EditPosition,EditOnlyPosition},
-    data(){
-      return{
+    components: {
+      Organization,
+      AddStaff,
+      RightMenu,
+      EditDepart,
+      AddDepart,
+      AddPosition,
+      EditPosition,
+      EditOnlyPosition,
+      AddPower
+    },
+    data() {
+      return {
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
@@ -255,7 +299,7 @@
 
         params:{
           keywords:'',
-          limit:10,
+          pageNum:10,
           page:1,
           org_id:'',
         },
@@ -274,6 +318,7 @@
         addPositionDialog : false, //新建岗位
         editPositionDialog:false,    //修改岗位
         editOnlyPositionDialog:false, //修改职位
+        powerModule: false,        //权限
         isEdit:false,
         editId : null,
         totalStaffNum : 0,
@@ -300,7 +345,7 @@
         isGetPosition:false,
         post_position:'', //  职位或岗位
         addPositionParams:[],
-        addStaffId: '',      //新建员工参数
+        addStaffParams:[],      //新建员工参数
       }
     },
     mounted(){
@@ -369,14 +414,15 @@
             this.getStaffData();
           }
         });
+        return list
       },
       //点击节点
-      nodeClick(data,node,store) {
+      nodeClick(data,node,store){
         this.params.org_id = data.id;
         this.department_id = data.id;
         this.department_name = data.name;
       },
-      nodeExpand(data,node,store) {
+      nodeExpand(data,node,store){
         if(this.defaultExpandKeys.indexOf(data.id)<0){
           this.defaultExpandKeys.push(data.id)
         }
@@ -387,7 +433,6 @@
         })
       },
       handleAdd(s,d,n){//增加节点
-        console.log(d);
         this.addDepart(d);
       },
       handleEdit(s,d,n){//编辑节点
@@ -452,6 +497,11 @@
         }
       },
 
+      //================权限====================
+      closePower() {
+        this.powerModule = false;
+      },
+
       //********************员工操作函数****************
       //获取员工数据列表
       getStaffData(){
@@ -471,6 +521,7 @@
         this.editId = row.id;
         this.menuType = 'staff';
         this.lists = [
+          {clickIndex: 'power', headIcon: 'el-icon-edit', label: '权限',},
           {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
           {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
         ];
@@ -481,7 +532,7 @@
         if(type === 'edit'){
           this.addStaffDialog = true;
           this.isEdit = true;
-        }else if(type === 'delete') {
+        }else if(type === 'delete'){
           this.$confirm('此操作将永久删除, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -495,6 +546,9 @@
             });
 
           });
+        }
+        if (type === 'power') {
+          this.powerModule = true;
         }
       },
       //删除员工
@@ -652,6 +706,7 @@
                 }
               })
             }
+
             arr.forEach((item) => {
               item.pName = this.onlyPositionName;
               item.orgId = this.department_id;
