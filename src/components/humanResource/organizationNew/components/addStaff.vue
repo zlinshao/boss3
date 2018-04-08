@@ -42,7 +42,7 @@
               <el-row :gutter="20">
                 <el-col :span="8">
                   <el-form-item  label="身份证号" required>
-                    <el-input placeholder="请输入身份证号" v-model="params.id_num" @blur="checkData"></el-input>
+                    <el-input placeholder="请输入身份证号" v-model="params.id_num" @blur="checkIDNumData"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -59,7 +59,7 @@
               <el-row :gutter="20">
                 <el-col :span="8">
                   <el-form-item  label="银行卡号" required>
-                    <el-input placeholder="请输入银行卡号" v-model="params.bank_num" @blur="checkData"></el-input>
+                    <el-input placeholder="请输入银行卡号" v-model="params.bank_num" @blur="checkBankData"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -341,6 +341,7 @@
     methods:{
       //编辑时获取员工信息
       getStaffInfo() {
+        console.log(this.editId);
         this.$http.get(globalConfig.server+'manager/staff/'+this.editId).then((res) => {
           if(res.data.code === '10020'){
             this.params.position_id = res.data.data.position_id;
@@ -405,7 +406,7 @@
       },
       //获取岗位
       getPosition(id){
-        this.$http.get(globalConfig.server_user+'positions?org_id=' + id+ '&per_page_number=50').then((res) => {
+        this.$http.get(globalConfig.server+'manager/positions?org_id=' + id+ '&limit=50').then((res) => {
           if(res.data.status === 'success'){
             this.positionArray = res.data.data;
           }else {
@@ -605,11 +606,32 @@
           }
         });
       },
-      //校验银行卡号和身份证号
-      checkData(){
+      //校验身份证号
+      checkIDNumData(){
         this.$http.get(globalConfig.server+ 'manager/staff/info?bank_num='+this.params.bank_num+'&id_num='+this.params.id_num).then((res) => {
           if(res.data.code === '10050') {
               this.checkStatus = true;
+              let data = res.data.data;
+              if(data.birthday) {
+                this.params.birthday = data.birthday;
+              }
+          }else{
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
+          }
+        });
+      },
+      //校验银行卡号
+      checkBankData(){
+        this.$http.get(globalConfig.server+ 'manager/staff/info?bank_num='+this.params.bank_num+'&id_num='+this.params.id_num).then((res) => {
+          if(res.data.code === '10050') {
+              this.checkStatus = true;
+              let data = res.data.data;
+              if(typeof data === 'string') {
+                this.params.account_bank = data;
+              }
           }else{
             this.$notify.warning({
               title: '警告',
