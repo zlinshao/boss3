@@ -832,10 +832,10 @@
         this.payWayChangeAmount--;
       },
       //jine bianhua
-      deleteMoneyTableChange(){
+      addMoreMoneyTableChange(item){
         this.moneyTableChangeAmount++;
       },
-      addMoreMoneyTableChange(item){
+      deleteMoneyTableChange(){
         this.moneyWayArray.splice(item, 1);
         this.moneySepArray.splice(item, 1);
         this.moneyTableChangeAmount--;

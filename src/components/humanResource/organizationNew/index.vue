@@ -145,7 +145,7 @@
                         label="职位">
                       </el-table-column>
                       <el-table-column
-                        prop="orgName"
+                        prop="org.name"
                         label="部门">
                       </el-table-column>
                     </el-table>
@@ -181,7 +181,7 @@
                         </template>
                       </el-table-column>
                       <el-table-column
-                        prop="pName"
+                        prop="postion_type.name"
                         label="职位">
                       </el-table-column>
                       <el-table-column
@@ -265,10 +265,10 @@
         },
         defaultExpandKeys: [],//默认展开节点列表
         params:{
-          keywords:'',
-          limit:10,
-          page:1,
-          org_id:'',
+          keywords: '',
+          limit: 10,
+          page: 1,
+          org_id: '',
         },
         staffTableData:[],    //员工列表
         positionTableData:[], //岗位列表
@@ -318,20 +318,14 @@
       document.getElementById('staffManage').style.minHeight = window.innerHeight - 160 + 'px';
       this.getDepart();
       this.activeName = 'first';
+      this.getDefaultData();
     },
     activated() {
       this.initExpand();
       document.getElementById('staffManage').style.minHeight = window.innerHeight - 160 + 'px';
       this.getDepart();
       this.activeName = 'first';
-      // this.$http.get(globalConfig.server_user+'organizations/1').then((res) => {
-      //   if(res.data.status === 'success'){
-      //     let data = res.data.data;
-      //     this.params.org_id = data.id;
-      //     this.department_id = data.id;
-      //     this.department_name = data.name;
-      //   }
-      // });
+      this.getDefaultData();
     },
     watch:{
       department_id(val){
@@ -350,9 +344,9 @@
       },
       activeName(val){
         if(val==='first'){
-          this.params.pageNum = 10;
+          this.params.limit = 10;
         }else if(val==='second'){
-          this.params.pageNum = 5;
+          this.params.limit = 5;
         }
         if(val==='first'&& !this.isGetStaff){
           this.getStaffData();
@@ -364,7 +358,16 @@
       }
     },
     methods: {
-
+      getDefaultData() {
+        this.$http.get(globalConfig.server+'manager/department/1').then((res) => {
+          if(res.data.code === '20020') {
+            let data = res.data.data;
+            this.params.org_id = data.id;
+            this.department_id = data.id;
+            this.department_name = data.name;
+          }
+        });
+      },
       //**************部门操作函数********************
       //获取部门数据
       getDepart(){
@@ -397,7 +400,6 @@
         })
       },
       handleAdd(s,d,n){//增加节点
-        console.log(d);
         this.addDepart(d);
       },
       handleEdit(s,d,n){//编辑节点
@@ -474,8 +476,8 @@
           +'&limit='+this.params.limit+'&org_id='+this.params.org_id+'&is_recursion=1').then((res) => {
           if(res.data.code === '10000'){
             this.staffTableData = res.data.data.data;
-            this.totalStaffNum = res.data && res.data.meta && res.data.meta.total;
-          }else {
+            this.totalStaffNum = res.data.data.count;
+          } else {
             this.staffTableData = [];
             this.totalStaffNum = 0;
           }
@@ -518,8 +520,8 @@
       },
       //删除员工
       deleteStaff(){
-        this.$http.delete(globalConfig.server_user+'users/'+this.editId).then((res) => {
-          if(res.data.status === 'success'){
+        this.$http.delete(globalConfig.server+'manager/staff/delete/'+this.editId).then((res) => {
+          if(res.data.code === 'success'){
             this.getStaffData();
             this.$notify.success({
               title: '成功',
@@ -547,8 +549,6 @@
         }
       },
 
-
-
       //********************职位操作函数****************
       //获取单独职位列表
       getOnlyPosition(){
@@ -557,23 +557,10 @@
           this.$http.get(globalConfig.server+'manager/position?department_id='+this.params.org_id+'&page='+this.params.page
             +'&limit='+this.params.limit).then((res) => {
             if(res.data.code === '20000'){
-              let tableData = res.data.data;
-              this.positionList = [];
-              this.totalOnlyPositionNum = res.data && res.data.meta && res.data.meta.total;
-              if(tableData.length>0){
-                this.onlyPositionId = tableData[0].id;
+              this.positionList = res.data.data.data;
+              this.totalOnlyPositionNum = res.data.data.count;
+              if(this.totalOnlyPositionNum > 0){
                 this.getPosition();
-                tableData.forEach((data) => {
-                  let org_id = data.org_id;
-                  let org_name = null;
-                  //遍历部门部门数组 根据org_id获取部门名称
-                  this.arrList.forEach((x)=>{
-                    if(x.id === org_id){
-                      org_name = x.name
-                    }
-                  });
-                  this.positionList.push(Object.assign({},data,{orgName:org_name}));
-                });
               }
             }else {
               this.$notify.info({
@@ -641,8 +628,8 @@
       },
       //删除职位
       deleteOnlyPosition(){
-        this.$http.delete(globalConfig.server_user+'position/type/'+this.onlyPositionId).then((res) =>{
-          if(res.data.status === 'success'){
+        this.$http.delete(globalConfig.server+'manager/position/delete/'+this.onlyPositionId).then((res) =>{
+          if(res.data.code === 'success'){
             this.$notify.success({
               title: '消息',
               message: '删除成功',
@@ -660,10 +647,10 @@
       //********************岗位操作函数****************
       //根据职位获取岗位
       getPosition(){
-        this.$http.get(globalConfig.server_user+'positions?type=' + this.onlyPositionId+'&page='+this.params.page
-          +'&per_page_number='+this.params.pageNum).then((res) => {
-          if(res.data.status === 'success'){
-            let arr = res.data.data;
+        this.$http.get(globalConfig.server+'manager/positions?type=' + this.onlyPositionId+'&page='+this.params.page
+          +'&limit='+this.params.limit).then((res) => {
+          if(res.data.code === '20000'){
+            let arr = res.data.data.data;
             for(let i=0;i<arr.length;i++){
               arr.forEach((item) => {
                 if(item.parent_id === arr[i].id){
@@ -676,8 +663,8 @@
               item.orgId = this.department_id;
               item.orgName = this.department_name;
             });
-            this.totalPositionNum = res.data.meta.total;
-            this.positionTableData = arr;
+            this.totalPositionNum = res.data.data.count;
+            this.positionTableData = res.data.data.data;
           }else {
             this.totalPositionNum = 0;
             this.positionTableData = [];
@@ -779,8 +766,8 @@
       },
       //删除岗位
       deletePosition(){
-        this.$http.delete(globalConfig.server_user+'positions/'+this.positionId).then((res) =>{
-          if(res.data.status === 'success'){
+        this.$http.delete(globalConfig.server+'manager/positions/delete/'+this.positionId).then((res) =>{
+          if(res.data.code === 'success'){
             this.$notify.success({
               title: '成功',
               message: '删除成功',
@@ -951,15 +938,15 @@
   #staffManage{
     min-height: 790px;
     .border{
-      /*border: 1px solid #6a8dfb;*/
+      border: 1px solid #f0f7ff;
       border-radius: 4px;
       min-height: 790px;
       .top{
         padding:0 10px;
         height: 40px;
-        background: #6a8dfb;
-        color: #ffffff;
-        font-size: 16px;
+        background: #dfe6fb;
+        color: #787a7e;
+        font-size: 14px;
         display: flex;
         align-items: center;
         justify-content: space-between;

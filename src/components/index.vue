@@ -232,13 +232,13 @@
             <template v-for="(item,index) in $router.options.routes">
               <!--一级菜单-->
               <el-menu-item v-if="item.hidden" v-for="child in item.children" :index="child.path" :key="child.path">
-                <i :class="child.icon" style="font-size: 22px"></i>
+                <i :class="child.icon" style="font-size: 26px"></i>
                 <span slot="title"> {{child.name}}</span>
               </el-menu-item>
 
               <el-submenu :index="item.name+''" v-if="!item.hidden && !item.abnormal">
                 <template slot="title">
-                  <i :class="item.icon" style="font-size: 22px"></i>
+                  <i :class="item.icon" style="font-size: 26px"></i>
                   <span>{{item.name}}</span>
                 </template>
                 <template v-for="(child,key) in item.children">
@@ -265,8 +265,7 @@
         </div>
 
         <div style="position: fixed;bottom: 10px;left: 36px;z-index: 99999;" v-if="!isCollapse">
-          <div style="color: #ffffff;">业务咨询&nbsp;&nbsp;陆经理</div>
-          <div style="color: #ffffff;">版本信息&nbsp;&nbsp;BOSS&nbsp;3.0</div>
+          <div style="color: #a2b8fd;">LEJIA © BOSS 3.0</div>
         </div>
 
         <el-main :class="isFull? 'mainHide':'' ">
@@ -281,9 +280,7 @@
         </el-main>
       </el-container>
     </div>
-
     <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeMessage"></MessageDetail>
-
   </div>
 </template>
 

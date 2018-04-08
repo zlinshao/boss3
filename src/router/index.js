@@ -188,7 +188,7 @@ export default new Router({
       hidden: true,
       name: '',
       children: [
-        {path: '/main', component: Main, name: '公司门户', icon: 'el-icon-menu'},
+        {path: '/main', component: Main, name: '公司门户', icon: 'iconfont icon-gongsimenhu'},
       ]
     },
 
@@ -267,7 +267,7 @@ export default new Router({
       hidden: true,
       name: '',
       children: [
-        {path: '/housesManage', component: HousesManage, name: '产品管控中心', icon: 'iconfont icon-zhuye'},
+        {path: '/housesManage', component: HousesManage, name: '产品管控中心', icon: 'iconfont icon-chanpinguankongzhongxin'},
       ]
     },
 
@@ -275,7 +275,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '租赁管理',
-      icon: 'iconfont icon-zulinguanli',
+      icon: 'iconfont icon-zulin',
       children: [
         {path: '/wholeRentManage', component: WholeRentManage, name: '整租管理',},
         {path: '/jointRentManage', component: JointRentManage, name: '合租管理',},
@@ -296,7 +296,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '财务账本',
-      icon: 'iconfont icon-caiwuzhangben',
+      icon: 'iconfont icon-caiwu1',
       children: [
         // {path: '/accountManage', component: AccountManage, name: '账户管理',},
         // {path: '/subjectManage', component: SubjectManage, name: '科目管理',},
@@ -326,7 +326,7 @@ export default new Router({
       hidden: true,
       name: '',
       children: [
-        {path: '/wechatMessage', component: WechatMessage, name: '微信管理', icon: 'iconfont icon-weixinguanli1'},
+        {path: '/wechatMessage', component: WechatMessage, name: '微信管理', icon: 'iconfont icon-weixin'},
       ]
     },
 
@@ -348,7 +348,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '人资管理',
-      icon: 'iconfont icon-renziguanli',
+      icon: 'iconfont icon-renzi',
       children: [
         // {path: '/staffManage', component: StaffManage, name: '用户管理',},
         {path: '/organization', component: Organization, name: '组织架构',},
@@ -376,7 +376,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: 'OA办公',
-      icon: 'iconfont icon-oabangong',
+      icon: 'iconfont icon-oa',
       children: [
         // {
         //   path: '/property', component: Property, icon: 'el-icons-fa-money', name: '资产管理',
@@ -411,7 +411,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '乐伽大学',
-      icon: 'iconfont icon-leqiedaxue1',
+      icon: 'iconfont icon-daxue',
       children: [
         {path: '/college', component: College, name: '乐伽大学 '},
         {path: '/LineCollege', component: LineCollege, name: '在线考试'},
@@ -421,9 +421,9 @@ export default new Router({
       path: '/',
       component: Index,
       name: '系统设置',
-      icon: 'iconfont icon-xitongshezhi1',
+      icon: 'iconfont icon-shezhi1',
       children: [
-        {path: 'moduleSetting', component: ModuleSetting, name: '模块设置'},
+        {path: '/moduleSetting', component: ModuleSetting, name: '模块设置'},
 
         // {path: '/message/message', component: Message, name: '短信模板'},
         // {path: '/loginRecord', component: LoginRecord, name: '登陆日志',},
@@ -431,7 +431,7 @@ export default new Router({
         // {path: '/roleManage', component: RoleManage, name: '角色管理',},
         // {path: '/powerManage', component: PowerManage, name: '权限管理',},
         // {path: '/villageManage', component: VillageManage, name: '小区管理',},
-        {path: 'managerSetting', component: ManagerSetting, name: '管理员设置'},
+        {path: '/managerSetting', component: ManagerSetting, name: '管理员设置'},
 
         // {path: '/recycle', component: Recycle, name: '回收站',},
         // {path: '/contractModule', component: ContractModule, name: '合同模板',},

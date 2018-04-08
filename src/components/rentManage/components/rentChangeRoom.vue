@@ -1,69 +1,120 @@
 <template>
   <div id="addHouseResources">
-    <el-dialog title="租客续约" :visible.sync="rentChangeRoomDialogVisible" width="60%">
+    <el-dialog title="租客调房" :visible.sync="rentChangeRoomDialogVisible" width="60%">
       <div>
         <el-tabs v-model="activeName">
           <el-tab-pane label="房源信息" name="first">
             <div class="form_border">
+              <div class="title">原租房信息</div>
               <el-form size="mini" :model="params" label-width="100px">
                 <el-row>
                   <el-col :span="8">
-                    <el-form-item label="小区名称">
-                      <div class="content">{{houseInfo.community_name}}</div>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
                     <el-form-item label="小区地址">
-                      <div class="content">{{houseInfo.community_address}}</div>
+                      <div class="content">{{rentContractInfo.address}}</div>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-form-item label="小区别名">
-                      <div class="content">{{houseInfo.community_nickname}}</div>
+                    <el-form-item label="合同编号">
+                      <div class="content">{{rentContractInfo.contract_number}}</div>
                     </el-form-item>
                   </el-col>
-                </el-row>
-                <el-row>
                   <el-col :span="8">
-                    <el-form-item label="门牌地址">
+                    <el-form-item label="月单价">
                       <div class="content">
-                        {{houseInfo.building}}-{{houseInfo.unit}}-{{houseInfo.doorplate}}
+                        <span v-for="(item,index) in rentContractInfo.price">
+                          {{item.price}}元，{{item.period}}个月 <span v-show="index<rentContractInfo.price-1">;</span>
+                        </span>
                       </div>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="房型">
-                      <div class="content" v-if="houseInfo.house_type">
-                        <span>{{houseInfo.house_type[0]}}</span>室
-                        <span>{{houseInfo.house_type[1]}}</span>厅
-                        <span>{{houseInfo.house_type[2]}}</span>卫
-                      </div>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="房产证号">
-                      <div class="content">{{houseInfo.property_number}}</div>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="8">
-                    <el-form-item label="建筑面积">
-                      <div class="content">{{houseInfo.area}}</div>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="楼层">
-                      <div class="content">{{houseInfo.floor}}</div>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="楼层数">
-                      <div class="content">{{houseInfo.floors}}</div>
                     </el-form-item>
                   </el-col>
                 </el-row>
 
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label="付款方式">
+                      <div class="content">
+                        <span v-for="(item,index) in rentContractInfo.pay_way">
+                         押 {{item.pay_way}} 付 {{item.pay_way_bet}}，{{item.period}}个月 <span v-show="index<rentContractInfo.pay_way-1">;</span>
+                        </span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="开始日期">
+                      <div class="content">{{rentContractInfo.begin_date}}</div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="开单人">
+                      <div class="content">
+                        {{rentContractInfo.staff_name}}
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
+              <div class="title">现房屋信息</div>
+              <el-form size="mini" :model="params" label-width="100px">
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label="房屋地址" required>
+                      <el-input placeholder="请输入内容" v-model="community_name" @focus="openVillageModal" readonly=""></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="房型">
+                      <div class="content">
+
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="面积">
+                      <div class="content">
+
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label="装修">
+                      <div class="content">
+
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="收房价格">
+                      <div class="content">
+
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="楼层">
+                      <div class="content">
+
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label="到期时间">
+                      <div class="content">
+
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="房屋类型">
+                      <div class="content">
+
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
               </el-form>
             </div>
           </el-tab-pane>
@@ -477,7 +528,7 @@
 
   export default {
     components: {UpLoad, VillageModal, Organization},
-    props: ['rentChangeRoomDialog', 'collectContractId', 'rentContractId', 'collectHouseId'],
+    props: ['rentChangeRoomDialog', 'rentContractId', 'collectHouseId','rentContractInfo'],
     data() {
       return {
         rentChangeRoomDialogVisible: false,
@@ -488,11 +539,10 @@
         length: 0,
         type: '',
 
-        houseInfo: {},                //房屋相关信息
         params: {
           id: '',   //合同id
           house_id: '',
-          type: 3,
+          type: 5,
           //------------------小区详情--------------------//
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
@@ -602,7 +652,6 @@
           this.$emit('close');
           this.isClear = false;
         } else {
-          this.getHouseInfo();
           this.getDetail();
           this.isClear = true;
           if (!this.isDictionary) {
@@ -664,15 +713,6 @@
           this.isDictionary = true
         });
       },
-
-      getHouseInfo(){
-        this.$http.get(globalConfig.server + 'lease/collect/' + this.collectContractId).then((res) => {
-          if (res.data.code === '61010') {
-            this.houseInfo = res.data.data;
-          }
-        })
-      },
-
       //获取详情
       getDetail(){
         this.$http.get(globalConfig.server + 'lease/rent/' + this.rentContractId).then((res) => {
@@ -791,6 +831,7 @@
       },
       closeVillageModal(val){
         this.villageDialog = false;
+        console.log(val)
         if (val) {
           this.params.community_id = val.id;
           this.community_name = val.village_name;
@@ -832,10 +873,10 @@
         this.payWayChangeAmount--;
       },
       //jine bianhua
-      deleteMoneyTableChange(){
+      addMoreMoneyTableChange(item){
         this.moneyTableChangeAmount++;
       },
-      addMoreMoneyTableChange(item){
+      deleteMoneyTableChange(){
         this.moneyWayArray.splice(item, 1);
         this.moneySepArray.splice(item, 1);
         this.moneyTableChangeAmount--;
@@ -951,7 +992,7 @@
         this.params = {
           id: this.rentContractId,   //合同id
           house_id: this.collectHouseId,
-          type: 3,
+          type: 5,
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
           contract_type: 1,           // 订单性质（合同种类）

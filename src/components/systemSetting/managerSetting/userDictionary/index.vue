@@ -6,7 +6,7 @@
           <div class="dictionary_left scroll_bar">
             <div class="dictionary_top">
               <span>用户字典</span>
-              <el-button size="mini" type="primary" style="text-align: right">使用指南</el-button>
+              <!--<el-button size="mini" type="primary" style="text-align: right;cursor: initial;">使用指南</el-button>-->
             </div>
             <el-tree
               ref="expandMenuList" class="expand-tree"
@@ -393,7 +393,9 @@
         height: 728px;
         overflow: auto;
         .dictionary_top {
-          padding: 10px;
+          line-height: 26px;
+          padding: 7px 10px;
+          border-radius: 3px;
           background: #dfe6fb;
           display: flex;
           justify-content: space-between;
