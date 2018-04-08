@@ -105,7 +105,8 @@ export default {
         minus: "",
         name: "",
         existing: "",
-        remark: ""
+        remark: "",
+        credit_item_id:"",
       },
       add: {
         id: "",
@@ -121,6 +122,7 @@ export default {
     formDetail(val) {
       this.form.sname = val.sname;
       this.form.id = val.id;
+      this.form.credit_item_id=val.credit_item_id
       this.form.dname = val.dname;
       this.form.minus = String(val.minus);
       this.formList.staff_id = val.staff_id;
@@ -208,13 +210,11 @@ export default {
     submitIntegral() {
       let typesubmit = [];
       let typesubmitot = [];
-      if(typeof (this.form.name) === 'string'){
-                this.$notify.warning({
-                  title: "警告",
-                  message: "数据未发生改变"
-                });
-      }else{
+
       if (this.newAdd == "新增") {
+      if(typeof (this.form.name) === 'string'){
+          this.form.name=this.form.credit_item_id
+      }
         if (this.form.name === "other") {
           this.$http
             .post(globalConfig.server + "credit/manage/other", {
@@ -266,6 +266,9 @@ export default {
             });
         }
       } else {
+      if(typeof (this.form.name) === 'string'){
+          this.form.name=this.form.credit_item_id
+      }
         if (this.form.name === "other") {
           this.$http
             .put(globalConfig.server + "credit/manage/other/" + this.form.id, {
@@ -316,7 +319,7 @@ export default {
             });
         }
       }
-      }
+ 
     },
     //调出选人组件
     openOrganizeModal() {
