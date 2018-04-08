@@ -38,7 +38,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input  v-model="staff_name" @focus="selectDep('staff')" placeholder="请选择负责人" readonly>
+                      <el-input  v-model="staff_name" @focus="selectDep" placeholder="请选择负责人" readonly>
                       </el-input>
                     </el-form-item>
                   </el-col>
@@ -120,7 +120,7 @@
     <Remind :remindDialog="remindDialog" :sendId="sendId" :totalNumber="num" :sendName="sendName" @close="closeRemind"></Remind>
     <CustomerDetail :customerDetailDialog="customerDetailDialog" :activeId="activeId" @close="closeModal"></CustomerDetail>
     <Organization :organizationDialog="organizeDialog" :length="length" :type="type" 
-                  @selectMember="selectMember"></Organization>
+                  @selectMember="selectMember" @close="closeOrganization"></Organization>
   </div>
 </template>
 
@@ -196,11 +196,14 @@ export default {
         this.sendName = "";     
     },
     // 人资搜索
-    selectDep(val) {
+    selectDep() {
       this.organizeDialog = true;
-      this.type = val;
+      this.type = 'staff';
       this.length = 1;
     },
+      closeOrganization(){
+        this.organizeDialog = false
+      },
     // 确认部门
     selectMember(val) {
       this.organizeDialog = false;
@@ -215,7 +218,7 @@ export default {
     openContextMenu(row, event) {
       console.log(row)
       this.lists = [
-        { clickIndex: "remindDialog", headIcon: "el-icon-bell", label: "提醒" }
+        { clickIndex: "remindDialog", headIcon: "el-icon-bell", label: "短信发送" }
       ];
       this.contextMenuParam(event);
     },

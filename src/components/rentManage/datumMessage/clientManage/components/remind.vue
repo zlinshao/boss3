@@ -11,8 +11,7 @@
             </el-col> 
             <el-col :span="10">
               <el-form-item label="离职业务员:" required >
-               <span v-if="name">{{name}}</span>
-               <span style="color:#f00" v-else>请在高级选项中选择</span>
+               <span><el-input  v-model="name" @focus="selectDep" placeholder="请选择负责人" readonly></el-input></span>
               </el-form-item>
              </el-col>
           </el-row>
@@ -41,22 +40,35 @@
         <el-button size="small" type="primary" @click="save">发 送</el-button>
       </span>
     </el-dialog>
+        <Organization :organizationDialog="organizeDialog" :length="length" :type="type" 
+                  @selectMember="selectMember" @close="closeOrganization"></Organization>
   </div>
+
 </template>
 
 <script>
 import ElCol from "element-ui/packages/col/src/col";
+import Organization from "../../../../common/organization.vue";
 export default {
-  components: { ElCol },
+  components: { ElCol,Organization },
   props: ["remindDialog","sendId" ,"sendName" ,"totalNumber"],
   data() {
     return {
       remindDialogVisible: false,
+      //模态框
+      organizeDialog: false,
       formInline: {
         id: [],
         date: "",
-
       },
+      form: {
+        search: "",
+        limit: 12,
+        page: 1 ,
+        user_id:''
+      },
+      type:'',
+      length:'',
       activeNameDialog:'',
         name:"",
         number:'',
@@ -74,6 +86,7 @@ export default {
           id: [],
           date: ""
         };
+        
         this.name="";
       }
     },
@@ -104,7 +117,7 @@ export default {
       this.$http
         .post(globalConfig.server + "core/customer/sms", this.formInline)
         .then(res => {
-          if (res.data.code === "10000") {
+          if (res.data.code === "10050") {
             this.$notify.success({
               title: "成功",
               message: res.data.msg
@@ -125,7 +138,32 @@ export default {
       
       }
 
-    }
+    },
+    // 人资搜索
+    selectDep() {
+      this.organizeDialog = true;
+      this.type = 'staff';
+      this.length = 1;
+    },
+      closeOrganization(){
+        this.organizeDialog = false
+      },
+    // 确认部门
+    selectMember(val) {
+      this.organizeDialog = false;
+      if (val[0].hasOwnProperty("avatar")) {
+        this.name = val[0].name;
+        this.formInline.id = val[0].id;
+        this.form.user_id = val[0].id;
+      this.$http
+        .get(globalConfig.server + "core/customer", { params: this.form })
+        .then(res => {
+          if (res.data.code === "10000") {
+            this.number = res.data.data.total;
+          }
+        });
+      }
+    },
   }
 };
 </script>

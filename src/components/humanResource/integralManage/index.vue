@@ -162,7 +162,7 @@
                @clickOperate="clickEvent"></RightMenu>
 
     <Organization :organizationDialog="organizeDialog" :length="length" :type="type"
-                  @selectMember="selectMember"></Organization>
+                  @selectMember="selectMember" @close="closeOrganization"></Organization>
 
     <!--积分详情-->
     <IntegralDetail :module="integralDetail" :rowid="rowid" @close="integralDetail = false"></IntegralDetail>
@@ -389,6 +389,9 @@ export default {
       this.length = 1;
       this.type = val;
     },
+      closeOrganization(){
+        this.organizeDialog = false
+      },
     // 确认部门
     selectMember(val) {
       this.organizeDialog = false;
