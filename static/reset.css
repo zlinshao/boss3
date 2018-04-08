@@ -262,5 +262,33 @@
 
 .unitMessage .el-input-group__append {
   padding: 0 3px !important; }
+ul.el-menu.el-menu--inline{
+  background-color:#405597 !important;
+}
+.el-submenu li.el-menu-item{
+  background-color:#405597 !important;
+}
+.is-opened{
+  background-color:#405597 !important;
+}
+.is-opened .el-submenu__title{
+  background-color:#405597 !important;
+  border-bottom:0.5px #000 solid !important;
+}
+.el-menu-item{
+  border-top:0.5px #a2b8fd solid !important;
+}
+.el-menu--collapse .el-menu-item{
+  border:none !important;
+}
+.el-submenu{
+  border:0.5px #a2b8fd solid !important;
+}
+.el-menu--collapse .el-submenu{
+  border:none !important;
+}
+.el-menu--inline .el-menu-item{
+  border:none !important;
+}
 
 /*# sourceMappingURL=reset.css.map */
