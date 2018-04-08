@@ -51,7 +51,7 @@
         <el-button size="small" type="primary" @click="sendx">发布</el-button>
       </span>
     </el-dialog>
-    <Organization :organizationDialog="organizationDialog" :type="type"  @close="closeOrganization"  @selectMember="coloseaa"></Organization>
+    <Organization :organizationDialog="organizationDialog" :type="typex"  @close="closeOrganization"  @selectMember="coloseaa"></Organization>
   </div>
 </template>
 
@@ -73,7 +73,7 @@ export default {
       organizationDialog: false,
       saveorsendflag: false,
       lenx: 7,
-      type:'depart',
+      typex:'',
       screenshots:[],
       screensho:[],
       secondfalg:false,
@@ -257,6 +257,7 @@ export default {
     },
     openOrganizationModal() {
       this.organizationDialog = true;
+      this.typex="depart"
     },
     closeOrganization() {
       this.organizationDialog = false;

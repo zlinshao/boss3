@@ -10,7 +10,7 @@
               </el-form-item>
             </el-col> 
             <el-col :span="10">
-              <el-form-item label="离职业务员:">
+              <el-form-item label="离职业务员:" required >
                <span v-if="name">{{name}}</span>
                <span style="color:#f00" v-else>请在高级选项中选择</span>
               </el-form-item>
@@ -23,13 +23,13 @@
               </el-form-item>
             </el-col>
             <el-col :span="10">
-              <el-form-item label="离职时间:">
+              <el-form-item label="离职时间:" required>
                 <el-date-picker type="date" format="yyyy-MM-dd" value-format="yyyy-MM-dd" placeholder="选择日期" v-model="formInline.date" style="width: 100%;"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-row>
           <el-form-item label="短信内容:">
-            <el-col :span="18">
+            <el-col :span="19">
               <el-input :rows="8" type="textarea" v-model="textarea"  ></el-input>
             </el-col>
           </el-form-item>
@@ -75,7 +75,6 @@ export default {
           date: ""
         };
         this.name="";
-        this.number="";
       }
     },
     sendId(val) {
@@ -95,6 +94,11 @@ export default {
               title: "警告",
               message: "未选离职业务员"
             });       
+      }else if(this.formInline.date == ""){
+             this.$notify.warning({
+              title: "警告",
+              message: "未填写离职时间"
+            });    
       }
       else{
       this.$http

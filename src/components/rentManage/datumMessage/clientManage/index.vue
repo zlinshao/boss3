@@ -117,7 +117,7 @@
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>    
-    <Remind :remindDialog="remindDialog" :sendId="sendId" :totalNumber="totalNumber" :sendName="sendName" @close="closeRemind"></Remind>
+    <Remind :remindDialog="remindDialog" :sendId="sendId" :totalNumber="num" :sendName="sendName" @close="closeRemind"></Remind>
     <CustomerDetail :customerDetailDialog="customerDetailDialog" :activeId="activeId" @close="closeModal"></CustomerDetail>
     <Organization :organizationDialog="organizeDialog" :length="length" :type="type" 
                   @selectMember="selectMember"></Organization>
@@ -150,6 +150,7 @@ export default {
       },
       staff_name:'',
       sendId: "",
+      num:0,
       sendName:"",
       totalNumber: 0,
       tableData: [],
@@ -223,6 +224,7 @@ export default {
     clickEvent(index) {
       this.show = false;
       this.remindDialog = true;
+      this.num=this.totalNumber;
     },
     closeRemind() {
       this.remindDialog = false;
