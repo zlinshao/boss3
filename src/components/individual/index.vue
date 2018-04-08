@@ -123,7 +123,7 @@
                   <i class="iconfont icon-jifen1"></i> {{creditTotal}}
                 </div>
               </div>
-              <div class="integralTab" @click="routerLink('/articleMessage','fourth')">
+              <div class="integralTab" @click="routerDetail(systemData[0] && systemData[0].id)">
                 <div class="titles">
                   <div>RNTEGAL GETAIL</div>
                   <div>晋升通道</div>
@@ -180,7 +180,7 @@
                     <div>明细积分</div>
                   </div>
                 </div>
-                <div class="integralBottom" @click="routerLink('/articleMessage','fourth')">
+                <div class="integralBottom" @click="routerDetail(systemData[0] && systemData[0].id)">
                   <div class="titles">
                     <div>RNTEGAL GETAIL</div>
                     <div>晋升通道</div>
@@ -267,17 +267,29 @@
         punishmentData:{},
         announcementId:'',
         creditTotal:'',     //总积分
+        systemData: [],
       }
     },
-    mounted() {
+    activated() {
       this.landholder = JSON.parse(localStorage.personal);
-      console.log(this.landholder)
       this.getAlbumNum();
       this.drawLineChart();
       this.getPraise();
       this.getPunishment();
       //获取积分明细
       this.getCredit();
+      //获取晋升通道的数据
+      this.getSystemTableData();
+    },
+    mounted() {
+      this.landholder = JSON.parse(localStorage.personal);
+      this.getAlbumNum();
+      this.drawLineChart();
+      this.getPraise();
+      this.getPunishment();
+      //获取积分明细
+      this.getCredit();
+      this.getSystemTableData();
     },
     watch: {
       'params.content': {
@@ -292,7 +304,19 @@
       routerLink(val,type) {
         this.$router.push({path: val,query:{type:type}})
       },
-
+      // 详情
+      routerDetail(id) {
+        let data = {ids: id, detail: 'converge'};
+        this.$router.push({path: '/Infodetails', query: data});
+        this.$store.dispatch('articleDetail', data);
+      },
+      getSystemTableData() {
+        this.$http.get(globalConfig.server + 'oa/portal/', { params: {dict_id: 552, pages: 1}}).then((res) => {
+          if (res.data.code === '80000') {
+            this.systemData = res.data.data.data;
+          }
+        })
+      },
       getAlbumNum(){
         this.$http.get(globalConfig.server + "album?page="+ this.currentPage+"&limit=16").then((res) =>{
           if (res.data.code === "20110") {

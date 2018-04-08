@@ -1,5 +1,5 @@
 <template>
-  <div id="staffManage" @click="show=false" @contextmenu="closeMenu">
+  <div id="staffManage"  @click="show=false" @contextmenu="closeMenu">
     <el-row :gutter="20">
       <el-col :span="6">
         <div class="border left">
@@ -154,7 +154,7 @@
                     <el-pagination
                       @size-change="handleSizeChange"
                       @current-change="handleCurrentChange"
-                      :current-page="currentPage"
+                      :current-page="params.page"
                       :page-sizes="[5, 10, 15, 20]"
                       :page-size="5"
                       layout="total, sizes, prev, pager, next, jumper"
@@ -194,7 +194,7 @@
                     <el-pagination
                       @size-change="handleSizeChange"
                       @current-change="handleCurrentChange"
-                      :current-page="currentPage"
+                      :current-page="params.page"
                       :page-sizes="[5, 10, 15, 20]"
                       :page-size="5"
                       layout="total, sizes, prev, pager, next, jumper"
@@ -203,46 +203,14 @@
                   </div>
                 </div>
               </el-tab-pane>
-
-              <!--<el-tab-pane label="岗位管理" name="third">-->
-                <!--<el-table-->
-                  <!--:data="positionTableData"-->
-                  <!--@row-contextmenu="openPositionMenu"-->
-                  <!--style="width: 100%">-->
-                  <!--<el-table-column-->
-                    <!--prop="name"-->
-                    <!--label="岗位">-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                    <!--label="上级岗位">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>-->
-                      <!--<span v-else=""> &nbsp;暂无&nbsp; </span>-->
-                    <!--</template>-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                    <!--prop="pName"-->
-                    <!--label="职位">-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                    <!--prop="orgName"-->
-                    <!--label="部门">-->
-                  <!--</el-table-column>-->
-                <!--</el-table>-->
-              <!--</el-tab-pane>-->
-
             </el-tabs>
-
-
-
           </div>
-
         </div>
       </el-col>
     </el-row>
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
     <EditDepart :editDepartDialog="editDepartDialog" :departId="departId" @close="closeEditDepart"></EditDepart>
-    <AddStaff :addStaffDialog="addStaffDialog" :addStaffParams="addStaffParams" :isEdit="isEdit" :editId="editId" @close="closeAddStaff"></AddStaff>
+    <AddStaff :addStaffDialog="addStaffDialog" :isEdit="isEdit" :editId="editId" @close="closeAddStaff"></AddStaff>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
     <AddDepart :addDepartDialog="addDepartDialog" :parentId="parentId" :parentName="parentName" @close="closeAddDepart"></AddDepart>
@@ -296,10 +264,9 @@
           label: 'name'
         },
         defaultExpandKeys: [],//默认展开节点列表
-
         params:{
           keywords:'',
-          pageNum:10,
+          limit:10,
           page:1,
           org_id:'',
         },
@@ -311,7 +278,6 @@
         currentPage:1,
         isDepartment : false,
         //......................
-
         addStaffDialog:false, //新增用户模态框
         editDepartDialog:false, //编辑部门模态框
         addDepartDialog:false, //新建部门模态框
@@ -327,7 +293,6 @@
         departId:null,
         parentId:null,
         parentName:null,
-
 
         loading:true,
         activeName:'',      //当前tab名
@@ -414,15 +379,14 @@
             this.getStaffData();
           }
         });
-        return list
       },
       //点击节点
-      nodeClick(data,node,store){
+      nodeClick(data,node,store) {
         this.params.org_id = data.id;
         this.department_id = data.id;
         this.department_name = data.name;
       },
-      nodeExpand(data,node,store){
+      nodeExpand(data,node,store) {
         if(this.defaultExpandKeys.indexOf(data.id)<0){
           this.defaultExpandKeys.push(data.id)
         }
@@ -433,6 +397,7 @@
         })
       },
       handleAdd(s,d,n){//增加节点
+        console.log(d);
         this.addDepart(d);
       },
       handleEdit(s,d,n){//编辑节点
@@ -532,7 +497,7 @@
         if(type === 'edit'){
           this.addStaffDialog = true;
           this.isEdit = true;
-        }else if(type === 'delete'){
+        }else if(type === 'delete') {
           this.$confirm('此操作将永久删除, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -706,7 +671,6 @@
                 }
               })
             }
-
             arr.forEach((item) => {
               item.pName = this.onlyPositionName;
               item.orgId = this.department_id;

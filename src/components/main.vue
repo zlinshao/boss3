@@ -613,6 +613,7 @@
      position: relative;
      font-size: 14px;
      width: 30px;
+     min-width: 30px;
      padding: 7px;
      color: #464748;
      margin: -70px 0 18px 15px;
