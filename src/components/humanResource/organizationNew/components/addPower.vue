@@ -157,6 +157,8 @@
             }
             break;
         }
+        this.checkAll = false;
+        this.isIndeterminate = true;
       },
       // 系统
       systemList() {
