@@ -154,7 +154,7 @@
                     <el-pagination
                       @size-change="handleSizeChange"
                       @current-change="handleCurrentChange"
-                      :current-page="currentPage"
+                      :current-page="params.page"
                       :page-sizes="[5, 10, 15, 20]"
                       :page-size="5"
                       layout="total, sizes, prev, pager, next, jumper"
@@ -194,7 +194,7 @@
                     <el-pagination
                       @size-change="handleSizeChange"
                       @current-change="handleCurrentChange"
-                      :current-page="currentPage"
+                      :current-page="params.page"
                       :page-sizes="[5, 10, 15, 20]"
                       :page-size="5"
                       layout="total, sizes, prev, pager, next, jumper"
@@ -240,6 +240,7 @@
     components:{Organization,AddStaff,RightMenu,EditDepart,AddDepart,AddPosition,EditPosition,EditOnlyPosition},
     data(){
       return{
+        currentPage: 1,
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
@@ -252,7 +253,6 @@
           label: 'name'
         },
         defaultExpandKeys: [],//默认展开节点列表
-
         params:{
           keywords:'',
           limit:10,
@@ -264,10 +264,8 @@
         positionList:[],      //职位列表
         organizationDialog:false,
         sortable: null,
-        currentPage:1,
         isDepartment : false,
         //......................
-
         addStaffDialog:false, //新增用户模态框
         editDepartDialog:false, //编辑部门模态框
         addDepartDialog:false, //新建部门模态框
@@ -282,7 +280,6 @@
         departId:null,
         parentId:null,
         parentName:null,
-
 
         loading:true,
         activeName:'',      //当前tab名

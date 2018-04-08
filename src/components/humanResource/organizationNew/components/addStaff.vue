@@ -94,7 +94,10 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item  label="等级" required>
-                    <el-input placeholder="请选择等级" v-model="params.level"></el-input>
+                    <el-select v-model="params.level">
+                      <el-option v-for="item in branchBankCategory" :value="item.id" :key="item.id" :label="item.dictionary_name">{{item.dictionary_name}}</el-option>
+                    </el-select>
+
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -287,6 +290,7 @@
         maritalStatusCategory: [],
         politicalStatusCategoey: [],
         educationCategory: [],
+        branchBankCategory: [],
         checkStatus: false,
       };
     },
@@ -416,6 +420,7 @@
               if(res.data.code === '10010') {
                 this.$emit('close','success');
                 this.closeModal();
+
               } else {
                 this.$notify.warning({
                   title: '警告',
@@ -481,11 +486,39 @@
       closeModal(){
         this.addStaffDialogVisible = false;
         this.params = {
-          position_id:[],
-          department_id:'',
-          name:'',
-          phone:''
-
+          position_id: [],
+          department_id: [],
+          phone: '',
+          real_name: '',
+          gender: '',
+          home_addr: '',
+          fertility_status: '',
+          id_num: '',
+          birthday: '',
+          recommender: '',
+          bank_num: '',
+          account_bank: '',
+          emergency_call: '',
+          level: '',
+          account_name: '',
+          status: '',
+          enroll: '',
+          // salary_level: '1',
+          salary: '',
+          entry_materials: [],
+          origin_addr: '',
+          marital_status: '',
+          political_status: '',
+          forward_time: '',
+          mail: '',
+          education: '',
+          school: '',
+          major: '',
+          graduation_time: '',
+          agreement_first_time: '',
+          agreement_first_end_time: '',
+          agreement_second_time: '',
+          remark: '',
         };
         this.department = '';
         this.positionArray =[];
@@ -565,7 +598,11 @@
       //等级
       getBranchBank() {
         this.$http.get(globalConfig.server+ 'setting/dictionary/234').then((res) => {
-
+          if (res.data.code === '30010') {
+            this.branchBankCategory = res.data.data;
+          }else{
+            this.branchBankCategory = [];
+          }
         });
       },
       //校验银行卡号和身份证号

@@ -14,13 +14,13 @@
           <div class="userInfo" style="margin-top: 18px">
             <div class="publishInfo">
               <div class="headPic">
-                <img :src="staffs.avatar" v-if="staffs.avatar !== '' && staffs.avatar !== null">
+                <img :src="staffs.avatar" v-if="staffs && staffs.avatar">
                 <img src="../../../assets/images/head.png" v-else>
               </div>
-              <div class="publishName">{{staffs.name}}</div>
+              <div class="publishName">{{staffs && staffs.name}}</div>
               <div class="publishRank">
-                <span v-for="key in staffs.org">
-                    <span>{{key.name}}</span>
+                <span v-for="key in staffs.org" v-if="staffs && staffs.org">
+                    <span>{{key && key.name}}</span>
                 </span>
               </div>
             </div>
@@ -52,7 +52,7 @@
                   <i class="iconfont icon-pinglun"></i>&nbsp;&nbsp;{{formList.comments_count}}
                 </div>
                 <div class="zan_div">
-                  <i class="iconfont icon-zan" :class="{'zan': assistId}" @click="assist()"></i>&nbsp;{{formList.favor_num}}
+                  <i class="iconfont icon-zan" :class="{'zanColor': assistId}" @click="assist()"></i>&nbsp;{{formList.favor_num}}
                 </div>
                 <div>
                   <i class="el-icon-view"></i>&nbsp;&nbsp;{{formList.read_num}}
@@ -73,15 +73,15 @@
         <div class="comment_box" v-if="isShow">
           <div class="publishComment">
             <div class="portrait">
-              <img :src="landholder.avatar" v-if="landholder.avatar !== '' && landholder.avatar !== null">
+              <img :src="landholder.avatar" v-if="landholder && landholder.avatar">
               <img src="../../../assets/images/head.png" v-else>
             </div>
             <div class="comments">
               <div class="staff_name">
                 <div>
-                  <span>{{landholder.name}}</span>&nbsp;&nbsp;
-                  <span v-for="key in landholder.org">
-                    <span>{{key.name}}</span>
+                  <span>{{landholder && landholder.name}}</span>&nbsp;&nbsp;
+                  <span v-for="key in landholder.org" v-if="landholder && landholder.org">
+                    <span>{{key && key.name}}</span>
                   </span>
                 </div>
               </div>
@@ -102,15 +102,15 @@
 
           <div class="commentOn" v-for="key in commentOn">
             <div class="portrait">
-              <img :src="key.staffs.avatar" v-if="key.staffs.avatar !== '' && key.staffs.avatar !== null">
+              <img :src="key.staffs.avatar" v-if="key && key.staffs && key.staffs.avatar">
               <img src="../../../assets/images/head.png" v-else>
             </div>
             <div class="comments">
               <div class="staff_name">
                 <div>
-                  <span>{{key.staffs.name}}</span>&nbsp;&nbsp;
-                  <span v-for="item in key.staffs.org">
-                    <span class="staffBefore">{{item.name}}</span>
+                  <span>{{key.staffs && key.staffs.name}}</span>&nbsp;&nbsp;
+                  <span v-for="item in key.staffs.org" v-if="key && key.staffs && key.staffs.org">
+                    <span class="staffBefore">{{item && item.name}}</span>
                   </span>
                 </div>
                 <div>
@@ -234,12 +234,13 @@
       // if(localStorage.getItem('detailStaffs')){
       //   this.staffs = JSON.parse(localStorage.getItem('detailStaffs'));
       // }
+      this.infoDetail();
     },
     activated() {
       this.infoDetail();
     },
     mounted() {
-      this.infoDetail();
+      // this.infoDetail();
     },
     watch: {
       ids(val) {
@@ -265,13 +266,13 @@
         if (JSON.stringify(query) !== '{}') {
           this.ids = query.ids;
           this.publicDetail(query.ids);
-          if (query.detail === 'port') {
-            this.isShow = false;
-            this.colNum = 24;
-          } else {
-            this.isShow = true;
-            this.colNum = 16;
-          }
+          // if (query.detail === 'port') {
+          //   this.isShow = false;
+          //   this.colNum = 24;
+          // } else {
+          this.isShow = true;
+          this.colNum = 16;
+          // }
         };
       },
       // 详情
@@ -344,6 +345,10 @@
           if (res.data.code === '80070') {
             this.publicDetail(this.formList.id);
             this.assistId = true;
+            $('.icon-zan.zanColor').addClass('zan');
+            setTimeout( ()=> {
+              $('.icon-zan.zanColor').removeClass('zan');
+            },2000);
             if (this.assistId) {
               this.formList.favor_num++;
             }
@@ -536,9 +541,11 @@
       width: 100%;
       height: 100%;
     }
-    .icon-zan.zan{
-      animation: color-me-in 1s;
+    .zanColor{
       color: #fb4699;
+    }
+    .zan{
+      animation: color-me-in 1s;
     }
     @keyframes color-me-in {
       0% {
