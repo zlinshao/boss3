@@ -227,11 +227,17 @@
                     <div v-for="item in payWayChangeAmount">
                       <el-row>
                         <el-col :span="6">
-                          <el-form-item label="付款方式">
+                          <el-form-item label="押">
                             <el-select clearable v-model="payWayArray[item-1]" placeholder="请选择付款方式" value="">
-                              <el-option v-for="item in pay_way_dic" :label="item.dictionary_name" :value="item.id"
-                                         :key="item.id"></el-option>
+                              <el-option v-for="item in 3" :value="item-1"
+                                         :key="item-1"></el-option>
                             </el-select>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                          <el-form-item label="付">
+                            <el-input placeholder="请输入内容"
+                                      v-model="pay_way_bet[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
                         <el-col :span="6">
@@ -471,7 +477,7 @@
 
   export default {
     components: {UpLoad, VillageModal, Organization},
-    props: ['addRentInfoDialog', 'collectContractId'],
+    props: ['addRentInfoDialog', 'collectContractId','collectHouseId'],
     data() {
       return {
         addRentInfoDialogVisible: false,
@@ -484,7 +490,7 @@
 
         houseInfo: {},                //房屋相关信息
         params: {
-          contract_id: '',   //合同id
+          house_id: '',   //合同id
           type: 1,
           //------------------小区详情--------------------//
           customers: [],               //租客数组
@@ -567,6 +573,7 @@
 
         payWayChangeAmount: 1,
         payWayArray: [],
+        pay_way_bet: [],
         payPeriodArray: [],
 
         moneyTableChangeAmount: 1,
@@ -602,8 +609,8 @@
           }
         }
       },
-      collectContractId(val){
-        this.params.contract_id = val;
+      collectHouseId(val){
+        this.params.house_id = val;
       },
       'params.purchase_way': {
         handler(val, oldVal){
@@ -675,6 +682,7 @@
         this.payPeriodArray[0] = this.params.month;
         this.priceArray.splice(1, this.priceArray.length);
         this.periodArray.splice(1, this.periodArray.length);
+        this.pay_way_bet.splice(1, this.pay_way_bet.length);
         this.payWayArray.splice(1, this.payWayArray.length);
         this.payPeriodArray.splice(1, this.payPeriodArray.length);
         this.priceChangeAmount = 1;
@@ -757,6 +765,7 @@
       },
       deletePayWayChange(item){
         this.payWayArray.splice(item, 1);
+        this.pay_way_bet.splice(item, 1);
         this.payPeriodArray.splice(item, 1);
         this.payWayChangeAmount--;
       },
@@ -837,6 +846,7 @@
         for (let i = 0; i < this.payWayChangeAmount; i++) {
           payWayItem = {};
           payWayItem.pay_way = this.payWayArray[i] ? this.payWayArray[i] : '';
+          payWayItem.pay_way_bet = this.pay_way_bet[i] ? this.pay_way_bet[i] : '';
           payWayItem.period = this.payPeriodArray[i] ? this.payPeriodArray[i] : '';
           this.params.pay_way.push(payWayItem);
         }
@@ -877,7 +887,7 @@
       clearData(){
         this.isClear = false;
         this.params = {
-          contract_id: '',   //合同id
+          house_id: '',   //合同id
           type: 1,
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
@@ -946,6 +956,7 @@
         this.periodArray = [];
         this.payWayChangeAmount = 1;
         this.payWayArray = [];
+        this.pay_way_bet = [];
         this.payPeriodArray = [];
       }
     }

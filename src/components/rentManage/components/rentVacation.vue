@@ -7,51 +7,27 @@
           <table class="tableDetail">
             <tr>
               <td>合同编号</td>
-              <td></td>
+              <td>{{rentContractInfo.contract_number}}</td>
               <td>地址</td>
-              <td></td>
-              <td>户型</td>
-              <td></td>
-              <td>姓名</td>
-              <td></td>
+              <td>{{rentContractInfo.address}}</td>
               <td>电话</td>
-              <td></td>
+              <td>{{rentContractInfo.phone}}</td>
             </tr>
             <tr>
               <td>身份证</td>
-              <td></td>
-              <td>建筑面积</td>
-              <td></td>
-              <td>押金</td>
-              <td></td>
-              <td>月单价</td>
-              <td></td>
+              <td>{{rentContractInfo.phone}}</td>
+              <td>中介费</td>
+              <td>{{rentContractInfo.agency}}</td>
               <td>合同期限</td>
-              <td></td>
+              <td>{{rentContractInfo.duration}}</td>
             </tr>
             <tr>
               <td>合同开始时间</td>
-              <td></td>
+              <td>{{rentContractInfo.begin_date}}</td>
               <td>合同结束时间</td>
+              <td>{{rentContractInfo.end_date}}</td>
               <td></td>
-              <td>门禁卡</td>
               <td></td>
-              <td>钥匙数</td>
-              <td colspan="3"></td>
-              <!--<td>证件号码</td>-->
-              <!--<td></td>-->
-            </tr>
-            <tr>
-              <td>水表底数</td>
-              <td></td>
-              <td>燃气表底数</td>
-              <td></td>
-              <td>电表底数</td>
-              <td colspan="5"></td>
-            </tr>
-            <tr>
-              <td>备注</td>
-              <td colspan="9"></td>
             </tr>
           </table>
         </div>
@@ -408,17 +384,16 @@
 <script>
   import UpLoad from '../../common/UPLOAD.vue'
   export default {
-    props:['rentVacationDialog','rentContractId'],
+    props:['rentVacationDialog','rentContractId','rentContractInfo'],
     components:{UpLoad},
     data() {
       return {
         rentVacationDialogVisible:false,
         params: {
-          contract_id : 1,
+          contract_id : '',
           module : '2',
-
           check_time : '',
-          check_type : 329,
+          check_type : '',
           bank_num : '',
           account_bank : '',
           branch_bank : '',
@@ -470,11 +445,10 @@
           TV_fees : '',
           network_fees : '',
         },
-        tableData:[],
-        value1:'',
         isClear : false,
         isDictionary:false,
         dictionary:[],
+        rentInfo:{},
       };
     },
     computed:{
@@ -519,7 +493,8 @@
       },
       rentVacationDialogVisible(val){
         if(!val){
-          this.$emit('close')
+          this.$emit('close');
+          this.isClear = true;
         }else {
           this.isClear = false;
           if(!this.isDictionary){
@@ -529,13 +504,12 @@
       },
       rentContractId(val){
         this.params.contract_id = val;
-      }
+      },
     },
     mounted(){
 
     },
     methods:{
-
       getDictionary(){
         this.$http.get(globalConfig.server+'setting/dictionary/328').then((res) => {
           if(res.data.code === '30010'){
@@ -550,13 +524,15 @@
       },
 
       confirmAdd(){
-//        this.rentVacationDialogVisible = false;
         this.$http.post(globalConfig.server+'customer/check_out',this.params).then((res) => {
           if(res.data.code === '20010'){
             this.$notify.success({
               title:'成功',
               message:res.data.msg
-            })
+            });
+            this.clearData();
+            this.rentVacationDialogVisible = false;
+            this.$emit('close','success');
           }else {
             this.$notify.warning({
               title:'警告',
@@ -564,7 +540,65 @@
             })
           }
         })
-      }
+      },
+      clearData(){
+        this.params = {
+          contract_id : this.rentContractId,
+          module : '2',
+          check_time : '',
+          check_type : '',
+          bank_num : '',
+          account_bank : '',
+          branch_bank : '',
+          account_name : '',
+          reason : '',
+          compensation : '',
+          image_pic : [],
+
+          refund_deposit : '',
+          residual_rent : '',
+          viewing_fee : '',
+          property_management_fee : '',
+          water_fee : '',
+          electricity_fee : '',
+          gas_fee : '',
+
+          water_last : '',
+          water_now : '',
+          water_unit_price : '',
+          water_late_payment : '',
+
+          electricity_peak_last : '',
+          electricity_peak_now : '',
+          electricity_peak_unit_price : '',
+          electricity_peak_late_payment : '',
+
+          electricity_valley_last : '',
+          electricity_valley_now : '',
+          electricity_valley_unit_price : '',
+          electricity_valley_late_payment : '',
+
+          gas_last : '',
+          gas_now : '',
+          gas_unit_price : '',
+          gas_late_payment : '',
+
+          property_management_last : '',
+          property_management_now : '',
+          property_management_electricity : '',
+          property_management_water : '',
+          property_management_total_fees : '',
+
+          liquidated_damages : '',
+          trash_fees : '',
+          cleaning_fees : '',
+          repair_compensation_fees : '',
+          other_fees : '',
+          overtime_rent : '',
+          TV_fees : '',
+          network_fees : '',
+        };
+      },
     }
   };
 </script>
@@ -587,9 +621,9 @@
               tr {
                 td {
                   border: 1px solid #ebeef5;
-                  padding: 2px 0;
                   color: #606266;
-                  text-align: center;
+                  text-align: left;
+                  padding: 4px 10px;
                   &:nth-child(odd) {
                     width: 8%;
                   }

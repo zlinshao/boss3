@@ -104,11 +104,15 @@
                     width="300"
                     trigger="click">
                     <el-table :data="scope.row.pay_way">
-                      <el-table-column width="150" property="pay_way" label="付款方式"></el-table-column>
+                      <el-table-column width="150" label="付款方式">
+                        <template slot-scope="scope">
+                          {{matchDictionary(scope.row.pay_way)}}
+                        </template>
+                      </el-table-column>
                       <el-table-column width="150" property="period" label="变化周期(月)"></el-table-column>
                     </el-table>
                   </el-popover>
-                  {{scope.row.pay_way[0].pay_way}}&nbsp;
+                  {{matchDictionary(scope.row.pay_way[0].pay_way)}}&nbsp;
                   <el-button size="mini" type="text" v-show="scope.row.pay_way.length>1" v-popover:payWay>变化</el-button>
                 </template>
               </el-table-column>
@@ -189,7 +193,7 @@
                 label="房屋地址">
               </el-table-column>
               <el-table-column
-                prop="house_type"
+                prop="property_type"
                 label="房屋类型">
               </el-table-column>
               <el-table-column
@@ -221,16 +225,17 @@
                     width="300"
                     trigger="click">
                     <el-table :data="scope.row.pay_way">
-                      <el-table-column width="150" property="pay_way" label="付款方式"></el-table-column>
-                      <el-table-column width="150" property="period" label="变化周期(月)"></el-table-column>
+                      <el-table-column width="100" property="pay_way" label="押"></el-table-column>
+                      <el-table-column width="100" property="pay_way_bet" label="付"></el-table-column>
+                      <el-table-column width="100" property="period" label="变化周期(月)"></el-table-column>
                     </el-table>
                   </el-popover>
-                  {{scope.row.pay_way[0].pay_way}}&nbsp;
+                  押 {{scope.row.pay_way[0].pay_way}} 付 {{scope.row.pay_way[0].pay_way_bet}}&nbsp;
                   <el-button size="mini" type="text" v-show="scope.row.pay_way.length>1" v-popover:payWayRent>变化</el-button>
                 </template>
               </el-table-column>
               <el-table-column
-                prop="month"
+                prop="duration"
                 label="签约时长(月)">
               </el-table-column>
               <el-table-column
@@ -289,6 +294,7 @@
             <el-tab-pane label="物品增减" name="GoodsChangeTab">
               <GoodsChangeTab :collectHouseId="collectHouseId" :activeName="activeName"></GoodsChangeTab>
             </el-tab-pane>
+            <!--
             <el-tab-pane label="房东退房记录" name="CollectReturnRomeInfoTab">
               <CollectReturnRomeInfoTab :collectContractId="collectContractId" :activeName="activeName"></CollectReturnRomeInfoTab>
             </el-tab-pane>
@@ -304,6 +310,7 @@
             <el-tab-pane label="转租记录" name="subletRecordTab">
               <subletRecordTab></subletRecordTab>
             </el-tab-pane>
+            -->
             <el-tab-pane label="应收款项" name="ReceivableItemTab">
               <ReceivableItemTab></ReceivableItemTab>
             </el-tab-pane>
@@ -338,7 +345,6 @@
     <BackUp :backUpDialog="backUpDialog" @close="closeModal"></BackUp>
     <Advanced :advancedDialog="advancedDialog" @close="closeModal"></Advanced>
     <OwnerDelay :ownerDelayDialog="ownerDelayDialog" @close="closeModal"></OwnerDelay>
-    <RentVacation :rentVacationDialog="rentVacationDialog" :rentContractId="rentContractId" @close="closeModal"></RentVacation>
     <IncreaseGoods :increaseGoodsDialog="increaseGoodsDialog" @close="closeModal"></IncreaseGoods>
     <DecreaseGoods :decreaseGoodsDialog="decreaseGoodsDialog" @close="closeModal"></DecreaseGoods>
     <OwnerArrears :ownerArrearsDialog="ownerArrearsDialog" @close="closeModal"></OwnerArrears>
@@ -348,13 +354,25 @@
     <CollectVacation :collectVacationDialog="collectVacationDialog" :collectContractId="collectContractId" @close="closeModal"></CollectVacation>
     <AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" @close="closeModal"></AddCollectRepair>
     <AddRentRepair :addRentRepairDialog="addRentRepairDialog" @close="closeModal"></AddRentRepair>
-    <RentChangeRoom :rentChangeRoomDialog="rentChangeRoomDialog" :rentContractId="rentContractId" @close="closeModal"></RentChangeRoom>
-    <Sublease :subleaseDialog="subleaseDialog" @close="closeModal"></Sublease>
-    <RentRenew :rentRenewDialog="rentRenewDialog" @close="closeModal"></RentRenew>
 
-    <AddRentInfo :addRentInfoDialog="addRentInfoDialog" :collectContractId="collectContractId" @close="closeModal"></AddRentInfo>
-    <EditRentInfo :editRentInfoDialog="editRentInfoDialog" :rentContractId="rentContractId"
+    <!--租客调房-->
+    <RentChangeRoom :rentChangeRoomDialog="rentChangeRoomDialog" :rentContractId="rentContractId" :collectHouseId="collectHouseId"
+                    :collectContractId="collectContractId" @close="closeModal"></RentChangeRoom>
+    <!--房屋转租-->
+    <Sublease :subleaseDialog="subleaseDialog" :rentContractId="rentContractId" :collectHouseId="collectHouseId"
+              :collectContractId="collectContractId" @close="closeModal"></Sublease>
+    <!--租客续约-->
+    <RentRenew :rentRenewDialog="rentRenewDialog" :rentContractId="rentContractId" :collectHouseId="collectHouseId"
+               :collectContractId="collectContractId" @close="closeModal"></RentRenew>
+    <!--新增租客-->
+    <AddRentInfo :addRentInfoDialog="addRentInfoDialog" :collectContractId="collectContractId"
+                 :collectHouseId="collectHouseId" @close="closeModal"></AddRentInfo>
+    <!--编辑租客-->
+    <EditRentInfo :editRentInfoDialog="editRentInfoDialog" :rentContractId="rentContractId" :collectHouseId="collectHouseId"
                   :collectContractId="collectContractId" @close="closeModal"></EditRentInfo>
+    <!--租客退房-->
+    <RentVacation :rentVacationDialog="rentVacationDialog" :rentContractId="rentContractId"
+                  :rentContractInfo="rentContractInfo" @close="closeModal"></RentVacation>
 
     <SendMessage :sendMessageDialog="sendMessageDialog" @close="closeModal"></SendMessage>
     <AddHouseResources :addHouseResourcesDialog="addHouseResourcesDialog" @close="closeModal"></AddHouseResources>
@@ -518,17 +536,23 @@
         rentParams:{
           page:1,
           limit:3,
+          house_id:'',
         },
         rentingData:[],     //租房列表数据
         rentTotalNum:0,
         rentHouseId : '',
         rentContractId : '',
-
+        rentContractInfo:{},
         contractModule : '',
         contractOperateId : '',
 
         activeName:'OwnerInfoTab',    //tab name
+        pay_way_dic:[],
       }
+    },
+
+    created(){
+      this.getDictionary()
     },
     mounted(){
       this.initData();
@@ -541,6 +565,22 @@
     },
 
     methods: {
+      getDictionary(){
+        this.dictionary(443, 1).then((res) => {
+          this.pay_way_dic = res.data;
+        });
+      },
+
+      matchDictionary(id){
+        let dictionary_name = null;
+        this.pay_way_dic.map((item) => {
+          if(item.id == id ){
+            dictionary_name = item.dictionary_name;
+          }
+        });
+        return dictionary_name;
+      },
+
       //数据初始化
       initData(){
         this.getCollectData();
@@ -625,9 +665,10 @@
       },
       //*********************************租房*******************************************************//
       getRentData(id){
-        this.$http.get(globalConfig.server+'lease/entire/rent/' + id,{params:this.rentParams}).then((res) => {
+        this.rentParams.house_id = id;
+        this.$http.get(globalConfig.server+'lease/rent',{params:this.rentParams}).then((res) => {
           this.$loading.hide();
-          if(res.data.code === '60110'){
+          if(res.data.code === '61110'){
             this.rentingData = res.data.data;
             this.rentTotalNum = res.data.meta.total;
             if(res.data.data.length>0){
@@ -650,20 +691,16 @@
 
       //租客右键
       clientMenu(row, event){
+        this.rentContractInfo = row;
         this.rentContractId = row.contract_id;
         this.contractOperateId = row.contract_id;   //通用合同ID
         this.contractModule = 2;
         this.lists = [
           {clickIndex: 'editRentInfoDialog',headIcon: 'el-icon-edit', label: '修改租客信息',},
-          {clickIndex: 'rentRenewDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '租客续约',},
-          {
-            clickIndex: '', headIcon: 'el-icons-fa-home', tailIcon: 'el-icon-arrow-right', label: '退房/调房',
-            children: [
-              {clickIndex: 'rentVacationDialog', label: '租客退房',},
-              {clickIndex: 'rentChangeRoomDialog', label: '租客调房',}
-            ]
-          },
-          {clickIndex: 'subleaseDialog', headIcon: 'el-icons-fa-refresh', label: '转租',},
+          {clickIndex: 'rentVacationDialog',headIcon: 'el-icons-fa-reply', label: '租客退房',},
+          {clickIndex: 'subleaseDialog', headIcon: 'el-icons-fa-refresh', label: '房屋转租',},
+          {clickIndex: 'rentRenewDialog', headIcon: 'el-icon-share', label: '租客续约',},
+          {clickIndex: 'rentChangeRoomDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '租客调房',},
 //          {clickIndex: 'ownerArrearsDialog', headIcon: 'el-icons-fa-cny', label: '租客欠款',},
 //          {clickIndex: 'addRentRepairDialog', headIcon: 'el-icons-fa-gear', label: '报修',},
 //          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},

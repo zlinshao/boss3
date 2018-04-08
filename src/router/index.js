@@ -67,7 +67,7 @@ import Management from '../components/OAWork/management/index.vue'              
 import Property from '../components/OAWork/property/index.vue'                                               //资产管理
 
 // import ArticleMessage from '../comments/OAWork/articleMessage/staffSquare/index.vue'                    //员工广场
-import PublicArticle from '../components/OAWork/articleMessage/staffSquare/components/PublicArticle.vue'     //文章发布
+import PublicArticle from '../components/OAWork/articleMessage/staffSquare/components/publicArticle.vue'     //文章发布
 import ArticleMessage from '../components/OAWork/articleMessage/index.vue'                                   //文章管理
 
 // import ContractClaim from '../comments/OAWork/pagerData/contractClaim/index.vue'
