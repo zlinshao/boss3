@@ -265,8 +265,7 @@
         </div>
 
         <div style="position: fixed;bottom: 10px;left: 36px;z-index: 99999;" v-if="!isCollapse">
-          <div style="color: #ffffff;">业务咨询&nbsp;&nbsp;陆经理</div>
-          <div style="color: #ffffff;">版本信息&nbsp;&nbsp;BOSS&nbsp;3.0</div>
+          <div style="color: #a2b8fd;">LEJIA © BOSS 3.0</div>
         </div>
 
         <el-main :class="isFull? 'mainHide':'' ">
@@ -281,9 +280,7 @@
         </el-main>
       </el-container>
     </div>
-
     <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeMessage"></MessageDetail>
-
   </div>
 </template>
 
