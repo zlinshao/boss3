@@ -60,43 +60,44 @@
       },
       departId(val){
           if(val){
-              this.getStaffInfo();
+              this.getDepartInfo();
           }
       }
     },
     methods:{
-      //编辑时获取员工信息
-      getStaffInfo(){
-        this.$http.get(globalConfig.server_user+'organizations/'+this.departId).then((res) => {
-          if(res.data.status === 'success'){
+      getDepartInfo(){
+        this.$http.get(globalConfig.server+'manager/department/'+this.departId).then((res) => {
+          if(res.data.code === '20020'){
             this.params.name = res.data.data.name;
             this.params.order = res.data.data.order;
             this.params.parent_id = res.data.data.parent_id;
             this.department = '';
-            this.$http.get(globalConfig.server_user+'organizations/'+this.params.parent_id).then((res) => {
-              if(res.data.status === 'success'){
+            this.$http.get(globalConfig.server+'manager/department/'+this.params.parent_id).then((res) => {
+              if(res.data.code === '20020'){
                 this.department = res.data.data.name;
               }
             });
           }else {
-            this.$notify({
+            this.$notify.warning({
               title: '警告',
-              message: res.data.message,
-              type:'warning'
+              message: res.data.msg,
             });
           }
         });
       },
       confirmEdit(){
-        this.$http.put(globalConfig.server_user+'organizations/'+this.departId,this.params).then((res) => {
-          if(res.data.status === 'success'){
+        this.$http.put(globalConfig.server+'manager/department/'+this.departId,this.params).then((res) => {
+          if(res.data.code === '20030'){
             this.$emit('close','success');
             this.closeModal();
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg,
+            });
           }else {
-            this.$notify({
+            this.$notify.warning({
               title: '警告',
-              message: res.data.message,
-              type:'warning'
+              message: res.data.msg,
             });
           }
         });

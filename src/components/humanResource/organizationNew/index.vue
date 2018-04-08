@@ -14,7 +14,7 @@
           <div id="dragTree">
             <el-tree ref="expandMenuList" class="expand-tree"
                      :data="setTree"
-                     node-key="id"
+                     node-key="name"
                      highlight-current
                      accordion
                      check-strictly
@@ -203,46 +203,14 @@
                   </div>
                 </div>
               </el-tab-pane>
-
-              <!--<el-tab-pane label="岗位管理" name="third">-->
-                <!--<el-table-->
-                  <!--:data="positionTableData"-->
-                  <!--@row-contextmenu="openPositionMenu"-->
-                  <!--style="width: 100%">-->
-                  <!--<el-table-column-->
-                    <!--prop="name"-->
-                    <!--label="岗位">-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                    <!--label="上级岗位">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>-->
-                      <!--<span v-else=""> &nbsp;暂无&nbsp; </span>-->
-                    <!--</template>-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                    <!--prop="pName"-->
-                    <!--label="职位">-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                    <!--prop="orgName"-->
-                    <!--label="部门">-->
-                  <!--</el-table-column>-->
-                <!--</el-table>-->
-              <!--</el-tab-pane>-->
-
             </el-tabs>
-
-
-
           </div>
-
         </div>
       </el-col>
     </el-row>
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
     <EditDepart :editDepartDialog="editDepartDialog" :departId="departId" @close="closeEditDepart"></EditDepart>
-    <AddStaff :addStaffDialog="addStaffDialog" :addStaffParams="addStaffParams" :isEdit="isEdit" :editId="editId" @close="closeAddStaff"></AddStaff>
+    <AddStaff :addStaffDialog="addStaffDialog" :isEdit="isEdit" :editId="editId" @close="closeAddStaff"></AddStaff>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
     <AddDepart :addDepartDialog="addDepartDialog" :parentId="parentId" :parentName="parentName" @close="closeAddDepart"></AddDepart>
@@ -287,7 +255,7 @@
 
         params:{
           keywords:'',
-          pageNum:10,
+          limit:10,
           page:1,
           org_id:'',
         },
@@ -332,7 +300,7 @@
         isGetPosition:false,
         post_position:'', //  职位或岗位
         addPositionParams:[],
-        addStaffParams:[],      //新建员工参数
+        addStaffId: '',      //新建员工参数
       }
     },
     mounted(){
@@ -340,14 +308,20 @@
       document.getElementById('staffManage').style.minHeight = window.innerHeight - 160 + 'px';
       this.getDepart();
       this.activeName = 'first';
-      this.$http.get(globalConfig.server_user+'organizations/1').then((res) => {
-        if(res.data.status === 'success'){
-          let data = res.data.data;
-          this.params.org_id = data.id;
-          this.department_id = data.id;
-          this.department_name = data.name;
-        }
-      });
+    },
+    activated() {
+      this.initExpand();
+      document.getElementById('staffManage').style.minHeight = window.innerHeight - 160 + 'px';
+      this.getDepart();
+      this.activeName = 'first';
+      // this.$http.get(globalConfig.server_user+'organizations/1').then((res) => {
+      //   if(res.data.status === 'success'){
+      //     let data = res.data.data;
+      //     this.params.org_id = data.id;
+      //     this.department_id = data.id;
+      //     this.department_name = data.name;
+      //   }
+      // });
     },
     watch:{
       department_id(val){
@@ -384,38 +358,25 @@
       //**************部门操作函数********************
       //获取部门数据
       getDepart(){
-        this.$http.get(globalConfig.server_user+'organizations?per_page_number=500').then((res) => {
-          this.arrList = res.data.data;
-          this.setTree = this.recurrence(null);
-          this.arrList.forEach((item) => {
-            if(item.parent_id < 1 && this.defaultExpandKeys.indexOf(item.id)<0){
-              this.defaultExpandKeys.push(item.id);
-            }
-          });
-          this.getStaffData();
-        })
-      },
-      //把数据转化为树形数据结构
-      recurrence(num){
-        let list = [];
-        this.arrList.forEach((item) => {
-          if(item.parent_id === num){
-            let tmp = this.recurrence(item.id);
-            if(tmp){
-              item['children'] = tmp;
-            }
-            list.push(item);
+        this.$http.get(globalConfig.server+'manager/department?search&page&limit=500&list_type=tree').then((res) => {
+          if(res.data.code === '20000'){
+            this.setTree = res.data.data;
+            this.setTree.forEach((item) => {
+              if(item.parent_id < 1 && this.defaultExpandKeys.indexOf(item.name)<0){
+                this.defaultExpandKeys.push(item.name);
+              }
+            });
+            this.getStaffData();
           }
         });
-        return list
       },
       //点击节点
-      nodeClick(data,node,store){
+      nodeClick(data,node,store) {
         this.params.org_id = data.id;
         this.department_id = data.id;
         this.department_name = data.name;
       },
-      nodeExpand(data,node,store){
+      nodeExpand(data,node,store) {
         if(this.defaultExpandKeys.indexOf(data.id)<0){
           this.defaultExpandKeys.push(data.id)
         }
@@ -426,6 +387,7 @@
         })
       },
       handleAdd(s,d,n){//增加节点
+        console.log(d);
         this.addDepart(d);
       },
       handleEdit(s,d,n){//编辑节点
@@ -461,19 +423,17 @@
       },
       //删除部门
       deleteDpr(id){
-        this.$http.delete(globalConfig.server_user+'organizations/'+id).then((res) =>{
-          if(res.data.status === 'success'){
-            this.$notify({
+        this.$http.get(globalConfig.server+'manager/department/delete/'+id).then((res) =>{
+          if(res.data.code === '20050'){
+            this.$notify.success({
               title: '成功',
-              message: '删除成功',
-              type:'success'
+              message: res.data.msg,
             });
             this.getDepart();
           }else {
-            this.$notify({
+            this.$notify.warning({
               title: '警告',
-              message: res.data.message,
-              type:'warning'
+              message: res.data.msg,
             });
           }
         })
@@ -492,17 +452,14 @@
         }
       },
 
-
-
-
       //********************员工操作函数****************
       //获取员工数据列表
       getStaffData(){
-        this.$http.get(globalConfig.server_user+'users?q='+this.params.keywords+'&page='+this.params.page
-          +'&per_page_number='+this.params.pageNum+'&org_id='+this.params.org_id+'&is_recursion=1').then((res) => {
-          if(res.data.status === 'success'){
-            this.staffTableData = res.data.data;
-            this.totalStaffNum = res.data.meta.total;
+        this.$http.get(globalConfig.server+'manager/staff?keywords='+this.params.keywords+'&pages='+this.params.page
+          +'&limit='+this.params.limit+'&org_id='+this.params.org_id+'&is_recursion=1').then((res) => {
+          if(res.data.code === '10000'){
+            this.staffTableData = res.data.data.data;
+            this.totalStaffNum = res.data && res.data.meta && res.data.meta.total;
           }else {
             this.staffTableData = [];
             this.totalStaffNum = 0;
@@ -524,7 +481,7 @@
         if(type === 'edit'){
           this.addStaffDialog = true;
           this.isEdit = true;
-        }else if(type === 'delete'){
+        }else if(type === 'delete') {
           this.$confirm('此操作将永久删除, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -545,15 +502,14 @@
         this.$http.delete(globalConfig.server_user+'users/'+this.editId).then((res) => {
           if(res.data.status === 'success'){
             this.getStaffData();
-            this.$notify({
+            this.$notify.success({
               title: '成功',
               message: '删除成功',
-              type:'success'
             });
           }else {
             this.$notify.info({
               title: '消息',
-              message: res.data.message
+              message: res.data.msg
             });
           }
         })
@@ -562,7 +518,6 @@
       addStaff(){
         this.addStaffDialog = true;
         this.isEdit = false;
-        this.addStaffParams = Object.assign({},this.addStaffParams, {depart_id:this.params.org_id,depart_name:this.department_name})
       },
       closeAddStaff(val){
         this.addStaffDialog = false;
@@ -580,12 +535,12 @@
       getOnlyPosition(){
         this.positionTableData = [];
         if(this.params.org_id){
-          this.$http.get(globalConfig.server_user+'position/type?org_id='+this.params.org_id+'&page='+this.params.page
-            +'&per_page_number='+this.params.pageNum).then((res) => {
-            if(res.data.status === 'success'){
+          this.$http.get(globalConfig.server+'manager/position?department_id='+this.params.org_id+'&page='+this.params.page
+            +'&limit='+this.params.limit).then((res) => {
+            if(res.data.code === '20000'){
               let tableData = res.data.data;
               this.positionList = [];
-              this.totalOnlyPositionNum = res.data.meta.total;
+              this.totalOnlyPositionNum = res.data && res.data.meta && res.data.meta.total;
               if(tableData.length>0){
                 this.onlyPositionId = tableData[0].id;
                 this.getPosition();
@@ -604,7 +559,7 @@
             }else {
               this.$notify.info({
                 title: '消息',
-                message: res.data.message,
+                message: res.data.msg,
               });
               this.positionList = [];
               this.totalOnlyPositionNum = 0;
@@ -669,17 +624,15 @@
       deleteOnlyPosition(){
         this.$http.delete(globalConfig.server_user+'position/type/'+this.onlyPositionId).then((res) =>{
           if(res.data.status === 'success'){
-            this.$notify({
+            this.$notify.success({
               title: '消息',
               message: '删除成功',
-              type:'success'
             });
             this.getOnlyPosition();
           }else {
-            this.$notify({
+            this.$notify.warning({
               title: '警告',
-              message: res.data.message,
-              type:'warning'
+              message: res.data.msg,
             });
           }
         })
@@ -692,7 +645,6 @@
           +'&per_page_number='+this.params.pageNum).then((res) => {
           if(res.data.status === 'success'){
             let arr = res.data.data;
-
             for(let i=0;i<arr.length;i++){
               arr.forEach((item) => {
                 if(item.parent_id === arr[i].id){
@@ -700,7 +652,6 @@
                 }
               })
             }
-
             arr.forEach((item) => {
               item.pName = this.onlyPositionName;
               item.orgId = this.department_id;
@@ -811,23 +762,21 @@
       deletePosition(){
         this.$http.delete(globalConfig.server_user+'positions/'+this.positionId).then((res) =>{
           if(res.data.status === 'success'){
-            this.$notify({
+            this.$notify.success({
               title: '成功',
               message: '删除成功',
-              type:'success'
             });
             this.getPosition();
           }else {
-            this.$notify({
+            this.$notify.warning({
               title: '警告',
               message: res.data.message,
-              type:'warning'
             });
           }
         })
       },
 
-      //新建岗位
+      //新建岗位  position职位  post岗位
       addPosition(val){
         this.addPositionDialog = true;
         if(val ==='position'){
@@ -912,10 +861,9 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$notify({
+          this.$notify.success({
             title: '成功',
             message: '保存成功',
-            type:'success'
           });
         }).catch(() => {
           this.$notify.info({
