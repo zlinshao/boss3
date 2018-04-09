@@ -4,7 +4,7 @@
       <el-form :inline="true" size="mini" style="border-bottom: 2px solid #e4e7ed;">
         <el-form-item label="职位名称">
           <el-select v-model="currentRoleId" clearable placeholder="请选择">
-            <el-option v-for="item in roleArray" :key="item.id" :label="item.name" :value="item.id">{{item.name}}
+            <el-option v-for="item in roleArray" :key="item.id" :label="item.display_name" :value="item.id">{{item.display_name}}
             </el-option>
           </el-select>
         </el-form-item>

@@ -434,15 +434,13 @@
           if(res.data.code === '20000') {
             this.options = [];
             res.data.data.data.forEach((item)=> {
-              let data = {};
-              data.value = item.id ;
-              data.label = item.name;
-              this.options.push(data);
+              // let data = {};
+              // data.value = item.id ;
+              // data.label = item.name;
+              // this.options.push(data);
+
+              this.getPositions(item.id);
             });
-           if(this.options.length>0) {
-             this.getPositions(id);
-           }
-           console.log(this.options);
           } else {
             this.options = [];
           }
