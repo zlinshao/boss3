@@ -165,23 +165,6 @@ this.itemAll();
       openOrganizationModal() {
         this.organizationDialog = true
       },
-      deleteInfo() {
-        this.$confirm('删除后不可恢复, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
-      },
     integral(val) {
       this.getlost=val;
       let typeGet = [];
@@ -269,6 +252,11 @@ this.itemAll();
         this.newAdd = "修改";        
       }
       if(index == "deleteInfo"){
+        this.$confirm('删除后不可恢复, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
         this.$http.delete(globalConfig.server + 'credit/manage/item/'+ this.formDetail.id
         ).then(res => {
           if (res.data.code === "30210") {
@@ -283,7 +271,14 @@ this.itemAll();
                   message: res.data.msg
                 });             
             }
-        });        
+        }); 
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+       
       }
       if(index == "addNoteDialog"){
         this.addNoteDialog=true;
