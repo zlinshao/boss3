@@ -39,7 +39,7 @@
               <img :src="pic.uri" v-for="pic in key">
             </h1>
           </div>
-          <div id="htmlForEditor" v-html="formList.content">
+          <div id="htmlForEditor">
 
           </div>
 
@@ -307,7 +307,7 @@
             this.formList = res.data.data;
             this.formList = Object.assign({},this.formList,res.data.data);
             // localStorage.setItem('detailFormList',JSON.stringify(this.formList));
-
+            $('#htmlForEditor').html(this.formList.content)
             this.cover_pic = res.data.data.album.cover_pic;
             this.cover_pic = Object.assign({},this.cover_pic,res.data.data.album.cover_pic);
             // localStorage.setItem('detailCoverPic',JSON.stringify(this.cover_pic));
