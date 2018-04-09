@@ -187,7 +187,7 @@
       },
 
       sureLogin(a, b) {
-        this.$http.post(globalConfig.server_token+ 'oauth/token', {
+        this.$http.post(globalConfig.server_token + 'oauth/token', {
           client_secret: globalConfig.client_secret,
           client_id: globalConfig.client_id,
           grant_type: 'password',
@@ -206,7 +206,7 @@
         });
       },
       sweepCode() {
-        window.location.href = 'https://oapi.dingtalk.com/connect/qrconnect?appid=dingoabeclxxwagukzyegm&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=http://test.boss-support.lejias.cn/sns_login'
+        window.location.href = 'https://oapi.dingtalk.com/connect/qrconnect?appid=' + globalConfig.appId + '&response_type=code&scope=snsapi_login&state=STATE&redirect_uri=' + globalConfig.server_token + 'sns_login'
       },
       //背景特效
       getBackground() {

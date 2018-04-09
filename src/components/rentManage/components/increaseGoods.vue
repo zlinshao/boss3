@@ -42,7 +42,7 @@
         <el-button size="small" type="primary" @click="savelast">保 存</el-button>
       </span>
     </el-dialog>
-    <GoodsConfigResources :value="value2" :goodsConfigDialog="goodsConfigDialog" @close="closeGoodsConfigResources"
+    <GoodsConfigResources :value="value2" :allall="toALL" :goodsConfigDialog="goodsConfigDialog" @close="closeGoodsConfigResources"
                           :events="demoEvents" @goodsconfig-changed="goodsconfigformchange"></GoodsConfigResources>
   </div>
 </template>
@@ -61,6 +61,7 @@
         goodsConfigDialog: false,     //物品增配
         demoEvents: [],
         allall: '',
+        toALL:'',
         data: {},
         list: [],
         urls: globalConfig.server,
@@ -77,7 +78,7 @@
         },
         forms: [],
         value2: '',
-
+        success:true,
       };
     },
     watch: {
@@ -125,6 +126,7 @@
       },
       openModalDialog(){
         this.goodsConfigDialog = true;
+        this.toALL= this.allall;
       },
       closeGoodsConfigResources(){
         this.goodsConfigDialog = false;
@@ -148,7 +150,7 @@
       //保存
       savelast(){
         if (this.data.good) {
-          debugger;
+
           for (let i = 0; i < this.data.good.length; i++) {
             this.list.push({"room": this.data.house[i], "category": this.data.good[i], "amount": this.data.num[i]})
 
@@ -196,7 +198,7 @@
             content: this.list,
             "dest": this.form.gone
           }).then((res) => {
-
+            this.$emit("close", 'changeGoods');
             if (res.data.code == "20010") {
               this.$notify({
                 title: '成功',
@@ -214,7 +216,7 @@
             this.allall = '';
             this.value2 = '';
             this.form = {come: '', time: '', gone: ''}
-            this.list = '';
+            this.list = [];
 
 
           })

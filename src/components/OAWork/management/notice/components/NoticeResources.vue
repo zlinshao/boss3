@@ -81,6 +81,7 @@ export default {
       twoflag: false, //保存或发布标识
       threeflag: false, //是否成功发布标识
       linelist: [{}],
+      upStatus:false,
       form: {
         title: "",
         type: "",
@@ -144,7 +145,8 @@ export default {
     }
   },
   methods: {
-    getImage(val) {    
+    getImage(val) {
+      this.upStatus = val[2];    
       this.form.attachment = val[1];
     },
 
@@ -178,6 +180,12 @@ export default {
         if (this.form.type == "研发") {
           this.form.type = 4;
         }
+        if(this.upStatus === true){
+          this.$notify.warning({
+            title:'警告',
+            message:'图片正在上传'
+          })
+        }else {
         this.$http
           .post(this.urls + "announcement", {
             title: this.form.title,
@@ -192,6 +200,7 @@ export default {
           });
 
       }    
+      }
     },
     //发布
     sendx() {
@@ -222,6 +231,12 @@ export default {
         if (this.form.type == "研发") {
           this.form.type = 4;
         }
+        if(this.upStatus === true){
+          this.$notify.warning({
+            title:'警告',
+            message:'图片正在上传'
+          })
+        }else {
         this.$http
           .post(this.urls + "announcement", {
             title: this.form.title,
@@ -242,6 +257,7 @@ export default {
               });
               this.threeflag = true;
               this.firstflag = true;
+              this.upStatus=false;
               this.$emit("threeflag", this.threeflag);
             } else {
               this.$notify.error({
@@ -253,6 +269,8 @@ export default {
             }
           });
         this.increaseGoodsDialogVisible = false;
+        
+        }
       }
     },
     openOrganizationModal() {

@@ -31,7 +31,7 @@
 <script>
   export default {
     name: 'hello',
-    props:['rentContractId','activeName'],
+    props:['rentContractId','activeName','tabStatusChange'],
     data () {
       return {
         tableData:[],
@@ -56,6 +56,12 @@
       },
       activeName(val){
         if(!this.isRequestData && val=== 'RentReturnVisitRecordTab' && this.rentContractId){
+          this.getData();
+          this.isRequestData = true;
+        }
+      },
+      tabStatusChange(val){
+        if(val=== 'visitRecord' && this.activeName==='RentReturnVisitRecordTab'){
           this.getData();
           this.isRequestData = true;
         }

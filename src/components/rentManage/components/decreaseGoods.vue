@@ -61,7 +61,7 @@
       </span>
 
     </el-dialog>
-  <ChangeGoodsResources :changeGoodsDialog="changeGoodsDialog" @close="closeChangeGoodsResources" @changeGoodSave="changeGoodSave"></ChangeGoodsResources>
+  <ChangeGoodsResources :changeGoodsDialog="changeGoodsDialog" :collectHouseId="collectHouseId" @close="closeChangeGoodsResources" @changeGoodSave="changeGoodSave"></ChangeGoodsResources>
   </div>
 </template>
 
@@ -91,7 +91,8 @@
         showflag:'0',
 
         value2: '',
-        goodsgoing: []
+        goodsgoing: [],
+        success:true,
       };
     },
     watch:{
@@ -122,19 +123,21 @@
         this.showflag=val;
       },
       changeGoodSave(val){
+
         this.goodScode='';
         this.goodscodesave=val.check;
         for(let k=0;k<val.check.length;k++){
 
         for(let i=0;i<this.houselist.length;i++)
-        {
+          for(let key in this.goods){
+        {   if(key == this.houselist[i].dictionary_name){
           for(let j=0;j<this.goods[this.houselist[i].dictionary_name].length;j++)
           {
             if(val.check[k]==this.goods[this.houselist[i].dictionary_name][j].id){
               this.goodScode +=this.goods[this.houselist[i].dictionary_name][j].code +";"
             }
           }
-        }
+        }}}
         }
       },
       decreaseGoodsSave(){
@@ -178,13 +181,13 @@
               message: '操作成功',
               type: 'success'
             });
+            this.$emit("close", 'changeGoods');
             this.allall='';
             this.goodScode='';
             this.value2='';
             this.form.gone='';
             this.goodscodesave='';
             this.deliveryFlag=true;
-            this.$emit('deliveryFlag', this.addGoodsFlag)
             this.decreaseGoodsDialogVisible=false;
             }
             else{

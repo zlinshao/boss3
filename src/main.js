@@ -63,30 +63,30 @@ Vue.config.productionTip = false;
 // });
 
 //axios全局配置
-let i = 0;
-axios.interceptors.request.use((config) => {  //配置发送请求的信息
-  if(config.url !== 'http://test.boss-support.lejias.cn/api/s1/messages?unread=1'){
-    i++;
-    store.dispatch('showLoading');
-  }
-  return config;
-}, function (error) {
-  return Promise.reject(error);
-});
-
-axios.interceptors.response.use((response) => { //配置请求回来的信息
-  i--;
-  if(i<1){
-    store.dispatch('hideLoading');
-  }
-  return response;
-}, function (error) {
-  i--;
-  if(i<1){
-    store.dispatch('hideLoading');
-  }
-  return Promise.reject(error);
-});
+// let i = 0;
+// axios.interceptors.request.use((config) => {  //配置发送请求的信息
+//   if(config.url !== 'http://test.boss-support.lejias.cn/api/s1/messages?unread=1'){
+//     i++;
+//     store.dispatch('showLoading');
+//   }
+//   return config;
+// }, function (error) {
+//   return Promise.reject(error);
+// });
+//
+// axios.interceptors.response.use((response) => { //配置请求回来的信息
+//   i--;
+//   if(i<1){
+//     store.dispatch('hideLoading');
+//   }
+//   return response;
+// }, function (error) {
+//   i--;
+//   if(i<1){
+//     store.dispatch('hideLoading');
+//   }
+//   return Promise.reject(error);
+// });
 
 
 //重定向router

@@ -34,7 +34,7 @@
 <script>
    import DeliveryResources from '../components/DeliveryResources.vue' //增加物品页面
   export default {
-    props:['changeGoodsDialog'],
+    props:['changeGoodsDialog',"collectHouseId"],
     components: {
       DeliveryResources
     },
@@ -56,6 +56,9 @@
         this.increaseGoodsDialogVisible = val
         this.delivery()
       },
+      collectHouseId(val){
+    
+      },
       increaseGoodsDialogVisible(val){
         if(!val){
           this.$emit('close')
@@ -70,7 +73,7 @@
       this.$http.get(this.urls+'setting/dictionary/298').then((res) => {
         if (res.data.code === '30010') {
         this.houseList=res.data.data;
-        this.hosueLength=this.houseList.length;
+        this.hosueLength=res.data.data.length;
             }
          })
       this.delivery()
@@ -87,11 +90,12 @@
       },
       changeGoodSave(){
         this.increaseGoodsDialogVisible = false;
+        console.log(this.form)
         this.$emit('changeGoodSave', this.form)
       },
       delivery(){
       //交接单详情接口
-      this.$http.get(this.urls+'house/asset?house_id=1').then((res) => {
+      this.$http.get(this.urls+'house/asset?house_id='+this.collectHouseId).then((res) => {
           if (res.data.code === '20000') {
             this.goods=res.data.data;
           }

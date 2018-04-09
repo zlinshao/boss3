@@ -866,6 +866,7 @@
             if (res.data.code === '61110') {
               this.clearData();
               this.addRentInfoDialogVisible = false;
+              this.$emit('close','updateRent');
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg

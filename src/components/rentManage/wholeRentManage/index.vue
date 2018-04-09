@@ -14,35 +14,91 @@
           <!--</el-button>-->
         </div>
 
-        <div class="tool_right"  @click="openModalDialog('settingDialog')">
-          <div><i class="el-icon-setting"></i>&nbsp;设置</div>
-        </div>
+        <!--<div class="tool_right"  @click="openModalDialog('settingDialog')">-->
+          <!--<div><i class="el-icon-setting"></i>&nbsp;设置</div>-->
+        <!--</div>-->
       </div>
       <div class="highRanking" style="margin-top: 10px">
         <div class="highSearch">
-          <el-form :inline="true" size="mini">
+          <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input placeholder="请输入内容" v-model="collectParams.keyWords" size="mini" clearable>
-                <el-button slot="append" icon="el-icon-search"></el-button>
+              <el-input placeholder="请输入内容" v-model="collectParams.search" @keyup.enter.native="search"  size="mini">
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
-            <el-form-item>
-              <el-button type="success">导出房源</el-button>
-            </el-form-item>
+            <!--<el-form-item>-->
+              <!--<el-button type="success">导出房源</el-button>-->
+            <!--</el-form-item>-->
           </el-form>
         </div>
 
         <!--高級搜索-->
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
-          <el-form :inline="true" :model="collectParams" size="mini" label-width="100px">
+          <el-form :inline="true"  onsubmit="return false" size="mini" label-width="100px">
             <div class="filterTitle">
               <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>
+
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">合同开始时间范围</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-date-picker
+                        v-model="collectParams.lord_start_time"
+                        type="daterange"
+                        value-format="yyyy-MM-dd"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">合同开始结束范围</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-date-picker
+                        v-model="collectParams.lord_end_time"
+                        type="daterange"
+                        value-format="yyyy-MM-dd"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">所属部门</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-input v-model="department_name" @focus="openOrganizeModal"
+                                placeholder="请选择" readonly=""></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
             <div class="btnOperate">
-              <el-button size="mini" type="primary">搜索</el-button>
+              <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
               <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
             </div>
@@ -292,7 +348,7 @@
               <RentInfoTab :rentContractId="rentContractId" :activeName="activeName"></RentInfoTab>
             </el-tab-pane>
             <el-tab-pane label="物品增减" name="GoodsChangeTab">
-              <GoodsChangeTab :collectHouseId="collectHouseId" :activeName="activeName"></GoodsChangeTab>
+              <GoodsChangeTab :collectHouseId="collectHouseId" :tabStatusChange="tabStatusChange" :activeName="activeName"></GoodsChangeTab>
             </el-tab-pane>
             <!--
             <el-tab-pane label="房东退房记录" name="CollectReturnRomeInfoTab">
@@ -324,16 +380,20 @@
               <RentMemorandumTab></RentMemorandumTab>
             </el-tab-pane>
             <el-tab-pane label="回访记录(收)" name="CollectReturnVisitRecordTab">
-              <CollectReturnVisitRecordTab :collectContractId="collectContractId" :activeName="activeName"></CollectReturnVisitRecordTab>
+              <CollectReturnVisitRecordTab :collectContractId="collectContractId" :tabStatusChange="tabStatusChange"
+                                           :activeName="activeName"></CollectReturnVisitRecordTab>
             </el-tab-pane>
             <el-tab-pane label="回访记录(租)" name="RentReturnVisitRecordTab">
-              <RentReturnVisitRecordTab :rentContractId="rentContractId" :activeName="activeName"></RentReturnVisitRecordTab>
+              <RentReturnVisitRecordTab :rentContractId="rentContractId" :tabStatusChange="tabStatusChange"
+                                        :activeName="activeName"></RentReturnVisitRecordTab>
             </el-tab-pane>
             <el-tab-pane label="跟进记录(收)" name="CollectFollowRecordTab">
-              <CollectFollowRecordTab :collectContractId="collectContractId" :activeName="activeName"></CollectFollowRecordTab>
+              <CollectFollowRecordTab :collectContractId="collectContractId" :tabStatusChange="tabStatusChange"
+                                      :activeName="activeName"></CollectFollowRecordTab>
             </el-tab-pane>
             <el-tab-pane label="跟进记录(租)" name="RentFollowRecordTab">
-              <RentFollowRecordTab :rentContractId="rentContractId" :activeName="activeName"></RentFollowRecordTab>
+              <RentFollowRecordTab :rentContractId="rentContractId" :tabStatusChange="tabStatusChange"
+                                   :activeName="activeName"></RentFollowRecordTab>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -341,6 +401,10 @@
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
+
+    <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
+                  @close='closeModal' @selectMember="selectMember"></Organization>
+
     <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
     <BackUp :backUpDialog="backUpDialog" @close="closeModal"></BackUp>
     <Advanced :advancedDialog="advancedDialog" @close="closeModal"></Advanced>
@@ -391,6 +455,8 @@
 
 <script>
   import RightMenu from '../../common/rightMenu.vue'    //右键
+  import Organization from '../../common/organization.vue'
+
   import Instruction from './components/instruction.vue'            //使用说明
   import BackUp from '../components/back-up.vue'                    //备份
   import Advanced from '../components/advancedSearch.vue'           //高级搜索
@@ -440,6 +506,7 @@
     name: 'hello',
     components: {
       RightMenu,
+      Organization,
       Instruction,
       BackUp,
       Advanced,
@@ -494,6 +561,10 @@
         show: false,
         lists: [],
         /***********/
+        organizationDialog:false,
+        length:0,
+        type:'',
+        department_name:'',
         //模态框
         instructionDialog: false,//使用说明
         backUpDialog: false, //备份
@@ -528,6 +599,9 @@
           page:1,
           limit:5,
           search:'',
+          lord_start_time:[],
+          lord_end_time:[],
+          org_id:'',
         },
         collectTotalNum:0,
         collectData: [],    //收房列表数据
@@ -549,6 +623,7 @@
 
         activeName:'OwnerInfoTab',    //tab name
         pay_way_dic:[],
+        tabStatusChange:'',
       }
     },
 
@@ -586,7 +661,25 @@
       initData(){
         this.getCollectData();
       },
+
+      openOrganizeModal(){
+        this.organizationDialog = true;
+        this.length = 1;
+        this.type = 'depart';
+      },
+      selectMember(val){
+        this.organizationDialog = false;
+        this.collectParams.org_id = val[0].id;
+        this.department_name =  val[0].name;
+      },
+
       /*****************************收房*********************************************************/
+      search(){
+        this.isHigh = false;
+        this.collectParams.page = 1;
+        this.getCollectData();
+      },
+
       getCollectData(){
         this.$loading.show();
         this.$http.get(globalConfig.server+'lease/collect',{params:this.collectParams}).then((res) => {
@@ -876,6 +969,8 @@
       },
       closeModal(val){
         this.instructionDialog = false;
+        this.organizationDialog = false;
+
         this.backUpDialog = false;
         this.advancedDialog = false;
         this.ownerDelayDialog = false;
@@ -903,9 +998,16 @@
         this.visitRecordDialog = false;
         this.contractModule = '';
         this.contractOperateId = '';
-
         if(val === 'updateCollect'){
           this.getCollectData();
+        }else if(val === 'updateRent'){
+          this.getRentData(this.collectHouseId);
+        }else if(val === 'changeGoods'){
+          this.tabStatusChange = 'GoodsChangeTab'
+        }else if(val === 'visitRecord'){
+          this.tabStatusChange = 'visitRecord'
+        }else if(val === 'workOrder'){
+          this.tabStatusChange = 'workOrder'
         }
       },
 
@@ -915,7 +1017,10 @@
         this.isHigh = !this.isHigh;
       },
       resetting(){
-
+        this.collectParams.lord_start_time = [];
+        this.collectParams.lord_end_time = [];
+        this.collectParams.org_id = '';
+        this.department_name = '';
       },
 
 
