@@ -148,7 +148,7 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    z-index: 999;
+    z-index: 99999;
     display: block;
   }
 </style>

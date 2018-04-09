@@ -231,19 +231,19 @@ export default new Router({
       isShortcut:true,
       children: [
         {path: '/clientManage', component: ClientManage, name: ' 客户管理 ',icon:"iconfont icon-kehu"},
-        {path: '/programme', component: Programme, name: ' 日程管理 ', icon:"iconfont icon-wodericheng"},
+        // {path: '/programme', component: Programme, name: ' 日程管理 ', icon:"iconfont icon-wodericheng"},
         {path: '/institution', component: Institution, name: ' 制度管理 ', icon:"iconfont icon-guizhangzhidu"},
         {path: '/counter', component: Counter, name: '业绩计算器', icon:"iconfont icon-jisuanqi"},
         {path: '/college', component: College, name: ' 乐伽大学 ' ,icon:"iconfont icon-leqiedaxue"},
-        {path: '/LineCollege', component: LineCollege, name: ' 在线考试 ', icon:"iconfont icon-zaixiankaoshi"},
+        // {path: '/LineCollege', component: LineCollege, name: ' 在线考试 ', icon:"iconfont icon-zaixiankaoshi"},
         {path: '/converge', component: Converge, name: ' 员工广场 ',  icon:"iconfont icon-yuangongguangchang"},
         {path: '/individual', component: Individual, name: ' 个人门户 ',icon:"el-icons-fa-user"},
         {path: '/wholeRentManage', component: WholeRentManage, name: ' 整租管理 ', icon:"iconfont icon-pinzhizhengzu"},
-        {path: '/jointRentManage', component: JointRentManage, name: ' 合租管理 ', icon:"iconfont icon-hezu"},
+        // {path: '/jointRentManage', component: JointRentManage, name: ' 合租管理 ', icon:"iconfont icon-hezu"},
         {path: '/housesManage', component: HousesManage, name: ' 产品管控中心 ',icon:"iconfont icon-fangzu"},
         {path: '/datumMessage/contractManage', component: ContractManage, name: ' 合同管理 ',icon:"iconfont icon-hetong1"},
         {path: '/sthToDo', component: SthToDo, name: ' 待办事项 ', icon:"iconfont icon-daiban"},
-        {path: '/examineAndApprove', component: ExamineAndApprove, name:  ' 审批 ', icon:"el-icon-edit-outline"},
+        // {path: '/examineAndApprove', component: ExamineAndApprove, name:  ' 审批 ', icon:"el-icon-edit-outline"},
         {path: '/sthToDoDetail_2', component: SthToDoDetail_2, name:  ' 喜报 ', icon:"iconfont icon-xibaoguanli"},
         {path: '/integralManage', component: IntegralManage, name: ' 积分管理 ',icon:"iconfont icon-jifen"},
 
@@ -292,26 +292,27 @@ export default new Router({
       ]
     },
 
-    {
-      path: '/',
-      component: Index,
-      name: '财务账本',
-      icon: 'iconfont icon-caiwu1',
-      children: [
-        // {path: '/accountManage', component: AccountManage, name: '账户管理',},
-        // {path: '/subjectManage', component: SubjectManage, name: '科目管理',},
-        {path: '/foundation', component: Foundation, name: '基础管理'},
-
-        // {path: '/roomCharge', component: RoomCharge, name: '房租款项总汇'},
-        // {path: '/otherSum', component: OtherSum, name: '其余款项总汇'},
-        {path: '/fundMessage', component: FundMessage, name: '款项管理'},
-
-        // {path: '/budgetManage', component: BudgetManage, name: '预算管理'},
-        // {path: '/endPayment', component: EndPayment, name: '尾款房租'},
-        {path: '/statistics', component: Statistics, name: '数据统计'},
-        {path: '/incomeFlow', component: IncomeFlow, name: '收支流水'},
-      ]
-    },
+    //
+    // {
+    //   path: '/',
+    //   component: Index,
+    //   name: '财务账本',
+    //   icon: 'iconfont icon-caiwu1',
+    //   children: [
+    //     // {path: '/accountManage', component: AccountManage, name: '账户管理',},
+    //     // {path: '/subjectManage', component: SubjectManage, name: '科目管理',},
+    //     {path: '/foundation', component: Foundation, name: '基础管理'},
+    //
+    //     // {path: '/roomCharge', component: RoomCharge, name: '房租款项总汇'},
+    //     // {path: '/otherSum', component: OtherSum, name: '其余款项总汇'},
+    //     {path: '/fundMessage', component: FundMessage, name: '款项管理'},
+    //
+    //     // {path: '/budgetManage', component: BudgetManage, name: '预算管理'},
+    //     // {path: '/endPayment', component: EndPayment, name: '尾款房租'},
+    //     {path: '/statistics', component: Statistics, name: '数据统计'},
+    //     {path: '/incomeFlow', component: IncomeFlow, name: '收支流水'},
+    //   ]
+    // },
 
     {
       path: '/statistics/staticDetail',
@@ -387,7 +388,7 @@ export default new Router({
         //     {path: '/property/capitalGather', component: CapitalGather, name: '固定资产汇总'},
         //   ]
         // },
-        {path: '/property', component: Property, name: '资产管理'},
+        // {path: '/property', component: Property, name: '资产管理'},
 
         {path: '/articleMessage', component: ArticleMessage, name: '文章管理'},
 
@@ -414,7 +415,7 @@ export default new Router({
       icon: 'iconfont icon-daxue',
       children: [
         {path: '/college', component: College, name: '乐伽大学 '},
-        {path: '/LineCollege', component: LineCollege, name: '在线考试'},
+        // {path: '/LineCollege', component: LineCollege, name: '在线考试'},
       ]
     },
     {

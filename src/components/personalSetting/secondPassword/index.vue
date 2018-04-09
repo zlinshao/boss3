@@ -7,9 +7,7 @@
         <el-col :span="20">
           <div>
             <el-checkbox-group v-model="checkList" >
-              <el-col :span="3" v-for="(val,key) in dictionary2" :key="key">
-                <el-checkbox :label="val.id">{{val.dictionary_name}}</el-checkbox>
-              </el-col>
+              <el-checkbox v-for="(val,key) in dictionary2" :key="key" :label="val.id">{{val.dictionary_name}}</el-checkbox>
             </el-checkbox-group>
           </div>
           <div class="remark">
@@ -191,14 +189,14 @@ export default {
             title: "警告",
             message: "二次密码不一致",
             type: "warning"
-          });       
+          });
       }
       }
     },
     //二级密码保存
     savesendinfo() {
-      
-      this.validateinput = true; 
+
+      this.validateinput = true;
 
       if(this.checkList =="" && this.validateinput == true){
         this.validateinput = false;
@@ -206,7 +204,7 @@ export default {
           title: "警告",
           message: "未选中任何模块",
           type: "warning"
-        });       
+        });
       }
       if (this.form.sms_code == "" && this.validateinput == true) {
         this.validateinput = false;
@@ -272,7 +270,7 @@ export default {
             sms_code_pwd: this.form.sms_code
           })
           .then(res => {
-            
+
             if (res.data.code === "100030") {
               this.$notify({
                 title: "成功",
@@ -333,7 +331,7 @@ export default {
 }
 .remark {
   color: #fdaece;
-  margin:20px 0 80px 0 ;
+  margin:20px 0 40px 0 ;
   float:left;
 }
 

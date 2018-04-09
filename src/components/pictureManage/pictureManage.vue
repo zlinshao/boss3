@@ -48,7 +48,7 @@
                       </el-tooltip>
 
                       <el-tooltip content="编辑" placement="bottom" effect="light">
-                        <el-button type="text" class="button" @click="editAlbum(item)">
+                        <el-button type="text" class="button" @click="editAlbum(item.id)">
                           <i  class="el-icon-edit"></i>
                         </el-button>
                       </el-tooltip>

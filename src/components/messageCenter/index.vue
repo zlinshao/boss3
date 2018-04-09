@@ -135,7 +135,7 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss">
+<style lang="scss" scoped="">
 
   @font-face {
     font-family: Impact;//////字体名称
@@ -183,21 +183,19 @@
         padding: 0 20px;
         margin-top: 10px;
         .search {
-          /*margin-top: 44px;*/
-          /*display: inline-block;*/
           width: 300px;
           margin-left: 113px;
           border-radius: 4px;
-          border: 1px solid #6a8dfb;
-          box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .08);
-          .el-input-group__append {
-            background: #6a8dfb;
-            color: #ffffff;
-            border: none;
-          }
-          .el-input__inner {
-            border: none;
-          }
+          /*border: 1px solid #6a8dfb;*/
+          /*box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .08);*/
+          /*.el-input-group__append {*/
+            /*background: #6a8dfb;*/
+            /*color: #ffffff;*/
+            /*border: none;*/
+          /*}*/
+          /*.el-input__inner {*/
+            /*border: none;*/
+          /*}*/
         }
       }
     }

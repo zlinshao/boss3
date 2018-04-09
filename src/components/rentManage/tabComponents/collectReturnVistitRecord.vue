@@ -31,7 +31,7 @@
 <script>
     export default {
       name: 'hello',
-      props:['collectContractId','activeName'],
+      props:['collectContractId','activeName','tabStatusChange'],
       data () {
         return {
           tableData:[],
@@ -56,6 +56,12 @@
         },
         activeName(val){
           if(!this.isRequestData && val=== 'CollectReturnVisitRecordTab' && this.collectContractId){
+            this.getData();
+            this.isRequestData = true;
+          }
+        },
+        tabStatusChange(val){
+          if(val=== 'visitRecord'&& this.activeName==='CollectReturnVisitRecordTab'){
             this.getData();
             this.isRequestData = true;
           }

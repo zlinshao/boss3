@@ -292,5 +292,7 @@ ul.el-menu.el-menu--inline{
 .el-menu--inline span{
   color:#aec1fc 
 }
-
+.el-menu--collapse .iconfont:hover,.el-menu--collapse .el-icons-fa-money:hover{
+  color: rgb(255, 208, 75) !important;
+}
 /*# sourceMappingURL=reset.css.map */

@@ -1,20 +1,14 @@
 <template>
   <div id="addPower">
     <el-dialog title="权限" :visible.sync="powerVisible" width="60%">
-
       <el-form :inline="true" size="mini" style="border-bottom: 2px solid #e4e7ed;">
         <el-form-item label="职位名称">
-          <el-select v-model="value4" clearable placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value">
+          <el-select v-model="currentRoleId" clearable placeholder="请选择">
+            <el-option v-for="item in roleArray" :key="item.id" :label="item.name" :value="item.id">{{item.name}}
             </el-option>
           </el-select>
         </el-form-item>
       </el-form>
-
       <el-radio-group v-model="tabPosition" style="width: 100%;">
         <el-tabs v-model="systemName" @tab-click="handleClick(systemName, 'sys')">
           <el-tab-pane v-for="(key,index) in systemData" :label="key.display_name" :name="key.name" :key="index">
@@ -26,7 +20,6 @@
       <el-tabs :tab-position="tabPosition" style="height: 500px;" v-model="moduleName"
                @tab-click="handleClick(moduleName, 'module')">
         <el-tab-pane v-for="(item,index) in moduleData" :label="item.display_name" :name="item.name" :key="index">
-
           <div class="scroll_bar" style="max-height: 480px;overflow: auto">
             <div style="margin-bottom: 15px" v-if="permissionData.length > 0">
               <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="allChange">全选</el-checkbox>
@@ -37,15 +30,11 @@
               </el-checkbox-group>
             </div>
           </div>
-
         </el-tab-pane>
       </el-tabs>
-      {{allPowerID}}<br>
-      {{checkAllPower}}<br>
-      {{checkedPower}}
       <div slot="footer" class="dialog-footer" style="text-align: center;">
-        <el-button size="small" type="primary" @click="empower(1)">授权给职位</el-button>
-        <el-button size="small" type="primary" @click="empower(2)">授权给个人</el-button>
+        <el-button size="small" type="primary" @click="empower('position')">授权给职位</el-button>
+        <el-button size="small" type="primary" @click="empower('person')">授权给个人</el-button>
         <el-button size="small" @click="powerVisible = false">取&nbsp;消</el-button>
       </div>
 
@@ -56,7 +45,7 @@
 <script>
   export default {
     name: "add-power",
-    props: ['module'],
+    props: ['module', 'powerData'],
     data() {
       return {
         powerVisible: false,
@@ -66,35 +55,26 @@
         moduleName: '',
         moduleData: [],
         permissionData: [],
-
         tabPosition: 'left',
-
-        allPowerID: [],
         checkedPower: [],
         checkAllPower: [],
         checkAll: false,
         isIndeterminate: true,
-
-        options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value4: ''
+        currentRoleId: '',
+        roleArray: [],
+        userId: '',
       }
     },
     mounted() {
+      this.roleArray = this.powerData.role;
+      this.userId = this.powerData.id;
+      console.log(this.powerData.role && this.powerData.role[0] && this.powerData.role[0].id);
+      this.currentRoleId = this.powerData.role && this.powerData.role[0] && this.powerData.role[0].id;
+    },
+    activated() {
+      this.roleArray = this.powerData.role;
+      this.userId = this.powerData.id;
+
     },
     watch: {
       module(val) {
@@ -105,19 +85,55 @@
         if (!val) {
           this.$emit('close');
         }
+      },
+      powerData(val) {
+        this.roleArray = val.role;
+        this.userId = val.id;
+        setTimeout(()=>{
+          this.getDefaultData();
+        },0);
+        console.log(this.powerData.role && this.powerData.role[0] && this.powerData.role[0].id);
+        this.currentRoleId = this.powerData.role && this.powerData.role[0] && this.powerData.role[0].id;
       }
     },
     methods: {
+      getDefaultData(){
+        this.checkedPower = [];
+        this.$http.get(globalConfig.server_user+ 'powers/'+this.userId).then( (res)=>{
+          if (res.data.status === 'success') {
+            let powers = res.data.data;
+            powers.forEach((item)=>{
+              this.checkedPower.push(item.id);
+            })
+          }
+        });
+      },
       allChange(val) {
-        this.checkedPower = val ? this.checkAllPower : [];
+        if (val) {
+          for (var i = 0; i < this.checkAllPower.length; i++) {
+            if ($.inArray(this.checkAllPower[i], this.checkedPower) === -1) {
+              this.checkedPower.push(this.checkAllPower[i]);
+            }
+          }
+        } else {
+          for (var i = 0; i < this.checkAllPower.length; i++) {
+            var index = this.checkedPower.indexOf(this.checkAllPower[i]);
+            this.checkedPower.splice(index, 1);
+          }
+        }
         this.isIndeterminate = false;
-        // this.allPowerID = this.noRepeat(this.allPowerID.concat(this.checkAllPower));
       },
       powerChange(value) {
         console.log(value);
-        let checkedCount = value.length;
-        this.checkAll = checkedCount === this.checkAllPower.length;
-        this.isIndeterminate = checkedCount > 0 && checkedCount < this.checkAllPower.length;
+        for (var i = 0; i < this.checkAllPower.length; i++) {
+          if ($.inArray(this.checkAllPower[i], value) === -1) {
+            this.checkAll = false;
+            this.isIndeterminate = true;
+            return;
+          }
+        }
+        this.checkAll = true;
+        this.isIndeterminate = false;
       },
 
       // 去重
@@ -181,8 +197,8 @@
           if (res.data.status === 'success') {
             let data = res.data.data;
             this.moduleData = data;
-            this.moduleName = data[0].name;
-            this.permissionList(data[0].id);
+            this.moduleName = data && data[0] && data[0].name;
+            this.permissionList(data[0] && data[0].id);
           }
           else {
             this.moduleData = [];
@@ -205,10 +221,37 @@
         })
       },
       empower(val) {
-        if (val === 1) {
-          console.log('授权职位');
+        let powerIds = this.checkedPower.toString();
+        if (val === 'position') {
+          this.$http.put(globalConfig.server_user + 'powers/' + this.currentRoleId + '?on=role&permissions=' + powerIds).then((res) => {
+            if (res.data.status === 'success') {
+              this.powerVisible = false;
+              this.$notify.success({
+                title: '成功',
+                message: '授权成功'
+              });
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.message
+              });
+            }
+          });
         } else {
-          console.log('授权个人');
+          this.$http.put(globalConfig.server_user + 'powers/' + this.userId + '?on=user&permissions=' + powerIds).then((res) => {
+            if (res.data.status === 'success') {
+              this.powerVisible = false;
+              this.$notify.success({
+                title: '成功',
+                message: '授权成功'
+              });
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.message
+              });
+            }
+          });
         }
       }
     },

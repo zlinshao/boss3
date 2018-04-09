@@ -5,10 +5,10 @@
         <el-button type="primary" style="background:#6a8dfb;border:0 none; width:130px; height:32px;" size="small" @click="showBasicset()">
           基本设置
         </el-button>
-        <el-button type="success" style="background:#58d788;border:0 none; width:130px; height:32px;"  size="small" @click="showSecond()">
+        <el-button type="success" style="background:#58d788;border:0 none; width:130px; height:32px;" size="small" @click="showSecond()">
           二级密码设置
         </el-button>
-        <el-button type="warning" style="background:#fdca41;border:0 none; width:130px; height:32px;"  size="small" @click="showLockscreen()">
+        <el-button type="warning" style="background:#fdca41;border:0 none; width:130px; height:32px;" size="small" @click="showLockscreen()">
           锁屏密码设置
         </el-button>
       </div>
@@ -63,13 +63,15 @@
           </div>
           <div class="validate">
             <div class="validateSign">
-              <el-input size="small" type="password" @keyup.native="identify_pwd_lock = ''"  v-model="set_pwd_lock" placeholder="请输入新密码"></el-input>
+              <el-input size="small" type="password" autocomplete="off" @keyup.native="identify_pwd_lock = ''"
+                        v-model="set_pwd_lock" placeholder="请输入新密码"></el-input>
               <i class="el-icon-success" style="color: #46ff53" v-show="set_pwd_lock.length>5"></i>
             </div>
           </div>
           <div class="validate">
             <div class="validateSign">
-              <el-input size="small" type="password" v-model="identify_pwd_lock" @blur="testPassword" placeholder="请确认新密码"></el-input>
+              <el-input size="small" type="password" autocomplete="off" v-model="identify_pwd_lock"
+                        @blur="testPassword" placeholder="请确认新密码"></el-input>
               <i class="el-icon-success" style="color: #46ff53" v-show="false"></i>
             </div>
           </div>
@@ -157,7 +159,6 @@ export default {
   },
   mounted() {
     this.getDictionary();
-    this.defaultCountdown = this.basicSetting.id[0] = localStorage.getItem('countdownTime');
   },
   watch: {},
   methods: {
@@ -165,8 +166,8 @@ export default {
       this.$http.get(globalConfig.server + "setting/dictionary/202")
         .then(res => {
           if (res.data.code === "30010") {
-
             this.dictionary = res.data.data;
+            this.defaultCountdown = this.basicSetting.id[0] = Number(localStorage.getItem('countdownTime'));
           } else {
             this.$notify.warning({
               title: "警告",
