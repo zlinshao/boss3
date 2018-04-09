@@ -1077,6 +1077,7 @@
             if(res.data.code === '61010'){
               this.clearData();
               this.addHouseResourcesDialogVisible = false;
+              this.$emit('close','updateCollect');
               this.$notify.success({
                 title: '成功',
                 message:res.data.msg

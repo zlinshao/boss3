@@ -934,11 +934,12 @@
         this.organizationDialog = false;
         if(this.selectType === 'staff'){
           this.params.staff_id = val[0].id;
-          this.params.leader_id = val[0].id;
-          this.params.department_id = val[0].org[0].id;
           this.staff_name = val[0].name;
-          this.leader_name =  val[0].name;
-          this.department_name =  val[0].org[0].name;
+
+          if(val[0].org.length>0){
+            this.params.department_id = val[0].org[0].id;
+            this.department_name = val[0].org[0].name;
+          }
         }else if(this.selectType === 'leader'){
           this.params.leader_id = val[0].id;
           this.leader_name =  val[0].name;
@@ -1078,6 +1079,7 @@
             if(res.data.code === '61010'){
               this.clearData();
               this.editHouseResourcesDialogVisible = false;
+              this.$emit('close','updateCollect');
               this.$notify.success({
                 title: '成功',
                 message:res.data.msg
