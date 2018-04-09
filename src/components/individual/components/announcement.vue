@@ -24,7 +24,7 @@
       </div>
       <div class="mainContainer">
         <div class="mainTop">公司各部门：</div>
-        <div class="mainTitle" v-html="detailData.content"></div>
+        <div class="mainTitle" id="htmlForEditor"></div>
         <div class="mainFooter">
           <div>
             <p>南京乐伽商业管理有限公司</p>
@@ -103,6 +103,7 @@
         this.$http.get(globalConfig.server + 'announcement/' + this.announcementId).then((res) => {
           if (res.data.code === '80010') {
             this.detailData = res.data.data;
+            $('#htmlForEditor').html(this.detailData.content)
             this.no1flag = this.detailData.type === 1;  //
             this.no3flag = this.detailData.type === 2;
             this.no2flag = this.detailData.type === 3;
