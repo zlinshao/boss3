@@ -490,13 +490,13 @@
       background: url($n) no-repeat;
       background-size: 100% 100%;
     }
-    <!--@mixin backLiner($a,$b) {-->
-      <!--background: $a;-->
-      <!--background: -webkit-gradient(linear, left top, right top, from($a), to($b));-->
-      <!--background: -o-linear-gradient(left, $a, $b);-->
-      <!--background: -moz-linear-gradientleft, (left,$a, $b);-->
-      <!--background: linear-gradient(left, $a, $b);-->
-    <!--}-->
+    /*<!--@mixin backLiner($a,$b) {-->*/
+      /*<!--background: $a;-->*/
+      /*<!--background: -webkit-gradient(linear, left top, right top, from($a), to($b));-->*/
+      /*<!--background: -o-linear-gradient(left, $a, $b);-->*/
+      /*<!--background: -moz-linear-gradientleft, (left,$a, $b);-->*/
+      /*<!--background: linear-gradient(left, $a, $b);-->*/
+    /*<!--}-->*/
     img {
       width: 100%;
       height: 100%;
