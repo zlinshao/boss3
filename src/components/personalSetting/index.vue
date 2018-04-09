@@ -5,10 +5,10 @@
         <el-button type="primary" style="background:#6a8dfb;border:0 none; width:130px; height:32px;" size="small" @click="showBasicset()">
           基本设置
         </el-button>
-        <el-button type="success" style="background:#58d788;border:0 none; width:130px; height:32px;"  size="small" @click="showSecond()">
+        <el-button type="success" style="background:#58d788;border:0 none; width:130px; height:32px;" size="small" @click="showSecond()">
           二级密码设置
         </el-button>
-        <el-button type="warning" style="background:#fdca41;border:0 none; width:130px; height:32px;"  size="small" @click="showLockscreen()">
+        <el-button type="warning" style="background:#fdca41;border:0 none; width:130px; height:32px;" size="small" @click="showLockscreen()">
           锁屏密码设置
         </el-button>
       </div>
