@@ -136,7 +136,7 @@
             }
           });
         }else if(this.type==='post') {
-          this.$http.post(globalConfig.server_user+'positions',this.params).then((res) => {
+          this.$http.post(globalConfig.server+'manager/positions',this.params).then((res) => {
             if(res.data.code === '20010'){
               this.$emit('close','success');
               this.closeModal();

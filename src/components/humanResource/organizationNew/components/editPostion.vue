@@ -51,7 +51,6 @@
       }
     },
     methods:{
-      //编辑时获取员工信息
       confirmAdd(){
         this.$http.put(globalConfig.server+'manager/position'+this.positionId,this.params).then((res) => {
           if(res.data.code === '20010'){

@@ -1,7 +1,7 @@
 <template>
   <div id="addRentRepair">
     <el-dialog :title="title" :visible.sync="addStaffDialogVisible" width="60%" :before-close="beforeCloseModal">
-      <div>
+      <div>{{params.position_id}}
         <el-form size="mini" :model="params" label-width="120px" style="padding: 0 20px;">
           <el-tabs v-model="activeName">
             <el-tab-pane  label="基本信息" name="first">
@@ -52,7 +52,11 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item  label="推荐人">
-                    <el-input placeholder="请填写推荐人" v-model="params.recommender"></el-input>
+                    <el-input placeholder="请填写推荐人" v-model="recommenderName" @focus="selectStaff">
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="emptyRecommender">清空</div>
+                      </template>
+                    </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -89,7 +93,13 @@
               <el-row :gutter="20">
                 <el-col :span="8">
                   <el-form-item  label="职位" required>
-                    <el-input placeholder="请选择职位" v-model="params.position_id[0]" clearable></el-input>
+                    <!--<el-input placeholder="请选择职位" v-model="params.position_id" clearable></el-input>-->
+                    <el-cascader
+                      expand-trigger="hover"
+                      :options="options"
+                      v-model="params.position_id"
+                      @change="handleChange">
+                    </el-cascader>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -102,7 +112,11 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item  label="部门" required>
-                    <el-input placeholder="请选择部门" v-model="department_name" @focus="selectDepart" ></el-input>
+                    <el-input placeholder="请选择部门" v-model="department" @focus="selectDepart" >
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="emptyDepart">清空</div>
+                      </template>
+                    </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -234,13 +248,13 @@
 <script>
   import Organization from '../../../common/organization.vue'
   export default {
-    props:['addStaffDialog','isEdit','editId'],
+    props:['addStaffDialog','isEdit','editId','departmentId'],
     components:{ Organization },
     data() {
       return {
         addStaffDialogVisible:false,
         activeName: 'first',
-        department_name: '',
+        recommenderName: '',
         params: {
           position_id: [],
           department_id: [],
@@ -291,6 +305,7 @@
         educationCategory: [],
         branchBankCategory: [],
         checkStatus: false,
+        options: [],
       };
     },
     watch:{
@@ -310,11 +325,8 @@
           this.getStaffInfo();
         }
       },
-      'params.department_id':{
-        deep:true,
-        handler(val,oldVal){
-          this.getPosition(this.params.department_id);
-        }
+      departmentId(val) {
+        this.getPosition(val);
       }
     },
     mounted(){
@@ -342,16 +354,18 @@
       getStaffInfo() {
         this.$http.get(globalConfig.server+'manager/staff/'+this.editId).then((res) => {
           if(res.data.code === '10020'){
-            let detail = res.data.data.data.detail;
+            let detail = res.data.data.detail;
             this.params.position_id = detail.position_id;
-            this.params.department_id = detail.department_id;
+            this.params.department_id = detail && detail.org && detail.org[0].id;
             this.params.real_name = detail.real_name;
             this.params.gender = detail.gender;
-            this.params.phone = detail.phone;
+            this.params.phone = res.data.data.phone;
             this.params.home_addr = detail.home_addr;
             this.params.fertility_status = detail.fertility_status;
             this.params.id_num = detail.id_num;
             this.params.birthday = detail.birthday;
+            this.params.recommender = detail.recommender;
+            // 推荐人名字  this.recommenderName =
             this.params.bank_num = detail.bank_num;
             this.params.account_bank = detail.account_bank;
             this.params.branch_bank = detail.branch_bank;
@@ -387,36 +401,62 @@
             this.params.department_id = [];
             this.params.position_id = [];
 
-            if(res.data.data && res.data.data.org && res.data.data.org.length>0) {
-              res.data.data.org.forEach((item) => {
+            if(res.data.data && res.data.data.data.org.length>0) {
+
+              res.data.data.data.org.forEach((item) => {
                 this.params.department_id.push(item.id);
                 departNameArray.push(item.name);
               })
             }
             this.department = departNameArray.join(',');
-            this.roleArray = res.data.data.role;
+
+            this.roleArray = res.data.data.data.role;
             if(this.roleArray && this.roleArray.length>0){
               this.roleArray.forEach((item) => {
-                this.params.position_id.push(item.position_id)
+                this.params.position_id.push(item.position_id);
               })
             }
             this.getPosition(this.params.department_id);
           }else {
-            this.$notify({
+            this.$notify.warning({
               title: '警告',
-              message: res.data.message,
-              type:'warning'
+              message: res.data.msg,
             });
           }
         });
       },
-      //获取岗位
+      handleChange(){
+
+      },
+      //获取职位
       getPosition(id){
-        this.$http.get(globalConfig.server+'manager/positions?org_id=' + id+ '&limit=50').then((res) => {
-          if(res.data.status === 'success'){
-            this.positionArray = res.data.data;
-          }else {
-            this.positionArray =[];
+        this.$http.get(globalConfig.server+'manager/position?department_id='+ id).then((res) => {
+          if(res.data.code === '20000') {
+            this.options = [];
+            res.data.data.data.forEach((item)=> {
+              let data = {};
+              data.value = item.id ;
+              data.label = item.name;
+              this.options.push(data);
+            });
+           if(this.options.length>0) {
+             this.getPositions(id);
+           }
+           console.log(this.options);
+          } else {
+            this.options = [];
+          }
+        })
+      },
+      //获取岗位
+      getPositions(id){
+        this.$http.get(globalConfig.server+'manager/positions?type='+ id).then((res) => {
+          if(res.data.code === '20000') {
+            res.data.data.data.forEach((item)=> {
+
+            })
+          } else {
+
           }
         })
       },
@@ -454,6 +494,18 @@
         this.organizationDialog = true;
         this.type = 'depart';
       },
+      selectStaff(){
+        this.organizationDialog = true;
+        this.type = 'staff';
+      },
+      emptyRecommender() {
+        this.recommenderName = '';
+        this.params.recommender = '';
+      },
+      emptyDepart() {
+        this.department = '';
+        this.params.department_id = [];
+      },
       //关闭选人框回调
       closeOrganization(){
         this.organizationDialog = false;
@@ -461,18 +513,22 @@
         this.length = null;
       },
       selectMember(val) {
-        this.params.department_id = [];
-        this.department_name = val[0].name;
-        let departNameArray = [];
-        if(val.length>0){
-          val.forEach((item) => {
-            this.params.department_id.push(item.id);
-            departNameArray.push(item.name);
-          });
+        if(this.type === 'depart'){
+          this.params.department_id = [];
+          let departNameArray = [];
+          if(val.length>0){
+            val.forEach((item) => {
+              this.params.department_id.push(item.id);
+              departNameArray.push(item.name);
+            });
+          }
+          this.department = departNameArray.join(',');
+          this.type = null;
+          this.length = null;
+        }else if(this.type === 'staff'){
+          this.params.recommender = val[0].id;
+          this.recommenderName = val[0].name;
         }
-        this.department = departNameArray.join(',');
-        this.type = null;
-        this.length = null;
         this.organizationDialog = false;
       },
       beforeCloseModal(){
