@@ -4,24 +4,19 @@
       <div>
         <el-form size="mini" :model="form" label-width="100px">
           <el-row>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="增配时间" required>
                 <el-date-picker v-model="value2" align="right" value-format="yyyy-MM-dd" format="yyyy-MM-dd" type="date"
                                 placeholder="选择日期">
                 </el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="12">
               <el-form-item label="物品来源" required>
                 <el-select v-model="form.come" placeholder="请选择物品来源">
                   <el-option v-for="item in forms" :key="item.id" :label="item.dictionary_name" :value="item.id">
                   </el-option>
                 </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="操作人:">
-                {{personal.name}}
               </el-form-item>
             </el-col>
           </el-row>
@@ -56,7 +51,7 @@
 
   import GoodsConfigResources from '../components/GoodsConfigResources.vue' //物品增配页面
   export default {
-    props: ['increaseGoodsDialog'],
+    props: ['increaseGoodsDialog','collectHouseId'],
     components: {
       GoodsConfigResources
     },
@@ -81,32 +76,6 @@
           gone: ''
         },
         forms: [],
-        pickerOptions1: {
-          disabledDate(time) {
-            return time.getTime() > Date.now();
-          },
-          shortcuts: [{
-            text: '今天',
-            onClick(picker) {
-              picker.$emit('pick', new Date());
-            }
-          }, {
-            text: '昨天',
-            onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24);
-              picker.$emit('pick', date);
-            }
-          }, {
-            text: '一周前',
-            onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', date);
-            }
-          }]
-        },
-
         value2: '',
 
       };
@@ -220,7 +189,7 @@
         }
         if (this.saveflag) {
           this.$http.post(this.urls + 'house/asset_in', {
-            house_id: 1,
+            house_id: this.collectHouseId,
             operate_time: this.value2,
             source: this.form.come,
             ownership: 318,

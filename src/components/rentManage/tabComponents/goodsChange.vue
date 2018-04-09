@@ -56,7 +56,7 @@
 
 <script>
     export default {
-      prop:['collectHouseId','activeName'],
+      props:['collectHouseId','activeName'],
       data () {
           return {
             goodsChangeData:[], //物品增减
@@ -72,11 +72,12 @@
           }
       },
       created() {
-        this.getData();
+//        this.getData();
       },
 
       watch:{
         collectHouseId(val){
+          this.params.house_id = val;
           this.isRequestData = false;
           if(this.activeName === 'GoodsChangeTab'){
             this.getData();

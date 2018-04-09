@@ -493,7 +493,7 @@
     @mixin backLiner($a,$b) {
       background: -webkit-linear-gradient(left, $a, $b);
       background: -o-linear-gradient(left, $a, $b);
-      background: -moz-linear-gradientleft, ($a, $b);
+      background: -moz-linear-gradientleft, (left,$a, $b);
       background: linear-gradient(left, $a, $b);
     }
     img {

@@ -69,7 +69,7 @@
   import ChangeGoodsResources from '../components/ChangeGoodsResources.vue' //物品增配页面
   import Upload from '../../common/UPLOAD.vue';
   export default {
-    props:['decreaseGoodsDialog'],
+    props:['decreaseGoodsDialog','collectHouseId'],
     components: {
       ChangeGoodsResources,
       Upload
@@ -89,31 +89,6 @@
         houselist:[],
         urls:globalConfig.server,
         showflag:'0',
-         pickerOptions1: {
-          disabledDate(time) {
-            return time.getTime() > Date.now();
-          },
-          shortcuts: [{
-            text: '今天',
-            onClick(picker) {
-              picker.$emit('pick', new Date());
-            }
-          }, {
-            text: '昨天',
-            onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24);
-              picker.$emit('pick', date);
-            }
-          }, {
-            text: '一周前',
-            onClick(picker) {
-              const date = new Date();
-              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', date);
-            }
-          }]
-        },
 
         value2: '',
         goodsgoing: []
@@ -135,7 +110,7 @@
     methods:{
       openModalDialog(){
         this.changeGoodsDialog=true;
-        
+
       },
       closeChangeGoodsResources(){
         this.changeGoodsDialog=false;
@@ -191,7 +166,7 @@
 
         if(this.saveflag){
            this.$http.post(this.urls+'house/asset_out', {
-           house_id:1,
+           house_id:this.collectHouseId,
            operate_time:this.value2,
            dest:this.form.gone,
            content:this.goodscodesave,
@@ -233,10 +208,9 @@
           }
       })
       //交接单详情接口
-      this.$http.get(this.urls+'house/asset?house_id=1').then((res) => {
+      this.$http.get(this.urls+'house/asset?house_id=' +this.collectHouseId).then((res) => {
           if (res.data.code === '20000') {
             this.goods=res.data.data;
-            console.log(this.goods)
           }
       })
       //房间编号
@@ -248,7 +222,7 @@
       }
     },
     mounted(){
-      
+
     },
     created:function(){
       this.personal = JSON.parse(localStorage.getItem("personal"));

@@ -1,11 +1,11 @@
 <template>
   <div id="increaseGoods">
-    <el-dialog title="物品增配" :visible.sync="increaseGoodsDialogVisible" width="75%" style="min-width:1110px;">
+    <el-dialog title="物品增配" :visible.sync="increaseGoodsDialogVisible" width="60%" style="min-width:1110px;">
       <div class="goodsall">
         <span class="topmassage">物品增配（点击下方按钮切换添加模式）</span>
-        <el-button type="primary" @click="openModalDialogx('addGoodsDialog')">物品设置</el-button>
+        <el-button type="primary" size="small" @click="openModalDialogx('addGoodsDialog')">物品设置</el-button>
         <div class="goodtable">
-          <el-form :model="form" style="width: 100%">
+          <el-form :model="form" size="mini" style="width: 100%">
             <el-row>
               <el-col :span="4">
                 增加日期
@@ -29,7 +29,7 @@
             style="width: 100%">
             <el-table-column label="物品来源">
               <template slot-scope="scope">
-                <el-select v-model="form.comeform[scope.$index]" placeholder="请选择物品来源">
+                <el-select size="small" v-model="form.comeform[scope.$index]" placeholder="请选择物品来源">
                   <el-option v-for="item in forms" :label="item.dictionary_name" :key="item.id"
                              :value="item.id"></el-option>
                 </el-select>
@@ -37,7 +37,7 @@
             </el-table-column>
             <el-table-column label="物品位置">
               <template slot-scope="scope">
-                <el-select v-model="form.house[scope.$index]" placeholder="请选择物品位置">
+                <el-select size="small" v-model="form.house[scope.$index]" placeholder="请选择物品位置">
                   <el-option v-for="item in houselist" :label="item.dictionary_name" :key="item.id"
                              :value="item.id"></el-option>
                 </el-select>
@@ -45,7 +45,7 @@
             </el-table-column>
             <el-table-column label="物品名称">
               <template slot-scope="scope">
-                <el-select v-model="form.good[scope.$index]" placeholder="请选择物品名称">
+                <el-select size="small" v-model="form.good[scope.$index]" placeholder="请选择物品名称">
                   <el-option v-for="item in goods" :label="item.dictionary_name" :key="item.id"
                              :value="item.id"></el-option>
                 </el-select>
@@ -53,19 +53,20 @@
             </el-table-column>
             <el-table-column label="单价（元）">
               <template slot-scope="scope">
-                <el-input v-model="form.price[scope.$index]" @change="checkNo(form.price[scope.$index],index)" v-on:input="pricechange(scope.$index)"
-                          placeholder=""></el-input>
+                <el-input size="small" v-model="form.price[scope.$index]"
+                          @change="checkNo(form.price[scope.$index],index)"
+                          v-on:input="pricechange(scope.$index)" placeholder=""></el-input>
               </template>
             </el-table-column>
             <el-table-column label="数量">
               <template slot-scope="scope">
-                <el-input v-model="form.num[scope.$index]" @change="checkNo2(form.num[scope.$index],index)" v-on:input="numchange(scope.$index)"
-                          placeholder=""></el-input>
+                <el-input size="small" v-model="form.num[scope.$index]" @change="checkNo2(form.num[scope.$index],index)"
+                          v-on:input="numchange(scope.$index)" placeholder=""></el-input>
               </template>
             </el-table-column>
             <el-table-column label="总价（元）">
               <template slot-scope="scope">
-                <el-input v-model="form.sum[scope.$index]"></el-input>
+                <el-input size="small" v-model="form.sum[scope.$index]"></el-input>
               </template>
             </el-table-column>
             <el-table-column label="操作" width="80px">
@@ -158,13 +159,13 @@
           if (res.data.code === '30010') {
             this.houselist = res.data.data;
           }
-        })
+        });
         //物品来源
         this.$http.get(this.urls + 'setting/dictionary/319').then((res) => {
           if (res.data.code === '30010') {
             this.forms = res.data.data;
           }
-        })
+        });
         this.goodsmore();
       },
       openModalDialogx(){
@@ -296,7 +297,7 @@
                 return prev;
               }
             }, 0);
-            sums[index] += ' 元';
+            sums[index] += '元';
           } else {
             sums[index] = 'N/A';
           }
@@ -321,24 +322,24 @@
           }
         })
       },
-        checkNo(value,index){
+      checkNo(value, index){
 
         let reg = /^[1-9]\d*$/;
-          if (value) {
-            if (value > 999999 || new  RegExp(reg).test(value) == false) {
-            this.form.price[index] =''
-            }
-          }
-        },
-        checkNo2(value,index){
-
-        let reg = /^[1-9]\d*$/;
-          if (value) {
-            if (value > 999999 || new  RegExp(reg).test(value) == false) {
-            this.form.num[index] =''
-            }
+        if (value) {
+          if (value > 999999 || new RegExp(reg).test(value) == false) {
+            this.form.price[index] = ''
           }
         }
+      },
+      checkNo2(value, index){
+
+        let reg = /^[1-9]\d*$/;
+        if (value) {
+          if (value > 999999 || new RegExp(reg).test(value) == false) {
+            this.form.num[index] = ''
+          }
+        }
+      }
     },
     created: function () {
 

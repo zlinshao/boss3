@@ -345,8 +345,8 @@
     <BackUp :backUpDialog="backUpDialog" @close="closeModal"></BackUp>
     <Advanced :advancedDialog="advancedDialog" @close="closeModal"></Advanced>
     <OwnerDelay :ownerDelayDialog="ownerDelayDialog" @close="closeModal"></OwnerDelay>
-    <IncreaseGoods :increaseGoodsDialog="increaseGoodsDialog" @close="closeModal"></IncreaseGoods>
-    <DecreaseGoods :decreaseGoodsDialog="decreaseGoodsDialog" @close="closeModal"></DecreaseGoods>
+    <IncreaseGoods :increaseGoodsDialog="increaseGoodsDialog" :collectHouseId="collectHouseId" @close="closeModal"></IncreaseGoods>
+    <DecreaseGoods :decreaseGoodsDialog="decreaseGoodsDialog" :collectHouseId="collectHouseId" @close="closeModal"></DecreaseGoods>
     <OwnerArrears :ownerArrearsDialog="ownerArrearsDialog" @close="closeModal"></OwnerArrears>
     <OwnerRenew :ownerRenewDialog="ownerRenewDialog" @close="closeModal"></OwnerRenew>
     <AddFollowUp :addFollowUpDialog="addFollowUpDialog" :contractModule="contractModule"

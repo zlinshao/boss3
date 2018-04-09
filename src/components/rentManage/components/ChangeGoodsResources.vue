@@ -1,6 +1,6 @@
 <template>
   <div id="increaseGoods">
-    <el-dialog title="物品选择" :visible.sync="increaseGoodsDialogVisible" width="65%" >
+    <el-dialog title="物品选择" :visible.sync="increaseGoodsDialogVisible" width="60%" >
       <div class="scroll_bar">
         <div class="addMore">
           <el-button type="text" size="small" class="el-icon-circle-plus" @click="openModalDialog('deliveryDialog')">增加</el-button>
@@ -75,7 +75,7 @@
          })
       this.delivery()
       },
-      
+
       openModalDialog(){
         this.deliveryDialog=true;
       },
