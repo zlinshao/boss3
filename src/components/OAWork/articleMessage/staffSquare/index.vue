@@ -162,8 +162,8 @@
       this.getDict();
     },
     activated() {
-      // this.getStaffTableData();
-      // this.getDict();
+      this.getStaffTableData();
+      this.getDict();
     },
     created() {
       this.form.pages = this.currentPage;
