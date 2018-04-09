@@ -27,20 +27,21 @@
 </template>
 
 <script>
-  import Communication from './communication/index.vue'
-  import Programme from './programme/index.vue'
+  // import Communication from './communication/index.vue'
+  // import Programme from './programme/index.vue'
   import Institution from './institution/index.vue'
-  import Vote from './vote/index.vue'
-  import Counter from './counter/index.vue'
-//  import department from './department/index.vue'
+  // import Vote from './vote/index.vue'
+  // import Counter from './counter/index.vue'
   import Notice from './notice/index.vue'
 
   export default {
     name: "index",
-    components: {Communication, Programme, Institution, Vote, Counter,Notice},
+    components: {
+      Institution,
+      Notice},
     data() {
       return {
-        activeName: 'first'
+        activeName: 'third'
       }
     },
     mounted() {
