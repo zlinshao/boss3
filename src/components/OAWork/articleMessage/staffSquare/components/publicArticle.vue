@@ -98,6 +98,7 @@
     activated() {
       console.log(this.$store.state.article.article_id)
       this.getParams();
+      this.isClear = false;
     },
     mounted() {
       this.getParams();
