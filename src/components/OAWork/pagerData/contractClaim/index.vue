@@ -18,29 +18,31 @@
           <i class="el-icons-fa-mail-forward"></i>&nbsp;丢失
         </el-button>
       </div>
-    </div>
-    <div class="filter">
-      <el-form :inline="true" onsubmit="return false" size="mini" class="demo-form-inline" style="display: flex;justify-content:flex-end ">
-        <el-form-item v-if="selectFlag==4">
-          <el-select v-model="params.proof" placeholder="请选择" clearable="" @change="search" value="">
-            <el-option label="资料齐全" value="7"></el-option>
-            <el-option label="交接单" value="1"></el-option>
-            <el-option label="收据" value="2"></el-option>
-            <el-option label="钥匙" value="4"></el-option>
-          </el-select>
-        </el-form-item>
 
-        <el-form-item>
-          <el-input v-model="params.search" placeholder="搜索" @keydown.enter.native="search">
-            <el-button slot="append" type="primary" @click="search" icon="el-icon-search"></el-button>
-          </el-input>
-        </el-form-item>
+      <div class="">
+        <el-form :inline="true" onsubmit="return false" size="mini" class="demo-form-inline" style="display: flex;justify-content:flex-end ">
+          <el-form-item v-if="selectFlag==4">
+            <el-select v-model="params.proof" placeholder="请选择" clearable="" @change="search" value="">
+              <el-option label="资料齐全" value="7"></el-option>
+              <el-option label="交接单" value="1"></el-option>
+              <el-option label="收据" value="2"></el-option>
+              <el-option label="钥匙" value="4"></el-option>
+            </el-select>
+          </el-form-item>
 
-        <el-form-item>
-          <el-button v-show="selectFlag>1" type="primary" @click="createNewTask">创建任务</el-button>
-        </el-form-item>
-      </el-form>
+          <el-form-item>
+            <el-input v-model="params.search" placeholder="搜索" @keydown.enter.native="search">
+              <el-button slot="append" type="primary" @click="search" icon="el-icon-search"></el-button>
+            </el-input>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button v-show="selectFlag>1" type="primary" @click="createNewTask">创建任务</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
     </div>
+
 
     <div class="main">
       <!--//汇总-->

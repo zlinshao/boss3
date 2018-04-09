@@ -116,6 +116,14 @@
               :row-class-name="tableRowCollectName"
               @row-contextmenu='houseMenu'
               style="width: 100%">
+              <el-table-column width="40">
+                <template slot-scope="scope">
+                  <span v-if="checkContractData[scope.row.contract_number.toUpperCase()]">
+                    <i class="el-icon-success" style="color: #6a8dfb"></i>
+                  </span>
+                  <span v-else=""></span>
+                </template>
+              </el-table-column>
               <el-table-column
                 prop="contract_number"
                 label="合同编号">
@@ -624,6 +632,8 @@
         activeName:'OwnerInfoTab',    //tab name
         pay_way_dic:[],
         tabStatusChange:'',
+        collectNumberArray:[],
+        checkContractData:{},
       }
     },
 
@@ -687,6 +697,11 @@
           if(res.data.code === '61010'){
             this.collectData = res.data.data;
             this.collectTotalNum = res.data.meta.total;
+            this.collectNumberArray = [];
+            this.collectData.forEach((item) => {
+              this.collectNumberArray.push(item.contract_number);
+            });
+            this.checkHandIn();
             if(res.data.data.length>0){
               this.collectHouseId = this.collectData[0].house_id;
               this.collectContractId = this.collectData[0].contract_id;
@@ -696,6 +711,18 @@
             this.collectTotalNum = 0;
           }
         })
+      },
+
+      checkHandIn(){
+         this.$http.post(globalConfig.server+'contract/number/check',{
+           contracts:this.collectNumberArray,
+         }).then((res) => {
+            if(res.data.code === '20000'){
+              this.checkContractData = res.data.data;
+            }else {
+              this.checkContractData = {};
+            }
+         })
       },
 
       //房屋右键

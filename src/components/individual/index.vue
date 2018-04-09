@@ -78,7 +78,7 @@
                         <span>迟到</span>
                         <i class="iconfont icon-shijian"></i>
                       </p>
-                      <p><b>0</b>
+                      <p><b>{{late}}</b>
                         <span>次</span></p>
                     </div>
                     <div>
@@ -87,7 +87,7 @@
                         <i class="iconfont icon-chidao"></i>
                       </p>
                       <p>
-                        <b>0</b>
+                        <b>{{early}}</b>
                         <span>次</span>
                       </p>
                     </div>
@@ -97,7 +97,7 @@
                         <i class="iconfont icon-qingzhou-gantanhao"></i>
                       </p>
                       <p>
-                        <b>0</b>
+                        <b>{{absent}}</b>
                         <span>次</span>
                       </p>
                     </div>
@@ -107,7 +107,7 @@
                         <i class="iconfont icon-kaoqin1" style="font-size: 24px"></i>
                       </p>
                       <p>
-                        <b>0</b>
+                        <b>{{attend}}</b>
                         <span>次</span>
                       </p>
                     </div>
@@ -188,6 +188,7 @@
                 </div>
               </div>
             </div>
+
           </div>
         </el-col>
         <el-col :span="6">
@@ -268,6 +269,13 @@
         announcementId:'',
         creditTotal:'',     //总积分
         systemData: [],
+
+        //考勤
+        late: 0,  //迟到
+        early: 0,  //早退
+        absent: 0,  //旷工
+        not_signed: 0,  // 未打卡
+        attend: 0, //出勤天数
       }
     },
     activated() {
@@ -290,6 +298,7 @@
       //获取积分明细
       this.getCredit();
       this.getSystemTableData();
+      this.getCheckWork();
     },
     watch: {
       'params.content': {
@@ -352,6 +361,19 @@
             }
           })
         }
+      },
+      //个人考勤
+      getCheckWork(){
+        let data = new Date().getFullYear() + '-' + (new Date().getMonth()+1);
+        this.$http.get(globalConfig.server + 'attendance?year_month=' + data).then((res) => {
+          if (res.data.code === '20010') {
+            this.late = res.data.data.late;
+            this.early = res.data.data.early;
+            this.absent = res.data.data.absent;
+            this.attend = res.data.data.attend;
+          }
+
+        })
       },
 
       //getAnnouncement

@@ -3,16 +3,16 @@
     <div class="headPic">
       <img src="../../../assets/images/university/1-乐伽大学.png">
 
-      <div class="navigation">
-        <div class="navigation_left" @mouseover="showKey('achievement')" @mouseout="outHide('achievement') ">
-          <img src="../../../assets/images/university/勋章.svg" v-if="achievementImgShow" style="width:40px;"/>
-          <div v-if="!achievementImgShow">成绩查询</div>
-        </div>
-        <div class="navigation_right" @mouseover="showKey('sign')" @mouseout="outHide('sign') ">
-          <img src="../../../assets/images/university/在线报名.svg" v-if="signImgShow" style="width:32px;position: absolute;right: 26px;"/>
-          <div v-if="!signImgShow">在线报名</div>
-        </div>
-      </div>
+      <!--<div class="navigation">-->
+        <!--<div class="navigation_left" @mouseover="showKey('achievement')" @mouseout="outHide('achievement') ">-->
+          <!--<img src="../../../assets/images/university/勋章.svg" v-if="achievementImgShow" style="width:40px;"/>-->
+          <!--<div v-if="!achievementImgShow">成绩查询</div>-->
+        <!--</div>-->
+        <!--<div class="navigation_right" @mouseover="showKey('sign')" @mouseout="outHide('sign') ">-->
+          <!--<img src="../../../assets/images/university/在线报名.svg" v-if="signImgShow" style="width:32px;position: absolute;right: 26px;"/>-->
+          <!--<div v-if="!signImgShow">在线报名</div>-->
+        <!--</div>-->
+      <!--</div>-->
     </div>
     <!--课程状态-->
     <div class="curriculum">
