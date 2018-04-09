@@ -264,8 +264,8 @@
           </el-menu>
         </div>
 
-        <div style="position: fixed;bottom: 10px;left: 36px;z-index: 99999;" v-if="!isCollapse">
-          <div style="color: #a2b8fd;">LEJIA © BOSS 3.0</div>
+        <div style="position: fixed;bottom: 10px;left: 70px;z-index: 99999;" v-if="!isCollapse">
+          <div style="color: #a2b8fd;">BOSS 3.0</div>
         </div>
 
         <el-main :class="isFull? 'mainHide':'' ">

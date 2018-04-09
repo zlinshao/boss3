@@ -51,17 +51,15 @@
       }
     },
     methods:{
-      //编辑时获取员工信息
       confirmAdd(){
-        this.$http.put(globalConfig.server_user+'position/type/'+this.onlyPositionId,this.params).then((res) => {
-          if(res.data.status === 'success'){
+        this.$http.put(globalConfig.server+'manager/position/'+this.onlyPositionId,this.params).then((res) => {
+          if(res.data.code === '20030'){
             this.$emit('close','success');
             this.closeModal();
           }else {
-            this.$notify({
+            this.$notify.warning({
               title: '警告',
               message: res.data.msg,
-              type: 'warning'
             });
           }
         });
