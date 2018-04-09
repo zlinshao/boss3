@@ -95,7 +95,7 @@
 <script>
   import AddGoodsResources from '../components/AddGoodsResources.vue' //增加物品页面
   export default {
-    props: ['goodsConfigDialog', 'value'],
+    props: ['goodsConfigDialog', 'value',"allall"],
     components: {
       AddGoodsResources
     },
@@ -137,8 +137,17 @@
           this.$emit('close')
         } else {
           this.getInfo()
+           this.form={
+          comeform: [],
+          house: [],
+          good: [],
+          price: [],
+          num: [],
+          sum: []
+        }         
         }
-      }
+      },
+
     },
     methods: {
       getInfo(){
