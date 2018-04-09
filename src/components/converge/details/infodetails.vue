@@ -52,7 +52,7 @@
                   <i class="iconfont icon-pinglun"></i>&nbsp;&nbsp;{{formList.comments_count}}
                 </div>
                 <div class="zan_div">
-                  <i class="iconfont icon-zan" :class="{'zanColor': assistId}" @click="assist()"></i>&nbsp;{{formList.favor_num}}
+                  <i class="iconfont icon-zan" :class="{'zan': assistId}" @click="assist()"></i>&nbsp;{{formList.favor_num}}
                 </div>
                 <div>
                   <i class="el-icon-view"></i>&nbsp;&nbsp;{{formList.read_num}}
@@ -345,10 +345,6 @@
           if (res.data.code === '80070') {
             this.publicDetail(this.formList.id);
             this.assistId = true;
-            $('.icon-zan.zanColor').addClass('zan');
-            setTimeout( ()=> {
-              $('.icon-zan.zanColor').removeClass('zan');
-            },2000);
             if (this.assistId) {
               this.formList.favor_num++;
             }
@@ -541,10 +537,8 @@
       width: 100%;
       height: 100%;
     }
-    .zanColor{
-      color: #fb4699;
-    }
     .zan{
+      color: #fb4699;
       animation: color-me-in 1s;
     }
     @keyframes color-me-in {

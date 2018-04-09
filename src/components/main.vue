@@ -92,7 +92,7 @@
                 <div style="border-bottom: 1px solid #eee;padding-bottom: 20px;"><el-button @click="openMore(noticeInfofirst)" size="small" style="background: #6a8dfb;color: #fff;margin-top: 20px;">更多</el-button></div>
 
                 <div class="clearfix list_gonggao" v-for="(item, index) in noticeInfo" v-if='index>0 && index<5' :key="index">
-                
+
                   <div v-if="item.type == 1" style="display: inline-block;float: left;"><img @click="openMore(item)" src="./../assets/images/shenp1.jpg" height="100" width="180" style="border-radius:5px;"></div>
                   <div v-if="item.type == 2" style="display: inline-block;float: left;"><img @click="openMore(item)" src="./../assets/images/shenp3.jpg" height="100" width="180" style="border-radius:5px;"></div>
                   <div v-if="item.type == 3" style="display: inline-block;float: left;"><img @click="openMore(item)" src="./../assets/images/shenp2.jpg" height="100" width="180" style="border-radius:5px;"></div>
@@ -629,6 +629,8 @@
     -webkit-line-clamp:2;
     font-size: 14px;
     line-height: 20px;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
   }
   .t_center{
     text-align: center;
