@@ -64,7 +64,7 @@
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
-    <NewAdd :newAddDialog="newAddDialog" :newAdd="newAdd" :formDetail="formDetail" @newAddBack="newAddBack" @close="newAddDialog = false"></NewAdd>
+    <NewAdd :newAddDialog="newAddDialog" :newAdd="newAdd" :formDetail="formDetail" @newAddBack="newAddBack" @close="closenewAddDialog"></NewAdd>
     <AddNote :addNoteDialog="addNoteDialog"  :formDetail="formDetail" @addNoteBack="addNoteBack" @close="addNoteDialog = false"></AddNote>
 
   </div>
@@ -245,6 +245,10 @@ this.itemAll();
           }
         });
       },
+    closenewAddDialog(){
+      this.newAddDialog =false;
+      this.formDetail={};
+    },
     openModalDialog(index) {
       //右键修改
       if (index == "newAddDialog") {

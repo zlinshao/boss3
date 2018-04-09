@@ -103,7 +103,7 @@
     <div class="img_appreciation">
       <div class="curriculumTitle">
         <div class="left_border"></div>
-        <div class="title">图片赏析</div>
+        <div class="title">课堂实记</div>
       </div>
       <div class="img_list">
         <el-row :gutter="2"  style="margin-top: 10px">

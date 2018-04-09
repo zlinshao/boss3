@@ -75,26 +75,30 @@
             <div class="title" style="color: #7ee8a6;">
               <span style="border-left: 4px solid #7ee8a6;"></span>公告信息
             </div>
-              <div><img src="./../assets/images/gonggao.png" style="width: 100%;height: 195px;"></div>
+              <div v-if="noticeInfofirst.type == 1"><img src="./../assets/images/shenp1.jpg" style="width: 100%;height: 195px;"></div>
+              <div v-if="noticeInfofirst.type == 2"><img src="./../assets/images/shenp3.jpg" style="width: 100%;height: 195px;"></div>
+              <div v-if="noticeInfofirst.type == 3"><img src="./../assets/images/shenp2.jpg" style="width: 100%;height: 195px;"></div>
               <div class="rightContent">
-                <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
+                <p class="info_title text_over_norwap" @click="openMore(noticeInfofirst)">{{noticeInfofirst.title}}</p>
                 <div class="clearfix">
-                  <span>2017-01-17</span>
+                  <span>{{noticeInfofirst.create_time}}</span>
                   <span style="float: right;">
-                    <i class="iconfont icon-xinxi" style="margin-right: -7px;vertical-align: middle"></i> 22 &nbsp;&nbsp;&nbsp;
-                    <i class="iconfont icon-zan" style="margin-right: -7px;"></i> 143 &nbsp;&nbsp;&nbsp;
-                    <i class="el-icon-view"> 15</i>
+                    <i class="el-icon-view"></i> {{noticeInfofirst.read_count}} &nbsp;&nbsp;&nbsp;
+                    <i class="iconfont icon-yanjingclose"> {{noticeInfofirst.read_uncount}}</i>
                   </span>
                 </div>
-                <div style="margin-top: 10px;" class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                <div style="margin-top: 10px;" class="second_line_camp">{{noticeInfofirst.content_without_table}}</div>
                 <div><em class="ix"></em></div>
-                <div style="border-bottom: 1px solid #eee;padding-bottom: 20px;"><el-button size="small" style="background: #6a8dfb;color: #fff;margin-top: 20px;">MORE</el-button></div>
+                <div style="border-bottom: 1px solid #eee;padding-bottom: 20px;"><el-button @click="openMore(noticeInfofirst)" size="small" style="background: #6a8dfb;color: #fff;margin-top: 20px;">MORE</el-button></div>
 
-                <div class="clearfix list_gonggao" v-for="item in 4">
-                  <div style="display: inline-block;float: left;"><img src="./../assets/images/gonggao_detail.png" height="100" width="180" style="border-radius:5px;"></div>
+                <div class="clearfix list_gonggao" v-for="(item, index) in noticeInfo" v-if='index>0 && index<5' :key="index">
+                
+                  <div v-if="item.type == 1" style="display: inline-block;float: left;"><img src="./../assets/images/shenp1.jpg" height="100" width="180" style="border-radius:5px;"></div>
+                  <div v-if="item.type == 2" style="display: inline-block;float: left;"><img src="./../assets/images/shenp3.jpg" height="100" width="180" style="border-radius:5px;"></div>
+                  <div v-if="item.type == 3" style="display: inline-block;float: left;"><img src="./../assets/images/shenp2.jpg" height="100" width="180" style="border-radius:5px;"></div>
                   <div style="padding-left: 200px;">
-                    <p class="info_title text_over_norwap">恭喜我公司企业注册logo成功</p>
-                    <div class="second_line_camp">恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功恭喜我公司企业注册logo成功</div>
+                    <p @click="openMore(item)"  class="info_title text_over_norwap">{{item.title}}</p>
+                    <div class="second_line_camp">{{item.content_without_table}}</div>
                     <div><em class="ix"></em></div>
                   </div>
                 </div>
@@ -270,13 +274,16 @@
 
       </el-row>
     </div>
+<Warning :warningDialog="warningDialog" :lookat="look"  @close="closeWarning" ></Warning>
   </div>
 </template>
 
 <script>
   let today = new Date();
+  import Warning from "./OAWork/management/notice/components/Warning.vue"; //预览页面
   export default {
     name: 'app',
+    components:{Warning},
     data() {
       return {
         urls: globalConfig.server_user,
@@ -286,6 +293,10 @@
         group_ranking: 5,
         bg_color: '',
         banners: [],
+        noticeInfo:[],
+        noticeInfofirst:{
+        },
+        look:{},
         staffSquares: [],
         staffSquareTop:[],
         externalNews: [],
@@ -314,6 +325,7 @@
           second: '当前业绩',
           third: '占公司总业绩百分比',
         },
+        warningDialog: false,
       }
     },
     methods: {
@@ -328,6 +340,9 @@
       },
       handleMonthChanged(data) {
         console.log(data)
+      },
+      closeWarning() {
+        this.warningDialog = false;
       },
       //切换新闻中心标题
       selectNewsType(e) {
@@ -535,8 +550,20 @@
           localStorage.setItem('mainWeeklyReportTop',JSON.stringify(this.weeklyReportTop));
         });
       },
+      getnotice(){
+        this.$http.get(globalConfig.server + "announcement").then((res) => {
+          console.log(res)
+          this.noticeInfo=res.data.data;
+          this.noticeInfofirst=res.data.data[0];
+        });
+      },
+      openMore(noticeInfofirst){
+        this.look=noticeInfofirst;
+        this.warningDialog = true;
+      },
     },
     mounted() {
+      this.getnotice();
       this.getBanners();
       this.getStaffSquare();
       this.getNews();
