@@ -42,6 +42,7 @@
       </el-tabs>
       {{allPowerID}}<br>
       {{checkAllPower}}<br>
+      {{checkedPower}}
       <div slot="footer" class="dialog-footer" style="text-align: center;">
         <el-button size="small" type="primary" @click="empower(1)">授权给职位</el-button>
         <el-button size="small" type="primary" @click="empower(2)">授权给个人</el-button>
@@ -110,9 +111,10 @@
       allChange(val) {
         this.checkedPower = val ? this.checkAllPower : [];
         this.isIndeterminate = false;
-        this.allPowerID = this.noRepeat(this.allPowerID.concat(this.checkAllPower));
+        // this.allPowerID = this.noRepeat(this.allPowerID.concat(this.checkAllPower));
       },
       powerChange(value) {
+        console.log(value);
         let checkedCount = value.length;
         this.checkAll = checkedCount === this.checkAllPower.length;
         this.isIndeterminate = checkedCount > 0 && checkedCount < this.checkAllPower.length;
