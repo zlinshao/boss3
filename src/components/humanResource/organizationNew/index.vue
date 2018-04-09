@@ -216,7 +216,7 @@
               <p>真实姓名：<span>{{staffDetailData&& staffDetailData.detail && staffDetailData.detail.real_name}}</span></p>
           </el-col>
           <el-col :span="8">
-            <p>性别：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.gender}}</span></p>
+            <p>性别：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.genders}}</span></p>
           </el-col>
           <el-col :span="8">
             <p>手机号码：<span>{{staffDetailData && staffDetailData.phone}}</span></p>
@@ -227,7 +227,7 @@
             <p>家庭住址：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.home_addr}}</span></p>
           </el-col>
           <el-col :span="8">
-            <p>生育状况 <span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.fertility_status}}</span></p>
+            <p>生育状况 <span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.fertility_statuss}}</span></p>
           </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -238,7 +238,7 @@
             <p>生日：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.birthday}}</span></p>
           </el-col>
           <el-col :span="8">
-            <p>推荐人：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.recommender}}</span></p>
+            <p>推荐人：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.recommender_name}}</span></p>
           </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -301,10 +301,10 @@
             <p>籍贯：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.origin_addr}}</span></p>
           </el-col>
           <el-col :span="8">
-            <p>婚姻状况：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.marital_status}}</span></p>
+            <p>婚姻状况：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.marital_statuss}}</span></p>
           </el-col>
           <el-col :span="8">
-            <p>政治面貌：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.political_status}}</span></p>
+            <p>政治面貌：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.political_statuss}}</span></p>
           </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -315,7 +315,7 @@
             <p>企业邮箱：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.mail}}</span></p>
           </el-col>
           <el-col :span="8">
-            <p>学历：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.education}}</span></p>
+            <p>学历：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.educations}}</span></p>
           </el-col>
         </el-row>
         <el-row :gutter="20">
