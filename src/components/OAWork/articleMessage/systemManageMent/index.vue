@@ -5,7 +5,8 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入标题" v-model="form.keywords" size="mini" clearable @keyup.enter.native="getSystemTableData()">
+            <el-input placeholder="请输入标题" v-model="form.keywords" size="mini" clearable
+                      @keyup.enter.native="getSystemTableData()">
               <el-button slot="append" icon="el-icon-search" @click="getSystemTableData()"></el-button>
             </el-input>
           </el-form-item>
@@ -89,9 +90,15 @@
           <el-table-column
             label="状态">
             <template slot-scope="scope">
-              <el-button class="btnStatus" v-if="scope.row.statuss === '已发布'" type="primary" size="mini">{{scope.row.statuss}}</el-button>
-              <el-button class="btnStatus" v-if="scope.row.statuss === '已结束'" type="warning" size="mini">{{scope.row.statuss}}</el-button>
-              <el-button class="btnStatus" v-if="scope.row.statuss === '草稿'" type="info" size="mini">{{scope.row.statuss}}</el-button>
+              <el-button class="btnStatus" v-if="scope.row.statuss === '已发布'" type="primary" size="mini">
+                {{scope.row.statuss}}
+              </el-button>
+              <el-button class="btnStatus" v-if="scope.row.statuss === '已结束'" type="warning" size="mini">
+                {{scope.row.statuss}}
+              </el-button>
+              <el-button class="btnStatus" v-if="scope.row.statuss === '草稿'" type="info" size="mini">
+                {{scope.row.statuss}}
+              </el-button>
               <el-tag type="success" v-if="scope.row.top !== null ">置顶</el-tag>
               <el-tag type="warning" v-if="scope.row.fine !==null ">精华</el-tag>
             </template>
@@ -126,7 +133,7 @@
 
   export default {
     name: 'system-management',
-    components: {RightMenu, Organization,EatLoading},
+    components: {RightMenu, Organization, EatLoading},
     data() {
       return {
         urls: globalConfig.server,
@@ -162,17 +169,17 @@
       this.getDict();
     },
     activated() {
-      this.getSystemTableData(1);
-      this.getDict();
+      // this.getSystemTableData(1);
+      // this.getDict();
     },
     created() {
       this.form.pages = this.currentPage;
     },
     watch: {
-      moduleId(val){
-        if(!val){
+      moduleId(val) {
+        if (!val) {
           this.form.dict_id = 380;
-        }else{
+        } else {
           this.form.dict_id = val;
         }
       },
@@ -193,7 +200,7 @@
       },
       getSystemTableData() {
         this.loading = true;
-        this.$http.get(this.urls + 'oa/portal/', { params: this.form}).then((res) => {
+        this.$http.get(this.urls + 'oa/portal/', {params: this.form}).then((res) => {
           this.isHigh = false;
           if (res.data.code === '80000') {
             this.tableData = res.data.data.data;
@@ -209,7 +216,7 @@
       // 详情
       openDetail(row) {
         var data = {ids: row.id, detail: 'port'};
-        this.$store.dispatch('articleDetail',data);
+        this.$store.dispatch('articleDetail', data);
         this.$router.push({path: '/Infodetails', query: data});
 
       },
@@ -228,8 +235,8 @@
       // 文章发布
       publicArticle() {
         this.$store.dispatch('deleteArticleId');
-        this.$router.push({path: '/publicArticle',query:{moduleType: this.moduleType}});
-        this.$store.dispatch('moduleType',this.moduleType);
+        this.$router.push({path: '/publicArticle', query: {moduleType: this.moduleType}});
+        this.$store.dispatch('moduleType', this.moduleType);
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -237,7 +244,7 @@
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
         this.form.pages = val;
-        this.$store.dispatch('systemPage',val);
+        this.$store.dispatch('systemPage', val);
         this.getSystemTableData();
 
       },
@@ -255,27 +262,27 @@
           ];
         } else {
           this.statuss = '已结束';
-          if(row.top === null && row.fine === null){
+          if (row.top === null && row.fine === null) {
             this.lists = [
               {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架',},
               {clickIndex: 'top', headIcon: 'el-icon-edit-outline', label: '置顶',},
               {clickIndex: 'essence', headIcon: 'el-icon-edit-outline', label: '精华',},
             ];
-          } else if(row.top !== null && row.fine === null){
+          } else if (row.top !== null && row.fine === null) {
             this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架',top:true},
+              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架', top: true},
               {clickIndex: 'top', headIcon: 'el-icon-edit-outline', label: '取消置顶',},
               {clickIndex: 'essence', headIcon: 'el-icon-edit-outline', label: '精华',},
             ];
-          } else if(row.top === null && row.fine !== null){
+          } else if (row.top === null && row.fine !== null) {
             this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架',fine:true},
+              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架', fine: true},
               {clickIndex: 'top', headIcon: 'el-icon-edit-outline', label: '置顶',},
               {clickIndex: 'essence', headIcon: 'el-icon-edit-outline', label: '取消精华',},
             ];
-          }else{
+          } else {
             this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架',top:true,fine:true},
+              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架', top: true, fine: true},
               {clickIndex: 'top', headIcon: 'el-icon-edit-outline', label: '取消置顶',},
               {clickIndex: 'essence', headIcon: 'el-icon-edit-outline', label: '取消精华',},
             ];
@@ -289,30 +296,30 @@
         switch (val.clickIndex) {
           case 'revise':
             this.$router.push({path: '/publicArticle', query: {ids: this.pitch, moduleType: this.moduleType}});
-            this.$store.dispatch('moduleType',this.moduleType);
+            this.$store.dispatch('moduleType', this.moduleType);
             break;
           case 'delete':
             this.deleteInfo(this.pitch);
             break;
           case 'grounding':
-            var top_fine={};
-            this.upperShelf(this.pitch, '上架',top_fine);
+            var top_fine = {};
+            this.upperShelf(this.pitch, '上架', top_fine);
             break;
           case 'undercarriage':
-            var top_fine={};
-            if(val.top){
+            var top_fine = {};
+            if (val.top) {
               top_fine.top = true;
             }
-            if(val.fine){
+            if (val.fine) {
               top_fine.fine = true;
             }
-            this.upperShelf(this.pitch, '下架',top_fine);
+            this.upperShelf(this.pitch, '下架', top_fine);
             break;
           case 'top':
-            this.top(this.pitch,'置顶');
+            this.top(this.pitch, '置顶');
             break;
           case 'essence':
-            this.essence(this.pitch,'精华');
+            this.essence(this.pitch, '精华');
             break;
         }
       },
@@ -363,7 +370,7 @@
       },
 
       // 上架下架
-      upperShelf(id, title,status) {
+      upperShelf(id, title, status) {
         this.$confirm('此操作将' + title + '文章, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -373,12 +380,12 @@
             if (res.data.code === '80080' || res.data.code === '80010') {
               this.getSystemTableData();
               this.prompt(1, res.data.msg);
-              if(title === '下架'){
-                if(status.top){
-                  this.top(id,'置顶');
+              if (title === '下架') {
+                if (status.top) {
+                  this.top(id, '置顶');
                 }
-                if(status.fine){
-                  this.essence(id,'精华');
+                if (status.fine) {
+                  this.essence(id, '精华');
                 }
               }
             } else {
@@ -410,8 +417,8 @@
 
       //置顶
       top(id, info) {
-        this.$http.put(globalConfig.server +"oa/portal/status/" + id,{type:'top'}).then((res) => {
-          if(res.data.code == "800100" || res.data.code == "800110") {
+        this.$http.put(globalConfig.server + "oa/portal/status/" + id, {type: 'top'}).then((res) => {
+          if (res.data.code == "800100" || res.data.code == "800110") {
             this.$notify.success({
               title: '成功',
               message: res.data.msg
@@ -423,8 +430,8 @@
       },
       //精华
       essence(id, info) {
-        this.$http.put(globalConfig.server +"oa/portal/status/" + id,{type:'fine'}).then((res) => {
-          if(res.data.code == "800100" || res.data.code == "800110" ) {
+        this.$http.put(globalConfig.server + "oa/portal/status/" + id, {type: 'fine'}).then((res) => {
+          if (res.data.code == "800100" || res.data.code == "800110") {
             this.$notify.success({
               title: '成功',
               message: res.data.msg
@@ -444,11 +451,13 @@
   .el-table th {
     text-align: left !important;
   }
+
   .el-table__body td {
     text-align: left !important;
   }
- .btnStatus{
-   cursor: inherit;
-   min-width:   68px;
- }
+
+  .btnStatus {
+    cursor: inherit;
+    min-width: 68px;
+  }
 </style>

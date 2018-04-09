@@ -162,8 +162,8 @@
       this.getDict();
     },
     activated() {
-      this.getCompanyTableData();
-      this.getDict();
+      // this.getCompanyTableData();
+      // this.getDict();
     },
     created() {
       this.form.pages = this.currentPage;
