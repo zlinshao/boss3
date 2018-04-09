@@ -56,7 +56,7 @@
 
 <script>
     export default {
-      props:['collectHouseId','activeName'],
+      props:['collectHouseId','activeName','tabStatusChange'],
       data () {
           return {
             goodsChangeData:[], //物品增减
@@ -86,6 +86,12 @@
         },
         activeName(val){
           if(!this.isRequestData && val=== 'GoodsChangeTab' && this.collectHouseId){
+            this.getData();
+            this.isRequestData = true;
+          }
+        },
+        tabStatusChange(val){
+          if(val=== 'GoodsChangeTab' && this.activeName==='GoodsChangeTab'){
             this.getData();
             this.isRequestData = true;
           }

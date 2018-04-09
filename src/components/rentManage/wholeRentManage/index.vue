@@ -14,9 +14,9 @@
           <!--</el-button>-->
         </div>
 
-        <div class="tool_right"  @click="openModalDialog('settingDialog')">
-          <div><i class="el-icon-setting"></i>&nbsp;设置</div>
-        </div>
+        <!--<div class="tool_right"  @click="openModalDialog('settingDialog')">-->
+          <!--<div><i class="el-icon-setting"></i>&nbsp;设置</div>-->
+        <!--</div>-->
       </div>
       <div class="highRanking" style="margin-top: 10px">
         <div class="highSearch">
@@ -292,7 +292,7 @@
               <RentInfoTab :rentContractId="rentContractId" :activeName="activeName"></RentInfoTab>
             </el-tab-pane>
             <el-tab-pane label="物品增减" name="GoodsChangeTab">
-              <GoodsChangeTab :collectHouseId="collectHouseId" :activeName="activeName"></GoodsChangeTab>
+              <GoodsChangeTab :collectHouseId="collectHouseId" :tabStatusChange="tabStatusChange" :activeName="activeName"></GoodsChangeTab>
             </el-tab-pane>
             <!--
             <el-tab-pane label="房东退房记录" name="CollectReturnRomeInfoTab">
@@ -324,16 +324,20 @@
               <RentMemorandumTab></RentMemorandumTab>
             </el-tab-pane>
             <el-tab-pane label="回访记录(收)" name="CollectReturnVisitRecordTab">
-              <CollectReturnVisitRecordTab :collectContractId="collectContractId" :activeName="activeName"></CollectReturnVisitRecordTab>
+              <CollectReturnVisitRecordTab :collectContractId="collectContractId" :tabStatusChange="tabStatusChange"
+                                           :activeName="activeName"></CollectReturnVisitRecordTab>
             </el-tab-pane>
             <el-tab-pane label="回访记录(租)" name="RentReturnVisitRecordTab">
-              <RentReturnVisitRecordTab :rentContractId="rentContractId" :activeName="activeName"></RentReturnVisitRecordTab>
+              <RentReturnVisitRecordTab :rentContractId="rentContractId" :tabStatusChange="tabStatusChange"
+                                        :activeName="activeName"></RentReturnVisitRecordTab>
             </el-tab-pane>
             <el-tab-pane label="跟进记录(收)" name="CollectFollowRecordTab">
-              <CollectFollowRecordTab :collectContractId="collectContractId" :activeName="activeName"></CollectFollowRecordTab>
+              <CollectFollowRecordTab :collectContractId="collectContractId" :tabStatusChange="tabStatusChange"
+                                      :activeName="activeName"></CollectFollowRecordTab>
             </el-tab-pane>
             <el-tab-pane label="跟进记录(租)" name="RentFollowRecordTab">
-              <RentFollowRecordTab :rentContractId="rentContractId" :activeName="activeName"></RentFollowRecordTab>
+              <RentFollowRecordTab :rentContractId="rentContractId" :tabStatusChange="tabStatusChange"
+                                   :activeName="activeName"></RentFollowRecordTab>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -549,6 +553,7 @@
 
         activeName:'OwnerInfoTab',    //tab name
         pay_way_dic:[],
+        tabStatusChange:'',
       }
     },
 
@@ -903,9 +908,16 @@
         this.visitRecordDialog = false;
         this.contractModule = '';
         this.contractOperateId = '';
-
         if(val === 'updateCollect'){
           this.getCollectData();
+        }else if(val === 'updateRent'){
+          this.getRentData(this.collectHouseId);
+        }else if(val === 'changeGoods'){
+          this.tabStatusChange = 'GoodsChangeTab'
+        }else if(val === 'visitRecord'){
+          this.tabStatusChange = 'visitRecord'
+        }else if(val === 'workOrder'){
+          this.tabStatusChange = 'workOrder'
         }
       },
 

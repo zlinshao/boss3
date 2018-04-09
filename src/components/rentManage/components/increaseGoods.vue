@@ -198,7 +198,7 @@
             content: this.list,
             "dest": this.form.gone
           }).then((res) => {
-            //this.$emit("success", this.success);
+            this.$emit("close", 'changeGoods');
             if (res.data.code == "20010") {
               this.$notify({
                 title: '成功',

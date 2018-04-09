@@ -158,6 +158,7 @@
                 message:res.data.msg
               });
               this.init();
+              this.$emit('close','workOrder')
               this.addFollowUpDialogVisible = false;
             }else {
               this.$notify.warning({
@@ -170,8 +171,8 @@
       },
       init(){
         this.params = {
-          contract_id : '',
-          module : '',
+          contract_id : this.contractOperateId,
+          module : this.contractModule,
           matters:'',                     //跟进事项
           type : '',                      //'事件类型',
           follow_id : '',                 // '跟进人',

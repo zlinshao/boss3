@@ -563,7 +563,7 @@
               message:res.data.msg
             });
             this.collectVacationDialogVisible = false;
-            this.$emit('close','success');
+            this.$emit('close','updateCollect');
           }else {
             this.$notify.warning({
               title:'警告',
@@ -575,7 +575,7 @@
     }
   };
 </script>
-<style lang="scss">
+<style lang="scss" scoped="">
   #rentVacation{
     .el-dialog__wrapper{
       .el-dialog{
