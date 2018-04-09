@@ -275,33 +275,16 @@ ul.el-menu.el-menu--inline{
   background-color:#405597 !important;
   border-bottom:0.5px #2e3e6e solid !important;
 }
-.el-menu-item{
-  border-top:0.5px #88a4fc solid !important;
-}
-.el-menu--collapse .el-menu-item{
-  border:none !important;
-}
-.el-submenu{
-  border:0.5px #88a4fc solid !important;
-}
-.el-menu--collapse .el-submenu{
-  border:none !important;
-}
-.el-menu--inline .el-menu-item{
-  border:none !important;
-}
+
+
 .is-opened .iconfont{
   color:rgb(255, 208, 75) !important;
 }
 .is-opened .el-submenu__title span{
   color: rgb(255, 208, 75) !important;
 }
-.is-opened{
-  border-top:1px #cad1fd solid !important;
-  border-bottom:1px #cad1fd solid !important;
-}
  .el-submenu__icon-arrow {
-  color:#66c4f9 !important
+  color:#a6b5ec !important
 }
 .is-opened .el-menu--inline .is-active span{
   color: rgb(255, 208, 75) !important;
