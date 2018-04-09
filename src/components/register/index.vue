@@ -241,7 +241,6 @@
     border-radius: $n;
   }
   #register{
-    background: #f9f9f9;
     .registerList {
       padding: 0 30px;
       height: 750px;
@@ -261,8 +260,8 @@
           @include flex;
           justify-content: left;
           .personnelPIc {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             @include border_radius(50%);
             img {
               width: 100%;
@@ -271,7 +270,7 @@
             }
           }
           .personnelName {
-            line-height: 50px;
+            line-height: 48px;
             margin-left: 20px;
             color: #6a8dfb;
           }

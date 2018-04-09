@@ -948,20 +948,21 @@
       background: $color4;
     }
 
-    width: 362px;
+    width: 322px;
     box-sizing: border-box;
     .el-dropdown-menu__item {
       line-height: 20px;
-      width: 90px;
+      width: 80px;
       float: left;
       text-align: center;
       padding: 12px 0 6px;
       b {
         @include border_radius(6px);
-        display: inline-block;
-        width: 50px;
-        height: 50px;
-        text-align: center;
+        display: inline-flex;
+        width: 40px;
+        height: 40px;
+        align-items: center;
+        justify-content: center;
         color: #fff;
         line-height: 50px;
         font-size: 22px;
@@ -970,6 +971,7 @@
         color: #575859;
         margin: 6px 0;
         display: block;
+        font-size: 12px;
       }
     }
     .border_top {
