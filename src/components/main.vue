@@ -634,7 +634,6 @@
   }
   .t_center{
     text-align: center;
-
   }
   .t_right{
     text-align: right;

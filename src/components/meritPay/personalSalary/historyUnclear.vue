@@ -162,7 +162,7 @@
       this.getTableData();
     },
     activated() {
-      this.getTableData();
+      // this.getTableData();
     },
     methods:{
       getTableData(){
