@@ -630,8 +630,8 @@
           }
           div.a:nth-of-type(1) {
             background:#6F86F7;
-            background: -webkit-linear-gradient(to right, #6F86F7, #6F86F7); /* 标准的语法（必须放在最后） */
-            background: linear-gradient(to right, #6F86F7, #6F86F7); /* 标准的语法（必须放在最后） */
+            background: -webkit-linear-gradient(to right, #6F86F7, #60BDF8); /* 标准的语法（必须放在最后） */
+            background: linear-gradient(to right, #6F86F7, #60BDF8); /* 标准的语法（必须放在最后） */
           }
           div.a:nth-of-type(2) {
             background:#EE7A88;
@@ -660,9 +660,9 @@
             }
           }
           div.a:nth-of-type(4) {
-            background:#d4d9df;
-            background: -webkit-linear-gradient(to right, #d4d9df, #b0b3b9); /* 标准的语法（必须放在最后） */
-            background: linear-gradient(to right, #d4d9df, #b0b3b9); /* 标准的语法（必须放在最后） */
+            background:#b0b3b9;
+            background: -webkit-linear-gradient(to right, #b0b3b9, #d4d9df); /* 标准的语法（必须放在最后） */
+            background: linear-gradient(to right, #b0b3b9,#d4d9df); /* 标准的语法（必须放在最后） */
             .aLeft {
 
             }
