@@ -188,7 +188,7 @@ export default new Router({
       hidden: true,
       name: '',
       children: [
-        {path: '/main', component: Main, name: '公司门户', icon: 'iconfont icon-gongsimenhu'},
+        {path: '/main', component: Main, name: '公司门户', icon: 'iconfont icon-shouyemenhu'},
       ]
     },
 
@@ -267,7 +267,7 @@ export default new Router({
       hidden: true,
       name: '',
       children: [
-        {path: '/housesManage', component: HousesManage, name: '产品管控中心', icon: 'iconfont icon-chanpinguankongzhongxin'},
+        {path: '/housesManage', component: HousesManage, name: '产品管控中心', icon: 'iconfont icon-chanpinguankong'},
       ]
     },
 
