@@ -3,7 +3,9 @@
     <div class="navBar" :class="isFull? 'navBarHide':'' ">
       <div class="left">
         <div class="logo" :class="isCollapse? 'isCollapse_logo':'' ">
-          <div class="boss" :class="isCollapse? 'boss1':'' ">BOSS</div>
+          <div class="boss" :class="isCollapse? 'boss1':'' ">
+
+          </div>
           <div v-if="isCollapse" class="isCollapse" @click="changeCollapse"></div>
           <div v-if="!isCollapse" class="el-icons-fa-bars" @click="changeCollapse"></div>
         </div>
@@ -658,11 +660,16 @@
       align-items: center;
     }
     .isCollapse {
-      width: 27px;
-      height: 20px;
-      margin-right: 20px;
-      background: url("../assets/images/boss.svg") no-repeat;
+      width: 30px;
+      height: 25px;
+      margin-right: 17px;
+      background: url("../assets/images/虚拟租赁合同-24.svg");
+      background-size: 100% 100%;
     }
+    .noCollapse{
+
+    }
+
     .isCollapse_logo {
       width: 64px !important;
       @include transition;
@@ -727,6 +734,10 @@
             color: #6a8dfb;
             margin-left: 50px;
             @include transition;
+            width: 72px;
+            height: 36px;
+            background: url("../assets/images/虚拟租赁合同-23.svg");
+            background-size: 100% 100%;
           }
           .boss1 {
             font-size: 26px;
