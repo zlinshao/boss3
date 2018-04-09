@@ -9,9 +9,9 @@
           <el-button type="success" size="mini" @click="openModalDialog('instructionDialog')">
             <i class="el-icon-tickets"></i>&nbsp;功能说明
           </el-button>
-          <el-button type="info" size="mini" @click="openModalDialog('backUpDialog')">
-            <i class="el-icon-tickets"></i>&nbsp;查看备份
-          </el-button>
+          <!--<el-button type="info" size="mini" @click="openModalDialog('backUpDialog')">-->
+            <!--<i class="el-icon-tickets"></i>&nbsp;查看备份-->
+          <!--</el-button>-->
         </div>
 
         <div class="tool_right"  @click="openModalDialog('settingDialog')">
@@ -310,13 +310,13 @@
             <el-tab-pane label="转租记录" name="subletRecordTab">
               <subletRecordTab></subletRecordTab>
             </el-tab-pane>
-            -->
-            <el-tab-pane label="应收款项" name="ReceivableItemTab">
+              <el-tab-pane label="应收款项" name="ReceivableItemTab">
               <ReceivableItemTab></ReceivableItemTab>
             </el-tab-pane>
             <el-tab-pane label="应付款项" name="PayableItemTab">
               <PayableItemTab></PayableItemTab>
             </el-tab-pane>
+            -->
             <el-tab-pane label="资料备忘(收)" name="CollectMemorandumTab">
               <CollectMemorandumTab></CollectMemorandumTab>
             </el-tab-pane>
@@ -590,6 +590,7 @@
       getCollectData(){
         this.$loading.show();
         this.$http.get(globalConfig.server+'lease/collect',{params:this.collectParams}).then((res) => {
+          this.$loading.hide();
           if(res.data.code === '61010'){
             this.collectData = res.data.data;
             this.collectTotalNum = res.data.meta.total;
@@ -668,7 +669,6 @@
       getRentData(id){
         this.rentParams.house_id = id;
         this.$http.get(globalConfig.server+'lease/rent',{params:this.rentParams}).then((res) => {
-          this.$loading.hide();
           if(res.data.code === '61110'){
             this.rentingData = res.data.data;
             this.rentTotalNum = res.data.meta.total;
@@ -874,7 +874,7 @@
           });
         });
       },
-      closeModal(){
+      closeModal(val){
         this.instructionDialog = false;
         this.backUpDialog = false;
         this.advancedDialog = false;
@@ -901,9 +901,12 @@
         this.topFormSetDialog = false;
         this.settingDialog = false;
         this.visitRecordDialog = false;
-
         this.contractModule = '';
         this.contractOperateId = '';
+
+        if(val === 'updateCollect'){
+          this.getCollectData();
+        }
       },
 
 

@@ -93,7 +93,7 @@
           getData(){
             this.$http.get(globalConfig.server+'customer/work_order',{params:this.params}).then((res) => {
               if(res.data.code === '100200'){
-                this.tableData = res.data.data.data;
+                this.tableData = res.data.data;
                 this.totalNumber = res.data.data.count;
               }else {
                 this.tableData = [];
