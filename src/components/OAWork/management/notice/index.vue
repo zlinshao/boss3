@@ -3,7 +3,7 @@
     <div>
     <div class="highRanking">
       <div class="highSearch" style="width:95%">
-        <el-form :inline="true" size="medium" >
+        <el-form :inline="true" size="medium" style="position:absolute;right:100px;" >
           <el-form-item>
             <el-input placeholder="公告主题/标题/内容关键字" v-model="form.search" @keyup.enter.native="myData(1)" size="mini"
                       clearable>
@@ -378,7 +378,7 @@ export default {
 .sendnotice {
   position: absolute;
   right: 0;
-  top: 4px;
+  top: 5px;
 }
 .main {
   margin-top: 10px;

@@ -52,7 +52,7 @@
     },
     methods:{
       confirmAdd(){
-        this.$http.put(globalConfig.server+'manager/position'+this.positionId,this.params).then((res) => {
+        this.$http.put(globalConfig.server+'manager/position/'+this.positionId,this.params).then((res) => {
           if(res.data.code === '20010'){
             this.$emit('close','success');
             this.closeModal();

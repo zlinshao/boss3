@@ -772,10 +772,10 @@
         this.getPosition();
       },
       //右键职位回调
-      openOnlyPositionDialog(type){
-        if(type === 'edit'){
+      openOnlyPositionDialog(val){
+        if(val.clickIndex === 'edit'){
           this.editOnlyPositionDialog = true;
-        }else if(type === 'delete'){
+        }else if(val.clickIndex === 'delete'){
           this.$confirm('此操作将永久删除, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -788,7 +788,7 @@
               message: '已取消删除'
             });
           });
-        }else if(type === 'addPost'){
+        }else if(val.clickIndex === 'addPost'){
             this.addPosition('post');
         }
       },
@@ -856,10 +856,10 @@
         ];
         this.contextParams(event);
       },
-      openPositionDialog(type){     //g岗位右键回调函数
-        if(type === 'edit'){
+      openPositionDialog(val){     //g岗位右键回调函数
+        if(val.clickIndex === 'edit'){
           this.editPositionDialog = true;
-        }else if(type === 'delete'){
+        }else if(val.clickIndex === 'delete'){
           this.$confirm('此操作将永久删除, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
