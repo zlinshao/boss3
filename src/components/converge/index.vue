@@ -296,14 +296,12 @@
                   <div class="bigPer2 ">
                     <span class="spanImg" @click="routerDetail(key.id)" v-for="(key,index) in figureData.data"
                           v-if="index === 2 || index === 3 && figureData.data[0] !== ''">
-
                       <a v-for="pic in key.album.cover_pic" class="module">
                         <img v-for="p in pic" :src="p.uri">
                         <div class="titleShow2">
                           <span>{{key.title}}</span>
                         </div>
                       </a>
-
                     </span>
                   </div>
                 </el-col>
@@ -655,17 +653,16 @@
       }
       .titleShow1, .titleShow2 {
         span {
+          position: absolute;
+          right: 0;
+          left: 16px;
+          bottom: 12px;
           font-size: 14px;
           padding: 10px 5px;
           display: inline-block;
           white-space: nowrap;
           text-overflow: ellipsis;
           overflow: hidden;
-        }
-      }
-      .titleShow2 {
-        span {
-          width: 46% !important;
         }
       }
       &:hover {
