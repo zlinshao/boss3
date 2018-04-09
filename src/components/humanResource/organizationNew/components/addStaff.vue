@@ -1,7 +1,7 @@
 <template>
   <div id="addRentRepair">
     <el-dialog :title="title" :visible.sync="addStaffDialogVisible" width="60%" :before-close="beforeCloseModal">
-      <div>
+      <div>{{this.options}}
         <el-form size="mini" :model="params" label-width="120px" style="padding: 0 20px;">
           <el-tabs v-model="activeName">
             <el-tab-pane  label="基本信息" name="first">
@@ -319,9 +319,9 @@
       },
       isEdit(val){
         if(!val){
-          this.title = '新建用户'
+          this.title = '新建用户';
         }else {
-          this.title = '修改用户'
+          this.title = '修改用户';
           this.getStaffInfo();
         }
       },
@@ -338,6 +338,7 @@
       this.getPoliticalStatus();
       this.getEducation();
       this.getBranchBank();
+      this.getPosition(this.departmentId);
     },
     created(){
       this.getSex();
@@ -348,6 +349,7 @@
       this.getPoliticalStatus();
       this.getEducation();
       this.getBranchBank();
+      this.getPosition(this.departmentId);
     },
     methods:{
       //编辑时获取员工信息
@@ -429,34 +431,43 @@
 
       },
       //获取职位
-      getPosition(id){
+      getPosition(id) {
         this.$http.get(globalConfig.server+'manager/position?department_id='+ id).then((res) => {
           if(res.data.code === '20000') {
             this.options = [];
             res.data.data.data.forEach((item)=> {
-              // let data = {};
-              // data.value = item.id ;
-              // data.label = item.name;
-              // this.options.push(data);
-
-              this.getPositions(item.id);
+              let data = {};
+              data.value = item.id ;
+              data.label = item.name;
+              this.options.push(data);
             });
           } else {
             this.options = [];
           }
-        })
+        });
+        this.options.forEach((item)=>{
+          this.getPositions(item.value);
+        });
       },
       //获取岗位
       getPositions(id){
         this.$http.get(globalConfig.server+'manager/positions?type='+ id).then((res) => {
           if(res.data.code === '20000') {
             res.data.data.data.forEach((item)=> {
+              for(var i=0;i<this.options.length;i++){
+                if(this.options[i].value === id){
+                  console.log(this.options[i]);
+                  this.options[i].children = [];
+                  let data = {};
+                  data.value = item.id;
+                  data.label = item.name;
+                  this.options[i].children.push(data);
 
-            })
-          } else {
-
+                }
+              }
+            });
           }
-        })
+        });
       },
       confirmAdd(){
         if(this.isEdit) {

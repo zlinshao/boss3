@@ -68,7 +68,6 @@
     mounted() {
       this.roleArray = this.powerData.role;
       this.userId = this.powerData.id;
-      console.log(this.powerData.role && this.powerData.role[0] && this.powerData.role[0].id);
       this.currentRoleId = this.powerData.role && this.powerData.role[0] && this.powerData.role[0].id;
     },
     activated() {
@@ -92,7 +91,6 @@
         setTimeout(()=>{
           this.getDefaultData();
         },0);
-        console.log(this.powerData.role && this.powerData.role[0] && this.powerData.role[0].id);
         this.currentRoleId = this.powerData.role && this.powerData.role[0] && this.powerData.role[0].id;
       }
     },
@@ -124,7 +122,6 @@
         this.isIndeterminate = false;
       },
       powerChange(value) {
-        console.log(value);
         for (var i = 0; i < this.checkAllPower.length; i++) {
           if ($.inArray(this.checkAllPower[i], value) === -1) {
             this.checkAll = false;
