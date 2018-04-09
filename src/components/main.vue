@@ -625,11 +625,11 @@
     overflow:hidden;
     text-overflow:ellipsis;
     display:-webkit-box;
-    -webkit-box-orient:vertical;
     -webkit-line-clamp:2;
     font-size: 14px;
     line-height: 20px;
     -webkit-box-orient: vertical;
+    box-orient: vertical;
     word-break: break-all;
   }
   .t_center{
