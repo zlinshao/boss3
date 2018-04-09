@@ -1,6 +1,6 @@
 <template>
   <div>
-     <el-dialog title="总合领取上限" :visible.sync="maxContractInfoDialogVisible" width="60%" style="min-width:1110px;">
+     <el-dialog title="总合同领取上限" :visible.sync="maxContractInfoDialogVisible" width="60%" style="min-width:1110px;">
       <div>
  
     <div class="highRanking">

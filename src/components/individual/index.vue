@@ -54,7 +54,7 @@
                   <p>相 册<span>&nbsp;{{albumNum}}</span></p>
                 </div>
               </div>
-              <div class="a">
+              <div class="a" style="cursor:Default">
                 <div class="aLeft">
                   <i class="iconfont icon-qita1"></i>
                 </div>
