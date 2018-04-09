@@ -162,8 +162,8 @@
       this.getDict();
     },
     activated() {
-      this.getLejiaTableData();
-      this.getDict();
+      // this.getLejiaTableData();
+      // this.getDict();
     },
     created() {
       this.form.pages = this.currentPage;

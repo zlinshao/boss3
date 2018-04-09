@@ -1,7 +1,7 @@
 <template>
   <div id="addRentRepair">
     <el-dialog :title="title" :visible.sync="addStaffDialogVisible" width="60%" :before-close="beforeCloseModal">
-      <div>{{params.position_id}}
+      <div>
         <el-form size="mini" :model="params" label-width="120px" style="padding: 0 20px;">
           <el-tabs v-model="activeName">
             <el-tab-pane  label="基本信息" name="first">
@@ -401,7 +401,7 @@
             this.params.department_id = [];
             this.params.position_id = [];
 
-            if(res.data.data && res.data.data.data.org.length>0) {
+            if(res.data.data && res.data.data.data && res.data.data.data.org.length>0) {
 
               res.data.data.data.org.forEach((item) => {
                 this.params.department_id.push(item.id);

@@ -354,14 +354,14 @@
     <EditDepart :editDepartDialog="editDepartDialog" :departId="departId" @close="closeEditDepart"></EditDepart>
     <AddStaff :addStaffDialog="addStaffDialog" :isEdit="isEdit" :editId="editId" @close="closeAddStaff" :departmentId="department_id"></AddStaff>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-               @clickOperate="clickEvent"></RightMenu>
+               @clickOperateMore="clickEvent"></RightMenu>
     <AddDepart :addDepartDialog="addDepartDialog" :parentId="parentId" :parentName="parentName" @close="closeAddDepart"></AddDepart>
 
     <AddPosition :addPositionDialog="addPositionDialog" :addPositionParams="addPositionParams" @close="closeAddPosition"></AddPosition>
     <EditPosition :editPositionDialog="editPositionDialog" :positionId="positionId" :positionName="positionName" @close="closeEditPosition"></EditPosition>
     <EditOnlyPosition :editOnlyPositionDialog="editOnlyPositionDialog" :onlyPositionId="onlyPositionId"
                       :onlyPositionName="onlyPositionName" @close="closeEditOnlyPosition"></EditOnlyPosition>
-    <AddPower :module="powerModule" @close="closePower"></AddPower>
+    <AddPower :module="powerModule" @close="closePower" :powerData="powerData"></AddPower>
   </div>
 </template>
 
@@ -394,6 +394,7 @@
     },
     data() {
       return {
+        powerData: [],
         staffDetail: false,
         staffDetailData: {},
         rightMenuX: 0,
@@ -636,6 +637,7 @@
       //================权限====================
       closePower() {
         this.powerModule = false;
+        this.powerData = [];
       },
 
       //********************员工操作函数****************
@@ -657,18 +659,18 @@
         this.editId = row.id;
         this.menuType = 'staff';
         this.lists = [
-          {clickIndex: 'power', headIcon: 'el-icon-edit', label: '权限',},
+          {clickIndex: 'power', headIcon: 'el-icon-edit', label: '权限',data: row},
           {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
           {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextParams(event);
       },
       //员工右键回调
-      openModalDialog(type){
-        if(type === 'edit'){
+      openModalDialog(val){
+        if(val.clickIndex === 'edit'){
           this.addStaffDialog = true;
           this.isEdit = true;
-        }else if(type === 'delete') {
+        }else if(val.clickIndex === 'delete') {
           this.$confirm('此操作将永久删除, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -683,8 +685,9 @@
 
           });
         }
-        if (type === 'power') {
+        if (val.clickIndex === 'power') {
           this.powerModule = true;
+          this.powerData = val.data;
         }
       },
       //删除员工
