@@ -354,8 +354,8 @@
             }
           });
         }).catch(() => {
-          this.$message({
-            type: 'info',
+          this.$notify.info({
+            title: '提示',
             message: '已取消删除'
           });
         });
@@ -385,8 +385,8 @@
             }
           });
         }).catch(() => {
-          this.$message({
-            type: 'info',
+          this.$notify.info({
+            title: '提示',
             message: '已取消操作'
           });
         });
@@ -395,13 +395,13 @@
       // 提示信息
       prompt(val, info) {
         if (val === 1) {
-          this.$message({
-            type: 'success',
+          this.$notify.success({
+            title: '成功',
             message: info,
           });
         } else {
-          this.$message({
-            type: 'info',
+          this.$notify.info({
+            title: '提示',
             message: info,
           });
         }

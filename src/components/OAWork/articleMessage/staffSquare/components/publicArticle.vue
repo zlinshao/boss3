@@ -247,13 +247,13 @@
 
       prompt(val, info) {
         if (val === 1) {
-          this.$message({
-            type: 'success',
+          this.$notify.success({
+            title: '成功',
             message: info,
           });
         } else {
-          this.$message({
-            type: 'info',
+          this.$notify.info({
+            title: '提示',
             message: info,
           });
         }

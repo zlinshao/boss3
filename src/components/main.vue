@@ -631,6 +631,7 @@
     -webkit-box-orient: vertical;
     box-orient: vertical;
     word-break: break-all;
+    height: 38px;
   }
   .t_center{
     text-align: center;
