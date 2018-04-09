@@ -116,7 +116,7 @@
               <div class="titleImg box">
                  <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
                     <img v-if="p.uri" v-for="p in pic" :src="p.uri">
-                    <img v-else src="../../assets/images/default.png">
+                    <img src="../../assets/images/default.png" v-else >
                   </span>
               </div>
               <div class="headline box" @click="routerDetail(key.id)">{{key.title}}</div>
@@ -167,7 +167,7 @@
                   <div class="titleImg box">
                      <span @click="routerDetail(key.id)" v-for="pic in key.album.cover_pic">
                     <img v-if="p.uri" v-for="p in pic" :src="p.uri">
-                    <img v-else src="../../assets/images/default.png">
+                    <img src="../../assets/images/default.png" v-else >
                   </span>
                   </div>
                   <div class="headline box" @click="routerDetail(key.id)">{{key.title}}</div>
@@ -629,7 +629,7 @@
           color: rgba(255, 255, 255, .8);
           font-size: 20px;
           margin-bottom: 20px;
-          /*margin-left: 20px;*/
+          margin-left: 20px;
           @include text_overflow(1);
         }
       }
