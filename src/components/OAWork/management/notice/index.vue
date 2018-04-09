@@ -378,7 +378,7 @@ export default {
 .sendnotice {
   position: absolute;
   right: 0;
-  top: 4px;
+  top: 5px;
 }
 .main {
   margin-top: 10px;
