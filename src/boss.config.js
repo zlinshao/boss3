@@ -8,7 +8,7 @@ globalConfig = {
   domain:'http://static.lejias.cn',
   env: 'dev',
   client_secret: 'udMntGnEJBgsevojFrMicLuW8G2ABBAsmRlK9fIC',
-  client_id: '2',
+  client_id: '2', 
   header:{
     //'Content-Type': 'application/x-www-form-urlencoded',
     'Accept': 'application/json',
