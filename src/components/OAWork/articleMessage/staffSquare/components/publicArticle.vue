@@ -130,7 +130,7 @@
             this.form.name = detail.title;
             this.form.region = detail.dict_id;
             this.form.htmlForEditor = detail.content;
-            let pic = detail.album.cover_pic;
+            let pic = detail && detail.album && detail.album.cover_pic;
             let arr = {};
             this.cover_id = [];
             for (let key in pic) {
@@ -216,7 +216,7 @@
         this.form.htmlForEditor= '';
         this.isClear = true;
         setTimeout( () => {
-          this.$router.push({path: '/articleMessage'})
+          this.$router.push({path: '/articleMessage',query:{refresh: 'refresh'}})
         },0);
       },
       handleImageAdded(file, Editor, cursorLocation, resetUploader) {

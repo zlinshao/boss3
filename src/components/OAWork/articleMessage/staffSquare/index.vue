@@ -162,8 +162,10 @@
       this.getDict();
     },
     activated() {
-      this.getStaffTableData();
-      this.getDict();
+      let refresh = this.$route.query.refresh;
+      if(refresh){
+        this.getStaffTableData();
+      }
     },
     created() {
       this.form.pages = this.currentPage;

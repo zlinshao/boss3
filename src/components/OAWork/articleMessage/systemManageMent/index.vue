@@ -165,12 +165,14 @@
       }
     },
     mounted() {
-      this.getSystemTableData(1);
+      this.getSystemTableData();
       this.getDict();
     },
     activated() {
-      this.getSystemTableData(1);
-      this.getDict();
+      let refresh = this.$route.query.refresh;
+      if(refresh){
+        this.getSystemTableData();
+      }
     },
     created() {
       this.form.pages = this.currentPage;
@@ -230,7 +232,7 @@
         this.form.dict_id = '';
         this.form.status = '';
         this.form.keywords = '';
-        this.getSystemTableData(1);
+        this.getSystemTableData();
       },
       // 文章发布
       publicArticle() {
@@ -423,7 +425,7 @@
               title: '成功',
               message: res.data.msg
             });
-            this.getSystemTableData(1);
+            this.getSystemTableData();
             this.getDict();
           }
         });

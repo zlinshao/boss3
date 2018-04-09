@@ -162,14 +162,15 @@
       this.getDict();
     },
     activated() {
-      this.getCompanyTableData();
-      this.getDict();
+      let refresh = this.$route.query.refresh;
+      if(refresh){
+        this.getStaffTableData();
+      }
     },
     created() {
       this.form.pages = this.currentPage;
     },
     watch:{
-
       moduleId(val){
         if(!val){
           this.form.dict_id = 377;

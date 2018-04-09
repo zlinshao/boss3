@@ -162,8 +162,10 @@
       this.getDict();
     },
     activated() {
-      this.getLejiaTableData();
-      this.getDict();
+      let refresh = this.$route.query.refresh;
+      if(refresh){
+        this.getLejiaTableData();
+      }
     },
     created() {
       this.form.pages = this.currentPage;
