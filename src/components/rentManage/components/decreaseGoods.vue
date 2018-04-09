@@ -123,7 +123,7 @@
         this.showflag=val;
       },
       changeGoodSave(val){
-        
+
         this.goodScode='';
         this.goodscodesave=val.check;
         for(let k=0;k<val.check.length;k++){
@@ -181,14 +181,13 @@
               message: '操作成功',
               type: 'success'
             });
-            //this.$emit("success", this.success);
+            this.$emit("close", 'changeGoods');
             this.allall='';
             this.goodScode='';
             this.value2='';
             this.form.gone='';
             this.goodscodesave='';
             this.deliveryFlag=true;
-            this.$emit('deliveryFlag', this.addGoodsFlag)
             this.decreaseGoodsDialogVisible=false;
             }
             else{

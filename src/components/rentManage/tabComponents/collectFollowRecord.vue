@@ -9,27 +9,33 @@
           label="创建时间">
         </el-table-column>
         <el-table-column
-          prop="name"
           label="房屋地址">
+          <template slot-scope="scope">
+            <span v-if="scope.row.construct">
+              <span v-if="scope.row.construct.house">
+                {{scope.row.construct.house.name}}
+              </span>
+            </span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="child_count"
           label="事件数">
         </el-table-column>
         <el-table-column
-          prop="child.length"
-          label="包含跟进项">
+          prop="matters"
+          label="跟进事项">
         </el-table-column>
         <el-table-column
           prop="expected_finish_time"
           label="预计完成时间">
         </el-table-column>
         <el-table-column
-          prop="creator_id"
+          prop="creator"
           label="创建人">
         </el-table-column>
         <el-table-column
-          prop="follow_id"
+          prop="follow"
           label="跟进人">
         </el-table-column>
         <el-table-column
@@ -54,7 +60,7 @@
 <script>
   import OrderDetail from '../datumMessage/workOrderManage/components/workOrderDetail.vue'
     export default {
-        props:['collectContractId','activeName'],
+        props:['collectContractId','activeName','tabStatusChange'],
         components: {OrderDetail},
         data () {
             return {
@@ -87,13 +93,19 @@
               this.getData();
               this.isRequestData = true;
             }
+          },
+          tabStatusChange(val){
+            if(val=== 'workOrder' && this.activeName==='CollectFollowRecordTab'){
+              this.getData();
+              this.isRequestData = true;
+            }
           }
         },
         methods:{
           getData(){
             this.$http.get(globalConfig.server+'customer/work_order',{params:this.params}).then((res) => {
               if(res.data.code === '100200'){
-                this.tableData = res.data.data;
+                this.tableData = res.data.data.data;
                 this.totalNumber = res.data.data.count;
               }else {
                 this.tableData = [];

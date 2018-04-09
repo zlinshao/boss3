@@ -65,7 +65,7 @@
               title: "成功",
               message: res.data.msg
             });
-            this.$emit('close','success');
+            this.$emit('close','visitRecord');
             this.visitRecordDialogVisible = false;
             this.form = {
               content: '',

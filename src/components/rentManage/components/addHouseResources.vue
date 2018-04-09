@@ -473,17 +473,17 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="开单人">
-                        <el-input placeholder="请输入内容" @focus="openOrganizeModal('staff')" readonly="" v-model="staff_name"></el-input>
+                        <el-input placeholder="请输入内容" @focus="openOrganizeModal('staff')" readonly="" v-model="params.staff_name"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="负责人">
-                        <el-input placeholder="请输入内容" @focus="openOrganizeModal('leader')" readonly="" v-model="leader_name"></el-input>
+                        <el-input placeholder="请输入内容" @focus="openOrganizeModal('leader')" readonly="" v-model="params.leader_name"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="部门">
-                        <el-input placeholder="请输入内容" @focus="openOrganizeModal('depart')" readonly="" v-model="department_name"></el-input>
+                        <el-input placeholder="请输入内容" @focus="openOrganizeModal('depart')" readonly="" v-model="params.department_name"></el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -653,6 +653,11 @@
           staff_id : '',                // 开单人
           leader_id : '',               // 负责人
           department_id : '',           // 部门
+
+          staff_name : '',                //组件选中显示名字
+          leader_name : '',               //组件选中显示名字
+          department_name : '',           //组件选中显示名字
+
           decorate_allow : [],          // 装修批准
           remark_terms : '',            // 备注条款
           remark : '',                  // 备注
@@ -670,12 +675,12 @@
           other_photo : [],
           checkout_photo : [],
           checkout_settle_photo : [],
+
+
         },
         community_name : '',           //小区名
         community_address : '',        //小区地址
-        staff_name : '',                //组件选中显示名字
-        leader_name : '',               //组件选中显示名字
-        department_name : '',           //组件选中显示名字
+
 
         customersAmount:1,
         nameArray : [],
@@ -848,6 +853,11 @@
             this.params.staff_id = data.staff_id;
             this.params.leader_id = data.leader_id;
             this.params.department_id = data.department_id;
+
+            this.params.staff_name = data.staff_name;
+            this.params.leader_name = data.leader_name;
+            this.params.department_name = data.department_name;
+
             this.params.decorate_allow = data.decorate_allow;
             this.params.remark_terms = data.remark_terms;
             this.params.remark = data.remark;
@@ -931,18 +941,18 @@
         if(this.selectType === 'staff'){
           this.params.staff_id = val[0].id;
           this.params.leader_id = val[0].id;
-          this.staff_name = val[0].name;
-          this.leader_name =  val[0].name;
+          this.params.staff_name = val[0].name;
+          this.params.leader_name =  val[0].name;
           if(val[0].org.length>0){
             this.params.department_id = val[0].org[0].id;
-            this.department_name = val[0].org[0].name;
+            this.params.department_name = val[0].org[0].name;
           }
         }else if(this.selectType === 'leader'){
           this.params.leader_id = val[0].id;
-          this.leader_name =  val[0].name;
+          this.params.leader_name =  val[0].name;
         }else if(this.selectType === 'depart'){
           this.params.department_id = val[0].id;
-          this.department_name =  val[0].name;
+          this.params.department_name =  val[0].name;
         }
       },
 
@@ -1158,6 +1168,11 @@
           staff_id : '',                // 开单人
           leader_id : '',               // 负责人
           department_id : '',           // 部门
+
+          staff_name : '',                //组件选中显示名字
+          leader_name : '',               //组件选中显示名字
+          department_name : '',           //组件选中显示名字
+
           decorate_allow : [],          // 装修批准
           remark_terms : '',            // 备注条款
           remark : '',                  // 备注
@@ -1178,9 +1193,7 @@
         };
         this.community_name = '';           //小区名
         this.community_address = '';        //小区地址
-        this.staff_name = '';                //组件选中显示名字
-        this.leader_name = '';               //组件选中显示名字
-        this.department_name = '';           //组件选中显示名字
+
         this.customersAmount=1;
         this.nameArray = [];
         this.sexArray = [];
