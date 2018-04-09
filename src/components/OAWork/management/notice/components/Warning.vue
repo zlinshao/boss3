@@ -64,11 +64,11 @@ export default {
     },
     lookat(val) {
       this.lookinfo = val;
-      if (val.type == "表彰") {
+      if (val.type == "表彰" || val.type == 1) {
         this.no1flag = true;
         this.no2flag = false;
         this.no3flag = false;
-      } else if (val.type == "通知") {
+      } else if (val.type == "通知" || val.type == 3) {
         this.no1flag = false;
         this.no2flag = true;
         this.no3flag = false;
