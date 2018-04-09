@@ -7,7 +7,7 @@
 
             <el-col :span="24">
               <el-form-item label="所属类型">
-                <el-select v-model="form.minus"  clearable="" placeholder="请选择积分类型">
+                <el-select v-model="changeNinus"  clearable="" placeholder="请选择积分类型">
                   <el-option label="得分项目" value="0"></el-option>
                   <el-option label="失分项目" value="1"></el-option>
                 </el-select>
@@ -59,6 +59,7 @@ export default {
         minus: "",
         remark:""
       },
+      changeNinus:"",
       otherType: false,
 
     };
@@ -68,7 +69,7 @@ export default {
         this.formid=val.id;
         this.form.name=val.name;
         this.form.amount=val.amount;
-        this.form.minus= val.item;
+        this.changeNinus= val.item;
         if(val.remarks){
             if(val.remarks[0]){
             if(val.remarks[0].content){
@@ -99,10 +100,10 @@ export default {
   methods: {
 
     submitIntegral() {
-      if(this.form.minus == "得分项目"){
+      if(this.changeNinus == "得分项目" || this.changeNinus == 0){
           this.form.minus=0
       }
-      else if(this.form.minus == "失分项目"){
+      else if(this.changeNinus == "失分项目" || this.changeNinus == 1){
           this.form.minus=1;
       }
       if (this.newAdd == "新增") {

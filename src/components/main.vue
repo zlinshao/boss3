@@ -89,7 +89,7 @@
                 </div>
                 <div style="margin-top: 10px;" class="second_line_camp">{{noticeInfofirst.content_without_table}}</div>
                 <div><em class="ix"></em></div>
-                <div style="border-bottom: 1px solid #eee;padding-bottom: 20px;"><el-button @click="openMore(noticeInfofirst)" size="small" style="background: #6a8dfb;color: #fff;margin-top: 20px;">MORE</el-button></div>
+                <div style="border-bottom: 1px solid #eee;padding-bottom: 20px;"><el-button @click="openMore(noticeInfofirst)" size="small" style="background: #6a8dfb;color: #fff;margin-top: 20px;">更多</el-button></div>
 
                 <div class="clearfix list_gonggao" v-for="(item, index) in noticeInfo" v-if='index>0 && index<5' :key="index">
                 
@@ -800,6 +800,7 @@
         .paiming {
           margin-bottom: 10px;
           border: 1px solid #dfe6fb;
+          border-top:none;
           border-radius: 5px;
           box-sizing: border-box;
           // box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);

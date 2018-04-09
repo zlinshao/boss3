@@ -75,7 +75,7 @@
                 label="手机号">
               </el-table-column>
               <el-table-column
-                prop="identity"
+                prop="detail.identitys"
                 label="客户身份">
               </el-table-column>
               <el-table-column
