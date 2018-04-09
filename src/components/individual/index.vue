@@ -490,13 +490,13 @@
       background: url($n) no-repeat;
       background-size: 100% 100%;
     }
-    @mixin backLiner($a,$b) {
-      background: $a;
-      background: -webkit-gradient(linear, left top, right top, from($a), to($b));
-      background: -o-linear-gradient(left, $a, $b);
-      background: -moz-linear-gradientleft, (left,$a, $b);
-      background: linear-gradient(left, $a, $b);
-    }
+    <!--@mixin backLiner($a,$b) {-->
+      <!--background: $a;-->
+      <!--background: -webkit-gradient(linear, left top, right top, from($a), to($b));-->
+      <!--background: -o-linear-gradient(left, $a, $b);-->
+      <!--background: -moz-linear-gradientleft, (left,$a, $b);-->
+      <!--background: linear-gradient(left, $a, $b);-->
+    <!--}-->
     img {
       width: 100%;
       height: 100%;
@@ -629,10 +629,14 @@
             }
           }
           div.a:nth-of-type(1) {
-            @include backLiner(#6F86F7, #60BDF8);
+            background:#6F86F7;
+            background: -webkit-linear-gradient(to right, #6F86F7, #6F86F7); /* 标准的语法（必须放在最后） */
+            background: linear-gradient(to right, #6F86F7, #6F86F7); /* 标准的语法（必须放在最后） */
           }
           div.a:nth-of-type(2) {
-            @include backLiner(#EE7A88, #EE9A89);
+            background:#EE7A88;
+            background: -webkit-linear-gradient(to right, #EE7A88, #EE9A89); /* 标准的语法（必须放在最后） */
+            background: linear-gradient(to right, #EE7A88, #EE9A89); /* 标准的语法（必须放在最后） */
             .aLeft {
 
             }
@@ -643,7 +647,9 @@
             }
           }
           div.a:nth-of-type(3) {
-            @include backLiner(#51B4D4, #6EE6AC);
+            background:#51B4D4;
+            background: -webkit-linear-gradient(to right, #51B4D4, #6EE6AC); /* 标准的语法（必须放在最后） */
+            background: linear-gradient(to right, #51B4D4, #6EE6AC); /* 标准的语法（必须放在最后） */
             .aLeft {
 
             }
@@ -654,7 +660,9 @@
             }
           }
           div.a:nth-of-type(4) {
-            @include backLiner(#d4d9df, #b0b3b9);
+            background:#d4d9df;
+            background: -webkit-linear-gradient(to right, #d4d9df, #b0b3b9); /* 标准的语法（必须放在最后） */
+            background: linear-gradient(to right, #d4d9df, #b0b3b9); /* 标准的语法（必须放在最后） */
             .aLeft {
 
             }
