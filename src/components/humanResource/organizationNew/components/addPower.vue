@@ -9,7 +9,6 @@
           </el-select>
         </el-form-item>
       </el-form>
-
       <el-radio-group v-model="tabPosition" style="width: 100%;">
         <el-tabs v-model="systemName" @tab-click="handleClick(systemName, 'sys')">
           <el-tab-pane v-for="(key,index) in systemData" :label="key.display_name" :name="key.name" :key="index">
@@ -56,9 +55,7 @@
         moduleName: '',
         moduleData: [],
         permissionData: [],
-
         tabPosition: 'left',
-
         checkedPower: [],
         checkAllPower: [],
         checkAll: false,
@@ -71,6 +68,8 @@
     mounted() {
       this.roleArray = this.powerData.role;
       this.userId = this.powerData.id;
+      console.log(this.powerData.role && this.powerData.role[0] && this.powerData.role[0].id);
+      this.currentRoleId = this.powerData.role && this.powerData.role[0] && this.powerData.role[0].id;
     },
     activated() {
       this.roleArray = this.powerData.role;
@@ -93,6 +92,8 @@
         setTimeout(()=>{
           this.getDefaultData();
         },0);
+        console.log(this.powerData.role && this.powerData.role[0] && this.powerData.role[0].id);
+        this.currentRoleId = this.powerData.role && this.powerData.role[0] && this.powerData.role[0].id;
       }
     },
     methods: {
