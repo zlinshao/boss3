@@ -41,19 +41,47 @@
         </div>
         <div class="title">已上缴收房合同</div>
         <div class="describe_border">
-          <el-row>
-            <el-col  v-for="item in detailInfo.collects" :key="item" :span="6">
-              {{item}}
-            </el-col>
+          <el-row v-for="(val,key) in detailInfo.collects" :key="key" style="padding: 5px;font-size: 14px">
+            <el-form label-width="80px">
+              <el-col :span="4">
+                {{val}}
+              </el-col>
+              <el-col :span="7">
+                <span style="color:#409EFF;">地址：</span>{{rentHandinAddress[key]}}
+              </el-col>
+              <el-col :span="8">
+                <el-checkbox style="font-size: 12px" disabled="" v-model="handover[key]" name="type">交接单</el-checkbox>
+                <el-checkbox style="font-size: 12px" disabled="" v-model="receipt[key]" name="type">收据</el-checkbox>
+                <el-checkbox style="font-size: 12px" disabled="" v-model="keyCode[key]" name="type">钥匙</el-checkbox>
+              </el-col>
+              <el-col :span="5">
+                <span v-if="passed[key]" class="passButton">{{passed[key]}}</span>
+                <el-button size="mini" type="primary" v-else="" href="javascript:;" @click="pass(val,key)">审核</el-button>
+              </el-col>
+            </el-form>
           </el-row>
         </div>
 
         <div class="title">已上缴租房合同</div>
         <div class="describe_border">
-          <el-row>
-            <el-col  v-for="item in detailInfo.rents" :key="item" :span="6">
-              {{item}}
-            </el-col>
+          <el-row v-for="(val,key) in detailInfo.rents" :key="key" style="padding: 5px;font-size: 14px">
+            <el-form label-width="80px">
+              <el-col :span="4">
+                {{val}}
+              </el-col>
+              <el-col :span="7">
+                <span style="color:#409EFF;">地址：</span>{{rentHandinAddress[key]}}
+              </el-col>
+              <el-col :span="8">
+                <el-checkbox style="font-size: 12px" disabled="" v-model="handover[key]" name="type">交接单</el-checkbox>
+                <el-checkbox style="font-size: 12px" disabled="" v-model="receipt[key]" name="type">收据</el-checkbox>
+                <el-checkbox style="font-size: 12px" disabled="" v-model="keyCode[key]" name="type">钥匙</el-checkbox>
+              </el-col>
+              <el-col :span="5">
+                <span v-if="passed[key]" class="passButton">{{passed[key]}}</span>
+                <el-button size="mini" type="primary" v-else="" href="javascript:;" @click="pass(val,key)">审核</el-button>
+              </el-col>
+            </el-form>
           </el-row>
         </div>
 
@@ -75,8 +103,13 @@
 
 <script>
   import ElInput from "../../../../../../node_modules/element-ui/packages/input/src/input";
+  import ElCol from "element-ui/packages/col/src/col";
+  import ElButton from "../../../../../../node_modules/element-ui/packages/button/src/button";
   export default {
-    components: {ElInput},
+    components: {
+      ElButton,
+      ElCol,
+      ElInput},
     props:['contractHandInDialog','handInEditId_detail'],
     data() {
       return {
@@ -86,6 +119,14 @@
         department:'',
         dictionary:[],
         city_name:'',
+
+        //公司合同备用字段
+        rentHandinAddress:{},
+        handover:{},
+        receipt:{},
+        keyCode:{},
+        passed:{},
+        checkBox:[],
       };
     },
     watch:{
@@ -115,6 +156,11 @@
         this.$http.get(globalConfig.server+'contract/handin/'+this.handInEditId_detail).then((res) => {
           if(res.data.code === '20010'){
             this.detailInfo = res.data.data.full;
+            this.rentHandinAddress = res.data.data.address;
+            this.handover = res.data.data.handover;
+            this.receipt = res.data.data.receipt;
+            this.keyCode = res.data.data.key;
+            this.passed = res.data.data.passed;
             this.department = res.data.data.department.name;
             this.dictionary.forEach((item) => {
               if(item.variable.city_code === this.detailInfo.city_code){
@@ -124,11 +170,37 @@
             })
           }
         });
+      },
+      pass(val,key){
+        this.$confirm('您确定将 '+ val +' 这条合同通过审核吗?', this.rentHandinAddress[key], {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.put(globalConfig.server+'contract/handin/pass/'+key).then((res) => {
+            if(res.data.code === '20010'){
+              this.getDetail();
+              this.$notify.success({
+                title:'成功',
+                message:res.data.msg
+              })
+            }
+          });
+        }).catch(() => {
+
+        });
+
       }
     }
   };
 </script>
 <style lang="scss" scoped="">
+  .passButton{
+    color: #409EFF;
+    &:hover{
+      color: #6a8dfb;
+    }
+  }
   .content {
     padding: 0 10px;
     background: #eef3fc;
