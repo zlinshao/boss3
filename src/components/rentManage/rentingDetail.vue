@@ -300,7 +300,7 @@
 
               <el-col :span="8">
                 <el-form-item label="开单人">
-                  <div class="content">{{contractInfo.staff_name}}</div>；
+                  <div class="content">{{contractInfo.staff_name}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">

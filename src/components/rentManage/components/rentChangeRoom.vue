@@ -181,11 +181,7 @@
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="是否公司单">
-                        <el-switch
-                          v-model="params.contract_type"
-                          active-text="非公司单"
-                          inactive-text="公司单" active-value="0" inactive-value="1">
-                        </el-switch>
+                        <el-switch v-model="params.contract_type" active-value="1" inactive-value="0"></el-switch>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -195,11 +191,7 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="是否中介">
-                        <el-switch
-                          v-model="params.is_agency"
-                          active-text="个人"
-                          inactive-text="中介" active-value="0" inactive-value="1">
-                        </el-switch>
+                        <el-switch v-model="params.is_agency" active-value="1" inactive-value="0"></el-switch>
                       </el-form-item>
                     </el-col>
 
@@ -546,13 +538,13 @@
           //------------------小区详情--------------------//
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
-          contract_type: 1,           // 订单性质（合同种类）
+          contract_type: '1',           // 订单性质（合同种类）
           contract_number: '',         // 合同编号
           month: '',                   // 租房月数
           sign_date: '',               // 签约日期
           begin_date: '',              // 合同开始时间
           end_date: '',                // 合同结束时间
-          is_agency: 1,               // 来源
+          is_agency: '1',               // 来源
           deposit: '',                 // 押金
 
           price: [],                   // 月单价
@@ -996,13 +988,13 @@
           type: 5,
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
-          contract_type: 1,           // 订单性质（合同种类）
+          contract_type: '1',           // 订单性质（合同种类）
           contract_number: '',         // 合同编号
           month: '',                   // 租房月数
           sign_date: '',               // 签约日期
           begin_date: '',              // 空置期开始时间
           end_date: '',                // 合同结束时间
-          is_agency: 1,               // 来源
+          is_agency: '1',               // 来源
           deposit: '',                 // 押金
           price: [],                   // 月单价
           pay_way: [],                 // 付款方式

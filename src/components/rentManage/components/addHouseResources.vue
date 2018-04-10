@@ -48,7 +48,6 @@
                       <el-col :span="8" style="padding-right: 10px">
                         <el-select clearable v-model="params.house_type[0]" placeholder="室" value="">
                           <el-option label="一室" value="1"></el-option>
-                          <el-option label="一室" value="1"></el-option>
                           <el-option label="二室" value="2"></el-option>
                           <el-option label="三室" value="3"></el-option>
                           <el-option label="四室" value="4"></el-option>
@@ -197,11 +196,7 @@
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="是否公司单" required="">
-                        <el-switch
-                          v-model="params.contract_type"
-                          active-text="非公司单"
-                          inactive-text="公司单" active-value="0" inactive-value="1">
-                        </el-switch>
+                        <el-switch v-model="params.contract_type" active-value="1" inactive-value="0"></el-switch>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -302,11 +297,7 @@
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="是否中介" required="">
-                        <el-switch
-                          v-model="params.is_agency"
-                          active-text="个人"
-                          inactive-text="中介" active-value="0" inactive-value="1">
-                        </el-switch>
+                        <el-switch v-model="params.is_agency" active-value="1" inactive-value="0"></el-switch>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -650,7 +641,7 @@
 
           customers: [],               //房东数组
           //-------------------合同详情--------------------//
-          contract_type: 1,           // 订单性质（合同种类）
+          contract_type: '1',           // 订单性质（合同种类）
           contract_number: '',         // 合同编号
           month: '',                   // 租房月数
           day: '',                     // 租房天数
@@ -663,7 +654,7 @@
           vacancy_other: '',           //空置期安置方式(其他)
           warranty_month: '',          // 保修期月数
           warranty_day: '',            // 保修期天数
-          is_agency: 1,              // 来源
+          is_agency: '1',              // 来源
           deposit: '',                 // 押金
           price: [],                   // 月单价
           pay_way: [],                 // 付款方式
@@ -863,7 +854,7 @@
               this.phoneArray.push(item.phone);
             });
             //合同信息
-            this.params.contract_type = data.contract_type;
+            this.params.contract_type = String(data.contract_type);
             this.params.contract_number = data.contract_number;
             this.params.month = data.month;
             this.params.day = data.day;
@@ -1192,7 +1183,7 @@
 
           customers: [],               //房东数组
           //-------------------合同详情--------------------//
-          contract_type: 1,           // 订单性质（合同种类）
+          contract_type: '1',           // 订单性质（合同种类）
           contract_number: '',         // 合同编号
           month: '',                   // 租房月数
           day: '',                     // 租房天数
@@ -1205,7 +1196,7 @@
           vacancy_other: '',           // 空置期安置方式(其他)
           warranty_month: '',          // 保修期月数
           warranty_day: '',            // 保修期天数
-          is_agency: 1,                    // 来源
+          is_agency: '1',                    // 来源
           deposit: '',                 // 押金
           price: [],                   // 月单价
           pay_way: '[]',                 // 付款方式
