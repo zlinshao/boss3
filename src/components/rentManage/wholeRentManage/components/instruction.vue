@@ -80,6 +80,8 @@
     },
     methods:{
       getDepart(){
+        this.setTree=[];
+        this.form.image_pic=[];
         this.$http.get(globalConfig.server+'des/tree').then((res) => {
           this.setTree = res.data.data;
           this.form.id = res.data.data[0].id;
