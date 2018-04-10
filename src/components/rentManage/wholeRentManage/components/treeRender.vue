@@ -9,12 +9,7 @@
 			<!--@keyup.enter.stop.native="nodeEditPass(STORE,DATA,NODE)"></el-input>-->
 		<!--</span>-->
 		<span :class="[DATA.id > maxExpandId ? 'tree-new tree-label' : 'tree-label']">
-			<span :title="DATA.title">{{DATA.title}}</span>
-		</span>
-		<span class="tree-btn">
-			<i class="el-icon-plus" @click.stop="nodeAdd(STORE,DATA,NODE)"></i>
-			<i class="el-icon-edit" @click.stop="nodeEdit(STORE,DATA,NODE)"></i>
-			<i class="el-icon-delete" @click.stop="nodeDel(STORE,DATA,NODE)"></i>
+			<span style="width:80%" :title="DATA.title">{{DATA.title}}</span>
 		</span>
 	</span>
 </template>
@@ -67,23 +62,10 @@
 		font-size:0.9em;
 		overflow: hidden;
 		float: left;
-		width:66%;
+		width:100%;
 	}
 		.tree-expand .tree-label span{
 		float: left;
 		}	
-	.tree-expand .tree-label .edit{
-		width:80%;
-	}
 
-	.tree-expand .tree-btn{
-		display:none;
-    float: right;
-    /*margin-left: 200px;*/
-	}
-	.tree-expand .tree-btn i{
-		color:#666;
-    font-size: 12px;
-		margin-right:5px;
-	}
 </style>

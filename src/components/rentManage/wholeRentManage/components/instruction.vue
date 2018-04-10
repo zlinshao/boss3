@@ -11,7 +11,8 @@
                      @node-click="nodeClick"
                      :default-expanded-keys="defaultExpandKeys"
                      :props="defaultProps"
-                     :expand-on-click-node="false">
+                     :expand-on-click-node="false"
+                     :render-content="renderContent">
             </el-tree>
           </div>
           </el-col>
@@ -37,6 +38,7 @@
 </template>
 
 <script>
+import TreeRender from "./treeRender.vue";
 export default {
   props: ["instructionDialog"],
   data() {
@@ -101,7 +103,19 @@ export default {
     },
     nextimg() {
       this.a = this.a + 1;
-    }
+    },
+    //********************树配置操作函数****************
+    renderContent(h, { node, data, store }) {
+      //加载节点
+      let that = this;
+      return h(TreeRender, {
+        props: {
+          DATA: data,
+          NODE: node,
+          STORE: store
+        }
+      });
+    },
   }
 };
 </script>
