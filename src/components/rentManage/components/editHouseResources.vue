@@ -789,11 +789,11 @@
             this.params.property_number = data.property_number;
             this.params.mound_number = data.mound_number;
             this.params.area = data.area;
-            this.params.decorate = Number(data.decorate);
+            this.params.decorate = data.decorate?Number(data.decorate):'';
             this.params.floor = data.floor;
             this.params.floors = data.floors;
-            this.params.property_type = Number(data.property_type);
-            this.params.house_feature = Number(data.house_feature);
+            this.params.property_type = data.property_type?Number(data.property_type):'';
+            this.params.house_feature = data.house_feature?Number(data.house_feature):'';
             //房东信息
             this.customersAmount = data.customers.length;
             data.customers.forEach((item) => {
@@ -840,14 +840,14 @@
             this.params.pay_second_date = data.pay_second_date;
             this.params.account_name = data.account_name;
             this.params.relationship = data.relationship;
-            this.params.purchase_way = Number(data.purchase_way);
+            this.params.purchase_way = data.purchase_way?Number(data.purchase_way):'';
             this.params.account = data.account;
             this.params.bank = data.bank;
             this.params.subbranch = data.subbranch;
             this.params.agency = data.agency;
             this.params.penalty = data.penalty;
             this.params.property = data.property;
-            this.params.property_payer = Number(data.property_payer);
+            this.params.property_payer = data.property_payer?Number(data.property_payer):'';
             this.params.water = data.water;
             this.params.electricity_peak = data.electricity_peak;
             this.params.electricity_valley = data.electricity_valley;
