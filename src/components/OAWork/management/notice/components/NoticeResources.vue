@@ -23,7 +23,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="对象" >
-                 <el-input v-model="form.obj" @click.native="openOrganizationModal()" placeholder="点击选择" ></el-input>
+                 <el-input v-model="form.obj" readonly  @click.native="openOrganizationModal()" placeholder="点击选择" ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -113,6 +113,7 @@ export default {
       if (!val) {
         this.$emit("close");
         this.secondfalg = true
+        this.midId = null
       }else{
         this.secondfalg = false
       }
@@ -158,6 +159,7 @@ export default {
     },
     //预览
     look(){
+      this.midId = null;
       this.form.preview=1;
       if (this.twoflag) {
         this.form.draft = "1";
@@ -167,6 +169,7 @@ export default {
       if (!this.firstflag) {
         this.form.id = "";
       }
+      
       this.saveorsend();
       if (this.saveorsendflag) {
         if (this.form.type == "表彰") {
@@ -221,9 +224,9 @@ export default {
       if (!this.firstflag) {
         this.form.id = "";
       }
-      if(this.midId){
+
         this.form.id = this.midId;
-      }
+
       this.saveorsend();
       if (this.saveorsendflag) {
         if (this.form.type == "表彰") {
@@ -263,6 +266,7 @@ export default {
                 type: "success"
               });
               this.midId = null;
+              this.form.id=null;
               this.threeflag = true;
               this.firstflag = true;
               this.upStatus=false;
