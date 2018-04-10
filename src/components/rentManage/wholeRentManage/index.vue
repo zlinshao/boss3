@@ -646,7 +646,9 @@
 
     watch:{
       collectHouseId(val){
-        this.getRentData(val);
+        if(val){
+          this.getRentData(val);
+        }
       }
     },
 
@@ -691,6 +693,8 @@
       },
 
       getCollectData(){
+        this.collectHouseId = '';
+        this.collectContractId = '';
         this.$loading.show();
         this.$http.get(globalConfig.server+'lease/collect',{params:this.collectParams}).then((res) => {
           this.$loading.hide();
