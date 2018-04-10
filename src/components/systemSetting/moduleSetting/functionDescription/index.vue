@@ -165,6 +165,7 @@ export default {
     //**************部门操作函数********************
     //获取部门数据
     getDepart() {
+      this.defaultExpandKeys = [];
       this.$http.get(globalConfig.server + "des/tree").then(res => {
         this.setTree = res.data.data;
         this.form.id = res.data.data[0].id;
@@ -175,6 +176,7 @@ export default {
     },
     //点击节点
     nodeClick(data, node, store) {
+      this.defaultExpandKeys = [];
       this.isClear = !this.isClear;
       this.cover_pic = [];
       this.a = 0;
