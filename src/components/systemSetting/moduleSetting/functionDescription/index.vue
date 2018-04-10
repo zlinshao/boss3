@@ -78,7 +78,6 @@
     data(){
       return{ 
         cover_pic: {}, 
-        arrList:[],
         a:0,
         len:null,
         setTree: [],
@@ -90,12 +89,6 @@
         defaultExpandKeys: [],//默认展开节点列表
         updateflag:false,
         lookingflag:false,
-        params:{
-          keywords:'',
-          pageNum:10,
-          page:1,
-          org_id:'',
-        },
         form:{
           id:'',
           title:'',
@@ -103,7 +96,6 @@
           image_pic:[],
           pid:''
         },
-        staffTableData:[],    //员工列表
         //......................
 
         editDepartDialog:false, //编辑部门模态框
@@ -183,6 +175,7 @@
           this.form.id = res.data.data[0].id;
           this.form.pid = res.data.data[0].pid;
           this.form.title = res.data.data[0].title;
+          this.defaultExpandKeys.push(res.data.data[0].id)
         })
       },
 
@@ -376,6 +369,8 @@
         .imgdiv img{
           max-width:850px;
           max-height: 550px;
+          width:100%;
+          height:100%;     
           margin:0 auto;
           display: block;
         }
