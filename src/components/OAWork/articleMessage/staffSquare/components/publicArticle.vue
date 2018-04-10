@@ -93,6 +93,7 @@
         editorDisabled: false,
         moduleType:'',
         isClear: false,
+        uploadStatus: false,
       }
     },
     activated() {
@@ -186,6 +187,13 @@
         this.previewShow = true;
       },
       onSubmit(val) {
+        if(this.uploadStatus){
+          this.$notify.warning({
+            title: '警告',
+            message: '图片上传中，请稍后'
+          });
+          return;
+        }
         let type;
         if (this.pitch !== '') {
           type = this.$http.put;
@@ -243,7 +251,10 @@
       },
       // 上传成功
       photo_success(val) {
+        console.log(val)
         this.cover_id = val[1];
+        this.uploadStatus = val[2];
+
       },
 
       prompt(val, info) {
@@ -291,18 +302,15 @@
       }
     },
     watch: {
-      // 'form.region':{
-      //   handler(val){
-      //     if(val == '363' || val == '364') {
-      //       this.editorDisabled = true;  //图片赏析和教师风采时富文本框禁用
-      //       $("#editor").css("background","#eae9e985");
-      //       this.form.htmlForEditor='';
-      //     }else{
-      //       this.editorDisabled = false;
-      //       $("#editor").css("background","initial");
-      //     }
-      //   }
-      // }
+      pitch(val) {
+        console.log(val);
+        if(val === ''){
+          this.form.name='';
+          this.form.region='';
+          this.form.htmlForEditor='';
+          this.cover_pic = '';
+        }
+      }
     }
   }
 </script>

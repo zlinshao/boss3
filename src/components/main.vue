@@ -52,18 +52,27 @@
                     <el-col :span="3"><span>负责人</span></el-col>
                   </el-row>
                 </div>
-                <div class="item_list scroll_bar">
-                  <div v-for="item in 10">
-                    <el-col :span="3" class="longLuOrder t_center" >{{item}}</el-col>
-                    <el-col :span="4" class="longHuPic t_center">
-                      <img src="../assets/images/head.jpg" alt="">
-                    </el-col>
-                    <div class="longHuName">陆宣羽</div>
-                    <el-col :span="4" class="t_right" style="padding-left: 0;padding-right: 23px;min-width: 145px;">南京一区 - 百万一组</el-col>
-                    <el-col :span="4" class="achievement" style="padding-right:45px;min-width: 120px;padding-left: 0;">212.222.00元</el-col>
-                    <el-col :span="3" class=" t_center" style="padding-right: 15px;">42套</el-col>
-                    <el-col :span="3" class=" t_center" style="padding-right: 5px;">37套</el-col>
-                    <el-col :span="3" class=" t_center" style="padding:0;">汪玉睿</el-col>
+                <!--<div class="item_list scroll_bar">-->
+                  <!--<div v-for="item in 10">-->
+                    <!--<el-col :span="3" class="longLuOrder t_center" >{{item}}</el-col>-->
+                    <!--<el-col :span="4" class="longHuPic t_center">-->
+                      <!--<img src="../assets/images/head.jpg" alt="">-->
+                    <!--</el-col>-->
+                    <!--<div class="longHuName">陆宣羽</div>-->
+                    <!--<el-col :span="4" class="t_right" style="padding-left: 0;padding-right: 23px;min-width: 145px;">南京一区 - 百万一组</el-col>-->
+                    <!--<el-col :span="4" class="achievement" style="padding-right:45px;min-width: 120px;padding-left: 0;">212.222.00元</el-col>-->
+                    <!--<el-col :span="3" class=" t_center" style="padding-right: 15px;">42套</el-col>-->
+                    <!--<el-col :span="3" class=" t_center" style="padding-right: 5px;">37套</el-col>-->
+                    <!--<el-col :span="3" class=" t_center" style="padding:0;">汪玉睿</el-col>-->
+                  <!--</div>-->
+                <!--</div>-->
+                <div class="item_list scroll_bar" style="height: 740px;">
+                  <div style="    position: absolute;top: 50%;left: 20%;">
+                    <img src="../assets/images/noData.png" style="float: left;" />
+                    <div>
+                      <img src="../assets/images/sorry.png" >
+                      <div style="color: #6a8dfb;position: relative;margin-top: 20px;margin-left: 10px;">抱歉，暂无数据</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -93,9 +102,9 @@
 
                 <div class="clearfix list_gonggao" v-for="(item, index) in noticeInfo" v-if='index>0 && index<5' :key="index">
 
-                  <div v-if="item.type == 1" style="display: inline-block;float: left;"><img @click="openMore(item)" src="./../assets/images/shenp1.jpg" height="98" width="180" style="border-radius:5px;"></div>
-                  <div v-if="item.type == 2" style="display: inline-block;float: left;"><img @click="openMore(item)" src="./../assets/images/shenp3.jpg" height="98" width="180" style="border-radius:5px;"></div>
-                  <div v-if="item.type == 3" style="display: inline-block;float: left;"><img @click="openMore(item)" src="./../assets/images/shenp2.jpg" height="98" width="180" style="border-radius:5px;"></div>
+                  <div v-if="item.type == 1" style="display: inline-block;float: left;"><img @click="openMore(item)" src="./../assets/images/shenp1.jpg" height="95" width="180" style="border-radius:5px;"></div>
+                  <div v-if="item.type == 2" style="display: inline-block;float: left;"><img @click="openMore(item)" src="./../assets/images/shenp3.jpg" height="95" width="180" style="border-radius:5px;"></div>
+                  <div v-if="item.type == 3" style="display: inline-block;float: left;"><img @click="openMore(item)" src="./../assets/images/shenp2.jpg" height="95" width="180" style="border-radius:5px;"></div>
                   <div style="padding-left: 200px;">
                     <p @click="openMore(item)"  class="info_title text_over_norwap">{{item.title}}</p>
                     <div class="second_line_camp">{{item.content_without_table}}</div>
