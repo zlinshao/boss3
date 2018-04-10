@@ -17,6 +17,7 @@
           </div>
           </el-col>
           <el-col :span="18" class="instruct_left">
+            <div style="font-size:16px; color: #409EFF;">{{titleName}}</div>
             <div v-if="arr[a] ==index" class="imgdiv" v-for="(key,index) in form.image_pic" :key="key.id">
               <img :src="pic.uri" v-for="pic in key" :key="pic.id" />
             </div>
@@ -56,7 +57,8 @@ export default {
       a: 0,
       len: null,
       setTree: [],
-      arr: []
+      arr: [],
+      titleName:""
     };
   },
   watch: {
@@ -75,6 +77,7 @@ export default {
   methods: {
     getDepart() {
       this.setTree = [];
+      this.titleName= "";
       this.form.image_pic = [];
       this.$http.get(globalConfig.server + "des/tree").then(res => {
         this.setTree = res.data.data;
@@ -96,6 +99,7 @@ export default {
           this.form.image_pic = res.data.data.album;
           for (let key in this.form.image_pic) this.arr.push(key);
           this.len = this.arr.length;
+          this.titleName = res.data.data.title;
         });
     },
     preimg() {
@@ -152,11 +156,11 @@ export default {
       }
       .elbuttom1 {
         float: left;
-        margin-left: 40%;
+        margin-left: 55%;
       }
       .elbuttom2 {
-        float: right;
-        margin-right: 40%;
+        float: left;
+        margin-left:40px;
       }
     }
   }
