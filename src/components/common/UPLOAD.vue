@@ -74,7 +74,7 @@
           this.editImg = this.editImage;
           this.imgId = [];
           for(let key in val){
-            this.imgId.push(  key)
+            this.imgId.push(key)
           }
         }
       },
