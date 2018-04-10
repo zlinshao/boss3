@@ -130,11 +130,7 @@
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="是否公司单" required="">
-                        <el-switch
-                          v-model="params.contract_type"
-                          active-text="非公司单"
-                          inactive-text="公司单" active-value="0" inactive-value="1">
-                        </el-switch>
+                        <el-switch v-model="params.contract_type" active-value="1" inactive-value="0"></el-switch>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -144,11 +140,7 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="是否中介" required="">
-                        <el-switch
-                          v-model="params.is_agency"
-                          active-text="个人"
-                          inactive-text="中介" active-value="0" inactive-value="1">
-                        </el-switch>
+                        <el-switch v-model="params.is_agency" active-value="1" inactive-value="0"></el-switch>
                       </el-form-item>
                     </el-col>
 
@@ -289,24 +281,24 @@
 
                   <el-row>
                     <el-col :span="6">
-                      <el-form-item label="中介费" required="">
+                      <el-form-item label="中介费" r>
                         <el-input placeholder="请输入内容" v-model="params.agency"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="违约金" required="">
+                      <el-form-item label="违约金" r>
                         <el-input placeholder="请输入内容" v-model="params.penalty"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6" class="unitMessage">
-                      <el-form-item label="物业费金额" required="">
+                      <el-form-item label="物业费金额" r>
                         <el-input placeholder="请输入内容" v-model="params.property">
                           <template slot="append">元/m²</template>
                         </el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="物业费承担方" required="">
+                      <el-form-item label="物业费承担方">
                         <el-select clearable v-model="params.property_payer" placeholder="请选择承担方" value="">
                           <el-option v-for="item in property_payer_dic" :label="item.dictionary_name" :value="item.id"
                                      :key="item.id"></el-option>
@@ -358,7 +350,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="尾款补齐时间" required="">
+                      <el-form-item label="尾款补齐时间">
                         <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
                                         v-model="params.retainage_date"></el-date-picker>
                       </el-form-item>
@@ -372,7 +364,7 @@
                   </el-row>
                   <el-row>
                     <el-col :span="6">
-                      <el-form-item label="开单人" required="">
+                      <el-form-item label="开单人">
                         <el-input placeholder="请输入内容" @focus="openOrganizeModal('staff')" readonly=""
                                   v-model="staff_name"></el-input>
                       </el-form-item>
@@ -384,7 +376,7 @@
                       <!--</el-form-item>-->
                     <!--</el-col>-->
                     <el-col :span="6">
-                      <el-form-item label="部门" required="">
+                      <el-form-item label="部门">
                         <el-input placeholder="请输入内容" @focus="openOrganizeModal('depart')" readonly=""
                                   v-model="department_name"></el-input>
                       </el-form-item>
@@ -495,13 +487,13 @@
           //------------------小区详情--------------------//
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
-          contract_type: 1,           // 订单性质（合同种类）
+          contract_type: '1',           // 订单性质（合同种类）
           contract_number: '',         // 合同编号
           month: '',                   // 租房月数
           sign_date: '',               // 签约日期
           begin_date: '',              // 合同开始时间
           end_date: '',                // 合同结束时间
-          is_agency: 1,               // 来源
+          is_agency: '1',               // 来源
           deposit: '',                 // 押金
 
           price: [],                   // 月单价
@@ -695,13 +687,13 @@
             });
 
             //合同信息
-            this.params.contract_type = data.contract_type;
+            this.params.contract_type = String(data.contract_type);
             this.params.contract_number = data.contract_number;
             this.params.month = data.month;
             this.params.sign_date = data.sign_date;
             this.params.begin_date = data.begin_date;
             this.params.end_date = data.end_date;
-            this.params.is_agency = data.is_agency;
+            this.params.is_agency = String(data.is_agency);
             this.params.deposit = data.deposit;
             this.params.money_sum = data.money_sum;
 
@@ -713,6 +705,7 @@
               this.priceArray.push(item.price);
               this.periodArray.push(item.period);
             });
+
             this.payWayChangeAmount = data.pay_way.length;
             this.payWayArray = [];
             this.pay_way_bet = [];
@@ -722,6 +715,15 @@
               this.pay_way_bet.push(Number(item.pay_way_bet));
               this.payPeriodArray.push(item.period);
             });
+
+            this.moneyTableChangeAmount = data.money_table.length;
+            this.moneyWayArray = [];
+            this.moneySepArray = [];
+            data.money_table.forEach((item,index) => {
+              this.moneyWayArray.push(item.money_way);
+              this.moneySepArray.push(item.money_sep);
+            });
+
             //--------------------------------------------------//
             this.params.retainage_date = data.retainage_date;
             this.params.receipt = data.receipt;
@@ -1004,13 +1006,13 @@
           house_id : this.collectHouseId,
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
-          contract_type: 1,           // 订单性质（合同种类）
+          contract_type: '1',           // 订单性质（合同种类）
           contract_number: '',         // 合同编号
           month: '',                   // 租房月数
           sign_date: '',               // 签约日期
           begin_date: '',              // 空置期开始时间
           end_date: '',                // 合同结束时间
-          is_agency: 1,               // 来源
+          is_agency: '',               // 来源
           deposit: '',                 // 押金
           price: [],                   // 月单价
           pay_way: [],                 // 付款方式
@@ -1069,6 +1071,9 @@
         this.payWayArray = [];
         this.pay_way_bet = [];
         this.payPeriodArray = [];
+        this.moneyTableChangeAmount = 1;
+        this.moneyWayArray = [];
+        this.moneySepArray = [];
       }
     }
   };
