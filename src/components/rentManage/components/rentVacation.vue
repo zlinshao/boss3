@@ -505,6 +505,7 @@
       rentContractId(val){
         this.params.contract_id = val;
       },
+
     },
     mounted(){
 

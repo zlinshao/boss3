@@ -179,7 +179,7 @@
 
                   <el-col :span="10" class="checkUp" :offset="4">
                     <div class="navigationLeft">
-                      <el-dropdown-item @click.native="lockScreen" style="padding: 0">
+                      <el-dropdown-item @click.native="lockScreen('手动')" style="padding: 0">
                         <div class="msgCenter">
                           <i class="el-icons-fa-unlock-alt" style="color: #C0C4CC;"></i>
                           <div class="msgTitle">一键锁屏</div>
@@ -227,8 +227,8 @@
     <div class="contentBox" :class="isCollapse? 'hideSidebar' : ''">
       <el-container>
         <div class="aside scroll_bar" id="isCollapse">
-          <el-menu mode="vertical" :default-active="$route.path" class="el-menu-vertical-demo" unique-opened
-                   :defaultOpeneds=defaultArray
+          <el-menu :default-active="$route.path" class="el-menu-vertical-demo" unique-opened
+                   :defaultOpeneds=defaultArray  @select="handlerSelect"
                    :collapse="isCollapse" router @open="handleOpen" @close="handleClose"
                    background-color="#6a8dfb" text-color="#fff" active-text-color="#ffd04b">
             <template v-for="(item,index) in $router.options.routes">
@@ -270,7 +270,7 @@
           <div style="color: #a2b8fd;">BOSS 3.0</div>
         </div>
 
-        <el-main :class="isFull? 'mainHide':'' ">
+        <el-main :class="isFull? 'mainHide':''">
           <div style="min-width: 1200px">
             <TagsView></TagsView>
           </div>
@@ -282,6 +282,7 @@
         </el-main>
       </el-container>
     </div>
+
     <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeMessage"></MessageDetail>
   </div>
 </template>
@@ -393,9 +394,11 @@
         screenFull.toggle();
       },
       handleOpen(key, keyPath) {
-
       },
       handleClose(key, keyPath) {
+      },
+      handlerSelect(key, keyPath){
+
       },
       clickScreen() {
         this.screenStatus = true;
@@ -428,17 +431,16 @@
         new Promise((resolve, reject) => {
           this.interval = setInterval(() => {
             this.Countdown--;
-            if (this.Countdown < 1) {
-              resolve('锁屏');
-            }
             if (this.screenStatus) {
               reject('重新计数');
               clearInterval(this.interval);
               this.interval = null;
+            }else if (this.Countdown < 1) {
+              resolve('锁屏');
             }
           }, 1000)
         }).then((data) => {
-          this.lockScreen();
+          this.lockScreen('倒计时');
         }).catch((data) => {
           this.Countdown = this.defaultTime;
           this.startCount();
@@ -448,7 +450,8 @@
       changeCollapse() {
         this.isCollapse = !this.isCollapse;
       },
-      lockScreen() {
+      lockScreen(val) {
+        console.log(val);
         clearInterval(this.interval);
         this.interval = null;
         clearInterval(this.messageInterval);

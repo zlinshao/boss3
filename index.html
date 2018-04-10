@@ -21,7 +21,9 @@
     <script src="https://cdn.staticfile.org/qiniu-js-sdk/1.0.14-beta/qiniu.min.js"></script>
 
     <script>
-
+      window.onbeforeunload = function (e) {
+        localStorage.setItem('lockStatus', 0);
+      }
     </script>
   </body>
 </html>

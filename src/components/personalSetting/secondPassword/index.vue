@@ -262,8 +262,7 @@ export default {
         this.checkNo2(this.form.passwordok)
       }
       if (this.validateinput) {
-        this.$http
-          .put(globalConfig.server + "setting/others/password", {
+        this.$http.put(globalConfig.server + "setting/others/password", {
             dict_id: this.checkList,
             secondary_password: this.form.passwordnew,
             repeat_secondary_password: this.form.passwordok,

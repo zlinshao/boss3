@@ -35,8 +35,8 @@
           <div class="box">
             <div class="boxHead">{{highestDepart}}</div>
 
-            <div class="breadcrumb-wrapper scroll_bar">
-              <div class="breadcrumb">
+            <div class="breadcrumb-wrapper scroll_bar" @scroll="scroll_bar_move" id="scroll_bar">
+              <div class="breadcrumb" id="breadcrumbBox">
                 <a>
                   <span @click="breadcrumbSearch(1)">{{highestDepart}}</span>
                 </a>
@@ -45,7 +45,7 @@
                 </a>
               </div>
               <div class="box-body">
-                <ul>
+                <ul id="memberBox">
                   <!--<li>-->
                     <!--<el-checkbox>全选</el-checkbox>-->
                   <!--</li>-->
@@ -55,7 +55,7 @@
                     </el-checkbox-group>
 
                     <el-button type="text" :disabled="checkedIdBox.indexOf(item.id)>-1" class="lowerLevel"
-                               @click="getNextLevel(item,$event)">丨 下级</el-button>
+                               @click="getNextLevel(item,$event)"> 丨下级</el-button>
                   </li>
                   <li v-for="item in departmentStaff" @click="selectStaff(item)">
                     <div>
@@ -113,6 +113,11 @@
         noDepart:false,
         memberLength:0,
         titlename:'',
+        currentDepartId:'',
+        currentPage_depart:1,
+        currentPage_user:1,
+        lastPage_depart : '',
+        lastPage_user : '',
       }
     },
     mounted() {
@@ -121,6 +126,7 @@
     watch:{
       organizationDialog(val){
         this.organizationVisible = val;
+        this.currentDepartId = 1;
         this.getDepartment(1);
       },
       organizationVisible(val){
@@ -180,8 +186,49 @@
       }
     },
     methods:{
+      scroll_bar_move(){
+        let div_scrollHeight = $('#memberBox').height() + $('#breadcrumbBox').height() + 10;
+        let div_clientHeight = $('#scroll_bar').height();
+        let div_scropTop = $('#scroll_bar').scrollTop();
+        if(div_scrollHeight - div_clientHeight - div_scropTop < 100){
+          this.getMoreUser();
+          this.getMoreDepart();
+        }
+      },
+      //获取更多员工信息
+      getMoreUser(){
+        if(this.currentPage_user<this.lastPage_user){
+          this.currentPage_user ++;
+          this.$http.get(globalConfig.server_user+'users?org_id='+this.currentDepartId+'&page='+this.currentPage_user).then((res) => {
+            if(res.data.status === 'success'){
+              if(res.data.data.length>0){
+                res.data.data.forEach((item) => {
+                  this.departmentStaff.push(item);
+                })
+              }
+            }
+          })
+        }
+      },
+      //获取更多部门信息
+      getMoreDepart(){
+        if(this.currentPage_depart<this.lastPage_depart){
+          this.currentPage_depart ++;
+          this.$http.get(globalConfig.server_user+'organizations?parent_id='+id+'&page='+this.currentPage_depart).then((res) => {
+            if(res.data.status === 'success'){
+              if(res.data.data.length>0){
+                res.data.data.forEach((item) => {
+                  this.departmentList.push(item);
+                })
+              }
+            }
+          })
+        }
+      },
       getDepartment(id){
           //获取顶级部门名称
+        this.currentPage_depart = 1;
+        this.currentPage_user = 1;
         this.$http.get(globalConfig.server_user+'organizations/1').then((res) => {
           if(res.data.status === 'success'){
             this.highestDepart = res.data.data.name;
@@ -190,11 +237,13 @@
         this.$http.get(globalConfig.server_user+'organizations?parent_id='+id).then((res) => {
           if(res.data.status === 'success'){
             this.departmentList = res.data.data;
+            this.lastPage_depart = res.data.meta.last_page;
           }
         });
         this.$http.get(globalConfig.server_user+'users?org_id='+id).then((res) => {
           if(res.data.status === 'success'){
             this.departmentStaff = res.data.data;
+            this.lastPage_user = res.data.meta.last_page;
           }
         })
       },
@@ -301,6 +350,7 @@
       //搜索下级部门
       getNextLevel(item,event){
         if(event.target.className!=='el-checkbox__inner'&&event.target.className!=='el-checkbox__original'){
+          this.currentDepartId = item.id;
           this.getDepartment(item.id);
           let isExist = false;
           this.breadcrumbList.forEach((x) =>{
@@ -316,9 +366,11 @@
       //面包屑搜索
       breadcrumbSearch(item,index){
         if(item === 1){
+          this.currentDepartId = 1;
           this.getDepartment(1);
           this.breadcrumbList = [];
         }else {
+          this.currentDepartId = item.id;
           this.getDepartment(item.id);
           this.breadcrumbList.splice(index + 1, this.breadcrumbList.length);
         }
@@ -451,13 +503,11 @@
               font-size: 14px;
               float: right;
               width: 300px;
-              height: 440px;
               background: #fff;
               border: 1px solid #ddd;
               border-radius: 4px;
               box-sizing: border-box;
               div{
-                max-height: 440px;
                 .boxHead{
                   text-align: center;
                   padding: 5px 0;

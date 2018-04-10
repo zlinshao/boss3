@@ -93,6 +93,20 @@
               </el-form-item>
             </el-col>
           </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="价格区间">
+                <el-col :span="11">
+                  <el-input type="number" v-model="form.min_price" placeholder="请输入最小价格"></el-input>
+                </el-col>
+                <el-col class="line" :span="2" style="text-align: center">-</el-col>
+                <el-col :span="11">
+                  <el-input type="number" v-model="form.max_price" placeholder="请输入最大价格"></el-input>
+                </el-col>
+              </el-form-item>
+            </el-col>
+
+          </el-row>
           <el-form-item label="小区照片">
             <upLoad :ID="'address'" @getImg="villagePic" :editImage="cover_pic"></upLoad>
           </el-form-item>
@@ -147,6 +161,8 @@
           latitude: '',                 //纬度
           longitude: '',                //经度
           propertyFee: '',              //物业费
+          min_price: '',              //物业费
+          max_price: '',              //物业费
           addressId: [],                //小区照片
           configure: '',                //周边配套
           villageIntroduce: '',         //小区简介
@@ -184,6 +200,8 @@
         this.form.houseType = val.house_type;
         this.form.allBuilding = val.total_buildings;
         this.form.propertyFee = val.property_fee;
+        this.form.min_price = val.min_price;
+        this.form.max_price = val.max_price;
         this.form.configure = val.peripheral_info;
         this.form.villageIntroduce = val.content;
         let pic = val.album.house_pic;
@@ -261,8 +279,8 @@
       closeAddress(val) {
         this.mapVisible = false;
         if (val !== '') {
-          let lat = val.location.split(',')[0];
-          let long = val.location.split(',')[1];
+          let long = val.location.split(',')[0];
+          let lat = val.location.split(',')[1];
           this.form.latitude = lat;
           this.form.longitude = long;
           this.form.villageName = val.name;
@@ -293,6 +311,8 @@
           house_type: this.form.houseType,
           total_buildings: this.form.allBuilding,
           property_fee: this.form.propertyFee,
+          min_price: this.form.min_price,
+          max_price: this.form.max_price,
           house_pic: this.form.addressId,
           peripheral_info: this.form.configure,
           content: this.form.villageIntroduce,
@@ -321,6 +341,8 @@
         this.form.latitude = '';                 //纬度
         this.form.longitude = '';                //经度
         this.form.propertyFee = '';              //物业费
+        this.form.min_price = '';              //物业费
+        this.form.max_price = '';              //物业费
         this.form.addressId = [];                //小区照片
         this.cover_pic = {};                    //小区照片
         this.form.configure = '';                //周边配套

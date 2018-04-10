@@ -17,8 +17,9 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="城市">
-                  <el-select clearable v-model="params.city_code" placeholder="请选择城市">
-                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                  <el-select clearable v-model="params.city_code" disabled="" placeholder="请选择城市">
+                    <el-option v-for="item in cityDictionary" :label="item.dictionary_name" :value="item.variable.city_code"
+                               :key="item.id"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -33,6 +34,7 @@
                 <el-form-item label="报备日期">
                   <el-date-picker
                     type="datetime"
+                    disabled
                     placeholder="选择日期时间"
                     value-format="yyyy-MM-dd HH:mm:ss" v-model="params.report_time">
                   </el-date-picker>
@@ -306,7 +308,7 @@
           personal_contracts:[],//s上缴个人合同
         },
         taskType:'3',
-        dictionary:[],
+        cityDictionary:[],
         contractDictionary:[],    //合同类型字典
         length:0,
         type:'',
@@ -384,12 +386,11 @@
     methods:{
       getDictionary(){
         this.$http.get(globalConfig.server+'setting/dictionary/306').then((res) => {
-          this.dictionary = res.data.data;
+          this.cityDictionary = res.data.data;
+          this.getApplyDetail();
         });
         this.$http.get(globalConfig.server+'setting/dictionary/107').then((res) => {
           this.contractDictionary = res.data.data;
-        }).then((data) =>{
-          this.getApplyDetail();
         })
       },
 
@@ -750,7 +751,6 @@
           personal_contracts:[],//s上缴个人合同
         };
         this.taskType = '3';
-        this.dictionary = [];
         this.length = '';
         this.type = '';
         this.organizationDialog = false;

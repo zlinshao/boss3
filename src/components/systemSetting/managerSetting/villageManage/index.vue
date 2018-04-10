@@ -349,7 +349,7 @@
       },
       // 双击
       dblMenu(row) {
-        this.$router.push({path: '/villageManage/villageDetail', query: {ids: row.id, term: this.form}});
+        this.$router.push({path: '/villageManage/villageDetail', query: {ids: row.id}});
       },
 
       // 右键

@@ -395,11 +395,11 @@
               <RentReturnVisitRecordTab :rentContractId="rentContractId" :tabStatusChange="tabStatusChange"
                                         :activeName="activeName"></RentReturnVisitRecordTab>
             </el-tab-pane>
-            <el-tab-pane label="跟进记录(收)" name="CollectFollowRecordTab">
+            <el-tab-pane label="收房工单" name="CollectFollowRecordTab">
               <CollectFollowRecordTab :collectContractId="collectContractId" :tabStatusChange="tabStatusChange"
                                       :activeName="activeName"></CollectFollowRecordTab>
             </el-tab-pane>
-            <el-tab-pane label="跟进记录(租)" name="RentFollowRecordTab">
+            <el-tab-pane label="租房工单" name="RentFollowRecordTab">
               <RentFollowRecordTab :rentContractId="rentContractId" :tabStatusChange="tabStatusChange"
                                    :activeName="activeName"></RentFollowRecordTab>
             </el-tab-pane>

@@ -2,7 +2,7 @@
   <div id="villageDetail">
     <div class="scroll_bar">
       <div class="personalInfo" style="">
-        <div class="title">个人信息</div>
+        <div class="title">小区信息</div>
       </div>
       <div class="form_border">
         <el-form size="mini" label-width="110px">
@@ -84,6 +84,17 @@
       <div class="title">周边信息</div>
       <div class="form_border">
         <div id="container"></div>
+
+        <div class="ambitusDetail" v-if="location.length>0&&location[0]!==''">
+          <div class="ambitusDetail_top" @click="changeActive($event)">
+            <a class="active">交通</a>
+            <a>学校</a>
+            <a>医疗</a>
+            <a>购物</a>
+            <a>生活</a>
+            <a>娱乐</a>
+          </div>
+        </div>
         <div id="panel">
 
         </div>
@@ -100,8 +111,8 @@
       return {
         urls: globalConfig.server,
         myData: {},
-        terms: {},
         house_pic: {},
+        location:[],
       }
     },
     mounted() {
@@ -113,26 +124,44 @@
     watch: {},
     methods: {
       details() {
-        this.terms = this.$route.query.term;
+        if(!this.$route.query.ids) {
+          this.$router.push({path:"/villageManage/villageDetail",query:{ids:sessionStorage.villageId}});
+        }else {
+          sessionStorage.setItem('villageId',this.$route.query.ids)
+        }
         this.$http.get(this.urls + 'setting/community/' + this.$route.query.ids).then((res) => {
           this.myData = res.data.data;
           this.house_pic = res.data.data.album.house_pic;
-        });
 
-        let map = new AMap.Map("container", {
-          resizeEnable: true
+          this.location = [];
+          this.location.push(res.data.data.longitude);
+          this.location.push(res.data.data.latitude);
+
+          this.initMap();
         });
+      },
+      initMap(){
+        let _this = this;
+        let map = new AMap.Map("container", {
+          resizeEnable: true,
+          zoom: 15,
+          center:_this.location
+        });
+        let marker = new AMap.Marker({
+          position: _this.location
+        });
+        marker.setMap(map);
         AMap.service(["AMap.PlaceSearch"], function () {
           let placeSearch = new AMap.PlaceSearch({ //构造地点查询类
-            pageSize: 5,
+            pageSize: 4,
             type: '餐饮服务',
             pageIndex: 1,
-            city: "010", //城市
+            city: '', //城市
             map: map,
             panel: "panel"
           });
 
-          let cpoint = [116.405467, 39.907761]; //中心点坐标
+          let cpoint = _this.location; //中心点坐标
           placeSearch.searchNearBy('', cpoint, 500, function (status, result) {
 
           });
