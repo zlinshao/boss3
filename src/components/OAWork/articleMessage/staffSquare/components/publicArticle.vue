@@ -14,7 +14,7 @@
 
       <el-form-item label="内容" required="">
         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
-                  v-model="form && form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
+                    v-model="form && form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
 
       </el-form-item>
 
@@ -40,7 +40,7 @@
       <div class="staff_name">
         <div class="staff_pic">
           <img :src="personal.avatar" v-if="personal.avatar !== ''">
-          <img src="../../../../../assets/images/head.png" v-else >
+          <img src="../../../../../assets/images/head.png" v-else>
         </div>
         <div class="info">
           <span>
@@ -66,9 +66,7 @@
   import Dropzone from '../../../../common/UPLOAD.vue'
 
   export default {
-    components: {
-      VueEditor, Dropzone
-    },
+    components: {VueEditor, Dropzone},
     data() {
       return {
         urls: globalConfig.server,
@@ -91,11 +89,9 @@
         previewShow: true,
         tabIndex: '',
         editorDisabled: false,
-        moduleType:'',
+        moduleType: '',
         isClear: false,
         uploadStatus: false,
-        change: this.$route.query.releaseArticle,
-        allChange: new Date().getTime(),
       }
     },
     activated() {
@@ -107,9 +103,21 @@
     },
     methods: {
       getParams() {
-        if(!this.$route.query.ids){
-          this.$store.dispatch('moduleType', this.$route.query.moduleType);
-          this.$router.push({path:"/publicArticle",query:{ids:this.$store.state.article.article_id, moduleType:this.$store.state.article.module_type,releaseArticle:this.allChange }});
+        if (!this.$route.query.ids) {
+          this.form.name = '';
+          this.form.region = '';
+          this.form.htmlForEditor = '';
+          this.cover_pic = '';
+          if(this.$route.query.moduleType){
+            this.$store.dispatch('moduleType', this.$route.query.moduleType);
+          }
+          this.$router.push({
+            path: "/publicArticle",
+            query: {
+              ids: this.$store.state.article.article_id,
+              moduleType: this.$store.state.article.module_type
+            }
+          });
         }
         let query = this.$route.query;
         this.moduleType = query.moduleType;
@@ -119,10 +127,10 @@
           this.publicDetail(query.ids);
           this.pitch = query.ids;
         }
-        if(query.ids){
+        if (query.ids) {
           this.$store.dispatch('articleId', query.ids);
         }
-        if(query.moduleType) {
+        if (query.moduleType) {
           this.$store.dispatch('moduleType', query.moduleType);
         }
       },
@@ -147,7 +155,7 @@
         })
       },
       getDict() {
-        switch(this.moduleType){
+        switch (this.moduleType) {
           case 'lejiaCollege':  //乐伽大学
             this.tabIndex = 'first';
             this.$http.get(this.urls + 'setting/dictionary/361').then((res) => {
@@ -189,7 +197,7 @@
         this.previewShow = true;
       },
       onSubmit(val) {
-        if(this.uploadStatus){
+        if (this.uploadStatus) {
           this.$notify.warning({
             title: '警告',
             message: '图片上传中，请稍后'
@@ -221,13 +229,13 @@
       goBack() {
         //点击取消清掉ids
         this.$store.dispatch('deleteArticleId');
-        this.form.name= '';
-        this.form.region= '';
-        this.form.htmlForEditor= '';
+        this.form.name = '';
+        this.form.region = '';
+        this.form.htmlForEditor = '';
         this.isClear = true;
-        setTimeout( () => {
-          this.$router.push({path: '/articleMessage',query:{refresh: 'refresh'}})
-        },0);
+        setTimeout(() => {
+          this.$router.push({path: '/articleMessage', query: {refresh: 'refresh'}})
+        }, 0);
       },
       handleImageAdded(file, Editor, cursorLocation, resetUploader) {
 
@@ -235,16 +243,16 @@
         formData.append('file', file);
 
         let config = {
-          headers:{'Content-Type':'multipart/form-data'}
+          headers: {'Content-Type': 'multipart/form-data'}
         };
-        if(file.size > 1024 * 1024 * 2){
-            this.$notify.warning({
-              title:'警告',
-              message:'只能上传jpg/png文件，且不超过2M'
-            })
-        }else {
-          this.$http.post(this.address + 'files', formData ,config).then((res) => {
-            if(res.data.status === 'success'){
+        if (file.size > 1024 * 1024 * 2) {
+          this.$notify.warning({
+            title: '警告',
+            message: '只能上传jpg/png文件，且不超过2M'
+          })
+        } else {
+          this.$http.post(this.address + 'files', formData, config).then((res) => {
+            if (res.data.status === 'success') {
               Editor.insertEmbed(cursorLocation, 'image', res.data.data.uri);
             }
           })
@@ -253,12 +261,9 @@
       },
       // 上传成功
       photo_success(val) {
-        console.log(val)
         this.cover_id = val[1];
         this.uploadStatus = val[2];
-
       },
-
       prompt(val, info) {
         if (val === 1) {
           this.$notify.success({
@@ -272,8 +277,7 @@
           });
         }
       },
-
-      upLoad(e){
+      upLoad(e) {
         console.log(e)
       },
       // 当前时间
@@ -305,20 +309,12 @@
     },
     watch: {
       pitch(val) {
-        console.log(val);
-        if(val === ''){
-          this.form.name='';
-          this.form.region='';
-          this.form.htmlForEditor='';
+        if (val === '') {
+          this.form.name = '';
+          this.form.region = '';
+          this.form.htmlForEditor = '';
           this.cover_pic = '';
         }
-      },
-      change(val) {
-        console.log(val);
-        this.form.name='';
-        this.form.region='';
-        this.form.htmlForEditor='';
-        this.cover_pic = '';
       },
     }
   }
