@@ -71,7 +71,7 @@
                     <img src="../assets/images/noData.png" style="float: left;" />
                     <div>
                       <img src="../assets/images/sorry.png" >
-                      <div style="color: #6a8dfb;position: relative;margin-top: 20px;margin-left: 10px;">抱歉，暂无数据</div>
+                      <div style="color: #6a8dfb;position: relative;margin-top: 20px;margin-left: 10px;">抱歉，暂无数据~~</div>
                     </div>
                   </div>
                 </div>

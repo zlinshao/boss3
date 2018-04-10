@@ -10,18 +10,22 @@
       <el-tab-pane label="功能说明" name="third">
         <FunctionDescription></FunctionDescription>
       </el-tab-pane>
+      <el-tab-pane label="业绩包管理" name="fourth">
+        <PackageManagement></PackageManagement>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
-  import IntegralManagement from './integralManagement/index.vue'
-  import ContractManagement from './contractManagement/index.vue'
+
   import FunctionDescription from './functionDescription/index.vue'
+  import IntegralManagement from './integralManagement/index.vue';
+  import ContractManagement from './contractManagement/index.vue';
+  import PackageManagement from './packageManagement/index.vue';
   export default {
- 
     name: "index",
-    components: {IntegralManagement,ContractManagement,FunctionDescription},
+    components: {IntegralManagement,ContractManagement,FunctionDescription,PackageManagement},
     data() {
       return {
         activeName: 'first'

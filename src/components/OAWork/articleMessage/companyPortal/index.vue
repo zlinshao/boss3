@@ -155,6 +155,7 @@
         moduleId: '',
         moduleType: 'companyPortal',
         loading: false,
+        allChange: new Date().getTime(),
       }
     },
     mounted() {
@@ -195,7 +196,6 @@
       },
       getCompanyTableData() {
         this.loading = true;
-        console.log(111)
         this.$http.get(this.urls + 'oa/portal/', { params:this.form }).then((res) => {
           this.isHigh = false;
           if (res.data.code === '80000') {
@@ -230,7 +230,7 @@
       // 文章发布
       publicArticle() {
         this.$store.dispatch('deleteArticleId');
-        this.$router.push({path: '/publicArticle',query:{moduleType: this.moduleType}});
+        this.$router.push({path: '/publicArticle',query:{moduleType: this.moduleType, releaseArticle: this.allChange}});
         this.$store.dispatch('moduleType',this.moduleType);
       },
       handleSizeChange(val) {
@@ -247,7 +247,6 @@
       // 右键
       openContextMenu(row, event) {
         this.pitch = row.id;
-        console.log(row.statuss);
         if (row.statuss !== '已发布') {
           this.statuss = '已发布';
           this.lists = [

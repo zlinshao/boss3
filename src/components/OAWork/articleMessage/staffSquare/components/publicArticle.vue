@@ -94,10 +94,11 @@
         moduleType:'',
         isClear: false,
         uploadStatus: false,
+        change: this.$route.query.releaseArticle,
+        allChange: new Date().getTime(),
       }
     },
     activated() {
-      console.log(this.$store.state.article.article_id)
       this.getParams();
       this.isClear = false;
     },
@@ -107,7 +108,8 @@
     methods: {
       getParams() {
         if(!this.$route.query.ids){
-          this.$router.push({path:"/publicArticle",query:{ids:this.$store.state.article.article_id, moduleType:this.$store.state.article.module_type}});
+          this.$store.dispatch('moduleType', this.$route.query.moduleType);
+          this.$router.push({path:"/publicArticle",query:{ids:this.$store.state.article.article_id, moduleType:this.$store.state.article.module_type,releaseArticle:this.allChange }});
         }
         let query = this.$route.query;
         this.moduleType = query.moduleType;
@@ -310,7 +312,14 @@
           this.form.htmlForEditor='';
           this.cover_pic = '';
         }
-      }
+      },
+      change(val) {
+        console.log(val);
+        this.form.name='';
+        this.form.region='';
+        this.form.htmlForEditor='';
+        this.cover_pic = '';
+      },
     }
   }
 </script>
