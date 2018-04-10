@@ -122,7 +122,7 @@
                   <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :current-page="params.page"
+                    :current-page="currentPage"
                     :page-sizes="[10, 20, 30, 40]"
                     :page-size="10"
                     layout="total, sizes, prev, pager, next, jumper"
@@ -153,7 +153,7 @@
                     <el-pagination
                       @size-change="handleSizeChange"
                       @current-change="handleCurrentChange"
-                      :current-page="params.page"
+                      :current-page="currentPage"
                       :page-sizes="[5, 10, 15, 20]"
                       :page-size="5"
                       layout="total, sizes, prev, pager, next, jumper"
@@ -193,7 +193,7 @@
                     <el-pagination
                       @size-change="handleSizeChange"
                       @current-change="handleCurrentChange"
-                      :current-page="params.page"
+                      :current-page="currentPage"
                       :page-sizes="[5, 10, 15, 20]"
                       :page-size="5"
                       layout="total, sizes, prev, pager, next, jumper"
@@ -456,6 +456,7 @@
         addStaffParams:[],      //新建员工参数
         entryMaterialsCategory: [],
         entry_materials: [],
+        currentPage: 1,
       }
     },
     mounted(){
@@ -729,8 +730,8 @@
             if(res.data.code === '20000'){
               this.positionList = res.data.data.data;
               this.totalOnlyPositionNum = res.data.data.count;
-              if(res.data.data.count > 0){
-                this.onlyPositionId = res.data.data && res.data.data.data[0].id;
+              if(res.data.data.data.length > 0){
+                this.onlyPositionId = res.data.data.data[0].id;
                 this.getPosition();
               }
             }else {
@@ -819,7 +820,7 @@
       //********************岗位操作函数****************
       //根据职位获取岗位
       getPosition(){
-        this.$http.get(globalConfig.server+'manager/positions?type=' + this.onlyPositionId+'&page='+this.params.page
+        this.$http.get(globalConfig.server+'manager/positions?type=' +this.onlyPositionId+'&page='+this.params.page
           +'&limit='+this.params.limit).then((res) => {
           if(res.data.code === '20000'){
             let arr = res.data.data.data;
@@ -1007,7 +1008,9 @@
 
       //**********分页************************
       handleSizeChange(val) {
+        this.params.limit = val;
         console.log(`每页 ${val} 条`);
+        this.search();
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);

@@ -7,17 +7,20 @@
       <el-tab-pane label="合同编号管理" name="second">
         <ContractManagement></ContractManagement>
       </el-tab-pane>
+      <el-tab-pane label="业绩包管理" name="third">
+        <PackageManagement></PackageManagement>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
-  import IntegralManagement from './integralManagement/index.vue'
-  import ContractManagement from './contractManagement/index.vue'
+  import IntegralManagement from './integralManagement/index.vue';
+  import ContractManagement from './contractManagement/index.vue';
+  import PackageManagement from './packageManagement/index.vue';
   export default {
- 
     name: "index",
-    components: {IntegralManagement,ContractManagement},
+    components: {IntegralManagement,ContractManagement,PackageManagement},
     data() {
       return {
         activeName: 'first'

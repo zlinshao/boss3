@@ -1,7 +1,7 @@
 <template>
   <div id="addRentRepair">
     <el-dialog :title="title" :visible.sync="addStaffDialogVisible" width="60%" :before-close="beforeCloseModal">
-      <div>{{this.options}}
+      <div>
         <el-form size="mini" :model="params" label-width="120px" style="padding: 0 20px;">
           <el-tabs v-model="activeName">
             <el-tab-pane  label="基本信息" name="first">
@@ -93,11 +93,11 @@
               <el-row :gutter="20">
                 <el-col :span="8">
                   <el-form-item  label="职位" required>
-                    <!--<el-input placeholder="请选择职位" v-model="params.position_id" clearable></el-input>-->
+                    <!--<el-input placeholder="请选择职位" v-model="roleNames" clearable></el-input>-->
                     <el-cascader
                       expand-trigger="hover"
                       :options="options"
-                      v-model="params.position_id"
+                      v-model="roleNames"
                       @change="handleChange">
                     </el-cascader>
                   </el-form-item>
@@ -152,19 +152,19 @@
               <el-row :gutter="20">
                 <el-col :span="8">
                   <el-form-item  label="籍贯">
-                    <el-input placeholder="请输入籍贯" v-model="params.origin_addr"></el-input>
+                    <el-input placeholder="请输入籍贯" v-model="params.origin_addr" clearable></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item  label="婚姻状况">
-                    <el-select v-model="params.marital_status">
+                    <el-select v-model="params.marital_status" clearable>
                       <el-option v-for="item in maritalStatusCategory" :label="item.dictionary_name" :key="item.id" :value="item.id">{{item.dictionary_name}}</el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="政治面貌">
-                    <el-select v-model="params.political_status">
+                    <el-select v-model="params.political_status" clearable>
                       <el-option  v-for="item in politicalStatusCategoey" :label="item.dictionary_name" :key="item.id" :value="item.id">{{item.dictionary_name}}</el-option>
                     </el-select>
                   </el-form-item>
@@ -173,18 +173,18 @@
               <el-row :gutter="20">
                 <el-col :span="8">
                   <el-form-item  label="转正时间">
-                    <el-date-picker v-model="params.forward_time" type="date" placeholder="请选择转正时间" value-format="yyyy-MM-dd">
+                    <el-date-picker v-model="params.forward_time" type="date" placeholder="请选择转正时间" value-format="yyyy-MM-dd" clearable>
                     </el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item  label="企业邮箱">
-                    <el-input placeholder="请输入企业邮箱" v-model="params.mail"></el-input>
+                    <el-input placeholder="请输入企业邮箱" v-model="params.mail" clearable></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="学历">
-                    <el-select v-model="params.education">
+                    <el-select v-model="params.education" clearable>
                       <el-option v-for="item in educationCategory" :label="item.dictionary_name" :key="item.id" :value="item.id" >{{item.dictionary_name}}</el-option>
                     </el-select>
                   </el-form-item>
@@ -193,34 +193,34 @@
               <el-row :gutter="20">
                 <el-col :span="8">
                   <el-form-item  label="毕业院校">
-                    <el-input placeholder="请输入毕业院校" v-model="params.school"></el-input>
+                    <el-input placeholder="请输入毕业院校" v-model="params.school" clearable></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item  label="专业">
-                    <el-input placeholder="请输入专业" v-model="params.major"></el-input>
+                    <el-input placeholder="请输入专业" v-model="params.major" clearable></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="毕业时间">
-                    <el-date-picker v-model="params.graduation_time" type="date" placeholder="请选择毕业时间" value-format="yyyy-MM-dd"></el-date-picker>
+                    <el-date-picker v-model="params.graduation_time" type="date" placeholder="请选择毕业时间" value-format="yyyy-MM-dd" clearable></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="8">
                   <el-form-item  label="第一次签合同时间">
-                    <el-date-picker v-model="params.agreement_first_time" type="date" placeholder="请选择时间" value-format="yyyy-MM-dd"></el-date-picker>
+                    <el-date-picker v-model="params.agreement_first_time" type="date" placeholder="请选择时间" value-format="yyyy-MM-dd" clearable></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item  label="第一次合同到期时间">
-                    <el-date-picker v-model="params.agreement_first_end_time" type="date" placeholder="请选择时间" value-format="yyyy-MM-dd"></el-date-picker>
+                    <el-date-picker v-model="params.agreement_first_end_time" type="date" placeholder="请选择时间" value-format="yyyy-MM-dd" clearable></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="第二次签合同时间">
-                    <el-date-picker v-model="params.agreement_second_time" type="date" placeholder="请选择时间" value-format="yyyy-MM-dd"></el-date-picker>
+                    <el-date-picker v-model="params.agreement_second_time" type="date" placeholder="请选择时间" value-format="yyyy-MM-dd" clearable></el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -248,7 +248,7 @@
 <script>
   let position = {};
   let positionArray = [];
-  import Organization from '../../../common/organization.vue'
+  import Organization from '../../../common/organization.vue';
   export default {
     props:['addStaffDialog','isEdit','editId','departmentId'],
     components:{ Organization },
@@ -258,7 +258,7 @@
         activeName: 'first',
         recommenderName: '',
         params: {
-          position_id: [],
+          position_id: [48],
           department_id: [],
           phone: '',
           real_name: '',
@@ -296,8 +296,8 @@
         department: '',
         type:null,
         length:null,
-        positionArray:[],
-        roleArray:[],
+        positionArray:[],  //级联职位
+        roleArray:[],  //编辑时获取的职位
         sexCategory: [],
         fertilityStatusCategory: [],
         accountStatusCategory: [],
@@ -308,6 +308,7 @@
         branchBankCategory: [],
         checkStatus: false,
         options: [],
+        roleNames: [],
       };
     },
     watch:{
@@ -359,8 +360,6 @@
         this.$http.get(globalConfig.server+'manager/staff/'+this.editId).then((res) => {
           if(res.data.code === '10020'){
             let detail = res.data.data.detail;
-            this.params.position_id = detail.position_id;
-            this.params.department_id = detail && detail.org && detail.org[0].id;
             this.params.real_name = detail.real_name;
             this.params.gender = detail.gender;
             this.params.phone = res.data.data.phone;
@@ -369,7 +368,7 @@
             this.params.id_num = detail.id_num;
             this.params.birthday = detail.birthday;
             this.params.recommender = detail.recommender;
-            // 推荐人名字  this.recommenderName =
+            this.recommenderName = detail.recommender_name;
             this.params.bank_num = detail.bank_num;
             this.params.account_bank = detail.account_bank;
             this.params.branch_bank = detail.branch_bank;
@@ -403,21 +402,22 @@
 
             let departNameArray = [];
             this.params.department_id = [];
-            this.params.position_id = [];
-
-            if(res.data.data && res.data.data.data && res.data.data.data.org.length>0) {
-
-              res.data.data.data.org.forEach((item) => {
+            // this.params.position_id = [];
+            if(res.data.data && res.data.data && res.data.data.org.length>0) {
+              res.data.data.org.forEach((item) => {
                 this.params.department_id.push(item.id);
                 departNameArray.push(item.name);
-              })
+              });
             }
             this.department = departNameArray.join(',');
 
             this.roleArray = res.data.data.role;
             if(this.roleArray && this.roleArray.length>0){
               this.roleArray.forEach((item) => {
-                this.params.position_id.push(item.position_id);
+                // this.params.position_id.push(item.id);
+                this.roleNames.push(item.display_name);
+                // this.roleNames = this.roleNames==='' ? item.display_name : this.roleNames+','+item.display_name;
+
               })
             }
             this.getPosition(this.params.department_id);
@@ -429,7 +429,8 @@
           }
         });
       },
-      handleChange(){
+      handleChange(val){
+        console.log(val);
 
       },
       //获取职位
@@ -441,16 +442,19 @@
               position = {};
               position.value = item.id ;
               position.label = item.name;
-              position.children = [];
+              // position.children = [];
               positionArray.push(position);
             });
           } else {
             positionArray = [];
           }
         });
-        positionArray.forEach((item)=>{
-          this.getPositions(item.value);
-        });
+        setTimeout(()=>{
+          positionArray.forEach((item)=>{
+            this.getPositions(item.value);
+          });
+        },0);
+
       },
       //获取岗位
       getPositions(id){
@@ -459,18 +463,15 @@
             res.data.data.data.forEach((item)=> {
               for(var i=0;i<positionArray.length;i++){
                 if(positionArray[i].value === id){
-                  // console.log(positionArray[i]);
-                  // let child = {children : []}
-                  // positionArray[i] = Object.assign({},positionArray[i],child);
-                  console.log(positionArray)
                   let data = {};
                   data.value = item.id;
                   data.label = item.name;
+                  positionArray[i].children =[];
                   positionArray[i].children.push(data);
                   console.log(this.options)
                 }
               }
-              this.options = positionArray
+              this.options = positionArray;
             });
           }
         });
