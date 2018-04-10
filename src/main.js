@@ -47,15 +47,6 @@ axios.defaults.headers.common['Env'] = globalConfig.env;
 axios.defaults.headers = globalConfig.header;
 
 
-if (localStorage.myData !== undefined) {
-  let head = JSON.parse(localStorage.myData);
-  globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
-}
-
-if (localStorage.personal !== undefined) {
-  globalConfig.personal = JSON.parse(localStorage.personal);
-}
-
 Vue.config.productionTip = false;
 // const router = new VueRouter({
 //   mode: 'history',
