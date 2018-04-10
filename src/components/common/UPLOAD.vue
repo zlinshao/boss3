@@ -51,13 +51,11 @@
 
         for (let i = 0; i < _this.imgArray.length; i++) {
           if (_this.imgArray[i].name.indexOf(id) > -1) {
-
             _this.imgId.forEach((item) => {
               if(_this.imgArray[i].id === item){
                 _this.imgId = _this.imgId.filter((x) =>{return x!==item})
               }
             });
-
             _this.imgArray.splice(i, 1);
           }
           _this.$emit('getImg', [_this.ID, _this.imgId, _this.isUploading]);
@@ -145,9 +143,6 @@
               _this.$emit('getImg', [_this.ID, _this.imgId, _this.isUploading]);
 
               plupload.each(files, function (file) {
-
-                console.log(file);
-
                 if (!file || !/image\//.test(file.type) || /photoshop/.test(file.type)) {
                   $('#pickfiles' + _this.ID).prepend(`
                     <div class="imgItem" id="${file.id}">
