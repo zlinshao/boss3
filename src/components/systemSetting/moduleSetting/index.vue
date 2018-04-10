@@ -7,6 +7,9 @@
       <el-tab-pane label="合同编号管理" name="second">
         <ContractManagement></ContractManagement>
       </el-tab-pane>
+      <el-tab-pane label="功能说明" name="third">
+        <FunctionDescription></FunctionDescription>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -14,10 +17,11 @@
 <script>
   import IntegralManagement from './integralManagement/index.vue'
   import ContractManagement from './contractManagement/index.vue'
+  import FunctionDescription from './functionDescription/index.vue'
   export default {
  
     name: "index",
-    components: {IntegralManagement,ContractManagement},
+    components: {IntegralManagement,ContractManagement,FunctionDescription},
     data() {
       return {
         activeName: 'first'
