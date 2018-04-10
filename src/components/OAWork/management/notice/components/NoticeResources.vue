@@ -82,6 +82,7 @@ export default {
       threeflag: false, //是否成功发布标识
       linelist: [{}],
       upStatus:false,
+      midId:null,
       form: {
         title: "",
         type: "",
@@ -117,7 +118,6 @@ export default {
       }
     },
     rowneedx(val) {
-      console.log(val)
       this.firstflag = true;
       if (val.content) {
         this.form.type = val.type;
@@ -198,6 +198,9 @@ export default {
             attachment: this.form.attachment
           })
           .then(res => {
+            if (res.data.code == "99910") {
+              this.midId = res.data.data.id;
+            }            
           });
 
       }    
@@ -217,6 +220,9 @@ export default {
       }
       if (!this.firstflag) {
         this.form.id = "";
+      }
+      if(this.midId){
+        this.form.id = this.midId;
       }
       this.saveorsend();
       if (this.saveorsendflag) {
@@ -256,6 +262,7 @@ export default {
                 message: "操作成功",
                 type: "success"
               });
+              this.midId = null;
               this.threeflag = true;
               this.firstflag = true;
               this.upStatus=false;
