@@ -70,11 +70,13 @@
       instructionDialogVisible(val){
         if(!val){
           this.$emit('close')
+        }else{
+          this.getDepart();
         }
       }
     },
     mounted(){
-      this.getDepart();
+      
     },
     methods:{
       getDepart(){
