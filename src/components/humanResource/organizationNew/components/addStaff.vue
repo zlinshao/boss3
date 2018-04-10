@@ -246,6 +246,8 @@
 </template>
 
 <script>
+  let position = {};
+  let positionArray = [];
   import Organization from '../../../common/organization.vue'
   export default {
     props:['addStaffDialog','isEdit','editId','departmentId'],
@@ -412,7 +414,7 @@
             }
             this.department = departNameArray.join(',');
 
-            this.roleArray = res.data.data.data.role;
+            this.roleArray = res.data.data.role;
             if(this.roleArray && this.roleArray.length>0){
               this.roleArray.forEach((item) => {
                 this.params.position_id.push(item.position_id);
@@ -434,18 +436,19 @@
       getPosition(id) {
         this.$http.get(globalConfig.server+'manager/position?department_id='+ id).then((res) => {
           if(res.data.code === '20000') {
-            this.options = [];
+            positionArray = []
             res.data.data.data.forEach((item)=> {
-              let data = {};
-              data.value = item.id ;
-              data.label = item.name;
-              this.options.push(data);
+              position = {};
+              position.value = item.id ;
+              position.label = item.name;
+              position.children = [];
+              positionArray.push(position);
             });
           } else {
-            this.options = [];
+            positionArray = [];
           }
         });
-        this.options.forEach((item)=>{
+        positionArray.forEach((item)=>{
           this.getPositions(item.value);
         });
       },
@@ -454,17 +457,20 @@
         this.$http.get(globalConfig.server+'manager/positions?type='+ id).then((res) => {
           if(res.data.code === '20000') {
             res.data.data.data.forEach((item)=> {
-              for(var i=0;i<this.options.length;i++){
-                if(this.options[i].value === id){
-                  console.log(this.options[i]);
-                  this.options[i].children = [];
+              for(var i=0;i<positionArray.length;i++){
+                if(positionArray[i].value === id){
+                  // console.log(positionArray[i]);
+                  // let child = {children : []}
+                  // positionArray[i] = Object.assign({},positionArray[i],child);
+                  console.log(positionArray)
                   let data = {};
                   data.value = item.id;
                   data.label = item.name;
-                  this.options[i].children.push(data);
-
+                  positionArray[i].children.push(data);
+                  console.log(this.options)
                 }
               }
+              this.options = positionArray
             });
           }
         });
