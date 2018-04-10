@@ -660,7 +660,7 @@
         this.lists = [
           {clickIndex: 'power', headIcon: 'el-icon-edit', label: '权限',data: row},
           {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-          {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
+          // {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextParams(event);
       },

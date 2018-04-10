@@ -65,10 +65,8 @@
               });
             }
           });
-
         },
         getImage(val) {
-          console.log(val);
           this.form.picture_ids = val[1]; //选择的图片数组ids
           this.uploadImgLength = val[1].length;
         },

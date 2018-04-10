@@ -202,7 +202,7 @@
                 <span>{{praiseData.title}}</span>
                 <span class="times">{{praiseData.create_time}}</span>
               </div>
-              <div class="mainTitle">
+              <div class="mainTitle" >
                 {{praiseData.content_without_table}}
               </div>
               <div class="buttonNew">
@@ -928,6 +928,7 @@
             -webkit-line-clamp: 2;
             line-clamp: 2;
             color: #aaaaaa;
+            height: 38px;
           }
           .buttonNew {
             margin: 0 10px;
