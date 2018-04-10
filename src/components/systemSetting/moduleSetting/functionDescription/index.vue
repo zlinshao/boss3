@@ -180,6 +180,7 @@ export default {
       this.a = 0;
       this.len = null;
       this.form.id = data.id;
+      this.defaultExpandKeys.push(data.id);
       this.form.pid = data.pid;
       this.form.title = data.title;
       this.updateflag = false;
