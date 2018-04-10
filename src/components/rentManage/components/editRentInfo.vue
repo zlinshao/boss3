@@ -729,14 +729,14 @@
             this.params.receipt = data.receipt;
             this.params.agency = data.agency;
             this.params.penalty = data.penalty;
-            this.params.property = Number(data.property);
+            this.params.property = data.property?Number(data.property):'';
             this.params.property_payer = data.property_payer;
             this.params.water = data.water;
             this.params.electricity_peak = data.electricity_peak;
             this.params.electricity_valley = data.electricity_valley;
             this.params.gas = data.gas;
             this.params.public_fee = data.public_fee;
-            this.params.manage_fee = Number(data.manage_fee);
+            this.params.manage_fee = data.manage_fee?Number(data.manage_fee):'';
             this.params.data_date = data.data_date;
 
             this.params.staff_id = data.staff_id;
