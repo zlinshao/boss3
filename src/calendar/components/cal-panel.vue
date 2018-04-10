@@ -18,7 +18,7 @@
       <div class="dates" >
         <div v-for="date in dayList"  class="item dayItem" :class="date.color?'border_color':''" :style="{borderColor:date.status?date.color:''}">
           <p style="line-height: 32px;font-size: 18px" @click="handleChangeCurday(date)">
-            <span v-if="date.status&&date.title==='Late'" style="color:#FCA131">{{date.status ? date.date.split('/')[2] : '&nbsp'}}</span>
+            <span v-if="date.status&&date.title==='Late' || date.status&&date.title==='SeriousLate'" style="color:#FCA131">{{date.status ? date.date.split('/')[2] : '&nbsp'}}</span>
             <span v-if="date.status&&date.title==='Early'" style="color:#6a8dfb">{{date.status ? date.date.split('/')[2] : '&nbsp'}}</span>
             <span v-if="date.status&&date.title==='NotSigned'" style="color:#fc2c96">{{date.status ? date.date.split('/')[2] : '&nbsp'}}</span>
             <span v-if="date.status&&date.title==='Absenteeism'" style="color:#fc2c96">{{date.status ? date.date.split('/')[2] : '&nbsp'}}</span>
@@ -27,7 +27,7 @@
           <!--<span v-if="date.status ? (today == date.date) : false" class="is-today" :style="{backgroundColor: customColor }" ></span>-->
           <!--<span v-if="date.status ? (date.title != undefined) : false" class="is-event"-->
           <!--:style="{borderColor: customColor, backgroundColor: (date.date == selectedDay) ? customColor : 'inherit'}"></span>-->
-          <span v-if="date.status&&date.title==='Late'" style="color:#fc2c96">
+          <span v-if="date.status&&date.title==='Late' || date.status&&date.title==='SeriousLate'" style="color:#fc2c96">
             <span class="time">{{date.start}} - {{date.end}}<br /></span>迟到
             <span v-if="date.status&&date.desc==='Early'">( 早退 )</span>
             <span v-if="date.status&&date.desc==='NotSigned'">( 未打卡 )</span>
@@ -35,19 +35,19 @@
           </span>
           <span v-if="date.status&&date.title==='Early'" style="color:#fc2c96">
             <span class="time">{{date.start}} - {{date.end}}<br /></span>早退
-            <span v-if="date.status&&date.desc==='Late'">( 迟到 )</span>
+            <span v-if="date.status&&date.desc==='Late' || date.status&&date.desc==='SeriousLate'">( 迟到 )</span>
             <span v-if="date.status&&date.desc==='NotSigned'">( 未打卡 )</span>
             <span v-if="date.status&&date.desc==='Absenteeism'">( 旷工 )</span>
           </span>
           <span v-if="date.status&&date.title==='NotSigned'" style="color:#fc2c96">
             <span class="time">{{date.start}} - {{date.end}}<br /></span>未打卡
-            <span v-if="date.status&&date.desc==='Late'">( 迟到 )</span>
+            <span v-if="date.status&&date.desc==='Late' || date.status&&date.desc==='SeriousLate'">( 迟到 )</span>
             <span v-if="date.status&&date.desc==='Early'">( 早退 )</span>
             <span v-if="date.status&&date.desc==='Absenteeism'">( 旷工 )</span>
           </span>
           <span v-if="date.status&&date.title==='Absenteeism'" style="color:#fc2c96">
             <span class="time">{{date.start}} - {{date.end}}<br /></span>旷工
-            <span v-if="date.status&&date.desc==='Late'">( 迟到 )</span>
+            <span v-if="date.status&&date.desc==='Late' || date.status&&date.desc==='SeriousLate'">( 迟到 )</span>
             <span v-if="date.status&&date.desc==='Early'">( 早退 )</span>
             <span v-if="date.status&&date.desc==='NotSigned'">( 未打卡 )</span>
           </span>
