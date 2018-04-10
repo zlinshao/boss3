@@ -46,7 +46,7 @@ import WechatMessage from '../components/wechatMessage/index.vue'               
 
 //人资管理
 // import StaffManage from '../comments/humanResource/staffManage/index.vue'
-import Organization from '../components/humanResource/organization/index.vue'
+// import Organization from '../components/humanResource/organization/index.vue'
 // import Achievement from '../comments/humanResource/achievement/index.vue'
 import IntegralManage from '../components/humanResource/integralManage/index.vue'
 import OrganizationNew from '../components/humanResource/organizationNew/index.vue'       // add by cj 组织架构
@@ -352,8 +352,8 @@ export default new Router({
       icon: 'iconfont icon-renzi',
       children: [
         // {path: '/staffManage', component: StaffManage, name: '用户管理',},
-        {path: '/organization', component: Organization, name: '组织架构',},
-        {path: '/OrganizationNew', component: OrganizationNew, name: '组织架构2',},
+        // {path: '/organization', component: Organization, name: '组织架构',},
+        {path: '/OrganizationNew', component: OrganizationNew, name: '组织架构',},
         {path: '/integralManage', component: IntegralManage, name: '积分管理',},
         // {path: '/achievement', component: Achievement, name: '业绩工资',},
       ]
