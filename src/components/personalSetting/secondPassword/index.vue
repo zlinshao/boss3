@@ -40,20 +40,20 @@
           </div>
           <div class="validate">
             <div class="validateSign">
-              <el-input size="mini" @change="checkNo(form.passwordnew)" :maxlength="16" type="password" v-model="form.passwordnew" :minlength="6" clearable placeholder="请输入新密码"></el-input>
+              <el-input size="mini" :maxlength="16" type="password" v-model="form.passwordnew" :minlength="6" clearable placeholder="请输入新密码"></el-input>
               <i class="el-icon-success" :maxlength="16" style="color: #46ff53" v-if="form.passwordnew.length>=6 && truefalg"></i>
 
             </div>
           </div>
           <div class="validate">
             <div class="validateSign">
-              <el-input size="mini" @change="checkNo2(form.passwordok)" type="password" v-model="form.passwordok" :minlength="6" clearable placeholder="请确认新密码"></el-input>
+              <el-input size="mini" type="password" v-model="form.passwordok" :minlength="6" clearable placeholder="请确认新密码"></el-input>
              <i class="el-icon-success" style="color: #46ff53" v-show="form.passwordok.length>=6 && form.passwordnew == form.passwordok &&truefalg"></i>
             </div>
           </div>
 
           <div class="remark">
-            备注：密码长度6-16位，数字、字母和符号至少包含两种。
+            备注：密码长度4-6位，数字、字母和符号至少包含两种。
           </div>
         </el-col>
       </el-row>
@@ -152,47 +152,7 @@ export default {
           }
         });
     },
-    //密码验证
-    checkNo(value) {
-      this.falsefalg=2;
-      this.truefalg=true;
-      let reg = /^(?![\d]+$)(?![a-zA-Z]+$)(?![!#$%^&*]+$)[\da-zA-Z!#$%^&*]/;
-      if (value) {
-        if (new RegExp(reg).test(value) == false ) {
-          this.validateinput = false;
-          this.truefalg=false;
-          this.$notify({
-            title: "警告",
-            message: "新密码格式有问题",
-            type: "warning"
-          });
-        }
-      }
-    },
-    //密码验证
-    checkNo2(value) {
-      this.truefalg=true;
-      let reg = /^(?![\d]+$)(?![a-zA-Z]+$)(?![!#$%^&*]+$)[\da-zA-Z!#$%^&*]/;
-      if (value) {
-        if (new RegExp(reg).test(value) == false) {
-          this.validateinput = false;
-          this.truefalg=false;
-          this.$notify({
-            title: "警告",
-            message: "二次密码格式有问题",
-            type: "warning"
-          });
-        }else if(this.form.passwordok != this.form.passwordnew ){
-          this.validateinput = false;
-          this.truefalg=false;
-          this.$notify({
-            title: "警告",
-            message: "二次密码不一致",
-            type: "warning"
-          });
-      }
-      }
-    },
+
     //二级密码保存
     savesendinfo() {
 
@@ -254,12 +214,6 @@ export default {
           message: "两次输入的密码不一样",
           type: "warning"
         });
-      }
-      if(this.validateinput == true){
-        this.checkNo(this.form.passwordnew)
-      }
-      if(this.validateinput == true){
-        this.checkNo2(this.form.passwordok)
       }
       if (this.validateinput) {
         this.$http
