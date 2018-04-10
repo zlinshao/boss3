@@ -46,10 +46,7 @@
               <el-button v-show="a < len - 1" class="elbuttom2" size="small" @click="nextimg" type="primary">下一张</el-button>
               <el-button v-show="a == len -1" class="elbuttom2" size="small"  type="info">下一张</el-button>
               </div>
-              <div v-else>
-                <el-button class="elbuttom1" size="small" type="info">上一张</el-button>
-                <el-button class="elbuttom2" size="small" type="info">下一张</el-button>
-              </div>
+ 
             </div>
             </div>
             <div v-show="updateflag">
