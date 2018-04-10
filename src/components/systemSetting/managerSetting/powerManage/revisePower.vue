@@ -93,7 +93,7 @@
 
     watch: {
       msg(val) {
-        if(this.title === '修改'){
+        if (this.title === '修改') {
           if (this.names === 'first') {
             this.form.ids = val.id;
             this.form.name = val.name;
@@ -118,6 +118,9 @@
 
       module(val) {
         this.dialogVisible = val;
+        if (this.title === '新增' && this.names === 'third') {
+          this.form.radio = 1;
+        }
       },
 
       dialogVisible(val) {
@@ -203,6 +206,7 @@
             if (res.data.status === 'success') {
               this.prompt(res.data.message, 1);
               this.$emit('sure', this.names);
+              this.$emit('close');
             } else {
               this.prompt(res.data.message, 2);
             }

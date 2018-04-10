@@ -14,7 +14,7 @@
           <div id="dragTree">
             <el-tree ref="expandMenuList" class="expand-tree"
                      :data="setTree"
-                     node-key="name"
+                     node-key="id"
                      highlight-current
                      accordion
                      check-strictly
@@ -93,7 +93,6 @@
                            style="width: 30px;height: 30px;border-radius: 50%;filter: grayscale(100%);">
                     </template>
                   </el-table-column>
-
                   <el-table-column
                     prop="name"
                     label="员工姓名">
@@ -123,7 +122,7 @@
                   <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :current-page="currentPage"
+                    :current-page="params.page"
                     :page-sizes="[10, 20, 30, 40]"
                     :page-size="10"
                     layout="total, sizes, prev, pager, next, jumper"
@@ -420,7 +419,6 @@
         positionList:[],      //职位列表
         organizationDialog:false,
         sortable: null,
-        currentPage:1,
         isDepartment : false,
         //......................
         addStaffDialog:false, //新增用户模态框
@@ -469,12 +467,12 @@
       this.getEntryMaterials();
     },
     activated() {
-      this.initExpand();
-      document.getElementById('staffManage').style.minHeight = window.innerHeight - 160 + 'px';
-      this.getDepart();
-      this.activeName = 'first';
-      this.getDefaultData();
-      this.getEntryMaterials();
+      // this.initExpand();
+      // document.getElementById('staffManage').style.minHeight = window.innerHeight - 160 + 'px';
+      // this.getDepart();
+      // this.activeName = 'first';
+      // this.getDefaultData();
+      // this.getEntryMaterials();
     },
     watch:{
       department_id(val){
@@ -545,8 +543,8 @@
           if(res.data.code === '20000'){
             this.setTree = res.data.data;
             this.setTree.forEach((item) => {
-              if(item.parent_id < 1 && this.defaultExpandKeys.indexOf(item.name)<0){
-                this.defaultExpandKeys.push(item.name);
+              if(item.parent_id < 1 && this.defaultExpandKeys.indexOf(item.id)<0){
+                this.defaultExpandKeys.push(item.id);
               }
             });
             this.getStaffData();
@@ -999,7 +997,7 @@
       //****************搜索*************
       search(){
         if(this.activeName=== 'first'){
-          this.getStaffData()
+          this.getStaffData();
         }else if(this.activeName=== 'second'){
           this.getOnlyPosition();
         }else if(this.activeName=== 'third'){
@@ -1009,10 +1007,10 @@
 
       //**********分页************************
       handleSizeChange(val) {
-        this.params.pageNum = val;
-        this.search();
+        console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
         this.params.page = val;
         this.search();
       },

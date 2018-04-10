@@ -117,6 +117,7 @@ export default {
       }
     },
     rowneedx(val) {
+      console.log(val)
       this.firstflag = true;
       if (val.content) {
         this.form.type = val.type;

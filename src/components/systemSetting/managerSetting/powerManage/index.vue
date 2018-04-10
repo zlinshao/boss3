@@ -5,7 +5,7 @@
         <el-button type="primary" size="mini" @click="newSystem"><i class="el-icon-plus"></i>&nbsp;新增系统</el-button>
       </div>
     </div>
-    <div class="border_1" @contextmenu='addMenu(1,$event)'>
+    <div class="border_1">
       <el-table
         :row-class-name="tableFirstName"
         :data="tableFirst"
@@ -51,7 +51,7 @@
     </div>
 
 
-    <div class="border_1" @contextmenu='addMenu(2,$event)'>
+    <div class="border_1">
       <el-table
         :row-class-name="tableSecondName"
         :data="tableSecond"
@@ -97,7 +97,7 @@
     </div>
 
 
-    <div class="border_1" @contextmenu='addMenu(3,$event)'>
+    <div class="border_1">
       <el-table
         :row-class-name="tableThirdName"
         :data="tableThird"
@@ -303,8 +303,6 @@
 
       // 删除
       openDelete(id, val) {
-        console.log(id);
-        console.log(val);
         this.$confirm('此操作将删除该文件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -333,28 +331,7 @@
           });
         });
       },
-      // 右键新增
-      addMenu(val, event) {
-        switch (val) {
-          case 1:
-            this.lists = [
-              {clickIndex: 'add1', headIcon: 'el-icon-edit-outline', label: '新增'},
-            ];
-            break;
-          case 2:
-            this.lists = [
-              {clickIndex: 'add2', headIcon: 'el-icon-edit-outline', label: '新增'},
-            ];
-            break;
-          case 3:
-            this.lists = [
-              {clickIndex: 'add3', headIcon: 'el-icon-edit-outline', label: '新增'},
-            ];
-            break;
-        }
 
-        this.contextMenuParam(event);
-      },
       // 右键 系统
       houseMenu(row, event) {
         this.firstClick(row);
