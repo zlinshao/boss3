@@ -5,7 +5,7 @@
         <div class="border left">
           <div class="top">
             <div>
-              组织架构
+              功能说明
             </div>
           </div>
           <div id="dragTree">
