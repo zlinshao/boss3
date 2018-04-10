@@ -132,7 +132,6 @@
       this.getAlbumId();
       this.getAllPhotos();
       this.getAlbumDetail();
-      console.log($('.imageItem').css('margin','-50px'))
     },
     activated(){
       this.getAlbumId();
