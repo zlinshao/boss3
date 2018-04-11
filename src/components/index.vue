@@ -324,7 +324,6 @@ import Instruction from './rentManage/wholeRentManage/components/instruction.vue
 
     mounted() {
       this.initData();
-      console.log(JSON.parse(localStorage.personal))
     },
     computed: {
       visitedViews() {
