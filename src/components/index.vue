@@ -349,6 +349,11 @@
       this.getDictionary2()
       this.$http.interceptors.response.use((response) => { //配置请求回来的信息
         if (response.data.code == '7777') {
+          clearInterval(this.interval);
+          this.interval = null;
+          clearInterval(this.messageInterval);
+          this.messageInterval = null;
+
           sessionStorage.setItem('beforePath', this.$route.path);
           sessionStorage.setItem('lockStatus', 1);
           this.$router.push({path: '/lock'});
@@ -542,7 +547,6 @@
         this.isCollapse = !this.isCollapse;
       },
       lockScreen(val) {
-        console.log(val);
         clearInterval(this.interval);
         this.interval = null;
         clearInterval(this.messageInterval);
