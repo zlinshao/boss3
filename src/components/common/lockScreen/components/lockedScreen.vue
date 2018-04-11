@@ -24,7 +24,7 @@
 
     <div style="position: fixed;bottom: 120px;right: 170px;">
       <div class="log_off" @click="log_off">
-        <i class="el-icons-fa-power-off"></i>
+        <img src="../../../../assets/images/log_out.png" alt="">
       </div>
     </div>
   </div>
@@ -142,13 +142,12 @@
       cursor: pointer;
       align-items: center;
       justify-content: center;
-      i {
-        font-size: 20px;
-        color: #6a8dfb;
+      img {
+        width: 18px;
         transition: all .3s;
       }
-      &:hover i {
-        font-size: 24px;
+      &:hover img {
+        width: 22px;
       }
     }
     width: 100vw;
