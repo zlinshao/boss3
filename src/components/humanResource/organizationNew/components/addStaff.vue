@@ -407,7 +407,6 @@
     },
     methods: {
       initial(){
-
           this.params.real_name = '';
           this.params.gender = '';
           this.params.phone = '';

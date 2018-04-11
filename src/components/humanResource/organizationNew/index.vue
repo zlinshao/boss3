@@ -804,11 +804,43 @@
       openContextMenu(row, event) {
         this.editId = row.id;
         this.menuType = 'staff';
-        this.lists = [
-          {clickIndex: 'power', headIcon: 'el-icon-edit', label: '权限',data: row},
-          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-          // {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
-        ];
+        console.log(row);
+        //is_enable 有值禁用 is_on_job 离职
+        if(row.is_enable && row.is_on_job){
+          this.lists = [
+            {clickIndex: 'power', headIcon: 'el-icon-edit', label: '权限',data: row},
+            {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
+            {clickIndex: 'enable', headIcon: 'el-icon-edit', label: '启用', id:row.id},
+            {clickIndex: 'on_job', headIcon: 'el-icon-edit', label: '复职', id:row.id},
+            // {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
+          ];
+        }else if(!row.is_enable && row.is_on_job){
+          this.lists = [
+            {clickIndex: 'power', headIcon: 'el-icon-edit', label: '权限',data: row},
+            {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
+            {clickIndex: 'enable', headIcon: 'el-icon-edit', label: '禁用', id:row.id},
+            {clickIndex: 'on_job', headIcon: 'el-icon-edit', label: '复职', id:row.id},
+          ];
+        }else if(row.is_enable && !row.is_on_job){
+          this.lists = [
+            {clickIndex: 'power', headIcon: 'el-icon-edit', label: '权限',data: row},
+            {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
+            {clickIndex: 'enable', headIcon: 'el-icon-edit', label: '启用', id:row.id},
+            {clickIndex: 'on_job', headIcon: 'el-icon-edit', label: '离职', id:row.id},
+          ];
+        }else if(!row.is_enable && !row.is_on_job){
+          this.lists = [
+            {clickIndex: 'power', headIcon: 'el-icon-edit', label: '权限',data: row},
+            {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
+            {clickIndex: 'enable', headIcon: 'el-icon-edit', label: '禁用', id:row.id},
+            {clickIndex: 'on_job', headIcon: 'el-icon-edit', label: '复职', id:row.id},
+          ];
+        }
+        // this.lists = [
+        //   {clickIndex: 'power', headIcon: 'el-icon-edit', label: '权限',data: row},
+        //   {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
+        //   // {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
+        // ];
         this.contextParams(event);
       },
       //员工右键回调
@@ -828,7 +860,36 @@
               title: '消息',
               message: '已取消删除',
             });
-
+          });
+        }else if(val.clickIndex === 'enable'){
+          this.$http.put(globalConfig.server+ 'manager/staff/dismiss/'+val.id, {type: 'is_enable'}).then((res)=>{
+            if(res.data.code === '10040'){
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.getStaffData();
+            }else{
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              })
+            }
+          });
+        }else if(val.clickIndex === 'on_job'){
+          this.$http.put(globalConfig.server+ 'manager/staff/dismiss/'+val.id, {type: 'is_on_job'}).then((res)=>{
+            if(res.data.code === '10040'){
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.getStaffData();
+            }else{
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              })
+            }
           });
         }
         if (val.clickIndex === 'power') {
