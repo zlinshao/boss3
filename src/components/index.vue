@@ -43,7 +43,7 @@
           </el-dropdown>
         </div>
         <!--消息-->
-        <div class="message" style="position: relative;margin-right: 30px">
+        <div class="message" style="position: relative;margin-right: 15px">
           <el-dropdown>
             <el-badge  :value="unReadMessageData.length" class="item">
               <i class="el-icons-fa-comment-o"></i>
