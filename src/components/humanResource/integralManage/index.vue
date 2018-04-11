@@ -301,7 +301,6 @@ export default {
     },
 
     search() {
-      this.form.page = 1;
       if (this.activeName == "first") {
         this.getTableData();
       } else if (this.activeName == "second") {
@@ -312,6 +311,8 @@ export default {
 
     handleSizeChange(val) {
       console.log(val);
+      this.form.page= val;
+      
     },
 
     //右键
@@ -352,7 +353,7 @@ export default {
       this.$http
         .put(globalConfig.server + "credit/manage/delete/" + this.activeId.id)
         .then(res => {
-          if (res.data.code === "30310") {
+          if (res.data.code === "30320") {
             this.getTableData();
           } else {
             this.$notify.warning({
