@@ -24,7 +24,8 @@
                      :default-expanded-keys="defaultExpandKeys"
                      :props="defaultProps"
                      :expand-on-click-node="false"
-                     :render-content="renderContent">
+                     :render-content="renderContent"
+                      draggable>
             </el-tree>
           </div>
         </div>
@@ -275,10 +276,17 @@
           <el-col :span="8">
             <p>账号状态：
               <span v-if="staffDetailData && staffDetailData.is_enable">禁用</span>
+              <span v-if="staffDetailData && !staffDetailData.is_enable">启用</span>
+            </p>
+          </el-col>
+          <el-col :span="8">
+            <p>在职状态：
               <span v-if="staffDetailData && staffDetailData.is_on_job">离职</span>
               <span v-if="staffDetailData && !staffDetailData.is_on_job">在职</span>
             </p>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="8">
             <p>入职时间：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.enroll}}</span></p>
           </el-col>
@@ -587,6 +595,7 @@
         this.department_name = data.name;
       },
       nodeExpand(data,node,store) {
+        console.log(data)
         if(this.defaultExpandKeys.indexOf(data.id)<0){
           this.defaultExpandKeys.push(data.id)
         }
@@ -746,6 +755,7 @@
         if(val === 'success'){
           this.getStaffData();
         }
+        this.getDepart();
       },
 
       //********************职位操作函数****************
