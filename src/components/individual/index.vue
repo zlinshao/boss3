@@ -75,7 +75,7 @@
                   <div>考勤管理</div>
                 </div>
                 <div class="months">
-                  <div class="monthTime">2018年03月考勤</div>
+                  <div class="monthTime">当月考勤</div>
                   <div class="month1">
                     <div>
                       <p class="monthP">
@@ -343,7 +343,12 @@
       //显示个人签名的input
       showInput(){
         this.isEdit = true;
-        this.params.content = this.landholder.data.signature.content;
+        if(this.landholder.data.signature){
+          this.params.content = this.landholder.data.signature.content;
+        }else {
+          this.params.content = ''
+        }
+
         setTimeout(() => {
           $('#editInput').focus();
           this.isChanged = false;
