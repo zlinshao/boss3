@@ -433,8 +433,8 @@
                   this.chinese.push({"name":this.dictionary2[i].dictionary_name,"id":this.dictionary2[i].id} )
                 }
               }
-            }           
-            
+            }
+
           }
 
         });

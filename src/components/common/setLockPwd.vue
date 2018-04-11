@@ -95,10 +95,11 @@
         return this.setCount && this.setPassWord;
       }
     },
-    created(){
+    mounted(){
+      console.log(JSON.parse(localStorage.personal).data)
       if (JSON.parse(localStorage.personal).data.setting.length > 0) {
-        this.basicSetting.id.push(JSON.parse(localStorage.personal).data.setting.dict_id);
-        this.defaultCountdown = JSON.parse(localStorage.personal).data.setting.dict_id
+        this.basicSetting.id[0] = Number(JSON.parse(localStorage.personal).data.setting[0].dict_id);
+        this.defaultCountdown = Number(JSON.parse(localStorage.personal).data.setting[0].dict_id)
       }
     },
     watch: {

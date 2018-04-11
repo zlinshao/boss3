@@ -263,6 +263,9 @@
 
 .unitMessage .el-input-group__append {
   padding: 0 3px !important; }
+
+
+
 ul.el-menu.el-menu--inline{
   background-color:#405597 !important;
 }
@@ -291,11 +294,11 @@ ul.el-menu.el-menu--inline{
   color: rgb(255, 208, 75) !important;
 }
 .el-menu--inline span{
-  color:#aec1fc 
+  color:#aec1fc
 }
-.el-menu--collapse .iconfont:hover,.el-menu--collapse .el-icons-fa-money:hover{
-  color: rgb(255, 208, 75) !important;
-}
+/*.el-menu--collapse .iconfont:hover,.el-menu--collapse .el-icons-fa-money:hover{*/
+  /*color: rgb(255, 208, 75) !important;*/
+/*}*/
 .el-menu--popup{
   padding:0 !important;
 }

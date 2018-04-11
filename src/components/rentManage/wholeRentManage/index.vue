@@ -111,6 +111,11 @@
           <div class="blueTable" @contextmenu="houseHeadMenu($event)">
             <el-table
               :data="collectData"
+              empty-text = 'collectStatus'
+              v-loading="collectLoading"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(255, 255, 255, 0)"
               @row-dblclick="dblClickTable"
               @row-click="clickCollectTable"
               :row-class-name="tableRowCollectName"
@@ -634,6 +639,8 @@
         tabStatusChange:'',
         collectNumberArray:[],
         checkContractData:{},
+        collectStatus:'1',
+        collectLoading:false,
       }
     },
 
@@ -695,12 +702,12 @@
       getCollectData(){
         this.collectHouseId = '';
         this.collectContractId = '';
-        this.$loading.show();
+        this.collectStatus = true
         this.$http.get(globalConfig.server+'lease/collect',{params:this.collectParams}).then((res) => {
-          this.$loading.hide();
           if(res.data.code === '61010'){
             this.collectData = res.data.data;
             this.collectTotalNum = res.data.meta.total;
+            this.collectStatus = false
             this.collectNumberArray = [];
             this.collectData.forEach((item) => {
               this.collectNumberArray.push(item.contract_number);
