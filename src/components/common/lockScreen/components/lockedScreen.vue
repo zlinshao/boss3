@@ -84,8 +84,6 @@
         this.$router.push('/login');
       },
       btnClick(){
-        console.log(sessionStorage.getItem('lockStatus'))
-
         this.$http.get(globalConfig.server + 'special/special/unlock_screen?pwd_lock=' + this.keywords).then((res) => {
           if (res.data.code === '100200') {
             new Promise((resolve, reject) => {
@@ -97,7 +95,7 @@
               if (sessionStorage.getItem('beforePath') === '/lock') {
                 this.$router.push('/main');
               } else {
-                this.$router.push({path: localStorage.getItem('beforePath')});
+                this.$router.push({path: sessionStorage.getItem('beforePath')});
               }
             });
           } else if (res.data.code === '100202') {

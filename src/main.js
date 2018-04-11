@@ -71,23 +71,13 @@ Vue.config.productionTip = false;
 
 //重定向router
 router.beforeEach((to, from, next) => {
-  let lockStatus = true;
+
   if (to.path === '/login') {
     localStorage.removeItem('myData');
     localStorage.removeItem('personal');
     globalConfig.header.Authorization = '';
   }
   let data = localStorage.getItem("myData");
-
-  // let data = null;
-  // if (sessionStorage.getItem('myData') != 'null') {
-  //   data = sessionStorage.getItem("myData");
-  //   if (to.path !== '/login') {
-  //     localStorage.setItem("myData", data);
-  //   }
-  // } else {
-  //   data = localStorage.getItem("myData");
-  // }
 
   if (!data && to.path !== '/login') {
     next({path: '/login'})
@@ -97,8 +87,10 @@ router.beforeEach((to, from, next) => {
     next({path: '/lock'});
   } else if (Number(sessionStorage.getItem('lockStatus')) === 0 && to.path === '/lock') {
     next({path: from.path});
+    console.log(from.path)
   } else {
     next();
+    console.log(from.path)
   }
 });
 
