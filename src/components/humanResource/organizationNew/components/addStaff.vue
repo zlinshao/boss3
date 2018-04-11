@@ -102,6 +102,15 @@
               </el-row>
               <el-row :gutter="20">
                 <el-col :span="8">
+                  <el-form-item label="部门" required>
+                    <el-input placeholder="请选择部门" v-model="department" @focus="selectDepart">
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="emptyDepart">清空</div>
+                      </template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
                   <el-form-item label="职位" required>
                     <el-select v-model="currentPosition" @blur="positionSelect">
                       <el-option v-for="item in positionArray" :value="item.id" :key="item.id"
@@ -112,20 +121,11 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="岗位" required>
-                    <el-select v-model="currentPost" :disabled="postSelectStatus" >
+                    <el-select v-model="params.position_id" :disabled="postSelectStatus" multiple>
                       <el-option v-for="item in postArray" :value="item.id" :key="item.id"
                                  :label="item.name" >{{item.name}}
                       </el-option>
                     </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="部门" required>
-                    <el-input placeholder="请选择部门" v-model="department" @focus="selectDepart">
-                      <template slot="append">
-                        <div style="cursor: pointer;" @click="emptyDepart">清空</div>
-                      </template>
-                    </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -340,6 +340,7 @@
     watch: {
       addStaffDialog(val) {
         this.addStaffDialogVisible = val;
+        this.initial();
       },
       addStaffDialogVisible(val) {
         if (!val) {
@@ -356,7 +357,7 @@
       },
       departmentId(val) {
         this.getPosition(val);
-      }
+      },
     },
     mounted() {
       this.getSex();
@@ -381,6 +382,47 @@
       this.getPosition(this.departmentId);
     },
     methods: {
+      initial(){
+        if(!this.editId){
+          this.params.real_name = '';
+          this.params.gender = '';
+          this.params.phone = '';
+          this.params.home_addr = '';
+          this.params.fertility_status = '';
+          this.params.id_num = '';
+          this.params.birthday = '';
+          this.params.recommender = '';
+          this.recommenderName = '';
+          this.params.bank_num = '';
+          this.params.account_bank = '';
+          this.params.branch_bank = '';
+          this.params.emergency_call = '';
+          this.params.level = '';
+          this.params.account_name = '';
+          this.params.status = '';
+          this.params.enroll = '';
+          this.params.salary = '';
+          this.params.entry_materials = [];
+          this.params.salary = '';
+          this.params.origin_addr = '';
+          this.params.marital_status = '';
+          this.params.political_status = '';
+          this.params.forward_time = '';
+          this.params.mail = '';
+          this.params.education = '';
+          this.params.school = '';
+          this.params.major = '';
+          this.params.graduation_time = '';
+          this.params.agreement_first_time = '';
+          this.params.agreement_first_end_time = '';
+          this.params.agreement_second_time = '';
+          this.params.remark = '';
+          this.params.department_id = [];
+          this.params.position_id = [];
+          this.department = '';
+          this.currentPost = '';
+        }
+      },
       positionSelect(){
         if(this.currentPosition){
           this.postSelectStatus = false;
@@ -447,14 +489,13 @@
             this.department = departNameArray.join(',');
 
             this.roleArray = res.data.data.role;
-            let roleNames = [];
+            this.currentPost = [];
             if (this.roleArray && this.roleArray.length > 0) {
               this.roleArray.forEach((item) => {
                 this.params.position_id.push(item.id);
-                roleNames.push(item.display_name);
+                this.currentPost.push(item.display_name);
               });
             }
-            this.currentPost = roleNames.join(',');
             this.getPosition(this.params.department_id);
           } else {
             this.$notify.warning({
@@ -498,8 +539,6 @@
         });
       },
       confirmAdd() {
-        this.params.position_id = [];
-        this.params.position_id.push(this.currentPost);
         if (this.isEdit) {
           //修改
           this.$http.put(globalConfig.server + 'manager/staff/' + this.editId, this.params).then((res) => {
@@ -708,7 +747,7 @@
       },
       //校验身份证号
       checkIDNumData() {
-        this.$http.get(globalConfig.server + 'manager/staff/info?bank_num=' + this.params.bank_num + '&id_num=' + this.params.id_num).then((res) => {
+        this.$http.get(globalConfig.server + 'manager/staff/info?id_num=' + this.params.id_num).then((res) => {
           if (res.data.code === '10050') {
             this.checkStatus = true;
             let data = res.data.data;
@@ -725,7 +764,7 @@
       },
       //校验银行卡号
       checkBankData() {
-        this.$http.get(globalConfig.server + 'manager/staff/info?bank_num=' + this.params.bank_num + '&id_num=' + this.params.id_num).then((res) => {
+        this.$http.get(globalConfig.server + 'manager/staff/info?bank_num=' + this.params.bank_num).then((res) => {
           if (res.data.code === '10050') {
             this.checkStatus = true;
             let data = res.data.data;

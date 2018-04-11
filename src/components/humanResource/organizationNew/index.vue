@@ -259,19 +259,18 @@
             <p>开户名：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.account_name}}</span></p>
           </el-col>
           <el-col :span="8">
-            <p>等级：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.level}}</span></p>
+            <p>等级：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.levels}}</span></p>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="8">
-            <p>职位：<span>{{currentPost}}</span></p>
-          </el-col>
-          <el-col :span="8">
             <p>部门：<span>{{department}}</span></p>
           </el-col>
           <el-col :span="8">
-
+            <!--<p>职位：<span></span></p>-->
+            <p>岗位：<span>{{currentPost}}</span></p>
           </el-col>
+          <el-col :span="8"></el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="8">

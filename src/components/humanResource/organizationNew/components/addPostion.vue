@@ -145,7 +145,7 @@
                 message: res.data.msg,
               });
             }else {
-              let msgData=res.data.message;
+              let msgData=res.data.msg;
               if(typeof (msgData) !=='string'){
                 let dataList = [];
                 let index = 0;
@@ -200,7 +200,7 @@
 
       //获取职位
       getPosition(){
-        this.$http.get(globalConfig.server_user+'position/type?org_id='+this.params.org_id).then((res) => {
+        this.$http.get(globalConfig.server+'manager/position/type?org_id='+this.params.org_id).then((res) => {
           if(res.data.code === '20010'){
             this.positionData = res.data.data;
           }else {
@@ -214,13 +214,13 @@
       },
       //获取岗位
       getPost(val){
-        this.$http.get(globalConfig.server_user+'positions?type='+val).then((res) => {
-          if(res.data.status === 'success'){
+        this.$http.get(globalConfig.server+'manager/positions?type='+val).then((res) => {
+          if(res.data.code === '20000'){
             this.postData = res.data.data;
           }else {
             this.$notify.info({
               title: '消息',
-              message: res.data.message,
+              message: res.data.msg,
             });
             this.postData = [];
           }
