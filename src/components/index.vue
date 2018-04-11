@@ -337,7 +337,6 @@
       if(JSON.parse(localStorage.personal).data.setting.length<1 || !JSON.parse(localStorage.personal).detail.pwd_lock){
         this.setLockPwdDialog = true;
       }
-      console.log(this.personal)
       //获取模块接口
       this.getDictionary2()
     },
@@ -453,14 +452,10 @@
         }
       },
       handleClose(key, keyPath) {
-        console.log(22)
-        console.log(key)
-        console.log(keyPath)
+
       },
       handlerSelect(key, keyPath){
-        console.log(33)
-        console.log(key)
-        console.log(keyPath)
+
         for(let chi in this.chinese){
           for(let path in keyPath){
           if(this.chinese[chi].name == keyPath[0]){
