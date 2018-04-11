@@ -89,7 +89,14 @@ router.beforeEach((to, from, next) => {
     globalConfig.header.Authorization = '';
   }
 
-  let data = localStorage.getItem("myData");
+  let data = null;
+  if(sessionStorage.getItem('myData')){
+    data =  sessionStorage.getItem("myData");
+    localStorage.setItem("myData",data)
+  }else {
+    data = localStorage.getItem("myData");
+  }
+
   if (!data && to.path !== '/login') {
     next({path: '/login'})
   }else if(data&&to.path === '/'){

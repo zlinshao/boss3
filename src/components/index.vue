@@ -284,6 +284,7 @@
     </div>
 
     <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeMessage"></MessageDetail>
+    <SetLockPwd :setLockPwdDialog="setLockPwdDialog" @close="closeMessage"></SetLockPwd>
   </div>
 </template>
 
@@ -291,10 +292,11 @@
   import TagsView from './common/tagsView.vue'
   import screenFull from 'screenfull'
   import MessageDetail from './common/messageDetail.vue'
+  import SetLockPwd from './common/setLockPwd.vue'
 
   export default {
     name: 'Index',
-    components: {TagsView, MessageDetail},
+    components: {TagsView, MessageDetail,SetLockPwd},
     data() {
       return {
         personal: {},
@@ -313,12 +315,19 @@
         loginDay: 0,
         loginPercent: 0,
         creditTotal: 0, // 积分总数
+
+        setLockPwdDialog:false,
       }
     },
 
     mounted() {
       this.initData();
-      console.log(JSON.parse(localStorage.personal))
+      if(JSON.parse(localStorage.personal).data.setting.length<1 || !JSON.parse(localStorage.personal).detail.pwd_lock){
+        this.setLockPwdDialog = true;
+      }
+      globalConfig.personal = JSON.parse(localStorage.personal);
+      let head = JSON.parse(localStorage.myData);
+      globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
     },
     computed: {
       visitedViews() {
@@ -380,6 +389,7 @@
       },
       closeMessage(){
         this.messageDialog = false;
+        this.setLockPwdDialog = false;
       },
       //获取未读消息
       getUnReadMessage(){
