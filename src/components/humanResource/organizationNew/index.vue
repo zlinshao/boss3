@@ -276,10 +276,17 @@
           <el-col :span="8">
             <p>账号状态：
               <span v-if="staffDetailData && staffDetailData.is_enable">禁用</span>
+              <span v-if="staffDetailData && !staffDetailData.is_enable">启用</span>
+            </p>
+          </el-col>
+          <el-col :span="8">
+            <p>在职状态：
               <span v-if="staffDetailData && staffDetailData.is_on_job">离职</span>
               <span v-if="staffDetailData && !staffDetailData.is_on_job">在职</span>
             </p>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="8">
             <p>入职时间：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.enroll}}</span></p>
           </el-col>

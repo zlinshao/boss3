@@ -140,6 +140,18 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
+                  <el-form-item label="在职状态" required>
+                    <el-select v-model="params.job_status" clearable>
+                      <el-option v-for="item in jobStatusCategory" :value="item.id" :key="item.id"
+                                 :label="item.dictionary_name">{{item.dictionary_name}}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8"></el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
                   <el-form-item label="入职时间" required>
                     <el-date-picker v-model="params.enroll" type="date" placeholder="请选择入职时间" value-format="yyyy-MM-dd">
                     </el-date-picker>
@@ -150,6 +162,7 @@
                     <el-input placeholder="请输入薪资" v-model="params.salary" clearable></el-input>
                   </el-form-item>
                 </el-col>
+                <el-col :span="8"></el-col>
               </el-row>
               <el-row :gutter="20">
                 <el-form-item label="入职材料">
@@ -301,6 +314,7 @@
           level: '',
           account_name: '',
           status: '',
+          job_status: '',
           enroll: '',
           salary: '',
           entry_materials: [],
@@ -334,6 +348,7 @@
         politicalStatusCategoey: [],
         educationCategory: [],
         branchBankCategory: [],
+        jobStatusCategory: [],
         checkStatus: false,
       };
     },
@@ -371,6 +386,7 @@
       this.getPoliticalStatus();
       this.getEducation();
       this.getBranchBank();
+      this.getOnJobStatus();
       this.getPosition(this.departmentId);
     },
     methods: {
@@ -442,6 +458,7 @@
             this.params.level = detail && detail.level;
             this.params.account_name = detail && detail.account_name;
             this.params.status = detail && detail.status;
+            this.params.job_status = detail && detail.job_status;
             this.params.enroll = detail && detail.enroll;
             this.params.salary = detail && detail.salary;
             this.params.entry_materials = detail && detail.entry_materials;
@@ -666,6 +683,16 @@
             this.fertilityStatusCategory = res.data.data;
           } else {
             this.fertilityStatusCategory = [];
+          }
+        });
+      },
+      //在职状态
+      getOnJobStatus() {
+        this.$http.get(globalConfig.server + 'setting/dictionary/559').then((res) => {
+          if (res.data.code === '30010') {
+            this.jobStatusCategory = res.data.data;
+          } else {
+            this.jobStatusCategory = [];
           }
         });
       },
