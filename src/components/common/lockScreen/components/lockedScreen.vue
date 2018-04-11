@@ -1,5 +1,8 @@
 <template>
   <div id="locking">
+    <!--<div class="clock" style="position: fixed;top: 80px;left: 150px">-->
+      <!--<span style="font-size: 50px;">23:00</span>-->
+    <!--</div>-->
     <div class="lock_container">
       <div class="header">
         <img v-if="personal && personal.avatar" :src="personal.avatar" alt="">

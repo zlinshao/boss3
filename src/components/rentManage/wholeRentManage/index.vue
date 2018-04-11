@@ -111,7 +111,7 @@
           <div class="blueTable" @contextmenu="houseHeadMenu($event)">
             <el-table
               :data="collectData"
-              empty-text = 'collectStatus'
+              :empty-text = 'collectStatus'
               v-loading="collectLoading"
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
@@ -248,6 +248,11 @@
           <div class="greenTable" @contextmenu="houseHeadMenu($event)">
             <el-table
               :data="rentingData"
+              :empty-text = 'rentStatus'
+              v-loading="rentLoading"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(255, 255, 255, 0)"
               @row-click="clickRentTable"
               @row-dblclick="dblClickRentTable"
               @row-contextmenu='clientMenu'
@@ -639,8 +644,10 @@
         tabStatusChange:'',
         collectNumberArray:[],
         checkContractData:{},
-        collectStatus:'1',
+        collectStatus:' ',
         collectLoading:false,
+        rentStatus:' ',
+        rentLoading:false,
       }
     },
 
@@ -702,12 +709,12 @@
       getCollectData(){
         this.collectHouseId = '';
         this.collectContractId = '';
-        this.collectStatus = true
+        this.collectLoading = true;
         this.$http.get(globalConfig.server+'lease/collect',{params:this.collectParams}).then((res) => {
+          this.collectLoading = false;
           if(res.data.code === '61010'){
             this.collectData = res.data.data;
             this.collectTotalNum = res.data.meta.total;
-            this.collectStatus = false
             this.collectNumberArray = [];
             this.collectData.forEach((item) => {
               this.collectNumberArray.push(item.contract_number);
@@ -719,6 +726,7 @@
             }
           }else {
             this.collectData = [];
+            this.collectStatus = '暂无数据';
             this.collectTotalNum = 0;
           }
         })
@@ -799,7 +807,9 @@
       //*********************************租房*******************************************************//
       getRentData(id){
         this.rentParams.house_id = id;
+        this.rentLoading = true;
         this.$http.get(globalConfig.server+'lease/rent',{params:this.rentParams}).then((res) => {
+          this.rentLoading = false;
           if(res.data.code === '61110'){
             this.rentingData = res.data.data;
             this.rentTotalNum = res.data.meta.total;
@@ -811,6 +821,7 @@
           }else {
             this.rentingData = [];
             this.rentTotalNum = 0;
+            this.rentStatus = '暂无数据';
           }
         })
       },
