@@ -17,7 +17,7 @@
           </div>
           </el-col>
           <el-col :span="18" class="instruct_left">
-            <div style="font-size:16px; color: #409EFF;">{{titleName}}</div>
+            <div style="font-size:16px;margin-left:4px; color: #409EFF;">{{titleName}}</div>
             <div v-if="arr[a] ==index" class="imgdiv" v-for="(key,index) in form.image_pic" :key="key.id">
               <img :src="pic.uri" v-for="pic in key" :key="pic.id" />
             </div>
@@ -26,7 +26,7 @@
       </div>
       <div style="text-align: center;padding: 40px;">
         <span slot="footer" class="dialog-footer" >
-          <div v-if="len">
+          <div v-if="len>1">
             <el-button v-show="a <= len-1 && a>0 " class="elbuttom1" size="small" @click="preimg" type="primary">上一张</el-button>
             <el-button v-show="a == 0" class="elbuttom1" size="small" type="info">上一张</el-button>
             <el-button v-show="a < len - 1" class="elbuttom2" size="small" @click="nextimg" type="primary">下一张</el-button>

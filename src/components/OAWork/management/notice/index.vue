@@ -75,7 +75,7 @@
               <template slot-scope="scope">
                <el-button class="btnStatus" v-if="scope.row.draft === '已发布'" type="primary" size="mini">已发布</el-button>
               <el-button class="btnStatus" v-if="scope.row.draft === '草稿'" type="info" size="mini">草稿</el-button>
-              <el-button class="btnStatus" v-if="scope.row.draft === '已下架'" type="warning" size="mini">已下架</el-button>
+              <el-button class="btnStatus" v-if="scope.row.draft === '已撤回'" type="warning" size="mini">已撤回</el-button>
               
             </template>
               </el-table-column>
@@ -245,7 +245,7 @@ export default {
                 this.tableData[j].draft = "草稿";
               }
               if(res.data.data[j].delete_time){
-                this.tableData[j].draft = "已下架";
+                this.tableData[j].draft = "已撤回";
               }
               if (!res.data.data[j].real_name) {
                 this.tableData[j].real_name = "未知人员";

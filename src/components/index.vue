@@ -113,7 +113,7 @@
           </div>
         </div>
         <div @click="openModalDialog('instructionDialog')" class="guide" style="cursor: pointer">
-          <i class="el-icon-info"></i>
+          <i style="font-size:26px; margin-right:4px;" class="iconfont icon-gantanhaodefuben"></i>
           功能说明
         </div>
         <!--个人信息-->
