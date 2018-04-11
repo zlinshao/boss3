@@ -355,6 +355,7 @@
           this.title = '新建用户';
         } else {
           this.title = '修改用户';
+          this.getStaffInfo();
         }
       },
       departmentId(val) {
@@ -371,10 +372,6 @@
       this.getEducation();
       this.getBranchBank();
       this.getPosition(this.departmentId);
-      this.getStaffInfo();
-    },
-    activated(){
-      this.getStaffInfo();
     },
     methods: {
       initial(){

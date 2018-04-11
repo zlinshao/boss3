@@ -24,7 +24,8 @@
                      :default-expanded-keys="defaultExpandKeys"
                      :props="defaultProps"
                      :expand-on-click-node="false"
-                     :render-content="renderContent">
+                     :render-content="renderContent"
+                      draggable>
             </el-tree>
           </div>
         </div>
@@ -587,6 +588,7 @@
         this.department_name = data.name;
       },
       nodeExpand(data,node,store) {
+        console.log(data)
         if(this.defaultExpandKeys.indexOf(data.id)<0){
           this.defaultExpandKeys.push(data.id)
         }
@@ -746,6 +748,7 @@
         if(val === 'success'){
           this.getStaffData();
         }
+        this.getDepart();
       },
 
       //********************职位操作函数****************
