@@ -222,14 +222,6 @@
           </el-col>
         </el-row>
         <el-row :gutter="20">
-          <el-col :span="16">
-            <p>家庭住址：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.home_addr}}</span></p>
-          </el-col>
-          <el-col :span="8">
-            <p>生育状况： <span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.fertility_statuss}}</span></p>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
           <el-col :span="8">
             <p>身份证号：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.id_num}}</span></p>
           </el-col>
@@ -238,6 +230,14 @@
           </el-col>
           <el-col :span="8">
             <p>推荐人：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.recommender_name}}</span></p>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="16">
+            <p>家庭住址：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.home_addr}}</span></p>
+          </el-col>
+          <el-col :span="8">
+            <p>生育状况： <span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.fertility_statuss}}</span></p>
           </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -268,9 +268,8 @@
           </el-col>
           <el-col :span="8">
             <!--<p>职位：<span></span></p>-->
-            <p>岗位：<span>{{currentPost}}</span></p>
           </el-col>
-          <el-col :span="8"></el-col>
+          <el-col :span="8"> <p>岗位：<span>{{currentPost}}</span></p></el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="8">
@@ -458,7 +457,6 @@
         isGetPosition:false,
         post_position:'', //  职位或岗位
         addPositionParams:[],
-        addStaffParams:[],      //新建员工参数
         entryMaterialsCategory: [],
         entry_materials: [],
         currentPage: 1,
@@ -792,7 +790,6 @@
       },
       //职位单击
       clickOnlyPositionMenu(row,event){
-        console.log(row);
         this.onlyPositionId = row.id;
         this.onlyPositionName = row.name;
         this.department_id = row.org.id;
