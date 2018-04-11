@@ -316,7 +316,6 @@ export default {
             this.total = res.data.num;
             
             for (let j = 0; j < res.data.data.length; j++) {
-              debugger
               this.tableData[j].department_name="";
               for(let m=0;m<res.data.data[j].department_id.length;m++){
               this.tableData[j].department_name += res.data.data[j].department_id[m].name +";";
