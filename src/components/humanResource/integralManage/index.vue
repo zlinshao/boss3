@@ -5,9 +5,9 @@
         <div class="tabsSearch">
           <el-form :inline="true" :model="form" size="mini">
             <el-form-item>
-              <el-input placeholder="请输入项目名称" @clear="searchtop" clearable v-model="form.item_name"
+              <el-input placeholder="请输入项目名称" @clear="search" clearable v-model="form.item_name"
                         @keyup.enter.native="search" size="mini">
-                <el-button slot="append" icon="el-icon-search" @click="searchtop"></el-button>
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -77,7 +77,7 @@
 
             </el-row>
             <div class="btnOperate">
-              <el-button size="mini" type="primary" @click="searchtop">搜索</el-button>
+              <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
               <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
             </div>
@@ -300,18 +300,16 @@ export default {
       this.integralDetail = true;
     },
 
-    search(val) {
-      this.form.page = val;
+    search() {
+      this.form.page = 1;
       if (this.activeName == "first") {
         this.getTableData();
       } else if (this.activeName == "second") {
         this.getGatherList();
       }
+      this.isHigh = false;
     },
-    searchtop() {
-     
-      this.getTableData();
-    },
+
     handleSizeChange(val) {
       console.log(val);
     },
@@ -424,6 +422,8 @@ export default {
       };
       this.department_name = ""; 
       this.staff_name="";
+      this.isHigh=false;
+      this.search(this.activeName)
     }
   }
 };
