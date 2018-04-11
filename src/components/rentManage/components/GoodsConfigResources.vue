@@ -1,6 +1,6 @@
 <template>
   <div id="increaseGoods">
-    <el-dialog title="物品增配" :visible.sync="increaseGoodsDialogVisible" width="60%" style="min-width:1110px;">
+    <el-dialog :close-on-click-modal="false" title="物品增配" :visible.sync="increaseGoodsDialogVisible" width="60%" style="min-width:1110px;">
       <div class="goodsall">
         <span class="topmassage">物品增配（点击下方按钮切换添加模式）</span>
         <el-button type="primary" size="small" @click="openModalDialogx('addGoodsDialog')">物品设置</el-button>
@@ -144,7 +144,7 @@
           price: [],
           num: [],
           sum: []
-        }         
+        }
         }
       },
 

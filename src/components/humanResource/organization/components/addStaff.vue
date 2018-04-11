@@ -1,6 +1,6 @@
 <template>
   <div id="addRentRepair">
-    <el-dialog :title="title" :visible.sync="addStaffDialogVisible" width="30%" :before-close="beforeCloseModal">
+    <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="addStaffDialogVisible" width="30%" :before-close="beforeCloseModal">
       <div>
         <el-form size="mini" :model="params" label-width="100px">
           <el-row v-if="!isEdit">

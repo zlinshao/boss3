@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="修改合同名称" :visible.sync="dialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" title="修改合同名称" :visible.sync="dialogVisible" width="30%">
       <el-form :model="form" size="mini" label-width="80px">
         <el-form-item label="原合同名称">
           <el-input v-model="form.oldName" placeholder="请输入原合同名称"></el-input>

@@ -1,6 +1,6 @@
 <template>
   <div class="modalFrame">
-    <el-dialog
+    <el-dialog :close-on-click-modal="false"
       title="高层报销"
       :visible.sync="gaocengVisible"
       width="50%">

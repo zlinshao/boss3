@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="分配房间" :visible.sync="distributionDialogVisible" width="60%">
+    <el-dialog :close-on-click-modal="false" title="分配房间" :visible.sync="distributionDialogVisible" width="60%">
       <div class="scroll_bar">
         <div>
           <el-button type="primary" size="mini">主要按钮</el-button>

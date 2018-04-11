@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :title="title" :visible.sync="dialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="dialogVisible" width="30%">
       <el-form :model="form" size="mini" label-width="80px">
         <div v-if="names === 'first'">
           <el-form-item label="系统标示">

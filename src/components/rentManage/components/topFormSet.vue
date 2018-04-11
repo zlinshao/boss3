@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="选择列" :visible.sync="topFormSetDialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="选择列" :visible.sync="topFormSetDialogVisible" width="40%">
       <div class="scroll_bar">
 
         <div class="title">选择列（勾选隐藏列）</div>

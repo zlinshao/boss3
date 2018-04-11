@@ -1,6 +1,6 @@
 <template>
   <div id="addFollowUp">
-    <el-dialog title="消息详情" :visible.sync="messageDialogVisible">
+    <el-dialog :close-on-click-modal="false" title="消息详情" :visible.sync="messageDialogVisible">
       <div class="messageContent scroll_bar">
         <div class="massageHead">
           <div style="width: 50px;height: 50px;border-radius: 50%;background: #6a8dfb"></div>

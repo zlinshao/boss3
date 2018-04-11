@@ -1,7 +1,7 @@
 <template>
   <div>
     <!--冻结工资-->
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="26%">
+    <el-dialog :close-on-click-modal="false" title="提示" :visible.sync="dialogVisible" width="26%">
       <div class="filter">
         <el-form :inline="true" :model="form" size="mini" label-width="80px">
           <el-form-item label="冻结月份">

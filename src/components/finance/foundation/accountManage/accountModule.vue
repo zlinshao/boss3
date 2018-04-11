@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="账户" :visible.sync="dialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="账户" :visible.sync="dialogVisible" width="40%">
       <el-form :model="form" size="mini" label-width="80px">
         <el-row>
           <el-col :span="12">

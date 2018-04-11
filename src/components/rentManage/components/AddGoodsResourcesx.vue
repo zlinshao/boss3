@@ -1,6 +1,6 @@
 <template>
   <div id="increaseGoods">
-    <el-dialog title="增加物品" :visible.sync="increaseGoodsDialogVisible" width="28%">
+    <el-dialog :close-on-click-modal="false" title="增加物品" :visible.sync="increaseGoodsDialogVisible" width="28%">
       <div>
         <el-form size="mini" :model="form" label-width="80px">
           <el-row :key="index" v-for="(line,index) in linelist">

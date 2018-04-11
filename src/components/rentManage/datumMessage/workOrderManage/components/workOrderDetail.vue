@@ -1,6 +1,6 @@
 <template>
   <div id="addFollowUp">
-    <el-dialog title="工单详情" :visible.sync="orderDetailDialogVisible" width="60%">
+    <el-dialog :close-on-click-modal="false" title="工单详情" :visible.sync="orderDetailDialogVisible" width="60%">
       <div class="scroll_bar">
         <div class="title">基本信息</div>
         <div  class="describe_border">

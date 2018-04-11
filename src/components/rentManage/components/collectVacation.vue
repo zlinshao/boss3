@@ -1,6 +1,6 @@
 <template>
   <div id="rentVacation">
-    <el-dialog title="房东退房" :visible.sync="collectVacationDialogVisible" width="60%">
+    <el-dialog :close-on-click-modal="false" title="房东退房" :visible.sync="collectVacationDialogVisible" width="60%">
       <div class="scroll_bar">
         <div class="title">房东-信息</div>
         <div class="table_border" >

@@ -1,6 +1,6 @@
 <template>
   <div class="modalFrame">
-    <el-dialog
+    <el-dialog :close-on-click-modal="false"
       title="房屋维修申报"
       :visible.sync="repairVisible"
       width="50%">

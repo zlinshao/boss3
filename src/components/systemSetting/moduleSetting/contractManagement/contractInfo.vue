@@ -1,8 +1,8 @@
 <template>
   <div >
-     <el-dialog title="总合同数" :visible.sync="contractInfoDialogVisible" width="60%" >
+     <el-dialog :close-on-click-modal="false" title="总合同数" :visible.sync="contractInfoDialogVisible" width="60%" >
       <div >
- 
+
     <div class="highRanking">
       <div style="float:left">
             <el-form :inline="true" size="mini">
@@ -16,7 +16,7 @@
           <el-button type="primary" size="small" @click="openModalDialog()">增加</el-button>
         </el-form>
       </div>
-    </div>    
+    </div>
     <div class="main" >
       <div class="blueTable">
         <el-table :data="consractList"  style="width: 100%">
@@ -44,7 +44,7 @@
                 @click="handleEdit(scope.$index, scope.row)">编辑
               </el-button>
             </template>
-          </el-table-column>         
+          </el-table-column>
         </el-table>
       </div>
       <div class="tableBottom">
@@ -77,7 +77,7 @@ export default {
       rightMenuX: 0,
       rightMenuY: 0,
       show: false,
-      lists: [],     
+      lists: [],
       contractInfoDialogVisible: false,
       addContracDialog:false,
       cityList:[],
@@ -151,22 +151,22 @@ export default {
                   }
 
                 }
-              }             
+              }
           }
           else{
             this.form.page=1;
             this.totalNumber=0;
           }
-          
-        }); 
-      }, 
+
+        });
+      },
     //新增完以后的回调
     cityCodeflag(val){
       if(val){
         this.integral(val);
-        
+
       }
-    },       
+    },
     }
 };
 </script>

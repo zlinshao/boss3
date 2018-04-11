@@ -1,6 +1,6 @@
 <template>
   <div class="modalFrame">
-    <el-dialog
+    <el-dialog :close-on-click-modal="false"
       title="报销审批"
       :visible.sync="reimbursedetail"
       width="50%">

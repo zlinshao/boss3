@@ -1,6 +1,6 @@
 <template>
   <div id="increaseGoods">
-    <el-dialog title="收房交接单" :visible.sync="increaseGoodsDialogVisible" width="60%">
+    <el-dialog :close-on-click-modal="false" title="收房交接单" :visible.sync="increaseGoodsDialogVisible" width="60%">
       <div class="scroll_bar">
         <div v-for="(houses,x) in houselist" :key="x">
           <span class="title">{{houses.dictionary_name}}</span>
@@ -72,7 +72,7 @@ export default {
     increaseGoodsDialogVisible(val) {
       if (!val) {
         this.$emit("close");
-      } 
+      }
     }
   },
   mounted(){

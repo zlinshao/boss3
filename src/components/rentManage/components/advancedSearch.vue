@@ -1,6 +1,6 @@
 <template>
   <div id="advancedSearch">
-    <el-dialog title="高级搜索" :visible.sync="advancedDialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="高级搜索" :visible.sync="advancedDialogVisible" width="40%">
       <div>
         <el-form :inline="true" size="mini" :model="formInline" class="demo-form-inline">
           <el-row :gutter="0">

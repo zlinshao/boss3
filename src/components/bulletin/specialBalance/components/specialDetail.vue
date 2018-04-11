@@ -1,6 +1,6 @@
 <template>
   <div id="specialDetail">
-    <el-dialog title="详情" :visible.sync="dialogVisible" width="60%">
+    <el-dialog :close-on-click-modal="false" title="详情" :visible.sync="dialogVisible" width="60%">
       <div class="scroll_bar">
         <div class="title">喜报详情</div>
         <div class="form_border">

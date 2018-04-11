@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="作废收据修改" :visible.sync="editCancelDialogVisible">
+    <el-dialog :close-on-click-modal="false" title="作废收据修改" :visible.sync="editCancelDialogVisible">
       <div class="scroll_bar">
         <div class="title">基本信息</div>
         <div class="form_border">

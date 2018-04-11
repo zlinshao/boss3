@@ -1,5 +1,5 @@
 <template>
-<el-dialog title="公告" :visible.sync="warningDialogVisible"  width="650px">
+<el-dialog :close-on-click-modal="false" title="公告" :visible.sync="warningDialogVisible"  width="650px">
   <div >
     <div class="navTop" v-bind:class="{ no1: no1flag, no2: no2flag, no3: no3flag }">
       <div class="top0">

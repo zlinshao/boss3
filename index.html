@@ -22,7 +22,12 @@
 
     <script>
       window.onbeforeunload = function (e) {
+        sessionStorage.setItem('lockStatus',localStorage.getItem('lockStatus'));
         localStorage.setItem('lockStatus', 0);
+      };
+      window.onload = function (e) {
+        let lockStatus = sessionStorage.getItem('lockStatus') == 1? 1:0;
+        localStorage.setItem('lockStatus', lockStatus);
       }
     </script>
   </body>

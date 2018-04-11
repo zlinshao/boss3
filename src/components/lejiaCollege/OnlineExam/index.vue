@@ -74,7 +74,7 @@
         </div>
       </div>
     <div id="examDialog">
-      <el-dialog  :visible.sync="examDialog" title="新建考试" width="50%">
+      <el-dialog :close-on-click-modal="false"  :visible.sync="examDialog" title="新建考试" width="50%">
         <div>
           <div style="color: #6a8dfb;">新建考试信息</div>
           <div class="exam_content">
@@ -142,7 +142,7 @@
       </el-dialog>
     </div>
     <div id="testPaperDialog">
-      <el-dialog :visible.sync="testPaperDialog" title="新建试卷" width="50%">
+      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="新建试卷" width="50%">
         <el-row :gutter="30">
           <el-col :span="12">
             <div class="import_questions" @click="importQuestion">

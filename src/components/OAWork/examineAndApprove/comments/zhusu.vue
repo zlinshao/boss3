@@ -1,6 +1,6 @@
 <template>
   <div class="modalFrame">
-    <el-dialog
+    <el-dialog :close-on-click-modal="false"
       title="住宿申请"
       :visible.sync="quarterVisible"
       width="50%">

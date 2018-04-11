@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog
+    <el-dialog :close-on-click-modal="false"
       title="修改短信名称"
       :visible.sync="dialogVisible"
       width="30%">

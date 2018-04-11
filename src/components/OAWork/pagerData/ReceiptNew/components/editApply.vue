@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="领取收据修改" :visible.sync="editApplyDialogVisible">
+    <el-dialog :close-on-click-modal="false" title="领取收据修改" :visible.sync="editApplyDialogVisible">
       <div class="scroll_bar">
         <div class="title">基本信息</div>
         <div class="form_border">
@@ -256,7 +256,7 @@
               this.refresh =1;
               this.$emit('Refreshxx', this.refresh)
               this.closeAddModal();
-              
+
             }else {
               this.$notify.warning({
                 title:'警告',

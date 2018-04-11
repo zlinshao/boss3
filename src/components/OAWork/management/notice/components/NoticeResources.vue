@@ -1,6 +1,6 @@
 <template>
   <div id="increaseGoods">
-    <el-dialog title="公告发布" :visible.sync="increaseGoodsDialogVisible" width="60%">
+    <el-dialog :close-on-click-modal="false" title="公告发布" :visible.sync="increaseGoodsDialogVisible" width="60%">
       <div>
         <el-form :model="form" label-width="100px" >
           <el-row>
@@ -128,7 +128,7 @@ export default {
         for(let i =0; i<val.department_id.length;i++){
           this.form.obj += val.department_id[i].name+";";
         }
-        
+
         this.form.id = val.id;
         this.form.attachment = val.attachment;
 
@@ -142,13 +142,13 @@ export default {
 
         this.form.attachment = [];
         this.firstflag = true;
-       
+
       }
     }
   },
   methods: {
     getImage(val) {
-      this.upStatus = val[2];    
+      this.upStatus = val[2];
       this.form.attachment = val[1];
     },
 
@@ -169,7 +169,7 @@ export default {
       if (!this.firstflag) {
         this.form.id = "";
       }
-      
+
       this.saveorsend();
       if (this.saveorsendflag) {
         if (this.form.type == "表彰") {
@@ -203,10 +203,10 @@ export default {
           .then(res => {
             if (res.data.code == "99910") {
               this.midId = res.data.data.id;
-            }            
+            }
           });
 
-      }    
+      }
       }
     },
     //发布
@@ -281,7 +281,7 @@ export default {
             }
           });
         this.increaseGoodsDialogVisible = false;
-        
+
         }
       }
     },
@@ -291,7 +291,7 @@ export default {
     },
     closeOrganization() {
       this.organizationDialog = false;
-      
+
     },
     coloseaa(val) {
       this.form.obj=""

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="付款时间" :visible.sync="dialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="付款时间" :visible.sync="dialogVisible" width="40%">
       <el-form :inline="true" size="mini" label-width="111px">
         <el-form-item v-for="(key,index) in date" :label="'第'+ (index + 1) + '次付款时间'" :key="index">
           <div class="block" v-if="title === 'revisePay' || title === 'reviseCollect'">

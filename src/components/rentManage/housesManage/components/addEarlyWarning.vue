@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="调整预警状态" :visible.sync="addEarlyWarningDialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" title="调整预警状态" :visible.sync="addEarlyWarningDialogVisible" width="30%">
       <div>
         <!--<div class="form_border">-->
         <el-form size="mini" :model="formInline" label-width="80px">

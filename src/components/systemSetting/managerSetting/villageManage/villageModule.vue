@@ -1,6 +1,6 @@
 <template>
   <div id="villageModule" class="dialog_scroll">
-    <el-dialog :title="formList.status" :visible.sync="dialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" :title="formList.status" :visible.sync="dialogVisible" width="40%">
       <div class="modules scroll_bar">
         <el-form :model="form" size="mini" label-width="80px">
           <el-row>

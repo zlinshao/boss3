@@ -1,6 +1,6 @@
 <template>
   <div class="modalFrame">
-    <el-dialog
+    <el-dialog :close-on-click-modal="false"
       title="调休审批"
       :visible.sync="takeworkdetail"
       width="50%">

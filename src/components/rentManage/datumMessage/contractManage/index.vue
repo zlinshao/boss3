@@ -206,7 +206,7 @@
                         width="200"
                         trigger="hover">
                         {{scope.row.address}}
-                      </el-popover>                        
+                      </el-popover>
                       </div>
                     </template>
                   </el-table-column>
@@ -281,7 +281,7 @@
                         width="200"
                         trigger="hover">
                         {{scope.row.address}}
-                      </el-popover>                        
+                      </el-popover>
                       </div>
                     </template>
                   </el-table-column>
@@ -344,7 +344,7 @@
 
 
       <div>
-        <el-dialog
+        <el-dialog :close-on-click-modal="false"
           title="新建维修"
           :visible.sync="maintenanceDialog"
           width="40%">
@@ -543,7 +543,7 @@
         totalNumbers:0,   //总数
         params:{
           page:1,
-          per_page_number:'12',    
+          per_page_number:'12',
           q:'',      //模糊搜索
           publish_time:'',     //发布时间
           lord_time:'',  //收房合同时间
@@ -591,7 +591,7 @@
     },
     methods: {
       search(){
-      
+
         if(this.activeName =="first"){
           this.params.page= 1;
           this.collectDatafunc();
@@ -642,10 +642,10 @@
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
         this.params.page=val;
-        if(this.activeName =="first"){  
+        if(this.activeName =="first"){
           this.collectDatafunc();
         }
-        else if( this.activeName == "second"){       
+        else if( this.activeName == "second"){
           this.rentDatafunc();
         }
       },
@@ -757,7 +757,7 @@
       resetting(){
         this.params={
           page:1,
-          per_page_number:'',    
+          per_page_number:'',
           q:'',      //模糊搜索
           publish_time:'',     //发布时间
           lord_time:'',  //收房合同时间

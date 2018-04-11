@@ -1,6 +1,6 @@
 <template>
   <div id="treeModule" class="dialog_scroll">
-    <el-dialog :title="title" :visible.sync="treeVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="treeVisible" width="30%">
       <div class="scroll_bar">
         <el-form :model="form" label-width="60px" size="mini">
           <el-form-item label="层级" v-if="msg.revise !== 'revise' && msg.rev !== 'dict'">
