@@ -14,8 +14,7 @@
                 <el-col :span="8">
                   <el-form-item label="性别" required>
                     <el-radio-group v-model="params.gender">
-                      <el-radio v-for="item in sexCategory" :label="item.id" :key="item.id" name="gender">
-                        {{item.dictionary_name}}
+                      <el-radio v-for="item in sexCategory" :label="item.id" :key="item.id"name="gender">{{item.dictionary_name}}
                       </el-radio>
                     </el-radio-group>
                   </el-form-item>
@@ -357,11 +356,9 @@
     watch: {
       addStaffDialog(val) {
         this.addStaffDialogVisible = val;
-        if (val) {
-          if (!this.editId) {
-            this.initial(); //新增时候清除
+        if(val){
+          if(!this.editId) {this.initial(); //新增时候清除
           }
-
         }
       },
       addStaffDialogVisible(val) {
@@ -409,44 +406,46 @@
       this.getPosition(this.departmentId);
     },
     methods: {
-      initial() {
-        this.params.real_name = '';
-        this.params.gender = '';
-        this.params.phone = '';
-        this.params.home_addr = '';
-        this.params.fertility_status = '';
-        this.params.id_num = '';
-        this.params.birthday = '';
-        this.params.recommender = '';
-        this.recommenderName = '';
-        this.params.bank_num = '';
-        this.params.account_bank = '';
-        this.params.branch_bank = '';
-        this.params.emergency_call = '';
-        this.params.level = '';
-        this.params.account_name = '';
-        this.params.status = '';
-        this.params.enroll = '';
-        this.params.salary = '';
-        this.params.entry_materials = [];
-        this.params.salary = '';
-        this.params.origin_addr = '';
-        this.params.marital_status = '';
-        this.params.political_status = '';
-        this.params.forward_time = '';
-        this.params.mail = '';
-        this.params.education = '';
-        this.params.school = '';
-        this.params.major = '';
-        this.params.graduation_time = '';
-        this.params.agreement_first_time = '';
-        this.params.agreement_first_end_time = '';
-        this.params.agreement_second_time = '';
-        this.params.remark = '';
-        this.params.department_id = [];
-        this.params.position_id = [];
-        this.department = '';
-        this.currentPost = '';
+      initial(){
+
+          this.params.real_name = '';
+          this.params.gender = '';
+          this.params.phone = '';
+          this.params.home_addr = '';
+          this.params.fertility_status = '';
+          this.params.id_num = '';
+          this.params.birthday = '';
+          this.params.recommender = '';
+          this.recommenderName = '';
+          this.params.bank_num = '';
+          this.params.account_bank = '';
+          this.params.branch_bank = '';
+          this.params.emergency_call = '';
+          this.params.level = '';
+          this.params.account_name = '';
+          this.params.status = '';
+          this.params.enroll = '';
+          this.params.salary = '';
+          this.params.entry_materials = [];
+          this.params.salary = '';
+          this.params.origin_addr = '';
+          this.params.marital_status = '';
+          this.params.political_status = '';
+          this.params.forward_time = '';
+          this.params.mail = '';
+          this.params.education = '';
+          this.params.school = '';
+          this.params.major = '';
+          this.params.graduation_time = '';
+          this.params.agreement_first_time = '';
+          this.params.agreement_first_end_time = '';
+          this.params.agreement_second_time = '';
+          this.params.remark = '';
+          this.params.department_id = [];
+          this.params.position_id = [];
+          this.department = '';
+          this.currentPost = '';
+
       },
       positionSelect() {
         if (this.currentPosition) {

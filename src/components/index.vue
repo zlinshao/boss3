@@ -69,16 +69,16 @@
                 </div>
               </el-dropdown-item>
               <el-dropdown-item>
-                  <el-row v-if="unReadMessageData.length >0" @click.native="showOtherDetail()">
-                    <el-col :span="24">
-                      <div style="display:block; line-height:32px; text-align:center; color:#409EFF">查看全部<span style="color:#f00">{{unReadMessageData.length}}条</span>未读</div>
-                    </el-col>
-                  </el-row>
+                <el-row v-if="unReadMessageData.length >0" @click.native="showOtherDetail()">
+                  <el-col :span="24">
+                    <div style="display:block; line-height:32px; text-align:center; color:#409EFF">查看全部<span style="color:#f00">{{unReadMessageData.length}}条</span>未读</div>
+                  </el-col>
+                </el-row>
                 <el-row v-if="unReadMessageData.length <=0" style="cursor:default">
-                    <el-col :span="24">
-                      暂无数据
-                    </el-col>
-                  </el-row>
+                  <el-col :span="24">
+                    <div style=" width:180px; height:65px; display:block; line-height:65px; text-align:center">暂无数据</div>
+                  </el-col>
+                </el-row>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -240,7 +240,7 @@
       <el-container>
         <div class="aside scroll_bar" id="isCollapse">
           <el-menu :default-active="$route.path" class="el-menu-vertical-demo" unique-opened
-                   :defaultOpeneds=defaultArray  @select="handlerSelect"
+                   :defaultOpeneds=defaultArray @select="handlerSelect"
                    :collapse="isCollapse" router @open="handleOpen" @close="handleClose"
                    background-color="#6a8dfb" text-color="#fff" active-text-color="#ffd04b">
             <template v-for="(item,index) in $router.options.routes">
@@ -342,11 +342,26 @@
 
     mounted() {
       this.initData();
-      if(JSON.parse(localStorage.personal).data.setting.length<1 || !JSON.parse(localStorage.personal).detail.pwd_lock){
+      if (JSON.parse(localStorage.personal).data.setting.length < 1 || !JSON.parse(localStorage.personal).detail.pwd_lock) {
         this.setLockPwdDialog = true;
       }
       //获取模块接口
       this.getDictionary2()
+      this.$http.interceptors.response.use((response) => { //配置请求回来的信息
+        if (response.data.code == '7777') {
+          clearInterval(this.interval);
+          this.interval = null;
+          clearInterval(this.messageInterval);
+          this.messageInterval = null;
+
+          sessionStorage.setItem('beforePath', this.$route.path);
+          sessionStorage.setItem('lockStatus', 1);
+          this.$router.push({path: '/lock'});
+        }
+        return response;
+      }, function (error) {
+        return Promise.reject(error);
+      });
     },
     computed: {
       visitedViews() {
@@ -386,7 +401,7 @@
       initData(){
         this.personal = JSON.parse(localStorage.personal);
         this.loginDay = this.personal.data.loginday;
-        this.loginPercent = Number(this.loginDay / 180*100) + '%';
+        this.loginPercent = Number(this.loginDay / 180 * 100) + '%';
         $('.percent').css('width', this.loginPercent);
         this.countTime();
 
@@ -394,7 +409,7 @@
         this.messageInterval = null;
 
         this.messageInterval = setInterval(() => {
-          if(localStorage.personal){
+          if (localStorage.personal) {
             this.getUnReadMessage()
           }
         }, 100000);
@@ -496,7 +511,7 @@
                   countDown.forEach((item) => {
                     if (array[i].dict_id == item.id) {
                       this.defaultTime = this.Countdown = Number(item.dictionary_name);
-                      localStorage.setItem('countdownTime',item.id);
+                      localStorage.setItem('countdownTime', item.id);
                       this.startCount();
                     }
                   })
@@ -516,7 +531,7 @@
               reject('重新计数');
               clearInterval(this.interval);
               this.interval = null;
-            }else if (this.Countdown < 1) {
+            } else if (this.Countdown < 1) {
               resolve('锁屏');
             }
           }, 1000)
@@ -532,15 +547,14 @@
         this.isCollapse = !this.isCollapse;
       },
       lockScreen(val) {
-        console.log(val);
         clearInterval(this.interval);
         this.interval = null;
         clearInterval(this.messageInterval);
         this.messageInterval = null;
         this.$http.get(globalConfig.server + 'setting/others/lock_screen_status?lock_status=1').then((res) => {
           if (res.data.code === '100003') {
-            localStorage.setItem('beforePath', this.$route.path);
-            localStorage.setItem('lockStatus', 1);
+            sessionStorage.setItem('beforePath', this.$route.path);
+            sessionStorage.setItem('lockStatus', 1);
             this.$router.push({path: '/lock'});
           } else {
             this.$notify({
@@ -750,7 +764,7 @@
       background: url("../assets/images/虚拟租赁合同-24.svg");
       background-size: 100% 100%;
     }
-    .noCollapse{
+    .noCollapse {
 
     }
 
