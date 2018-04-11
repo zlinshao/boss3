@@ -21,7 +21,7 @@
 
             <el-col :span="24">
               <el-form-item label="对应积分">
-                <el-input placeholder="请输入内容" v-model="form.amount" @change="checkNo(form.amount)"></el-input>
+                <el-input placeholder="请输入内容" v-model="form.amount" @keyup.native="tichu"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -149,7 +149,9 @@ export default {
       }
 
     },
-
+    tichu(){
+      this.form.amount=this.form.amount.replace(/[^\u4e00-\u9fa5a-zA-Z0-9\w]/g,'')
+    },
     close() {
         this.formid='';
       this.form={

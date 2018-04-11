@@ -153,7 +153,7 @@
       <div class="pages block">
         <el-pagination
           @size-change="handleSizeChange"
-          @current-change="search"
+          @current-change="handleCurrentChange"
           :current-page="form.page"
           :page-size="form.limit"
           layout="total, prev, pager, next, jumper"
@@ -234,6 +234,13 @@ export default {
   },
   watch: {},
   methods: {
+
+    handleSizeChange(val) {
+      console.log(1111111);
+      this.form.page= val;
+      
+    },
+
     newAddBack(val) {
       if (val == "新增") {
         this.form.page = 1;
@@ -257,7 +264,6 @@ export default {
           if (res.data.code === "30310") {
             this.totalNumber = res.data.num;
             this.tableData = res.data.data;
-            console.log(res.data.data)
             // this.remark = res.data.data.last_remark;
             // res.data.data.last_remark[0].content = this.remark;
           } else {
@@ -299,7 +305,10 @@ export default {
       this.rowid = row.id;
       this.integralDetail = true;
     },
-
+    handleCurrentChange(val){
+      this.form.page = val;
+      this.search()
+    },
     search() {
       if (this.activeName == "first") {
         this.getTableData();
@@ -307,12 +316,6 @@ export default {
         this.getGatherList();
       }
       this.isHigh = false;
-    },
-
-    handleSizeChange(val) {
-      console.log(val);
-      this.form.page= val;
-      
     },
 
     //右键
