@@ -578,6 +578,7 @@
       this.getLejiaCollege();
       this.getPerWeeklyReport();
       this.table = this.achieveTable;
+      console.log(1111111);
     },
     created(){
       globalConfig.personal = JSON.parse(localStorage.personal);
