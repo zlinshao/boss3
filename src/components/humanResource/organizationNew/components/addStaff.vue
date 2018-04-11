@@ -368,7 +368,8 @@
         if (!val) {
           this.$emit('close')
         } else {
-          this.getPosition(this.departmentId);  // 新增/修改时候查询最新职位
+          this.positionArray = [];
+          // this.getPosition(this.departmentId);  // 新增/修改时候查询最新职位
         }
       },
       isEdit(val) {
@@ -380,17 +381,19 @@
         }
       },
       departmentId(val) {
+        this.positionArray = [];
         this.getPosition(val);
       },
       department(val) {
         if(val){
           this.positionDisabled = false;
           this.positionArray = [];
+          for(var i=0;i<this.params.department_id.length;i++){
+            this.getPosition(this.params.department_id[i]);
+          }
+        }else{
+          this.positionArray = [];
         }
-        this.params.department_id.forEach( (item) => {
-          // this.getPosition(item);
-        });
-        console.log(this.params.department_id);
       },
     },
     mounted() {
@@ -511,12 +514,12 @@
             this.currentPost = [];
             if (this.roleArray && this.roleArray.length > 0) {
               this.roleArray.forEach((item) => {
-                this.params.position_id.push(item.positions.id);
+                this.params.position_id.push(item.position_id);
                 this.currentPost.push(item.positions.name);
               });
               this.currentPosition = this.roleArray[0].display_name;
             }
-            this.getPosition(this.params.department_id);
+            // this.getPosition(this.params.department_id);
           } else {
             this.$notify.warning({
               title: '警告',
@@ -529,7 +532,7 @@
       getPosition(id) {
         this.$http.get(globalConfig.server + 'manager/position?department_id=' + id).then((res) => {
           if (res.data.code === '20000') {
-            this.positionArray = [];
+            // this.positionArray = [];
             res.data.data.data.forEach((item) => {
               let position = {};
               position.id = item.id;
