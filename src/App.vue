@@ -32,6 +32,7 @@
       }
     },
     created(){
+
       if (localStorage.myData !== undefined) {
         let head = JSON.parse(localStorage.myData);
         globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;

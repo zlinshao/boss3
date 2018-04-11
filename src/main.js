@@ -66,19 +66,7 @@ Vue.config.productionTip = false;
 //   return Promise.reject(error);
 // });
 //
-// axios.interceptors.response.use((response) => { //配置请求回来的信息
-//   i--;
-//   if(i<1){
-//     store.dispatch('hideLoading');
-//   }
-//   return response;
-// }, function (error) {
-//   i--;
-//   if(i<1){
-//     store.dispatch('hideLoading');
-//   }
-//   return Promise.reject(error);
-// });
+
 
 
 //重定向router
@@ -89,24 +77,25 @@ router.beforeEach((to, from, next) => {
     localStorage.removeItem('personal');
     globalConfig.header.Authorization = '';
   }
+  let data = localStorage.getItem("myData");
 
-  let data = null;
-  if (sessionStorage.getItem('myData') != 'null') {
-    data = sessionStorage.getItem("myData");
-    if (to.path !== '/login') {
-      localStorage.setItem("myData", data);
-    }
-  } else {
-    data = localStorage.getItem("myData");
-  }
+  // let data = null;
+  // if (sessionStorage.getItem('myData') != 'null') {
+  //   data = sessionStorage.getItem("myData");
+  //   if (to.path !== '/login') {
+  //     localStorage.setItem("myData", data);
+  //   }
+  // } else {
+  //   data = localStorage.getItem("myData");
+  // }
 
   if (!data && to.path !== '/login') {
     next({path: '/login'})
   } else if (data && to.path === '/') {
     next({path: '/main'})
-  } else if (Number(localStorage.getItem('lockStatus')) === 1 && to.path !== '/lock') {
+  } else if (Number(sessionStorage.getItem('lockStatus')) === 1 && to.path !== '/lock') {
     next({path: '/lock'});
-  } else if (Number(localStorage.getItem('lockStatus')) === 0 && to.path === '/lock' && sessionStorage.getItem('lockStatus') != 1) {
+  } else if (Number(sessionStorage.getItem('lockStatus')) === 0 && to.path === '/lock') {
     next({path: from.path});
   } else {
     next();

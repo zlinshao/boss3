@@ -332,6 +332,16 @@
       if(JSON.parse(localStorage.personal).data.setting.length<1 || !JSON.parse(localStorage.personal).detail.pwd_lock){
         this.setLockPwdDialog = true;
       }
+      this.$http.interceptors.response.use((response) => { //配置请求回来的信息
+        if(response.data.code == '7777'){
+          sessionStorage.setItem('beforePath', this.$route.path);
+          sessionStorage.setItem('lockStatus', 1);
+          this.$router.push({path: '/lock'});
+        }
+        return response;
+      }, function (error) {
+        return Promise.reject(error);
+      });
     },
     computed: {
       visitedViews() {
@@ -476,15 +486,14 @@
         this.isCollapse = !this.isCollapse;
       },
       lockScreen(val) {
-        console.log(val);
         clearInterval(this.interval);
         this.interval = null;
         clearInterval(this.messageInterval);
         this.messageInterval = null;
         this.$http.get(globalConfig.server + 'setting/others/lock_screen_status?lock_status=1').then((res) => {
           if (res.data.code === '100003') {
-            localStorage.setItem('beforePath', this.$route.path);
-            localStorage.setItem('lockStatus', 1);
+            sessionStorage.setItem('beforePath', this.$route.path);
+            sessionStorage.setItem('lockStatus', 1);
             this.$router.push({path: '/lock'});
           } else {
             this.$notify({
