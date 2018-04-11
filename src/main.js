@@ -80,6 +80,8 @@ Vue.config.productionTip = false;
 // });
 
 
+
+
 //重定向router
 router.beforeEach((to, from, next) => {
   let lockStatus = true;
@@ -92,7 +94,9 @@ router.beforeEach((to, from, next) => {
   let data = null;
   if(sessionStorage.getItem('myData')){
     data =  sessionStorage.getItem("myData");
-    localStorage.setItem("myData",data)
+    if(to.path !== '/login'){
+      localStorage.setItem("myData",data)
+    }
   }else {
     data = localStorage.getItem("myData");
   }
