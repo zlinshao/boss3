@@ -44,8 +44,8 @@
         </div>
         <!--消息-->
         <div class="message" style="position: relative;margin-right: 30px">
-          <el-dropdown v-if="unReadMessageData.length">
-            <el-badge :value="unReadMessageData.length" class="item">
+          <el-dropdown>
+            <el-badge  :value="unReadMessageData.length" class="item">
               <i class="el-icons-fa-comment-o"></i>
               消 息
             </el-badge>
@@ -68,14 +68,22 @@
                   </el-row>
                 </div>
               </el-dropdown-item>
+              <el-dropdown-item>
+                  <el-row v-if="unReadMessageData.length >0" @click.native="showOtherDetail()">
+                    <el-col :span="24">
+                      <div style="display:block; line-height:32px; text-align:center; color:#409EFF">查看全部<span style="color:#f00">{{unReadMessageData.length}}条</span>未读</div>
+                    </el-col>
+                  </el-row>
+                <el-row v-if="unReadMessageData.length <=0" style="cursor:default">
+                    <el-col :span="24">
+                      暂无数据
+                    </el-col>
+                  </el-row>
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
 
-          <!--//没有消息展现方式-->
-          <span v-else="" style="cursor: default">
-            <i class="el-icons-fa-comment-o"></i>
-            消 息
-          </span>
+
           <!--//喜报名片-->
           <div v-if="false">
             <div class="gladBulletin">
@@ -407,6 +415,14 @@
             this.getUnReadMessage();
           }
         })
+      },
+      showOtherDetail(){
+        this.$router.push({
+          path: "/messageCenter",
+          query: {
+            unread: 1
+          }
+        });
       },
       closeMessage(){
         this.messageDialog = false;

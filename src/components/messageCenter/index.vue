@@ -84,6 +84,10 @@
     },
     mounted(){
         this.getMessage();
+        this.params.unread = this.$route.query.unread
+       
+    },
+    watch:{
     },
     methods: {
       getMessage(){
