@@ -13,7 +13,6 @@
 <script>
   import LOADING from './components/common/loading.vue'
   import BackToTop from './components/common/backToTop.vue'
-
   export default {
     name: 'app',
     components: {LOADING, BackToTop},
@@ -32,9 +31,15 @@
       }
     },
     created(){
-      globalConfig.personal = JSON.parse(localStorage.personal);
-      let head = JSON.parse(localStorage.myData);
-      globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
+      if (localStorage.myData !== undefined) {
+        let head = JSON.parse(localStorage.myData);
+        globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
+      }
+
+      if (localStorage.personal !== undefined) {
+        globalConfig.personal = JSON.parse(localStorage.personal);
+      }
+
       this.responses();
       document.onkeydown = function (e) {//键盘按键控制
         e = e || window.event;
@@ -44,7 +49,7 @@
       };
     },
     computed: {
-      isLoading() {
+      isLoading(){
         return this.$store.state.app.isLoading;
       }
     },
