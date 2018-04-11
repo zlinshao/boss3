@@ -38,7 +38,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="附件" >
-                <div class="upload_div"><Upload :ID="'upload'" @getImg="getImage"   :isClear="secondfalg" ></Upload></div>
+                <div class="upload_div"><Upload :ID="'upload'" @getImg="getImage" :editImage="cover_pic"   :isClear="secondfalg" ></Upload></div>
               </el-form-item>
             </el-col>
           </el-row>
@@ -68,6 +68,7 @@ export default {
   },
   data() {
     return {
+      cover_pic: [],
       increaseGoodsDialogVisible: false,
       urls: globalConfig.server,
       organizationDialog: false,
@@ -112,8 +113,9 @@ export default {
     increaseGoodsDialogVisible(val) {
       if (!val) {
         this.$emit("close");
-        this.secondfalg = true
-        this.midId = null
+        this.secondfalg = true;
+        this.midId = null;
+        this.form.id="";
       }else{
         this.secondfalg = false
       }
@@ -121,6 +123,12 @@ export default {
     rowneedx(val) {
       this.firstflag = true;
       if (val.content) {
+      this.cover_pic = [];
+      this.$http
+        .get(globalConfig.server + "announcement/" + val.id)
+        .then(res => {
+          this.cover_pic = res.data.data.attachment;
+        });
         this.form.type = val.type;
         this.form.title = val.title;
         this.form.context = val.content;
@@ -142,6 +150,7 @@ export default {
 
         this.form.attachment = [];
         this.firstflag = true;
+        this.cover_pic = []
 
       }
     }

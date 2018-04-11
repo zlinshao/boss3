@@ -10,9 +10,9 @@
       <el-tab-pane label="制度管理" name="third">
         <Institution></Institution>
       </el-tab-pane>
-      <el-tab-pane label="投票管理" name="fourth">
-        <Vote></Vote>
-      </el-tab-pane>
+      <!--<el-tab-pane label="投票管理" name="fourth">-->
+        <!--<Vote></Vote>-->
+      <!--</el-tab-pane>-->
       <!--<el-tab-pane label="业绩计算器" name="fifth">-->
         <!--<Counter></Counter>-->
       <!--</el-tab-pane>-->
