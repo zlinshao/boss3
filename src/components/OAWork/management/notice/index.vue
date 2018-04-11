@@ -67,8 +67,8 @@
               </el-table-column>
               <el-table-column
                 width="200px"
-                prop="update_time"
-                label="发布时间">
+                prop="create_time"
+                label="新增时间">
               </el-table-column>
               <el-table-column
                 width="120px"
@@ -76,20 +76,52 @@
                 label="发布人">
               </el-table-column>
               <el-table-column
-                prop="title"
+                width="260px"
+                label="发送对象">
+                <template slot-scope="scope">
+                <div v-popover:popover1 style="display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                {{scope.row.department_name}}
+                <el-popover
+                ref="popover1"
+                placement="top-start"
+                width="200"
+                trigger="hover">
+                {{scope.row.department_name}}
+                </el-popover>
+                </div>
+                </template>
+
+              </el-table-column>            
+
+              <el-table-column
                 width="260px"
                 label="标题">
                 <template slot-scope="scope">
-                <div style="display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                <div v-popover:popover1 style="display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
                 {{scope.row.title}}
+                <el-popover
+                ref="popover1"
+                placement="top-start"
+                width="200"
+                trigger="hover">
+                {{scope.row.title}}
+                </el-popover>
                 </div>
                 </template>
+
               </el-table-column>
               <el-table-column
                 label="主要内容">
                 <template slot-scope="scope">
-                <div style="display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+                <div v-popover:popover1 style="display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
                 {{scope.row.content_without_table}}
+                <el-popover
+                ref="popover1"
+                placement="top-start"
+                width="400"
+                trigger="hover">
+                {{scope.row.content_without_table}}
+                </el-popover>
                 </div>
                 </template>
               </el-table-column>
@@ -174,6 +206,7 @@ export default {
       rightMenuX: 0,
       rightMenuY: 0,
       lists: [],
+      department_name:"",
       forms: [
         { id: "1", name: "表彰" },
         { id: "2", name: "批评" },
@@ -281,7 +314,13 @@ export default {
             this.tableData = res.data.data;
             this.nowPage = val;
             this.total = res.data.num;
+            
             for (let j = 0; j < res.data.data.length; j++) {
+              debugger
+              this.tableData[j].department_name="";
+              for(let m=0;m<res.data.data[j].department_id.length;m++){
+              this.tableData[j].department_name += res.data.data[j].department_id[m].name +";";
+              }
               if (res.data.data[j].draft == "0") {
                 this.tableData[j].draft = "已发布";
               } else if (res.data.data[j].draft == "1") {
