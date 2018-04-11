@@ -296,4 +296,7 @@ ul.el-menu.el-menu--inline{
 .el-menu--collapse .iconfont:hover,.el-menu--collapse .el-icons-fa-money:hover{
   color: rgb(255, 208, 75) !important;
 }
+.el-menu--popup{
+  padding:0;
+}
 /*# sourceMappingURL=reset.css.map */
