@@ -14,7 +14,8 @@
                 <el-col :span="8">
                   <el-form-item label="性别" required>
                     <el-radio-group v-model="params.gender">
-                      <el-radio v-for="item in sexCategory" :label="item.id" :key="item.id" name="gender">{{item.dictionary_name}}
+                      <el-radio v-for="item in sexCategory" :label="item.id" :key="item.id" name="gender">
+                        {{item.dictionary_name}}
                       </el-radio>
                     </el-radio-group>
                   </el-form-item>
@@ -65,7 +66,8 @@
               <el-row :gutter="20">
                 <el-col :span="8">
                   <el-form-item label="银行卡号" required>
-                    <el-input placeholder="请输入银行卡号" v-model="params.bank_num" @blur="checkBankData" clearable></el-input>
+                    <el-input placeholder="请输入银行卡号" v-model="params.bank_num" @blur="checkBankData"
+                              clearable></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -112,7 +114,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="职位" required>
-                    <el-select v-model="currentPosition" @blur="positionSelect" clearable>
+                    <el-select v-model="currentPosition" @blur="positionSelect" :disabled="positionDisabled" clearable>
                       <el-option v-for="item in positionArray" :value="item.id" :key="item.id"
                                  :label="item.name">{{item.name}}
                       </el-option>
@@ -121,9 +123,9 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="岗位" required>
-                    <el-select v-model="params.position_id" :disabled="postSelectStatus" multiple>
+                    <el-select v-model="params.position_id" :disabled="postDisabled" multiple>
                       <el-option v-for="item in postArray" :value="item.id" :key="item.id"
-                                 :label="item.name" >{{item.name}}
+                                 :label="item.name">{{item.name}}
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -296,7 +298,8 @@
         recommenderName: '',
         currentPosition: '',
         currentPost: '',
-        postSelectStatus: true,
+        positionDisabled: true,
+        postDisabled: true,
         params: {
           position_id: [],
           department_id: [],
@@ -349,14 +352,13 @@
         educationCategory: [],
         branchBankCategory: [],
         jobStatusCategory: [],
-        checkStatus: false,
       };
     },
     watch: {
       addStaffDialog(val) {
         this.addStaffDialogVisible = val;
-        if(val){
-          if(!this.editId) {
+        if (val) {
+          if (!this.editId) {
             this.initial(); //新增时候清除
           }
 
@@ -365,7 +367,7 @@
       addStaffDialogVisible(val) {
         if (!val) {
           this.$emit('close')
-        }else {
+        } else {
           this.getPosition(this.departmentId);  // 新增/修改时候查询最新职位
         }
       },
@@ -379,6 +381,16 @@
       },
       departmentId(val) {
         this.getPosition(val);
+      },
+      department(val) {
+        if(val){
+          this.positionDisabled = false;
+          this.positionArray = [];
+        }
+        this.params.department_id.forEach( (item) => {
+          // this.getPosition(item);
+        });
+        console.log(this.params.department_id);
       },
     },
     mounted() {
@@ -394,48 +406,48 @@
       this.getPosition(this.departmentId);
     },
     methods: {
-      initial(){
-          this.params.real_name = '';
-          this.params.gender = '';
-          this.params.phone = '';
-          this.params.home_addr = '';
-          this.params.fertility_status = '';
-          this.params.id_num = '';
-          this.params.birthday = '';
-          this.params.recommender = '';
-          this.recommenderName = '';
-          this.params.bank_num = '';
-          this.params.account_bank = '';
-          this.params.branch_bank = '';
-          this.params.emergency_call = '';
-          this.params.level = '';
-          this.params.account_name = '';
-          this.params.status = '';
-          this.params.enroll = '';
-          this.params.salary = '';
-          this.params.entry_materials = [];
-          this.params.salary = '';
-          this.params.origin_addr = '';
-          this.params.marital_status = '';
-          this.params.political_status = '';
-          this.params.forward_time = '';
-          this.params.mail = '';
-          this.params.education = '';
-          this.params.school = '';
-          this.params.major = '';
-          this.params.graduation_time = '';
-          this.params.agreement_first_time = '';
-          this.params.agreement_first_end_time = '';
-          this.params.agreement_second_time = '';
-          this.params.remark = '';
-          this.params.department_id = [];
-          this.params.position_id = [];
-          this.department = '';
-          this.currentPost = '';
+      initial() {
+        this.params.real_name = '';
+        this.params.gender = '';
+        this.params.phone = '';
+        this.params.home_addr = '';
+        this.params.fertility_status = '';
+        this.params.id_num = '';
+        this.params.birthday = '';
+        this.params.recommender = '';
+        this.recommenderName = '';
+        this.params.bank_num = '';
+        this.params.account_bank = '';
+        this.params.branch_bank = '';
+        this.params.emergency_call = '';
+        this.params.level = '';
+        this.params.account_name = '';
+        this.params.status = '';
+        this.params.enroll = '';
+        this.params.salary = '';
+        this.params.entry_materials = [];
+        this.params.salary = '';
+        this.params.origin_addr = '';
+        this.params.marital_status = '';
+        this.params.political_status = '';
+        this.params.forward_time = '';
+        this.params.mail = '';
+        this.params.education = '';
+        this.params.school = '';
+        this.params.major = '';
+        this.params.graduation_time = '';
+        this.params.agreement_first_time = '';
+        this.params.agreement_first_end_time = '';
+        this.params.agreement_second_time = '';
+        this.params.remark = '';
+        this.params.department_id = [];
+        this.params.position_id = [];
+        this.department = '';
+        this.currentPost = '';
       },
-      positionSelect(){
-        if(this.currentPosition){
-          this.postSelectStatus = false;
+      positionSelect() {
+        if (this.currentPosition) {
+          this.postDisabled = false;
           this.getPositions(this.currentPosition);
         }
       },
@@ -447,55 +459,44 @@
             this.params.status = res.data.data.status;
             this.params.job_status = res.data.data.job_status;
             this.params.real_name = res.data.data.name;
-
             let detail = res.data.data.detail;
-            if(!detail){
-              return;
-            }
-            if(detail.gender !== 229 || detail.gender !== 230){
-              this.params.gender = '';
-            }else{
+            if (detail) {
               this.params.gender = Number(detail.gender);
-            }
-            this.params.home_addr = detail.home_addr;
-            if(detail.fertility_status !== 232 || detail.fertility_status !== 233){
-              this.params.fertility_status = '';
-            }else{
+              this.params.home_addr = detail.home_addr;
               this.params.fertility_status = Number(detail.fertility_status);
-            }
-            this.params.id_num = detail.id_num;
-            this.params.birthday = detail.birthday;
-            this.params.recommender = detail.recommender;
-            this.recommenderName = detail.recommender_name;
-            this.params.bank_num = detail.bank_num;
-            this.params.account_bank = detail.account_bank;
-            this.params.branch_bank = detail.branch_bank;
-            this.params.emergency_call = detail.emergency_call;
-            this.params.level = detail.level;
-            this.params.account_name = detail.account_name;
-            this.params.enroll = detail.enroll;
-            this.params.salary = detail.salary;
-            this.params.entry_materials = [];
-            if (detail.entry_materials && detail.entry_materials.length > 0) {
-              for (var i = 0; i < detail.entry_materials.length; i++) {
-                this.params.entry_materials.push(Number(detail.entry_materials[i]));
+              this.params.id_num = detail.id_num;
+              this.params.birthday = detail.birthday;
+              this.params.recommender = detail.recommender;
+              this.recommenderName = detail.recommender_name;
+              this.params.bank_num = detail.bank_num;
+              this.params.account_bank = detail.account_bank;
+              this.params.branch_bank = detail.branch_bank;
+              this.params.emergency_call = detail.emergency_call;
+              this.params.level = detail.level;
+              this.params.account_name = detail.account_name;
+              this.params.enroll = detail.enroll;
+              this.params.salary = detail.salary;
+              this.params.entry_materials = [];
+              if (detail.entry_materials && detail.entry_materials.length > 0) {
+                for (var i = 0; i < detail.entry_materials.length; i++) {
+                  this.params.entry_materials.push(Number(detail.entry_materials[i]));
+                }
               }
+              this.params.salary = detail.salary;
+              this.params.origin_addr = detail.origin_addr;
+              this.params.marital_status = detail.marital_status;
+              this.params.political_status = detail.political_status;
+              this.params.forward_time = detail.forward_time;
+              this.params.mail = detail.mail;
+              this.params.education = detail.education;
+              this.params.school = detail.school;
+              this.params.major = detail.major;
+              this.params.graduation_time = detail.graduation_time;
+              this.params.agreement_first_time = detail.agreement_first_time;
+              this.params.agreement_first_end_time = detail.agreement_first_end_time;
+              this.params.agreement_second_time = detail.agreement_second_time;
+              this.params.remark = detail.remark;
             }
-            this.params.salary = detail.salary;
-            this.params.origin_addr = detail.origin_addr;
-            this.params.marital_status = detail.marital_status;
-            this.params.political_status = detail.political_status;
-            this.params.forward_time = detail.forward_time;
-            this.params.mail = detail.mail;
-            this.params.education = detail.education;
-            this.params.school = detail.school;
-            this.params.major = detail.major;
-            this.params.graduation_time = detail.graduation_time;
-            this.params.agreement_first_time = detail.agreement_first_time;
-            this.params.agreement_first_end_time = detail.agreement_first_end_time;
-            this.params.agreement_second_time = detail.agreement_second_time;
-            this.params.remark = detail.remark;
-
             let departNameArray = [];
             this.params.department_id = [];
             this.params.position_id = [];
@@ -510,9 +511,10 @@
             this.currentPost = [];
             if (this.roleArray && this.roleArray.length > 0) {
               this.roleArray.forEach((item) => {
-                this.params.position_id.push(item.id);
-                this.currentPost.push(item.display_name);
+                this.params.position_id.push(item.positions.id);
+                this.currentPost.push(item.positions.name);
               });
+              this.currentPosition = this.roleArray[0].display_name;
             }
             this.getPosition(this.params.department_id);
           } else {
@@ -643,6 +645,7 @@
           level: '',
           account_name: '',
           status: '',
+          job_status: '',
           enroll: '',
           salary: '',
           entry_materials: [],
@@ -744,7 +747,6 @@
           }
         });
       },
-
       //等级
       getBranchBank() {
         this.$http.get(globalConfig.server + 'setting/dictionary/234').then((res) => {
@@ -759,12 +761,11 @@
       checkIDNumData() {
         this.$http.get(globalConfig.server + 'manager/staff/info?id_num=' + this.params.id_num).then((res) => {
           if (res.data.code === '10050') {
-            this.checkStatus = true;
-            let data = res.data.data;
-            if (data.birthday) {
+            let data = res && res.data && res.data.data;
+            if (data.birthday && !this.params.birthday) {
               this.params.birthday = data.birthday;
             }
-            if(data.origin_addr){
+            if (data.origin_addr && !this.params.home_addr) {
               this.params.home_addr = data.origin_addr.result;
             }
           } else {
@@ -779,8 +780,10 @@
       checkBankData() {
         this.$http.get(globalConfig.server + 'manager/staff/info?bank_num=' + this.params.bank_num).then((res) => {
           if (res.data.code === '10050') {
-            this.checkStatus = true;
-            this.params.account_bank = res.data.data && res.data.data.bankname;
+            let data = res && res.data && res.data.data;
+            if (data.bankname && !this.params.account_bank) {
+              this.params.account_bank = res.data.data && res.data.data.bankname;
+            }
           } else {
             this.$notify.warning({
               title: '警告',
