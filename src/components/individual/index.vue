@@ -9,7 +9,11 @@
         <div class="rightPic">
           <div class="landName">
             <span>{{landholder.name}}</span>
-            <span></span>
+            <span v-if="loginDay >= 3 && loginDay < 5" class="span3"></span>
+            <span v-else-if="loginDay >= 5 && loginDay < 10" class="span5"></span>
+            <span v-else-if="loginDay >= 10 && loginDay < 30" class="span10"></span>
+            <span v-else-if="loginDay >= 30" class="span30"></span>
+            <span v-else></span>
           </div>
           <div class="personalSign">
             <span v-if="!isEdit && landholder.data && landholder.data.signature" style="cursor: pointer"
@@ -276,6 +280,7 @@
         absent: 0,  //旷工
         not_signed: 0,  // 未打卡
         attend: 0, //出勤天数
+        loginDay:0,  //连续登陆天数
       }
     },
     activated() {
@@ -291,6 +296,7 @@
     },
     mounted() {
       this.landholder = JSON.parse(localStorage.personal);
+      this.loginDay = this.landholder.data.loginday;
       this.getAlbumNum();
       this.drawLineChart();
       this.getPraise();
@@ -563,7 +569,18 @@
               width: 24px;
               height: 24px;
               margin-left: 10px;
-              @include back("../../assets/images/individual/1.png");
+            }
+            .span3{
+              @include back("../../assets/images/individual/3days.png");
+            }
+            .span5{
+              @include back("../../assets/images/individual/5days.png");
+            }
+            .span10{
+              @include back("../../assets/images/individual/10days.png");
+            }
+            .span30{
+              @include back("../../assets/images/individual/30days.png");
             }
           }
           .personalSign {

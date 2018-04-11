@@ -5,17 +5,48 @@
       <div class="highSearch" style="width:95%">
         <el-form :inline="true" size="medium" style="position:absolute;right:100px;" >
           <el-form-item>
-            <el-input placeholder="公告主题/标题/内容关键字" v-model="form.search" @keyup.enter.native="myData(1)" size="mini"
+            <el-input placeholder="标题/内容关键字" v-model="form.search" @keyup.enter.native="myData(1)" size="mini"
                       clearable>
               <el-button slot="append" icon="el-icon-search" @click="myData(1)"></el-button>
               <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
             </el-input>
           </el-form-item>
-
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+          </el-form-item>
         </el-form>
         <el-button @click="openModalDialogx('noticeDialog')" class="sendnotice" size="mini" type="primary">发布公告</el-button>
       </div>
+      <div class="filter high_grade" :class="isHigh? 'highHide':''">
+        <el-form :inline="true" :model="form" size="mini" label-width="100px">
+          <div class="filterTitle">
+            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+          </div>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">选择类别</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select v-model="form.type" clearable placeholder="请选择类别">
+                      <el-option v-for="(key,index) in forms" :label="key.name" :value="key.id"
+                                 :key="index"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
 
+          </el-row>
+          <div class="btnOperate">
+            <el-button size="mini" type="primary" @click="myData(1)">搜索</el-button>
+            <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+            <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+          </div>
+        </el-form>
+      </div>
     </div>
       <div class="main">
         <div class="myHouse">
@@ -26,9 +57,13 @@
               @row-contextmenu='noticeMenu'
               style="width: 100%">
               <el-table-column
-                prop="type"
                 width="120px"
                 label="公告主题">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.type === 1">表彰</span>
+                  <span v-if="scope.row.type === 2">批评</span>
+                  <span v-if="scope.row.type === 3">通知</span>     
+                </template>
               </el-table-column>
               <el-table-column
                 width="200px"
@@ -70,14 +105,12 @@
               </el-table-column>
               <el-table-column
                 width="140px"
-
                 label="状态">
-              <template slot-scope="scope">
-               <el-button class="btnStatus" v-if="scope.row.draft === '已发布'" type="primary" size="mini">已发布</el-button>
-              <el-button class="btnStatus" v-if="scope.row.draft === '草稿'" type="info" size="mini">草稿</el-button>
-              <el-button class="btnStatus" v-if="scope.row.draft === '已撤回'" type="warning" size="mini">已撤回</el-button>
-              
-            </template>
+                <template slot-scope="scope">
+                  <el-button class="btnStatus" v-if="scope.row.draft === '已发布'" type="primary" size="mini">已发布</el-button>
+                  <el-button class="btnStatus" v-if="scope.row.draft === '草稿'" type="info" size="mini">草稿</el-button>
+                  <el-button class="btnStatus" v-if="scope.row.draft === '已撤回'" type="warning" size="mini">已撤回</el-button>     
+                </template>
               </el-table-column>
             </el-table>
           </div>
@@ -145,7 +178,7 @@ export default {
         { id: "1", name: "表彰" },
         { id: "2", name: "批评" },
         { id: "3", name: "通知" },
-        { id: "4", name: "研发" }
+        // { id: "4", name: "研发" }
       ]
     };
   },
@@ -177,6 +210,21 @@ export default {
     closeMenu() {
       this.show = false;
     },
+      // 高级
+      highGrade() {
+        this.isHigh = !this.isHigh;
+      },
+      // 重置
+      resetting() {
+        this.isHigh = false;
+        this.form= {
+        page: 1,
+        limit: 12,
+        type: "",
+        search: ""
+        },
+        this.myData(1);
+      },          
     //右键参数
     contextMenuParam(event) {
       //param: user right param
@@ -234,11 +282,6 @@ export default {
             this.nowPage = val;
             this.total = res.data.num;
             for (let j = 0; j < res.data.data.length; j++) {
-              for (let i = 0; i < 4; i++) {
-                if (this.forms[i].id == res.data.data[j].type) {
-                  this.tableData[j].type = this.forms[i].name;
-                }
-              }
               if (res.data.data[j].draft == "0") {
                 this.tableData[j].draft = "已发布";
               } else if (res.data.data[j].draft == "1") {
