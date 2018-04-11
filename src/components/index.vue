@@ -288,6 +288,7 @@
     </div>
 
     <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeMessage"></MessageDetail>
+    <SetLockPwd :setLockPwdDialog="setLockPwdDialog" @close="closeMessage"></SetLockPwd>
 	<Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
   </div>
 </template>
@@ -296,10 +297,12 @@
   import TagsView from './common/tagsView.vue'
   import screenFull from 'screenfull'
   import MessageDetail from './common/messageDetail.vue'
-import Instruction from './rentManage/wholeRentManage/components/instruction.vue'            //使用说明
+  import Instruction from './rentManage/wholeRentManage/components/instruction.vue'            //使用说明
+  import SetLockPwd from './common/setLockPwd.vue'
+
   export default {
     name: 'Index',
-    components: {TagsView, MessageDetail,Instruction},
+    components: {TagsView, MessageDetail,Instruction,SetLockPwd},
     data() {
       return {
         personal: {},
@@ -318,13 +321,17 @@ import Instruction from './rentManage/wholeRentManage/components/instruction.vue
         loginDay: 0,
         loginPercent: 0,
         creditTotal: 0, // 积分总数
+
+        setLockPwdDialog:false,
         instructionDialog:false  //功能说明
       }
     },
 
     mounted() {
       this.initData();
-
+      if(JSON.parse(localStorage.personal).data.setting.length<1 || !JSON.parse(localStorage.personal).detail.pwd_lock){
+        this.setLockPwdDialog = true;
+      }
       globalConfig.personal = JSON.parse(localStorage.personal);
       let head = JSON.parse(localStorage.myData);
       globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
@@ -399,6 +406,7 @@ import Instruction from './rentManage/wholeRentManage/components/instruction.vue
       },
       closeMessage(){
         this.messageDialog = false;
+        this.setLockPwdDialog = false;
       },
       //获取未读消息
       getUnReadMessage(){

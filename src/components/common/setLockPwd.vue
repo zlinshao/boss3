@@ -1,186 +1,200 @@
 <template>
-  <div id="remarks">
-    <el-dialog :close-on-click-modal="false" title="请设置锁屏密码" :visible.sync="dialogVisible" width="30%">
-      <div class="scroll_bar">
-        <el-table
-          :data="tableData"
-          style="width: 100%"
-          max-height="520">
-          <el-table-column
-            prop="date"
-            label="备注时间"
-            width="90px;">
-          </el-table-column>
+  <div id="">
+    <el-dialog :close-on-click-modal="false" title="锁屏设置" :visible.sync="setLockPwdDialogVisible" width="40%">
+      <div class="">
+        <el-form size="mini" onsubmit="return false;" label-width="100px">
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="倒计时">
+                <el-select value="" v-model="basicSetting.id[0]">
+                  <el-option v-for="item in count_time_dic" :key="item.id"
+                             :label="item.dictionary_name" :value="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <span style="color:#fdaece;margin-left:100px;">备注:首页倒计时时间设置,当合计时结束后,将自动进入锁屏模式</span>
 
-          <el-table-column
-            prop="contents"
-            label="备注内容">
-          </el-table-column>
-
-          <el-table-column
-            prop="name"
-            label="备注人"
-            width="100px">
-          </el-table-column>
-
-          <el-table-column
-            label="操作"
-            width="150px">
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="text"
-                @click="handleEdit(scope.$index, scope.row)">编辑
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="手机号">
+                <el-input disabled="" v-model="personalInfo.phone"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="验证码">
+                <el-input v-model="sms_lock_num"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="10" :offset="2">
+              <el-button size="mini" @click="sendMessage" v-if="isSending>59" style="width: 140px;" type="primary">
+                获取验证码
               </el-button>
-              <el-button
-                size="mini"
-                type="text"
-                style="color: red"
-                @click="openDelete(scope.$index, scope.row)">删除
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+              <el-button size="mini" v-if="isSending<60" disabled="" style="width: 140px;" type="primary">{{isSending}}s后重新发送</el-button>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="锁屏密码">
+                <el-input size="small" type="password" @keyup.native="identify_pwd_lock = ''"
+                          v-model="set_pwd_lock" placeholder="请输入新密码"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="确认密码">
+                <el-input size="small" type="password" v-model="identify_pwd_lock"
+                          @blur="testPassword" placeholder="请确认新密码"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <span style="color:#fdaece;margin-left:100px;">备注:密码长度4-6位，数字、字母和下划线</span>
+        </el-form>
       </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button size="small" type="primary" style="float: left;" @click="remarkVisible = true">新&nbsp;增</el-button>
-        <el-button size="small" @click="dialogVisible = false">取&nbsp;消</el-button>
-        <el-button size="small" type="primary" @click="dialogVisible = false">确&nbsp;定</el-button>
-      </div>
+      <span slot="footer" class="dialog-footer">
+        <!--<el-button size="small" @click="setLockPwdDialogVisible = false">取 消</el-button>-->
+        <el-button :disabled="!sms_lock_num || identify_pwd_lock !== set_pwd_lock || !identify_pwd_lock || !set_pwd_lock
+                   || !basicSetting.id[0] || basicSetting.id[0]==defaultCountdown"
+                   size="small" type="primary" @click="saveVisitRecord">确 定</el-button>
+      </span>
     </el-dialog>
-
-    <el-dialog :close-on-click-modal="false" title="新增备注" :visible.sync="remarkVisible" width="40%">
-      <el-form :model="form">
-        <el-form-item>
-          <el-input v-model="form.remarks" type="textarea" :autosize="{minRows: 4, maxRows: 4}"
-                    placeholder="请填写备注内容"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button size="small" @click="remarkVisible = false">取&nbsp;消</el-button>
-        <el-button size="small" type="primary" @click="remarkVisible = false">确&nbsp;定</el-button>
-      </div>
-    </el-dialog>
-
   </div>
 </template>
 
 <script>
   export default {
-    name: "remarks",
-    props: ['module'],
+    props: ['setLockPwdDialog'],
+    components: {},
     data() {
       return {
-        form: {
-          remarks: '',
+        setLockPwdDialogVisible: false,
+        count_time_dic: [],
+        //个人基本设置
+        basicSetting: {
+          id: [],
+          type: 1
         },
-        dialogVisible: false,
-        remarkVisible: false,
-        powerModule: false,
-        tableData: [
-          {
-            date: '2018-01-01 00:00:00',
-            contents: '发挥到了萨菲航空斯大林饭卡恐惧和顾客上费大概多少个梵蒂冈地方是个杜帅杜帅广东省广东省广东省广泛大使馆电风扇赶得上过分的事广东省广东省过分的事的',
-            name: '活雷锋',
-          }, {
-            date: '2018-01-01 00:00:00',
-            contents: '反对和科技示范户是打开回复会计师大后方看见撒旦回复卡萨丁回复看见萨菲航空基地撒回复看爱的',
-            name: '活雷锋',
-          }, {
-            date: '2018-01-01 00:00:00',
-            contents: '广泛大概是个范德萨打发时光的发生过的方式广泛的广泛大使馆的附属国豆腐干反对是',
-            name: '活雷锋',
-          }, {
-            date: '2018-01-01 00:00:00',
-            contents: '政府都感到十分广泛大使馆反倒是广东佛山杜帅广东省高度广泛的鬼地方高浮雕鬼地方收购的方式过分的事房东广东佛山士大夫',
-            name: '活雷锋',
-          }, {
-            date: '2018-01-01 00:00:00',
-            contents: '政府都感到十分广泛大使馆反倒是广东佛山杜帅广东省高度广泛的鬼地方高浮雕鬼地方收购的方式过分的事房东广东佛山士大夫',
-            name: '活雷锋',
-          }, {
-            date: '2018-01-01 00:00:00',
-            contents: '政府都感到十分广泛大使馆反倒是广东佛山杜帅广东省高度广泛的鬼地方高浮雕鬼地方收购的方式过分的事房东广东佛山士大夫',
-            name: '活雷锋',
-          }, {
-            date: '2018-01-01 00:00:00',
-            contents: '政府都感到十分广泛大使馆反倒是广东佛山杜帅广东省高度广泛的鬼地方高浮雕鬼地方收购的方式过分的事房东广东佛山士大夫',
-            name: '活雷锋',
-          }, {
-            date: '2018-01-01 00:00:00',
-            contents: '政府都感到十分广泛大使馆反倒是广东佛山杜帅广东省高度广泛的鬼地方高浮雕鬼地方收购的方式过分的事房东广东佛山士大夫',
-            name: '活雷锋',
-          }, {
-            date: '2018-01-01 00:00:00',
-            contents: '政府都感到十分广泛大使馆反倒是广东佛山杜帅广东省高度广泛的鬼地方高浮雕鬼地方收购的方式过分的事房东广东佛山士大夫',
-            name: '活雷锋',
-          }, {
-            date: '2018-01-01 00:00:00',
-            contents: '政府都感到十分广泛大使馆反倒是广东佛山杜帅广东省高度广泛的鬼地方高浮雕鬼地方收购的方式过分的事房东广东佛山士大夫',
-            name: '活雷锋',
-          }, {
-            date: '2018-01-01 00:00:00',
-            contents: '政府都感到十分广泛大使馆反倒是广东佛山杜帅广东省高度广泛的鬼地方高浮雕鬼地方收购的方式过分的事房东广东佛山士大夫',
-            name: '活雷锋',
-          },
-        ],
+        //锁屏
+        isSending: 60, //发送验证码
+        sms_lock_num: "", //验证码
+        set_pwd_lock: "", //锁屏密码
+        identify_pwd_lock: "",
+        defaultCountdown: '',
+        setCount : false,
+        setPassWord : false,
       }
     },
-    mounted() {
+    computed: {
+      personalInfo(){
+        return JSON.parse(localStorage.personal);
+      },
+      isClose(){
+        return this.setCount && this.setPassWord;
+      }
+    },
+    created(){
+      if (JSON.parse(localStorage.personal).data.setting.length > 0) {
+        this.basicSetting.id.push(JSON.parse(localStorage.personal).data.setting.dict_id);
+        this.defaultCountdown = JSON.parse(localStorage.personal).data.setting.dict_id
+      }
     },
     watch: {
-      module(val) {
-        this.dialogVisible = val;
+      setLockPwdDialog(val) {
+        this.setLockPwdDialogVisible = val;
       },
-      dialogVisible(val) {
+      setLockPwdDialogVisible(val) {
         if (!val) {
           this.$emit('close');
+        } else {
+          this.getDictionary();
         }
       },
-      remarkVisible(val) {
-        if (!val) {
-          console.log(1);
-          this.form.remarks = '';
+      isClose(val){
+        if(val){
+          this.setLockPwdDialogVisible = false;
+          this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
+            localStorage.setItem('personal', JSON.stringify(res.data.data));
+            globalConfig.personal = res.data.data.data;
+          });
         }
       }
     },
     methods: {
-      // 新增
-      onSubmit() {
+      getDictionary(){
+        this.dictionary(203).then((res) => {
+          this.count_time_dic = res.data;
+        })
+      },
+      //发送验证码
+      sendMessage() {
+        new Promise((resolve, reject) => {
+          let interval = setInterval(() => {
+            this.isSending--;
+            if (this.isSending < 0) {
+              clearInterval(interval);
+              resolve();
+            }
+          }, 1000);
+        }).then(data => {
+          this.isSending = 60;
+        });
+        this.$http.get(globalConfig.server + "setting/others/sms_code").then(res => {
+          if (res.data.code === "100090") {
+            this.$notify({
+              title: "成功",
+              message: res.data.msg,
+              type: "success"
+            });
+          }
+        });
+      },
+      testPassword(){
+        if (this.set_pwd_lock !== this.identify_pwd_lock) {
+          this.$notify.warning({
+            title: "警告",
+            message: "两次输入密码不相同！"
+          })
+        }
+      },
+      saveVisitRecord(){
+        this.$http.post(globalConfig.server + "setting/setting/save", this.basicSetting).then(res => {
+          if (res.data.code === "50000") {
+            this.$store.dispatch('changeBasicSetting');
+            this.setCount = true;
+          } else {
+            this.$notify({
+              title: "警告",
+              message: res.data.msg,
+              type: "warning"
+            });
+          }
+        });
+
+        this.$http.get(globalConfig.server + "setting/others/lock_screen_status?sms_lock_num=" +
+          this.sms_lock_num + "&set_pwd_lock=" + this.set_pwd_lock).then(res => {
+          if (res.data.code === "100000") {
+            this.sms_lock_num = '';
+            this.set_pwd_lock = '';
+            this.identify_pwd_lock = '';
+            this.isSending = 60;
+            this.setPassWord = true;
+          } else {
+            this.$notify({
+              title: "警告",
+              message: res.data.msg,
+              type: "warning"
+            });
+          }
+        });
 
       },
-      // 修改
-      handleEdit(index, row) {
-        console.log(index, row);
-        this.form.remarks = row.contents;
-        this.remarkVisible = true;
-      },
-      // 删除
-      handleDelete(index, row) {
-        console.log(index, row);
-      },
-      // 删除
-      openDelete(index, row) {
-        this.$confirm('此操作将删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
-      }
     },
   }
 </script>
 
-<style lang="scss">
+<style scoped>
 
 </style>

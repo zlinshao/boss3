@@ -1,6 +1,6 @@
 <template>
   <div id="organizationId">
-    <el-dialog :close-on-click-modal="false" :title="titlename" :visible.sync="organizationVisible" width="785px" center>
+    <el-dialog :close-on-click-modal="false" title="组织架构" :visible.sync="organizationVisible" width="785px" center>
       <div class="content">
         <div class="content_left" @click="inputFocus">
           <div style="display:flex;flex-wrap: wrap;">
@@ -112,7 +112,6 @@
         noStaff:false,
         noDepart:false,
         memberLength:0,
-        titlename:'',
         currentDepartId:'',
         currentPage_depart:1,
         currentPage_user:1,
@@ -142,15 +141,12 @@
           if(val==='depart'){
             this.noStaff = true;
             this.noDepart = false;
-            this.titlename ="部门选择";
           }else if(val==='staff'){
             this.noStaff = false;
             this.noDepart = true;
-            this.titlename ="人员选择";
           }else {
             this.noStaff = false;
             this.noDepart = false;
-            this.titlename ="部门或人员选择";
           }
         }
       },

@@ -63,14 +63,14 @@
           </div>
           <div class="validate">
             <div class="validateSign">
-              <el-input size="small" type="password" autocomplete="off" @keyup.native="identify_pwd_lock = ''"
+              <el-input size="small" type="password" @keyup.native="identify_pwd_lock = ''"
                         v-model="set_pwd_lock" placeholder="请输入新密码"></el-input>
               <i class="el-icon-success" style="color: #46ff53" v-show="set_pwd_lock.length>5"></i>
             </div>
           </div>
           <div class="validate">
             <div class="validateSign">
-              <el-input size="small" type="password" autocomplete="off" v-model="identify_pwd_lock"
+              <el-input size="small" type="password" v-model="identify_pwd_lock"
                         @blur="testPassword" placeholder="请确认新密码"></el-input>
               <i class="el-icon-success" style="color: #46ff53" v-show="false"></i>
             </div>
