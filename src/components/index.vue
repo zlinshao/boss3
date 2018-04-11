@@ -43,7 +43,7 @@
           </el-dropdown>
         </div>
         <!--消息-->
-        <div class="message" style="position: relative;margin-right: 50px">
+        <div class="message" style="position: relative;margin-right: 30px">
           <el-dropdown v-if="unReadMessageData.length">
             <el-badge :value="unReadMessageData.length" class="item">
               <i class="el-icons-fa-comment-o"></i>
@@ -111,6 +111,10 @@
             </div>
             <div class="gladBackground"></div>
           </div>
+        </div>
+        <div @click="openModalDialog('instructionDialog')" class="guide" style="cursor: pointer">
+          <i class="el-icon-info"></i>
+          功能说明
         </div>
         <!--个人信息-->
         <div class="personInfo">
@@ -284,6 +288,7 @@
     </div>
 
     <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeMessage"></MessageDetail>
+	<Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
   </div>
 </template>
 
@@ -291,10 +296,10 @@
   import TagsView from './common/tagsView.vue'
   import screenFull from 'screenfull'
   import MessageDetail from './common/messageDetail.vue'
-
+import Instruction from './rentManage/wholeRentManage/components/instruction.vue'            //使用说明
   export default {
     name: 'Index',
-    components: {TagsView, MessageDetail},
+    components: {TagsView, MessageDetail,Instruction},
     data() {
       return {
         personal: {},
@@ -313,6 +318,7 @@
         loginDay: 0,
         loginPercent: 0,
         creditTotal: 0, // 积分总数
+        instructionDialog:false  //功能说明
       }
     },
 
@@ -345,6 +351,16 @@
       }
     },
     methods: {
+      openModalDialog(type) {
+        switch (type) {
+          case 'instructionDialog':   //说明书
+            this.instructionDialog = true;
+            break;
+        }
+      },
+      closeModal() {
+        this.instructionDialog = false;
+      },
       initData(){
         this.personal = JSON.parse(localStorage.personal);
         this.loginDay = this.personal.data.loginday;
