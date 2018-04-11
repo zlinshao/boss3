@@ -241,8 +241,10 @@ export default {
               }
               if (res.data.data[j].draft == "0") {
                 this.tableData[j].draft = "已发布";
-              } else {
+              } else if (res.data.data[j].draft == "1") {
                 this.tableData[j].draft = "草稿";
+                this.tableData[j].read_count =0;
+                this.tableData[j].read_uncount =0;
               }
               if(res.data.data[j].unstage == 1){
                 this.tableData[j].draft = "已撤回";
