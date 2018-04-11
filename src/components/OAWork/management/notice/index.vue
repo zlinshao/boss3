@@ -68,7 +68,7 @@
               <el-table-column
                 width="200px"
                 prop="create_time"
-                label="新增时间">
+                label="创建时间">
               </el-table-column>
               <el-table-column
                 width="120px"
