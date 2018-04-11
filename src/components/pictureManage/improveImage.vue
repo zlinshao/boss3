@@ -54,7 +54,7 @@
         }
       },
       pictureIds(val) {
-        console.log("pictureIds============="+val);
+
       }
     },
     methods: {

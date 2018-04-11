@@ -81,10 +81,8 @@
       methods: {
         createAlbum() {
             this.$http.post(globalConfig.server + "album",this.form).then((res)=>{
-              console.log(res.data)
               if(res.data.code == '20110'){
                 this.createAlbumDialogVisible = false;
-                console.log(res.data)
                 this.createAlbumId = res.data.data.id;
                 this.form = {};
                 this.$confirm('相册'+ res.data.data.name+'保存成功，是否马上上传照片到这个相册?', '创建成功', {

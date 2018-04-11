@@ -226,7 +226,7 @@
             <p>家庭住址：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.home_addr}}</span></p>
           </el-col>
           <el-col :span="8">
-            <p>生育状况 <span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.fertility_statuss}}</span></p>
+            <p>生育状况： <span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.fertility_statuss}}</span></p>
           </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -258,22 +258,28 @@
           <el-col :span="8">
             <p>开户名：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.account_name}}</span></p>
           </el-col>
-          <el-col :span="8"></el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="8">
-            <p>职位：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.position_id}}</span></p>
-          </el-col>
           <el-col :span="8">
             <p>等级：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.level}}</span></p>
           </el-col>
+        </el-row>
+        <el-row :gutter="20">
           <el-col :span="8">
-            <p>部门：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.department}}</span></p>
+            <p>职位：<span>{{currentPost}}</span></p>
+          </el-col>
+          <el-col :span="8">
+            <p>部门：<span>{{department}}</span></p>
+          </el-col>
+          <el-col :span="8">
+
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="8">
-            <p>账号状态：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.status}}</span></p>
+            <p>账号状态：
+              <span v-if="staffDetailData && staffDetailData.is_enable">禁用</span>
+              <span v-if="staffDetailData && staffDetailData.is_on_job">离职</span>
+              <span v-if="staffDetailData && !staffDetailData.is_on_job">在职</span>
+            </p>
           </el-col>
           <el-col :span="8">
             <p>入职时间：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.enroll}}</span></p>
@@ -457,6 +463,8 @@
         entryMaterialsCategory: [],
         entry_materials: [],
         currentPage: 1,
+        department: '',
+        currentPost: '',
       }
     },
     mounted(){
@@ -517,15 +525,38 @@
         });
       },
       openDetail(row) {
-        console.log(row.detail);
         this.staffDetail = true;
-        this.staffDetailData = row;
-        this.entry_materials = [];
-        if(row.detail && row.detail.entry_materials && row.detail.entry_materials.length>0){
-          for(var i=0;i<row.detail.entry_materials.length;i++){
-            this.entry_materials.push(Number(row.detail.entry_materials[i]));
+        this.$http.get(globalConfig.server + 'manager/staff/' + row.id).then((res) => {
+          this.staffDetailData = {};
+          if (res.data.code === '10020') {
+            let detail = res.data.data.detail;
+            if (!detail) {
+              return;
+            }
+            this.staffDetailData = res.data.data;
+            this.entry_materials = [];
+            if(res.data.data.detail && res.data.data.detail.entry_materials && res.data.data.detail.entry_materials.length>0) {
+              for(var i=0;i<res.data.data.detail.entry_materials.length;i++){
+                this.entry_materials.push(Number(res.data.data.detail.entry_materials[i]));
+              }
+              let departNameArray = [];
+              if (res.data.data && res.data.data && res.data.data.org.length > 0) {
+                res.data.data.org.forEach((item) => {
+                  departNameArray.push(item.name);
+                });
+              }
+              this.department = departNameArray.join(',');
+              let roleArray = res.data.data.role;
+              let roleNames = [];
+              if (roleArray && roleArray.length > 0) {
+                roleArray.forEach((item) => {
+                  roleNames.push(item.display_name);
+                });
+              }
+              this.currentPost = roleNames.join(',');
+            }
           }
-        }
+        });
       },
       getDefaultData() {
         this.$http.get(globalConfig.server+'manager/department/1').then((res) => {
@@ -654,13 +685,13 @@
         })
       },
       //右键菜单
-      openContextMenu(row, event){
+      openContextMenu(row, event) {
         this.editId = row.id;
         this.menuType = 'staff';
         this.lists = [
           {clickIndex: 'power', headIcon: 'el-icon-edit', label: '权限',data: row},
           {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-          {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
+          // {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextParams(event);
       },
