@@ -578,13 +578,8 @@
       this.getLejiaCollege();
       this.getPerWeeklyReport();
       this.table = this.achieveTable;
-      console.log(1111111);
     },
     created(){
-      globalConfig.personal = JSON.parse(localStorage.personal);
-      let head = JSON.parse(localStorage.myData);
-      globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
-
       this.table = this.achieveTable;
       //取出本地缓存数据
       if(localStorage.getItem('mainBanners')){

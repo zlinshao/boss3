@@ -324,11 +324,14 @@ import Instruction from './rentManage/wholeRentManage/components/instruction.vue
 
     mounted() {
       this.initData();
-      console.log(JSON.parse(localStorage.personal))
+
+      globalConfig.personal = JSON.parse(localStorage.personal);
+      let head = JSON.parse(localStorage.myData);
+      globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
     },
     computed: {
       visitedViews() {
-        return this.$store
+        return this.$store;
       },
       isShortcutPath(){
         let isShortcutPath = [];

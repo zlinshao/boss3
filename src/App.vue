@@ -48,6 +48,7 @@
 
     methods: {
       responses() {
+        let that = this;
         this.$http.interceptors.response.use(function (response) {
           return response;
         }, function (error) {
@@ -57,13 +58,13 @@
                 error.message = '请求错误';
                 break;
               case 401:
-                this.$alert('登陆超时请重新登陆', '温馨提示', {
+                that.$alert('登陆超时请重新登陆', '温馨提示', {
                   confirmButtonText: '确定',
                   callback: action => {
                     localStorage.removeItem('myData');
                     localStorage.removeItem('personal');
                     globalConfig.header.Authorization = '';
-                    this.$router.push({path: '/login'});
+                    that.$router.push({path: '/login'});
                   }
                 });
                 error.message = '未授权，请登录';
