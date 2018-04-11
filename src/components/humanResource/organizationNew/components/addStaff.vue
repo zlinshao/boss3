@@ -1,6 +1,6 @@
 <template>
   <div id="addRentRepair">
-    <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="addStaffDialogVisible" width="60%" :before-close="beforeCloseModal">
+    <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="addStaffDialogVisible" width="60%">
       <div>
         <el-form size="mini" :model="params" label-width="120px" style="padding: 0 20px;">
           <el-tabs v-model="activeName">
@@ -14,7 +14,7 @@
                 <el-col :span="8">
                   <el-form-item label="性别" required>
                     <el-radio-group v-model="params.gender">
-                      <el-radio v-for="item in sexCategory" :label="item.id" :key="item.id">{{item.dictionary_name}}
+                      <el-radio v-for="item in sexCategory" :label="item.id" :key="item.id" name="gender">{{item.dictionary_name}}
                       </el-radio>
                     </el-radio-group>
                   </el-form-item>
@@ -55,7 +55,7 @@
                 <el-col :span="8">
                   <el-form-item label="生育状况">
                     <el-radio-group v-model="params.fertility_status">
-                      <el-radio v-for="item in fertilityStatusCategory" :label="item.id" :key="item.id">
+                      <el-radio v-for="item in fertilityStatusCategory" :label="item.id" name="gender" :key="item.id">
                         {{item.dictionary_name}}
                       </el-radio>
                     </el-radio-group>
@@ -273,7 +273,7 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="beforeCloseModal">取 消</el-button>
+        <el-button size="small" @click="addStaffDialogVisible=false">取 消</el-button>
         <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
@@ -356,13 +356,17 @@
       addStaffDialog(val) {
         this.addStaffDialogVisible = val;
         if(val){
-          this.initial(); //新增时候清除
-          this.getPosition(this.departmentId);  // 新增/修改时候查询最新职位
+          if(!this.editId) {
+            this.initial(); //新增时候清除
+          }
+
         }
       },
       addStaffDialogVisible(val) {
         if (!val) {
           this.$emit('close')
+        }else {
+          this.getPosition(this.departmentId);  // 新增/修改时候查询最新职位
         }
       },
       isEdit(val) {
@@ -391,7 +395,6 @@
     },
     methods: {
       initial(){
-        if(!this.editId){
           this.params.real_name = '';
           this.params.gender = '';
           this.params.phone = '';
@@ -429,7 +432,6 @@
           this.params.position_id = [];
           this.department = '';
           this.currentPost = '';
-        }
       },
       positionSelect(){
         if(this.currentPosition){
@@ -442,46 +444,57 @@
         this.$http.get(globalConfig.server + 'manager/staff/' + this.editId).then((res) => {
           if (res.data.code === '10020') {
             this.params.phone = res.data.data.phone;
+            this.params.status = res.data.data.status;
+            this.params.job_status = res.data.data.job_status;
+            this.params.real_name = res.data.data.name;
+
             let detail = res.data.data.detail;
-            this.params.real_name = detail && detail.real_name;
-            this.params.gender = detail && detail.gender;
-            this.params.home_addr = detail && detail.home_addr;
-            this.params.fertility_status = detail && detail.fertility_status;
-            this.params.id_num = detail && detail.id_num;
-            this.params.birthday = detail && detail.birthday;
-            this.params.recommender = detail && detail.recommender;
-            this.recommenderName = detail && detail.recommender_name;
-            this.params.bank_num = detail && detail.bank_num;
-            this.params.account_bank = detail && detail.account_bank;
-            this.params.branch_bank = detail && detail.branch_bank;
-            this.params.emergency_call = detail && detail.emergency_call;
-            this.params.level = detail && detail.level;
-            this.params.account_name = detail && detail.account_name;
-            this.params.status = detail && detail.status;
-            this.params.job_status = detail && detail.job_status;
-            this.params.enroll = detail && detail.enroll;
-            this.params.salary = detail && detail.salary;
-            this.params.entry_materials = detail && detail.entry_materials;
+            if(!detail){
+              return;
+            }
+            if(detail.gender !== 229 || detail.gender !== 230){
+              this.params.gender = '';
+            }else{
+              this.params.gender = Number(detail.gender);
+            }
+            this.params.home_addr = detail.home_addr;
+            if(detail.fertility_status !== 232 || detail.fertility_status !== 233){
+              this.params.fertility_status = '';
+            }else{
+              this.params.fertility_status = Number(detail.fertility_status);
+            }
+            this.params.id_num = detail.id_num;
+            this.params.birthday = detail.birthday;
+            this.params.recommender = detail.recommender;
+            this.recommenderName = detail.recommender_name;
+            this.params.bank_num = detail.bank_num;
+            this.params.account_bank = detail.account_bank;
+            this.params.branch_bank = detail.branch_bank;
+            this.params.emergency_call = detail.emergency_call;
+            this.params.level = detail.level;
+            this.params.account_name = detail.account_name;
+            this.params.enroll = detail.enroll;
+            this.params.salary = detail.salary;
             this.params.entry_materials = [];
-            if (detail && detail.entry_materials && detail.entry_materials.length > 0) {
+            if (detail.entry_materials && detail.entry_materials.length > 0) {
               for (var i = 0; i < detail.entry_materials.length; i++) {
                 this.params.entry_materials.push(Number(detail.entry_materials[i]));
               }
             }
-            this.params.salary = detail && detail.salary;
-            this.params.origin_addr = detail && detail.origin_addr;
-            this.params.marital_status = detail && detail.marital_status;
-            this.params.political_status = detail && detail.political_status;
-            this.params.forward_time = detail && detail.forward_time;
-            this.params.mail = detail && detail.mail;
-            this.params.education = detail && detail.education;
-            this.params.school = detail && detail.school;
-            this.params.major = detail && detail.major;
-            this.params.graduation_time = detail && detail.graduation_time;
-            this.params.agreement_first_time = detail && detail.agreement_first_time;
-            this.params.agreement_first_end_time = detail && detail.agreement_first_end_time;
-            this.params.agreement_second_time = detail && detail.agreement_second_time;
-            this.params.remark = detail && detail.remark;
+            this.params.salary = detail.salary;
+            this.params.origin_addr = detail.origin_addr;
+            this.params.marital_status = detail.marital_status;
+            this.params.political_status = detail.political_status;
+            this.params.forward_time = detail.forward_time;
+            this.params.mail = detail.mail;
+            this.params.education = detail.education;
+            this.params.school = detail.school;
+            this.params.major = detail.major;
+            this.params.graduation_time = detail.graduation_time;
+            this.params.agreement_first_time = detail.agreement_first_time;
+            this.params.agreement_first_end_time = detail.agreement_first_end_time;
+            this.params.agreement_second_time = detail.agreement_second_time;
+            this.params.remark = detail.remark;
 
             let departNameArray = [];
             this.params.department_id = [];
@@ -611,20 +624,6 @@
         }
         this.organizationDialog = false;
       },
-      beforeCloseModal() {
-        if (this.isEdit) {
-          this.params = {
-            position_id: [],
-            department_id: '',
-            name: '',
-            phone: ''
-          };
-          this.department = '';
-          this.positionArray = [];
-          this.roleArray = [];
-        }
-        this.addStaffDialogVisible = false;
-      },
       closeModal() {
         this.addStaffDialogVisible = false;
         this.params = {
@@ -645,7 +644,6 @@
           account_name: '',
           status: '',
           enroll: '',
-          // salary_level: '1',
           salary: '',
           entry_materials: [],
           origin_addr: '',

@@ -105,6 +105,11 @@ export default {
   },
   mounted() {
     this.personal = JSON.parse(localStorage.personal);
+    for(let key in this.personal.data.secondary_password){
+      this.checkList.push(parseInt(this.personal.data.secondary_password[key]))
+    }
+    
+    console.log(this.personal);
     this.form.phone=this.personal.phone;
     this.getDictionary2()
   },
@@ -230,6 +235,10 @@ export default {
                 message: res.data.msg,
                 type: "success"
               });
+          this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
+            localStorage.setItem('personal', JSON.stringify(res.data.data));
+            globalConfig.personal = res.data.data.data;
+          });
             this.form = {
               id: "",
               phone: "",

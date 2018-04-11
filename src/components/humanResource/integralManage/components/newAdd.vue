@@ -24,7 +24,7 @@
             </el-col>
             <el-col :span="10">
               <el-form-item label="积分项" required>
-                <el-select v-model="form.minus" @change="integral" clearable="" placeholder="请选择积分项">
+                <el-select v-model="form.minus" @change="integral" clearable @clear="clearableminus" placeholder="请选择积分项">
                   <el-option label="得分项目" value="0"></el-option>
                   <el-option label="失分项目" value="1"></el-option>
                 </el-select>
@@ -32,7 +32,7 @@
             </el-col>
             <el-col :span="14">
               <el-form-item label-width="20px">
-                <el-select v-model="form.name" @change="integralAmount" clearable placeholder="请选择积分项">
+                <el-select v-model="form.name" @change="integralAmount" clearable @clear="clearname" placeholder="请选择积分项">
                   <el-option v-for="(key,index) in integralList" :label="key.name" :value="key.id"
                              :key="index"></el-option>
                   <el-option label="其他" value="other" v-if="integralList.length !== 0"></el-option>
@@ -171,7 +171,12 @@ export default {
   mounted() {},
   methods: {
     // 积分项
-
+    clearableminus(){
+      this.form.minus = ""
+    },
+    clearname(){
+      this.form.name=""
+    },
     integral(val) {
       let typeGet = [];
       if (val == "0") {

@@ -560,7 +560,7 @@
         });
       },
       getnotice(){
-        this.$http.get(globalConfig.server + "announcement").then((res) => {
+        this.$http.get(globalConfig.server + "announcement?stage=1&not_draft=1&all=1").then((res) => {
           this.noticeInfo=res.data.data;
           this.noticeInfofirst=res.data.data[0];
         });

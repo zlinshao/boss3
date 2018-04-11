@@ -289,6 +289,7 @@
 
     <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeMessage"></MessageDetail>
     <SetLockPwd :setLockPwdDialog="setLockPwdDialog" @close="closeMessage"></SetLockPwd>
+    <UnlockSecondPW :unlockSecondPWDialog="unlockSecondPWDialog" :sendId="sendId" @close="closeMessage"></UnlockSecondPW>
 	<Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
   </div>
 </template>
@@ -299,10 +300,10 @@
   import MessageDetail from './common/messageDetail.vue'
   import Instruction from './rentManage/wholeRentManage/components/instruction.vue'            //使用说明
   import SetLockPwd from './common/setLockPwd.vue'
-
+  import UnlockSecondPW from './common/unlocksecondpw.vue'
   export default {
     name: 'Index',
-    components: {TagsView, MessageDetail,Instruction,SetLockPwd},
+    components: {TagsView, MessageDetail,Instruction,SetLockPwd,UnlockSecondPW},
     data() {
       return {
         personal: {},
@@ -323,7 +324,11 @@
         creditTotal: 0, // 积分总数
 
         setLockPwdDialog:false,
-        instructionDialog:false  //功能说明
+        instructionDialog:false,  //功能说明
+        dictionary2:[],   //模块
+        chinese:[],
+        unlockSecondPWDialog:false,
+        sendId:"",
       }
     },
 
@@ -332,16 +337,8 @@
       if(JSON.parse(localStorage.personal).data.setting.length<1 || !JSON.parse(localStorage.personal).detail.pwd_lock){
         this.setLockPwdDialog = true;
       }
-      this.$http.interceptors.response.use((response) => { //配置请求回来的信息
-        if(response.data.code == '7777'){
-          sessionStorage.setItem('beforePath', this.$route.path);
-          sessionStorage.setItem('lockStatus', 1);
-          this.$router.push({path: '/lock'});
-        }
-        return response;
-      }, function (error) {
-        return Promise.reject(error);
-      });
+      //获取模块接口
+      this.getDictionary2()
     },
     computed: {
       visitedViews() {
@@ -414,6 +411,7 @@
       closeMessage(){
         this.messageDialog = false;
         this.setLockPwdDialog = false;
+        this.unlockSecondPWDialog = false;
       },
       //获取未读消息
       getUnReadMessage(){
@@ -423,17 +421,49 @@
           }
         })
       },
+    getDictionary2() {
+      this.$http
+        .get(globalConfig.server + "setting/dictionary/220")
+        .then(res => {
+          if (res.data.code === "30010") {
+            this.dictionary2 = res.data.data;
+            for(let i=0;i<this.dictionary2.length;i++){
+              for(let key in this.personal.data.secondary_password){
+                if(this.dictionary2[i].id ==this.personal.data.secondary_password[key]){
+                  this.chinese.push({"name":this.dictionary2[i].dictionary_name,"id":this.dictionary2[i].id} )
+                }
+              }
+            }
 
+          }
+
+        });
+    },
       // 全屏
       fullScreen(val) {
         screenFull.toggle();
       },
       handleOpen(key, keyPath) {
+        for(let chi in this.chinese){
+          if(this.chinese[chi].name == key){
+            this.unlockSecondPWDialog = true;
+            this.sendId=this.chinese[chi].id;
+          }
+        }
       },
       handleClose(key, keyPath) {
+
       },
       handlerSelect(key, keyPath){
 
+        for(let chi in this.chinese){
+          for(let path in keyPath){
+          if(this.chinese[chi].name == keyPath[0]){
+            this.unlockSecondPWDialog = true;
+            this.sendId=this.chinese[chi].id;
+          }
+          }
+        }
       },
       clickScreen() {
         this.screenStatus = true;
@@ -486,14 +516,15 @@
         this.isCollapse = !this.isCollapse;
       },
       lockScreen(val) {
+        console.log(val);
         clearInterval(this.interval);
         this.interval = null;
         clearInterval(this.messageInterval);
         this.messageInterval = null;
         this.$http.get(globalConfig.server + 'setting/others/lock_screen_status?lock_status=1').then((res) => {
           if (res.data.code === '100003') {
-            sessionStorage.setItem('beforePath', this.$route.path);
-            sessionStorage.setItem('lockStatus', 1);
+            localStorage.setItem('beforePath', this.$route.path);
+            localStorage.setItem('lockStatus', 1);
             this.$router.push({path: '/lock'});
           } else {
             this.$notify({

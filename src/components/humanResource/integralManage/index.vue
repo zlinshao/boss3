@@ -5,9 +5,9 @@
         <div class="tabsSearch">
           <el-form :inline="true" :model="form" size="mini">
             <el-form-item>
-              <el-input placeholder="请输入项目名称" @clear="searchtop" clearable v-model="form.item_name"
+              <el-input placeholder="请输入项目名称" @clear="search" clearable v-model="form.item_name"
                         @keyup.enter.native="search" size="mini">
-                <el-button slot="append" icon="el-icon-search" @click="searchtop"></el-button>
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -77,7 +77,7 @@
 
             </el-row>
             <div class="btnOperate">
-              <el-button size="mini" type="primary" @click="searchtop">搜索</el-button>
+              <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
               <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
             </div>
@@ -153,7 +153,7 @@
       <div class="pages block">
         <el-pagination
           @size-change="handleSizeChange"
-          @current-change="search"
+          @current-change="handleCurrentChange"
           :current-page="form.page"
           :page-size="form.limit"
           layout="total, prev, pager, next, jumper"
@@ -234,6 +234,13 @@ export default {
   },
   watch: {},
   methods: {
+
+    handleSizeChange(val) {
+      console.log(1111111);
+      this.form.page= val;
+      
+    },
+
     newAddBack(val) {
       if (val == "新增") {
         this.form.page = 1;
@@ -257,7 +264,6 @@ export default {
           if (res.data.code === "30310") {
             this.totalNumber = res.data.num;
             this.tableData = res.data.data;
-            console.log(res.data.data)
             // this.remark = res.data.data.last_remark;
             // res.data.data.last_remark[0].content = this.remark;
           } else {
@@ -299,21 +305,17 @@ export default {
       this.rowid = row.id;
       this.integralDetail = true;
     },
-
-    search(val) {
+    handleCurrentChange(val){
       this.form.page = val;
+      this.search()
+    },
+    search() {
       if (this.activeName == "first") {
         this.getTableData();
       } else if (this.activeName == "second") {
         this.getGatherList();
       }
-    },
-    searchtop() {
-     
-      this.getTableData();
-    },
-    handleSizeChange(val) {
-      console.log(val);
+      this.isHigh = false;
     },
 
     //右键
@@ -354,7 +356,7 @@ export default {
       this.$http
         .put(globalConfig.server + "credit/manage/delete/" + this.activeId.id)
         .then(res => {
-          if (res.data.code === "30310") {
+          if (res.data.code === "30320") {
             this.getTableData();
           } else {
             this.$notify.warning({
@@ -424,6 +426,8 @@ export default {
       };
       this.department_name = ""; 
       this.staff_name="";
+      this.isHigh=false;
+      this.search(this.activeName)
     }
   }
 };
