@@ -1,6 +1,6 @@
 <template>
   <div id="decreaseGoods">
-    <el-dialog title="物品搬出" :visible.sync="decreaseGoodsDialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="物品搬出" :visible.sync="decreaseGoodsDialogVisible" width="40%">
       <div>
         <el-form size="small" :model="form" label-width="80px">
           <el-row>

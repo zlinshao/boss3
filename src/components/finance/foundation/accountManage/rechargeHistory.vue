@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="充值归零记录" :visible.sync="dialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="充值归零记录" :visible.sync="dialogVisible" width="40%">
       <el-form :model="form" size="mini" lebel-width="100px">
         <el-row>
           <el-col :span="12">

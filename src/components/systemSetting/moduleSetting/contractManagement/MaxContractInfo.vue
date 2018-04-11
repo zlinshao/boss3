@@ -1,8 +1,8 @@
 <template>
   <div>
-     <el-dialog title="总合同领取上限" :visible.sync="maxContractInfoDialogVisible" width="60%" style="min-width:1110px;">
+     <el-dialog :close-on-click-modal="false" title="总合同领取上限" :visible.sync="maxContractInfoDialogVisible" width="60%" style="min-width:1110px;">
       <div>
- 
+
     <div class="highRanking">
       <div class="highSearch">
           <el-form :inline="true" size="mini">
@@ -26,7 +26,7 @@
                     <div class="el_col_label">领取上限范围</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
-                    <el-form-item>  
+                    <el-form-item>
                       <el-col style="padding:0 " :span="8" class="el_col_option">
                       <el-input  v-model="form.from" placeholder="请输入最小上限">
                       </el-input>
@@ -59,7 +59,7 @@
             </div>
           </el-form>
         </div>
-    </div>    
+    </div>
     <div class="main" >
       <div class="blueTable">
         <el-table
@@ -140,16 +140,16 @@ export default {
   },
    methods: {
       getInfo(){
-        this.$http.get(this.urls + 'contract/policy',{params:this.form} ).then((res) => {         
+        this.$http.get(this.urls + 'contract/policy',{params:this.form} ).then((res) => {
           if(res.data.code=="20000"){
             this.contractionList = res.data.data.data;
-            this.totalNumber = res.data.data.count;       
+            this.totalNumber = res.data.data.count;
           }
           else{
             this.totalNumber=0;
             this.form.page=1;
           }
-        })      
+        })
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
@@ -187,7 +187,7 @@ export default {
       highGrade(){
         this.isHigh = !this.isHigh;
       },
-      search(){ 
+      search(){
         this.form.page=1;
         this.getInfo();
         this.isHigh=false

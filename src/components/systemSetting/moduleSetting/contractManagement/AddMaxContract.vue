@@ -1,12 +1,12 @@
 <template>
   <div id="increaseGoods">
-    <el-dialog title="设置" :visible.sync="increaseGoodsDialogVisible" width="20%" style="margin-top:20vh">
+    <el-dialog :close-on-click-modal="false" title="设置" :visible.sync="increaseGoodsDialogVisible" width="20%" style="margin-top:20vh">
       <div>
         <el-form size="mini" :model="form" label-width="120px">
           <el-row>
             <el-col :span="18">
               <el-form-item label="操作对象" >
-                <el-input v-model="follow_name" placeholder="选择操作对象" readonly="" @focus="openOrganizeModal"></el-input> 
+                <el-input v-model="follow_name" placeholder="选择操作对象" readonly="" @focus="openOrganizeModal"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -22,7 +22,7 @@
               <span class="addstyle">操作人:{{this.personal.name}}</span>
             </el-col>
             </el-row>
-             <el-row>       
+             <el-row>
             <el-col :span="18">
               <span class="addstyle">操作时间:{{date}}</span>
             </el-col>
@@ -94,12 +94,12 @@
               max_count:''
             }
             this.follow_name='';
-            this.increaseGoodsDialogVisible=false;       
+            this.increaseGoodsDialogVisible=false;
           }else{
                  this.$notify.warning({
                   title: "警告",
                   message: res.data.msg
-                });             
+                });
             }
         })
       },

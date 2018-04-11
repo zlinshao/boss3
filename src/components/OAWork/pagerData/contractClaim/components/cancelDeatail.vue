@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="作废合同详情" :visible.sync="contractCancelDialogVisible">
+    <el-dialog :close-on-click-modal="false" title="作废合同详情" :visible.sync="contractCancelDialogVisible">
       <div  class="scroll_bar">
         <div class="title">基本信息</div>
         <div class="form_border">

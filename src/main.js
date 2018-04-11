@@ -105,7 +105,7 @@ router.beforeEach((to, from, next) => {
     next({path: '/main'})
   }else if(Number(localStorage.getItem('lockStatus'))===1 && to.path!=='/lock'){
     next({path:'/lock'});
-  }else if(Number(localStorage.getItem('lockStatus'))===0 && to.path === '/lock'){
+  }else if(Number(localStorage.getItem('lockStatus'))===0 && to.path === '/lock' && sessionStorage.getItem('lockStatus')!=1){
     next({path:from.path});
   }else {
     next();

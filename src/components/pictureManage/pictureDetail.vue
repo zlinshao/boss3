@@ -71,7 +71,7 @@
         </el-col>
       </el-row>
     </div>
-    <el-dialog id="photoDetail" title="编辑照片信息" :visible.sync="photoDetailDialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" id="photoDetail" title="编辑照片信息" :visible.sync="photoDetailDialogVisible" width="30%">
       <div class="">
         <el-form size="mini" onsubmit="return false;" :model="photoForm" label-width="100px">
           <el-row >

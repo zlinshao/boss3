@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :title="newAdd" :visible.sync="newAddDialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" :title="newAdd" :visible.sync="newAddDialogVisible" width="30%">
       <div>
         <el-form size="mini" :model="form" label-width="100px">
           <el-row>
@@ -125,9 +125,9 @@ export default {
                 });
               }
             });
-       
+
       } else {
-        
+
           this.$http
             .put(globalConfig.server + "credit/manage/item/" + this.formid, this.form)
             .then(res => {
@@ -145,9 +145,9 @@ export default {
                 });
               }
             });
-        
+
       }
- 
+
     },
 
     close() {

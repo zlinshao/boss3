@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="分配" :visible.sync="dispatchDialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="分配" :visible.sync="dispatchDialogVisible" width="40%">
       <div class="scroll_bar">
 
         <el-form label-width="80px" size="mini">

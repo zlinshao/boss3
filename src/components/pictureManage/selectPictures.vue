@@ -1,6 +1,6 @@
 <template>
   <div id="choosePictures">
-    <el-dialog title="选择相册" :visible.sync="choosePicturesDialogVisible" width="50%">
+    <el-dialog :close-on-click-modal="false" title="选择相册" :visible.sync="choosePicturesDialogVisible" width="50%">
       <div class="">
         <el-form size="mini" :model="form" label-width="100px">
           <el-row >

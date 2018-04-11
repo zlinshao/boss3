@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="创建任务" :visible.sync="createTaskDialogVisible">
+    <el-dialog :close-on-click-modal="false" title="创建任务" :visible.sync="createTaskDialogVisible">
       <div class="scroll_bar">
         <div class="title">基本信息</div>
         <div class="form_border">

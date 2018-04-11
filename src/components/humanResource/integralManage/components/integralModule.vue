@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :title="newAdd" :visible.sync="integralVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" :title="newAdd" :visible.sync="integralVisible" width="40%">
       <div>
         <el-form size="mini" :model="form" label-width="100px">
           <el-row>

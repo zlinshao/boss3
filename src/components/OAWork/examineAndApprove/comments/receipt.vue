@@ -1,6 +1,6 @@
 <template>
   <div class="modalFrame">
-    <el-dialog
+    <el-dialog :close-on-click-modal="false"
       title="收据领用"
       :visible.sync="receiptVisible"
       width="50%">

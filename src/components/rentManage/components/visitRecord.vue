@@ -1,6 +1,6 @@
 <template>
   <div id="visitRecord">
-    <el-dialog title="回访记录" :visible.sync="visitRecordDialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" title="回访记录" :visible.sync="visitRecordDialogVisible" width="30%">
       <div class="">
         <el-form size="mini" onsubmit="return false;" :model="form" label-width="100px">
           <el-row>

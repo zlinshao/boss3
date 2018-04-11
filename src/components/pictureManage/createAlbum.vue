@@ -1,6 +1,6 @@
 <template>
   <div id="createAlbum">
-    <el-dialog :title="dialogTitle" :visible.sync="createAlbumDialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" :title="dialogTitle" :visible.sync="createAlbumDialogVisible" width="30%">
       <div class="">
         <el-form size="mini" onsubmit="return false;" :model="form" label-width="100px">
           <el-row >

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="设置" :visible.sync="settingDialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="设置" :visible.sync="settingDialogVisible" width="40%">
       <div class="scroll_bar">
         <div class="title">退房提醒设置</div>
         <div class="form_border">

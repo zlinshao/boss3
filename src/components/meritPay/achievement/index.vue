@@ -178,7 +178,7 @@
         :total="totalNum">
       </el-pagination>
     </div>
-    <el-dialog  title="业绩详情" :visible.sync="dialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false"  title="业绩详情" :visible.sync="dialogVisible" width="30%">
       <el-row style="margin: 0 20px;">
         <el-col :span="6">个人提成：</el-col>
         <el-col :span="18">{{dblRowData.achv}}</el-col>

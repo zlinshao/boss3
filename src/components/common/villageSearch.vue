@@ -1,6 +1,6 @@
 <template>
   <div id="mapSearchId">
-    <el-dialog title="小区选择" :visible.sync="villageDialogVisible" width="40%" :before-close="closeDialog">
+    <el-dialog :close-on-click-modal="false" title="小区选择" :visible.sync="villageDialogVisible" width="40%" :before-close="closeDialog">
       <div class="content">
         <div class="filter-container">
           <el-form :inline="true" size="mini" class="demo-form-inline">

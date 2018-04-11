@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="上缴收据修改" :visible.sync="editHandInDialogVisible">
+    <el-dialog :close-on-click-modal="false" title="上缴收据修改" :visible.sync="editHandInDialogVisible">
       <div class="scroll_bar">
         <div class="title">基本信息</div>
         <div class="form_border">
@@ -130,7 +130,7 @@
         upStatus:false,
         editImage:{},
         isSelectCollect: [],
-        isSelectRent: [],       
+        isSelectRent: [],
         //作废
         contractCancelCollect:[],
         contractCancelRent:[],
@@ -190,7 +190,7 @@
 
                 for(let key in this.isSelectCollect){
                   this.params.candidate.push(key)
-                }               
+                }
             // this.params.contract_type = arr.contract_type;
 
               this.params.department_id = arr.department_id;
@@ -199,7 +199,7 @@
               this.staff_name = arr.simple_staff.real_name;
             }
 
- 
+
           }
         });
       },
@@ -239,7 +239,7 @@
                 title:'成功',
                 message:res.data.msg
               });
-              
+
               this.$emit('close');
               this.refresh=3;
               this.$emit('Refreshxx', this.refresh);
@@ -252,7 +252,7 @@
               })
             }
           })
-       
+
       },
       init(){
         $('.imgItem').remove();
@@ -267,11 +267,11 @@
           screenshot:[],
           candidate:[],
           medi_contracts:[],//s上缴中介收据
-          personal_contracts:[],//s上缴个人收据         
+          personal_contracts:[],//s上缴个人收据
         };
         this.editImage={},
         this.isSelectCollec=[],
-        this.isSelectRent= [],   
+        this.isSelectRent= [],
         this.taskType = '3';
         this.dictionary = [];
         this.length = '';

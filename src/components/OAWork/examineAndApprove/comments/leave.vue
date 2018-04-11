@@ -1,6 +1,6 @@
 <template>
   <div class="modalFrame">
-    <el-dialog
+    <el-dialog :close-on-click-modal="false"
       title="请假审批"
       :visible.sync="leaveVisible"
       width="50%">
@@ -50,7 +50,7 @@
             根据排班自动计算时长：<el-button type="text" @click="innerVisible = true">查看明细</el-button>
           </el-form-item>
 
-          <el-dialog
+          <el-dialog :close-on-click-modal="false"
             width="30%"
             title="计算明细"
             :visible.sync="innerVisible"

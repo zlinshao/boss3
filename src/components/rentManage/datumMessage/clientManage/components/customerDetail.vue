@@ -1,6 +1,6 @@
 <template>
   <div id="addFollowUp">
-    <el-dialog title="客户详情" :visible.sync="orderDetailDialogVisible" width="60%">
+    <el-dialog :close-on-click-modal="false" title="客户详情" :visible.sync="orderDetailDialogVisible" width="60%">
       <div class="scroll_bar">
         <div class="title">基本信息</div>
         <div  class="describe_border">
@@ -16,7 +16,7 @@
                   <div class="content" v-if="customerDetail.sex == 2">女</div>
                   <div class="content" v-if="customerDetail.sex == 1">男</div>
                 </el-form-item>
-              </el-col>              
+              </el-col>
               <el-col :span="6">
                 <el-form-item label="联系方式">
                   <div class="content">{{customerDetail.phone}}</div>
@@ -26,7 +26,7 @@
                 <el-form-item label="身份证件号">
                   <div class="content">{{customerDetail.idcard}}</div>
                 </el-form-item>
-              </el-col>            
+              </el-col>
             </el-row>
 
           </el-form>
@@ -63,7 +63,7 @@
               <el-col :span="6">
                 <el-form-item label="联系方式">
                   <div class="content" v-if="customerDetail.detail">{{customerDetail.detail.mobile}}</div>
-                  <div class="content" v-else>暂时数据</div>  
+                  <div class="content" v-else>暂时数据</div>
                 </el-form-item>
               </el-col>
             </el-row>

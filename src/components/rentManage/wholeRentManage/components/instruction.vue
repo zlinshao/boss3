@@ -1,6 +1,6 @@
 <template>
   <div id="instruction">
-    <el-dialog title="功能说明" :visible.sync="instructionDialogVisible" width="62%">
+    <el-dialog :close-on-click-modal="false" title="功能说明" :visible.sync="instructionDialogVisible" width="62%">
       <div>
         <el-row :gutter="20" class="instruct_main">
           <el-col :span="6" class="instruct_right scroll_bar">

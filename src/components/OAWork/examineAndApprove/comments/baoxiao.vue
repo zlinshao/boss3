@@ -1,6 +1,6 @@
 <template>
   <div class="modalFrame ">
-    <el-dialog title="报销流程" :visible.sync="reimbursement" width="50%">
+    <el-dialog :close-on-click-modal="false" title="报销流程" :visible.sync="reimbursement" width="50%">
       <div class="scroll_bar">
         <el-form :model="form" size="mini" label-width="100px">
           <div v-for="item in number">

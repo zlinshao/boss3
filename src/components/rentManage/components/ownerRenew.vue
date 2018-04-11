@@ -1,6 +1,6 @@
 <template>
   <div id="ownerRenew">
-    <el-dialog title="房东续约" :visible.sync="ownerRenewDialogVisible">
+    <el-dialog :close-on-click-modal="false" title="房东续约" :visible.sync="ownerRenewDialogVisible">
       <div>
         <el-form size="mini" :model="formInline" label-width="80px">
           <el-row>

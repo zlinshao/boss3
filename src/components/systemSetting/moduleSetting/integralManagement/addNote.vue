@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="备注" :visible.sync="newAddDialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" title="备注" :visible.sync="newAddDialogVisible" width="30%">
       <div>
         <el-form size="mini" :model="form" label-width="100px">
           <el-row>
@@ -80,7 +80,7 @@ export default {
                   message: res.data.msg
                 });
               }
-            }); 
+            });
     },
 
     close() {

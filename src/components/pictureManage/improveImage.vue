@@ -1,6 +1,6 @@
 <template>
   <div id="improveImgInfo">
-    <el-dialog title="上传完成" :visible.sync="improveImgInfoDialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="上传完成" :visible.sync="improveImgInfoDialogVisible" width="40%">
       <div class="">
         <el-form size="small" :model="formInfo" label-width="100px">
           <el-row >

@@ -1,6 +1,6 @@
 <template>
   <div class="modalFrame">
-    <el-dialog
+    <el-dialog :close-on-click-modal="false"
       title="事业部报销"
       :visible.sync="shiyebuVisible"
       width="50%">

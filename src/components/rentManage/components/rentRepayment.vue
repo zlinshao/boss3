@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="还款" :visible.sync="repaymentDialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="还款" :visible.sync="repaymentDialogVisible" width="40%">
       <div>
         <!--<div class="form_border">-->
           <el-form size="mini" :model="formInline" label-width="100px">

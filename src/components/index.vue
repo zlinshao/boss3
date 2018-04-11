@@ -318,6 +318,7 @@
 
     mounted() {
       this.initData();
+      console.log(JSON.parse(localStorage.personal))
     },
     computed: {
       visitedViews() {

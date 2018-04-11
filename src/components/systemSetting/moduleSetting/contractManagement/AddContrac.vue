@@ -1,6 +1,6 @@
 <template>
   <div id="increaseGoods">
-    <el-dialog :title="newOrChange" :visible.sync="increaseGoodsDialogVisible" width="28%" style="margin-top:18vh">
+    <el-dialog :close-on-click-modal="false" :title="newOrChange" :visible.sync="increaseGoodsDialogVisible" width="28%" style="margin-top:18vh">
       <div>
         <el-form size="mini" :model="form" label-width="80px">
           <el-row>
@@ -80,7 +80,7 @@
       increaseGoodsDialogVisible(val){
         if (!val) {
           this.$emit('close')
-          
+
         }
       },
       cityList(val){
@@ -92,7 +92,7 @@
         this.form.rent_amount = val.rent_amount;
         this.form.collect_remain = val.collect_remain;
         this.form.rent_remain = val.rent_remain;
-        this.operate_name = val.operator.real_name;  
+        this.operate_name = val.operator.real_name;
         this.contarctid = val.id;
       },
       newOrChange(val){
@@ -100,7 +100,7 @@
         if(val == "新增"){
           this.close();
         }
-      },     
+      },
     },
     methods: {
       savex(){
@@ -119,7 +119,7 @@
                  this.$notify.warning({
                   title: "警告",
                   message: res.data.msg
-                });             
+                });
             }
         })
       } else if(this.newOrChangein=="修改") {
@@ -135,15 +135,15 @@
             });
             this.$emit("cityCodeflag",this.form.city_code);
             this.increaseGoodsDialogVisible=false;
-         
+
           }else{
                  this.$notify.warning({
                   title: "警告",
                   message: res.data.msg
-                });             
+                });
             }
         })
-      }        
+      }
 
       },
       integral(val){
@@ -153,9 +153,9 @@
           if (res.data.code === "20000") {
               this.form.collect_remain = res.data.data.collect_remain;
               this.form.rent_remain = res.data.data.rent_remain;
-            
+
           }
-        });         
+        });
       },
       clearable(){
         this.form.collect_remain = 0;
@@ -167,9 +167,9 @@
                 collect_amount:'',
                 rent_amount:'',
                 collect_remain: 0,
-                rent_remain: 0,             
+                rent_remain: 0,
             }
-          this.operate_name=this.personal.name;         
+          this.operate_name=this.personal.name;
       },
 checkNo(value){
 let reg = /^[1-9]\d*$/;
@@ -186,7 +186,7 @@ if (value > 999999 || new RegExp(reg).test(value) == false) {
 this.form.rent_amount =''
 }
 }
-} 
+}
     },
     mounted(){
       this.personal = JSON.parse(localStorage.personal);
