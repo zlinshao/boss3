@@ -332,9 +332,6 @@
       if(JSON.parse(localStorage.personal).data.setting.length<1 || !JSON.parse(localStorage.personal).detail.pwd_lock){
         this.setLockPwdDialog = true;
       }
-      globalConfig.personal = JSON.parse(localStorage.personal);
-      let head = JSON.parse(localStorage.myData);
-      globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
     },
     computed: {
       visitedViews() {

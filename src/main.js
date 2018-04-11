@@ -31,6 +31,7 @@ import VueLoading from './plugin/loading/loading.js'
 
 // 地图
 import AMap from 'vue-amap'
+
 Vue.use(Fun);
 Vue.use(AMap);
 Vue.use(VueLoading);
@@ -80,8 +81,6 @@ Vue.config.productionTip = false;
 // });
 
 
-
-
 //重定向router
 router.beforeEach((to, from, next) => {
   let lockStatus = true;
@@ -92,24 +91,24 @@ router.beforeEach((to, from, next) => {
   }
 
   let data = null;
-  if(sessionStorage.getItem('myData')){
-    data =  sessionStorage.getItem("myData");
-    if(to.path !== '/login'){
-      localStorage.setItem("myData",data)
+  if (sessionStorage.getItem('myData') != 'null') {
+    data = sessionStorage.getItem("myData");
+    if (to.path !== '/login') {
+      localStorage.setItem("myData", data);
     }
-  }else {
+  } else {
     data = localStorage.getItem("myData");
   }
 
   if (!data && to.path !== '/login') {
     next({path: '/login'})
-  }else if(data&&to.path === '/'){
+  } else if (data && to.path === '/') {
     next({path: '/main'})
-  }else if(Number(localStorage.getItem('lockStatus'))===1 && to.path!=='/lock'){
-    next({path:'/lock'});
-  }else if(Number(localStorage.getItem('lockStatus'))===0 && to.path === '/lock' && sessionStorage.getItem('lockStatus')!=1){
-    next({path:from.path});
-  }else {
+  } else if (Number(localStorage.getItem('lockStatus')) === 1 && to.path !== '/lock') {
+    next({path: '/lock'});
+  } else if (Number(localStorage.getItem('lockStatus')) === 0 && to.path === '/lock' && sessionStorage.getItem('lockStatus') != 1) {
+    next({path: from.path});
+  } else {
     next();
   }
 });
