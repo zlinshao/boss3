@@ -1,6 +1,6 @@
 <template>
   <div class="modalFrame">
-    <el-dialog
+    <el-dialog :close-on-click-modal="false"
       title="积分申请"
       :visible.sync="dialogVisible"
       width="50%">

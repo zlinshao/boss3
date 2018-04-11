@@ -1,6 +1,6 @@
 <template>
   <div id="mapSearchId">
-    <el-dialog title="地图" :visible.sync="mapFormVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="地图" :visible.sync="mapFormVisible" width="40%">
       <div class="content" v-if="isMapSearch">
         <div class="filter-container">
           <el-form :inline="true" size="mini" class="demo-form-inline">
@@ -82,7 +82,7 @@
         </el-form>
       </div>
       <!--内层dialog 选择坐标-->
-      <el-dialog
+      <el-dialog :close-on-click-modal="false"
         width="40%"
         title="选取坐标"
         :visible.sync="innerVisible"

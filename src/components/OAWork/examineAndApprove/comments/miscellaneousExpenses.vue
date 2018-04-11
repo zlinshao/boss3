@@ -1,6 +1,6 @@
 <template>
   <div class="modalFrame">
-    <el-dialog
+    <el-dialog :close-on-click-modal="false"
       title="客服部问题申报"
       :visible.sync="miscellaneousExpensesVisible"
       width="50%">

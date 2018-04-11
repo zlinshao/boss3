@@ -1,6 +1,6 @@
 <template>
   <div id="remarks">
-    <el-dialog :close-on-click-modal="false" title="备注" :visible.sync="dialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="请设置锁屏密码" :visible.sync="dialogVisible" width="30%">
       <div class="scroll_bar">
         <el-table
           :data="tableData"

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="补齐时间修改" :visible.sync="dialogVisible" width="24%">
+    <el-dialog :close-on-click-modal="false" title="补齐时间修改" :visible.sync="dialogVisible" width="24%">
       <el-form size="mini" label-width="70px">
         <el-form-item label="补齐时间">
           <div class="block">

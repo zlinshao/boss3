@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="发送短信" :visible.sync="sendMessageDialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="发送短信" :visible.sync="sendMessageDialogVisible" width="40%">
       <div>
         <div class="title">收件人信息</div>
         <div class="form_border">

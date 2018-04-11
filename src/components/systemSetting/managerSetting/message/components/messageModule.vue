@@ -1,6 +1,6 @@
 <template>
   <div class="messageModule">
-    <el-dialog :title="messageName" :visible.sync="dialogFormVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" :title="messageName" :visible.sync="dialogFormVisible" width="30%">
       <el-form :model="form" label-width="100px" size="mini">
         <el-row>
           <el-col :span="12">

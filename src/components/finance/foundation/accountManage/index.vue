@@ -105,7 +105,7 @@
     </div>
 
     <!--充值-->
-    <el-dialog title="充值金额" :visible.sync="rechargeVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" title="充值金额" :visible.sync="rechargeVisible" width="30%">
       <el-form :model="rechargeForm" size="mini" label-width="80px">
         <el-form-item label="充值金额">
           <el-input v-model="rechargeForm.money" placeholder="请输入金额"></el-input>

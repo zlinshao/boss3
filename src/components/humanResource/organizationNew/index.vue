@@ -207,7 +207,7 @@
         </div>
       </el-col>
     </el-row>
-    <el-dialog title="员工详情" :visible.sync="staffDetail" width="50%" >
+    <el-dialog :close-on-click-modal="false" title="员工详情" :visible.sync="staffDetail" width="50%" >
       <div style="font-size: 16px;">基础信息</div>
       <div style="border: 1px solid #dfe6fb;padding: 0 10px;">
         <el-row :gutter="20">

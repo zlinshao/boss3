@@ -1,7 +1,7 @@
 <template>
   <div>
 
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" title="提示" :visible.sync="dialogVisible" width="30%">
       <el-checkbox-group v-model="checkList" >
         <el-checkbox v-for="item in data" :label="item.id" :key="item.id">{{item.dictionary_name}}</el-checkbox>
       </el-checkbox-group>

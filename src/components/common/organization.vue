@@ -1,6 +1,6 @@
 <template>
   <div id="organizationId">
-    <el-dialog :title="titlename" :visible.sync="organizationVisible" width="785px" center>
+    <el-dialog :close-on-click-modal="false" :title="titlename" :visible.sync="organizationVisible" width="785px" center>
       <div class="content">
         <div class="content_left" @click="inputFocus">
           <div style="display:flex;flex-wrap: wrap;">

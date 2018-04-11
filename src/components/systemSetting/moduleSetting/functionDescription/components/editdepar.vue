@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="修改标题" :visible.sync="editDepartDialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" title="修改标题" :visible.sync="editDepartDialogVisible" width="30%">
       <div>
         <el-form size="mini" :model="params" label-width="100px">
           <el-row>

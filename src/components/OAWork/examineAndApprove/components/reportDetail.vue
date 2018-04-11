@@ -1,6 +1,6 @@
 <template>
   <div id="reportDetail">
-    <el-dialog title="报备详情" :visible.sync="reportVisible" width="70%">
+    <el-dialog :close-on-click-modal="false" title="报备详情" :visible.sync="reportVisible" width="70%">
       <el-form size="mini" label-width="110px">
         <el-row v-if="JSON.stringify(show_content) !== '{}'">
           <el-col :span="8" v-for="(key,index) in show_content" :key="index"

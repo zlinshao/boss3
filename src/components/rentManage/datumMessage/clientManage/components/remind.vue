@@ -1,14 +1,14 @@
 <template>
   <div>
-    <el-dialog title="发送短信" :visible.sync="remindDialogVisible" width="32%">
+    <el-dialog :close-on-click-modal="false" title="发送短信" :visible.sync="remindDialogVisible" width="32%">
       <div>
         <el-form size="mini" :model="formInline" label-width="100px">
-          <el-row> 
-            <el-col :span="10">        
-              <el-form-item label="收件人:">        
+          <el-row>
+            <el-col :span="10">
+              <el-form-item label="收件人:">
               <span>共计{{number}}人</span>
               </el-form-item>
-            </el-col> 
+            </el-col>
             <el-col :span="10">
               <el-form-item label="离职业务员:" required >
                <span><el-input  v-model="name" @focus="selectDep" placeholder="请选择负责人" readonly></el-input></span>
@@ -18,7 +18,7 @@
           <el-row>
             <el-col :span="10">
               <el-form-item label="短信名称:">
-              <span>员工离职短信</span>           
+              <span>员工离职短信</span>
               </el-form-item>
             </el-col>
             <el-col :span="10">
@@ -40,7 +40,7 @@
         <el-button size="small" type="primary" @click="save">发 送</el-button>
       </span>
     </el-dialog>
-        <Organization :organizationDialog="organizeDialog" :length="length" :type="type" 
+        <Organization :organizationDialog="organizeDialog" :length="length" :type="type"
                   @selectMember="selectMember" @close="closeOrganization"></Organization>
   </div>
 
@@ -86,7 +86,7 @@ export default {
           id: [],
           date: ""
         };
-        
+
         this.name="";
       }
     },
@@ -106,12 +106,12 @@ export default {
              this.$notify.warning({
               title: "警告",
               message: "未选离职业务员"
-            });       
+            });
       }else if(this.formInline.date == ""){
              this.$notify.warning({
               title: "警告",
               message: "未填写离职时间"
-            });    
+            });
       }
       else{
       this.$http
@@ -135,7 +135,7 @@ export default {
             });
           }
         });
-      
+
       }
 
     },

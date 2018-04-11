@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="合同汇总详情" :visible.sync="totalDialogVisible">
+    <el-dialog :close-on-click-modal="false" title="合同汇总详情" :visible.sync="totalDialogVisible">
       <div class="scroll_bar">
         <div class="title">合同信息</div>
         <div class="table_border">

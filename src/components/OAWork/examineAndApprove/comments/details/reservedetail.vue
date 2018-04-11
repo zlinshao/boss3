@@ -1,6 +1,6 @@
 <template>
   <div class="modalFrame">
-    <el-dialog
+    <el-dialog :close-on-click-modal="false"
       title="备用金申领审批"
       :visible.sync="reservedetail"
       width="50%">

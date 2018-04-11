@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="领取合同修改" :visible.sync="editApplyDialogVisible">
+    <el-dialog :close-on-click-modal="false" title="领取合同修改" :visible.sync="editApplyDialogVisible">
       <div class="scroll_bar">
         <div class="title">基本信息{{params.screenshot}}</div>
         <div class="form_border">

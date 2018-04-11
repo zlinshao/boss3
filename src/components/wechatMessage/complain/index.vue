@@ -118,7 +118,7 @@
       </el-pagination>
     </div>
 
-    <el-dialog title="投诉处理" :visible.sync="reversionVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" title="投诉处理" :visible.sync="reversionVisible" width="30%">
         <el-form size="mini" label-width="80px">
           <el-form-item label="回复：">
             <el-input type="textarea" v-model="replyContent" :autosize="{minRows: 2,maxRows: 4}"></el-input>

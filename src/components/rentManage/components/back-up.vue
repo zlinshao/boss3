@@ -1,6 +1,6 @@
 <template>
   <div id="back_up">
-    <el-dialog title="查看备份" :visible.sync="backUpDialogVisible">
+    <el-dialog :close-on-click-modal="false" title="查看备份" :visible.sync="backUpDialogVisible">
       <div>
         <el-table
           :data="tableData"

@@ -1,6 +1,6 @@
 <template>
   <div class="modalFrame">
-    <el-dialog
+    <el-dialog :close-on-click-modal="false"
       title="采购审批"
       :visible.sync="purchasedetail"
       width="50%">

@@ -75,6 +75,8 @@
               <template slot-scope="scope">
                <el-button class="btnStatus" v-if="scope.row.draft === '已发布'" type="primary" size="mini">已发布</el-button>
               <el-button class="btnStatus" v-if="scope.row.draft === '草稿'" type="info" size="mini">草稿</el-button>
+              <el-button class="btnStatus" v-if="scope.row.draft === '已下架'" type="warning" size="mini">已下架</el-button>
+              
             </template>
               </el-table-column>
             </el-table>
@@ -202,17 +204,22 @@ export default {
       this.lists = [
         { clickIndex: "noticeDialog", headIcon: "el-icons-fa-edit", label: "编辑" },
         { clickIndex: "look", headIcon: "el-icons-fa-eye", label: "预览" },
-        { clickIndex: "delete",  headIcon: "el-icons-fa-trash-o", label: "删除" },
+        { clickIndex: "delete",  headIcon: "el-icons-fa-trash-o", label: "下架" },
         { clickIndex: "sendnotice",  headIcon: "el-icons-fa-check-circle-o",   label: "发布"   }
       ];
+      this.contextMenuParam(event);
       }
       else if(row.draft=="已发布"){
       this.lists = [
         { clickIndex: "look", headIcon: "el-icons-fa-eye", label: "预览" },
-        { clickIndex: "delete",  headIcon: "el-icons-fa-trash-o", label: "删除" }
+        { clickIndex: "delete",  headIcon: "el-icons-fa-trash-o", label: "下架" }
       ];
-      }
       this.contextMenuParam(event);
+      }
+      else{
+        this.lists = [];
+      }
+      
     },
     myData(val) {
       this.tableData = [];
@@ -236,6 +243,9 @@ export default {
                 this.tableData[j].draft = "已发布";
               } else {
                 this.tableData[j].draft = "草稿";
+              }
+              if(res.data.data[j].delete_time){
+                this.tableData[j].draft = "已下架";
               }
               if (!res.data.data[j].real_name) {
                 this.tableData[j].real_name = "未知人员";

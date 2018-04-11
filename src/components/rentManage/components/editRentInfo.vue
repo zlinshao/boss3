@@ -1,6 +1,6 @@
 <template>
   <div id="addHouseResources">
-    <el-dialog title="修改租客信息" :visible.sync="editRentInfoDialogVisible" width="60%">
+    <el-dialog :close-on-click-modal="false" title="修改租客信息" :visible.sync="editRentInfoDialogVisible" width="60%">
       <div>
         <el-tabs v-model="activeName">
           <el-tab-pane label="房源信息" name="first">

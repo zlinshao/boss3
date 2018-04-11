@@ -1,6 +1,6 @@
 <template>
   <div id="treeModule">
-    <el-dialog :title="title" :visible.sync="knowVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="knowVisible" width="30%">
       <el-form :model="form" label-width="60px" size="mini">
         <el-form-item label="层级">
           <el-select v-model="form.topClass" clearable>

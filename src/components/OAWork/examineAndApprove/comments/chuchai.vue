@@ -1,6 +1,6 @@
 <template>
   <div class="modalFrame">
-    <el-dialog
+    <el-dialog :close-on-click-modal="false"
       title="出差报销"
       :visible.sync="chuchaiVisible"
       width="50%">

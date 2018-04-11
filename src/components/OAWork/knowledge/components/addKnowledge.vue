@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="制度上传" :visible.sync="moduleVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="制度上传" :visible.sync="moduleVisible" width="40%">
       <div>
         <el-form size="small" label-width="100px" :modal="formInline">
           <el-row>

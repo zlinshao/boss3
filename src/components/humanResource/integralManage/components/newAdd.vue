@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :title="newAdd" :visible.sync="newAddDialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" :title="newAdd" :visible.sync="newAddDialogVisible" width="40%">
       <div>
         <el-form size="mini" :model="form" label-width="100px">
           <el-row>
@@ -69,7 +69,7 @@
       </span>
     </el-dialog>
     <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
-                  @close='closeModal' @selectMember="selectMember"></Organization>    
+                  @close='closeModal' @selectMember="selectMember"></Organization>
   </div>
 </template>
 
@@ -326,7 +326,7 @@ export default {
             });
         }
       }
- 
+
     },
     //调出选人组件
     openOrganizeModal() {

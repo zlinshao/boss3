@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="领取收据详情" :visible.sync="contractDialogVisible">
+    <el-dialog :close-on-click-modal="false" title="领取收据详情" :visible.sync="contractDialogVisible">
       <div class="scroll_bar">
         <div class="title">基本信息</div>
         <div class="form_border">
@@ -8,7 +8,7 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="领用人">
-                <div class="content" v-if="detailInfo.simple_staff">{{detailInfo.simple_staff.real_name}}</div> 
+                <div class="content" v-if="detailInfo.simple_staff">{{detailInfo.simple_staff.real_name}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -53,7 +53,7 @@
         <div v-if="detailInfo.screenshot.length>0"  :key="detailInfo.screenshot.id" v-for="item in detailInfo.screenshot" style="display: inline-block">
             <img style="width: 100px;height: 100px;border-radius: 6px;margin: 0 10px 10px 0" :src="item.uri" alt=""
                  data-magnify="" :data-src="item.uri">
-          </div> 
+          </div>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">

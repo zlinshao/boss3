@@ -1,6 +1,6 @@
 <template>
   <div class="modalFrame">
-    <el-dialog
+    <el-dialog :close-on-click-modal="false"
       title="水电燃报销（官网）"
       :visible.sync="miscellaneousExpensesOfficialVisible"
       width="60%">

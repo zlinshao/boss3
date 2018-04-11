@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="新增科目" :visible.sync="dialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="新增科目" :visible.sync="dialogVisible" width="40%">
       <el-form :model="form" size="mini" label-width="80px">
         <el-form-item label="上级科目">
           <el-input v-model="form.preSubject" placeholder="请选择科目" readonly>

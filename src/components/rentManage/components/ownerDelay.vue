@@ -1,6 +1,6 @@
 <template>
   <div id="ownerDelay">
-    <el-dialog title="房东延期" :visible.sync="ownerDelayDialogVisible">
+    <el-dialog :close-on-click-modal="false" title="房东延期" :visible.sync="ownerDelayDialogVisible">
       <div>
         <div class="title">房东信息</div>
         <div class="table_border">

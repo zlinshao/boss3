@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="新建部门" :visible.sync="addDepartDialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" title="新建部门" :visible.sync="addDepartDialogVisible" width="30%">
       <div>
         <el-form size="mini" :model="params" label-width="100px">
           <el-row>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="高级筛选" :visible.sync="dialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" title="高级筛选" :visible.sync="dialogVisible" width="30%">
       <el-form label-width="80px" size="mini">
         <el-row>
           <el-col :span="22">

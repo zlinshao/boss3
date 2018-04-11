@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="公告" :visible.sync="announcementDialogVisible">
+  <el-dialog :close-on-click-modal="false" title="公告" :visible.sync="announcementDialogVisible">
     <div class="scroll_bar">
       <div class="headContainer" :class="{ no1: no1flag, no2: no2flag, no3: no3flag }">
         <div class="headTitle">

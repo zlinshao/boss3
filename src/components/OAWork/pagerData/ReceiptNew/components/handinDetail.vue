@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="上缴收据详情" :visible.sync="contractHandInDialogVisible">
+    <el-dialog :close-on-click-modal="false" title="上缴收据详情" :visible.sync="contractHandInDialogVisible">
       <div  class="scroll_bar">
         <div class="title">基本信息</div>
         <div class="form_border">

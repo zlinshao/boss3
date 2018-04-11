@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog title="丢失收据详情" :visible.sync="contractLossDialogVisible">
+    <el-dialog :close-on-click-modal="false" title="丢失收据详情" :visible.sync="contractLossDialogVisible">
       <div  class="scroll_bar">
         <div class="title">基本信息</div>
         <div class="form_border">
