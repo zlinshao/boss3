@@ -204,7 +204,7 @@ export default {
       this.lists = [
         { clickIndex: "noticeDialog", headIcon: "el-icons-fa-edit", label: "编辑" },
         { clickIndex: "look", headIcon: "el-icons-fa-eye", label: "预览" },
-        { clickIndex: "delete",  headIcon: "el-icons-fa-trash-o", label: "下架" },
+        { clickIndex: "delete",  headIcon: "el-icons-fa-trash-o", label: "删除" },
         { clickIndex: "sendnotice",  headIcon: "el-icons-fa-check-circle-o",   label: "发布"   }
       ];
       this.contextMenuParam(event);
@@ -212,7 +212,7 @@ export default {
       else if(row.draft=="已发布"){
       this.lists = [
         { clickIndex: "look", headIcon: "el-icons-fa-eye", label: "预览" },
-        { clickIndex: "delete",  headIcon: "el-icons-fa-trash-o", label: "下架" }
+        { clickIndex: "reset",  headIcon: "el-icons-fa-trash-o", label: "撤回" }
       ];
       this.contextMenuParam(event);
       }
@@ -244,7 +244,7 @@ export default {
               } else {
                 this.tableData[j].draft = "草稿";
               }
-              if(res.data.data[j].delete_time){
+              if(res.data.data[j].unstage == 1){
                 this.tableData[j].draft = "已撤回";
               }
               if (!res.data.data[j].real_name) {
@@ -301,12 +301,7 @@ export default {
                 }
               });
           })
-          .catch(() => {
-            this.$alert("未删除", "提示", {
-              confirmButtonText: "确定",
-              type: "error"
-            });
-          });
+
       }
       //右键发布
       if (index == "sendnotice") {
@@ -319,6 +314,33 @@ export default {
         } else {
           this.letsend();
         }
+      }
+      //撤回
+      if( index == "reset"){
+        this.$confirm("确定要撤回该公告吗？", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        })
+          .then(() => {
+            this.$http
+              .put(this.urls + "announcement/unstage/" + this.rightrow.id)
+              .then(res => {
+                if (res.data.code == "80010") {
+                  this.$notify({
+                    title: "成功",
+                    message: "撤回成功",
+                    type: "success"
+                  });
+                  this.myData(this.form.page);
+                } else {
+                  this.$notify.error({
+                    title: "错误",
+                    message: "操作失败"
+                  });
+                }
+              });
+          })
       }
     },
     //发布接口

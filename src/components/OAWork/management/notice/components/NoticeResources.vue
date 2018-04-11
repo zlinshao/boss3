@@ -224,8 +224,10 @@ export default {
       if (!this.firstflag) {
         this.form.id = "";
       }
-
-        this.form.id = this.midId;
+        if(this.form.id == ""){
+          this.form.id = this.midId;
+        }
+        
 
       this.saveorsend();
       if (this.saveorsendflag) {
