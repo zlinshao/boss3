@@ -444,7 +444,7 @@
             this.params.phone = res.data.data.phone;
             let detail = res.data.data.detail;
             this.params.real_name = detail && detail.real_name;
-            this.params.gender = detail && detail.gender;
+            this.params.gender = '229';
             this.params.home_addr = detail && detail.home_addr;
             this.params.fertility_status = detail && detail.fertility_status;
             this.params.id_num = detail && detail.id_num;

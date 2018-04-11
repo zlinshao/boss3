@@ -118,6 +118,26 @@
                     prop="created_at"
                     label="入职时间">
                   </el-table-column>
+                  <el-table-column
+                    prop="created_at"
+                    label="账号状态">
+                    <template slot-scope="scope">
+                      <div>
+                        <span v-if="scope.row.is_enable"><el-tag type="danger">禁用</el-tag></span>
+                        <span v-if="!scope.row.is_enable"><el-tag type="success">启用</el-tag></span>
+                      </div>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    prop="created_at"
+                    label="在职状态">
+                    <template slot-scope="scope">
+                      <div >
+                        <span v-if="scope.row.is_on_job"><el-tag type="warning">离职</el-tag></span>
+                        <span v-if="!scope.row.is_on_job"><el-tag type="success">在职</el-tag></span>
+                      </div>
+                    </template>
+                  </el-table-column>
                 </el-table>
                 <div class="tableBottom">
                   <el-pagination
@@ -209,68 +229,110 @@
       </el-col>
     </el-row>
     <el-dialog :close-on-click-modal="false" title="员工详情" :visible.sync="staffDetail" width="50%" >
-      <div style="font-size: 16px;">基础信息</div>
-      <div style="border: 1px solid #dfe6fb;padding: 0 10px;">
+      <div class="title">基础信息</div>
+      <div style="padding: 0 20px;" class="form_border">
         <el-row :gutter="20">
           <el-col :span="8">
-              <p>真实姓名：<span>{{staffDetailData&& staffDetailData.detail && staffDetailData.detail.real_name}}</span></p>
+              <p>真实姓名：<span v-if="staffDetailData&& staffDetailData.detail && staffDetailData.detail.real_name">
+                {{staffDetailData&& staffDetailData.detail && staffDetailData.detail.real_name}}</span>
+                <span v-else>暂无</span>
+              </p>
           </el-col>
           <el-col :span="8">
-            <p>性别：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.genders}}</span></p>
+            <p>性别：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.genders">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.genders}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
           <el-col :span="8">
-            <p>手机号码：<span>{{staffDetailData && staffDetailData.phone}}</span></p>
+            <p>手机号码：<span v-if="staffDetailData && staffDetailData.phone">
+              {{staffDetailData && staffDetailData.phone}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="8">
-            <p>身份证号：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.id_num}}</span></p>
+            <p>身份证号：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.id_num">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.id_num}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
           <el-col :span="8">
-            <p>生日：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.birthday}}</span></p>
+            <p>生日：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.birthday">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.birthday}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
           <el-col :span="8">
-            <p>推荐人：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.recommender_name}}</span></p>
+            <p>推荐人：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.recommender_name">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.recommender_name}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="16">
-            <p>家庭住址：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.home_addr}}</span></p>
+            <p>家庭住址：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.home_addr">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.home_addr}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
           <el-col :span="8">
-            <p>生育状况： <span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.fertility_statuss}}</span></p>
-          </el-col>
-        </el-row>
-        <el-row :gutter="20">
-          <el-col :span="8">
-            <p>银行卡号：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.bank_num}}</span></p>
-          </el-col>
-          <el-col :span="8">
-            <p>开户行：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.account_bank}}</span></p>
-          </el-col>
-          <el-col :span="8">
-            <p>紧急电话：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.emergency_call}}</span></p>
+            <p>生育状况： <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.fertility_statuss">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.fertility_statuss}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="8">
-            <p>支行：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.branch_bank}}</span></p>
+            <p>银行卡号：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.bank_num">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.bank_num}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
           <el-col :span="8">
-            <p>开户名：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.account_name}}</span></p>
+            <p>开户行：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.account_bank">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.account_bank}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
           <el-col :span="8">
-            <p>等级：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.levels}}</span></p>
+            <p>紧急电话：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.emergency_call">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.emergency_call}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="8">
-            <p>部门：<span>{{department}}</span></p>
+            <p>支行：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.branch_bank">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.branch_bank}}</span>
+              <span v-else>暂无</span>
+            </p>
+          </el-col>
+          <el-col :span="8">
+            <p>开户名：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.account_name">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.account_name}}</span>
+              <span v-else>暂无</span>
+            </p>
+          </el-col>
+          <el-col :span="8">
+            <p>等级：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.levels">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.levels}}</span>
+              <span v-else>暂无</span>
+            </p>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <p>部门：<span v-if="department">{{department}}</span><span v-else>暂无</span></p>
           </el-col>
           <el-col :span="8">
             <!--<p>职位：<span></span></p>-->
           </el-col>
-          <el-col :span="8"> <p>岗位：<span>{{currentPost}}</span></p></el-col>
+          <el-col :span="8"> <p>岗位：<span v-if="currentPost">{{currentPost}}</span> <span v-else>暂无</span></p></el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="8">
@@ -288,10 +350,16 @@
         </el-row>
         <el-row>
           <el-col :span="8">
-            <p>入职时间：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.enroll}}</span></p>
+            <p>入职时间：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.enroll">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.enroll}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
           <el-col :span="8">
-            <p>薪资：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.salary}}</span></p>
+            <p>薪资：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.salary">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.salary}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
         </el-row>
         <el-row :gutter="20">
@@ -305,55 +373,97 @@
           </el-col>
         </el-row>
       </div>
-      <div style="font-size: 16px;">辅助信息</div>
-      <div style="border: 1px solid #dfe6fb;padding: 0 10px;">
+      <div class="title">辅助信息</div>
+      <div style="padding: 0 20px;" class="form_border">
         <el-row :gutter="20">
           <el-col :span="8">
-            <p>籍贯：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.origin_addr}}</span></p>
+            <p>籍贯：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.origin_addr">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.origin_addr}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
           <el-col :span="8">
-            <p>婚姻状况：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.marital_statuss}}</span></p>
+            <p>婚姻状况：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.marital_statuss">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.marital_statuss}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
           <el-col :span="8">
-            <p>政治面貌：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.political_statuss}}</span></p>
+            <p>政治面貌：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.political_statuss">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.political_statuss}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="8">
-            <p>转正时间：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.forward_time}}</span></p>
+            <p>转正时间：
+              <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.forward_time">
+                {{staffDetailData && staffDetailData.detail && staffDetailData.detail.forward_time}}
+              </span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
           <el-col :span="8">
-            <p>企业邮箱：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.mail}}</span></p>
+            <p>企业邮箱：
+              <span  v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.mail">
+                {{staffDetailData && staffDetailData.detail && staffDetailData.detail.mail}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
           <el-col :span="8">
-            <p>学历：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.educations}}</span></p>
+            <p>学历：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.educations">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.educations}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="8">
-            <p>毕业院校：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.school}}</span></p>
+            <p>毕业院校：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.school">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.school}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
           <el-col :span="8">
-            <p>专业：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.major}}</span></p>
+            <p>专业：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.major">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.major}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
           <el-col :span="8">
-            <p>毕业时间：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.graduation_time}}</span></p>
+            <p>毕业时间：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.graduation_time">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.graduation_time}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="8">
-            <p>第一次签合同时间：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_first_time}}</span></p>
+            <p>第一次签合同时间：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_first_time">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_first_time}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
           <el-col :span="8">
-            <p>第一次合同到期时间：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_first_end_time}}</span></p>
+            <p>第一次合同到期时间：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_first_end_time">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_first_end_time}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
           <el-col :span="8">
-            <p>第二次签合同时间：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_second_time}}</span></p>
+            <p>第二次签合同时间：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_second_time">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.agreement_second_time}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
         </el-row>
         <el-row :gutter="20">
           <el-col :span="24">
-            <p>备注：<span>{{staffDetailData && staffDetailData.detail && staffDetailData.detail.remark}}</span></p>
+            <p>备注：<span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.remark">
+              {{staffDetailData && staffDetailData.detail && staffDetailData.detail.remark}}</span>
+              <span v-else>暂无</span>
+            </p>
           </el-col>
         </el-row>
       </div>
