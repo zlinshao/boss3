@@ -1,7 +1,7 @@
 <template>
   <div id="addRentRepair">
     <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="addStaffDialogVisible" width="60%">
-      <div>
+      <div>{{roleArray}}
         <el-form size="mini" :model="params" label-width="120px" style="padding: 0 20px;">
           <el-tabs v-model="activeName">
             <el-tab-pane label="基本信息" name="first">
@@ -445,6 +445,8 @@
           this.params.position_id = [];
           this.department = '';
           this.currentPost = '';
+          this.positionDisabled = true;
+          this.postDisabled = true;
 
       },
       positionSelect() {
@@ -463,6 +465,7 @@
             this.params.real_name = res.data.data.name;
             let detail = res.data.data.detail;
             if (detail) {
+              this.postDisabled = false;
               this.params.gender = Number(detail.gender);
               this.params.home_addr = detail.home_addr;
               this.params.fertility_status = Number(detail.fertility_status);
@@ -509,14 +512,20 @@
               });
             }
             this.department = departNameArray.join(',');
-            this.roleArray = res && res.data && res.data.data && res.data.data.role;
+            let postArr = res && res.data && res.data.data && res.data.data.role;
             this.currentPost = [];
-            if (this.roleArray && this.roleArray.length > 0) {
-              this.roleArray.forEach((item) => {
-                this.params.position_id.push(item.position_id);
+            this.roleArray = [];
+            if (postArr && postArr.length > 0) {
+              postArr.forEach((item) => {
+                this.params.position_id.push(item.display_name);
                 this.currentPost.push(item.positions.name);
+                let data = {};
+                data.id = item.position_id;
+                data.name = item.positions.name;
+                this.roleArray.push(data);
               });
-              this.currentPosition = this.roleArray[0].display_name;
+              this.currentPosition = postArr[0].display_name;
+
             }
             // this.getPosition(this.params.department_id);
           } else {
