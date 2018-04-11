@@ -4,7 +4,8 @@
     <!--<LOADING v-if="isLoading"></LOADING>-->
 
     <el-tooltip placement="top" content="返回顶部">
-      <back-to-top transitionName="fade" :customStyle="myBackToTopStyle" :visibilityHeight="300" :backPosition="50"></back-to-top>
+      <back-to-top transitionName="fade" :customStyle="myBackToTopStyle" :visibilityHeight="300"
+                   :backPosition="50"></back-to-top>
     </el-tooltip>
   </div>
 </template>
@@ -12,10 +13,11 @@
 <script>
   import LOADING from './components/common/loading.vue'
   import BackToTop from './components/common/backToTop.vue'
+
   export default {
     name: 'app',
-    components: {LOADING,BackToTop},
-    data(){
+    components: {LOADING, BackToTop},
+    data() {
       return {
         loading: false,
         myBackToTopStyle: {
@@ -29,7 +31,8 @@
         }
       }
     },
-    created(){
+    created() {
+      this.responses();
       document.onkeydown = function (e) {//键盘按键控制
         e = e || window.event;
         if (e.keyCode == 116) {
@@ -38,17 +41,72 @@
       };
     },
     computed: {
-      isLoading(){
+      isLoading() {
         return this.$store.state.app.isLoading;
       }
     },
 
     methods: {
+      responses() {
+        this.$http.interceptors.response.use(function (response) {
+          return response;
+        }, function (error) {
+          if (error && error.response) {
+            switch (error.response.status) {
+              case 400:
+                error.message = '请求错误';
+                break;
+              case 401:
+                this.$alert('登陆超时请重新登陆', '温馨提示', {
+                  confirmButtonText: '确定',
+                  callback: action => {
+                    localStorage.removeItem('myData');
+                    localStorage.removeItem('personal');
+                    globalConfig.header.Authorization = '';
+                    this.$router.push({path: '/login'});
+                  }
+                });
+                error.message = '未授权，请登录';
+                break;
+              case 403:
+                error.message = '拒绝访问';
+                break;
+              case 404:
+                error.message = `请求地址出错: ${error.response.config.url}`;
+                break;
+              case 408:
+                error.message = '请求超时';
+                break;
+              case 500:
+                error.message = '服务器内部错误';
+                break;
+              case 501:
+                error.message = '服务未实现';
+                break;
+              case 502:
+                error.message = '网关错误';
+                break;
+              case 503:
+                error.message = '服务不可用';
+                break;
+              case 504:
+                error.message = '网关超时';
+                break;
+              case 505:
+                error.message = 'HTTP版本不受支持';
+                break;
+              default:
+            }
+          }
+          return Promise.reject(error);
+        });
+
+      },
       prevent(e) {
         e.preventDefault();
         this.$store.dispatch('closeMenu')
       },
-      closeMenu(){
+      closeMenu() {
         this.$store.dispatch('closeMenu')
       }
     }
@@ -60,6 +118,7 @@
     height: 100%;
     box-sizing: border-box;
   }
+
   body {
     margin: 0;
     padding: 0;

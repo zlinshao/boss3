@@ -561,7 +561,6 @@
       },
       getnotice(){
         this.$http.get(globalConfig.server + "announcement").then((res) => {
-          console.log(res)
           this.noticeInfo=res.data.data;
           this.noticeInfofirst=res.data.data[0];
         });
