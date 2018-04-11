@@ -49,6 +49,7 @@
     },
     mounted(){
       clearInterval(this.interval);
+      this.times();
       this.interval = setInterval(() => {
         this.times();
       }, 1000);
