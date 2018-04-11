@@ -1,7 +1,7 @@
 <template>
   <div id="addRentRepair">
     <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="addStaffDialogVisible" width="60%">
-      <div>{{roleArray}}
+      <div>
         <el-form size="mini" :model="params" label-width="120px" style="padding: 0 20px;">
           <el-tabs v-model="activeName">
             <el-tab-pane label="基本信息" name="first">
@@ -129,27 +129,6 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-              </el-row>
-              <el-row :gutter="20">
-                <el-col :span="8">
-                  <el-form-item label="账号状态" required>
-                    <el-select v-model="params.status" clearable>
-                      <el-option v-for="item in accountStatusCategory" :value="item.id" :key="item.id"
-                                 :label="item.dictionary_name">{{item.dictionary_name}}
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="在职状态" required>
-                    <el-select v-model="params.job_status" clearable>
-                      <el-option v-for="item in jobStatusCategory" :value="item.id" :key="item.id"
-                                 :label="item.dictionary_name">{{item.dictionary_name}}
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8"></el-col>
               </el-row>
               <el-row>
                 <el-col :span="8">
