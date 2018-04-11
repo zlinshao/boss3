@@ -289,6 +289,7 @@
 
     <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeMessage"></MessageDetail>
     <SetLockPwd :setLockPwdDialog="setLockPwdDialog" @close="closeMessage"></SetLockPwd>
+    <UnlockSecondPW :unlockSecondPWDialog="unlockSecondPWDialog" :sendId="sendId" @close="closeMessage"></UnlockSecondPW>
 	<Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
   </div>
 </template>
@@ -299,10 +300,10 @@
   import MessageDetail from './common/messageDetail.vue'
   import Instruction from './rentManage/wholeRentManage/components/instruction.vue'            //使用说明
   import SetLockPwd from './common/setLockPwd.vue'
-
+  import UnlockSecondPW from './common/unlocksecondpw.vue'
   export default {
     name: 'Index',
-    components: {TagsView, MessageDetail,Instruction,SetLockPwd},
+    components: {TagsView, MessageDetail,Instruction,SetLockPwd,UnlockSecondPW},
     data() {
       return {
         personal: {},
@@ -323,7 +324,11 @@
         creditTotal: 0, // 积分总数
 
         setLockPwdDialog:false,
-        instructionDialog:false  //功能说明
+        instructionDialog:false,  //功能说明
+        dictionary2:[],   //模块
+        chinese:[],
+        unlockSecondPWDialog:false,
+        sendId:"",
       }
     },
 
@@ -332,6 +337,9 @@
       if(JSON.parse(localStorage.personal).data.setting.length<1 || !JSON.parse(localStorage.personal).detail.pwd_lock){
         this.setLockPwdDialog = true;
       }
+      console.log(this.personal)
+      //获取模块接口
+      this.getDictionary2()
     },
     computed: {
       visitedViews() {
@@ -404,6 +412,7 @@
       closeMessage(){
         this.messageDialog = false;
         this.setLockPwdDialog = false;
+        this.unlockSecondPWDialog = false;
       },
       //获取未读消息
       getUnReadMessage(){
@@ -413,17 +422,53 @@
           }
         })
       },
+    getDictionary2() {
+      this.$http
+        .get(globalConfig.server + "setting/dictionary/220")
+        .then(res => {
+          if (res.data.code === "30010") {
+            this.dictionary2 = res.data.data;
+            for(let i=0;i<this.dictionary2.length;i++){
+              for(let key in this.personal.data.secondary_password){
+                if(this.dictionary2[i].id ==this.personal.data.secondary_password[key]){
+                  this.chinese.push({"name":this.dictionary2[i].dictionary_name,"id":this.dictionary2[i].id} )
+                }
+              }
+            }           
+            
+          }
 
+        });
+    },
       // 全屏
       fullScreen(val) {
         screenFull.toggle();
       },
       handleOpen(key, keyPath) {
+        for(let chi in this.chinese){
+          if(this.chinese[chi].name == key){
+            this.unlockSecondPWDialog = true;
+            this.sendId=this.chinese[chi].id;
+          }
+        }
       },
       handleClose(key, keyPath) {
+        console.log(22)
+        console.log(key)
+        console.log(keyPath)
       },
       handlerSelect(key, keyPath){
-
+        console.log(33)
+        console.log(key)
+        console.log(keyPath)
+        for(let chi in this.chinese){
+          for(let path in keyPath){
+          if(this.chinese[chi].name == keyPath[0]){
+            this.unlockSecondPWDialog = true;
+            this.sendId=this.chinese[chi].id;
+          }
+          }
+        }
       },
       clickScreen() {
         this.screenStatus = true;
