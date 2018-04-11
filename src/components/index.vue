@@ -69,16 +69,16 @@
                 </div>
               </el-dropdown-item>
               <el-dropdown-item>
-                  <el-row v-if="unReadMessageData.length >0" @click.native="showOtherDetail()">
-                    <el-col :span="24">
-                      <div style="display:block; line-height:32px; text-align:center; color:#409EFF">查看全部<span style="color:#f00">{{unReadMessageData.length}}条</span>未读</div>
-                    </el-col>
-                  </el-row>
+                <el-row v-if="unReadMessageData.length >0" @click.native="showOtherDetail()">
+                  <el-col :span="24">
+                    <div style="display:block; line-height:32px; text-align:center; color:#409EFF">查看全部<span style="color:#f00">{{unReadMessageData.length}}条</span>未读</div>
+                  </el-col>
+                </el-row>
                 <el-row v-if="unReadMessageData.length <=0" style="cursor:default">
-                    <el-col :span="24">
-                      暂无数据
-                    </el-col>
-                  </el-row>
+                  <el-col :span="24">
+                    <div style=" width:180px; height:65px; display:block; line-height:65px; text-align:center">暂无数据</div>
+                  </el-col>
+                </el-row>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
