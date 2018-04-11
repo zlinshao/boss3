@@ -29,7 +29,7 @@
               <i class="iconfont icon-qita1"></i><span>快捷入口</span>
             </span>
             <el-dropdown-menu slot="dropdown" class="shortcutList">
-              <el-dropdown-item v-for="(item,index) in isShortcutPath"  :key="index"
+              <el-dropdown-item v-for="(item,index) in isShortcutPath" :key="index"
                                 @click.native="routers(item.path)" :class="{'border_top': index > 3}">
                 <div>
                   <b style="font-weight: 100" :class="{'backColor1': -1 < index,'backColor2': index === 3 || index === 11 || index === 13,
@@ -232,7 +232,7 @@
       <el-container>
         <div class="aside scroll_bar" id="isCollapse">
           <el-menu :default-active="$route.path" class="el-menu-vertical-demo" unique-opened
-                   :defaultOpeneds=defaultArray  @select="handlerSelect"
+                   :defaultOpeneds=defaultArray @select="handlerSelect"
                    :collapse="isCollapse" router @open="handleOpen" @close="handleClose"
                    background-color="#6a8dfb" text-color="#fff" active-text-color="#ffd04b">
             <template v-for="(item,index) in $router.options.routes">
@@ -289,7 +289,7 @@
 
     <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeMessage"></MessageDetail>
     <SetLockPwd :setLockPwdDialog="setLockPwdDialog" @close="closeMessage"></SetLockPwd>
-	<Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
+    <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
   </div>
 </template>
 
@@ -302,7 +302,7 @@
 
   export default {
     name: 'Index',
-    components: {TagsView, MessageDetail,Instruction,SetLockPwd},
+    components: {TagsView, MessageDetail, Instruction, SetLockPwd},
     data() {
       return {
         personal: {},
@@ -322,18 +322,18 @@
         loginPercent: 0,
         creditTotal: 0, // 积分总数
 
-        setLockPwdDialog:false,
-        instructionDialog:false  //功能说明
+        setLockPwdDialog: false,
+        instructionDialog: false  //功能说明
       }
     },
 
     mounted() {
       this.initData();
-      if(JSON.parse(localStorage.personal).data.setting.length<1 || !JSON.parse(localStorage.personal).detail.pwd_lock){
+      if (JSON.parse(localStorage.personal).data.setting.length < 1 || !JSON.parse(localStorage.personal).detail.pwd_lock) {
         this.setLockPwdDialog = true;
       }
       this.$http.interceptors.response.use((response) => { //配置请求回来的信息
-        if(response.data.code == '7777'){
+        if (response.data.code == '7777') {
           sessionStorage.setItem('beforePath', this.$route.path);
           sessionStorage.setItem('lockStatus', 1);
           this.$router.push({path: '/lock'});
@@ -381,7 +381,7 @@
       initData(){
         this.personal = JSON.parse(localStorage.personal);
         this.loginDay = this.personal.data.loginday;
-        this.loginPercent = Number(this.loginDay / 180*100) + '%';
+        this.loginPercent = Number(this.loginDay / 180 * 100) + '%';
         $('.percent').css('width', this.loginPercent);
         this.countTime();
 
@@ -389,7 +389,7 @@
         this.messageInterval = null;
 
         this.messageInterval = setInterval(() => {
-          if(localStorage.personal){
+          if (localStorage.personal) {
             this.getUnReadMessage()
           }
         }, 100000);
@@ -450,7 +450,7 @@
                   countDown.forEach((item) => {
                     if (array[i].dict_id == item.id) {
                       this.defaultTime = this.Countdown = Number(item.dictionary_name);
-                      localStorage.setItem('countdownTime',item.id);
+                      localStorage.setItem('countdownTime', item.id);
                       this.startCount();
                     }
                   })
@@ -470,7 +470,7 @@
               reject('重新计数');
               clearInterval(this.interval);
               this.interval = null;
-            }else if (this.Countdown < 1) {
+            } else if (this.Countdown < 1) {
               resolve('锁屏');
             }
           }, 1000)
@@ -703,7 +703,7 @@
       background: url("../assets/images/虚拟租赁合同-24.svg");
       background-size: 100% 100%;
     }
-    .noCollapse{
+    .noCollapse {
 
     }
 
