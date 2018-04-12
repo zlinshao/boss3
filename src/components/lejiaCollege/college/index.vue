@@ -250,7 +250,7 @@
             return;
           }
           for (let i = 0; i < teachers.length; i++) {
-            let cover_pic = teachers[i].album.cover_pic;
+            let cover_pic = teachers[i] && teachers[i].album && teachers[i].album.cover_pic;
             let first = true;
             for (let key in cover_pic) {
               if (teachers[i].statuss == "已发布") {
@@ -276,7 +276,7 @@
             return;
           }
           for (let i = 0; i < pictures.length; i++) {
-            let cover_pic = pictures[i].album.cover_pic;
+            let cover_pic = pictures[i] && pictures[i].album && pictures[i].album.cover_pic;
             let first = true;
             for (let key in cover_pic) {
               if (pictures[i].statuss == "已发布") {
@@ -303,7 +303,7 @@
             return;
           }
           for (let i = 0; i < courses.length; i++) {
-            let cover_pic = courses[i].album.cover_pic;
+            let cover_pic = courses[i] && courses[i].album && courses[i].album.cover_pic;
             let first = true;
             for (let key in cover_pic) {
               if (courses[i].statuss == "已发布") {

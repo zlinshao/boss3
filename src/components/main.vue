@@ -397,7 +397,7 @@
             return;
           }
           for (let i = 0; i < bannerData.length; i++) {
-            let cover_pic = bannerData[i].album.cover_pic;
+            let cover_pic = bannerData[i] && bannerData[i].album && bannerData[i].album.cover_pic;
             let first = true;
             for (let key in cover_pic) {
               if(bannerData[i].statuss == "已发布") {
@@ -424,7 +424,7 @@
             return;
           }
           for (let i = 0; i < staffData.length; i++) {
-            let cover_pic = staffData[i].album.cover_pic;
+            let cover_pic = staffData[i] && staffData[i].album && staffData[i].album.cover_pic;
             let first = true;
             for (let key in cover_pic) {
               if(staffData[i].statuss == "已发布") {
@@ -460,7 +460,7 @@
             return;
           }
           for (let i = 0; i < newsData.length; i++) {
-            let cover_pic = newsData[i].album.cover_pic;
+            let cover_pic = newsData[i] && newsData[i].album && newsData[i].album.cover_pic;
             let first = true;
             for (let key in cover_pic) {
               if(newsData[i].statuss == "已发布") {
@@ -490,7 +490,7 @@
             return;
           }
           for (let i = 0; i < lejiaData.length; i++) {
-            let cover_pic = lejiaData[i].album.cover_pic;
+            let cover_pic = lejiaData[i] &&  lejiaData[i].album && lejiaData[i].album.cover_pic;
             let first = true;
             for (let key in cover_pic) {
               if(lejiaData[i].statuss == "已发布") {
@@ -530,7 +530,7 @@
             return;
           }
           for (let i = 0; i < reportData.length; i++) {
-            let cover_pic = reportData[i].album.cover_pic;
+            let cover_pic = reportData[i] && reportData[i].album && reportData[i].album.cover_pic;
             let first = true;
             for (let key in cover_pic) {
               if(reportData[i].statuss == "已发布") {
