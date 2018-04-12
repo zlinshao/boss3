@@ -95,7 +95,10 @@
       }
     },
     mounted(){
-
+      if (JSON.parse(localStorage.personal).data.setting.length > 0) {
+        this.basicSetting.id[0] = Number(JSON.parse(localStorage.personal).data.setting[0].dict_id);
+        this.defaultCountdown = Number(JSON.parse(localStorage.personal).data.setting[0].dict_id)
+      }
     },
     watch: {
       setLockPwdDialog(val) {
