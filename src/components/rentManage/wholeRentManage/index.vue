@@ -1,23 +1,22 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="wholeRentContainer">
-      <div class="tool">
+      <!--
+       <div class="tool">
         <div class="tool_left">
-          <el-button type="primary" size="mini" @click="openModalDialog('addHouseResourcesDialog')">
-            <i class="el-icon-document"></i>&nbsp;登记房源
-          </el-button>
           <el-button type="success" size="mini" @click="openModalDialog('instructionDialog')">
             <i class="el-icon-tickets"></i>&nbsp;功能说明
           </el-button>
-          <!--<el-button type="info" size="mini" @click="openModalDialog('backUpDialog')">-->
-            <!--<i class="el-icon-tickets"></i>&nbsp;查看备份-->
-          <!--</el-button>-->
+          <el-button type="info" size="mini" @click="openModalDialog('backUpDialog')">
+            <i class="el-icon-tickets"></i>&nbsp;查看备份
+          </el-button>
         </div>
-
-        <!--<div class="tool_right"  @click="openModalDialog('settingDialog')">-->
-          <!--<div><i class="el-icon-setting"></i>&nbsp;设置</div>-->
-        <!--</div>-->
+        <div class="tool_right"  @click="openModalDialog('settingDialog')">
+          <div><i class="el-icon-setting"></i>&nbsp;设置</div>
+        </div>
       </div>
+      -->
+
       <div class="highRanking" style="margin-top: 10px">
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
@@ -29,6 +28,9 @@
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
+            <el-button type="primary" size="mini" @click="openModalDialog('addHouseResourcesDialog')">
+              <i class="el-icon-document"></i>&nbsp;登记房源
+            </el-button>
             <!--<el-form-item>-->
               <!--<el-button type="success">导出房源</el-button>-->
             <!--</el-form-item>-->
@@ -721,6 +723,7 @@
             });
             this.checkHandIn();
             if(res.data.data.length>0){
+              this.collectStatus = '暂无数据';
               this.collectHouseId = this.collectData[0].house_id;
               this.collectContractId = this.collectData[0].contract_id;
             }
@@ -817,6 +820,7 @@
               this.rentContractId = res.data.data[0].contract_id;
             }else {
               this.rentContractId = '';
+              this.rentStatus = '暂无数据';
             }
           }else {
             this.rentingData = [];
