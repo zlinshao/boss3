@@ -26,7 +26,7 @@
         <el-col :span="24">
           <div class="myPicture">
             <div>
-              <el-button type="text" class="title" @click="routerLink('/pictureManage')">我的相册</el-button>
+              <div class="title"><el-button type="text" @click="routerLink('/pictureManage')">我的相册</el-button></div>
             </div>
             <el-button icon="el-icon-picture-outline" type="primary" size="small" @click="openModalDialog('choosePicturesDialog')">上传照片</el-button>
             <el-button icon="el-icon-picture-outline" type="success" size="small" @click="openModalDialog('createAlbumDialog')">创建相册</el-button>
@@ -326,8 +326,16 @@
         border-bottom: 1px solid #e5e5e5;
       }
       .title {
-        font-size: 14px;
+        color: #409EFF;
+        opacity: .7;
         margin: 12px 0;
+        &:before {
+          border-radius: 2px;
+          margin-right: 5px;
+          background: #409EFF;
+          border-left: 1px solid #409EFF;
+          content: '|';
+        }
       }
       .pictures{
         margin: 17px;

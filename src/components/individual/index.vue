@@ -296,7 +296,7 @@
     },
     mounted() {
       this.landholder = JSON.parse(localStorage.personal);
-      this.loginDay = this.landholder.data.loginday;
+      this.loginDay = this.landholder.data.loginday;;
       this.getAlbumNum();
       this.drawLineChart();
       this.getPraise();
@@ -574,26 +574,32 @@
               width: 32px;
               height: 32px;
               margin-left: 10px;
-              font-size: 18px;
-              line-height: 32px;
+              font-size: 12px;
+              
               text-align: center;
+              
             }
             .span3{
               background: url("../../assets/images/individual/3days.png") no-repeat top;
             }
             .span5{
+              line-height:30px;
               color: #f9c38d;
               background: url("../../assets/images/individual/5days.png") no-repeat top;
             }
             .span15{
+              line-height:30px;
               color: #ffd200;
               background: url("../../assets/images/individual/15days.png") no-repeat top;
             }
             .span30{
+              line-height:30px;
               color: #fce0cc;
               background: url("../../assets/images/individual/30days.png") no-repeat top;
             }
             .otherspan{
+              text-indent:-3px;
+              line-height: 32px;
               color: #c3fb74;
               background: url("../../assets/images/individual/otherday.png") no-repeat top;
             }
