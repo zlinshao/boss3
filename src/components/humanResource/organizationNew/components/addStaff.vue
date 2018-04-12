@@ -355,24 +355,6 @@
         this.positionArray = [];
         this.getPosition(val);
       },
-      department(val) {
-        if (val) {
-          this.positionArray = [];
-          // this.currentPosition = [];
-          // this.params.position_id = [];
-          this.positionDisabled = false;  //职位可选
-          for (var i = 0; i < this.params.department_id.length; i++) {
-            this.getPosition(this.params.department_id[i]);
-          }
-        } else {
-          this.positionArray = [];
-          this.currentPosition = [];
-          this.params.position_id = [];
-          this.postArray = [];
-          this.positionDisabled = true;
-          this.postDisabled = true;
-        }
-      },
     },
     mounted() {
       this.getSex();
@@ -436,6 +418,24 @@
           for (var i = 0; i < this.currentPosition.length; i++) {
             this.getPositions(this.currentPosition[i]);
           }
+        }
+      },
+      selectDepartment(){
+        if (this.department) {
+          this.positionArray = [];
+          this.currentPosition = [];
+          this.params.position_id = [];
+          this.positionDisabled = false;  //职位可选
+          for (var i = 0; i < this.params.department_id.length; i++) {
+            this.getPosition(this.params.department_id[i]);
+          }
+        } else {
+          this.positionArray = [];
+          this.currentPosition = [];
+          this.params.position_id = [];
+          this.postArray = [];
+          this.positionDisabled = true;
+          this.postDisabled = true;
         }
       },
       //编辑时获取员工信息
@@ -625,6 +625,7 @@
             });
           }
           this.department = departNameArray.join(',');
+          this.selectDepartment();
           this.type = null;
           this.length = null;
         } else if (this.type === 'staff') {
