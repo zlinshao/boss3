@@ -1,6 +1,6 @@
 <template>
   <div >
-    <div class="badgeup" >
+    <div class="badgeup" v-show="panelShow">
       <div v-if="loginDay == 3" class="backdiv backdiv3"></div>
       <div v-else-if="loginDay == 5" class="backdiv backdiv5"></div>
       <div v-else-if="loginDay == 15" class="backdiv backdiv15"></div>
@@ -25,12 +25,42 @@ export default {
   data() {
     return {
       landholder: {},
-      loginDay: 0 //连续登陆天数
+      panelShow: false,
+      loginDay: 0, //连续登陆天数
+      badgeDialogVisible: false,
+      type:3
     };
+  },
+  watch: {
+    badgeDialog(val) {
+      this.panelShow = val;
+    },
+    panelShow(val) {
+      if (!val) {
+        this.$emit("close");
+      }
+    }
   },
   mounted() {
     this.landholder = JSON.parse(localStorage.personal);
     this.loginDay = this.landholder.data.loginday;
+    setTimeout(() => {
+      this.closeBadge();
+    }, 5000);
+  },
+  methods:{
+    closeBadge(){
+        this.$http.post(globalConfig.server + 'manager/staff_record', {type: this.type}).then((res) => {
+          if (res.data.code === '30010') {
+            this.panelShow= false;
+          this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
+            localStorage.setItem('personal', JSON.stringify(res.data.data));
+            globalConfig.personal = res.data.data.data;
+          });
+          }
+        })
+        
+    }
   }
 };
 </script>

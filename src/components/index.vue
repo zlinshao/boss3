@@ -297,9 +297,9 @@
 
     <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeMessage"></MessageDetail>
     <SetLockPwd :setLockPwdDialog="setLockPwdDialog" @close="closeMessage"></SetLockPwd>
-    <UnlockSecondPW :unlockSecondPWDialog="unlockSecondPWDialog" :sendId="sendId" @close="closeMessage"></UnlockSecondPW>
+    <UnlockSecondPW :unlockSecondPWDialog="unlockSecondPWDialog" @unlockFlag="unlockFlag" :sendId="sendId" @close="closeMessagex"></UnlockSecondPW>
 	  <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
-
+<BadgeView :badgeDialog="badgeDialog" @close="closebadgeDialog"></BadgeView>
   </div>
 </template>
 
@@ -313,7 +313,7 @@
   import BadgeView from './common/badge.vue'
   export default {
     name: 'Index',
-    components: {TagsView, MessageDetail,Instruction,SetLockPwd,UnlockSecondPW},
+    components: {TagsView, MessageDetail,Instruction,SetLockPwd,UnlockSecondPW,BadgeView},
     data() {
       return {
         personal: {},
@@ -340,6 +340,7 @@
         unlockSecondPWDialog:false,
         sendId:"",
 	      badgeDialog:false, //徽章模态框
+unlockFlagpart:false,
       }
     },
 
@@ -425,6 +426,9 @@
           this.setLockPwdDialog = true;
         }
         this.personal = JSON.parse(localStorage.personal);
+        if(!this.personal.data.medal){
+          this.badgeDialog = true;
+        }	
         this.loginDay = this.personal.data.loginday;
         this.loginPercent = Number(this.loginDay / 180 * 100) + '%';
         $('.percent').css('width', this.loginPercent);
@@ -467,8 +471,17 @@
       closeMessage(){
         this.messageDialog = false;
         this.setLockPwdDialog = false;
+      },
+      closeMessagex(){
         this.unlockSecondPWDialog = false;
       },
+      unlockFlag(val){
+        this.unlockFlagpart=val;
+        if(!this.unlockFlagpart){
+          this.defaultArray=[];
+        }
+       },
+
       //获取未读消息
       getUnReadMessage(){
         this.$http.get(globalConfig.server_user + 'messages?unread=1').then((res) => {
@@ -500,25 +513,27 @@
         screenFull.toggle();
       },
       handleOpen(key, keyPath) {
+if(!this.unlockFlagpart){
         for(let chi in this.chinese){
           if(this.chinese[chi].name == key){
             this.unlockSecondPWDialog = true;
             this.sendId=this.chinese[chi].id;
           }
-        }
+        }}
       },
       handleClose(key, keyPath) {
 
       },
       handlerSelect(key, keyPath){
 
+if(!this.unlockFlagpart){
         for(let chi in this.chinese){
           for(let path in keyPath){
           if(this.chinese[chi].name == keyPath[0]){
             this.unlockSecondPWDialog = true;
             this.sendId=this.chinese[chi].id;
           }
-          }
+          }}
         }
       },
       clickScreen() {

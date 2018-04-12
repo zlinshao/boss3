@@ -29,6 +29,7 @@ export default {
   data() {
     return {
       unlockSecondPWDialogVisible: false,
+      unlockFlag:false,
       basicSetting: {
         dict_id: "",
         pwd: ""
@@ -48,13 +49,12 @@ export default {
     unlockSecondPWDialogVisible(val) {
       if (!val) {
         this.$emit("close");
-        this.basicSetting = {
-          dict_id: "",
-          pwd: ""
-        };
+        this.$emit("unlockFlag",this.unlockFlag);
+        this.basicSetting.pwd=""
       }
     },
     sendId(val) {
+      console.log(val)
       this.basicSetting.dict_id = val;
     }
   },
@@ -68,11 +68,13 @@ export default {
         .then(res => {
           if (res.data.code === "1000100") {
             this.unlockSecondPWDialogVisible = false;
+            this.unlockFlag = true;
             this.basicSetting = {
               dict_id: "",
               pwd: ""
             };
           } else {
+            this.unlockFlag = false;
             this.$notify({
               title: "警告",
               message: res.data.msg,
