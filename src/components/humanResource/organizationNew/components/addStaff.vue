@@ -114,7 +114,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="职位" required>
-                    <el-select v-model="currentPosition" @blur="positionSelect" :disabled="positionDisabled" multiple>
+                    <el-select v-model="currentPosition" @change="positionSelect" :disabled="positionDisabled" multiple>
                       <el-option v-for="item in positionArray" :value="item.id" :key="item.id"
                                  :label="item.name">{{item.name}}
                       </el-option>
@@ -332,16 +332,15 @@
     watch: {
       addStaffDialog(val) {
         this.addStaffDialogVisible = val;
-        if(val){
-          if(!this.editId) {this.initial(); //新增时候清除
+        if (val) {
+          if (!this.editId) {
+            this.initial(); //新增时候清除
           }
         }
       },
       addStaffDialogVisible(val) {
         if (!val) {
-          this.$emit('close')
-        } else {
-          this.positionArray = [];
+          this.$emit('close');
         }
       },
       isEdit(val) {
@@ -357,15 +356,15 @@
         this.getPosition(val);
       },
       department(val) {
-        if(val){
+        if (val) {
           this.positionArray = [];
           // this.currentPosition = [];
           // this.params.position_id = [];
           this.positionDisabled = false;  //职位可选
-          for(var i=0;i<this.params.department_id.length;i++){
+          for (var i = 0; i < this.params.department_id.length; i++) {
             this.getPosition(this.params.department_id[i]);
           }
-        }else{
+        } else {
           this.positionArray = [];
           this.currentPosition = [];
           this.params.position_id = [];
@@ -373,9 +372,6 @@
           this.positionDisabled = true;
           this.postDisabled = true;
         }
-      },
-      currentPosition(val){
-        this.positionSelect();
       },
     },
     mounted() {
@@ -435,9 +431,9 @@
       },
       positionSelect() {
         this.postArray = [];
-        if (this.currentPosition.length>0) {
+        if (this.currentPosition.length > 0) {
           this.postDisabled = false; //岗位可选
-          for(var i=0;i<this.currentPosition.length;i++){
+          for (var i = 0; i < this.currentPosition.length; i++) {
             this.getPositions(this.currentPosition[i]);
           }
         }
@@ -506,7 +502,7 @@
                 let arr = {};
                 arr.id = item.positions.id;
                 arr.name = item.positions.name;
-                if($.inArray(item.positions.id, this.currentPosition) === -1){
+                if ($.inArray(item.positions.id, this.currentPosition) === -1) {
                   this.positionArray.push(arr);
                   this.currentPosition.push(item.positions.id);
                 }
@@ -515,7 +511,7 @@
                 let data = {};
                 data.id = item.position_id;
                 data.name = item.display_name;
-                if($.inArray(item.positions.id, this.params.position_id) === -1){
+                if ($.inArray(item.positions.id, this.params.position_id) === -1) {
                   this.postArray.push(data);
                   this.params.position_id.push(item.position_id);
                 }
@@ -535,17 +531,11 @@
       getPosition(id) {
         this.$http.get(globalConfig.server + 'manager/position?department_id=' + id).then((res) => {
           if (res.data.code === '20000') {
-            // this.positionArray = [];
             res.data.data.data.forEach((item) => {
               let position = {};
               position.id = item.id;
               position.name = item.name;
-              //重复的不加进数组
-              // for(var i=0;i<this.positionArray.length;i++){
-              //   if(item.id !== this.positionArray[i].id){
-                  this.positionArray.push(position);
-              //   }
-              // }
+              this.positionArray.push(position);
             });
           }
         });
@@ -554,17 +544,11 @@
       getPositions(id) {
         this.$http.get(globalConfig.server + 'manager/positions?type=' + id).then((res) => {
           if (res.data.code === '20000') {
-            // this.postArray = [];
             res.data.data.data.forEach((item) => {
               let data = {};
               data.id = item.id;
               data.name = item.name;
-              //重复的不加进数组
-              // for(var i=0;i<this.postArray.length;i++){
-              //   if(item.id !== this.postArray[i].id){
-                  this.postArray.push(data);
-              //   }
-              // }
+              this.postArray.push(data);
             });
           }
         });
