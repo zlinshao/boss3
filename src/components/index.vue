@@ -311,6 +311,7 @@ import Instruction from "./rentManage/wholeRentManage/components/instruction.vue
 import SetLockPwd from "./common/setLockPwd.vue";
 import UnlockSecondPW from "./common/unlocksecondpw.vue";
 import BadgeView from "./common/badge.vue";
+import cookie from 'js-cookie'
 export default {
   name: "Index",
   components: {
@@ -359,10 +360,16 @@ export default {
     $(document).mousemove(function() {
       _this.clickScreen();
     });
+      this.unlockFlagpart = cookie.get("unlockFlagpart");
+      console.log(cookie.get("unlockFlagpart"))
+      if(!this.unlockFlagpart){
+        this.getDictionary2();
+      }
+    
     this.initData();
 
     //获取模块接口
-    this.getDictionary2();
+    
     //多页面锁屏
     this.multiPageLock();
 
@@ -401,7 +408,10 @@ export default {
   },
   methods: {
     openBadge(){
-      this.unlockSecondPWDialog = true;
+      if(!this.unlockFlagpart){
+        this.unlockSecondPWDialog = true;
+      }
+      
     },
     //多开页面验证锁屏
     multiPageLock() {
@@ -507,6 +517,7 @@ export default {
     },
     unlockFlag(val) {
       this.unlockFlagpart = val;
+      cookie.set("unlockFlagpart",val,{expires:1});
       if (this.unlockFlagpart) {
         this.chinese =[]
       }
