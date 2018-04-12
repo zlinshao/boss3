@@ -295,8 +295,6 @@
           emergency_call: '',
           level: '',
           account_name: '',
-          status: '',
-          job_status: '',
           enroll: '',
           salary: '',
           entry_materials: [],
@@ -345,7 +343,6 @@
           this.$emit('close')
         } else {
           this.positionArray = [];
-          // this.getPosition(this.departmentId);  // 新增/修改时候查询最新职位
         }
       },
       isEdit(val) {
@@ -401,7 +398,6 @@
         this.params.emergency_call = '';
         this.params.level = '';
         this.params.account_name = '';
-        this.params.status = '';
         this.params.enroll = '';
         this.params.salary = '';
         this.params.entry_materials = [];
@@ -440,8 +436,6 @@
         this.$http.get(globalConfig.server + 'manager/staff/' + this.editId).then((res) => {
           if (res.data.code === '10020') {
             this.params.phone = res.data.data.phone;
-            this.params.status = res.data.data.status;
-            this.params.job_status = res.data.data.job_status;
             this.params.real_name = res.data.data.name;
             let detail = res.data.data.detail;
             if (detail) {
@@ -561,7 +555,12 @@
           this.$http.put(globalConfig.server + 'manager/staff/' + this.editId, this.params).then((res) => {
             if (res.data.code === '10030') {
               this.$emit('close', 'success');
-              this.closeModal();
+              this.addStaffDialogVisible = false;
+              this.initial();
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg,
+              });
             } else {
               this.$notify.warning({
                 title: '警告',
@@ -574,7 +573,11 @@
           this.$http.post(globalConfig.server + 'manager/staff', this.params).then((res) => {
             if (res.data.code === '10010') {
               this.$emit('close', 'success');
-              this.closeModal();
+              this.addStaffDialogVisible = false;
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg,
+              });
             } else {
               this.$notify.warning({
                 title: '警告',
@@ -625,46 +628,6 @@
           this.recommenderName = val[0].name;
         }
         this.organizationDialog = false;
-      },
-      closeModal() {
-        this.addStaffDialogVisible = false;
-        this.params = {
-          position_id: [],
-          department_id: [],
-          phone: '',
-          real_name: '',
-          gender: '',
-          home_addr: '',
-          fertility_status: '',
-          id_num: '',
-          birthday: '',
-          recommender: '',
-          bank_num: '',
-          account_bank: '',
-          emergency_call: '',
-          level: '',
-          account_name: '',
-          status: '',
-          job_status: '',
-          enroll: '',
-          salary: '',
-          entry_materials: [],
-          origin_addr: '',
-          marital_status: '',
-          political_status: '',
-          forward_time: '',
-          mail: '',
-          education: '',
-          school: '',
-          major: '',
-          graduation_time: '',
-          agreement_first_time: '',
-          agreement_first_end_time: '',
-          agreement_second_time: '',
-          remark: '',
-        };
-        this.department = '';
-        this.positionArray = [];
       },
       //性别
       getSex() {
