@@ -3,7 +3,7 @@
     <!--冻结工资-->
     <el-dialog :close-on-click-modal="false" title="提示" :visible.sync="dialogVisible" width="26%">
       <div class="filter">
-        <el-form :inline="true" onsubmit="return" :model="form" size="mini" label-width="80px">
+        <el-form :inline="true" onsubmit="return false" :model="form" size="mini" label-width="80px">
           <el-form-item label="冻结月份">
             <el-date-picker
               v-model="form.months"

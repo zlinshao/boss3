@@ -17,7 +17,7 @@
         </div>
       </div>
       <div class="filter">
-        <el-form :inline="true" onsubmit="return" :model="formInline" size="mini" class="demo-form-inline">
+        <el-form :inline="true" onsubmit="return false" :model="formInline" size="mini" class="demo-form-inline">
           <el-form-item label="性质">
             <el-select v-model="formInline.house" clearable placeholder="请选择">
               <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">

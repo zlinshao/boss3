@@ -3,7 +3,7 @@
     <div>
     <div class="highRanking">
       <div class="highSearch" style="width:95%">
-        <el-form :inline="true" onsubmit="return" size="medium" style="position:absolute;right:100px;" >
+        <el-form :inline="true" onsubmit="return false" size="medium" style="position:absolute;right:100px;" >
           <el-form-item>
             <el-input placeholder="标题/内容关键字" v-model="form.search" @keyup.enter.native="myData(1)" size="mini"
                       clearable>
@@ -18,7 +18,7 @@
         <el-button @click="openModalDialogx('noticeDialog')" class="sendnotice" size="mini" type="primary">发布公告</el-button>
       </div>
       <div class="filter high_grade" :class="isHigh? 'highHide':''">
-        <el-form :inline="true" onsubmit="return" :model="form" size="mini" label-width="100px">
+        <el-form :inline="true" onsubmit="return false" :model="form" size="mini" label-width="100px">
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
           </div>

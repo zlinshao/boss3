@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-dialog :close-on-click-modal="false" title="付款时间" :visible.sync="dialogVisible" width="40%">
-      <el-form :inline="true" onsubmit="return" size="mini" label-width="111px">
+      <el-form :inline="true" onsubmit="return false" size="mini" label-width="111px">
         <el-form-item v-for="(key,index) in date" :label="'第'+ (index + 1) + '次付款时间'" :key="index">
           <div class="block" v-if="title === 'revisePay' || title === 'reviseCollect'">
             <el-date-picker

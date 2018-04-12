@@ -5,14 +5,14 @@
 
     <div class="highRanking">
       <div style="float:left">
-            <el-form :inline="true" onsubmit="return" size="mini">
+            <el-form :inline="true" onsubmit="return false" size="mini">
               <el-select size="mini" v-model="cityCode" @change="integral"  placeholder="请选择">
                <el-option v-for="val in cityList" :label="val.dictionary_name" :value="val.variable.city_code" :key="val.id"></el-option>
               </el-select>
             </el-form>
       </div>
       <div class="highSearch">
-        <el-form :inline="true" onsubmit="return" size="mini">
+        <el-form :inline="true" onsubmit="return false" size="mini">
           <el-button type="primary" size="small" @click="openModalDialog()">增加</el-button>
         </el-form>
       </div>

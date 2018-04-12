@@ -3,7 +3,7 @@
     <el-dialog :close-on-click-modal="false" title="地图" :visible.sync="mapFormVisible" width="40%">
       <div class="content" v-if="isMapSearch">
         <div class="filter-container">
-          <el-form :inline="true" onsubmit="return" size="mini" class="demo-form-inline">
+          <el-form :inline="true" onsubmit="return false" size="mini" class="demo-form-inline">
             <el-form-item>
               <el-select v-model="chooseCity" placeholder="请选择城市" value="">
                 <el-option v-for="item in cityDictionary" :label="item.dictionary_name"

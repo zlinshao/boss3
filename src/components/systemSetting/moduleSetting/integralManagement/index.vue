@@ -3,13 +3,13 @@
 
     <div class="highRanking">
       <div class="highSearch">
-        <el-form :inline="true" onsubmit="return" size="mini" style="margin-right:30px;">
+        <el-form :inline="true" onsubmit="return false" size="mini" style="margin-right:30px;">
           <el-select size="mini" v-model="type"  @change="integral" clearable="" placeholder="请选择积分项">
             <el-option label="得分项目" value="0"></el-option>
             <el-option label="失分项目" value="1"></el-option>
           </el-select>
         </el-form>
-        <el-form :inline="true" onsubmit="return" size="mini">
+        <el-form :inline="true" onsubmit="return false" size="mini">
           <el-button size="mini" @click="newList" type="primary">新增项目</el-button>
         </el-form>
       </div>

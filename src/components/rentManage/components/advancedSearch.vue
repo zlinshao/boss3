@@ -2,7 +2,7 @@
   <div id="advancedSearch">
     <el-dialog :close-on-click-modal="false" title="高级搜索" :visible.sync="advancedDialogVisible" width="40%">
       <div>
-        <el-form :inline="true" onsubmit="return" size="mini" :model="formInline" class="demo-form-inline">
+        <el-form :inline="true" onsubmit="return false" size="mini" :model="formInline" class="demo-form-inline">
           <el-row :gutter="0">
             <el-col :span="6">
               <el-form-item>

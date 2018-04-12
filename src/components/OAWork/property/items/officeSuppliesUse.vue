@@ -1,7 +1,7 @@
 <template>
   <div @click="show=false" @contextmenu="show=false">
     <!--<div class="filter">-->
-    <!--<el-form :inline="true" onsubmit="return" :model="formInline" size="mini" class="demo-form-inline">-->
+    <!--<el-form :inline="true" onsubmit="return false" :model="formInline" size="mini" class="demo-form-inline">-->
     <!--<el-form-item label="选择领取人">-->
     <!--<el-input readonly="" @focus="openOrganizationModal('staff')" placeholder="点击选择"></el-input>-->
     <!--</el-form-item>-->
@@ -27,7 +27,7 @@
 
     <div class="highRanking">
       <div class="highSearch">
-        <el-form :inline="true" onsubmit="return" size="mini">
+        <el-form :inline="true" onsubmit="return false" size="mini">
           <el-form-item>
             <el-input placeholder="请输入内容" v-model="params.keyWords" size="mini" clearable>
               <el-button slot="append" icon="el-icon-search"></el-button>
@@ -43,7 +43,7 @@
       </div>
 
       <div class="filter high_grade" :class="isHigh? 'highHide':''">
-        <el-form :inline="true" onsubmit="return" size="mini" label-width="100px">
+        <el-form :inline="true" onsubmit="return false" size="mini" label-width="100px">
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
           </div>

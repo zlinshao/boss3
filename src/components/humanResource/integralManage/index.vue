@@ -3,7 +3,7 @@
     <div id="clientContainer">
       <div class="highRanking">
         <div class="tabsSearch">
-          <el-form :inline="true" onsubmit="return" :model="form" size="mini">
+          <el-form :inline="true" onsubmit="return false" :model="form" size="mini">
             <el-form-item>
               <el-input placeholder="请输入项目名称" @clear="search" clearable v-model="form.item_name"
                         @keyup.enter.native="search" size="mini">
@@ -19,7 +19,7 @@
           </el-form>
         </div>
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
-          <el-form :inline="true" onsubmit="return" :model="form" size="mini" label-width="100px">
+          <el-form :inline="true" onsubmit="return false" :model="form" size="mini" label-width="100px">
             <div class="filterTitle">
               <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>
