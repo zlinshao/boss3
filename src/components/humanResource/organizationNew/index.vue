@@ -1111,7 +1111,6 @@
           }
         })
       },
-
       //新建岗位  position职位  post岗位
       addPosition(val){
         this.addPositionDialog = true;
@@ -1134,7 +1133,6 @@
           }
         }
       },
-
       //********************右键配置操作函数****************
       contextParams(event){
         let e = event || window.event;	//support firefox contextmenu
@@ -1162,7 +1160,6 @@
         this.show = false;
       },
 
-
       //********************树配置操作函数****************
       renderContent(h,{node,data,store}){//加载节点
         let that = this;
@@ -1186,7 +1183,6 @@
         this.organizationDialog = false;
       },
 
-
       //确定排序
       confirmSave(){
         this.$confirm('您确定保存吗?', '提示', {
@@ -1205,7 +1201,6 @@
           });
         });
       },
-
       //****************搜索*************
       search(){
         if(this.activeName=== 'first'){
@@ -1216,7 +1211,6 @@
           this.getPosition();
         }
       },
-
       //**********分页************************
       handleSizeChange(val) {
         this.params.limit = val;

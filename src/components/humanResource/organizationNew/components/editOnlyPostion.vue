@@ -39,11 +39,12 @@
     },
     watch:{
       editOnlyPositionDialog(val){
-        this.editOnlyPositionDialogVisible = val
+        this.editOnlyPositionDialogVisible = val;
+        this.params.name = this.onlyPositionName;
       },
       editOnlyPositionDialogVisible(val){
         if(!val){
-          this.$emit('close')
+          this.$emit('close');
         }
       },
       onlyPositionName(val){
