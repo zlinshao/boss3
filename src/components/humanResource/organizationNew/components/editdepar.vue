@@ -2,7 +2,7 @@
   <div>
     <el-dialog :close-on-click-modal="false" title="修改部门" :visible.sync="editDepartDialogVisible" width="30%">
       <div>
-        <el-form size="mini" :model="params" label-width="100px">
+        <el-form size="mini" onsubmit="return false;" :model="params" label-width="100px">
           <el-row>
             <el-col :span="24">
               <el-form-item label="上级部门">

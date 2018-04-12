@@ -2,7 +2,7 @@
   <div id="addRentRepair">
     <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="addStaffDialogVisible" width="60%">
       <div>
-        <el-form size="mini" :model="params" label-width="120px" style="padding: 0 20px;">
+        <el-form size="mini" onsubmit="return false;" :model="params" label-width="120px" style="padding: 0 20px;">
           <el-tabs v-model="activeName">
             <el-tab-pane label="基本信息" name="first">
               <el-row :gutter="20">
@@ -114,7 +114,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="职位" required>
-                    <el-select v-model="currentPosition" @blur="positionSelect" :disabled="positionDisabled" clearable>
+                    <el-select v-model="currentPosition" @blur="positionSelect" :disabled="positionDisabled" multiple>
                       <el-option v-for="item in positionArray" :value="item.id" :key="item.id"
                                  :label="item.name">{{item.name}}
                       </el-option>
@@ -131,7 +131,7 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-              <el-row>
+              <el-row :gutter="20">
                 <el-col :span="8">
                   <el-form-item label="入职时间" required>
                     <el-date-picker v-model="params.enroll" type="date" placeholder="请选择入职时间" value-format="yyyy-MM-dd">
@@ -275,8 +275,7 @@
         addStaffDialogVisible: false,
         activeName: 'first',
         recommenderName: '',
-        currentPosition: '',
-        currentPost: '',
+        currentPosition: [],
         positionDisabled: true,
         postDisabled: true,
         params: {
@@ -359,14 +358,24 @@
       },
       department(val) {
         if(val){
-          this.positionDisabled = false;
           this.positionArray = [];
+          this.currentPosition = [];
+          this.positionDisabled = false;  //职位可选
+          console.log(this.params.department_id)
           for(var i=0;i<this.params.department_id.length;i++){
             this.getPosition(this.params.department_id[i]);
           }
         }else{
           this.positionArray = [];
+          this.currentPosition = [];
+          this.params.position_id = [];
+          this.postArray = [];
+          this.positionDisabled = true;
+          this.postDisabled = true;
         }
+      },
+      currentPosition(val){
+        this.positionSelect();
       },
     },
     mounted() {
@@ -418,17 +427,19 @@
         this.params.department_id = [];
         this.params.position_id = [];
         this.department = '';
-        this.currentPost = '';
-        this.currentPosition = '';
+        this.currentPosition = [];
         this.positionArray = [];
         this.postArray = [];
         this.positionDisabled = true;
         this.postDisabled = true;
       },
       positionSelect() {
-        if (this.currentPosition) {
-          this.postDisabled = false;
-          this.getPositions(this.currentPosition);
+        this.postArray = [];
+        if (this.currentPosition.length>0) {
+          this.postDisabled = false; //岗位可选
+          for(var i=0;i<this.currentPosition.length;i++){
+            this.getPositions(this.currentPosition[i]);
+          }
         }
       },
       //编辑时获取员工信息
@@ -477,7 +488,6 @@
             }
             let departNameArray = [];
             this.params.department_id = [];
-            this.params.position_id = [];
             if (res.data.data && res.data.data && res.data.data.org && res.data.data.org.length > 0) {
               res.data.data.org.forEach((item) => {
                 this.params.department_id.push(item.id);
@@ -486,31 +496,33 @@
             }
             this.department = departNameArray.join(',');
             let postArr = res && res.data && res.data.data && res.data.data.role;
-            this.currentPost = [];
             this.postArray = [];
             this.positionArray = [];
+            this.currentPosition = [];
+            this.params.position_id = [];
             if (postArr && postArr.length > 0) {
               postArr.forEach((item) => {
-                this.params.position_id.push(item.position_id);
-                this.currentPost.push(item.display_name);
-                //岗位
-                let data = {};
-                data.id = item.position_id;
-                data.name = item.display_name;
-                this.postArray.push(data);
-
                 //职位
                 let arr = {};
                 arr.id = item.positions.id;
                 arr.name = item.positions.name;
-                this.positionArray.push(arr);
+                if($.inArray(item.positions.id, this.currentPosition) === -1){
+                  this.positionArray.push(arr);
+                  this.currentPosition.push(item.positions.id);
+                }
+
+                //岗位
+                let data = {};
+                data.id = item.position_id;
+                data.name = item.display_name;
+                if($.inArray(item.positions.id, this.params.position_id) === -1){
+                  this.postArray.push(data);
+                  this.params.position_id.push(item.position_id);
+                }
               });
-              this.currentPosition = postArr[0].positions.id;
               this.postDisabled = false;
               this.positionDisabled = false;
-
             }
-            // this.getPosition(this.params.department_id);
           } else {
             this.$notify.warning({
               title: '警告',
@@ -528,10 +540,13 @@
               let position = {};
               position.id = item.id;
               position.name = item.name;
-              this.positionArray.push(position);
+              //重复的不加进数组
+              // for(var i=0;i<this.positionArray.length;i++){
+              //   if(item.id !== this.positionArray[i].id){
+                  this.positionArray.push(position);
+              //   }
+              // }
             });
-          } else {
-            this.positionArray = [];
           }
         });
       },
@@ -539,12 +554,17 @@
       getPositions(id) {
         this.$http.get(globalConfig.server + 'manager/positions?type=' + id).then((res) => {
           if (res.data.code === '20000') {
-            this.postArray = [];
+            // this.postArray = [];
             res.data.data.data.forEach((item) => {
               let data = {};
               data.id = item.id;
               data.name = item.name;
-              this.postArray.push(data);
+              //重复的不加进数组
+              // for(var i=0;i<this.postArray.length;i++){
+              //   if(item.id !== this.postArray[i].id){
+                  this.postArray.push(data);
+              //   }
+              // }
             });
           }
         });
