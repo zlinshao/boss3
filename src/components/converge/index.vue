@@ -626,6 +626,7 @@
           margin-bottom: 20px;
           margin-left: 20px;
           @include text_overflow(1);
+          height: 23px;
         }
       }
       .titleShow1, .titleShow2 {
