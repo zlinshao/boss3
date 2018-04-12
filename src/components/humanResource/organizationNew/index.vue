@@ -803,7 +803,6 @@
       openContextMenu(row, event) {
         this.editId = row.id;
         this.menuType = 'staff';
-        console.log(row);
         //is_enable 有值禁用 is_on_job 离职
         if(row.is_enable && row.is_on_job){
           this.lists = [

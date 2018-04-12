@@ -321,7 +321,6 @@
         length: null,
         positionArray: [],  //职位
         postArray: [],  //岗位
-        roleArray: [],  //编辑时获取的职位
         sexCategory: [],
         fertilityStatusCategory: [],
         accountStatusCategory: [],
@@ -425,6 +424,8 @@
         this.department = '';
         this.currentPost = '';
         this.currentPosition = '';
+        this.positionArray = [];
+        this.postArray = [];
         this.positionDisabled = true;
         this.postDisabled = true;
       },
@@ -510,7 +511,7 @@
                 arr.name = item.positions.name;
                 this.positionArray.push(arr);
               });
-              this.currentPosition = postArr[0].positions.name;
+              this.currentPosition = postArr[0].positions.id;
               this.postDisabled = false;
               this.positionDisabled = false;
 
@@ -664,7 +665,6 @@
         };
         this.department = '';
         this.positionArray = [];
-        this.roleArray = [];
       },
       //性别
       getSex() {
