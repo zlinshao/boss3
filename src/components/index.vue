@@ -299,7 +299,7 @@
     <SetLockPwd :setLockPwdDialog="setLockPwdDialog" @close="closeMessage"></SetLockPwd>
     <UnlockSecondPW :unlockSecondPWDialog="unlockSecondPWDialog" :sendId="sendId" @close="closeMessage"></UnlockSecondPW>
 	  <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
-    <BadgeView :badgeDialog="badgeDialog" @close="closebadgeDialog"></BadgeView>
+    
   </div>
 </template>
 
@@ -313,7 +313,7 @@
   import BadgeView from './common/badge.vue'
   export default {
     name: 'Index',
-    components: {TagsView, MessageDetail,Instruction,SetLockPwd,UnlockSecondPW,BadgeView},
+    components: {TagsView, MessageDetail,Instruction,SetLockPwd,UnlockSecondPW},
     data() {
       return {
         personal: {},
