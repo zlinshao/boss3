@@ -359,9 +359,9 @@
       department(val) {
         if(val){
           this.positionArray = [];
-          this.currentPosition = [];
+          // this.currentPosition = [];
+          // this.params.position_id = [];
           this.positionDisabled = false;  //职位可选
-          console.log(this.params.department_id)
           for(var i=0;i<this.params.department_id.length;i++){
             this.getPosition(this.params.department_id[i]);
           }
