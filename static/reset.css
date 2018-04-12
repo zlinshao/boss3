@@ -95,11 +95,10 @@
     display: block; }
   .expand-tree .is-current > .el-tree-node__content .tree-label {
     font-weight: 600;
-  }
+    white-space: normal; }
 .expand-tree .el-tree-node:hover {
   overflow: hidden; }
 .expand-tree .el-tree-node__content {
-  line-height: 30px;
   height: 30px; }
   .expand-tree .el-tree-node__content:hover .tree-btn {
     display: inline-block; }
@@ -259,47 +258,14 @@
   top: 50px !important; }
 
 .contentBox .el-container .aside .el-menu i {
-  color: #fff }
+  color: #fff !important; }
 
 .unitMessage .el-input-group__append {
   padding: 0 3px !important; }
 
+#locking .el-input__inner {
+  border-radius: 20px !important;
+  border: 1px solid rgba(64, 158, 255, 0.12);
+  box-shadow: 0 2px 4px 0 rgba(64, 158, 255, 0.12), 0 0 6px 0 rgba(64, 158, 255, 0.04); }
 
-
-ul.el-menu.el-menu--inline{
-  background-color:#405597 !important;
-}
-.el-submenu li.el-menu-item{
-  background-color:#405597 !important;
-}
-.is-opened{
-  background-color:#405597 !important;
-}
-.is-opened .el-submenu__title{
-  background-color:#405597 !important;
-  border-bottom:0.5px #2e3e6e solid !important;
-}
-
-
-.is-opened .iconfont{
-  color:rgb(255, 208, 75) !important;
-}
-.is-opened .el-submenu__title span{
-  color: rgb(255, 208, 75) !important;
-}
- .el-submenu__icon-arrow {
-  color:#a6b5ec !important
-}
-.is-opened .el-menu--inline .is-active span{
-  color: rgb(255, 208, 75) !important;
-}
-.el-menu--inline span{
-  color:#aec1fc
-}
-/*.el-menu--collapse .iconfont:hover,.el-menu--collapse .el-icons-fa-money:hover{*/
-  /*color: rgb(255, 208, 75) !important;*/
-/*}*/
-.el-menu--popup{
-  padding:0 !important;
-}
 /*# sourceMappingURL=reset.css.map */

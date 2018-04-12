@@ -7,6 +7,14 @@ document.body.addEventListener('DOMSubtreeModified',function (e) {
 
 export default {
   install(Vue, options) {
+    //获取个人信息
+    Vue.prototype.getPersonalInfo = function () {
+      this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
+        localStorage.setItem('personal', JSON.stringify(res.data.data));
+        globalConfig.personal = res.data.data.data;
+      });
+    };
+
     Vue.prototype.dictionary = function (data,flag) {
       return new Promise((resolve, reject) => {
         this.$http.get(globalConfig.server + 'setting/dictionary/' +data,{params:{status:flag}}).then( (res) => {
