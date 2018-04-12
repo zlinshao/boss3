@@ -53,7 +53,7 @@
     methods:{
       confirmAdd(){
         this.$http.put(globalConfig.server+'manager/positions/'+this.positionId,this.params).then((res) => {
-          if(res.data.code === '20010'){
+          if(res.data.code === '20030'){
             this.$emit('close','success');
             this.closeModal();
             this.$notify.success({
@@ -61,10 +61,19 @@
               message: res.data.msg,
             });
           }else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
-            });
+            if(typeof res.data.msg=== 'object'){
+                res.data.msg.name.forEach((item)=>{
+                  this.$notify.warning({
+                    title: '警告',
+                    message: item,
+                  });
+                })
+            }else{
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg,
+              });
+            }
           }
         });
       },
