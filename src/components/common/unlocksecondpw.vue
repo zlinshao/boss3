@@ -31,7 +31,7 @@ export default {
       unlockSecondPWDialogVisible: false,
       unlockFlag:false,
       basicSetting: {
-        dict_id: "",
+        dict_id: "221",
         pwd: ""
       }
     };
@@ -70,7 +70,7 @@ export default {
             this.unlockSecondPWDialogVisible = false;
             this.unlockFlag = true;
             this.basicSetting = {
-              dict_id: "",
+              dict_id: "221",
               pwd: ""
             };
           } else {

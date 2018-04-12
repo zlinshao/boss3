@@ -250,7 +250,7 @@
                 <span slot="title"> {{child.name}}</span>
               </el-menu-item>
 
-              <el-submenu :index="item.name+''" v-if="!item.hidden && !item.abnormal">
+              <el-submenu :index="item.name+''"  :disabled ="chinese.indexOf(item.name)>-1" @click.native="openBadge" v-if="!item.hidden && !item.abnormal">
                 <template slot="title">
                   <i :class="item.icon" style="font-size: 26px"></i>
                   <span>{{item.name}}</span>
@@ -400,6 +400,9 @@ export default {
     }
   },
   methods: {
+    openBadge(){
+      this.unlockSecondPWDialog = true;
+    },
     //多开页面验证锁屏
     multiPageLock() {
       this.$http.interceptors.response.use(
@@ -505,7 +508,7 @@ export default {
     unlockFlag(val) {
       this.unlockFlagpart = val;
       if (this.unlockFlagpart) {
-        this.defaultArray.push(this.openkey);
+        this.chinese =[]
       }
     },
 
@@ -531,10 +534,7 @@ export default {
                   this.dictionary2[i].id ==
                   this.personal.data.secondary_password[key]
                 ) {
-                  this.chinese.push({
-                    name: this.dictionary2[i].dictionary_name,
-                    id: this.dictionary2[i].id
-                  });
+                  this.chinese.push(this.dictionary2[i].dictionary_name);
                 }
               }
             }
@@ -545,31 +545,10 @@ export default {
     fullScreen(val) {
       screenFull.toggle();
     },
-    handleOpen(key, keyPath) {     
-      this.openkey = key;
-      if (!this.unlockFlagpart) {
-        for (let chi in this.chinese) {
-          if (this.chinese[chi].name == key) {
-            this.defaultArray = [];
-            this.unlockSecondPWDialog = true;
-            this.sendId = this.chinese[chi].id;
-          }
-        }
-      }
+    handleOpen(key, keyPath) {    
     },
     handleClose(key, keyPath) {},
     handlerSelect(key, keyPath) {
-      this.openPath = keyPath[1];
-      if (!this.unlockFlagpart) {
-        for (let chi in this.chinese) {
-          for (let path in keyPath) {
-            if (this.chinese[chi].name == keyPath[0]) {
-              this.unlockSecondPWDialog = true;
-              this.sendId = this.chinese[chi].id;
-            }
-          }
-        }
-      }
     },
     clickScreen() {
       this.screenStatus = true;
