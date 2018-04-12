@@ -67,7 +67,6 @@
 <script>
   export default {
     props: ['setLockPwdDialog'],
-    components: {},
     data() {
       return {
         setLockPwdDialogVisible: false,
@@ -96,7 +95,6 @@
       }
     },
     mounted(){
-      console.log(JSON.parse(localStorage.personal).data)
       if (JSON.parse(localStorage.personal).data.setting.length > 0) {
         this.basicSetting.id[0] = Number(JSON.parse(localStorage.personal).data.setting[0].dict_id);
         this.defaultCountdown = Number(JSON.parse(localStorage.personal).data.setting[0].dict_id)
@@ -116,10 +114,7 @@
       isClose(val){
         if(val){
           this.setLockPwdDialogVisible = false;
-          this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
-            localStorage.setItem('personal', JSON.stringify(res.data.data));
-            globalConfig.personal = res.data.data.data;
-          });
+          this.getPersonalInfo();
         }
       }
     },

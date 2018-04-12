@@ -1,5 +1,5 @@
 <template xmlns:v-popover="http://www.w3.org/1999/xhtml">
-  <div id="index" @click="clickScreen">
+  <div id="index">
     <div class="navBar" :class="isFull? 'navBarHide':'' ">
       <div class="left">
         <div class="logo" :class="isCollapse? 'isCollapse_logo':'' ">
@@ -344,27 +344,24 @@
     },
 
     mounted() {
-      this.initData();
-      if (JSON.parse(localStorage.personal).data.setting.length < 1 || !JSON.parse(localStorage.personal).detail.pwd_lock) {
-        this.setLockPwdDialog = true;
-      }
-      //获取模块接口
-      this.getDictionary2()
-      this.$http.interceptors.response.use((response) => { //配置请求回来的信息
-        if (response.data.code == '7777') {
-          clearInterval(this.interval);
-          this.interval = null;
-          clearInterval(this.messageInterval);
-          this.messageInterval = null;
-
-          sessionStorage.setItem('beforePath', this.$route.path);
-          sessionStorage.setItem('lockStatus', 1);
-          this.$router.push({path: '/lock'});
-        }
-        return response;
-      }, function (error) {
-        return Promise.reject(error);
+      //鼠标滑动
+      let _this = this;
+      $(document).mousemove(function () {
+        _this.clickScreen();
       });
+      this.initData();
+
+      //获取模块接口
+      this.getDictionary2();
+      //多页面锁屏
+      this.multiPageLock();
+
+      setInterval(function () {
+        if(localStorage.getItem('initCount') == 1){
+          _this.screenStatus = true;
+        }
+        localStorage.setItem('initCount',0);
+      },1000)
     },
     computed: {
       visitedViews() {
@@ -391,6 +388,24 @@
       }
     },
     methods: {
+      //多开页面验证锁屏
+      multiPageLock(){
+        this.$http.interceptors.response.use((response) => { //配置请求回来的信息
+          if (response.data.code == '7777') {
+            clearInterval(this.interval);
+            this.interval = null;
+            clearInterval(this.messageInterval);
+            this.messageInterval = null;
+            sessionStorage.setItem('beforePath', this.$route.path);
+            sessionStorage.setItem('lockStatus', 1);
+            this.$router.push({path: '/lock'});
+          }
+          return response;
+        }, function (error) {
+          return Promise.reject(error);
+        });
+      },
+
       openModalDialog(type) {
         switch (type) {
           case 'instructionDialog':   //说明书
@@ -405,6 +420,10 @@
         this.badgeDialog = false;
       },
       initData(){
+        //判断是否存在锁屏密码
+        if (JSON.parse(localStorage.personal).data.setting.length < 1 || !JSON.parse(localStorage.personal).detail.pwd_lock) {
+          this.setLockPwdDialog = true;
+        }
         this.personal = JSON.parse(localStorage.personal);
         this.loginDay = this.personal.data.loginday;
         this.loginPercent = Number(this.loginDay / 180 * 100) + '%';
@@ -458,24 +477,24 @@
           }
         })
       },
-    getDictionary2() {
-      this.$http
-        .get(globalConfig.server + "setting/dictionary/220")
-        .then(res => {
-          if (res.data.code === "30010") {
-            this.dictionary2 = res.data.data;
-            for(let i=0;i<this.dictionary2.length;i++){
-              for(let key in this.personal.data.secondary_password){
-                if(this.dictionary2[i].id ==this.personal.data.secondary_password[key]){
-                  this.chinese.push({"name":this.dictionary2[i].dictionary_name,"id":this.dictionary2[i].id} )
+      getDictionary2() {
+        this.$http
+          .get(globalConfig.server + "setting/dictionary/220")
+          .then(res => {
+            if (res.data.code === "30010") {
+              this.dictionary2 = res.data.data;
+              for(let i=0;i<this.dictionary2.length;i++){
+                for(let key in this.personal.data.secondary_password){
+                  if(this.dictionary2[i].id ==this.personal.data.secondary_password[key]){
+                    this.chinese.push({"name":this.dictionary2[i].dictionary_name,"id":this.dictionary2[i].id} )
+                  }
                 }
               }
+
             }
 
-          }
-
-        });
-    },
+          });
+      },
       // 全屏
       fullScreen(val) {
         screenFull.toggle();
@@ -504,6 +523,7 @@
       },
       clickScreen() {
         this.screenStatus = true;
+        localStorage.setItem('initCount',1)
       },
       countTime() {
         let countDown = [];

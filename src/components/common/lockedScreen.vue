@@ -1,41 +1,50 @@
 <template>
   <div id="locking">
     <div class="clock" v-if="year" style="position: fixed;top: 80px;left: 150px;">
-      <div style="font-size: 50px;">{{hours}}:{{minutes}}:{{seconds}}</div>
+      <div style="font-size: 48px;">{{hours}}:{{minutes}}:{{seconds}}</div>
       <div style="font-size: 18px;width: 197px;display:flex;justify-content: space-between">
         <span>{{year}}-{{months}}-{{day}}</span>
         <span>{{week}}</span>
       </div>
-      <div style="font-size: 16px;color: #6a8dfb;margin-top: 60px">
-        乐伽不止眼前的合同，还有诗和远方的田野！
+      <div style="font-size: 17px;color: #6a8dfb;margin-top: 60px">
+        {{xljt}}
       </div>
     </div>
     <div class="lock_container">
       <div class="header">
         <img v-if="personal && personal.avatar" :src="personal.avatar" alt="">
-        <img src="../../../../assets/images/head.jpg" v-else="" alt="">
+        <img src="../../assets/images/head.jpg" v-else="" alt="">
       </div>
       <div v-if="personal && personal.name" class="name">{{personal.name}}</div>
       <div class="name" v-else="">LEJIA</div>
       <div class="input">
         <el-input placeholder="请输入密码" type="password" @keyup.enter.native="btnClick" v-model="keywords"></el-input>
       </div>
+      <!--<a href="javascript:;" style="font-size: 14px;color: #6a8dfb">-->
+        <!--忘记密码？-->
+      <!--</a>-->
     </div>
 
     <div style="position: fixed;bottom: 120px;right: 170px;">
       <div class="log_off" @click="log_off">
-        <img src="../../../../assets/images/log_out.png" alt="">
+        <img src="../../assets/images/log_out.png" alt="">
       </div>
     </div>
+
+    <!--<SetLockPwd :setLockPwdDialog="setLockPwdDialog" :type="type" @close="closeModal"></SetLockPwd>-->
   </div>
 </template>
 
 <script>
+  import SetLockPwd from './setLockPwd.vue'
   import Cookies from 'js-cookie';
   export default {
     name: 'hello',
+    components:{SetLockPwd},
     data () {
       return {
+        setLockPwdDialog:false,
+        type:'onlySetPwd',
         keywords: '',
         personal: {},
         interval: null,
@@ -45,9 +54,22 @@
         hours: '',
         minutes: '',
         seconds: '',
+        xljt: '',
+        xljxArray:[
+          '幸福是持续地拥有满足感和知足感',
+          '喝一杯咖啡，放松一下自己',
+          '像蜜蜂一样勤劳工作才能享受蜜甜生活',
+          '在忙，也别忘了照顾自己' ,
+          '丢下一些包袱后，你会惊讶的发现，原来自己可以飞的那么高' ,
+          '做一个微笑挂在嘴边，快乐放在心上的人',
+          '将来的你，一定会感谢现在拼命努力的你',
+          '理想是一面旗帜，信念是一枚火炬',
+          '休息，休息一会', '喝杯茶吧, 让精神抖擞一下~'
+        ],
       }
     },
     mounted(){
+      this.getFlag();
       clearInterval(this.interval);
       this.times();
       this.interval = setInterval(() => {
@@ -64,6 +86,11 @@
       lock_div.style.height = height + 'px';
     },
     methods: {
+      getFlag(){
+        let length = this.xljxArray.length;
+        let num = Math.floor(Math.random()*length);
+        this.xljt = this.xljxArray[num]?this.xljxArray[num]:'乐伽不止眼前的合同，还有诗和远方的田野！';
+      },
       times(){
         let date = new Date();
         this.year = date.getFullYear() + "";
@@ -82,7 +109,13 @@
         this.week = "星期"+ weekArray[week];
       },
       log_off(){
-        this.$router.push('/login');
+        this.$http.get(globalConfig.server + "logout").then(res => {
+          sessionStorage.setItem('lockStatus', 0);
+          this.$router.push('/login');
+        });
+      },
+      closeModal(){
+
       },
       btnClick(){
         this.$http.get(globalConfig.server + 'special/special/unlock_screen?pwd_lock=' + this.keywords).then((res) => {
@@ -129,10 +162,12 @@
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss">
+<style lang="scss" scoped="">
 
   #locking {
-    font-family: 'NSimSun', sans-serif;
+    font-family: '苹方-简', sans-serif;
+    font-weight: lighter;
+    letter-spacing: 1px;
     .log_off {
       width: 40px;
       height: 40px;
@@ -152,7 +187,7 @@
     }
     width: 100vw;
     height: 100%;
-    background: url("../../../../assets/images/背景.png") no-repeat;
+    background: url("../../assets/images/背景.png") no-repeat;
     background-size: 100% 100%;
     .lock_container {
       width: 250px;
@@ -181,11 +216,6 @@
         margin-top: 60px;
         text-align: center;
         width: 250px;
-        .el-input__inner {
-          border-radius: 20px;
-          border: 1px solid rgba(64,158,255,.12);
-          box-shadow: 0 2px 4px 0 rgba(64,158,255,.12), 0 0 6px 0 rgba(64,158,255,.04);
-        }
       }
     }
 

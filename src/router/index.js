@@ -5,7 +5,7 @@ import Router from 'vue-router'
 import Login from '../components/Login.vue'
 import Index from '../components/index.vue'
 import Main from '../components/main.vue'
-import Lock from '../components/common/lockScreen/components/lockedScreen.vue'
+import Lock from '../components/common/lockedScreen.vue'
 
 
 //租赁管理

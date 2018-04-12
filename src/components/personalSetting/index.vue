@@ -239,6 +239,7 @@ export default {
               message: res.data.msg,
               type: "success"
             });
+            this.getPersonalInfo();
             this.sms_lock_num = '';
             this.set_pwd_lock = '';
             this.identify_pwd_lock = '';
@@ -261,7 +262,8 @@ export default {
               message: res.data.msg,
               type: "success"
             });
-            this.$store.dispatch('changeBasicSetting')
+            this.$store.dispatch('changeBasicSetting');
+            this.getPersonalInfo();
           } else {
             this.$notify({
               title: "警告",
