@@ -56,6 +56,10 @@
           if(res.data.code === '20030'){
             this.$emit('close','success');
             this.closeModal();
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg,
+            });
           }else {
             this.$notify.warning({
               title: '警告',

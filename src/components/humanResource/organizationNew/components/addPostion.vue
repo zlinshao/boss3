@@ -91,7 +91,8 @@
     },
     watch:{
       addPositionDialog(val){
-        this.addPositionDialogVisible = val
+        this.addPositionDialogVisible = val;
+        this.params = [];
       },
       addPositionDialogVisible(val){
         if(!val){
@@ -216,7 +217,7 @@
       getPost(val){
         this.$http.get(globalConfig.server+'manager/positions?type='+val).then((res) => {
           if(res.data.code === '20000'){
-            this.postData = res.data.data;
+            this.postData = res.data.data.data;
           }else {
             this.$notify.info({
               title: '消息',
