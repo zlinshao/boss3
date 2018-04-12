@@ -4,7 +4,7 @@
 
       <div class="highRanking">
         <div class="tabsSearch">
-          <el-form :inline="true" size="mini">
+          <el-form :inline="true" onsubmit="return" size="mini">
             <el-form-item>
               <el-input v-model="params.q" placeholder="搜索">
                 <el-button @click="search()" slot="append" type="primary" icon="el-icon-search"></el-button>
@@ -20,7 +20,7 @@
         </div>
 
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
-          <el-form :inline="true" :model="formInline" size="mini" label-width="100px">
+          <el-form :inline="true" onsubmit="return" :model="formInline" size="mini" label-width="100px">
             <div class="filterTitle">
               <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>

@@ -15,7 +15,7 @@
           <!--</el-button>-->
         <!--</div>-->
         <div class="highSearch">
-          <el-form :inline="true" size="mini">
+          <el-form :inline="true" onsubmit="return" size="mini">
             <el-form-item>
               <el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" clearable>
                 <el-button slot="append" icon="el-icon-search"></el-button>
@@ -28,7 +28,7 @@
         </div>
 
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
-          <el-form :inline="true" :model="form" size="mini" label-width="100px">
+          <el-form :inline="true" onsubmit="return" :model="form" size="mini" label-width="100px">
             <div class="filterTitle">
               <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>

@@ -2,7 +2,7 @@
   <div id="integralDetail">
     <div class="highRanking">
       <div class="highSearch">
-        <el-form :inline="true" size="mini">
+        <el-form :inline="true" onsubmit="return" size="mini">
           <el-form-item>
             <el-select v-model="value" size="mini" clearable placeholder="请选择" @change="search">
               <el-option v-for="(item,index) in options" :key="index" :label="item" :value="index">

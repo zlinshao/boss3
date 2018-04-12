@@ -3,7 +3,7 @@
 
       <div class="highRanking">
         <div class="highSearch">
-          <el-form :inline="true" size="mini">
+          <el-form :inline="true" onsubmit="return" size="mini">
             <el-form-item>
               <el-input placeholder="请输入内容" v-model="formInline.keyWords" size="mini" clearable>
                 <el-button slot="append" icon="el-icon-search"></el-button>

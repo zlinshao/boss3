@@ -299,7 +299,7 @@
     <SetLockPwd :setLockPwdDialog="setLockPwdDialog" @close="closeMessage"></SetLockPwd>
     <UnlockSecondPW :unlockSecondPWDialog="unlockSecondPWDialog" :sendId="sendId" @close="closeMessage"></UnlockSecondPW>
 	  <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
-    
+
   </div>
 </template>
 
@@ -588,6 +588,10 @@
               message: res.data.msg,
               type: 'warning'
             });
+            //锁屏失败
+            this.Countdown = this.defaultTime;
+            this.startCount();
+            this.screenStatus = false;
           }
         })
       },

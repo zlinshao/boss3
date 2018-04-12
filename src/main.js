@@ -90,7 +90,6 @@ router.beforeEach((to, from, next) => {
     console.log(from.path)
   } else {
     next();
-    console.log(from.path)
   }
 });
 

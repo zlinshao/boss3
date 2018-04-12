@@ -206,8 +206,8 @@
                 <span>{{praiseData.title}}</span>
                 <span class="times">{{praiseData.create_time}}</span>
               </div>
-              <div class="mainTitle" >
-                {{praiseData.content_without_table}}
+              <div class="mainTitle" v-html="praiseData.content_without_table">
+
               </div>
               <div class="buttonNew">
                 <div>

@@ -37,7 +37,7 @@
 
         <!--高級搜索-->
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
-          <el-form :inline="true"  onsubmit="return false" size="mini" label-width="100px">
+          <el-form :inline="true" onsubmit="return false" size="mini" label-width="100px">
             <div class="filterTitle">
               <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>

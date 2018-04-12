@@ -3,7 +3,7 @@
     <div id="clientContainer">
       <div class="highRanking">
         <div class="tabsSearch">
-          <el-form :inline="true" :model="form" size="mini">
+          <el-form :inline="true" onsubmit="return" :model="form" size="mini">
             <el-form-item>
               <el-input placeholder="请输入项目名称" @clear="search" clearable v-model="form.item_name"
                         @keyup.enter.native="search" size="mini">
@@ -19,7 +19,7 @@
           </el-form>
         </div>
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
-          <el-form :inline="true" :model="form" size="mini" label-width="100px">
+          <el-form :inline="true" onsubmit="return" :model="form" size="mini" label-width="100px">
             <div class="filterTitle">
               <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>
@@ -60,7 +60,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                  
+
                       <el-col style="padding:0 " :span="11" class="el_col_option">
                       <el-input  v-model="form.credit_from" placeholder="请输入最小积分">
                       </el-input>
@@ -69,7 +69,7 @@
                       <el-input  v-model="form.credit_to" placeholder="请输入最大积分">
                       </el-input>
                       </el-col>
-                     
+
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -238,7 +238,7 @@ export default {
     handleSizeChange(val) {
       console.log(1111111);
       this.form.page= val;
-      
+
     },
 
     newAddBack(val) {
@@ -424,7 +424,7 @@ export default {
         credit_to: "",
         department_id: ""
       };
-      this.department_name = ""; 
+      this.department_name = "";
       this.staff_name="";
       this.isHigh=false;
       this.search(this.activeName)

@@ -2,7 +2,7 @@
   <div id="periodicTable" @click="show=false" @contextmenu="closeMenu">
     <div class="highRanking">
       <div class="highSearch">
-        <el-form :inline="true" size="mini">
+        <el-form onsubmit="return" :inline="true" size="mini">
           <!--<el-form-item>-->
             <!--<el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" clearable>-->
               <!--<el-button slot="append" icon="el-icon-search"></el-button>-->

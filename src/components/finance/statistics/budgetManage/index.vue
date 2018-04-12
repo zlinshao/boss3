@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="filter">
-      <el-form :inline="true" :model="form" size="mini">
+      <el-form :inline="true" onsubmit="return" :model="form" size="mini">
         <el-form-item>
           <el-date-picker
             v-model="form.dates"

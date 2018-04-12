@@ -3,7 +3,7 @@
     <div>
     <div class="highRanking">
       <div class="highSearch" style="width:95%">
-        <el-form :inline="true" size="medium" style="position:absolute;right:100px;" >
+        <el-form :inline="true" onsubmit="return" size="medium" style="position:absolute;right:100px;" >
           <el-form-item>
             <el-input placeholder="标题/内容关键字" v-model="form.search" @keyup.enter.native="myData(1)" size="mini"
                       clearable>
@@ -18,7 +18,7 @@
         <el-button @click="openModalDialogx('noticeDialog')" class="sendnotice" size="mini" type="primary">发布公告</el-button>
       </div>
       <div class="filter high_grade" :class="isHigh? 'highHide':''">
-        <el-form :inline="true" :model="form" size="mini" label-width="100px">
+        <el-form :inline="true" onsubmit="return" :model="form" size="mini" label-width="100px">
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
           </div>
@@ -62,7 +62,7 @@
                 <template slot-scope="scope">
                   <span v-if="scope.row.type === 1">表彰</span>
                   <span v-if="scope.row.type === 2">批评</span>
-                  <span v-if="scope.row.type === 3">通知</span>     
+                  <span v-if="scope.row.type === 3">通知</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -91,7 +91,7 @@
                 </div>
                 </template>
 
-              </el-table-column>            
+              </el-table-column>
 
               <el-table-column
                 width="260px"
@@ -141,7 +141,7 @@
                 <template slot-scope="scope">
                   <el-button class="btnStatus" v-if="scope.row.draft === '已发布'" type="primary" size="mini">已发布</el-button>
                   <el-button class="btnStatus" v-if="scope.row.draft === '草稿'" type="info" size="mini">草稿</el-button>
-                  <el-button class="btnStatus" v-if="scope.row.draft === '已撤回'" type="warning" size="mini">已撤回</el-button>     
+                  <el-button class="btnStatus" v-if="scope.row.draft === '已撤回'" type="warning" size="mini">已撤回</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -257,7 +257,7 @@ export default {
         search: ""
         },
         this.myData(1);
-      },          
+      },
     //右键参数
     contextMenuParam(event) {
       //param: user right param
@@ -300,7 +300,7 @@ export default {
       else{
         this.lists = [];
       }
-      
+
     },
     myData(val) {
       this.tableData = [];
@@ -314,7 +314,7 @@ export default {
             this.tableData = res.data.data;
             this.nowPage = val;
             this.total = res.data.num;
-            
+
             for (let j = 0; j < res.data.data.length; j++) {
               this.tableData[j].department_name="";
               for(let m=0;m<res.data.data[j].department_id.length;m++){

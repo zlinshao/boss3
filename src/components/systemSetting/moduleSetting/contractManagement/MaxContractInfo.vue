@@ -5,7 +5,7 @@
 
     <div class="highRanking">
       <div class="highSearch">
-          <el-form :inline="true" size="mini">
+          <el-form :inline="true" onsubmit="return" size="mini">
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级搜索</el-button>
             </el-form-item>

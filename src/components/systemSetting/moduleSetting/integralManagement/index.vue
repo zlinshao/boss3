@@ -3,13 +3,13 @@
 
     <div class="highRanking">
       <div class="highSearch">
-        <el-form :inline="true" size="mini" style="margin-right:30px;">
+        <el-form :inline="true" onsubmit="return" size="mini" style="margin-right:30px;">
           <el-select size="mini" v-model="type"  @change="integral" clearable="" placeholder="请选择积分项">
             <el-option label="得分项目" value="0"></el-option>
             <el-option label="失分项目" value="1"></el-option>
           </el-select>
         </el-form>
-        <el-form :inline="true" size="mini">
+        <el-form :inline="true" onsubmit="return" size="mini">
           <el-button size="mini" @click="newList" type="primary">新增项目</el-button>
         </el-form>
       </div>
@@ -45,7 +45,7 @@
 {{scope.row.remark}}
 </el-popover>
 </div>
-</template>           
+</template>
           </el-table-column>
         </el-table>
       </div>
@@ -115,7 +115,7 @@
       } else {
         this.itemAll();
       }
-    }, 
+    },
     addNoteBack(){
 this.itemAll();
     },
@@ -123,7 +123,7 @@ this.itemAll();
     newList() {
       this.newAdd = "新增";
       this.newAddDialog = true;
-    },  
+    },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
@@ -135,7 +135,7 @@ this.itemAll();
         }else{
            this.itemAll();
         }
-       
+
       },
       clickTable(row, event, column) {
         console.log(row, event, column)
@@ -186,7 +186,7 @@ this.itemAll();
           if (res.data.code === "30210") {
             this.integralList = res.data.data;
             this.totalNumber = res.data.num;
-            for(let i=0;i<res.data.data.length;i++){       
+            for(let i=0;i<res.data.data.length;i++){
                if(res.data.data[i].amount_str[0]=='+'){
                  this.integralList[i].item="得分项目"
                }
@@ -203,8 +203,8 @@ this.itemAll();
                 }
             }
              }
-            }   
-         
+            }
+
           }
         });
       }
@@ -224,7 +224,7 @@ this.itemAll();
           if (res.data.code === "30210") {
             this.integralList = res.data.data;
             this.totalNumber = res.data.num;
-            for(let i=0;i<res.data.data.length;i++){       
+            for(let i=0;i<res.data.data.length;i++){
                if(res.data.data[i].amount_str[0]=='+'){
                  this.integralList[i].item="得分项目"
                }
@@ -253,7 +253,7 @@ this.itemAll();
       //右键修改
       if (index == "newAddDialog") {
         this.newAddDialog = true;
-        this.newAdd = "修改";        
+        this.newAdd = "修改";
       }
       if(index == "deleteInfo"){
         this.$confirm('删除后不可恢复, 是否继续?', '提示', {
@@ -273,16 +273,16 @@ this.itemAll();
                  this.$notify.warning({
                   title: "警告",
                   message: res.data.msg
-                });             
+                });
             }
-        }); 
+        });
         }).catch(() => {
           this.$message({
             type: 'info',
             message: '已取消删除'
           });
         });
-       
+
       }
       if(index == "addNoteDialog"){
         this.addNoteDialog=true;

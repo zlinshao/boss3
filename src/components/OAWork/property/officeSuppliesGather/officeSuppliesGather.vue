@@ -1,7 +1,7 @@
 <template>
   <div @click="show=false" @contextmenu="show=false">
     <!--<div class="filter">-->
-      <!--<el-form :inline="true" :model="formInline" size="mini" class="demo-form-inline">-->
+      <!--<el-form :inline="true" onsubmit="return" onsubmit="return" :model="formInline" size="mini" class="demo-form-inline">-->
         <!--<el-form-item label="商品颜色">-->
           <!--<el-select v-model="formInline.region" placeholder="请选择商品颜色">-->
             <!--<el-option label="区域一" value="shanghai"></el-option>-->
@@ -32,7 +32,7 @@
 
     <div class="highRanking">
       <div class="highSearch">
-        <el-form :inline="true" size="mini">
+        <el-form :inline="true" onsubmit="return" size="mini">
           <el-form-item>
             <el-input placeholder="请输入内容" v-model="formInline.keyWords" size="mini" clearable>
               <el-button slot="append" icon="el-icon-search"></el-button>
@@ -51,7 +51,7 @@
       </div>
 
       <div class="filter high_grade" :class="isHigh? 'highHide':''">
-        <el-form :inline="true" :model="formInline" size="mini" label-width="100px">
+        <el-form :inline="true" onsubmit="return" :model="formInline" size="mini" label-width="100px">
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
           </div>
