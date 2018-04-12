@@ -92,7 +92,6 @@
     watch:{
       addPositionDialog(val){
         this.addPositionDialogVisible = val;
-        this.params = [];
       },
       addPositionDialogVisible(val){
         if(!val){
