@@ -165,6 +165,10 @@
                         label="职位">
                       </el-table-column>
                       <el-table-column
+                        prop="display_name"
+                        label="职位标识">
+                      </el-table-column>
+                      <el-table-column
                         prop="org.name"
                         label="部门">
                       </el-table-column>
@@ -201,8 +205,12 @@
                         </template>
                       </el-table-column>
                       <el-table-column
-                        prop="postion_type.name"
+                        prop="position_type.name"
                         label="职位">
+                      </el-table-column>
+                      <el-table-column
+                        prop="display_name"
+                        label="职位标识">
                       </el-table-column>
                       <el-table-column
                         prop="orgName"
@@ -705,9 +713,9 @@
         this.department_name = data.name;
       },
       nodeExpand(data,node,store) {
-        if(this.defaultExpandKeys.indexOf(data.id)<0){
-          this.defaultExpandKeys.push(data.id)
-        }
+        // if(this.defaultExpandKeys.indexOf(data.id)<0){
+        //   this.defaultExpandKeys.push(data.id)
+        // }
       },
       nodeCollapse(data,node,store){
         this.defaultExpandKeys.filter((x)=>{
@@ -1079,7 +1087,6 @@
           });
         }
       },
-
       //修改岗位完成回调
       closeEditPosition(val){
         this.editPositionDialog = false;
@@ -1127,8 +1134,6 @@
           }
         }
       },
-
-
 
       //********************右键配置操作函数****************
       contextParams(event){
