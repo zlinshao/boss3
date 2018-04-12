@@ -421,10 +421,6 @@ unlockFlagpart:false,
         this.badgeDialog = false;
       },
       initData(){
-        //判断是否存在锁屏密码
-        if (JSON.parse(localStorage.personal).data.setting.length < 1 || !JSON.parse(localStorage.personal).detail.pwd_lock) {
-          this.setLockPwdDialog = true;
-        }
         this.personal = JSON.parse(localStorage.personal);
         if(!this.personal.data.medal){
           this.badgeDialog = true;
@@ -432,6 +428,14 @@ unlockFlagpart:false,
         this.loginDay = this.personal.data.loginday;
         this.loginPercent = Number(this.loginDay / 180 * 100) + '%';
         $('.percent').css('width', this.loginPercent);
+
+        //判断是否存在锁屏密码
+        if(this.personal.data.setting&&Array.isArray(this.personal.data.setting)){
+          if (this.personal.data.setting.length < 1 || !this.personal.detail.pwd_lock) {
+            this.setLockPwdDialog = true;
+          }
+        }
+
         this.countTime();
 
         clearInterval(this.messageInterval);
