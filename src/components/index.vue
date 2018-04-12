@@ -298,7 +298,8 @@
     <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeMessage"></MessageDetail>
     <SetLockPwd :setLockPwdDialog="setLockPwdDialog" @close="closeMessage"></SetLockPwd>
     <UnlockSecondPW :unlockSecondPWDialog="unlockSecondPWDialog" :sendId="sendId" @close="closeMessage"></UnlockSecondPW>
-	<Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
+	  <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
+    <BadgeView :badgeDialog="badgeDialog" @close="closebadgeDialog"></BadgeView>
   </div>
 </template>
 
@@ -309,9 +310,10 @@
   import Instruction from './rentManage/wholeRentManage/components/instruction.vue'            //使用说明
   import SetLockPwd from './common/setLockPwd.vue'
   import UnlockSecondPW from './common/unlocksecondpw.vue'
+  import BadgeView from './common/badge.vue'
   export default {
     name: 'Index',
-    components: {TagsView, MessageDetail,Instruction,SetLockPwd,UnlockSecondPW},
+    components: {TagsView, MessageDetail,Instruction,SetLockPwd,UnlockSecondPW,BadgeView},
     data() {
       return {
         personal: {},
@@ -337,6 +339,7 @@
         chinese:[],
         unlockSecondPWDialog:false,
         sendId:"",
+	      badgeDialog:false, //徽章模态框
       }
     },
 
@@ -397,6 +400,9 @@
       },
       closeModal() {
         this.instructionDialog = false;
+      },
+      closebadgeDialog(){
+        this.badgeDialog = false;
       },
       initData(){
         this.personal = JSON.parse(localStorage.personal);
