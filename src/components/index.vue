@@ -428,7 +428,7 @@ unlockFlagpart:false,
         this.personal = JSON.parse(localStorage.personal);
         if(!this.personal.data.medal){
           this.badgeDialog = true;
-        }	
+        }
         this.loginDay = this.personal.data.loginday;
         this.loginPercent = Number(this.loginDay / 180 * 100) + '%';
         $('.percent').css('width', this.loginPercent);

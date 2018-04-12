@@ -28,11 +28,11 @@
           'border-radius': '4px',
           'line-height': '45px', // 请保持与高度一致以垂直居中
           background: '#ecf5ffe8'// 按钮的背景颜色
-        }
+        },
+        loginIndex: 0,
       }
     },
     created(){
-
       if (localStorage.myData !== undefined) {
         let head = JSON.parse(localStorage.myData);
         globalConfig.header.Authorization = head.token_type + ' ' + head.access_token;
@@ -59,25 +59,27 @@
     methods: {
       responses() {
         let that = this;
-        this.$http.interceptors.response.use(function (response) {
-          return response;
-        }, function (error) {
-          if (error && error.response) {
-            if (error.response.data.status_code === 401) {
-              that.$alert('登陆超时请重新登陆', '温馨提示', {
-                confirmButtonText: '确定',
-                callback: action => {
-                  localStorage.removeItem('myData');
-                  localStorage.removeItem('personal');
-                  globalConfig.header.Authorization = '';
-                  that.$router.push({path: '/login'});
-                }
-              });
+        if (this.loginIndex === 0) {
+          this.$http.interceptors.response.use(function (response) {
+            return response;
+          }, function (error) {
+            if (error && error.response) {
+              if (error.response.data.status_code === 401) {
+                that.$alert('登陆超时请重新登陆', '温馨提示', {
+                  confirmButtonText: '确定',
+                  callback: action => {
+                    that.loginIndex++;
+                    localStorage.removeItem('myData');
+                    localStorage.removeItem('personal');
+                    globalConfig.header.Authorization = '';
+                    that.$router.push({path: '/login'});
+                  }
+                });
+              }
             }
-          }
-          return Promise.reject(error);
-        });
-
+            return Promise.reject(error);
+          });
+        }
       },
       prevent(e) {
         e.preventDefault();
