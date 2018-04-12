@@ -9,11 +9,11 @@
         <div class="rightPic">
           <div class="landName">
             <span>{{landholder.name}}</span>
-            <span v-if="loginDay >= 3 && loginDay < 5" class="span3"></span>
-            <span v-else-if="loginDay >= 5 && loginDay < 10" class="span5"></span>
-            <span v-else-if="loginDay >= 10 && loginDay < 30" class="span10"></span>
-            <span v-else-if="loginDay >= 30" class="span30"></span>
-            <span v-else></span>
+            <span v-if="loginDay==3" class="span3"></span>
+            <span v-else-if="loginDay==5" class="span5">5</span>
+            <span v-else-if="loginDay == 15" class="span15">15</span>
+            <span v-else-if="loginDay == 30" class="span30">30</span>
+            <span class="otherspan" v-else>{{loginDay}}</span>
           </div>
           <div class="personalSign">
             <span v-if="!isEdit && landholder.data && landholder.data.signature" style="cursor: pointer"
@@ -571,21 +571,31 @@
             font-size: 21px;
             color: $colorBor;
             span:last-of-type {
-              width: 24px;
-              height: 24px;
+              width: 32px;
+              height: 32px;
               margin-left: 10px;
+              font-size: 12px;
+              line-height: 32px;
+              text-align: center;
             }
             .span3{
-              @include back("../../assets/images/individual/3days.png");
+              background: url("../../assets/images/individual/3days.png") no-repeat top;
             }
             .span5{
-              @include back("../../assets/images/individual/5days.png");
+              color: #f9c38d;
+              background: url("../../assets/images/individual/5days.png") no-repeat top;
             }
-            .span10{
-              @include back("../../assets/images/individual/10days.png");
+            .span15{
+              color: #ffd200;
+              background: url("../../assets/images/individual/15days.png") no-repeat top;
             }
             .span30{
-              @include back("../../assets/images/individual/30days.png");
+              color: #fce0cc;
+              background: url("../../assets/images/individual/30days.png") no-repeat top;
+            }
+            .otherspan{
+              color: #c3fb74;
+              background: url("../../assets/images/individual/otherday.png") no-repeat top;
             }
           }
           .personalSign {
