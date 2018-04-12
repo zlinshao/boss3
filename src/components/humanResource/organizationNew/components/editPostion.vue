@@ -40,6 +40,7 @@
     watch:{
       editPositionDialog(val){
         this.editPositionDialogVisible = val
+        this.params.name = this.positionName;
       },
       editPositionDialogVisible(val){
         if(!val){
