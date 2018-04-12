@@ -46,7 +46,7 @@ export default {
     this.loginDay = this.landholder.data.loginday;
     setTimeout(() => {
       this.closeBadge();
-    }, 5000);
+    }, 2000);
   },
   methods:{
     closeBadge(){
