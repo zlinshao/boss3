@@ -337,7 +337,7 @@
       if(JSON.parse(localStorage.personal).data.setting.length<1 || !JSON.parse(localStorage.personal).detail.pwd_lock){
         this.setLockPwdDialog = true;
       }
-      console.log(this.personal)
+
       //获取模块接口
       this.getDictionary2()
     },
@@ -434,8 +434,8 @@
                   this.chinese.push({"name":this.dictionary2[i].dictionary_name,"id":this.dictionary2[i].id} )
                 }
               }
-            }           
-            
+            }
+
           }
 
         });
