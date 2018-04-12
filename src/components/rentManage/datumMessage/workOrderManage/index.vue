@@ -61,6 +61,11 @@
         <div class="myTable" >
           <el-table
             :data="tableData"
+            :empty-text = 'workOrderStatus'
+            v-loading="workOrderLoading"
+            element-loading-text="拼命加载中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(255, 255, 255, 0)"
             @row-click="clickTable"
             @row-dblclick="dblClickTable"
             @row-contextmenu='houseMenu'
@@ -173,7 +178,9 @@
         startEdit:false,
         startAddResult:false,
         startDetail:false,
-        dictionary_follow:[]//  跟进状态字典
+        dictionary_follow:[],//  跟进状态字典
+        workOrderStatus: ' ',
+        workOrderLoading: false,
       }
     },
 
@@ -195,11 +202,15 @@
       },
       //获取列表数据
       getTableData(){
+        this.workOrderLoading = true;
+        this.workOrderStatus = ' ';
         this.$http.get(globalConfig.server+'customer/work_order',{params:this.params}).then((res) => {
+          this.workOrderLoading = false;
           if(res.data.code === '100200'){
             this.tableData = res.data.data.data;
             this.totalNumber = res.data.data.count;
           }else {
+            this.workOrderStatus = '暂无数据';
             this.tableData = [];
             this.totalNumber = 0;
           }

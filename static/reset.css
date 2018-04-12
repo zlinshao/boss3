@@ -268,4 +268,7 @@
   border: 1px solid rgba(64, 158, 255, 0.12);
   box-shadow: 0 2px 4px 0 rgba(64, 158, 255, 0.12), 0 0 6px 0 rgba(64, 158, 255, 0.04); }
 
+.el-submenu.is-disabled .el-menu-item, .el-submenu.is-disabled .el-submenu__title {
+  cursor: pointer !important; }
+
 /*# sourceMappingURL=reset.css.map */

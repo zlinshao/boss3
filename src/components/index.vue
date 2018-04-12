@@ -29,7 +29,7 @@
               <i class="iconfont icon-qita1"></i><span>快捷入口</span>
             </span>
             <el-dropdown-menu slot="dropdown" class="shortcutList">
-              <el-dropdown-item v-for="(item,index) in isShortcutPath"  :key="index"
+              <el-dropdown-item v-for="(item,index) in isShortcutPath" :key="index"
                                 @click.native="routers(item.path)" :class="{'border_top': index > 3}">
                 <div>
                   <b style="font-weight: 100" :class="{'backColor1': -1 < index,'backColor2': index === 3 || index === 11 || index === 13,
@@ -45,7 +45,7 @@
         <!--消息-->
         <div class="message" style="position: relative;margin-right: 15px">
           <el-dropdown>
-            <el-badge  :value="unReadMessageData.length" class="item">
+            <el-badge :value="unReadMessageData.length" class="item">
               <i class="el-icons-fa-comment-o"></i>
               消 息
             </el-badge>
@@ -71,12 +71,15 @@
               <el-dropdown-item>
                 <el-row v-if="unReadMessageData.length >0" @click.native="showOtherDetail()">
                   <el-col :span="24">
-                    <div style="display:block; line-height:32px; text-align:center; color:#409EFF">查看全部<span style="color:#f00">{{unReadMessageData.length}}条</span>未读</div>
+                    <div style="display:block; line-height:32px; text-align:center; color:#409EFF">查看全部<span
+                      style="color:#f00">{{unReadMessageData.length}}条</span>未读
+                    </div>
                   </el-col>
                 </el-row>
                 <el-row v-if="unReadMessageData.length <=0" style="cursor:default">
                   <el-col :span="24">
-                    <div style=" width:180px; height:65px; display:block; line-height:65px; text-align:center">暂无数据</div>
+                    <div style=" width:180px; height:65px; display:block; line-height:65px; text-align:center">暂无数据
+                    </div>
                   </el-col>
                 </el-row>
               </el-dropdown-item>
@@ -251,27 +254,30 @@
               </el-menu-item>
 
               <el-submenu :index="item.name+''" v-if="!item.hidden && !item.abnormal">
+                <!--二级菜单标题-->
                 <template slot="title">
                   <i :class="item.icon" style="font-size: 26px"></i>
                   <span>{{item.name}}</span>
                 </template>
+
                 <template v-for="(child,key) in item.children">
-                  <!--三级菜单-->
-                  <el-submenu :index="child.path" v-if="child.children" style="padding-left: 14px">
-                    <template slot="title">
-                      <i :class="child.icon"></i>
-                      <span>{{child.name}}</span>
-                    </template>
-                    <el-menu-item v-for="last in child.children" :index="last.path" :key="last.path"
-                                  style="padding-left: 74px">
-                      {{last.name}}
-                    </el-menu-item>
-                  </el-submenu>
                   <!--二级菜单-->
                   <el-menu-item v-if="!child.children" :index="child.path" :key="child.path" style="padding-left: 54px">
                     <i :class="child.icon"></i>
                     <span>{{child.name}}</span>
                   </el-menu-item>
+
+                  <!--三级菜单-->
+                  <el-submenu :index="child.path" v-if="child.children" style="padding-left: 14px">
+                    <!--三级菜单标题-->
+                    <template slot="title">
+                      <i :class="child.icon"></i>
+                      <span>{{child.name}}</span>
+                    </template>
+                    <el-menu-item v-for="last in child.children" :index="last.path" :key="last.path" style="padding-left: 74px">
+                      {{last.name}}
+                    </el-menu-item>
+                  </el-submenu>
                 </template>
               </el-submenu>
             </template>
@@ -297,9 +303,10 @@
 
     <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeMessage"></MessageDetail>
     <SetLockPwd :setLockPwdDialog="setLockPwdDialog" @close="closeMessage"></SetLockPwd>
-    <UnlockSecondPW :unlockSecondPWDialog="unlockSecondPWDialog" @unlockFlag="unlockFlag" :sendId="sendId" @close="closeMessagex"></UnlockSecondPW>
-	  <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
-<BadgeView :badgeDialog="badgeDialog" @close="closebadgeDialog"></BadgeView>
+    <UnlockSecondPW :unlockSecondPWDialog="unlockSecondPWDialog" @unlockFlag="unlockFlag" :sendId="sendId"
+                    @close="closeMessagex"></UnlockSecondPW>
+    <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
+    <BadgeView :badgeDialog="badgeDialog" @close="closebadgeDialog"></BadgeView>
   </div>
 </template>
 
@@ -311,9 +318,10 @@
   import SetLockPwd from './common/setLockPwd.vue'
   import UnlockSecondPW from './common/unlocksecondpw.vue'
   import BadgeView from './common/badge.vue'
+  import Cookies from 'js-cookie'
   export default {
     name: 'Index',
-    components: {TagsView, MessageDetail,Instruction,SetLockPwd,UnlockSecondPW,BadgeView},
+    components: {TagsView, MessageDetail, Instruction, SetLockPwd, UnlockSecondPW, BadgeView},
     data() {
       return {
         personal: {},
@@ -333,19 +341,20 @@
         loginPercent: 0,
         creditTotal: 0, // 积分总数
 
-        setLockPwdDialog:false,
-        instructionDialog:false,  //功能说明
-        dictionary2:[],   //模块
-        chinese:[],
-        unlockSecondPWDialog:false,
-        sendId:"",
-	      badgeDialog:false, //徽章模态框
-unlockFlagpart:false,
+        setLockPwdDialog: false,
+        instructionDialog: false,  //功能说明
+        dictionary2: [],   //模块
+        chinese: [],
+        unlockSecondPWDialog: false,
+        sendId: "",
+        badgeDialog: false, //徽章模态框
+        unlockFlagpart: false,
       }
     },
 
     mounted() {
       //鼠标滑动
+      console.log(Cookies.get('ddd'))
       let _this = this;
       $(document).mousemove(function () {
         _this.clickScreen();
@@ -358,11 +367,11 @@ unlockFlagpart:false,
       this.multiPageLock();
 
       setInterval(function () {
-        if(localStorage.getItem('initCount') == 1){
+        if (localStorage.getItem('initCount') == 1) {
           _this.screenStatus = true;
         }
-        localStorage.setItem('initCount',0);
-      },1000)
+        localStorage.setItem('initCount', 0);
+      }, 1000)
     },
     computed: {
       visitedViews() {
@@ -422,15 +431,15 @@ unlockFlagpart:false,
       },
       initData(){
         this.personal = JSON.parse(localStorage.personal);
-        if(!this.personal.data.medal){
+        if (!this.personal.data.medal) {
           this.badgeDialog = true;
-        }	
+        }
         this.loginDay = this.personal.data.loginday;
         this.loginPercent = Number(this.loginDay / 180 * 100) + '%';
         $('.percent').css('width', this.loginPercent);
 
         //判断是否存在锁屏密码
-        if(this.personal.data.setting&&Array.isArray(this.personal.data.setting)){
+        if (this.personal.data.setting && Array.isArray(this.personal.data.setting)) {
           if (this.personal.data.setting.length < 1 || !this.personal.detail.pwd_lock) {
             this.setLockPwdDialog = true;
           }
@@ -480,11 +489,11 @@ unlockFlagpart:false,
         this.unlockSecondPWDialog = false;
       },
       unlockFlag(val){
-        this.unlockFlagpart=val;
-        if(!this.unlockFlagpart){
-          this.defaultArray=[];
+        this.unlockFlagpart = val;
+        if (!this.unlockFlagpart) {
+          this.defaultArray = [];
         }
-       },
+      },
 
       //获取未读消息
       getUnReadMessage(){
@@ -500,10 +509,10 @@ unlockFlagpart:false,
           .then(res => {
             if (res.data.code === "30010") {
               this.dictionary2 = res.data.data;
-              for(let i=0;i<this.dictionary2.length;i++){
-                for(let key in this.personal.data.secondary_password){
-                  if(this.dictionary2[i].id ==this.personal.data.secondary_password[key]){
-                    this.chinese.push({"name":this.dictionary2[i].dictionary_name,"id":this.dictionary2[i].id} )
+              for (let i = 0; i < this.dictionary2.length; i++) {
+                for (let key in this.personal.data.secondary_password) {
+                  if (this.dictionary2[i].id == this.personal.data.secondary_password[key]) {
+                    this.chinese.push({"name": this.dictionary2[i].dictionary_name, "id": this.dictionary2[i].id})
                   }
                 }
               }
@@ -514,35 +523,37 @@ unlockFlagpart:false,
       },
       // 全屏
       fullScreen(val) {
+        Cookies.set('ddd',1);
         screenFull.toggle();
       },
       handleOpen(key, keyPath) {
-if(!this.unlockFlagpart){
-        for(let chi in this.chinese){
-          if(this.chinese[chi].name == key){
-            this.unlockSecondPWDialog = true;
-            this.sendId=this.chinese[chi].id;
+        if (!this.unlockFlagpart) {
+          for (let chi in this.chinese) {
+            if (this.chinese[chi].name == key) {
+              this.unlockSecondPWDialog = true;
+              this.sendId = this.chinese[chi].id;
+            }
           }
-        }}
+        }
       },
       handleClose(key, keyPath) {
 
       },
       handlerSelect(key, keyPath){
-
-if(!this.unlockFlagpart){
-        for(let chi in this.chinese){
-          for(let path in keyPath){
-          if(this.chinese[chi].name == keyPath[0]){
-            this.unlockSecondPWDialog = true;
-            this.sendId=this.chinese[chi].id;
+        if (!this.unlockFlagpart) {
+          for (let chi in this.chinese) {
+            for (let path in keyPath) {
+              if (this.chinese[chi].name == keyPath[0]) {
+                this.unlockSecondPWDialog = true;
+                this.sendId = this.chinese[chi].id;
+              }
+            }
           }
-          }}
         }
       },
       clickScreen() {
         this.screenStatus = true;
-        localStorage.setItem('initCount',1)
+        localStorage.setItem('initCount', 1)
       },
       countTime() {
         let countDown = [];

@@ -91,7 +91,7 @@ import ModuleSetting from '../components/systemSetting/moduleSetting/index.vue' 
 // import UserDictionary from '../comments/systemSetting/userDictionary/index.vue'                        //用户字典
 // import RoleManage from '../comments/systemSetting/roleManage/index.vue'                                //角色管理
 // import PowerManage from '../comments/systemSetting/powerManage/index.vue'                              //权限管理
-// import VillageManage from '../comments/systemSetting/villageManage/index.vue'                          //小区管理
+import VillageManage from '../components/systemSetting/managerSetting/villageManage/index.vue'                          //小区管理
 import VillageDetail from '../components/systemSetting/managerSetting/villageManage/villageDetail.vue'      //小区管理详情
 import ManagerSetting from '../components/systemSetting/managerSetting/index.vue'                           //管理员设置
 
@@ -264,10 +264,12 @@ export default new Router({
     {
       path: '/',
       component: Index,
-      hidden: true,
-      name: '',
+      name: '产品管控中心',
+      icon: 'iconfont icon-chanpinguankong',
       children: [
-        {path: '/housesManage', component: HousesManage, name: '产品管控中心', icon: 'iconfont icon-chanpinguankong'},
+        {path: '/housesManage', component: HousesManage, name: '产品管理',},
+        {path: '/villageManage', component: VillageManage, name: '小区管理',},
+
       ]
     },
 
@@ -431,7 +433,6 @@ export default new Router({
         // {path: '/userDictionary', component: UserDictionary, name: '用户字典',},
         // {path: '/roleManage', component: RoleManage, name: '角色管理',},
         // {path: '/powerManage', component: PowerManage, name: '权限管理',},
-        // {path: '/villageManage', component: VillageManage, name: '小区管理',},
         {path: '/managerSetting', component: ManagerSetting, name: '管理员设置'},
 
         // {path: '/recycle', component: Recycle, name: '回收站',},

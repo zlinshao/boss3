@@ -137,7 +137,6 @@
               </el-table-column>
               <el-table-column
                 prop="address"
-                width="160px"
                 label="房屋地址">
               </el-table-column>
               <el-table-column
@@ -205,10 +204,10 @@
                 width="180px"
                 label="结束日期">
               </el-table-column>
-              <el-table-column
-                prop="agency"
-                label="中介费">
-              </el-table-column>
+              <!--<el-table-column-->
+                <!--prop="agency"-->
+                <!--label="中介费">-->
+              <!--</el-table-column>-->
               <el-table-column
                 prop="department_name"
                 label="所属部门">
@@ -322,10 +321,10 @@
                 prop="end_date"
                 label="结束日期">
               </el-table-column>
-              <el-table-column
-                prop="agency"
-                label="中介费">
-              </el-table-column>
+              <!--<el-table-column-->
+                <!--prop="agency"-->
+                <!--label="中介费">-->
+              <!--</el-table-column>-->
 
               <el-table-column
                 prop="staff_name"
