@@ -304,390 +304,442 @@
 </template>
 
 <script>
-  import TagsView from './common/tagsView.vue'
-  import screenFull from 'screenfull'
-  import MessageDetail from './common/messageDetail.vue'
-  import Instruction from './rentManage/wholeRentManage/components/instruction.vue'            //使用说明
-  import SetLockPwd from './common/setLockPwd.vue'
-  import UnlockSecondPW from './common/unlocksecondpw.vue'
-  import BadgeView from './common/badge.vue'
-  export default {
-    name: 'Index',
-    components: {TagsView, MessageDetail,Instruction,SetLockPwd,UnlockSecondPW,BadgeView},
-    data() {
-      return {
-        personal: {},
-        isCollapse: true,
-        isFull: false,
-        Countdown: 0,  //倒计时
-        defaultTime: 0,  //倒计时
-        screenStatus: false,
-        defaultArray: [],
-        messageDialog: false,
+import TagsView from "./common/tagsView.vue";
+import screenFull from "screenfull";
+import MessageDetail from "./common/messageDetail.vue";
+import Instruction from "./rentManage/wholeRentManage/components/instruction.vue"; //使用说明
+import SetLockPwd from "./common/setLockPwd.vue";
+import UnlockSecondPW from "./common/unlocksecondpw.vue";
+import BadgeView from "./common/badge.vue";
+export default {
+  name: "Index",
+  components: {
+    TagsView,
+    MessageDetail,
+    Instruction,
+    SetLockPwd,
+    UnlockSecondPW,
+    BadgeView
+  },
+  data() {
+    return {
+      personal: {},
+      isCollapse: true,
+      isFull: false,
+      Countdown: 0, //倒计时
+      defaultTime: 0, //倒计时
+      screenStatus: false,
+      defaultArray: [],
+      messageDialog: false,
 
-        unReadMessageData: [],
-        messageDetail: [],
-        interval: null,
-        messageInterval: null,
-        loginDay: 0,
-        loginPercent: 0,
-        creditTotal: 0, // 积分总数
+      unReadMessageData: [],
+      messageDetail: [],
+      interval: null,
+      messageInterval: null,
+      loginDay: 0,
+      loginPercent: 0,
+      creditTotal: 0, // 积分总数
 
-        setLockPwdDialog:false,
-        instructionDialog:false,  //功能说明
-        dictionary2:[],   //模块
-        chinese:[],
-        unlockSecondPWDialog:false,
-        sendId:"",
-	      badgeDialog:false, //徽章模态框
-unlockFlagpart:false,
+      setLockPwdDialog: false,
+      instructionDialog: false, //功能说明
+      dictionary2: [], //模块
+      chinese: [],
+      unlockSecondPWDialog: false,
+      sendId: "",
+      badgeDialog: false, //徽章模态框
+      unlockFlagpart: false,
+      openkey:"",
+      openPath:"",
+    };
+  },
+
+  mounted() {
+    //鼠标滑动
+    let _this = this;
+    $(document).mousemove(function() {
+      _this.clickScreen();
+    });
+    this.initData();
+
+    //获取模块接口
+    this.getDictionary2();
+    //多页面锁屏
+    this.multiPageLock();
+
+    setInterval(function() {
+      if (localStorage.getItem("initCount") == 1) {
+        _this.screenStatus = true;
       }
+      localStorage.setItem("initCount", 0);
+    }, 1000);
+  },
+  computed: {
+    visitedViews() {
+      return this.$store;
     },
-
-    mounted() {
-      //鼠标滑动
-      let _this = this;
-      $(document).mousemove(function () {
-        _this.clickScreen();
+    isShortcutPath() {
+      let isShortcutPath = [];
+      this.$router.options.routes.forEach(item => {
+        if (item.isShortcut) {
+          isShortcutPath = item.children;
+        }
       });
-      this.initData();
-
-      //获取模块接口
-      this.getDictionary2();
-      //多页面锁屏
-      this.multiPageLock();
-
-      setInterval(function () {
-        if(localStorage.getItem('initCount') == 1){
-          _this.screenStatus = true;
-        }
-        localStorage.setItem('initCount',0);
-      },1000)
+      return isShortcutPath;
+    }
+  },
+  watch: {
+    isCollapse(val) {
+      document.getElementById("isCollapse").style.overflow = val
+        ? "visible"
+        : "auto";
     },
-    computed: {
-      visitedViews() {
-        return this.$store;
-      },
-      isShortcutPath(){
-        let isShortcutPath = [];
-        this.$router.options.routes.forEach((item) => {
-          if (item.isShortcut) {
-            isShortcutPath = item.children;
-          }
-        });
-        return isShortcutPath;
+    "$store.state.app.isBasicChange": {
+      handler(val, oldVal) {
+        this.countTime();
       }
-    },
-    watch: {
-      isCollapse(val) {
-        document.getElementById('isCollapse').style.overflow = val ? 'visible' : 'auto';
-      },
-      '$store.state.app.isBasicChange': {
-        handler(val, oldVal){
-          this.countTime();
-        }
-      }
-    },
-    methods: {
-      //多开页面验证锁屏
-      multiPageLock(){
-        this.$http.interceptors.response.use((response) => { //配置请求回来的信息
-          if (response.data.code == '7777') {
+    }
+  },
+  methods: {
+    //多开页面验证锁屏
+    multiPageLock() {
+      this.$http.interceptors.response.use(
+        response => {
+          //配置请求回来的信息
+          if (response.data.code == "7777") {
             clearInterval(this.interval);
             this.interval = null;
             clearInterval(this.messageInterval);
             this.messageInterval = null;
-            sessionStorage.setItem('beforePath', this.$route.path);
-            sessionStorage.setItem('lockStatus', 1);
-            this.$router.push({path: '/lock'});
+            sessionStorage.setItem("beforePath", this.$route.path);
+            sessionStorage.setItem("lockStatus", 1);
+            this.$router.push({ path: "/lock" });
           }
           return response;
-        }, function (error) {
+        },
+        function(error) {
           return Promise.reject(error);
-        });
-      },
-
-      openModalDialog(type) {
-        switch (type) {
-          case 'instructionDialog':   //说明书
-            this.instructionDialog = true;
-            break;
         }
-      },
-      closeModal() {
-        this.instructionDialog = false;
-      },
-      closebadgeDialog(){
-        this.badgeDialog = false;
-      },
-      initData(){
-        this.personal = JSON.parse(localStorage.personal);
-        if(!this.personal.data.medal){
-          this.badgeDialog = true;
+      );
+    },
+
+    openModalDialog(type) {
+      switch (type) {
+        case "instructionDialog": //说明书
+          this.instructionDialog = true;
+          break;
+      }
+    },
+    closeModal() {
+      this.instructionDialog = false;
+    },
+    closebadgeDialog() {
+      this.badgeDialog = false;
+    },
+    initData() {
+      this.personal = JSON.parse(localStorage.personal);
+      if (!this.personal.data.medal) {
+        this.badgeDialog = true;
+      }
+      this.loginDay = this.personal.data.loginday;
+      this.loginPercent = Number(this.loginDay / 180 * 100) + "%";
+      $(".percent").css("width", this.loginPercent);
+
+      //判断是否存在锁屏密码
+      if (
+        this.personal.data.setting &&
+        Array.isArray(this.personal.data.setting)
+      ) {
+        if (
+          this.personal.data.setting.length < 1 ||
+          !this.personal.detail.pwd_lock
+        ) {
+          this.setLockPwdDialog = true;
         }
-        this.loginDay = this.personal.data.loginday;
-        this.loginPercent = Number(this.loginDay / 180 * 100) + '%';
-        $('.percent').css('width', this.loginPercent);
+      }
 
-        //判断是否存在锁屏密码
-        if(this.personal.data.setting&&Array.isArray(this.personal.data.setting)){
-          if (this.personal.data.setting.length < 1 || !this.personal.detail.pwd_lock) {
-            this.setLockPwdDialog = true;
-          }
+      this.countTime();
+
+      clearInterval(this.messageInterval);
+      this.messageInterval = null;
+
+      this.messageInterval = setInterval(() => {
+        if (localStorage.personal) {
+          this.getUnReadMessage();
         }
-
-        this.countTime();
-
-        clearInterval(this.messageInterval);
-        this.messageInterval = null;
-
-        this.messageInterval = setInterval(() => {
-          if (localStorage.personal) {
-            this.getUnReadMessage()
-          }
-        }, 100000);
-        //获取积分明细
-        this.getCredit();
-        //获取登陆时长
-        this.getLoginDay();
-      },
-      routers(url) {
-        this.$router.push(url);
-      },
-      //显示消息详情
-      showMessageDetail(val){
-        this.messageDetail = val;
-        this.messageDialog = true;
-        this.$http.put(globalConfig.server_user + 'messages/' + val.id).then((res) => {
-          if (res.data.status === 'success') {
+      }, 100000);
+      //获取积分明细
+      this.getCredit();
+      //获取登陆时长
+      this.getLoginDay();
+    },
+    routers(url) {
+      this.$router.push(url);
+    },
+    //显示消息详情
+    showMessageDetail(val) {
+      this.messageDetail = val;
+      this.messageDialog = true;
+      this.$http
+        .put(globalConfig.server_user + "messages/" + val.id)
+        .then(res => {
+          if (res.data.status === "success") {
             this.getUnReadMessage();
           }
-        })
-      },
-      showOtherDetail(){
-        this.$router.push({
-          path: "/messageCenter",
-          query: {
-            unread: 1
-          }
         });
-      },
-      closeMessage(){
-        this.messageDialog = false;
-        this.setLockPwdDialog = false;
-      },
-      closeMessagex(){
-        this.unlockSecondPWDialog = false;
-      },
-      unlockFlag(val){
-        this.unlockFlagpart=val;
-        if(!this.unlockFlagpart){
-          this.defaultArray=[];
+    },
+    showOtherDetail() {
+      this.$router.push({
+        path: "/messageCenter",
+        query: {
+          unread: 1
         }
-       },
+      });
+    },
+    closeMessage() {
+      this.messageDialog = false;
+      this.setLockPwdDialog = false;
+    },
+    closeMessagex() {
+      this.unlockSecondPWDialog = false;
+    },
+    unlockFlag(val) {
+      this.unlockFlagpart = val;
+      if (this.unlockFlagpart) {
+        this.defaultArray.push(this.openkey);
+      }
+    },
 
-      //获取未读消息
-      getUnReadMessage(){
-        this.$http.get(globalConfig.server_user + 'messages?unread=1').then((res) => {
-          if (res.data.status === 'success') {
+    //获取未读消息
+    getUnReadMessage() {
+      this.$http
+        .get(globalConfig.server_user + "messages?unread=1")
+        .then(res => {
+          if (res.data.status === "success") {
             this.unReadMessageData = res.data.data;
           }
-        })
-      },
-      getDictionary2() {
-        this.$http
-          .get(globalConfig.server + "setting/dictionary/220")
-          .then(res => {
-            if (res.data.code === "30010") {
-              this.dictionary2 = res.data.data;
-              for(let i=0;i<this.dictionary2.length;i++){
-                for(let key in this.personal.data.secondary_password){
-                  if(this.dictionary2[i].id ==this.personal.data.secondary_password[key]){
-                    this.chinese.push({"name":this.dictionary2[i].dictionary_name,"id":this.dictionary2[i].id} )
-                  }
+        });
+    },
+    getDictionary2() {
+      this.$http
+        .get(globalConfig.server + "setting/dictionary/220")
+        .then(res => {
+          if (res.data.code === "30010") {
+            this.dictionary2 = res.data.data;
+            for (let i = 0; i < this.dictionary2.length; i++) {
+              for (let key in this.personal.data.secondary_password) {
+                if (
+                  this.dictionary2[i].id ==
+                  this.personal.data.secondary_password[key]
+                ) {
+                  this.chinese.push({
+                    name: this.dictionary2[i].dictionary_name,
+                    id: this.dictionary2[i].id
+                  });
                 }
               }
-
             }
-
-          });
-      },
-      // 全屏
-      fullScreen(val) {
-        screenFull.toggle();
-      },
-      handleOpen(key, keyPath) {
-if(!this.unlockFlagpart){
-        for(let chi in this.chinese){
-          if(this.chinese[chi].name == key){
-            this.unlockSecondPWDialog = true;
-            this.sendId=this.chinese[chi].id;
-          }
-        }}
-      },
-      handleClose(key, keyPath) {
-
-      },
-      handlerSelect(key, keyPath){
-
-if(!this.unlockFlagpart){
-        for(let chi in this.chinese){
-          for(let path in keyPath){
-          if(this.chinese[chi].name == keyPath[0]){
-            this.unlockSecondPWDialog = true;
-            this.sendId=this.chinese[chi].id;
-          }
-          }}
-        }
-      },
-      clickScreen() {
-        this.screenStatus = true;
-        localStorage.setItem('initCount',1)
-      },
-      countTime() {
-        let countDown = [];
-        this.$http.get(globalConfig.server + 'setting/dictionary/203').then((res) => {
-          if (res.data.code === '30010') {
-            countDown = res.data.data;
-            this.$http.get(globalConfig.server + 'setting/setting/read?type=1&staff_id=' + this.personal.id).then((res) => {
-              if (res.data.code === '50010') {
-                let array = res.data.data;
-                for (let i = 0; i < array.length; i++) {
-                  countDown.forEach((item) => {
-                    if (array[i].dict_id == item.id) {
-                      this.defaultTime = this.Countdown = Number(item.dictionary_name);
-                      localStorage.setItem('countdownTime', item.id);
-                      this.startCount();
-                    }
-                  })
-                }
-              }
-            })
           }
         });
-      },
-
-      startCount(){
-        clearInterval(this.interval);
-        new Promise((resolve, reject) => {
-          this.interval = setInterval(() => {
-            this.Countdown--;
-            if (this.screenStatus) {
-              reject('重新计数');
-              clearInterval(this.interval);
-              this.interval = null;
-            } else if (this.Countdown < 1) {
-              resolve('锁屏');
+    },
+    // 全屏
+    fullScreen(val) {
+      screenFull.toggle();
+    },
+    handleOpen(key, keyPath) {     
+      this.openkey = key;
+      if (!this.unlockFlagpart) {
+        for (let chi in this.chinese) {
+          if (this.chinese[chi].name == key) {
+            this.defaultArray = [];
+            this.unlockSecondPWDialog = true;
+            this.sendId = this.chinese[chi].id;
+          }
+        }
+      }
+    },
+    handleClose(key, keyPath) {},
+    handlerSelect(key, keyPath) {
+      this.openPath = keyPath[1];
+      if (!this.unlockFlagpart) {
+        for (let chi in this.chinese) {
+          for (let path in keyPath) {
+            if (this.chinese[chi].name == keyPath[0]) {
+              this.unlockSecondPWDialog = true;
+              this.sendId = this.chinese[chi].id;
             }
-          }, 1000)
-        }).then((data) => {
-          this.lockScreen('倒计时');
-        }).catch((data) => {
+          }
+        }
+      }
+    },
+    clickScreen() {
+      this.screenStatus = true;
+      localStorage.setItem("initCount", 1);
+    },
+    countTime() {
+      let countDown = [];
+      this.$http
+        .get(globalConfig.server + "setting/dictionary/203")
+        .then(res => {
+          if (res.data.code === "30010") {
+            countDown = res.data.data;
+            this.$http
+              .get(
+                globalConfig.server +
+                  "setting/setting/read?type=1&staff_id=" +
+                  this.personal.id
+              )
+              .then(res => {
+                if (res.data.code === "50010") {
+                  let array = res.data.data;
+                  for (let i = 0; i < array.length; i++) {
+                    countDown.forEach(item => {
+                      if (array[i].dict_id == item.id) {
+                        this.defaultTime = this.Countdown = Number(
+                          item.dictionary_name
+                        );
+                        localStorage.setItem("countdownTime", item.id);
+                        this.startCount();
+                      }
+                    });
+                  }
+                }
+              });
+          }
+        });
+    },
+
+    startCount() {
+      clearInterval(this.interval);
+      new Promise((resolve, reject) => {
+        this.interval = setInterval(() => {
+          this.Countdown--;
+          if (this.screenStatus) {
+            reject("重新计数");
+            clearInterval(this.interval);
+            this.interval = null;
+          } else if (this.Countdown < 1) {
+            resolve("锁屏");
+          }
+        }, 1000);
+      })
+        .then(data => {
+          this.lockScreen("倒计时");
+        })
+        .catch(data => {
           this.Countdown = this.defaultTime;
           this.startCount();
           this.screenStatus = false;
-        })
-      },
-      changeCollapse() {
-        this.isCollapse = !this.isCollapse;
-      },
-      lockScreen(val) {
-        clearInterval(this.interval);
-        this.interval = null;
-        clearInterval(this.messageInterval);
-        this.messageInterval = null;
-        this.$http.get(globalConfig.server + 'setting/others/lock_screen_status?lock_status=1').then((res) => {
-          if (res.data.code === '100003') {
-            sessionStorage.setItem('beforePath', this.$route.path);
-            sessionStorage.setItem('lockStatus', 1);
-            this.$router.push({path: '/lock'});
+        });
+    },
+    changeCollapse() {
+      this.isCollapse = !this.isCollapse;
+    },
+    lockScreen(val) {
+      clearInterval(this.interval);
+      this.interval = null;
+      clearInterval(this.messageInterval);
+      this.messageInterval = null;
+      this.$http
+        .get(
+          globalConfig.server +
+            "setting/others/lock_screen_status?lock_status=1"
+        )
+        .then(res => {
+          if (res.data.code === "100003") {
+            sessionStorage.setItem("beforePath", this.$route.path);
+            sessionStorage.setItem("lockStatus", 1);
+            this.$router.push({ path: "/lock" });
           } else {
             this.$notify({
-              title: '警告',
+              title: "警告",
               message: res.data.msg,
-              type: 'warning'
+              type: "warning"
             });
             //锁屏失败
             this.Countdown = this.defaultTime;
             this.startCount();
             this.screenStatus = false;
           }
-        })
-      },
-      //获取积分总数
-      getCredit(){
-        this.$http.get(globalConfig.server + 'credit/manage/self').then((res) => {
-          if (res.data.code === '30310') {
-            this.creditTotal = res.data.data;
-          }
-        })
-      },
-      //获取登陆时长
-      getLoginDay(){
-//        this.$http.get(globalConfig.server + 'special/special/time').then((res) => {
-//          if (res.data.code === '30310') {
-//            this.creditTotal = res.data.data;
-//          }
-//        })
-      }
+        });
+    },
+    //获取积分总数
+    getCredit() {
+      this.$http.get(globalConfig.server + "credit/manage/self").then(res => {
+        if (res.data.code === "30310") {
+          this.creditTotal = res.data.data;
+        }
+      });
+    },
+    //获取登陆时长
+    getLoginDay() {
+      //        this.$http.get(globalConfig.server + 'special/special/time').then((res) => {
+      //          if (res.data.code === '30310') {
+      //            this.creditTotal = res.data.data;
+      //          }
+      //        })
     }
   }
+};
 </script>
 
 <style lang="scss" scoped="">
-  @mixin border_radius($n) {
-    -webkit-border-radius: $n;
-    -moz-border-radius: $n;
-    border-radius: $n;
-  }
+@mixin border_radius($n) {
+  -webkit-border-radius: $n;
+  -moz-border-radius: $n;
+  border-radius: $n;
+}
 
-  @mixin box_shadow($n) {
-    -webkit-box-shadow: 0 0 12px 0 $n;
-    -moz-box-shadow: 0 0 12px 0 $n;
-    box-shadow: 0 0 12px 0 $n;
-  }
+@mixin box_shadow($n) {
+  -webkit-box-shadow: 0 0 12px 0 $n;
+  -moz-box-shadow: 0 0 12px 0 $n;
+  box-shadow: 0 0 12px 0 $n;
+}
 
-  @mixin box_sizing {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-  }
+@mixin box_sizing {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
-  @mixin transition {
-    transition: all .4s;
-  }
+@mixin transition {
+  transition: all 0.4s;
+}
 
-  @mixin flex {
-    display: -webkit-flex;
-    display: flex;
-  }
+@mixin flex {
+  display: -webkit-flex;
+  display: flex;
+}
 
-  $color1: #409EFF;
-  $color2: #58D788;
-  $color3: #FB4699;
-  $color4: #FDCA41;
-  .personal {
-    width: 200px;
-    background: #f9fbff;
-    padding: 18px 16px;
-    /*修改*/
-    .rank {
-      font-size: 13px;
-      margin-top: 10px;
-    }
-    .progressBar {
-      margin-top: 10px;
-      position: relative;
+$color1: #409eff;
+$color2: #58d788;
+$color3: #fb4699;
+$color4: #fdca41;
+.personal {
+  width: 200px;
+  background: #f9fbff;
+  padding: 18px 16px;
+  /*修改*/
+  .rank {
+    font-size: 13px;
+    margin-top: 10px;
+  }
+  .progressBar {
+    margin-top: 10px;
+    position: relative;
+    height: 4px;
+    width: 100%;
+    background: #e8e9e9;
+    border-radius: 2px;
+    .percent {
       height: 4px;
-      width: 100%;
-      background: #e8e9e9;
       border-radius: 2px;
-      .percent {
-        height: 4px;
-        border-radius: 2px;
-        background: linear-gradient(to right, #7796f9, #f856a1); /* 标准的语法（必须放在最后） */
-      }
-      /*.progress {
+      background: linear-gradient(
+        to right,
+        #7796f9,
+        #f856a1
+      ); /* 标准的语法（必须放在最后） */
+    }
+    /*.progress {
         width: 100%;
         height: 5px;
         border-radius: 5px;
@@ -721,108 +773,105 @@ if(!this.unlockFlagpart){
         top: -5px;
         right: -3px;
       }*/
-    }
-    .level {
-      @include flex;
-      justify-content: space-between;
-      margin-top: 10px;
-    }
-    .navigation {
-      margin-top: 10px;
-      .navigationLeft {
-        margin-right: 10px;
-        .el-dropdown-menu__item:hover {
-          &:hover {
-            background: transparent;
-          }
-        }
-        .msgCenter {
-          @include flex;
-          font-size: 13px;
-          padding: 0;
-          i {
-            color: #409EFF;
-            margin-top: 11px;
-          }
-          .msgTitle {
-            margin-left: 8px;
-          }
+  }
+  .level {
+    @include flex;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+  .navigation {
+    margin-top: 10px;
+    .navigationLeft {
+      margin-right: 10px;
+      .el-dropdown-menu__item:hover {
+        &:hover {
+          background: transparent;
         }
       }
-
-    }
-
-    .detrusion {
-      float: left;
-      width: 180px;
-      margin: 20px 10px 10px;
-      background: #409EFF;
-      padding: 0;
-      text-align: center;
-      color: #ffffff;
-      @include box_shadow(#409EFF);
-      @include border_radius(6px);
-    }
-    .detrusion:hover {
-      background: #6A8DFB;
-      color: #ffffff;
-      @include box_shadow(#6A8DFB);
+      .msgCenter {
+        @include flex;
+        font-size: 13px;
+        padding: 0;
+        i {
+          color: #409eff;
+          margin-top: 11px;
+        }
+        .msgTitle {
+          margin-left: 8px;
+        }
+      }
     }
   }
 
-  #index {
-    .transition-box {
-      width: 200px;
-      height: 80px;
-      box-sizing: border-box;
-      display: flex;
-      display: -webkit-flex;
-      position: relative;
-      @include transition;
-      background: url("../assets/images/peosonal.png") no-repeat;
-      -moz-background-size: 100% 100%;
-      background-size: 100% 100%;
-      div {
-        /*width: 80px;*/
-        color: #ffffff;
-        img {
-          position: absolute;
-          top: -25px;
-          width: 80px;
-          height: 80px;
-          left: -15px;;
-        }
+  .detrusion {
+    float: left;
+    width: 180px;
+    margin: 20px 10px 10px;
+    background: #409eff;
+    padding: 0;
+    text-align: center;
+    color: #ffffff;
+    @include box_shadow(#409eff);
+    @include border_radius(6px);
+  }
+  .detrusion:hover {
+    background: #6a8dfb;
+    color: #ffffff;
+    @include box_shadow(#6a8dfb);
+  }
+}
+
+#index {
+  .transition-box {
+    width: 200px;
+    height: 80px;
+    box-sizing: border-box;
+    display: flex;
+    display: -webkit-flex;
+    position: relative;
+    @include transition;
+    background: url("../assets/images/peosonal.png") no-repeat;
+    -moz-background-size: 100% 100%;
+    background-size: 100% 100%;
+    div {
+      /*width: 80px;*/
+      color: #ffffff;
+      img {
+        position: absolute;
+        top: -25px;
+        width: 80px;
+        height: 80px;
+        left: -15px;
       }
-      div.contents {
+    }
+    div.contents {
+      @include box_sizing;
+      margin: 10px 0 0 85px;
+    }
+  }
+  .department_name {
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    background-color: #6a8dfb;
+    align-items: center;
+  }
+  .isCollapse {
+    width: 30px;
+    height: 25px;
+    margin-right: 17px;
+    background: url("../assets/images/虚拟租赁合同-24.svg");
+    background-size: 100% 100%;
+  }
+  .noCollapse {
+  }
 
-        @include box_sizing;
-        margin: 10px 0 0 85px;
-      }
-    }
-    .department_name {
-      color: #fff;
-      padding: 10px;
-      text-align: center;
-      background-color: #6a8dfb;
-      align-items: center;
-    }
-    .isCollapse {
-      width: 30px;
-      height: 25px;
-      margin-right: 17px;
-      background: url("../assets/images/虚拟租赁合同-24.svg");
-      background-size: 100% 100%;
-    }
-    .noCollapse {
-
-    }
-
-    .isCollapse_logo {
-      width: 64px !important;
-      @include transition;
-      cursor: pointer;
-    }
-    /*
+  .isCollapse_logo {
+    width: 64px !important;
+    @include transition;
+    cursor: pointer;
+  }
+  /*
     .navBarLeft {
       position: fixed;
       top: 0;
@@ -851,336 +900,336 @@ if(!this.unlockFlagpart){
       }
     }*/
 
-    .navBar {
-      width: 100%;
-      min-width: 1200px;
-      height: 66px;
-      background: #fff;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 66;
-      border-bottom: 1px solid #f4f3f6;
+  .navBar {
+    width: 100%;
+    min-width: 1200px;
+    height: 66px;
+    background: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 66;
+    border-bottom: 1px solid #f4f3f6;
+    display: flex;
+    @include transition;
+    .left {
+      width: 50%;
+      height: 100%;
       display: flex;
-      @include transition;
-      .left {
-        width: 50%;
+      align-items: center;
+      .logo {
+        width: 210px;
         height: 100%;
+        border-right: 1px solid #e6e6e6;
         display: flex;
         align-items: center;
-        .logo {
-          width: 210px;
-          height: 100%;
-          border-right: 1px solid #e6e6e6;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          transition: all .4s;
-          .boss {
-            font-size: 26px;
-            color: #6a8dfb;
-            margin-left: 50px;
-            @include transition;
-            width: 72px;
-            height: 36px;
-            background: url("../assets/images/虚拟租赁合同-23.svg");
-            background-size: 100% 100%;
-          }
-          .boss1 {
-            font-size: 26px;
-            color: #6a8dfb;
-            margin-left: -72.25px;
-            @include transition;
-          }
-          .el-icons-fa-bars {
-            font-size: 24px;
-            color: #4f5aa2;
-            margin-right: 25px;
-            cursor: pointer;
-          }
+        justify-content: space-between;
+        transition: all 0.4s;
+        .boss {
+          font-size: 26px;
+          color: #6a8dfb;
+          margin-left: 50px;
+          @include transition;
+          width: 72px;
+          height: 36px;
+          background: url("../assets/images/虚拟租赁合同-23.svg");
+          background-size: 100% 100%;
         }
-        .slogan {
-          margin-left: 30px;
-        }
-      }
-      .right {
-        width: 50%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-        div {
-          display: flex;
-          align-items: center;
-          font-size: 16px;
-        }
-        .countdown, .message, .guide {
-          width: 120px;
-          cursor: pointer;
-          justify-content: center;
-          border-left: 1px solid #e6e6e6;
-          i {
-            margin-right: 10px;
-            font-size: 20px;
-            color: #409EFF;
-          }
-        }
-        .message {
-          .gladBulletin {
-            width: 490px;
-            height: 320px;
-            position: absolute;
-            top: 80px;
-            left: -170px;
-            background: #f9f8fb;
-            border-radius: 10px;
-            display: flex;
-            flex-wrap: wrap;
-            align-content: space-between;
-            background-size: 100% 100%;
-            .gladTop {
-              width: 100%;
-              height: 82px;
-              background: url("../assets/images/xibaotop.png") no-repeat;
-              background-size: 100%;
-            }
-            .gladContent {
-              width: 100%;
-              height: 150px;
-              display: block;
-              overflow: visible;
-              padding: 0 20px;
-              .title {
-                height: 50px;
-                width: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                .words {
-                  margin: 0 2px;
-                  font-size: 20px;
-                  font-weight: bold;
-                  color: #d046f1;
-                }
-              }
-              .glad_card {
-                height: 140px;
-                border-top: 2px solid #6a8dfb;
-                border-radius: 5px;
-                background: #fff;
-                position: relative;
-                z-index: 10;
-                display: flex;
-                .glad_card_head {
-                  height: 100%;
-                  padding: 0 10px;
-                  img {
-                    width: 100px;
-                    height: 100px;
-                    border-radius: 5px
-                  }
-                }
-                .glad_card_info {
-                  height: 100px;
-                  flex-grow: 1;
-                  display: flex;
-                  flex-wrap: wrap;
-                  align-items: flex-start;
-                }
-              }
-            }
-            .gladBottom {
-              width: 100%;
-              height: 83px;
-              background: url("../assets/images/xibaobottom.png") no-repeat;
-              background-size: 100%;
-            }
-          }
-          .gladBackground {
-            position: absolute;
-            width: 628px;
-            height: 403px;
-            top: 35px;
-            left: -225px;
-            background: url("../assets/images/xiabobeijing.png") no-repeat;
-            background-size: 100% 100%;
-            z-index: 100;
-          }
-
-        }
-
-        .guide {
-          width: 150px;
-        }
-        .personInfo {
-          height: 100%;
-          width: 200px;
-          .head {
-            width: 40px;
-            height: 40px;
-            padding: 0 0 0 25px;
-            img {
-              width: 40px;
-              height: 40px;
-              border-radius: 50%;
-            }
-          }
-          .el-dropdown {
-            margin-left: 20px;
-            font-size: 15px;
-            cursor: pointer;
-
-          }
-        }
-      }
-
-    }
-
-    .navBarHide {
-      top: -66px;
-      //      @include transition;
-    }
-
-    .contentBox {
-      .el-container {
-        .aside {
-          position: fixed;
-          top: 66px;
-          height: 100%;
-          z-index: 56;
-          overflow: auto;
-          [class^="el-icons-fa"], [class*=" el-icons-fa"] {
-            vertical-align: middle;
-            margin-right: 5px;
-            width: 24px;
-            text-align: center;
-            font-size: 18px;
-          }
-          .developBack {
-            background: #405597 !important;
-          }
-          .el-menu--collapse {
-            width: 64px;
-            height: 100%;
-          }
-          .el-menu-vertical-demo:not(.el-menu--collapse) {
-            width: 210px;
-            min-height: 100%;
-            padding-bottom: 70px;
-          }
-        }
-        .el-main {
-          margin-top: 66px;
-          min-height: 500px;
-          padding: 10px 20px;
-          margin-left: 210px;
-          overflow-x: hidden;
+        .boss1 {
+          font-size: 26px;
+          color: #6a8dfb;
+          margin-left: -72.25px;
           @include transition;
         }
-        .mainHide {
-          margin-top: 0 !important;
-          //          @include transition;
+        .el-icons-fa-bars {
+          font-size: 24px;
+          color: #4f5aa2;
+          margin-right: 25px;
+          cursor: pointer;
         }
       }
-    }
-    .hideSidebar {
-      .el-main {
-        margin-left: 64px !important;
+      .slogan {
+        margin-left: 30px;
       }
     }
-  }
-
-  /*----------------------  快捷入口*-------------------*/
-  .shortcutList {
-    padding: 0 !important;
-    .backColor1 {
-      background: $color1;
-    }
-    .backColor2 {
-      background: $color2;
-    }
-    .backColor3 {
-      background: $color3;
-    }
-    .backColor4 {
-      background: $color4;
-    }
-
-    width: 322px;
-    box-sizing: border-box;
-    .el-dropdown-menu__item {
-      line-height: 20px;
-      width: 80px;
-      float: left;
-      text-align: center;
-      padding: 12px 0 6px;
-      b {
-        @include border_radius(6px);
-        display: inline-flex;
-        width: 40px;
-        height: 40px;
+    .right {
+      width: 50%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      div {
+        display: flex;
         align-items: center;
+        font-size: 16px;
+      }
+      .countdown,
+      .message,
+      .guide {
+        width: 120px;
+        cursor: pointer;
         justify-content: center;
-        color: #fff;
-        line-height: 50px;
-        font-size: 22px;
+        border-left: 1px solid #e6e6e6;
+        i {
+          margin-right: 10px;
+          font-size: 20px;
+          color: #409eff;
+        }
       }
-      span {
-        color: #575859;
-        margin: 6px 0;
-        display: block;
-        font-size: 12px;
+      .message {
+        .gladBulletin {
+          width: 490px;
+          height: 320px;
+          position: absolute;
+          top: 80px;
+          left: -170px;
+          background: #f9f8fb;
+          border-radius: 10px;
+          display: flex;
+          flex-wrap: wrap;
+          align-content: space-between;
+          background-size: 100% 100%;
+          .gladTop {
+            width: 100%;
+            height: 82px;
+            background: url("../assets/images/xibaotop.png") no-repeat;
+            background-size: 100%;
+          }
+          .gladContent {
+            width: 100%;
+            height: 150px;
+            display: block;
+            overflow: visible;
+            padding: 0 20px;
+            .title {
+              height: 50px;
+              width: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              .words {
+                margin: 0 2px;
+                font-size: 20px;
+                font-weight: bold;
+                color: #d046f1;
+              }
+            }
+            .glad_card {
+              height: 140px;
+              border-top: 2px solid #6a8dfb;
+              border-radius: 5px;
+              background: #fff;
+              position: relative;
+              z-index: 10;
+              display: flex;
+              .glad_card_head {
+                height: 100%;
+                padding: 0 10px;
+                img {
+                  width: 100px;
+                  height: 100px;
+                  border-radius: 5px;
+                }
+              }
+              .glad_card_info {
+                height: 100px;
+                flex-grow: 1;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: flex-start;
+              }
+            }
+          }
+          .gladBottom {
+            width: 100%;
+            height: 83px;
+            background: url("../assets/images/xibaobottom.png") no-repeat;
+            background-size: 100%;
+          }
+        }
+        .gladBackground {
+          position: absolute;
+          width: 628px;
+          height: 403px;
+          top: 35px;
+          left: -225px;
+          background: url("../assets/images/xiabobeijing.png") no-repeat;
+          background-size: 100% 100%;
+          z-index: 100;
+        }
       }
-    }
-    .border_top {
-      border-top: 1px solid #e5e5e5;
+
+      .guide {
+        width: 150px;
+      }
+      .personInfo {
+        height: 100%;
+        width: 200px;
+        .head {
+          width: 40px;
+          height: 40px;
+          padding: 0 0 0 25px;
+          img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+          }
+        }
+        .el-dropdown {
+          margin-left: 20px;
+          font-size: 15px;
+          cursor: pointer;
+        }
+      }
     }
   }
 
-  .topFlex {
-    @include flex;
-    align-items: center;
+  .navBarHide {
+    top: -66px;
+    //      @include transition;
   }
 
-  /*----------------------  消息列表*-------------------*/
-  .menuLists {
-    li + li {
-      border-top: 1px solid #dfe6fb;
+  .contentBox {
+    .el-container {
+      .aside {
+        position: fixed;
+        top: 66px;
+        height: 100%;
+        z-index: 56;
+        overflow: auto;
+        [class^="el-icons-fa"],
+        [class*=" el-icons-fa"] {
+          vertical-align: middle;
+          margin-right: 5px;
+          width: 24px;
+          text-align: center;
+          font-size: 18px;
+        }
+        .developBack {
+          background: #405597 !important;
+        }
+        .el-menu--collapse {
+          width: 64px;
+          height: 100%;
+        }
+        .el-menu-vertical-demo:not(.el-menu--collapse) {
+          width: 210px;
+          min-height: 100%;
+          padding-bottom: 70px;
+        }
+      }
+      .el-main {
+        margin-top: 66px;
+        min-height: 500px;
+        padding: 10px 20px;
+        margin-left: 210px;
+        overflow-x: hidden;
+        @include transition;
+      }
+      .mainHide {
+        margin-top: 0 !important;
+        //          @include transition;
+      }
     }
+  }
+  .hideSidebar {
+    .el-main {
+      margin-left: 64px !important;
+    }
+  }
+}
+
+/*----------------------  快捷入口*-------------------*/
+.shortcutList {
+  padding: 0 !important;
+  .backColor1 {
+    background: $color1;
+  }
+  .backColor2 {
+    background: $color2;
+  }
+  .backColor3 {
+    background: $color3;
+  }
+  .backColor4 {
+    background: $color4;
+  }
+
+  width: 322px;
+  box-sizing: border-box;
+  .el-dropdown-menu__item {
+    line-height: 20px;
+    width: 80px;
+    float: left;
+    text-align: center;
+    padding: 12px 0 6px;
+    b {
+      @include border_radius(6px);
+      display: inline-flex;
+      width: 40px;
+      height: 40px;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      line-height: 50px;
+      font-size: 22px;
+    }
+    span {
+      color: #575859;
+      margin: 6px 0;
+      display: block;
+      font-size: 12px;
+    }
+  }
+  .border_top {
+    border-top: 1px solid #e5e5e5;
+  }
+}
+
+.topFlex {
+  @include flex;
+  align-items: center;
+}
+
+/*----------------------  消息列表*-------------------*/
+.menuLists {
+  li + li {
+    border-top: 1px solid #dfe6fb;
+  }
+  li {
+    line-height: 20px;
+  }
+  .first {
+    width: 300px;
+    padding: 10px;
+    cursor: pointer;
     li {
-      line-height: 20px;
+      padding: 0;
     }
-    .first {
-      width: 300px;
-      padding: 10px;
-      cursor: pointer;
-      li {
-        padding: 0;
+    .picSign {
+      font-size: 27px;
+      width: 35px;
+      height: 35px;
+      line-height: 35px;
+      text-align: center;
+      @include border_radius(50%);
+      color: #ffffff;
+      background: #409eff;
+      margin-right: 12px;
+      margin-top: 2px;
+    }
+    .public {
+      .signOne {
+        font-size: 16px;
+        color: #409eff;
       }
-      .picSign {
-        font-size: 27px;
-        width: 35px;
-        height: 35px;
-        line-height: 35px;
-        text-align: center;
-        @include border_radius(50%);
-        color: #ffffff;
-        background: #409EFF;
-        margin-right: 12px;
-        margin-top: 2px;
-      }
-      .public {
-        .signOne {
-          font-size: 16px;
-          color: #409EFF;
-        }
-        .limits {
-          font-size: 14px;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          overflow: hidden;
-        }
+      .limits {
+        font-size: 14px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
       }
     }
   }
+}
 </style>
