@@ -574,7 +574,7 @@
               width: 32px;
               height: 32px;
               margin-left: 10px;
-              font-size: 12px;
+              font-size: 18px;
               line-height: 32px;
               text-align: center;
             }
