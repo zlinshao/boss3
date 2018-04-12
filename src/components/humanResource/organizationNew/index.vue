@@ -705,7 +705,6 @@
         this.department_name = data.name;
       },
       nodeExpand(data,node,store) {
-        console.log(data)
         if(this.defaultExpandKeys.indexOf(data.id)<0){
           this.defaultExpandKeys.push(data.id)
         }
@@ -833,7 +832,7 @@
             {clickIndex: 'power', headIcon: 'el-icon-edit', label: '权限',data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'el-icon-edit', label: '禁用', id:row.id},
-            {clickIndex: 'on_job', headIcon: 'el-icon-edit', label: '复职', id:row.id},
+            {clickIndex: 'on_job', headIcon: 'el-icon-edit', label: '离职', id:row.id},
           ];
         }
         // this.lists = [

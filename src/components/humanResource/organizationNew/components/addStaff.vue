@@ -14,7 +14,8 @@
                 <el-col :span="8">
                   <el-form-item label="性别" required>
                     <el-radio-group v-model="params.gender">
-                      <el-radio v-for="item in sexCategory" :label="item.id" :key="item.id"name="gender">{{item.dictionary_name}}
+                      <el-radio v-for="item in sexCategory" :label="item.id" :key="item.id" name="gender">
+                        {{item.dictionary_name}}
                       </el-radio>
                     </el-radio-group>
                   </el-form-item>
@@ -385,47 +386,47 @@
       this.getPosition(this.departmentId);
     },
     methods: {
-      initial(){
-          this.params.real_name = '';
-          this.params.gender = '';
-          this.params.phone = '';
-          this.params.home_addr = '';
-          this.params.fertility_status = '';
-          this.params.id_num = '';
-          this.params.birthday = '';
-          this.params.recommender = '';
-          this.recommenderName = '';
-          this.params.bank_num = '';
-          this.params.account_bank = '';
-          this.params.branch_bank = '';
-          this.params.emergency_call = '';
-          this.params.level = '';
-          this.params.account_name = '';
-          this.params.status = '';
-          this.params.enroll = '';
-          this.params.salary = '';
-          this.params.entry_materials = [];
-          this.params.salary = '';
-          this.params.origin_addr = '';
-          this.params.marital_status = '';
-          this.params.political_status = '';
-          this.params.forward_time = '';
-          this.params.mail = '';
-          this.params.education = '';
-          this.params.school = '';
-          this.params.major = '';
-          this.params.graduation_time = '';
-          this.params.agreement_first_time = '';
-          this.params.agreement_first_end_time = '';
-          this.params.agreement_second_time = '';
-          this.params.remark = '';
-          this.params.department_id = [];
-          this.params.position_id = [];
-          this.department = '';
-          this.currentPost = '';
-          this.positionDisabled = true;
-          this.postDisabled = true;
-
+      initial() {
+        this.params.real_name = '';
+        this.params.gender = '';
+        this.params.phone = '';
+        this.params.home_addr = '';
+        this.params.fertility_status = '';
+        this.params.id_num = '';
+        this.params.birthday = '';
+        this.params.recommender = '';
+        this.recommenderName = '';
+        this.params.bank_num = '';
+        this.params.account_bank = '';
+        this.params.branch_bank = '';
+        this.params.emergency_call = '';
+        this.params.level = '';
+        this.params.account_name = '';
+        this.params.status = '';
+        this.params.enroll = '';
+        this.params.salary = '';
+        this.params.entry_materials = [];
+        this.params.salary = '';
+        this.params.origin_addr = '';
+        this.params.marital_status = '';
+        this.params.political_status = '';
+        this.params.forward_time = '';
+        this.params.mail = '';
+        this.params.education = '';
+        this.params.school = '';
+        this.params.major = '';
+        this.params.graduation_time = '';
+        this.params.agreement_first_time = '';
+        this.params.agreement_first_end_time = '';
+        this.params.agreement_second_time = '';
+        this.params.remark = '';
+        this.params.department_id = [];
+        this.params.position_id = [];
+        this.department = '';
+        this.currentPost = '';
+        this.currentPosition = '';
+        this.positionDisabled = true;
+        this.postDisabled = true;
       },
       positionSelect() {
         if (this.currentPosition) {
@@ -443,7 +444,6 @@
             this.params.real_name = res.data.data.name;
             let detail = res.data.data.detail;
             if (detail) {
-              this.postDisabled = false;
               this.params.gender = Number(detail.gender);
               this.params.home_addr = detail.home_addr;
               this.params.fertility_status = Number(detail.fertility_status);
@@ -492,17 +492,27 @@
             this.department = departNameArray.join(',');
             let postArr = res && res.data && res.data.data && res.data.data.role;
             this.currentPost = [];
-            this.roleArray = [];
+            this.postArray = [];
+            this.positionArray = [];
             if (postArr && postArr.length > 0) {
               postArr.forEach((item) => {
-                this.params.position_id.push(item.display_name);
-                this.currentPost.push(item.positions.name);
+                this.params.position_id.push(item.position_id);
+                this.currentPost.push(item.display_name);
+                //岗位
                 let data = {};
                 data.id = item.position_id;
-                data.name = item.positions.name;
-                this.roleArray.push(data);
+                data.name = item.display_name;
+                this.postArray.push(data);
+
+                //职位
+                let arr = {};
+                arr.id = item.positions.id;
+                arr.name = item.positions.name;
+                this.positionArray.push(arr);
               });
-              this.currentPosition = postArr[0].display_name;
+              this.currentPosition = postArr[0].positions.name;
+              this.postDisabled = false;
+              this.positionDisabled = false;
 
             }
             // this.getPosition(this.params.department_id);
