@@ -56,7 +56,7 @@ import OrganizationNew from '../components/humanResource/organizationNew/index.v
 
 //OA办公
 // import Communication from '../comments/OAWork/communication/index.vue'                 //通讯管理
-import Programme from '../components/OAWork/management/programme/index.vue'               //日程管理
+// import Programme from '../components/OAWork/management/programme/index.vue'               //日程管理
 import Institution from '../components/OAWork/management/institution/index.vue'           //制度管理
 // import Vote from '../comments/OAWork/vote/index.vue'                                   //投票管理
 import Counter from '../components/OAWork/management/counter/index.vue'                   //业绩计算器
