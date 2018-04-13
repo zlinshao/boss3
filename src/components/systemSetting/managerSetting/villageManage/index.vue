@@ -262,16 +262,28 @@
         this.villageLoading = true;
         this.emptyContent = ' ';
         this.form.pages = val;
+        this.tableData = [];
         this.$http.get(this.urls + 'setting/community/', {
           params: this.form,
         }).then((res) => {
           this.villageLoading = false;
           if (res.data.code === '10000') {
             this.currentPage = val;
-            this.tableData = res.data.data.list;
+            // this.tableData = res.data.data.list;
+            let data = res.data.data.list;
+            for (let i = 0; i < data.length; i++) {
+              let list = {};
+              list.id = data[i].id;
+              list.village_name = data[i].village_name;
+              list.address = data[i].address;
+              list.village_alias = data[i].village_alias !== null?data[i].village_alias: '暂无信息';
+              list.house_types = data[i].house_types !== null?data[i].house_types: '暂无信息';
+              list.built_year = data[i].built_year;
+              list.total_buildings = data[i].total_buildings !== ''?data[i].total_buildings: '暂无信息';
+              this.tableData.push(list);
+            }
             this.paging = res.data.data.count;
           } else {
-            this.tableData = [];
             this.paging = 0;
             this.emptyContent = '暂无数据';
           }
