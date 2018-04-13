@@ -19,6 +19,7 @@
       <div class="name" v-else="">LEJIA</div>
       <div class="input">
         <el-input placeholder="请输入密码" type="password" @keyup.enter.native="btnClick" v-model="keywords"></el-input>
+        <el-button type="text" class="el-icons-fa-arrow-circle-right deBlocking" @click="btnClick"></el-button>
       </div>
       <!--<a href="javascript:;" style="font-size: 14px;color: #6a8dfb">-->
         <!--忘记密码？-->
@@ -219,6 +220,13 @@
         margin-top: 60px;
         text-align: center;
         width: 250px;
+        position: relative;
+        .deBlocking{
+          font-size: 25px;
+          position: absolute;
+          top: -5px;
+          right: 10px;
+        }
       }
     }
 

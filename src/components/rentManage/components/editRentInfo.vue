@@ -4,7 +4,11 @@
       <div>
         <el-tabs v-model="activeName">
           <el-tab-pane label="房源信息" name="first">
-            <div class="form_border">
+            <div class="form_border"
+                 v-loading="tableLoading"
+                 element-loading-text="拼命加载中"
+                 element-loading-spinner="el-icon-loading"
+                 element-loading-background="rgba(255, 255, 255, .8)">
               <el-form size="mini" :model="params" label-width="100px">
                 <el-row>
                   <el-col :span="8">
@@ -588,6 +592,7 @@
         other_photo: {},
         checkout_photo: {},
         checkout_settle_photo: {},
+        tableLoading : false,
       };
     },
     watch: {
@@ -663,7 +668,9 @@
       },
 
       getHouseInfo(){
+        this.tableLoading = true;
         this.$http.get(globalConfig.server + 'lease/collect/' + this.collectContractId).then((res) => {
+          this.tableLoading = false;
           if (res.data.code === '61010') {
             this.houseInfo = res.data.data;
           }

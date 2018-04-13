@@ -187,12 +187,16 @@
                 </template>
               </el-table-column>
               <el-table-column
-                prop="vacancy"
-                label="空置期(天)">
+                label="空置期">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.vacancy">{{scope.row.vacancy}}天</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="duration"
-                label="签约时长（月）">
+                label="签约时长">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.duration">{{scope.row.duration}}天</span>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="begin_date"
@@ -310,8 +314,10 @@
                 </template>
               </el-table-column>
               <el-table-column
-                prop="duration"
                 label="签约时长(月)">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.duration">{{scope.row.duration}}天</span>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="begin_date"
