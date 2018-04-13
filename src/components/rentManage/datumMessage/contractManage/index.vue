@@ -14,7 +14,7 @@
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
             <el-form-item style="float: right">
-              <el-button type="success">导出合同</el-button>
+              <el-button type="success" @click="viewIncompleteRecord">查看不齐记录</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -594,13 +594,15 @@
 
     },
     methods: {
+      //查看不齐记录，跳转页面
+      viewIncompleteRecord() {
+        // this.$router.push({path: '/incompleteRecord'});
+      },
       search(){
-
         if(this.activeName =="first"){
           this.params.page= 1;
           this.collectDatafunc();
-        }
-        else if( this.activeName == "second"){
+        }else if( this.activeName == "second"){
           this.params.page = 1;
           this.rentDatafunc();
         }
@@ -610,8 +612,7 @@
         if(this.activeName =="first"){
           this.params.page= 1;
           this.collectDatafunc();
-        }
-        else if( this.activeName == "second"){
+        }else if( this.activeName == "second"){
           this.params.page = 1;
           this.rentDatafunc();
         }
