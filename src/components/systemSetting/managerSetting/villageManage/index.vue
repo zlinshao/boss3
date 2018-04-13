@@ -134,6 +134,11 @@
 
     <el-table
       :data="tableData"
+      :empty-text='villageStatus'
+      v-loading="villageLoading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(255, 255, 255, 0)"
       style="width: 100%;"
       @row-contextmenu='houseMenu'
       @row-dblclick='dblMenu'>
@@ -221,9 +226,17 @@
         cityList: [],
         areaList: [],
         regionList: [],
+
+        villageStatus: ' ',
+        villageLoading: false,
       }
     },
     mounted() {
+      this.villageLoading = true;
+      this.villageStatus = ' ';
+      this.$http.get(this.urls + 'setting/others/province').then((res) => {
+        this.provinceList = res.data.data;
+      });
       this.$http.get(this.urls + 'setting/dictionary/10').then((res) => {
         this.dict = res.data.data;
         if (this.$route.query.status === 1) {
@@ -243,16 +256,16 @@
           this.myData(1);
         }
       });
-      this.$http.get(this.urls + 'setting/others/province').then((res) => {
-        this.provinceList = res.data.data;
-      });
     },
     methods: {
       myData(val) {
+        this.villageLoading = true;
+        this.villageStatus = ' ';
         this.form.pages = val;
         this.$http.get(this.urls + 'setting/community/', {
           params: this.form,
         }).then((res) => {
+          this.villageLoading = false;
           if (res.data.code === '10000') {
             this.currentPage = val;
             this.tableData = res.data.data.list;
@@ -260,6 +273,7 @@
           } else {
             this.tableData = [];
             this.paging = 0;
+            this.villageStatus = '暂无数据';
           }
         })
       },

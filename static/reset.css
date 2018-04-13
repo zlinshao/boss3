@@ -268,4 +268,44 @@
   border: 1px solid rgba(64, 158, 255, 0.12);
   box-shadow: 0 2px 4px 0 rgba(64, 158, 255, 0.12), 0 0 6px 0 rgba(64, 158, 255, 0.04); }
 
+.el-loading-mask .el-loading-spinner {
+  margin-top: 0; }
+
+.twoFlex {
+  display: -webkit-flex;
+  display: flex; }
+  .twoFlex .el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 200px;
+    min-height: 400px; }
+  .twoFlex .el-menu--collapse {
+    width: 46px; }
+  .twoFlex .el-menu-item {
+    overflow: hidden;
+    -ms-text-overflow: ellipsis;
+    text-overflow: ellipsis; }
+    .twoFlex .el-menu-item i {
+      font-size: 20px; }
+    .twoFlex .el-menu-item div {
+      padding: 0 10px !important; }
+  .twoFlex .tableLeft {
+    width: 100%;
+    margin-left: 12px; }
+  .twoFlex .btnCollapse .el-radio-button__inner {
+    text-align: right;
+    background: #409EFF;
+    border-color: #409EFF;
+    color: #FFFFFF;
+    padding: 10px 16px;
+    border-radius: 0 !important; }
+  .twoFlex .btnCollapse .sss1 .el-radio-button__inner {
+    width: 47px;
+    transition: all .4s; }
+    .twoFlex .btnCollapse .sss1 .el-radio-button__inner i {
+      transform: rotate(0deg); }
+  .twoFlex .btnCollapse .sss .el-radio-button__inner {
+    width: 201px;
+    transition: all .4s; }
+    .twoFlex .btnCollapse .sss .el-radio-button__inner i {
+      transform: rotate(180deg); }
+
 /*# sourceMappingURL=reset.css.map */
