@@ -23,10 +23,12 @@
           <div class="scroll_bar" style="max-height: 480px;overflow: auto">
             <div style="margin-bottom: 15px" v-if="permissionData.length > 0">
               <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="allChange">全选</el-checkbox>
-              <div style="margin: 10px 0;"></div>
-              <el-checkbox-group v-model="checkedPower" @change="powerChange">
-                <el-checkbox v-for="key in permissionData" :label="key.id" :key="key.id">{{key.display_name}}
-                </el-checkbox>
+              <el-checkbox-group v-model="checkedPower" @change="powerChange">'
+                <el-row>
+                  <el-col :span="6" v-for="key in permissionData" :key="key.id">
+                  <el-checkbox  :label="key.id" >{{key.display_name}}</el-checkbox>
+                  </el-col>
+                </el-row>
               </el-checkbox-group>
             </div>
           </div>
@@ -263,5 +265,8 @@
         margin-right: 30px;
       }
     }
+    .el-tabs--left .el-tabs__header.is-left{
+        width: 120px;
+      }
   }
 </style>

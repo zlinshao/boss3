@@ -14,6 +14,11 @@
           <div id="dragTree">
             <el-tree ref="expandMenuList" class="expand-tree"
                      :data="setTree"
+                     :empty-text = 'collectStatus'
+                     v-loading="collectLoading"
+                     element-loading-text="拼命加载中"
+                     element-loading-spinner="el-icon-loading"
+                     element-loading-background="rgba(255, 255, 255, 0)"
                      node-key="id"
                      highlight-current
                      accordion
@@ -83,6 +88,11 @@
               <el-tab-pane label="用户管理" name="first">
                 <el-table
                   :data="staffTableData"
+                  :empty-text = 'userCollectStatus'
+                  v-loading="userCollectLoading"
+                  element-loading-text="拼命加载中"
+                  element-loading-spinner="el-icon-loading"
+                  element-loading-background="rgba(255, 255, 255, 0)"
                   @row-contextmenu="openContextMenu"
                   @cell-dblclick="openDetail"
                   style="width: 100%">
@@ -156,6 +166,11 @@
                   <div class="blueTable">
                     <el-table
                       :data="positionList"
+                      :empty-text = 'positionCollectStatus'
+                      v-loading="positionCollectLoading"
+                      element-loading-text="拼命加载中"
+                      element-loading-spinner="el-icon-loading"
+                      element-loading-background="rgba(255, 255, 255, 0)"
                       :row-class-name="tableRowClassName"
                       @row-contextmenu="openOnlyPositionMenu"
                       @row-click="clickOnlyPositionMenu"
@@ -191,6 +206,11 @@
                   <div class="greenTable">
                     <el-table
                       :data="positionTableData"
+                      :empty-text = 'postCollectStatus'
+                      v-loading="postCollectLoading"
+                      element-loading-text="拼命加载中"
+                      element-loading-spinner="el-icon-loading"
+                      element-loading-background="rgba(255, 255, 255, 0)"
                       @row-contextmenu="openPositionMenu"
                       style="width: 100%">
                       <el-table-column
@@ -524,6 +544,15 @@
     data() {
       return {
         powerData: [],
+        collectStatus:' ',
+        collectLoading:false,
+        userCollectStatus:' ',
+        userCollectLoading:false,
+        positionCollectStatus:' ',
+        positionCollectLoading:false,
+        postCollectStatus:' ',
+        postCollectLoading:false,
+
         staffDetail: false,
         staffDetailData: {},
         rightMenuX: 0,
@@ -700,7 +729,10 @@
       //**************部门操作函数********************
       //获取部门数据
       getDepart(){
+        this.collectLoading = true;
+        this.collectStatus = ' ';
         this.$http.get(globalConfig.server+'manager/department?search&page&limit=500&list_type=tree').then((res) => {
+          this.collectLoading = false;
           if(res.data.code === '20000'){
             this.setTree = res.data.data;
             this.setTree.forEach((item) => {
@@ -709,6 +741,9 @@
               }
             });
             this.getStaffData();
+          }else{
+            this.collectStatus = '暂无数据';
+            this.setTree = [];
           }
         });
       },
@@ -802,12 +837,16 @@
       //********************员工操作函数****************
       //获取员工数据列表
       getStaffData(){
+        this.userCollectLoading = true;
+        this.userCollectStatus = ' ';
         this.$http.get(globalConfig.server+'manager/staff?keywords='+this.params.keywords+'&pages='+this.params.page
           +'&limit='+this.params.limit+'&org_id='+this.params.org_id+'&is_recursion=1').then((res) => {
+          this.userCollectLoading = false;
           if(res.data.code === '10000'){
             this.staffTableData = res.data.data.data;
             this.totalStaffNum = res.data.data.count;
           } else {
+            this.userCollectStatus = '暂无数据';
             this.staffTableData = [];
             this.totalStaffNum = 0;
           }
@@ -946,8 +985,11 @@
       getOnlyPosition(){
         this.positionTableData = [];
         if(this.params.org_id){
+          this.positionCollectLoading = true;
+          this.positionCollectStatus = ' ';
           this.$http.get(globalConfig.server+'manager/position?department_id='+this.params.org_id+'&page='+this.params.page
             +'&limit='+this.params.limit).then((res) => {
+            this.positionCollectLoading = false;
             if(res.data.code === '20000'){
               this.positionList = res.data.data.data;
               this.totalOnlyPositionNum = res.data.data.count;
@@ -960,6 +1002,7 @@
                 title: '消息',
                 message: res.data.msg,
               });
+              this.positionCollectStatus = '暂无数据';
               this.positionList = [];
               this.totalOnlyPositionNum = 0;
             }
@@ -972,7 +1015,6 @@
         this.onlyPositionName = row.name;
         this.department_id = row.org_id;
         this.department_name = row.org.name;
-        console.log(this.department_name)
         this.getPosition();
         this.menuType = 'onlyPosition';
         this.lists = [
@@ -1041,8 +1083,11 @@
       //********************岗位操作函数****************
       //根据职位获取岗位
       getPosition(){
+        this.postCollectLoading = true;
+        this.postCollectStatus = ' ';
         this.$http.get(globalConfig.server+'manager/positions?type=' +this.onlyPositionId+'&page='+this.params.page
           +'&limit='+this.params.limit).then((res) => {
+          this.postCollectLoading = false;
           if(res.data.code === '20000'){
             let arr = res.data.data.data;
             for(let i=0;i<arr.length;i++){
@@ -1057,12 +1102,12 @@
               item.orgId = this.department_id;
               item.orgName = this.department_name;
             });
-            console.log(this.department_name);
             this.totalPositionNum = res.data.data.count;
             this.positionTableData = res.data.data.data;
           }else {
             this.totalPositionNum = 0;
             this.positionTableData = [];
+            this.postCollectStatus = '暂无数据';
           }
         })
       },

@@ -67,6 +67,11 @@
       <div class="blueTable left_table">
         <el-table
           :data="tableData"
+          :empty-text = 'collectStatus'
+          v-loading="collectLoading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(255, 255, 255, 0)"
           @row-contextmenu='openContextMenu'
           @cell-dblclick='openDetail'
           style="width: 100%">
@@ -115,7 +120,7 @@
                 @clickOperateMore="clickEvent"></RightMenu>
 
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
-    <eat-loading :loading="loading"></eat-loading>
+    <!--<eat-loading :loading="loading"></eat-loading>-->
   </div>
 </template>
 
@@ -154,7 +159,8 @@
         organizationDialog: false,
         moduleId: '',
         moduleType: 'lejiaCollege',
-        loading: false,
+        collectStatus: ' ',
+        collectLoading: false,
       }
     },
     mounted() {
@@ -180,17 +186,18 @@
         });
       },
       getLejiaTableData() {
-        this.loading = true;
+        this.collectLoading = true;
+        this.collectStatus = ' ';
         this.$http.get(this.urls + 'oa/portal/', { params: this.form }).then((res) => {
           this.isHigh = false;
+          this.collectLoading = false;
           if (res.data.code === '80000') {
             this.tableData = res.data.data.data;
             this.totalNum = res.data.data.count;
-            this.loading = false;
           } else {
+            this.collectStatus = '暂无数据';
             this.tableData = [];
             this.totalNum = 0;
-            this.loading = false;
           }
         });
       },
