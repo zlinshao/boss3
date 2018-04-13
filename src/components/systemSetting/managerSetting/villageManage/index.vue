@@ -267,7 +267,7 @@
         }).then((res) => {
           this.villageLoading = false;
           if (res.data.code === '10000') {
-            this.currentPage = val;
+            // this.currentPage = val;
             // this.tableData = res.data.data.list;
             let data = res.data.data.list;
             this.tableData = [];
