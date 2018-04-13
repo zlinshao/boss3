@@ -350,7 +350,7 @@
 
         setLockPwdDialog: false,
         instructionDialog: false, //功能说明
-        dictionary2: [], //模块
+        dictionary2: [], //二级密码所需模块
         chinese: [],
         unlockSecondPWDialog: false,
         sendId: "",
@@ -385,6 +385,7 @@
       }
     },
     created(){
+      //缓存二级密码解锁状态
       this.unlockFlagpart = cookie.get("unlockFlagpart");
       if (!eval(this.unlockFlagpart)) {
         this.getDictionary2();
@@ -413,9 +414,10 @@
 
     methods: {
       initData() {
-        if (!this.personal.data.medal) {
-          this.badgeDialog = true;
-        }
+        //个人连续登录时长勋章
+        // if (!this.personal.data.medal) {
+        //   this.badgeDialog = true;
+        // }
         this.loginDay = this.personal.data.loginday;
         this.loginPercent = Number(this.loginDay / 180 * 100) + "%";
         $(".percent").css("width", this.loginPercent);
@@ -518,6 +520,7 @@
         this.instructionDialog = false;
         this.badgeDialog = false;
       },
+      //二级密码回调
       unlockFlag(val) {
         this.unlockFlagpart = val;
         cookie.set("unlockFlagpart", val, {expires: 1});
