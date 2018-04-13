@@ -5,7 +5,8 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入标题" v-model="form.keywords" size="mini" clearable @keyup.enter.native="getSystemTableData()">
+            <el-input placeholder="请输入标题" v-model="form.keywords" size="mini" clearable
+                      @keyup.enter.native="getSystemTableData()">
               <el-button slot="append" icon="el-icon-search" @click="getSystemTableData()"></el-button>
             </el-input>
           </el-form-item>
@@ -64,6 +65,11 @@
       <div class="blueTable left_table">
         <el-table
           :data="tableData"
+          :empty-text='collectStatus'
+          v-loading="collectLoading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(255, 255, 255, 0)"
           @cell-dblclick='openDetail'
           style="width: 100%">
           <el-table-column
@@ -96,7 +102,7 @@
       </div>
     </div>
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
-    <eat-loading :loading="loading"></eat-loading>
+    <!--<eat-loading :loading="loading"></eat-loading>-->
   </div>
 </template>
 
@@ -106,7 +112,7 @@
 
   export default {
     name: 'system-management',
-    components: { Organization, EatLoading },
+    components: {Organization, EatLoading},
     data() {
       return {
         urls: globalConfig.server,
@@ -133,14 +139,11 @@
         organizationDialog: false,
         moduleId: '',
         moduleType: 'systemManageMent',
-        loading: false,
+        collectStatus: ' ',
+        collectLoading: false,
       }
     },
     mounted() {
-      this.getSystemTableData(1);
-      this.getDict();
-    },
-    activated() {
       this.getSystemTableData(1);
       this.getDict();
     },
@@ -148,10 +151,10 @@
       this.form.pages = this.currentPage;
     },
     watch: {
-      moduleId(val){
-        if(!val){
+      moduleId(val) {
+        if (!val) {
           this.form.dict_id = 380;
-        }else{
+        } else {
           this.form.dict_id = val;
         }
       },
@@ -171,24 +174,25 @@
         });
       },
       getSystemTableData() {
-        this.loading = true;
-        this.$http.get(this.urls + 'oa/portal/', { params: this.form}).then((res) => {
+        this.collectLoading = true;
+        this.collectStatus = ' ';
+        this.$http.get(this.urls + 'oa/portal/', {params: this.form}).then((res) => {
           this.isHigh = false;
+          this.collectLoading = false;
           if (res.data.code === '80000') {
             this.tableData = res.data.data.data;
             this.totalNum = res.data.data.count;
-            this.loading = false;
           } else {
+            this.collectStatus = '暂无数据';
             this.tableData = [];
             this.totalNum = 0;
-            this.loading = false;
           }
         })
       },
       // 详情
       openDetail(row) {
         var data = {ids: row.id};
-        this.$store.dispatch('articleDetail',data);
+        this.$store.dispatch('articleDetail', data);
         this.$router.push({path: '/Infodetails', query: data});
 
       },
@@ -207,8 +211,8 @@
       // 文章发布
       publicArticle() {
         this.$store.dispatch('deleteArticleId');
-        this.$router.push({path: '/publicArticle',query:{moduleType: this.moduleType}});
-        this.$store.dispatch('moduleType',this.moduleType);
+        this.$router.push({path: '/publicArticle', query: {moduleType: this.moduleType}});
+        this.$store.dispatch('moduleType', this.moduleType);
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -216,7 +220,7 @@
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
         this.form.pages = val;
-        this.$store.dispatch('systemPage',val);
+        this.$store.dispatch('systemPage', val);
         this.getSystemTableData();
 
       },
@@ -252,11 +256,13 @@
   .el-table th {
     text-align: left !important;
   }
+
   .el-table__body td {
     text-align: left !important;
   }
-  .btnStatus{
+
+  .btnStatus {
     cursor: inherit;
-    min-width:   68px;
+    min-width: 68px;
   }
 </style>

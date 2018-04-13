@@ -316,9 +316,9 @@
 
             <el-row>
               <!--<el-col :span="8">-->
-                <!--<el-form-item label="个人/中介">-->
-                  <!--<div class="content">{{contractInfo.from}}</div>-->
-                <!--</el-form-item>-->
+              <!--<el-form-item label="个人/中介">-->
+              <!--<div class="content">{{contractInfo.from}}</div>-->
+              <!--</el-form-item>-->
               <!--</el-col>-->
               <el-col :span="8">
                 <el-form-item label="中介费(元)">
@@ -411,64 +411,76 @@
                     <el-tabs type="border-card">
                       <el-tab-pane label="证件照片">
                         <div class="image">
-                          <img v-for="(value,key) in contractInfo.identity_photo" :src="value" data-magnify="" :data-src="value">
+                          <img v-for="(value,key) in contractInfo.identity_photo" :src="value" data-magnify=""
+                               :data-src="value">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane label="银行卡照片">
                         <div class="image">
-                          <img v-for="(value,key) in contractInfo.bank_photo" :src="value" data-magnify="" :data-src="value">
+                          <img v-for="(value,key) in contractInfo.bank_photo" :src="value" data-magnify=""
+                               :data-src="value">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane label="水表照片">
                         <div class="image">
-                          <img v-for="(value,key) in contractInfo.water_photo" :src="value" data-magnify="" :data-src="value">
+                          <img v-for="(value,key) in contractInfo.water_photo" :src="value" data-magnify=""
+                               :data-src="value">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane label="电表照片">
                         <div class="image">
-                          <img v-for="(value,key) in contractInfo.electricity_photo" :src="value" data-magnify="" :data-src="value">
+                          <img v-for="(value,key) in contractInfo.electricity_photo" :src="value" data-magnify=""
+                               :data-src="value">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane label="燃气表照片">
                         <div class="image">
-                          <img v-for="(value,key) in contractInfo.gas_photo" :src="value" data-magnify="" :data-src="value">
+                          <img v-for="(value,key) in contractInfo.gas_photo" :src="value" data-magnify=""
+                               :data-src="value">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane label="交接单">
                         <div class="image">
-                          <img v-for="(value,key) in contractInfo.checkin_photo" :src="value" data-magnify="" :data-src="value">
+                          <img v-for="(value,key) in contractInfo.checkin_photo" :src="value" data-magnify=""
+                               :data-src="value">
                         </div>
                       </el-tab-pane>
 
                       <el-tab-pane label="委托书">
                         <div class="image">
-                          <img v-for="(value,key) in contractInfo.auth_photo" :src="value" data-magnify="" :data-src="value">
+                          <img v-for="(value,key) in contractInfo.auth_photo" :src="value" data-magnify=""
+                               :data-src="value">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane label="押金收条">
                         <div class="image">
-                          <img v-for="(value,key) in contractInfo.deposit_photo" :src="value" data-magnify="" :data-src="value">
+                          <img v-for="(value,key) in contractInfo.deposit_photo" :src="value" data-magnify=""
+                               :data-src="value">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane label="承诺书照片">
                         <div class="image">
-                          <img v-for="(value,key) in contractInfo.promise" :src="value" data-magnify="" :data-src="value">
+                          <img v-for="(value,key) in contractInfo.promise" :src="value" data-magnify=""
+                               :data-src="value">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane label="补充照片">
                         <div class="image">
-                          <img v-for="(value,key) in contractInfo.other_photo" :src="value" data-magnify="" :data-src="value">
+                          <img v-for="(value,key) in contractInfo.other_photo" :src="value" data-magnify=""
+                               :data-src="value">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane label="退租交接单">
                         <div class="image">
-                          <img v-for="(value,key) in contractInfo.checkout_photo" :src="value" data-magnify="" :data-src="value">
+                          <img v-for="(value,key) in contractInfo.checkout_photo" :src="value" data-magnify=""
+                               :data-src="value">
                         </div>
                       </el-tab-pane>
 
                       <el-tab-pane label="退租结算单">
                         <div class="image">
-                          <img v-for="(value,key) in contractInfo.checkout_settle_photo" :src="value" data-magnify="" :data-src="value">
+                          <img v-for="(value,key) in contractInfo.checkout_settle_photo" :src="value" data-magnify=""
+                               :data-src="value">
                         </div>
                       </el-tab-pane>
 
@@ -555,7 +567,7 @@
           <el-form size="small" label-width="180px">
             <el-row>
               <el-col :span="8">
-                  <el-form-item label="回访时间">
+                <el-form-item label="回访时间">
                   <div class="content"></div>
                 </el-form-item>
               </el-col>
@@ -600,119 +612,209 @@
       </div>
     </div>
 
-    <div class="operatePanel" style="position: fixed;bottom: 100px;right: 60px;" @click="isPanel = !isPanel">
-      <i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="el-icon-circle-plus"></i>
+    <div class="operatePanel" style="position: fixed;bottom: 100px;right: 80px;" @click="isPanel = !isPanel">
+      <!--<i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="el-icon-circle-plus"></i>-->
+      <i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="el-icon-document"></i>
     </div>
-    <div class="panelContent" id="panelContent" v-show="isPanel">
-        <div class="panel_header">
-          <div style="color: #6a8dfb;font-size: 16px">
-            房屋资料缺失项
-          </div>
-
-          <div @click="isPanel = false">
-            <span style="color: #fb4694;font-size: 16px;cursor: pointer">取消</span>
-          </div>
+    <div class="panelContent" id="panelContent" v-show="isPanel" >
+      <div class="panel_header">
+        <div style="color: #6a8dfb;font-size: 16px">
+          房屋资料缺失项
         </div>
-
+        <div @click="isPanel = false">
+          <!--<span style="color: #fb4694;font-size: 16px;cursor: pointer">取消</span>-->
+          <i style="font-size: 23px;opacity: .8;cursor: pointer" class="el-icon-close"></i>
+        </div>
+      </div>
+      <div style="padding: 10px;">
         <div class="title">请输入缺失项目名，并使用 “,”隔开</div>
         <div class="textBox">
           <el-input
             type="textarea"
             :autosize="{ minRows: 6, maxRows: 6}"
+            v-model="params.content"
             placeholder="请输入内容">
           </el-input>
         </div>
         <div style="margin-bottom: 30px">
           <el-form ref="form" :model="sizeForm" label-width="80px">
-            <el-form-item label="选择通知人">
-              <el-input readonly=""></el-input>
-            </el-form-item>
+            <el-col :span="18">
+              <el-form-item label="选择通知人">
+                <el-input readonly="" v-model="receiverNames" size="mini" @focus="selectPeople">
+                  <template slot="append">
+                    <div style="cursor: pointer;" @click="emptyPeople">清空</div>
+                  </template>
+                </el-input>
+              </el-form-item>
+            </el-col>
           </el-form>
         </div>
-        <div style="text-align: center;">
-          <el-button size="mini" type="primary" style="width: 200px">发&nbsp;&nbsp;送</el-button>
+        <div style="text-align: center;clear: both;">
+          <el-button size="mini" type="primary" @click="noteSave(1)">发 送</el-button>&nbsp;&nbsp;&nbsp;
+          <el-button size="mini" type="primary" @click="noteSave(0)">保 存</el-button>
         </div>
-    </div>
-  </div>
+      </div>
 
+    </div>
+    <Organization :organizationDialog="organizationDialog" :type="type" @close="closeOrganization"
+                  @selectMember="selectMember"></Organization>
+  </div>
 </template>
 
 <script>
+  import Organization from '../common/organization.vue';
 
   export default {
+    components: {Organization},
     data() {
       return {
         steps: 0,
         sizeForm: {},
         isPanel: false,
-        houseInfo : [],
-        customersInfo:[],
-        contractInfo : [],
-        financeInfo : [],
-        returnInfo : [],
-        historyInfo : [],
-        houseId : '',
-        ownerId : '',
-        contractId : '',
-        financeId : '',
-        returnId : '',
-        historyId : '',
-        all_dic : [],   //房屋类型
+        houseInfo: [],
+        customersInfo: [],
+        contractInfo: [],
+        financeInfo: [],
+        returnInfo: [],
+        historyInfo: [],
+        houseId: '',
+        ownerId: '',
+        contractId: '',
+        financeId: '',
+        returnId: '',
+        historyId: '',
+        all_dic: [],   //房屋类型
+        organizationDialog: false,
+        type: '',
+        contract_id: this.$route.query.id, //合同Id
+        params: {
+          contract_id: this.$route.query.id,
+          content: '',
+          receiver_id: [],
+          is_rent: 1,
+          is_send: null,
+        },
+        receiverNames: '',
       }
     },
-    created(){
-      this.getDictionary()
+    created() {
+      this.getDictionary();
     },
-    mounted(){
+    mounted() {
       this.initData();
       this.getContractDetail();
-      this.houseId = document.getElementById('houseId').offsetTop -201;
-      this.ownerId = document.getElementById('ownerId').offsetTop -201;
-      this.contractId = document.getElementById('contractId').offsetTop -201;
-      this.financeId = document.getElementById('financeId').offsetTop -201;
-      this.returnId = document.getElementById('returnId').offsetTop -201;
-      this.historyId = document.getElementById('historyId').offsetTop -201;
+      this.houseId = document.getElementById('houseId').offsetTop - 201;
+      this.ownerId = document.getElementById('ownerId').offsetTop - 201;
+      this.contractId = document.getElementById('contractId').offsetTop - 201;
+      this.financeId = document.getElementById('financeId').offsetTop - 201;
+      this.returnId = document.getElementById('returnId').offsetTop - 201;
+      this.historyId = document.getElementById('historyId').offsetTop - 201;
+    },
+    watch: {
+      // 自动获取上一条备忘
+      isPanel(val) {
+        if(val){
+          this.$http.get(globalConfig.server+ 'lease/note?is_rent=1&contract_id='+this.contract_id).then((res)=>{
+            if(res.data.code === '60510'){
+              if(res.data.data){
+                this.params.content = res.data.data.content;
+                if(res.data.data.receiver_id){
+                  this.params.receiver_id = [];
+                  let receiver = res.data.data.receiver_id;
+                  let names = [];
+                  receiver.forEach((item)=>{
+                    this.params.receiver_id.push(item.id);
+                    names.push(item.name);
+                  });
+                  this.receiverNames = names.join(',');
+                }
+              }
+            }
+          })
+        }
+      }
     },
     methods: {
-      getContractDetail(){
-         this.$http.get(globalConfig.server+'lease/collect/'+this.$route.query.id).then((res) =>{
-            if(res.data.code === '61010'){
-              this.contractInfo = res.data.data;
-              this.customersInfo = res.data.data.customers;
-
-            }
-         })
+      selectPeople() {
+        this.organizationDialog = true;
+        this.type = 'staff';
       },
-      getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/all').then( (res) => {
-            this.all_dic = res.data.data;
+      emptyPeople() {
+        this.params.reveiver_id = [];
+        this.receiverNames = '';
+      },
+      closeOrganization() {
+        this.organizationDialog = false;
+      },
+      //发送/保存备忘
+      noteSave(val){
+        this.params.is_send =val;
+        this.$http.post(globalConfig.server+'lease/note/save', this.params).then((res)=>{
+          if(res.data.code === '60510'){
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.isPanel = false;
+          }else{
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
+      selectMember(val) {
+        this.params.receiver_id = [];
+        let name = [];
+        if (val.length > 0) {
+          val.forEach((item) => {
+            this.params.receiver_id.push(item.id);
+            name.push(item.name);
+          });
+        }
+        this.receiverNames = name.join(',');
+        this.type = '';
+      },
+      getContractDetail() {
+        this.$http.get(globalConfig.server + 'lease/collect/' + this.contract_id).then((res) => {
+          if (res.data.code === '61010') {
+            this.contractInfo = res.data.data;
+            this.customersInfo = res.data.data.customers;
+
+          }
+        })
+      },
+      getDictionary() {
+        this.$http.get(globalConfig.server + 'setting/dictionary/all').then((res) => {
+          this.all_dic = res.data.data;
         })
       },
 
-      matchDictionary(id){
+      matchDictionary(id) {
         let dictionary_name = null;
         this.all_dic.map((item) => {
-          if(item.id == id ){
+          if (item.id == id) {
             dictionary_name = item.dictionary_name;
           }
         });
         return dictionary_name;
       },
 
-      initData(){
+      initData() {
         document.getElementById('mainContent').addEventListener('scroll', () => {
           let scroll_top = document.getElementById('mainContent').scrollTop;
-          if(scroll_top >= this.ownerId && scroll_top<this.contractId){
-            this.steps =1;
-          }else if(scroll_top >= this.contractId && scroll_top<this.financeId){
-            this.steps =2;
-          }else if(scroll_top >= this.financeId && scroll_top<this.returnId-201){
-            this.steps =3;
-          }else if(scroll_top >= this.returnId-201 && scroll_top<this.historyId-201){
-            this.steps =4;
-          }else if(scroll_top>this.historyId-201){
-            this.steps =5;
-          }else if(scroll_top < this.ownerId){
+          if (scroll_top >= this.ownerId && scroll_top < this.contractId) {
+            this.steps = 1;
+          } else if (scroll_top >= this.contractId && scroll_top < this.financeId) {
+            this.steps = 2;
+          } else if (scroll_top >= this.financeId && scroll_top < this.returnId - 201) {
+            this.steps = 3;
+          } else if (scroll_top >= this.returnId - 201 && scroll_top < this.historyId - 201) {
+            this.steps = 4;
+          } else if (scroll_top > this.historyId - 201) {
+            this.steps = 5;
+          } else if (scroll_top < this.ownerId) {
             this.steps = 0;
           }
         });
@@ -721,7 +823,7 @@
           document.getElementById('mainContent').style.height = window.innerHeight - 240 + 'px';
         }
       },
-      changeStep(step){
+      changeStep(step) {
         this.steps = step;
         switch (step) {
           case 0:
@@ -744,7 +846,7 @@
             break;
         }
       },
-      getText(e){
+      getText(e) {
         console.log(e.target.innerText)
       }
     },
@@ -776,10 +878,10 @@
       position: fixed;
       bottom: 100px;
       right: 230px;
-      border: 1px solid rgba(64,158,255,.12);
-      box-shadow: 0 2px 4px 0 rgba(64,158,255,.12), 0 0 6px 0 rgba(64,158,255,.04);
+      border: 1px solid rgba(64, 158, 255, .12);
+      box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);
       padding: 0 10px;
-      .panel_header{
+      .panel_header {
         height: 50px;
         display: flex;
         align-items: center;
@@ -787,7 +889,7 @@
         box-sizing: border-box;
         border-bottom: 1px solid #E1E1E1;
       }
-      .textBox{
+      .textBox {
         margin-bottom: 15px;
       }
     }
