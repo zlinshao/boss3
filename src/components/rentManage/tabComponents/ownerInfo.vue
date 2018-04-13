@@ -131,7 +131,7 @@
         }
       },
       activeName(val){
-        if(!this.isRequestData && val=== 'OwnerInfoTab'){
+        if(!this.isRequestData){
           if(this.collectContractId){
             this.getData();
             this.isRequestData = true;
@@ -152,6 +152,7 @@
               this.collectData = res.data.data.customer;
             }else {
               this.collectData = [];
+              this.emptyContent = '暂无数据';
             }
           }else {
             this.collectData = [];

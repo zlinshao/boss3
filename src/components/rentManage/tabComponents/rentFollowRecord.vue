@@ -109,7 +109,7 @@
         }
       },
       tabStatusChange(val){
-        if(val=== 'workOrder' && this.activeName==='RentFollowRecordTab'){
+        if(val=== 'workOrder'){
           this.getData();
           this.isRequestData = true;
         }

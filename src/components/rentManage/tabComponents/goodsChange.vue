@@ -97,7 +97,7 @@
           }
         },
         tabStatusChange(val){
-          if(val=== 'GoodsChangeTab' && this.activeName==='GoodsChangeTab'){
+          if(val=== 'GoodsChangeTab'){
             this.getData();
             this.isRequestData = true;
           }

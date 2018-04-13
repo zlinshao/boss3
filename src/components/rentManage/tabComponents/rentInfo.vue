@@ -131,7 +131,7 @@
         }
       },
       activeName(val){
-        if(!this.isRequestData && val=== 'RentInfoTab'){
+        if(!this.isRequestData){
           if(this.rentContractId){
             this.getData();
             this.isRequestData = true;

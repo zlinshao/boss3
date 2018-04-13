@@ -501,7 +501,7 @@
   import ReturnVisit from '../components/returnVisit.vue'   //查看回访
   import TopForm from '../components/topFormSet.vue'    //表头列表
   import Setting from './components/setting.vue'
-  import VisitRecord from './../components/visitRecord.vue'    //回访记录
+  import VisitRecord from './../components/visitRecord.vue'    //添加回访
   //--------------------------tabs content-----------------------------------------------------------------//
   import GoodsChangeTab from '../tabComponents/goodsChange.vue'
   import OwnerInfoTab from '../tabComponents/ownerInfo.vue'
@@ -610,7 +610,7 @@
         returnVisitDialog:false,      //查看回访
         topFormSetDialog:false,       //选择列
         settingDialog : false,        //设置
-        visitRecordDialog: false,    //回访记录
+        visitRecordDialog: false,    //添加回访
 
         isHigh: false,
         /*******************收房*********************/
@@ -777,7 +777,7 @@
           },
 //          {clickIndex: 'addCollectRepairDialog', headIcon: 'el-icons-fa-gear', label: '维修',},
 //          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
-          {clickIndex: 'visitRecordDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '回访记录',},
+          {clickIndex: 'visitRecordDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加回访',},
         ];
         this.contextMenuParam(event);
       },
@@ -822,12 +822,12 @@
               this.rentContractId = res.data.data[0].contract_id;
             }else {
               this.rentContractId = '';
-              this.rentStatus = '暂无数据';
+              this.rentStatus = '暂未出租';
             }
           }else {
             this.rentingData = [];
             this.rentTotalNum = 0;
-            this.rentStatus = '暂无数据';
+            this.rentStatus = '暂未出租';
           }
         })
       },
@@ -854,7 +854,7 @@
 //          {clickIndex: 'addRentRepairDialog', headIcon: 'el-icons-fa-gear', label: '报修',},
 //          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
           {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单',},
-          {clickIndex: 'visitRecordDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '回访记录',},
+          {clickIndex: 'visitRecordDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加回访',},
         ];
         this.contextMenuParam(event);
       },
@@ -1023,9 +1023,9 @@
         });
       },
       closeModal(val){
+        this.tabStatusChange = '';
         this.instructionDialog = false;
         this.organizationDialog = false;
-
         this.backUpDialog = false;
         this.advancedDialog = false;
         this.ownerDelayDialog = false;

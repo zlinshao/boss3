@@ -323,7 +323,9 @@
                           </el-form-item>
                         </el-col>
                         <el-col :span="6" v-if="item>1">
-                          <div class="deleteNumber" @click="deletePriceChange(item-1)">删除</div>
+                          <div class="deleteNumber">
+                            <span @click="deletePriceChange(item-1)">删除</span>
+                          </div>
                         </el-col>
                       </el-row>
                     </div>
@@ -353,7 +355,9 @@
                           </el-form-item>
                         </el-col>
                         <el-col :span="6" v-if="item>1">
-                          <div class="deleteNumber" @click="deletePayWayChange(item-1)">删除</div>
+                          <div class="deleteNumber">
+                            <span @click="deletePayWayChange(item-1)">删除</span>
+                          </div>
                         </el-col>
                       </el-row>
                     </div>

@@ -148,11 +148,11 @@
               this.$router.push({path: '/login'});
             });
           } else {
+            console.log(this.$notify.warning)
             this.keywords = '';
-            this.$notify({
+            this.$notify.warning({
               title: '警告',
               message: res.data.msg,
-              type: 'warning'
             });
           }
         })
@@ -170,7 +170,7 @@
     letter-spacing: 1px;
     user-select: none;
     position: absolute;
-    z-index: 99999;
+    z-index: 2006;
     .log_off {
       width: 40px;
       height: 40px;

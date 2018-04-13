@@ -103,7 +103,7 @@
             }
           },
           tabStatusChange(val){
-            if(val=== 'workOrder' && this.activeName==='CollectFollowRecordTab'){
+            if(val=== 'workOrder'){
               this.getData();
               this.isRequestData = true;
             }
