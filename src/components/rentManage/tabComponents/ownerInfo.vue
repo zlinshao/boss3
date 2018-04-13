@@ -66,6 +66,10 @@
 
       <el-table
         :data="collectData"
+        v-loading="tableLoading"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0)"
         style="width: 100%">
         <el-table-column
           prop="name"
@@ -112,6 +116,8 @@
         /***********/
         collectData:[],
         isRequestData : false,
+        emptyContent : ' ',
+        tableLoading : false,
       }
     },
     mounted(){
@@ -137,7 +143,10 @@
     },
     methods:{
       getData(){
+        this.tableLoading = true;
+        this.emptyContent = ' ';
         this.$http.get(globalConfig.server+'lease/detail/'+this.collectContractId +'?collect_or_rent=0').then((res) =>{
+          this.tableLoading = false;
           if(res.data.code === '60010'){
             if(Array.isArray(res.data.data.customer)){
               this.collectData = res.data.data.customer;
@@ -146,6 +155,7 @@
             }
           }else {
             this.collectData = [];
+            this.emptyContent = '暂无数据';
           }
         })
       },

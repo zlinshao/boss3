@@ -2,6 +2,10 @@
   <div>
     <el-table
       :data="goodsChangeData"
+      v-loading="tableLoading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0)"
       style="width: 100%">
       <el-table-column
         prop="change_type"
@@ -69,6 +73,8 @@
               limit:3,
             },
             isRequestData : false,
+            emptyContent : ' ',
+            tableLoading : false,
           }
       },
       created() {
@@ -104,7 +110,10 @@
           this.getData();
         } ,
         getData(){
+          this.tableLoading = true;
+          this.emptyContent = ' ';
           this.$http.get(this.urls+'house/asset_change', { params: this.params, }).then((res) => {
+            this.tableLoading = false;
             if (res.data.code === '20000') {
               this.goodsChangeData=res.data.data.data;
               for(let i=0;i<this.params.limit;i++){
@@ -120,6 +129,7 @@
             }
             else{
               this.goodsChangeData=[];
+              this.emptyContent = '暂无数据';
               this.total=0;
             }
           })

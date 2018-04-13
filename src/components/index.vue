@@ -192,7 +192,7 @@
 
                   <el-col :span="10" class="checkUp" :offset="4">
                     <div class="navigationLeft">
-                      <el-dropdown-item @click.native="lockScreen('手动')" style="padding: 0">
+                      <el-dropdown-item @click.native="lockScreen()" style="padding: 0">
                         <div class="msgCenter">
                           <i class="el-icons-fa-unlock-alt" style="color: #C0C4CC;"></i>
                           <div class="msgTitle">一键锁屏</div>
@@ -406,7 +406,26 @@
       //定时器 轮巡获取最新消息
       this.getUnreadTermly();
     },
+    activated(){
+      //初始化个人信息
+      this.personal = JSON.parse(localStorage.personal);
+      //鼠标滑动监听
+      let _this = this;
+      $(document).mousemove(function () {
+        _this.clickScreen();
+      });
 
+      //根据个人信息进行操作事项
+      this.initData();
+      //多页面锁屏
+      this.multiPageLock();
+      this.watchCount();
+      this.countTime();
+      //获取积分明细
+      this.getCredit();
+      //定时器 轮巡获取最新消息
+      this.getUnreadTermly();
+    },
     methods: {
       initData() {
         if (!this.personal.data.medal) {
@@ -447,14 +466,18 @@
       multiPageLock() {
         this.$http.interceptors.response.use(response => {
             //配置请求回来的信息
-            if (response.data.code == "7777") {
-              clearInterval(this.interval);
-              this.interval = null;
-              clearInterval(this.messageInterval);
-              this.messageInterval = null;
-              sessionStorage.setItem("beforePath", this.$route.path);
-              sessionStorage.setItem("lockStatus", 1);
-              this.$router.push({path: "/lock"});
+            if(this.$route.path !== '/lock'){
+              if (response.data.code == "7777") {
+                clearInterval(this.interval);
+                this.interval = null;
+                this.messageInterval = null;
+
+                sessionStorage.setItem("beforePath", this.$route.path);
+
+                alert(sessionStorage.getItem('beforePath'));
+                sessionStorage.setItem("lockStatus", 1);
+                this.$router.push({path: "/lock"});
+              }
             }
             return response;
           },
@@ -574,6 +597,7 @@
                     countDown.forEach((item) => {
                       if (array[i].dict_id == item.id) {
                         this.defaultTime = this.Countdown = Number(item.dictionary_name);
+//                        this.defaultTime = this.Countdown = 5;
                         localStorage.setItem('countdownTime', item.id);
                         this.startCount();
                       }
@@ -600,7 +624,7 @@
           }, 1000);
         })
           .then(data => {
-            this.lockScreen("倒计时");
+            this.lockScreen();
           })
           .catch(data => {
             this.Countdown = this.defaultTime;
@@ -613,7 +637,7 @@
         this.isCollapse = !this.isCollapse;
       },
 
-      lockScreen(val) {
+      lockScreen() {
         clearInterval(this.interval);
         this.interval = null;
         clearInterval(this.messageInterval);

@@ -49,6 +49,10 @@
       <div v-show="selectFlag==1">
         <el-table
           :data="contractTotalData"
+          v-loading="tableLoading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0)"
           @row-dblclick = 'showContractDetail'
           @row-contextmenu='openTotalMenu'
           style="width: 100%">
@@ -102,6 +106,10 @@
       <div v-show="selectFlag==2">
         <el-table
           :data="contractApplyData"
+          v-loading="tableLoading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0)"
           @row-dblclick = 'showContractDetail'
           @row-contextmenu='openApplyMenu'
           style="width: 100%">
@@ -132,6 +140,10 @@
       <div v-show="selectFlag==3">
         <el-table
           :data="contractCancelData"
+          v-loading="tableLoading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0)"
           @row-dblclick = 'showContractDetail'
           @row-contextmenu='openCancelMenu'
           style="width: 100%">
@@ -162,6 +174,10 @@
       <div v-show="selectFlag==4">
         <el-table
           :data="contractHandInData"
+          v-loading="tableLoading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0)"
           @row-dblclick = 'showContractDetail'
           @row-contextmenu='openHandInMenu'
           style="width: 100%">
@@ -192,6 +208,10 @@
       <div v-show="selectFlag==5">
         <el-table
           :data="contractLossData"
+          v-loading="tableLoading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0)"
           @row-dblclick = 'showContractDetail'
           @row-contextmenu='openLossMenu'
           style="width: 100%">
@@ -338,6 +358,9 @@
         handInEditId_detail : '',
         totalId_detail : '',
         lossEditId_detail : '',
+
+        emptyContent : ' ',
+        tableLoading : false,
       }
     },
     watch:{
@@ -525,13 +548,17 @@
       //****************************汇总***************************//
 
       getTotalList(){
+        this.tableLoading = true;
+        this.emptyContent = ' ';
         this.$http.get(globalConfig.server+'contract/mission',{params:this.params}).then((res) => {
+          this.tableLoading = false;
           if(res.data.code === '20000'){
             this.contractTotalData = res.data.data.data;
             this.totalNumbers =res.data.data.count;
           }else {
             this.contractTotalData =[];
             this.totalNumbers =0;
+            this.emptyContent = '暂无数据';
           }
         })
       },
@@ -568,13 +595,17 @@
 
 
       getApplyList(){
+        this.tableLoading = true;
+        this.emptyContent = ' ';
         this.$http.get(globalConfig.server+'contract/apply',{params:this.params}).then((res) => {
+          this.tableLoading = false;
           if(res.data.code === '20000'){
             this.contractApplyData = res.data.data.data;
             this.totalNumbers =res.data.data.count;
           }else {
             this.contractApplyData =[];
             this.totalNumbers =0;
+            this.emptyContent = '暂无数据';
           }
         })
       },
@@ -593,13 +624,17 @@
       },
       //****************************合同作废***********************//
       getCancelList(){
+        this.tableLoading = true;
+        this.emptyContent = ' ';
         this.$http.get(globalConfig.server+'contract/invalidate',{params:this.params}).then((res) => {
+          this.tableLoading = false;
           if(res.data.code === '20000'){
             this.contractCancelData = res.data.data.data;
             this.totalNumbers =res.data.data.count;
           }else {
             this.contractCancelData =[];
             this.totalNumbers =0;
+            this.emptyContent = '暂无数据';
           }
         })
       },
@@ -607,13 +642,17 @@
       //***************************合同上缴**************************//
 
       getHandInList(){
+        this.tableLoading = true;
+        this.emptyContent = ' ';
         this.$http.get(globalConfig.server+'contract/handin',{params:this.params}).then((res) => {
+          this.tableLoading = false;
           if(res.data.code === '20000'){
             this.contractHandInData = res.data.data.data;
             this.totalNumbers =res.data.data.count;
           }else {
             this.contractHandInData =[];
             this.totalNumbers =0;
+            this.emptyContent = '暂无数据';
           }
         })
       },
@@ -623,13 +662,17 @@
       //***************************合同丢失**************************//
 
       getLossList(){
+        this.tableLoading = true;
+        this.emptyContent = ' ';
         this.$http.get(globalConfig.server+'contract/loss',{params:this.params}).then((res) => {
+          this.tableLoading = false;
           if(res.data.code === '20000'){
             this.contractLossData = res.data.data.data;
             this.totalNumbers =res.data.data.count;
           }else {
             this.contractLossData =[];
             this.totalNumbers =0;
+            this.emptyContent = '暂无数据';
           }
         })
       },
