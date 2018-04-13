@@ -252,7 +252,7 @@
                 <span slot="title"> {{child.name}}</span>
               </el-menu-item>
 
-              <el-submenu :index="item.name+''" :disabled="chinese.indexOf(item.name)>-1" @click.native="openBadge"
+              <el-submenu :index="item.name+''" :disabled="chinese.indexOf(item.name)>-1" @click.native="openBadge(item.name)"
                           v-if="!item.hidden && !item.abnormal">
                 <!--二级菜单标题-->
                 <template slot="title">
@@ -443,11 +443,14 @@
       },
 
       //验证二级密码弹框
-      openBadge(){
+      openBadge(key){
         if (!eval(this.unlockFlagpart)) {
-          this.unlockSecondPWDialog = true;
+        for(let chi in this.chinese){
+          if(this.chinese[chi] == key){
+            this.unlockSecondPWDialog = true;
+          }
+          }
         }
-
       },
       //拦截器 验证锁屏
       multiPageLock() {
