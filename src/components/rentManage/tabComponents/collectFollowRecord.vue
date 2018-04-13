@@ -2,6 +2,11 @@
     <div>
       <el-table
         :data="tableData"
+        :empty-text = 'emptyContent'
+        v-loading="tableLoading"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0)"
         @row-dblclick="dblClickTable"
         style="width: 100%">
         <el-table-column
@@ -77,6 +82,9 @@
               orderDetailDialog : false,
 
               isRequestData : false,
+
+              emptyContent : ' ',
+              tableLoading : false,
             }
         },
         watch:{
@@ -103,13 +111,17 @@
         },
         methods:{
           getData(){
+            this.tableLoading = true;
+            this.emptyContent = ' ';
             this.$http.get(globalConfig.server+'customer/work_order',{params:this.params}).then((res) => {
+              this.tableLoading = false;
               if(res.data.code === '100200'){
                 this.tableData = res.data.data.data;
                 this.totalNumber = res.data.data.count;
               }else {
                 this.tableData = [];
                 this.totalNumber = 0;
+                this.emptyContent = '暂无数据';
               }
             })
           },

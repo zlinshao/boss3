@@ -723,9 +723,10 @@
             });
             this.checkHandIn();
             if(res.data.data.length>0){
-              this.collectStatus = '暂无数据';
               this.collectHouseId = this.collectData[0].house_id;
               this.collectContractId = this.collectData[0].contract_id;
+            }else {
+              this.collectStatus = '暂无数据';
             }
           }else {
             this.collectData = [];

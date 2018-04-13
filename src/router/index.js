@@ -159,14 +159,20 @@ export default new Router({
       path: '/login',
       component: Login,
       name: '',
-      hidden: true
+      hidden: true,
+      meta: {
+        keepAlive: true // 不需要缓存
+      }
     },
 
     {
       path: '/lock',
       component: Lock,
       name: '',
-      hidden: true
+      hidden: true,
+      meta: {
+        keepAlive: true // 不需要缓存
+      }
     },
 
     {

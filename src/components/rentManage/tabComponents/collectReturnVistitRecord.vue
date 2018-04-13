@@ -2,6 +2,11 @@
     <div>
       <el-table
         :data="tableData"
+        :empty-text = 'emptyContent'
+        v-loading="tableLoading"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0)"
         style="width: 100%">
         <el-table-column
           prop="simple_staff.real_name"
@@ -43,6 +48,9 @@
           },
           isRequestData:false,
           totalNumber:0,
+
+          emptyContent : ' ',
+          tableLoading : false,
         }
       },
       watch:{
@@ -69,13 +77,17 @@
       },
       methods:{
         getData(){
+          this.tableLoading = true;
+          this.emptyContent = ' ';
           this.$http.get(globalConfig.server+'contract/feedback',{params:this.params}).then((res) => {
+            this.tableLoading = false;
             if(res.data.code === '20000'){
               this.tableData = res.data.data.data;
               this.totalNumber = res.data.data.count;
             }else {
               this.tableData = [];
               this.totalNumber = 0;
+              this.emptyContent = '暂无数据';
             }
           })
         },

@@ -1,6 +1,9 @@
 <template>
   <div id="app" @contextmenu="prevent($event)" @click="closeMenu">
-    <router-view></router-view>
+    <keep-alive>
+      <router-view v-if="!$route.meta.keepAlive"></router-view>
+    </keep-alive>
+    <router-view v-if="$route.meta.keepAlive"></router-view>
     <!--<LOADING v-if="isLoading"></LOADING>-->
 
     <el-tooltip placement="top" content="返回顶部">

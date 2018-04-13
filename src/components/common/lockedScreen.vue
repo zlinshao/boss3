@@ -126,6 +126,7 @@
                 resolve();
               }
             }).then((data) => {
+              console.log(sessionStorage.getItem('beforePath'))
               if (sessionStorage.getItem('beforePath') === '/lock') {
                 this.$router.push('/main');
               } else {
@@ -168,6 +169,8 @@
     font-weight: lighter;
     letter-spacing: 1px;
     user-select: none;
+    position: absolute;
+    z-index: 99999;
     .log_off {
       width: 40px;
       height: 40px;
