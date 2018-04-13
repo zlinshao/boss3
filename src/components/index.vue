@@ -29,7 +29,7 @@
               <i class="iconfont icon-qita1"></i><span>快捷入口</span>
             </span>
             <el-dropdown-menu slot="dropdown" class="shortcutList">
-              <el-dropdown-item v-for="(item,index) in isShortcutPath"  :key="index"
+              <el-dropdown-item v-for="(item,index) in isShortcutPath" :key="index"
                                 @click.native="routers(item.path)" :class="{'border_top': index > 3}">
                 <div>
                   <b style="font-weight: 100" :class="{'backColor1': -1 < index,'backColor2': index === 3 || index === 11 || index === 13,
@@ -45,7 +45,7 @@
         <!--消息-->
         <div class="message" style="position: relative;margin-right: 15px">
           <el-dropdown>
-            <el-badge  :value="unReadMessageData.length" class="item">
+            <el-badge :value="unReadMessageData.length" class="item">
               <i class="el-icons-fa-comment-o"></i>
               消 息
             </el-badge>
@@ -71,12 +71,15 @@
               <el-dropdown-item>
                 <el-row v-if="unReadMessageData.length >0" @click.native="showOtherDetail()">
                   <el-col :span="24">
-                    <div style="display:block; line-height:32px; text-align:center; color:#409EFF">查看全部<span style="color:#f00">{{unReadMessageData.length}}条</span>未读</div>
+                    <div style="display:block; line-height:32px; text-align:center; color:#409EFF">查看全部<span
+                      style="color:#f00">{{unReadMessageData.length}}条</span>未读
+                    </div>
                   </el-col>
                 </el-row>
                 <el-row v-if="unReadMessageData.length <=0" style="cursor:default">
                   <el-col :span="24">
-                    <div style=" width:180px; height:65px; display:block; line-height:65px; text-align:center">暂无数据</div>
+                    <div style=" width:180px; height:65px; display:block; line-height:65px; text-align:center">暂无数据
+                    </div>
                   </el-col>
                 </el-row>
               </el-dropdown-item>
@@ -240,8 +243,7 @@
       <el-container>
         <div class="aside scroll_bar" id="isCollapse">
           <el-menu :default-active="$route.path" class="el-menu-vertical-demo" unique-opened
-                   :defaultOpeneds=defaultArray @select="handlerSelect"
-                   :collapse="isCollapse" router @open="handleOpen" @close="handleClose"
+                   :defaultOpeneds=defaultArray :collapse="isCollapse" router
                    background-color="#6a8dfb" text-color="#fff" active-text-color="#ffd04b">
             <template v-for="(item,index) in $router.options.routes">
               <!--一级菜单-->
@@ -250,7 +252,8 @@
                 <span slot="title"> {{child.name}}</span>
               </el-menu-item>
 
-              <el-submenu :index="item.name+''"  :disabled ="chinese.indexOf(item.name)>-1" @click.native="openBadge" v-if="!item.hidden && !item.abnormal">
+              <el-submenu :index="item.name+''" :disabled="chinese.indexOf(item.name)>-1" @click.native="openBadge"
+                          v-if="!item.hidden && !item.abnormal">
                 <!--二级菜单标题-->
                 <template slot="title">
                   <i :class="item.icon" style="font-size: 26px"></i>
@@ -270,7 +273,8 @@
                       <i :class="child.icon"></i>
                       <span>{{child.name}}</span>
                     </template>
-                    <el-menu-item v-for="last in child.children" :index="last.path" :key="last.path" style="padding-left: 74px">
+                    <el-menu-item v-for="last in child.children" :index="last.path" :key="last.path"
+                                  style="padding-left: 74px">
                       {{last.name}}
                     </el-menu-item>
                   </el-submenu>
@@ -297,43 +301,44 @@
       </el-container>
     </div>
 
-    <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeMessage"></MessageDetail>
-    <SetLockPwd :setLockPwdDialog="setLockPwdDialog" @close="closeMessage"></SetLockPwd>
-    <UnlockSecondPW :unlockSecondPWDialog="unlockSecondPWDialog" @unlockFlag="unlockFlag" :sendId="sendId" @close="closeMessagex"></UnlockSecondPW>
-	  <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
-<BadgeView :badgeDialog="badgeDialog" @close="closebadgeDialog"></BadgeView>
+    <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeModal"></MessageDetail>
+    <SetLockPwd :setLockPwdDialog="setLockPwdDialog" @close="closeModal"></SetLockPwd>
+    <UnlockSecondPW :unlockSecondPWDialog="unlockSecondPWDialog" @unlockFlag="unlockFlag" :sendId="sendId"
+                    @close="closeModal"></UnlockSecondPW>
+    <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
+    <BadgeView :badgeDialog="badgeDialog" @close="closeModal"></BadgeView>
   </div>
 </template>
 
 <script>
-import TagsView from "./common/tagsView.vue";
-import screenFull from "screenfull";
-import MessageDetail from "./common/messageDetail.vue";
-import Instruction from "./rentManage/wholeRentManage/components/instruction.vue"; //使用说明
-import SetLockPwd from "./common/setLockPwd.vue";
-import UnlockSecondPW from "./common/unlocksecondpw.vue";
-import BadgeView from "./common/badge.vue";
-import cookie from 'js-cookie'
-export default {
-  name: "Index",
-  components: {
-    TagsView,
-    MessageDetail,
-    Instruction,
-    SetLockPwd,
-    UnlockSecondPW,
-    BadgeView
-  },
-  data() {
-    return {
-      personal: {},
-      isCollapse: true,
-      isFull: false,
-      Countdown: 0, //倒计时
-      defaultTime: 0, //倒计时
-      screenStatus: false,
-      defaultArray: [],
-      messageDialog: false,
+  import TagsView from "./common/tagsView.vue";
+  import screenFull from "screenfull";
+  import MessageDetail from "./common/messageDetail.vue";
+  import Instruction from "./rentManage/wholeRentManage/components/instruction.vue"; //使用说明
+  import SetLockPwd from "./common/setLockPwd.vue";
+  import UnlockSecondPW from "./common/unlocksecondpw.vue";
+  import BadgeView from "./common/badge.vue";
+  import cookie from 'js-cookie'
+  export default {
+    name: "Index",
+    components: {
+      TagsView,
+      MessageDetail,
+      Instruction,
+      SetLockPwd,
+      UnlockSecondPW,
+      BadgeView
+    },
+    data() {
+      return {
+        personal: {},
+        isCollapse: true,
+        isFull: false,
+        Countdown: 0, //倒计时
+        defaultTime: 0, //倒计时
+        screenStatus: false,
+        defaultArray: [],
+        messageDialog: false,
 
         unReadMessageData: [],
         messageDetail: [],
@@ -343,201 +348,198 @@ export default {
         loginPercent: 0,
         creditTotal: 0, // 积分总数
 
-      setLockPwdDialog: false,
-      instructionDialog: false, //功能说明
-      dictionary2: [], //模块
-      chinese: [],
-      unlockSecondPWDialog: false,
-      sendId: "",
-      badgeDialog: false, //徽章模态框
-      unlockFlagpart: false,
-      openkey:"",
-      openPath:"",
-    };
-  },
-  created(){
-
-    this.unlockFlagpart = cookie.get("unlockFlagpart");
-    if(!eval(this.unlockFlagpart)){
-      this.getDictionary2();
-    }
-  },
-  mounted() {
-    //鼠标滑动
-    let _this = this;
-    $(document).mousemove(function() {
-      _this.clickScreen();
-    });
-
-    this.initData();
-
-    //获取模块接口
-
-    //多页面锁屏
-    this.multiPageLock();
-
-    setInterval(function() {
-      if (localStorage.getItem("initCount") == 1) {
-        _this.screenStatus = true;
-      }
-      localStorage.setItem("initCount", 0);
-    }, 1000);
-  },
-  computed: {
-    visitedViews() {
-      return this.$store;
+        setLockPwdDialog: false,
+        instructionDialog: false, //功能说明
+        dictionary2: [], //模块
+        chinese: [],
+        unlockSecondPWDialog: false,
+        sendId: "",
+        badgeDialog: false, //徽章模态框
+        unlockFlagpart: false,
+      };
     },
-    isShortcutPath() {
-      let isShortcutPath = [];
-      this.$router.options.routes.forEach(item => {
-        if (item.isShortcut) {
-          isShortcutPath = item.children;
-        }
-      });
-      return isShortcutPath;
-    }
-  },
-  watch: {
-    isCollapse(val) {
-      document.getElementById("isCollapse").style.overflow = val
-        ? "visible"
-        : "auto";
-    },
-    "$store.state.app.isBasicChange": {
-      handler(val, oldVal) {
-        this.countTime();
-      }
-    }
-  },
-  methods: {
-    openBadge(){
-      if(!eval(this.unlockFlagpart)){
-        this.unlockSecondPWDialog = true;
-      }
-
-    },
-    //多开页面验证锁屏
-    multiPageLock() {
-      this.$http.interceptors.response.use(
-        response => {
-          //配置请求回来的信息
-          if (response.data.code == "7777") {
-            clearInterval(this.interval);
-            this.interval = null;
-            clearInterval(this.messageInterval);
-            this.messageInterval = null;
-            sessionStorage.setItem("beforePath", this.$route.path);
-            sessionStorage.setItem("lockStatus", 1);
-            this.$router.push({ path: "/lock" });
+    computed: {
+      visitedViews() {
+        return this.$store;
+      },
+      isShortcutPath() {
+        let isShortcutPath = [];
+        this.$router.options.routes.forEach(item => {
+          if (item.isShortcut) {
+            isShortcutPath = item.children;
           }
-          return response;
-        },
-        function(error) {
-          return Promise.reject(error);
-        }
-      );
-    },
-
-    openModalDialog(type) {
-      switch (type) {
-        case "instructionDialog": //说明书
-          this.instructionDialog = true;
-          break;
+        });
+        return isShortcutPath;
       }
     },
-    closeModal() {
-      this.instructionDialog = false;
+    watch: {
+      isCollapse(val) {
+        document.getElementById("isCollapse").style.overflow = val
+          ? "visible"
+          : "auto";
+      },
+      "$store.state.app.isBasicChange": {
+        handler(val, oldVal) {
+          this.countTime();
+        }
+      }
     },
-    closebadgeDialog() {
-      this.badgeDialog = false;
+    created(){
+      this.unlockFlagpart = cookie.get("unlockFlagpart");
+      if (!eval(this.unlockFlagpart)) {
+        this.getDictionary2();
+      }
     },
-    initData() {
+    mounted() {
+      //初始化个人信息
       this.personal = JSON.parse(localStorage.personal);
-      if (!this.personal.data.medal) {
-        this.badgeDialog = true;
-      }
-      this.loginDay = this.personal.data.loginday;
-      this.loginPercent = Number(this.loginDay / 180 * 100) + "%";
-      $(".percent").css("width", this.loginPercent);
+      //鼠标滑动监听
+      let _this = this;
+      $(document).mousemove(function () {
+        _this.clickScreen();
+      });
 
-      //判断是否存在锁屏密码
-      if (
-        this.personal.data.setting &&
-        Array.isArray(this.personal.data.setting)
-      ) {
-        if (
-          this.personal.data.setting.length < 1 ||
-          !this.personal.detail.pwd_lock
-        ) {
-          this.setLockPwdDialog = true;
-        }
-      }
-
+      //根据个人信息进行操作事项
+      this.initData();
+      //多页面锁屏
+      this.multiPageLock();
+      this.watchCount();
       this.countTime();
-
-      clearInterval(this.messageInterval);
-      this.messageInterval = null;
-
-      this.messageInterval = setInterval(() => {
-        if (localStorage.personal) {
-          this.getUnReadMessage();
-        }
-      }, 100000);
       //获取积分明细
       this.getCredit();
-      //获取登陆时长
-      this.getLoginDay();
-    },
-    routers(url) {
-      this.$router.push(url);
-    },
-    //显示消息详情
-    showMessageDetail(val) {
-      this.messageDetail = val;
-      this.messageDialog = true;
-      this.$http
-        .put(globalConfig.server_user + "messages/" + val.id)
-        .then(res => {
-          if (res.data.status === "success") {
-            this.getUnReadMessage();
-          }
-        });
-    },
-    showOtherDetail() {
-      this.$router.push({
-        path: "/messageCenter",
-        query: {
-          unread: 1
-        }
-      });
-    },
-    closeMessage() {
-      this.messageDialog = false;
-      this.setLockPwdDialog = false;
-    },
-    closeMessagex() {
-      this.unlockSecondPWDialog = false;
-    },
-    unlockFlag(val) {
-      this.unlockFlagpart = val;
-      cookie.set("unlockFlagpart",val,{expires:1});
-      if (this.unlockFlagpart) {
-        this.chinese =[]
-      }
+      //定时器 轮巡获取最新消息
+      this.getUnreadTermly();
     },
 
-    //获取未读消息
-    getUnReadMessage() {
-      this.$http
-        .get(globalConfig.server_user + "messages?unread=1")
-        .then(res => {
-          if (res.data.status === "success") {
-            this.unReadMessageData = res.data.data;
+    methods: {
+      initData() {
+        if (!this.personal.data.medal) {
+          this.badgeDialog = true;
+        }
+        this.loginDay = this.personal.data.loginday;
+        this.loginPercent = Number(this.loginDay / 180 * 100) + "%";
+        $(".percent").css("width", this.loginPercent);
+
+        //判断是否存在锁屏密码
+        if (this.personal.data.setting && Array.isArray(this.personal.data.setting)) {
+          if (this.personal.data.setting.length < 1 || !this.personal.detail.pwd_lock) {
+            this.setLockPwdDialog = true;
+          }
+        }
+
+      },
+
+      //定时器 轮巡获取最新消息
+      getUnreadTermly(){
+        clearInterval(this.messageInterval);
+        this.messageInterval = null;
+        this.messageInterval = setInterval(() => {
+          if (localStorage.personal) {
+            this.getUnReadMessage();
+          }
+        }, 100000);
+      },
+
+      //验证二级密码弹框
+      openBadge(){
+        if (!eval(this.unlockFlagpart)) {
+          this.unlockSecondPWDialog = true;
+        }
+
+      },
+      //拦截器 验证锁屏
+      multiPageLock() {
+        this.$http.interceptors.response.use(response => {
+            //配置请求回来的信息
+            if (response.data.code == "7777") {
+              clearInterval(this.interval);
+              this.interval = null;
+              clearInterval(this.messageInterval);
+              this.messageInterval = null;
+              sessionStorage.setItem("beforePath", this.$route.path);
+              sessionStorage.setItem("lockStatus", 1);
+              this.$router.push({path: "/lock"});
+            }
+            return response;
+          },
+          function (error) {
+            return Promise.reject(error);
+          }
+        );
+      },
+      //多页面同开状态下验证，统一倒计时时间
+      watchCount(){
+        setInterval(function () {
+          if (localStorage.getItem("initCount") == 1) {
+            _this.screenStatus = true;
+          }
+          localStorage.setItem("initCount", 0);
+        }, 1000);
+
+      },
+
+      openModalDialog(type) {
+        switch (type) {
+          case "instructionDialog": //说明书
+            this.instructionDialog = true;
+            break;
+        }
+      },
+
+      routers(url) {
+        this.$router.push(url);
+      },
+      //显示消息详情
+      showMessageDetail(val) {
+        this.messageDetail = val;
+        this.messageDialog = true;
+        this.$http
+          .put(globalConfig.server_user + "messages/" + val.id)
+          .then(res => {
+            if (res.data.status === "success") {
+              this.getUnReadMessage();
+            }
+          });
+      },
+
+      showOtherDetail() {
+        this.$router.push({
+          path: "/messageCenter",
+          query: {
+            unread: 1
           }
         });
-    },
-    getDictionary2() {
-      this.$http.get(globalConfig.server + "setting/dictionary/220").then(res => {
+      },
+      //模态框回调
+      closeModal() {
+        this.messageDialog = false;
+        this.setLockPwdDialog = false;
+        this.unlockSecondPWDialog = false;
+        this.instructionDialog = false;
+        this.badgeDialog = false;
+      },
+      unlockFlag(val) {
+        this.unlockFlagpart = val;
+        cookie.set("unlockFlagpart", val, {expires: 1});
+        if (this.unlockFlagpart) {
+          this.chinese = []
+        }
+      },
+
+      //获取未读消息
+      getUnReadMessage() {
+        this.$http
+          .get(globalConfig.server_user + "messages?unread=1")
+          .then(res => {
+            if (res.data.status === "success") {
+              this.unReadMessageData = res.data.data;
+            }
+          });
+      },
+
+      //二级密码
+      getDictionary2() {
+        this.$http.get(globalConfig.server + "setting/dictionary/220").then(res => {
           if (res.data.code === "30010") {
             this.dictionary2 = res.data.data;
             for (let i = 0; i < this.dictionary2.length; i++) {
@@ -550,71 +552,70 @@ export default {
             }
           }
         });
-    },
-    // 全屏
-    fullScreen(val) {
-      screenFull.toggle();
-    },
-    handleOpen(key, keyPath) {
-    },
-    handleClose(key, keyPath) {},
-    handlerSelect(key, keyPath) {
-    },
-    clickScreen() {
-      this.screenStatus = true;
-      localStorage.setItem("initCount", 1);
-    },
-    countTime() {
-      let countDown = [];
-      this.$http
-        .get(globalConfig.server + "setting/dictionary/203")
-        .then(res => {
-          if (res.data.code === "30010") {
-            countDown = res.data.data;
-            this.$http.get(globalConfig.server + 'setting/setting/read?type=1&staff_id=' + this.personal.id).then((res) => {
-              if (res.data.code === '50010') {
-                let array = res.data.data;
-                for (let i = 0; i < array.length; i++) {
-                  countDown.forEach((item) => {
-                    if (array[i].dict_id == item.id) {
-                      this.defaultTime = this.Countdown = Number(item.dictionary_name);
-                      localStorage.setItem('countdownTime', item.id);
-                      this.startCount();
-                    }
-                  })
-                }
-              }
-            })
-          }
-        });
+      },
+      // 全屏
+      fullScreen(val) {
+        screenFull.toggle();
       },
 
-    startCount() {
-      clearInterval(this.interval);
-      new Promise((resolve, reject) => {
-        this.interval = setInterval(() => {
-          this.Countdown--;
-          if (this.screenStatus) {
-            reject("重新计数");
-            clearInterval(this.interval);
-            this.interval = null;
-          } else if (this.Countdown < 1) {
-            resolve("锁屏");
-          }
-        }, 1000);
-      })
-        .then(data => {
-          this.lockScreen("倒计时");
-        })
-        .catch(data => {
-          this.Countdown = this.defaultTime;
-          this.startCount();
-          this.screenStatus = false;
-        })
+      clickScreen() {
+        this.screenStatus = true;
+        localStorage.setItem("initCount", 1);
       },
+
+      countTime() {
+        let countDown = [];
+        this.$http
+          .get(globalConfig.server + "setting/dictionary/203")
+          .then(res => {
+            if (res.data.code === "30010") {
+              countDown = res.data.data;
+              this.$http.get(globalConfig.server + 'setting/setting/read?type=1&staff_id=' + this.personal.id).then((res) => {
+                if (res.data.code === '50010') {
+                  let array = res.data.data;
+                  for (let i = 0; i < array.length; i++) {
+                    countDown.forEach((item) => {
+                      if (array[i].dict_id == item.id) {
+                        this.defaultTime = this.Countdown = Number(item.dictionary_name);
+                        localStorage.setItem('countdownTime', item.id);
+                        this.startCount();
+                      }
+                    })
+                  }
+                }
+              })
+            }
+          });
+      },
+
+      startCount() {
+        clearInterval(this.interval);
+        new Promise((resolve, reject) => {
+          this.interval = setInterval(() => {
+            this.Countdown--;
+            if (this.screenStatus) {
+              reject("重新计数");
+              clearInterval(this.interval);
+              this.interval = null;
+            } else if (this.Countdown < 1) {
+              resolve("锁屏");
+            }
+          }, 1000);
+        })
+          .then(data => {
+            this.lockScreen("倒计时");
+          })
+          .catch(data => {
+            this.Countdown = this.defaultTime;
+            this.startCount();
+            this.screenStatus = false;
+          })
+      },
+
       changeCollapse() {
         this.isCollapse = !this.isCollapse;
       },
+
       lockScreen(val) {
         clearInterval(this.interval);
         this.interval = null;
@@ -638,6 +639,7 @@ export default {
           }
         })
       },
+
       //获取积分总数
       getCredit(){
         this.$http.get(globalConfig.server + 'credit/manage/self').then((res) => {
@@ -646,14 +648,7 @@ export default {
           }
         })
       },
-      //获取登陆时长
-      getLoginDay(){
-//        this.$http.get(globalConfig.server + 'special/special/time').then((res) => {
-//          if (res.data.code === '30310') {
-//            this.creditTotal = res.data.data;
-//          }
-//        })
-      }
+
     }
   }
 </script>
@@ -711,40 +706,6 @@ export default {
         border-radius: 2px;
         background: linear-gradient(to right, #7796f9, #f856a1); /* 标准的语法（必须放在最后） */
       }
-      /*.progress {
-        width: 100%;
-        height: 5px;
-        border-radius: 5px;
-        position: relative;
-        overflow: hidden;
-        background: #E8E9E9;
-      }
-      .progress > span {
-        position: absolute;
-        display: inline-block;
-        width: 50%;
-        height: 100%;
-        background: -webkit-linear-gradient(left, #409eff, #fa4699);
-        text-align: center;
-      }
-
-      .round {
-        width: 5px;
-        height: 5px;
-        @include border_radius(50px);
-        position: absolute;
-        background: #FFFFFF;
-      }
-      .roundLeft {
-        border: 5px solid #FDCA41;
-        top: -5px;
-        left: -2px;
-      }
-      .roundRight {
-        border: 5px solid #D6D7DB;
-        top: -5px;
-        right: -3px;
-      }*/
     }
     .level {
       @include flex;
@@ -1208,4 +1169,3 @@ export default {
     }
   }
 </style>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       

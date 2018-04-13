@@ -108,7 +108,7 @@ export default {
     for(let key in this.personal.data.secondary_password){
       this.checkList.push(parseInt(this.personal.data.secondary_password[key]))
     }
-    
+
     console.log(this.personal);
     this.form.phone=this.personal.phone;
     this.getDictionary2()
@@ -193,17 +193,6 @@ export default {
         this.$notify({
           title: "警告",
           message: "确定的新密码不能为空",
-          type: "warning"
-        });
-      }
-      if (
-        (this.form.passwordok.length < 6 || this.form.passwordnew.length < 6) &&
-        this.validateinput == true
-      ) {
-        this.validateinput = false;
-        this.$notify({
-          title: "警告",
-          message: "密码长度不足6位",
           type: "warning"
         });
       }
