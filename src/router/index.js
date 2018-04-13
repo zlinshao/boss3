@@ -12,11 +12,13 @@ import Lock from '../components/common/lockedScreen.vue'
 import WholeRentManage from '../components/rentManage/wholeRentManage/index.vue'
 import JointRentManage from '../components/rentManage/jointRentManage/index.vue'
 
-import ContractManage from '../components/rentManage/datumMessage/contractManage/index.vue'
-import ClientManage from '../components/rentManage/datumMessage/clientManage/index.vue'
-import HousesManage from '../components/rentManage/housesManage/index.vue'
+// import ContractManage from '../components/rentManage/datumMessage/contractManage/index.vue'
+// import ClientManage from '../components/rentManage/datumMessage/clientManage/index.vue'
+import HousesManage from '../components/rentManage/housesManage/index.vue'                      //产品管控中心
 // import RepairManage from '../components/rentManage/repairManage/index.vue'
-import DatumMessage from '../components/rentManage/datumMessage/index.vue'                    //资料管理
+import ClientManage from '../components/rentManage/datumMessage/clientManage/index.vue'         //客户管理
+import ContractManage from '../components/rentManage/datumMessage/contractManage/index.vue'     //合同管理
+import WorkOrderManage from '../components/rentManage/datumMessage/workOrderManage/index.vue'   //工单管理
 
 
 // 财务账本
@@ -287,7 +289,10 @@ export default new Router({
       children: [
         {path: '/wholeRentManage', component: WholeRentManage, name: '整租管理',},
         {path: '/jointRentManage', component: JointRentManage, name: '合租管理',},
-        {path: '/datumMessage', component: DatumMessage, name: '资料管理',},
+        // {path: '/datumMessage', component: DatumMessage, name: '资料管理',},
+        {path: '/clientManage', component: ClientManage, name: '客户管理',},
+        {path: '/contractManage', component: ContractManage, name: '合同管理',},
+        {path: '/workOrderManage', component: WorkOrderManage, name: '工单管理',},
         // {
         //   path: '/datumMessage', component: DatumMessage, icon: 'el-icons-fa-money', name: '资料管理',
         //   children: [
