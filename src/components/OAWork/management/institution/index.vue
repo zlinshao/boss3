@@ -131,6 +131,7 @@
           status: '',
           keywords: '',
           pages: 1,
+          a: 'oa_system',
         },
         totalNum: 0,
         tableData: [],
