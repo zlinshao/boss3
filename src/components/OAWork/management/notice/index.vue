@@ -53,6 +53,11 @@
           <div class="blueTable">
             <el-table
               :data="tableData"
+              :empty-text = 'rentStatus'
+              v-loading="rentLoading"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(255, 255, 255, 0)"              
               @row-click="clickTable"
               @row-contextmenu='noticeMenu'
               style="width: 100%">
@@ -212,7 +217,9 @@ export default {
         { id: "2", name: "批评" },
         { id: "3", name: "通知" },
         // { id: "4", name: "研发" }
-      ]
+      ],
+      rentStatus:' ',
+      rentLoading:false,
     };
   },
 
@@ -305,11 +312,14 @@ export default {
     myData(val) {
       this.tableData = [];
       this.form.page = val;
+      this.rentStatus = " ";
+      this.rentLoading = true;     
       this.$http
         .get(this.urls + "announcement", {
           params: this.form
         })
         .then(res => {
+          this.rentLoading = false;
           if (res.data.code === "80010") {
             this.tableData = res.data.data;
             this.nowPage = val;
@@ -336,6 +346,7 @@ export default {
             }
           } else {
             this.total = 0;
+            this.rentStatus = '暂无数据';
           }
         });
     },

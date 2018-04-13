@@ -88,6 +88,11 @@
         <el-tab-pane label="明细" name="first">
           <el-table
             :data="tableData"
+            :empty-text = 'rentStatus'
+            v-loading="rentLoading"
+            element-loading-text="拼命加载中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(255, 255, 255, 0)"
             @row-dblclick="dblClickTable"
             @row-contextmenu='rightMenu'
             style="width: 100%">
@@ -126,6 +131,11 @@
         <el-tab-pane label="汇总" name="second">
           <el-table
             :data="tableData2"
+            :empty-text = 'rentStatus'
+            v-loading="rentLoading"
+            element-loading-text="拼命加载中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(255, 255, 255, 0)"
             style="width: 100%">
             <el-table-column
               prop="date"
@@ -226,7 +236,9 @@ export default {
       isActive: 0,
       isHigh: false,
       integralDetail: false,
-      newAddDialog: false
+      newAddDialog: false,
+      rentStatus: " ",
+      rentLoading: false
     };
   },
   mounted() {
@@ -234,11 +246,8 @@ export default {
   },
   watch: {},
   methods: {
-
     handleSizeChange(val) {
-      console.log(1111111);
-      this.form.page= val;
-
+      this.form.page = val;
     },
 
     newAddBack(val) {
@@ -258,35 +267,40 @@ export default {
       }
     },
     getTableData() {
+      this.rentStatus = " ";
+      this.rentLoading = true;
       this.$http
         .get(globalConfig.server + "credit/manage", { params: this.form })
         .then(res => {
+          this.rentLoading = false;
           if (res.data.code === "30310") {
             this.totalNumber = res.data.num;
             this.tableData = res.data.data;
             // this.remark = res.data.data.last_remark;
             // res.data.data.last_remark[0].content = this.remark;
           } else {
-            this.$notify.warning({
-              title: "警告",
-              message: res.data.msg
-            });
+              this.rentStatus = '暂无数据';
+              this.totalNumber= 0;
           }
         });
     },
     // 获取汇总列表
     getGatherList() {
+      this.rentStatus = " ";
+      this.rentLoading = true;
       this.$http
         .get(globalConfig.server + "credit/manage/summary", {
           params: this.form
         })
         .then(res => {
+          this.rentLoading = false;
           if (res.data.code === "30310") {
             this.totalNumber = res.data.num;
             this.tableData2 = res.data.data;
           } else {
             this.tableData2 = [];
             this.totalNumber = 0;
+            this.rentStatus = '暂无数据';
           }
         });
     },
@@ -305,9 +319,9 @@ export default {
       this.rowid = row.id;
       this.integralDetail = true;
     },
-    handleCurrentChange(val){
+    handleCurrentChange(val) {
       this.form.page = val;
-      this.search()
+      this.search();
     },
     search() {
       if (this.activeName == "first") {
@@ -396,9 +410,9 @@ export default {
       this.length = 1;
       this.type = val;
     },
-      closeOrganization(){
-        this.organizeDialog = false
-      },
+    closeOrganization() {
+      this.organizeDialog = false;
+    },
     // 确认部门
     selectMember(val) {
       this.organizeDialog = false;
@@ -425,9 +439,9 @@ export default {
         department_id: ""
       };
       this.department_name = "";
-      this.staff_name="";
-      this.isHigh=false;
-      this.search(this.activeName)
+      this.staff_name = "";
+      this.isHigh = false;
+      this.search(this.activeName);
     }
   }
 };

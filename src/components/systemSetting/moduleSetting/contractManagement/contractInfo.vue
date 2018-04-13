@@ -19,7 +19,13 @@
     </div>
     <div class="main" >
       <div class="blueTable">
-        <el-table :data="consractList"  style="width: 100%">
+        <el-table :data="consractList"  
+        :empty-text = 'rentStatus'
+        v-loading="rentLoading"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(255, 255, 255, 0)"        
+        style="width: 100%">
           <el-table-column label="入库时间" prop="operate_time">
           </el-table-column>
           <el-table-column label="城市" prop="city_name">
@@ -93,6 +99,8 @@ export default {
         limit:12,
         page:1,
       },
+      rentStatus:' ',
+      rentLoading:false,
     };
   },
   watch: {
@@ -137,9 +145,12 @@ export default {
       },
       detail(val) {
         this.consractList=[];
+        this.rentStatus = " ";
+        this.rentLoading = true;
         this.$http
         .get(globalConfig.server + "contract/reserve/detail/" + this.cityCode, { params: this.form })
         .then(res => {
+          this.rentLoading = false;
           if (res.data.code === "20000") {
               this.consractList=res.data.data.data;
               this.totalNumber = res.data.data.count;
@@ -156,6 +167,7 @@ export default {
           else{
             this.form.page=1;
             this.totalNumber=0;
+            this.rentStatus = '暂无数据';
           }
 
         });

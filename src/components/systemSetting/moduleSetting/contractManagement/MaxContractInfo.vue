@@ -64,8 +64,12 @@
       <div class="blueTable">
         <el-table
           :data="contractionList"
-          style="width: 100%">
-
+          style="width: 100%"
+          :empty-text = 'rentStatus'
+          v-loading="rentLoading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(255, 255, 255, 0)">
           <el-table-column label="操作对象" prop="simple_staff.real_name">
           </el-table-column>
           <el-table-column label="领取上限(收/租)" prop="max_count">
@@ -123,6 +127,8 @@ export default {
         to:'',
         follow_id:''
       },
+      rentStatus:' ',
+      rentLoading:false,
     };
   },
   watch: {
@@ -140,7 +146,10 @@ export default {
   },
    methods: {
       getInfo(){
+        this.rentStatus = " ";
+        this.rentLoading = true;
         this.$http.get(this.urls + 'contract/policy',{params:this.form} ).then((res) => {
+          this.rentLoading = false;
           if(res.data.code=="20000"){
             this.contractionList = res.data.data.data;
             this.totalNumber = res.data.data.count;
@@ -148,6 +157,7 @@ export default {
           else{
             this.totalNumber=0;
             this.form.page=1;
+            this.rentStatus = '暂无数据';
           }
         })
       },

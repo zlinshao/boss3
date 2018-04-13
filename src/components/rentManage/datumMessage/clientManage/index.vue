@@ -58,6 +58,11 @@
           <div class="myTable">
             <el-table
               :data="tableData"
+              :empty-text = 'rentStatus'
+              v-loading="rentLoading"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(255, 255, 255, 0)"              
               @row-dblclick="dblClickTable"
               @row-contextmenu='openContextMenu'
               @row-click="clickTable"
@@ -160,7 +165,9 @@ export default {
       isHigh: false,
       remindDialog: false,
       customerDetailDialog: false,
-      activeId: ""
+      activeId: "",
+      rentStatus:' ',
+      rentLoading:false,
     };
   },
   mounted() {
@@ -258,12 +265,18 @@ export default {
     },
     //客户信息
     getCustomer() {
+      this.rentStatus = " ";
+      this.rentLoading = true;      
       this.$http
         .get(globalConfig.server + "core/customer", { params: this.formInline })
         .then(res => {
+          this.rentLoading = false;
           if (res.data.code === "10000") {
             this.tableData = res.data.data.data;
             this.totalNumber = res.data.data.total;
+          }else{
+            this.rentStatus = '暂无数据';
+            this.totalNumber = 0;
           }
         });
     },

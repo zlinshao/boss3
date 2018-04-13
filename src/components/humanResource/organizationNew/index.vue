@@ -820,32 +820,32 @@
         //is_enable 有值禁用 is_on_job 离职
         if(row.is_enable && row.is_on_job){
           this.lists = [
-            {clickIndex: 'power', headIcon: 'el-icon-edit', label: '权限',data: row},
+            {clickIndex: 'power', headIcon: 'iconfont icon-caigoudingdan1', label: '权限',data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-            {clickIndex: 'enable', headIcon: 'el-icon-edit', label: '启用', id:row.id},
-            {clickIndex: 'on_job', headIcon: 'el-icon-edit', label: '复职', id:row.id},
+            {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用', id:row.id},
+            {clickIndex: 'on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职', id:row.id},
             // {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
           ];
         }else if(!row.is_enable && row.is_on_job){
           this.lists = [
-            {clickIndex: 'power', headIcon: 'el-icon-edit', label: '权限',data: row},
+            {clickIndex: 'power', headIcon: 'iconfont icon-caigoudingdan1', label: '权限',data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-            {clickIndex: 'enable', headIcon: 'el-icon-edit', label: '禁用', id:row.id},
-            {clickIndex: 'on_job', headIcon: 'el-icon-edit', label: '复职', id:row.id},
+            {clickIndex: 'enable', headIcon: 'iconfont icon-heimingdan', label: '禁用', id:row.id},
+            {clickIndex: 'on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职', id:row.id},
           ];
         }else if(row.is_enable && !row.is_on_job){
           this.lists = [
-            {clickIndex: 'power', headIcon: 'el-icon-edit', label: '权限',data: row},
+            {clickIndex: 'power', headIcon: 'iconfont icon-caigoudingdan1', label: '权限',data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-            {clickIndex: 'enable', headIcon: 'el-icon-edit', label: '启用', id:row.id},
-            {clickIndex: 'on_job', headIcon: 'el-icon-edit', label: '离职', id:row.id},
+            {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用', id:row.id},
+            {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职', id:row.id},
           ];
         }else if(!row.is_enable && !row.is_on_job){
           this.lists = [
-            {clickIndex: 'power', headIcon: 'el-icon-edit', label: '权限',data: row},
+            {clickIndex: 'power', headIcon: 'iconfont icon-caigoudingdan1', label: '权限',data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-            {clickIndex: 'enable', headIcon: 'el-icon-edit', label: '禁用', id:row.id},
-            {clickIndex: 'on_job', headIcon: 'el-icon-edit', label: '离职', id:row.id},
+            {clickIndex: 'enable', headIcon: 'iconfont icon-heimingdan', label: '禁用', id:row.id},
+            {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职', id:row.id},
           ];
         }
         // this.lists = [
