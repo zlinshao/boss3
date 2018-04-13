@@ -965,7 +965,8 @@
         this.onlyPositionId = row.id;
         this.onlyPositionName = row.name;
         this.department_id = row.org_id;
-        this.department_name = row.orgName;
+        this.department_name = row.org.name;
+        console.log(this.department_name)
         this.getPosition();
         this.menuType = 'onlyPosition';
         this.lists = [
@@ -1050,6 +1051,7 @@
               item.orgId = this.department_id;
               item.orgName = this.department_name;
             });
+            console.log(this.department_name);
             this.totalPositionNum = res.data.data.count;
             this.positionTableData = res.data.data.data;
           }else {
