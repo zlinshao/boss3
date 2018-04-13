@@ -880,7 +880,7 @@
             })
           }else if(this.taskType === '4') {
             this.$http.post(globalConfig.server+'contract/loss',this.params).then((res) => {
-              if(res.data.code ==='20000'){
+              if(res.data.code ==='20010'){
                 this.$notify.success({
                   title:'成功',
                   message:res.data.msg

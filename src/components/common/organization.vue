@@ -230,7 +230,7 @@
             this.highestDepart = res.data.data.name;
           }
         });
-        this.$http.get(globalConfig.server_user+'organizations?parent_id='+id).then((res) => {
+        this.$http.get(globalConfig.server_user+'organizations?parent_id='+id+'&per_page_number=50').then((res) => {
           if(res.data.status === 'success'){
             this.departmentList = res.data.data;
             this.lastPage_depart = res.data.meta.last_page;
