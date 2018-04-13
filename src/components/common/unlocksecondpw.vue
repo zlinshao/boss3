@@ -7,7 +7,7 @@
             <el-col :span="12">
               <el-form-item label="二级密码">
                 <el-input size="small" type="password"
-                          v-model="basicSetting.pwd" placeholder="请输入二级密码"></el-input>
+                          v-model="basicSetting.pwd"  @keyup.enter.native="saveVisitRecord" placeholder="请输入二级密码"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
