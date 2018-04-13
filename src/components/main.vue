@@ -181,7 +181,7 @@
             <div class="lejia">
               <el-row>
                 <el-col :span="8" style="padding:0;">
-                  <div class="hover_pic">
+                  <div class="hover_pic" style="border-top:none;border-left:none;">
                     <img v-if="lejiaCollegeTop[0]" :src="lejiaCollegeTop[0].uri" width="100%"  height="195" @click="routerDetail(lejiaCollegeTop[0].id)">
                   </div>
                 </el-col>
@@ -192,19 +192,21 @@
                     <div style="padding: 12px 12px 34px 120px;">
                       <p class="info_title text_over_norwap">{{lejiaCollege[0] && lejiaCollege[0].title}}</p>
                       <div class="second_line_camp">{{lejiaCollege[0] && lejiaCollege[0].content}}</div>
-                      <span style="display: block;margin-top: 15px;">
-                        <i class="el-icon-view"></i>
-                          <span class="view_word" v-if="lejiaCollege[0]"> {{lejiaCollege[0].read_num}}人</span>&nbsp;&nbsp;&nbsp;
-                          <span class="view_word" v-if="!lejiaCollege[0]"> 0人</span>&nbsp;&nbsp;&nbsp;
-                        <i class="el-icon-edit"></i>
+                      <div style="display: block;margin-top: 15px;width: 60%;min-width: 100px;" class="clearfix">
+                        <i class="el-icon-view" style="float: left;">
+                          <span class="view_word" v-if="lejiaCollege[0]"> {{lejiaCollege[0].read_num}}人</span>
+                          <span class="view_word" v-if="!lejiaCollege[0]"> 0人</span>
+                        </i>
+                        <i class="el-icon-edit" style="float: right;">
                           <span class="edit_word" v-if="lejiaCollege[0]"> {{lejiaCollege[0].favor_num}}人</span>
                           <span class="edit_word" v-if="!lejiaCollege[0]"> 0人</span>
-                    </span>
+                        </i>
+                    </div>
                     </div>
                   </div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
-                  <div class="hover_pic">
+                  <div class="hover_pic" style="border-top:none;border-right:none;">
                     <img v-if="lejiaCollegeTop[1]" :src="lejiaCollegeTop[1].uri" width="100%"  height="195" @click="routerDetail(lejiaCollegeTop[1].id)">
                   </div>
                 </el-col>
@@ -219,19 +221,21 @@
                     <div style="padding: 12px 12px 34px 120px;">
                       <p class="info_title text_over_norwap">{{lejiaCollege[1] && lejiaCollege[1].title}}</p>
                       <div class="second_line_camp">{{lejiaCollege[1] && lejiaCollege[1].content}}</div>
-                      <span style="display: block;margin-top: 15px;">
-                        <i class="el-icon-view"></i>
-                          <span class="view_word" v-if="lejiaCollege[1]"> {{lejiaCollege[0].read_num}}人</span>&nbsp;&nbsp;&nbsp;
-                          <span class="view_word" v-if="!lejiaCollege[1]"> 0人</span>&nbsp;&nbsp;&nbsp;
-                        <i class="el-icon-edit"></i>
+                      <div style="display: block;margin-top: 15px;width: 60%;min-width: 100px;" class="clearfix">
+                        <i class="el-icon-view" style="float: left;">
+                          <span class="view_word" v-if="lejiaCollege[1]"> {{lejiaCollege[0].read_num}}人</span>
+                          <span class="view_word" v-if="!lejiaCollege[1]"> 0人</span>
+                        </i>
+                        <i class="el-icon-edit" style="float: right;">
                           <span class="edit_word" v-if="lejiaCollege[1]"> {{lejiaCollege[0].favor_num}}人</span>
                           <span class="edit_word" v-if="!lejiaCollege[1]"> 0人</span>
-                    </span>
+                        </i>
+                    </div>
                     </div>
                   </div>
                 </el-col>
                 <el-col :span="8" style="padding:0;">
-                  <div class="hover_pic">
+                  <div class="hover_pic" style="border-bottom: none;">
                     <img v-if="lejiaCollegeTop[2]" :src="lejiaCollegeTop[2].uri" width="100%"  height="195" @click="routerDetail( lejiaCollegeTop[2].id)">
                   </div>
                 </el-col>
@@ -241,13 +245,15 @@
                     <div style="padding: 12px 12px 0px 120px;">
                       <p class="info_title text_over_norwap">{{lejiaCollege[2] && lejiaCollege[2].title}}</p>
                       <div class="second_line_camp">{{lejiaCollege[2] && lejiaCollege[2].content}}</div>
-                      <span style="display: block;margin-top: 15px;">
-                      <i class="el-icon-view"></i>
-                        <span class="view_word" v-if="lejiaCollege[2]"> {{lejiaCollege[2].read_num}}人</span>&nbsp;&nbsp;&nbsp;
-                        <span class="view_word" v-if="!lejiaCollege[2]"> 0人</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      <i class="el-icon-edit" ></i>
-                        <span class="edit_word" v-if="lejiaCollege[2]"> {{lejiaCollege[2].favor_num}}人</span>&nbsp;&nbsp;&nbsp;
-                        <span class="edit_word" v-if="!lejiaCollege[2]"> 0人</span>&nbsp;&nbsp;&nbsp;
+                      <span style="display: block;margin-top: 15px;width: 60%;min-width: 100px;" class="clearfix">
+                      <i class="el-icon-view" style="float: left;">
+                        <span class="view_word" v-if="lejiaCollege[2]"> {{lejiaCollege[2].read_num}}人</span>
+                        <span class="view_word" v-if="!lejiaCollege[2]"> 0人</span>
+                      </i>
+                      <i class="el-icon-edit" style="float: right;">
+                        <span class="edit_word" v-if="lejiaCollege[2]"> {{lejiaCollege[2].favor_num}}人</span>
+                        <span class="edit_word" v-if="!lejiaCollege[2]"> 0人</span>
+                      </i>
                     </span>
                     </div>
                   </div>
@@ -612,6 +618,14 @@
 </script>
 
 <style scoped lang="scss">
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+  .clearfix:after {
+    clear: both
+  }
   [class*=el-col-] {
     transition: 0.3s;
   }
@@ -743,7 +757,7 @@
         overflow: hidden;
         border: 1px solid #dfe6fb;
         border-radius: 5px;
-        /*box-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);*/
+        height: 195px;
         img {
           transition: all .5s;
           &:hover {
