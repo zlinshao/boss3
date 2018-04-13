@@ -180,6 +180,11 @@
               <div class="myTable" @contextmenu="houseHeadMenu($event)">
                 <el-table
                   :data="collectData"
+                  :empty-text = 'rentStatus'
+                  v-loading="rentLoading"
+                  element-loading-text="拼命加载中"
+                  element-loading-spinner="el-icon-loading"
+                  element-loading-background="rgba(255, 255, 255, 0)"
                   @row-click="clickTable"
                   @row-contextmenu='houseMenu'
                   style="width: 100%">
@@ -255,6 +260,11 @@
               <div class="myTable" @contextmenu="houseHeadMenu($event)">
                 <el-table
                   :data="rentData"
+                  :empty-text = 'rentStatus'
+                  v-loading="rentLoading"
+                  element-loading-text="拼命加载中"
+                  element-loading-spinner="el-icon-loading"
+                  element-loading-background="rgba(255, 255, 255, 0)"
                   @row-click="clickTable"
                   @row-contextmenu='houseMenu'
                   style="width: 100%">
@@ -583,6 +593,8 @@
         radio: '1',
         value: '',
         value1: '',
+        rentStatus:' ',
+        rentLoading:false,
       }
     },
     mounted(){
@@ -614,24 +626,32 @@
       },
       collectDatafunc(){
         this.collectData=[];
+        this.rentStatus = " ";
+        this.rentLoading = true;
         this.$http.get(globalConfig.server+'lease/contract?collect_or_rent=0',{params:this.params}).then((res) => {
+          this.rentLoading = false;
           if(res.data.code === '60310'){
             this.collectData = res.data.data;
             this.totalNumbers =res.data.meta.total;
           }else {
             this.collectData =[];
+            this.rentStatus = '暂无数据';
             this.totalNumbers =0;
           }
         })
       },
       rentDatafunc(){
         this.rentData=[]
+        this.rentStatus = " ";
+        this.rentLoading = true;
         this.$http.get(globalConfig.server+'lease/contract?collect_or_rent=1',{params:this.params}).then((res) => {
+          this.rentLoading = false;
           if(res.data.code === '60310'){
             this.rentData = res.data.data;
             this.totalNumbers =res.data.meta.total;
           }else {
             this.rentData =[];
+            this.rentStatus = '暂无数据';
             this.totalNumbers =0;
           }
         })
