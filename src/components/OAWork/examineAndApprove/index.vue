@@ -394,6 +394,11 @@
         <el-badge slot="label" :is-dot="false" class="item">待办事项</el-badge>
         <div class="myTable">
           <el-table
+            :empty-text='examineStatus'
+            v-loading="examineLoading"
+            element-loading-text="拼命加载中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(255, 255, 255, 0)"
             :data="tableData"
             @row-dblclick="dblClickTable"
             style="width: 100%">
@@ -423,6 +428,11 @@
       <el-tab-pane label="我审批的" name="third">
         <el-badge slot="label" :is-dot="false" class="item">我审批的</el-badge>
         <el-table
+          :empty-text='examineStatus'
+          v-loading="examineLoading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(255, 255, 255, 0)"
           :data="tableData"
           @row-dblclick="dblClickTable"
           style="width: 100%">
@@ -460,17 +470,22 @@
                      @close="handleClose"
                      :collapse="isCollapse">
               <el-menu-item index="unfinished">
-                <i class="el-icon-menu"></i>
+                <i class="iconfont icon-daiban"></i>
                 <span slot="title">未完成</span>
               </el-menu-item>
               <el-menu-item index="finish">
-                <i class="el-icon-document"></i>
+                <i class="iconfont icon-wancheng"></i>
                 <span slot="title">已完成</span>
               </el-menu-item>
             </el-menu>
           </div>
           <div class="tableLeft">
             <el-table
+              :empty-text='examineStatus'
+              v-loading="examineLoading"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(255, 255, 255, 0)"
               :data="tableData"
               @row-dblclick="dblClickTable"
               style="width: 100%">
@@ -557,6 +572,11 @@
           </div>
           <div class="tableLeft">
             <el-table
+              :empty-text='examineStatus'
+              v-loading="examineLoading"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(255, 255, 255, 0)"
               :data="tableData"
               @row-dblclick="dblClickTable"
               style="width: 100%">
@@ -585,62 +605,62 @@
         </div>
 
         <!--<el-tabs v-model="readActive" @tab-click="childActive(activeName,readActive)">-->
-          <!--<el-tab-pane label="未读" name="unread">-->
-            <!--<el-badge slot="label" :is-dot="false" class="item">未读({{amount}})</el-badge>-->
-            <!--<el-table-->
-              <!--:data="tableData"-->
-              <!--@row-dblclick="dblClickTable"-->
-              <!--style="width: 100%">-->
-              <!--<el-table-column-->
-                <!--prop="title"-->
-                <!--label="审批标题">-->
-              <!--</el-table-column>-->
-              <!--<el-table-column-->
-                <!--prop="summary"-->
-                <!--label="审批摘要">-->
-              <!--</el-table-column>-->
-              <!--<el-table-column-->
-                <!--prop="created_at"-->
-                <!--label="发起时间">-->
-              <!--</el-table-column>-->
-              <!--<el-table-column-->
-                <!--prop="finish_at"-->
-                <!--label="完成时间">-->
-              <!--</el-table-column>-->
-              <!--<el-table-column-->
-                <!--prop="status"-->
-                <!--label="状态">-->
-              <!--</el-table-column>-->
-            <!--</el-table>-->
-          <!--</el-tab-pane>-->
-          <!--<el-tab-pane label="已读" name="read">-->
-            <!--<el-badge slot="label" :is-dot="false" class="item">已读</el-badge>-->
-            <!--<el-table-->
-              <!--:data="tableData"-->
-              <!--@row-dblclick="dblClickTable"-->
-              <!--style="width: 100%">-->
-              <!--<el-table-column-->
-                <!--prop="title"-->
-                <!--label="审批标题">-->
-              <!--</el-table-column>-->
-              <!--<el-table-column-->
-                <!--prop="summary"-->
-                <!--label="审批摘要">-->
-              <!--</el-table-column>-->
-              <!--<el-table-column-->
-                <!--prop="created_at"-->
-                <!--label="发起时间">-->
-              <!--</el-table-column>-->
-              <!--<el-table-column-->
-                <!--prop="finish_at"-->
-                <!--label="完成时间">-->
-              <!--</el-table-column>-->
-              <!--<el-table-column-->
-                <!--prop="status"-->
-                <!--label="状态">-->
-              <!--</el-table-column>-->
-            <!--</el-table>-->
-          <!--</el-tab-pane>-->
+        <!--<el-tab-pane label="未读" name="unread">-->
+        <!--<el-badge slot="label" :is-dot="false" class="item">未读({{amount}})</el-badge>-->
+        <!--<el-table-->
+        <!--:data="tableData"-->
+        <!--@row-dblclick="dblClickTable"-->
+        <!--style="width: 100%">-->
+        <!--<el-table-column-->
+        <!--prop="title"-->
+        <!--label="审批标题">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+        <!--prop="summary"-->
+        <!--label="审批摘要">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+        <!--prop="created_at"-->
+        <!--label="发起时间">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+        <!--prop="finish_at"-->
+        <!--label="完成时间">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+        <!--prop="status"-->
+        <!--label="状态">-->
+        <!--</el-table-column>-->
+        <!--</el-table>-->
+        <!--</el-tab-pane>-->
+        <!--<el-tab-pane label="已读" name="read">-->
+        <!--<el-badge slot="label" :is-dot="false" class="item">已读</el-badge>-->
+        <!--<el-table-->
+        <!--:data="tableData"-->
+        <!--@row-dblclick="dblClickTable"-->
+        <!--style="width: 100%">-->
+        <!--<el-table-column-->
+        <!--prop="title"-->
+        <!--label="审批标题">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+        <!--prop="summary"-->
+        <!--label="审批摘要">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+        <!--prop="created_at"-->
+        <!--label="发起时间">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+        <!--prop="finish_at"-->
+        <!--label="完成时间">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+        <!--prop="status"-->
+        <!--label="状态">-->
+        <!--</el-table-column>-->
+        <!--</el-table>-->
+        <!--</el-tab-pane>-->
         <!--</el-tabs>-->
       </el-tab-pane>
     </el-tabs>
@@ -768,6 +788,8 @@
         reportID: '',
 
         isCollapse: true,
+        examineStatus: ' ',
+        examineLoading: false,
 
         showUp: false,    //暂时隐藏
         isOpen_1: true,
@@ -875,34 +897,41 @@
       },
       // 待办事项
       myData(val, page) {
+        this.examineStatus = ' ';
+        this.examineLoading = true;
         this.params.page = page;
         this.$http.get(this.address + 'process', {
           params: val,
         }).then((res) => {
+          this.examineLoading = false;
           let data = res.data.data;
-          if ((val.type === 3 && val.published === 0) || (val.type === 4 && val.read_at === 0)) {
-            this.amount = res.data.meta.total;
-          }
-          this.paging = res.data.meta.total;
-          let dataList = [];
-          for (let i = 0; i < data.length; i++) {
-            let list = {};
-            list.id = data[i].id;
-            list.created_at = data[i].created_at;
-            list.finish_at = data[i].finish_at !== null ? data[i].finish_at : '未完成';
-            if (val.type === 3) {
-              list.title = '发起的XXXXXX报备';
-              list.summary = '摘要';
-              list.status = data[i].place.display_name;
-            } else {
-              list.title = data[i].title;
-              if (data[i].flow !== null) {
-                list.status = data[i].flow.place.display_name;
-              }
+          if (res.data.status === 'success' && data.length !== 0) {
+            if ((val.type === 3 && val.published === 0) || (val.type === 4 && val.read_at === 0)) {
+              this.amount = res.data.meta.total;
             }
-            dataList.push(list);
+            this.paging = res.data.meta.total;
+            let dataList = [];
+            for (let i = 0; i < data.length; i++) {
+              let list = {};
+              list.id = data[i].id;
+              list.created_at = data[i].created_at;
+              list.finish_at = data[i].finish_at !== null ? data[i].finish_at : '未完成';
+              if (val.type === 3) {
+                list.title = '发起的XXXXXX报备';
+                list.summary = '摘要';
+                list.status = data[i].place.display_name;
+              } else {
+                list.title = data[i].title;
+                if (data[i].flow !== null) {
+                  list.status = data[i].flow.place.display_name;
+                }
+              }
+              dataList.push(list);
+            }
+            this.tableData = dataList;
+          } else {
+            this.examineStatus = '暂无数据';
           }
-          this.tableData = dataList;
         })
       },
       retract(flag) {
