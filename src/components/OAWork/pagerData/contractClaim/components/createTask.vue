@@ -628,6 +628,7 @@
         this.$http.get(globalConfig.server+'contract/max/'+this.params.city_code).then((res) => {
           this.params.collect_start = res.data.data.collect;
           this.params.rent_start = res.data.data.rent;
+          this.computeContractEnd('collect');
         })
       },
 

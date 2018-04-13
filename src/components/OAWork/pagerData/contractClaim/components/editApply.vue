@@ -18,7 +18,8 @@
               <el-col :span="8">
                 <el-form-item label="城市">
                   <el-select clearable v-model="params.city_code" disabled="" placeholder="请选择城市" value="">
-                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.variable.city_code"
+                    <el-option v-for="item in cityDictionary" :label="item.dictionary_name"
+                               :value="item.variable.city_code"
                                :key="item.id"></el-option>
                   </el-select>
                 </el-form-item>
@@ -79,16 +80,16 @@
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="120px">
             <!--<el-row>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="剩余合同数（收）">-->
-                  <!--<el-input disabled="" v-model="collect"></el-input>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="剩余合同数（租）">-->
-                  <!--<el-input disabled="" v-model="rent"></el-input>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
+            <!--<el-col :span="8">-->
+            <!--<el-form-item label="剩余合同数（收）">-->
+            <!--<el-input disabled="" v-model="collect"></el-input>-->
+            <!--</el-form-item>-->
+            <!--</el-col>-->
+            <!--<el-col :span="8">-->
+            <!--<el-form-item label="剩余合同数（租）">-->
+            <!--<el-input disabled="" v-model="rent"></el-input>-->
+            <!--</el-form-item>-->
+            <!--</el-col>-->
             <!--</el-row>-->
 
             <el-row>
@@ -102,7 +103,7 @@
             <el-row>
               <el-col :span="16">
                 <el-form-item label="备注">
-                  <el-input v-model="params.remark" type="textarea" ></el-input>
+                  <el-input v-model="params.remark" type="textarea"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -123,34 +124,34 @@
   import Organization from '../../../../common/organization.vue'
   import Upload from '../../../../common/UPLOAD.vue'
   export default {
-    components:{Organization,Upload},
-    props:['editApplyDialog','applyEditId','startOperate'],
+    components: {Organization, Upload},
+    props: ['editApplyDialog', 'applyEditId', 'startOperate'],
     data() {
       return {
-        editApplyDialogVisible:false,
+        editApplyDialogVisible: false,
         params: {
-          city_code:'',
+          city_code: '',
 //          category:'',
-          report_time:'',
-          staff_id:'',
-          department_id:'1',
-          remark:'',
-          screenshot:[],
+          report_time: '',
+          staff_id: '',
+          department_id: '1',
+          remark: '',
+          screenshot: [],
           //zuofei
-          candidate:[],
+          candidate: [],
         },
-        taskType:'1',
-        dictionary:[],
-        length:0,
-        type:'',
-        organizationDialog:false,
-        staff_name : '',
-        depart_name : '',
-        collect : '',
-        rent : '',
-        upStatus:false,
+        taskType: '1',
+        cityDictionary: [],
+        length: 0,
+        type: '',
+        organizationDialog: false,
+        staff_name: '',
+        depart_name: '',
+        collect: '',
+        rent: '',
+        upStatus: false,
 
-        editImage:{},
+        editImage: {},
 
 //        已经选取的合同编号
         isSelectCollect: [],
@@ -161,70 +162,70 @@
     mounted(){
 
     },
-    watch:{
+    watch: {
       editApplyDialog(val){
         this.editApplyDialogVisible = val
       },
       editApplyDialogVisible(val){
-        if(!val){
+        if (!val) {
           this.$emit('close')
         }
       },
       startOperate(val){
-        if(val){
-            this.getDictionary();
+        if (val) {
+          this.getDictionary();
         }
       }
     },
-    methods:{
+    methods: {
 
       getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/306').then((res) => {
-          this.dictionary = res.data.data;
+        this.dictionary(306, 1).then((res) => {
+          this.cityDictionary = res.data;
           this.getApplyDetail();
         });
       },
       //获取详情
       getApplyDetail(){
-        this.$http.get(globalConfig.server+'contract/apply/'+this.applyEditId).then((res) => {
-            if(res.data.code === '20000'){
-                let applyInfo = res.data.data.full;
-                this.params.report_time = applyInfo.report_time;
-                this.params.staff_id = applyInfo.staff_id;
-                this.params.city_code = applyInfo.city_code;
-                this.params.department_id = applyInfo.department_id;
+        this.$http.get(globalConfig.server + 'contract/apply/' + this.applyEditId).then((res) => {
+          if (res.data.code === '20000') {
+            let applyInfo = res.data.data.full;
+            this.params.report_time = applyInfo.report_time;
+            this.params.staff_id = applyInfo.staff_id;
+            this.params.city_code = applyInfo.city_code;
+            this.params.department_id = applyInfo.department_id;
 
-                this.depart_name = res.data.data.department.name;
-                if(applyInfo.simple_staff){
-                  this.staff_name = applyInfo.simple_staff.real_name;
-                }
-
-                //照片修改
-                let picObject = {};
-                this.params.screenshot = [];
-                applyInfo.screenshot.forEach((item) =>{
-                  picObject[item.id] = item.uri;
-                  this.params.screenshot.push(item.id)
-                });
-                this.editImage = picObject;
-
-
-                this.isSelectCollect = applyInfo.collects;
-                this.isSelectRent = applyInfo.rents;
-                this.params.candidate = [];
-
-                for(let key in this.isSelectCollect){
-                  this.params.candidate.push(key)
-                }
-                for(let key in this.isSelectRent){
-                  this.params.candidate.push(key)
-                }
-                this.collect = applyInfo.collect_remain;
-                this.rent = applyInfo.rent_remain;
-                this.params.city_code = applyInfo.city_code;
-
-
+            this.depart_name = res.data.data.department.name;
+            if (applyInfo.simple_staff) {
+              this.staff_name = applyInfo.simple_staff.real_name;
             }
+
+            //照片修改
+            let picObject = {};
+            this.params.screenshot = [];
+            applyInfo.screenshot.forEach((item) => {
+              picObject[item.id] = item.uri;
+              this.params.screenshot.push(item.id)
+            });
+            this.editImage = picObject;
+
+
+            this.isSelectCollect = applyInfo.collects;
+            this.isSelectRent = applyInfo.rents;
+            this.params.candidate = [];
+
+            for (let key in this.isSelectCollect) {
+              this.params.candidate.push(key)
+            }
+            for (let key in this.isSelectRent) {
+              this.params.candidate.push(key)
+            }
+            this.collect = applyInfo.collect_remain;
+            this.rent = applyInfo.rent_remain;
+            this.params.city_code = applyInfo.city_code;
+
+
+          }
         });
       },
 
@@ -242,7 +243,7 @@
         this.params.staff_id = val[0].id;
         this.params.department_id = val[0].org[0].id;
         this.staff_name = val[0].name;
-        this.depart_name =  val[0].org[0].name;
+        this.depart_name = val[0].org[0].name;
 
       },
 
@@ -258,24 +259,24 @@
 
       //确认提交
       confirmAdd(){
-        if(this.upStatus === true){
+        if (this.upStatus === true) {
           this.$notify.warning({
-            title:'警告',
-            message:'图片正在上传'
+            title: '警告',
+            message: '图片正在上传'
           })
-        }else {
-          this.$http.put(globalConfig.server+'contract/apply/'+this.applyEditId,this.params).then((res) => {
-            if(res.data.code ==='20010'){
+        } else {
+          this.$http.put(globalConfig.server + 'contract/apply/' + this.applyEditId, this.params).then((res) => {
+            if (res.data.code === '20010') {
               this.$notify.success({
-                title:'成功',
-                message:res.data.msg
+                title: '成功',
+                message: res.data.msg
               });
-              this.$emit('close','success');
+              this.$emit('close', 'success');
               this.closeAddModal();
-            }else {
+            } else {
               this.$notify.warning({
-                title:'警告',
-                message:res.data.msg
+                title: '警告',
+                message: res.data.msg
               })
             }
           })
@@ -285,24 +286,24 @@
         $('.imgItem').remove();
         this.editApplyDialogVisible = false;
         this.params = {
-          city_code:'',
+          city_code: '',
 //          category:'',
-          report_time:'',
-          staff_id:'',
-          department_id:'1',
-          remark:'',
-          screenshot:[],
-          candidate:[],
+          report_time: '',
+          staff_id: '',
+          department_id: '1',
+          remark: '',
+          screenshot: [],
+          candidate: [],
         };
         this.taskType = '1';
-        this.dictionary = [];
+        this.cityDictionary = [];
         this.length = '';
         this.type = '';
         this.organizationDialog = false;
-        this.staff_name  =  '';
-        this.depart_name  =  '';
-        this.collect  =  '';
-        this.rent  =  '';
+        this.staff_name = '';
+        this.depart_name = '';
+        this.collect = '';
+        this.rent = '';
         this.upStatus = false;
         this.isSelectCollect = [];
         this.isSelectRent = [];
@@ -311,18 +312,19 @@
   };
 </script>
 <style lang="scss" scoped="">
-.addMore{
-  text-align: right;
-  i{
-    font-size: 18px;
+  .addMore {
+    text-align: right;
+    i {
+      font-size: 18px;
+    }
   }
-}
-  .deleteNumber{
+
+  .deleteNumber {
     text-align: center;
     cursor: pointer;
     margin-top: 2px;
     color: #409EFF;
-    &:hover{
+    &:hover {
       color: #6a8dfb;
 
     }

@@ -385,8 +385,8 @@
     },
     methods:{
       getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/306').then((res) => {
-          this.cityDictionary = res.data.data;
+        this.dictionary(306, 1).then((res) => {
+          this.cityDictionary = res.data;
           this.getApplyDetail();
         });
         this.$http.get(globalConfig.server+'setting/dictionary/107').then((res) => {

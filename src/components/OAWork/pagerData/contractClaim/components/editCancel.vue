@@ -18,7 +18,7 @@
               <el-col :span="8">
                 <el-form-item label="城市">
                   <el-select clearable v-model="params.city_code" disabled="" placeholder="请选择城市" value="">
-                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.variable.city_code"
+                    <el-option v-for="item in cityDictionary" :label="item.dictionary_name" :value="item.variable.city_code"
                                :key="item.id"></el-option>
                   </el-select>
                 </el-form-item>
@@ -140,7 +140,7 @@
           candidate:[],
         },
         taskType:'2',
-        dictionary:[],
+        cityDictionary:[],
         length:0,
         type:'',
         organizationDialog:false,
@@ -178,8 +178,8 @@
     },
     methods:{
       getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/306').then((res) => {
-          this.dictionary = res.data.data;
+        this.dictionary(306, 1).then((res) => {
+          this.cityDictionary = res.data;
           this.getApplyDetail();
         });
       },
@@ -285,7 +285,7 @@
           candidate:[],
         };
         this.taskType = '2';
-        this.dictionary = [];
+        this.cityDictionary = [];
         this.length = '';
         this.type = '';
         this.organizationDialog = false;

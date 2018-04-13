@@ -71,7 +71,6 @@
         tabStatusChange(val){
           if(val=== 'visitRecord'){
             this.getData();
-            this.isRequestData = true;
           }
         }
       },

@@ -66,6 +66,7 @@
 
       <el-table
         :data="collectData"
+        :empty-text = 'collectStatus'
         v-loading="tableLoading"
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"

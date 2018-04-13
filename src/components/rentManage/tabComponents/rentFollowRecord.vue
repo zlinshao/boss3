@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-table
+      :empty-text = 'collectStatus'
       v-loading="tableLoading"
       element-loading-text="拼命加载中"
       element-loading-spinner="el-icon-loading"
@@ -111,7 +112,6 @@
       tabStatusChange(val){
         if(val=== 'workOrder'){
           this.getData();
-          this.isRequestData = true;
         }
       }
     },

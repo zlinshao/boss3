@@ -845,6 +845,9 @@
           if(res.data.code === '10000'){
             this.staffTableData = res.data.data.data;
             this.totalStaffNum = res.data.data.count;
+            if(this.staffTableData.length<1){
+              this.userCollectStatus = '暂无数据';
+            }
           } else {
             this.userCollectStatus = '暂无数据';
             this.staffTableData = [];
@@ -996,6 +999,9 @@
               if(res.data.data.data.length > 0){
                 this.onlyPositionId = res.data.data.data[0].id;
                 this.getPosition();
+              }else {
+                this.positionCollectStatus = '暂无数据';
+                this.postCollectStatus = '暂无数据';
               }
             }else {
               this.$notify.info({
@@ -1003,6 +1009,7 @@
                 message: res.data.msg,
               });
               this.positionCollectStatus = '暂无数据';
+              this.postCollectStatus = '暂无数据';
               this.positionList = [];
               this.totalOnlyPositionNum = 0;
             }
