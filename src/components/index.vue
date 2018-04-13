@@ -2,12 +2,10 @@
   <div id="index">
     <div class="navBar" :class="isFull? 'navBarHide':'' ">
       <div class="left">
-        <div class="logo" :class="isCollapse? 'isCollapse_logo':'' ">
-          <div class="boss" :class="isCollapse? 'boss1':'' ">
-
-          </div>
-          <div v-if="isCollapse" class="isCollapse" @click="changeCollapse"></div>
-          <div v-if="!isCollapse" class="el-icons-fa-bars" @click="changeCollapse"></div>
+        <div class="logo" @click="changeCollapse" :class="isCollapse? 'isCollapse_logo':'' ">
+          <div class="boss" :class="isCollapse? 'boss1':'' "></div>
+          <div v-if="isCollapse" class="isCollapse"></div>
+          <div v-if="!isCollapse" class="el-icons-fa-bars"></div>
         </div>
         <div class="slogan">
           <img src="../assets/images/slogan.png" alt="">
@@ -374,9 +372,7 @@
     },
     watch: {
       isCollapse(val) {
-        document.getElementById("isCollapse").style.overflow = val
-          ? "visible"
-          : "auto";
+        document.getElementById("isCollapse").style.overflow = val ? "visible" : "auto";
       },
       "$store.state.app.isBasicChange": {
         handler(val, oldVal) {
