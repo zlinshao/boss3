@@ -144,6 +144,7 @@ import ChoosePictures from '../components/pictureManage/selectPictures.vue'     
 import ImproveImgInfo from '../components/pictureManage/improveImage.vue'                //完善照片信息
 import PictureDetail from '../components/pictureManage/pictureDetail.vue';               //相册详情
 import VisitRecord from '../components/rentManage/components/visitRecord.vue';               //回访记录
+import IncompleteRecord from '../components/rentManage/datumMessage/contractManage/incompleteRecord.vue'; //合同不齐记录
 
 Vue.use(Router);
 
@@ -228,6 +229,7 @@ export default new Router({
         {path: '/improveImgInfo', component: ImproveImgInfo, name: "完善照片信息",},
         {path: '/pictureDetail', component: PictureDetail, name: "相册详情",},
         {path: '/visitRecord', component: VisitRecord, name: "回访记录"},
+        {path: '/incompleteRecord', component: IncompleteRecord, name: "合同不齐记录"},
       ]
     },
     //快捷入口
