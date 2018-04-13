@@ -332,15 +332,16 @@
     watch: {
       addStaffDialog(val) {
         this.addStaffDialogVisible = val;
-        if (val) {
-          if (!this.editId) {
-            this.initial(); //新增时候清除
-          }
-        }
       },
       addStaffDialogVisible(val) {
         if (!val) {
           this.$emit('close');
+        }
+        if (val) {
+          if (!this.editId) {
+            this.initial(); //新增时候清除
+          }
+          this.getDictionaries(); //新增或者修改打开弹框时候才请求字典
         }
       },
       isEdit(val) {
@@ -357,18 +358,21 @@
       },
     },
     mounted() {
-      this.getSex();
-      this.getFertilityStatus();
-      this.getAccountStatus();
-      this.getEntryMaterials();
-      this.getMaritalStatus();
-      this.getPoliticalStatus();
-      this.getEducation();
-      this.getBranchBank();
-      this.getOnJobStatus();
+
       this.getPosition(this.departmentId);
     },
     methods: {
+      getDictionaries(){
+        this.getSex();
+        this.getFertilityStatus();
+        this.getAccountStatus();
+        this.getEntryMaterials();
+        this.getMaritalStatus();
+        this.getPoliticalStatus();
+        this.getEducation();
+        this.getBranchBank();
+        this.getOnJobStatus();
+      },
       initial() {
         this.params.real_name = '';
         this.params.gender = '';
@@ -636,11 +640,16 @@
       },
       //性别
       getSex() {
-        this.$http.get(globalConfig.server + 'setting/dictionary/228').then((res) => {
-          if (res.data.code === '30010') {
-            this.sexCategory = res.data.data;
-          } else {
-            this.sexCategory = [];
+        // this.$http.get(globalConfig.server + 'setting/dictionary/228').then((res) => {
+        //   if (res.data.code === '30010') {
+        //     this.sexCategory = res.data.data;
+        //   } else {
+        //     this.sexCategory = [];
+        //   }
+        // });
+        this.dictionary(228).then((res) => {
+          if(res.code === '30010'){
+            this.sexCategory = res.data;
           }
         });
       },
