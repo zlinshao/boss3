@@ -43,7 +43,11 @@
         <!--消息-->
         <div class="message" style="position: relative;margin-right: 15px">
           <el-dropdown>
-            <el-badge :value="unReadMessageData.length" class="item">
+            <el-badge v-if="unReadMessageData.length>0" :value="unReadMessageData.length" class="item">
+              <i class="el-icons-fa-comment-o"></i>
+              消 息
+            </el-badge>
+            <el-badge v-else  class="item">
               <i class="el-icons-fa-comment-o"></i>
               消 息
             </el-badge>
