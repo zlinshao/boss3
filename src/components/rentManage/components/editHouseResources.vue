@@ -368,7 +368,6 @@
                       </el-button>
                     </div>
                   </div>
-
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="第一次打房租" required="">
