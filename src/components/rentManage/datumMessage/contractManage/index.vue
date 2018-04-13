@@ -229,10 +229,6 @@
                     label="资料补齐时间">
                   </el-table-column>
                   <el-table-column
-                    prop="province"
-                    label="过期情况">
-                  </el-table-column>
-                  <el-table-column
                     prop="return_visit"
                     label="回访情况">
                   </el-table-column>
@@ -307,10 +303,6 @@
                   <el-table-column
                     prop="complete_date"
                     label="资料补齐时间">
-                  </el-table-column>
-                  <el-table-column
-                    prop="province"
-                    label="过期情况">
                   </el-table-column>
                   <el-table-column
                     prop="return_visit"
