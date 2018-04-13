@@ -355,18 +355,19 @@ export default {
       openPath:"",
     };
   },
+  created(){
 
+    this.unlockFlagpart = cookie.get("unlockFlagpart");
+    if(!eval(this.unlockFlagpart)){
+      this.getDictionary2();
+    }
+  },
   mounted() {
     //鼠标滑动
     let _this = this;
     $(document).mousemove(function() {
       _this.clickScreen();
     });
-      this.unlockFlagpart = cookie.get("unlockFlagpart");
-      console.log(cookie.get("unlockFlagpart"))
-      if(!this.unlockFlagpart){
-        this.getDictionary2();
-      }
 
     this.initData();
 
@@ -410,7 +411,7 @@ export default {
   },
   methods: {
     openBadge(){
-      if(!this.unlockFlagpart){
+      if(!eval(this.unlockFlagpart)){
         this.unlockSecondPWDialog = true;
       }
 
@@ -536,16 +537,12 @@ export default {
         });
     },
     getDictionary2() {
-      this.$http
-        .get(globalConfig.server + "setting/dictionary/220")
-        .then(res => {
+      this.$http.get(globalConfig.server + "setting/dictionary/220").then(res => {
           if (res.data.code === "30010") {
             this.dictionary2 = res.data.data;
             for (let i = 0; i < this.dictionary2.length; i++) {
               for (let key in this.personal.data.secondary_password) {
-                if (
-                  this.dictionary2[i].id ==
-                  this.personal.data.secondary_password[key]
+                if (this.dictionary2[i].id == this.personal.data.secondary_password[key]
                 ) {
                   this.chinese.push(this.dictionary2[i].dictionary_name);
                 }
@@ -1211,3 +1208,4 @@ export default {
     }
   }
 </style>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
