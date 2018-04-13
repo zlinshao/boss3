@@ -178,6 +178,8 @@ export default {
     },
     //点击节点
     nodeClick(data, node, store) {
+      this.defaultExpandKeys = [];
+      this.defaultExpandKeys.push(data.id);
       this.isClear = !this.isClear;
       this.cover_pic = [];
       this.a = 0;
@@ -230,6 +232,7 @@ export default {
       this.addDepartDialog = true;
     },
     closeAddDepart(val) {
+      
       this.addDepartDialog = false;
       this.parentId = null;
       this.parentName = null;
@@ -287,6 +290,8 @@ export default {
     },
     //编辑部门
     editDepart(data) {
+      this.defaultExpandKeys = [];
+      this.defaultExpandKeys.push(data.id);
       this.departId = data.id;
       this.departName = data.title;
       this.topId = data.pid;
