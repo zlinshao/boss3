@@ -13,7 +13,7 @@
                      :data="setTree"
                      node-key="id"
                      highlight-current
-                     accordion
+                     :accordion ="accordionFlag"
                      check-strictly
                      @node-click="nodeClick"
                      @node-expand="nodeExpand"
@@ -83,6 +83,7 @@ export default {
       defaultExpandKeys: [], //默认展开节点列表
       updateflag: false,
       lookingflag: false,
+      accordionFlag:true,
       form: {
         id: "",
         title: "",
