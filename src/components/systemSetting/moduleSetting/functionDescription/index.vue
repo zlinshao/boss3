@@ -165,27 +165,23 @@ export default {
     //**************部门操作函数********************
     //获取部门数据
     getDepart() {
-      this.defaultExpandKeys = [];
       this.$http.get(globalConfig.server + "des/tree").then(res => {
         this.setTree = res.data.data;
         if(res.data.data.length> 0){
         this.form.id = res.data.data[0].id;
         this.form.pid = res.data.data[0].pid;
         this.form.title = res.data.data[0].title;
-        this.defaultExpandKeys.push(res.data.data[0].id);
         }
       });
       
     },
     //点击节点
     nodeClick(data, node, store) {
-      this.defaultExpandKeys = [];
       this.isClear = !this.isClear;
       this.cover_pic = [];
       this.a = 0;
       this.len = null;
       this.form.id = data.id;
-      this.defaultExpandKeys.push(data.id);
       this.form.pid = data.pid;
       this.form.title = data.title;
       this.updateflag = false;
@@ -226,6 +222,8 @@ export default {
     },
     //新建部门
     addDepart(data) {
+      this.defaultExpandKeys = [];
+      this.defaultExpandKeys.push(data.id);
       this.parentId = data.id;
       this.parentName = data.title;
       this.addDepartDialog = true;
