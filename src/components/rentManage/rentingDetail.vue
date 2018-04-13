@@ -517,7 +517,8 @@
     </div>
 
     <div class="operatePanel" style="position: fixed;bottom: 100px;right: 60px;" @click="isPanel = !isPanel">
-      <i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="el-icon-circle-plus"></i>
+      <!--<i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="el-icon-circle-plus"></i>-->
+      <i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="el-icon-document"></i>
     </div>
     <div class="panelContent" id="panelContent" v-show="isPanel">
         <div class="panel_header">
@@ -526,7 +527,8 @@
           </div>
 
           <div @click="isPanel = false">
-            <span style="color: #fb4694;font-size: 16px;cursor: pointer">取消</span>
+            <!--<span style="color: #fb4694;font-size: 16px;cursor: pointer">取消</span>-->
+            <i style="font-size: 23px;opacity: .8;cursor: pointer" class="el-icon-close"></i>
           </div>
         </div>
 
@@ -535,33 +537,42 @@
           <el-input
             type="textarea"
             :autosize="{ minRows: 6, maxRows: 6}"
+            v-model="params.content"
             placeholder="请输入内容">
           </el-input>
         </div>
         <div style="margin-bottom: 30px">
           <el-form ref="form" :model="sizeForm" label-width="80px">
             <el-form-item label="选择通知人">
-              <el-input readonly=""></el-input>
+              <el-input readonly="" v-model="receiverNames" size="mini" @focus="selectPeople">
+                <template slot="append">
+                  <div style="cursor: pointer;" @click="emptyPeople">清空</div>
+                </template>
+              </el-input>
             </el-form-item>
           </el-form>
         </div>
-        <div style="text-align: center;">
-          <el-button size="mini" type="primary" style="width: 200px">发&nbsp;&nbsp;送</el-button>
-        </div>
+      <div style="text-align: center;clear: both;">
+        <el-button size="mini" type="primary" @click="noteSave(1)">发 送</el-button>&nbsp;&nbsp;&nbsp;
+        <el-button size="mini" type="primary" @click="noteSave(0)">保 存</el-button>
+      </div>
     </div>
+    <Organization :organizationDialog="organizationDialog" :type="type" @close="closeOrganization"
+                  @selectMember="selectMember"></Organization>
   </div>
-
 </template>
 
 <script>
-
+  import Organization from '../common/organization.vue';
   export default {
+    components: {Organization},
     data() {
       return {
         steps: 0,
         sizeForm: {},
         isPanel: false,
         houseInfo : [],
+        customersInfo: [],
         contractInfo : [],
         financeInfo : [],
         returnInfo : [],
@@ -573,6 +584,18 @@
         returnId : '',
         historyId : '',
         all_dic:[],
+
+        organizationDialog: false,
+        type: '',
+        contract_id: this.$route.query.id, //合同Id
+        params: {
+          contract_id: this.$route.query.id,
+          content: '',
+          receiver_id: [],
+          is_rent: 1,
+          is_send: null,
+        },
+        receiverNames: '',
       }
     },
     created(){
@@ -588,7 +611,72 @@
       this.returnId = document.getElementById('returnId').offsetTop -201;
       this.historyId = document.getElementById('historyId').offsetTop -201;
     },
+    watch: {
+      // 自动获取上一条备忘
+      isPanel(val) {
+        if(val){
+          this.$http.get(globalConfig.server+ 'lease/note?is_rent=1&contract_id='+this.contract_id).then((res)=>{
+            if(res.data.code === '60510'){
+              if(res.data.data){
+                this.params.content = res.data.data.content;
+                if(res.data.data.receiver_id){
+                  this.params.receiver_id = [];
+                  let receiver = res.data.data.receiver_id;
+                  let names = [];
+                  receiver.forEach((item)=>{
+                    this.params.receiver_id.push(item.id);
+                    names.push(item.name);
+                  });
+                  this.receiverNames = names.join(',');
+                }
+              }
+            }
+          })
+        }
+      }
+    },
     methods: {
+      selectPeople() {
+        this.organizationDialog = true;
+        this.type = 'staff';
+      },
+      emptyPeople() {
+        this.params.receiver_id = [];
+        this.receiverNames = '';
+      },
+      closeOrganization() {
+        this.organizationDialog = false;
+      },
+      //发送/保存备忘
+      noteSave(val){
+        this.params.is_send =val;
+        this.$http.post(globalConfig.server+'lease/note/save', this.params).then((res)=>{
+          if(res.data.code === '60510'){
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.isPanel = false;
+          }else{
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
+      selectMember(val) {
+        this.params.receiver_id = [];
+        let name = [];
+        if (val.length > 0) {
+          val.forEach((item) => {
+            this.params.receiver_id.push(item.id);
+            name.push(item.name);
+          });
+        }
+        this.receiverNames = name.join(',');
+        this.type = '';
+      },
       getContractDetail(){
         this.$http.get(globalConfig.server+'lease/collect/'+this.$route.query.collectId).then((res) =>{
           if(res.data.code === '61010'){
