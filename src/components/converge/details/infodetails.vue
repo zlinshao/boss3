@@ -19,7 +19,7 @@
               </div>
               <div class="publishName">{{staffs && staffs.name}}</div>
               <div class="publishRank">
-                <span v-for="key in staffs.org" v-if="staffs && staffs.org">
+                <span v-for="key in staffs && staffs.org">
                     <span>{{key && key.name}}</span>
                 </span>
               </div>
@@ -80,7 +80,7 @@
               <div class="staff_name">
                 <div>
                   <span>{{landholder && landholder.name}}</span>&nbsp;&nbsp;
-                  <span v-for="key in landholder.org" v-if="landholder && landholder.org">
+                  <span v-for="key in landholder && landholder.org">
                     <span>{{key && key.name}}</span>
                   </span>
                 </div>
@@ -109,7 +109,7 @@
               <div class="staff_name">
                 <div>
                   <span>{{key.staffs && key.staffs.name}}</span>&nbsp;&nbsp;
-                  <span v-for="item in key.staffs.org" v-if="key && key.staffs && key.staffs.org">
+                  <span v-for="item in key && key.staffs && key.staffs.org">
                     <span class="staffBefore">{{item && item.name}}</span>
                   </span>
                 </div>
@@ -157,7 +157,7 @@
               </div>
             </div>
             <div class="ingreat_pic" @click="routerDetail(key.id)">
-               <span v-for="pic in key.album.cover_pic">
+               <span v-for="pic in key && key.album && key.album.cover_pic">
                     <img v-for="p in pic" :src="p.uri">
                   </span>
             </div>
@@ -308,12 +308,12 @@
             this.formList = Object.assign({},this.formList,res.data.data);
             // localStorage.setItem('detailFormList',JSON.stringify(this.formList));
             $('#htmlForEditor').html(this.formList.content)
-            this.cover_pic = res.data.data.album.cover_pic;
-            this.cover_pic = Object.assign({},this.cover_pic,res.data.data.album.cover_pic);
+            this.cover_pic = res.data.data && res.data.data.album && res.data.data.album.cover_pic;
+            this.cover_pic = Object.assign({},this.cover_pic, res.data.data && res.data.data.album && res.data.data.album.cover_pic);
             // localStorage.setItem('detailCoverPic',JSON.stringify(this.cover_pic));
 
-            this.staffs = res.data.data.staffs[0];
-            this.staffs = Object.assign({},this.staffs,res.data.data.staffs[0]);
+            this.staffs = res.data.data && res.data.data.staffs && res.data.data.staffs[0];
+            this.staffs = Object.assign({},this.staffs, res.data.data && res.data.data.staffs && res.data.data.staffs[0]);
             // localStorage.setItem('detailStaffs',JSON.stringify(this.staffs));
             this.myData(id, 1);
           }
