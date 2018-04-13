@@ -338,7 +338,7 @@
             <p>部门：<span v-if="department">{{department}}</span><span v-else>暂无</span></p>
           </el-col>
           <el-col :span="8">
-            <!--<p>职位：<span></span></p>-->
+            <p>职位：<span v-if="currentPosition">{{currentPosition}}</span> <span v-else>暂无</span></p>
           </el-col>
           <el-col :span="8"> <p>岗位：<span v-if="currentPost">{{currentPost}}</span> <span v-else>暂无</span></p></el-col>
         </el-row>
@@ -586,8 +586,9 @@
         entryMaterialsCategory: [],
         entry_materials: [],
         currentPage: 1,
-        department: '',
-        currentPost: '',
+        department: '',  //部门
+        currentPost: '',  //岗位
+        currentPosition: '', //职位
       }
     },
     mounted(){
@@ -671,12 +672,17 @@
               this.department = departNameArray.join(',');
               let roleArray = res.data.data.role;
               let roleNames = [];
+              let positionNames = [];
               if (roleArray && roleArray.length > 0) {
                 roleArray.forEach((item) => {
                   roleNames.push(item.display_name);
+                  if(item.positions){
+                    positionNames.push(item.positions.name);
+                  }
                 });
               }
               this.currentPost = roleNames.join(',');
+              this.currentPosition = positionNames.join(',');
             }
           }
         });
