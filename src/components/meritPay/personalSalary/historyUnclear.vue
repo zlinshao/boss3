@@ -1,128 +1,133 @@
 <template>
-    <div id="HistoryUnclear"  @click="show=false" @contextmenu="closeMenu">
-      <div class="highRanking">
-        <div class="tabsSearch">
-          <el-form :inline="true" onsubmit="return false" size="mini">
-            <el-form-item>
-              <el-input placeholder="请输入内容" v-model="form.search" class="input-with-select" clearable>
-                <el-select v-model="form.category" slot="prepend" placeholder="请选择" >
-                  <el-option label="收房" value="1"></el-option>
-                  <el-option label="租房" value="2"></el-option>
-                </el-select>
-                <el-button slot="append" icon="el-icon-search" @click="getTableData"></el-button>
-              </el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" size="mini" @click="exportData">导出</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
-        <div class="filter high_grade" :class="isHigh? 'highHide': ''">
-          <el-form :inline="true" onsubmit="return false" :model="form" size="mini" label-width="100px">
-            <div class="filterTitle">
-              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
-            </div>
-            <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">日期</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <div class="block">
-                        <el-date-picker
-                          v-model="form.month"
-                          type="month"
-                          placeholder="选择月"
-                          value-format="yyyy-MM">
-                        </el-date-picker>
-                      </div>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
-            <div class="btnOperate">
-              <el-button size="mini" type="primary" @click="getTableData">搜索</el-button>
-              <el-button size="mini" type="primary" @click="resetting">重置</el-button>
-              <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
-            </div>
-          </el-form>
-        </div>
+  <div id="HistoryUnclear" @click="show=false" @contextmenu="closeMenu">
+    <div class="highRanking">
+      <div class="tabsSearch">
+        <el-form :inline="true" onsubmit="return false" size="mini">
+          <el-form-item>
+            <el-input placeholder="请输入内容" v-model="form.search" class="input-with-select" clearable>
+              <el-select v-model="form.category" slot="prepend" placeholder="请选择">
+                <el-option label="收房" value="1"></el-option>
+                <el-option label="租房" value="2"></el-option>
+              </el-select>
+              <el-button slot="append" icon="el-icon-search" @click="getTableData"></el-button>
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="exportData">导出</el-button>
+          </el-form-item>
+        </el-form>
       </div>
-      <div class="main">
-        <div style="margin: 0 0 10px;height: 28px;"></div>
-        <el-table
-          :data="tableData"
-          tooltip-effect="dark"
-          style="width: 100%"
-          @row-contextmenu="detailMenu">
-          <el-table-column
-            v-if="batch"
-            type="selection"
-            width="55">
-          </el-table-column>
-          <el-table-column
-            label="收/租状态"
-            prop="contract_category">
-            <template slot-scope="scope">
-              <div>
-                <span v-if="scope.row.contract_category === 1">收</span>
-                <span v-if="scope.row.contract_category === 2">租</span>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="房屋地址"
-            prop="address">
-          </el-table-column>
-          <el-table-column
-            label="政务不齐"
-            prop="incomplete_info">
-            <template slot-scope="scope">
-              <div :class="{'bgColor':scope.row.incomplete_info.length < 5 }">
-                <span v-for="val in scope.row.incomplete_info">{{val}}</span>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="开单人"
-            prop="staff_name">
-          </el-table-column>
-          <el-table-column
-            label="负责人"
-            prop="leader">
-          </el-table-column>
-          <el-table-column
-            label="所属部门"
-            prop="module">
-          </el-table-column>
-        </el-table>
+      <div class="filter high_grade" :class="isHigh? 'highHide': ''">
+        <el-form :inline="true" onsubmit="return false" :model="form" size="mini" label-width="100px">
+          <div class="filterTitle">
+            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+          </div>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">日期</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <div class="block">
+                      <el-date-picker
+                        v-model="form.month"
+                        type="month"
+                        placeholder="选择月"
+                        value-format="yyyy-MM">
+                      </el-date-picker>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <div class="btnOperate">
+            <el-button size="mini" type="primary" @click="getTableData">搜索</el-button>
+            <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+            <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+          </div>
+        </el-form>
       </div>
-      <div class="block pages">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="form.page"
-          :page-size="12"
-          layout="total, prev, pager, next, jumper"
-          :total="totalNum">
-        </el-pagination>
-      </div>
-      <!--右键-->
-      <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-                 @clickOperateMore="clickEvent"></RightMenu>
-
-      <!--备注-->
-      <Remarks :module="remarkVisible" @close="closeRemark" ></Remarks>
-
-      <!--标记-->
-      <Badge :module="badgeVisible" @close="closeBadge" :incompleteList="incompleteList" :salaryId="salaryId"></Badge>
     </div>
+    <div class="main">
+      <div style="margin: 0 0 10px;height: 28px;"></div>
+      <el-table
+        :data="tableData"
+        :empty-text='collectStatus'
+        v-loading="collectLoading"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(255, 255, 255, 0)"
+        tooltip-effect="dark"
+        style="width: 100%"
+        @row-contextmenu="detailMenu">
+        <el-table-column
+          v-if="batch"
+          type="selection"
+          width="55">
+        </el-table-column>
+        <el-table-column
+          label="收/租状态"
+          prop="contract_category">
+          <template slot-scope="scope">
+            <div>
+              <span v-if="scope.row.contract_category === 1">收</span>
+              <span v-if="scope.row.contract_category === 2">租</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="房屋地址"
+          prop="address">
+        </el-table-column>
+        <el-table-column
+          label="政务不齐"
+          prop="incomplete_info">
+          <template slot-scope="scope">
+            <div :class="{'bgColor':scope.row.incomplete_info.length < 5 }">
+              <span v-for="val in scope.row.incomplete_info">{{val}}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="开单人"
+          prop="staff_name">
+        </el-table-column>
+        <el-table-column
+          label="负责人"
+          prop="leader">
+        </el-table-column>
+        <el-table-column
+          label="所属部门"
+          prop="module">
+        </el-table-column>
+      </el-table>
+    </div>
+    <div class="block pages">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="form.page"
+        :page-size="12"
+        layout="total, prev, pager, next, jumper"
+        :total="totalNum">
+      </el-pagination>
+    </div>
+    <!--右键-->
+    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+               @clickOperateMore="clickEvent"></RightMenu>
+
+    <!--备注-->
+    <Remarks :module="remarkVisible" @close="closeRemark"></Remarks>
+
+    <!--标记-->
+    <Badge :module="badgeVisible" @close="closeBadge" :incompleteList="incompleteList" :salaryId="salaryId"></Badge>
+  </div>
 </template>
 
 <script>
@@ -136,9 +141,9 @@
     data() {
       return {
         isHigh: false,
-        tableData:  [],
+        tableData: [],
         totalNum: 0,
-        buttonVal: ['业务员','管理层'],
+        buttonVal: ['业务员', '管理层'],
         active: 0,
         form: {
           category: '',
@@ -156,26 +161,29 @@
         remarkVisible: false,
         incompleteList: [],  //政务不齐的id
         salaryId: '',
+        collectStatus: ' ',
+        collectLoading: false,
       }
     },
     mounted() {
       this.getTableData();
     },
-    activated() {
-      // this.getTableData();
-    },
-    methods:{
-      getTableData(){
-        if(!this.form.month){
+    methods: {
+      getTableData() {
+        if (!this.form.month) {
           this.form.month = '';
         }
-        this.$http.get(globalConfig.server+ 'salary/achv/history?category='+this.form.category+'&page='+this.form.page+
-          '&month='+this.form.month+'&search='+this.form.search).then((res) => {
+        this.collectLoading = true;
+        this.collectStatus = ' ';
+        this.$http.get(globalConfig.server + 'salary/achv/history?category=' + this.form.category + '&page=' + this.form.page +
+          '&month=' + this.form.month + '&search=' + this.form.search).then((res) => {
           this.isHigh = false;
-          if(res.data.code === '88800'){
+          this.collectLoading = false;
+          if (res.data.code === '88800') {
             this.tableData = res.data.data.data;
             this.totalNum = Number(res.data.data.count);
-          }else{
+          } else {
+            this.collectStatus = '暂无数据';
             this.tableData = [];
             this.totalNum = 0;
           }
@@ -198,7 +206,7 @@
         this.isHigh = !this.isHigh;
       },
       exportData() {
-        this.$http.get(globalConfig.server+'salary/achv/export', { responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
+        this.$http.get(globalConfig.server + 'salary/achv/export', {responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
           if (!res.data) {
             return;
           }
@@ -217,7 +225,7 @@
       openBadge() {
         this.badgeVisible = true;
       },
-      closeBadge(){
+      closeBadge() {
         this.badgeVisible = false;
         this.getTableData();
       },
@@ -225,7 +233,11 @@
       detailMenu(row, event) {
         this.lists = [
           {
-            clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '未发标记',incompleteList: row.incomplete_list,id:row.id
+            clickIndex: 'revise',
+            headIcon: 'el-icon-edit-outline',
+            label: '未发标记',
+            incompleteList: row.incomplete_list,
+            id: row.id
             // clickIndex: 'revise', tailIcon: 'el-icon-arrow-right', headIcon: 'el-icon-edit-outline', label: '未发标记',
             // children: [
             //   {clickIndex: 'one', label: '单条',},
@@ -282,15 +294,18 @@
     border-color: #409EFF;
     color: #ffffff;
   }
-  .roll_table table{
+
+  .roll_table table {
     width: 100%;
     /*border-collapse:collapse;*/
   }
-  .roll_table table thead th{
+
+  .roll_table table thead th {
     background: #ebeef5;
 
   }
-  .roll_table table tbody td{
+
+  .roll_table table tbody td {
     background: #fafafa;
   }
 </style>

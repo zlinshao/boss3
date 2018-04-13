@@ -72,6 +72,11 @@
       <div style="height:120px;">
         <el-table
           :data="tableData"
+          :empty-text='collectStatus'
+          v-loading="collectLoading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(255, 255, 255, 0)"
           width="100%">
           <el-table-column
             label="名称"
@@ -107,147 +112,151 @@
       </div>
     </div>
     <!--组织架构-->
-    <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize" @selectMember="selectMember" ></organization>
+    <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize"
+                  @selectMember="selectMember"></organization>
   </div>
 </template>
 
 <script>
   import organization from '../../common/organization.vue';
-    export default {
-      name: "periodic-person",
-      components: {organization},
-      data() {
-        return {
-          tableData: [],
-          depart_name: '',
-          form: {
-            page: 1,
-            limit: 12,
-            date: '',
-            depart_ids: [],
-            start_time: '',
-            end_time: '',
-          },
-          totalNum: 0,
-          isHigh: false,
-          organizeVisible: false,
-          organizeType: '',
-          pickerOptions: {
-            shortcuts: [{
-              text: '最近一周',
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                picker.$emit('pick', [start, end]);
-              }
-            }, {
-              text: '最近一个月',
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                picker.$emit('pick', [start, end]);
-              }
-            }, {
-              text: '最近三个月',
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                picker.$emit('pick', [start, end]);
-              }
-            }]
-          },
-        }
-      },
-      methods: {
-        getTableData(){
-          if(this.form.date){
-            this.form.start_time = this.form.date[0];
-            this.form.end_time = this.form.date[1];
-          }else{
-            this.form.start_time = '';
-            this.form.end_time = '';
-          }
-          this.isHigh = false;
-          this.$http.get(globalConfig.server+'salary/periodic/district?limit=12&page='+this.form.page
-            +'&start_time='+this.form.start_time+'&end_time='+this.form.end_time
-            +'&depart_ids='+this.form.depart_ids).then((res)=>{
-              if(res.data.code === '88810'){
-                this.tableData = res.data.data.data;
-                this.totalNum = res.data.data.count;
-              }else if(res.data.code === '88811'){
-                this.tableData = [];
-                this.totalNum = 0;
-              }
-          });
+
+  export default {
+    name: "periodic-person",
+    components: {organization},
+    data() {
+      return {
+        tableData: [],
+        depart_name: '',
+        form: {
+          page: 1,
+          limit: 12,
+          date: '',
+          depart_ids: [],
+          start_time: '',
+          end_time: '',
         },
-        handleSizeChange(val) {
-          console.log(`每页 ${val} 条`);
+        totalNum: 0,
+        isHigh: false,
+        organizeVisible: false,
+        organizeType: '',
+        pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
         },
-        handleCurrentChange(val) {
-          console.log(`当前页: ${val}`);
-          this.form.page = val;
-          this.getTableData();
-        },
-        // 重置
-        resetting() {
-          this.form.dates = '';
+        collectStatus: ' ',
+        collectLoading: false,
+      }
+    },
+    methods: {
+      getTableData() {
+        if (this.form.date) {
+          this.form.start_time = this.form.date[0];
+          this.form.end_time = this.form.date[1];
+        } else {
           this.form.start_time = '';
           this.form.end_time = '';
-          this.closeDepart();
-          this.closeStaff();
-        },
-        // 高级筛选
-        highGrade() {
-          this.isHigh = !this.isHigh;
-        },
-        // 部门筛选
-        chooseDepart() {
-          this.organizeVisible = true;
-          this.organizeType = 'depart';
-        },
-        closeOrganize() {
-          this.organizeVisible = false;
-        },
-        // 清空部门
-        closeDepart() {
-          this.form.depart_ids = [];
-          this.depart_name = '';
-        },
-        selectMember(val){
-          if(this.organizeType === 'depart'){
-            for(var i=0;i<val.length;i++){
-              this.depart_name = this.depart_name==="" ? val[i].name: this.depart_name+","+val[i].name;
-              this.form.depart_ids.push(val[i].id);
-            }
+        }
+        this.isHigh = false;
+        this.collectLoading = true;
+        this.collectStatus = ' ';
+        this.$http.get(globalConfig.server + 'salary/periodic/district?limit=12&page=' + this.form.page
+          + '&start_time=' + this.form.start_time + '&end_time=' + this.form.end_time
+          + '&depart_ids=' + this.form.depart_ids).then((res) => {
+          this.collectLoading = false;
+          if (res.data.code === '88810') {
+            this.tableData = res.data.data.data;
+            this.totalNum = res.data.data.count;
+          } else if (res.data.code === '88811') {
+            this.collectStatus = '暂无数据';
+            this.tableData = [];
+            this.totalNum = 0;
           }
-        },
-        // 导出
-        exportData() {
-          this.$http.get(globalConfig.server+'salary/periodic/export/district', { responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
-            if (!res.data) {
-              return;
-            }
-            let url = window.URL.createObjectURL(new Blob([res.data]));
-            let link = document.createElement('a');
-            link.style.display = 'a';
-            link.href = url;
-            link.setAttribute('download', 'excel.xlsx');
-            document.body.appendChild(link);
-            link.click();
-          });
-        },
-
+        });
       },
-      mounted() {
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.form.page = val;
         this.getTableData();
       },
-      activated() {
-        this.getTableData();
+      // 重置
+      resetting() {
+        this.form.dates = '';
+        this.form.start_time = '';
+        this.form.end_time = '';
+        this.closeDepart();
+        this.closeStaff();
       },
-    }
+      // 高级筛选
+      highGrade() {
+        this.isHigh = !this.isHigh;
+      },
+      // 部门筛选
+      chooseDepart() {
+        this.organizeVisible = true;
+        this.organizeType = 'depart';
+      },
+      closeOrganize() {
+        this.organizeVisible = false;
+      },
+      // 清空部门
+      closeDepart() {
+        this.form.depart_ids = [];
+        this.depart_name = '';
+      },
+      selectMember(val) {
+        if (this.organizeType === 'depart') {
+          for (var i = 0; i < val.length; i++) {
+            this.depart_name = this.depart_name === "" ? val[i].name : this.depart_name + "," + val[i].name;
+            this.form.depart_ids.push(val[i].id);
+          }
+        }
+      },
+      // 导出
+      exportData() {
+        this.$http.get(globalConfig.server + 'salary/periodic/export/district', {responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
+          if (!res.data) {
+            return;
+          }
+          let url = window.URL.createObjectURL(new Blob([res.data]));
+          let link = document.createElement('a');
+          link.style.display = 'a';
+          link.href = url;
+          link.setAttribute('download', 'excel.xlsx');
+          document.body.appendChild(link);
+          link.click();
+        });
+      },
+    },
+    mounted() {
+      this.getTableData();
+    },
+  }
 </script>
 
 <style scoped>

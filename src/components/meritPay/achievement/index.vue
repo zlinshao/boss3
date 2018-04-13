@@ -4,16 +4,16 @@
       <div class="highSearch">
         <el-form onsubmit="return false" :inline="true" size="mini">
           <!--<el-form-item>-->
-            <!--<el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" clearable>-->
-              <!--<el-button slot="append" icon="el-icon-search"></el-button>-->
-              <!--&lt;!&ndash;<el-button slot="append" icon="el-icons-fa-bars"></el-button>&ndash;&gt;-->
-            <!--</el-input>-->
+          <!--<el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" clearable>-->
+          <!--<el-button slot="append" icon="el-icon-search"></el-button>-->
+          <!--&lt;!&ndash;<el-button slot="append" icon="el-icons-fa-bars"></el-button>&ndash;&gt;-->
+          <!--</el-input>-->
           <!--</el-form-item>-->
           <el-form-item>
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
           <el-form-item>
-            <el-form-item >
+            <el-form-item>
               <el-button type="primary" @click="exportData">导出</el-button>
             </el-form-item>
           </el-form-item>
@@ -98,6 +98,11 @@
 
     <el-table
       :data="tableData"
+      :empty-text='collectStatus'
+      v-loading="collectLoading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(255, 255, 255, 0)"
       @row-contextmenu='openContextMenu'
       @cell-dblclick='openDetail'
       width="100%">
@@ -149,9 +154,10 @@
       </el-table-column>
       <el-table-column
         label="溢出业绩">
-        <template slot-scope="scope" >
+        <template slot-scope="scope">
           <span v-if="!editAble">{{scope.row.achv_overflow}}</span>
-          <span v-if="editAble"><input v-model="scope.row.achv_overflow" type="text" @blur="onsubmit(scope.row)" style="border: none;" ></span>
+          <span v-if="editAble"><input v-model="scope.row.achv_overflow" type="text" @blur="onsubmit(scope.row)"
+                                       style="border: none;"></span>
         </template>
       </el-table-column>
       <el-table-column
@@ -178,7 +184,7 @@
         :total="totalNum">
       </el-pagination>
     </div>
-    <el-dialog :close-on-click-modal="false"  title="业绩详情" :visible.sync="dialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" title="业绩详情" :visible.sync="dialogVisible" width="30%">
       <el-row style="margin: 0 20px;">
         <el-col :span="6">个人提成：</el-col>
         <el-col :span="18">{{dblRowData.achv}}</el-col>
@@ -201,7 +207,8 @@
         </span>
     </el-dialog>
     <!--组织架构-->
-    <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize" @selectMember="selectMember"></organization>
+    <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize"
+                  @selectMember="selectMember"></organization>
     <right-menu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                 @clickOperateMore="clickEvent"></right-menu>
   </div>
@@ -213,7 +220,7 @@
 
   export default {
     name: 'index',
-    components: {Organization,RightMenu},
+    components: {Organization, RightMenu},
     data() {
       return {
         show: false,
@@ -278,48 +285,51 @@
         dblRowData: [],
         editAble: false,
         achvOverflow: '',
+        collectStatus: ' ',
+        collectLoading: false,
       }
-    },
-    activated() {
-      this.getTableData();
     },
     mounted() {
       this.getTableData();
     },
     methods: {
       //编辑溢出业绩
-      onsubmit(val){
+      onsubmit(val) {
         this.editAble = false;
-        this.$http.put(globalConfig.server+ '/salary/achv/'+val.id, {achv_overflow:val.achv_overflow}).then((res) => {
-            if(res.data.code === '88830'){
-              this.$notify.success({
-                title: '成功',
-                message: res.data.msg
-              });
-            }else{
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.msg
-              });
-            }
+        this.$http.put(globalConfig.server + '/salary/achv/' + val.id, {achv_overflow: val.achv_overflow}).then((res) => {
+          if (res.data.code === '88830') {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
         });
       },
-      getTableData(){
-        if(this.form.date){
+      getTableData() {
+        if (this.form.date) {
           this.form.start_time = this.form.date[0];
           this.form.end_time = this.form.date[1];
-        }else{
+        } else {
           this.form.start_time = '';
           this.form.end_time = '';
         }
-        this.$http.get(globalConfig.server+ 'salary/achv?limit=12&page='+this.form.page
-          +'&start_time='+this.form.start_time+'&end_time='+this.form.end_time
-          +'&depart_ids='+this.form.depart_ids).then((res) => {
+        this.collectLoading = true;
+        this.collectStatus = ' ';
+        this.$http.get(globalConfig.server + 'salary/achv?limit=12&page=' + this.form.page
+          + '&start_time=' + this.form.start_time + '&end_time=' + this.form.end_time
+          + '&depart_ids=' + this.form.depart_ids).then((res) => {
           this.isHigh = false;
-          if(res.data.code === '88800'){
+          this.collectLoading = false;
+          if (res.data.code === '88800') {
             this.tableData = res.data.data.data;
             this.totalNum = Number(res.data.data.count);
-          }else{
+          } else {
+            this.collectStatus = '暂无数据';
             this.tableData = [];
             this.totalNum = 0;
           }
@@ -334,14 +344,14 @@
         ];
         this.contextMenuParam(event);
       },
-      openDetail(row){
+      openDetail(row) {
         console.log(row);
         this.dblRowData = row;
         this.dialogVisible = true;
       },
       // 右键回调
       clickEvent(val) {
-        switch(val.clickIndex) {
+        switch (val.clickIndex) {
           case 'confiscation':
 
             break;
@@ -399,26 +409,26 @@
         this.depart_name = '';
       },
       // 清空员工
-      closeStaff(){
+      closeStaff() {
         this.form.staff_ids = [];
         this.staff_name = '';
       },
-      selectMember(val){
-        if(this.organizeType === 'depart'){
-          for(var i=0;i<val.length;i++){
-            this.depart_name = this.depart_name==="" ? val[i].name: this.depart_name+","+val[i].name;
+      selectMember(val) {
+        if (this.organizeType === 'depart') {
+          for (var i = 0; i < val.length; i++) {
+            this.depart_name = this.depart_name === "" ? val[i].name : this.depart_name + "," + val[i].name;
             this.form.depart_ids.push(val[i].id);
           }
-        } else if (this.organizeType === 'staff'){
-          for(var i=0;i<val.length;i++){
-            this.staff_name = this.staff_name==="" ? val[i].name: this.staff_name+","+val[i].name;
+        } else if (this.organizeType === 'staff') {
+          for (var i = 0; i < val.length; i++) {
+            this.staff_name = this.staff_name === "" ? val[i].name : this.staff_name + "," + val[i].name;
             this.form.staff_ids.push(val[i].id);
           }
         }
       },
       // 导出
       exportData() {
-        this.$http.get(globalConfig.server+'salary/achv/export', { responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
+        this.$http.get(globalConfig.server + 'salary/achv/export', {responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
           if (!res.data) {
             return;
           }
@@ -446,7 +456,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
-  #periodicTable{
+  #periodicTable {
     .filter {
       padding-top: 10px;
       .el-select .el-input {
