@@ -72,6 +72,11 @@
           <div class="blueTable">
             <el-table
               :data="tableData"
+              :empty-text = 'rentStatus'
+              v-loading="rentLoading"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(255, 255, 255, 0)"
               style="width: 100%">
               <el-table-column
                 prop="name"
@@ -168,7 +173,8 @@
         isHigh: false,
         nowPage: 1,   //当前页
         total:0,      //总条数
-
+        rentStatus:' ',
+        rentLoading:false,    
 
         //模态框
         instructionDialog: false,
@@ -228,11 +234,12 @@
         this.tableData = [];
         this.form.page = val;
         this.form.time=this.value4;
-
+        this.rentStatus = " ";
+        this.rentLoading = true;
         this.$http.get(this.urls+'attendance/summary/', {
           params: this.form,
         }).then((res) => {
-
+            this.rentLoading = false;
             if (res.data.code === '20010') {
                 this.tableData=res.data.data;
                 this.nowPage=val;
@@ -240,6 +247,7 @@
             }
             else{
               this.total=0;
+              this.rentStatus = '暂无数据';
             }
 
          })

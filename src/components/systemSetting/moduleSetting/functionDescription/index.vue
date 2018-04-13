@@ -3,8 +3,8 @@
     <el-row :gutter="20">
       <el-col :span="6">
         <div class="border left">
-          <div class="top">
-            <div>
+          <div class="top" style="cursor:pointer" @click="topadd">
+            <div >
               功能说明
             </div>
           </div>
@@ -217,6 +217,12 @@ export default {
             message: "已取消删除"
           });
         });
+    },
+    //顶级
+    topadd(){
+      this.parentId = "0";
+      this.parentName = "功能说明";
+      this.addDepartDialog = true;
     },
     //新建部门
     addDepart(data) {

@@ -265,35 +265,35 @@
         if (row.statuss !== '已发布') {
           this.statuss = '已发布';
           this.lists = [
-            {clickIndex: 'revise', headIcon: 'el-icon-edit-outline', label: '编辑'},
-            {clickIndex: 'delete', headIcon: 'el-icon-circle-close-outline', label: '删除'},
-            {clickIndex: 'grounding', headIcon: 'el-icon-circle-close-outline', label: '上架'},
+            {clickIndex: 'revise', headIcon: 'iconfont icon-bianji--', label: '编辑'},
+            {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除'},
+            {clickIndex: 'grounding', headIcon: 'iconfont icon-shangjia--', label: '上架'},
           ];
         } else {
           this.statuss = '已结束';
           if (row.top === null && row.fine === null) {
             this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架',},
-              {clickIndex: 'top', headIcon: 'el-icon-edit-outline', label: '置顶',},
-              {clickIndex: 'essence', headIcon: 'el-icon-edit-outline', label: '精华',},
+              {clickIndex: 'undercarriage', headIcon: 'iconfont icon-xiajia--', label: '下架',},
+              {clickIndex: 'top', headIcon: 'iconfont icon-zhiding--', label: '置顶',},
+              {clickIndex: 'essence', headIcon: 'iconfont icon-jinghua--', label: '精华',},
             ];
           } else if (row.top !== null && row.fine === null) {
             this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架', top: true},
-              {clickIndex: 'top', headIcon: 'el-icon-edit-outline', label: '取消置顶',},
-              {clickIndex: 'essence', headIcon: 'el-icon-edit-outline', label: '精华',},
+              {clickIndex: 'undercarriage', headIcon: 'iconfont icon-xiajia--', label: '下架', top: true},
+              {clickIndex: 'top', headIcon: 'el-icon-download', label: '取消置顶',},
+              {clickIndex: 'essence', headIcon: 'iconfont icon-jinghua--', label: '精华',},
             ];
           } else if (row.top === null && row.fine !== null) {
             this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架', fine: true},
-              {clickIndex: 'top', headIcon: 'el-icon-edit-outline', label: '置顶',},
-              {clickIndex: 'essence', headIcon: 'el-icon-edit-outline', label: '取消精华',},
+              {clickIndex: 'undercarriage', headIcon: 'iconfont icon-xiajia--', label: '下架', fine: true},
+              {clickIndex: 'top', headIcon: 'iconfont icon-zhiding--', label: '置顶',},
+              {clickIndex: 'essence', headIcon: 'iconfont icon-jinghua--', label: '取消精华',},
             ];
           } else {
             this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'el-icon-edit-outline', label: '下架', top: true, fine: true},
-              {clickIndex: 'top', headIcon: 'el-icon-edit-outline', label: '取消置顶',},
-              {clickIndex: 'essence', headIcon: 'el-icon-edit-outline', label: '取消精华',},
+              {clickIndex: 'undercarriage', headIcon: 'iconfont icon-xiajia--', label: '下架', top: true, fine: true},
+              {clickIndex: 'top', headIcon: 'el-icon-download', label: '取消置顶',},
+              {clickIndex: 'essence', headIcon: 'iconfont icon-jinghua--', label: '取消精华',},
             ];
           }
 
