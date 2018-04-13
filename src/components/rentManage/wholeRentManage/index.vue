@@ -711,6 +711,7 @@
         this.collectHouseId = '';
         this.collectContractId = '';
         this.collectLoading = true;
+        this.collectStatus = ' ';
         this.$http.get(globalConfig.server+'lease/collect',{params:this.collectParams}).then((res) => {
           this.collectLoading = false;
           if(res.data.code === '61010'){
@@ -810,6 +811,7 @@
       getRentData(id){
         this.rentParams.house_id = id;
         this.rentLoading = true;
+        this.rentStatus = ' ';
         this.$http.get(globalConfig.server+'lease/rent',{params:this.rentParams}).then((res) => {
           this.rentLoading = false;
           if(res.data.code === '61110'){
