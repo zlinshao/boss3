@@ -691,7 +691,7 @@
           contract_id: this.$route.query.id,
           content: '',
           receiver_id: [],
-          is_rent: 1,
+          is_rent: 0,
           is_send: null,
         },
         receiverNames: '',
@@ -714,7 +714,7 @@
       // 自动获取上一条备忘
       isPanel(val) {
         if(val){
-          this.$http.get(globalConfig.server+ 'lease/note?is_rent=1&contract_id='+this.contract_id).then((res)=>{
+          this.$http.get(globalConfig.server+ 'lease/note?is_rent=0&contract_id='+this.contract_id).then((res)=>{
             if(res.data.code === '60510'){
               if(res.data.data){
                 this.params.content = res.data.data.content;
@@ -740,7 +740,7 @@
         this.type = 'staff';
       },
       emptyPeople() {
-        this.params.reveiver_id = [];
+        this.params.receiver_id = [];
         this.receiverNames = '';
       },
       closeOrganization() {
