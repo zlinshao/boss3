@@ -7,6 +7,11 @@
     </div>
     <div class="border_1">
       <el-table
+        :empty-text='emptyContent1'
+        v-loading="tableLoading1"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0)"
         :row-class-name="tableFirstName"
         :data="tableFirst"
         style="width: 100%"
@@ -53,6 +58,11 @@
 
     <div class="border_1">
       <el-table
+        :empty-text='emptyContent2'
+        v-loading="tableLoading2"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0)"
         :row-class-name="tableSecondName"
         :data="tableSecond"
         style="width: 100%"
@@ -99,6 +109,11 @@
 
     <div class="border_1">
       <el-table
+        :empty-text='emptyContent3'
+        v-loading="tableLoading3"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0)"
         :row-class-name="tableThirdName"
         :data="tableThird"
         style="width: 100%"
@@ -195,6 +210,13 @@
         details: {},
         powerModule: false,
         title: '',
+
+        emptyContent1: ' ',
+        tableLoading1: false,
+        emptyContent2: ' ',
+        tableLoading2: false,
+        emptyContent3: ' ',
+        tableLoading3: false,
       }
     },
     mounted() {
@@ -224,13 +246,20 @@
       // ===================系统================
       // 系统列表
       powerList(val) {
+        this.emptyContent1 = ' ';
+        this.tableLoading1 = true;
         this.firstForm.page = val;
         this.$http.get(this.urls + 'systems?per_page_number=5', {
           params: this.firstForm
         }).then((res) => {
-          if (res.data.status === 'success') {
-            this.tableFirst = res.data.data;
+          this.tableLoading1 = false;
+          let data = res.data.data;
+          if (res.data.status === 'success' && data.length !== 0) {
+            this.tableFirst = data;
             this.paging1 = res.data.meta.total;
+          } else {
+            this.paging1 = 0;
+            this.emptyContent1 = '暂无数据';
           }
         })
       },
@@ -244,13 +273,20 @@
       // ==============模块=================
       // 模块列表
       moduleList(val, id) {
+        this.emptyContent2 = ' ';
+        this.tableLoading2 = true;
         this.secondForm.page = val;
         this.$http.get(this.urls + 'modules?per_page_number=5&sys_id=' + this.addID.firstID, {
           params: this.secondForm
         }).then((res) => {
-          if (res.data.status === 'success') {
+          this.tableLoading2 = false;
+          let data = res.data.data;
+          if (res.data.status === 'success' && data.length !== 0) {
             this.tableSecond = res.data.data;
             this.paging2 = res.data.meta.total;
+          } else {
+            this.paging2 = 0;
+            this.emptyContent2 = '暂无数据';
           }
         });
       },
@@ -262,13 +298,20 @@
       },
       // ==============权限=================
       authority(val) {
+        this.emptyContent3 = ' ';
+        this.tableLoading3 = true;
         this.thirdForm.page = val;
         this.$http.get(this.urls + 'permissions?per_page_number=5&mod_id=' + this.addID.secondID, {
           params: this.thirdForm
         }).then((res) => {
-          if (res.data.status === 'success') {
+          this.tableLoading3 = false;
+          let data = res.data.data;
+          if (res.data.status === 'success' && data.length !== 0) {
             this.tableThird = res.data.data;
             this.paging3 = res.data.meta.total;
+          } else {
+            this.paging3 = 0;
+            this.emptyContent3 = '暂无数据';
           }
         });
       },

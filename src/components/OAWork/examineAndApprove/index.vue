@@ -394,7 +394,7 @@
         <el-badge slot="label" :is-dot="false" class="item">待办事项</el-badge>
         <div class="myTable">
           <el-table
-            :empty-text='examineStatus'
+            :empty-text='emptyContent'
             v-loading="examineLoading"
             element-loading-text="拼命加载中"
             element-loading-spinner="el-icon-loading"
@@ -428,7 +428,7 @@
       <el-tab-pane label="我审批的" name="third">
         <el-badge slot="label" :is-dot="false" class="item">我审批的</el-badge>
         <el-table
-          :empty-text='examineStatus'
+          :empty-text='emptyContent'
           v-loading="examineLoading"
           element-loading-text="拼命加载中"
           element-loading-spinner="el-icon-loading"
@@ -481,7 +481,7 @@
           </div>
           <div class="tableLeft">
             <el-table
-              :empty-text='examineStatus'
+              :empty-text='emptyContent'
               v-loading="examineLoading"
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
@@ -572,7 +572,7 @@
           </div>
           <div class="tableLeft">
             <el-table
-              :empty-text='examineStatus'
+              :empty-text='emptyContent'
               v-loading="examineLoading"
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
@@ -788,7 +788,7 @@
         reportID: '',
 
         isCollapse: true,
-        examineStatus: ' ',
+        emptyContent: ' ',
         examineLoading: false,
 
         showUp: false,    //暂时隐藏
@@ -897,7 +897,7 @@
       },
       // 待办事项
       myData(val, page) {
-        this.examineStatus = ' ';
+        this.emptyContent = ' ';
         this.examineLoading = true;
         this.params.page = page;
         this.$http.get(this.address + 'process', {
@@ -930,7 +930,7 @@
             }
             this.tableData = dataList;
           } else {
-            this.examineStatus = '暂无数据';
+            this.emptyContent = '暂无数据';
           }
         })
       },

@@ -4,13 +4,13 @@
       <div class="highSearch">
         <el-form :model="form" :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入内容" v-model="form.keyWords" size="mini"  @nter.keyup.enter.native="search">
+            <el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" @nter.keyup.enter.native="search">
               <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
             </el-input>
           </el-form-item>
           <!--<el-form-item>-->
-            <!--<el-button type="primary" size="mini" @click="highGrade">高级</el-button>-->
+          <!--<el-button type="primary" size="mini" @click="highGrade">高级</el-button>-->
           <!--</el-form-item>-->
           <el-form-item>
             <el-button type="primary" @click="openMessageModule">
@@ -50,6 +50,11 @@
     </div>
 
     <el-table
+      :empty-text='emptyContent'
+      v-loading="tableLoading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0)"
       :data="tableData"
       style="width: 100%"
       @row-contextmenu='houseMenu'>
@@ -131,8 +136,8 @@
           keywords: '',
           pages: 1,
         },
-        totalNumbers:0,
-        activeId:'',
+        totalNumbers: 0,
+        activeId: '',
 
         pickerOptions: {},
         dateValue: '',
@@ -141,6 +146,9 @@
         messageModule: false,
         messageName: '',
         reviseMessage: false,
+
+        emptyContent: ' ',
+        tableLoading: false,
       }
     },
     mounted() {
@@ -149,16 +157,16 @@
     methods: {
       //获取列表数据
       getDate() {
-        this.$http.get(globalConfig.server+'setting/sms_template/',{params:this.form}).then((res) => {
-          if(res.data.code === '20000'){
+        this.emptyContent = ' ';
+        this.tableLoading = true;
+        this.$http.get(globalConfig.server + 'setting/sms_template/', {params: this.form}).then((res) => {
+          this.tableLoading = false;
+          if (res.data.code === '20000') {
             this.tableData = res.data.data.list;
             this.totalNumbers = res.data.data.count;
-//
-//            this.$notify.success({
-//              title: '成功',
-//              message: res.data.msg,
-//            });
-          }else {
+          } else {
+            this.tableLoading = false;
+            this.emptyContent = '暂无数据';
             this.$notify.warning({
               title: '警告',
               message: res.data.msg,
@@ -183,7 +191,7 @@
         this.form.pages = val;
         this.getDate();
       },
-      search(){
+      search() {
         this.form.pages = 1;
         this.getDate();
       },
@@ -244,9 +252,9 @@
               message: '已取消删除!'
             });
           });
-        }else if(val==='reTemplet'){
+        } else if (val === 'reTemplet') {
           this.reTemplet();
-        }else if(val==='reName'){
+        } else if (val === 'reName') {
           this.reName();
         }
       },
@@ -264,8 +272,8 @@
       closeMessageModule(val) {
         this.messageModule = false;
         this.messageName = '';
-        if(val === 'success'){
-            this.getDate();
+        if (val === 'success') {
+          this.getDate();
         }
       },
 
@@ -277,11 +285,11 @@
         this.reviseMessage = false;
       },
       //删除短信
-      deleteMessage(){
-        this.$http.get(globalConfig.server+'setting/sms_template/delete/'+this.activeId).then((res)=>{
-          if(res.data.code === '20040'){
-              this.search();
-          }else {
+      deleteMessage() {
+        this.$http.get(globalConfig.server + 'setting/sms_template/delete/' + this.activeId).then((res) => {
+          if (res.data.code === '20040') {
+            this.search();
+          } else {
             this.$notify.warning({
               title: '警告',
               message: res.data.msg

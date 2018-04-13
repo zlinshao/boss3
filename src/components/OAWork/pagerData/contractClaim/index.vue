@@ -49,6 +49,7 @@
       <div v-show="selectFlag==1">
         <el-table
           :data="contractTotalData"
+          :empty-text='emptyContent'
           v-loading="tableLoading"
           element-loading-text="拼命加载中"
           element-loading-spinner="el-icon-loading"
@@ -106,6 +107,7 @@
       <div v-show="selectFlag==2">
         <el-table
           :data="contractApplyData"
+          :empty-text='emptyContent'
           v-loading="tableLoading"
           element-loading-text="拼命加载中"
           element-loading-spinner="el-icon-loading"
@@ -140,6 +142,7 @@
       <div v-show="selectFlag==3">
         <el-table
           :data="contractCancelData"
+          :empty-text='emptyContent'
           v-loading="tableLoading"
           element-loading-text="拼命加载中"
           element-loading-spinner="el-icon-loading"
@@ -174,6 +177,7 @@
       <div v-show="selectFlag==4">
         <el-table
           :data="contractHandInData"
+          :empty-text='emptyContent'
           v-loading="tableLoading"
           element-loading-text="拼命加载中"
           element-loading-spinner="el-icon-loading"
@@ -208,6 +212,7 @@
       <div v-show="selectFlag==5">
         <el-table
           :data="contractLossData"
+          :empty-text='emptyContent'
           v-loading="tableLoading"
           element-loading-text="拼命加载中"
           element-loading-spinner="el-icon-loading"

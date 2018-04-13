@@ -134,7 +134,7 @@
 
     <el-table
       :data="tableData"
-      :empty-text='villageStatus'
+      :empty-text='emptyContent'
       v-loading="villageLoading"
       element-loading-text="拼命加载中"
       element-loading-spinner="el-icon-loading"
@@ -227,13 +227,13 @@
         areaList: [],
         regionList: [],
 
-        villageStatus: ' ',
+        emptyContent: ' ',
         villageLoading: false,
       }
     },
     mounted() {
       this.villageLoading = true;
-      this.villageStatus = ' ';
+      this.emptyContent = ' ';
       this.$http.get(this.urls + 'setting/others/province').then((res) => {
         this.provinceList = res.data.data;
       });
@@ -260,7 +260,7 @@
     methods: {
       myData(val) {
         this.villageLoading = true;
-        this.villageStatus = ' ';
+        this.emptyContent = ' ';
         this.form.pages = val;
         this.$http.get(this.urls + 'setting/community/', {
           params: this.form,
@@ -273,7 +273,7 @@
           } else {
             this.tableData = [];
             this.paging = 0;
-            this.villageStatus = '暂无数据';
+            this.emptyContent = '暂无数据';
           }
         })
       },
