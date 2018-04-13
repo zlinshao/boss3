@@ -117,7 +117,7 @@
         tableData:[],
         detailInfo:{},
         department:'',
-        dictionary:[],
+        cityDictionary:[],
         city_name:'',
 
         //公司合同备用字段
@@ -147,8 +147,8 @@
     },
     methods:{
       getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/306').then((res) => {
-          this.dictionary = res.data.data;
+        this.dictionary(306, 1).then((res) => {
+          this.cityDictionary = res.data;
         });
       },
 
@@ -162,7 +162,7 @@
             this.keyCode = res.data.data.key;
             this.passed = res.data.data.passed;
             this.department = res.data.data.department.name;
-            this.dictionary.forEach((item) => {
+            this.cityDictionary.forEach((item) => {
               if(item.variable.city_code === this.detailInfo.city_code){
                 this.city_name = item.dictionary_name;
                 return false;

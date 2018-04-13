@@ -84,7 +84,7 @@
         tableData:[],
         detailInfo:{},
         department:'',
-        dictionary:[],
+        cityDictionary:[],
         city_name:'',
       };
     },
@@ -106,8 +106,8 @@
     },
     methods:{
       getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/306').then((res) => {
-          this.dictionary = res.data.data;
+        this.dictionary(306, 1).then((res) => {
+          this.cityDictionary = res.data;
         });
       },
       getDetail(){
@@ -115,7 +115,7 @@
           if(res.data.code === '20000'){
             this.detailInfo = res.data.data.full;
             this.department = res.data.data.department.name;
-            this.dictionary.forEach((item) => {
+            this.cityDictionary.forEach((item) => {
               if(item.variable.city_code === this.detailInfo.city_code){
                 this.city_name = item.dictionary_name;
                 return false;
