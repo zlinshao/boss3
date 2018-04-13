@@ -262,7 +262,6 @@
         this.villageLoading = true;
         this.emptyContent = ' ';
         this.form.pages = val;
-        this.tableData = [];
         this.$http.get(this.urls + 'setting/community/', {
           params: this.form,
         }).then((res) => {
@@ -271,6 +270,7 @@
             this.currentPage = val;
             // this.tableData = res.data.data.list;
             let data = res.data.data.list;
+            this.tableData = [];
             for (let i = 0; i < data.length; i++) {
               let list = {};
               list.id = data[i].id;
@@ -284,6 +284,7 @@
             }
             this.paging = res.data.data.count;
           } else {
+            this.tableData = [];
             this.paging = 0;
             this.emptyContent = '暂无数据';
           }
