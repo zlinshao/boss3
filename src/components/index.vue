@@ -469,6 +469,7 @@
       },
       //多页面同开状态下验证，统一倒计时时间
       watchCount(){
+        let _this = this;
         setInterval(function () {
           if (localStorage.getItem("initCount") == 1) {
             _this.screenStatus = true;
