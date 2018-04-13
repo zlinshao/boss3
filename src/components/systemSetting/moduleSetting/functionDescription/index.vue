@@ -168,11 +168,14 @@ export default {
       this.defaultExpandKeys = [];
       this.$http.get(globalConfig.server + "des/tree").then(res => {
         this.setTree = res.data.data;
+        if(res.data.data.length> 0){
         this.form.id = res.data.data[0].id;
         this.form.pid = res.data.data[0].pid;
         this.form.title = res.data.data[0].title;
         this.defaultExpandKeys.push(res.data.data[0].id);
+        }
       });
+      
     },
     //点击节点
     nodeClick(data, node, store) {
