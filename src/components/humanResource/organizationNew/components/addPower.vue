@@ -16,7 +16,6 @@
           </el-tab-pane>
         </el-tabs>
       </el-radio-group>
-
       <el-tabs :tab-position="tabPosition" style="height: 500px;" v-model="moduleName"
                @tab-click="handleClick(moduleName, 'module')">
         <el-tab-pane v-for="(item,index) in moduleData" :label="item.display_name" :name="item.name" :key="index">
@@ -26,7 +25,7 @@
               <el-checkbox-group v-model="checkedPower" @change="powerChange">'
                 <el-row>
                   <el-col :span="6" v-for="key in permissionData" :key="key.id">
-                  <el-checkbox  :label="key.id" >{{key.display_name}}</el-checkbox>
+                    <el-checkbox  :label="key.id" >{{key.display_name}}</el-checkbox>
                   </el-col>
                 </el-row>
               </el-checkbox-group>
