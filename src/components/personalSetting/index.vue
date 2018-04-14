@@ -262,6 +262,7 @@ export default {
               message: res.data.msg,
               type: "success"
             });
+            this.defaultCountdown = this.basicSetting.id[0]
             this.$store.dispatch('changeBasicSetting');
             this.getPersonalInfo();
           } else {

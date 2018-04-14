@@ -2,7 +2,7 @@
   <div>
     <el-table
       :data="goodsChangeData"
-      :empty-text = 'collectStatus'
+      :empty-text = 'emptyContent'
       v-loading="tableLoading"
       element-loading-text="拼命加载中"
       element-loading-spinner="el-icon-loading"
