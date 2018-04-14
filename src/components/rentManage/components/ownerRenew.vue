@@ -4,32 +4,28 @@
       <div>
         <el-tabs v-model="activeName">
           <el-tab-pane label="房源信息" name="first">
-            <div class="form_border"
-                 v-loading="tableLoading"
-                 element-loading-text="拼命加载中"
-                 element-loading-spinner="el-icon-loading"
-                 element-loading-background="rgba(0, 0, 0, 0)">
+            <div class="form_border">
               <el-form size="mini" :model="params" label-width="100px">
                 <el-row>
                   <el-col :span="6">
                     <el-form-item label="小区名称" required>
-                      <el-input disabled="" placeholder="请输入内容" v-model="community_name" @focus="openVillageModal"
+                      <el-input placeholder="请输入内容" v-model="community_name" @focus="openVillageModal"
                                 readonly=""></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="6">
                     <el-form-item label="小区地址" required>
-                      <el-input disabled="" placeholder="请输入内容" v-model="community_address" disabled=""></el-input>
+                      <el-input placeholder="请输入内容" v-model="community_address" disabled=""></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="6">
-                    <el-form-item label="小区别名" required="">
-                      <el-input disabled="" placeholder="请输入内容" v-model="params.community_nickname"></el-input>
+                    <el-form-item label="小区别名">
+                      <el-input placeholder="请输入内容" v-model="params.community_nickname"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="6">
                     <el-form-item label="丘号" required="">
-                      <el-input disabled="" placeholder="请输入内容" v-model="params.mound_number"></el-input>
+                      <el-input placeholder="请输入内容" v-model="params.mound_number"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -37,20 +33,20 @@
                   <el-col :span="12">
                     <el-form-item label="门牌地址" required>
                       <el-col :span="8" style="padding-right: 10px">
-                        <el-input disabled="" placeholder="座/栋" v-model="params.building"></el-input>
+                        <el-input placeholder="座/栋" v-model="params.building"></el-input>
                       </el-col>
                       <el-col :span="8" style="padding-right: 10px">
-                        <el-input disabled="" placeholder="单元" v-model="params.unit"></el-input>
+                        <el-input placeholder="单元" v-model="params.unit"></el-input>
                       </el-col>
                       <el-col :span="8">
-                        <el-input disabled="" placeholder="门牌号" v-model="params.doorplate"></el-input>
+                        <el-input placeholder="门牌号" v-model="params.doorplate"></el-input>
                       </el-col>
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
                     <el-form-item label="房型" required="">
                       <el-col :span="8" style="padding-right: 10px">
-                        <el-select disabled="" v-model="params.house_type[0]" placeholder="室" value="">
+                        <el-select clearable v-model="params.house_type[0]" placeholder="室" value="">
                           <el-option label="一室" value="1"></el-option>
                           <el-option label="一室" value="1"></el-option>
                           <el-option label="二室" value="2"></el-option>
@@ -63,7 +59,8 @@
                         </el-select>
                       </el-col>
                       <el-col :span="8" style="padding-right: 10px">
-                        <el-select disabled="" v-model="params.house_type[1]" placeholder="厅" value="">
+                        <el-select clearable v-model="params.house_type[1]" placeholder="厅" value="">
+                          <el-option label="无" value=""></el-option>
                           <el-option label="一厅" value="1"></el-option>
                           <el-option label="二厅" value="2"></el-option>
                           <el-option label="三厅" value="3"></el-option>
@@ -72,7 +69,8 @@
                         </el-select>
                       </el-col>
                       <el-col :span="8">
-                        <el-select disabled="" v-model="params.house_type[2]" placeholder="卫" value="">
+                        <el-select clearable v-model="params.house_type[2]" placeholder="卫" value="">
+                          <el-option label="无" value=""></el-option>
                           <el-option label="一卫" value="1"></el-option>
                           <el-option label="二卫" value="2"></el-option>
                           <el-option label="三卫" value="3"></el-option>
@@ -86,17 +84,17 @@
                 <el-row>
                   <el-col :span="6">
                     <el-form-item label="房产证号" required>
-                      <el-input disabled="" placeholder="请输入内容" v-model="params.property_number"></el-input>
+                      <el-input placeholder="请输入内容" v-model="params.property_number"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="6">
                     <el-form-item label="建筑面积" required>
-                      <el-input disabled="" placeholder="请输入内容" v-model="params.area"></el-input>
+                      <el-input placeholder="请输入内容" v-model="params.area"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="6">
                     <el-form-item label="装修" required="">
-                      <el-select disabled="" clearable v-model="params.decorate" placeholder="请选择装修类型" value="">
+                      <el-select clearable v-model="params.decorate" placeholder="请选择装修类型" value="">
                         <el-option v-for="item in decorate_dic" :label="item.dictionary_name" :value="item.id"
                                    :key="item.id"></el-option>
                       </el-select>
@@ -105,13 +103,13 @@
                   <el-col :span="6">
                     <el-form-item label="楼层" required>
                       <el-col :span="10">
-                        <el-input disabled="" placeholder="楼层" v-model="params.floor"></el-input>
+                        <el-input placeholder="楼层" v-model="params.floor"></el-input>
                       </el-col>
                       <el-col :span="4" style="text-align: center">
                         /
                       </el-col>
                       <el-col :span="10">
-                        <el-input disabled="" placeholder="总楼层" v-model="params.floors"></el-input>
+                        <el-input placeholder="总楼层" v-model="params.floors"></el-input>
                       </el-col>
                     </el-form-item>
                   </el-col>
@@ -119,8 +117,8 @@
 
                 <el-row>
                   <el-col :span="6">
-                    <el-form-item label="房屋类型">
-                      <el-select disabled="" clearable v-model="params.property_type" placeholder="请选择房屋类型" value="">
+                    <el-form-item label="房屋类型" required="">
+                      <el-select clearable v-model="params.property_type" placeholder="请选择房屋类型" value="">
                         <el-option v-for="item in property_type_dic" :label="item.dictionary_name" :value="item.id"
                                    :key="item.id"></el-option>
                       </el-select>
@@ -217,7 +215,7 @@
                           </el-input>
                         </el-col>
                         <el-col :span="12">
-                          <el-input placeholder="天数" v-model="params.day">
+                          <el-input placeholder="天数" @blur="computedEndDate" v-model="params.day">
                             <template slot="append">天</template>
                           </el-input>
                         </el-col>
@@ -292,7 +290,7 @@
                     <el-col :span="6">
                       <el-form-item label="合同结束时间" required="">
                         <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
-                                        v-model="params.end_date"></el-date-picker>
+                                        v-model="params.end_date" disabled=""></el-date-picker>
                       </el-form-item>
                     </el-col>
 
@@ -308,6 +306,18 @@
                     <el-col :span="6">
                       <el-form-item label="押金" required>
                         <el-input placeholder="请输入内容" v-model="params.deposit"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="第一次打房租" required="">
+                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
+                                        v-model="params.pay_first_date"></el-date-picker>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="第二次打房租" required="">
+                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
+                                        v-model="params.pay_second_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -373,18 +383,7 @@
                     </div>
                   </div>
                   <el-row>
-                    <el-col :span="6">
-                      <el-form-item label="第一次打房租" required="">
-                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
-                                        v-model="params.pay_first_date"></el-date-picker>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                      <el-form-item label="第二次打房租" required="">
-                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
-                                        v-model="params.pay_second_date"></el-date-picker>
-                      </el-form-item>
-                    </el-col>
+
                     <el-col :span="6">
                       <el-form-item label="收款姓名" required="">
                         <el-input placeholder="请输入内容" v-model="params.account_name"></el-input>
@@ -453,7 +452,7 @@
 
                   <el-row >
                     <el-col :span="6">
-                      <el-form-item label="水表底数" required>
+                      <el-form-item label="水表底数">
                         <el-input placeholder="请输入内容" v-model="params.water"></el-input>
                       </el-form-item>
                     </el-col>
@@ -472,12 +471,12 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="燃气表底数" required>
+                      <el-form-item label="燃气表底数">
                         <el-input placeholder="请输入内容" v-model="params.gas"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="公摊费用" required>
+                      <el-form-item label="公摊费用">
                         <el-input placeholder="请输入内容" v-model="params.public_fee"></el-input>
                       </el-form-item>
                     </el-col>
@@ -490,7 +489,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="开单人">
+                      <el-form-item label="开单人" required="">
                         <el-input placeholder="请输入内容" @focus="openOrganizeModal('staff')" readonly="" v-model="staff_name"></el-input>
                       </el-form-item>
                     </el-col>
@@ -500,7 +499,7 @@
                     <!--</el-form-item>-->
                     <!--</el-col>-->
                     <el-col :span="6">
-                      <el-form-item label="部门">
+                      <el-form-item label="部门" required="">
                         <el-input placeholder="请输入内容" @focus="openOrganizeModal('depart')" readonly="" v-model="department_name"></el-input>
                       </el-form-item>
                     </el-col>
@@ -611,8 +610,7 @@
         type:'',
 
         params: {
-          draft:0,
-          type : 2,
+          type : '',
           //------------------小区详情--------------------//
           community_id : '',            //小区id
           community_nickname : '',      //小区昵称
@@ -642,8 +640,8 @@
           vacancy : '',                 // 空置期
           vacancy_way : '',             // 空置期安置方式
           vacancy_other : '',           //空置期安置方式(其他)
-          warranty_month : '',          // 保修期月数
-          warranty_day : '',            // 保修期天数
+          warranty_month : 0,          // 保修期月数
+          warranty_day : 0,            // 保修期天数
           is_agency  : '1',              // 来源
           deposit : '',                 // 押金
           price : [],                   // 月单价
@@ -698,6 +696,7 @@
         sexArray : [],
         id_typeArray : [],
         id_numberArray : [],
+        idArray : [],
         phoneArray : [],
 
         //-----------------字典----------------------//
@@ -734,7 +733,6 @@
         other_photo : {},
         checkout_photo : {},
         checkout_settle_photo : {},
-        tableLoading : false,
       };
     },
     watch:{
@@ -840,6 +838,7 @@
 
       //改变收房月数
       changeMonth(){
+        this.computedEndDate();
         this.periodArray[0] = this.params.month;
         this.payPeriodArray[0] = this.params.month;
         this.priceArray.splice(1,this.priceArray.length);
@@ -904,6 +903,7 @@
         this.sexArray.splice(item,1);
         this.id_typeArray.splice(item,1);
         this.id_numberArray.splice(item,1);
+        this.idArray.splice(item,1);
         this.phoneArray.splice(item,1);
         this.customersAmount --;
       },
@@ -930,8 +930,13 @@
 
       //计算空置期结束时间
       computedEndDate(){
-        let timestamp = Date.parse(new Date(this.params.begin_date))+ Number(this.params.vacancy)*24*60*60*1000;
-        this.params.vacancy_end_date = this.formatDate(new Date(timestamp));
+        this.$http.get(globalConfig.server+'lease/helper/collectdates?begin_date='+this.params.begin_date+'&month='
+          +this.params.month +'&day='+this.params.day+'&vacancy='+this.params.vacancy ).then((res) =>{
+          if(res.data.code === '69910'){
+            this.params.vacancy_end_date = res.data.data.vac_end_date;
+            this.params.end_date = res.data.data.end_date;
+          }
+        })
       },
       formatDate(now) {
         let year=now.getFullYear();
@@ -980,6 +985,7 @@
           customItem.sex = this.sexArray[i]?this.sexArray[i]:'';
           customItem.id_type = this.id_typeArray[i]?this.id_typeArray[i]:'';
           customItem.id_number = this.id_numberArray[i]?this.id_numberArray[i]:'';
+          customItem.id = this.idArray[i]?this.idArray[i]:'';
           customItem.phone = this.phoneArray[i]?this.phoneArray[i]:'';
           this.params.customers.push(customItem);
         }
@@ -1004,10 +1010,10 @@
         }
 
         if(!this.isUpPic){
-          this.$http.post(globalConfig.server + 'lease/collect', this.params).then((res) => {
+          this.$http.put(globalConfig.server+'lease/collect/'+this.collectContractId,this.params).then((res) => {
             if(res.data.code === '61010'){
               this.clearData();
-              this.ownerRenewDialogVisible = false;
+              this.editHouseResourcesDialogVisible = false;
               this.$emit('close','updateCollect');
               this.$notify.success({
                 title: '成功',
@@ -1030,8 +1036,7 @@
       clearData(){
         this.isClear = false;
         this.params = {
-          draft:0,
-          type : 2,
+          type : '',
           //------------------小区详情--------------------//
           community_id : '',            //小区id
           community_nickname : '',      //小区昵称
@@ -1061,8 +1066,8 @@
           vacancy : '',                 // 空置期
           vacancy_way : '',             // 空置期安置方式
           vacancy_other : '',           // 空置期安置方式(其他)
-          warranty_month : '',          // 保修期月数
-          warranty_day : '',            // 保修期天数
+          warranty_month : 0,          // 保修期月数
+          warranty_day : 0,            // 保修期天数
           is_agency  : '1',                    // 来源
           deposit : '',                 // 押金
           price : [],                   // 月单价
@@ -1116,6 +1121,7 @@
         this.sexArray = [];
         this.id_typeArray = [];
         this.id_numberArray = [];
+        this.idArray = [];
         this.phoneArray = [];
         //-----------------字典----------------------//
 

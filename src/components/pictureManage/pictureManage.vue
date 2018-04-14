@@ -25,9 +25,6 @@
       <el-row>
         <el-col :span="24">
           <div class="myPicture">
-            <div>
-              <div class="title"><el-button type="text" @click="routerLink('/pictureManage')">我的相册</el-button></div>
-            </div>
             <el-button icon="el-icon-picture-outline" type="primary" size="small" @click="openModalDialog('choosePicturesDialog')">上传照片</el-button>
             <el-button icon="el-icon-picture-outline" type="success" size="small" @click="openModalDialog('createAlbumDialog')">创建相册</el-button>
         </div>
@@ -320,6 +317,7 @@
     .main {
       .myPicture {
         margin-left: 17px;
+        margin-top: 15px;
         color: #6a8dfb;
         padding-top: 10px;
         padding-bottom: 20px;
