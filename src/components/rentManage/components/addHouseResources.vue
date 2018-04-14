@@ -59,6 +59,7 @@
                       </el-col>
                       <el-col :span="8" style="padding-right: 10px">
                         <el-select clearable v-model="params.house_type[1]" placeholder="厅" value="">
+                          <el-option label="无" value=""></el-option>
                           <el-option label="一厅" value="1"></el-option>
                           <el-option label="二厅" value="2"></el-option>
                           <el-option label="三厅" value="3"></el-option>
@@ -68,6 +69,7 @@
                       </el-col>
                       <el-col :span="8">
                         <el-select clearable v-model="params.house_type[2]" placeholder="卫" value="">
+                          <el-option label="无" value=""></el-option>
                           <el-option label="一卫" value="1"></el-option>
                           <el-option label="二卫" value="2"></el-option>
                           <el-option label="三卫" value="3"></el-option>
@@ -494,13 +496,13 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="负责人">
+                      <el-form-item label="负责人" required="">
                         <el-input placeholder="请输入内容" @focus="openOrganizeModal('leader')" readonly=""
                                   v-model="params.leader_name"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="部门">
+                      <el-form-item label="部门" required="">
                         <el-input placeholder="请输入内容" @focus="openOrganizeModal('depart')" readonly=""
                                   v-model="params.department_name"></el-input>
                       </el-form-item>
@@ -657,8 +659,8 @@
           vacancy: '',                 // 空置期
           vacancy_way: '',             // 空置期安置方式
           vacancy_other: '',           //空置期安置方式(其他)
-          warranty_month: '',          // 保修期月数
-          warranty_day: '',            // 保修期天数
+          warranty_month: 0,          // 保修期月数
+          warranty_day: 0,            // 保修期天数
           is_agency: '1',              // 来源
           deposit: '',                 // 押金
           price: [],                   // 月单价
@@ -870,8 +872,8 @@
             this.params.vacancy = data.vacancy;
             this.params.vacancy_way = data.vacancy_way;
             this.params.vacancy_other = data.vacancy_other;
-            this.params.warranty_month = data.warranty_month;
-            this.params.warranty_day = data.warranty_day;
+            this.params.warranty_month = data.warranty_month?data.warranty_month:0;
+            this.params.warranty_day = data.warranty_day?data.warranty_day:0;
             this.params.is_agency = String(data.is_agency);
             this.params.deposit = data.deposit;
             //------------月单价和付款方式-----------------------//
@@ -1207,8 +1209,8 @@
           vacancy: '',                 // 空置期
           vacancy_way: '',             // 空置期安置方式
           vacancy_other: '',           // 空置期安置方式(其他)
-          warranty_month: '',          // 保修期月数
-          warranty_day: '',            // 保修期天数
+          warranty_month: 0,          // 保修期月数
+          warranty_day: 0,            // 保修期天数
           is_agency: '1',                    // 来源
           deposit: '',                 // 押金
           price: [],                   // 月单价

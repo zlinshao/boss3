@@ -14,7 +14,7 @@
 
     <div class="container">
       <div class="top">
-        <h3>{{contractInfo.community_name}} 详情</h3>
+        <h3>{{contractInfo.community_name}}  {{contractInfo.building}}-{{contractInfo.unit}}-{{contractInfo.doorplate}}</h3>
         <h3>
           <el-button size="mini" type="primary" v-if="false">已回访</el-button>
           <el-button size="mini" type="danger">未回访</el-button>
@@ -24,7 +24,7 @@
       </div>
       <div id="mainContent" class="main scroll_bar">
 
-        <div id="houseId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
+        <div id="houseId" style="border-bottom: 1px solid #ccc;margin: 10px 0 50px 150px;">
           <div class="title">房屋信息</div>
         </div>
 
@@ -223,7 +223,10 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="保修期(月)">
-                  <div class="content">{{contractInfo.warranty_month}}{{contractInfo.warranty_day}}</div>
+                  <div class="content">
+                    <span v-if="contractInfo.warranty_month">{{contractInfo.warranty_month}}月</span>
+                    <span v-if="contractInfo.warranty_day">{{contractInfo.warranty_day}}天</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -947,7 +950,7 @@
       }
     }
     .top {
-      height: 100px;
+      height: 80px;
       border-bottom: 1px solid #dbdbdb;
       display: flex;
       align-items: flex-end;

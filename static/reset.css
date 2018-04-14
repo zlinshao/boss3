@@ -261,7 +261,9 @@
   color: #fff !important; }
 
 .unitMessage .el-input-group__append {
-  padding: 0 3px !important; }
+  padding: 0 1px !important; }
+.unitMessage .el-input__inner {
+  padding: 0 2px; }
 
 #locking .el-input__inner {
   border-radius: 20px !important;

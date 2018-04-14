@@ -156,10 +156,10 @@
                     width="400"
                     trigger="click">
                     <el-table :data="scope.row.price">
-                      <el-table-column width="100" property="price" label="价格(元)"></el-table-column>
-                      <el-table-column width="100" property="period" label="变化周期(月)"></el-table-column>
                       <el-table-column width="100" property="begin_date" label="开始时间"></el-table-column>
                       <el-table-column width="100" property="end_date" label="结束时间"></el-table-column>
+                      <el-table-column width="100" property="price" label="价格(元)"></el-table-column>
+                      <el-table-column width="100" property="period" label="变化周期(月)"></el-table-column>
                     </el-table>
                   </el-popover>
                   {{scope.row.price[0].price}}&nbsp;
@@ -176,14 +176,14 @@
                     width="400"
                     trigger="click">
                     <el-table :data="scope.row.pay_way">
+                      <el-table-column width="100" property="begin_date" label="开始时间"></el-table-column>
+                      <el-table-column width="100" property="end_date" label="结束时间"></el-table-column>
                       <el-table-column width="100" label="付款方式">
                         <template slot-scope="scope">
                           {{matchDictionary(scope.row.pay_way)}}
                         </template>
                       </el-table-column>
                       <el-table-column width="100" property="period" label="变化周期(月)"></el-table-column>
-                      <el-table-column width="100" property="begin_date" label="开始时间"></el-table-column>
-                      <el-table-column width="100" property="end_date" label="结束时间"></el-table-column>
                     </el-table>
                   </el-popover>
                   {{matchDictionary(scope.row.pay_way[0].pay_way)}}&nbsp;
@@ -199,7 +199,7 @@
               <el-table-column
                 label="签约时长">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.duration">{{scope.row.duration}}天</span>
+                  <span v-if="scope.row.duration">{{scope.row.duration}}</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -290,10 +290,10 @@
                     width="400"
                     trigger="click">
                     <el-table :data="scope.row.price">
-                      <el-table-column width="100" property="price" label="价格(元)"></el-table-column>
-                      <el-table-column width="100" property="period" label="变化周期(月)"></el-table-column>
                       <el-table-column width="100" property="begin_date" label="开始时间"></el-table-column>
                       <el-table-column width="100" property="end_date" label="结束时间"></el-table-column>
+                      <el-table-column width="100" property="price" label="价格(元)"></el-table-column>
+                      <el-table-column width="100" property="period" label="变化周期(月)"></el-table-column>
                     </el-table>
                   </el-popover>
                   {{scope.row.price[0].price}}&nbsp;
@@ -310,11 +310,11 @@
                     width="500"
                     trigger="click">
                     <el-table :data="scope.row.pay_way">
+                      <el-table-column width="100" property="begin_date" label="开始时间"></el-table-column>
+                      <el-table-column width="100" property="end_date" label="结束时间"></el-table-column>
                       <el-table-column width="100" property="pay_way" label="押"></el-table-column>
                       <el-table-column width="100" property="pay_way_bet" label="付"></el-table-column>
                       <el-table-column width="100" property="period" label="变化周期(月)"></el-table-column>
-                      <el-table-column width="100" property="begin_date" label="开始时间"></el-table-column>
-                      <el-table-column width="100" property="end_date" label="结束时间"></el-table-column>
                     </el-table>
                   </el-popover>
                   押 {{scope.row.pay_way[0].pay_way}} 付 {{scope.row.pay_way[0].pay_way_bet}}&nbsp;
@@ -322,9 +322,9 @@
                 </template>
               </el-table-column>
               <el-table-column
-                label="签约时长(月)">
+                label="签约时长">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.duration">{{scope.row.duration}}天</span>
+                  <span v-if="scope.row.duration">{{scope.row.duration}}</span>
                 </template>
               </el-table-column>
               <el-table-column
