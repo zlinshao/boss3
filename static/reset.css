@@ -316,7 +316,7 @@
 
 .el-tabs {
   width: 100% !important; }
-  .el-tabs .el-tabs__header, .el-tabs .el-tabs__content {
+  .el-tabs .el-tabs__content {
     width: 100% !important; }
 
 /*# sourceMappingURL=reset.css.map */
