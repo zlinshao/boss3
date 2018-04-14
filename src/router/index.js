@@ -82,6 +82,7 @@ import ExamineAndApprove from '../components/OAWork/examineAndApprove/index.vue'
 
 // 乐伽大学
 import LineCollege from '../components/lejiaCollege/OnlineExam/index.vue'
+import StaffRegistration from '../components/lejiaCollege/StaffRegistration/index.vue'
 import College from '../components/lejiaCollege/college/index.vue'
 
 
@@ -245,7 +246,7 @@ export default new Router({
         {path: '/institution', component: Institution, name: ' 制度管理 ', icon: "iconfont icon-guizhangzhidu"},
         {path: '/counter', component: Counter, name: '业绩计算器', icon: "iconfont icon-jisuanqi"},
         {path: '/college', component: College, name: ' 乐伽大学 ', icon: "iconfont icon-leqiedaxue"},
-        // {path: '/LineCollege', component: LineCollege, name: ' 在线考试 ', icon:"iconfont icon-zaixiankaoshi"},
+        {path: '/LineCollege', component: LineCollege, name: ' 成绩查询 ', icon:"iconfont icon-zaixiankaoshi"},
         {path: '/converge', component: Converge, name: ' 员工广场 ', icon: "iconfont icon-yuangongguangchang"},
         {path: '/individual', component: Individual, name: ' 个人门户 ', icon: "el-icons-fa-user"},
         {path: '/wholeRentManage', component: WholeRentManage, name: ' 整租管理 ', icon: "iconfont icon-pinzhizhengzu"},
@@ -434,8 +435,8 @@ export default new Router({
       name: '乐伽大学',
       icon: 'iconfont icon-daxue',
       children: [
-        {path: '/college', component: College, name: '乐伽大学 '},
-        // {path: '/LineCollege', component: LineCollege, name: '在线考试'},
+        {path: '/LineCollege', component: LineCollege, name: '成绩查询'},
+        {path: '/StaffRegistration', component: StaffRegistration, name: '员工报名'},
       ]
     },
     {
