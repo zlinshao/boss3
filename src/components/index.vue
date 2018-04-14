@@ -316,7 +316,7 @@
 
     <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeModal"></MessageDetail>
     <SetLockPwd :setLockPwdDialog="setLockPwdDialog" @close="closeModal"></SetLockPwd>
-    <UnlockSecondPW :unlockSecondPWDialog="unlockSecondPWDialog" @unlockFlag="unlockFlag" :sendId="sendId"
+    <UnlockSecondPW :unlockSecondPWDialog="unlockSecondPWDialog" @unlockFlag="unlockFlag" :unLockName="unLockName"
                     @close="closeModal"></UnlockSecondPW>
     <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
     <BadgeView :badgeDialog="badgeDialog" @close="closeModal"></BadgeView>
@@ -352,7 +352,7 @@
         screenStatus: false,
         defaultArray: [],
         messageDialog: false,
-
+        unLockName:"",
         unReadMessageData: [],
         messageDetail: [],
         interval: null,
@@ -480,6 +480,7 @@
         if (!eval(this.unlockFlagpart)) {
         for(let chi in this.chinese){
           if(this.chinese[chi] == key){
+            this.unLockName = key;
             this.unlockSecondPWDialog = true;
           }
           }

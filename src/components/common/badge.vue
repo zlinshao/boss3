@@ -1,6 +1,8 @@
 <template>
-  <div >
-    <div class="badgeup" v-show="panelShow">
+  <div>
+    <el-dialog :close-on-click-modal="false" width="0" style="margin-top:20vh" :visible.sync="badgeDialogVisible">
+    <div class="badgeup" >
+      <span class="close" @click="closeBadge">X</span>
       <div v-if="loginDay == 3" class="backdiv backdiv3"></div>
       <div v-else-if="loginDay == 5" class="backdiv backdiv5"></div>
       <div v-else-if="loginDay == 15" class="backdiv backdiv15"></div>
@@ -15,6 +17,7 @@
       <span class="span1">每日登录</span>
       <span class="span2">"你已连续登录{{loginDay}}天"</span>
     </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -46,15 +49,15 @@ export default {
   },
   watch: {
     badgeDialog(val) {
-      this.panelShow = val;
+      this.badgeDialogVisible = val;
     },
-    panelShow(val) {
+    badgeDialogVisible(val) {
       if (!val) {
         this.$emit("close");
       } else {
-        setTimeout(() => {
-          this.closeBadge();
-        }, 2000);
+        // setTimeout(() => {
+        //   this.closeBadge();
+        // }, 2000);
       }
     }
   },
@@ -69,7 +72,7 @@ export default {
         .post(globalConfig.server + "manager/staff_record", { type: this.type })
         .then(res => {
           if (res.data.code === "30010") {
-            this.panelShow = false;
+            this.badgeDialogVisible = false;
             this.$http
               .get(globalConfig.server + "special/special/loginInfo")
               .then(res => {
@@ -85,7 +88,8 @@ export default {
       this.xljt = this.xljxArray[num]
         ? this.xljxArray[num]
         : "乐伽不止眼前的合同，还有诗和远方的田野！";
-    }
+    },
+
   }
 };
 </script>
@@ -171,8 +175,20 @@ export default {
 .span2 {
   position: absolute;
   font-size: 16px;
-  left: 144px;
+  left: 190px;
   bottom: 78px;
   color: #fdeb5b;
+}
+.close{
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  position: absolute;
+  right: 34px;
+  top:20px;
+  z-index: 999;
+  color: #fff;
+  cursor: pointer;
 }
 </style>

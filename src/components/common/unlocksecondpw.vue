@@ -27,13 +27,14 @@
 <script>
 import ClearSecondPW from "./clearSecondpw.vue";
 export default {
-  props: ["unlockSecondPWDialog", "sendId"],
+  props: ["unlockSecondPWDialog", "unLockName"],
   components: {ClearSecondPW},
   data() {
     return {
       unlockSecondPWDialogVisible: false,
       unlockFlag:false,
       ClearSecondPWDialog:false,
+      dictionary2:[],
       basicSetting: {
         dict_id: "221",
         pwd: ""
@@ -57,9 +58,18 @@ export default {
         this.basicSetting.pwd=""
       }
     },
-    sendId(val) {
-      console.log(val)
-      this.basicSetting.dict_id = val;
+    unLockName(val) {
+    
+        this.$http.get(globalConfig.server + "setting/dictionary/220").then(res => {
+          if (res.data.code === "30010") {
+            this.dictionary2 = res.data.data;
+            for (let i = 0; i < this.dictionary2.length; i++) {
+                if (this.dictionary2[i].dictionary_name == val) {
+                  this.basicSetting.dict_id=this.dictionary2[i].id
+                }
+            }
+          }
+        });
     },
   },
   methods: {
@@ -85,7 +95,7 @@ export default {
             this.unlockSecondPWDialogVisible = false;
             this.unlockFlag = true;
             this.basicSetting = {
-              dict_id: "221",
+              dict_id: "",
               pwd: ""
             };
           } else {
