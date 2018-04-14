@@ -14,7 +14,7 @@
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
             <el-form-item style="float: right">
-              <el-button type="success" @click="viewIncompleteRecord">查看不齐记录</el-button>
+              <el-button type="success" @click="viewIncompleteRecord">查看补齐记录</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -180,7 +180,7 @@
               <div class="myTable" @contextmenu="houseHeadMenu($event)">
                 <el-table
                   :data="collectData"
-                  :empty-text = 'rentStatus'
+                  :empty-text='rentStatus'
                   v-loading="rentLoading"
                   element-loading-text="拼命加载中"
                   element-loading-spinner="el-icon-loading"
@@ -201,19 +201,20 @@
                     label="业主姓名">
                   </el-table-column>
                   <el-table-column
+                    prop="address"
                     label="地址">
-                    <template slot-scope="scope">
-                      <div v-popover:popover1 style="display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                         {{scope.row.address}}
-                       <el-popover
-                        ref="popover1"
-                        placement="top-start"
-                        width="200"
-                        trigger="hover">
-                        {{scope.row.address}}
-                      </el-popover>
-                      </div>
-                    </template>
+                    <!--<template slot-scope="scope">-->
+                    <!--<div v-popover:popover1 style="display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">-->
+                    <!--{{scope.row.address}}-->
+                    <!--<el-popover-->
+                    <!--ref="popover1"-->
+                    <!--placement="top-start"-->
+                    <!--width="200"-->
+                    <!--trigger="hover">-->
+                    <!--{{scope.row.address}}-->
+                    <!--</el-popover>-->
+                    <!--</div>-->
+                    <!--</template>-->
                   </el-table-column>
                   <el-table-column
                     prop="phone"
@@ -256,7 +257,7 @@
               <div class="myTable" @contextmenu="houseHeadMenu($event)">
                 <el-table
                   :data="rentData"
-                  :empty-text = 'rentStatus'
+                  :empty-text='rentStatus'
                   v-loading="rentLoading"
                   element-loading-text="拼命加载中"
                   element-loading-spinner="el-icon-loading"
@@ -277,19 +278,20 @@
                     label="业主姓名">
                   </el-table-column>
                   <el-table-column
+                    prop="address"
                     label="地址">
-                    <template slot-scope="scope">
-                      <div v-popover:popover1 style="display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-                         {{scope.row.address}}
-                       <el-popover
-                        ref="popover1"
-                        placement="top-start"
-                        width="200"
-                        trigger="hover">
-                        {{scope.row.address}}
-                      </el-popover>
-                      </div>
-                    </template>
+                    <!--<template slot-scope="scope">-->
+                    <!--<div v-popover:popover1 style="display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">-->
+                    <!--{{scope.row.address}}-->
+                    <!--<el-popover-->
+                    <!--ref="popover1"-->
+                    <!--placement="top-start"-->
+                    <!--width="200"-->
+                    <!--trigger="hover">-->
+                    <!--{{scope.row.address}}-->
+                    <!--</el-popover>-->
+                    <!--</div>-->
+                    <!--</template>-->
                   </el-table-column>
                   <el-table-column
                     prop="phone"
@@ -344,12 +346,11 @@
         </div>
       </div>
 
-
       <div>
         <el-dialog :close-on-click-modal="false"
-          title="新建维修"
-          :visible.sync="maintenanceDialog"
-          width="40%">
+                   title="新建维修"
+                   :visible.sync="maintenanceDialog"
+                   width="40%">
           <el-form size="mini" label-width="100px">
             <el-row>
               <el-col :span="12">
@@ -484,11 +485,65 @@
 
         </el-dialog>
       </div>
-
+      <div>
+        <el-dialog :close-on-click-modal="false" title="合同备忘" :visible.sync="memoDialog" width="50%">
+          <div>
+            <el-table
+              :data="memoTableData"
+              :empty-text='incompleteStatus'
+              v-loading="incompleteLoading"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(255, 255, 255, 0)"
+              style="width: 100%">
+              <el-table-column
+                prop="create_time"
+                label="创建时间">
+              </el-table-column>
+              <el-table-column
+                prop="contract_number"
+                label="合同编号">
+              </el-table-column>
+              <el-table-column
+                prop="house_name"
+                label="房屋地址">
+              </el-table-column>
+              <el-table-column
+                prop="update_time"
+                label="资料补齐时间">
+              </el-table-column>
+              <el-table-column
+                prop="content"
+                label="备忘内容">
+              </el-table-column>
+              <el-table-column
+                prop="receivers"
+                label="接收人">
+              </el-table-column>
+              <el-table-column
+                prop="sender"
+                label="发送人">
+              </el-table-column>
+              <el-table-column
+                prop="is_send"
+                label="操作类型">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.is_send===0">保存</span>
+                  <span v-if="scope.row.is_send===1">发送</span>
+                  <span v-if="scope.row.is_send===null">暂无</span>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <div slot="footer" class="dialog-footer">
+            <el-button size="small" type="primary" @click="memoDialog = false">确&nbsp;定</el-button>
+          </div>
+        </el-dialog>
+      </div>
 
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-               @clickOperate="clickEvent"></RightMenu>
+               @clickOperateMore="clickEvent"></RightMenu>
 
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
   </div>
@@ -497,17 +552,18 @@
 <script>
   import RightMenu from '../../../common/rightMenu.vue'
   import Organization from '../../../common/organization.vue'
+
   export default {
     name: 'hello',
-    components: {RightMenu,Organization},
-    data () {
-          return {
+    components: {RightMenu, Organization},
+    data() {
+      return {
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
         lists: [],
         /***********/
-        selectFlag:1,
+        selectFlag: 1,
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -536,27 +592,26 @@
           }]
         },
         statisticDate: '',
-        collectData:[],   //收房合同
-        rentData:[],      //租房合同
+        collectData: [],   //收房合同
+        rentData: [],      //租房合同
         formInline: {
           name: '',
           house: '',
         },
-        totalNumbers:0,   //总数
-        params:{
-          page:1,
-          per_page_number:'12',
-          q:'',      //模糊搜索
-          publish_time:'',     //发布时间
-          lord_time:'',  //收房合同时间
-          renter_time:'',//租房合同时间
-          sign_time:'',   //签约日期
-          un_upload:'',   //未上传合同
-          org_id:'',  //部门合同
-          status:''   //房屋状态： status（1：正在出租， 2：快结束，3：已结束，4：签约中）
+        totalNumbers: 0,   //总数
+        params: {
+          page: 1,
+          per_page_number: '12',
+          q: '',      //模糊搜索
+          publish_time: '',     //发布时间
+          lord_time: '',  //收房合同时间
+          renter_time: '',//租房合同时间
+          sign_time: '',   //签约日期
+          un_upload: '',   //未上传合同
+          org_id: '',  //部门合同
+          status: ''   //房屋状态： status（1：正在出租， 2：快结束，3：已结束，4：签约中）
         },
         currentPage: 1,
-
         options: [
           {
             value: '选项1',
@@ -574,78 +629,106 @@
             value: '选项5',
             label: '北京烤鸭'
           }],
-
         //模态框
         organizationDialog: false,
         activeName: 'first',
-        isHigh:false,
+        isHigh: false,
         maintenanceDialog: false,     //维修模态框
-
         input: '',
         radio: '1',
         value: '',
         value1: '',
-        rentStatus:' ',
-        rentLoading:false,
+        rentStatus: ' ',
+        rentLoading: false,
+        memoDialog: false, //备忘模态框
+        memoTableData: [],
+        incompleteStatus: ' ',
+        incompleteLoading: false,
+        is_rent: 0,
+        selectContractId: '',
       }
     },
-    mounted(){
+    mounted() {
       this.collectDatafunc();
 
     },
+    watch: {
+      memoDialog(val) {
+        if (val) {
+          this.incompleteStatus = " ";
+          this.incompleteLoading = true;
+          this.$http.get(globalConfig.server + 'lease/note/index?limit=500&is_rent=' + this.is_rent+'&contract_id='+this.selectContractId).then((res) => {
+            this.incompleteLoading = false;
+            if (res.data.code === '60510') {
+              this.memoTableData = res.data.data;
+            } else {
+              this.incompleteStatus = "暂无数据";
+              this.memoTableData = [];
+            }
+          });
+        }
+      },
+      activeName(val) {
+        if(val === 'first') {
+          this.is_rent = 0;
+        }else{
+          this.is_rent = 1;
+        }
+      },
+    },
     methods: {
-      //查看不齐记录，跳转页面
+      //查看补齐记录，跳转页面
       viewIncompleteRecord() {
-        // this.$router.push({path: '/incompleteRecord'});
+        this.$router.push({path: '/incompleteRecord', query: {active: this.activeName}});
       },
-      search(){
-        if(this.activeName =="first"){
-          this.params.page= 1;
+      search() {
+        if (this.activeName == "first") {
+          this.params.page = 1;
           this.collectDatafunc();
-        }else if( this.activeName == "second"){
+        } else if (this.activeName == "second") {
           this.params.page = 1;
           this.rentDatafunc();
         }
       },
-      highSearch(){
+      highSearch() {
         this.isHigh = !this.isHigh;
-        if(this.activeName =="first"){
-          this.params.page= 1;
+        if (this.activeName == "first") {
+          this.params.page = 1;
           this.collectDatafunc();
-        }else if( this.activeName == "second"){
+        } else if (this.activeName == "second") {
           this.params.page = 1;
           this.rentDatafunc();
         }
       },
-      collectDatafunc(){
-        this.collectData=[];
+      collectDatafunc() {
+        this.collectData = [];
         this.rentStatus = " ";
         this.rentLoading = true;
-        this.$http.get(globalConfig.server+'lease/contract?collect_or_rent=0',{params:this.params}).then((res) => {
+        this.$http.get(globalConfig.server + 'lease/contract?collect_or_rent=0', {params: this.params}).then((res) => {
           this.rentLoading = false;
-          if(res.data.code === '60310'){
+          if (res.data.code === '60310') {
             this.collectData = res.data.data;
-            this.totalNumbers =res.data.meta.total;
-          }else {
-            this.collectData =[];
+            this.totalNumbers = res.data.meta.total;
+          } else {
+            this.collectData = [];
             this.rentStatus = '暂无数据';
-            this.totalNumbers =0;
+            this.totalNumbers = 0;
           }
         })
       },
-      rentDatafunc(){
-        this.rentData=[]
+      rentDatafunc() {
+        this.rentData = []
         this.rentStatus = " ";
         this.rentLoading = true;
-        this.$http.get(globalConfig.server+'lease/contract?collect_or_rent=1',{params:this.params}).then((res) => {
+        this.$http.get(globalConfig.server + 'lease/contract?collect_or_rent=1', {params: this.params}).then((res) => {
           this.rentLoading = false;
-          if(res.data.code === '60310'){
+          if (res.data.code === '60310') {
             this.rentData = res.data.data;
-            this.totalNumbers =res.data.meta.total;
-          }else {
-            this.rentData =[];
+            this.totalNumbers = res.data.meta.total;
+          } else {
+            this.rentData = [];
             this.rentStatus = '暂无数据';
-            this.totalNumbers =0;
+            this.totalNumbers = 0;
           }
         })
       },
@@ -654,40 +737,38 @@
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
-        this.params.page=val;
-        if(this.activeName =="first"){
+        this.params.page = val;
+        if (this.activeName == "first") {
           this.collectDatafunc();
         }
-        else if( this.activeName == "second"){
+        else if (this.activeName == "second") {
           this.rentDatafunc();
         }
       },
-      clickTable(row, event, column){
+      clickTable(row, event, column) {
         console.log(row, event, column)
       },
       //房屋右键
-      houseMenu(row, event){
+      houseMenu(row, event) {
         this.lists = [
           {clickIndex: 'stick', headIcon: 'el-icons-fa-arrow-up', label: '置顶',},
           {clickIndex: 'cancel', headIcon: 'el-icons-fa-scissors', label: '作废',},
           {clickIndex: '', headIcon: 'el-icons-fa-eye', label: '查看回访记录',},
           {clickIndex: 'maintenanceDialog', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
+          {clickIndex: 'lookMemorandum', headIcon: 'el-icons-fa-eye', label: '查看合同备忘',contract_id: row.contract_id},
         ];
         this.contextMenuParam(event);
       },
-
-
       //合同表头右键
-      houseHeadMenu(e){
+      houseHeadMenu(e) {
         this.lists = [
           {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
         ];
         this.contextMenuParam(event);
       },
-
       //右键回调事件
-      clickEvent (index) {
-        switch (index){
+      clickEvent(val) {
+        switch (val.clickIndex) {
           case 'stick' :
             this.$confirm('您确定将其置顶吗', '提示', {
               confirmButtonText: '确定',
@@ -725,14 +806,18 @@
           case 'maintenanceDialog':
             this.maintenanceDialog = true;
             break;
+          case 'lookMemorandum':
+            this.memoDialog = true;
+            this.selectContractId = val.contract_id;
+            break;
         }
       },
       //关闭右键菜单
-      closeMenu(){
+      closeMenu() {
         this.show = false;
       },
       //右键参数
-      contextMenuParam(event){
+      contextMenuParam(event) {
         //param: user right param
         let e = event || window.event;	//support firefox contextmenu
         this.show = false;
@@ -744,52 +829,51 @@
           this.show = true
         })
       },
-
-      selectDep(){
-          console.log(1)
-          this.organizationDialog = true
+      selectDep() {
+        console.log(1)
+        this.organizationDialog = true
       },
-      closeOrganization(){
+      closeOrganization() {
         this.organizationDialog = false
       },
-      selectStatus(flag){
+      selectStatus(flag) {
         this.selectFlag = flag;
       },
       // tabs标签页
       handleClick(tab, event) {
-        if(this.activeName =="first"){
+        if (this.activeName == "first") {
           this.collectDatafunc();
         }
-        else if(this.activeName == "second"){
+        else if (this.activeName == "second") {
           this.rentDatafunc();
         }
       },
-      highGrade(){
-          this.isHigh = !this.isHigh;
+      highGrade() {
+        this.isHigh = !this.isHigh;
       },
-      resetting(){
-        this.params={
-          page:1,
-          per_page_number:'',
-          q:'',      //模糊搜索
-          publish_time:'',     //发布时间
-          lord_time:'',  //收房合同时间
-          renter_time:'',//租房合同时间
-          sign_time:'',   //签约日期
-          un_upload:'',   //未上传合同
-          org_id:'',  //部门合同
-          status:''   //房屋状态： status（1：正在出租， 2：快结束，3：已结束，4：签约中）
+      resetting() {
+        this.params = {
+          page: 1,
+          per_page_number: '',
+          q: '',      //模糊搜索
+          publish_time: '',     //发布时间
+          lord_time: '',  //收房合同时间
+          renter_time: '',//租房合同时间
+          sign_time: '',   //签约日期
+          un_upload: '',   //未上传合同
+          org_id: '',  //部门合同
+          status: ''   //房屋状态： status（1：正在出租， 2：快结束，3：已结束，4：签约中）
         }
       }
-    }
+    },
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped="">
   #clientContainer {
-    min-height:400px;
-    .selectButton{
+    min-height: 400px;
+    .selectButton {
       color: #fff;
       background: #66b1ff;
     }
@@ -819,7 +903,7 @@
     }
     .main {
       font-size: 12px;
-      >div {
+      > div {
         .tableBottom {
           padding: 8px;
           display: flex;

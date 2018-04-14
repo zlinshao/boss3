@@ -39,7 +39,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="推荐人">
-                    <el-input placeholder="请填写推荐人" v-model="recommenderName" @focus="selectStaff">
+                    <el-input placeholder="请填写推荐人" readonly v-model="recommenderName" @focus="selectStaff">
                       <template slot="append">
                         <div style="cursor: pointer;" @click="emptyRecommender">清空</div>
                       </template>
@@ -105,7 +105,7 @@
               <el-row :gutter="20">
                 <el-col :span="8">
                   <el-form-item label="部门" required>
-                    <el-input placeholder="请选择部门" v-model="department" @focus="selectDepart">
+                    <el-input placeholder="请选择部门" readonly v-model="department" @focus="selectDepart">
                       <template slot="append">
                         <div style="cursor: pointer;" @click="emptyDepart">清空</div>
                       </template>

@@ -230,7 +230,7 @@ export default new Router({
         {path: '/improveImgInfo', component: ImproveImgInfo, name: "完善照片信息",},
         {path: '/pictureDetail', component: PictureDetail, name: "相册详情",},
         {path: '/visitRecord', component: VisitRecord, name: "回访记录"},
-        {path: '/incompleteRecord', component: IncompleteRecord, name: "合同不齐记录"},
+        {path: '/incompleteRecord', component: IncompleteRecord, name: "合同补齐记录"},
       ]
     },
     //快捷入口
