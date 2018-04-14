@@ -11,7 +11,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <span style="color:#fdaece;margin-left:100px;">备注:密码长度4-6位，数字、字母和下划线</span>
+          <span style="color:#fdaece;margin-left:100px;">备注:密码长度6-18位数字或字母。</span>
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
