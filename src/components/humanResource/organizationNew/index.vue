@@ -76,7 +76,7 @@
                     <el-button type="primary" @click="addStaff" v-if="activeName==='first'">新建员工</el-button>
                     <el-button type="primary" @click="addPosition('position')" v-if="activeName==='second'">新建职位</el-button>
                   </el-form-item>
-                  <el-form-item style="float: right">
+                  <el-form-item style="float: right" v-if="activeName==='first'">
                     <el-input v-model="params.keywords" placeholder="请输入搜索内容" @keyup.enter.prevent.native="search">
                       <el-button slot="append" type="primary" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
@@ -240,8 +240,8 @@
                   </div>
                   <div class="tableBottom">
                     <el-pagination
-                      @size-change="handleSizeChange"
-                      @current-change="handleCurrentChange"
+                      @size-change="handlePostSizeChange"
+                      @current-change="handlePostCurrentChange"
                       :current-page="currentPage"
                       :page-sizes="[5, 10, 15, 20]"
                       :page-size="5"
@@ -576,6 +576,12 @@
           page: 1,
           org_id: '',
         },
+        //由于存在分页bug,所以暂时把职位和岗位的参数分开
+        postParams:{
+          limit: 5,
+          page: 1,
+        },
+
         staffTableData:[],    //员工列表
         positionTableData:[], //岗位列表
         positionList:[],      //职位列表
@@ -1111,8 +1117,8 @@
       getPosition(){
         this.postCollectLoading = true;
         this.postCollectStatus = ' ';
-        this.$http.get(globalConfig.server+'manager/positions?type=' +this.onlyPositionId+'&page='+this.params.page
-          +'&limit='+this.params.limit).then((res) => {
+        this.$http.get(globalConfig.server+'manager/positions?type=' +this.onlyPositionId+'&page='+this.postParams.page
+          +'&limit='+this.postParams.limit).then((res) => {
           this.postCollectLoading = false;
           if(res.data.code === '20000'){
             let arr = res.data.data.data;
@@ -1296,6 +1302,15 @@
       handleCurrentChange(val) {
         this.params.page = val;
         this.search();
+      },
+
+      handlePostSizeChange(val) {
+        this.postParams.limit = val;
+        this.getPosition();
+      },
+      handlePostCurrentChange(val) {
+        this.postParams.page = val;
+        this.getPosition();
       },
       //---------------部门排序--------------------
       sortDepartment(){
