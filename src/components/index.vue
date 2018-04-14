@@ -410,6 +410,7 @@
       this.getCredit();
       //定时器 轮巡获取最新消息
       this.getUnreadTermly();
+      this.getUnReadMessage();
     },
     activated(){
       //初始化个人信息

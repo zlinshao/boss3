@@ -64,6 +64,25 @@
                  data-magnify="" :data-src="item.uri">
           </div>
         </div>
+        <div class="title">备注</div>
+        <div class="describe_border">
+          <div v-if="detailInfo.remarks.length>0" v-for="item in detailInfo.remarks">
+            <el-form size="mini" label-width="80px">
+              <el-row>
+                <el-col :span="16">
+                  <el-form-item label="备注内容">
+                    <div class="content">{{item.content}}</div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="创建时间">
+                    <div class="content">{{item.create_time}}</div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
+        </div>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="contractDialogVisible = false">取 消</el-button>
