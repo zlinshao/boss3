@@ -179,8 +179,6 @@ export default {
         this.form.id = "";
       }
 
-      this.saveorsend();
-      if (this.saveorsendflag) {
         if (this.form.type == "表彰") {
           this.form.type = 1;
         }
@@ -216,7 +214,6 @@ export default {
           });
 
       }
-      }
     },
     //发布
     sendx() {
@@ -237,9 +234,6 @@ export default {
           this.form.id = this.midId;
         }
         
-
-      this.saveorsend();
-      if (this.saveorsendflag) {
         if (this.form.type == "表彰") {
           this.form.type = 1;
         }
@@ -281,6 +275,7 @@ export default {
               this.threeflag = true;
               this.firstflag = true;
               this.upStatus=false;
+              this.increaseGoodsDialogVisible = false;
               this.$emit("threeflag", this.threeflag);
             } else {
               this.$notify.error({
@@ -291,9 +286,8 @@ export default {
               this.$emit("threeflag", this.threeflag);
             }
           });
-        this.increaseGoodsDialogVisible = false;
+        
 
-        }
       }
     },
     openOrganizationModal() {
@@ -312,34 +306,6 @@ export default {
         }
     },
 
-    //保存或发布校验
-    saveorsend() {
-      this.saveorsendflag = true;
-      if (this.form.type == "" && this.saveorsendflag == true) {
-        this.saveorsendflag = false;
-        this.$notify({
-          title: "警告",
-          message: "公告类型不能为空",
-          type: "warning"
-        });
-      }
-      if (this.form.title == "" && this.saveorsendflag == true) {
-        this.saveorsendflag = false;
-        this.$notify({
-          title: "警告",
-          message: "公告主题不能为空",
-          type: "warning"
-        });
-      }
-      if (this.form.context == "" && this.saveorsendflag == true) {
-        this.saveorsendflag = false;
-        this.$notify({
-          title: "警告",
-          message: "正文内容不能为空",
-          type: "warning"
-        });
-      }
-    },
       handleImageAdded(file, Editor, cursorLocation, resetUploader) {
 
         let formData = new FormData();

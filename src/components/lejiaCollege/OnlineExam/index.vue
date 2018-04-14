@@ -140,15 +140,15 @@
           </div>
         </div>
       </div>
-<Organization :organizationDialog="organizationDialog" :length="len" :type="depart"  @close="closeOrganization"  @selectMember="coloseaa"></Organization>
+  <Organization :organizationDialog="organizationDialog" :length="len" :type="depart"  @close="closeOrganization"  @selectMember="coloseaa"></Organization>
   </div>
 </template>
 
 <script>
-import Organization from '../../common/organization.vue'
+import Organization from "../../common/organization.vue";
 export default {
   name: "index",
-  components:{Organization},
+  components: { Organization },
   data() {
     return {
       tableData: [],
@@ -157,9 +157,9 @@ export default {
         limit: 12,
         type: "",
         search: "",
-        department_id:"",
+        department_id: ""
       },
-      departname:"",
+      departname: "",
       forms: [
         { id: "1", name: "表彰" },
         { id: "2", name: "批评" },
@@ -203,30 +203,30 @@ export default {
           }
         ]
       },
-      value4: "",    
-      len:0,
-      depart:"",  
+      value4: "",
+      len: 0,
+      depart: ""
     };
   },
   mounted() {},
   watch: {},
   methods: {
-      openOrganizationModal() {
-        this.organizationDialog = true;
-        this.len=1;
-        this.depart="depart";
-      },
-      closeOrganization() {
-        this.organizationDialog = false;
-        this.len=0;
-        this.depart="";
-      },
-      coloseaa(val){
-        this.departname=val[0].name
-        this.form.department_id=val[0].id
-        this.len=0;
-        this.depart="";
-      },
+    openOrganizationModal() {
+      this.organizationDialog = true;
+      this.len = 1;
+      this.depart = "depart";
+    },
+    closeOrganization() {
+      this.organizationDialog = false;
+      this.len = 0;
+      this.depart = "";
+    },
+    coloseaa(val) {
+      this.departname = val[0].name;
+      this.form.department_id = val[0].id;
+      this.len = 0;
+      this.depart = "";
+    },
     // 高级
     highGrade() {
       this.isHigh = !this.isHigh;
