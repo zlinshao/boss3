@@ -90,7 +90,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="更新时间">
-                    <div class="content">{{item.update_time}}</div>
+                    <div class="content">{{item.create_time}}</div>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -166,7 +166,7 @@
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="更新时间">
-                    <div class="content">{{item.update_time}}</div>
+                    <div class="content">{{item.create_time}}</div>
                   </el-form-item>
                 </el-col>
               </el-row>

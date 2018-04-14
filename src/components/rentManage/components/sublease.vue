@@ -837,10 +837,10 @@
         this.payWayChangeAmount--;
       },
       //jine bianhua
-      addMoreMoneyTableChange(item){
+      addMoreMoneyTableChange(){
         this.moneyTableChangeAmount++;
       },
-      deleteMoneyTableChange(){
+      deleteMoneyTableChange(item){
         this.moneyWayArray.splice(item, 1);
         this.moneySepArray.splice(item, 1);
         this.moneyTableChangeAmount--;
@@ -922,7 +922,7 @@
         let moneyTableItem = {};
         this.params.money_table = [];
         for (let i = 0; i < this.moneyTableChangeAmount; i++) {
-          payWayItem = {};
+          moneyTableItem = {};
           moneyTableItem.money_way = this.moneyWayArray[i] ? this.moneyWayArray[i] : '';
           moneyTableItem.money_sep = this.moneySepArray[i] ? this.moneySepArray[i] : '';
           this.params.money_table.push(moneyTableItem);

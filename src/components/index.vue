@@ -446,6 +446,8 @@
           if (this.personal.data.setting.length < 1 || !this.personal.detail.pwd_lock) {
             this.setLockPwdDialog = true;
           }
+        }else {
+          this.setLockPwdDialog = true;
         }
 
       },
