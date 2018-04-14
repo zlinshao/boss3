@@ -1149,6 +1149,7 @@
           width: 100%;
           border: 1px solid #d4f0de;
           .el-tabs__content {
+            width: 100% !important;
             min-height: 100px;
             .el-tab-pane {
 
