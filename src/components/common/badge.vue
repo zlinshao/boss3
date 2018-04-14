@@ -29,7 +29,7 @@ export default {
       loginDay: 0, //连续登陆天数
       badgeDialogVisible: false,
       type: 3,
-      xljt: '',
+      xljt: "",
       xljxArray: [
         "幸福是持续地拥有满足感和知足感^_^",
         "喝一杯咖啡，放松一下自己^_^",
@@ -51,6 +51,10 @@ export default {
     panelShow(val) {
       if (!val) {
         this.$emit("close");
+      } else {
+        setTimeout(() => {
+          this.closeBadge();
+        }, 2000);
       }
     }
   },
@@ -58,9 +62,6 @@ export default {
     this.landholder = JSON.parse(localStorage.personal);
     this.loginDay = this.landholder.data.loginday;
     this.getFlag();
-    setTimeout(() => {
-      this.closeBadge();
-    }, 2000);
   },
   methods: {
     closeBadge() {
@@ -78,11 +79,13 @@ export default {
           }
         });
     },
-      getFlag(){
-        let length = this.xljxArray.length;
-        let num = Math.floor(Math.random()*length);
-        this.xljt = this.xljxArray[num]?this.xljxArray[num]:'乐伽不止眼前的合同，还有诗和远方的田野！';
-      },
+    getFlag() {
+      let length = this.xljxArray.length;
+      let num = Math.floor(Math.random() * length);
+      this.xljt = this.xljxArray[num]
+        ? this.xljxArray[num]
+        : "乐伽不止眼前的合同，还有诗和远方的田野！";
+    }
   }
 };
 </script>
