@@ -15,21 +15,25 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
+        <el-button size="small" type="success" @click="clearPassword">清除二级密码</el-button>
         <el-button :disabled="!basicSetting.pwd"
                    size="small" type="primary" @click="saveVisitRecord">确 定</el-button>
       </span>
     </el-dialog>
+    <ClearSecondPW :ClearSecondPWDialog="ClearSecondPWDialog" @clearFalg="clearFalg"  @close="closeModal"></ClearSecondPW>
   </div>
 </template>
 
 <script>
+import ClearSecondPW from "./clearSecondpw.vue";
 export default {
   props: ["unlockSecondPWDialog", "sendId"],
-  components: {},
+  components: {ClearSecondPW},
   data() {
     return {
       unlockSecondPWDialogVisible: false,
       unlockFlag:false,
+      ClearSecondPWDialog:false,
       basicSetting: {
         dict_id: "221",
         pwd: ""
@@ -56,10 +60,21 @@ export default {
     sendId(val) {
       console.log(val)
       this.basicSetting.dict_id = val;
-    }
+    },
   },
   methods: {
-
+    closeModal(){
+      this.ClearSecondPWDialog =false;
+    },
+    clearPassword(){
+      this.ClearSecondPWDialog = true;
+    },
+    clearFalg(val){
+      if(val){
+        this.unlockSecondPWDialogVisible =false;
+        this.$emit("unlockFlag",val);
+      }
+    },
     saveVisitRecord() {
       this.$http
         .get(globalConfig.server + "setting/others/password", {

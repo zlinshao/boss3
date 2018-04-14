@@ -45,47 +45,53 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" type="primary" >确 定</el-button>
+        <el-button size="small" type="primary" @click="save" >确 定</el-button>
       </span>
     </el-dialog>
+<StarffSure :starffSureFlag="starffSureFlag" @close="closeModal"></StarffSure>
   </div>
 </template>
 
 <script>
+import StarffSure from "./StarffSure.vue";
 export default {
   props: ["starffAddFlag"],
-  components: {},
+  components: { StarffSure },
   data() {
     return {
       starffAddDialogVisible: false,
+      starffSureFlag: false,
       personal: {},
-      createTime:"",
-      form:{
-        check:[],
+      createTime: "",
+      form: {
+        check: []
       },
-      goods:[
+      goods: [
         {
-          id:1,
-          name:1
-        },{
-          id:2,
-          name:2
-        },{
-          id:3,
-          name:3
-        },{
-          id:4,
-          name:4
+          id: 1,
+          name: 1
+        },
+        {
+          id: 2,
+          name: 2
+        },
+        {
+          id: 3,
+          name: 3
+        },
+        {
+          id: 4,
+          name: 4
         }
-      ],
+      ]
     };
   },
   computed: {},
   mounted() {
     //初始化个人信息
     this.personal = JSON.parse(localStorage.personal);
-    this.createTime = this.personal.detail.create_time.split(' ')[0];
-    console.log(this.personal)
+    this.createTime = this.personal.detail.create_time.split(" ")[0];
+    console.log(this.personal);
   },
   created() {},
   watch: {
@@ -99,7 +105,14 @@ export default {
     }
   },
   methods: {
-    // saveVisitRecord() {
+    //模态框回调
+    closeModal() {
+      this.starffSureFlag = false;
+    },
+    save() {
+      this.starffSureFlag = true;
+    }
+    // save() {
     //   this.$http
     //     .get(globalConfig.server + "setting/others/password", {
     //       params: this.basicSetting
