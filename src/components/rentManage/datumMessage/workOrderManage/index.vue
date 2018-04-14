@@ -48,6 +48,27 @@
                 </el-row>
               </el-col>
             </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">工单创建时间</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-date-picker
+                        v-model="params.create_time"
+                        type="daterange"
+                        value-format="yyyy-MM-dd"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
@@ -160,6 +181,7 @@
           limit: 12,
           follow_status:'',
           follow_id:'',
+          create_time:[],
         },
         follow_name:'',   //跟进人
         length:0,
@@ -316,6 +338,7 @@
       resetting(){
         this.params.follow_id = '';
         this.params.follow_status = '';
+        this.params.create_time = [];
         this.follow_name = '';
         this.search();
       }
