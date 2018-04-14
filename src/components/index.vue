@@ -433,7 +433,7 @@
     },
     methods: {
       initData() {
-        个人连续登录时长勋章
+        //个人连续登录时长勋章
         if (!this.personal.data.medal) {
           this.badgeDialog = true;
         }
