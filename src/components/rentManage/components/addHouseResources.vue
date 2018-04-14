@@ -114,7 +114,7 @@
 
                 <el-row>
                   <el-col :span="6">
-                    <el-form-item label="房屋类型">
+                    <el-form-item label="房屋类型" required="">
                       <el-select clearable v-model="params.property_type" placeholder="请选择房屋类型" value="">
                         <el-option v-for="item in property_type_dic" :label="item.dictionary_name" :value="item.id"
                                    :key="item.id"></el-option>
@@ -449,7 +449,7 @@
 
                   <el-row>
                     <el-col :span="6">
-                      <el-form-item label="水表底数" required>
+                      <el-form-item label="水表底数">
                         <el-input placeholder="请输入内容" v-model="params.water"></el-input>
                       </el-form-item>
                     </el-col>
@@ -468,12 +468,12 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="燃气表底数" required>
+                      <el-form-item label="燃气表底数">
                         <el-input placeholder="请输入内容" v-model="params.gas"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="公摊费用" required>
+                      <el-form-item label="公摊费用">
                         <el-input placeholder="请输入内容" v-model="params.public_fee"></el-input>
                       </el-form-item>
                     </el-col>

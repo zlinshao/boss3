@@ -600,6 +600,7 @@
         sexArray: [],
         id_typeArray: [],
         id_numberArray: [],
+        idArray: [],
         phoneArray: [],
 
         //-----------------字典----------------------//
@@ -719,6 +720,7 @@
             this.sexArray = [];
             this.id_typeArray = [];
             this.id_numberArray = [];
+            this.idArray = [];
             this.phoneArray = [];
 
             let data = res.data.data;
@@ -730,6 +732,7 @@
               this.sexArray.push(String(item.sex));
               this.id_typeArray.push(item.idtype);
               this.id_numberArray.push(item.idcard);
+              this.idArray.push(item.id);
               this.phoneArray.push(item.phone);
             });
 
@@ -846,6 +849,7 @@
         this.sexArray.splice(item, 1);
         this.id_typeArray.splice(item, 1);
         this.id_numberArray.splice(item, 1);
+        this.idArray.splice(item, 1);
         this.phoneArray.splice(item, 1);
         this.customersAmount--;
       },
@@ -928,6 +932,7 @@
           customItem.sex = this.sexArray[i] ? this.sexArray[i] : '';
           customItem.id_type = this.id_typeArray[i] ? this.id_typeArray[i] : '';
           customItem.id_number = this.id_numberArray[i] ? this.id_numberArray[i] : '';
+          customItem.id = this.idArray[i] ? this.idArray[i] : '';
           customItem.phone = this.phoneArray[i] ? this.phoneArray[i] : '';
           this.params.customers.push(customItem);
         }
@@ -1048,6 +1053,7 @@
         this.sexArray = [];
         this.id_typeArray = [];
         this.id_numberArray = [];
+        this.idArray = [];
         this.phoneArray = [];
         //-----------------字典----------------------//
 
