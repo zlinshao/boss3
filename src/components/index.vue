@@ -53,7 +53,7 @@
             </el-badge>
             <el-dropdown-menu slot="dropdown" class="menuLists">
               <!--消息图标-->
-              <el-dropdown-item v-for="(item,index) in unReadMessageData" v-if="index<2" :key="index">
+              <el-dropdown-item v-for="(item,index) in unReadMessageData" v-if="index<2 && unReadMessageData.length>0" :key="index">
                 <div class="first">
                   <el-row @click.native="showMessageDetail(item)">
                     <el-col :span="4">
@@ -70,21 +70,32 @@
                   </el-row>
                 </div>
               </el-dropdown-item>
-              <el-dropdown-item>
-                <el-row v-if="unReadMessageData.length >0" @click.native="showOtherDetail()">
+              <el-dropdown-item >
+                <el-row v-if="unReadMessageData.length >0" @click.native="showOtherDetail('unread')">
                   <el-col :span="24">
-                    <div style="display:block; line-height:32px; text-align:center; color:#409EFF">查看全部<span
+                    <div style="display:block; margin-top:10px; text-align:center; color:#409EFF">查看全部<span
                       style="color:#f00">{{unReadMessageData.length}}条</span>未读
                     </div>
                   </el-col>
                 </el-row>
-                <el-row v-if="unReadMessageData.length <=0" style="cursor:default">
+              </el-dropdown-item>
+              <el-dropdown-item class="not" v-if="unReadMessageData.length <0">
+                <el-row  style="cursor:default; ">
                   <el-col :span="24">
-                    <div style=" width:180px; height:65px; display:block; line-height:65px; text-align:center">暂无数据
+                    <i style="font-size:50px;color:#eee; display:block; text-align:center;" class="el-icon-warning"></i>
+                    <div style=" width:180px;color:#aaa; height:40px; display:block; line-height:40px; text-align:center">您当前还没有消息提醒
                     </div>
                   </el-col>
                 </el-row>
               </el-dropdown-item>
+              <el-dropdown-item v-if="unReadMessageData.length <0">
+                <el-row @click.native="showOtherDetail('read')">
+                  <el-col :span="24">
+                    <div style="display:block; margin-top:10px; text-align:center; color:#409EFF">查看全部已读消息
+                      </div>
+                  </el-col>
+                </el-row> 
+              </el-dropdown-item>    
             </el-dropdown-menu>
           </el-dropdown>
 
@@ -533,13 +544,23 @@
           });
       },
 
-      showOtherDetail() {
+      showOtherDetail(val) {
+        if(val == 'unread'){
         this.$router.push({
           path: "/messageCenter",
           query: {
             unread: 1
           }
         });
+        }
+        else{
+         this.$router.push({
+          path: "/messageCenter",
+          query: {
+            unread: 0
+          }
+        });         
+        }
       },
       //模态框回调
       closeModal() {
@@ -1201,4 +1222,6 @@
       }
     }
   }
+  .not:hover{background: none !important;}
+  .not{border:none !important;}
 </style>
