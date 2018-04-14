@@ -110,6 +110,7 @@ export default {
       this.$http.get(globalConfig.server + "exam").then(res => {
         if (res.data.code === "30000") {
           this.goods = res.data.data.data;
+          this.form.check = ""
         }
       });
     }
