@@ -51,8 +51,8 @@
 <style scoped="">
 
   .totalNumber{
-    font-family: 'Impact', sans-serif;
-    color: #ccc;
+    /*font-family: 'Impact', sans-serif;*/
+    color: #bbb;
     font-size: 14px;
   }
 	.tree-expand{
