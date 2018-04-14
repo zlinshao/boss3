@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div @click="show=false" @contextmenu="closeMenu">
       <el-table
         :data="tableData"
         :empty-text = 'emptyContent'
@@ -8,6 +8,7 @@
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(0, 0, 0, 0)"
         @row-dblclick="dblClickTable"
+        @row-contextmenu='houseMenu'
         style="width: 100%">
         <el-table-column
           prop="create_time"
@@ -59,16 +60,26 @@
         </el-pagination>
       </div>
       <OrderDetail :orderDetailDialog="orderDetailDialog" :activeId="activeId" :startDetail="startDetail" @close="closeModal"></OrderDetail>
+      <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+                 @clickOperate="clickEvent"></RightMenu>
+      <AddChildTask :addChildTaskDialog="addChildTaskDialog" :activeId="activeId" :startAddResult="startEdit" @close="closeModal"></AddChildTask>
     </div>
 </template>
 
 <script>
   import OrderDetail from '../datumMessage/workOrderManage/components/workOrderDetail.vue'
+  import RightMenu from '../../common/rightMenu.vue'
+  import AddChildTask from '../datumMessage/workOrderManage/components/addChildTask.vue'
     export default {
         props:['collectContractId','activeName','tabStatusChange'],
-        components: {OrderDetail},
+        components: {OrderDetail,RightMenu,AddChildTask},
         data () {
             return {
+              rightMenuX: 0,
+              rightMenuY: 0,
+              show: false,
+              lists: [],
+              /***********/
               tableData:[],
               params: {
                 pages: 1,
@@ -80,11 +91,14 @@
               activeId : '',
               startDetail : false,
               orderDetailDialog : false,
+              addChildTaskDialog :false,
+              startEdit :false,
 
               isRequestData : false,
 
               emptyContent : ' ',
               tableLoading : false,
+
             }
         },
         watch:{
@@ -136,6 +150,44 @@
           closeModal(){
             this.orderDetailDialog = false;
             this.startDetail = false;
+            this.addChildTaskDialog = false;
+          },
+
+
+          //房屋右键
+          houseMenu(row, event){
+            this.activeId = row.id;
+            this.lists = [
+//          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
+              {clickIndex: 'addChildren', headIcon: 'el-icon-plus', label: '添加子任务',},
+            ];
+            this.contextMenuParam(event);
+          },
+          //右键回调事件
+          clickEvent (index) {
+            switch (index){
+              case 'addChildren' :
+                this.addChildTaskDialog = true;
+                this.startEdit = true;
+                break;
+            }
+          },
+          //关闭右键菜单
+          closeMenu(){
+            this.show = false;
+          },
+          //右键参数
+          contextMenuParam(event){
+            //param: user right param
+            let e = event || window.event;	//support firefox contextmenu
+            this.show = false;
+            this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+            this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+            event.preventDefault();
+            event.stopPropagation();
+            this.$nextTick(() => {
+              this.show = true
+            })
           },
         }
     }
