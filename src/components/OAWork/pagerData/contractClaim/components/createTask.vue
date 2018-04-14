@@ -538,7 +538,8 @@
       },
       createTaskDialogVisible(val){
         if(!val){
-          this.$emit('close')
+          this.$emit('close');
+          this.closeAddModal();
         }
       },
       selectFlag(val){

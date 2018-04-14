@@ -309,6 +309,7 @@
         this.isHigh = !this.isHigh;
       },
       search(){
+        this.isHigh = false;
         this.params.pages = 1;
         this.getTableData();
       },

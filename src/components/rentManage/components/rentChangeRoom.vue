@@ -273,7 +273,7 @@
                       <el-row>
                         <el-col :span="6">
                           <el-form-item label="押">
-                            <el-select clearable v-model="payWayArray[item-1]" placeholder="请选择付款方式" value="">
+                            <el-select clearable v-model="payWayArray[0]" :disabled="item>1" placeholder="请选择付款方式" value="">
                               <el-option v-for="item in 3" :value="item-1"
                                          :key="item-1"></el-option>
                             </el-select>
@@ -946,7 +946,7 @@
         this.params.pay_way = [];
         for (let i = 0; i < this.payWayChangeAmount; i++) {
           payWayItem = {};
-          payWayItem.pay_way = this.payWayArray[i] ? this.payWayArray[i] : '';
+          payWayItem.pay_way = this.payWayArray[0] ? this.payWayArray[0] : '';
           payWayItem.pay_way_bet = this.pay_way_bet[i] ? this.pay_way_bet[i] : '';
           payWayItem.period = this.payPeriodArray[i] ? this.payPeriodArray[i] : '';
           this.params.pay_way.push(payWayItem);

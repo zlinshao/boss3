@@ -81,7 +81,7 @@
                 <i class="el-icon-plus"></i>新增跟进结果
               </el-button>
             </div>
-            <div v-if="workOrderDetail.remarks.length>0">
+            <div v-if="workOrderDetail.remarks&&workOrderDetail.remarks.length>0">
               <el-form size="small" label-width="100px" v-if="workOrderDetail.remarks">
                 <el-row v-for="item in workOrderDetail.remarks" :key="item.id">
                   <el-col :span="16">
@@ -162,7 +162,7 @@
                 <i class="el-icon-plus"></i>新增跟进结果
               </el-button>
             </div>
-            <div v-if="item.remarks.length>0">
+            <div v-if="item.remarks&&item.remarks.length>0">
               <el-form size="small" label-width="100px" v-if="item.remarks">
                 <el-row v-for="item in item.remarks" :key="item.id">
                   <el-col :span="16">

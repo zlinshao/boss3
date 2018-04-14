@@ -415,12 +415,12 @@
                                :data-src="value">
                         </div>
                       </el-tab-pane>
-                      <el-tab-pane label="银行卡照片">
-                        <div class="image">
-                          <img v-for="(value,key) in contractInfo.bank_photo" :src="value" data-magnify=""
-                               :data-src="value">
-                        </div>
-                      </el-tab-pane>
+                        <el-tab-pane label="银行卡照片">
+                          <div class="image">
+                            <img v-for="(value,key) in contractInfo.bank_photo" :src="value" data-magnify=""
+                                 :data-src="value">
+                          </div>
+                        </el-tab-pane>
                       <el-tab-pane label="水表照片">
                         <div class="image">
                           <img v-for="(value,key) in contractInfo.water_photo" :src="value" data-magnify=""
