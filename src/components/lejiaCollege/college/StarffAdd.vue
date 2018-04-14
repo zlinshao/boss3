@@ -34,7 +34,7 @@
             </el-col>            
           </el-row>
           <el-row>
-              <el-form :model="form" size="mini" class="elformot">
+              <el-form :model="form" size="mini" class="elformot scroll_bar">
                 <el-form-item>
                   <el-radio-group v-model="form.check">
                     <el-col :span="24" :key="index" v-for="(val,index) in goods" style="line-height:24px;height: 24px;">
@@ -124,6 +124,8 @@ export default {
 }
 .elformot{
   margin: 0 40px;
-  overflow: hidden;
+  overflow-x:hidden;
+  overflow-y:auto;  
+  height: 200px;
 }
 </style>
