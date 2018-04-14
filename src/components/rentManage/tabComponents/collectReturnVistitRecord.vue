@@ -9,16 +9,16 @@
         element-loading-background="rgba(0, 0, 0, 0)"
         style="width: 100%">
         <el-table-column
+          prop="content"
+          label="回访内容">
+        </el-table-column>
+        <el-table-column
           prop="simple_staff.real_name"
           label="回访人">
         </el-table-column>
         <el-table-column
           prop="create_time"
           label="回访时间">
-        </el-table-column>
-        <el-table-column
-          prop="content"
-          label="回访内容">
         </el-table-column>
       </el-table>
       <div class="pagination">

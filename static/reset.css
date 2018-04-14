@@ -268,9 +268,6 @@
   border: 1px solid rgba(64, 158, 255, 0.12);
   box-shadow: 0 2px 4px 0 rgba(64, 158, 255, 0.12), 0 0 6px 0 rgba(64, 158, 255, 0.04); }
 
-.el-submenu.is-disabled .el-menu-item, .el-submenu.is-disabled .el-submenu__title {
-  cursor: pointer !important; }
-
 .el-loading-mask .el-loading-spinner {
   margin-top: 0; }
 
@@ -310,5 +307,16 @@
     transition: all .4s; }
     .twoFlex .btnCollapse .sss .el-radio-button__inner i {
       transform: rotate(180deg); }
+
+.el-submenu.is-disabled .el-menu-item, .el-submenu.is-disabled .el-submenu__title {
+  cursor: pointer !important; }
+
+.el-notification {
+  z-index: 999999 !important; }
+
+.el-tabs {
+  width: 100% !important; }
+  .el-tabs .el-tabs__header, .el-tabs .el-tabs__content {
+    width: 100% !important; }
 
 /*# sourceMappingURL=reset.css.map */

@@ -171,7 +171,7 @@
     letter-spacing: 1px;
     user-select: none;
     position: absolute;
-    z-index: 2006;
+    z-index: 99999;
     .log_off {
       width: 40px;
       height: 40px;

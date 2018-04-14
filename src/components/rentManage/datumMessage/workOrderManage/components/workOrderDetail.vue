@@ -14,7 +14,7 @@
               <el-col :span="8">
                 <el-form-item label="创建人">
                   <div class="content">
-                    <span v-if="workOrderDetail.creators">{{workOrderDetail.creators[0].name}}</span>
+                    <span v-if="workOrderDetail.creators">{{workOrderDetail.creators.name}}</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -33,7 +33,7 @@
               <el-col :span="8">
                 <el-form-item label="跟进人">
                   <div class="content">
-                    <span v-if="workOrderDetail.follows">{{workOrderDetail.follows[0].name}}</span>
+                    <span v-if="workOrderDetail.follows">{{workOrderDetail.follows.name}}</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -81,20 +81,25 @@
                 <i class="el-icon-plus"></i>新增跟进结果
               </el-button>
             </div>
-            <el-form size="small" label-width="100px" v-if="workOrderDetail.remarks">
-              <el-row v-for="item in workOrderDetail.remarks" :key="item.id">
-                <el-col :span="16">
-                  <el-form-item label="跟进结果">
-                    <div class="content">{{item.content}}</div>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="更新时间">
-                    <div class="content">{{item.create_time}}</div>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>
+            <div v-if="workOrderDetail.remarks.length>0">
+              <el-form size="small" label-width="100px" v-if="workOrderDetail.remarks">
+                <el-row v-for="item in workOrderDetail.remarks" :key="item.id">
+                  <el-col :span="16">
+                    <el-form-item label="跟进结果">
+                      <div class="content">{{item.content}}</div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="更新时间">
+                      <div class="content">{{item.create_time}}</div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </div>
+            <div class="content" v-else="" style="text-align: center;line-height: 30px">
+              暂无数据
+            </div>
           </el-form>
         </div>
 
@@ -109,7 +114,7 @@
               <el-col :span="8">
                 <el-form-item label="跟进人">
                   <div class="content">
-                    <span v-if="item.follows">{{item.follows[0].name}}</span>
+                    <span v-if="item.follows">{{item.follows.name}}</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -157,20 +162,25 @@
                 <i class="el-icon-plus"></i>新增跟进结果
               </el-button>
             </div>
-            <el-form size="small" label-width="100px" v-if="item.remarks">
-              <el-row v-for="item in item.remarks" :key="item.id">
-                <el-col :span="16">
-                  <el-form-item label="跟进结果">
-                    <div class="content">{{item.content}}</div>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="更新时间">
-                    <div class="content">{{item.create_time}}</div>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>
+            <div v-if="item.remarks.length>0">
+              <el-form size="small" label-width="100px" v-if="item.remarks">
+                <el-row v-for="item in item.remarks" :key="item.id">
+                  <el-col :span="16">
+                    <el-form-item label="跟进结果">
+                      <div class="content">{{item.content}}</div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="更新时间">
+                      <div class="content">{{item.create_time}}</div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
+            </div>
+            <div class="content" v-else="" style="text-align: center;line-height: 30px">
+              暂无数据
+            </div>
           </el-form>
         </div>
       </div>
