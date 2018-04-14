@@ -919,19 +919,27 @@
             });
           });
         }else if(val.clickIndex === 'enable'){
-          this.$http.put(globalConfig.server+ 'manager/staff/dismiss/'+val.id, {type: 'is_enable'}).then((res)=>{
-            if(res.data.code === '10040'){
-              this.$notify.success({
-                title: '成功',
-                message: res.data.msg
-              });
-              this.getStaffData();
-            }else{
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.msg
-              })
-            }
+          this.$confirm('员工禁用状态将会改变, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$http.put(globalConfig.server+ 'manager/staff/dismiss/'+val.id, {type: 'is_enable'}).then((res)=>{
+              if(res.data.code === '10040'){
+                this.$notify.success({
+                  title: '成功',
+                  message: res.data.msg
+                });
+                this.getStaffData();
+              }else{
+                this.$notify.warning({
+                  title: '警告',
+                  message: res.data.msg
+                })
+              }
+            });
+          }).catch(() => {
+
           });
         }else if(val.clickIndex === 'on_job'){
           this.$confirm('员工在职状态将会改变, 是否继续?', '提示', {

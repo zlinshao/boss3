@@ -1143,7 +1143,9 @@
       }
       .myDetail {
         margin-bottom: 15px;
+        width: 100%;
         .el-tabs {
+          width: 100%;
           border: 1px solid #d4f0de;
           .el-tabs__content {
             min-height: 100px;

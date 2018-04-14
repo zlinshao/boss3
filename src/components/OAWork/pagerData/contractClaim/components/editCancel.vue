@@ -94,7 +94,7 @@
             <el-row>
               <el-col>
                 <el-form-item label="截图">
-                  <Upload :ID="'jieTu'" @getImg="getImg"></Upload>
+                  <Upload :ID="'jieTu_edit_cancel'" @getImg="getImg"></Upload>
                 </el-form-item>
               </el-col>
             </el-row>

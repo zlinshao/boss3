@@ -481,11 +481,10 @@
               if (response.data.code == "7777") {
                 clearInterval(this.interval);
                 this.interval = null;
+                clearInterval(this.messageInterval);
                 this.messageInterval = null;
 
                 sessionStorage.setItem("beforePath", this.$route.path);
-
-                alert(sessionStorage.getItem('beforePath'));
                 sessionStorage.setItem("lockStatus", 1);
                 this.$router.push({path: "/lock"});
               }
