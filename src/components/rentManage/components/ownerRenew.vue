@@ -48,7 +48,6 @@
                       <el-col :span="8" style="padding-right: 10px">
                         <el-select clearable v-model="params.house_type[0]" placeholder="室" value="">
                           <el-option label="一室" value="1"></el-option>
-                          <el-option label="一室" value="1"></el-option>
                           <el-option label="二室" value="2"></el-option>
                           <el-option label="三室" value="3"></el-option>
                           <el-option label="四室" value="4"></el-option>
