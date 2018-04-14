@@ -126,7 +126,7 @@
         },
         refresh: 0,
         taskType:'1',
-        dictionary:[],
+        dictionaryx:[],
         length:0,
         type:'',
         organizationDialog:false,
@@ -165,8 +165,8 @@
     methods:{
 
       getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/306').then((res) => {
-          this.dictionary = res.data.data;
+        this.dictionary(306,1).then((res) => {
+          this.dictionaryx = res.data;
           this.getApplyDetail();
         });
       },
@@ -199,7 +199,7 @@
                   this.params.candidate.push(key)
                 }
                 this.params.city_code=applyInfo.city_code;
-                this.dictionary.forEach(item => {
+                this.dictionaryx.forEach(item => {
                  if (item.variable.city_abbr === applyInfo.city_code) {
                    this.params.city_name = item.dictionary_name;
                    return false;
@@ -280,7 +280,7 @@
           candidate:[],
         };
         this.taskType = '1';
-        this.dictionary = [];
+        this.dictionaryx = [];
         this.length = '';
         this.type = '';
         this.organizationDialog = false;

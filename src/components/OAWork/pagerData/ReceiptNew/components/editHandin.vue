@@ -118,7 +118,7 @@
         },
         taskType:'3',
         refresh:0,
-        dictionary:[],
+        dictionaryx:[],
         contractDictionary:[],    //收据类型字典
         length:0,
         type:'',
@@ -158,11 +158,11 @@
     },
     methods:{
       getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/306').then((res) => {
-          this.dictionary = res.data.data;
+        this.dictionary(306,1).then((res) => {
+          this.dictionaryx = res.data;
         });
-        this.$http.get(globalConfig.server+'setting/dictionary/107').then((res) => {
-          this.contractDictionary = res.data.data;
+        this.dictionary(107,1).then((res) => {
+          this.contractDictionary = res.data;
         }).then((data) =>{
           this.getApplyDetail();
         })
@@ -273,7 +273,7 @@
         this.isSelectCollec=[],
         this.isSelectRent= [],
         this.taskType = '3';
-        this.dictionary = [];
+        this.dictionaryx = [];
         this.length = '';
         this.type = '';
         this.organizationDialog = false;

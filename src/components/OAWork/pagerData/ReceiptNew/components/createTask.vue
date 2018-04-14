@@ -19,7 +19,7 @@
               <el-col :span="8">
                 <el-form-item label="城市">
                   <el-select clearable v-model="params.city_code" placeholder="请选择城市" @change="selectCity" value="">
-                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.variable.city_abbr"
+                    <el-option v-for="item in dictionaryx" :label="item.dictionary_name" :value="item.variable.city_abbr"
                                :key="item.id"></el-option>
                   </el-select>
                 </el-form-item>
@@ -111,7 +111,7 @@
             <el-row>
               <el-col :span="8" v-for="item in contractCollectNum" :key="item">
                 <el-form-item label="收据编号（自选）">
-                  <el-input v-model="params.collect_extra[item-1]"></el-input>
+                  <el-input v-model="params.candidate[params.amount+1]"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -122,12 +122,13 @@
             </div>
             <div class="title" v-if="taskType==3">
               收房收据上缴(请勾选)
+              <el-checkbox style="float:right" :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
             </div>
             <div class="title" v-if="taskType==4">
               收房收据丢失(请勾选)
             </div>
             <el-row>
-              <el-checkbox-group v-model="params.candidate">
+              <el-checkbox-group v-model="params.candidate" @change="handleCheckedCitiesChange">
                 <el-col :span="6" v-for="(val,key) in collectCancelCollect" :key="key">
                   <el-checkbox :label="val.id" name="type">{{val.full_text}}</el-checkbox>
                 </el-col>
@@ -190,6 +191,8 @@
       return {
         createTaskDialogVisible:false,
         RefreshTask:0,
+        isIndeterminate:true,
+        checkAll: false,
         params: {
           city_code:'',
 //          category:'',
@@ -209,7 +212,7 @@
           personal_contracts:[],//s上缴个人收据
         },
         taskType:'1',
-        dictionary:[],
+        dictionaryx:[],
         contractDictionary:[],    //收据类型字典
         length:0,
         type:'',
@@ -237,7 +240,8 @@
       },
       createTaskDialogVisible(val){
         if(!val){
-          this.$emit('close')
+          this.$emit('close');
+          this.closeAddModal();
         }
       },
       selectFlag(val){
@@ -253,12 +257,26 @@
       }
     },
     methods:{
+      handleCheckAllChange(val) {
+        if(val){
+        for(let i =0 ; i<this.collectCancelCollect.length;i++)
+        this.params.candidate.push(parseInt(this.collectCancelCollect[i].id))
+        }else{
+          this.params.candidate =[];
+        }
+        this.isIndeterminate = false;
+      },
+      handleCheckedCitiesChange(value) {
+        let checkedCount = value.length;
+        this.checkAll = checkedCount === this.collectCancelCollect.length;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.collectCancelCollect.length;
+      },
       getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/306').then((res) => {
-          this.dictionary = res.data.data;
+        this.dictionary(306,1).then((res) => {
+          this.dictionaryx = res.data;
         });
-        this.$http.get(globalConfig.server+'setting/dictionary/107').then((res) => {
-          this.contractDictionary = res.data.data;
+        this.dictionary(107,1).then((res) => {
+          this.contractDictionary = res.data
         })
       },
       //调出选人组件
@@ -453,7 +471,7 @@
             personal_contracts:[],//s上缴个人收据
         };
         this.taskType = '1';
-        this.dictionary = [];
+        this.dictionaryx = [];
         this.length = '';
         this.type = '';
         this.organizationDialog = false;

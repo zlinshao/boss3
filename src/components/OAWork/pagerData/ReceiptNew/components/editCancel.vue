@@ -110,7 +110,7 @@
         },
         taskType:'2',
         refresh:0,
-        dictionary:[],
+        dictionaryx:[],
         length:0,
         type:'',
         organizationDialog:false,
@@ -148,8 +148,8 @@
     },
     methods:{
       getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/306').then((res) => {
-          this.dictionary = res.data.data;
+        this.dictionary(306,1).then((res) => {
+          this.dictionaryx = res.data;
           this.getApplyDetail();
         });
       },
@@ -256,7 +256,7 @@
           candidate:[],
         };
         this.taskType = '2';
-        this.dictionary = [];
+        this.dictionaryx = [];
         this.length = '';
         this.type = '';
         this.organizationDialog = false;

@@ -72,7 +72,7 @@
         tableData:[],
         detailInfo:{},
         department:'',
-        dictionary:[],
+        dictionaryx:[],
       };
     },
     watch:{
@@ -93,8 +93,8 @@
     },
     methods:{
       getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/306').then((res) => {
-          this.dictionary = res.data.data;
+        this.dictionary(306,1).then((res) => {
+          this.dictionaryx = res.data;
         });
       },
 

@@ -75,7 +75,7 @@ export default {
       tableData: [],
       detailInfo: {},
       department: "",
-      dictionary: [],
+      dictionaryx: [],
       city_name: ""
     };
   },
@@ -97,25 +97,22 @@ export default {
   },
   methods: {
     getDictionary() {
-      this.$http
-        .get(globalConfig.server + "setting/dictionary/306")
-        .then(res => {
-          console.log(res);
-          this.dictionary = res.data.data;
-        });
+      this.dictionary(306, 1).then((res) => {
+        console.log(res);
+        this.dictionaryx = res.data;
+      });
     },
     getDetail() {
-
-      this.detailInfo={};
-      this.department="";
-      this.city_name= "";
+      this.detailInfo = {};
+      this.department = "";
+      this.city_name = "";
       this.$http
         .get(globalConfig.server + "receipt/apply/" + this.applyEditId_detail)
         .then(res => {
           if (res.data.code === "21000") {
             this.detailInfo = res.data.data;
             this.department = res.data.data.department.name;
-            this.dictionary.forEach(item => {
+            this.dictionaryx.forEach(item => {
               if (item.variable.city_abbr === this.detailInfo.city_code) {
                 this.city_name = item.dictionary_name;
                 return false;

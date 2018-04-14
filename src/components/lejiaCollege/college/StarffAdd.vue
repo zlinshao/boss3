@@ -38,7 +38,7 @@
                 <el-form-item>
                   <el-radio-group v-model="form.check">
                     <el-col :span="24" :key="index" v-for="(val,index) in goods" style="line-height:24px;height: 24px;">
-                      <el-radio :title="val.name" :label="index">{{val.name}}</el-radio>
+                      <el-radio :title="val.name" :label="index+1">{{val.name}}</el-radio>
                     </el-col>
                   </el-radio-group>
                 </el-form-item>
