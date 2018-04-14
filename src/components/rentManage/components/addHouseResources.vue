@@ -19,7 +19,7 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="6">
-                    <el-form-item label="小区别名" required="">
+                    <el-form-item label="小区别名">
                       <el-input placeholder="请输入内容" v-model="params.community_nickname"></el-input>
                     </el-form-item>
                   </el-col>
@@ -212,7 +212,7 @@
                           </el-input>
                         </el-col>
                         <el-col :span="12">
-                          <el-input placeholder="天数" v-model="params.day">
+                          <el-input placeholder="天数"  @blur="computedEndDate" v-model="params.day">
                             <template slot="append">天</template>
                           </el-input>
                         </el-col>
@@ -287,7 +287,7 @@
                     <el-col :span="6">
                       <el-form-item label="合同结束时间" required="">
                         <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
-                                        v-model="params.end_date"></el-date-picker>
+                                        v-model="params.end_date" disabled=""></el-date-picker>
                       </el-form-item>
                     </el-col>
 
@@ -303,6 +303,18 @@
                     <el-col :span="6">
                       <el-form-item label="押金" required>
                         <el-input placeholder="请输入内容" v-model="params.deposit"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="第一次打房租" required="">
+                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
+                                        v-model="params.pay_first_date"></el-date-picker>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                      <el-form-item label="第二次打房租" required="">
+                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
+                                        v-model="params.pay_second_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -369,18 +381,7 @@
                   </div>
 
                   <el-row>
-                    <el-col :span="6">
-                      <el-form-item label="第一次打房租" required="">
-                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
-                                        v-model="params.pay_first_date"></el-date-picker>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="6">
-                      <el-form-item label="第二次打房租" required="">
-                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
-                                        v-model="params.pay_second_date"></el-date-picker>
-                      </el-form-item>
-                    </el-col>
+
                     <el-col :span="6">
                       <el-form-item label="收款姓名" required="">
                         <el-input placeholder="请输入内容" v-model="params.account_name"></el-input>
@@ -974,6 +975,7 @@
 
       //改变收房月数
       changeMonth(){
+        this.computedEndDate();
         this.periodArray[0] = this.params.month;
         this.payPeriodArray[0] = this.params.month;
         this.priceArray.splice(1, this.priceArray.length);
@@ -1065,8 +1067,15 @@
 
       //计算空置期结束时间
       computedEndDate(){
-        let timestamp = Date.parse(new Date(this.params.begin_date)) + Number(this.params.vacancy) * 24 * 60 * 60 * 1000;
-        this.params.vacancy_end_date = this.formatDate(new Date(timestamp));
+//        let timestamp = Date.parse(new Date(this.params.begin_date)) + Number(this.params.vacancy) * 24 * 60 * 60 * 1000;
+//        this.params.vacancy_end_date = this.formatDate(new Date(timestamp));
+        this.$http.get(globalConfig.server+'lease/helper/collectdates?begin_date='+this.params.begin_date+'&month='
+                        +this.params.month +'&day='+this.params.day+'&vacancy='+this.params.vacancy ).then((res) =>{
+          if(res.data.code === '69910'){
+            this.params.vacancy_end_date = res.data.data.vac_end_date;
+            this.params.end_date = res.data.data.end_date;
+          }
+        })
       },
       formatDate(now) {
         let year = now.getFullYear();

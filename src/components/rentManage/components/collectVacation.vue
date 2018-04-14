@@ -61,7 +61,8 @@
             <el-row >
               <el-col :span="8">
                 <el-form-item label="退房时间" required>
-                  <el-date-picker type="date" v-model="params.check_time" placeholder="选择日期" style="width: 100%;"></el-date-picker>
+                  <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="params.check_time"
+                                  placeholder="选择日期" style="width: 100%;"></el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
