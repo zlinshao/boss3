@@ -793,7 +793,9 @@
             this.params.building = data.building;
             this.params.unit = data.unit;
             this.params.doorplate = data.doorplate;
-            this.params.house_type = data.house_type;
+            data.house_type.forEach((item,index) => {
+              this.params.house_type[index] = String(item);
+            });
             this.params.property_number = data.property_number;
             this.params.mound_number = data.mound_number;
             this.params.area = data.area;
