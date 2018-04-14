@@ -280,7 +280,7 @@ export default {
             } else {
               this.$notify.error({
                 title: "错误",
-                message: "操作失败"
+                message: res.data.msg
               });
               this.threeflag = false;
               this.$emit("threeflag", this.threeflag);
