@@ -230,10 +230,7 @@
 
       //确认提交
       confirmAdd(){
-        debugger;
-
           this.$http.put(globalConfig.server+'receipt/handin/'+this.handInEditId,this.params).then((res) => {
-            debugger;
             if(res.data.code ==='21010'){
               this.$notify.success({
                 title:'成功',

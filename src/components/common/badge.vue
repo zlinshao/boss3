@@ -6,7 +6,7 @@
       <div v-else-if="loginDay == 15" class="backdiv backdiv15"></div>
       <div v-else-if="loginDay == 30" class="backdiv backdiv30"></div>
       <div v-else class="backdiv backdivo"></div>
-      <p class="Rtitle">温馨关怀温馨关怀温馨关怀温馨关怀温馨关怀温馨关怀</p>
+      <p class="Rtitle">{{xljt}}</p>
       <span v-if="loginDay == 3" class="day day3">{{loginDay}}</span>
       <span v-else-if="loginDay == 5" class="day day5">{{loginDay}}</span>
       <span v-else-if="loginDay == 15" class="day day15">{{loginDay}}</span>
@@ -28,7 +28,20 @@ export default {
       panelShow: false,
       loginDay: 0, //连续登陆天数
       badgeDialogVisible: false,
-      type:3
+      type: 3,
+      xljt: '',
+      xljxArray: [
+        "幸福是持续地拥有满足感和知足感^_^",
+        "喝一杯咖啡，放松一下自己^_^",
+        "像蜜蜂一样勤劳工作才能享受蜜甜生活^_^",
+        "在忙，也别忘了照顾自己^_^",
+        "丢下一些包袱后，你会惊讶的发现，原来自己可以飞的那么高^_^",
+        "做一个微笑挂在嘴边，快乐放在心上的人^_^",
+        "将来的你，一定会感谢现在拼命努力的你^_^",
+        "理想是一面旗帜，信念是一枚火炬^_^",
+        "休息，休息一会",
+        "喝杯茶吧, 让精神抖擞一下^_^"
+      ]
     };
   },
   watch: {
@@ -44,23 +57,32 @@ export default {
   mounted() {
     this.landholder = JSON.parse(localStorage.personal);
     this.loginDay = this.landholder.data.loginday;
+    this.getFlag();
     setTimeout(() => {
       this.closeBadge();
     }, 2000);
   },
-  methods:{
-    closeBadge(){
-        this.$http.post(globalConfig.server + 'manager/staff_record', {type: this.type}).then((res) => {
-          if (res.data.code === '30010') {
-            this.panelShow= false;
-          this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
-            localStorage.setItem('personal', JSON.stringify(res.data.data));
-            globalConfig.personal = res.data.data.data;
-          });
+  methods: {
+    closeBadge() {
+      this.$http
+        .post(globalConfig.server + "manager/staff_record", { type: this.type })
+        .then(res => {
+          if (res.data.code === "30010") {
+            this.panelShow = false;
+            this.$http
+              .get(globalConfig.server + "special/special/loginInfo")
+              .then(res => {
+                localStorage.setItem("personal", JSON.stringify(res.data.data));
+                globalConfig.personal = res.data.data.data;
+              });
           }
-        })
-        
-    }
+        });
+    },
+      getFlag(){
+        let length = this.xljxArray.length;
+        let num = Math.floor(Math.random()*length);
+        this.xljt = this.xljxArray[num]?this.xljxArray[num]:'乐伽不止眼前的合同，还有诗和远方的田野！';
+      },
   }
 };
 </script>
