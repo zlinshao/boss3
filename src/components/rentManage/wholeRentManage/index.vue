@@ -437,7 +437,8 @@
     <IncreaseGoods :increaseGoodsDialog="increaseGoodsDialog" :collectHouseId="collectHouseId" @close="closeModal"></IncreaseGoods>
     <DecreaseGoods :decreaseGoodsDialog="decreaseGoodsDialog" :collectHouseId="collectHouseId" @close="closeModal"></DecreaseGoods>
     <OwnerArrears :ownerArrearsDialog="ownerArrearsDialog" @close="closeModal"></OwnerArrears>
-    <OwnerRenew :ownerRenewDialog="ownerRenewDialog" @close="closeModal"></OwnerRenew>
+    <!--收房续约-->
+    <OwnerRenew :ownerRenewDialog="ownerRenewDialog" :collectContractId="collectContractId" @close="closeModal"></OwnerRenew>
     <AddFollowUp :addFollowUpDialog="addFollowUpDialog" :contractModule="contractModule"
                  :contractOperateId="contractOperateId" @close="closeModal"></AddFollowUp>
     <CollectVacation :collectVacationDialog="collectVacationDialog" :collectContractId="collectContractId" @close="closeModal"></CollectVacation>

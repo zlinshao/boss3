@@ -2,7 +2,7 @@
   <div>
     <el-dialog :close-on-click-modal="false" title="领取合同修改" :visible.sync="editApplyDialogVisible">
       <div class="scroll_bar">
-        <div class="title">基本信息{{params.screenshot}}</div>
+        <div class="title">基本信息</div>
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="120px">
             <el-row>
