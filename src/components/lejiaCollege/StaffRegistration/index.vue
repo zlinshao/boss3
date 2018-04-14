@@ -1,39 +1,106 @@
 <template>
   <div>
     <div id="onlineExam">
-      <div class="tool">
-        <div class="tool_left">
-          <el-button type="success" size="mini" @click="openModalDialog('examDialog')">
-            <!--<i class="el-icon-tickets"></i>-->
-            <img src="../../../assets/images/examination/create_exam.svg" style="width: 11px;">&nbsp;新建考试
-          </el-button>
-          <el-button type="danger" size="mini" style="background: #fb4699;" @click="openModalDialog('testPaperDialog')">
-            <i class="el-icon-document"></i>&nbsp;新建试卷
-          </el-button>
-        </div>
-        <div class="tool_right">
-          <el-form>
-            <el-form-item>
-              <span>选择类型</span>
-              <el-select v-model="formInline.type" size="mini" placeholder="请选择" clearable>
-                <el-option v-for="item in 4" :key="item.id" label="C语言" :value="item.value"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-form>
-          <el-form>
-            <el-form-item style="margin-right: 10px;">
-              <el-input placeholder="搜索关键字" v-model="search" size="small"  class="search_input">
-                <el-button slot="append" icon="el-icon-search" class="search_button" ></el-button>
-              </el-input>
-            </el-form-item>
-          </el-form>
-        </div>
+    <div class="highRanking">
+      <div class="highSearch" >
+        <el-form :inline="true" onsubmit="return false" size="mini" >
+          <el-form-item>
+            <el-input placeholder="标题/内容关键字" v-model="form.search" @keyup.enter.native="myData(1)" size="mini"
+                      clearable>
+              <el-button slot="append" icon="el-icon-search" @click="myData(1)"></el-button>
+              <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+          </el-form-item>
+        </el-form>
       </div>
+      <div class="filter high_grade" :class="isHigh? 'highHide':''">
+        <el-form :inline="true" onsubmit="return false" :model="form" size="mini" label-width="100px">
+          <div class="filterTitle">
+            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+          </div>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">选择类型</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select v-model="form.type" clearable placeholder="请选择类型">
+                      <el-option v-for="(key,index) in forms" :label="key.name" :value="key.id"
+                                 :key="index"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row >
+                <el-col :span="8">
+                  <div class="el_col_label">时间</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-date-picker
+                    size="mini"
+                    v-model="value4"
+                    type="datetimerange"
+                    :picker-options="pickerOptions2"
+                    value-format="yyyy-MM-dd"
+                    format="yyyy-MM-dd"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
+                    align="right">
+                  </el-date-picker>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">选择试卷</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select v-model="form.type" clearable placeholder="请选择试卷">
+                      <el-option v-for="(key,index) in forms" :label="key.name" :value="key.id"
+                                 :key="index"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">部门搜索</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                <el-form-item >
+                   <el-input readonly="" v-model="this.departname" @click.native="openOrganizationModal()" placeholder="点击选择"></el-input>
+                </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <div class="btnOperate">
+            <el-button size="mini" type="primary" @click="myData(1)">搜索</el-button>
+            <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+            <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+          </div>
+        </el-form>
+      </div>
+    </div>
       <div class="main">
         <div class="myHouse">
           <div class="blueTable">
             <el-table
-              :data="quizData"
+              :data="tableData"
               @row-dblclick="dblClickTable"
               @row-contextmenu=''
               style="width: 100%">
@@ -62,210 +129,134 @@
             <div style="text-align: center">
               <el-pagination
                 @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="currentPage"
+                @current-change="myData"
+                :current-page="form.page"
                 :page-sizes="[10, 20, 30, 40]"
-                :page-size="10"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="50">
+                :page-size="12"
+                layout="total, prev, pager, next, jumper"
+                :total="total">
               </el-pagination>
             </div>
           </div>
         </div>
       </div>
-    <div id="examDialog">
-      <el-dialog :close-on-click-modal="false"  :visible.sync="examDialog" title="新建考试" width="50%">
-        <div>
-          <div style="color: #6a8dfb;">新建考试信息</div>
-          <div class="exam_content">
-            <el-form size="mini" onsubmit="return false;" :model="formExam" label-width="70px" >
-              <el-row :gutter="50">
-                <el-col :span="12">
-                  <el-form-item label="场次名称" required>
-                    <el-input v-model="formExam.name" placeholder="请输入场次"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="试卷类型" required>
-                    <el-select v-model="formExam.name" size="mini" placeholder="请选择类型" clearable>
-                      <el-option v-for="item in 4" :key="item.id" label="C语言" :value="item.value"></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="50">
-                <el-col :span="12">
-                  <el-form-item label="使用试卷">
-                    <el-select v-model="formExam.name" size="mini" placeholder="请选择试卷" clearable>
-                      <el-option v-for="item in 4" :key="item.id" label="C语言" :value="item.value"></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-checkbox label="试卷随机"></el-checkbox>
-              </el-row>
-              <el-row :gutter="50">
-                <el-col :span="12">
-                  <el-form-item label="开考时间">
-                    <el-date-picker v-model="formExam.name" type="datetime" placeholder="请选择"></el-date-picker>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                  <el-form-item label="试卷时长">
-                    <el-input placeholder="请输入分钟" v-model="formExam.name"><template slot="append">分钟</template></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="50">
-                <el-col :span="12">
-                  <el-form-item label="开考后">
-                    <el-input placeholder="请输入分钟" v-model="formExam.name"> <template slot="append">分钟</template></el-input>
-                  </el-form-item>
-                </el-col>
-                <span class="vt_align">设定时间后不能在登陆考试系统</span>
-
-              </el-row>
-              <el-row :gutter="50">
-                <el-col :span="12">
-                  <el-form-item label="考生选择">
-                    <el-select v-model="formExam.name" size="mini" placeholder="请选择类型" clearable>
-                      <el-option v-for="item in 4" :key="item.id" label="C语言" :value="item.value"></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-form>
-          </div>
-          <span slot="footer" class="dialog-footer">
-            <el-button size="small" type="primary" @click="saveExam" style="padding: 10px 20px;">保存</el-button>
-          </span>
-        </div>
-      </el-dialog>
-    </div>
-    <div id="testPaperDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="新建试卷" width="50%">
-        <el-row :gutter="30">
-          <el-col :span="12">
-            <div class="import_questions" @click="importQuestion">
-              <div><img src="../../../assets/images/examination/import_question.svg"><br/>批量导入试题</div>
-            </div>
-          </el-col>
-          <el-col :span="12">
-            <div class="import_questions" style="border: 1px solid #fda2cc;box-shadow: 0 0 3px 1px #fda2cc;">
-              <div><img src="../../../assets/images/examination/self_entry.svg"><br/>自己录入</div>
-            </div>
-          </el-col>
-        </el-row>
-      </el-dialog>
-    </div>
+<Organization :organizationDialog="organizationDialog" :length="len" :type="depart"  @close="closeOrganization"  @selectMember="coloseaa"></Organization>
   </div>
 </template>
 
 <script>
-  export default {
-    name: "index",
-    data() {
-      return {
-        formInline:{
-          type: '',
-        },
-        search:'',
-        quizData: [],
-        examDialog: false,
-        testPaperDialog: false,
-        formExam:{
-          name: '',
-          description: '',
-        },
-        currentPage: 1,
-      }
-    },
-    mounted() {
-    },
-    watch: {},
-    methods: {
-      saveExam() {
-        this.examDialog = false;
+import Organization from '../../common/organization.vue'
+export default {
+  name: "index",
+  components:{Organization},
+  data() {
+    return {
+      tableData: [],
+      form: {
+        page: 1,
+        limit: 12,
+        type: "",
+        search: "",
+        department_id:"",
       },
-      importQuestion() {
-        // this.$route.push({path:'batchImportQuestios'});
-      },
-      dblClickTable(){
+      departname:"",
+      forms: [
+        { id: "1", name: "表彰" },
+        { id: "2", name: "批评" },
+        { id: "3", name: "通知" }
+        // { id: "4", name: "研发" }
+      ],
+      total: 0,
+      isHigh: false, //高级搜索
+      rentStatus: " ",
+      rentLoading: false,
+      organizationDialog: false,
 
+      pickerOptions2: {
+        shortcuts: [
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            }
+          }
+        ]
       },
-      openModalDialog(val) {
-        switch(val){
-          case 'examDialog':
-            this.examDialog = true;
-            break;
-          case 'testPaperDialog':
-            this.testPaperDialog = true;
-            break;
-        }
+      value4: "",    
+      len:0,
+      depart:"",  
+    };
+  },
+  mounted() {},
+  watch: {},
+  methods: {
+      openOrganizationModal() {
+        this.organizationDialog = true;
+        this.len=1;
+        this.depart="depart";
       },
-
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
+      closeOrganization() {
+        this.organizationDialog = false;
+        this.len=0;
+        this.depart="";
       },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-        this.form.pages = val;
-        this.$store.dispatch('companyPage',val);
-        this.getCompanyTableData();
-
+      coloseaa(val){
+        this.departname=val[0].name
+        this.form.department_id=val[0].id
+        this.len=0;
+        this.depart="";
       },
+    // 高级
+    highGrade() {
+      this.isHigh = !this.isHigh;
     },
+    // 重置
+    resetting() {
+      this.isHigh = false;
+      (this.form = {
+        page: 1,
+        limit: 12,
+        type: "",
+        search: ""
+      }),
+        this.myData(1);
+    },
+    myData(val) {
+      this.form.page = val;
+      this.rentStatus = " ";
+      this.rentLoading = true;
+    },
+
+    dblClickTable() {},
+
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+    }
   }
+};
 </script>
 
 <style lang="scss" scoped>
-  #onlineExam {
-    .tool{
-      .tool_right {
-        .search_input{
-          margin-left: 10px;
-          /*border: 1px solid #6a8dfb;*/
-          color: #6a8dfb;
-            .search_button{
-              /*background: #6a8dfb;*/
-              /*color: #fff;*/
-            }
-         }
-        }
-    }
-  }
-  #examDialog {
-   .el-dialog__title{
-      color: #6a8dfb !important;
-    }
-    .exam_content{
-      border: 1px solid #dfe6fb;
-      padding: 10px;
-    }
-    .vt_align{
-      vertical-align: middle;
-      vertical-align: -webkit-baseline-middle;
-    }
-    .dialog-footer{
-      text-align: center;
-      display: block;
-      margin-top: 20px;
-    }
-  }
-  #testPaperDialog {
-    padding: 25px 15px;
-    .import_questions {
-      border: 1px solid #b4c6fd;
-      -webkit-box-shadow: 0 0 3px 1px #b4c6fd;
-      box-shadow: 0 0 3px 1px #b4c6fd;
-      text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 180px;
-      border-radius: 5px;
-    }
-  }
-
-
 
 </style>

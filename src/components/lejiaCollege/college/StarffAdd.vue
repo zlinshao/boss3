@@ -25,20 +25,22 @@
               <el-form-item label="上月溢出业绩:">
                 <span></span>
               </el-form-item>
-            </el-col>
+            </el-col>  
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item label="考试选择">
               </el-form-item>
-            </el-col>
-              <el-form :model="form" size="mini"  label-width="40px">
+            </el-col>            
+          </el-row>
+          <el-row>
+              <el-form :model="form" size="mini" class="elformot">
                 <el-form-item>
-                  <el-checkbox-group v-model="form.check">
-                    <el-col :span="24" :key="index" v-for="(val,index) in goods">
-                      <el-checkbox :title="val.name" :label="val.id" name="USER">{{val.name}}</el-checkbox>
+                  <el-radio-group v-model="form.check">
+                    <el-col :span="24" :key="index" v-for="(val,index) in goods" style="line-height:24px;height: 24px;">
+                      <el-radio :title="val.name" :label="index">{{val.name}}</el-radio>
                     </el-col>
-                  </el-checkbox-group>
+                  </el-radio-group>
                 </el-form-item>
               </el-form>
           </el-row>
@@ -48,42 +50,22 @@
         <el-button size="small" type="primary" @click="save" >确 定</el-button>
       </span>
     </el-dialog>
-<StarffSure :starffSureFlag="starffSureFlag" @close="closeModal"></StarffSure>
   </div>
 </template>
 
 <script>
-import StarffSure from "./StarffSure.vue";
 export default {
   props: ["starffAddFlag"],
-  components: { StarffSure },
+  components: {},
   data() {
     return {
       starffAddDialogVisible: false,
-      starffSureFlag: false,
       personal: {},
       createTime: "",
       form: {
-        check: []
+        check: ""
       },
-      goods: [
-        {
-          id: 1,
-          name: 1
-        },
-        {
-          id: 2,
-          name: 2
-        },
-        {
-          id: 3,
-          name: 3
-        },
-        {
-          id: 4,
-          name: 4
-        }
-      ]
+      goods: []
     };
   },
   computed: {},
@@ -92,6 +74,7 @@ export default {
     this.personal = JSON.parse(localStorage.personal);
     this.createTime = this.personal.detail.create_time.split(" ")[0];
     console.log(this.personal);
+    this.getExam();
   },
   created() {},
   watch: {
@@ -105,35 +88,41 @@ export default {
     }
   },
   methods: {
-    //模态框回调
-    closeModal() {
-      this.starffSureFlag = false;
-    },
     save() {
-      this.starffSureFlag = true;
+      this.$http.post(globalConfig.server + "exam/enroll/" + this.form.check ).then(res => {
+        if (res.data.code === "30010") {
+          this.starffAddDialogVisible = false;
+          this.$notify({
+            title: "成功",
+            message: res.data.msg,
+            type: "success"
+          });
+        } else {
+          this.$notify({
+            title: "失败",
+            message: res.data.msg,
+            type: "warning"
+          });
+        }
+      });
+    },
+    getExam() {
+      this.$http.get(globalConfig.server + "exam").then(res => {
+        if (res.data.code === "30000") {
+          this.goods = res.data.data.data;
+        }
+      });
     }
-    // save() {
-    //   this.$http
-    //     .get(globalConfig.server + "setting/others/password", {
-    //       params: this.basicSetting
-    //     })
-    //     .then(res => {
-    //       if (res.data.code === "1000100") {
-    //         this.starffAddDialogVisible = false;
-    //       } else {
-    //         this.unlockFlag = false;
-    //         this.$notify({
-    //           title: "警告",
-    //           message: res.data.msg,
-    //           type: "warning"
-    //         });
-    //       }
-    //     });
-    // }
   }
 };
 </script>
 
 <style scoped>
-
+.el-radio{
+  line-height: 24px !important;
+}
+.elformot{
+  margin: 0 40px;
+  overflow: hidden;
+}
 </style>
