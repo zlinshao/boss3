@@ -58,9 +58,8 @@
             });
             _this.imgArray.splice(i, 1);
           }
-          _this.$emit('getImg', [_this.ID, _this.imgId, _this.isUploading]);
         }
-
+        _this.$emit('getImg', [_this.ID, _this.imgId, _this.isUploading]);
       });
 
       this.getTokenMessage();
