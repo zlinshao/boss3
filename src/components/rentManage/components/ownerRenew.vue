@@ -206,6 +206,31 @@
                         <el-input placeholder="请输入内容" v-model="params.contract_number"></el-input>
                       </el-form-item>
                     </el-col>
+
+
+                    <el-col :span="6">
+                      <el-form-item label="签约日期" required="">
+                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
+                                        v-model="params.sign_date"></el-date-picker>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="6" class="unitMessage">
+                      <el-form-item label="保修期" required="">
+                        <el-col :span="12" style="padding-right: 10px">
+                          <el-input placeholder="月数" v-model="params.warranty_month">
+                            <template slot="append">月</template>
+                          </el-input>
+                        </el-col>
+                        <el-col :span="12">
+                          <el-input placeholder="天数" v-model="params.warranty_day">
+                            <template slot="append">天</template>
+                          </el-input>
+                        </el-col>
+                      </el-form-item>
+                    </el-col>
+                  </el-row>
+
+                  <el-row>
                     <el-col :span="6" class="unitMessage">
                       <el-form-item label="签约时长" required>
                         <el-col :span="12" style="padding-right: 10px">
@@ -220,15 +245,6 @@
                         </el-col>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
-                      <el-form-item label="签约日期" required="">
-                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
-                                        v-model="params.sign_date"></el-date-picker>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-
-                  <el-row>
                     <el-col :span="6">
                       <el-form-item label="空置期天数" required="">
                         <el-input placeholder="请输入内容" @blur="computedEndDate" v-model="params.vacancy"></el-input>
@@ -248,20 +264,7 @@
                         <el-input placeholder="请输入内容" v-model="params.vacancy_other"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6" class="unitMessage">
-                      <el-form-item label="保修期" required="">
-                        <el-col :span="12" style="padding-right: 10px">
-                          <el-input placeholder="月数" v-model="params.warranty_month">
-                            <template slot="append">月</template>
-                          </el-input>
-                        </el-col>
-                        <el-col :span="12">
-                          <el-input placeholder="天数" v-model="params.warranty_day">
-                            <template slot="append">天</template>
-                          </el-input>
-                        </el-col>
-                      </el-form-item>
-                    </el-col>
+
                   </el-row>
 
                   <el-row>

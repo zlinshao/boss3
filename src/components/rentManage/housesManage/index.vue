@@ -15,8 +15,8 @@
 
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input placeholder="请输入内容" v-model="formInline.keyWords" size="mini" clearable>
-                <el-button slot="append" icon="el-icon-search"></el-button>
+              <el-input placeholder="请输入内容" @keyup.enter.native="search" v-model="formInline.keyWords" size="mini" clearable>
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -85,7 +85,7 @@
               </el-col>
             </el-row>
             <div class="btnOperate">
-              <el-button size="mini" type="primary">搜索</el-button>
+              <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
               <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
             </div>
@@ -98,6 +98,11 @@
           <div class="myTable">
             <el-table
               :data="tableData"
+              :empty-text = 'emptyContent'
+              v-loading="tableLoading"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(0, 0, 0, 0)"
               @row-click="clickTable"
               @row-contextmenu="houseMenu"
               style="width: 100%">
@@ -253,6 +258,9 @@
         isHigh :false,
 
         activeName:'first',
+
+        emptyContent : ' ',
+        tableLoading : false,
       }
     },
     mounted(){
@@ -279,7 +287,6 @@
           {clickIndex: 'addFollowDialog', headIcon: 'el-icon-circle-plus-outline', label: '添加跟进记录',},
           {clickIndex: 'addDecorateDialog', headIcon: 'el-icon-circle-plus-outline', label: '添加装修记录',},
           {clickIndex: 'addEarlyWarningDialog', headIcon: 'el-icon-circle-plus-outline', label: '添加预警状态',},
-//          {clickIndex: 'dispatch', headIcon: 'el-icon-menu', label: '分配',},
         ];
         this.contextMenuParam(event);
       },
@@ -343,7 +350,10 @@
       },
       resetting(){
 
-      }
+      },
+      search(){
+        this.isHigh = false;
+      },
     }
   }
 </script>

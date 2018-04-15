@@ -3,7 +3,7 @@
     <div id="clientContainer">
       <div class="highRanking">
         <div class="highSearch">
-          <el-form :inline="true" size="mini">
+          <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
               <el-input v-model="params.keywords" placeholder="地址/事项/编号/客户" @keyup.enter.native="search">
                 <el-button slot="append" type="primary" @click="search" icon="el-icon-search"></el-button>

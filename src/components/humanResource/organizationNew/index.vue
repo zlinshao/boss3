@@ -1012,6 +1012,7 @@
       //获取单独职位列表
       getOnlyPosition(){
         this.positionTableData = [];
+        this.totalPositionNum = 0;
         if(this.params.org_id){
           this.positionCollectLoading = true;
           this.positionCollectStatus = ' ';
@@ -1116,7 +1117,7 @@
       //根据职位获取岗位
       getPosition(){
         if(!this.onlyPositionId){
-            return false;
+          return false;
         }else {
           this.postCollectLoading = true;
           this.postCollectStatus = ' ';

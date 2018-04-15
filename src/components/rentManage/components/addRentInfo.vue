@@ -298,7 +298,7 @@
 
                   <el-row>
                     <el-col :span="6">
-                      <el-form-item label="中介费" required="">
+                      <el-form-item label="中介费">
                         <el-input placeholder="请输入内容" v-model="params.agency"></el-input>
                       </el-form-item>
                     </el-col>
@@ -308,7 +308,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6" class="unitMessage">
-                      <el-form-item label="物业费金额" required="">
+                      <el-form-item label="物业费金额">
                         <el-input placeholder="请输入内容" v-model="params.property">
                           <template slot="append">元/m²</template>
                         </el-input>
@@ -326,7 +326,7 @@
 
                   <el-row>
                     <el-col :span="6">
-                      <el-form-item label="水表底数" required>
+                      <el-form-item label="水表底数">
                         <el-input placeholder="请输入内容" v-model="params.water"></el-input>
                       </el-form-item>
                     </el-col>

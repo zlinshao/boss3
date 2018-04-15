@@ -350,7 +350,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="违约金">
+                      <el-form-item label="违约金" required="">
                         <el-input placeholder="请输入内容" v-model="params.penalty"></el-input>
                       </el-form-item>
                     </el-col>
@@ -362,7 +362,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="物业费承担方">
+                      <el-form-item label="物业费承担方" required="">
                         <el-select clearable v-model="params.property_payer" placeholder="请选择承担方" value="">
                           <el-option v-for="item in property_payer_dic" :label="item.dictionary_name" :value="item.id"
                                      :key="item.id"></el-option>
@@ -373,7 +373,7 @@
 
                   <el-row>
                     <el-col :span="6">
-                      <el-form-item label="水表底数" required>
+                      <el-form-item label="水表底数">
                         <el-input placeholder="请输入内容" v-model="params.water"></el-input>
                       </el-form-item>
                     </el-col>
