@@ -7,14 +7,14 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="上传图片">
-                <UpLoad :ID="'upLoad_pic'" :isClear="isClear"  @getImg="getImg"></UpLoad>
+                <UpLoad :ID="'upLoad_pic'" :isClear="isClear" @getImg="getImg"></UpLoad>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
               <el-form-item label="备注">
-                <el-input type="textarea" placeholder="请输入内容"></el-input>
+                <el-input type="textarea" v-model="formInline.remark" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -23,7 +23,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="upLoadDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="upLoadDialogVisible = false">确 定</el-button>
+        <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -32,15 +32,20 @@
 <script>
   import UpLoad from '../../../common/UPLOAD.vue'
   export default {
-    props:['upLoadDialog'],
+    props:['upLoadDialog','houseId'],
     components:{UpLoad},
     data() {
       return {
         upLoadDialogVisible:false,
-        formInline:{},
+        formInline:{
+          house_id : '',
+          album_file : [],
+          remark : '',
+        },
         FormVisible: false,
 
         isClear:false,
+        isUpload:false,
       };
     },
     watch:{
@@ -53,18 +58,47 @@
         }else {
           this.isClear = true;
         }
+      },
+      houseId(val){
+        this.formInline.house_id = val;
       }
     },
     methods:{
       getImg(val){
+        this.formInline.album_file = val[1];
+        this.isUpload = val[2];
+      },
 
+      confirmAdd(){
+        if(!this.isUpload){
+          this.$http.post(globalConfig.server+'house/album',this.formInline).then((res) => {
+            if(res.data.code === '20010'){
+              this.upLoadDialogVisible = false;
+              this.$emit('close','success');
+              this.formInline = {
+                house_id : this.houseId,
+                album_file : [],
+                remark : '',
+              };
+              this.isClear = false;
+              this.$notify.success({
+                title:'成功',
+                message:res.data.msg,
+              })
+            }else {
+              this.$notify.warning({
+                title:'警告',
+                message:res.data.msg,
+              })
+            }
+          })
+        }else {
+          this.$notify.warning({
+            title:'警告',
+            message:'图片正在上传',
+          })
+        }
       },
-      selectStaff(){
-        this.FormVisible = true;
-      },
-      closeStaff(){
-        this.FormVisible = false;
-      }
     }
   };
 </script>

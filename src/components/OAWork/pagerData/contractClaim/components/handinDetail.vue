@@ -39,52 +39,132 @@
             </el-row>
           </el-form>
         </div>
-        <div class="title">已上缴收房合同</div>
-        <div class="describe_border">
-          <el-row v-for="(val,key) in detailInfo.collects" :key="key" style="padding: 5px;font-size: 14px">
-            <el-form label-width="80px">
-              <el-col :span="4">
-                {{val}}
-              </el-col>
-              <el-col :span="7">
-                <span style="color:#409EFF;">地址：</span>{{rentHandinAddress[key]}}
-              </el-col>
-              <el-col :span="8">
-                <el-checkbox style="font-size: 12px" disabled="" v-model="handover[key]" name="type">交接单</el-checkbox>
-                <el-checkbox style="font-size: 12px" disabled="" v-model="receipt[key]" name="type">收据</el-checkbox>
-                <el-checkbox style="font-size: 12px" disabled="" v-model="keyCode[key]" name="type">钥匙</el-checkbox>
-              </el-col>
-              <el-col :span="5">
-                <span v-if="passed[key]" class="passButton">{{passed[key]}}</span>
-                <el-button size="mini" type="primary" v-else="" href="javascript:;" @click="pass(val,key)">审核</el-button>
-              </el-col>
-            </el-form>
-          </el-row>
-        </div>
 
-        <div class="title">已上缴租房合同</div>
-        <div class="describe_border">
-          <el-row v-for="(val,key) in detailInfo.rents" :key="key" style="padding: 5px;font-size: 14px">
-            <el-form label-width="80px">
-              <el-col :span="4">
-                {{val}}
-              </el-col>
-              <el-col :span="7">
-                <span style="color:#409EFF;">地址：</span>{{rentHandinAddress[key]}}
-              </el-col>
-              <el-col :span="8">
-                <el-checkbox style="font-size: 12px" disabled="" v-model="handover[key]" name="type">交接单</el-checkbox>
-                <el-checkbox style="font-size: 12px" disabled="" v-model="receipt[key]" name="type">收据</el-checkbox>
-                <el-checkbox style="font-size: 12px" disabled="" v-model="keyCode[key]" name="type">钥匙</el-checkbox>
-              </el-col>
-              <el-col :span="5">
-                <span v-if="passed[key]" class="passButton">{{passed[key]}}</span>
-                <el-button size="mini" type="primary" v-else="" href="javascript:;" @click="pass(val,key)">审核</el-button>
-              </el-col>
-            </el-form>
-          </el-row>
-        </div>
+        <div v-if="contractType === 'company'">
+          <div class="title">已上缴收房合同(公司合同)</div>
+          <div class="describe_border">
+            <el-row v-for="(val,key) in detailInfo.collects" :key="key" style="padding: 5px;font-size: 14px">
+              <el-form label-width="80px">
+                <el-col :span="4">
+                  {{val}}
+                </el-col>
+                <el-col :span="7">
+                  <span style="color:#409EFF;">地址：</span>{{rentHandinAddress[key]}}
+                </el-col>
+                <el-col :span="8">
+                  <el-checkbox style="font-size: 12px" disabled="" v-model="handover[key]" name="type">交接单</el-checkbox>
+                  <el-checkbox style="font-size: 12px" disabled="" v-model="receipt[key]" name="type">收据</el-checkbox>
+                  <el-checkbox style="font-size: 12px" disabled="" v-model="keyCode[key]" name="type">钥匙</el-checkbox>
+                </el-col>
+                <el-col :span="5">
+                  <span v-if="passed[key]" class="passButton">{{passed[key]}}</span>
+                  <el-button size="mini" type="primary" v-else="" href="javascript:;" @click="pass(val,key)">审核</el-button>
+                </el-col>
+              </el-form>
+            </el-row>
+          </div>
 
+          <div class="title">已上缴租房合同(公司合同)</div>
+          <div class="describe_border">
+            <el-row v-for="(val,key) in detailInfo.rents" :key="key" style="padding: 5px;font-size: 14px">
+              <el-form label-width="80px">
+                <el-col :span="4">
+                  {{val}}
+                </el-col>
+                <el-col :span="7">
+                  <span style="color:#409EFF;">地址：</span>{{rentHandinAddress[key]}}
+                </el-col>
+                <el-col :span="8">
+                  <el-checkbox style="font-size: 12px" disabled="" v-model="handover[key]" name="type">交接单</el-checkbox>
+                  <el-checkbox style="font-size: 12px" disabled="" v-model="receipt[key]" name="type">收据</el-checkbox>
+                  <el-checkbox style="font-size: 12px" disabled="" v-model="keyCode[key]" name="type">钥匙</el-checkbox>
+                </el-col>
+                <el-col :span="5">
+                  <span v-if="passed[key]" class="passButton">{{passed[key]}}</span>
+                  <el-button size="mini" type="primary" v-else="" href="javascript:;" @click="pass(val,key)">审核</el-button>
+                </el-col>
+              </el-form>
+            </el-row>
+          </div>
+        </div>
+        <div v-if="contractType === 'personal'">
+          <div class="title">已上缴收房合同(个人合同)</div>
+          <div class="describe_border">
+            <el-row v-for="item in personal_contracts" v-if="item.category == 1" :key="item.number" style="padding: 5px;font-size: 14px">
+              <el-form label-width="80px">
+                <el-col :span="8">
+                  <span style="color:#409EFF;">合同编号：</span>{{item.number}}
+                </el-col>
+                <el-col :span="8">
+                  <span style="color:#409EFF;">地址：</span>{{item.address}}
+                </el-col>
+                <el-col :span="8">
+                  <el-checkbox style="font-size: 12px" disabled="" v-model="item.handover" name="type">交接单</el-checkbox>
+                  <el-checkbox style="font-size: 12px" disabled="" v-model="item.receipt" name="type">收据</el-checkbox>
+                  <el-checkbox style="font-size: 12px" disabled="" v-model="item.key" name="type">钥匙</el-checkbox>
+                </el-col>
+              </el-form>
+            </el-row>
+          </div>
+
+          <div class="title">已上缴租房合同(个人合同)</div>
+          <div class="describe_border">
+            <el-row v-for="item in personal_contracts" v-if="item.category == 2" :key="item.number" style="padding: 5px;font-size: 14px">
+              <el-form label-width="80px">
+                <el-col :span="8">
+                  <span style="color:#409EFF;">合同编号：</span>{{item.number}}
+                </el-col>
+                <el-col :span="8">
+                  <span style="color:#409EFF;">地址：</span>{{item.address}}
+                </el-col>
+                <el-col :span="8">
+                  <el-checkbox style="font-size: 12px" disabled="" v-model="item.handover" name="type">交接单</el-checkbox>
+                  <el-checkbox style="font-size: 12px" disabled="" v-model="item.receipt" name="type">收据</el-checkbox>
+                  <el-checkbox style="font-size: 12px" disabled="" v-model="item.key" name="type">钥匙</el-checkbox>
+                </el-col>
+              </el-form>
+            </el-row>
+          </div>
+        </div>
+        <div v-if="contractType === 'medi'">
+          <div class="title">已上缴收房合同(中介合同)</div>
+          <div class="describe_border">
+            <el-row v-for="item in medi_contracts" v-if="item.category == 1" :key="item.number" style="padding: 5px;font-size: 14px">
+              <el-form label-width="80px">
+                <el-col :span="8">
+                  <span style="color:#409EFF;">合同编号：</span>{{item.number}}
+                </el-col>
+                <el-col :span="8">
+                  <span style="color:#409EFF;">地址：</span>{{item.address}}
+                </el-col>
+                <el-col :span="8">
+                  <el-checkbox style="font-size: 12px" disabled="" v-model="item.handover" name="type">交接单</el-checkbox>
+                  <el-checkbox style="font-size: 12px" disabled="" v-model="item.receipt" name="type">收据</el-checkbox>
+                  <el-checkbox style="font-size: 12px" disabled="" v-model="item.key" name="type">钥匙</el-checkbox>
+                </el-col>
+              </el-form>
+            </el-row>
+          </div>
+
+          <div class="title">已上缴租房合同(中介合同)</div>
+          <div class="describe_border">
+            <el-row v-for="item in medi_contracts" v-if="item.category == 2" :key="item.number" style="padding: 5px;font-size: 14px">
+              <el-form label-width="80px">
+                <el-col :span="8">
+                  <span style="color:#409EFF;">合同编号：</span>{{item.number}}
+                </el-col>
+                <el-col :span="8">
+                  <span style="color:#409EFF;">地址：</span>{{item.address}}
+                </el-col>
+                <el-col :span="8">
+                  <el-checkbox style="font-size: 12px" disabled="" v-model="item.handover" name="type">交接单</el-checkbox>
+                  <el-checkbox style="font-size: 12px" disabled="" v-model="item.receipt" name="type">收据</el-checkbox>
+                  <el-checkbox style="font-size: 12px" disabled="" v-model="item.key" name="type">钥匙</el-checkbox>
+                </el-col>
+              </el-form>
+            </el-row>
+          </div>
+        </div>
         <div class="title">截图</div>
         <div class="describe_border">
           <div v-if="detailInfo.screenshot.length>0" v-for="item in detailInfo.screenshot" style="display: inline-block">
@@ -146,7 +226,9 @@
         receipt:{},
         keyCode:{},
         passed:{},
-        checkBox:[],
+        personal_contracts:[],
+        medi_contracts:[],
+        contractType : 'company',
       };
     },
     watch:{
@@ -176,10 +258,19 @@
         this.$http.get(globalConfig.server+'contract/handin/'+this.handInEditId_detail).then((res) => {
           if(res.data.code === '20010'){
             this.detailInfo = res.data.data.full;
-            this.rentHandinAddress = res.data.data.address;
-            this.handover = res.data.data.handover;
-            this.receipt = res.data.data.receipt;
-            this.keyCode = res.data.data.key;
+            if(res.data.data.personal_contracts.length>0){
+              this.contractType = 'personal';
+              this.personal_contracts = res.data.data.personal_contracts;
+            }else if(res.data.data.medi_contracts.length>0){
+              this.contractType = 'medi';
+              this.medi_contracts = res.data.data.medi_contracts;
+            }else {
+              this.rentHandinAddress = res.data.data.address;
+              this.contractType = 'company';
+              this.handover = res.data.data.handover;
+              this.receipt = res.data.data.receipt;
+              this.keyCode = res.data.data.key;
+            }
             this.passed = res.data.data.passed;
             this.department = res.data.data.department.name;
             this.cityDictionary.forEach((item) => {
