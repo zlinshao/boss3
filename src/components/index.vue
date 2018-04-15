@@ -43,7 +43,7 @@
         <!--消息-->
         <div class="message" style="position: relative;margin-right: 15px">
           <el-dropdown>
-            <el-badge v-if="unReadMessageData.length>0" :value="unReadMessageData.length" class="item">
+            <el-badge v-if="messageTotal>0" :max="99" :value="messageTotal" class="item">
               <i class="el-icons-fa-comment-o"></i>
               消 息
             </el-badge>
@@ -74,7 +74,7 @@
                 <el-row v-if="unReadMessageData.length >0" @click.native="showOtherDetail('unread')">
                   <el-col :span="24">
                     <div style="display:block; margin-top:10px; text-align:center; color:#409EFF">查看全部<span
-                      style="color:#f00">{{unReadMessageData.length}}条</span>未读
+                      style="color:#f00">{{messageTotal}}条</span>未读
                     </div>
                   </el-col>
                 </el-row>
@@ -94,8 +94,8 @@
                     <div style="display:block; margin-top:10px; text-align:center; color:#409EFF">查看全部已读消息
                       </div>
                   </el-col>
-                </el-row> 
-              </el-dropdown-item>    
+                </el-row>
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
 
@@ -354,6 +354,7 @@
         messageDialog: false,
         unLockName:"",
         unReadMessageData: [],
+        messageTotal:0,
         messageDetail: [],
         interval: null,
         messageInterval: null,
@@ -369,6 +370,7 @@
         sendId: "",
         badgeDialog: false, //徽章模态框
         unlockFlagpart: false,
+
       };
     },
     computed: {
@@ -560,7 +562,7 @@
           query: {
             unread: 0
           }
-        });         
+        });
         }
       },
       //模态框回调
@@ -587,6 +589,7 @@
           .then(res => {
             if (res.data.status === "success") {
               this.unReadMessageData = res.data.data;
+              this.messageTotal = res.data.meta.total;
             }
           });
       },

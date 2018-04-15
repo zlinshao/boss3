@@ -267,6 +267,7 @@
       firstClick(row) {
         this.addID.firstID = row.id;
         this.moduleList(1);
+        this.secondPage = 1;
         this.tableSecond = [];
         this.tableThird = [];
       },
@@ -294,6 +295,7 @@
       secondClick(row) {
         this.addID.secondID = row.id;
         this.authority(1);
+        this.thirdPage = 1;
         this.tableThird = [];
       },
       // ==============权限=================

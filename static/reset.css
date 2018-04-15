@@ -319,4 +319,32 @@
 .el-tabs {
   width: 100% !important; }
 
+ul.el-menu.el-menu--inline {
+  background-color: #405597 !important; }
+
+.el-submenu li.el-menu-item {
+  background-color: #405597 !important; }
+
+.is-opened {
+  background-color: #405597 !important; }
+
+.is-opened .el-submenu__title {
+  background-color: #405597 !important;
+  border-bottom: 0.5px #2e3e6e solid !important; }
+
+.el-submenu__icon-arrow {
+  color: #a6b5ec !important; }
+
+.is-opened .el-menu--inline .is-active span {
+  color: #ffd04b !important; }
+
+.el-menu--inline span {
+  color: #aec1fc; }
+
+.el-menu--collapse .iconfont:hover, .el-menu--collapse .el-icons-fa-money:hover {
+  color: #ffd04b !important; }
+
+.el-menu--popup {
+  padding: 0 !important; }
+
 /*# sourceMappingURL=reset.css.map */

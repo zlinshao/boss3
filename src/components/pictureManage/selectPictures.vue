@@ -58,10 +58,7 @@
               this.choosePicturesDialogVisible = false;
               this.improveImgInfoDialog = true;  //显示完善照片信息界面
               this.isClear = true;
-              this.form = {
-                album_id: '',
-                picture_ids: [],
-              }
+              this.form.picture_ids = '';
             }else{
               this.$notify.warning({
                 title: "警告",
