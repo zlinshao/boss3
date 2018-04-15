@@ -1,6 +1,10 @@
 <template>
   <div id="messageCent">
-    <div class="container">
+    <div class="container"
+         v-loading="tableLoading"
+         element-loading-text="拼命加载中..."
+         element-loading-spinner="el-icon-loading"
+         element-loading-background="rgba(255, 255, 255, 0)">
       <div class="header">
         <div class="headName">消息列表</div>
 
@@ -56,7 +60,7 @@
         加载更多...
       </div>
       <div style="text-align: center;margin: 20px 0 50px 0 ;" v-if="isLastPage">
-        已经到最底部了
+        我也是有底线的
       </div>
     </div>
     <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeMessage"></MessageDetail>
@@ -80,18 +84,39 @@
         isLastPage:false,
         messageDialog:false,
         messageDetail:[],
+        isGetMore:true,
+        scrollHeight:'',
+        tableLoading:false,
       }
     },
     mounted(){
-        this.getMessage();
-        this.params.unread = this.$route.query.unread
-       
+      let _this = this;
+      this.getMessage();
+      this.params.unread = this.$route.query.unread;
+      $(document).scroll(function () {
+        _this.scroll_bar_move();
+      })
     },
     watch:{
     },
     methods: {
+      scroll_bar_move(){
+        let body_height = $('body').height();
+        let body_scrollTop = $(document).scrollTop();
+        let scroll_height = $('#messageCent').height()+100;
+        if(this.scrollHeight < scroll_height){
+          this.isGetMore = true;
+        }
+        this.scrollHeight = scroll_height;
+        if(scroll_height - body_scrollTop - body_height < 50){
+          this.getMore();
+          this.isGetMore = false;
+        }
+      },
       getMessage(){
+        this.tableLoading = true;
         this.$http.get(globalConfig.server_user+'messages',{params:this.params}).then((res) => {
+          this.tableLoading = false;
           if(res.data.status === 'success'){
             let arr = [];
             arr = res.data.data;
@@ -103,8 +128,10 @@
         })
       },
       getMore(){
-        this.params.page++;
-        this.getMessage();
+        if(this.isGetMore && !this.isLastPage){
+          this.params.page++;
+          this.getMessage();
+        }
       },
       unRead(){
         this.params.page = 1;

@@ -25,7 +25,7 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="child_count"
+        prop="events"
         label="事件数">
       </el-table-column>
       <el-table-column

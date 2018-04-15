@@ -5,8 +5,8 @@
         <div class="highSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input v-model="params.name" placeholder="搜索">
-                <el-button slot="append" type="primary" icon="el-icon-search"></el-button>
+              <el-input v-model="params.keywords" placeholder="地址/事项/编号/客户" @keyup.enter.native="search">
+                <el-button slot="append" type="primary" @click="search" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -106,7 +106,7 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop="child_count"
+              prop="events"
               label="事件数">
             </el-table-column>
             <el-table-column
@@ -179,6 +179,7 @@
         params: {
           pages: 1,
           limit: 12,
+          keywords:'',
           follow_status:'',
           follow_id:'',
           create_time:[],

@@ -1115,8 +1115,12 @@
       //********************岗位操作函数****************
       //根据职位获取岗位
       getPosition(){
-        this.postCollectLoading = true;
-        this.postCollectStatus = ' ';
+        if(!this.onlyPositionId){
+            return false;
+        }else {
+          this.postCollectLoading = true;
+          this.postCollectStatus = ' ';
+        }
         this.$http.get(globalConfig.server+'manager/positions?type=' +this.onlyPositionId+'&page='+this.postParams.page
           +'&limit='+this.postParams.limit).then((res) => {
           this.postCollectLoading = false;
