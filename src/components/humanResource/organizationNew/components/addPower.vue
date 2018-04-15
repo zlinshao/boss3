@@ -28,6 +28,7 @@
                     <el-checkbox  :label="key.id" >{{key.display_name}}</el-checkbox>
                   </el-col>
                 </el-row>
+
               </el-checkbox-group>
             </div>
           </div>
