@@ -72,15 +72,12 @@
         addChildTaskDialogVisible:false,
         params:{
           parent_id:'',                       //父级id
-//          module:'1',                        //'关联模型', 1-收房  2-租房
           matters:'',                        //跟进事项
-//          contract_id : '1',                 //'合同id',
           type : '',                         //'事件类型',
           follow_id : '',                    // '跟进人',
           expect_time  : '',                 //'期待维修时间',
           expected_finish_time : '',         //'预计完成时间',
           follow_time : '',                  //'跟进时间',
-//          follow_content : '',             //'跟进内容',
           image_pic:[]
         },
         organizationDialog: false,
@@ -173,16 +170,14 @@
       },
       init(){
         this.params = {
-          module:'1',                      //'关联模型', 1-收房  2-租房
           matters:'',                     //跟进事项
-          contract_id : '1',               //'合同id',
           type : '',                      //'事件类型',
           follow_id : '',                 // '跟进人',
           expect_time  : '',              //'预计完成时间',
           expected_finish_time : '',      //'预计完成时间',
           follow_time : '',               //'跟进时间',
-//          follow_content : '',            //'跟进内容',
-          image_pic:[]
+          image_pic:[],
+          parent_id:this.activeId,
         };
         this.follow_name = '';
         this.isClear = true;
