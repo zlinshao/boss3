@@ -316,12 +316,8 @@
 .el-notification {
   z-index: 999999 !important; }
 
-.el-tabs--top {
+.el-tabs {
   width: 100% !important; }
-  .el-tabs--top .el-tabs__content {
-    width: 100% !important; }
-    .el-tabs--top .el-tabs__content .el-tab-pane {
-      width: 100% !important; }
 
 ul.el-menu.el-menu--inline {
   background-color: #405597 !important; }

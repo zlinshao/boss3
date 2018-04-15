@@ -7,8 +7,8 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="控制预警" required>
-                <el-select clearable placeholder="请选择控制预警" value="">
-                  <el-option label="item.dictionary_name" value="item.id"></el-option>
+                <el-select clearable placeholder="请选择控制预警" v-model="formInline.after_warning_status" value="">
+                  <el-option v-for="item in warning_dic" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -17,7 +17,15 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="调整原因">
-                <el-input type="textarea" placeholder="请输入内容"></el-input>
+                <el-input type="textarea" v-model="formInline.reason" placeholder="请输入内容"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="24">
+              <el-form-item label="上传图片">
+                <UpLoad :ID="'earlyWarning_pic'" :isClear="isClear"  @getImg="getImg"></UpLoad>
               </el-form-item>
             </el-col>
           </el-row>
@@ -26,7 +34,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="addEarlyWarningDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="addEarlyWarningDialogVisible = false">确 定</el-button>
+        <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -35,15 +43,23 @@
 <script>
   import UpLoad from '../../../common/UPLOAD.vue'
   export default {
-    props:['addEarlyWarningDialog'],
+    props:['addEarlyWarningDialog','houseId'],
     components:{UpLoad},
     data() {
       return {
         addEarlyWarningDialogVisible:false,
-        formInline:{},
+        formInline:{
+          house_id : '',
+          after_warning_status : '',
+          reason : '',
+          album_file:[],
+        },
         FormVisible: false,
 
         isClear:false,
+        warning_dic:[],
+        isDictionary : false,
+        isUpload : false,
       };
     },
     watch:{
@@ -55,19 +71,54 @@
           this.$emit('close')
         }else {
           this.isClear = true;
+          if(!this.isDictionary){
+            this.getDictionary();
+          }
         }
+      },
+      houseId(val){
+        this.formInline.house_id = val;
       }
     },
     methods:{
       getImg(val){
-
+        this.formInline.album_file = val[1];
+        this.isUpload = val[2];
       },
-      selectStaff(){
-        this.FormVisible = true;
+      getDictionary(){
+        this.dictionary(590,1).then((res) => {this.warning_dic = res.data;this.isDictionary = true});
       },
-      closeStaff(){
-        this.FormVisible = false;
-      }
+      confirmAdd(){
+        if(!this.isUpload){
+          this.$http.post(globalConfig.server+'core/warning',this.formInline).then((res) => {
+            if(res.data.code === '40010'){
+              this.addEarlyWarningDialogVisible = false;
+              this.$emit('close','success');
+              this.formInline = {
+                house_id : this.houseId,
+                after_warning_status : '',
+                reason : '',
+                album_file:[],
+              };
+              this.isClear = false;
+              this.$notify.success({
+                title:'成功',
+                message:res.data.msg,
+              })
+            }else {
+              this.$notify.warning({
+                title:'警告',
+                message:res.data.msg,
+              })
+            }
+          })
+        }else {
+          this.$notify.warning({
+            title:'警告',
+            message:'图片正在上传',
+          })
+        }
+      },
     }
   };
 </script>

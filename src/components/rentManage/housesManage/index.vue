@@ -1,4 +1,4 @@
- <template>
+<template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="houseContainer">
 
@@ -15,7 +15,7 @@
 
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input placeholder="请输入内容" @keyup.enter.native="search" v-model="formInline.keyWords" size="mini" clearable>
+              <el-input placeholder="请输入内容" @keyup.enter.native="search" v-model="formInline.q" size="mini" clearable>
                 <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
@@ -91,23 +91,24 @@
             </div>
           </el-form>
         </div>
-
       </div>
       <div class="main">
         <div class="tableBox">
           <div class="myTable">
             <el-table
               :data="tableData"
-              :empty-text = 'emptyContent'
+              :empty-text='emptyContent'
               v-loading="tableLoading"
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
               element-loading-background="rgba(0, 0, 0, 0)"
-              @row-click="clickTable"
               @row-contextmenu="houseMenu"
+              @row-click = 'clickTable'
+              :row-class-name="tableRowCollectName"
+              @selection-change="handleSelectionChange"
               style="width: 100%">
               <el-table-column
-                type="selection"
+                type="id"
                 width="30">
               </el-table-column>
               <el-table-column
@@ -115,56 +116,101 @@
                 label="地址">
               </el-table-column>
               <el-table-column
-                prop="date"
                 label="房型">
+                <template slot-scope="scope">
+                  <span>{{dicts.room[scope.row.room]}}</span>
+                  <span>{{dicts.hall[scope.row.hall]}}</span>
+                  <span>{{dicts.toilet[scope.row.toilet]}}</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="name"
                 label="装修">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.decoration">{{matchDictionary(scope.row.decoration)}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="name"
                 label="房屋类型">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.house_identity">{{matchDictionary(scope.row.house_identity)}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="province"
                 label="出租性质">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.rent_type">{{matchDictionary(scope.row.rent_type)}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="province"
+                width="150"
                 label="房屋评分">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.house_grade">
+                    <el-rate disabled v-model="scope.row.house_grade" style="line-height: 37px"></el-rate>
+                  </span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="date"
                 label="房屋特色">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.house_feature">{{matchDictionary(scope.row.house_feature)}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="province"
+                prop="suggest_price"
                 label="参考价格">
               </el-table-column>
               <el-table-column
-                prop="name"
                 label="房屋状态">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.status">{{matchDictionary(scope.row.status)}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="name"
-                label="空置时长">
+                prop="total_ready_days"
+                label="空置期(天)">
               </el-table-column>
               <el-table-column
-                prop="date"
+                prop="current_ready_days"
+                label="当前空置时长(天)">
+              </el-table-column>
+              <el-table-column
+                prop="is_again_rent"
+                label="是否为二次出租">
+              </el-table-column>
+              <el-table-column
+                prop="rent_end_than_days"
+                label="租房结束是否晚于收房">
+              </el-table-column>
+              <el-table-column
                 label="预警状态">
+                <template slot-scope="scope">
+                  <div v-if="scope.row.warning_status == 1" class="label success">正常</div>
+                  <div v-if="scope.row.warning_status == 2" class="label yellow">黄色预警</div>
+                  <div v-if="scope.row.warning_status == 3" class="label orange">橙色预警</div>
+                  <div v-if="scope.row.warning_status == 4" class="label red">红色预警</div>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="date"
                 label="负责人">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.user&&scope.row.user.name">{{scope.row.user.name}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="name"
                 label="所属部门">
-              </el-table-column>
-              <el-table-column
-                prop="province"
-                label="备注">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.user&&scope.row.user.org&&scope.row.user.org.length>0
+                  &&scope.row.user.org[0].name">{{scope.row.user.org[0].name}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
             </el-table>
           </div>
@@ -174,11 +220,11 @@
               <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="currentPage"
-                :page-sizes="[10, 20, 30, 40]"
-                :page-size="10"
+                :current-page="formInline.page"
+                :page-sizes="[5, 10, 15, 20]"
+                :page-size="formInline.per_page_number"
                 layout="total, sizes, prev, pager, next, jumper"
-                :total="400">
+                :total="totalNumber">
               </el-pagination>
             </div>
           </div>
@@ -186,7 +232,7 @@
         <div class="myDetail">
           <el-tabs type="border-card" v-model="activeName">
             <el-tab-pane name="first" label="跟进记录">
-              <FollowRecordTab></FollowRecordTab>
+              <FollowRecordTab :all_dic="all_dic" :houseId="houseId" :activeName="activeName"></FollowRecordTab>
             </el-tab-pane>
             <el-tab-pane name="second" label="装修记录">
               <DecorateRecordTab></DecorateRecordTab>
@@ -202,11 +248,12 @@
                @clickOperate="clickEvent"></RightMenu>
     <Organization :organizationDialog="organizationDialog" @close="closeModal"></Organization>
 
-    <EditHouseInfo :editHouseDialog="editHouseDialog" @close="closeModal"></EditHouseInfo>
-    <AddFollow :addFollowDialog="addFollowDialog" @close="closeModal"></AddFollow>
-    <UpLoadPic :upLoadDialog="upLoadDialog" @close="closeModal"></UpLoadPic>
-    <AddEarlyWarning :addEarlyWarningDialog="addEarlyWarningDialog" @close="closeModal"></AddEarlyWarning>
-    <AddDecorate :addDecorateDialog="addDecorateDialog" @close="closeModal"></AddDecorate>
+    <EditHouseInfo :editHouseDialog="editHouseDialog" :houseDetail="houseDetail" :houseId="houseId"
+                   @close="closeModal"></EditHouseInfo>
+    <AddFollow :addFollowDialog="addFollowDialog" :houseId="houseId" @close="closeModal"></AddFollow>
+    <UpLoadPic :upLoadDialog="upLoadDialog" :houseId="houseId" @close="closeModal"></UpLoadPic>
+    <AddEarlyWarning :addEarlyWarningDialog="addEarlyWarningDialog" :houseId="houseId" @close="closeModal"></AddEarlyWarning>
+    <AddDecorate :addDecorateDialog="addDecorateDialog" :houseId="houseId" @close="closeModal"></AddDecorate>
   </div>
 </template>
 
@@ -224,8 +271,10 @@
   import AddDecorate from './components/addDecorateRecord.vue'
   export default {
     name: 'hello',
-    components: {RightMenu,Organization,FollowRecordTab,DecorateRecordTab,EarlyWarning,EditHouseInfo,AddFollow,UpLoadPic
-                ,AddEarlyWarning,AddDecorate},
+    components: {
+      RightMenu, Organization, FollowRecordTab, DecorateRecordTab, EarlyWarning, EditHouseInfo, AddFollow, UpLoadPic
+      , AddEarlyWarning, AddDecorate
+    },
     data () {
       return {
         rightMenuX: 0,
@@ -234,53 +283,129 @@
         lists: [],
         /***********/
         formInline: {
-          name: '',
-          house: ''
+          q: '',
+          per_page_number: 5,
+          page: 1
         },
-        tableData: [{
-          date: '2016-05-03',
-          name: '王小虎',
-          province: '上海',
-          city: '普陀区',
-          address: '上海市普陀区金沙江路 1518 弄',
-          zip: 200333
-        },],
-        currentPage: 1,
+        tableData: [],
+        totalNumber: 0,
         options: [],
 
         //模态框
         organizationDialog: false,
-        editHouseDialog : false,
-        addFollowDialog : false,
-        upLoadDialog : false,
-        addEarlyWarningDialog : false,
-        addDecorateDialog : false,
-        isHigh :false,
+        editHouseDialog: false,
+        addFollowDialog: false,
+        upLoadDialog: false,
+        addEarlyWarningDialog: false,
+        addDecorateDialog: false,
 
-        activeName:'first',
+        isHigh: false,
+        activeName: 'first',
 
-        emptyContent : ' ',
-        tableLoading : false,
+        emptyContent: ' ',
+        tableLoading: false,
+        dicts: {
+          room: ['1室', '2室', '3室', '4室', '5室', '6室', '7室', '8室'],
+          hall: ['无', '1厅', '2厅', '3厅', '4厅', '5厅'],
+          toilet: ['无', '1卫', '2卫', '3卫', '4卫', '5卫'],
+        },
+        all_dic: [],        //装修
+
+        houseId: '',
+        houseDetail: {},
+
       }
     },
     mounted(){
-      $('.earlyWarning .warningItem').click(function () {
-        $(this).addClass('selected_tr').siblings().removeClass('selected_tr');
-      });
+      this.getData();
+      this.getDictionary();
     },
     methods: {
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`);
-      },
-      clickTable(row, event, column){
-        console.log(row, event, column)
+      getDictionary() {
+        this.$http.get(globalConfig.server + 'setting/dictionary/all').then((res) => {
+          this.all_dic = res.data.data;
+        })
       },
 
+      matchDictionary(id) {
+        let dictionary_name = null;
+        this.all_dic.map((item) => {
+          if (item.id == id) {
+            dictionary_name = item.dictionary_name;
+          }
+        });
+        return dictionary_name;
+      },
+      getData(){
+        this.emptyContent = ' ';
+        this.tableLoading = true;
+        this.$http.get(globalConfig.server_user + 'houses', {params: this.formInline}).then((res) => {
+          this.tableLoading = false;
+          if (res.data.status === 'success') {
+            this.totalNumber = res.data.meta.total;
+            if (res.data.data.length > 0) {
+              this.tableData = res.data.data;
+            } else {
+              this.tableData = [];
+              this.emptyContent = '暂无数据';
+            }
+          } else {
+            this.tableData = [];
+            this.totalNumber = 0;
+            this.emptyContent = '暂无数据';
+          }
+        })
+      },
+      //复选框变化
+      handleSelectionChange(val){
+        console.log(val)
+      },
+      //*****************************高级搜索/各种搜索项****************************//
+      highGrade(){
+        this.isHigh = !this.isHigh;
+      },
+      resetting(){
+
+      },
+      search(){
+        this.isHigh = false;
+        this.formInline.page = 1;
+        this.getData();
+      },
+
+      handleSizeChange(val) {
+        this.formInline.per_page_number = val;
+        this.getData();
+      },
+      handleCurrentChange(val) {
+        this.formInline.page = val;
+        this.getData();
+      },
+
+      //选人模态框
+      openOrganizationModal(val){
+        if (val === 'dispatch') {
+        }
+        this.organizationDialog = true;
+      },
+      closeOrganization(){
+        this.organizationDialog = false;
+      },
+
+      clickTable(row, event){
+        this.houseId = row.id;
+      },
+      tableRowCollectName({row, rowIndex}) {
+        if (row.id === this.houseId) {
+          return 'selected_tr';
+        }
+        return '';
+      },
+      //*****************************右键操作****************************//
       //房屋右键
       houseMenu(row, event){
+        this.houseId = row.id;
+        this.houseDetail = row;
         this.lists = [
           {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '编辑房屋信息',},
           {clickIndex: 'upLoadDialog', headIcon: 'el-icon-upload2', label: '上传房屋照片',},
@@ -293,7 +418,7 @@
 
       //右键回调时间
       clickEvent (index) {
-        switch (index){
+        switch (index) {
           case 'edit' :
             this.editHouseDialog = true;
             break;
@@ -311,12 +436,15 @@
             break;
         }
       },
-      closeModal(){
+      closeModal(val){
         this.editHouseDialog = false;
         this.addFollowDialog = false;
         this.upLoadDialog = false;
         this.addEarlyWarningDialog = false;
         this.addDecorateDialog = false;
+        if (val === 'success') {
+          this.getData();
+        }
       },
       //关闭右键菜单
       closeMenu(){
@@ -336,24 +464,6 @@
           this.show = true
         })
       },
-
-      openOrganizationModal(val){
-        if(val === 'dispatch'){
-        }
-        this.organizationDialog = true;
-      },
-      closeOrganization(){
-        this.organizationDialog = false;
-      },
-      highGrade(){
-        this.isHigh = !this.isHigh;
-      },
-      resetting(){
-
-      },
-      search(){
-        this.isHigh = false;
-      },
     }
   }
 </script>
@@ -361,15 +471,35 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped="">
   #houseContainer {
-    .earlyWarning{
-      button{
+    .earlyWarning {
+      button {
         color: #666;
-        :hover{
+        :hover {
           color: #6a8dfb;
         }
       }
     }
-
+    .label {
+      display: inline-block;
+      width: 70px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      border-radius: 4px;
+      color: #ffffff;
+    }
+    .success {
+      background: #409EFF;
+    }
+    .yellow {
+      background: #FFCC00
+    }
+    .orange {
+      background: #FF9900
+    }
+    .red {
+      background: #FF3900
+    }
     .main {
       font-size: 12px;
       .tableBox {
