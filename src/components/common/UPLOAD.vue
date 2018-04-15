@@ -38,7 +38,7 @@
 
     mounted(){
       let _this = this;
-      $(document).on('click', '.pic_delete', function () {
+      $(document).on('click', '#pickfiles'+this.ID+' '+'.pic_delete', function () {
         let id = $(this).attr("data-val");
         let toremove = '';
         for (let i in _this.uploader.files) {
@@ -48,7 +48,6 @@
         }
         $('#' + id).remove();
         _this.uploader.splice(toremove, 1);
-
         for (let i = 0; i < _this.imgArray.length; i++) {
           if (_this.imgArray[i].name.indexOf(id) > -1) {
             _this.imgId.forEach((item) => {
@@ -140,7 +139,6 @@
             'FilesAdded': function (up, files) {
               _this.isUploading = true;
               _this.$emit('getImg', [_this.ID, _this.imgId, _this.isUploading]);
-
               plupload.each(files, function (file) {
                 if (!file || !/image\//.test(file.type) || /photoshop/.test(file.type)) {
                   $('#pickfiles' + _this.ID).prepend(`
