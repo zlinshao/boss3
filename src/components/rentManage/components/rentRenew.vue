@@ -233,7 +233,8 @@
                       <el-row>
                         <el-col :span="6">
                           <el-form-item label="押" required="">
-                            <el-select clearable v-model="payWayArray[0]" :disabled="item>1" placeholder="请选择付款方式" value="">
+                            <el-select clearable v-model="payWayArray[0]" :disabled="item>1" placeholder="请选择付款方式"
+                                       value="">
                               <el-option v-for="item in 3" :value="item-1"
                                          :key="item-1"></el-option>
                             </el-select>
@@ -298,7 +299,7 @@
 
                   <el-row>
                     <el-col :span="6">
-                      <el-form-item label="中介费" required="">
+                      <el-form-item label="中介费">
                         <el-input placeholder="请输入内容" v-model="params.agency"></el-input>
                       </el-form-item>
                     </el-col>
@@ -308,7 +309,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6" class="unitMessage">
-                      <el-form-item label="物业费金额" required="">
+                      <el-form-item label="物业费金额">
                         <el-input placeholder="请输入内容" v-model="params.property">
                           <template slot="append">元/m²</template>
                         </el-input>
@@ -326,7 +327,7 @@
 
                   <el-row>
                     <el-col :span="6">
-                      <el-form-item label="水表底数" required>
+                      <el-form-item label="水表底数">
                         <el-input placeholder="请输入内容" v-model="params.water"></el-input>
                       </el-form-item>
                     </el-col>
@@ -602,7 +603,7 @@
         other_photo: {},
         checkout_photo: {},
         checkout_settle_photo: {},
-        tableLoading : false,
+        tableLoading: false,
       };
     },
     watch: {
@@ -850,10 +851,10 @@
         this.payWayChangeAmount--;
       },
       //jine bianhua
-      addMoreMoneyTableChange(item){
+      addMoreMoneyTableChange(){
         this.moneyTableChangeAmount++;
       },
-      deleteMoneyTableChange(){
+      deleteMoneyTableChange(item){
         this.moneyWayArray.splice(item, 1);
         this.moneySepArray.splice(item, 1);
         this.moneyTableChangeAmount--;
@@ -861,9 +862,9 @@
 
       //计算空置期结束时间
       computedEndDate(){
-        this.$http.get(globalConfig.server+'lease/helper/rentdates?begin_date='+this.params.begin_date+'&month='
-          +this.params.month +'&day='+this.params.day+'&vacancy='+this.params.vacancy ).then((res) =>{
-          if(res.data.code === '69910'){
+        this.$http.get(globalConfig.server + 'lease/helper/rentdates?begin_date=' + this.params.begin_date + '&month='
+          + this.params.month + '&day=' + this.params.day + '&vacancy=' + this.params.vacancy).then((res) => {
+          if (res.data.code === '69910') {
             this.params.end_date = res.data.data.end_date;
           }
         })
@@ -940,7 +941,7 @@
         let moneyTableItem = {};
         this.params.money_table = [];
         for (let i = 0; i < this.moneyTableChangeAmount; i++) {
-          payWayItem = {};
+          moneyTableItem = {};
           moneyTableItem.money_way = this.moneyWayArray[i] ? this.moneyWayArray[i] : '';
           moneyTableItem.money_sep = this.moneySepArray[i] ? this.moneySepArray[i] : '';
           this.params.money_table.push(moneyTableItem);
@@ -951,7 +952,7 @@
             if (res.data.code === '61110') {
               this.clearData();
               this.rentRenewDialogVisible = false;
-              this.$emit('close','updateRent');
+              this.$emit('close', 'updateRent');
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg

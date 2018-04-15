@@ -37,7 +37,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="上传图片">
-                <UpLoad :ID="'addFollow_pic'" :isClear="isClear"  @getImg="getImg"></UpLoad>
+                <UpLoad :ID="'addDecorate_pic'" :isClear="isClear"  @getImg="getImg"></UpLoad>
               </el-form-item>
             </el-col>
           </el-row>

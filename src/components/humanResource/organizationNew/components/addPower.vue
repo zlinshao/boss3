@@ -33,6 +33,7 @@
           </div>
         </el-tab-pane>
       </el-tabs>
+
       <div slot="footer" class="dialog-footer" style="text-align: center;">
         <el-button size="small" type="primary" @click="empower('position')">授权给职位</el-button>
         <el-button size="small" type="primary" @click="empower('person')">授权给个人</el-button>

@@ -284,7 +284,7 @@
                         </el-col>
                         <el-col :span="6" v-if="item>1">
                           <div class="deleteNumber">
-                            <sapn @click="deleteMoneyTableChange(item-1)">删除</sapn>
+                            <span @click="deleteMoneyTableChange(item-1)">删除</span>
                           </div>
                         </el-col>
                       </el-row>
@@ -298,17 +298,17 @@
 
                   <el-row>
                     <el-col :span="6">
-                      <el-form-item label="中介费" r>
+                      <el-form-item label="中介费">
                         <el-input placeholder="请输入内容" v-model="params.agency"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="违约金" r>
+                      <el-form-item label="违约金">
                         <el-input placeholder="请输入内容" v-model="params.penalty"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6" class="unitMessage">
-                      <el-form-item label="物业费金额" r>
+                      <el-form-item label="物业费金额">
                         <el-input placeholder="请输入内容" v-model="params.property">
                           <template slot="append">元/m²</template>
                         </el-input>
@@ -326,7 +326,7 @@
 
                   <el-row>
                     <el-col :span="6">
-                      <el-form-item label="水表底数" required>
+                      <el-form-item label="水表底数">
                         <el-input placeholder="请输入内容" v-model="params.water"></el-input>
                       </el-form-item>
                     </el-col>
@@ -911,10 +911,10 @@
         this.payWayChangeAmount--;
       },
       //jine bianhua
-      addMoreMoneyTableChange(item){
+      addMoreMoneyTableChange(){
         this.moneyTableChangeAmount++;
       },
-      deleteMoneyTableChange(){
+      deleteMoneyTableChange(item){
         this.moneyWayArray.splice(item, 1);
         this.moneySepArray.splice(item, 1);
         this.moneyTableChangeAmount--;
@@ -997,11 +997,11 @@
           this.params.pay_way.push(payWayItem);
         }
 
-        //money_table
+        //table
         let moneyTableItem = {};
         this.params.money_table = [];
         for (let i = 0; i < this.moneyTableChangeAmount; i++) {
-          payWayItem = {};
+          moneyTableItem = {};
           moneyTableItem.money_way = this.moneyWayArray[i] ? this.moneyWayArray[i] : '';
           moneyTableItem.money_sep = this.moneySepArray[i] ? this.moneySepArray[i] : '';
           this.params.money_table.push(moneyTableItem);

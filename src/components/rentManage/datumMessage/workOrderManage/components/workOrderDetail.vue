@@ -2,29 +2,24 @@
   <div id="addFollowUp">
     <el-dialog :close-on-click-modal="false" title="工单详情" :visible.sync="orderDetailDialogVisible" width="60%">
       <div class="scroll_bar">
-        <div class="title">基本信息</div>
-        <div  class="describe_border">
-          <el-form size="small" label-width="100px">
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="创建时间">
-                  <div class="content">{{workOrderDetail.create_time}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="创建人">
-                  <div class="content">
-                    <span v-if="workOrderDetail.creators">{{workOrderDetail.creators.name}}</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </div>
         <div class="title">事项详情</div>
         <div class="describe_border">
           <el-form size="small" label-width="100px">
             <el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="创建时间">
+                    <div class="content">{{workOrderDetail.create_time}}</div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="创建人">
+                    <div class="content">
+                      <span v-if="workOrderDetail.creators">{{workOrderDetail.creators.name}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
               <el-col :span="8">
                 <el-form-item label="工单类型">
                   <div class="content">{{workOrderDetail.types}}</div>
@@ -102,9 +97,23 @@
             </div>
           </el-form>
         </div>
-
+        <div class="title">子工单项</div>
         <div class="describe_border" v-for="item in workOrderDetail.child">
           <el-form size="small" label-width="100px">
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="创建时间">
+                  <div class="content">{{item.create_time}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="创建人">
+                  <div class="content">
+                    <span v-if="item.creators">{{item.creators.name}}</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+            </el-row>
             <el-row>
               <el-col :span="8">
                 <el-form-item label="工单类型">
