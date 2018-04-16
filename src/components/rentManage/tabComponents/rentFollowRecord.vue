@@ -114,13 +114,11 @@
         }
       },
       activeName(val){
-        if(!this.isRequestData && val=== 'RentFollowRecordTab' && this.rentContractId){
-          if(this.rentContractId){
-            this.getData();
-            this.isRequestData = true;
-          }else {
-            this.tableData = [];
-          }
+        if(this.rentContractId && val=== 'RentFollowRecordTab'){
+          this.getData();
+          this.isRequestData = true;
+        }else {
+          this.tableData = [];
         }
       },
       tabStatusChange(val){
@@ -133,6 +131,8 @@
       getData(){
         this.tableLoading = true;
         this.emptyContent = ' ';
+        this.tableData = [];
+        this.totalNumber = 0;
         this.$http.get(globalConfig.server+'customer/work_order',{params:this.params}).then((res) => {
           this.tableLoading = false;
           if(res.data.code === '100200'){

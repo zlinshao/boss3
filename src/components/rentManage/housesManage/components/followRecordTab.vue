@@ -31,30 +31,33 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="vacant_time"
         label="空置期(天)">
+        <template slot-scope="scope">
+          <div v-if="scope.row.vacant_time">{{scope.row.vacant_time}}</div>
+          <div v-else="">/</div>
+        </template>
       </el-table-column>
       <el-table-column
         label="预警状态">
         <template slot-scope="scope">
           <div v-if="scope.row.warning_status == 1" class="label success">正常</div>
-          <div v-if="scope.row.warning_status == 2" class="label yellow">黄色预警</div>
-          <div v-if="scope.row.warning_status == 3" class="label orange">橙色预警</div>
-          <div v-if="scope.row.warning_status == 4" class="label red">红色预警</div>
+          <div v-else-if="scope.row.warning_status == 2" class="label yellow">黄色预警</div>
+          <div v-else-if="scope.row.warning_status == 3" class="label orange">橙色预警</div>
+          <div v-else-if="scope.row.warning_status == 4" class="label red">红色预警</div>
+          <div v-else="">/</div>
         </template>
       </el-table-column>
       <el-table-column
         label="负责人">
         <template slot-scope="scope">
-          <span v-if="scope.row.user&&scope.row.user.name">{{scope.row.user.name}}</span>
+          <span v-if="scope.row.leaders&&scope.row.leaders.real_name">{{scope.row.leaders.real_name}}</span>
           <span v-else="">/</span>
         </template>
       </el-table-column>
       <el-table-column
         label="所属部门">
         <template slot-scope="scope">
-          <span v-if="scope.row.user&&scope.row.user.org&&scope.row.user.org.length>0
-                 &&scope.row.user.org[0].name">{{scope.row.user.org[0].name}}</span>
+          <span v-if="scope.row.departments&&scope.row.departments.name">{{scope.row.departments.name}}</span>
           <span v-else="">/</span>
         </template>
       </el-table-column>
@@ -107,7 +110,7 @@
   import RightMenu from '../../../common/rightMenu.vue'
   import EditFollow from './editFollowRecord.vue'
   export default {
-    props:['houseId','activeName','all_dic'],
+    props:['houseId','activeName','all_dic','changeHouseStatus'],
     components:{RightMenu,EditFollow},
     data () {
         return {
@@ -123,7 +126,7 @@
             id:'',
           },
           totalNumber:0,
-          emptyContent: ' ',
+          emptyContent: '暂无数据',
           tableLoading: false,
           editFollowDialog : false,
           followId : '',
@@ -144,7 +147,14 @@
             this.getData();
           }
         }
-      }
+      },
+      changeHouseStatus(val){
+        if(val){
+          if(this.activeName === 'first'){
+            this.getData();
+          }
+        }
+      },
     },
     methods:{
       currentChange(val){
@@ -163,6 +173,8 @@
       getData(){
         this.emptyContent = ' ';
         this.tableLoading = true;
+        this.tableData = [];
+        this.totalNumber = 0;
         this.tableData = [];
         this.totalNumber = 0;
         this.$http.get(globalConfig.server + 'core/follow', {params: this.params}).then((res) => {

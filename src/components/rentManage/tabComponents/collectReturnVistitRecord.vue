@@ -63,7 +63,7 @@
           }
         },
         activeName(val){
-          if(!this.isRequestData && val=== 'CollectReturnVisitRecordTab' && this.collectContractId){
+          if(val=== 'CollectReturnVisitRecordTab' && this.collectContractId){
             this.getData();
             this.isRequestData = true;
           }
@@ -78,6 +78,8 @@
         getData(){
           this.tableLoading = true;
           this.emptyContent = ' ';
+          this.tableData = [];
+          this.totalNumber = 0;
           this.$http.get(globalConfig.server+'contract/feedback',{params:this.params}).then((res) => {
             this.tableLoading = false;
             if(res.data.code === '20000'){

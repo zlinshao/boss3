@@ -31,9 +31,13 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="vacant_time"
         label="空置期(天)">
+        <template slot-scope="scope">
+          <div v-if="scope.row.vacant_time">{{scope.row.vacant_time}}</div>
+          <div v-else="">/</div>
+        </template>
       </el-table-column>
+
       <el-table-column
         label="装修前效果">
         <template slot-scope="scope">
@@ -64,12 +68,18 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="leader_id"
         label="负责人">
+        <template slot-scope="scope">
+          <span v-if="scope.row.leaders&&scope.row.leaders.real_name">{{scope.row.leaders.real_name}}</span>
+          <span v-else="">/</span>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="department_id"
         label="所属部门">
+        <template slot-scope="scope">
+          <span v-if="scope.row.departments&&scope.row.departments.name">{{scope.row.departments.name}}</span>
+          <span v-else="">/</span>
+        </template>
       </el-table-column>
 
       <el-table-column
@@ -112,7 +122,7 @@
   import RightMenu from '../../../common/rightMenu.vue'
   import EditDecorate from './editDecorateRecord.vue'
   export default {
-    props:['houseId','activeName','all_dic'],
+    props:['houseId','activeName','all_dic','changeHouseStatus'],
     components:{RightMenu,EditDecorate},
     data () {
       return {
@@ -149,7 +159,14 @@
             this.getData();
           }
         }
-      }
+      },
+      changeHouseStatus(val){
+        if(val){
+          if(this.activeName === 'second'){
+            this.getData();
+          }
+        }
+      },
     },
     methods:{
       currentChange(val){

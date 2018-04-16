@@ -30,33 +30,53 @@
         </template>
       </el-table-column>
       <el-table-column
-        prop="vacant_time"
         label="空置期(天)">
+        <template slot-scope="scope">
+          <div v-if="scope.row.vacant_time">{{scope.row.vacant_time}}</div>
+          <div v-else="">/</div>
+        </template>
       </el-table-column>
       <el-table-column
         label="预警状态">
         <template slot-scope="scope">
-          <div v-if="scope.row.pre_warning_status == 1" class="label success">正常</div>
-          <div v-if="scope.row.pre_warning_status == 2" class="label yellow">黄色预警</div>
-          <div v-if="scope.row.pre_warning_status == 3" class="label orange">橙色预警</div>
-          <div v-if="scope.row.pre_warning_status == 4" class="label red">红色预警</div>
+          <div v-if="scope.row.warning_status == 1" class="label success">正常</div>
+          <div v-else-if="scope.row.warning_status == 2" class="label yellow">黄色预警</div>
+          <div v-else-if="scope.row.warning_status == 3" class="label orange">橙色预警</div>
+          <div v-else-if="scope.row.warning_status == 4" class="label red">红色预警</div>
+          <div v-else="">/</div>
         </template>
       </el-table-column>
 
       <el-table-column
-        prop="leader_id"
         label="负责人">
+        <template slot-scope="scope">
+          <span v-if="scope.row.leaders&&scope.row.leaders.real_name">{{scope.row.leaders.real_name}}</span>
+          <span v-else="">/</span>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="department_id"
         label="所属部门">
+        <template slot-scope="scope">
+          <span v-if="scope.row.departments&&scope.row.departments.name">{{scope.row.departments.name}}</span>
+          <span v-else="">/</span>
+        </template>
       </el-table-column>
 
       <el-table-column
-        prop="follow_id"
         label="操作人">
+        <template slot-scope="scope">
+          <span v-if="scope.row.creators&&scope.row.creators.real_name">{{scope.row.creators.real_name}}</span>
+          <span v-else="">/</span>
+        </template>
       </el-table-column>
-
+      <el-table-column
+        label="截图">
+        <template slot-scope="scope">
+          <el-button type="text" v-if="scope.row.album && scope.row.album.album_file"
+                     @click="openModal(scope.row.album.album_file)">查看</el-button>
+          <span v-else="">/</span>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="reason"
         label="调整原因">
@@ -71,13 +91,19 @@
         layout="total, prev, pager, next, jumper"
         :total="totalNumber">
       </el-pagination>
+
+      <el-dialog title="文件查看" :visible.sync="dialogFileVisible" :close-on-click-modal="false">
+        <div class="scroll_bar">
+          <img v-for="(val,key) in fileObject" :src="val[0].uri" data-magnify="" :data-src="val[0].uri">
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
   export default {
-    props:['houseId','activeName','all_dic'],
+    props:['houseId','activeName','all_dic','changeHouseStatus'],
     data () {
       return {
         tableData:[],
@@ -89,6 +115,9 @@
         totalNumber:0,
         emptyContent: ' ',
         tableLoading: false,
+
+        fileObject :{},
+        dialogFileVisible : false,
       }
     },
     watch:{
@@ -104,7 +133,14 @@
             this.getData();
           }
         }
-      }
+      },
+      changeHouseStatus(val){
+        if(val){
+          if(this.activeName === 'third'){
+            this.getData();
+          }
+        }
+      },
     },
     methods:{
       currentChange(val){
@@ -136,6 +172,10 @@
             this.emptyContent = '暂无数据';
           }
         })
+      },
+      openModal(val){
+        this.fileObject = val;
+        this.dialogFileVisible = true;
       },
     }
 
