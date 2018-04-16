@@ -74,16 +74,16 @@ export default {
       organizationDialog: false,
       saveorsendflag: false,
       lenx: 7,
-      typex:'',
-      screenshots:[],
-      screensho:[],
-      secondfalg:false,
+      typex: "",
+      screenshots: [],
+      screensho: [],
+      secondfalg: false,
       firstflag: false, //编辑或新建标识
       twoflag: false, //保存或发布标识
       threeflag: true, //是否成功发布标识
       linelist: [{}],
-      upStatus:false,
-      midId:null,
+      upStatus: false,
+      midId: null,
       form: {
         title: "",
         type: "",
@@ -91,7 +91,7 @@ export default {
         draft: "",
         obj: "",
 
-        departmentInfo:[],
+        departmentInfo: [],
         context: "",
         attachment: [],
         // fujian:'',
@@ -115,34 +115,33 @@ export default {
         this.$emit("close");
         this.secondfalg = true;
         this.midId = null;
-        this.form.id="";
+        this.form.id = "";
         this.$emit("threeflag", this.threeflag);
-      }else{
-        this.secondfalg = false
+      } else {
+        this.secondfalg = false;
       }
     },
     rowneedx(val) {
       this.firstflag = true;
       if (val.content) {
-      this.cover_pic = [];
-      this.$http
-        .get(globalConfig.server + "announcement/" + val.id)
-        .then(res => {
-          this.cover_pic = res.data.data.attachment;
-        });
+        this.cover_pic = [];
+        this.$http
+          .get(globalConfig.server + "announcement/" + val.id)
+          .then(res => {
+            this.cover_pic = res.data.data.attachment;
+          });
         this.form.type = val.type;
         this.form.title = val.title;
         this.form.context = val.content;
 
-        for(let i =0; i<val.department_id.length;i++){
-          this.form.obj += val.department_id[i].name+";";
+        for (let i = 0; i < val.department_id.length; i++) {
+          this.form.obj += val.department_id[i].name + ";";
         }
 
         this.form.id = val.id;
         this.form.attachment = val.attachment;
 
-        this.screenshots= val.attachment;
-
+        this.screenshots = val.attachment;
       } else {
         this.form.type = "";
         this.form.title = "";
@@ -151,8 +150,7 @@ export default {
 
         this.form.attachment = [];
         this.firstflag = true;
-        this.cover_pic = []
-
+        this.cover_pic = [];
       }
     }
   },
@@ -168,37 +166,33 @@ export default {
       this.midfunc();
     },
     //预览
-    look(){
+    look() {
       this.midId = null;
-      this.form.preview=1;
+      this.form.preview = 1;
       if (this.twoflag) {
         this.form.draft = "1";
       } else {
         this.form.draft = "0";
       }
 
-      if (!this.firstflag) {
-        this.form.id = "";
+      if (this.form.type == "表彰") {
+        this.form.type = 1;
       }
-
-        if (this.form.type == "表彰") {
-          this.form.type = 1;
-        }
-        if (this.form.type == "批评") {
-          this.form.type = 2;
-        }
-        if (this.form.type == "通知") {
-          this.form.type = 3;
-        }
-        if (this.form.type == "研发") {
-          this.form.type = 4;
-        }
-        if(this.upStatus === true){
-          this.$notify.warning({
-            title:'警告',
-            message:'图片正在上传'
-          })
-        }else {
+      if (this.form.type == "批评") {
+        this.form.type = 2;
+      }
+      if (this.form.type == "通知") {
+        this.form.type = 3;
+      }
+      if (this.form.type == "研发") {
+        this.form.type = 4;
+      }
+      if (this.upStatus === true) {
+        this.$notify.warning({
+          title: "警告",
+          message: "图片正在上传"
+        });
+      } else {
         this.$http
           .post(this.urls + "announcement", {
             title: this.form.title,
@@ -212,9 +206,9 @@ export default {
           .then(res => {
             if (res.data.code == "99910") {
               this.midId = res.data.data.id;
+              this.form.id = res.data.data.id;
             }
           });
-
       }
     },
     //发布
@@ -223,37 +217,35 @@ export default {
       this.midfunc();
     },
     midfunc() {
-      this.form.preview=0;
+      this.form.preview = 0;
       if (this.twoflag) {
         this.form.draft = "1";
       } else {
         this.form.draft = "0";
       }
-      if (!this.firstflag) {
-        this.form.id = "";
+
+      if (this.form.id == "") {
+        this.form.id = this.midId;
       }
-        if(this.form.id == ""){
-          this.form.id = this.midId;
-        }
-        
-        if (this.form.type == "表彰") {
-          this.form.type = 1;
-        }
-        if (this.form.type == "批评") {
-          this.form.type = 2;
-        }
-        if (this.form.type == "通知") {
-          this.form.type = 3;
-        }
-        if (this.form.type == "研发") {
-          this.form.type = 4;
-        }
-        if(this.upStatus === true){
-          this.$notify.warning({
-            title:'警告',
-            message:'图片正在上传'
-          })
-        }else {
+
+      if (this.form.type == "表彰") {
+        this.form.type = 1;
+      }
+      if (this.form.type == "批评") {
+        this.form.type = 2;
+      }
+      if (this.form.type == "通知") {
+        this.form.type = 3;
+      }
+      if (this.form.type == "研发") {
+        this.form.type = 4;
+      }
+      if (this.upStatus === true) {
+        this.$notify.warning({
+          title: "警告",
+          message: "图片正在上传"
+        });
+      } else {
         this.$http
           .post(this.urls + "announcement", {
             title: this.form.title,
@@ -273,9 +265,9 @@ export default {
                 type: "success"
               });
               this.midId = null;
-              this.form.id=null;
+              this.form.id = null;
               this.firstflag = true;
-              this.upStatus=false;
+              this.upStatus = false;
               this.increaseGoodsDialogVisible = false;
               this.$emit("threeflag", this.threeflag);
             } else {
@@ -287,48 +279,45 @@ export default {
               this.$emit("threeflag", this.threeflag);
             }
           });
-        
-
       }
     },
     openOrganizationModal() {
       this.organizationDialog = true;
-      this.typex="depart"
+      this.typex = "depart";
     },
     closeOrganization() {
       this.organizationDialog = false;
-
     },
     coloseaa(val) {
-      this.form.obj=""
-      this.form.departmentInfo=val;
-        for(let i =0; i<val.length;i++){
-          this.form.obj += val[i].name+";";
-        }
+      this.form.obj = "";
+      this.form.departmentInfo = val;
+      for (let i = 0; i < val.length; i++) {
+        this.form.obj += val[i].name + ";";
+      }
     },
 
-      handleImageAdded(file, Editor, cursorLocation, resetUploader) {
+    handleImageAdded(file, Editor, cursorLocation, resetUploader) {
+      let formData = new FormData();
+      formData.append("file", file);
 
-        let formData = new FormData();
-        formData.append('file', file);
-
-        let config = {
-          headers:{'Content-Type':'multipart/form-data'}
-        };
-        if(file.size > 1024 * 1024 * 2){
-            this.$notify.warning({
-              title:'警告',
-              message:'只能上传jpg/png文件，且不超过2M'
-            })
-        }else {
-          this.$http.post(globalConfig.server_user + 'files', formData ,config).then((res) => {
-            if(res.data.status === 'success'){
-              Editor.insertEmbed(cursorLocation, 'image', res.data.data.uri);
+      let config = {
+        headers: { "Content-Type": "multipart/form-data" }
+      };
+      if (file.size > 1024 * 1024 * 2) {
+        this.$notify.warning({
+          title: "警告",
+          message: "只能上传jpg/png文件，且不超过2M"
+        });
+      } else {
+        this.$http
+          .post(globalConfig.server_user + "files", formData, config)
+          .then(res => {
+            if (res.data.status === "success") {
+              Editor.insertEmbed(cursorLocation, "image", res.data.data.uri);
             }
-          })
-        }
-
-      },
+          });
+      }
+    }
   },
 
   created: function() {}
