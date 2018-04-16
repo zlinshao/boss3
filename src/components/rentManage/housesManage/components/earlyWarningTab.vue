@@ -39,10 +39,10 @@
       <el-table-column
         label="预警状态">
         <template slot-scope="scope">
-          <div v-if="scope.row.warning_status == 1" class="label success">正常</div>
-          <div v-else-if="scope.row.warning_status == 2" class="label yellow">黄色预警</div>
-          <div v-else-if="scope.row.warning_status == 3" class="label orange">橙色预警</div>
-          <div v-else-if="scope.row.warning_status == 4" class="label red">红色预警</div>
+          <div v-if="scope.row.after_warning_status == 1" class="label success">正常</div>
+          <div v-else-if="scope.row.after_warning_status == 2" class="label yellow">黄色预警</div>
+          <div v-else-if="scope.row.after_warning_status == 3" class="label orange">橙色预警</div>
+          <div v-else-if="scope.row.after_warning_status == 4" class="label red">红色预警</div>
           <div v-else="">/</div>
         </template>
       </el-table-column>
@@ -72,8 +72,10 @@
       <el-table-column
         label="截图">
         <template slot-scope="scope">
-          <el-button type="text" v-if="scope.row.album && scope.row.album.album_file"
-                     @click="openModal(scope.row.album.album_file)">查看</el-button>
+          <a href="javascript:;" type="text" v-if="scope.row.album && scope.row.album.album_file"
+             @click="openModal(scope.row.album.album_file)">
+            <i style="font-size: 16px" class="el-icon-picture"></i>
+          </a>
           <span v-else="">/</span>
         </template>
       </el-table-column>

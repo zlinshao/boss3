@@ -85,8 +85,10 @@
       <el-table-column
         label="截图">
         <template slot-scope="scope">
-          <el-button type="text" v-if="scope.row.album && scope.row.album.album_file"
-                     @click="openModal(scope.row.album.album_file)">查看</el-button>
+          <a href="javascript:;" type="text" v-if="scope.row.album && scope.row.album.album_file"
+             @click="openModal(scope.row.album.album_file)">
+            <i style="font-size: 16px" class="el-icon-picture"></i>
+          </a>
           <span v-else="">/</span>
         </template>
       </el-table-column>
