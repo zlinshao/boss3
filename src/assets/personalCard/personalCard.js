@@ -68,16 +68,16 @@ function insertHtml(offsetTop,offsetLeft,personal) {
                                  <div>${personal.org[0].name}</div>
                               </div>
                                <div>
-                                 <div>入职天数</div>
-                                 <div>业务员</div>
+                                 <div>入职时间</div>
+                                 <div>${personal.created_at.split(' ')[0]}</div>
                               </div>
                               <div>
                                  <div>员工状态</div>
-                                 <div>${personal.is_enable}</div>
+                                 <div>在职</div>
                               </div>
                                <div>
                                  <div>主管姓名</div>
-                                 <div>业务员</div>
+                                 <div>${personal.is_enable}</div>
                               </div>
                          </div>
                      </div>`;

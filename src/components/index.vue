@@ -128,17 +128,22 @@
                     <div style="width: 100%;height: 20px;font-size: 14px;">
                       <span style="color: #abadae">签约时长：</span>3年3个月（租）
                     </div>
+<<<<<<< HEAD
                   </div>    
                   <div class="glad_card_right">
                     <span class="gladsp1"><span>￥</span>2600</span>
                     <span class="gladsp2">月单价</span>
                   </div>          
                 </div> 
+=======
+                  </div>
+                </div>
+>>>>>>> dev_c
               </div>
               <div class="gladBottom">
                 <div class="glad_close" @click="glad_close">
                   <span>关闭</span>
-                </div>                 
+                </div>
               </div>
             </div>
             <div class="gladBackground"></div>
@@ -155,7 +160,7 @@
               <img data-card="" :data-src="JSON.stringify(personal)" :src="personal.avatar">
             </span>
             <span v-else>
-              <img src="../assets/images/head.jpg">
+              <img data-card="" :data-src="JSON.stringify(personal)" src="../assets/images/head.jpg">
             </span>
 
           </div>
@@ -415,6 +420,7 @@
     mounted() {
       //初始化个人信息
       this.personal = JSON.parse(localStorage.personal);
+      console.log(this.personal);
       //鼠标滑动监听
       let _this = this;
       $(document).mousemove(function () {
@@ -1096,7 +1102,7 @@
               }
               .glad_close:hover{
                 font-size: 20px;
-              }              
+              }
             }
           }
           .gladBackground {
