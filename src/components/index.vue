@@ -101,7 +101,7 @@
 
 
           <!--//喜报名片-->
-          <div v-if="false">
+          <div v-if="gladFlag">
             <div class="gladBulletin">
               <div class="gladTop"></div>
               <div class="gladContent">
@@ -128,10 +128,14 @@
                     <div style="width: 100%;height: 20px;font-size: 14px;">
                       <span style="color: #abadae">签约时长：</span>3年3个月（租）
                     </div>
-                  </div>
-                </div>
+                  </div>              
+                </div> 
               </div>
-              <div class="gladBottom"></div>
+              <div class="gladBottom">
+                <div class="glad_close" @click="glad_close">
+                  <span>关闭</span>
+                </div>                 
+              </div>
             </div>
             <div class="gladBackground"></div>
           </div>
@@ -369,8 +373,8 @@
         unlockSecondPWDialog: false,
         sendId: "",
         badgeDialog: false, //徽章模态框
-        unlockFlagpart: false,
-
+        unlockFlagpart: false,//二级密码标识
+        gladFlag:false, //喜报标识
       };
     },
     computed: {
@@ -707,6 +711,10 @@
         })
       },
 
+      //喜报关闭
+      glad_close(){
+        this.gladFlag =false;
+      }
     }
   }
 </script>
@@ -1037,9 +1045,24 @@
               height: 83px;
               background: url("../assets/images/xibaobottom.png") no-repeat;
               background-size: 100%;
+              .glad_close{
+                display: block;
+                height: 42px;
+                width: 100%;
+                line-height: 42px;
+                text-align: center;
+                z-index: 111;
+                margin-top:40px;
+                color: #fff;
+                cursor: pointer;
+              }
+              .glad_close:hover{
+                font-size: 20px;
+              }              
             }
           }
           .gladBackground {
+            cursor:default;
             position: absolute;
             width: 628px;
             height: 403px;

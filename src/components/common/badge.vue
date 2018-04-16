@@ -2,7 +2,7 @@
   <div>
     <el-dialog :close-on-click-modal="false" width="0" style="margin-top:20vh" :visible.sync="badgeDialogVisible">
     <div class="badgeup" >
-      <span class="close" @click="closeBadge">X</span>
+      <span class="close el-icon-close"  @click="closeBadge"></span>
       <div v-if="loginDay == 3" class="backdiv backdiv3"></div>
       <div v-else-if="loginDay == 5" class="backdiv backdiv5"></div>
       <div v-else-if="loginDay == 15" class="backdiv backdiv15"></div>
@@ -183,11 +183,11 @@ export default {
   width: 30px;
   height: 30px;
   line-height: 30px;
-  font-size: 15px;
+  font-size: 20px;
   text-align: center;
   position: absolute;
   right: 31px;
-  top:20px;
+  top:18px;
   z-index: 999;
   color: rgb(33, 0, 74);
   cursor: pointer;
