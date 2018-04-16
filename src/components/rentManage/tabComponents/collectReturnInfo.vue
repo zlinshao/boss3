@@ -1,8 +1,12 @@
 <template>
-    <div  @click="show=false" @contextmenu="closeMenu">
+    <div>
       <el-table
         :data="rentingData"
-        @row-contextmenu='showContextMenu'
+        :empty-text = 'emptyContent'
+        v-loading="tableLoading"
+        element-loading-text="拼命加载中"
+        element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0)"
         style="width: 100%">
         <el-table-column
           prop="check_time"
@@ -63,26 +67,16 @@
           :total="totalNumber">
         </el-pagination>
       </div>
-      <!--<RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"-->
-                 <!--@clickOperate="clickEvent"></RightMenu>-->
-      <EditRentChange :editRentChangeDialog="editRentChangeDialog" @close="closeModal"></EditRentChange>
+
     </div>
 </template>
 
 <script>
-  import RightMenu from '../../../common/rightMenu.vue'    //右键
-  import EditRentChange from './components/editRentChange.vue'
     export default {
-      components:{RightMenu,EditRentChange},
       props:['collectContractId','activeName'],
       data () {
           return {
-            rightMenuX: 0,
-            rightMenuY: 0,
-            show: false,
-            lists: [],
-            /***********/
-            editRentChangeDialog:false,
+
             rentingData:[],
             params:{
               limit:3,
@@ -92,6 +86,8 @@
             totalNumber:0,
             editId:'',      //编辑id
             isRequestData : false,
+            emptyContent : '暂无数据',
+            tableLoading : false,
           }
       },
       mounted(){
@@ -107,7 +103,7 @@
           }
         },
         activeName(val){
-          if(!this.isRequestData && val=== 'CollectReturnRomeInfoTab' && this.collectContractId){
+          if(val=== 'CollectReturnRomeInfoTab' && this.collectContractId){
             this.getData();
             this.isRequestData = true;
           }
@@ -115,14 +111,18 @@
       },
       methods:{
         getData(){
+          this.tableLoading = true;
+          this.emptyContent = ' ';
           this.$http.get(globalConfig.server+'customer/check_out',{params:this.params}).then((res) => {
-              if(res.data.code === '20000'){
-                this.rentingData = res.data.data.data;
-                this.totalNumber = res.data.data.count;
-              }else {
-                this.rentingData = [];
-                this.totalNumber = 0;
-              }
+            this.tableLoading = false;
+            if(res.data.code === '20000'){
+              this.rentingData = res.data.data.data;
+              this.totalNumber = res.data.data.count;
+            }else {
+              this.rentingData = [];
+              this.totalNumber = 0;
+              this.emptyContent = '暂无数据';
+            }
           })
         },
         currentChange(val){
@@ -130,47 +130,13 @@
           this.getData();
         },
         openModalDialog(index){
-          if(index === 'edit'){
+          if(collectReturnInfo === 'edit'){
               this.editRentChangeDialog = true;
           }
         },
         closeModal(){
           this.editRentChangeDialog = false;
         },
-
-        /***********************右键************************/
-        //合同表头右键
-        showContextMenu(row, event){
-          this.editId = row.id;
-          this.lists = [
-            {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-          ];
-          this.contextMenuParam(event);
-        },
-
-        //右键回调时间
-        clickEvent (index) {
-          this.openModalDialog(index);
-        },
-        //关闭右键菜单
-        closeMenu(){
-          this.show = false;
-        },
-        //右键参数
-        contextMenuParam(event){
-          //param: user right param
-          let e = event || window.event;	//support firefox contextmenu
-          this.show = false;
-          this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
-          this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
-//        console.log(this.rightMenuX,this.rightMenuY)
-          event.preventDefault();
-          event.stopPropagation();
-          this.$nextTick(() => {
-            this.show = true
-          })
-        },
-
       }
     }
 </script>

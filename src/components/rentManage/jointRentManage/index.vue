@@ -499,7 +499,7 @@
   import OwnerInfoTab from '../tabComponents/ownerInfo.vue'
   import RentInfoTab from '../tabComponents/rentInfo.vue'
   //  import InDebtInfoTab from '../tabComponents/InDebtInfo.vue'
-  import CollectReturnRomeInfoTab from '../tabComponents/returnRoomInfo/index.vue'   //退还房
+  import CollectReturnRomeInfoTab from '../tabComponents/collectReturnInfo.vue'   //退还房
   import rentReturnRomeInfoTab from '../tabComponents/rentReturnInfo.vue'   //退还房
   import CollectRenewContractTab from '../tabComponents/collcetRenewContract.vue'
   import RentRenewContractTab from '../tabComponents/rentRenewContract.vue'
