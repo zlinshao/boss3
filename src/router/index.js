@@ -251,7 +251,7 @@ export default new Router({
         {path: '/individual', component: Individual, name: ' 个人门户 ', icon: "el-icons-fa-user"},
         {path: '/wholeRentManage', component: WholeRentManage, name: ' 整租管理 ', icon: "iconfont icon-pinzhizhengzu"},
         // {path: '/jointRentManage', component: JointRentManage, name: ' 合租管理 ', icon:"iconfont icon-hezu"},
-        {path: '/housesManage', component: HousesManage, name: ' 产品管理 ', icon: "iconfont icon-fangzu"},
+        {path: '/housesManage', component: HousesManage, name: ' 产品管控中心 ', icon: "iconfont icon-fangzu"},
         {
           path: '/datumMessage/contractManage',
           component: ContractManage,
