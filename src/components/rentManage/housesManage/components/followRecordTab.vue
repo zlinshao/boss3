@@ -71,8 +71,10 @@
       <el-table-column
         label="截图">
         <template slot-scope="scope">
-          <el-button type="text" v-if="scope.row.album && scope.row.album.album_file"
-                     @click="openModal(scope.row.album.album_file)">查看</el-button>
+          <a href="javascript:;" type="text" v-if="scope.row.album && scope.row.album.album_file"
+                     @click="openModal(scope.row.album.album_file)">
+            <i style="font-size: 16px" class="el-icon-picture"></i>
+          </a>
           <span v-else="">/</span>
         </template>
       </el-table-column>
@@ -96,6 +98,7 @@
     <el-dialog title="文件查看" :visible.sync="dialogFileVisible" :close-on-click-modal="false">
       <div class="scroll_bar">
         <img v-for="(val,key) in fileObject" :src="val[0].uri" data-magnify="" :data-src="val[0].uri">
+
       </div>
     </el-dialog>
 

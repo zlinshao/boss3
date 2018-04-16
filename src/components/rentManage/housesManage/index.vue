@@ -180,15 +180,17 @@
               <el-table-column
                 label="是否为二次出租">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.is_again_rent==1">是</span>
-                  <span v-else="">否</span>
+                  <span v-if="scope.row.is_again_rent>0">是</span>
+                  <span v-else-if="scope.row.is_again_rent===0">否</span>
+                  <span v-else="">/</span>
                 </template>
               </el-table-column>
               <el-table-column
                 label="租房结束是否晚于收房">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.rent_end_than_days==1">是</span>
-                  <span v-else="">否</span>
+                  <span v-if="scope.row.rent_end_than_days>0">晚于{{scope.row.rent_end_than_days}}天</span>
+                  <span v-else-if="scope.row.rent_end_than_days<0">否</span>
+                  <span v-else="">/</span>
                 </template>
               </el-table-column>
               <el-table-column
