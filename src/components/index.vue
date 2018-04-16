@@ -79,7 +79,7 @@
                   </el-col>
                 </el-row>
               </el-dropdown-item>
-              <el-dropdown-item class="not" v-if="unReadMessageData.length <0">
+              <el-dropdown-item class="not" v-if="unReadMessageData.length <=0">
                 <el-row  style="cursor:default; ">
                   <el-col :span="24">
                     <i style="font-size:50px;color:#eee; display:block; text-align:center;" class="el-icon-warning"></i>
@@ -88,7 +88,7 @@
                   </el-col>
                 </el-row>
               </el-dropdown-item>
-              <el-dropdown-item v-if="unReadMessageData.length <0">
+              <el-dropdown-item v-if="unReadMessageData.length <=0">
                 <el-row @click.native="showOtherDetail('read')">
                   <el-col :span="24">
                     <div style="display:block; margin-top:10px; text-align:center; color:#409EFF">查看全部已读消息
