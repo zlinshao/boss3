@@ -80,7 +80,7 @@
           this.$http.post(globalConfig.server+'house/album',this.formInline).then((res) => {
             if(res.data.code === '30060'){
               this.upLoadDialogVisible = false;
-              this.$emit('close','success');
+//              this.$emit('close','success');
               this.$notify.success({
                 title:'成功',
                 message:res.data.msg,

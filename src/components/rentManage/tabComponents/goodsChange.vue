@@ -92,7 +92,7 @@
           }
         },
         activeName(val){
-          if(!this.isRequestData && val=== 'GoodsChangeTab' && this.collectHouseId){
+          if(val=== 'GoodsChangeTab' && this.collectHouseId){
             this.getData();
             this.isRequestData = true;
           }
@@ -112,6 +112,8 @@
         getData(){
           this.tableLoading = true;
           this.emptyContent = ' ';
+          this.goodsChangeData=[];
+          this.total=0;
           this.$http.get(this.urls+'house/asset_change', { params: this.params, }).then((res) => {
             this.tableLoading = false;
             if (res.data.code === '20000') {
@@ -129,8 +131,8 @@
             }
             else{
               this.goodsChangeData=[];
-              this.emptyContent = '暂无数据';
               this.total=0;
+              this.emptyContent = '暂无数据';
             }
           })
         }

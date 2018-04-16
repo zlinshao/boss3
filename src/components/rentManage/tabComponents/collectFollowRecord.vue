@@ -111,7 +111,7 @@
             }
           },
           activeName(val){
-            if(!this.isRequestData && val=== 'CollectFollowRecordTab' && this.collectContractId){
+            if(val=== 'CollectFollowRecordTab' && this.collectContractId){
               this.getData();
               this.isRequestData = true;
             }
@@ -126,6 +126,8 @@
           getData(){
             this.tableLoading = true;
             this.emptyContent = ' ';
+            this.tableData = [];
+            this.totalNumber = 0;
             this.$http.get(globalConfig.server+'customer/work_order',{params:this.params}).then((res) => {
               this.tableLoading = false;
               if(res.data.code === '100200'){

@@ -90,7 +90,7 @@
           this.$http.post(globalConfig.server+'core/follow',this.formInline).then((res) => {
             if(res.data.code === '20010'){
               this.addFollowDialogVisible = false;
-              this.$emit('close','success');
+              this.$emit('close','success_tab');
               this.formInline = {
                 house_id : this.houseId,
                 follow_type : '',

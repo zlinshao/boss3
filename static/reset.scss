@@ -555,3 +555,8 @@ ul.el-menu.el-menu--inline{
 .el-menu--popup{
   padding:0 !important;
 }
+#rentingDetail {
+  .el-badge__content.is-fixed{
+    top: 5px !important;
+  }
+}

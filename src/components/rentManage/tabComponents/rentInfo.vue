@@ -132,13 +132,11 @@
         }
       },
       activeName(val){
-        if(!this.isRequestData){
-          if(this.rentContractId){
-            this.getData();
-            this.isRequestData = true;
-          }else {
-            this.rentData = [];
-          }
+        if(this.rentContractId && val === 'RentInfoTab'){
+          this.getData();
+          this.isRequestData = true;
+        }else {
+          this.rentData = [];
         }
       }
     },
@@ -146,6 +144,7 @@
       getData(){
         this.tableLoading = true;
         this.emptyContent = ' ';
+        this.rentData = [];
         this.$http.get(globalConfig.server+'lease/detail/'+this.rentContractId +'?collect_or_rent=1').then((res) =>{
           this.tableLoading = false;
           if(res.data.code === '60010'){

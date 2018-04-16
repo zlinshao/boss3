@@ -96,8 +96,11 @@
                 width="35">
               </el-table-column>
               <el-table-column
-                prop="name"
                 label="地址">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.name">{{scope.row.name}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="房型">
@@ -146,8 +149,11 @@
                 </template>
               </el-table-column>
               <el-table-column
-                prop="suggest_price"
                 label="参考价格">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.suggest_price">{{scope.row.suggest_price}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="房屋状态">
@@ -157,28 +163,42 @@
                 </template>
               </el-table-column>
               <el-table-column
-                prop="total_ready_days"
                 label="空置期(天)">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.total_ready_days">{{scope.row.total_ready_days}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="current_ready_days"
                 label="当前空置时长(天)">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.current_ready_days">{{scope.row.current_ready_days}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="is_again_rent"
                 label="是否为二次出租">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.is_again_rent==1">是</span>
+                  <span v-else="">否</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="rent_end_than_days"
                 label="租房结束是否晚于收房">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.rent_end_than_days==1">是</span>
+                  <span v-else="">否</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="预警状态">
                 <template slot-scope="scope">
                   <div v-if="scope.row.warning_status == 1" class="label success">正常</div>
-                  <div v-if="scope.row.warning_status == 2" class="label yellow">黄色预警</div>
-                  <div v-if="scope.row.warning_status == 3" class="label orange">橙色预警</div>
-                  <div v-if="scope.row.warning_status == 4" class="label red">红色预警</div>
+                  <div v-else-if="scope.row.warning_status == 2" class="label yellow">黄色预警</div>
+                  <div v-else-if="scope.row.warning_status == 3" class="label orange">橙色预警</div>
+                  <div v-else-if="scope.row.warning_status == 4" class="label red">红色预警</div>
+                  <div v-else="">/</div>
                 </template>
               </el-table-column>
               <el-table-column
@@ -216,13 +236,16 @@
         <div class="myDetail">
           <el-tabs type="border-card" v-model="activeName">
             <el-tab-pane name="first" label="跟进记录">
-              <FollowRecordTab :all_dic="all_dic" :houseId="houseId" :activeName="activeName"></FollowRecordTab>
+              <FollowRecordTab :changeHouseStatus="changeHouseStatus" :all_dic="all_dic"
+                               :houseId="houseId" :activeName="activeName"></FollowRecordTab>
             </el-tab-pane>
             <el-tab-pane name="second" label="装修记录">
-              <DecorateRecordTab :all_dic="all_dic" :houseId="houseId" :activeName="activeName"></DecorateRecordTab>
+              <DecorateRecordTab :changeHouseStatus="changeHouseStatus" :all_dic="all_dic"
+                                 :houseId="houseId" :activeName="activeName"></DecorateRecordTab>
             </el-tab-pane>
             <el-tab-pane name="third" label="预警状态调整记录">
-              <EarlyWarning :all_dic="all_dic" :houseId="houseId" :activeName="activeName"></EarlyWarning>
+              <EarlyWarning :changeHouseStatus="changeHouseStatus" :all_dic="all_dic"
+                            :houseId="houseId" :activeName="activeName"></EarlyWarning>
             </el-tab-pane>
             <el-tab-pane name="forth" label="收房合同详情">
               <CollectContractTab :all_dic="all_dic" :collectData="collectData" :activeName="activeName"></CollectContractTab>
@@ -318,6 +341,7 @@
         houseStatus:{},
         operateArray : [],    //选中数组
         organizationType : '',
+        changeHouseStatus : false,
       }
     },
     mounted(){
@@ -353,6 +377,9 @@
             this.totalNumber = res.data.meta.total;
             if (res.data.data.length > 0) {
               this.tableData = res.data.data;
+              if(!this.houseId){
+                this.houseId = res.data.data[0].id;
+              }
             } else {
               this.tableData = [];
               this.emptyContent = '暂无数据';
@@ -391,6 +418,7 @@
       },
       search(){
         this.isHigh = false;
+        this.houseId = '';
         this.formInline.page = 1;
         this.getData();
       },
@@ -401,6 +429,7 @@
       },
       handleCurrentChange(val) {
         this.formInline.page = val;
+        this.houseId = '';
         this.getData();
       },
 
@@ -490,6 +519,7 @@
 
       //右键回调时间
       clickEvent (index) {
+        this.changeHouseStatus = false;
         switch (index) {
           case 'edit' :
             this.editHouseDialog = true;
@@ -516,6 +546,8 @@
         this.addDecorateDialog = false;
         if (val === 'success') {
           this.getData();
+        }else if (val === 'success_tab'){
+          this.changeHouseStatus = true;
         }
       },
       //关闭右键菜单
