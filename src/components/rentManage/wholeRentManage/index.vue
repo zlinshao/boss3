@@ -144,6 +144,14 @@
                 label="房屋类型">
               </el-table-column>
               <el-table-column
+                prop="type"
+                label="合同性质">
+              </el-table-column>
+              <el-table-column
+                prop="status"
+                label="合同状态">
+              </el-table-column>
+              <el-table-column
                 prop="deposit"
                 label="收房押金">
               </el-table-column>
@@ -280,6 +288,14 @@
                 label="房屋类型">
               </el-table-column>
               <el-table-column
+                prop="type"
+                label="合同性质">
+              </el-table-column>
+              <el-table-column
+                prop="status"
+                label="合同状态">
+              </el-table-column>
+              <el-table-column
                 prop="price"
                 label="出租价格">
                 <template slot-scope="scope">
@@ -383,13 +399,14 @@
             <el-tab-pane label="物品增减" name="GoodsChangeTab">
               <GoodsChangeTab :collectHouseId="collectHouseId" :tabStatusChange="tabStatusChange" :activeName="activeName"></GoodsChangeTab>
             </el-tab-pane>
-            <!--
+
             <el-tab-pane label="房东退房记录" name="CollectReturnRomeInfoTab">
               <CollectReturnRomeInfoTab :collectContractId="collectContractId" :activeName="activeName"></CollectReturnRomeInfoTab>
             </el-tab-pane>
-            <el-tab-pane label="退/换房记录(租)" name="rentReturnRomeInfoTab">
+            <el-tab-pane label="租客退房记录" name="rentReturnRomeInfoTab">
               <rentReturnRomeInfoTab :rentContractId="rentContractId" :activeName="activeName"></rentReturnRomeInfoTab>
             </el-tab-pane>
+            <!--
             <el-tab-pane label="续约/延期(收)" name="CollectRenewContractTab">
               <CollectRenewContractTab></CollectRenewContractTab>
             </el-tab-pane>
@@ -522,7 +539,7 @@
   import OwnerInfoTab from '../tabComponents/ownerInfo.vue'
   import RentInfoTab from '../tabComponents/rentInfo.vue'
 //  import InDebtInfoTab from '../tabComponents/InDebtInfo.vue'
-  import CollectReturnRomeInfoTab from '../tabComponents/returnRoomInfo/index.vue'   //退还房
+  import CollectReturnRomeInfoTab from '../tabComponents/collectReturnInfo.vue'   //退还房
   import rentReturnRomeInfoTab from '../tabComponents/rentReturnInfo.vue'   //退还房
   import CollectRenewContractTab from '../tabComponents/collcetRenewContract.vue'
   import RentRenewContractTab from '../tabComponents/rentRenewContract.vue'
