@@ -2,42 +2,63 @@
   <div>
     <el-table
       :data="tableData"
+      :empty-text='emptyContent'
+      v-loading="tableLoading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0)"
       style="width: 100%">
       <el-table-column
         prop="create_time"
-        label="记录时间">
+        label="调整时间">
       </el-table-column>
       <el-table-column
-        prop="create_time"
+        width="150"
         label="房屋评分">
+        <template slot-scope="scope">
+          <span v-if="scope.row.house_rating">
+            <el-rate disabled v-model="scope.row.house_rating" style="line-height: 37px"></el-rate>
+          </span>
+          <span v-else="">/</span>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="name"
         label="房屋状态">
+        <template slot-scope="scope">
+          <span v-if="scope.row.house_status==1">已租</span>
+          <span v-else="">未租</span>
+        </template>
       </el-table-column>
       <el-table-column
-        prop="child_count"
-        label="空置时长">
+        prop="vacant_time"
+        label="空置期(天)">
       </el-table-column>
       <el-table-column
-        prop="child.length"
         label="预警状态">
+        <template slot-scope="scope">
+          <div v-if="scope.row.pre_warning_status == 1" class="label success">正常</div>
+          <div v-if="scope.row.pre_warning_status == 2" class="label yellow">黄色预警</div>
+          <div v-if="scope.row.pre_warning_status == 3" class="label orange">橙色预警</div>
+          <div v-if="scope.row.pre_warning_status == 4" class="label red">红色预警</div>
+        </template>
       </el-table-column>
+
       <el-table-column
-        prop="expected_finish_time"
+        prop="leader_id"
         label="负责人">
       </el-table-column>
       <el-table-column
-        prop="creator_id"
+        prop="department_id"
         label="所属部门">
       </el-table-column>
+
       <el-table-column
         prop="follow_id"
         label="操作人">
       </el-table-column>
 
       <el-table-column
-        prop="follow_statuss"
+        prop="reason"
         label="调整原因">
       </el-table-column>
     </el-table>
@@ -56,20 +77,66 @@
 
 <script>
   export default {
-    name: 'hello',
+    props:['houseId','activeName','all_dic'],
     data () {
-        return {
-          tableData:[],
-          params:{
-            page:1,
-          },
-          totalNumber:0
+      return {
+        tableData:[],
+        params:{
+          page:1,
+          limit:3,
+          id:'',
+        },
+        totalNumber:0,
+        emptyContent: ' ',
+        tableLoading: false,
+      }
+    },
+    watch:{
+      activeName(val){
+        if(val === 'third'){
+          this.getData();
         }
+      },
+      houseId(val){
+        if(val){
+          this.params.id = val;
+          if(this.activeName === 'third'){
+            this.getData();
+          }
+        }
+      }
     },
     methods:{
       currentChange(val){
-
-      }
+        this.params.page = val;
+        this.getData();
+      },
+      matchDictionary(id) {
+        let dictionary_name = null;
+        this.all_dic.map((item) => {
+          if (item.id == id) {
+            dictionary_name = item.dictionary_name;
+          }
+        });
+        return dictionary_name;
+      },
+      getData(){
+        this.emptyContent = ' ';
+        this.tableLoading = true;
+        this.tableData = [];
+        this.totalNumber = 0;
+        this.$http.get(globalConfig.server + 'core/warning', {params: this.params}).then((res) => {
+          this.tableLoading = false;
+          if (res.data.code === '40000') {
+            this.totalNumber = res.data.data.count;
+            this.tableData = res.data.data.data;
+          } else {
+            this.tableData = [];
+            this.totalNumber = 0;
+            this.emptyContent = '暂无数据';
+          }
+        })
+      },
     }
 
   }
@@ -77,5 +144,31 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  .label {
+    display: inline-block;
+    width: 70px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    border-radius: 4px;
+    color: #ffffff;
+  }
+  .success {
+    background: #409EFF;
+  }
+  .yellow {
+    background: #FFCC00
+  }
+  .orange {
+    background: #FF9900
+  }
+  .red {
+    background: #FF3900
+  }
+  img{
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    margin: 10px;
+  }
 </style>

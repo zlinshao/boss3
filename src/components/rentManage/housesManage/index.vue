@@ -6,14 +6,14 @@
         <div class="highSearch" style="justify-content: space-between">
 
           <div class="earlyWarning">
-            <el-button class="warningItem" type="text">空置房源: xx套</el-button>
-            <el-button class="warningItem" type="text">黄色预警房源:xx套</el-button>
-            <el-button class="warningItem" type="text">橙色预警房源:xx套</el-button>
-            <el-button class="warningItem" type="text">红色预警房源:xx套</el-button>
-            <el-button class="warningItem" type="text">现有房源: xx套</el-button>
+            <el-button class="warningItem" type="text">空置房源: {{houseStatus.emptyHouse}}套</el-button>
+            <el-button class="warningItem" type="text" style="color: #FFCC00">黄色预警房源:{{houseStatus.yellowHouse}}套</el-button>
+            <el-button class="warningItem" type="text" style="color: #FF9900">橙色预警房源:{{houseStatus.orangeHouse}}套</el-button>
+            <el-button class="warningItem" type="text" style="color: #FF3900">红色预警房源:{{houseStatus.redHouse}}套</el-button>
+            <el-button class="warningItem" type="text" style="color: #409EFF">现有房源: {{houseStatus.lord_end_at}}套</el-button>
           </div>
 
-          <el-form :inline="true" size="mini">
+          <el-form :inline="true" size="mini" onsubmit="return false">
             <el-form-item>
               <el-input placeholder="请输入内容" @keyup.enter.native="search" v-model="formInline.q" size="mini" clearable>
                 <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
@@ -23,11 +23,11 @@
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="openOrganizationModal('dispatch')">分配</el-button>
+              <el-button type="primary":disabled="!operateArray.length" @click="openOrganizationModal('dispatch')">分配</el-button>
             </el-form-item>
-            <el-form-item>
-              <el-button type="primary"><i class="el-icon-sort"></i></el-button>
-            </el-form-item>
+            <!--<el-form-item>-->
+              <!--<el-button type="primary"><i class="el-icon-sort"></i></el-button>-->
+            <!--</el-form-item>-->
           </el-form>
         </div>
 
@@ -44,31 +44,14 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="formInline.house" clearable placeholder="请选择" value="">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
+                      <el-select v-model="formInline.status" clearable placeholder="请选择房屋状态" value="">
+                        <el-option label="未收" value="0"></el-option>
+                        <el-option label="已收" value="1"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
                 </el-row>
               </el-col>
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">认领状态</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select v-model="formInline.house" clearable placeholder="请选择">
-                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                        </el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
-            <el-row class="el_row_border">
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
@@ -76,14 +59,15 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input readonly="" @focus="openOrganizationModal" v-model="formInline.ss" placeholder="点击选择部门">
-                        <el-button slot="append" type="primary">清空</el-button>
+                      <el-input readonly="" @focus="openOrganizationModal('filter')" v-model="department_name" placeholder="点击选择部门">
+
                       </el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
               </el-col>
             </el-row>
+
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
@@ -108,8 +92,8 @@
               @selection-change="handleSelectionChange"
               style="width: 100%">
               <el-table-column
-                type="id"
-                width="30">
+                type="selection"
+                width="35">
               </el-table-column>
               <el-table-column
                 prop="name"
@@ -168,8 +152,8 @@
               <el-table-column
                 label="房屋状态">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.status">{{matchDictionary(scope.row.status)}}</span>
-                  <span v-else="">/</span>
+                  <span v-if="scope.row.status==1">已租</span>
+                  <span v-else="">未租</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -235,10 +219,16 @@
               <FollowRecordTab :all_dic="all_dic" :houseId="houseId" :activeName="activeName"></FollowRecordTab>
             </el-tab-pane>
             <el-tab-pane name="second" label="装修记录">
-              <DecorateRecordTab></DecorateRecordTab>
+              <DecorateRecordTab :all_dic="all_dic" :houseId="houseId" :activeName="activeName"></DecorateRecordTab>
             </el-tab-pane>
             <el-tab-pane name="third" label="预警状态调整记录">
-              <EarlyWarning></EarlyWarning>
+              <EarlyWarning :all_dic="all_dic" :houseId="houseId" :activeName="activeName"></EarlyWarning>
+            </el-tab-pane>
+            <el-tab-pane name="forth" label="收房合同详情">
+              <CollectContractTab :all_dic="all_dic" :collectData="collectData" :activeName="activeName"></CollectContractTab>
+            </el-tab-pane>
+            <el-tab-pane name="fifth" label="租房合同详情">
+              <RentContractTab :all_dic="all_dic" :collectId="collectId" :rentData="rentData" :activeName="activeName"></RentContractTab>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -246,7 +236,8 @@
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
-    <Organization :organizationDialog="organizationDialog" @close="closeModal"></Organization>
+    <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
+                  @selectMember="selectMember" @close="closeModal"></Organization>
 
     <EditHouseInfo :editHouseDialog="editHouseDialog" :houseDetail="houseDetail" :houseId="houseId"
                    @close="closeModal"></EditHouseInfo>
@@ -263,6 +254,8 @@
   import FollowRecordTab from './components/followRecordTab.vue'
   import DecorateRecordTab from './components/decorateRecordTab.vue'
   import EarlyWarning from './components/earlyWarningTab.vue'
+  import CollectContractTab from './components/collectContractTab.vue'
+  import RentContractTab from './components/rentContractTab.vue'
 
   import EditHouseInfo from './components/editHouseInfo.vue'
   import AddFollow from './components/addFollowRecord.vue'
@@ -272,8 +265,8 @@
   export default {
     name: 'hello',
     components: {
-      RightMenu, Organization, FollowRecordTab, DecorateRecordTab, EarlyWarning, EditHouseInfo, AddFollow, UpLoadPic
-      , AddEarlyWarning, AddDecorate
+      RightMenu, Organization, FollowRecordTab, DecorateRecordTab, EarlyWarning, EditHouseInfo,
+      AddFollow, UpLoadPic, AddEarlyWarning, AddDecorate,CollectContractTab,RentContractTab
     },
     data () {
       return {
@@ -285,8 +278,14 @@
         formInline: {
           q: '',
           per_page_number: 5,
-          page: 1
+          page: 1,
+          status : '',
+          org_id : '',
         },
+        department_name : '',
+        length : '',
+        type : '',
+
         tableData: [],
         totalNumber: 0,
         options: [],
@@ -313,12 +312,21 @@
 
         houseId: '',
         houseDetail: {},
-
+        collectData : [],
+        rentData : [],
+        collectId : '',
+        houseStatus:{},
+        operateArray : [],    //选中数组
+        organizationType : '',
       }
     },
     mounted(){
       this.getData();
       this.getDictionary();
+      this.getCharts();
+//      $('.earlyWarning .warningItem').click(function () {
+//        $(this).addClass('selected_tr').siblings().removeClass('selected_tr');
+//      });
     },
     methods: {
       getDictionary() {
@@ -356,16 +364,32 @@
           }
         })
       },
+      getCharts(){
+        this.$http.get(globalConfig.server_user + 'charts').then((res) => {
+          if (res.data.status === 'success') {
+            this.houseStatus = res.data.data.house;
+          } else {
+
+          }
+        })
+      },
       //复选框变化
       handleSelectionChange(val){
-        console.log(val)
+        this.operateArray = [];
+        if(val.length>0){
+          val.forEach((item) => {
+            this.operateArray.push(item.id);
+          })
+        }
       },
       //*****************************高级搜索/各种搜索项****************************//
       highGrade(){
         this.isHigh = !this.isHigh;
       },
       resetting(){
-
+        this.formInline.org_id = '';
+        this.department_name = '';
+        this.formInline.status = '';
       },
       search(){
         this.isHigh = false;
@@ -384,16 +408,42 @@
 
       //选人模态框
       openOrganizationModal(val){
-        if (val === 'dispatch') {
-        }
         this.organizationDialog = true;
+        this.organizationType = val;
+        this.type = 'depart';
+        this.length = 1;
       },
       closeOrganization(){
         this.organizationDialog = false;
       },
+      selectMember(val){
+        this.organizationDialog = false;
+        if(this.organizationType === 'dispatch'){
+          this.$confirm('分配后将不可撤回, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
 
+          }).catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消分配'
+            });
+          });
+        }else {
+          this.formInline.org_id = val[0].id;
+          this.department_name = val[0].name;
+        }
+      },
+      //************************************************************************/
       clickTable(row, event){
         this.houseId = row.id;
+        this.collectData = row.lords;
+        if(this.collectData.length>0){
+          this.collectId = this.collectData[0].id;
+        }
+        this.rentData = row.renters;
       },
       tableRowCollectName({row, rowIndex}) {
         if (row.id === this.houseId) {
@@ -406,6 +456,11 @@
       houseMenu(row, event){
         this.houseId = row.id;
         this.houseDetail = row;
+        this.collectData = row.lords;
+        if(this.collectData.length>0){
+          this.collectId = this.collectId[0].id;
+        }
+        this.rentData = row.renters;
         this.lists = [
           {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '编辑房屋信息',},
           {clickIndex: 'upLoadDialog', headIcon: 'el-icon-upload2', label: '上传房屋照片',},
@@ -473,9 +528,10 @@
   #houseContainer {
     .earlyWarning {
       button {
+        cursor: default;
         color: #666;
         :hover {
-          color: #6a8dfb;
+          /*color: #6a8dfb;*/
         }
       }
     }
