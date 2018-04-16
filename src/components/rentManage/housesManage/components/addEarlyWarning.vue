@@ -72,7 +72,14 @@
       },
       addEarlyWarningDialogVisible(val){
         if(!val){
-          this.$emit('close')
+          this.$emit('close');
+          this.formInline = {
+            house_id : this.houseId,
+            after_warning_status : '',
+            reason : '',
+            album_file:[],
+          };
+          this.isClear = false;
         }else {
           this.isClear = true;
           if(!this.isDictionary){
@@ -98,13 +105,6 @@
             if(res.data.code === '40010'){
               this.addEarlyWarningDialogVisible = false;
               this.$emit('close','success');
-              this.formInline = {
-                house_id : this.houseId,
-                after_warning_status : '',
-                reason : '',
-                album_file:[],
-              };
-              this.isClear = false;
               this.$notify.success({
                 title:'成功',
                 message:res.data.msg,

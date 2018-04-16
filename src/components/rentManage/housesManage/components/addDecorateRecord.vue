@@ -88,7 +88,17 @@
       },
       addDecorateDialogVisible(val){
         if(!val){
-          this.$emit('close')
+          this.$emit('close');
+          this.formInline = {
+            house_id : this.houseId,
+            decoration_type : '',
+            decoration_start_time : '',
+            decoration_end_time : '',
+            after_decoration_effect : '',
+            remark : '',
+            album_file:[],
+          };
+          this.isClear = false;
         }else {
           this.isClear = true;
           if(!this.isDictionary){
@@ -114,16 +124,6 @@
             if(res.data.code === '30010'){
               this.addDecorateDialogVisible = false;
               this.$emit('close','success');
-              this.formInline = {
-                house_id : this.houseId,
-                decoration_type : '',
-                decoration_start_time : '',
-                decoration_end_time : '',
-                after_decoration_effect : '',
-                remark : '',
-                album_file:[],
-              };
-              this.isClear = false;
               this.$notify.success({
                 title:'成功',
                 message:res.data.msg,
