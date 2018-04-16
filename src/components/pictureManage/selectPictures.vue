@@ -3,12 +3,14 @@
     <el-dialog :close-on-click-modal="false" title="选择相册" :visible.sync="choosePicturesDialogVisible" width="50%">
       <div class="">
         <el-form size="mini" :model="form" label-width="100px">
-          <el-row >
-            <el-form-item label="选择相册" >
-              <el-col :span="8" >
-              <el-select v-model="form.album_id" placeholder="请选择相册" >
-                <el-option  v-for="album in albumData" :label="album.name" :value="album.id" :key="album.id">{{album.name}}</el-option>
-              </el-select>
+          <el-row>
+            <el-form-item label="选择相册">
+              <el-col :span="8">
+                <el-select v-model="form.album_id" placeholder="请选择相册">
+                  <el-option v-for="album in albumData" :label="album.name" :value="album.id" :key="album.id">
+                    {{album.name}}
+                  </el-option>
+                </el-select>
               </el-col>
             </el-form-item>
             <!--图片ids-->
@@ -23,94 +25,109 @@
         <el-button size="small" type="primary" @click="saveImages">保存</el-button>
       </span>
     </el-dialog>
-    <improve-img-info :improveImgInfoDialog="improveImgInfoDialog" @close="closeImproveImgInfoDialog" @upload="continueUploading" :pictureIds="pictureIds" :uploadImgLength="uploadImgLength" :albumId="albumId"></improve-img-info>
+    <improve-img-info :improveImgInfoDialog="improveImgInfoDialog" @close="closeImproveImgInfoDialog"
+                      @upload="continueUploading" :pictureIds="pictureIds" :uploadImgLength="uploadImgLength"
+                      :albumId="form.album_id "></improve-img-info>
   </div>
 </template>
 
 <script>
-    import Upload from '../common/UPLOAD.vue';
-    import ImproveImgInfo from './improveImage.vue';
-    export default {
-      name: "choose-pictures",
-      props: ['choosePicturesDialog','albumId'],
-      components:{
-        Upload,
-        ImproveImgInfo,
-      },
-      data() {
-        return {
-          choosePicturesDialogVisible: false,
-          improveImgInfoDialog: false,
-          form: {
-            album_id: '',
-            picture_ids: [],
-          },
-          albumData: [],
-          uploadImgLength: 0,
-          isClear: false,
-          pictureIds: [],
+  import Upload from '../common/UPLOAD.vue';
+  import ImproveImgInfo from './improveImage.vue';
+
+  export default {
+    name: "choose-pictures",
+    props: ['choosePicturesDialog', 'albumId'],
+    components: {
+      Upload,
+      ImproveImgInfo,
+    },
+    data() {
+      return {
+        choosePicturesDialogVisible: false,
+        improveImgInfoDialog: false,
+        form: {
+          album_id: '',
+          picture_ids: [],
+        },
+        albumData: [],
+        uploadImgLength: 0,
+        isClear: false,
+        pictureIds: [],
+        uploadStatus: false,
+      }
+    },
+    methods: {
+      saveImages() {
+        if (this.uploadStatus) {
+          this.$notify.warning({
+            title: '警告',
+            message: '图片上传中，请稍后'
+          });
+          return;
         }
-      },
-      methods: {
-        saveImages() {
-          this.$http.post(globalConfig.server + 'photo',this.form).then((res)=>{
-            if(res.data.code == '20210') {
-              this.$emit("close");
-              this.choosePicturesDialogVisible = false;
-              this.improveImgInfoDialog = true;  //显示完善照片信息界面
-              this.isClear = true;
-              this.pictureIds = this.form.picture_ids;
-              this.form.picture_ids = '';
-            }else{
-              this.$notify.warning({
-                title: "警告",
-                message: res.data.msg
-              });
-            }
-          });
-        },
-        getImage(val) {
-          this.form.picture_ids = val[1]; //选择的图片数组ids
-          this.uploadImgLength = val[1].length;
-        },
-        closeImproveImgInfoDialog() {
-          this.improveImgInfoDialog = false;  //关闭完善照片信息界面
-          this.$emit('close');
-        },
-        continueUploading() {
-          this.choosePicturesDialogVisible = true;
-        },
-        // 获取指定相册信息
-        getImgData() {
-          this.$http.get(globalConfig.server + "album").then((res) =>{
-            if (res.data.code == "20110") {
-              this.albumData = res.data.data;
-            }
-          });
-        },
-      },
-      watch: {
-        choosePicturesDialog(val) {
-          this.choosePicturesDialogVisible = val;
-          this.getImgData();
-        },
-        choosePicturesDialogVisible(val) {
-          if(!val) {
-            this.$emit('close');
+        this.$http.post(globalConfig.server + 'photo', this.form).then((res) => {
+          if (res.data.code == '20210') {
+            this.$emit("close");
+            this.choosePicturesDialogVisible = false;
+            this.improveImgInfoDialog = true;  //显示完善照片信息界面
+            this.pictureIds = this.form.picture_ids;
+            this.form.picture_ids = '';
+            this.isClear = true;
+          } else {
+            this.$notify.warning({
+              title: "警告",
+              message: res.data.msg
+            });
           }
-        },
-        albumId(val) {
-          this.getImgData();
-          this.form.album_id = Number(this.albumId) ;
+        });
+      },
+      getImage(val) {
+        this.form.picture_ids = val[1]; //选择的图片数组ids
+        this.uploadImgLength = val[1].length;
+        this.uploadStatus = val[2];
+      },
+      closeImproveImgInfoDialog() {
+        this.improveImgInfoDialog = false;  //关闭完善照片信息界面
+        this.$emit('close');
+      },
+      continueUploading() {
+        this.choosePicturesDialogVisible = true;
+      },
+      // 获取指定相册信息
+      getImgData() {
+        this.$http.get(globalConfig.server + "album").then((res) => {
+          if (res.data.code == "20110") {
+            this.albumData = res.data.data;
+          }
+        });
+      },
+    },
+    watch: {
+      choosePicturesDialog(val) {
+        this.choosePicturesDialogVisible = val;
+        this.getImgData();
+
+      },
+      choosePicturesDialogVisible(val) {
+        if (!val) {
+          this.$emit('close');
+        }else{
+          this.isClear = false;
+          setTimeout(()=>{
+            this.isClear = true;
+          },0);
         }
       },
-      mounted() {
-         this.getImgData();
-         this.form.album_id =  this.albumId;
-      },
-    }
+      albumId(val) {
+        this.getImgData();
+        this.form.album_id = Number(this.albumId);
+      }
+    },
+    mounted() {
+      this.getImgData();
+      this.form.album_id = this.albumId;
+    },
+  }
 </script>
 
-<style scoped>
-
-</style>

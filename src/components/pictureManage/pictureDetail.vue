@@ -89,6 +89,8 @@
 
     <create-album :createAlbumDialog="createAlbumDialog" @close="closeCreateAlbumDialog" :albumId="albumDetail.id" fromDetail="fromPicture"></create-album>
     <choose-pictures :choosePicturesDialog="choosePicturesDialog" @close="closeChoosePicturesDialog" :albumId="albumId"></choose-pictures>
+
+
   </div>
 </template>
 
@@ -97,12 +99,12 @@
   import choosePictures from './selectPictures.vue';
   import RightMenu from '../common/rightMenu.vue'    //右键
   export default {
+    name: "picture-detail",
     components: {
       CreateAlbum,
       choosePictures,
       RightMenu,
     },
-    name: "picture-detail",
     data() {
       return {
         choosePicturesDialog: false,
@@ -123,22 +125,18 @@
         albumId: '',
       }
     },
-    // computed:{
-    //   albumId(){
-    //     return  this.$route.query.albumId ? this.$route.query.albumId : this.$store.state.picture.albumId;
-    //   }
-    // },
+    activated() {
+      if(this.$route.query.from === 'list'){
+        this.getAlbumId();
+        this.getAllPhotos();
+        this.getAlbumDetail();
+      }
+    },
     mounted() {
       this.getAlbumId();
       this.getAllPhotos();
       this.getAlbumDetail();
     },
-    activated(){
-      this.getAlbumId();
-      this.getAllPhotos();
-      this.getAlbumDetail();
-    },
-
     methods: {
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);

@@ -53,9 +53,6 @@
           this.$emit('close');
         }
       },
-      pictureIds(val) {
-        console.log(val);
-      }
     },
     methods: {
       continueUploading() {
@@ -63,12 +60,17 @@
         this.$emit("upload");
       },
       saveAllPhoto() {
-
         this.$http.put(globalConfig.server + "/photo/edit",{album_id:this.albumId,photo_ids:this.pictureIds,name:this.formInfo.name}).then((res)=>{
           if(res.data.code == "20210"){
             this.improveImgInfoDialogVisible = false;
             this.$notify.success({
               title:"成功",
+              message:res.data.msg
+            });
+            this.formInfo.name = '';
+          }else{
+            this.$notify.warning({
+              title:"警告",
               message:res.data.msg
             });
           }
