@@ -368,8 +368,6 @@
         this.$http.get(globalConfig.server_user + 'charts').then((res) => {
           if (res.data.status === 'success') {
             this.houseStatus = res.data.data.house;
-          } else {
-
           }
         })
       },
@@ -424,17 +422,36 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-
+            this.dispatchHouse(val[0].id)
           }).catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消分配'
-            });
+            this.$notify.success({
+              title:'消息',
+              message:'已取消分配',
+            })
           });
         }else {
           this.formInline.org_id = val[0].id;
           this.department_name = val[0].name;
         }
+      },
+      //分配房屋
+      dispatchHouse(departId){
+        let object = {};
+        let update = {};
+        let org = {org_id :departId};
+        this.operateArray.forEach((item) => {
+          object[item] = org;
+        });
+        update.update = object;
+        this.$http.post(globalConfig.server_user + 'houses/batch',{'batch':JSON.stringify(update)}).then((res) => {
+          if (res.data.status === 'success') {
+            this.$notify.success({
+              title:'成功',
+              message:'操作成功',
+            });
+            this.getData();
+          }
+        })
       },
       //************************************************************************/
       clickTable(row, event){
