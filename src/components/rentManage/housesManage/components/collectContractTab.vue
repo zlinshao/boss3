@@ -36,15 +36,15 @@
           <el-popover
             ref="payWay"
             placement="bottom"
-            width="400"
+            width="300"
             trigger="click">
             <el-table :data="scope.row.pay_way">
-              <el-table-column width="100" label="付款方式">
+              <el-table-column width="150" label="付款方式">
                 <template slot-scope="scope">
                   {{matchDictionary(scope.row.pay_way)}}
                 </template>
               </el-table-column>
-              <el-table-column width="100" property="period" label="变化周期(月)"></el-table-column>
+              <el-table-column width="150" property="period" label="变化周期(月)"></el-table-column>
             </el-table>
           </el-popover>
           {{matchDictionary(scope.row.pay_way[0].pay_way)}}&nbsp;
