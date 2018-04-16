@@ -61,7 +61,7 @@
     <!--教师风采-->
     <div class="teacher">
       <div class="curriculumTitle">
-        <div class="left_border" style="border-left: 2px solid #fb4699;"></div>
+        <div class="left_border" style="border-left: 4px solid #fb4699;"></div>
         <div class="title" style="color: #fb4699">教师风采</div>
       </div>
       <!--<el-row :gutter="12">-->
@@ -190,7 +190,7 @@ import StarffAdd from "./StarffAdd.vue";
       //模态框回调
       closeModal() {
         this.starffAddFlag = false;
-      },      
+      },
       clickKey(val){
         if(val == 'achievement'){
           this.$router.push({path: '/LineCollege'});
@@ -490,7 +490,7 @@ import StarffAdd from "./StarffAdd.vue";
       .left_border {
         height: 14px;
         width: 0;
-        border-left: 2px solid #6a8dfb;
+        border-left: 4px solid #6a8dfb;
         @include border_radius(3px);
       }
       .title {

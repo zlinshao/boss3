@@ -249,6 +249,9 @@
                   <el-table-column
                     prop="approval_status"
                     label="审核状态">
+                    <template slot-scope="scope">
+                      <el-button class="btnStatus" type="primary" size="mini">{{scope.row.approval_status}}</el-button>
+                    </template>
                   </el-table-column>
                 </el-table>
               </div>
@@ -326,6 +329,9 @@
                   <el-table-column
                     prop="approval_status"
                     label="审核状态">
+                    <template slot-scope="scope">
+                      <el-button class="btnStatus" type="primary" size="mini">{{scope.row.approval_status}}</el-button>
+                    </template>
                   </el-table-column>
                 </el-table>
               </div>
@@ -657,10 +663,15 @@
         if (val) {
           this.incompleteStatus = " ";
           this.incompleteLoading = true;
-          this.$http.get(globalConfig.server + 'lease/note/index?limit=500&is_rent=' + this.is_rent+'&contract_id='+this.selectContractId).then((res) => {
+          this.$http.get(globalConfig.server + 'lease/note/index?limit=500&is_rent=' + this.is_rent + '&contract_id=' + this.selectContractId).then((res) => {
             this.incompleteLoading = false;
             if (res.data.code === '60510') {
               this.memoTableData = res.data.data;
+              if (res.data.data.length < 1) {
+                this.incompleteStatus = "暂无数据";
+                this.tableData = [];
+                this.totalNum = 0;
+              }
             } else {
               this.incompleteStatus = "暂无数据";
               this.memoTableData = [];
@@ -669,9 +680,9 @@
         }
       },
       activeName(val) {
-        if(val === 'first') {
+        if (val === 'first') {
           this.is_rent = 0;
-        }else{
+        } else {
           this.is_rent = 1;
         }
       },
@@ -755,7 +766,7 @@
           {clickIndex: 'cancel', headIcon: 'el-icons-fa-scissors', label: '作废',},
           {clickIndex: '', headIcon: 'el-icons-fa-eye', label: '查看回访记录',},
           {clickIndex: 'maintenanceDialog', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
-          {clickIndex: 'lookMemorandum', headIcon: 'el-icons-fa-eye', label: '查看合同备忘',contract_id: row.contract_id},
+          {clickIndex: 'lookMemorandum', headIcon: 'el-icon-edit', label: '查看合同备忘', contract_id: row.contract_id},
         ];
         this.contextMenuParam(event);
       },

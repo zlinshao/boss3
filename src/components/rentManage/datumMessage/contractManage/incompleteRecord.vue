@@ -85,7 +85,7 @@
         </div>
       </div>
       <div>
-        <div style="padding: 40px 0;">
+        <div style="padding: 38px 0;">
           <el-table
             :data="tableData"
             :empty-text='incompleteStatus'
@@ -248,13 +248,17 @@
         if(!this.params.date_range){
           this.params.date_range = [];
         }
-        this.$http.get(globalConfig.server + 'lease/note/index?limit=12&is_rent='+this.is_rent+'&page='+this.params.page+
-          '&department_id='+this.params.department_id+'&staff_id='+this.params.staff_id+'&date_range='+this.params.date_range).then((res) => {
+        this.$http.get(globalConfig.server + 'lease/note/index?is_rent='+this.is_rent, {params:this.params}).then((res) => {
           this.incompleteLoading = false;
           this.isHigh = false;
           if(res.data.code === '60510'){
             this.tableData = res.data.data;
             this.totalNum = res.data.num;
+            if(res.data.data.length<1){
+              this.incompleteStatus = "暂无数据";
+              this.tableData = [];
+              this.totalNum = 0;
+            }
           }else{
             this.incompleteStatus = "暂无数据";
             this.tableData = [];

@@ -36,9 +36,14 @@
 
           <el-row>
             <el-col :span="12">
-              <el-form-item label="预计完成时间">
+              <el-form-item label="下次跟进时间">
                 <el-date-picker type="datetime" placeholder="选择日期时间"
                                 value-format="yyyy-MM-dd HH:mm:ss" v-model="params.expected_finish_time"></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="回复电话">
+                <el-input v-model="params.mobile" ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -86,7 +91,8 @@
           expected_finish_time : '',         //'预计完成时间',
           follow_time : '',                  //'跟进时间',
           follow_status : '',                  //'跟进时间',
-          image_pic:[]
+          image_pic:[],
+          mobile: '',
         },
         organizationDialog: false,
         isClear:false,
@@ -128,13 +134,13 @@
         this.$http.get(globalConfig.server+'setting/dictionary/255').then((res) => {
           if(res.data.code === "30010"){
             this.dictionary = res.data.data;
-            this.isDictionary = true
+            this.isDictionary = true;
           }
         });
         this.$http.get(globalConfig.server+'setting/dictionary/335').then((res) => {
           if(res.data.code === "30010"){
             this.dictionary_follow = res.data.data;
-            this.isDictionary = true
+            this.isDictionary = true;
           }
         });
       },
@@ -149,6 +155,7 @@
             this.params.expected_finish_time = detail.expected_finish_time;
             this.params.follow_status = detail.follow_status;
             this.params.follow_time = detail.follow_time;
+            this.params.mobile = detail.mobile;
 
             //照片修改
             let picObject = {};
@@ -220,7 +227,8 @@
           expected_finish_time : '',         //'预计完成时间',
           follow_time : '',                  //'跟进时间',
           follow_status : '',                  //'跟进时间',
-          image_pic:[]
+          image_pic:[],
+          mobile: '',
         };
         this.follow_name = '';
         this.isClear = true;

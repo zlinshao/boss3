@@ -28,8 +28,9 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select clearable v-model="params.follow_status" placeholder="跟进状态" value="">
-                        <el-option v-for="item in dictionary_follow" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                      <el-select clearable v-model="params.follow_status" placeholder="请选择跟进状态" value="">
+                        <el-option v-for="item in dictionary_follow" :label="item.dictionary_name" :value="item.id"
+                                   :key="item.id"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -42,7 +43,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input  v-model="follow_name" readonly="" @focus="openOrganizeModal"></el-input>
+                      <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -68,6 +69,82 @@
                   </el-col>
                 </el-row>
               </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">跟进时间</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-date-picker
+                        v-model="params.create_time"
+                        type="daterange"
+                        value-format="yyyy-MM-dd"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">更新时间</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-date-picker
+                        v-model="params.update_time"
+                        type="daterange"
+                        value-format="yyyy-MM-dd"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">完成时间</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-date-picker
+                        v-model="params.finish_time"
+                        type="daterange"
+                        value-format="yyyy-MM-dd"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">工单类型</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select clearable v-model="params.type" placeholder="请选择工单类型" value="">
+                        <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.id"
+                                   :key="item.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
             </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
@@ -79,10 +156,10 @@
       </div>
 
       <div class="main">
-        <div class="myTable" >
+        <div class="myTable">
           <el-table
             :data="tableData"
-            :empty-text = 'workOrderStatus'
+            :empty-text='workOrderStatus'
             v-loading="workOrderLoading"
             element-loading-text="拼命加载中"
             element-loading-spinner="el-icon-loading"
@@ -110,6 +187,10 @@
               label="事件数">
             </el-table-column>
             <el-table-column
+              prop="type"
+              label="工单类型">
+            </el-table-column>
+            <el-table-column
               prop="matters"
               label="跟进事项">
             </el-table-column>
@@ -128,6 +209,17 @@
             <el-table-column
               prop="follow_statuss"
               label="跟进状态">
+              <template slot-scope="scope">
+                <el-button class="btnStatus" v-if="scope.row.follow_statuss === '已完成'" type="primary" size="mini">
+                  {{scope.row.follow_statuss}}
+                </el-button>
+                <el-button class="btnStatus" v-if="scope.row.follow_statuss === '处理中'" type="warning" size="mini">
+                  {{scope.row.follow_statuss}}
+                </el-button>
+                <el-button class="btnStatus" v-if="scope.row.follow_statuss === '待处理'" type="info" size="mini">
+                  {{scope.row.follow_statuss}}
+                </el-button>
+              </template>
             </el-table-column>
           </el-table>
         </div>
@@ -152,8 +244,10 @@
 
     <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
                   @close='closeModal' @selectMember="selectMember"></Organization>
-    <AddChildTask :addChildTaskDialog="addChildTaskDialog" :activeId="activeId" :startAddResult="startEdit" @close="closeModal"></AddChildTask>
-    <OrderDetail :orderDetailDialog="orderDetailDialog" :activeId="activeId" :startDetail="startDetail" @close="closeModal"></OrderDetail>
+    <AddChildTask :addChildTaskDialog="addChildTaskDialog" :activeId="activeId" :startAddResult="startEdit"
+                  @close="closeModal"></AddChildTask>
+    <OrderDetail :orderDetailDialog="orderDetailDialog" :activeId="activeId" :startDetail="startDetail"
+                 @close="closeModal"></OrderDetail>
   </div>
 </template>
 
@@ -163,10 +257,11 @@
 
   import AddChildTask from './components/addChildTask.vue'
   import OrderDetail from './components/workOrderDetail.vue'
+
   export default {
     name: 'hello',
-    components: {RightMenu,Organization,AddChildTask,OrderDetail},
-    data () {
+    components: {RightMenu, Organization, AddChildTask, OrderDetail},
+    data() {
       return {
         rightMenuX: 0,
         rightMenuY: 0,
@@ -175,18 +270,22 @@
         /***********/
         statisticDate: '',
 
-        totalNumber : 0,
+        totalNumber: 0,
         params: {
           pages: 1,
           limit: 12,
-          keywords:'',
-          follow_status:'',
-          follow_id:'',
-          create_time:[],
+          keywords: '',
+          follow_status: '',
+          follow_id: '',
+          create_time: [],
+          follow_time: '',
+          update_time: '',
+          finish_time: '',
+          type: '',
         },
-        follow_name:'',   //跟进人
-        length:0,
-        type:'',
+        follow_name: '',   //跟进人
+        length: 0,
+        type: '',
         tableData: [],
         options: [],
 
@@ -194,45 +293,57 @@
         organizationDialog: false,
         editWorkDialog: false,     //编辑
         addChildTaskDialog: false,     //添加子任务框
-        orderDetailDialog : false,
+        orderDetailDialog: false,
         activeName: 'first',
-        isHigh:false,
-        activeId:'',
-        startEdit:false,
-        startAddResult:false,
-        startDetail:false,
-        dictionary_follow:[],//  跟进状态字典
+        isHigh: false,
+        activeId: '',
+        startEdit: false,
+        startAddResult: false,
+        startDetail: false,
+        dictionary: [],
+        dictionary_follow: [],//  跟进状态字典
         workOrderStatus: ' ',
         workOrderLoading: false,
+        isDictionary: false,
       }
     },
 
-    created(){
-      this.getDictionary();
-      if(this.$store.state.datum.work_order_filter.pages){
-        this.params.pages=this.$store.state.datum.work_order_filter.pages;
-        this.params.limit=this.$store.state.datum.work_order_filter.limit;
+    created() {
+      if (!this.isDictionary) {
+        this.getDictionary();
+      }
+      if (this.$store.state.datum.work_order_filter.pages) {
+        this.params.pages = this.$store.state.datum.work_order_filter.pages;
+        this.params.limit = this.$store.state.datum.work_order_filter.limit;
       }
       this.getTableData();
     },
     methods: {
-      getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/335').then((res) => {
-          if(res.data.code === "30010"){
-            this.dictionary_follow = res.data.data;
+      getDictionary() {
+        this.$http.get(globalConfig.server + 'setting/dictionary/255').then((res) => {
+          if (res.data.code === "30010") {
+            this.dictionary = res.data.data;
+            this.isDictionary = true;
           }
         });
+        this.$http.get(globalConfig.server + 'setting/dictionary/335').then((res) => {
+          if (res.data.code === "30010") {
+            this.dictionary_follow = res.data.data;
+            this.isDictionary = true;
+          }
+        });
+
       },
       //获取列表数据
-      getTableData(){
+      getTableData() {
         this.workOrderLoading = true;
         this.workOrderStatus = ' ';
-        this.$http.get(globalConfig.server+'customer/work_order',{params:this.params}).then((res) => {
+        this.$http.get(globalConfig.server + 'customer/work_order', {params: this.params}).then((res) => {
           this.workOrderLoading = false;
-          if(res.data.code === '100200'){
+          if (res.data.code === '100200') {
             this.tableData = res.data.data.data;
             this.totalNumber = res.data.data.count;
-          }else {
+          } else {
             this.workOrderStatus = '暂无数据';
             this.tableData = [];
             this.totalNumber = 0;
@@ -243,18 +354,18 @@
       handleSizeChange(val) {
         this.params.limit = val;
         this.getTableData();
-        this.$store.dispatch('workOrderFilter',this.params);
+        this.$store.dispatch('workOrderFilter', this.params);
       },
       handleCurrentChange(val) {
         this.params.pages = val;
         this.getTableData();
-        this.$store.dispatch('workOrderFilter',this.params);
+        this.$store.dispatch('workOrderFilter', this.params);
       },
-      clickTable(row, event, column){
+      clickTable(row, event, column) {
         console.log(row, event, column)
       },
       //房屋右键
-      houseMenu(row, event){
+      houseMenu(row, event) {
         this.activeId = row.id;
         this.lists = [
 //          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
@@ -262,14 +373,14 @@
         ];
         this.contextMenuParam(event);
       },
-      dblClickTable(row, event){
+      dblClickTable(row, event) {
         this.activeId = row.id;
         this.startDetail = true;
         this.orderDetailDialog = true;
       },
       //右键回调事件
-      clickEvent (index) {
-        switch (index){
+      clickEvent(index) {
+        switch (index) {
 //          case 'edit' :
 //            this.editWorkDialog = true;
 //            this.startEdit = true;
@@ -281,11 +392,11 @@
         }
       },
       //关闭右键菜单
-      closeMenu(){
+      closeMenu() {
         this.show = false;
       },
       //右键参数
-      contextMenuParam(event){
+      contextMenuParam(event) {
         //param: user right param
         let e = event || window.event;	//support firefox contextmenu
         this.show = false;
@@ -298,7 +409,7 @@
         })
       },
 
-      closeModal(val){
+      closeModal(val) {
         this.organizationDialog = false;
 //        this.editWorkDialog = false;
         this.addChildTaskDialog = false;
@@ -309,18 +420,18 @@
         this.startAddResult = false;
         this.startDetail = false;
 
-        if(val){
+        if (val) {
 
         }
       },
 
       //调出选人组件
-      openOrganizeModal(){
+      openOrganizeModal() {
         this.organizationDialog = true;
         this.type = 'staff';
         this.length = 1;
       },
-      selectMember(val){
+      selectMember(val) {
         this.type = '';
         this.length = '';
         this.params.follow_id = val[0].id;
@@ -328,15 +439,15 @@
 
       },
 
-      highGrade(){
+      highGrade() {
         this.isHigh = !this.isHigh;
       },
-      search(){
+      search() {
         this.isHigh = false;
         this.params.pages = 1;
         this.getTableData();
       },
-      resetting(){
+      resetting() {
         this.params.follow_id = '';
         this.params.follow_status = '';
         this.params.create_time = [];
@@ -351,7 +462,7 @@
 <style lang="scss" scoped="">
   #clientContainer {
     min-height: 800px;
-    .selectButton{
+    .selectButton {
       color: #fff;
       background: #66b1ff;
     }

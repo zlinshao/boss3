@@ -14,9 +14,9 @@
         <systemManageMent></systemManageMent>
       </el-tab-pane>
     </el-tabs>
-    <el-button type="success" size="mini" @click="openModalDialog('instructionDialog')" class="user_introction">
-      <i class="el-icon-tickets"></i>&nbsp;功能说明
-    </el-button>
+    <!--<el-button type="success" size="mini" @click="openModalDialog('instructionDialog')" class="user_introction">-->
+      <!--<i class="el-icon-tickets"></i>&nbsp;功能说明-->
+    <!--</el-button>-->
     <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
   </div>
 </template>
