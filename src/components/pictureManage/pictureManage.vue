@@ -25,7 +25,7 @@
       <el-row>
         <el-col :span="24">
           <div class="myPicture">
-            <el-button icon="el-icon-picture-outline" type="primary" size="small" @click="openModalDialog('choosePicturesDialog')">上传照片</el-button>
+            <el-button icon="el-icon-picture-outline" v-show="albumData.length>0" type="primary" size="small" @click="openModalDialog('choosePicturesDialog')" >上传照片</el-button>
             <el-button icon="el-icon-picture-outline" type="success" size="small" @click="openModalDialog('createAlbumDialog')">创建相册</el-button>
         </div>
           <div class="pictures">

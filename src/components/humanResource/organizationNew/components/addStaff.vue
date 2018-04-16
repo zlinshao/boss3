@@ -358,11 +358,10 @@
       },
     },
     mounted() {
-
       this.getPosition(this.departmentId);
     },
     methods: {
-      getDictionaries(){
+      getDictionaries() {
         this.getSex();
         this.getFertilityStatus();
         this.getAccountStatus();
@@ -424,7 +423,7 @@
           }
         }
       },
-      selectDepartment(){
+      selectDepartment() {
         if (this.department) {
           this.positionArray = [];
           this.currentPosition = [];
@@ -648,7 +647,7 @@
         //   }
         // });
         this.dictionary(228).then((res) => {
-          if(res.code === '30010'){
+          if (res.code === '30010') {
             this.sexCategory = res.data;
           }
         });

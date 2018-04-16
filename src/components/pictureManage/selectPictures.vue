@@ -23,7 +23,7 @@
         <el-button size="small" type="primary" @click="saveImages">保存</el-button>
       </span>
     </el-dialog>
-    <improve-img-info :improveImgInfoDialog="improveImgInfoDialog" @close="closeImproveImgInfoDialog" @upload="continueUploading" :pictureIds="form.picture_ids" :uploadImgLength="uploadImgLength" :albumId="albumId"></improve-img-info>
+    <improve-img-info :improveImgInfoDialog="improveImgInfoDialog" @close="closeImproveImgInfoDialog" @upload="continueUploading" :pictureIds="pictureIds" :uploadImgLength="uploadImgLength" :albumId="albumId"></improve-img-info>
   </div>
 </template>
 
@@ -48,6 +48,7 @@
           albumData: [],
           uploadImgLength: 0,
           isClear: false,
+          pictureIds: [],
         }
       },
       methods: {
@@ -58,6 +59,7 @@
               this.choosePicturesDialogVisible = false;
               this.improveImgInfoDialog = true;  //显示完善照片信息界面
               this.isClear = true;
+              this.pictureIds = this.form.picture_ids;
               this.form.picture_ids = '';
             }else{
               this.$notify.warning({
