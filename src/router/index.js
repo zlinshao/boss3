@@ -280,10 +280,10 @@ export default new Router({
     {
       path: '/',
       component: Index,
-      name: '产品管控中心',
+      name: '房管中心',
       icon: 'iconfont icon-chanpinguankong',
       children: [
-        {path: '/housesManage', component: HousesManage, name: '产品管理',},
+        {path: '/housesManage', component: HousesManage, name: '产品管控中心',},
         {path: '/villageManage', component: VillageManage, name: '小区管理',},
 
       ]
