@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="show=false" @contextmenu="closeMenu">
     <el-table
       :data="tableData"
       :empty-text='emptyContent'
@@ -7,6 +7,7 @@
       element-loading-text="拼命加载中"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0)"
+      @row-contextmenu="houseMenu"
       style="width: 100%">
       <el-table-column
         prop="create_time"
@@ -25,8 +26,8 @@
       <el-table-column
         label="房屋状态">
         <template slot-scope="scope">
-          <span v-if="scope.row.house_status">{{matchDictionary(scope.row.house_status)}}</span>
-          <span v-else="">/</span>
+          <span v-if="scope.row.house_status==1">已租</span>
+          <span v-else="">未租</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -67,15 +68,8 @@
       <el-table-column
         label="截图">
         <template slot-scope="scope">
-          <el-popover
-            ref="popover4"
-            placement="top"
-            width="400"
-            trigger="click">
-            <img v-for="(val,key) in scope.row.album.album_file" :src="val[0].uri"
-                 data-magnify="" :data-src="val[0].uri">
-          </el-popover>
-          <el-button type="text" v-if="scope.row.album && scope.row.album.album_file"  v-popover:popover4>查看</el-button>
+          <el-button type="text" v-if="scope.row.album && scope.row.album.album_file"
+                     @click="openModal(scope.row.album.album_file)">查看</el-button>
           <span v-else="">/</span>
         </template>
       </el-table-column>
@@ -94,16 +88,34 @@
         :total="totalNumber">
       </el-pagination>
     </div>
+
+
+    <el-dialog title="文件查看" :visible.sync="dialogFileVisible" :close-on-click-modal="false">
+      <div class="scroll_bar">
+        <img v-for="(val,key) in fileObject" :src="val[0].uri" data-magnify="" :data-src="val[0].uri">
+      </div>
+    </el-dialog>
+
+    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+               @clickOperate="clickEvent"></RightMenu>
+
+    <EditFollow :editFollowDialog="editFollowDialog" :followId="followId" @close="closeModal"></EditFollow>
   </div>
 </template>
 
 <script>
-  import ElButton from "../../../../../node_modules/element-ui/packages/button/src/button";
+  import RightMenu from '../../../common/rightMenu.vue'
+  import EditFollow from './editFollowRecord.vue'
   export default {
-    components: {ElButton},
     props:['houseId','activeName','all_dic'],
+    components:{RightMenu,EditFollow},
     data () {
         return {
+          rightMenuX: 0,
+          rightMenuY: 0,
+          show: false,
+          lists: [],
+          /***********/
           tableData:[],
           params:{
             page:1,
@@ -113,6 +125,10 @@
           totalNumber:0,
           emptyContent: ' ',
           tableLoading: false,
+          editFollowDialog : false,
+          followId : '',
+          fileObject :{},
+          dialogFileVisible : false,
         }
     },
     watch:{
@@ -122,8 +138,12 @@
         }
       },
       houseId(val){
-        this.getData();
-        this.params.id = val;
+        if(val){
+          this.params.id = val;
+          if(this.activeName === 'first'){
+            this.getData();
+          }
+        }
       }
     },
     methods:{
@@ -157,9 +177,53 @@
           }
         })
       },
-      dd(){
-          alert(32)
-      }
+
+      openModal(val){
+        this.fileObject = val;
+        this.dialogFileVisible = true;
+      },
+
+      //房屋右键
+      houseMenu(row, event){
+        this.followId = row.id;
+        this.lists = [
+          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改跟进记录',},
+        ];
+        this.contextMenuParam(event);
+      },
+
+      //右键回调时间
+      clickEvent (index) {
+        switch (index) {
+          case 'edit' :
+            this.editFollowDialog = true;
+            break;
+        }
+      },
+      closeModal(val){
+        this.editFollowDialog = false;
+        if (val === 'success') {
+          this.getData();
+        }
+      },
+      //关闭右键菜单
+      closeMenu(){
+        this.show = false;
+      },
+
+      //右键参数
+      contextMenuParam(event){
+        //param: user right param
+        let e = event || window.event;	//support firefox contextmenu
+        this.show = false;
+        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true
+        })
+      },
     }
 
   }

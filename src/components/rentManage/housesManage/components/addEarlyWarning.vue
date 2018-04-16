@@ -8,7 +8,11 @@
             <el-col :span="24">
               <el-form-item label="控制预警" required>
                 <el-select clearable placeholder="请选择控制预警" v-model="formInline.after_warning_status" value="">
-                  <el-option v-for="item in warning_dic" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                  <el-option  label="正常" value="1"></el-option>
+                  <el-option  label="黄色预警" value="2"></el-option>
+                  <el-option  label="橙色预警" value="3"></el-option>
+                  <el-option  label="红色预警" value="4"></el-option>
+                  <!--<el-option v-for="item in warning_dic" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>-->
                 </el-select>
               </el-form-item>
             </el-col>
