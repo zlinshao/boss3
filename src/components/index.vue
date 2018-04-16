@@ -1070,10 +1070,10 @@
                   }
                   .gladsp2{
                     position: absolute;
-                    bottom:5px;
-                    left:20px;
+                    bottom:6px;
+                    left:22px;
                     color: #fff;
-                    font-size: 13px;
+                    font-size: 12px;
                   }
                 }
               }
