@@ -458,7 +458,7 @@
         this.houseDetail = row;
         this.collectData = row.lords;
         if(this.collectData.length>0){
-          this.collectId = this.collectId[0].id;
+          this.collectId = this.collectData[0].id;
         }
         this.rentData = row.renters;
         this.lists = [
