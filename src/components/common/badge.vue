@@ -55,9 +55,9 @@ export default {
       if (!val) {
         this.$emit("close");
       } else {
-        // setTimeout(() => {
-        //   this.closeBadge();
-        // }, 2000);
+        setTimeout(() => {
+          this.closeBadge();
+        }, 3000);
       }
     }
   },
@@ -180,15 +180,16 @@ export default {
   color: #fdeb5b;
 }
 .close{
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  font-size: 15px;
   text-align: center;
   position: absolute;
-  right: 34px;
+  right: 31px;
   top:20px;
   z-index: 999;
-  color: #fff;
+  color: rgb(33, 0, 74);
   cursor: pointer;
 }
 </style>
