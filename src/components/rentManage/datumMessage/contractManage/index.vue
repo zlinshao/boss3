@@ -661,6 +661,11 @@
             this.incompleteLoading = false;
             if (res.data.code === '60510') {
               this.memoTableData = res.data.data;
+              if(res.data.data.length<1){
+                this.incompleteStatus = "暂无数据";
+                this.tableData = [];
+                this.totalNum = 0;
+              }
             } else {
               this.incompleteStatus = "暂无数据";
               this.memoTableData = [];
@@ -755,7 +760,7 @@
           {clickIndex: 'cancel', headIcon: 'el-icons-fa-scissors', label: '作废',},
           {clickIndex: '', headIcon: 'el-icons-fa-eye', label: '查看回访记录',},
           {clickIndex: 'maintenanceDialog', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
-          {clickIndex: 'lookMemorandum', headIcon: 'el-icons-fa-eye', label: '查看合同备忘',contract_id: row.contract_id},
+          {clickIndex: 'lookMemorandum', headIcon: 'el-icon-edit', label: '查看合同备忘',contract_id: row.contract_id},
         ];
         this.contextMenuParam(event);
       },
