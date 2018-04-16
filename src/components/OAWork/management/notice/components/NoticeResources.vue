@@ -80,7 +80,7 @@ export default {
       secondfalg:false,
       firstflag: false, //编辑或新建标识
       twoflag: false, //保存或发布标识
-      threeflag: false, //是否成功发布标识
+      threeflag: true, //是否成功发布标识
       linelist: [{}],
       upStatus:false,
       midId:null,
@@ -116,6 +116,7 @@ export default {
         this.secondfalg = true;
         this.midId = null;
         this.form.id="";
+        this.$emit("threeflag", this.threeflag);
       }else{
         this.secondfalg = false
       }
@@ -175,6 +176,7 @@ export default {
       } else {
         this.form.draft = "0";
       }
+
       if (!this.firstflag) {
         this.form.id = "";
       }
@@ -272,7 +274,6 @@ export default {
               });
               this.midId = null;
               this.form.id=null;
-              this.threeflag = true;
               this.firstflag = true;
               this.upStatus=false;
               this.increaseGoodsDialogVisible = false;
