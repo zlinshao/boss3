@@ -19,6 +19,13 @@
                     </div>
                   </el-form-item>
                 </el-col>
+                <el-col :span="8">
+                  <el-form-item label="回复电话">
+                    <div class="content">
+                      <span v-if="workOrderDetail.mobile">{{workOrderDetail.mobile}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
               </el-row>
               <el-col :span="8">
                 <el-form-item label="工单类型">
@@ -40,8 +47,8 @@
             </el-row>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="跟进状态">
-                  <div class="content">{{workOrderDetail.follow_statuss}}</div>
+                <el-form-item label="完成时间">
+                  <div class="content">{{workOrderDetail.finish_time}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -50,7 +57,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="期待完成时间">
+                <el-form-item label="下次跟进时间">
                   <div class="content">{{workOrderDetail.expected_finish_time}}</div>
                 </el-form-item>
               </el-col>
