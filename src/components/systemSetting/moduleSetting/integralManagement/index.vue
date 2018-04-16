@@ -1,9 +1,9 @@
 <template>
   <div @click="show=false" @contextmenu="show=false">
 
-    <div class="highRanking">
+    <div class="highRanking" style=" position: absolute; top: 122px; right: 30px;">
       <div class="highSearch">
-        <el-form :inline="true" onsubmit="return false" size="mini" style="margin-right:30px;">
+        <el-form :inline="true" onsubmit="return false" size="mini" style="margin-right: 20px;">
           <el-select size="mini" v-model="type"  @change="integral" clearable="" placeholder="请选择积分项">
             <el-option label="得分项目" value="0"></el-option>
             <el-option label="失分项目" value="1"></el-option>

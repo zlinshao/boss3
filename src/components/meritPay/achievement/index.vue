@@ -1,6 +1,6 @@
 <template>
   <div id="periodicTable" @click="show=false" @contextmenu="closeMenu">
-    <div class="highRanking">
+    <div class="highRanking" style=" position: absolute; top: 120px; right: 20px;">
       <div class="highSearch">
         <el-form onsubmit="return false" :inline="true" size="mini">
           <!--<el-form-item>-->
@@ -19,8 +19,9 @@
           </el-form-item>
         </el-form>
       </div>
-
-      <div class="filter high_grade" :class="isHigh? 'highHide':''">
+    </div>
+    <div class="highRanking">
+      <div class="filter high_grade" :class="isHigh? 'highHide':''"  style=" margin-top: -40px;">
         <el-form :inline="true" :model="form" size="mini" label-width="100px">
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索

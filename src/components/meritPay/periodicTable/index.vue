@@ -1,10 +1,6 @@
 <template>
   <div id="periodicTable">
-
-
-
     <el-tabs v-model="activeName" @tab-click="handleClick">
-
       <el-tab-pane label="个人" name="first">
         <periodic-person></periodic-person>
       </el-tab-pane>

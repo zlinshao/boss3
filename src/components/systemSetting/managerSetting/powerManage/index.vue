@@ -1,7 +1,7 @@
 <template>
   <div @click="show = false" @contextmenu="closeMenu">
     <div class="highRanking">
-      <div class="highHide" style="text-align: right;margin-bottom: 10px;">
+      <div class="highHide" style="position: absolute; top: -52px; right: 20px;">
         <el-button type="primary" size="mini" @click="newSystem"><i class="el-icon-plus"></i>&nbsp;新增系统</el-button>
       </div>
     </div>

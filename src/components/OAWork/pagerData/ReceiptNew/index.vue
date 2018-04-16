@@ -19,7 +19,7 @@
         </el-button>
       </div>
     </div>
-    <div class="filter">
+    <div class="filter" style="position: absolute; top: 112px; right: 20px;">
       <el-form :inline="true" onsubmit="return false" size="mini" class="demo-form-inline" style="display: flex;justify-content:flex-end ">
         <el-form-item>
           <el-input v-model="params.search" placeholder="编号" @keydown.enter.native="search">

@@ -1,7 +1,7 @@
 <template>
   <div id="Payroll">
-    <div class="highRanking">
-      <div class="tabsSearch">
+    <div class="highRanking" style=" position: absolute; top: 122px; right: 55px;">
+      <div class="tabsSearch" style="position: relative;">
         <el-form :inline="true" onsubmit="return false" size="mini">
           <el-form-item>
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
@@ -16,7 +16,9 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="filter high_grade" :class="isHigh? 'highHide':''">
+    </div>
+    <div class="highRanking">
+      <div class="filter high_grade" :class="isHigh? 'highHide':''"  style=" margin-top: -40px;">
         <el-form :inline="true" onsubmit="return false" :model="form" size="mini" label-width="100px">
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索

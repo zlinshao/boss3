@@ -1,24 +1,25 @@
 <template>
   <div>
     <div>
-    <div class="highRanking">
-      <div class="highSearch">
-        <el-form :inline="true" size="mini">
-          <el-form-item>
-            <el-input placeholder="签到人" v-model="form.pename" @keyup.enter.native="myData(1)" size="mini"
-                      clearable>
-              <el-button slot="append" icon="el-icon-search" @click="myData(1)"></el-button>
-              <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
-            </el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
-          </el-form-item>
+      <div class="highRanking" style=" position: absolute; top: 120px; right: 20px;">
+        <div class="highSearch">
+          <el-form :inline="true" size="mini">
+            <el-form-item>
+              <el-input placeholder="签到人" v-model="form.pename" @keyup.enter.native="myData(1)" size="mini"
+                        clearable>
+                <el-button slot="append" icon="el-icon-search" @click="myData(1)"></el-button>
+                <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+            </el-form-item>
 
-        </el-form>
+          </el-form>
+        </div>
       </div>
-
-      <div class="filter high_grade" :class="isHigh? 'highHide':''">
+    <div class="highRanking">
+      <div class="filter high_grade" :class="isHigh? 'highHide':''" style=" margin-top: -40px;">
         <el-form :inline="true" :model="form" size="mini" label-width="100px">
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索

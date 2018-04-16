@@ -19,7 +19,7 @@
         </el-button>
       </div>
 
-      <div class="">
+      <div style="position: absolute; top: 123px; right: 20px;">
         <el-form :inline="true" onsubmit="return false" size="mini" class="demo-form-inline" style="display: flex;justify-content:flex-end ">
           <el-form-item v-if="selectFlag==4">
             <el-select v-model="params.proof" placeholder="请选择" clearable="" @change="search" value="">

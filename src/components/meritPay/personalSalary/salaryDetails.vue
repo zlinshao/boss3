@@ -1,7 +1,7 @@
 <template>
   <div id="SalaryDetails" @click="show=false" @contextmenu="closeMenu">
-    <div class="highRanking">
-      <div class="tabsSearch">
+    <div class="highRanking" style=" position: absolute; top: 122px; right: 20px;">
+      <div class="tabsSearch" style="position: relative;">
         <el-form :inline="true" onsubmit="return false" size="mini">
           <el-form-item>
             <el-input placeholder="请输入内容" v-model="form.search" class="input-with-select" clearable>
@@ -20,7 +20,9 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="filter high_grade" :class="isHigh? 'highHide':''">
+    </div>
+    <div class="highRanking">
+      <div class="filter high_grade" :class="isHigh? 'highHide':''"  style=" margin-top: -40px;">
         <el-form :inline="true" onsubmit="return false" :model="form" size="mini" label-width="100px">
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索

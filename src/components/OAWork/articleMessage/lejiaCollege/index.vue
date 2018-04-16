@@ -1,7 +1,6 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
-
-    <div class="highRanking">
+    <div class="highRanking" style=" position: absolute; top: 120px; right: 20px;">
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
@@ -18,8 +17,9 @@
           </el-form-item>
         </el-form>
       </div>
-
-      <div class="filter high_grade" :class="isHigh? 'highHide':''">
+    </div>
+    <div class="highRanking">
+      <div class="filter high_grade" :class="isHigh? 'highHide':''" style=" margin-top: -40px;">
         <el-form :inline="true" :model="form" size="mini" label-width="100px">
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
@@ -68,7 +68,7 @@
       <div class="blueTable left_table">
         <el-table
           :data="tableData"
-          :empty-text = 'collectStatus'
+          :empty-text='collectStatus'
           v-loading="collectLoading"
           element-loading-text="拼命加载中"
           element-loading-spinner="el-icon-loading"
@@ -95,9 +95,15 @@
           <el-table-column
             label="状态">
             <template slot-scope="scope">
-              <el-button class="btnStatus" v-if="scope.row.statuss === '已发布'" type="primary" size="mini">{{scope.row.statuss}}</el-button>
-              <el-button class="btnStatus" v-if="scope.row.statuss === '已结束'" type="warning" size="mini">{{scope.row.statuss}}</el-button>
-              <el-button class="btnStatus" v-if="scope.row.statuss === '草稿'" type="info" size="mini">{{scope.row.statuss}}</el-button>
+              <el-button class="btnStatus" v-if="scope.row.statuss === '已发布'" type="primary" size="mini">
+                {{scope.row.statuss}}
+              </el-button>
+              <el-button class="btnStatus" v-if="scope.row.statuss === '已结束'" type="warning" size="mini">
+                {{scope.row.statuss}}
+              </el-button>
+              <el-button class="btnStatus" v-if="scope.row.statuss === '草稿'" type="info" size="mini">
+                {{scope.row.statuss}}
+              </el-button>
               <el-tag type="success" v-if="scope.row.top !== null ">置顶</el-tag>
               <el-tag type="warning" v-if="scope.row.fine !==null ">精华</el-tag>
             </template>
@@ -250,27 +256,27 @@
           ];
         } else {
           this.statuss = '已结束';
-          if(row.top === null && row.fine === null){
+          if (row.top === null && row.fine === null) {
             this.lists = [
               {clickIndex: 'undercarriage', headIcon: 'iconfont icon-xiajia--', label: '下架'},
               {clickIndex: 'top', headIcon: 'iconfont icon-zhiding--', label: '置顶',},
               {clickIndex: 'essence', headIcon: 'iconfont icon-jinghua--', label: '精华',},
             ];
-          } else if(row.top !== null && row.fine === null){
+          } else if (row.top !== null && row.fine === null) {
             this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'iconfont icon-xiajia--', label: '下架',top:true},
+              {clickIndex: 'undercarriage', headIcon: 'iconfont icon-xiajia--', label: '下架', top: true},
               {clickIndex: 'top', headIcon: 'el-icon-download', label: '取消置顶',},
               {clickIndex: 'essence', headIcon: 'iconfont icon-jinghua--', label: '精华',},
             ];
-          } else if(row.top === null && row.fine !== null){
+          } else if (row.top === null && row.fine !== null) {
             this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'iconfont icon-xiajia--', label: '下架',fine:true},
+              {clickIndex: 'undercarriage', headIcon: 'iconfont icon-xiajia--', label: '下架', fine: true},
               {clickIndex: 'top', headIcon: 'iconfont icon-zhiding--', label: '置顶',},
               {clickIndex: 'essence', headIcon: 'iconfont icon-jinghua--', label: '取消精华',},
             ];
-          }else{
+          } else {
             this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'iconfont icon-xiajia--', label: '下架',top:true,fine:true},
+              {clickIndex: 'undercarriage', headIcon: 'iconfont icon-xiajia--', label: '下架', top: true, fine: true},
               {clickIndex: 'top', headIcon: 'el-icon-download', label: '取消置顶',},
               {clickIndex: 'essence', headIcon: 'iconfont icon-jinghua--', label: '取消精华',},
             ];
@@ -284,7 +290,7 @@
         switch (val.clickIndex) {
           case 'revise':
             this.$router.push({path: '/publicArticle', query: {ids: this.pitch, moduleType: this.moduleType}});
-            this.$store.dispatch('moduleType',this.moduleType);
+            this.$store.dispatch('moduleType', this.moduleType);
             break;
           case 'delete':
             this.deleteInfo(this.pitch);
@@ -454,6 +460,7 @@
   .el-table th {
     text-align: left !important;
   }
+
   .el-table__body td {
     text-align: left !important;
   }
@@ -462,4 +469,5 @@
     cursor: inherit;
     min-width: 68px;
   }
+
 </style>

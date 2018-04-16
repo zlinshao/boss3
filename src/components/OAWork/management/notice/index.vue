@@ -1,23 +1,25 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div>
-    <div class="highRanking">
-      <div class="highSearch" style="width:95%">
-        <el-form :inline="true" onsubmit="return false" size="medium" style="position:absolute;right:100px;" >
-          <el-form-item>
-            <el-input placeholder="标题/内容关键字" v-model="form.search" @keyup.enter.native="myData(1)" size="mini"
-                      clearable>
-              <el-button slot="append" icon="el-icon-search" @click="myData(1)"></el-button>
-              <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
-            </el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
-          </el-form-item>
-        </el-form>
-        <el-button @click="openModalDialogx('noticeDialog')" class="sendnotice" size="mini" type="primary">发布公告</el-button>
+      <div class="highRanking" style=" position: absolute; top: 120px; right: 110px;">
+        <div class="highSearch">
+          <el-form :inline="true" onsubmit="return false" size="medium">
+            <el-form-item>
+              <el-input placeholder="标题/内容关键字" v-model="form.search" @keyup.enter.native="myData(1)" size="mini"
+                        clearable>
+                <el-button slot="append" icon="el-icon-search" @click="myData(1)"></el-button>
+                <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+            </el-form-item>
+          </el-form>
+          <el-button @click="openModalDialogx('noticeDialog')" class="sendnotice" size="mini" type="primary" style="margin-right: -80px;">发布公告</el-button>
+        </div>
       </div>
-      <div class="filter high_grade" :class="isHigh? 'highHide':''">
+    <div class="highRanking">
+      <div class="filter high_grade" :class="isHigh? 'highHide':''"  style=" margin-top: -40px;">
         <el-form :inline="true" onsubmit="return false" :model="form" size="mini" label-width="100px">
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
@@ -57,7 +59,7 @@
               v-loading="rentLoading"
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
-              element-loading-background="rgba(255, 255, 255, 0)"              
+              element-loading-background="rgba(255, 255, 255, 0)"
               @row-click="clickTable"
               @row-contextmenu='noticeMenu'
               style="width: 100%">
@@ -313,7 +315,7 @@ export default {
       this.tableData = [];
       this.form.page = val;
       this.rentStatus = " ";
-      this.rentLoading = true;     
+      this.rentLoading = true;
       this.$http
         .get(this.urls + "announcement", {
           params: this.form
