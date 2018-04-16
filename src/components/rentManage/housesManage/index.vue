@@ -4,7 +4,6 @@
 
       <div class="highRanking">
         <div class="highSearch" style="justify-content: space-between">
-
           <div class="earlyWarning">
             <el-button class="warningItem" type="text">空置房源: {{houseStatus.emptyHouse}}套</el-button>
             <el-button class="warningItem" type="text" style="color: #FFCC00">黄色预警房源:{{houseStatus.yellowHouse}}套</el-button>
