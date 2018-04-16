@@ -149,9 +149,8 @@
         collectVacationDialog: false,
         isHigh: false,
         form: {
-          keyWords: '',
-          selects: '',
-          dates: '',
+          page: '',
+          limit: '',
         },
         pickerOptions: {
           shortcuts: [{

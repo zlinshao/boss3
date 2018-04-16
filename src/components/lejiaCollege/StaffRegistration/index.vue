@@ -102,27 +102,18 @@
             <el-table
               :data="tableData"
               @row-dblclick="dblClickTable"
-              @row-contextmenu=''
               style="width: 100%">
               <el-table-column
-                prop="contract_num"
-                label="总题数">
+                prop="real_name"
+                label="姓名">
               </el-table-column>
               <el-table-column
-                prop="address"
+                prop="exam_name"
                 label="试卷名称">
               </el-table-column>
               <el-table-column
-                prop="house_type"
-                label="总分值">
-              </el-table-column>
-              <el-table-column
-                prop="deposit"
-                label="总时长">
-              </el-table-column>
-              <el-table-column
-                prop="price"
-                label="类型">
+                prop="enroll_time"
+                label="报名时间">
               </el-table-column>
             </el-table>
           </div>
@@ -131,10 +122,9 @@
                 @size-change="handleSizeChange"
                 @current-change="myData"
                 :current-page="form.page"
-                :page-sizes="[10, 20, 30, 40]"
-                :page-size="12"
+                :page-size="2"
                 layout="total, prev, pager, next, jumper"
-                :total="total">
+                :total="tableNumber">
               </el-pagination>
             </div>
           </div>
@@ -145,28 +135,28 @@
 </template>
 
 <script>
-import Organization from '../../common/organization.vue'
+import Organization from "../../common/organization.vue";
 export default {
   name: "index",
-  components:{Organization},
+  components: { Organization },
   data() {
     return {
       tableData: [],
+      tableNumber: 0,
       form: {
         page: 1,
-        limit: 12,
+        limit: 2,
         type: "",
         search: "",
-        department_id:"",
+        department_id: ""
       },
-      departname:"",
+      departname: "",
       forms: [
         { id: "1", name: "表彰" },
         { id: "2", name: "批评" },
         { id: "3", name: "通知" }
         // { id: "4", name: "研发" }
       ],
-      total: 0,
       isHigh: false, //高级搜索
       rentStatus: " ",
       rentLoading: false,
@@ -203,30 +193,41 @@ export default {
           }
         ]
       },
-      value4: "",    
-      len:0,
-      depart:"",  
+      value4: "",
+      len: 0,
+      depart: ""
     };
   },
-  mounted() {},
+  mounted() {
+    this.myData(1);
+  },
   watch: {},
   methods: {
-      openOrganizationModal() {
-        this.organizationDialog = true;
-        this.len=1;
-        this.depart="depart";
-      },
-      closeOrganization() {
-        this.organizationDialog = false;
-        this.len=0;
-        this.depart="";
-      },
-      coloseaa(val){
-        this.departname=val[0].name
-        this.form.department_id=val[0].id
-        this.len=0;
-        this.depart="";
-      },
+    myData(val) {
+      this.form.page = val;
+      this.$http
+        .get(globalConfig.server + "exam/enroll", { params: this.form })
+        .then(res => {
+          this.tableData = res.data.data.data;
+          this.tableNumber = res.data.data.count;
+        });
+    },
+    openOrganizationModal() {
+      this.organizationDialog = true;
+      this.len = 1;
+      this.depart = "depart";
+    },
+    closeOrganization() {
+      this.organizationDialog = false;
+      this.len = 0;
+      this.depart = "";
+    },
+    coloseaa(val) {
+      this.departname = val[0].name;
+      this.form.department_id = val[0].id;
+      this.len = 0;
+      this.depart = "";
+    },
     // 高级
     highGrade() {
       this.isHigh = !this.isHigh;
@@ -240,12 +241,7 @@ export default {
         type: "",
         search: ""
       }),
-        this.myData(1);
-    },
-    myData(val) {
-      this.form.page = val;
-      this.rentStatus = " ";
-      this.rentLoading = true;
+        this.init(1);
     },
 
     dblClickTable() {},

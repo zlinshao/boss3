@@ -102,27 +102,18 @@
             <el-table
               :data="tableData"
               @row-dblclick="dblClickTable"
-              @row-contextmenu=''
               style="width: 100%">
               <el-table-column
-                prop="contract_num"
-                label="总题数">
+                prop="real_name"
+                label="姓名">
               </el-table-column>
               <el-table-column
-                prop="address"
+                prop="exam_name"
                 label="试卷名称">
               </el-table-column>
               <el-table-column
-                prop="house_type"
-                label="总分值">
-              </el-table-column>
-              <el-table-column
-                prop="deposit"
-                label="总时长">
-              </el-table-column>
-              <el-table-column
-                prop="price"
-                label="类型">
+                prop="score"
+                label="得分">
               </el-table-column>
             </el-table>
           </div>
@@ -131,16 +122,15 @@
                 @size-change="handleSizeChange"
                 @current-change="myData"
                 :current-page="form.page"
-                :page-sizes="[10, 20, 30, 40]"
-                :page-size="12"
+                :page-size="2"
                 layout="total, prev, pager, next, jumper"
-                :total="total">
+                :total="tableNumber">
               </el-pagination>
             </div>
           </div>
         </div>
       </div>
-  <Organization :organizationDialog="organizationDialog" :length="len" :type="depart"  @close="closeOrganization"  @selectMember="coloseaa"></Organization>
+<Organization :organizationDialog="organizationDialog" :length="len" :type="depart"  @close="closeOrganization"  @selectMember="coloseaa"></Organization>
   </div>
 </template>
 
@@ -152,9 +142,10 @@ export default {
   data() {
     return {
       tableData: [],
+      tableNumber: 0,
       form: {
         page: 1,
-        limit: 12,
+        limit: 2,
         type: "",
         search: "",
         department_id: ""
@@ -166,7 +157,6 @@ export default {
         { id: "3", name: "通知" }
         // { id: "4", name: "研发" }
       ],
-      total: 0,
       isHigh: false, //高级搜索
       rentStatus: " ",
       rentLoading: false,
@@ -208,9 +198,20 @@ export default {
       depart: ""
     };
   },
-  mounted() {},
+  mounted() {
+    this.myData(1);
+  },
   watch: {},
   methods: {
+    myData(val) {
+      this.form.page = val;
+      this.$http
+        .get(globalConfig.server + "exam/result",)
+        .then(res => {
+          this.tableData = res.data.data;
+          this.tableNumber = 1
+        });
+    },
     openOrganizationModal() {
       this.organizationDialog = true;
       this.len = 1;
@@ -240,12 +241,7 @@ export default {
         type: "",
         search: ""
       }),
-        this.myData(1);
-    },
-    myData(val) {
-      this.form.page = val;
-      this.rentStatus = " ";
-      this.rentLoading = true;
+        this.init(1);
     },
 
     dblClickTable() {},

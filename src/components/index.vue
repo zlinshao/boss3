@@ -128,7 +128,11 @@
                     <div style="width: 100%;height: 20px;font-size: 14px;">
                       <span style="color: #abadae">签约时长：</span>3年3个月（租）
                     </div>
-                  </div>              
+                  </div>    
+                  <div class="glad_card_right">
+                    <span class="gladsp1"><span>￥</span>2600</span>
+                    <span class="gladsp2">月单价</span>
+                  </div>          
                 </div> 
               </div>
               <div class="gladBottom">
@@ -1015,6 +1019,7 @@
                 }
               }
               .glad_card {
+                position: relative;
                 height: 140px;
                 border-top: 2px solid #6a8dfb;
                 border-radius: 5px;
@@ -1037,6 +1042,39 @@
                   display: flex;
                   flex-wrap: wrap;
                   align-items: flex-start;
+                }
+                .glad_card_right{
+                  position: absolute;
+                  width: 77px;
+                  height: 77px;
+                  top:40px;
+                  right:10px;
+                  background: url("../assets/images/gladright.png") no-repeat;
+                  .gladsp1{
+                    position: absolute;
+                    top:12px;
+                    left:22px;
+                    color:#fb4699;
+                    height: 40px;
+                    line-height: 40px;
+                    font-size: 20px;
+                    font-weight: bold;
+                    span{
+                      font-size: 13px;
+                      height: 20px;
+                      line-height: 20px;
+                      position: absolute;
+                      top: 9px;
+                      left: -14px;
+                    }
+                  }
+                  .gladsp2{
+                    position: absolute;
+                    bottom:5px;
+                    left:20px;
+                    color: #fff;
+                    font-size: 13px;
+                  }
                 }
               }
             }
