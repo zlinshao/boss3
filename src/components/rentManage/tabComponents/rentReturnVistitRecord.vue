@@ -48,7 +48,7 @@
         },
         isRequestData:false,
         totalNumber:0,
-        emptyContent : ' ',
+        emptyContent : '暂无数据',
         tableLoading : false,
       }
     },

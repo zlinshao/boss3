@@ -74,7 +74,7 @@
               limit:3,
             },
             isRequestData : false,
-            emptyContent : ' ',
+            emptyContent : '暂无数据',
             tableLoading : false,
           }
       },

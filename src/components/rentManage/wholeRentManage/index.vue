@@ -742,10 +742,12 @@
               this.collectContractId = this.collectData[0].contract_id;
             }else {
               this.collectStatus = '暂无数据';
+              this.rentStatus = '暂未出租';
             }
           }else {
             this.collectData = [];
             this.collectStatus = '暂无数据';
+            this.rentStatus = '暂未出租';
             this.collectTotalNum = 0;
           }
         })
