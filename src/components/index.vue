@@ -92,7 +92,7 @@
                 <el-row @click.native="showOtherDetail('read')">
                   <el-col :span="24">
                     <div style="display:block; margin-top:10px; text-align:center; color:#409EFF">查看全部已读消息
-                      </div>
+                    </div>
                   </el-col>
                 </el-row>
               </el-dropdown-item>
@@ -128,17 +128,8 @@
                     <div style="width: 100%;height: 20px;font-size: 14px;">
                       <span style="color: #abadae">签约时长：</span>3年3个月（租）
                     </div>
-<<<<<<< HEAD
-                  </div>    
-                  <div class="glad_card_right">
-                    <span class="gladsp1"><span>￥</span>2600</span>
-                    <span class="gladsp2">月单价</span>
-                  </div>          
-                </div> 
-=======
                   </div>
                 </div>
->>>>>>> dev_c
               </div>
               <div class="gladBottom">
                 <div class="glad_close" @click="glad_close">
@@ -494,11 +485,11 @@
       //验证二级密码弹框
       openBadge(key){
         if (!eval(this.unlockFlagpart)) {
-        for(let chi in this.chinese){
-          if(this.chinese[chi] == key){
-            this.unLockName = key;
-            this.unlockSecondPWDialog = true;
-          }
+          for(let chi in this.chinese){
+            if(this.chinese[chi] == key){
+              this.unLockName = key;
+              this.unlockSecondPWDialog = true;
+            }
           }
         }
       },
@@ -563,20 +554,20 @@
 
       showOtherDetail(val) {
         if(val == 'unread'){
-        this.$router.push({
-          path: "/messageCenter",
-          query: {
-            unread: 1
-          }
-        });
+          this.$router.push({
+            path: "/messageCenter",
+            query: {
+              unread: 1
+            }
+          });
         }
         else{
-         this.$router.push({
-          path: "/messageCenter",
-          query: {
-            unread: 0
-          }
-        });
+          this.$router.push({
+            path: "/messageCenter",
+            query: {
+              unread: 0
+            }
+          });
         }
       },
       //模态框回调
@@ -1025,7 +1016,6 @@
                 }
               }
               .glad_card {
-                position: relative;
                 height: 140px;
                 border-top: 2px solid #6a8dfb;
                 border-radius: 5px;
@@ -1048,39 +1038,6 @@
                   display: flex;
                   flex-wrap: wrap;
                   align-items: flex-start;
-                }
-                .glad_card_right{
-                  position: absolute;
-                  width: 77px;
-                  height: 77px;
-                  top:40px;
-                  right:10px;
-                  background: url("../assets/images/gladright.png") no-repeat;
-                  .gladsp1{
-                    position: absolute;
-                    top:12px;
-                    left:22px;
-                    color:#fb4699;
-                    height: 40px;
-                    line-height: 40px;
-                    font-size: 20px;
-                    font-weight: bold;
-                    span{
-                      font-size: 13px;
-                      height: 20px;
-                      line-height: 20px;
-                      position: absolute;
-                      top: 9px;
-                      left: -14px;
-                    }
-                  }
-                  .gladsp2{
-                    position: absolute;
-                    bottom:6px;
-                    left:22px;
-                    color: #fff;
-                    font-size: 12px;
-                  }
                 }
               }
             }
