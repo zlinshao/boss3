@@ -57,7 +57,7 @@ export default {
       } else {
         setTimeout(() => {
           this.closeBadge();
-        }, 2000);
+        }, 3000);
       }
     }
   },
