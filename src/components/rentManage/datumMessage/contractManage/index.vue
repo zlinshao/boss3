@@ -6,7 +6,7 @@
         <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input v-model="params.q" placeholder="搜索">
+              <el-input v-model="params.q" placeholder="搜索" readOnly @focus="openAddressDialog">
                 <el-button @click="search()" slot="append" type="primary" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
@@ -550,18 +550,18 @@
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
-
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
+    <AddressSearch :addressDialog = "addressDialog" @close="closeAddressDialog"></AddressSearch>
   </div>
 </template>
 
 <script>
-  import RightMenu from '../../../common/rightMenu.vue'
-  import Organization from '../../../common/organization.vue'
-
+  import RightMenu from '../../../common/rightMenu.vue';
+  import Organization from '../../../common/organization.vue';
+  import AddressSearch from '../../../common/addressSearch';
   export default {
     name: 'hello',
-    components: {RightMenu, Organization},
+    components: {RightMenu, Organization, AddressSearch},
     data() {
       return {
         rightMenuX: 0,
@@ -652,6 +652,7 @@
         incompleteLoading: false,
         is_rent: 0,
         selectContractId: '',
+        addressDialog: false,
       }
     },
     mounted() {
@@ -688,6 +689,15 @@
       },
     },
     methods: {
+      openAddressDialog() {
+        this.addressDialog = true;
+      },
+      closeAddressDialog(val) {
+        this.addressDialog = false;
+        if(val){
+          this.params.q = val.address;
+        }
+      },
       //查看补齐记录，跳转页面
       viewIncompleteRecord() {
         this.$router.push({path: '/incompleteRecord', query: {active: this.activeName}});
