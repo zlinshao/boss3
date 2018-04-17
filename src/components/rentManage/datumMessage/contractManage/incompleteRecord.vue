@@ -5,7 +5,7 @@
         <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input v-model="params.address" placeholder="请输入搜索">
+              <el-input v-model="params.address" placeholder="请输入搜索" readOnly @focus="openAddressDialog">
                 <el-button @click="search()" slot="append" type="primary" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
@@ -149,14 +149,16 @@
     </div>
     <Organization :organizationDialog="organizationDialog" :type="type" @close="closeOrganization"
                   @selectMember="selectMember"></Organization>
+    <AddressSearch :addressDialog = "addressDialog" @close="closeAddressDialog"></AddressSearch>
   </div>
 </template>
 
 <script>
   import Organization from '../../../common/organization.vue';
+  import AddressSearch from '../../../common/addressSearch';
   export default {
     name: "incomplete-record",
-    components: {Organization},
+    components: {Organization, AddressSearch},
     data() {
       return {
         pickerOptions: {
@@ -207,6 +209,7 @@
         incompleteLoading: false,
         tableData: [],
         type: '',
+        addressDialog: false,
       }
     },
     mounted() {
@@ -224,6 +227,15 @@
 
     },
     methods: {
+      openAddressDialog() {
+        this.addressDialog = true;
+      },
+      closeAddressDialog(val) {
+        this.addressDialog = false;
+        if(val){
+          this.params.address = val.address;
+        }
+      },
       search() {
 //        this.getIncompleteRecordData();
       },
