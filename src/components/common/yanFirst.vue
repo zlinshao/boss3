@@ -15,7 +15,7 @@
         我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工
       </div>
       <div class="button">
-        <el-button size="small" type="success">下一条</el-button><el-button size="small" @click="close" type="primary">我知道了</el-button>
+        <el-button @click="close"  size="small" type="success">我知道了</el-button>
       </div>
     </div>
     </el-dialog>
@@ -25,7 +25,7 @@
 <script>
 export default {
   name: "hello",
-  props: ["institutionDialog"],
+  props: ["yanFirstDialog"],
   data() {
     return {
       landholder: {},
@@ -37,7 +37,7 @@ export default {
     };
   },
   watch: {
-    institutionDialog(val) {
+    yanFirstDialog(val) {
       this.badgeDialogVisible = val;
     },
     badgeDialogVisible(val) {
@@ -77,36 +77,35 @@ export default {
 <style scoped>
 .badgeup {
   position: fixed;
-  background: #fff;
   top: 50%;
   left: 50%;
   margin-left:-350px;
   margin-top:-230px;
+  z-index: 3333;
   display: block;
   width: 700px;
   height: 460px;
-  border-top:2px #fb4699 solid;
-  z-index: 3333;
+  background: url("../../assets/images/yanfa1.png") no-repeat center;
 }
 .span1{
   font-size: 20px;
-  color: #606266;
+  color: #fff;
   position: absolute;
-  left:20px;
-  top:14px;
-  width: 680px;
+  left:311px;
+  top:74px;
+  width: 380px;
   height: 32px;
   line-height: 32px;
   overflow: hidden;
 }
 .msg{
   position: absolute;
-  width: 680px;
+  width: 380px;
   height: 40px;
-  left:20px;
-  top:54px;
+  left:311px;
+  top:136px;
   line-height: 40px;
-  color: #464748
+  color: #fff
 }
   img{
     width: 40px;
@@ -115,20 +114,19 @@ export default {
     margin-right:10px;
   }
 .article{
-  width: 660px;
-  height: 270px;
+  width: 360px;
+  height: 130px;
   position: absolute;
-  left: 10px;
-  top:100px;
-  border-bottom:1px #eee solid;
-  color:#606266;
+  left: 301px;
+  top:200px;
+  color:#fff;
 }
 .button{
   position: absolute;
-  width: 300px;
+  width: 132px;
   height: 32px;
-  left:213px;
-  bottom:15px;
+  left:311px;
+  bottom:50px;
 }
 .el-button {
   width: 130px; 

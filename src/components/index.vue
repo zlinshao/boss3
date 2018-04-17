@@ -329,6 +329,8 @@
     <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
     <BadgeView :badgeDialog="badgeDialog" @close="closeModal"></BadgeView>
     <InstitutionView :institutionDialog="institutionDialog" @close="closeModal"></InstitutionView>
+    <YanFirstView :yanFirstDialog="yanFirstDialog" @close="closeModal"></YanFirstView>
+    <YanSecondView :yanSecondDialog="yanSecondDialog" @close="closeModal"></YanSecondView>
   </div>
 </template>
 
@@ -341,6 +343,9 @@
   import UnlockSecondPW from "./common/unlocksecondpw.vue";  //解锁二级密码
   import BadgeView from "./common/badge.vue";   //每日徽章
   import InstitutionView from "./common/institution.vue";   // 制度弹窗
+  import NoticeTitleView from "./common/noticeTitle.vue";   // 公告弹窗
+  import YanFirstView from "./common/yanFirst.vue";   // 研发弹窗
+  import YanSecondView from "./common/yanSecond.vue";   // 研发2弹窗
   import cookie from 'js-cookie'
   export default {
     name: "Index",
@@ -351,7 +356,10 @@
       SetLockPwd,
       UnlockSecondPW,
       BadgeView,
-      InstitutionView
+      InstitutionView,
+      NoticeTitleView,
+      YanFirstView,
+      YanSecondView
     },
     data() {
       return {
@@ -383,6 +391,11 @@
         unlockFlagpart: false,//二级密码标识
         gladFlag:false, //喜报标识
         institutionDialog:false,    //制度模态框
+        noticeTitleDialog:false,    //公告模态框
+        yanFirstDialog:false,       //研发1
+        yanSecondDialog:false,      //研发2
+        refresh:false,  //每天刷新一次
+
       };
     },
     computed: {
@@ -435,6 +448,15 @@
       if (!eval(this.unlockFlagpart)) {
         this.getDictionary2();
       }
+      //刷新
+      this.refresh = cookie.get("reFresh");
+      if(!eval(this.refresh)){
+          this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
+            localStorage.setItem('personal', JSON.stringify(res.data.data));
+            globalConfig.personal = res.data.data.data;
+          });
+      cookie.set("reFresh", true, {expires: 1});
+      }
     },
     mounted() {
       //初始化个人信息
@@ -484,10 +506,12 @@
         if (!this.personal.data.medal) {
           this.badgeDialog = true;
         }
-        //制度弹窗
+        //弹窗
+        //this.institutionDialog = true;
+        //this.noticeTitleDialog = true;
+        //this.yanFirstDialog = true;
+        //this.yanSecondDialog = true;
 
-        // this.institutionDialog = true;
-        
         this.loginDay = this.personal.data.loginday;
         this.loginPercent = Number(this.loginDay / 180 * 100) + "%";
         $(".percent").css("width", this.loginPercent);
@@ -610,6 +634,9 @@
         this.instructionDialog = false;
         this.badgeDialog = false;
         this.institutionDialog = false;
+        this.noticeTitleDialog = false;
+        this.yanFirstDialog = false;
+        this.yanSecondDialog = false;
       },
       //二级密码回调
       unlockFlag(val) {

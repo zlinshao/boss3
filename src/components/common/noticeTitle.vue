@@ -25,7 +25,7 @@
 <script>
 export default {
   name: "hello",
-  props: ["institutionDialog"],
+  props: ["noticeTitleDialog"],
   data() {
     return {
       landholder: {},
@@ -37,7 +37,7 @@ export default {
     };
   },
   watch: {
-    institutionDialog(val) {
+    noticeTitleDialog(val) {
       this.badgeDialogVisible = val;
     },
     badgeDialogVisible(val) {
@@ -85,7 +85,7 @@ export default {
   display: block;
   width: 700px;
   height: 460px;
-  border-top:2px #fb4699 solid;
+  border-top:2px #6a8dfb solid;
   z-index: 3333;
 }
 .span1{
