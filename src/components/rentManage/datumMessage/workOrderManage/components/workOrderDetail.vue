@@ -73,7 +73,8 @@
               <el-col :span="24" v-if="workOrderDetail.album">
                 <el-form-item label="截图">
                   <img v-if="workOrderDetail.album.image_pic!=[]" data-magnify
-                       v-for="(val,key) in workOrderDetail.album.image_pic" :data-src="val[0].uri" :src="val[0].uri" alt="">
+                       v-for="(val,key) in workOrderDetail.album.image_pic" :data-src="val[0].uri" :src="val[0].uri"
+                       alt="">
                 </el-form-item>
               </el-col>
             </el-row>
@@ -207,7 +208,8 @@
     </el-dialog>
     <EditWork :editWorkDialog="editWorkDialog" :activeId="editId" :startEdit="startEdit" @close="closeModal"></EditWork>
 
-    <AddResult :addResultDialog="addResultDialog" :startAddResult="startAddResult" :activeId="addResultId" @close="closeModal"></AddResult>
+    <AddResult :addResultDialog="addResultDialog" :startAddResult="startAddResult" :activeId="addResultId"
+               @close="closeModal"></AddResult>
   </div>
 </template>
 
@@ -216,66 +218,66 @@
   import EditWork from './editWorkOrder.vue'
 
   export default {
-    name:'addFollowUp',
-    props:['orderDetailDialog','activeId','startDetail'],
-    components:{AddResult,EditWork},
+    name: 'addFollowUp',
+    props: ['orderDetailDialog', 'activeId', 'startDetail'],
+    components: {AddResult, EditWork},
     data() {
       return {
-        orderDetailDialogVisible:false,
-        workOrderDetail:{},
-        addResultId:'',
-        addResultDialog:false,
-        startAddResult:false,
+        orderDetailDialogVisible: false,
+        workOrderDetail: {},
+        addResultId: '',
+        addResultDialog: false,
+        startAddResult: false,
 
-        editWorkDialog:false,
-        startEdit:false,
-        editId:'',
+        editWorkDialog: false,
+        startEdit: false,
+        editId: '',
       };
     },
-    watch:{
-      orderDetailDialog(val){
+    watch: {
+      orderDetailDialog(val) {
         this.orderDetailDialogVisible = val
       },
-      orderDetailDialogVisible(val){
-        if(!val){
+      orderDetailDialogVisible(val) {
+        if (!val) {
           this.$emit('close');
-        }else {
+        } else {
           this.isClear = false
         }
       },
-      startDetail(val){
-        if(val){
+      startDetail(val) {
+        if (val) {
           this.getDetail();
         }
       }
     },
-    mounted(){
+    mounted() {
 
     },
-    methods:{
-      getDetail(){
-        this.$http.get(globalConfig.server+'customer/work_order/'+this.activeId).then((res) => {
-          if(res.data.code === "10020"){
+    methods: {
+      getDetail() {
+        this.$http.get(globalConfig.server + 'customer/work_order/' + this.activeId).then((res) => {
+          if (res.data.code === "10020") {
             this.workOrderDetail = res.data.data;
           }
         });
       },
-      addResult(id){
+      addResult(id) {
         this.addResultId = id;
         this.addResultDialog = true;
         this.startAddResult = true;
 
       },
-      closeModal(val){
+      closeModal(val) {
         this.addResultDialog = false;
         this.editWorkDialog = false;
         this.startEdit = false;
         this.startAddResult = false;
-        if(val === 'success'){
+        if (val === 'success') {
           this.getDetail();
         }
       },
-      editOrder(id){
+      editOrder(id) {
         this.editId = id;
         this.editWorkDialog = true;
         this.startEdit = true;
@@ -284,7 +286,7 @@
   };
 </script>
 <style lang="scss" scoped="">
-  #addFollowUp{
+  #addFollowUp {
     .content {
       padding: 0 10px;
       min-height: 32px;
@@ -293,13 +295,13 @@
       font-size: 12px;
       color: #727479;
     }
-    img{
+    img {
       width: 80px;
       height: 80px;
       border-radius: 6px;
       margin: 0 10px 10px 0;
     }
-    .follow_result{
+    .follow_result {
       display: flex;
       justify-content: space-between;
     }

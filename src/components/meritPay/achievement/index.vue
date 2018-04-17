@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="highRanking">
-      <div class="filter high_grade" :class="isHigh? 'highHide':''"  style=" margin-top: -40px;">
+      <div class="filter high_grade" :class="isHigh? 'highHide':''" style=" margin-top: -40px;">
         <el-form :inline="true" :model="form" size="mini" label-width="100px">
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
