@@ -5,7 +5,7 @@
         <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input v-model="params.address" placeholder="请输入搜索" readOnly @focus="openAddressDialog">
+              <el-input v-model="params.q" placeholder="请输入搜索" readOnly clearable @focus="openAddressDialog">
                 <el-button @click="search()" slot="append" type="primary" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
@@ -149,7 +149,7 @@
     </div>
     <Organization :organizationDialog="organizationDialog" :type="type" @close="closeOrganization"
                   @selectMember="selectMember"></Organization>
-    <AddressSearch :addressDialog="addressDialog" @close="closeAddressDialog"></AddressSearch>
+    <AddressSearch :addressDialog="addressDialog" @close="closeAddressDialog" ></AddressSearch>
   </div>
 </template>
 
@@ -190,10 +190,10 @@
           }]
         },
         totalNum: 0,   //总数
-        is_rent: null,
+        is_rent: 0,
         params: {
           page: 1,
-          address: '',      //模糊搜索
+          q: '',      //模糊搜索
           department_id: [],   //开单人部门id
           staff_id: [],    //开单人id
           date_range: [], //创建时间范围 数组
@@ -214,6 +214,7 @@
       }
     },
     mounted() {
+      this.getDefaultData();
       this.getIncompleteRecordData();
     },
     activated() {
@@ -221,6 +222,17 @@
     },
     watch: {},
     methods: {
+      openAddressDialog() {
+        this.addressDialog = true;
+      },
+      closeAddressDialog(val) {
+        this.addressDialog = false;
+        console.log(val);
+        if(val){
+          this.params.q = val.address;
+          this.params.contract_id = val.contract_id;
+        }
+      },
       getDefaultData() {
         if (!this.$route.query.active) {
           this.$router.push({
@@ -240,17 +252,8 @@
           this.is_rent = 1;
         }
       },
-      openAddressDialog() {
-        this.addressDialog = true;
-      },
-      closeAddressDialog(val) {
-        this.addressDialog = false;
-        if (val) {
-          this.params.address = val.address;
-        }
-      },
       search() {
-//        this.getIncompleteRecordData();
+       this.getIncompleteRecordData();
       },
       exportData() {
         this.$http.get(globalConfig.server + 'lease/note/index?limit=12&is_rent=' + this.is_rent + '&output=1', {responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流

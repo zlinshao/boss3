@@ -4,14 +4,9 @@
       <div class="content">
         <div class="filter-container">
           <el-form :inline="true" onsubmit="return false" size="mini" class="demo-form-inline">
-            <el-form-item label="城市">
-              <el-select clearable v-model="params.city" placeholder="请选择城市" value="">
-                <el-option v-if="cityDictionary.length>0" v-for="item in cityDictionary" :label="item.dictionary_name"
-                           :value="item.variable.city_id" :key="item.id"></el-option>
-              </el-select>
-            </el-form-item>
+
             <el-form-item>
-              <el-input v-model="params.keywords" placeholder="请输入内容" class="input-with-select" @keyup.enter.native="search">
+              <el-input v-model="params.q" placeholder="请输入内容" class="input-with-select"  @keyup.enter.native="search" clearable>
                 <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
@@ -21,24 +16,18 @@
           <el-table :data="tableData" @row-click="rowClick" style="width: 100%">
             <el-table-column width="65">
               <template slot-scope="scope">
-                <el-radio v-model="radio" :label="scope.row.id">
+                <el-radio v-model="radio" :label="scope.row.contract_id">
                   <span style="display: none">1</span>
                 </el-radio>
               </template>
             </el-table-column>
-            <el-table-column label="小区名称">
-              <template slot-scope="scope">{{ scope.row.village_name }}</template>
-            </el-table-column>
+
             <el-table-column
               prop="address"
               label="房屋地址">
             </el-table-column>
             <el-table-column
-              prop="province_name"
-              label="小区地址">
-            </el-table-column>
-            <el-table-column
-              prop="city_name"
+              prop="type"
               label="房屋性质">
             </el-table-column>
 
@@ -63,16 +52,13 @@
       return {
         addressDialogVisible: false,
         tableData :[],
-
         radio:'',
         selectedItem : [],
         params: {
           pages: 1,
-          keywords: '',
-          city: '',
+          q: '',
+          limit: 500
         },
-        cityDictionary : [],
-        isDictionary : false,
       }
     },
 
@@ -87,32 +73,22 @@
         if (!val) {
           this.$emit('close');
         }else {
-          if(!this.isDictionary){
-            this.getDictionary();
-          }
+          this.search();
         }
-      },
-      selectMember(val){
-        this.buttonStatus = !val.length;
       }
     },
     methods:{
-       //获取字典
-      getDictionary(){
-        this.dictionary(306,1).then((res) => {this.cityDictionary = res.data;this.isDictionary = true});
-      },
       search(){ //关键词 搜索线上高德数据
-        this.$http.get(globalConfig.server + 'setting/community/', {params: this.params}).then((res) => {
-          if (res.data.code === '10000') {
-            this.tableData = res.data.data.list;
-          } else {
+        this.$http.get(globalConfig.server + 'lease/collect', {params: this.params}).then((res) => {
+          if (res.data.code === '61010') {
+            this.tableData = res.data.data;
 
           }
         })
       },
       closeDialog(done){    //关闭模态框回调
         if(done === 'yes'){
-           if(this.selectedItem.id){
+           if(this.selectedItem.contract_id){
              this.$emit('close',this.selectedItem);
              this.addressDialogVisible = false;
              this.selectedItem = [];
@@ -120,7 +96,7 @@
            } else {
              this.$notify.warning({
                title:'警告',
-               message : '您尚未选择小区'
+               message : '您尚未选择房屋地址'
              })
            }
         }else {
@@ -129,7 +105,7 @@
       },
 
       rowClick(row, event, column){
-        this.radio = row.id;
+        this.radio = row.contract_id;
         this.selectedItem = row;
       },
     }

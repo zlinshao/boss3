@@ -6,7 +6,7 @@
         <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input v-model="params.q" placeholder="搜索" readOnly @focus="openAddressDialog">
+              <el-input v-model="params.q" placeholder="搜索" clearable>
                 <el-button @click="search()" slot="append" type="primary" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
@@ -54,8 +54,8 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input v-model="formInline.name" @focus="selectDep" readonly placeholder="选择部门">
-                        <el-button slot="append" type="primary">清空</el-button>
+                      <el-input v-model="department" @focus="selectDepart" readonly placeholder="选择部门">
+                        <el-button slot="append" type="primary" @click="emptyDepart">清空</el-button>
                       </el-input>
                     </el-form-item>
                   </el-col>
@@ -595,8 +595,8 @@
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
-    <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
-    <AddressSearch :addressDialog = "addressDialog" @close="closeAddressDialog"></AddressSearch>
+    <Organization :organizationDialog="organizationDialog" @close="closeOrganization" @selectMember="selectMember"></Organization>
+    <!--<AddressSearch :addressDialog = "addressDialog" @close="closeAddressDialog"></AddressSearch>-->
   </div>
 </template>
 
@@ -664,6 +664,8 @@
           org_id: [],  // 部门
           status: '',   // 房屋状态1:未签约， 2：已签约， 3：快到期（60天内）， 4：已结束， 5：已过期
         },
+        department: '',
+        type: '',
         currentPage: 1,
         options: [
           {
@@ -735,11 +737,27 @@
       },
     },
     methods: {
+      selectMember(val) {
+        if (this.type === 'depart') {
+          this.params.org_id = [];
+          let departNameArray = [];
+          if (val.length > 0) {
+            val.forEach((item) => {
+              this.params.org_id.push(item.id);
+              departNameArray.push(item.name);
+            });
+          }
+          this.department = departNameArray.join(',');
+          this.type = null;
+        }
+        this.organizationDialog = false;
+      },
       openAddressDialog() {
         this.addressDialog = true;
       },
       closeAddressDialog(val) {
         this.addressDialog = false;
+        console.log(val);
         if(val){
           this.params.q = val.address;
         }
@@ -789,7 +807,7 @@
         this.rentLoading = true;
         this.$http.get(globalConfig.server + 'lease/rent', {params: this.params}).then((res) => {
           this.rentLoading = false;
-          if (res.data.code === '61010') {
+          if (res.data.code === '61110') {
             this.rentData = res.data.data;
             this.totalNumbers = res.data.meta.total;
           } else {
@@ -896,9 +914,13 @@
           this.show = true
         })
       },
-      selectDep() {
-        console.log(1)
-        this.organizationDialog = true
+      selectDepart() {
+        this.type = 'depart';
+        this.organizationDialog = true;
+      },
+      emptyDepart() {
+        this.department = '';
+        this.params.org_id = [];
       },
       closeOrganization() {
         this.organizationDialog = false
@@ -919,18 +941,21 @@
         this.isHigh = !this.isHigh;
       },
       resetting() {
+        this.department = '';
         this.params = {
           page: 1,
           per_page_number: '',
           q: '',      //模糊搜索
-          publish_time: '',     //发布时间
-          lord_time: '',  //收房合同时间
-          renter_time: '',//租房合同时间
-          sign_time: '',   //签约日期
-          un_upload: '',   //未上传合同
-          org_id: '',  //部门合同
-          status: ''   //房屋状态： status（1：正在出租， 2：快结束，3：已结束，4：签约中）
-        }
+          publish_time: [],     //发布时间
+          lord_start_time: [],  //收房合同开始时间
+          lord_end_time: [],   //收房合同结束时间
+          renter_start_time: [], // 租房合同开始时间
+          renter_end_time: [], //租房合同结束时间
+          sign_time: [],   // 签约日期
+          un_upload: '',   // 是否上传合同
+          org_id: [],  // 部门
+          status: '',   // 房屋状态1:未签约， 2：已签约， 3：快到期（60天内）， 4：已结束， 5：已过期
+        };
       }
     },
   }
