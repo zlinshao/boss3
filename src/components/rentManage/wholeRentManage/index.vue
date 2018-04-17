@@ -139,10 +139,10 @@
                 prop="address"
                 label="房屋地址">
               </el-table-column>
-              <el-table-column
-                prop="property_type"
-                label="房屋类型">
-              </el-table-column>
+              <!--<el-table-column-->
+                <!--prop="property_type"-->
+                <!--label="房屋类型">-->
+              <!--</el-table-column>-->
               <el-table-column
                 prop="type"
                 label="合同性质">
@@ -212,12 +212,10 @@
               </el-table-column>
               <el-table-column
                 prop="begin_date"
-                width="180px"
                 label="开始日期">
               </el-table-column>
               <el-table-column
                 prop="end_date"
-                width="180px"
                 label="结束日期">
               </el-table-column>
               <!--<el-table-column-->
@@ -283,10 +281,10 @@
                 prop="address"
                 label="房屋地址">
               </el-table-column>
-              <el-table-column
-                prop="property_type"
-                label="房屋类型">
-              </el-table-column>
+              <!--<el-table-column-->
+                <!--prop="property_type"-->
+                <!--label="房屋类型">-->
+              <!--</el-table-column>-->
               <el-table-column
                 prop="type"
                 label="合同性质">

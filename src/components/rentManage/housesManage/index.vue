@@ -441,9 +441,7 @@
         this.type = 'depart';
         this.length = 1;
       },
-      closeOrganization(){
-        this.organizationDialog = false;
-      },
+
       selectMember(val){
         this.organizationDialog = false;
         if(this.organizationType === 'dispatch'){
@@ -542,6 +540,7 @@
       closeModal(val){
         this.editHouseDialog = false;
         this.addFollowDialog = false;
+        this.organizationDialog = false;
         this.upLoadDialog = false;
         this.addEarlyWarningDialog = false;
         this.addDecorateDialog = false;

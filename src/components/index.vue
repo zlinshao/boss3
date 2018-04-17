@@ -131,7 +131,7 @@
                     <div class="glad_card_right">
                       <span class="gladsp1"><span>￥</span>2600</span>
                       <span class="gladsp2">月单价</span>
-                    </div>                       
+                    </div>
                   </div>
                 </div>
               </div>
@@ -425,7 +425,7 @@
         }
       },
       second_Flag(val){
-      if(val){  
+      if(val){
         this.$http.get(globalConfig.server + "setting/dictionary/220").then(res => {
           if (res.data.code === "30010") {
             this.dictionary2 = res.data.data;
@@ -433,7 +433,7 @@
               for (let key in JSON.parse(localStorage.personal).data.secondary_password) {
                 if (res.data.data[i].id == JSON.parse(localStorage.personal).data.secondary_password[key]
                 ) {
-                  this.chinese.push(res.data.data[i].dictionary_name);  
+                  this.chinese.push(res.data.data[i].dictionary_name);
                 }
               }
             }
