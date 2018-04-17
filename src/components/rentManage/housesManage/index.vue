@@ -511,9 +511,9 @@
         this.lists = [
           {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '编辑房屋信息',},
           {clickIndex: 'upLoadDialog', headIcon: 'el-icon-upload2', label: '上传房屋照片',},
-          {clickIndex: 'addFollowDialog', headIcon: 'el-icon-circle-plus-outline', label: '添加跟进记录',},
-          {clickIndex: 'addDecorateDialog', headIcon: 'el-icon-circle-plus-outline', label: '添加装修记录',},
-          {clickIndex: 'addEarlyWarningDialog', headIcon: 'el-icon-circle-plus-outline', label: '调整预警状态',},
+          {clickIndex: 'addFollowDialog', headIcon: 'iconfont icon-tianjiagengjinjilu', label: '添加跟进记录',},
+          {clickIndex: 'addDecorateDialog', headIcon: 'iconfont icon-tianjiazhuangxiujilu', label: '添加装修记录',},
+          {clickIndex: 'addEarlyWarningDialog', headIcon: 'iconfont icon-tianjiayujingjilu', label: '添加预警状态',},
         ];
         this.contextMenuParam(event);
       },
