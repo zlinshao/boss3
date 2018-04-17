@@ -93,6 +93,7 @@
           follow_status : '',                  //'跟进时间',
           image_pic:[],
           mobile: '',
+          id: '',
         },
         organizationDialog: false,
         isClear:false,
@@ -200,7 +201,8 @@
             message:'图片正在上传'
           })
         }else {
-          this.$http.put(globalConfig.server+'customer/work_order/'+this.activeId,this.params).then((res) => {
+           this.params.id = this.activeId;
+          this.$http.put(globalConfig.server+'customer/work_order/update',this.params).then((res) => {
             if(res.data.code === '10030'){
               this.$notify.success({
                 title:'成功',

@@ -67,9 +67,9 @@
                   <!--</div>-->
                 <!--</div>-->
                 <div class="item_list scroll_bar" style="height: 740px;">
-                  <div style="    position: absolute;top: 50%;left: 20%;">
+                  <div style="position: absolute;top: 50%;left: 20%;">
                     <img src="../assets/images/noData.png" style="float: left;" />
-                    <div>
+                    <div >
                       <img src="../assets/images/sorry.png" >
                       <div style="color: #6a8dfb;position: relative;margin-top: 20px;margin-left: 10px;">抱歉，暂无数据~~</div>
                     </div>
@@ -618,6 +618,9 @@
 </script>
 
 <style scoped lang="scss">
+  .scroll_bar{
+    background-image: url('../assets/images/404_images/bg_square.png');
+  }
   .clearfix:before,
   .clearfix:after {
     display: table;
