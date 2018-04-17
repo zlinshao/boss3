@@ -7,51 +7,27 @@
           <table class="tableDetail">
             <tr>
               <td>合同编号</td>
-              <td></td>
+              <td>{{collectContractInfo.contract_number}}</td>
               <td>地址</td>
-              <td></td>
-              <td>户型</td>
-              <td></td>
-              <td>姓名</td>
-              <td></td>
+              <td>{{collectContractInfo.address}}</td>
               <td>电话</td>
-              <td></td>
+              <td>{{collectContractInfo.phone}}</td>
             </tr>
             <tr>
-              <td>身份证</td>
-              <td></td>
-              <td>建筑面积</td>
-              <td></td>
+              <td>中介费</td>
+              <td>{{collectContractInfo.agency}}</td>
               <td>押金</td>
-              <td></td>
-              <td>月单价</td>
-              <td></td>
+              <td>{{collectContractInfo.deposit}}</td>
               <td>合同期限</td>
-              <td></td>
+              <td>{{collectContractInfo.duration}}</td>
             </tr>
             <tr>
               <td>合同开始时间</td>
-              <td></td>
+              <td>{{collectContractInfo.begin_date}}</td>
               <td>合同结束时间</td>
+              <td>{{collectContractInfo.end_date}}</td>
               <td></td>
-              <td>门禁卡</td>
               <td></td>
-              <td>钥匙数</td>
-              <td colspan="3"></td>
-              <!--<td>证件号码</td>-->
-              <!--<td></td>-->
-            </tr>
-            <tr>
-              <td>水表底数</td>
-              <td></td>
-              <td>燃气表底数</td>
-              <td></td>
-              <td>电表底数</td>
-              <td colspan="5"></td>
-            </tr>
-            <tr>
-              <td>备注</td>
-              <td colspan="9"></td>
             </tr>
           </table>
         </div>
@@ -113,7 +89,7 @@
 
         <div class="title">上传照片</div>
         <div class="describe_border">
-          <UpLoad :ID="'rentingVacationId'" :isClear="isClear" @getImg="getImg"></UpLoad>
+          <UpLoad :ID="'collectVacationId'" :isClear="isClear" @getImg="getImg"></UpLoad>
         </div>
 
 
@@ -414,7 +390,7 @@
 <script>
   import UpLoad from '../../common/UPLOAD.vue'
   export default {
-    props:['collectVacationDialog','collectContractId'],
+    props:['collectVacationDialog','collectContractId','collectInfo'],
     components:{UpLoad},
     data() {
       return {
@@ -480,6 +456,7 @@
         isClear : false,
         isDictionary:false,
         dictionary:[],
+        collectContractInfo :{},
       };
     },
     computed:{
@@ -528,6 +505,7 @@
           this.initData();
         }else {
           this.isClear = false;
+          this.getContractData();
           if(!this.isDictionary){
             this.getDictionary();
           }
@@ -535,6 +513,9 @@
       },
       collectContractId(val){
         this.params.contract_id = val;
+      },
+      collectInfo(val){
+        this.collectContractInfo = val;
       }
     },
     mounted(){
@@ -553,7 +534,9 @@
       getImg(val){
         this.params.image_pic = val[1];
       },
+      getContractData(){
 
+      },
       confirmAdd(){
         this.$http.post(globalConfig.server+'customer/check_out',this.params).then((res) => {
           if(res.data.code === '20010'){

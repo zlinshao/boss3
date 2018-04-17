@@ -14,10 +14,10 @@
               <td>{{rentContractInfo.phone}}</td>
             </tr>
             <tr>
-              <td>身份证</td>
-              <td>{{rentContractInfo.phone}}</td>
               <td>中介费</td>
               <td>{{rentContractInfo.agency}}</td>
+              <td>押金</td>
+              <td>{{rentContractInfo.deposit}}</td>
               <td>合同期限</td>
               <td>{{rentContractInfo.duration}}</td>
             </tr>

@@ -466,7 +466,8 @@
     <OwnerRenew :ownerRenewDialog="ownerRenewDialog" :collectContractId="collectContractId" @close="closeModal"></OwnerRenew>
     <AddFollowUp :addFollowUpDialog="addFollowUpDialog" :contractModule="contractModule"
                  :contractOperateId="contractOperateId" @close="closeModal"></AddFollowUp>
-    <CollectVacation :collectVacationDialog="collectVacationDialog" :collectContractId="collectContractId" @close="closeModal"></CollectVacation>
+    <CollectVacation :collectVacationDialog="collectVacationDialog" :collectInfo="collectInfo"
+                     :collectContractId="collectContractId" @close="closeModal"></CollectVacation>
     <AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" @close="closeModal"></AddCollectRepair>
     <AddRentRepair :addRentRepairDialog="addRentRepairDialog" @close="closeModal"></AddRentRepair>
 
@@ -658,6 +659,7 @@
         collectData: [],    //收房列表数据
         collectHouseId:'',   //房屋id
         collectContractId:'', //  收房合同id
+        collectInfo : {},
         //*******************租房*******************//
         rentParams:{
           page:1,
@@ -784,6 +786,7 @@
 
       //房屋右键
       houseMenu(row, event){
+        this.collectInfo = row;
         this.collectHouseId = row.house_id;
         this.collectContractId = row.contract_id;   //收房id
         this.contractOperateId = row.contract_id;   //通用合同ID
