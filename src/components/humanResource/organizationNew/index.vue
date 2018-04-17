@@ -61,10 +61,8 @@
               <li><span class="el-icons-fa-bars" style="margin-right: 10px"></span>行政部（8人）</li>
             </ul>
             <div style="margin: 10px;display: flex;justify-content: flex-end">
-
             </div>
           </div>
-
           <div v-show="!isDepartment" style="padding: 10px;">
             <div class="highRanking">
               <div class="tabsSearch">
@@ -77,13 +75,47 @@
                     <el-button type="primary" @click="addPosition('position')" v-if="activeName==='second'">新建职位
                     </el-button>
                   </el-form-item>
+                  <el-form-item v-if="activeName==='first'" style="float: right">
+                    <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+                  </el-form-item>
                   <el-form-item style="float: right" v-if="activeName==='first'">
-                    <el-input v-model="params.keywords" placeholder="请输入搜索内容" @keyup.enter.prevent.native="search">
+                    <el-input v-model="params.keywords" placeholder="请输入搜索内容" clearable
+                              @keyup.enter.prevent.native="search">
                       <el-button slot="append" type="primary" icon="el-icon-search" @click="search"></el-button>
                     </el-input>
                   </el-form-item>
+
                 </el-form>
               </div>
+              <div class="filter high_grade" :class="isHigh? 'highHide':''">
+                <el-form :inline="true" onsubmit="return false" :model="params" size="mini" label-width="100px">
+                  <div class="filterTitle">
+                    <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+                  </div>
+
+                  <el-row class="el_row_border">
+                    <el-col :span="12">
+                      <el-row>
+                        <el-col :span="8">
+                          <div class="el_col_label">在职状态</div>
+                        </el-col>
+                        <el-col :span="16" class="el_col_option">
+                          <el-select v-model="params.is_dimission" size="mini" clearable>
+                            <el-option key="0" label="在职" value="0">在职</el-option>
+                            <el-option key="1" label="离职" value="1">离职</el-option>
+                          </el-select>
+                        </el-col>
+                      </el-row>
+                    </el-col>
+                  </el-row>
+                  <div class="btnOperate">
+                    <el-button size="mini" type="primary" @click="search">搜索</el-button>
+                    <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+                    <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+                  </div>
+                </el-form>
+              </div>
+
             </div>
             <el-tabs v-model="activeName">
               <el-tab-pane label="用户管理" name="first">
@@ -560,6 +592,7 @@
     },
     data() {
       return {
+        isHigh: false,
         powerData: [],
         collectStatus: ' ',
         collectLoading: false,
@@ -589,6 +622,7 @@
           limit: 10,
           page: 1,
           org_id: '',
+          is_dimission: '',
         },
         //由于存在分页bug,所以暂时把职位和岗位的参数分开
         postParams: {
@@ -690,6 +724,12 @@
       }
     },
     methods: {
+      highGrade() {
+        this.isHigh = !this.isHigh;
+      },
+      resetting() {
+        this.params.is_dimission = '';
+      },
       //入职材料
       getEntryMaterials() {
         this.$http.get(globalConfig.server + 'setting/dictionary/515').then((res) => {
@@ -865,8 +905,9 @@
         this.userCollectLoading = true;
         this.userCollectStatus = ' ';
         this.$http.get(globalConfig.server + 'manager/staff?keywords=' + this.params.keywords + '&pages=' + this.params.page
-          + '&limit=' + this.params.limit + '&org_id=' + this.params.org_id + '&is_recursion=1').then((res) => {
+          + '&limit=' + this.params.limit + '&org_id=' + this.params.org_id + '&is_recursion=1' + '&is_dimission=' + this.params.is_dimission).then((res) => {
           this.userCollectLoading = false;
+          this.isHigh = false;
           if (res.data.code === '10000') {
             this.staffTableData = res.data.data.data;
             this.totalStaffNum = res.data.data.count;
