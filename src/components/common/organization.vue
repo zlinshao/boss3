@@ -34,7 +34,6 @@
         <div class="content_right">
           <div class="box">
             <div class="boxHead">{{highestDepart}}</div>
-
             <div class="breadcrumb-wrapper scroll_bar" @scroll="scroll_bar_move" id="scroll_bar">
               <div class="breadcrumb" id="breadcrumbBox">
                 <a>
@@ -46,9 +45,9 @@
               </div>
               <div class="box-body">
                 <ul id="memberBox">
-                  <!--<li>-->
-                    <!--<el-checkbox>全选</el-checkbox>-->
-                  <!--</li>-->
+                  <li>
+                    <el-checkbox v-model="dimission">查看离职员工</el-checkbox>
+                  </li>
                   <li v-for="item in departmentList">
                     <el-checkbox-group v-model="checkedIdBox" @change="checkDepart(item,$event)">
                       <el-checkbox  :disabled="noDepart" :label="item.id" :key="item.id">{{item.name}} ({{item.users}}人)</el-checkbox>
@@ -117,12 +116,19 @@
         currentPage_user:1,
         lastPage_depart : '',
         lastPage_user : '',
+        is_dimission :0,
+        dimission :false,
       }
     },
     mounted() {
 
     },
     watch:{
+      dimission(val){
+        this.is_dimission = val?1:0;
+        this.getDepartment(this.currentDepartId);
+
+      },
       organizationDialog(val){
         this.organizationVisible = val;
         this.currentDepartId = 1;
@@ -195,7 +201,8 @@
       getMoreUser(){
         if(this.currentPage_user<this.lastPage_user){
           this.currentPage_user ++;
-          this.$http.get(globalConfig.server_user+'users?org_id='+this.currentDepartId+'&page='+this.currentPage_user).then((res) => {
+          this.$http.get(globalConfig.server_user+'users?org_id='+this.currentDepartId+'&page='+this.currentPage_user
+                          +'&is_dimission='+this.is_dimission).then((res) => {
             if(res.data.status === 'success'){
               if(res.data.data.length>0){
                 res.data.data.forEach((item) => {
@@ -236,7 +243,7 @@
             this.lastPage_depart = res.data.meta.last_page;
           }
         });
-        this.$http.get(globalConfig.server_user+'users?org_id='+id).then((res) => {
+        this.$http.get(globalConfig.server_user+'users?org_id='+id+'&is_dimission='+this.is_dimission).then((res) => {
           if(res.data.status === 'success'){
             this.departmentStaff = res.data.data;
             this.lastPage_user = res.data.meta.last_page;

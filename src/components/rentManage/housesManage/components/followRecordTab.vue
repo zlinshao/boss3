@@ -26,8 +26,9 @@
       <el-table-column
         label="房屋状态">
         <template slot-scope="scope">
-          <span v-if="scope.row.house_status==1">已租</span>
-          <span v-else="">未租</span>
+          <span style="color: #1ecb4e" v-if="scope.row.house_status==1">已出租</span>
+          <span v-else-if="scope.row.house_status == 2">待收房</span>
+          <span style="color: #f34199" v-else="">未出租</span>
         </template>
       </el-table-column>
       <el-table-column

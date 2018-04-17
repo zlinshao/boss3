@@ -92,8 +92,6 @@
           <UpLoad :ID="'collectVacationId'" :isClear="isClear" @getImg="getImg"></UpLoad>
         </div>
 
-
-
         <div class="title">应退还</div>
         <div class="form_border">
           <el-form size="mini" label-width="100px">
@@ -400,7 +398,7 @@
           module : '1',
 
           check_time : '',
-          check_type : 331,
+          check_type : '',
           profit:'',
           bank_num : '',
           account_bank : '',
@@ -560,7 +558,7 @@
           module : '2',
 
           check_time : '',
-          check_type : 331,
+          check_type : '',
           profit:'',
           bank_num : '',
           account_bank : '',
