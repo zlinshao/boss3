@@ -23,13 +23,13 @@
           <span v-else="">/</span>
         </template>
       </el-table-column>
-      <el-table-column
-        label="房屋状态">
-        <template slot-scope="scope">
-          <span v-if="scope.row.house_status==1">已租</span>
-          <span v-else="">未租</span>
-        </template>
-      </el-table-column>
+      <!--<el-table-column-->
+        <!--label="房屋状态">-->
+        <!--<template slot-scope="scope">-->
+          <!--<span v-if="scope.row.house_status==1">已租</span>-->
+          <!--<span v-else="">未租</span>-->
+        <!--</template>-->
+      <!--</el-table-column>-->
       <el-table-column
         label="空置期(天)">
         <template slot-scope="scope">

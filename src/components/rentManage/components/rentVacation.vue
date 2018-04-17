@@ -495,7 +495,7 @@
       rentVacationDialogVisible(val){
         if(!val){
           this.$emit('close');
-          this.isClear = true;
+          this.clearData();
         }else {
           this.isClear = false;
           if(!this.isDictionary){
@@ -532,7 +532,6 @@
               title:'成功',
               message:res.data.msg
             });
-            this.clearData();
             this.rentVacationDialogVisible = false;
             this.$emit('close','success');
           }else {
@@ -600,6 +599,7 @@
           TV_fees : '',
           network_fees : '',
         };
+        this.isClear = true;
       },
     }
   };

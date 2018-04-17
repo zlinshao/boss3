@@ -212,8 +212,7 @@
               <el-table-column
                 label="所属部门">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.user&&scope.row.user.org&&scope.row.user.org.length>0
-                  &&scope.row.user.org[0].name">{{scope.row.user.org[0].name}}</span>
+                  <span v-if="scope.row.org&&scope.row.org.name">{{scope.row.org.name}}</span>
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
@@ -305,6 +304,7 @@
           page: 1,
           status : '',
           org_id : '',
+          is_nrcy : 0,
         },
         department_name : '',
         length : '',
@@ -513,7 +513,7 @@
           {clickIndex: 'upLoadDialog', headIcon: 'el-icon-upload2', label: '上传房屋照片',},
           {clickIndex: 'addFollowDialog', headIcon: 'el-icon-circle-plus-outline', label: '添加跟进记录',},
           {clickIndex: 'addDecorateDialog', headIcon: 'el-icon-circle-plus-outline', label: '添加装修记录',},
-          {clickIndex: 'addEarlyWarningDialog', headIcon: 'el-icon-circle-plus-outline', label: '调整预警状态',},
+          {clickIndex: 'addEarlyWarningDialog', headIcon: 'el-icon-circle-plus-outline', label: '调整预警状态',disabled:row.status},
         ];
         this.contextMenuParam(event);
       },
@@ -547,9 +547,19 @@
         this.addDecorateDialog = false;
         if (val === 'success') {
           this.getData();
-        }else if (val === 'success_tab'){
+        }else if (val === 'success_tab_first'){
+          this.activeName = 'first';
           this.changeHouseStatus = true;
           this.getData();
+        }else if(val === 'success_tab_second'){
+          this.activeName = 'second';
+          this.changeHouseStatus = true;
+          this.getData();
+        }else if(val === 'success_tab_third'){
+          this.activeName = 'third';
+          this.changeHouseStatus = true;
+          this.getData();
+          this.getCharts();
         }
       },
       //关闭右键菜单

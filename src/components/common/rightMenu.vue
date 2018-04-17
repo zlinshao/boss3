@@ -3,11 +3,12 @@
 		<ul class="menu-ui" :style="{left:startX.replace(/[^0-9]/ig,'')>innerWidth-150?innerWidth-150+'px':startX,top:startY}"
         v-if="show" @contextmenu="rightMenuClick($event)">
 			<li v-for="(item, index) in list" @mouseover="showIndex=index" @mouseleave="showIndex=-1" :key="index">
-				<a :class="item['divide'] ? 'divide':''" @click="emitClickEvent($event, item)" @contextmenu="emitClickEvent($event, item)">
+				<button :disabled="item.disabled" :class="item['divide'] ? 'divide':''"
+                @click="emitClickEvent($event, item)" @contextmenu="emitClickEvent($event, item)">
 					<i :class="item.headIcon" class="head-icon"></i>
 					<span>{{ item.label}}</span>
 					<i :class="item.tailIcon" class="tail-icon"></i>
-				</a>
+				</button>
         <!--存在子元素进行递归-->
 				<infinite-right-menu v-if="showChildren(item)" @clickOperate="emitClick"
 														 :list="item.children" :startX="isOverflowX?'-95%':'95%'" :startY="'0'"
@@ -71,7 +72,7 @@
   }
 </script>
 
-<style scoped="">
+<style scoped="" lang="scss">
 	.menu-ui {
 		position: absolute;
 		background: white;
@@ -88,7 +89,10 @@
 		position: relative;
 	}
 
-	a {
+	button {
+    width: 100%;
+    background: #ffffff;
+    border:none ;
 		text-decoration: none;
 		position: relative;
 		display: flex;
@@ -99,8 +103,17 @@
 		height: 26px;
 		line-height: 26px;
 		color: #222;
+    &:hover{
+      background-color: #6a8dfb;
+    }
 	}
-
+  button[disabled]{
+    color: #c0c4cc;
+    cursor: not-allowed;
+    i{
+      color: #c0c4cc;
+    }
+  }
 	.divide {
 		border-bottom: 1px solid #e6e6e6;
 	}
@@ -109,10 +122,10 @@
 		background-color: #6a8dfb;
 	}
 
-	li:hover > a > span {
+	li:hover > button > span {
 		color: #ffffff;
 	}
-	a > span {
+	button > span {
 		padding-left: 20px;
 		font-size: 13px;
 		text-overflow: ellipsis;
