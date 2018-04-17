@@ -777,13 +777,7 @@
       },
       highSearch() {
         this.isHigh = !this.isHigh;
-        if (this.activeName == "first") {
-          this.params.page = 1;
-          this.collectDatafunc();
-        } else if (this.activeName == "second") {
-          this.params.page = 1;
-          this.rentDatafunc();
-        }
+        this.search();
       },
       collectDatafunc() {
         this.collectData = [];

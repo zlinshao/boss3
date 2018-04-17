@@ -2,19 +2,21 @@
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="clientContainer">
       <div class="highRanking">
-        <div class="highSearch">
+        <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input v-model="params.keywords" placeholder="地址/事项/编号/客户" @keyup.enter.native="search">
+              <el-input v-model="params.keywords" placeholder="地址/事项/编号/客户" @keyup.enter.native="search" clearable>
                 <el-button slot="append" type="primary" @click="search" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="exportData">导出</el-button>
+            </el-form-item>
           </el-form>
         </div>
-
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
           <el-form :inline="true" onsubmit="return false" size="mini" label-width="100px">
             <div class="filterTitle">
@@ -43,7 +45,9 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal"></el-input>
+                      <el-input v-model="follow_name" readonly="" @focus="openOrganizeModal">
+                        <el-button slot="append" type="primary" @click="emptyFollowPeople">清空</el-button>
+                      </el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -77,7 +81,7 @@
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
                       <el-date-picker
-                        v-model="params.create_time"
+                        v-model="params.follow_time"
                         type="daterange"
                         value-format="yyyy-MM-dd"
                         range-separator="至"
@@ -154,90 +158,219 @@
           </el-form>
         </div>
       </div>
-
       <div class="main">
-        <div class="myTable">
-          <el-table
-            :data="tableData"
-            :empty-text='workOrderStatus'
-            v-loading="workOrderLoading"
-            element-loading-text="拼命加载中"
-            element-loading-spinner="el-icon-loading"
-            element-loading-background="rgba(255, 255, 255, 0)"
-            @row-click="clickTable"
-            @row-dblclick="dblClickTable"
-            @row-contextmenu='houseMenu'
-            style="width: 100%">
-            <el-table-column
-              prop="create_time"
-              label="创建时间">
-            </el-table-column>
-            <el-table-column
-              label="房屋地址">
-              <template slot-scope="scope">
-            <span v-if="scope.row.construct">
-              <span v-if="scope.row.construct.house">
-                {{scope.row.construct.house.name}}
-              </span>
-            </span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="events"
-              label="事件数">
-            </el-table-column>
-            <el-table-column
-              prop="type"
-              label="工单类型">
-            </el-table-column>
-            <el-table-column
-              prop="matters"
-              label="跟进事项">
-            </el-table-column>
-            <el-table-column
-              prop="expected_finish_time"
-              label="预计完成时间">
-            </el-table-column>
-            <el-table-column
-              prop="creator"
-              label="创建人">
-            </el-table-column>
-            <el-table-column
-              prop="follow"
-              label="跟进人">
-            </el-table-column>
-            <el-table-column
-              prop="follow_statuss"
-              label="跟进状态">
-              <template slot-scope="scope">
-                <el-button class="btnStatus" v-if="scope.row.follow_statuss === '已完成'" type="primary" size="mini">
-                  {{scope.row.follow_statuss}}
-                </el-button>
-                <el-button class="btnStatus" v-if="scope.row.follow_statuss === '处理中'" type="warning" size="mini">
-                  {{scope.row.follow_statuss}}
-                </el-button>
-                <el-button class="btnStatus" v-if="scope.row.follow_statuss === '待处理'" type="info" size="mini">
-                  {{scope.row.follow_statuss}}
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
-        <div class="tableBottom">
-          <div class="left">
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="params.pages"
-              :page-sizes="[12, 20, 30, 40]"
-              :page-size="params.limit"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="totalNumber">
-            </el-pagination>
+        <div>
+          <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="收房工单" name="first">
+              <el-table
+                :data="collectTableData"
+                :empty-text='workOrderStatus'
+                v-loading="workOrderLoading"
+                element-loading-text="拼命加载中"
+                element-loading-spinner="el-icon-loading"
+                element-loading-background="rgba(255, 255, 255, 0)"
+                @row-click="clickTable"
+                @row-dblclick="dblClickTable"
+                @row-contextmenu='houseMenu'
+                style="width: 100%">
+                <el-table-column
+                  prop="create_time"
+                  label="创建时间">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
+                    <span v-if="!scope.row.create_time">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="房屋地址">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.construct">
+                      <span v-if="scope.row.construct.house">
+                        {{scope.row.construct.house.name}}
+                      </span>
+                    </span>
+                    <span v-if="!scope.row.construct">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="events"
+                  label="事件数">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.events">{{scope.row.events}}</span>
+                    <span v-if="!scope.row.events">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="types"
+                  label="工单类型">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.types">{{scope.row.types}}</span>
+                    <span v-if="!scope.row.types">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="matters"
+                  label="跟进事项">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.matters">{{scope.row.matters}}</span>
+                    <span v-if="!scope.row.matters">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="expected_finish_time"
+                  label="预计完成时间">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.expected_finish_time">{{scope.row.expected_finish_time}}</span>
+                    <span v-if="!scope.row.expected_finish_time">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="creator"
+                  label="创建人">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.creator">{{scope.row.creator}}</span>
+                    <span v-if="!scope.row.creator">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="follow"
+                  label="跟进人">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.follow">{{scope.row.follow}}</span>
+                      <span v-if="!scope.row.follow">暂无</span>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                  prop="follow_statuss"
+                  label="跟进状态">
+                  <template slot-scope="scope">
+                    <el-button class="btnStatus" v-if="scope.row.follow_statuss === '已完成'" type="primary" size="mini">
+                      {{scope.row.follow_statuss}}
+                    </el-button>
+                    <el-button class="btnStatus" v-if="scope.row.follow_statuss === '处理中'" type="warning" size="mini">
+                      {{scope.row.follow_statuss}}
+                    </el-button>
+                    <el-button class="btnStatus" v-if="scope.row.follow_statuss === '待处理'" type="info" size="mini">
+                      {{scope.row.follow_statuss}}
+                    </el-button>
+                    <span v-if="!scope.row.follow_statuss">暂无</span>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="租房工单" name="second">
+              <el-table
+                :data="rentTableData"
+                :empty-text='rentStatus'
+                v-loading="rentLoading"
+                element-loading-text="拼命加载中"
+                element-loading-spinner="el-icon-loading"
+                element-loading-background="rgba(255, 255, 255, 0)"
+                @row-click="clickTable"
+                @row-dblclick="dblClickTable"
+                @row-contextmenu='houseMenu'
+                style="width: 100%">
+                <el-table-column
+                  prop="create_time"
+                  label="创建时间">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
+                    <span v-if="!scope.row.create_time">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="房屋地址">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.construct">
+                      <span v-if="scope.row.construct.house">
+                        {{scope.row.construct.house.name}}
+                      </span>
+                    </span>
+                    <span v-if="!scope.row.construct">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="events"
+                  label="事件数">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.events">{{scope.row.events}}</span>
+                    <span v-if="!scope.row.events">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="types"
+                  label="工单类型">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.types">{{scope.row.types}}</span>
+                    <span v-if="!scope.row.types">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="matters"
+                  label="跟进事项">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.matters">{{scope.row.matters}}</span>
+                    <span v-if="!scope.row.matters">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="expected_finish_time"
+                  label="预计完成时间">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.expected_finish_time">{{scope.row.expected_finish_time}}</span>
+                    <span v-if="!scope.row.expected_finish_time">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="creator"
+                  label="创建人">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.creator">{{scope.row.creator}}</span>
+                    <span v-if="!scope.row.creator">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="follow"
+                  label="跟进人">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.follow">{{scope.row.follow}}</span>
+                    <span v-if="!scope.row.follow">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="follow_statuss"
+                  label="跟进状态">
+                  <template slot-scope="scope">
+                    <el-button class="btnStatus" v-if="scope.row.follow_statuss === '已完成'" type="primary" size="mini">
+                      {{scope.row.follow_statuss}}
+                    </el-button>
+                    <el-button class="btnStatus" v-if="scope.row.follow_statuss === '处理中'" type="warning" size="mini">
+                      {{scope.row.follow_statuss}}
+                    </el-button>
+                    <el-button class="btnStatus" v-if="scope.row.follow_statuss === '待处理'" type="info" size="mini">
+                      {{scope.row.follow_statuss}}
+                    </el-button>
+                    <span v-if="!scope.row.follow_statuss">暂无</span>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-tab-pane>
+          </el-tabs>
+          <div class="tableBottom">
+            <div class="left">
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="params.pages"
+                :page-sizes="[12, 20, 30, 40]"
+                :page-size="params.limit"
+                layout="total, prev, pager, next, jumper"
+                :total="totalNumber">
+              </el-pagination>
+            </div>
           </div>
         </div>
       </div>
-
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
@@ -269,7 +402,7 @@
         lists: [],
         /***********/
         statisticDate: '',
-
+        activeName: 'first',
         totalNumber: 0,
         params: {
           pages: 1,
@@ -282,19 +415,19 @@
           update_time: '',
           finish_time: '',
           type: '',
+          module: 1,
         },
         follow_name: '',   //跟进人
         length: 0,
         type: '',
-        tableData: [],
+        collectTableData: [],
+        rentTableData: [],
         options: [],
-
         //模态框
         organizationDialog: false,
         editWorkDialog: false,     //编辑
         addChildTaskDialog: false,     //添加子任务框
         orderDetailDialog: false,
-        activeName: 'first',
         isHigh: false,
         activeId: '',
         startEdit: false,
@@ -305,9 +438,10 @@
         workOrderStatus: ' ',
         workOrderLoading: false,
         isDictionary: false,
+        rentStatus: ' ',
+        rentLoading: false,
       }
     },
-
     created() {
       if (!this.isDictionary) {
         this.getDictionary();
@@ -316,9 +450,26 @@
         this.params.pages = this.$store.state.datum.work_order_filter.pages;
         this.params.limit = this.$store.state.datum.work_order_filter.limit;
       }
-      this.getTableData();
+      this.collectDatafunc();
+    },
+    watch: {
+      activeName(val) {
+        if (val === 'first') {
+          this.module = 1;
+        } else {
+          this.module = 2;
+        }
+      },
     },
     methods: {
+      handleClick() {
+        if (this.activeName == "first") {
+          this.collectDatafunc();
+        }
+        else if (this.activeName == "second") {
+          this.rentDatafunc();
+        }
+      },
       getDictionary() {
         this.$http.get(globalConfig.server + 'setting/dictionary/255').then((res) => {
           if (res.data.code === "30010") {
@@ -335,30 +486,50 @@
 
       },
       //获取列表数据
-      getTableData() {
+      collectDatafunc() {
         this.workOrderLoading = true;
         this.workOrderStatus = ' ';
+        this.params.module = 1;
         this.$http.get(globalConfig.server + 'customer/work_order', {params: this.params}).then((res) => {
           this.workOrderLoading = false;
           if (res.data.code === '100200') {
-            this.tableData = res.data.data.data;
+            this.collectTableData = res.data.data.data;
             this.totalNumber = res.data.data.count;
           } else {
             this.workOrderStatus = '暂无数据';
-            this.tableData = [];
+            this.collectTableData = [];
+            this.totalNumber = 0;
+          }
+        })
+      },
+      rentDatafunc() {
+        this.rentLoading = true;
+        this.rentStatus = ' ';
+        this.params.module = 2;
+        this.$http.get(globalConfig.server + 'customer/work_order', {params: this.params}).then((res) => {
+          this.rentLoading = false;
+          if (res.data.code === '100200') {
+            this.rentTableData = res.data.data.data;
+            this.totalNumber = res.data.data.count;
+          } else {
+            this.rentStatus = '暂无数据';
+            this.rentTableData = [];
             this.totalNumber = 0;
           }
         })
       },
 
       handleSizeChange(val) {
-        this.params.limit = val;
-        this.getTableData();
+        console.log(`每页 ${val} 条`);
         this.$store.dispatch('workOrderFilter', this.params);
       },
       handleCurrentChange(val) {
         this.params.pages = val;
-        this.getTableData();
+        if (this.activeName == "first") {
+          this.collectDatafunc();
+        } else if (this.activeName == "second") {
+          this.rentDatafunc();
+        }
         this.$store.dispatch('workOrderFilter', this.params);
       },
       clickTable(row, event, column) {
@@ -419,7 +590,7 @@
 //        this.startEdit = false;
         this.startAddResult = false;
         this.startDetail = false;
-
+        this.search();
         if (val) {
 
         }
@@ -436,23 +607,50 @@
         this.length = '';
         this.params.follow_id = val[0].id;
         this.follow_name = val[0].name;
-
       },
-
+      emptyFollowPeople() {
+        this.params.follow_id = '';
+        this.follow_name = '';
+      },
       highGrade() {
         this.isHigh = !this.isHigh;
       },
       search() {
         this.isHigh = false;
-        this.params.pages = 1;
-        this.getTableData();
+        if (this.activeName == "first") {
+          this.params.pages = 1;
+          this.collectDatafunc();
+        } else if (this.activeName == "second") {
+          this.params.pages = 1;
+          this.rentDatafunc();
+        }
       },
       resetting() {
         this.params.follow_id = '';
         this.params.follow_status = '';
         this.params.create_time = [];
+        this.params.update_time = [];
+        this.params.follow_time = [];
+        this.params.finish_time = [];
+        this.params.type = '';
         this.follow_name = '';
-        this.search();
+      },
+      exportData() {
+        this.$http.get(globalConfig.server + 'customer/work_order/export', {
+          responseType: 'arraybuffer',
+          params: this.params
+        }).then((res) => { // 处理返回的文件流
+          if (!res.data) {
+            return;
+          }
+          let url = window.URL.createObjectURL(new Blob([res.data]));
+          let link = document.createElement('a');
+          link.style.display = 'a';
+          link.href = url;
+          link.setAttribute('download', 'excel.xlsx');
+          document.body.appendChild(link);
+          link.click();
+        });
       }
     }
   }

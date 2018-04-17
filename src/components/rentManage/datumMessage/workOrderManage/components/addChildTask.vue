@@ -28,13 +28,19 @@
             </el-col>
 
             <el-col :span="12">
-              <el-form-item label="预计完成时间">
+              <el-form-item label="下次跟进时间">
                 <el-date-picker type="datetime" placeholder="选择日期时间"
                                 value-format="yyyy-MM-dd HH:mm:ss" v-model="params.expected_finish_time"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-row>
-
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="回复电话" required="">
+                <el-input  v-model="params.mobile" clearable></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <el-row>
             <el-col :span="24">
               <el-form-item label="跟进事项" required="">
@@ -78,7 +84,8 @@
           expect_time  : '',                 //'期待维修时间',
           expected_finish_time : '',         //'预计完成时间',
           follow_time : '',                  //'跟进时间',
-          image_pic:[]
+          image_pic:[],
+          mobile: '',
         },
         organizationDialog: false,
         isClear:false,
@@ -142,7 +149,6 @@
         this.length = '';
         this.params.follow_id = val[0].id;
         this.follow_name = val[0].name;
-
       },
       closeModal(){
         this.organizationDialog = false
@@ -178,6 +184,7 @@
           follow_time : '',               //'跟进时间',
           image_pic:[],
           parent_id:this.activeId,
+          mobile: '',
         };
         this.follow_name = '';
         this.isClear = true;
