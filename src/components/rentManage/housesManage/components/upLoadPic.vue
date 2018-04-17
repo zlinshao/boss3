@@ -6,7 +6,7 @@
         <el-form size="mini" :model="formInline" label-width="80px">
           <el-row>
             <el-col :span="24">
-              <el-form-item label="上传图片">
+              <el-form-item label="上传图片" required="">
                 <UpLoad :ID="'upLoad_pic'" :isClear="isClear" @getImg="getImg"></UpLoad>
               </el-form-item>
             </el-col>

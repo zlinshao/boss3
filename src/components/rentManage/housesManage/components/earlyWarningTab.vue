@@ -37,7 +37,17 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="预警状态">
+        label="调整前预警状态">
+        <template slot-scope="scope">
+          <div v-if="scope.row.pre_warning_status == 1" class="label success">正常</div>
+          <div v-else-if="scope.row.pre_warning_status == 2" class="label yellow">黄色预警</div>
+          <div v-else-if="scope.row.pre_warning_status == 3" class="label orange">橙色预警</div>
+          <div v-else-if="scope.row.pre_warning_status == 4" class="label red">红色预警</div>
+          <div v-else="">/</div>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="调整后预警状态">
         <template slot-scope="scope">
           <div v-if="scope.row.after_warning_status == 1" class="label success">正常</div>
           <div v-else-if="scope.row.after_warning_status == 2" class="label yellow">黄色预警</div>
