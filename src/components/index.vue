@@ -328,6 +328,7 @@
                     @close="closeModal"></UnlockSecondPW>
     <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
     <BadgeView :badgeDialog="badgeDialog" @close="closeModal"></BadgeView>
+    <InstitutionView :institutionDialog="institutionDialog" @close="closeModal"></InstitutionView>
   </div>
 </template>
 
@@ -337,8 +338,9 @@
   import MessageDetail from "./common/messageDetail.vue";
   import Instruction from "./rentManage/wholeRentManage/components/instruction.vue"; //使用说明
   import SetLockPwd from "./common/setLockPwd.vue";
-  import UnlockSecondPW from "./common/unlocksecondpw.vue";
-  import BadgeView from "./common/badge.vue";
+  import UnlockSecondPW from "./common/unlocksecondpw.vue";  //解锁二级密码
+  import BadgeView from "./common/badge.vue";   //每日徽章
+  import InstitutionView from "./common/institution.vue";   // 制度弹窗
   import cookie from 'js-cookie'
   export default {
     name: "Index",
@@ -348,7 +350,8 @@
       Instruction,
       SetLockPwd,
       UnlockSecondPW,
-      BadgeView
+      BadgeView,
+      InstitutionView
     },
     data() {
       return {
@@ -379,6 +382,7 @@
         badgeDialog: false, //徽章模态框
         unlockFlagpart: false,//二级密码标识
         gladFlag:false, //喜报标识
+        institutionDialog:false,    //制度模态框
       };
     },
     computed: {
@@ -393,6 +397,9 @@
           }
         });
         return isShortcutPath;
+      },
+      second_Flag(){
+        return this.$store.state.secondPassword.second_Flag
       }
     },
     watch: {
@@ -403,6 +410,23 @@
         handler(val, oldVal) {
           this.countTime();
         }
+      },
+      second_Flag(val){
+      if(val){  
+        this.$http.get(globalConfig.server + "setting/dictionary/220").then(res => {
+          if (res.data.code === "30010") {
+            this.dictionary2 = res.data.data;
+            for (let i = 0; i < res.data.data.length; i++) {
+              for (let key in JSON.parse(localStorage.personal).data.secondary_password) {
+                if (res.data.data[i].id == JSON.parse(localStorage.personal).data.secondary_password[key]
+                ) {
+                  this.chinese.push(res.data.data[i].dictionary_name);  
+                }
+              }
+            }
+          }
+        });
+      }
       }
     },
     created(){
@@ -460,6 +484,10 @@
         if (!this.personal.data.medal) {
           this.badgeDialog = true;
         }
+        //制度弹窗
+
+        // this.institutionDialog = true;
+        
         this.loginDay = this.personal.data.loginday;
         this.loginPercent = Number(this.loginDay / 180 * 100) + "%";
         $(".percent").css("width", this.loginPercent);
@@ -581,6 +609,7 @@
         this.unlockSecondPWDialog = false;
         this.instructionDialog = false;
         this.badgeDialog = false;
+        this.institutionDialog = false;
       },
       //二级密码回调
       unlockFlag(val) {
@@ -608,11 +637,11 @@
         this.$http.get(globalConfig.server + "setting/dictionary/220").then(res => {
           if (res.data.code === "30010") {
             this.dictionary2 = res.data.data;
-            for (let i = 0; i < this.dictionary2.length; i++) {
+            for (let i = 0; i < res.data.data.length; i++) {
               for (let key in this.personal.data.secondary_password) {
-                if (this.dictionary2[i].id == this.personal.data.secondary_password[key]
+                if (res.data.data[i].id == this.personal.data.secondary_password[key]
                 ) {
-                  this.chinese.push(this.dictionary2[i].dictionary_name);
+                  this.chinese.push(res.data.data[i].dictionary_name);
                 }
               }
             }

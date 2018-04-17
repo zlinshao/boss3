@@ -588,9 +588,9 @@
       </div>
     </div>
 
-    <div class="operatePanel" style="position: fixed;bottom: 100px;right: 60px;" @click="isPanel = !isPanel">
+    <div class="operatePanel" style="position: fixed;bottom: 120px;right: 80px;" @click="isPanel = !isPanel">
       <!--<i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="el-icon-circle-plus"></i>-->
-      <i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="el-icon-document"></i>
+      <i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="iconfont icon-bianji--"></i>
     </div>
     <div class="panelContent" id="panelContent" v-show="isPanel">
         <div class="panel_header">
@@ -833,6 +833,9 @@
 </script>
 
 <style scoped lang="scss">
+  i.iconfont.icon-bianji--:hover{
+    border-radius: 5px;
+  }
   #rentingDetail {
     height: 100%;
     overflow: hidden;
@@ -858,8 +861,14 @@
       bottom: 100px;
       right: 230px;
       border: 1px solid rgba(64,158,255,.12);
-      box-shadow: 0 2px 4px 0 rgba(64,158,255,.12), 0 0 6px 0 rgba(64,158,255,.04);
+      /*box-shadow: 0 2px 4px 0 rgba(64,158,255,.12), 0 0 6px 0 rgba(64,158,255,.04);*/
       padding: 0 10px;
+      box-shadow: 0 0px 9px 0 #909399;
+      -webkit-transition:all 0.5s linear;
+      -moz-transition:all 0.5s linear;
+      -ms-transition:all 0.5s linear;
+      -o-transition:all 0.5s linear;
+      transition:all 0.5s linear;
       .panel_header{
         height: 50px;
         display: flex;

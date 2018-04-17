@@ -96,6 +96,7 @@ export default {
       dictionary: [], //字典
       truefalg:false,
       falsefalg:1,
+      selectFlag:false,
       //个人基本设置
       basicSetting: {
         id: [],
@@ -160,8 +161,8 @@ export default {
 
     //二级密码保存
     savesendinfo() {
-
-      this.validateinput = true;
+     
+      this.validateinput = true; 
 
       if(this.checkList =="" && this.validateinput == true){
         this.validateinput = false;
@@ -228,6 +229,9 @@ export default {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
             globalConfig.personal = res.data.data.data;
           });
+          this.selectFlag = true;
+          this.$store.dispatch('secondFlag', this.selectFlag);
+          this.$router.push({path: '/main'});
             this.form = {
               id: "",
               phone: "",
@@ -237,6 +241,7 @@ export default {
             };
             this.checkList=[]
             } else {
+              this.selectFlag = false;
               this.$notify({
                 title: "警告",
                 message: res.data.msg,

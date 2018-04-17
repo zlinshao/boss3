@@ -5,7 +5,7 @@
         <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input v-model="params.address" placeholder="请输入搜索" readOnly @focus="openAddressDialog">
+              <el-input v-model="params.q" placeholder="请输入搜索" readOnly clearable @focus="openAddressDialog">
                 <el-button @click="search()" slot="append" type="primary" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
@@ -149,13 +149,14 @@
     </div>
     <Organization :organizationDialog="organizationDialog" :type="type" @close="closeOrganization"
                   @selectMember="selectMember"></Organization>
-    <AddressSearch :addressDialog = "addressDialog" @close="closeAddressDialog"></AddressSearch>
+    <AddressSearch :addressDialog="addressDialog" @close="closeAddressDialog" ></AddressSearch>
   </div>
 </template>
 
 <script>
   import Organization from '../../../common/organization.vue';
   import AddressSearch from '../../../common/addressSearch';
+
   export default {
     name: "incomplete-record",
     components: {Organization, AddressSearch},
@@ -189,10 +190,10 @@
           }]
         },
         totalNum: 0,   //总数
-        is_rent: null,
+        is_rent: 0,
         params: {
           page: 1,
-          address: '',      //模糊搜索
+          q: '',      //模糊搜索
           department_id: [],   //开单人部门id
           staff_id: [],    //开单人id
           date_range: [], //创建时间范围 数组
@@ -213,34 +214,49 @@
       }
     },
     mounted() {
-
-    },
-    activated() {
-      if(this.$route.query.active === 'first') {
-        this.is_rent = 0;
-      }else{
-        this.is_rent = 1;
-      }
+      this.getDefaultData();
       this.getIncompleteRecordData();
     },
-    watch: {
-
+    activated() {
+      this.getDefaultData();
     },
+    watch: {},
     methods: {
       openAddressDialog() {
         this.addressDialog = true;
       },
       closeAddressDialog(val) {
         this.addressDialog = false;
+        console.log(val);
         if(val){
-          this.params.address = val.address;
+          this.params.q = val.address;
+          this.params.contract_id = val.contract_id;
+        }
+      },
+      getDefaultData() {
+        if (!this.$route.query.active) {
+          this.$router.push({
+            path: "/incompleteRecord",
+            query: {
+              active: this.$store.state.datum.incomplete_record_active,
+            }
+          });
+        }
+        let query = this.$route.query;
+        if (query.active) {
+          this.$store.dispatch("incompleteRecordActive", query.active);
+        }
+        if (query.active === 'first') {
+          this.is_rent = 0;
+        } else {
+          this.is_rent = 1;
         }
       },
       search() {
-//        this.getIncompleteRecordData();
+       this.getIncompleteRecordData();
       },
       exportData() {
-        this.$http.get(globalConfig.server +  'lease/note/index?limit=12&is_rent='+this.is_rent+'&output=1', {responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
+        this.$http.get(globalConfig.server + 'lease/note/index?limit=12&is_rent=' + this.is_rent + '&output=1', {responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
           if (!res.data) {
             return;
           }
@@ -257,21 +273,21 @@
       getIncompleteRecordData() {
         this.incompleteStatus = " ";
         this.incompleteLoading = true;
-        if(!this.params.date_range){
+        if (!this.params.date_range) {
           this.params.date_range = [];
         }
-        this.$http.get(globalConfig.server + 'lease/note/index?is_rent='+this.is_rent, {params:this.params}).then((res) => {
+        this.$http.get(globalConfig.server + 'lease/note/index?is_rent=' + this.is_rent, {params: this.params}).then((res) => {
           this.incompleteLoading = false;
           this.isHigh = false;
-          if(res.data.code === '60510'){
+          if (res.data.code === '60510') {
             this.tableData = res.data.data;
             this.totalNum = res.data.num;
-            if(res.data.data.length<1){
+            if (res.data.data.length < 1) {
               this.incompleteStatus = "暂无数据";
               this.tableData = [];
               this.totalNum = 0;
             }
-          }else{
+          } else {
             this.incompleteStatus = "暂无数据";
             this.tableData = [];
             this.totalNum = 0;
@@ -323,21 +339,21 @@
         this.type = '';
         this.organizationDialog = false
       },
-      selectMember(val){
-        if(this.type === 'depart'){
+      selectMember(val) {
+        if (this.type === 'depart') {
           this.params.department = '';
           this.params.department_id = [];
           let names = [];
-          val.forEach((item)=>{
+          val.forEach((item) => {
             this.params.department_id.push(item.id);
             names.push(item.name);
           });
           this.params.department = names.join(',');
-        }else if(this.type === 'staff'){
+        } else if (this.type === 'staff') {
           this.params.staff = '';
           this.params.staff_id = [];
           let names = [];
-          val.forEach((item)=>{
+          val.forEach((item) => {
             this.params.staff_id.push(item.id);
             names.push(item.name);
           });
