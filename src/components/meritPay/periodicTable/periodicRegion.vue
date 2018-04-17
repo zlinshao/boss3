@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="highRanking" style="position: absolute; top: 120px; right: 20px;">
+    <div class="highRanking" style="position: absolute; top: 122px; right: 20px;">
       <div class="highSearch">
         <el-form :inline="true" onsubmit="return false" size="mini">
           <el-form-item>
