@@ -68,7 +68,7 @@
               <el-col :span="8">
                 <el-form-item label="退房性质" required>
                   <el-select v-model="params.check_type" clearable="" placeholder="请选择退房性质" value="">
-                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :key="item.id" :value="item.id"></el-option>
+                    <el-option v-for="item in dictionaryx" :label="item.dictionary_name" :key="item.id" :value="item.id"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -113,7 +113,7 @@
 
         <div class="title">上传照片</div>
         <div class="describe_border">
-          <UpLoad :ID="'rentingVacationId'" :isClear="isClear" @getImg="getImg"></UpLoad>
+          <UpLoad :ID="'retreatVacationId'" :isClear="isClear" @getImg="getImg"></UpLoad>
         </div>
 
 
@@ -477,11 +477,10 @@
           TV_fees : '',
           network_fees : '',
         },
-        tableData:[],
         value1:'',
         isClear : false,
         isDictionary:false,
-        dictionary:[],
+        dictionaryx:[],
       };
     },
     computed:{
@@ -526,9 +525,10 @@
       },
       collectVacationDialogVisible(val){
         if(!val){
-          this.$emit('close')
-        }else {
+          this.$emit('close');
           this.isClear = false;
+        }else {
+          this.isClear = true;
           if(!this.isDictionary){
             this.getDictionary();
           }
@@ -543,9 +543,9 @@
     },
     methods:{
       getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/328').then((res) => {
-          if(res.data.code === '30010'){
-            this.dictionary=res.data.data;
+        this.dictionary(328,1).then((res) => {
+          if(res.code === '30010'){
+            this.dictionaryx=res.data;
             this.isDictionary = true;
           }
         })
