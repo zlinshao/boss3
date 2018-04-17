@@ -30,12 +30,13 @@
       }
     },
     mounted(){
+      let _this = this;
       this.innerWidth = document.documentElement.clientWidth;
       this.innerHeight = document.documentElement.clientHeight;
-      window.onresize = function(){
-        this.innerWidth = document.documentElement.clientWidth;
-        this.innerHeight = document.documentElement.clientHeight;
-      };
+      $(window).resize(function() {
+        _this.innerWidth = document.documentElement.clientWidth;
+        _this.innerHeight = document.documentElement.clientHeight;
+      });
     },
     computed:{
       isOverflowX(){
