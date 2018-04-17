@@ -1,6 +1,6 @@
 <template>
   <div id="periodicTable" @click="show=false" @contextmenu="closeMenu">
-    <div class="highRanking" style=" position: absolute; top: 120px; right: 20px;">
+    <div class="highRanking" style=" position: absolute; top: 122px; right: 20px;">
       <div class="highSearch">
         <el-form onsubmit="return false" :inline="true" size="mini">
           <!--<el-form-item>-->
