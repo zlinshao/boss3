@@ -1,5 +1,5 @@
 <template>
-  <div id="addHouseResources">
+  <div id="renewHouseResources">
     <el-dialog :close-on-click-modal="false" title="房屋续收" :visible.sync="ownerRenewDialogVisible" width="60%">
       <div>
         <el-tabs v-model="activeName">
@@ -539,43 +539,43 @@
             <div class="scroll_bar">
               <el-form label-width="100px">
                 <el-form-item label="证件照片" required="">
-                  <UpLoad :ID="'addHouse_id_card'" :isClear="isClear" :editImage="identity_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'renewHouse_id_card'" :isClear="isClear" :editImage="identity_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="银行卡照片" required="">
-                  <UpLoad :ID="'addHouse_bank_card'" :isClear="isClear" :editImage="bank_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'renewHouse_bank_card'" :isClear="isClear" :editImage="bank_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="合同照片" required="">
-                  <UpLoad :ID="'addHouse_contract_card'" :isClear="isClear" :editImage="photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'renewHouse_contract_card'" :isClear="isClear" :editImage="photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="水表照片">
-                  <UpLoad :ID="'addHouse_water_card'" :isClear="isClear" :editImage="water_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'renewHouse_water_card'" :isClear="isClear" :editImage="water_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="电表照片">
-                  <UpLoad :ID="'addHouse_ele_card'" :isClear="isClear" :editImage="electricity_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'renewHouse_ele_card'" :isClear="isClear" :editImage="electricity_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="燃气表照片">
-                  <UpLoad :ID="'addHouse_gas_card'" :isClear="isClear" :editImage="gas_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'renewHouse_gas_card'" :isClear="isClear" :editImage="gas_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="交接单照片">
-                  <UpLoad :ID="'addHouse_hand_over_card'" :isClear="isClear" :editImage="checkin_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'renewHouse_hand_over_card'" :isClear="isClear" :editImage="checkin_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="委托书" required="">
-                  <UpLoad :ID="'addHouse_proxy_card'" :isClear="isClear" :editImage="auth_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'renewHouse_proxy_card'" :isClear="isClear" :editImage="auth_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="押金收条" required="">
-                  <UpLoad :ID="'addHouse_deposit_card'" :isClear="isClear" :editImage="deposit_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'renewHouse_deposit_card'" :isClear="isClear" :editImage="deposit_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="承诺书" required="">
-                  <UpLoad :ID="'addHouse_commitment_card'" :isClear="isClear" :editImage="promise" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'renewHouse_commitment_card'" :isClear="isClear" :editImage="promise" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="补充照片">
-                  <UpLoad :ID="'addHouse_other_card'" :isClear="isClear" :editImage="other_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'renewHouse_other_card'" :isClear="isClear" :editImage="other_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="退租交接单照片">
-                  <UpLoad :ID="'checkout_card'" :isClear="isClear" :editImage="checkout_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'renew_checkout_card'" :isClear="isClear" :editImage="checkout_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="退租结算照片">
-                  <UpLoad :ID="'checkout_settle_card'" :isClear="isClear" :editImage="checkout_settle_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'renew_checkout_settle_card'" :isClear="isClear" :editImage="checkout_settle_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
               </el-form>
             </div>
@@ -950,31 +950,31 @@
       },
       getImg(val){
         this.isUpPic = val[2];
-        if(val[0] === 'addHouse_id_card'){
+        if(val[0] === 'renewHouse_id_card'){
           this.params.identity_photo = val[1];
-        }else if(val[0] === 'addHouse_bank_card'){
+        }else if(val[0] === 'renewHouse_bank_card'){
           this.params.bank_photo = val[1];
-        }else if(val[0] === 'addHouse_contract_card'){
+        }else if(val[0] === 'renewHouse_contract_card'){
           this.params.photo = val[1];
-        }else if(val[0] === 'addHouse_water_card'){
+        }else if(val[0] === 'renewHouse_water_card'){
           this.params.water_photo = val[1];
-        }else if(val[0] === 'addHouse_ele_card'){
+        }else if(val[0] === 'renewHouse_ele_card'){
           this.params.electricity_photo = val[1];
-        }else if(val[0] === 'addHouse_gas_card'){
+        }else if(val[0] === 'renewHouse_gas_card'){
           this.params.gas_photo = val[1];
-        }else if(val[0] === 'addHouse_hand_over_card'){
+        }else if(val[0] === 'renewHouse_hand_over_card'){
           this.params.checkin_photo = val[1];
-        }else if(val[0] === 'addHouse_proxy_card'){
+        }else if(val[0] === 'renewHouse_proxy_card'){
           this.params.auth_photo = val[1];
-        }else if(val[0] === 'addHouse_deposit_card'){
+        }else if(val[0] === 'renewHouse_deposit_card'){
           this.params.deposit_photo = val[1];
-        }else if(val[0] === 'addHouse_commitment_card'){
+        }else if(val[0] === 'renewHouse_commitment_card'){
           this.params.promise = val[1];
-        }else if(val[0] === 'addHouse_other_card'){
+        }else if(val[0] === 'renewHouse_other_card'){
           this.params.other_photo = val[1];
-        }else if(val[0] === 'checkout_card'){
+        }else if(val[0] === 'renew_checkout_card'){
           this.params.checkout_photo = val[1];
-        }else if(val[0] === 'checkout_settle_card'){
+        }else if(val[0] === 'renew_checkout_settle_card'){
           this.params.checkout_settle_photo = val[1];
         }
       },
@@ -1141,7 +1141,7 @@
   };
 </script>
 <style lang="scss" scoped="">
-  #addHouseResources{
+  #renewHouseResources{
     .el-dialog__wrapper{
       .el-dialog{
         .el-dialog__body{

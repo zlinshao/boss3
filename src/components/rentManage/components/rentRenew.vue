@@ -421,46 +421,46 @@
             <div class="scroll_bar">
               <el-form label-width="100px">
                 <el-form-item label="证件照片" required="">
-                  <UpLoad :ID="'addRent_id_card'" :isClear="isClear" :editImage="identity_photo"
+                  <UpLoad :ID="'renewRent_id_card'" :isClear="isClear" :editImage="identity_photo"
                           @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="合同照片" required="">
-                  <UpLoad :ID="'addRent_contract_card'" :isClear="isClear" :editImage="photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'renewRent_contract_card'" :isClear="isClear" :editImage="photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="水表照片">
-                  <UpLoad :ID="'addRent_water_card'" :isClear="isClear" :editImage="water_photo"
+                  <UpLoad :ID="'renewRent_water_card'" :isClear="isClear" :editImage="water_photo"
                           @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="电表照片">
-                  <UpLoad :ID="'addRent_ele_card'" :isClear="isClear" :editImage="electricity_photo"
+                  <UpLoad :ID="'renewRent_ele_card'" :isClear="isClear" :editImage="electricity_photo"
                           @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="燃气表照片">
-                  <UpLoad :ID="'addRent_gas_card'" :isClear="isClear" :editImage="gas_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'renewRent_gas_card'" :isClear="isClear" :editImage="gas_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="交接单照片">
-                  <UpLoad :ID="'addRent_hand_over_card'" :isClear="isClear" :editImage="checkin_photo"
+                  <UpLoad :ID="'renewRent_hand_over_card'" :isClear="isClear" :editImage="checkin_photo"
                           @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="委托书" required="">
-                  <UpLoad :ID="'addRent_certificate_photo'" :isClear="isClear" :editImage="certificate_photo"
+                  <UpLoad :ID="'renewRent_certificate_photo'" :isClear="isClear" :editImage="certificate_photo"
                           @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="押金收条" required="">
-                  <UpLoad :ID="'addRent_deposit_card'" :isClear="isClear" :editImage="deposit_photo"
+                  <UpLoad :ID="'renewRent_deposit_card'" :isClear="isClear" :editImage="deposit_photo"
                           @getImg="getImg"></UpLoad>
                 </el-form-item>
 
                 <el-form-item label="补充照片">
-                  <UpLoad :ID="'addRent_other_card'" :isClear="isClear" :editImage="other_photo"
+                  <UpLoad :ID="'renewRent_other_card'" :isClear="isClear" :editImage="other_photo"
                           @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="退租交接单照片">
-                  <UpLoad :ID="'checkout_card'" :isClear="isClear" :editImage="checkout_photo"
+                  <UpLoad :ID="'renewRent_checkout_card'" :isClear="isClear" :editImage="checkout_photo"
                           @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="退租结算照片">
-                  <UpLoad :ID="'checkout_settle_card'" :isClear="isClear" :editImage="checkout_settle_photo"
+                  <UpLoad :ID="'renewRent_checkout_settle_card'" :isClear="isClear" :editImage="checkout_settle_photo"
                           @getImg="getImg"></UpLoad>
                 </el-form-item>
               </el-form>
@@ -877,27 +877,27 @@
       },
       getImg(val){
         this.isUpPic = val[2];
-        if (val[0] === 'addRent_id_card') {
+        if (val[0] === 'renewRent_id_card') {
           this.params.identity_photo = val[1];
-        } else if (val[0] === 'addRent_contract_card') {
+        } else if (val[0] === 'renewRent_contract_card') {
           this.params.photo = val[1];
-        } else if (val[0] === 'addRent_water_card') {
+        } else if (val[0] === 'renewRent_water_card') {
           this.params.water_photo = val[1];
-        } else if (val[0] === 'addRent_ele_card') {
+        } else if (val[0] === 'renewRent_ele_card') {
           this.params.electricity_photo = val[1];
-        } else if (val[0] === 'addRent_gas_card') {
+        } else if (val[0] === 'renewRent_gas_card') {
           this.params.gas_photo = val[1];
-        } else if (val[0] === 'addRent_hand_over_card') {
+        } else if (val[0] === 'renewRent_hand_over_card') {
           this.params.checkin_photo = val[1];
-        } else if (val[0] === 'addRent_certificate_photo') {
+        } else if (val[0] === 'renewRent_certificate_photo') {
           this.params.certificate_photo = val[1];
-        } else if (val[0] === 'addRent_deposit_card') {
+        } else if (val[0] === 'renewRent_deposit_card') {
           this.params.deposit_photo = val[1];
-        } else if (val[0] === 'addRent_other_card') {
+        } else if (val[0] === 'renewRent_other_card') {
           this.params.other_photo = val[1];
-        } else if (val[0] === 'checkout_card') {
+        } else if (val[0] === 'renewRent_checkout_card') {
           this.params.checkout_photo = val[1];
-        } else if (val[0] === 'checkout_settle_card') {
+        } else if (val[0] === 'renewRent_checkout_settle_card') {
           this.params.checkout_settle_photo = val[1];
         }
       },
