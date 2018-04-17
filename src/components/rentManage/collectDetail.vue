@@ -10,9 +10,9 @@
         <el-step title="房源信息" @click.native="changeStep(0)"></el-step>
         <el-step title="房东信息" @click.native="changeStep(1)"></el-step>
         <el-step title="合同信息" @click.native="changeStep(2)"></el-step>
-        <el-step title="财务信息" @click.native="changeStep(3)"></el-step>
+        <!--<el-step title="财务信息" @click.native="changeStep(3)"></el-step>-->
         <el-step title="回访记录" @click.native="changeStep(4)"></el-step>
-        <el-step title="操作历史" @click.native="changeStep(5)"></el-step>
+        <!--<el-step title="操作历史" @click.native="changeStep(5)"></el-step>-->
       </el-steps>
     </div>
 
@@ -414,7 +414,7 @@
             </el-row>
             <el-row>
               <el-col :span="24">
-                <el-form-item label="证件照片">
+                <el-form-item label="其他照片">
                   <div>
                     <el-tabs type="border-card">
                       <el-tab-pane>
@@ -571,7 +571,7 @@
             </el-row>
           </el-form>
         </div>
-
+        <!--
         <div id="financeId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
           <div class="title">财务信息</div>
         </div>
@@ -638,40 +638,33 @@
             </el-row>
           </el-form>
         </div>
-
+-->
         <div id="returnId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
           <div class="title">回访信息</div>
         </div>
 
         <div class="returnVisitInfo">
           <el-form size="small" label-width="180px">
-            <el-row>
+            <el-row v-for="item in reBackData" :key="item.id">
               <el-col :span="8">
                 <el-form-item label="回访时间">
-                  <div class="content"></div>
+                  <div class="content">{{item.create_time}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="回访结果">
-                  <div class="content"></div>
+                  <div class="content">{{item.content}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="回访满意度">
-                  <div class="content"></div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="备注">
-                  <div class="content"></div>
+                <el-form-item label="回访人">
+                  <div class="content">{{item.simple_staff.real_name}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
           </el-form>
         </div>
-
+<!--
         <div id="historyId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
           <div class="title">操作历史</div>
         </div>
@@ -689,6 +682,7 @@
             </el-row>
           </el-form>
         </div>
+        -->
       </div>
     </div>
 
@@ -775,7 +769,8 @@
           is_send: null,
         },
         receiverNames: '',
-        loadingStatus : true
+        loadingStatus : true,
+        reBackData :[],
       }
     },
     beforeCreate(){
@@ -787,6 +782,7 @@
     mounted() {
       this.initData();
       this.getContractDetail();
+      this.getReBackDetail();
       this.houseId = document.getElementById('houseId').offsetTop - 201;
       this.ownerId = document.getElementById('ownerId').offsetTop - 201;
       this.contractId = document.getElementById('contractId').offsetTop - 201;
@@ -867,6 +863,15 @@
             this.contractInfo = res.data.data;
             this.customersInfo = res.data.data.customers;
 
+          }
+        })
+      },
+      getReBackDetail(){
+        this.$http.get(globalConfig.server+'contract/feedback?contract_id='+this.contract_id+'&category=1').then((res) => {
+          if(res.data.code === '20000'){
+            this.reBackData = res.data.data.data;
+          }else {
+            this.reBackData = [];
           }
         })
       },
