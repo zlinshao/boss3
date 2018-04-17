@@ -421,7 +421,7 @@
         collectVacationDialogVisible:false,
         params: {
           contract_id : '',
-          module : '2',
+          module : '1',
 
           check_time : '',
           check_type : 331,
@@ -477,8 +477,6 @@
           TV_fees : '',
           network_fees : '',
         },
-        tableData:[],
-        value1:'',
         isClear : false,
         isDictionary:false,
         dictionary:[],
@@ -526,7 +524,8 @@
       },
       collectVacationDialogVisible(val){
         if(!val){
-          this.$emit('close')
+          this.$emit('close');
+          this.initData();
         }else {
           this.isClear = false;
           if(!this.isDictionary){
@@ -556,7 +555,6 @@
       },
 
       confirmAdd(){
-//        this.collectVacationDialogVisible = false;
         this.$http.post(globalConfig.server+'customer/check_out',this.params).then((res) => {
           if(res.data.code === '20010'){
             this.$notify.success({
@@ -572,7 +570,68 @@
             })
           }
         })
-      }
+      },
+      initData(){
+        this.params = {
+          contract_id : this.collectContractId,
+          module : '2',
+
+          check_time : '',
+          check_type : 331,
+          profit:'',
+          bank_num : '',
+          account_bank : '',
+          branch_bank : '',
+          account_name : '',
+          reason : '',
+          compensation : '',
+          image_pic : [],
+
+          refund_deposit : '',
+          residual_rent : '',
+          viewing_fee : '',
+          property_management_fee : '',
+          water_fee : '',
+          electricity_fee : '',
+          gas_fee : '',
+
+          water_last : '',
+          water_now : '',
+          water_unit_price : '',
+          water_late_payment : '',
+
+          electricity_peak_last : '',
+          electricity_peak_now : '',
+          electricity_peak_unit_price : '',
+          electricity_peak_late_payment : '',
+
+          electricity_valley_last : '',
+          electricity_valley_now : '',
+          electricity_valley_unit_price : '',
+          electricity_valley_late_payment : '',
+
+          gas_last : '',
+          gas_now : '',
+          gas_unit_price : '',
+          gas_late_payment : '',
+
+          property_management_last : '',
+          property_management_now : '',
+          property_management_electricity : '',
+          property_management_water : '',
+          property_management_total_fees : '',
+
+          liquidated_damages : '',
+          trash_fees : '',
+          cleaning_fees : '',
+          repair_compensation_fees : '',
+          other_fees : '',
+          overtime_rent : '',
+          TV_fees : '',
+          network_fees : '',
+        };
+        this.isClear = false;
+      },
     }
   };
 </script>

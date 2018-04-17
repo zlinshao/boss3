@@ -123,7 +123,7 @@
           this.$http.post(globalConfig.server+'core/decoration',this.formInline).then((res) => {
             if(res.data.code === '30010'){
               this.addDecorateDialogVisible = false;
-              this.$emit('close','success_tab');
+              this.$emit('close','success_tab_second');
               this.$notify.success({
                 title:'成功',
                 message:res.data.msg,
