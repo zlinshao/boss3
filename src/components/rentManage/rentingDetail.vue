@@ -1,5 +1,9 @@
 <template>
-  <div id="rentingDetail">
+  <div id="rentingDetail"
+       v-loading="loadingStatus"
+       element-loading-text="拼命加载中"
+       element-loading-spinner="el-icon-loading"
+       element-loading-background="rgba(255, 255, 255, .8)">
 
     <div class="stepLine">
       <el-steps direction="vertical" :active="steps" style="cursor: pointer">
@@ -668,6 +672,7 @@
           is_send: null,
         },
         receiverNames: '',
+        loadingStatus : true,
       }
     },
     created(){
@@ -751,6 +756,7 @@
       },
       getContractDetail(){
         this.$http.get(globalConfig.server+'lease/collect/'+this.$route.query.collectId).then((res) =>{
+          this.loadingStatus = false;
           if(res.data.code === '61010'){
             this.houseInfo = res.data.data;
 

@@ -92,7 +92,7 @@
               style="width: 100%">
               <el-table-column
                 type="selection"
-                width="35">
+                width="30">
               </el-table-column>
               <el-table-column
                 label="地址">

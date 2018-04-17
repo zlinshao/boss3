@@ -10,39 +10,33 @@
         style="width: 100%">
         <el-table-column
           prop="check_time"
-          label="退/换房时间">
+          label="退房时间">
         </el-table-column>
         <el-table-column
           prop="check_types"
-          label="退/换房状态">
+          label="退房状态">
         </el-table-column>
-        <el-table-column
-          prop="house_type"
-          label="退/换房方">
-        </el-table-column>
-        <el-table-column
-          prop="create_time"
-          label="合同开始时间">
-        </el-table-column>
-        <el-table-column
-          prop="price"
-          label="合同结束时间">
-        </el-table-column>
+
+
         <el-table-column
           prop="pay_type"
           label="结算详情">
         </el-table-column>
         <el-table-column
-          prop="vacancy"
+          prop="total_fees"
+          label="总费用">
+        </el-table-column>
+        <el-table-column
+          prop="should_be_returned_fees"
           label="应退费用">
         </el-table-column>
         <el-table-column
-          prop="contract_year"
-          label="扣款金额">
+          prop="deduct_energy_fees"
+          label="能源费用">
         </el-table-column>
         <el-table-column
-          prop="start_time"
-          label="实际退款">
+          prop="others_fees"
+          label="其他费用">
         </el-table-column>
         <el-table-column
           prop="start_time"
@@ -55,6 +49,13 @@
         <el-table-column
           prop="start_time"
           label="操作人">
+        </el-table-column>
+        <el-table-column
+          label="结算状态">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status == 2">已结算</span>
+            <el-button size="mini" type="text" v-else="" @click="check_out(scope.row.id)">未结算</el-button>
+          </template>
         </el-table-column>
       </el-table>
 
@@ -137,6 +138,30 @@
         currentChange(val){
           this.params.page = val;
           this.getData();
+        },
+
+        check_out(id){
+          this.$confirm('结算后将不可撤回, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$http.put(globalConfig.server+'customer/check_out/status/'+id).then((res) => {
+              if(res.data.code === '20060'){
+                this.$notify.success({
+                  title:'成功',
+                  message:res.data.msg,
+                });
+                this.getData();
+              }
+            })
+          }).catch(() => {
+            this.$notify.success({
+              title:'消息',
+              message:'已取消结算',
+            })
+          });
+
         },
       }
     }

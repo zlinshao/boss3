@@ -105,6 +105,7 @@
 		color: #222;
     &:hover{
       background-color: #6a8dfb;
+      color: #ffffff;
     }
 	}
   button[disabled]{
@@ -122,9 +123,6 @@
 		background-color: #6a8dfb;
 	}
 
-	li:hover > button > span {
-		color: #ffffff;
-	}
 	button > span {
 		padding-left: 20px;
 		font-size: 13px;

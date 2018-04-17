@@ -1,5 +1,9 @@
 <template>
-  <div id="rentingDetail">
+  <div id="rentingDetail"
+       v-loading="loadingStatus"
+       element-loading-text="拼命加载中"
+       element-loading-spinner="el-icon-loading"
+       element-loading-background="rgba(255, 255, 255, .8)">
 
     <div class="stepLine">
       <el-steps direction="vertical" :active="steps" style="cursor: pointer">
@@ -738,8 +742,8 @@
 </template>
 
 <script>
-  import Organization from '../common/organization.vue';
 
+  import Organization from '../common/organization.vue';
   export default {
     components: {Organization},
     data() {
@@ -771,7 +775,11 @@
           is_send: null,
         },
         receiverNames: '',
+        loadingStatus : true
       }
+    },
+    beforeCreate(){
+
     },
     created() {
       this.getDictionary();
@@ -854,6 +862,7 @@
       },
       getContractDetail() {
         this.$http.get(globalConfig.server + 'lease/collect/' + this.contract_id).then((res) => {
+            this.loadingStatus = false;
           if (res.data.code === '61010') {
             this.contractInfo = res.data.data;
             this.customersInfo = res.data.data.customers;
