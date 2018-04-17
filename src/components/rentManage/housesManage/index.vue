@@ -513,7 +513,7 @@
           {clickIndex: 'upLoadDialog', headIcon: 'el-icon-upload2', label: '上传房屋照片',},
           {clickIndex: 'addFollowDialog', headIcon: 'el-icon-circle-plus-outline', label: '添加跟进记录',},
           {clickIndex: 'addDecorateDialog', headIcon: 'el-icon-circle-plus-outline', label: '添加装修记录',},
-          {clickIndex: 'addEarlyWarningDialog', headIcon: 'el-icon-circle-plus-outline', label: '添加预警状态',},
+          {clickIndex: 'addEarlyWarningDialog', headIcon: 'el-icon-circle-plus-outline', label: '调整预警状态',},
         ];
         this.contextMenuParam(event);
       },
@@ -549,6 +549,7 @@
           this.getData();
         }else if (val === 'success_tab'){
           this.changeHouseStatus = true;
+          this.getData();
         }
       },
       //关闭右键菜单

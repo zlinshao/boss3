@@ -20,7 +20,7 @@
 
           <el-row>
             <el-col :span="24">
-              <el-form-item label="调整原因">
+              <el-form-item label="调整原因" required="">
                 <el-input type="textarea" v-model="formInline.reason" placeholder="请输入内容"></el-input>
               </el-form-item>
             </el-col>
@@ -28,7 +28,7 @@
 
           <el-row>
             <el-col :span="24">
-              <el-form-item label="上传图片">
+              <el-form-item label="上传图片" required="">
                 <UpLoad :ID="'earlyWarning_pic'" :isClear="isClear"  @getImg="getImg"></UpLoad>
               </el-form-item>
             </el-col>
