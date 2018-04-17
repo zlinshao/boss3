@@ -38,17 +38,18 @@
           prop="others_fees"
           label="其他费用">
         </el-table-column>
+
         <el-table-column
-          prop="start_time"
-          label="退租状态">
-        </el-table-column>
-        <el-table-column
-          prop="start_time"
           label="结算人">
+          <template slot-scope="scope">
+            <span v-if="scope.row.creators&&scope.row.creators.name">{{scope.row.creators.name}}</span>
+          </template>
         </el-table-column>
         <el-table-column
-          prop="start_time"
           label="操作人">
+          <template slot-scope="scope">
+            <span v-if="scope.row.settlers&&scope.row.settlers.name">{{scope.row.settlers.name}}</span>
+          </template>
         </el-table-column>
         <el-table-column
           label="结算状态">
