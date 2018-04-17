@@ -932,7 +932,6 @@
 <style scoped lang="scss">
   i.iconfont.icon-bianji--:hover{
     border-radius: 5px;
-    box-shadow: 0 4px 25px 0 #9093999c, 0 0 10px 0 #909399;
   }
   #rentingDetail {
     height: 100%;
