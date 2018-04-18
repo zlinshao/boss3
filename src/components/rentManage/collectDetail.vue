@@ -968,6 +968,11 @@
                 message:res.data.msg,
               });
               this.getContractDetail();
+            }else {
+              this.$notify.warning({
+                title:'警告',
+                message:res.data.msg,
+              });
             }
           })
         }).catch(() => {

@@ -85,17 +85,15 @@
             <div class="title" style="color: #7ee8a6;">
               <span style="border-left: 4px solid #7ee8a6;"></span>公告信息
             </div>
-            <div v-if="noticeInfofirst.type == 1"><img @click="openMore(noticeInfofirst)"
-                                                       src="./../assets/images/biaoyang.png"
-                                                       style="width: 100%;height: 195px;"></div>
-            <div v-if="noticeInfofirst.type == 2"><img @click="openMore(noticeInfofirst)"
-                                                       src="./../assets/images/chengfa.png"
-                                                       style="width: 100%;height: 195px;"></div>
-            <div v-if="noticeInfofirst.type == 3"><img @click="openMore(noticeInfofirst)"
-                                                       src="./../assets/images/tongzhi.png"
-                                                       style="width: 100%;height: 195px;"></div>
+            <div v-if="noticeInfofirst && noticeInfofirst.type == 1">
+              <img @click="openMore(noticeInfofirst)" src="./../assets/images/biaoyang.png" style="width: 100%;height: 195px;">
+            </div>
+            <div v-if="noticeInfofirst && noticeInfofirst.type == 2">
+              <img @click="openMore(noticeInfofirst)" src="./../assets/images/chengfa.png" style="width: 100%;height: 195px;"></div>
+            <div v-if="noticeInfofirst && noticeInfofirst.type == 3">
+              <img @click="openMore(noticeInfofirst)" src="./../assets/images/tongzhi.png" style="width: 100%;height: 195px;"></div>
             <div class="rightContent">
-              <p class="info_title text_over_norwap" @click="openMore(noticeInfofirst)">{{noticeInfofirst.title}}</p>
+              <p class="info_title text_over_norwap" v-if="noticeInfofirst" @click="openMore(noticeInfofirst)">{{noticeInfofirst.title}}</p>
               <div class="clearfix">
                 <span>{{noticeInfofirst.create_time}}</span>
                 <span style="float: right;">
@@ -114,20 +112,14 @@
               <div class="clearfix list_gonggao" v-for="(item, index) in noticeInfo" v-if='index>0 && index<5'
                    :key="index">
 
-                <div v-if="item.type == 1" style="display: inline-block;float: left;"><img @click="openMore(item)"
-                                                                                           src="./../assets/images/biaoyang.png"
-                                                                                           height="95" width="180"
-                                                                                           style="border-radius:5px;">
+                <div v-if="item.type == 1" style="display: inline-block;float: left;">
+                  <img @click="openMore(item)" src="./../assets/images/biaoyang.png" height="95" width="180" style="border-radius:5px;">
                 </div>
-                <div v-if="item.type == 2" style="display: inline-block;float: left;"><img @click="openMore(item)"
-                                                                                           src="./../assets/images/chengfa.png"
-                                                                                           height="95" width="180"
-                                                                                           style="border-radius:5px;">
+                <div v-if="item.type == 2" style="display: inline-block;float: left;">
+                  <img @click="openMore(item)" src="./../assets/images/chengfa.png" height="95" width="180" style="border-radius:5px;">
                 </div>
-                <div v-if="item.type == 3" style="display: inline-block;float: left;"><img @click="openMore(item)"
-                                                                                           src="./../assets/images/tongzhi.png"
-                                                                                           height="95" width="180"
-                                                                                           style="border-radius:5px;">
+                <div v-if="item.type == 3" style="display: inline-block;float: left;">
+                  <img @click="openMore(item)" src="./../assets/images/tongzhi.png" height="95" width="180" style="border-radius:5px;">
                 </div>
                 <div style="padding-left: 200px;">
                   <p @click="openMore(item)" class="info_title text_over_norwap">{{item.title}}</p>
