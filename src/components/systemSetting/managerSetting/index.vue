@@ -16,9 +16,9 @@
       <el-tab-pane label="权限管理" name="fifth">
         <PowerManage></PowerManage>
       </el-tab-pane>
-      <el-tab-pane label="小区管理" name="sixth">
-        <VillageManage></VillageManage>
-      </el-tab-pane>
+      <!--<el-tab-pane label="小区管理" name="sixth">-->
+        <!--<VillageManage></VillageManage>-->
+      <!--</el-tab-pane>-->
     </el-tabs>
   </div>
 </template>

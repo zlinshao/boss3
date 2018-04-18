@@ -94,7 +94,7 @@ import ModuleSetting from '../components/systemSetting/moduleSetting/index.vue' 
 // import UserDictionary from '../comments/systemSetting/userDictionary/index.vue'                        //用户字典
 // import RoleManage from '../comments/systemSetting/roleManage/index.vue'                                //角色管理
 // import PowerManage from '../comments/systemSetting/powerManage/index.vue'                              //权限管理
-import VillageManage from '../components/systemSetting/managerSetting/villageManage/index.vue'                          //小区管理
+import VillageManage from '../components/systemSetting/managerSetting/villageManage/index.vue'              //小区管理
 import VillageDetail from '../components/systemSetting/managerSetting/villageManage/villageDetail.vue'      //小区管理详情
 import ManagerSetting from '../components/systemSetting/managerSetting/index.vue'                           //管理员设置
 

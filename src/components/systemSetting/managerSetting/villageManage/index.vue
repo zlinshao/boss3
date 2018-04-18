@@ -1,6 +1,6 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
-    <div class="highRanking" style=" position: absolute; top: 122px; right: 20px;">
+    <div class="highRanking">
       <div class="highSearch">
         <el-form :inline="true" onsubmit="return false" size="mini">
           <el-form-item>
@@ -152,6 +152,12 @@
         label="地址">
       </el-table-column>
       <el-table-column
+        label="地域">
+        <template slot-scope="scope">
+            {{scope.row.province_name}}&nbsp;-&nbsp;{{scope.row.city_name}}&nbsp;-&nbsp;{{scope.row.area_name}}
+        </template>
+      </el-table-column>
+      <el-table-column
         prop="village_alias"
         label="小区别名">
       </el-table-column>
@@ -276,6 +282,9 @@
               let list = {};
               list.id = data[i].id;
               list.village_name = data[i].village_name;
+              list.province_name = data[i].province_name;
+              list.city_name = data[i].city_name;
+              list.area_name = data[i].area_name;
               list.address = data[i].address;
               list.village_alias = data[i].village_alias !== null?data[i].village_alias: '暂无信息';
               list.house_types = data[i].house_types !== null?data[i].house_types: '暂无信息';
