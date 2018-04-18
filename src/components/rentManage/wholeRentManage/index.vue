@@ -822,7 +822,7 @@
               {clickIndex: 'increaseGoodsDialog', label: '物品增进',}
             ]
           },
-//          {clickIndex: 'addCollectRepairDialog', headIcon: 'el-icons-fa-gear', label: '维修',},
+         {clickIndex: 'addCollectRepairDialog', headIcon: 'el-icons-fa-gear', label: '维修',},
 //          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
           {clickIndex: 'visitRecordDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加回访',},
         ];
@@ -898,7 +898,7 @@
           {clickIndex: 'rentRenewDialog', headIcon: 'el-icon-share', label: '租客续约',},
           {clickIndex: 'rentChangeRoomDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '租客调房',},
 //          {clickIndex: 'ownerArrearsDialog', headIcon: 'el-icons-fa-cny', label: '租客欠款',},
-//          {clickIndex: 'addRentRepairDialog', headIcon: 'el-icons-fa-gear', label: '报修',},
+         {clickIndex: 'addRentRepairDialog', headIcon: 'el-icons-fa-gear', label: '报修',},
 //          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
           {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单',},
           {clickIndex: 'visitRecordDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加回访',},

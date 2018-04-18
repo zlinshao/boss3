@@ -38,7 +38,7 @@
       <el-col :span="18">
         <div class="border right">
           <div class="top">
-            <div>{{department_name}}</div>
+            <div>{{department_name}}<span v-if="departManageName" style="color: #cc6262;font-size: 12px;"> ( <i class="iconfont icon-fuzeren"></i> {{departManageName}} )</span>   </div>
             <!--<div @click="sortDepartment">-->
             <!--<el-button size="mini">部门排序</el-button>-->
             <!--&lt;!&ndash;<el-button v-if="isDepartment" style="color: #ffffff" type="text">取消排序</el-button>&ndash;&gt;-->
@@ -544,7 +544,7 @@
       </span>
     </el-dialog>
 
-    <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
+    <Organization :organizationDialog="organizationDialog" @close="closeOrganization" :type="type" @selectMember="selectMember"></Organization>
     <EditDepart :editDepartDialog="editDepartDialog" :departId="departId" @close="closeEditDepart"></EditDepart>
     <AddStaff :addStaffDialog="addStaffDialog" :isEdit="isEdit" :editId="editId" @close="closeAddStaff"
               :departmentId="department_id"></AddStaff>
@@ -675,6 +675,9 @@
         department: '',  //部门
         currentPost: '',  //岗位
         currentPosition: '', //职位
+        type: '',
+        setManageDepartId: '',
+        departManageName: '',
       }
     },
     mounted() {
@@ -788,6 +791,7 @@
             this.params.org_id = data.id;
             this.department_id = data.id;
             this.department_name = data.name;
+            this.departManageName = data.leader && data.leader.name;
           }
         });
       },
@@ -817,6 +821,7 @@
         this.params.org_id = data.id;
         this.department_id = data.id;
         this.department_name = data.name;
+        this.departManageName = data.leader && data.leader.name;
       },
       nodeExpand(data, node, store) {
         // if(this.defaultExpandKeys.indexOf(data.id)<0){
@@ -827,6 +832,29 @@
         this.defaultExpandKeys.filter((x) => {
           return x !== data.id;
         })
+      },
+      handleSet(s, d, n){ //设置负责人
+        this.organizationDialog = true;
+        this.type = 'staff';
+        this.setManageDepartId = d.id;
+      },
+      selectMember(val){
+        if(val){
+          this.$http.put(globalConfig.server_user+'organizations/'+this.setManageDepartId, {leader_id: val[0].id}).then((res)=>{
+            if(res.data.status === 'success'){
+              this.$notify.success({
+                title: '成功',
+                message: '设置负责人成功'
+              });
+              this.getDepart();
+            }else{
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.message
+              })
+            }
+          });
+        }
       },
       handleAdd(s, d, n) {//增加节点
         this.addDepart(d);
@@ -1321,6 +1349,7 @@
             STORE: store,
           },
           on: {
+            nodeSet: ((s, d, n) => that.handleSet(s, d, n)),
             nodeAdd: ((s, d, n) => that.handleAdd(s, d, n)),
             nodeEdit: ((s, d, n) => that.handleEdit(s, d, n)),
             nodeDel: ((s, d, n) => that.handleDelete(s, d, n))

@@ -12,6 +12,7 @@
 			<span>{{DATA.name}}&nbsp;&nbsp; <span class="totalNumber"> ({{DATA.users}}人)</span></span>
 		</span>
 		<span class="tree-btn">
+			<i class="iconfont icon-fuzeren" @click.stop="nodeSet(STORE,DATA,NODE)"></i>
 			<i class="el-icon-plus" @click.stop="nodeAdd(STORE,DATA,NODE)"></i>
 			<i class="el-icon-edit" @click.stop="nodeEdit(STORE,DATA,NODE)"></i>
 			<i class="el-icon-delete" @click.stop="nodeDel(STORE,DATA,NODE)"></i>
@@ -24,6 +25,9 @@
 		name: 'treeExpand',
 		props: ['NODE', 'DATA', 'STORE', 'maxExpandId'],
 		methods: {
+      nodeSet(s,d,n){//设置负责人
+        this.$emit('nodeSet',s,d,n);
+      },
 			nodeAdd(s,d,n){//新增
 				this.$emit('nodeAdd',s,d,n);
 			},
