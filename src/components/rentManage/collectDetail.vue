@@ -180,7 +180,7 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="订单性质">
-                  <div class="content" v-if="contractInfo.type">公司单</div>
+                  <div class="content" v-if="contractInfo.type == 1">公司单</div>
                   <div class="content" v-else="">非公司单</div>
                 </el-form-item>
               </el-col>

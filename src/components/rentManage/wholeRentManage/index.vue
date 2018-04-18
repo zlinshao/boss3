@@ -285,8 +285,8 @@
           </div>
           <div class="tableBottom">
             <div class="right">
-              <div>未租房源 <span>5&nbsp;套</span></div>
-              <div>已定 <span>0&nbsp;套</span></div>
+              <!--<div>未租房源 <span>5&nbsp;套</span></div>-->
+              <!--<div>已定 <span>0&nbsp;套</span></div>-->
             </div>
 
             <div class="left">
@@ -453,8 +453,8 @@
           </div>
           <div class="tableBottom">
             <div class="right">
-              <div>本套相差 <span>0&nbsp;元</span></div>
-              <div>押金差 <span>0&nbsp;元</span></div>
+              <!--<div>本套相差 <span>0&nbsp;元</span></div>-->
+              <!--<div>押金差 <span>0&nbsp;元</span></div>-->
             </div>
             <div class="left">
               <el-pagination
