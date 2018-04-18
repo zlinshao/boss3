@@ -236,14 +236,26 @@
                   <el-table-column
                     prop="contract_number"
                     label="合同编号">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.contract_number">{{scope.row.contract_number}}</span>
+                      <span v-if="!scope.row.contract_number">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="bulletin_time"
                     label="上传时间">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.bulletin_time">{{scope.row.bulletin_time}}</span>
+                      <span v-if="!scope.row.bulletin_time">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="customer_name"
                     label="业主姓名">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.customer_name">{{scope.row.customer_name}}</span>
+                      <span v-if="!scope.row.customer_name">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="address"
@@ -260,42 +272,75 @@
                     <!--</el-popover>-->
                     <!--</div>-->
                     <!--</template>-->
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.address">{{scope.row.address}}</span>
+                      <span v-if="!scope.row.address">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="phone"
                     label="手机号码">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.phone">{{scope.row.phone}}</span>
+                      <span v-if="!scope.row.phone">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="end_date"
                     width="136px"
                     label="合同到期时间">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.end_date">{{scope.row.end_date}}</span>
+                      <span v-if="!scope.row.end_date">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="complete_date"
                     label="资料补齐时间">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.complete_date">{{scope.row.complete_date}}</span>
+                      <span v-if="!scope.row.complete_date">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="return_visit"
                     label="回访情况">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.return_visit">{{scope.row.return_visit}}</span>
+                      <span v-if="!scope.row.return_visit">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="staff_name"
                     width="80px;"
                     label="开单人">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.staff_name">{{scope.row.staff_name}}</span>
+                      <span v-if="!scope.row.staff_name">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="leader_name"
                     label="负责人">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>
+                      <span v-if="!scope.row.leader_name">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="department_name"
                     label="部门">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.department_name">{{scope.row.department_name}}</span>
+                      <span v-if="!scope.row.department_name">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="approval_status"
                     label="审核状态">
                     <template slot-scope="scope">
-                      <el-button class="btnStatus" type="primary" size="mini">{{scope.row.approval_status}}</el-button>
+                      <el-button class="btnStatus" type="primary" size="mini" v-if="scope.row.approval_status">{{scope.row.approval_status}}</el-button>
+                      <span v-if="!scope.row.approval_status">暂无</span>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -316,14 +361,26 @@
                   <el-table-column
                     prop="contract_number"
                     label="合同编号">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.contract_number">{{scope.row.contract_number}}</span>
+                      <span v-if="!scope.row.contract_number">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="bulletin_time"
                     label="上传时间">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.bulletin_time">{{scope.row.bulletin_time}}</span>
+                      <span v-if="!scope.row.bulletin_time">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="customer_name"
                     label="业主姓名">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.customer_name">{{scope.row.customer_name}}</span>
+                      <span v-if="!scope.row.customer_name">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="address"
@@ -340,42 +397,75 @@
                     <!--</el-popover>-->
                     <!--</div>-->
                     <!--</template>-->
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.address">{{scope.row.address}}</span>
+                      <span v-if="!scope.row.address">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="phone"
                     label="手机号码">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.phone">{{scope.row.phone}}</span>
+                      <span v-if="!scope.row.phone">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="end_date"
                     width="136px"
                     label="合同到期时间">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.end_date">{{scope.row.end_date}}</span>
+                      <span v-if="!scope.row.end_date">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="complete_date"
                     label="资料补齐时间">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.complete_date">{{scope.row.complete_date}}</span>
+                      <span v-if="!scope.row.complete_date">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="return_visit"
                     label="回访情况">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.return_visit">{{scope.row.return_visit}}</span>
+                      <span v-if="!scope.row.return_visit">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="staff_name"
                     width="80px"
                     label="开单人">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.staff_name">{{scope.row.staff_name}}</span>
+                      <span v-if="!scope.row.staff_name">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="leader_name"
                     label="负责人">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>
+                      <span v-if="!scope.row.leader_name">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="department_name"
                     label="部门">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.department_name">{{scope.row.department_name}}</span>
+                      <span v-if="!scope.row.department_name">暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     prop="approval_status"
                     label="审核状态">
                     <template slot-scope="scope">
-                      <el-button class="btnStatus" type="primary" size="mini">{{scope.row.approval_status}}</el-button>
+                      <el-button class="btnStatus" type="primary" size="mini" v-if="scope.row.approval_status">{{scope.row.approval_status}}</el-button>
+                      <span v-if="!scope.row.approval_status">暂无</span>
                     </template>
                   </el-table-column>
                 </el-table>

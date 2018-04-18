@@ -97,30 +97,58 @@
             <el-table-column
               prop="create_time"
               label="创建时间">
+              <template slot-scope="scope">
+                <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
+                <span v-if="!scope.row.create_time">暂无</span>
+              </template>
             </el-table-column>
             <el-table-column
               prop="contract_number"
               label="合同编号">
+              <template slot-scope="scope">
+                <span v-if="scope.row.contract_number">{{scope.row.contract_number}}</span>
+                <span v-if="!scope.row.contract_number">暂无</span>
+              </template>
             </el-table-column>
             <el-table-column
               prop="house_name"
               label="房屋地址">
+              <template slot-scope="scope">
+                <span v-if="scope.row.house_name">{{scope.row.house_name}}</span>
+                <span v-if="!scope.row.house_name">暂无</span>
+              </template>
             </el-table-column>
             <el-table-column
               prop="update_time"
               label="资料补齐时间">
+              <template slot-scope="scope">
+                <span v-if="scope.row.update_time">{{scope.row.update_time}}</span>
+                <span v-if="!scope.row.update_time">暂无</span>
+              </template>
             </el-table-column>
             <el-table-column
               prop="content"
               label="备忘内容">
+              <template slot-scope="scope">
+                <span v-if="scope.row.content">{{scope.row.content}}</span>
+                <span v-if="!scope.row.content">暂无</span>
+              </template>
             </el-table-column>
             <el-table-column
               prop="receivers"
               label="接收人">
+              <template slot-scope="scope">
+                <span v-if="scope.row.receivers">{{scope.row.receivers}}</span>
+                <span v-if="!scope.row.receivers">暂无</span>
+              </template>
             </el-table-column>
             <el-table-column
               prop="sender"
               label="发送人">
+              <template slot-scope="scope">
+                <span v-if="scope.row.sender">{{scope.row.sender}}</span>
+                <span v-if="!scope.row.sender">暂无</span>
+              </template>
             </el-table-column>
             <el-table-column
               prop="is_send"

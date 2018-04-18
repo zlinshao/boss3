@@ -87,6 +87,10 @@
           <el-table-column
             prop="staffs.name"
             label="发布人">
+            <template slot-scope="scope">
+              <span v-if="scope.row.staffs && scope.row.staffs.name">{{scope.row.staffs && scope.row.staffs.name}}</span>
+              <span v-if="!(scope.row.staffs && scope.row.staffs.name)">暂无</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="create_time"
