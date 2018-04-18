@@ -847,6 +847,7 @@
                 message: '设置负责人成功'
               });
               this.getDepart();
+              this.getDefaultData();
             }else{
               this.$notify.warning({
                 title: '警告',

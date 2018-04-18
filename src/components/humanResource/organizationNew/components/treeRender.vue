@@ -12,7 +12,7 @@
 			<span>{{DATA.name}}&nbsp;&nbsp; <span class="totalNumber"> ({{DATA.users}}人)</span></span>
 		</span>
 		<span class="tree-btn">
-			<i class="iconfont icon-fuzeren" @click.stop="nodeSet(STORE,DATA,NODE)"></i>
+			<i class="iconfont icon-fuzeren" @click="nodeSet(STORE,DATA,NODE)"></i>
 			<i class="el-icon-plus" @click.stop="nodeAdd(STORE,DATA,NODE)"></i>
 			<i class="el-icon-edit" @click.stop="nodeEdit(STORE,DATA,NODE)"></i>
 			<i class="el-icon-delete" @click.stop="nodeDel(STORE,DATA,NODE)"></i>
