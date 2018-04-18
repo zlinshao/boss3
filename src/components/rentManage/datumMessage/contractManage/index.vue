@@ -934,8 +934,14 @@
         this.lists = [
           {clickIndex: 'stick', headIcon: 'el-icons-fa-arrow-up', label: '置顶',},
           {clickIndex: 'cancel', headIcon: 'el-icons-fa-scissors', label: '作废',},
-          {clickIndex: '', headIcon: 'el-icons-fa-eye', label: '查看回访记录',},
-          {clickIndex: 'maintenanceDialog', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
+          {
+            clickIndex: '', headIcon: 'el-icons-fa-eye', tailIcon: 'el-icon-arrow-right', label: '回访记录',
+            children: [
+              {clickIndex: '', headIcon: 'el-icons-fa-eye', label: '查看回访记录'},
+              {clickIndex: '', headIcon: 'el-icons-fa-plus', label: '添加回访记录'},
+              ]
+          },
+          // {clickIndex: 'maintenanceDialog', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
           {clickIndex: 'lookMemorandum', headIcon: 'el-icon-edit', label: '查看合同备忘', contract_id: row.contract_id},
         ];
         this.contextMenuParam(event);
@@ -956,13 +962,13 @@
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              this.$message({
-                type: 'success',
+              this.$message.success({
+                title: '成功',
                 message: '置顶成功!'
               });
             }).catch(() => {
-              this.$message({
-                type: 'info',
+              this.$message.info({
+                title: '提示',
                 message: '已取消置顶'
               });
             });
@@ -973,13 +979,13 @@
               cancelButtonText: '取消',
               type: 'warning'
             }).then(() => {
-              this.$message({
-                type: 'success',
+              this.$message.success({
+                title: '成功',
                 message: '作废成功!'
               });
             }).catch(() => {
-              this.$message({
-                type: 'info',
+              this.$message.info({
+                title: '提示',
                 message: '已取消作废'
               });
             });

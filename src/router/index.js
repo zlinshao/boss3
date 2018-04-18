@@ -258,7 +258,7 @@ export default new Router({
           name: ' 合同管理 ',
           icon: "iconfont icon-hetong1"
         },
-        {path: '/sthToDo', component: SthToDo, name: ' 待办事项 ', icon: "iconfont icon-daiban"},
+        {path: '/examineAndApprove', component: ExamineAndApprove, name: ' 待办事项 ', icon: "iconfont icon-daiban"},
         // {path: '/examineAndApprove', component: ExamineAndApprove, name:  ' 审批 ', icon:"el-icon-edit-outline"},
         {path: '/sthToDoDetail_2', component: SthToDoDetail_2, name: ' 喜报 ', icon: "iconfont icon-xibaoguanli"},
         {path: '/integralManage', component: IntegralManage, name: ' 积分管理 ', icon: "iconfont icon-jifen"},
@@ -414,7 +414,7 @@ export default new Router({
 
         {path: '/articleMessage', component: ArticleMessage, name: '文章管理'},
 
-        {path: '/examineAndApprove', component: ExamineAndApprove, name: '审批管理'},
+        {path: '/examineAndApprove', component: ExamineAndApprove, name: '报备管理'},
 
         // {path: '/communication', component: Communication, name: '通讯管理',},
         // {path: '/programme', component: Programme, name: '日程管理',},
