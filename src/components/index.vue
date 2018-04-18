@@ -644,7 +644,9 @@
       //二级密码回调
       unlockFlag(val) {
         this.unlockFlagpart = val;
-        cookie.set("unlockFlagpart", val, {expires: 1});
+        var millisecondx = new Date().getTime();  
+        var expiresTimex = new Date(millisecondx + 60 * 1000 * 60 * 18); //设置18小时缓存
+        cookie.set("unlockFlagpart", val, {expires: expiresTimex});
         if (this.unlockFlagpart) {
           this.chinese = []
         }
