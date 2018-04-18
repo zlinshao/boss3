@@ -15,7 +15,7 @@ import JointRentManage from '../components/rentManage/jointRentManage/index.vue'
 // import ContractManage from '../components/rentManage/datumMessage/contractManage/index.vue'
 // import ClientManage from '../components/rentManage/datumMessage/clientManage/index.vue'
 import HousesManage from '../components/rentManage/housesManage/index.vue'                      //产品管控中心
-// import RepairManage from '../components/rentManage/repairManage/index.vue'
+import RepairManage from '../components/rentManage/repairManage/index.vue'
 import ClientManage from '../components/rentManage/datumMessage/clientManage/index.vue'         //客户管理
 import ContractManage from '../components/rentManage/datumMessage/contractManage/index.vue'     //合同管理
 import WorkOrderManage from '../components/rentManage/datumMessage/workOrderManage/index.vue'   //工单管理
@@ -310,7 +310,7 @@ export default new Router({
         //     {path: '/datumMessage/contractManage', component: ContractManage, name: '合同管理',},
         //   ]
         // },
-        // {path: '/repairManage', component: RepairManage, name: '维修管理',}
+        {path: '/repairManage', component: RepairManage, name: '维修管理',}
       ]
     },
 

@@ -589,7 +589,7 @@
       <!--<i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="el-icon-circle-plus"></i>-->
       <i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="iconfont icon-bianji--"></i>
     </div>
-    <div class="panelContent" id="panelContent" v-show="isPanel">
+    <div class="panelContent" id="panelContent" :class="{'div_fade': isPanel}">
         <div class="panel_header">
           <div style="color: #6a8dfb;font-size: 16px">
             房屋资料缺失项
@@ -610,8 +610,9 @@
             placeholder="请输入内容">
           </el-input>
         </div>
-        <div style="margin-bottom: 30px">
-          <el-form ref="form" :model="sizeForm" label-width="80px">
+      <div style="margin-bottom: 30px">
+        <el-form ref="form" :model="sizeForm" label-width="80px">
+          <el-col :span="18">
             <el-form-item label="选择通知人">
               <el-input readonly="" v-model="receiverNames" size="mini" @focus="selectPeople">
                 <template slot="append">
@@ -619,8 +620,9 @@
                 </template>
               </el-input>
             </el-form-item>
-          </el-form>
-        </div>
+          </el-col>
+        </el-form>
+      </div>
       <div style="text-align: center;clear: both;">
         <el-button size="mini" type="primary" @click="noteSave(1)">发 送</el-button>&nbsp;&nbsp;&nbsp;
         <el-button size="mini" type="primary" @click="noteSave(0)">保 存</el-button>
@@ -841,7 +843,15 @@
 
 <style scoped lang="scss">
   i.iconfont.icon-bianji--:hover{
-    border-radius: 5px;
+    box-shadow: 0 1px 14px 1px #909399;
+    border-radius: 6px;
+    transition: all .5s;
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+  .div_fade{
+    right: 230px!important;
   }
   #rentingDetail {
     height: 100%;
@@ -866,16 +876,16 @@
       border-radius: 6px;
       position: fixed;
       bottom: 100px;
-      right: 230px;
+      right: -550px;
       border: 1px solid rgba(64,158,255,.12);
       /*box-shadow: 0 2px 4px 0 rgba(64,158,255,.12), 0 0 6px 0 rgba(64,158,255,.04);*/
       padding: 0 10px;
       box-shadow: 0 0px 9px 0 #909399;
-      -webkit-transition:all 0.5s linear;
-      -moz-transition:all 0.5s linear;
-      -ms-transition:all 0.5s linear;
-      -o-transition:all 0.5s linear;
-      transition:all 0.5s linear;
+      -webkit-transition:all 0.3s linear;
+      -moz-transition:all 0.3s linear;
+      -ms-transition:all 0.3s linear;
+      -o-transition:all 0.3s linear;
+      transition:all 0.3s linear;
       .panel_header{
         height: 50px;
         display: flex;
