@@ -454,6 +454,7 @@
           this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
             globalConfig.personal = res.data.data.data;
+            this.loginDay = JSON.parse(localStorage.personal).data.loginday;
           });
       cookie.set("reFresh", true, {expires: 1});
       }
