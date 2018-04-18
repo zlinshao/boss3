@@ -21,9 +21,15 @@
         <h3>
           {{contractInfo.community_name}}  {{contractInfo.building}}-{{contractInfo.unit}}-{{contractInfo.doorplate}}</h3>
         <h3>
-          <el-button size="mini" type="primary" v-if="contractInfo.visit_status&&contractInfo.visit_status.id == 2" disabled="">已回访</el-button>
-          <el-button size="mini" type="primary" @click="check(1)"
-                     v-if="contractInfo.visit_status&&contractInfo.visit_status.id == 1">未回访</el-button>
+          <el-button size="mini" type="primary"
+                     v-if="contractInfo.visit_status&&contractInfo.visit_status.id == 3" disabled="">
+            {{contractInfo.visit_status.name}}
+          </el-button>
+
+          <el-button size="mini" type="primary"  @click="check(1)"
+                     v-if="contractInfo.visit_status&&contractInfo.visit_status.id == 2">
+            {{contractInfo.visit_status.name}}
+          </el-button>
 
           <el-button size="mini" type="danger" @click="reject" v-if="contractInfo.doc_status&&contractInfo.doc_status.id > 1">驳回</el-button>
           <el-button size="mini" type="primary" @click="check(0)" v-if="contractInfo.doc_status&&contractInfo.doc_status.id==1">
@@ -997,6 +1003,11 @@
                 message:res.data.msg,
               });
               this.getContractDetail();
+            }else {
+              this.$notify.warning({
+                title:'警告',
+                message:res.data.msg,
+              });
             }
           })
         }).catch(() => {
@@ -1093,7 +1104,7 @@
     }
 
     .el-button--mini {
-      width: 80px;
+      min-width: 80px;
     }
     /*.el-button--primary {*/
       /*background-color: #6a8dfb;*/
