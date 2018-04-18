@@ -81,8 +81,8 @@
       getData(){
         this.$http.get(globalConfig.server+'core/follow/'+this.followId).then((res) => {
           if(res.data.code === '20020'){
-              this.formInline.follow_type = Number(res.data.data.follow_type);
-              this.formInline.follow_content = res.data.data.follow_content;
+            this.formInline.follow_type = Number(res.data.data.follow_type);
+            this.formInline.follow_content = res.data.data.follow_content;
             let picObject = {};
             this.editImage = {};
             this.formInline.album_file = [];

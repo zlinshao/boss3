@@ -194,6 +194,16 @@
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
+
+              <el-table-column
+                prop="current_ready_days"
+                label="剩余合同时长(天)">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.lord_remainder_days">{{scope.row.lord_remainder_days}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+
               <el-table-column
                 label="预警状态">
                 <template slot-scope="scope">
