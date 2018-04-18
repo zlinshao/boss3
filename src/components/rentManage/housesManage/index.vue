@@ -9,7 +9,8 @@
             <el-button class="warningItem" type="text" style="color: #FFCC00">黄色预警房源:{{houseStatus.yellowHouse}}套</el-button>
             <el-button class="warningItem" type="text" style="color: #FF9900">橙色预警房源:{{houseStatus.orangeHouse}}套</el-button>
             <el-button class="warningItem" type="text" style="color: #FF3900">红色预警房源:{{houseStatus.redHouse}}套</el-button>
-            <el-button class="warningItem" type="text" style="color: #409EFF">现有房源: {{houseStatus.lord_end_at}}套</el-button>
+            <el-button class="warningItem" type="text" style="color: #409EFF">正在运营中房源: {{houseStatus.lord_end_at}}套</el-button>
+            <el-button class="warningItem" type="text" style="color: #409EFF">待收房源: {{houseStatus.wait_lord_at}}套</el-button>
           </div>
 
           <el-form :inline="true" size="mini" onsubmit="return false">

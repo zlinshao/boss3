@@ -55,7 +55,7 @@
           label="结算状态">
           <template slot-scope="scope">
             <span v-if="scope.row.status == 2">已结算</span>
-            <el-button size="mini" type="text" v-else="" @click="check_out(scope.row.id)">未结算</el-button>
+            <el-button size="mini" type="primary" v-else="" @click="check_out(scope.row.id)">未结算</el-button>
           </template>
         </el-table-column>
       </el-table>
