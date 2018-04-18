@@ -101,6 +101,11 @@
           <div class="blueTable">
             <el-table
               :data="tableData"
+              :empty-text = 'rentStatus'
+              v-loading="rentLoading"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(255, 255, 255, 0)"
               @row-dblclick="dblClickTable"
               style="width: 100%">
               <el-table-column
@@ -150,6 +155,8 @@ export default {
         search: "",
         department_id: ""
       },
+      rentStatus:' ',
+      rentLoading:false,
       departname: "",
       forms: [
         { id: "1", name: "表彰" },
@@ -205,11 +212,20 @@ export default {
   methods: {
     myData(val) {
       this.form.page = val;
+      this.rentStatus = " ";
+      this.rentLoading = true;
       this.$http
         .get(globalConfig.server + "exam/enroll", { params: this.form })
         .then(res => {
+          if(res.data.code == '36000'){
+          this.rentLoading = false;
           this.tableData = res.data.data.data;
           this.tableNumber = res.data.data.count;
+          }else{
+            this.rentStatus = '暂无数据';
+            this.tableNumber = 0;
+          }
+
         });
     },
     openOrganizationModal() {

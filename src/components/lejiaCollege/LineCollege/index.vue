@@ -101,6 +101,11 @@
           <div class="blueTable">
             <el-table
               :data="tableData"
+              :empty-text = 'rentStatus'
+              v-loading="rentLoading"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(255, 255, 255, 0)"
               @row-dblclick="dblClickTable"
               style="width: 100%">
               <el-table-column
@@ -161,7 +166,8 @@ export default {
       rentStatus: " ",
       rentLoading: false,
       organizationDialog: false,
-
+      rentStatus:' ',
+      rentLoading:false,
       pickerOptions2: {
         shortcuts: [
           {
@@ -205,11 +211,20 @@ export default {
   methods: {
     myData(val) {
       this.form.page = val;
+      this.rentStatus = " ";
+      this.rentLoading = true;  
       this.$http
         .get(globalConfig.server + "exam/result",)
         .then(res => {
-          this.tableData = res.data.data;
-          this.tableNumber = 1
+          if(res.data.code == '36010'){
+            this.rentLoading = false;
+            this.tableData = res.data.data;
+            this.tableNumber = 1
+          }else{
+            this.rentStatus = '暂无数据';
+            this.tableNumber =0;
+          }
+
         });
     },
     openOrganizationModal() {
