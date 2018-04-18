@@ -20,10 +20,24 @@
       <div class="top">
         <h3>{{contractInfo.community_name}}  {{contractInfo.building}}-{{contractInfo.unit}}-{{contractInfo.doorplate}}</h3>
         <h3>
-          <el-button size="mini" type="primary" v-if="false">已回访</el-button>
-          <el-button size="mini" type="danger">未回访</el-button>
-          <el-button size="mini" type="warning" v-if="false">驳回</el-button>
-          <el-button size="mini" type="success">通过</el-button>
+          <el-button size="mini" type="primary"
+                     v-if="contractInfo.visit_status&&contractInfo.visit_status.id == 2" disabled="">已回访</el-button>
+          <el-button size="mini" type="primary" @click="check(1)"
+                     v-if="contractInfo.visit_status&&contractInfo.visit_status.id == 1">未回访</el-button>
+
+          <el-button size="mini" type="danger" @click="reject"
+                     v-if="contractInfo.doc_status&&contractInfo.doc_status.id > 1">驳回</el-button>
+          <el-button size="mini" type="primary" @click="check(0)"
+                     v-if="contractInfo.doc_status&&contractInfo.doc_status.id==1">
+            {{contractInfo.doc_status.name}}
+          </el-button>
+          <el-button size="mini" type="primary" @click="check(0)"
+                     v-if="contractInfo.doc_status&&contractInfo.doc_status.id==2">{{contractInfo.doc_status.name}}</el-button>
+          <el-button size="mini" type="primary" @click="check(0)"
+                     v-if="contractInfo.doc_status&&contractInfo.doc_status.id==3">{{contractInfo.doc_status.name}}</el-button>
+          <el-button size="mini" type="success" v-if="contractInfo.doc_status&&contractInfo.doc_status.id == 4" disabled="">
+            {{contractInfo.doc_status.name}}
+          </el-button>
         </h3>
       </div>
       <div id="mainContent" class="main scroll_bar" @click.stop="getText($event)">
@@ -405,7 +419,7 @@
                       <el-tab-pane>
                         <span slot="label">
                           <el-badge is-dot class="item" v-if="Array.isArray(contractInfo.certificate_photo)">凭证照片</el-badge>
-                          <span v-else="">凭证照片</span>
+                          <span v-else="">截图凭证</span>
                         </span>
                         <div class="image">
                           <span v-if="Array.isArray(contractInfo.certificate_photo)">暂无照片</span>
@@ -666,6 +680,10 @@
         receiverNames: '',
         loadingStatus : true,
         reBackData :[],
+        approveParams:{
+          is_rent:1,
+          is_visit : 0,
+        }
       }
     },
     created(){
@@ -828,6 +846,53 @@
       },
       getText(e){
         console.log(e.target.innerText)
+      },
+      check(val){
+        this.approveParams.is_visit = val;
+        this.$confirm('您确认审核通过吗, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.put(globalConfig.server+'lease/status/approve/'+this.contract_id,this.approveParams).then((res) => {
+            if(res.data.code === '60610'){
+              this.$notify.success({
+                title:'成功',
+                message:res.data.msg,
+              });
+              this.getContractDetail();
+            }
+          })
+        }).catch(() => {
+          this.$notify.info({
+            title:'消息',
+            message:'已取消审核',
+          })
+        });
+
+      },
+      reject(){
+        this.approveParams.is_visit = 0;
+        this.$confirm('您确认审核通过吗, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.put(globalConfig.server + 'lease/status/reject/' + this.contract_id, this.approveParams).then((res) => {
+            if (res.data.code === '60610') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg,
+              });
+              this.getContractDetail();
+            }
+          })
+        }).catch(() => {
+          this.$notify.info({
+            title: '消息',
+            message: '已取消审核',
+          })
+        });
       }
     },
   }
@@ -906,26 +971,26 @@
     .el-button--mini {
       width: 80px;
     }
-    .el-button--primary {
-      background-color: #6a8dfb;
-      border-color: #6a8dfb;
-      box-shadow: 0 2px 8px 0 #6a8dfb;
-    }
-    .el-button--danger {
-      background-color: #fb4694;
-      border-color: #fb4694;
-      box-shadow: 0 2px 8px 0 #fb4694;
-    }
-    .el-button--warning {
-      background-color: #fdca41;
-      border-color: #fdca41;
-      box-shadow: 0 2px 8px 0 #fdca41;
-    }
-    .el-button--success {
-      background-color: #58d788;
-      border-color: #58d788;
-      box-shadow: 0 2px 8px 0 #58d788;
-    }
+    /*.el-button--primary {*/
+      /*background-color: #6a8dfb;*/
+      /*border-color: #6a8dfb;*/
+      /*box-shadow: 0 2px 8px 0 #6a8dfb;*/
+    /*}*/
+    /*.el-button--danger {*/
+      /*background-color: #fb4694;*/
+      /*border-color: #fb4694;*/
+      /*box-shadow: 0 2px 8px 0 #fb4694;*/
+    /*}*/
+    /*.el-button--warning {*/
+      /*background-color: #fdca41;*/
+      /*border-color: #fdca41;*/
+      /*box-shadow: 0 2px 8px 0 #fdca41;*/
+    /*}*/
+    /*.el-button--success {*/
+      /*background-color: #58d788;*/
+      /*border-color: #58d788;*/
+      /*box-shadow: 0 2px 8px 0 #58d788;*/
+    /*}*/
     @media screen and (min-width: 1280px) {
       .top {
         padding: 0 200px;

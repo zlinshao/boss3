@@ -520,7 +520,7 @@
         }
         this.rentData = row.renters;
         this.lists = [
-          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '编辑房屋信息',},
+          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '编辑房屋属性',},
           {clickIndex: 'upLoadDialog', headIcon: 'el-icon-upload2', label: '上传房屋照片',},
           {clickIndex: 'addFollowDialog', headIcon: 'iconfont icon-tianjiagengjinjilu', label: '添加跟进记录',},
           {clickIndex: 'addDecorateDialog', headIcon: 'iconfont icon-tianjiazhuangxiujilu', label: '添加装修记录',},

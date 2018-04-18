@@ -560,3 +560,13 @@ ul.el-menu.el-menu--inline{
     top: 5px !important;
   }
 }
+#rentVacation{
+  .el-input.is-disabled .el-input__inner {
+    color: #666 !important;
+    cursor: default !important;
+  }
+  .el-textarea.is-disabled .el-textarea__inner{
+    color: #666 !important;
+    cursor: default !important;
+  }
+}

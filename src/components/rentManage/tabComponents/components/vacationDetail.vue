@@ -1,31 +1,35 @@
 <template>
   <div id="rentVacation">
-    <el-dialog :close-on-click-modal="false" title="修改退房信息" :visible.sync="editCollectVacationVisible" width="60%">
+    <el-dialog :close-on-click-modal="false" title="退房详情" :visible.sync="vacationDetailVisible" width="65%">
       <div class="scroll_bar">
         <div class="title">客户-信息</div>
         <div class="table_border" >
           <table class="tableDetail">
             <tr>
               <td>合同编号</td>
-              <td>{{collectContractInfo.contract_number}}</td>
+              <td>{{contractInfo.contract_number}}</td>
               <td>地址</td>
-              <td>{{collectContractInfo.address}}</td>
+              <td>{{contractInfo.community_address}}</td>
               <td>电话</td>
-              <td>{{collectContractInfo.phone}}</td>
+              <td>
+                <span v-if="contractInfo.customers&&contractInfo.customers.length>0">
+                  {{contractInfo.customers[0].phone}}
+                </span>
+              </td>
             </tr>
             <tr>
               <td>中介费</td>
-              <td>{{collectContractInfo.agency}}</td>
+              <td>{{contractInfo.agency}}</td>
               <td>押金</td>
-              <td>{{collectContractInfo.deposit}}</td>
-              <td>合同期限</td>
-              <td>{{collectContractInfo.duration}}</td>
+              <td>{{contractInfo.deposit}}</td>
+              <td>签约人</td>
+              <td>{{contractInfo.staff_name}}</td>
             </tr>
             <tr>
               <td>合同开始时间</td>
-              <td>{{collectContractInfo.begin_date}}</td>
+              <td>{{contractInfo.begin_date}}</td>
               <td>合同结束时间</td>
-              <td>{{collectContractInfo.end_date}}</td>
+              <td>{{contractInfo.end_date}}</td>
               <td></td>
               <td></td>
             </tr>
@@ -37,25 +41,25 @@
             <el-row >
               <el-col :span="8">
                 <el-form-item label="退房时间" required>
-                  <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="params.check_time"
+                  <el-date-picker disabled type="date" value-format="yyyy-MM-dd" v-model="params.check_time"
                                   placeholder="选择日期" style="width: 100%;"></el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="退房性质" required>
-                  <el-select v-model="params.check_type" clearable="" placeholder="请选择退房性质" value="">
+                  <el-select disabled v-model="params.check_type" clearable="" placeholder="请选择退房性质" value="">
                     <el-option v-for="item in dictionary" :label="item.dictionary_name" :key="item.id" :value="item.id"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="8" v-if="params.check_type == 331">
                 <el-form-item label="违约盈利" required>
-                  <el-input placeholder="请输入内容" v-model="params.profit"></el-input>
+                  <el-input disabled placeholder="请输入内容" v-model="params.profit"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="姓名" required>
-                  <el-input placeholder="请输入内容" v-model="params.account_name"></el-input>
+                  <el-input disabled placeholder="请输入内容" v-model="params.account_name"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -63,17 +67,17 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="退款账号" required>
-                  <el-input placeholder="请输入内容" @blur="getBank" v-model="params.bank_num"></el-input>
+                  <el-input disabled placeholder="请输入内容" v-model="params.bank_num"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="开户行" required>
-                  <el-input placeholder="请输入内容" v-model="params.account_bank"></el-input>
+                  <el-input disabled placeholder="请输入内容" v-model="params.account_bank"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="支行" required>
-                  <el-input placeholder="请输入内容" v-model="params.branch_bank"></el-input>
+                  <el-input disabled placeholder="请输入内容" v-model="params.branch_bank"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -82,17 +86,17 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <div class="title">退房原因</div>
-            <el-input type="textarea" resize="none" v-model="params.reason" placeholder="请输入内容"></el-input>
+            <el-input disabled type="textarea" resize="none" v-model="params.reason" placeholder="请输入内容"></el-input>
           </el-col>
           <el-col :span="12">
             <div class="title">维修赔偿详情</div>
-            <el-input type="textarea" resize="none" v-model="params.compensation" placeholder="请输入内容"></el-input>
+            <el-input disabled type="textarea" resize="none" v-model="params.compensation" placeholder="请输入内容"></el-input>
           </el-col>
         </el-row>
 
         <div class="title">上传照片</div>
         <div class="describe_border">
-          <UpLoad :ID="'editCollectVacationId'" :editImage="editImage" :isClear="isClear" @getImg="getImg"></UpLoad>
+          <UpLoad :ID="'vacationDetailId'" :editImage="editImage" :isClear="isClear" @getImg="getImg"></UpLoad>
         </div>
 
         <div class="title">应退还</div>
@@ -101,42 +105,42 @@
             <el-row >
               <el-col :span="6">
                 <el-form-item label="退还押金">
-                  <el-input v-model="params.refund_deposit" type="number" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.refund_deposit" type="number" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="剩余房租">
-                  <el-input v-model="params.residual_rent" type="number" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.residual_rent" type="number" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="收视费">
-                  <el-input v-model="params.viewing_fee" type="number" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.viewing_fee" type="number" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="预存物管费">
-                  <el-input v-model="params.property_management_fee" type="number" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.property_management_fee" type="number" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="预存水费">
-                  <el-input v-model="params.water_fee" type="number" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.water_fee" type="number" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="预存电费">
-                  <el-input v-model="params.electricity_fee"  type="number" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_fee"  type="number" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="预存气费">
-                  <el-input v-model="params.gas_fee" type="number" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.gas_fee" type="number" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="应退还">
-                  <el-input :disabled="true" v-model="reimbursementTotal" placeholder="请输入内容"></el-input>
+                  <el-input disabled :disabled="true" v-model="reimbursementTotal" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -153,27 +157,27 @@
               </el-col>
               <el-col :span="5">
                 <el-form-item label="上次底数">
-                  <el-input v-model="params.water_last"  placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.water_last"  placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="5">
                 <el-form-item label="本次底数">
-                  <el-input v-model="params.water_now" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.water_now" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="单价">
-                  <el-input v-model="params.water_unit_price" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.water_unit_price" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="滞纳金">
-                  <el-input v-model="params.water_late_payment" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.water_late_payment" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="合计">
-                  <el-input v-model="waterTotal" disabled="" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="waterTotal" disabled="" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <!--<el-col :span="2" style="text-align: right">-->
@@ -187,27 +191,27 @@
               </el-col>
               <el-col :span="5">
                 <el-form-item label="上次底数">
-                  <el-input v-model="params.electricity_peak_last" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_peak_last" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="5">
                 <el-form-item label="本次底数">
-                  <el-input v-model="params.electricity_peak_now" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_peak_now" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="单价">
-                  <el-input v-model="params.electricity_peak_unit_price" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_peak_unit_price" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="滞纳金">
-                  <el-input v-model="params.electricity_peak_late_payment" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_peak_late_payment" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="合计">
-                  <el-input v-model="elePeakTotal" disabled="" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="elePeakTotal" disabled="" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <!--<el-col :span="2" style="text-align: right">-->
@@ -222,27 +226,27 @@
               </el-col>
               <el-col :span="5">
                 <el-form-item label="上次底数">
-                  <el-input v-model="params.electricity_valley_last" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_valley_last" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="5">
                 <el-form-item label="本次底数">
-                  <el-input v-model="params.electricity_valley_now" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_valley_now" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="单价">
-                  <el-input v-model="params.electricity_valley_unit_price" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_valley_unit_price" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="滞纳金">
-                  <el-input v-model="params.electricity_valley_late_payment" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_valley_late_payment" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="合计">
-                  <el-input v-model="eleValTotal" disabled="" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="eleValTotal" disabled="" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <!--<el-col :span="2" style="text-align: right">-->
@@ -256,27 +260,27 @@
               </el-col>
               <el-col :span="5">
                 <el-form-item label="上次底数">
-                  <el-input v-model="params.gas_last" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.gas_last" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="5">
                 <el-form-item label="本次底数">
-                  <el-input v-model="params.gas_now" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.gas_now" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="单价">
-                  <el-input v-model="params.gas_unit_price" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.gas_unit_price" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="滞纳金">
-                  <el-input v-model="params.gas_late_payment" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.gas_late_payment" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="合计">
-                  <el-input v-model="gasTotal" disabled="" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="gasTotal" disabled="" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <!--<el-col :span="2" style="text-align: right">-->
@@ -290,33 +294,33 @@
               </el-col>
               <el-col :span="10">
                 <el-form-item label="上次交到">
-                  <el-date-picker type="date" v-model="params.property_management_last" placeholder="选择日期"></el-date-picker>
+                  <el-date-picker disabled type="date" v-model="params.property_management_last" placeholder="选择日期"></el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="本次交到">
-                  <el-date-picker type="date" v-model="params.property_management_now" placeholder="选择日期"></el-date-picker>
+                  <el-date-picker disabled type="date" v-model="params.property_management_now" placeholder="选择日期"></el-date-picker>
                 </el-form-item>
               </el-col>
 
               <el-col :span="5" :offset="2">
                 <el-form-item label="公摊水费">
-                  <el-input v-model="params.property_management_electricity" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.property_management_electricity" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="5">
                 <el-form-item label="公摊电费">
-                  <el-input v-model="params.property_management_water" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.property_management_water" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="物业费">
-                  <el-input v-model="params.property_management_total_fees" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.property_management_total_fees" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="合计">
-                  <el-input v-model="managementTotal" disabled="" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="managementTotal" disabled="" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <!--<el-col :span="2" style="text-align: right">-->
@@ -332,42 +336,42 @@
             <el-row >
               <el-col :span="6">
                 <el-form-item label="违约金">
-                  <el-input v-model="params.liquidated_damages" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.liquidated_damages" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="垃圾费">
-                  <el-input v-model="params.trash_fees" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.trash_fees" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="清洁费">
-                  <el-input v-model="params.cleaning_fees" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.cleaning_fees" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="维修赔偿">
-                  <el-input v-model="params.repair_compensation_fees" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.repair_compensation_fees" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="其他费用">
-                  <el-input v-model="params.other_fees" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.other_fees" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="超期房时">
-                  <el-input v-model="params.overtime_rent" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.overtime_rent" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="超期房费">
-                  <el-input v-model="params.TV_fees" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.TV_fees" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="超期网费">
-                  <el-input v-model="params.network_fees" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.network_fees" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -381,8 +385,8 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="editCollectVacationVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
+        <!--<el-button size="small" @click="vacationDetailVisible = false">取 消</el-button>-->
+        <!--<el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>-->
       </span>
     </el-dialog>
   </div>
@@ -391,11 +395,11 @@
 <script>
   import UpLoad from '../../../common/UPLOAD.vue'
   export default {
-    props:['editCollectVacation','vacationId'],
+    props:['vacationDetail','vacationId'],
     components:{UpLoad},
     data() {
       return {
-        editCollectVacationVisible:false,
+        vacationDetailVisible:false,
         params: {
           contract_id : '',
           module : '',
@@ -457,7 +461,7 @@
         isClear : false,
         isDictionary:false,
         dictionary:[],
-        collectContractInfo :{},
+        contractInfo :{},
         editImage : {},
       };
     },
@@ -498,10 +502,10 @@
       },
     },
     watch:{
-      editCollectVacation(val){
-        this.editCollectVacationVisible = val
+      vacationDetail(val){
+        this.vacationDetailVisible = val
       },
-      editCollectVacationVisible(val){
+      vacationDetailVisible(val){
         if(!val){
           this.$emit('close');
           this.initData();
@@ -528,15 +532,8 @@
       },
       //上传图片
       getImg(val){
+        console.log(val)
         this.params.image_pic = val[1];
-      },
-
-      getBank(){
-        this.$http.get(globalConfig.server+'manager/staff/info?bank_num='+this.params.bank_num).then((res) => {
-          if(res.data.code === '10050'){
-            this.params.account_bank = res.data.data.bankname;
-          }
-        })
       },
       //获取退房详情
       getData(){
@@ -545,6 +542,7 @@
             let data = res.data.data;
             this.params.contract_id = data.contract_id;
             this.params.module = data.module;
+            this.getContractInfo(data.module,data.contract_id);
 
             this.params.check_time = data.check_time;
             this.params.check_type = data.check_type;
@@ -599,7 +597,6 @@
             this.params.TV_fees = data.details.TV_fees;
             this.params.network_fees = data.details.network_fees;
 
-
             let picObject = {};
             this.editImage = {};
             this.params.image_pic = [];
@@ -613,23 +610,23 @@
           }
         })
       },
-      confirmAdd(){
-        this.$http.put(globalConfig.server+'customer/check_out/'+this.vacationId,this.params).then((res) => {
-          if(res.data.code === '20030'){
-            this.$notify.success({
-              title:'成功',
-              message:res.data.msg
-            });
-            this.editCollectVacationVisible = false;
-            this.$emit('close','success');
-          }else {
-            this.$notify.warning({
-              title:'警告',
-              message:res.data.msg
-            })
-          }
-        })
+
+      getContractInfo(module,id){
+        if(module == 1){
+          this.$http.get(globalConfig.server + 'lease/collect/' + id).then((res) => {
+            if (res.data.code === '61010') {
+              this.contractInfo = res.data.data;
+            }
+          })
+        }else {
+          this.$http.get(globalConfig.server + 'lease/rent/' +id).then((res) => {
+            if (res.data.code === '61110') {
+              this.contractInfo = res.data.data;
+            }
+          })
+        }
       },
+
       initData(){
         this.params = {
           contract_id : '',
@@ -696,6 +693,15 @@
 </script>
 <style lang="scss" scoped="">
   #rentVacation{
+
+    .el-input.is-disabled .el-input__inner {
+      background-color: #f5f7fa;
+      border-color: #e4e7ed;
+      color: #666 !important;
+      cursor: default !important;
+    }
+
+
     .el-dialog__wrapper{
       .el-dialog{
         .el-dialog__body{

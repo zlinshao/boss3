@@ -22,13 +22,20 @@
           {{contractInfo.community_name}}  {{contractInfo.building}}-{{contractInfo.unit}}-{{contractInfo.doorplate}}</h3>
         <h3>
           <el-button size="mini" type="primary" v-if="contractInfo.visit_status&&contractInfo.visit_status.id == 2" disabled="">已回访</el-button>
-          <el-button size="mini" type="primary" @click="check" v-if="contractInfo.visit_status&&contractInfo.visit_status.id == 1">未回访</el-button>
+          <el-button size="mini" type="primary" @click="check(1)"
+                     v-if="contractInfo.visit_status&&contractInfo.visit_status.id == 1">未回访</el-button>
 
           <el-button size="mini" type="danger" @click="reject" v-if="contractInfo.doc_status&&contractInfo.doc_status.id > 1">驳回</el-button>
-          <el-button size="mini" type="primary" @click="check" v-if="contractInfo.doc_status&&contractInfo.doc_status.id==1">提交</el-button>
-          <el-button size="mini" type="primary" @click="check" v-if="contractInfo.doc_status&&contractInfo.doc_status.id==2">通过审核1</el-button>
-          <el-button size="mini" type="primary" @click="check" v-if="contractInfo.doc_status&&contractInfo.doc_status.id==3">通过审核3</el-button>
-          <el-button size="mini" type="success" v-if="contractInfo.doc_status&&contractInfo.doc_status.id == 4" disabled="">已发布</el-button>
+          <el-button size="mini" type="primary" @click="check(0)" v-if="contractInfo.doc_status&&contractInfo.doc_status.id==1">
+            {{contractInfo.doc_status.name}}
+          </el-button>
+          <el-button size="mini" type="primary" @click="check(0)"
+                     v-if="contractInfo.doc_status&&contractInfo.doc_status.id==2">{{contractInfo.doc_status.name}}</el-button>
+          <el-button size="mini" type="primary" @click="check(0)"
+                     v-if="contractInfo.doc_status&&contractInfo.doc_status.id==3">{{contractInfo.doc_status.name}}</el-button>
+          <el-button size="mini" type="success" v-if="contractInfo.doc_status&&contractInfo.doc_status.id == 4" disabled="">
+            {{contractInfo.doc_status.name}}
+          </el-button>
         </h3>
       </div>
       <div id="mainContent" class="main scroll_bar">
@@ -947,15 +954,52 @@
       getText(e) {
         console.log(e.target.innerText)
       },
-      check(){
-        this.$http.put(globalConfig.server+'lease/status/approve/'+this.contractId,this.approveParams).then((res) => {
+      check(val){
+        this.approveParams.is_visit = val;
+        this.$confirm('您确认审核通过吗, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.put(globalConfig.server+'lease/status/approve/'+this.contract_id,this.approveParams).then((res) => {
+            if(res.data.code === '60610'){
+              this.$notify.success({
+                title:'成功',
+                message:res.data.msg,
+              });
+              this.getContractDetail();
+            }
+          })
+        }).catch(() => {
+          this.$notify.info({
+            title:'消息',
+            message:'已取消审核',
+          })
+        });
 
-        })
       },
       reject(){
-        this.$http.put(globalConfig.server+'lease/status/reject/'+this.contractId,this.approveParams).then((res) => {
-
-        })
+        this.approveParams.is_visit = 0;
+        this.$confirm('您确认审核通过吗, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.put(globalConfig.server+'lease/status/reject/'+this.contract_id,this.approveParams).then((res) => {
+            if(res.data.code === '60610'){
+              this.$notify.success({
+                title:'成功',
+                message:res.data.msg,
+              });
+              this.getContractDetail();
+            }
+          })
+        }).catch(() => {
+          this.$notify.info({
+            title:'消息',
+            message:'已取消审核',
+          })
+        });
       },
     },
   }

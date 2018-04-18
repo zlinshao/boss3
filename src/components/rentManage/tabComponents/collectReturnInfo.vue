@@ -1,13 +1,14 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <el-table
-      :data="rentingData"
+      :data="tableData"
       :empty-text='emptyContent'
       v-loading="tableLoading"
       element-loading-text="拼命加载中"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0)"
       @row-contextmenu='houseMenu'
+      @row-dblclick = 'dblClickTable'
       style="width: 100%">
       <el-table-column
         prop="check_time"
@@ -27,24 +28,28 @@
         label="总费用">
         <template slot-scope="scope">
           <span v-if="scope.row.details">{{scope.row.details.total_fees}}</span>
+          <span v-else="">/</span>
         </template>
       </el-table-column>
       <el-table-column
         label="应退费用">
         <template slot-scope="scope">
           <span v-if="scope.row.details">{{scope.row.details.should_be_returned_fees}}</span>
+          <span v-else="">/</span>
         </template>
       </el-table-column>
       <el-table-column
         label="能源费用">
         <template slot-scope="scope">
           <span v-if="scope.row.details">{{scope.row.details.deduct_energy_fees}}</span>
+          <span v-else="">/</span>
         </template>
       </el-table-column>
       <el-table-column
         label="其他费用">
         <template slot-scope="scope">
           <span v-if="scope.row.details">{{scope.row.details.others_fees}}</span>
+          <span v-else="">/</span>
         </template>
       </el-table-column>
 
@@ -52,12 +57,14 @@
         label="结算人">
         <template slot-scope="scope">
           <span v-if="scope.row.creators&&scope.row.creators.name">{{scope.row.creators.name}}</span>
+          <span v-else="">/</span>
         </template>
       </el-table-column>
       <el-table-column
         label="操作人">
         <template slot-scope="scope">
           <span v-if="scope.row.settlers&&scope.row.settlers.name">{{scope.row.settlers.name}}</span>
+          <span v-else="">/</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -79,17 +86,19 @@
       </el-pagination>
     </div>
     <EditCollectVacation :editCollectVacation="editCollectVacation" :vacationId="vacationId" @close="closeModal"></EditCollectVacation>
+    <VacationDetail :vacationDetail="vacationDetail" :vacationId="vacationId" @close="closeModal"></VacationDetail>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
   </div>
 </template>
 
 <script>
-  import EditCollectVacation from './components/editCollectVacation.vue'
+  import EditCollectVacation from './components/editVacation.vue'
   import RightMenu from '../../common/rightMenu.vue'
+  import VacationDetail from './components/vacationDetail.vue'
   export default {
     props: ['collectContractId', 'activeName'],
-    components: {EditCollectVacation, RightMenu},
+    components: {EditCollectVacation, VacationDetail,RightMenu},
     data () {
       return {
         rightMenuX: 0,
@@ -97,10 +106,11 @@
         show: false,
         lists: [],
         /***********/
-        rentingData: [],
+        tableData: [],
         params: {
           limit: 3,
           page: 1,
+          module:1,
           contract_id: '',
         },
         totalNumber: 0,
@@ -109,6 +119,7 @@
         emptyContent: '暂无数据',
         tableLoading: false,
         editCollectVacation: false,
+        vacationDetail: false,
         vacationId : '',
       }
     },
@@ -135,14 +146,14 @@
       getData(){
         this.tableLoading = true;
         this.emptyContent = ' ';
-        this.rentingData = [];
+        this.tableData = [];
         this.$http.get(globalConfig.server + 'customer/check_out', {params: this.params}).then((res) => {
           this.tableLoading = false;
           if (res.data.code === '20000') {
-            this.rentingData = res.data.data.data;
+            this.tableData = res.data.data.data;
             this.totalNumber = res.data.data.count;
           } else {
-            this.rentingData = [];
+            this.tableData = [];
             this.totalNumber = 0;
             this.emptyContent = '暂无数据';
           }
@@ -178,6 +189,7 @@
 
       closeModal(val){
         this.editCollectVacation = false;
+        this.vacationDetail = false;
         if(val === 'success'){
             this.getData();
         }
@@ -191,6 +203,10 @@
           {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
         ];
         this.contextMenuParam(event);
+      },
+      dblClickTable(row){
+        this.vacationId = row.id;
+        this.vacationDetail = true;
       },
       //右键回调事件
       clickEvent (index) {
