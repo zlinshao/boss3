@@ -555,7 +555,7 @@
       initData(){
         this.params = {
           contract_id : this.collectContractId,
-          module : '2',
+          module : '1',
 
           check_time : '',
           check_type : '',

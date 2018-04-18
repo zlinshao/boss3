@@ -21,10 +21,14 @@
         <h3>
           {{contractInfo.community_name}}  {{contractInfo.building}}-{{contractInfo.unit}}-{{contractInfo.doorplate}}</h3>
         <h3>
-          <el-button size="mini" type="primary" v-if="false">已回访</el-button>
-          <el-button size="mini" type="danger">未回访</el-button>
-          <el-button size="mini" type="warning" v-if="false">驳回</el-button>
-          <el-button size="mini" type="success">通过</el-button>
+          <el-button size="mini" type="primary" v-if="contractInfo.visit_status&&contractInfo.visit_status.id == 2" disabled="">已回访</el-button>
+          <el-button size="mini" type="primary" @click="check" v-if="contractInfo.visit_status&&contractInfo.visit_status.id == 1">未回访</el-button>
+
+          <el-button size="mini" type="danger" @click="reject" v-if="contractInfo.doc_status&&contractInfo.doc_status.id > 1">驳回</el-button>
+          <el-button size="mini" type="primary" @click="check" v-if="contractInfo.doc_status&&contractInfo.doc_status.id==1">提交</el-button>
+          <el-button size="mini" type="primary" @click="check" v-if="contractInfo.doc_status&&contractInfo.doc_status.id==2">通过审核1</el-button>
+          <el-button size="mini" type="primary" @click="check" v-if="contractInfo.doc_status&&contractInfo.doc_status.id==3">通过审核3</el-button>
+          <el-button size="mini" type="success" v-if="contractInfo.doc_status&&contractInfo.doc_status.id == 4" disabled="">已发布</el-button>
         </h3>
       </div>
       <div id="mainContent" class="main scroll_bar">
@@ -771,6 +775,10 @@
         receiverNames: '',
         loadingStatus : true,
         reBackData :[],
+        approveParams:{
+          is_rent:0,
+          is_visit : 0,
+        }
       }
     },
     beforeCreate(){
@@ -786,9 +794,9 @@
       this.houseId = document.getElementById('houseId').offsetTop - 201;
       this.ownerId = document.getElementById('ownerId').offsetTop - 201;
       this.contractId = document.getElementById('contractId').offsetTop - 201;
-      this.financeId = document.getElementById('financeId').offsetTop - 201;
+//      this.financeId = document.getElementById('financeId').offsetTop - 201;
       this.returnId = document.getElementById('returnId').offsetTop - 201;
-      this.historyId = document.getElementById('historyId').offsetTop - 201;
+//      this.historyId = document.getElementById('historyId').offsetTop - 201;
     },
     watch: {
       // 自动获取上一条备忘
@@ -938,7 +946,17 @@
       },
       getText(e) {
         console.log(e.target.innerText)
-      }
+      },
+      check(){
+        this.$http.put(globalConfig.server+'lease/status/approve/'+this.contractId,this.approveParams).then((res) => {
+
+        })
+      },
+      reject(){
+        this.$http.put(globalConfig.server+'lease/status/reject/'+this.contractId,this.approveParams).then((res) => {
+
+        })
+      },
     },
   }
 </script>
@@ -1019,26 +1037,26 @@
     .el-button--mini {
       width: 80px;
     }
-    .el-button--primary {
-      background-color: #6a8dfb;
-      border-color: #6a8dfb;
-      box-shadow: 0 2px 8px 0 #6a8dfb;
-    }
-    .el-button--danger {
-      background-color: #fb4694;
-      border-color: #fb4694;
-      box-shadow: 0 2px 8px 0 #fb4694;
-    }
-    .el-button--warning {
-      background-color: #fdca41;
-      border-color: #fdca41;
-      box-shadow: 0 2px 8px 0 #fdca41;
-    }
-    .el-button--success {
-      background-color: #58d788;
-      border-color: #58d788;
-      box-shadow: 0 2px 8px 0 #58d788;
-    }
+    /*.el-button--primary {*/
+      /*background-color: #6a8dfb;*/
+      /*border-color: #6a8dfb;*/
+      /*box-shadow: 0 2px 8px 0 #6a8dfb;*/
+    /*}*/
+    /*.el-button--danger {*/
+      /*background-color: #fb4694;*/
+      /*border-color: #fb4694;*/
+      /*box-shadow: 0 2px 8px 0 #fb4694;*/
+    /*}*/
+    /*.el-button--warning {*/
+      /*background-color: #fdca41;*/
+      /*border-color: #fdca41;*/
+      /*box-shadow: 0 2px 8px 0 #fdca41;*/
+    /*}*/
+    /*.el-button--success {*/
+      /*background-color: #58d788;*/
+      /*border-color: #58d788;*/
+      /*box-shadow: 0 2px 8px 0 #58d788;*/
+    /*}*/
     @media screen and (min-width: 1280px) {
       .top {
         padding: 0 200px;

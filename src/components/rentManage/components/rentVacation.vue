@@ -31,7 +31,7 @@
             </tr>
           </table>
         </div>
-        <div class="title">换房信息</div>
+        <div class="title">退房信息</div>
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="100px">
             <el-row >
@@ -73,7 +73,7 @@
         </div>
         <el-row :gutter="20">
           <el-col :span="12">
-            <div class="title">换房原因</div>
+            <div class="title">退房原因</div>
             <el-input type="textarea" resize="none" v-model="params.reason" placeholder="请输入内容"></el-input>
           </el-col>
           <el-col :span="12">
@@ -95,12 +95,12 @@
             <el-row >
               <el-col :span="6">
                 <el-form-item label="退还押金">
-                  <el-input v-model="params.refund_deposit" type="number" placeholder="请输入内容">换房</el-input>
+                  <el-input v-model="params.refund_deposit" type="number" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="剩余房租">
-                  <el-input v-model="params.residual_rent" type="number" placeholder="请输入内容">换房</el-input>
+                  <el-input v-model="params.residual_rent" type="number" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
