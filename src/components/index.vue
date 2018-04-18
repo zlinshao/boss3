@@ -325,9 +325,9 @@
     <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeModal"></MessageDetail>
     <SetLockPwd :setLockPwdDialog="setLockPwdDialog" @close="closeModal"></SetLockPwd>
     <UnlockSecondPW :unlockSecondPWDialog="unlockSecondPWDialog" @unlockFlag="unlockFlag" :unLockName="unLockName"
-                    @close="closeModal"></UnlockSecondPW>
+                    @close="closeModalSecond"></UnlockSecondPW>
     <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
-    <BadgeView :badgeDialog="badgeDialog" @close="closeModal"></BadgeView>
+    <BadgeView :badgeDialog="badgeDialog" @close="closeModalSecond"></BadgeView>
     <InstitutionView :institutionDialog="institutionDialog" @close="closeModal"></InstitutionView>
     <YanFirstView :yanFirstDialog="yanFirstDialog" @close="closeModal"></YanFirstView>
     <YanSecondView :yanSecondDialog="yanSecondDialog" @close="closeModal"></YanSecondView>
@@ -633,13 +633,15 @@
       closeModal() {
         this.messageDialog = false;
         this.setLockPwdDialog = false;
-        this.unlockSecondPWDialog = false;
         this.instructionDialog = false;
-        this.badgeDialog = false;
         this.institutionDialog = false;
         this.noticeTitleDialog = false;
         this.yanFirstDialog = false;
         this.yanSecondDialog = false;
+      },
+      closeModalSecond(){
+        this.unlockSecondPWDialog = false;
+        this.badgeDialog = false;
       },
       //二级密码回调
       unlockFlag(val) {
