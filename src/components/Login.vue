@@ -23,17 +23,17 @@
               <img src="../assets/images/dd1.png" alt="">
             </div>
             <div style="color:#6a8dfb;">钉钉 - 扫码</div>
-            <div>一键登陆</div>
+            <div>一键登录</div>
           </div>
           <div @click="messageLogin">
             <div><img src="../assets/images/sj.png" alt=""></div>
             <div style="color:#fb4699;">手机号</div>
-            <div>快速登陆</div>
+            <div>快速登录</div>
           </div>
           <div>
             <div><img src="../assets/images/weixin2.png" alt=""></div>
             <div style="color: #58d788">微信 - 扫码</div>
-            <div>一键登陆</div>
+            <div>一键登录</div>
           </div>
         </div>
       </div>
@@ -82,11 +82,11 @@
           </el-input>
 
           <div style="display: flex;justify-content: flex-end;margin-top: 20px">
-            <el-button type="text" @click="isMessage=false">更换登陆方式</el-button>
+            <el-button type="text" @click="isMessage=false">更换登录方式</el-button>
           </div>
 
           <div class="confirmLogin">
-            <el-button size="medium" type="primary" @click.native.prevent="sureLogin(phone, identifyingCode)">登 陆
+            <el-button size="medium" type="primary" @click.native.prevent="sureLogin(phone, identifyingCode)">登 录
             </el-button>
           </div>
         </div>
@@ -94,7 +94,7 @@
           <div class="dingLogin">
             <div><img src="../assets/images/dd1.png" alt=""></div>
             <div style="color:#6a8dfb;">钉钉 - 扫码</div>
-            <div>一键登陆</div>
+            <div>一键登录</div>
           </div>
         </div>
 
@@ -102,7 +102,7 @@
           <div class="dingLogin">
             <div><img src="../assets/images/weixin2.png" alt=""></div>
             <div style="color: #58d788">微信 - 扫码</div>
-            <div>一键登陆</div>
+            <div>一键登录</div>
           </div>
         </div>
 
@@ -120,7 +120,7 @@
         phone: '',
         identifyingCode: '',
         loading: false,
-        underWay: true,      //登陆中
+        underWay: true,      //登录中
         loadingNum: 60,
         // ruleForm2: {
         //   account: 'admin',

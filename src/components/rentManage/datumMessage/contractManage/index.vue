@@ -231,6 +231,7 @@
                   element-loading-spinner="el-icon-loading"
                   element-loading-background="rgba(255, 255, 255, 0)"
                   @row-click="clickTable"
+                  @row-dblclick="dblClickTable"
                   @row-contextmenu='houseMenu'
                   style="width: 100%">
                   <el-table-column
@@ -356,6 +357,7 @@
                   element-loading-spinner="el-icon-loading"
                   element-loading-background="rgba(255, 255, 255, 0)"
                   @row-click="clickTable"
+                  @row-dblclick="dblClickTable"
                   @row-contextmenu='houseMenu'
                   style="width: 100%">
                   <el-table-column
@@ -915,7 +917,17 @@
         }
       },
       clickTable(row, event, column) {
-        console.log(row, event, column)
+        // console.log(row, event, column)
+      },
+      dblClickTable(row, event){  //双击详情
+        if(this.activeName === 'first'){
+          const {href} = this.$router.resolve({path: '/collectDetail',query:{id:row.contract_id}});
+          window.open(href,'_blank','width=1920,height=1080');
+        }else if(this.activeName === 'second'){
+          const {href} = this.$router.resolve({path: '/rentingDetail',query:{id:row.contract_id}});
+          window.open(href,'_blank','width=1920,height=1080');
+        }
+
       },
       //房屋右键
       houseMenu(row, event) {
