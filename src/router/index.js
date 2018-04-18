@@ -246,7 +246,7 @@ export default new Router({
         {path: '/institution', component: Institution, name: ' 制度管理 ', icon: "iconfont icon-guizhangzhidu"},
         {path: '/counter', component: Counter, name: '业绩计算器', icon: "iconfont icon-jisuanqi"},
         {path: '/college', component: College, name: ' 乐伽大学 ', icon: "iconfont icon-leqiedaxue"},
-        {path: '/LineCollege', component: LineCollege, name: ' 成绩查询 ', icon:"iconfont icon-zaixiankaoshi"},
+        // {path: '/LineCollege', component: LineCollege, name: ' 成绩查询 ', icon:"iconfont icon-zaixiankaoshi"},
         {path: '/converge', component: Converge, name: ' 员工广场 ', icon: "iconfont icon-yuangongguangchang"},
         {path: '/individual', component: Individual, name: ' 个人门户 ', icon: "el-icons-fa-user"},
         {path: '/wholeRentManage', component: WholeRentManage, name: ' 整租管理 ', icon: "iconfont icon-pinzhizhengzu"},
@@ -296,7 +296,7 @@ export default new Router({
       icon: 'iconfont icon-zulin',
       children: [
         {path: '/wholeRentManage', component: WholeRentManage, name: '整租管理',},
-        {path: '/jointRentManage', component: JointRentManage, name: '合租管理',},
+        // {path: '/jointRentManage', component: JointRentManage, name: '合租管理',},
         // {path: '/datumMessage', component: DatumMessage, name: '资料管理',},
         {path: '/clientManage', component: ClientManage, name: '客户管理',},
         {path: '/contractManage', component: ContractManage, name: '合同管理',},
@@ -349,7 +349,7 @@ export default new Router({
       hidden: true,
       name: '',
       children: [
-        {path: '/wechatMessage', component: WechatMessage, name: '微信管理', icon: 'iconfont icon-weixin'},
+        // {path: '/wechatMessage', component: WechatMessage, name: '微信管理', icon: 'iconfont icon-weixin'},
       ]
     },
 
@@ -437,8 +437,8 @@ export default new Router({
       icon: 'iconfont icon-daxue',
       children: [
         {path: '/college', component: College, name: '乐伽大学 '},
-        {path: '/LineCollege', component: LineCollege, name: '成绩查询'},
-        {path: '/StaffRegistration', component: StaffRegistration, name: '员工报名'},
+        // {path: '/LineCollege', component: LineCollege, name: '成绩查询'},
+        // {path: '/StaffRegistration', component: StaffRegistration, name: '员工报名'},
       ]
     },
     {

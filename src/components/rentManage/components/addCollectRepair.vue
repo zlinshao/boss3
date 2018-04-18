@@ -19,6 +19,8 @@
                 <el-input v-model="form.customer_name" ></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="8">
               <el-form-item label="客户性别">
                 <el-input v-model="form.customer_name" ></el-input>
@@ -29,11 +31,15 @@
                 <el-input v-model="form.customer_mobile" ></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
+          </el-row>
+          <el-row>
+            <el-col :span="16">
               <el-form-item label="维修内容">
                 <el-input type="textarea" v-model="form.content" ></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="8">
               <el-form-item label="维修时间">
                 <el-date-picker type="date" v-model="form.repair_time" placeholder="选择日期"></el-date-picker>
@@ -49,17 +55,13 @@
                 <el-input  v-model="form.repair_result" ></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="8">
               <el-form-item label="维修金额">
                 <el-input  v-model="form.repair_money" ></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
-              <el-form-item label="备注">
-                <el-input type="textarea" v-model="form.content" ></el-input>
-              </el-form-item>
-            </el-col>
-
             <el-col :span="8">
               <el-form-item label="维修状态">
                 <el-select v-model="form.status" placeholder="请选择责任归属">
@@ -68,6 +70,15 @@
                 </el-select>
               </el-form-item>
             </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="16">
+              <el-form-item label="备注">
+                <el-input type="textarea" v-model="form.content" ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="8">
               <el-form-item label="认责人">
                 <el-input placeholder="请输入内容"></el-input>
