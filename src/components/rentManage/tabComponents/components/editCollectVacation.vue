@@ -1,6 +1,6 @@
 <template>
   <div id="rentVacation">
-    <el-dialog :close-on-click-modal="false" title="房东退房" :visible.sync="collectVacationDialogVisible" width="60%">
+    <el-dialog :close-on-click-modal="false" title="修改退房信息" :visible.sync="editCollectVacationVisible" width="60%">
       <div class="scroll_bar">
         <div class="title">客户-信息</div>
         <div class="table_border" >
@@ -92,7 +92,7 @@
 
         <div class="title">上传照片</div>
         <div class="describe_border">
-          <UpLoad :ID="'collectVacationId'" :isClear="isClear" @getImg="getImg"></UpLoad>
+          <UpLoad :ID="'editCollectVacationId'" :editImage="editImage" :isClear="isClear" @getImg="getImg"></UpLoad>
         </div>
 
         <div class="title">应退还</div>
@@ -381,7 +381,7 @@
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="collectVacationDialogVisible = false">取 消</el-button>
+        <el-button size="small" @click="editCollectVacationVisible = false">取 消</el-button>
         <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
@@ -389,16 +389,16 @@
 </template>
 
 <script>
-  import UpLoad from '../../common/UPLOAD.vue'
+  import UpLoad from '../../../common/UPLOAD.vue'
   export default {
-    props:['collectVacationDialog','collectContractId','collectInfo'],
+    props:['editCollectVacation','vacationId'],
     components:{UpLoad},
     data() {
       return {
-        collectVacationDialogVisible:false,
+        editCollectVacationVisible:false,
         params: {
           contract_id : '',
-          module : '1',
+          module : '',
 
           check_time : '',
           check_type : '',
@@ -458,6 +458,7 @@
         isDictionary:false,
         dictionary:[],
         collectContractInfo :{},
+        editImage : {},
       };
     },
     computed:{
@@ -497,27 +498,21 @@
       },
     },
     watch:{
-      collectVacationDialog(val){
-        this.collectVacationDialogVisible = val
+      editCollectVacation(val){
+        this.editCollectVacationVisible = val
       },
-      collectVacationDialogVisible(val){
+      editCollectVacationVisible(val){
         if(!val){
           this.$emit('close');
           this.initData();
         }else {
-          this.isClear = false;
-          this.getContractData();
+          this.isClear = true;
+          this.getData();
           if(!this.isDictionary){
             this.getDictionary();
           }
         }
       },
-      collectContractId(val){
-        this.params.contract_id = val;
-      },
-      collectInfo(val){
-        this.collectContractInfo = val;
-      }
     },
     mounted(){
 
@@ -531,6 +526,11 @@
           }
         })
       },
+      //上传图片
+      getImg(val){
+        this.params.image_pic = val[1];
+      },
+
       getBank(){
         this.$http.get(globalConfig.server+'manager/staff/info?bank_num='+this.params.bank_num).then((res) => {
           if(res.data.code === '10050'){
@@ -538,22 +538,90 @@
           }
         })
       },
-      //上传图片
-      getImg(val){
-        this.params.image_pic = val[1];
-      },
-      getContractData(){
+      //获取退房详情
+      getData(){
+        this.$http.get(globalConfig.server+'customer/check_out/'+this.vacationId).then((res) => {
+          if(res.data.code === '20020'){
+            let data = res.data.data;
+            this.params.contract_id = data.contract_id;
+            this.params.module = data.module;
 
+            this.params.check_time = data.check_time;
+            this.params.check_type = data.check_type;
+            this.params.profit = data.extend_field && data.extend_field.profit;
+            this.params.bank_num = data.bank_num;
+            this.params.account_bank = data.account_bank;
+            this.params.branch_bank = data.branch_bank;
+            this.params.account_name = data.account_name;
+            this.params.reason = data.reason;
+            this.params.compensation = data.compensation;
+
+            this.params.refund_deposit = data.details.refund_deposit;
+            this.params.residual_rent = data.details.residual_rent;
+            this.params.viewing_fee = data.details.viewing_fee;
+            this.params.property_management_fee = data.details.property_management_fee;
+            this.params.water_fee = data.details.water_fee;
+            this.params.electricity_fee = data.details.electricity_fee;
+            this.params.gas_fee = data.details.gas_fee;
+
+            this.params.water_last = data.details.water_last;
+            this.params.water_now = data.details.water_now;
+            this.params.water_unit_price = data.details.water_unit_price;
+            this.params.water_late_payment = data.details.water_late_payment;
+
+            this.params.electricity_peak_last = data.details.electricity_peak_last;
+            this.params.electricity_peak_now = data.details.electricity_peak_now;
+            this.params.electricity_peak_unit_price = data.details.electricity_peak_unit_price;
+            this.params.electricity_peak_late_payment = data.details.electricity_peak_late_payment;
+
+            this.params.electricity_valley_last = data.details.electricity_valley_last;
+            this.params.electricity_valley_now = data.details.electricity_valley_now;
+            this.params.electricity_valley_unit_price = data.details.electricity_valley_unit_price;
+            this.params.electricity_valley_late_payment = data.details.electricity_valley_late_payment;
+
+            this.params.gas_last = data.details.gas_last;
+            this.params.gas_now = data.details.gas_now;
+            this.params.gas_unit_price = data.details.gas_unit_price;
+            this.params.gas_late_payment = data.details.gas_late_payment;
+
+            this.params.property_management_last = data.details.property_management_last;
+            this.params.property_management_now = data.details.property_management_now;
+            this.params.property_management_electricity = data.details.property_management_electricity;
+            this.params.property_management_water = data.details.property_management_water;
+            this.params.property_management_total_fees = data.details.property_management_total_fees;
+
+            this.params.liquidated_damages = data.details.liquidated_damages;
+            this.params.trash_fees = data.details.trash_fees;
+            this.params.cleaning_fees = data.details.cleaning_fees;
+            this.params.repair_compensation_fees = data.details.repair_compensation_fees;
+            this.params.other_fees = data.details.other_fees;
+            this.params.overtime_rent = data.details.overtime_rent;
+            this.params.TV_fees = data.details.TV_fees;
+            this.params.network_fees = data.details.network_fees;
+
+
+            let picObject = {};
+            this.editImage = {};
+            this.params.image_pic = [];
+            if(data.album!==[]){
+              for(let key in data.album.image_pic){
+                picObject[key] = data.album.image_pic[key][0].uri;
+                this.params.image_pic.push(key)
+              }
+            }
+            this.editImage = picObject;
+          }
+        })
       },
       confirmAdd(){
-        this.$http.post(globalConfig.server+'customer/check_out',this.params).then((res) => {
-          if(res.data.code === '20010'){
+        this.$http.put(globalConfig.server+'customer/check_out/'+this.vacationId,this.params).then((res) => {
+          if(res.data.code === '20030'){
             this.$notify.success({
               title:'成功',
               message:res.data.msg
             });
-            this.collectVacationDialogVisible = false;
-            this.$emit('close','updateCollect');
+            this.editCollectVacationVisible = false;
+            this.$emit('close','success');
           }else {
             this.$notify.warning({
               title:'警告',
@@ -564,8 +632,8 @@
       },
       initData(){
         this.params = {
-          contract_id : this.collectContractId,
-          module : '1',
+          contract_id : '',
+          module : '',
 
           check_time : '',
           check_type : '',

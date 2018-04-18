@@ -32,22 +32,22 @@
           <div class="title">房屋信息</div>
         </div>
 
-        <div class="houseInfo">
+        <div class="contractInfo">
           <el-form size="small" label-width="180px">
             <el-row>
               <el-col :span="8">
                 <el-form-item label="小区名称">
-                  <div class="content">{{houseInfo.community_name}}</div>
+                  <div class="content">{{contractInfo.community_name}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="小区地址">
-                  <div class="content">{{houseInfo.community_address}}</div>
+                  <div class="content">{{contractInfo.community_address}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="小区别名">
-                  <div class="content">{{houseInfo.community_nickname}}</div>
+                  <div class="content">{{contractInfo.community_nickname}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -55,63 +55,63 @@
               <el-col :span="8">
                 <el-form-item label="门牌地址">
                   <div class="content">
-                    {{houseInfo.building}}-{{houseInfo.unit}}-{{houseInfo.doorplate}}
+                    {{contractInfo.building}}-{{contractInfo.unit}}-{{contractInfo.doorplate}}
                   </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="房型">
-                  <div class="content" v-if="houseInfo.house_type">
-                    <span>{{houseInfo.house_type[0]}}</span>室
-                    <span>{{houseInfo.house_type[1]}}</span>厅
-                    <span>{{houseInfo.house_type[2]}}</span>卫
+                  <div class="content" v-if="contractInfo.house_type">
+                    <span>{{contractInfo.house_type[0]}}</span>室
+                    <span>{{contractInfo.house_type[1]}}</span>厅
+                    <span>{{contractInfo.house_type[2]}}</span>卫
                   </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="房产证号">
-                  <div class="content">{{houseInfo.property_number}}</div>
+                  <div class="content">{{contractInfo.property_number}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
                 <el-form-item label="丘号">
-                  <div class="content">{{houseInfo.mound_number}}</div>
+                  <div class="content">{{contractInfo.mound_number}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="建筑面积">
-                  <div class="content">{{houseInfo.area}}</div>
+                  <div class="content">{{contractInfo.area}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="装修">
-                  <div class="content">{{matchDictionary(houseInfo.decorate)}}</div>
+                  <div class="content">{{matchDictionary(contractInfo.decorate)}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
                 <el-form-item label="楼层">
-                  <div class="content">{{houseInfo.floor}}</div>
+                  <div class="content">{{contractInfo.floor}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="楼层数">
-                  <div class="content">{{houseInfo.floors}}</div>
+                  <div class="content">{{contractInfo.floors}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="房屋类型">
-                  <div class="content">{{matchDictionary(houseInfo.property_type)}}</div>
+                  <div class="content">{{matchDictionary(contractInfo.property_type)}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
                 <el-form-item label="房屋特色">
-                  <div class="content">{{matchDictionary(houseInfo.house_feature)}}</div>
+                  <div class="content">{{matchDictionary(contractInfo.house_feature)}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -538,11 +538,11 @@
                     </el-row>
                   </el-form>
                 </div>
+    -->
+        <div id="returnId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
+          <div class="title">回访信息</div>
+        </div>
 
-                <div id="returnId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
-                  <div class="title">回访信息</div>
-                </div>
-                -->
         <div class="returnVisitInfo">
           <el-form size="small" label-width="180px">
             <el-row v-for="item in reBackData" :key="item.id">
@@ -642,7 +642,6 @@
         steps: 0,
         sizeForm: {},
         isPanel: false,
-        houseInfo : [],
         customersInfo: [],
         contractInfo : [],
         financeInfo : [],
@@ -681,9 +680,9 @@
       this.houseId = document.getElementById('houseId').offsetTop -201;
       this.ownerId = document.getElementById('ownerId').offsetTop -201;
       this.contractId = document.getElementById('contractId').offsetTop -201;
-      this.financeId = document.getElementById('financeId').offsetTop -201;
+//      this.financeId = document.getElementById('financeId').offsetTop -201;
       this.returnId = document.getElementById('returnId').offsetTop -201;
-      this.historyId = document.getElementById('historyId').offsetTop -201;
+//      this.historyId = document.getElementById('historyId').offsetTop -201;
     },
     watch: {
       // 自动获取上一条备忘
@@ -752,13 +751,8 @@
         this.type = '';
       },
       getContractDetail(){
-        this.$http.get(globalConfig.server+'lease/collect/'+this.$route.query.collectId).then((res) =>{
-          this.loadingStatus = false;
-          if(res.data.code === '61010'){
-            this.houseInfo = res.data.data;
-          }
-        });
         this.$http.get(globalConfig.server+'lease/rent/'+this.$route.query.id).then((res) =>{
+          this.loadingStatus = false;
           if(res.data.code === '61110'){
             this.contractInfo = res.data.data;
             this.customersInfo = res.data.data.customers;

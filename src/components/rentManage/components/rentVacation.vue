@@ -49,23 +49,25 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="退款账号" required>
-                  <el-input placeholder="请输入内容" v-model="params.bank_num"></el-input>
+                <el-form-item label="姓名" required>
+                  <el-input placeholder="请输入内容" v-model="params.account_name"></el-input>
                 </el-form-item>
               </el-col>
+            </el-row>
+            <el-row>
               <el-col :span="8">
-                <el-form-item label="姓名" required>
-                  <el-input placeholder="请输入内容" v-model="params.account_bank"></el-input>
+                <el-form-item label="退款账号" required>
+                  <el-input placeholder="请输入内容" @blur="getBank" v-model="params.bank_num"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="开户行" required>
-                  <el-input placeholder="请输入内容" v-model="params.branch_bank"></el-input>
+                  <el-input placeholder="请输入内容" v-model="params.account_bank"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="支行" required>
-                  <el-input placeholder="请输入内容" v-model="params.account_name"></el-input>
+                  <el-input placeholder="请输入内容" v-model="params.branch_bank"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -524,7 +526,13 @@
       getImg(val){
         this.params.image_pic = val[1];
       },
-
+      getBank(){
+        this.$http.get(globalConfig.server+'manager/staff/info?bank_num='+this.params.bank_num).then((res) => {
+          if(res.data.code === '10050'){
+            this.params.account_bank = res.data.data.bankname;
+          }
+        })
+      },
       confirmAdd(){
         this.$http.post(globalConfig.server+'customer/check_out',this.params).then((res) => {
           if(res.data.code === '20010'){

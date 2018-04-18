@@ -1,169 +1,224 @@
 <template>
-    <div>
-      <el-table
-        :data="rentingData"
-        :empty-text = 'emptyContent'
-        v-loading="tableLoading"
-        element-loading-text="拼命加载中"
-        element-loading-spinner="el-icon-loading"
-        element-loading-background="rgba(0, 0, 0, 0)"
-        style="width: 100%">
-        <el-table-column
-          prop="check_time"
-          label="退房时间">
-        </el-table-column>
-        <el-table-column
-          prop="check_types"
-          label="退房状态">
-        </el-table-column>
+  <div @click="show=false" @contextmenu="closeMenu">
+    <el-table
+      :data="rentingData"
+      :empty-text='emptyContent'
+      v-loading="tableLoading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0)"
+      @row-contextmenu='houseMenu'
+      style="width: 100%">
+      <el-table-column
+        prop="check_time"
+        label="退房时间">
+      </el-table-column>
+      <el-table-column
+        prop="check_types"
+        label="退房状态">
+      </el-table-column>
 
 
-        <el-table-column
-          prop="pay_type"
-          label="结算详情">
-        </el-table-column>
-        <el-table-column
-          prop="total_fees"
-          label="总费用">
-        </el-table-column>
-        <el-table-column
-          prop="should_be_returned_fees"
-          label="应退费用">
-        </el-table-column>
-        <el-table-column
-          prop="deduct_energy_fees"
-          label="能源费用">
-        </el-table-column>
-        <el-table-column
-          prop="others_fees"
-          label="其他费用">
-        </el-table-column>
+      <!--<el-table-column-->
+        <!--prop="pay_type"-->
+        <!--label="结算详情">-->
+      <!--</el-table-column>-->
+      <el-table-column
+        label="总费用">
+        <template slot-scope="scope">
+          <span v-if="scope.row.details">{{scope.row.details.total_fees}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="应退费用">
+        <template slot-scope="scope">
+          <span v-if="scope.row.details">{{scope.row.details.should_be_returned_fees}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="能源费用">
+        <template slot-scope="scope">
+          <span v-if="scope.row.details">{{scope.row.details.deduct_energy_fees}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="其他费用">
+        <template slot-scope="scope">
+          <span v-if="scope.row.details">{{scope.row.details.others_fees}}</span>
+        </template>
+      </el-table-column>
 
-        <el-table-column
-          label="结算人">
-          <template slot-scope="scope">
-            <span v-if="scope.row.creators&&scope.row.creators.name">{{scope.row.creators.name}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="操作人">
-          <template slot-scope="scope">
-            <span v-if="scope.row.settlers&&scope.row.settlers.name">{{scope.row.settlers.name}}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="结算状态">
-          <template slot-scope="scope">
-            <span v-if="scope.row.status == 2">已结算</span>
-            <el-button size="mini" type="primary" v-else="" @click="check_out(scope.row.id)">未结算</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <el-table-column
+        label="结算人">
+        <template slot-scope="scope">
+          <span v-if="scope.row.creators&&scope.row.creators.name">{{scope.row.creators.name}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="操作人">
+        <template slot-scope="scope">
+          <span v-if="scope.row.settlers&&scope.row.settlers.name">{{scope.row.settlers.name}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="结算状态">
+        <template slot-scope="scope">
+          <span v-if="scope.row.status == 2">已结算</span>
+          <el-button size="mini" type="primary" v-else="" @click="check_out(scope.row.id)">未结算</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
-      <div class="pagination">
-        <el-pagination
-          @current-change="currentChange"
-          :current-page="params.pages"
-          :page-size="3"
-          layout="total, prev, pager, next, jumper"
-          :total="totalNumber">
-        </el-pagination>
-      </div>
-
+    <div class="pagination">
+      <el-pagination
+        @current-change="currentChange"
+        :current-page="params.pages"
+        :page-size="3"
+        layout="total, prev, pager, next, jumper"
+        :total="totalNumber">
+      </el-pagination>
     </div>
+    <EditCollectVacation :editCollectVacation="editCollectVacation" :vacationId="vacationId" @close="closeModal"></EditCollectVacation>
+    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+               @clickOperate="clickEvent"></RightMenu>
+  </div>
 </template>
 
 <script>
-    export default {
-      props:['collectContractId','activeName'],
-      data () {
-          return {
-
-            rentingData:[],
-            params:{
-              limit:3,
-              page:1,
-              contract_id : '',
-            },
-            totalNumber:0,
-            editId:'',      //编辑id
-            isRequestData : false,
-            emptyContent : '暂无数据',
-            tableLoading : false,
-          }
-      },
-      mounted(){
-
-      },
-      watch:{
-        collectContractId(val){
-          this.params.contract_id = val;
-          this.isRequestData = false;
-          if(this.activeName === 'CollectReturnRomeInfoTab'){
-            this.getData();
-            this.isRequestData = true;
-          }
+  import EditCollectVacation from './components/editCollectVacation.vue'
+  import RightMenu from '../../common/rightMenu.vue'
+  export default {
+    props: ['collectContractId', 'activeName'],
+    components: {EditCollectVacation, RightMenu},
+    data () {
+      return {
+        rightMenuX: 0,
+        rightMenuY: 0,
+        show: false,
+        lists: [],
+        /***********/
+        rentingData: [],
+        params: {
+          limit: 3,
+          page: 1,
+          contract_id: '',
         },
-        activeName(val){
-          if(val=== 'CollectReturnRomeInfoTab' && this.collectContractId){
-            this.getData();
-            this.isRequestData = true;
-          }
+        totalNumber: 0,
+        editId: '',      //编辑id
+        isRequestData: false,
+        emptyContent: '暂无数据',
+        tableLoading: false,
+        editCollectVacation: false,
+        vacationId : '',
+      }
+    },
+    mounted(){
+
+    },
+    watch: {
+      collectContractId(val){
+        this.params.contract_id = val;
+        this.isRequestData = false;
+        if (this.activeName === 'CollectReturnRomeInfoTab') {
+          this.getData();
+          this.isRequestData = true;
         }
       },
-      methods:{
-        getData(){
-          this.tableLoading = true;
-          this.emptyContent = ' ';
-          this.$http.get(globalConfig.server+'customer/check_out',{params:this.params}).then((res) => {
-            this.tableLoading = false;
-            if(res.data.code === '20000'){
-              this.rentingData = res.data.data.data;
-              this.totalNumber = res.data.data.count;
-            }else {
-              this.rentingData = [];
-              this.totalNumber = 0;
-              this.emptyContent = '暂无数据';
+      activeName(val){
+        if (val === 'CollectReturnRomeInfoTab' && this.collectContractId) {
+          this.getData();
+          this.isRequestData = true;
+        }
+      }
+    },
+    methods: {
+      getData(){
+        this.tableLoading = true;
+        this.emptyContent = ' ';
+        this.rentingData = [];
+        this.$http.get(globalConfig.server + 'customer/check_out', {params: this.params}).then((res) => {
+          this.tableLoading = false;
+          if (res.data.code === '20000') {
+            this.rentingData = res.data.data.data;
+            this.totalNumber = res.data.data.count;
+          } else {
+            this.rentingData = [];
+            this.totalNumber = 0;
+            this.emptyContent = '暂无数据';
+          }
+        })
+      },
+      currentChange(val){
+        this.params.page = val;
+        this.getData();
+      },
+      check_out(id){
+        this.$confirm('结算后将不可撤回, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.put(globalConfig.server + 'customer/check_out/status/' + id).then((res) => {
+            if (res.data.code === '20060') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg,
+              });
+              this.getData();
             }
           })
-        },
-        currentChange(val){
-          this.params.page = val;
-          this.getData();
-        },
-        openModalDialog(index){
-          if(collectReturnInfo === 'edit'){
-              this.editRentChangeDialog = true;
-          }
-        },
-        closeModal(){
-          this.editRentChangeDialog = false;
-        },
-        check_out(id){
-          this.$confirm('结算后将不可撤回, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            this.$http.put(globalConfig.server+'customer/check_out/status/'+id).then((res) => {
-              if(res.data.code === '20060'){
-                this.$notify.success({
-                  title:'成功',
-                  message:res.data.msg,
-                });
-                this.getData();
-              }
-            })
-          }).catch(() => {
-            this.$notify.success({
-              title:'消息',
-              message:'已取消结算',
-            })
-          });
+        }).catch(() => {
+          this.$notify.success({
+            title: '消息',
+            message: '已取消结算',
+          })
+        });
 
-        },
-      }
+      },
+
+      closeModal(val){
+        this.editCollectVacation = false;
+        if(val === 'success'){
+            this.getData();
+        }
+      },
+
+
+      //房屋右键
+      houseMenu(row, event){
+        this.vacationId = row.id;
+        this.lists = [
+          {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
+        ];
+        this.contextMenuParam(event);
+      },
+      //右键回调事件
+      clickEvent (index) {
+        switch (index) {
+          case 'edit' :
+            this.editCollectVacation = true;
+            break;
+        }
+      },
+      //关闭右键菜单
+      closeMenu(){
+        this.show = false;
+      },
+      //右键参数
+      contextMenuParam(event){
+        //param: user right param
+        let e = event || window.event;	//support firefox contextmenu
+        this.show = false;
+        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true
+        })
+      },
     }
+  }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

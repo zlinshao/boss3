@@ -123,14 +123,14 @@
               :row-class-name="tableRowCollectName"
               @row-contextmenu='houseMenu'
               style="width: 100%">
-              <el-table-column width="40">
-                <template slot-scope="scope">
-                  <span v-if="checkContractData[scope.row.contract_number.toUpperCase()]">
-                    <i class="el-icon-success" style="color: #6a8dfb"></i>
-                  </span>
-                  <span v-else=""></span>
-                </template>
-              </el-table-column>
+              <!--<el-table-column width="40">-->
+                <!--<template slot-scope="scope">-->
+                  <!--<span v-if="checkContractData[scope.row.contract_number.toUpperCase()]">-->
+                    <!--<i class="el-icon-success" style="color: #6a8dfb"></i>-->
+                  <!--</span>-->
+                  <!--<span v-else=""></span>-->
+                <!--</template>-->
+              <!--</el-table-column>-->
               <el-table-column
                 prop="contract_number"
                 label="合同编号">
@@ -178,8 +178,10 @@
                       <el-table-column width="100" property="period" label="变化周期(月)"></el-table-column>
                     </el-table>
                   </el-popover>
-                  {{scope.row.price[0].price}}&nbsp;
-                  <el-button v-popover:popover4 size="mini" v-show="scope.row.price.length>1" type="text">变化</el-button>
+                  <span v-if="scope.row.price&&scope.row.price.length>0">
+                    {{scope.row.price[0].price}}&nbsp;
+                  </span>
+                  <el-button v-popover:popover4 size="mini" v-if="scope.row.price.length>1" type="text">变化</el-button>
                 </template>
               </el-table-column>
               <el-table-column
@@ -202,7 +204,9 @@
                       <el-table-column width="100" property="period" label="变化周期(月)"></el-table-column>
                     </el-table>
                   </el-popover>
-                  {{matchDictionary(scope.row.pay_way[0].pay_way)}}&nbsp;
+                  <span v-if="scope.row.pay_way&&scope.row.pay_way.length>0">
+                    {{matchDictionary(scope.row.pay_way[0].pay_way)}}&nbsp;
+                  </span>
                   <el-button size="mini" type="text" v-show="scope.row.pay_way.length>1" v-popover:payWay>变化</el-button>
                 </template>
               </el-table-column>
@@ -306,10 +310,8 @@
                 label="回访状态">
               </el-table-column>
               <el-table-column
-                prop="price"
                 label="出租价格">
                 <template slot-scope="scope">
-
                   <el-popover
                     ref="rentPrice"
                     placement="bottom"
@@ -322,8 +324,10 @@
                       <el-table-column width="100" property="period" label="变化周期(月)"></el-table-column>
                     </el-table>
                   </el-popover>
-                  {{scope.row.price[0].price}}&nbsp;
-                  <el-button v-popover:rentPrice size="mini"  v-show="scope.row.price.length>1" type="text">变化</el-button>
+                  <span v-if="scope.row.price&&scope.row.price.length>0">
+                    {{scope.row.price[0].price}}&nbsp;
+                  </span>
+                  <el-button v-popover:rentPrice size="mini"  v-if="scope.row.price.length>1" type="text">变化</el-button>
                 </template>
               </el-table-column>
               <el-table-column
@@ -343,7 +347,9 @@
                       <el-table-column width="100" property="period" label="变化周期(月)"></el-table-column>
                     </el-table>
                   </el-popover>
-                  {{scope.row.pay_way[0].pay_way_str}}&nbsp;
+                  <span v-if="scope.row.pay_way&&scope.row.pay_way.length>0">
+                    {{scope.row.pay_way[0].pay_way_str}}&nbsp;
+                  </span>
                   <el-button size="mini" type="text" v-show="scope.row.pay_way.length>1" v-popover:payWayRent>变化</el-button>
                 </template>
               </el-table-column>

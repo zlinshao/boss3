@@ -28,29 +28,17 @@ $(document).on('click', '[data-card]', function (e) {
   e.stopPropagation();
   isClickHead = true;
 
-
-  window.onresize = function () {
-
-    let offsetLeft = e.clientX;
-    let offsetTop = e.clientY;
-    //定位名片顯示位置
-    if(offsetLeft+294>window.innerWidth){
-      offsetLeft = window.innerWidth - 334
-    }
-    if(offsetTop+194>window.innerHeight){
-      offsetTop = window.innerHeight - 194 - e.target.width;
-    }else {
-      offsetTop =offsetTop + e.target.width;
-    }
-    insertHtml(offsetTop,offsetLeft,personal);
-  }
+  //浏览器尺寸变化，名片消失
+  $(window).resize(function () {
+    $('#personalCard').remove();
+  })
 });
 
 
 
 
 function insertHtml(offsetTop,offsetLeft,personal) {
-  let contentHtml = `<div id="personalCard" style="position: absolute;left: ${offsetLeft}px;top: ${offsetTop}px;">
+  let contentHtml = `<div id="personalCard" style="position: fixed;left: ${offsetLeft}px;top: ${offsetTop}px;">
                          <div class="personalCard_left">
                               <div class="header">
                                   <img src="${personal.avatar}" alt="">
