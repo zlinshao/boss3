@@ -123,45 +123,66 @@
               :row-class-name="tableRowCollectName"
               @row-contextmenu='houseMenu'
               style="width: 100%">
-              <!--<el-table-column width="40">-->
-                <!--<template slot-scope="scope">-->
-                  <!--<span v-if="checkContractData[scope.row.contract_number.toUpperCase()]">-->
-                    <!--<i class="el-icon-success" style="color: #6a8dfb"></i>-->
-                  <!--</span>-->
-                  <!--<span v-else=""></span>-->
-                <!--</template>-->
-              <!--</el-table-column>-->
-              <el-table-column
-                prop="contract_number"
-                label="合同编号">
+              <el-table-column width="40">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.contract_number&&checkContractData[scope.row.contract_number.toUpperCase()]">
+                    <i class="el-icon-success" style="color: #6a8dfb"></i>
+                  </span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="address"
+                label="合同编号">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.contract_number">{{scope.row.contract_number}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+              <el-table-column
                 label="房屋地址">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.address">{{scope.row.address}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <!--<el-table-column-->
                 <!--prop="property_type"-->
                 <!--label="房屋类型">-->
               <!--</el-table-column>-->
               <el-table-column
-                prop="type"
                 label="合同性质">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.type">{{scope.row.type}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="status"
                 label="合同状态">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.status">{{scope.row.status}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="visit_status.name"
                 label="审核状态">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.doc_status&&scope.row.doc_status.name">{{scope.row.doc_status.name}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="doc_status.name"
                 label="回访状态">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="deposit"
                 label="收房押金">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.deposit">{{scope.row.deposit}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="收房价格">
@@ -214,33 +235,47 @@
                 label="空置期">
                 <template slot-scope="scope">
                   <span v-if="scope.row.vacancy">{{scope.row.vacancy}}天</span>
+                  <span v-else="">/</span>
                 </template>
               </el-table-column>
               <el-table-column
                 label="合同时长">
                 <template slot-scope="scope">
                   <span v-if="scope.row.duration">{{scope.row.duration}}</span>
+                  <span v-else="">/</span>
                 </template>
               </el-table-column>
               <el-table-column
-                prop="begin_date"
                 label="开始日期">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.begin_date">{{scope.row.begin_date}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="end_date"
                 label="结束日期">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.end_date">{{scope.row.end_date}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <!--<el-table-column-->
                 <!--prop="agency"-->
                 <!--label="中介费">-->
               <!--</el-table-column>-->
               <el-table-column
-                prop="department_name"
                 label="所属部门">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.department_name">{{scope.row.department_name}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="staff_name"
                 label="签约人">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.staff_name">{{scope.row.staff_name}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <!--<el-table-column-->
                 <!--prop="leader_name"-->
@@ -282,32 +317,50 @@
               :row-class-name="tableRowRentName"
               style="width: 100%">
               <el-table-column
-                prop="contract_number"
                 label="合同编号">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.contract_number">{{scope.row.contract_number}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="address"
                 label="房屋地址">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.address">{{scope.row.address}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <!--<el-table-column-->
-                <!--prop="property_type"-->
-                <!--label="房屋类型">-->
+              <!--prop="property_type"-->
+              <!--label="房屋类型">-->
               <!--</el-table-column>-->
               <el-table-column
-                prop="type"
                 label="合同性质">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.type">{{scope.row.type}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="status"
                 label="合同状态">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.status">{{scope.row.status}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="visit_status.name"
                 label="审核状态">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.doc_status&&scope.row.doc_status.name">{{scope.row.doc_status.name}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="doc_status.name"
                 label="回访状态">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="出租价格">
@@ -357,28 +410,40 @@
                 label="合同时长">
                 <template slot-scope="scope">
                   <span v-if="scope.row.duration">{{scope.row.duration}}</span>
+                  <span v-else="">/</span>
                 </template>
               </el-table-column>
               <el-table-column
-                prop="begin_date"
                 label="开始日期">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.begin_date">{{scope.row.begin_date}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="end_date"
                 label="结束日期">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.end_date">{{scope.row.end_date}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <!--<el-table-column-->
-                <!--prop="agency"-->
-                <!--label="中介费">-->
+              <!--prop="agency"-->
+              <!--label="中介费">-->
               <!--</el-table-column>-->
-
               <el-table-column
-                prop="staff_name"
-                label="签约人">
+                label="所属部门">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.department_name">{{scope.row.department_name}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="department_name"
-                label="所属部门">
+                label="签约人">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.staff_name">{{scope.row.staff_name}}</span>
+                  <span v-else="">/</span>
+                </template>
               </el-table-column>
               <!--<el-table-column-->
                 <!--prop="leader_name"-->
@@ -438,13 +503,13 @@
             <el-tab-pane label="应付款项" name="PayableItemTab">
               <PayableItemTab></PayableItemTab>
             </el-tab-pane>
-            -->
             <el-tab-pane label="资料备忘(收)" name="CollectMemorandumTab">
               <CollectMemorandumTab></CollectMemorandumTab>
             </el-tab-pane>
             <el-tab-pane label="资料备忘(租)" name="RentMemorandumTab">
               <RentMemorandumTab></RentMemorandumTab>
             </el-tab-pane>
+            -->
             <el-tab-pane label="回访记录(收)" name="CollectReturnVisitRecordTab">
               <CollectReturnVisitRecordTab :collectContractId="collectContractId" :tabStatusChange="tabStatusChange"
                                            :activeName="activeName"></CollectReturnVisitRecordTab>
@@ -814,7 +879,7 @@
             clickIndex: '', headIcon: 'el-icons-fa-pencil-square-o', tailIcon: 'el-icon-arrow-right', label: '房东续约/延期',
             children: [
               {clickIndex: 'ownerRenewDialog', label: '续约',},
-              {clickIndex: 'ownerDelayDialog', label: '延期',}
+//              {clickIndex: 'ownerDelayDialog', label: '延期',}
             ]
           },
           {clickIndex: 'collectVacationDialog', headIcon: 'el-icons-fa-reply', label: '房东退房',},

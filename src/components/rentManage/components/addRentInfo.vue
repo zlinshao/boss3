@@ -441,7 +441,7 @@
                   <UpLoad :ID="'addRent_hand_over_card'" :isClear="isClear" :editImage="checkin_photo"
                           @getImg="getImg"></UpLoad>
                 </el-form-item>
-                <el-form-item label="委托书" required="">
+                <el-form-item label="截图凭证" required="">
                   <UpLoad :ID="'addRent_certificate_photo'" :isClear="isClear" :editImage="certificate_photo"
                           @getImg="getImg"></UpLoad>
                 </el-form-item>

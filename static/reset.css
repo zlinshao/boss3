@@ -350,4 +350,11 @@ ul.el-menu.el-menu--inline {
 #rentingDetail .el-badge__content.is-fixed {
   top: 5px !important; }
 
+#rentVacation .el-input.is-disabled .el-input__inner {
+  color: #666 !important;
+  cursor: default !important; }
+#rentVacation .el-textarea.is-disabled .el-textarea__inner {
+  color: #666 !important;
+  cursor: default !important; }
+
 /*# sourceMappingURL=reset.css.map */
