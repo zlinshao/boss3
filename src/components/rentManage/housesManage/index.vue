@@ -87,6 +87,7 @@
               element-loading-spinner="el-icon-loading"
               element-loading-background="rgba(0, 0, 0, 0)"
               @row-contextmenu="houseMenu"
+              @row-dblclick="dblClickTable"
               @row-click = 'clickTable'
               :row-class-name="tableRowCollectName"
               @selection-change="handleSelectionChange"
@@ -280,6 +281,8 @@
     <UpLoadPic :upLoadDialog="upLoadDialog" :houseId="houseId" @close="closeModal"></UpLoadPic>
     <AddEarlyWarning :addEarlyWarningDialog="addEarlyWarningDialog" :houseId="houseId" @close="closeModal"></AddEarlyWarning>
     <AddDecorate :addDecorateDialog="addDecorateDialog" :houseId="houseId" @close="closeModal"></AddDecorate>
+
+    <HouseDetail :houseDetailDialog="houseDetailDialog" :houseId="houseId" @close="closeModal"></HouseDetail>
   </div>
 </template>
 
@@ -297,10 +300,11 @@
   import UpLoadPic from './components/upLoadPic.vue'
   import AddEarlyWarning from './components/addEarlyWarning.vue'
   import AddDecorate from './components/addDecorateRecord.vue'
+  import HouseDetail from './components/houseDetail.vue'
   export default {
     name: 'hello',
     components: {
-      RightMenu, Organization, FollowRecordTab, DecorateRecordTab, EarlyWarning, EditHouseInfo,
+      RightMenu, Organization, FollowRecordTab, DecorateRecordTab, EarlyWarning, EditHouseInfo,HouseDetail,
       AddFollow, UpLoadPic, AddEarlyWarning, AddDecorate,CollectContractTab,RentContractTab
     },
     data () {
@@ -334,6 +338,7 @@
         upLoadDialog: false,
         addEarlyWarningDialog: false,
         addDecorateDialog: false,
+        houseDetailDialog: false,
 
         isHigh: false,
         activeName: 'first',
@@ -510,6 +515,11 @@
         return '';
       },
       //*****************************右键操作****************************//
+      dblClickTable(row, event){
+        this.houseId = row.id;
+        this.houseDetailDialog = true;
+      },
+
       //房屋右键
       houseMenu(row, event){
         this.houseId = row.id;
@@ -557,6 +567,7 @@
         this.upLoadDialog = false;
         this.addEarlyWarningDialog = false;
         this.addDecorateDialog = false;
+        this.houseDetailDialog = false;
         if (val === 'success') {
           this.getData();
         }else if (val === 'success_tab_first'){
