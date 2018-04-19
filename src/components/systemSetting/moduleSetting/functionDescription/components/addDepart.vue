@@ -90,6 +90,7 @@
         this.params = {
           title:'',
           pid:'',
+          sort:0
         }
         this.department="";
       }
