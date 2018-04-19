@@ -92,6 +92,8 @@
               <img @click="openMore(noticeInfofirst)" src="./../assets/images/chengfa.png" style="width: 100%;height: 195px;"></div>
             <div v-if="noticeInfofirst && noticeInfofirst.type == 3">
               <img @click="openMore(noticeInfofirst)" src="./../assets/images/tongzhi.png" style="width: 100%;height: 195px;"></div>
+            <div v-if="!(noticeInfofirst && noticeInfofirst.type)">
+              <img style="height: 195px;"></div>
             <div class="rightContent">
               <p class="info_title text_over_norwap" v-if="noticeInfofirst" @click="openMore(noticeInfofirst)">{{noticeInfofirst.title}}</p>
               <div class="clearfix">
@@ -199,13 +201,13 @@
             </div>
             <div class="lejia">
               <el-row>
-                <el-col :span="8" style="padding:0;">
+                <el-col :span="8" style="padding:0;height: 195px">
                   <div class="hover_pic" style="border-top:none;border-left:none;">
                     <img v-if="lejiaCollegeTop[0]" :src="lejiaCollegeTop[0].uri" width="100%" height="195"
                          @click="routerDetail(lejiaCollegeTop[0].id)">
                   </div>
                 </el-col>
-                <el-col :span="8" style="padding:0;">
+                <el-col :span="8" style="padding:0;height: 195px">
                   <div class="list_frame" v-if="lejiaCollege[0]" @click="routerDetail(lejiaCollege[0].id)">
                     <div style="display: inline-block;float: left;margin-top: 30px;">
                       <img v-if="lejiaCollege[0]" :src="lejiaCollege[0].uri" width="100" height="100"
@@ -226,7 +228,7 @@
                     </div>
                   </div>
                 </el-col>
-                <el-col :span="8" style="padding:0;">
+                <el-col :span="8" style="padding:0;height: 195px">
                   <div class="hover_pic" style="border-top:none;border-right:none;">
                     <img v-if="lejiaCollegeTop[1]" :src="lejiaCollegeTop[1].uri" width="100%" height="195"
                          @click="routerDetail(lejiaCollegeTop[1].id)">
@@ -234,7 +236,7 @@
                 </el-col>
               </el-row>
               <el-row>
-                <el-col :span="8" style="padding:0;">
+                <el-col :span="8" style="padding:0;height: 195px">
                   <div class="list_frame" v-if="lejiaCollege[1]" @click="routerDetail(lejiaCollege[1].id)">
                     <div style="display: inline-block;float: left;margin-top: 30px;">
                       <img v-if="lejiaCollege[1]" :src="lejiaCollege[1].uri" height="100" width="100"
@@ -257,13 +259,13 @@
                     </div>
                   </div>
                 </el-col>
-                <el-col :span="8" style="padding:0;">
+                <el-col :span="8" style="padding:0;height: 195px">
                   <div class="hover_pic" style="border-bottom: none;">
                     <img v-if="lejiaCollegeTop[2]" :src="lejiaCollegeTop[2].uri" width="100%" height="195"
                          @click="routerDetail( lejiaCollegeTop[2].id)">
                   </div>
                 </el-col>
-                <el-col :span="8" style="padding:0;">
+                <el-col :span="8" style="padding:0;height: 195px">
                   <div class="list_frame" v-if="lejiaCollege[2]" @click="routerDetail(lejiaCollege[2].id)">
                     <div style="display: inline-block;float: left;margin-top: 30px;"><img
                       :src="lejiaCollege[2] && lejiaCollege[2].uri" height="100" width="100"
