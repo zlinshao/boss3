@@ -9,68 +9,91 @@
         element-loading-background="rgba(255, 255, 255, 0)"
         style="width: 100%">
         <el-table-column
-          prop="create_time"
-          label="创建时间">
+          prop="contract_type"
+          label="合同类型">
           <template slot-scope="scope">
-            <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
-            <span v-if="!scope.row.create_time">暂无</span>
+            <span v-if="scope.row.contract_type">{{scope.row.contract_type}}</span>
+            <span v-if="!scope.row.contract_type">暂无</span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="contract_number"
-          label="合同编号">
+          prop="customer_name"
+          label="客户姓名">
           <template slot-scope="scope">
-            <span v-if="scope.row.contract_number">{{scope.row.contract_number}}</span>
-            <span v-if="!scope.row.contract_number">暂无</span>
+            <span v-if="scope.row.customer_name">{{scope.row.customer_name}}</span>
+            <span v-if="!scope.row.customer_name">暂无</span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="house_name"
-          label="房屋地址">
+          prop="sex"
+          label="性别">
           <template slot-scope="scope">
-            <span v-if="scope.row.house_name">{{scope.row.house_name}}</span>
-            <span v-if="!scope.row.house_name">暂无</span>
+            <span v-if="scope.row.sex">{{scope.row.sex}}</span>
+            <span v-if="!scope.row.sex">暂无</span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="update_time"
-          label="资料补齐时间">
+          prop="customer_mobile"
+          label="客户电话">
           <template slot-scope="scope">
-            <span v-if="scope.row.update_time">{{scope.row.update_time}}</span>
-            <span v-if="!scope.row.update_time">暂无</span>
+            <span v-if="scope.row.customer_mobile">{{scope.row.customer_mobile}}</span>
+            <span v-if="!scope.row.customer_mobile">暂无</span>
           </template>
         </el-table-column>
         <el-table-column
           prop="content"
-          label="备忘内容">
+          label="维修内容">
           <template slot-scope="scope">
             <span v-if="scope.row.content">{{scope.row.content}}</span>
             <span v-if="!scope.row.content">暂无</span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="receivers"
-          label="接收人">
+          prop="repair_time"
+          label="维修时间">
           <template slot-scope="scope">
-            <span v-if="scope.row.receivers">{{scope.row.receivers}}</span>
-            <span v-if="!scope.row.receivers">暂无</span>
+            <span v-if="scope.row.repair_time">{{scope.row.repair_time}}</span>
+            <span v-if="!scope.row.repair_time">暂无</span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="sender"
-          label="发送人">
+          prop="repair_master"
+          label="维修师傅">
           <template slot-scope="scope">
-            <span v-if="scope.row.sender">{{scope.row.sender}}</span>
-            <span v-if="!scope.row.sender">暂无</span>
+            <span v-if="scope.row.repair_master">{{scope.row.repair_master}}</span>
+            <span v-if="!scope.row.repair_master">暂无</span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="is_send"
-          label="操作类型">
+          prop="repair_result"
+          label="维修结果">
           <template slot-scope="scope">
-            <span v-if="scope.row.is_send===0">保存</span>
-            <span v-if="scope.row.is_send===1">发送</span>
-            <span v-if="scope.row.is_send===null">暂无</span>
+            <span v-if="scope.row.repair_result">{{scope.row.repair_result}}</span>
+            <span v-if="!scope.row.repair_result">暂无</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="repair_money"
+          label="维修金额">
+          <template slot-scope="scope">
+            <span v-if="scope.row.repair_money">{{scope.row.repair_money}}</span>
+            <span v-if="!scope.row.repair_money">暂无</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="status"
+          label="维修状态">
+          <template slot-scope="scope">
+            <span v-if="scope.row.status">{{scope.row.status}}</span>
+            <span v-if="!scope.row.status">暂无</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="person_liable"
+          label="认责人">
+          <template slot-scope="scope">
+            <span v-if="scope.row.liable">{{scope.row.liable}}</span>
+            <span v-if="!scope.row.liable">暂无</span>
           </template>
         </el-table-column>
       </el-table>
@@ -116,13 +139,13 @@
       },
       watch: {
         activeName(val){
-          if(val=== 'CollectMemorandumTab'){
+          if(val=== 'CollectRepairTab'){
             this.getTableData();
           }
         },
         collectContractId(val) {
           this.params.contract_id = val;
-          if(this.activeName === 'CollectMemorandumTab'){
+          if(this.activeName === 'CollectRepairTab'){
             this.getTableData();
           }
         },
@@ -131,7 +154,7 @@
         getTableData() {
           this.tableStatus = " ";
           this.tableLoading = true;
-          this.$http.get(globalConfig.server + 'lease/note/index?is_rent=0&limit='+this.params.limit+'&page='+this.params.page+'&contract_id='+this.params.contract_id).then((res) => {
+          this.$http.get(globalConfig.server + 'repaire/list?module=1&limit='+this.params.limit+'&page='+this.params.page+'&contract_id='+this.params.contract_id).then((res) => {
             this.tableLoading = false;
             if (res.data.code === '60510') {
               this.tableData = res.data.data;
