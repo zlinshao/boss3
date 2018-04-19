@@ -308,13 +308,13 @@
                         <el-input placeholder="请输入内容" v-model="params.penalty"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6" class="unitMessage">
-                      <el-form-item label="物业费金额">
-                        <el-input placeholder="请输入内容" v-model="params.property">
-                          <template slot="append">元/m²</template>
-                        </el-input>
-                      </el-form-item>
-                    </el-col>
+                    <!--<el-col :span="6" class="unitMessage">-->
+                      <!--<el-form-item label="物业费金额">-->
+                        <!--<el-input placeholder="请输入内容" v-model="params.property">-->
+                          <!--<template slot="append">元/m²</template>-->
+                        <!--</el-input>-->
+                      <!--</el-form-item>-->
+                    <!--</el-col>-->
                     <el-col :span="6">
                       <el-form-item label="物业费承担方" required="">
                         <el-select clearable v-model="params.property_payer" placeholder="请选择承担方" value="">
