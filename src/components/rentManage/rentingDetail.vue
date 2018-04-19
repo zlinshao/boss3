@@ -856,7 +856,7 @@
       },
       check(val){
         this.approveParams.is_visit = val;
-        this.$confirm('您确认审核通过吗, 是否继续?', '提示', {
+        this.$confirm('您确认操作吗, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
