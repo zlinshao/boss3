@@ -8,9 +8,9 @@
               <el-tag type="info" closable size="medium" @close="handleClose(item)" style="margin-left:10px">{{item.name}}</el-tag>
             </div>
             <div style="flex-grow:1">
-              <el-input id="search" placeholder="请输入企业联系人" @keyup.native="keywordsSearch"
-                        @keydown.8.native="backSpace" v-model="keywords" style="border: none"
-                        @keydown.down.native="changeDown" @keydown.up.native="changeUp" @keydown.13.native='keyDownAdd'></el-input>
+              <input id="search" placeholder="请输入企业联系人" @keyup="keywordsSearch"
+                     @keydown.8="backSpace" v-model="keywords" type="text" class="inputSearch"
+                     @keydown.down="changeDown" @keydown.up="changeUp" @keydown.13='keyDownAdd'>
             </div>
           </div>
           <div class="searchItems">
@@ -451,6 +451,21 @@
               &:hover{
                 border-color: #83c7ff;
               }
+
+              .inputSearch{
+                border: none;
+                background: #fff;
+                border-radius: 4px;
+                box-sizing: border-box;
+                color: #606266;
+                display: inline-block;
+                height: 40px;
+                line-height: 40px;
+                outline: 0;
+                padding: 0 15px;
+                width: 100%;
+              }
+
               .searchItems{
                 ul {
                   height: 377px;

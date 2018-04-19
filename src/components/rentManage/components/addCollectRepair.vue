@@ -6,23 +6,24 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="合同编号">
-                <el-input v-model="form.contract_number" ></el-input>
+                <el-input v-model="form.contract_number" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="合同类型">
-                <el-input v-model="form.contract_type" ></el-input>
+                <el-input v-model="form.contract_type" disabled></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
-              <el-form-item label="客户姓名">
-                <el-input v-model="form.customer_name" ></el-input>
-              </el-form-item>
-            </el-col>
+
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="客户性别">
+              <el-form-item label="客户姓名" required>
+                <el-input v-model="form.customer_name" ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="客户性别" required>
                 <el-radio-group v-model="form.sex">
                   <el-radio v-for="item in sexCategory" :label="item.id" :key="item.id">
                     {{item.dictionary_name}}
@@ -31,18 +32,12 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="客户电话">
+              <el-form-item label="回复电话" required>
                 <el-input v-model="form.customer_mobile" ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
-            <el-col :span="16">
-              <el-form-item label="维修内容">
-                <el-input type="textarea" v-model="form.content" ></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
+
           <el-row>
             <el-col :span="8">
               <el-form-item label="维修时间">
@@ -85,15 +80,19 @@
           </el-row>
           <el-row>
             <el-col :span="16">
+              <el-form-item label="维修内容">
+                <el-input type="textarea" v-model="form.content" ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="16">
               <el-form-item label="备注">
                 <el-input type="textarea" v-model="form.remark" ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
-        <div class="describe_border">
-          功能说明：再次发布维修信息，您指定维修人员会收到短信，即使维修人员在外作业也能知道接下来的工作内容。
-        </div>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="addCollectRepairDialogVisible = false">取 消</el-button>
@@ -105,11 +104,12 @@
 
 <script>
   export default {
-    props:['addCollectRepairDialog'],
+    props:['addCollectRepairDialog', 'contract'],
     data() {
       return {
         addCollectRepairDialogVisible:false,
         form:{
+          contract_id: '', //合同Id
           contract_number: '', //合同编号
           contract_type: '', //合同类型
           customer_name: '',  //客户姓名
@@ -138,13 +138,14 @@
         if(!val){
           this.$emit('close')
         }else{
-          this.form = {};  //新增时候清空数据
           this.getDictionary();
         }
-      }
-    },
-    mounted() {
-
+      },
+      contract(val) {
+        this.form.contract_id = val.contract_id;
+        this.form.contract_number = val.contract_number;
+        this.form.contract_type = val.type;
+      },
     },
     methods: {
       getDictionary() {
@@ -159,14 +160,14 @@
         });
       },
       confirmAdd() {
-        this.addCollectRepairDialogVisible = false;
-        this.form.module = 1;
         this.$http.post(globalConfig.server+ 'repaire/insert', this.form).then((res)=>{
           if(res.data.code === '600200'){
             this.$notify.success({
               title: '成功',
               message: res.data.msg
             });
+            this.initial();
+            this.addCollectRepairDialogVisible = false;
           }else{
             this.$notify.warning({
               title: '警告',
@@ -174,6 +175,21 @@
             });
           }
         })
+      },
+      initial(){
+        this.form = {
+            customer_name: '',  //客户姓名
+            sex: null,     //性别
+            customer_mobile: '',  //客户电话
+            content: '',  //维修内容
+            repair_time: '',  //维修时间
+            repair_master: '',  //维修师傅
+            repair_result: '',  //维修结果
+            repair_money: '',   //维修金额
+            remark: '',  //备注
+            status: '',  //维修状态
+            person_liable: '', //认责人
+        };
       },
     },
   };

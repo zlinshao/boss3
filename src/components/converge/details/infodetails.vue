@@ -39,7 +39,7 @@
               <img :src="pic.uri" v-for="pic in key">
             </h1>
           </div>
-          <div id="htmlForEditor">
+          <div  class="post_text ql-editor" id="htmlForEditor">
 
           </div>
 

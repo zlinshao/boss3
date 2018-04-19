@@ -474,7 +474,7 @@
               </div>
             </el-tab-pane>
           </el-tabs>
-          <div class="tableBottom">
+          <div class="block pages">
             <div class="left">
               <el-pagination
                 @size-change="handleSizeChange"
@@ -689,6 +689,8 @@
                @clickOperateMore="clickEvent"></RightMenu>
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization" @selectMember="selectMember"></Organization>
     <!--<AddressSearch :addressDialog = "addressDialog" @close="closeAddressDialog"></AddressSearch>-->
+    <visit-record :visitRecordDialog="visitRecordDialog" :contractId="contractOperateId"
+                  :category="contractModule" @close="closeModal"></visit-record>
   </div>
 </template>
 
@@ -696,9 +698,11 @@
   import RightMenu from '../../../common/rightMenu.vue';
   import Organization from '../../../common/organization.vue';
   import AddressSearch from '../../../common/addressSearch';
+  import VisitRecord from '../../components/visitRecord.vue'    //添加回访
+
   export default {
     name: 'hello',
-    components: {RightMenu, Organization, AddressSearch},
+    components: {RightMenu, Organization, AddressSearch, VisitRecord},
     data() {
       return {
         rightMenuX: 0,
@@ -794,6 +798,9 @@
         is_rent: 0,
         selectContractId: '',
         addressDialog: false,
+        visitRecordDialog: false,
+        contractModule : '',
+        contractOperateId : '',
       }
     },
     mounted() {
@@ -829,6 +836,9 @@
       },
     },
     methods: {
+      closeModal() {
+
+      },
       selectMember(val) {
         if (this.type === 'depart') {
           this.params.org_id = [];
@@ -880,6 +890,11 @@
           if (res.data.code === '61010') {
             this.collectData = res.data.data;
             this.totalNumbers = res.data.meta.total;
+            if(res.data.data.length<1) {
+              this.collectData = [];
+              this.rentStatus = '暂无数据';
+              this.totalNumbers = 0;
+            }
           } else {
             this.collectData = [];
             this.rentStatus = '暂无数据';
@@ -896,6 +911,11 @@
           if (res.data.code === '61110') {
             this.rentData = res.data.data;
             this.totalNumbers = res.data.meta.total;
+            if (res.data.data.length<1) {
+              this.collectData = [];
+              this.rentStatus = '暂无数据';
+              this.totalNumbers = 0;
+            }
           } else {
             this.rentData = [];
             this.rentStatus = '暂无数据';
@@ -931,14 +951,16 @@
       },
       //房屋右键
       houseMenu(row, event) {
+        this.collectContractId = row.contract_id;   //收房id
+        this.contractOperateId = row.contract_id;   //通用合同ID
         this.lists = [
-          {clickIndex: 'stick', headIcon: 'el-icons-fa-arrow-up', label: '置顶',},
-          {clickIndex: 'cancel', headIcon: 'el-icons-fa-scissors', label: '作废',},
+          // {clickIndex: 'stick', headIcon: 'el-icons-fa-arrow-up', label: '置顶',},
+          // {clickIndex: 'cancel', headIcon: 'el-icons-fa-scissors', label: '作废',},
           {
             clickIndex: '', headIcon: 'el-icons-fa-eye', tailIcon: 'el-icon-arrow-right', label: '回访记录',
             children: [
-              {clickIndex: '', headIcon: 'el-icons-fa-eye', label: '查看回访记录'},
-              {clickIndex: '', headIcon: 'el-icons-fa-plus', label: '添加回访记录'},
+              {clickIndex: 'viewVisit', headIcon: 'el-icons-fa-eye', label: '查看回访记录'},
+              {clickIndex: 'addVisit', headIcon: 'el-icons-fa-plus', label: '添加回访记录'},
               ]
           },
           // {clickIndex: 'maintenanceDialog', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
@@ -956,23 +978,6 @@
       //右键回调事件
       clickEvent(val) {
         switch (val.clickIndex) {
-          case 'stick' :
-            this.$confirm('您确定将其置顶吗', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              this.$message.success({
-                title: '成功',
-                message: '置顶成功!'
-              });
-            }).catch(() => {
-              this.$message.info({
-                title: '提示',
-                message: '已取消置顶'
-              });
-            });
-            break;
           case 'cancel':
             this.$confirm('您确定将其作废吗', '提示', {
               confirmButtonText: '确定',
@@ -992,6 +997,12 @@
             break;
           case 'maintenanceDialog':
             this.maintenanceDialog = true;
+            break;
+          case 'viewVisit':
+            this.visitRecordDialog = true;
+            break;
+          case 'addVisit':
+
             break;
           case 'lookMemorandum':
             this.memoDialog = true;

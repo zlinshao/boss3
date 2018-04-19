@@ -355,6 +355,12 @@ import StarffAdd from "./StarffAdd.vue";
       this.getPictureAppreciation();
       $("ul.el-carousel__indicators").css("display", "none");
     },
+    activated() {
+      this.getCourseStatus();
+      this.getTeachers();
+      this.getPictureAppreciation();
+      $("ul.el-carousel__indicators").css("display", "none");
+    },
     created() {
       if (localStorage.getItem('collegeCourseStatus')) {
         this.courseStatus = JSON.parse(localStorage.getItem('collegeCourseStatus'));

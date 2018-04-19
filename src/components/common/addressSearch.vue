@@ -82,7 +82,6 @@
         this.$http.get(globalConfig.server + 'lease/collect', {params: this.params}).then((res) => {
           if (res.data.code === '61010') {
             this.tableData = res.data.data;
-
           }
         })
       },

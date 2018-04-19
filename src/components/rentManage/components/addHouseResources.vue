@@ -564,6 +564,20 @@
                 <el-form-item label="燃气表照片">
                   <UpLoad :ID="'addHouse_gas_card'" :isClear="isClear" :editImage="gas_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
+
+                <el-form-item label="房产证照片">
+                  <UpLoad :ID="'addHouse_property_card_new'" :isClear="isClear" :editImage="property_photo" @getImg="getImg"></UpLoad>
+                </el-form-item>
+                <el-form-item label="水卡照片">
+                  <UpLoad :ID="'addHouse_water_card_new'" :isClear="isClear" :editImage="water_card_photo" @getImg="getImg"></UpLoad>
+                </el-form-item>
+                <el-form-item label="电卡照片">
+                  <UpLoad :ID="'addHouse_electricity_card_new'" :isClear="isClear" :editImage="electricity_card_photo" @getImg="getImg"></UpLoad>
+                </el-form-item>
+                <el-form-item label="燃气卡照片">
+                  <UpLoad :ID="'addHouse_gas_card_new'" :isClear="isClear" :editImage="gas_card_photo" @getImg="getImg"></UpLoad>
+                </el-form-item>
+
                 <el-form-item label="交接单照片">
                   <UpLoad :ID="'addHouse_hand_over_card'" :isClear="isClear" :editImage="checkin_photo"
                           @getImg="getImg"></UpLoad>
@@ -702,6 +716,12 @@
           water_photo: [],
           electricity_photo: [],
           gas_photo: [],
+
+          property_photo : [],
+          water_card_photo : [],
+          electricity_card_photo : [],
+          gas_card_photo : [],
+
           checkin_photo: [],
           auth_photo: [],
           deposit_photo: [],
@@ -750,6 +770,12 @@
         water_photo: {},
         electricity_photo: {},
         gas_photo: {},
+
+        property_photo : {},
+        water_card_photo : {},
+        electricity_card_photo : {},
+        gas_card_photo : {},
+
         checkin_photo: {},
         auth_photo: {},
         deposit_photo: {},
@@ -929,6 +955,12 @@
             this.water_photo = data.water_photo;
             this.electricity_photo = data.electricity_photo;
             this.gas_photo = data.gas_photo;
+
+            this.property_photo = data.property_photo;
+            this.water_card_photo = data.water_card_photo;
+            this.electricity_card_photo = data.electricity_card_photo;
+            this.gas_card_photo = data.gas_card_photo;
+
             this.checkin_photo = data.checkin_photo;
             this.auth_photo = data.auth_photo;
             this.deposit_photo = data.deposit_photo;
@@ -944,6 +976,12 @@
             this.params.water_photo = [];
             this.params.electricity_photo = [];
             this.params.gas_photo = [];
+
+            this.params.property_photo = [];
+            this.params.water_card_photo = [];
+            this.params.electricity_card_photo = [];
+            this.params.gas_card_photo = [];
+
             this.params.checkin_photo = [];
             this.params.auth_photo = [];
             this.params.deposit_photo = [];
@@ -957,6 +995,12 @@
             this.imageArray(data.water_photo, this.params.water_photo);
             this.imageArray(data.electricity_photo, this.params.electricity_photo);
             this.imageArray(data.gas_photo, this.params.gas_photo);
+
+            this.imageArray(data.property_photo,this.params.property_photo);
+            this.imageArray(data.water_card_photo,this.params.water_card_photo);
+            this.imageArray(data.electricity_card_photo,this.params.electricity_card_photo);
+            this.imageArray(data.gas_card_photo,this.params.gas_card_photo);
+
             this.imageArray(data.checkin_photo, this.params.checkin_photo);
             this.imageArray(data.auth_photo, this.params.auth_photo);
             this.imageArray(data.deposit_photo, this.params.deposit_photo);
@@ -1100,6 +1144,14 @@
           this.params.electricity_photo = val[1];
         } else if (val[0] === 'addHouse_gas_card') {
           this.params.gas_photo = val[1];
+        } else if(val[0] === 'addHouse_property_card_new'){
+          this.params.property_photo = val[1];
+        } else if(val[0] === 'addHouse_water_card_new'){
+          this.params.water_card_photo = val[1];
+        } else if(val[0] === 'addHouse_electricity_card_new'){
+          this.params.electricity_card_photo = val[1];
+        } else if(val[0] === 'addHouse_gas_card_new'){
+          this.params.gas_card_photo = val[1];
         } else if (val[0] === 'addHouse_hand_over_card') {
           this.params.checkin_photo = val[1];
         } else if (val[0] === 'addHouse_proxy_card') {
@@ -1252,6 +1304,12 @@
           water_photo: [],
           electricity_photo: [],
           gas_photo: [],
+
+          property_photo: [],
+          water_card_photo: [],
+          electricity_card_photo: [],
+          gas_card_photo: [],
+
           checkin_photo: [],
           auth_photo: [],
           deposit_photo: [],

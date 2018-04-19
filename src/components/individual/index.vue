@@ -575,9 +575,9 @@
               height: 32px;
               margin-left: 10px;
               font-size: 12px;
-              
+
               text-align: center;
-              
+
             }
             .span3{
               background: url("../../assets/images/individual/3days.png") no-repeat top;
@@ -981,12 +981,12 @@
           }
           .com {
             height: 130px;
-            @include back("../../assets/images/individual/gonggao.png");
+            @include back("../../assets/images/individual/90-赞美.png");
           }
         }
         .company2 {
           .com {
-            @include back("../../assets/images/individual/huodong.png");
+            @include back("../../assets/images/individual/91-惩罚.png");
           }
         }
       }

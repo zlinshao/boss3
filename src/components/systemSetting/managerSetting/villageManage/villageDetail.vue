@@ -22,7 +22,24 @@
                 <div class="special">{{myData.address}}</div>
               </el-form-item>
             </el-col>
-
+            <el-col :span="8">
+              <el-form-item label="地域">
+                <div class="special">
+                  <span v-if="myData.province">{{myData.province.province_name}}</span>
+                  -
+                  <span v-if="myData.city">{{myData.city.city_name}}</span>
+                  -
+                  <span v-if="myData.area">{{myData.area.area_name}}</span>
+                  -
+                  <span v-if="myData.region">{{myData.region.region_name}}</span>
+                </div>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="价格区间">
+                <div class="special">{{myData.min_price}} - {{myData.max_price}}</div>
+              </el-form-item>
+            </el-col>
             <el-col :span="8">
               <el-form-item label="房屋类型">
                 <div class="special">{{myData.house_types}}</div>
@@ -85,17 +102,7 @@
       <div class="form_border">
         <div id="container"></div>
 
-        <div class="ambitusDetail" v-if="location.length>0&&location[0]!==''">
-          <div class="ambitusDetail_top" @click="changeActive($event)">
-            <a class="active">交通</a>
-            <a>学校</a>
-            <a>医疗</a>
-            <a>购物</a>
-            <a>生活</a>
-            <a>娱乐</a>
-          </div>
-        </div>
-        <div id="panel">
+        <div id="panel" class="scroll_bar">
 
         </div>
       </div>
@@ -144,7 +151,7 @@
         let _this = this;
         let map = new AMap.Map("container", {
           resizeEnable: true,
-          zoom: 15,
+          zoom: 12,
           center:_this.location
         });
         let marker = new AMap.Marker({
@@ -181,11 +188,12 @@
     .form_border {
       position: relative;
       #panel {
+        margin: 15px;
         position: absolute;
         top: 15px;
         right: 15px;
         width: 360px;
-        height: 300px;
+        height: 330px;
         overflow-y: auto;
       }
     }

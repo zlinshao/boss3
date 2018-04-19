@@ -96,7 +96,10 @@
 
         <div class="title">上传照片</div>
         <div class="describe_border">
-          <UpLoad :ID="'vacationDetailId'" :editImage="editImage" :isClear="isClear" @getImg="getImg"></UpLoad>
+          <div class="editImg" v-if="Object.keys(editImage).length>0">
+            <img v-for="(val,key) in editImage" :src="val" alt="" data-magnify="" :data-src="val"
+                  style="width: 120px;  height: 120px; border-radius:6px;margin: 0 15px 15px 0">
+          </div>
         </div>
 
         <div class="title">应退还</div>

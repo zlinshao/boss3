@@ -2,7 +2,7 @@
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="clientContainer">
       <div class="highRanking">
-        <div class="highSearch">
+        <div class="tabsSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
               <el-input placeholder="请输入标题" v-model="form.keywords" size="mini" clearable @keyup.enter.native="">
@@ -42,12 +42,12 @@
         </div>
       </div>
       <div class="main">
-        <div class="myHouse">
-          <div class="myTable" @contextmenu="houseHeadMenu($event)">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tab-pane label="收房维修记录" name="first">
             <el-table
-              :data="tableData"
-              :empty-text='tableStatus'
-              v-loading="tableLoading"
+              :data="collectTableData"
+              :empty-text='collectStatus'
+              v-loading="collectLoading"
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
               element-loading-background="rgba(255, 255, 255, 0)"
@@ -138,38 +138,144 @@
                 prop="person_liable"
                 label="认责人">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.person_liable">{{scope.row.person_liable}}</span>
-                  <span v-if="!scope.row.person_liable">暂无</span>
+                  <span v-if="scope.row.liable">{{scope.row.liable}}</span>
+                  <span v-if="!scope.row.liable">暂无</span>
                 </template>
               </el-table-column>
             </el-table>
-          </div>
-          <div class="block pages">
-            <div class="left">
-              <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page="form.page"
-                :page-size="10"
-                layout="total, prev, pager, next, jumper"
-                :total="totalNum">
-              </el-pagination>
-            </div>
+          </el-tab-pane>
+          <el-tab-pane label="租房维修记录" name="second">
+            <el-table
+              :data="rentTableData"
+              :empty-text='rentStatus'
+              v-loading="rentLoading"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(255, 255, 255, 0)"
+              @row-click="clickTable"
+              @row-contextmenu='houseMenu'
+              style="width: 100%">
+              <el-table-column
+                prop="contract_type"
+                label="合同类型">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.contract_type">{{scope.row.contract_type}}</span>
+                  <span v-if="!scope.row.contract_type">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="customer_name"
+                label="客户姓名">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.customer_name">{{scope.row.customer_name}}</span>
+                  <span v-if="!scope.row.customer_name">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="sex"
+                label="性别">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.sex">{{scope.row.sex}}</span>
+                  <span v-if="!scope.row.sex">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="customer_mobile"
+                label="客户电话">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.customer_mobile">{{scope.row.customer_mobile}}</span>
+                  <span v-if="!scope.row.customer_mobile">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="content"
+                label="维修内容">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.content">{{scope.row.content}}</span>
+                  <span v-if="!scope.row.content">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="repair_time"
+                label="维修时间">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.repair_time">{{scope.row.repair_time}}</span>
+                  <span v-if="!scope.row.repair_time">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="repair_master"
+                label="维修师傅">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.repair_master">{{scope.row.repair_master}}</span>
+                  <span v-if="!scope.row.repair_master">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="repair_result"
+                label="维修结果">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.repair_result">{{scope.row.repair_result}}</span>
+                  <span v-if="!scope.row.repair_result">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="repair_money"
+                label="维修金额">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.repair_money">{{scope.row.repair_money}}</span>
+                  <span v-if="!scope.row.repair_money">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="status"
+                label="维修状态">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.status">{{scope.row.status}}</span>
+                  <span v-if="!scope.row.status">暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="person_liable"
+                label="认责人">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.liable">{{scope.row.liable}}</span>
+                  <span v-if="!scope.row.liable">暂无</span>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-tab-pane>
+        </el-tabs>
+        <div class="block pages">
+          <div class="left">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="form.page"
+              :page-size="12"
+              layout="total, prev, pager, next, jumper"
+              :total="totalNum">
+            </el-pagination>
           </div>
         </div>
       </div>
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-               @clickOperate="clickEvent"></RightMenu>
+               @clickOperateMore="clickEvent"></RightMenu>
+    <AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" :collectRepairId="collectRepairId" @close="closeModal"></AddCollectRepair>
+    <AddRentRepair :addRentRepairDialog="addRentRepairDialog" :rentRepairId="rentRepairId" @close="closeModal"></AddRentRepair>
   </div>
 </template>
 
 <script>
-  import RightMenu from '../../common/rightMenu.vue'
+  import RightMenu from '../../common/rightMenu.vue';
+  import AddCollectRepair from '../components/addCollectRepair';
+  import AddRentRepair from '../components/addRentRepair';
+
 
   export default {
     name: 'hello',
-    components: {RightMenu},
+    components: {RightMenu, AddCollectRepair, AddRentRepair},
     data() {
       return {
         rightMenuX: 0,
@@ -177,38 +283,75 @@
         show: false,
         lists: [],
         form: {
-          name: '',
-          house: '',
           page: 1,
           limit: 12,
         },
-        tableData: [],
+        collectTableData: [],
+        rentTableData: [],
         totalNum: 0,
         currentPage: 1,
         isHigh: false,
-        tableStatus: ' ',
-        tableLoading: false,
+        collectStatus: ' ',
+        collectLoading: false,
+        rentStatus: ' ',
+        rentLoading: false,
+        activeName: 'first',
+        addCollectRepairDialog: false,
+        addRentRepairDialog: false,
+        collectRepairId: '',
+        rentRepairId: '',
       }
     },
     mounted() {
-      this.getTableData();
+      this.getCollectTableData();
     },
     methods: {
-      getTableData() {
-        this.tableStatus = ' ';
-        this.tableLoading = true;
-        this.$http.get(globalConfig.server + 'repaire/list?limit=12&page=' + this.form.page).then((res) => {
+      getCollectTableData() {
+        this.collectStatus = ' ';
+        this.collectLoading = true;
+        this.$http.get(globalConfig.server + 'repaire/list?limit=12&module=1&page=' + this.form.page).then((res) => {
           this.isHigh = false;
-          this.tableLoading = false;
+          this.collectLoading = false;
           if (res.data.code === '600200') {
-            this.tableData = res.data.data;
+            this.collectTableData = res.data.data.data;
             this.totalNum = res.data.data.count;
           } else {
-            this.tableData = [];
+            this.collectTableData = [];
             this.totalNum = 0;
-            this.tableStatus = '暂无数据';
+            this.collectStatus = '暂无数据';
           }
         });
+      },
+      getRentTableData() {
+        this.rentStatus = ' ';
+        this.rentLoading = true;
+        this.$http.get(globalConfig.server + 'repaire/list?limit=12&module=2&page=' + this.form.page).then((res) => {
+          this.isHigh = false;
+          this.rentLoading = false;
+          if (res.data.code === '600200') {
+            this.rentTableData = res.data.data.data;
+            this.totalNum = res.data.data.count;
+          } else {
+            this.rentTableData = [];
+            this.totalNum = 0;
+            this.rentStatus = '暂无数据';
+          }
+        });
+      },
+
+      closeModal() {
+        this.addCollectRepairDialog = false;
+        this.addRentRepairDialog = false;
+        this.collectRepairId = '';
+        this.rentRepairId = '';
+      },
+      // tabs标签页
+      handleClick(tab, event) {
+        if (this.activeName == "first") {
+          this.getCollectTableData();
+        } else if (this.activeName == "second") {
+          this.getRentTableData();
+        }
       },
       // 高级
       highGrade() {
@@ -228,29 +371,34 @@
       clickTable(row, event, column) {
         console.log(row, event, column)
       },
-      //房屋右键
+      //右键
       houseMenu(row, event) {
         this.lists = [
-          {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '房源修改',},
-          {clickIndex: 1, headIcon: 'el-icon-circle-plus', label: '添加跟进',},
-          {clickIndex: 1, headIcon: 'el-icon-edit-outline', label: '修改看房',},
-          {clickIndex: 1, headIcon: 'el-icon-edit', label: '修改回访',},
-          {clickIndex: 4, headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
-          {clickIndex: 1, headIcon: 'el-icon-error', label: '删除房源',},
+          {clickIndex: 'add_follow', headIcon: 'el-icon-plus', label: '添加跟进',},
+          {clickIndex: 'edit_repair', headIcon: 'el-icon-edit', label: '编辑', id: row.id},
+          {clickIndex: 'delete_repair', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },
-      //合同表头右键
-      houseHeadMenu(e) {
-        this.lists = [
-          {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
-        ];
-        this.contextMenuParam(event);
-      },
+      //右键回调
+      clickEvent(val) {
+        switch (val.clickIndex) {
+          case 'add_follow':
 
-      //右键回调时间
-      clickEvent(index) {
-        console.log('click ' + index)
+            break;
+          case 'edit_repair':
+            if (this.activeName === 'first') {
+              this.collectRepairId = val.id;
+              this.addCollectRepairDialog = true;
+            } else if (this.activeName === 'second') {
+              this.collectRepairId = val.id;
+              this.addRentInfoDialog = true;
+            }
+            break;
+          case 'delete_repair':
+
+            break;
+        }
       },
       //关闭右键菜单
       closeMenu() {
@@ -276,63 +424,6 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
   #clientContainer {
-    .tool {
-      border-bottom: 1px solid #eee;
-      display: flex;
-      padding-bottom: 10px;
-      justify-content: space-between;
-      .tool_right {
-        display: flex;
-        align-items: center;
-        div {
-          width: 100px;
-          text-align: center;
-          cursor: pointer;
-          &:first-child {
-            /*border-right: 1px solid #ccc;*/
-          }
-          i {
-            color: #409EFF;
-          }
-        }
-      }
-    }
-    .filter {
-      padding-top: 10px;
-    }
-    .main {
-      font-size: 12px;
-      .myHouse {
-        border: 1px solid #dfe6fb;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .12), 0 0 6px 0 rgba(0, 0, 0, .04);
-        .myTable {
-          .el-table {
-            th {
-              background-color: #dfe6fb;
-            }
-          }
-        }
-        .tableBottom {
-          padding: 8px;
-          display: flex;
-          justify-content: space-between;
-          .right {
-            display: flex;
-            align-items: center;
-            div {
-              width: 100px;
-              text-align: center;
-              span {
-                color: #fb529f;
-              }
-              &:first-child {
-                border-right: 1px solid #ccc;
-              }
-            }
-          }
-        }
-      }
-    }
+
   }
 </style>

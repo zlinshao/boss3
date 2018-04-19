@@ -415,6 +415,9 @@
     mounted() {
       this.addRegion();
     },
+    activated(){
+      this.addRegion();
+    },
     created() {
       if (localStorage.getItem('convergeHostData')) {
         this.hostData = JSON.parse(localStorage.getItem('convergeHostData'));

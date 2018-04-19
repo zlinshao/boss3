@@ -97,11 +97,11 @@
             <el-col :span="12">
               <el-form-item label="价格区间">
                 <el-col :span="11">
-                  <el-input type="number" v-model="form.min_price" placeholder="请输入最小价格"></el-input>
+                  <el-input v-model="form.min_price" placeholder="请输入最小价格"></el-input>
                 </el-col>
                 <el-col class="line" :span="2" style="text-align: center">-</el-col>
                 <el-col :span="11">
-                  <el-input type="number" v-model="form.max_price" placeholder="请输入最大价格"></el-input>
+                  <el-input v-model="form.max_price" placeholder="请输入最大价格"></el-input>
                 </el-col>
               </el-form-item>
             </el-col>
@@ -178,18 +178,18 @@
     watch: {
       formList(val) {
         this.villageId = val.id;
-        this.form.province = val.province;
+        this.form.province = val.province.province_id;
         if (val.province !== '') {
-          this.chooseList('city', val.province);
-          this.form.city = val.city;
+          this.chooseList('city', val.province.province_id);
+          this.form.city = val.city.city_id;
         }
         if (val.city !== '') {
-          this.chooseList('area', val.city);
-          this.form.area = val.area;
+          this.chooseList('area', val.city.city_id);
+          this.form.area = val.area.area_id;
         }
         if (val.area !== '') {
-          this.chooseList('region', val.area);
-          this.form.region = Number(val.region);
+          this.chooseList('region', val.area.area_id);
+          this.form.region = val.region.id;
         }
         this.form.villageName = val.village_name;
         this.form.villageAddress = val.address;

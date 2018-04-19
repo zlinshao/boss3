@@ -1,17 +1,12 @@
 <template>
   <div id="mapSearchId">
-    <el-dialog :close-on-click-modal="false" title="小区选择" :visible.sync="villageDialogVisible" width="40%" :before-close="closeDialog">
+    <el-dialog :close-on-click-modal="false" title="房屋选择" :visible.sync="houseDialogVisible" width="40%" :before-close="closeDialog">
       <div class="content">
         <div class="filter-container">
           <el-form :inline="true" onsubmit="return false" size="mini" class="demo-form-inline">
-            <el-form-item label="城市">
-              <el-select clearable v-model="params.city" placeholder="请选择城市" value="">
-                <el-option v-if="cityDictionary.length>0" v-for="item in cityDictionary" :label="item.dictionary_name"
-                           :value="item.variable.city_id" :key="item.id"></el-option>
-              </el-select>
-            </el-form-item>
+
             <el-form-item>
-              <el-input v-model="params.keywords" placeholder="请输入内容" class="input-with-select" @keyup.enter.native="search">
+              <el-input v-model="params.q" placeholder="请输入内容" class="input-with-select"  @keyup.enter.native="search" clearable>
                 <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
@@ -26,24 +21,18 @@
                 </el-radio>
               </template>
             </el-table-column>
-            <el-table-column label="小区名称">
-              <template slot-scope="scope">{{ scope.row.village_name }}</template>
-            </el-table-column>
+
             <el-table-column
-              prop="address"
-              label="小区地址">
-            </el-table-column>
-            <el-table-column
-              label="省份">
+              label="房屋地址">
               <template slot-scope="scope">
-                <span v-if="scope.row.province">{{scope.row.province.province_name}}</span>
+                <span v-if="scope.row.name">{{scope.row.name}}</span>
                 <span v-else="">/</span>
               </template>
             </el-table-column>
             <el-table-column
-              label="城市">
+              label="签约人">
               <template slot-scope="scope">
-                <span v-if="scope.row.city">{{scope.row.city.city_name}}</span>
+                <span v-if="scope.row.user">{{scope.row.user.name}}</span>
                 <span v-else="">/</span>
               </template>
             </el-table-column>
@@ -64,21 +53,21 @@
 <script>
 
   export default {
-    props:['villageDialog'],
+    props:['houseDialog'],
     data () {
       return {
-        villageDialogVisible: false,
+        houseDialogVisible: false,
         tableData :[],
-
         radio:'',
         selectedItem : [],
         params: {
-          pages: 1,
-          keywords: '',
-          city: '',
+          q: '',
+          per_page_number: 50,
+          page: 1,
+          status : '',
+          is_nrcy : 0,
+          is_lord : 1,
         },
-        cityDictionary : [],
-        isDictionary : false,
       }
     },
 
@@ -86,33 +75,26 @@
 
     },
     watch:{
-      villageDialog(val){
-        this.villageDialogVisible = val
+      houseDialog(val){
+        this.houseDialogVisible = val
       },
-      villageDialogVisible(val) {
+      houseDialogVisible(val) {
         if (!val) {
           this.$emit('close');
-        }else {
-          if(!this.isDictionary){
-            this.getDictionary();
-          }
         }
-      },
-      selectMember(val){
-        this.buttonStatus = !val.length;
       }
     },
     methods:{
-       //获取字典
-      getDictionary(){
-        this.dictionary(306,1).then((res) => {this.cityDictionary = res.data;this.isDictionary = true});
-      },
-      search(){ //关键词 搜索线上高德数据
-        this.$http.get(globalConfig.server + 'setting/community/', {params: this.params}).then((res) => {
-          if (res.data.code === '10000') {
-            this.tableData = res.data.data.list;
+      search(){ //关键词 搜索
+        this.$http.get(globalConfig.server_user + 'houses', {params: this.params}).then((res) => {
+          if (res.data.status === 'success') {
+            if (res.data.data.length > 0) {
+              this.tableData = res.data.data;
+            } else {
+              this.tableData = [];
+            }
           } else {
-
+            this.tableData = [];
           }
         })
       },
@@ -120,17 +102,17 @@
         if(done === 'yes'){
            if(this.selectedItem.id){
              this.$emit('close',this.selectedItem);
-             this.villageDialogVisible = false;
+             this.houseDialogVisible = false;
              this.selectedItem = [];
              this.radio = '';
            } else {
              this.$notify.warning({
                title:'警告',
-               message : '您尚未选择小区'
+               message : '您尚未选择房屋地址'
              })
            }
         }else {
-          this.villageDialogVisible = false;
+          this.houseDialogVisible = false;
         }
       },
 
