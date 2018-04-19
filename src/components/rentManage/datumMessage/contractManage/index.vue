@@ -683,12 +683,41 @@
           </div>
         </el-dialog>
       </div>
+      <div >
+        <el-dialog :close-on-click-modal="false" title="回访记录" :visible.sync="viewVisitRecordDialog" width="50%">
+          <div>
+            <el-table
+              :data="visitTableData"
+              :empty-text='visitStatus'
+              v-loading="visitLoading"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(255, 255, 255, 0)"
+              style="width: 100%">
+              <el-table-column
+                prop="content"
+                label="回访内容">
+              </el-table-column>
+              <el-table-column
+                prop="simple_staff.real_name"
+                label="回访人">
+              </el-table-column>
+              <el-table-column
+                prop="create_time"
+                label="回访时间">
+              </el-table-column>
+            </el-table>
+          </div>
+          <div slot="footer" class="dialog-footer">
+            <el-button size="small" type="primary" @click="viewVisitRecordDialog = false">确&nbsp;定</el-button>
+          </div>
+        </el-dialog>
+      </div>
 
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization" @selectMember="selectMember"></Organization>
-    <!--<AddressSearch :addressDialog = "addressDialog" @close="closeAddressDialog"></AddressSearch>-->
     <visit-record :visitRecordDialog="visitRecordDialog" :contractId="contractOperateId"
                   :category="contractModule" @close="closeModal"></visit-record>
   </div>
@@ -697,12 +726,11 @@
 <script>
   import RightMenu from '../../../common/rightMenu.vue';
   import Organization from '../../../common/organization.vue';
-  import AddressSearch from '../../../common/addressSearch';
   import VisitRecord from '../../components/visitRecord.vue'    //添加回访
 
   export default {
     name: 'hello',
-    components: {RightMenu, Organization, AddressSearch, VisitRecord},
+    components: {RightMenu, Organization, VisitRecord},
     data() {
       return {
         rightMenuX: 0,
@@ -797,10 +825,13 @@
         incompleteLoading: false,
         is_rent: 0,
         selectContractId: '',
-        addressDialog: false,
         visitRecordDialog: false,
         contractModule : '',
         contractOperateId : '',
+        viewVisitRecordDialog: false,
+        visitTableData: [],
+        visitStatus: ' ',
+        visitLoading: false,
       }
     },
     mounted() {
@@ -834,10 +865,36 @@
           this.is_rent = 1;
         }
       },
+      visitRecordDialog(val) {
+        if(!val){
+          this.contractOperateId = '';
+          this.contractModule = '';
+        }
+      },
+      viewVisitRecordDialog(val) {
+        if(val) {
+          this.visitLoading = true;
+          this.visitStatus = ' ';
+          this.visitTableData = [];
+          this.$http.get(globalConfig.server+'contract/feedback?limit=100&category='+this.contractModule+'&contract_id='+this.contractOperateId).then((res) => {
+            this.visitLoading = false;
+            if(res.data.code === '20000'){
+              this.visitTableData = res.data.data.data;
+            }else {
+              this.visitTableData = [];
+              this.visitStatus = '暂无数据';
+            }
+          });
+        }else{
+          this.contractOperateId = '';
+          this.contractModule = '';
+        }
+      }
     },
     methods: {
       closeModal() {
-
+        this.visitRecordDialog = false;
+        this.viewVisitRecordDialog = false;
       },
       selectMember(val) {
         if (this.type === 'depart') {
@@ -951,13 +1008,14 @@
       },
       //房屋右键
       houseMenu(row, event) {
+        this.contractModule = !this.is_rent ? 1 : 2;
         this.collectContractId = row.contract_id;   //收房id
         this.contractOperateId = row.contract_id;   //通用合同ID
         this.lists = [
           // {clickIndex: 'stick', headIcon: 'el-icons-fa-arrow-up', label: '置顶',},
           // {clickIndex: 'cancel', headIcon: 'el-icons-fa-scissors', label: '作废',},
           {
-            clickIndex: '', headIcon: 'el-icons-fa-eye', tailIcon: 'el-icon-arrow-right', label: '回访记录',
+            clickIndex: 'visit', headIcon: 'el-icons-fa-eye', tailIcon: 'el-icon-arrow-right', label: '回访记录',
             children: [
               {clickIndex: 'viewVisit', headIcon: 'el-icons-fa-eye', label: '查看回访记录'},
               {clickIndex: 'addVisit', headIcon: 'el-icons-fa-plus', label: '添加回访记录'},
@@ -968,15 +1026,9 @@
         ];
         this.contextMenuParam(event);
       },
-      //合同表头右键
-      houseHeadMenu(e) {
-        this.lists = [
-          {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
-        ];
-        this.contextMenuParam(event);
-      },
       //右键回调事件
       clickEvent(val) {
+        console.log(val)
         switch (val.clickIndex) {
           case 'cancel':
             this.$confirm('您确定将其作废吗', '提示', {
@@ -999,10 +1051,10 @@
             this.maintenanceDialog = true;
             break;
           case 'viewVisit':
-            this.visitRecordDialog = true;
+            this.viewVisitRecordDialog = true;
             break;
           case 'addVisit':
-
+            this.visitRecordDialog = true;
             break;
           case 'lookMemorandum':
             this.memoDialog = true;

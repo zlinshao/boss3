@@ -34,13 +34,11 @@
           </div>
         </el-tab-pane>
       </el-tabs>
-
       <div slot="footer" class="dialog-footer" style="text-align: center;">
         <el-button size="small" type="primary" @click="empower('position')">授权给职位</el-button>
         <el-button size="small" type="primary" @click="empower('person')">授权给个人</el-button>
         <el-button size="small" @click="powerVisible = false">取&nbsp;消</el-button>
       </div>
-
     </el-dialog>
   </div>
 </template>
@@ -181,7 +179,7 @@
       // 系统
       systemList() {
         this.$http.get(this.urls + 'systems?per_page_number=100&page=1').then((res) => {
-          if (res.data.status === 'success') {
+          if (res.data.status === 'success'&& res.data.data.length !== 0) {
             let data = res.data.data;
             this.systemData = data;
             this.systemName = data[0].name;
@@ -194,7 +192,7 @@
       // 模块
       moduleList(val) {
         this.$http.get(this.urls + 'modules?per_page_number=100&page=1&sys_id=' + val).then((res) => {
-          if (res.data.status === 'success') {
+          if (res.data.status === 'success'&& res.data.data.length !== 0) {
             let data = res.data.data;
             this.moduleData = data;
             this.moduleName = data && data[0] && data[0].name;
@@ -209,7 +207,7 @@
       permissionList(val) {
         this.$http.get(this.urls + 'permissions?per_page_number=100&page=1&mod_id=' + val).then((res) => {
           this.checkAllPower = [];
-          if (res.data.status === 'success') {
+          if (res.data.status === 'success'&& res.data.data.length !== 0) {
             let data = res.data.data;
             this.permissionData = data;
             for (let i = 0; i < data.length; i++) {
