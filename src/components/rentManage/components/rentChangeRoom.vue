@@ -58,59 +58,38 @@
                 <el-row>
                   <el-col :span="8">
                     <el-form-item label="房屋地址" required>
-                      <el-input placeholder="请输入内容" v-model="community_name" @focus="openVillageModal" readonly=""></el-input>
+                      <el-input placeholder="请输入内容" @focus="openVillageModal" v-model="houseAddress.name" readonly=""></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="房型">
                       <div class="content">
-
+                        <span>{{dicts.room[houseAddress.room]}}</span>
+                        <span>{{dicts.hall[houseAddress.hall]}}</span>
+                        <span>{{dicts.toilet[houseAddress.toilet]}}</span>
                       </div>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="面积">
-                      <div class="content">
-
-                      </div>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row>
                   <el-col :span="8">
                     <el-form-item label="装修">
                       <div class="content">
-
-                      </div>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="收房价格">
-                      <div class="content">
-
-                      </div>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="楼层">
-                      <div class="content">
-
+                        <span v-if="houseAddress.decoration">{{matchDictionary(houseAddress.decoration)}}</span>
                       </div>
                     </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row>
                   <el-col :span="8">
-                    <el-form-item label="到期时间">
+                    <el-form-item label="参考价格">
                       <div class="content">
-
+                        <span v-if="houseAddress.suggest_price">{{houseAddress.suggest_price}}</span>
                       </div>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="房屋类型">
                       <div class="content">
-
+                        <span v-if="houseAddress.house_identity">{{matchDictionary(houseAddress.house_identity)}}</span>
                       </div>
                     </el-form-item>
                   </el-col>
@@ -520,7 +499,7 @@
         <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
-    <VillageModal :villageDialog="villageDialog" @close="closeVillageModal"></VillageModal>
+    <AddressModal :houseDialog="houseDialog" @close="closeAddressModal"></AddressModal>
     <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
                   @close='closeModal' @selectMember="selectMember"></Organization>
   </div>
@@ -528,18 +507,18 @@
 
 <script>
   import UpLoad from '../../common/UPLOAD.vue'
-  import VillageModal from '../../common/villageSearch.vue'
+  import AddressModal from '../../common/houseSearch.vue'
   import Organization from '../../common/organization.vue'
 
   export default {
-    components: {UpLoad, VillageModal, Organization},
+    components: {UpLoad, AddressModal, Organization},
     props: ['rentChangeRoomDialog', 'rentContractId', 'collectHouseId','rentContractInfo'],
     data() {
       return {
         rentChangeRoomDialogVisible: false,
         activeName: 'first',
         isClear: false,
-        villageDialog: false,
+        houseDialog: false,
         organizationDialog: false,
         length: 0,
         type: '',
@@ -547,6 +526,7 @@
         params: {
           id: '',   //合同id
           house_id: '',
+          house_id_rent:'',
           type: 5,
           //------------------小区详情--------------------//
           customers: [],               //租客数组
@@ -597,8 +577,7 @@
           checkout_photo: [],
           checkout_settle_photo: [],
         },
-        community_name: '',           //小区名
-        community_address: '',        //小区地址
+
         staff_name: '',                //组件选中显示名字
 //        leader_name: '',               //组件选中显示名字
         department_name: '',           //组件选中显示名字
@@ -621,6 +600,8 @@
         pay_way_dic: [],
         property_payer_dic: [],
         purchase_way_dic: [],
+
+        all_dic :[],
         isUpPic: false,
 
         priceChangeAmount: 1,
@@ -648,6 +629,14 @@
         other_photo: {},
         checkout_photo: {},
         checkout_settle_photo: {},
+
+        houseAddress:{},
+
+        dicts: {
+          room: ['1室', '2室', '3室', '4室', '5室', '6室', '7室', '8室'],
+          hall: ['无', '1厅', '2厅', '3厅', '4厅', '5厅'],
+          toilet: ['无', '1卫', '2卫', '3卫', '4卫', '5卫'],
+        },
       };
     },
     watch: {
@@ -682,18 +671,6 @@
     },
     methods: {
       getDictionary(){
-        this.dictionary(410, 1).then((res) => {
-          this.property_type_dic = res.data;
-          this.isDictionary = true
-        });
-        this.dictionary(425, 1).then((res) => {
-          this.house_feature_dic = res.data;
-          this.isDictionary = true
-        });
-        this.dictionary(404, 1).then((res) => {
-          this.decorate_dic = res.data;
-          this.isDictionary = true
-        });
         this.dictionary(409, 1).then((res) => {
           this.id_type_dic = res.data;
           this.isDictionary = true
@@ -719,6 +696,20 @@
           this.purchase_way_dic = res.data;
           this.isDictionary = true
         });
+
+        this.$http.get(globalConfig.server + 'setting/dictionary/all').then((res) => {
+          this.all_dic = res.data.data;
+        })
+      },
+
+      matchDictionary(id) {
+        let dictionary_name = null;
+        this.all_dic.map((item) => {
+          if (item.id == id) {
+            dictionary_name = item.dictionary_name;
+          }
+        });
+        return dictionary_name;
       },
       //获取详情
       getDetail(){
@@ -837,15 +828,14 @@
 
       //打开小区模态框
       openVillageModal(){
-        this.villageDialog = true
+        this.houseDialog = true
       },
-      closeVillageModal(val){
-        this.villageDialog = false;
-        console.log(val)
-        if (val) {
-          this.params.community_id = val.id;
-          this.community_name = val.village_name;
-          this.community_address = val.address;
+      closeAddressModal(val){
+        this.houseDialog = false;
+        if(val){
+          console.log(val)
+          this.houseAddress = val;
+          this.params.house_id_rent = val.id;
         }
       },
 
@@ -1009,6 +999,7 @@
         this.params = {
           id: this.rentContractId,   //合同id
           house_id: this.collectHouseId,
+          house_id_rent: '',
           type: 5,
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
@@ -1058,8 +1049,7 @@
           checkout_photo: [],
           checkout_settle_photo: [],
         };
-        this.community_name = '';           //小区名
-        this.community_address = '';        //小区地址
+
         this.staff_name = '';                //组件选中显示名字
         this.department_name = '';           //组件选中显示名字
         this.customersAmount = 1;

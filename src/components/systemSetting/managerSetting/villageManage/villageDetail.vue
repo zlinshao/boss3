@@ -37,7 +37,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="价格区间">
-                <div class="special"></div>
+                <div class="special">{{myData.min_price}} - {{myData.max_price}}</div>
               </el-form-item>
             </el-col>
             <el-col :span="8">

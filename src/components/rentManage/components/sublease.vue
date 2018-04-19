@@ -698,16 +698,6 @@
 
             let data = res.data.data;
 
-            //租客信息
-            this.customersAmount = data.customers.length;
-            data.customers.forEach((item) => {
-              this.nameArray.push(item.name);
-              this.sexArray.push(String(item.sex));
-              this.id_typeArray.push(item.idtype);
-              this.id_numberArray.push(item.idcard);
-              this.phoneArray.push(item.phone);
-            });
-
 
             //照片
             this.identity_photo = data.identity_photo;

@@ -1,6 +1,6 @@
 <template>
   <div id="mapSearchId">
-    <el-dialog :close-on-click-modal="false" title="房屋地址选择" :visible.sync="addressDialogVisible" width="40%" :before-close="closeDialog">
+    <el-dialog :close-on-click-modal="false" title="房屋选择" :visible.sync="houseDialogVisible" width="40%" :before-close="closeDialog">
       <div class="content">
         <div class="filter-container">
           <el-form :inline="true" onsubmit="return false" size="mini" class="demo-form-inline">
@@ -16,19 +16,25 @@
           <el-table :data="tableData" @row-click="rowClick" style="width: 100%">
             <el-table-column width="65">
               <template slot-scope="scope">
-                <el-radio v-model="radio" :label="scope.row.contract_id">
+                <el-radio v-model="radio" :label="scope.row.id">
                   <span style="display: none">1</span>
                 </el-radio>
               </template>
             </el-table-column>
 
             <el-table-column
-              prop="address"
               label="房屋地址">
+              <template slot-scope="scope">
+                <span v-if="scope.row.name">{{scope.row.name}}</span>
+                <span v-else="">/</span>
+              </template>
             </el-table-column>
             <el-table-column
-              prop="type"
-              label="房屋性质">
+              label="签约人">
+              <template slot-scope="scope">
+                <span v-if="scope.row.user">{{scope.row.user.name}}</span>
+                <span v-else="">/</span>
+              </template>
             </el-table-column>
 
           </el-table>
@@ -47,17 +53,20 @@
 <script>
 
   export default {
-    props:['addressDialog'],
+    props:['houseDialog'],
     data () {
       return {
-        addressDialogVisible: false,
+        houseDialogVisible: false,
         tableData :[],
         radio:'',
         selectedItem : [],
         params: {
-          pages: 1,
           q: '',
-          limit: 500
+          per_page_number: 50,
+          page: 1,
+          status : '',
+          is_nrcy : 0,
+          is_lord : 1,
         },
       }
     },
@@ -66,30 +75,34 @@
 
     },
     watch:{
-      addressDialog(val){
-        this.addressDialogVisible = val
+      houseDialog(val){
+        this.houseDialogVisible = val
       },
-      addressDialogVisible(val) {
+      houseDialogVisible(val) {
         if (!val) {
           this.$emit('close');
-        }else {
-          this.search();
         }
       }
     },
     methods:{
-      search(){ //关键词 搜索线上高德数据
-        this.$http.get(globalConfig.server + 'lease/collect', {params: this.params}).then((res) => {
-          if (res.data.code === '61010') {
-            this.tableData = res.data.data;
+      search(){ //关键词 搜索
+        this.$http.get(globalConfig.server_user + 'houses', {params: this.params}).then((res) => {
+          if (res.data.status === 'success') {
+            if (res.data.data.length > 0) {
+              this.tableData = res.data.data;
+            } else {
+              this.tableData = [];
+            }
+          } else {
+            this.tableData = [];
           }
         })
       },
       closeDialog(done){    //关闭模态框回调
         if(done === 'yes'){
-           if(this.selectedItem.contract_id){
+           if(this.selectedItem.id){
              this.$emit('close',this.selectedItem);
-             this.addressDialogVisible = false;
+             this.houseDialogVisible = false;
              this.selectedItem = [];
              this.radio = '';
            } else {
@@ -99,12 +112,12 @@
              })
            }
         }else {
-          this.addressDialogVisible = false;
+          this.houseDialogVisible = false;
         }
       },
 
       rowClick(row, event, column){
-        this.radio = row.contract_id;
+        this.radio = row.id;
         this.selectedItem = row;
       },
     }
