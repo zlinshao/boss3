@@ -483,7 +483,6 @@
                         </div>
                       </el-tab-pane>
                       <el-tab-pane>
-
                         <span slot="label">
                           <el-badge is-dot class="item" v-if="Array.isArray(contractInfo.gas_photo)">燃气表照片</el-badge>
                           <span v-else="">燃气表照片</span>
@@ -494,8 +493,59 @@
                                :data-src="value">
                         </div>
                       </el-tab-pane>
-                      <el-tab-pane>
 
+
+
+                      <el-tab-pane>
+                        <span slot="label">
+                          <el-badge is-dot class="item" v-if="Array.isArray(contractInfo.property_photo)">房产证照片</el-badge>
+                          <span v-else="">房产证照片</span>
+                        </span>
+                        <div class="image">
+                          <span v-if="Array.isArray(contractInfo.property_photo)">暂无照片</span>
+                          <img v-for="(value,key) in contractInfo.property_photo" :src="value" data-magnify="" v-else=""
+                               :data-src="value">
+                        </div>
+                      </el-tab-pane>
+                      <el-tab-pane>
+                        <span slot="label">
+                          <el-badge is-dot class="item" v-if="Array.isArray(contractInfo.water_card_photo)">水卡照片</el-badge>
+                          <span v-else="">水卡照片</span>
+                        </span>
+                        <div class="image">
+                          <span v-if="Array.isArray(contractInfo.water_card_photo)">暂无照片</span>
+                          <img v-for="(value,key) in contractInfo.water_card_photo" :src="value" data-magnify="" v-else=""
+                               :data-src="value">
+                        </div>
+                      </el-tab-pane>
+                      <el-tab-pane>
+                        <span slot="label">
+                          <el-badge is-dot class="item"
+                                    v-if="Array.isArray(contractInfo.electricity_card_photo)">电卡照片</el-badge>
+                          <span v-else="">电卡照片</span>
+                        </span>
+                        <div class="image">
+                          <span v-if="Array.isArray(contractInfo.electricity_card_photo)">暂无照片</span>
+                          <img v-for="(value,key) in contractInfo.electricity_card_photo" :src="value" data-magnify=""
+                               v-else=""
+                               :data-src="value">
+                        </div>
+                      </el-tab-pane>
+
+                      <el-tab-pane>
+                        <span slot="label">
+                          <el-badge is-dot class="item" v-if="Array.isArray(contractInfo.gas_card_photo)">燃气卡照片</el-badge>
+                          <span v-else="">燃气卡照片</span>
+                        </span>
+                        <div class="image">
+                          <span v-if="Array.isArray(contractInfo.gas_card_photo)">暂无照片</span>
+                          <img v-for="(value,key) in contractInfo.gas_card_photo" :src="value" data-magnify="" v-else=""
+                               :data-src="value">
+                        </div>
+                      </el-tab-pane>
+
+
+                      <el-tab-pane>
                         <span slot="label">
                           <el-badge is-dot class="item" v-if="Array.isArray(contractInfo.checkin_photo)">交接单</el-badge>
                           <span v-else="">交接单</span>

@@ -2,13 +2,15 @@
  * Created by AigLe on 2018/3/11 0011.
  */
 import img from '../images/defaultHead.png'
-
+let is_on_job = null;
 let isClickHead = false;
 $(document).on('click', '[data-card]', function (e) {
   let personal = JSON.parse($(e.target).attr('data-src'));
   if(!personal.avatar){
     personal.avatar = img;
   }
+  is_on_job = personal.is_on_job?'离职':'在职';
+  console.log(personal)
   let offsetLeft = e.clientX;
   let offsetTop = e.clientY;
 
@@ -49,7 +51,7 @@ function insertHtml(offsetTop,offsetLeft,personal) {
                          <div class="personalCard_right">
                               <div>
                                  <div>员工职务</div>
-                                 <div>业务员</div>
+                                 <div>${personal.role[0].display_name}</div>
                               </div>
                               <div>
                                  <div>部门</div>
@@ -61,11 +63,11 @@ function insertHtml(offsetTop,offsetLeft,personal) {
                               </div>
                               <div>
                                  <div>员工状态</div>
-                                 <div>在职</div>
+                                 <div>${is_on_job}</div>
                               </div>
                                <div>
-                                 <div>主管姓名</div>
-                                 <div>${personal.is_enable}</div>
+                                 <div>生日</div>
+                                 <div>${personal.detail.birthday}</div>
                               </div>
                          </div>
                      </div>`;
