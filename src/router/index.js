@@ -310,7 +310,7 @@ export default new Router({
         //     {path: '/datumMessage/contractManage', component: ContractManage, name: '合同管理',},
         //   ]
         // },
-        // {path: '/repairManage', component: RepairManage, name: '维修管理',}
+        {path: '/repairManage', component: RepairManage, name: '维修管理',}
       ]
     },
 

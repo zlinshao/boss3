@@ -95,13 +95,13 @@
             <div class="rightContent">
               <p class="info_title text_over_norwap" v-if="noticeInfofirst" @click="openMore(noticeInfofirst)">{{noticeInfofirst.title}}</p>
               <div class="clearfix">
-                <span>{{noticeInfofirst.create_time}}</span>
+                <span>{{noticeInfofirst && noticeInfofirst.create_time}}</span>
                 <span style="float: right;">
-                    <i class="el-icon-view"></i> {{noticeInfofirst.read_count}} &nbsp;&nbsp;&nbsp;
-                    <i class="iconfont icon-yanjingclose"> {{noticeInfofirst.read_uncount}}</i>
+                    <i class="el-icon-view"></i> {{noticeInfofirst && noticeInfofirst.read_count}} &nbsp;&nbsp;&nbsp;
+                    <i class="iconfont icon-yanjingclose"> {{noticeInfofirst && noticeInfofirst.read_uncount}}</i>
                   </span>
               </div>
-              <div style="margin-top: 10px;" class="second_line_camp">{{noticeInfofirst.content_without_table}}</div>
+              <div style="margin-top: 10px;" class="second_line_camp">{{noticeInfofirst && noticeInfofirst.content_without_table}}</div>
               <div><em class="ix"></em></div>
               <div style="border-bottom: 1px solid #eee;padding-bottom: 20px;">
                 <el-button @click="openMore(noticeInfofirst)" size="small"
