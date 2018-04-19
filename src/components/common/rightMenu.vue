@@ -10,7 +10,7 @@
 					<i :class="item.tailIcon" class="tail-icon"></i>
 				</button>
         <!--存在子元素进行递归-->
-				<infinite-right-menu v-if="showChildren(item)" @clickOperate="emitClick"
+				<infinite-right-menu v-if="showChildren(item)" @clickOperate="emitClick" @clickOperateMore="emitClickItem"
 														 :list="item.children" :startX="isOverflowX?'-95%':'95%'" :startY="'0'"
 														 :show="showList(index)"></infinite-right-menu>
 			</li>
