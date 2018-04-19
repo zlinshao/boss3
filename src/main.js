@@ -15,6 +15,7 @@ import Boss from './boss.config.js'
 import Fun from './fun.config.js'
 import Cookies from 'js-cookie';
 
+import vueEventCalendar from 'vue-event-calendar'
 import 'vue-event-calendar/dist/style.css' //1.1.10之后的版本，css被放在了单独的文件中，方便替换
 
 import $ from 'jquery'
@@ -24,9 +25,10 @@ import './assets/magnify/jquery.magnify'
 import './assets/personalCard/personalCard.css'
 import './assets/personalCard/personalCard.js'
 
-import vueEventCalendar from 'vue-event-calendar'
 
 import VueLoading from './plugin/loading/loading.js'
+
+import 'vue2-editor/node_modules/quill/dist/quill.core.css'
 
 
 // 地图

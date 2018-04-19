@@ -127,7 +127,6 @@
                 resolve();
               }
             }).then((data) => {
-              console.log(sessionStorage.getItem('beforePath'))
               if (sessionStorage.getItem('beforePath') === '/lock') {
                 this.$router.push('/main');
               } else {
