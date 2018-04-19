@@ -97,10 +97,8 @@
         <div class="title">上传照片</div>
         <div class="describe_border">
           <div class="editImg" v-if="Object.keys(editImage).length>0">
-            <div class="imgItem" v-for="(val,key) in editImage">
-              <<img :src="val" alt="" data-magnify="" :data-src="val"
-                    style="width: 120px;  height: 120px; border-radius:6px;">
-            </div>
+            <img v-for="(val,key) in editImage" :src="val" alt="" data-magnify="" :data-src="val"
+                  style="width: 120px;  height: 120px; border-radius:6px;margin: 0 15px 15px 0">
           </div>
         </div>
 
