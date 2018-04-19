@@ -62,7 +62,6 @@ export default {
     },
     loginDay(val){
       this. loginDayto = val;
-      console.log(this. loginDayto)
     }
   },
   mounted() {

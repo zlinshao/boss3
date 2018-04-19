@@ -7,7 +7,7 @@
           <div id="dragTree">
             <el-tree ref="expandMenuList" class="expand-tree"
                      :data="setTree"
-                     node-key="id"
+                     node-key="id"                    
                      @node-click="nodeClick"
                      :default-expanded-keys="defaultExpandKeys"
                      :props="defaultProps"
@@ -19,7 +19,7 @@
           <el-col :span="18" class="instruct_left">
             <div style="font-size:16px;margin-left:4px; color: #409EFF;">{{titleName}}</div>
             <div v-if="arr[a] ==index" class="imgdiv" v-for="(key,index) in form.image_pic" :key="key.id">
-              <img :src="pic.uri" v-for="pic in key" :key="pic.id" />
+              <img :src="pic.uri" v-for="pic in key" data-magnify :data-src="pic.uri" :key="pic.id" />
             </div>
           </el-col>
         </el-row>

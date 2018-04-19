@@ -9,6 +9,11 @@
                 <el-input placeholder="请输入内容" v-model="params.title"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="24">
+              <el-form-item label='序号'>
+                <el-input type="number" placeholder="请输入内容" v-model="sortInt"></el-input>
+              </el-form-item>
+            </el-col>
           </el-row>
         </el-form>
       </div>
@@ -16,6 +21,7 @@
         <el-button size="small" @click="editDepartDialogVisible=false">取 消</el-button>
         <el-button size="small" type="primary" @click.native="confirmEdit">确 定</el-button>
       </span>
+
     </el-dialog>
   </div>
 </template>
@@ -30,14 +36,19 @@
         params:{
           id:'',
           title:'',
-          pid:''
+          pid:'',
+          sort:0
         },
+        sortInt:0,
         department:'',
       };
     },
     watch:{
       editDepartDialog(val){
         this.editDepartDialogVisible = val
+      },
+      sortInt(val){
+        this.params.sort = parseInt(val);
       },
       editDepartDialogVisible(val){
         if(!val){

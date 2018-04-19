@@ -14,6 +14,11 @@
                 <el-input placeholder="请输入内容" v-model="params.title"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="24">
+              <el-form-item label='序号'>
+                <el-input type="number" placeholder="请输入内容" v-model="sortInt"></el-input>
+              </el-form-item>
+            </el-col>
           </el-row>
         </el-form>
       </div>
@@ -34,13 +39,18 @@
         params:{
           title:'',
           pid:'',
+          sort:0
         },
+        sortInt:0,
         department:'',
       };
     },
     watch:{
       addDepartDialog(val){
         this.addDepartDialogVisible = val
+      },
+      sortInt(val){
+        this.params.sort = parseInt(val);
       },
       addDepartDialogVisible(val){
         if(!val){
