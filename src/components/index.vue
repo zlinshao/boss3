@@ -327,7 +327,7 @@
     <UnlockSecondPW :unlockSecondPWDialog="unlockSecondPWDialog" @unlockFlag="unlockFlag" :unLockName="unLockName"
                     @close="closeModalSecond"></UnlockSecondPW>
     <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
-    <BadgeView :badgeDialog="badgeDialog" @close="closeModalSecond"></BadgeView>
+    <BadgeView :badgeDialog="badgeDialog" :loginDay="loginDay" @close="closeModalSecond"></BadgeView>
     <InstitutionView :institutionDialog="institutionDialog" @close="closeModal"></InstitutionView>
     <YanFirstView :yanFirstDialog="yanFirstDialog" @close="closeModal"></YanFirstView>
     <YanSecondView :yanSecondDialog="yanSecondDialog" @close="closeModal"></YanSecondView>

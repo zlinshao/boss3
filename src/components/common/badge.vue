@@ -3,19 +3,19 @@
     <el-dialog :close-on-click-modal="false" width="0" style="margin-top:20vh" :visible.sync="badgeDialogVisible">
     <div class="badgeup" >
       <span class="close el-icon-close"  @click="closeBadge"></span>
-      <div v-if="loginDay == 3" class="backdiv backdiv3"></div>
-      <div v-else-if="loginDay == 5" class="backdiv backdiv5"></div>
-      <div v-else-if="loginDay == 15" class="backdiv backdiv15"></div>
-      <div v-else-if="loginDay == 30" class="backdiv backdiv30"></div>
+      <div v-if="loginDayto == 3" class="backdiv backdiv3"></div>
+      <div v-else-if="loginDayto == 5" class="backdiv backdiv5"></div>
+      <div v-else-if="loginDayto == 15" class="backdiv backdiv15"></div>
+      <div v-else-if="loginDayto == 30" class="backdiv backdiv30"></div>
       <div v-else class="backdiv backdivo"></div>
       <p class="Rtitle">{{xljt}}</p>
-      <span v-if="loginDay == 3" class="day day3">{{loginDay}}</span>
-      <span v-else-if="loginDay == 5" class="day day5">{{loginDay}}</span>
-      <span v-else-if="loginDay == 15" class="day day15">{{loginDay}}</span>
-      <span v-else-if="loginDay == 30" class="day day30">{{loginDay}}</span>
-      <span v-else class="day dayo">{{loginDay}}</span>
+      <span v-if="loginDayto == 3" class="day day3">{{loginDayto}}</span>
+      <span v-else-if="loginDayto == 5" class="day day5">{{loginDayto}}</span>
+      <span v-else-if="loginDayto == 15" class="day day15">{{loginDayto}}</span>
+      <span v-else-if="loginDayto == 30" class="day day30">{{loginDayto}}</span>
+      <span v-else class="day dayo">{{loginDayto}}</span>
       <span class="span1">每日登录</span>
-      <span class="span2">"你已连续登录{{loginDay}}天"</span>
+      <span class="span2">"你已连续登录{{loginDayto}}天"</span>
     </div>
     </el-dialog>
   </div>
@@ -24,12 +24,12 @@
 <script>
 export default {
   name: "hello",
-  props: ["badgeDialog"],
+  props: ["badgeDialog" ,"loginDay"],
   data() {
     return {
       landholder: {},
       panelShow: false,
-      loginDay: 0, //连续登陆天数
+      loginDayto: 0, //连续登陆天数
       badgeDialogVisible: false,
       type: 3,
       xljt: "",
@@ -59,11 +59,13 @@ export default {
           this.closeBadge();
         }, 3000);
       }
+    },
+    loginDay(val){
+      this. loginDayto = val;
+      console.log(this. loginDayto)
     }
   },
   mounted() {
-    this.landholder = JSON.parse(localStorage.personal);
-    this.loginDay = this.landholder.data.loginday;
     this.getFlag();
   },
   methods: {
