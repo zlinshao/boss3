@@ -43,7 +43,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="退房性质" required>
-                  <el-select v-model="params.check_type" clearable="" placeholder="请选择退房性质" value="">
+                  <el-select v-model="params.check_type" @change="clearFee" clearable="" placeholder="请选择退房性质" value="">
                     <el-option v-for="item in dictionary" :label="item.dictionary_name" :key="item.id" :value="item.id"></el-option>
                   </el-select>
                 </el-form-item>
@@ -53,6 +53,12 @@
                   <el-input placeholder="请输入内容" v-model="params.profit"></el-input>
                 </el-form-item>
               </el-col>
+              <el-col :span="8" v-if="params.check_type == 333 || params.check_type == 582">
+                <el-form-item label="转租费" required>
+                  <el-input placeholder="请输入内容" v-model="params.sublease_fee"></el-input>
+                </el-form-item>
+              </el-col>
+
               <el-col :span="8">
                 <el-form-item label="姓名" required>
                   <el-input placeholder="请输入内容" v-model="params.account_name"></el-input>
@@ -330,11 +336,11 @@
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="80px">
             <el-row >
-              <el-col :span="6">
-                <el-form-item label="违约金">
-                  <el-input v-model="params.liquidated_damages" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
+              <!--<el-col :span="6">-->
+                <!--<el-form-item label="违约金">-->
+                  <!--<el-input v-model="params.liquidated_damages" placeholder="请输入内容"></el-input>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
               <el-col :span="6">
                 <el-form-item label="垃圾费">
                   <el-input v-model="params.trash_fees" placeholder="请输入内容"></el-input>
@@ -403,6 +409,7 @@
           check_time : '',
           check_type : '',
           profit:'',
+          sublease_fee:'',
           bank_num : '',
           account_bank : '',
           branch_bank : '',
@@ -494,6 +501,7 @@
       realTotal(){
         return Number(this.reimbursementTotal)-Number(this.waterTotal)-Number(this.elePeakTotal)-
           Number(this.eleValTotal)-Number(this.gasTotal)-Number(this.managementTotal)-Number(this.otherTotal)
+          -Number(this.params.sublease_fee)-Number(this.params.profit);
       },
     },
     watch:{
@@ -538,6 +546,11 @@
           }
         })
       },
+//      退房性质变化
+      clearFee(){
+          this.params.profit = '';
+          this.params.sublease_fee = '';
+      },
       //上传图片
       getImg(val){
         this.params.image_pic = val[1];
@@ -570,6 +583,7 @@
           check_time : '',
           check_type : '',
           profit:'',
+          sublease_fee:'',
           bank_num : '',
           account_bank : '',
           branch_bank : '',

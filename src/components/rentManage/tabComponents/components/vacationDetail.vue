@@ -57,6 +57,11 @@
                   <el-input disabled placeholder="请输入内容" v-model="params.profit"></el-input>
                 </el-form-item>
               </el-col>
+              <el-col :span="8" v-if="params.check_type == 333 || params.check_type == 582">
+                <el-form-item label="转租费" required>
+                  <el-input placeholder="请输入内容" v-model="params.sublease_fee"></el-input>
+                </el-form-item>
+              </el-col>
               <el-col :span="8">
                 <el-form-item label="姓名" required>
                   <el-input disabled placeholder="请输入内容" v-model="params.account_name"></el-input>
@@ -106,11 +111,11 @@
         <div class="form_border">
           <el-form size="mini" label-width="100px">
             <el-row >
-              <el-col :span="6">
-                <el-form-item label="退还押金">
-                  <el-input disabled v-model="params.refund_deposit" type="number" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
+              <!--<el-col :span="6">-->
+                <!--<el-form-item label="退还押金">-->
+                  <!--<el-input disabled v-model="params.refund_deposit" type="number" placeholder="请输入内容"></el-input>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
               <el-col :span="6">
                 <el-form-item label="剩余房租">
                   <el-input disabled v-model="params.residual_rent" type="number" placeholder="请输入内容"></el-input>
@@ -410,6 +415,7 @@
           check_time : '',
           check_type : '',
           profit:'',
+          sublease_fee:'',
           bank_num : '',
           account_bank : '',
           branch_bank : '',
@@ -502,6 +508,7 @@
       realTotal(){
         return Number(this.reimbursementTotal)-Number(this.waterTotal)-Number(this.elePeakTotal)-
           Number(this.eleValTotal)-Number(this.gasTotal)-Number(this.managementTotal)-Number(this.otherTotal)
+          -Number(this.params.sublease_fee)-Number(this.params.profit);
       },
     },
     watch:{
@@ -550,6 +557,7 @@
             this.params.check_time = data.check_time;
             this.params.check_type = data.check_type;
             this.params.profit = data.extend_field && data.extend_field.profit;
+            this.params.sublease_fee = data.extend_field && data.extend_field.sublease_fee;
             this.params.bank_num = data.bank_num;
             this.params.account_bank = data.account_bank;
             this.params.branch_bank = data.branch_bank;
@@ -638,6 +646,7 @@
           check_time : '',
           check_type : '',
           profit:'',
+          sublease_fee:'',
           bank_num : '',
           account_bank : '',
           branch_bank : '',
