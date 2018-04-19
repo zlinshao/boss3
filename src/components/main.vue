@@ -613,6 +613,15 @@
       this.getPerWeeklyReport();
       this.table = this.achieveTable;
     },
+    activated() {
+      this.getnotice();
+      this.getBanners();
+      this.getStaffSquare();
+      this.getNews();
+      this.getLejiaCollege();
+      this.getPerWeeklyReport();
+      this.table = this.achieveTable;
+    },
     created() {
       this.table = this.achieveTable;
       //取出本地缓存数据
