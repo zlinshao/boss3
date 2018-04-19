@@ -474,7 +474,7 @@
               </div>
             </el-tab-pane>
           </el-tabs>
-          <div class="tableBottom">
+          <div class="block pages">
             <div class="left">
               <el-pagination
                 @size-change="handleSizeChange"

@@ -503,13 +503,14 @@
             <el-tab-pane label="应付款项" name="PayableItemTab">
               <PayableItemTab></PayableItemTab>
             </el-tab-pane>
+
+            -->
             <el-tab-pane label="资料备忘(收)" name="CollectMemorandumTab">
-              <CollectMemorandumTab></CollectMemorandumTab>
+              <CollectMemorandumTab :collectContractId="collectContractId" :activeName="activeName" ></CollectMemorandumTab>
             </el-tab-pane>
             <el-tab-pane label="资料备忘(租)" name="RentMemorandumTab">
-              <RentMemorandumTab></RentMemorandumTab>
+              <RentMemorandumTab :rentContractId="rentContractId" :activeName="activeName" ></RentMemorandumTab>
             </el-tab-pane>
-            -->
             <el-tab-pane label="回访记录(收)" name="CollectReturnVisitRecordTab">
               <CollectReturnVisitRecordTab :collectContractId="collectContractId" :tabStatusChange="tabStatusChange"
                                            :activeName="activeName"></CollectReturnVisitRecordTab>
@@ -525,6 +526,12 @@
             <el-tab-pane label="租房工单" name="RentFollowRecordTab">
               <RentFollowRecordTab :rentContractId="rentContractId" :tabStatusChange="tabStatusChange"
                                    :activeName="activeName"></RentFollowRecordTab>
+            </el-tab-pane>
+            <el-tab-pane label="维修单(收)" name="CollectRepairTab">
+              <CollectRepairTab :collectContractId="collectContractId" :activeName="activeName" ></CollectRepairTab>
+            </el-tab-pane>
+            <el-tab-pane label="维修单(租)" name="RentRepairTab">
+              <RentRepairTab :collectContractId="collectContractId" :activeName="activeName" ></RentRepairTab>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -634,6 +641,9 @@
   import RentReturnVisitRecordTab from '../tabComponents/rentReturnVistitRecord.vue'
   import CollectFollowRecordTab from '../tabComponents/collectFollowRecord.vue'
   import RentFollowRecordTab from '../tabComponents/rentFollowRecord.vue'
+  import CollectRepairTab from '../tabComponents/collectRepair.vue'
+  import RentRepairTab from '../tabComponents/rentRepair.vue'
+
 //  import ServiceRecordTab from '../tabComponents/serviceRecord.vue'
   export default {
     name: 'hello',
@@ -685,6 +695,8 @@
       RentReturnVisitRecordTab,
       CollectFollowRecordTab,
       RentFollowRecordTab,
+      CollectRepairTab,
+      RentRepairTab,
 //      ServiceRecordTab,
     },
     data () {
@@ -1176,11 +1188,11 @@
         }else if(val === 'updateRent'){
           this.getRentData(this.collectHouseId);
         }else if(val === 'changeGoods'){
-          this.tabStatusChange = 'GoodsChangeTab'
+          this.tabStatusChange = 'GoodsChangeTab';
         }else if(val === 'visitRecord'){
-          this.tabStatusChange = 'visitRecord'
+          this.tabStatusChange = 'visitRecord';
         }else if(val === 'workOrder'){
-          this.tabStatusChange = 'workOrder'
+          this.tabStatusChange = 'workOrder';
         }
       },
 
