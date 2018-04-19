@@ -15,13 +15,13 @@
           </el-row>
           <span style="color:#fdaece;margin-left:100px;">备注:首页倒计时时间设置,当合计时结束后,将自动进入锁屏模式</span>
 
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="手机号">
-                <el-input disabled="" v-model="personalInfo.phone"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
+          <!--<el-row>-->
+            <!--<el-col :span="12">-->
+              <!--<el-form-item label="手机号">-->
+                <!--<el-input disabled="" v-model="phone_number"></el-input>-->
+              <!--</el-form-item>-->
+            <!--</el-col>-->
+          <!--</el-row>-->
           <el-row>
             <el-col :span="12">
               <el-form-item label="验证码">
@@ -87,11 +87,11 @@
       }
     },
     computed: {
-      personalInfo(){
-        return JSON.parse(localStorage.personal);
-      },
       isClose(){
         return this.setCount && this.setPassWord;
+      },
+      phone_number(){
+        return JSON.parse(localStorage.personal).phone;
       }
     },
     mounted(){
