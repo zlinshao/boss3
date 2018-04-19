@@ -1,14 +1,28 @@
 <template>
   <div id="addFollowUp">
-    <el-dialog :close-on-click-modal="false" title="添加跟进" :visible.sync="addFollowUpDialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="添加跟进" :visible.sync="addFollowUpDialogVisible" width="45%">
       <div>
         <el-form size="small" :model="params" label-width="100px">
           <el-row>
+            <el-col :span="12">
+              <el-form-item label="所属城市" required="">
+                <el-select clearable v-model="params.city" placeholder="选择城市" value="">
+                  <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
             <el-col :span="12">
               <el-form-item label="工单类型" required="">
                 <el-select clearable v-model="params.type" placeholder="缴费方式" value="">
                   <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
                 </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="回复电话">
+                <el-input  v-model="params.mobile" ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -19,19 +33,21 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="回复电话">
-                <el-input  v-model="params.mobile" ></el-input>
+              <el-form-item label="跟进状态">
+                <el-select clearable v-model="params.follow_status" placeholder="工单进度" value="">
+                  <el-option v-for="item in dictionary_follow" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
-            <el-col></el-col>
-          </el-row>
-          <el-row>
             <el-col :span="12">
               <el-form-item label="跟进时间">
                 <el-date-picker type="datetime" placeholder="选择日期时间"
                                 value-format="yyyy-MM-dd HH:mm:ss" v-model="params.follow_time"></el-date-picker>
               </el-form-item>
             </el-col>
+
+          </el-row>
+          <el-row>
             <el-col :span="12">
               <el-form-item label="下次跟进时间">
                 <el-date-picker type="datetime" placeholder="选择日期时间"
@@ -75,11 +91,13 @@
       return {
         addFollowUpDialogVisible:false,
         params:{
+          city: '',
           contract_id : '',                 //'合同id',
           module: '',                        //'关联模型', 1-收房  2-租房
           matters:'',                        //跟进事项
           type : '',                         //'事件类型',
           follow_id : '',                    // '跟进人',
+          follow_status: '',
           expect_time  : '',                 //'期待维修时间',
           expected_finish_time : '',         //'预计完成时间',
           follow_time : '',                  //'跟进时间',
@@ -89,11 +107,13 @@
         organizationDialog: false,
         isClear:false,
         dictionary:[],
+        dictionary_follow:[],
         follow_name:'',
         length:0,
         type:'',
         upStatus:false,
         isDictionary:false,
+        cityCategory: [],
       };
     },
     watch:{
@@ -127,6 +147,19 @@
             this.isDictionary = true
           }
         });
+        this.$http.get(globalConfig.server+'setting/dictionary/335').then((res) => {
+          if(res.data.code === "30010"){
+            this.dictionary_follow = res.data.data;
+            this.isDictionary = true;
+          }
+        });
+        this.$http.get(globalConfig.server+'setting/dictionary/306').then((res) => {
+          if(res.data.code === "30010"){
+            this.cityCategory = res.data.data;
+            this.isDictionary = true;
+          }
+        });
+
       },
       //调出选人组件
       openOrganizeModal(){
