@@ -156,10 +156,10 @@
           this.tableLoading = true;
           this.$http.get(globalConfig.server + 'repaire/list?module=2&limit='+this.params.limit+'&page='+this.params.page+'&contract_id='+this.params.contract_id).then((res) => {
             this.tableLoading = false;
-            if (res.data.code === '60510') {
-              this.tableData = res.data.data;
-              this.totalNum = res.data.num;
-              if (res.data.data.length < 1) {
+            if (res.data.code === '600200') {
+              this.tableData = res.data.data.data;
+              this.totalNum = res.data.data.count;
+              if (res.data.data.data.length < 1) {
                 this.tableStatus = "暂无数据";
                 this.tableData = [];
                 this.totalNum = 0;
