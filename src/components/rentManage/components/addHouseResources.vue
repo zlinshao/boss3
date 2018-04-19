@@ -791,7 +791,8 @@
       },
       addHouseResourcesDialogVisible(val){
         if (!val) {
-          this.$emit('close')
+          this.$emit('close');
+          this.clearData();
         } else {
           this.isClear = true;
           this.getDraft();
@@ -1114,8 +1115,8 @@
 
       //计算空置期结束时间
       computedEndDate(){
-//        let timestamp = Date.parse(new Date(this.params.begin_date)) + Number(this.params.vacancy) * 24 * 60 * 60 * 1000;
-//        this.params.vacancy_end_date = this.formatDate(new Date(timestamp));
+        this.params.day = this.params.day?this.params.day:0;
+
         this.$http.get(globalConfig.server+'lease/helper/collectdates?begin_date='+this.params.begin_date+'&month='
                         +this.params.month +'&day='+this.params.day+'&vacancy='+this.params.vacancy ).then((res) =>{
           if(res.data.code === '69910'){

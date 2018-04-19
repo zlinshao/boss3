@@ -1,4 +1,4 @@
-<template>
+`<template>
   <div id="addHouseResources">
     <el-dialog :close-on-click-modal="false" title="房屋转租" :visible.sync="subleaseDialogVisible" width="60%">
       <div>
@@ -847,6 +847,7 @@
 
       //计算空置期结束时间
       computedEndDate(){
+        this.params.day = this.params.day?this.params.day:0;
         this.$http.get(globalConfig.server+'lease/helper/rentdates?begin_date='+this.params.begin_date+'&month='
           +this.params.month +'&day='+this.params.day+'&vacancy='+this.params.vacancy ).then((res) =>{
           if(res.data.code === '69910'){
