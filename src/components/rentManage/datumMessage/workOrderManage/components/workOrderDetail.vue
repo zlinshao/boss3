@@ -6,30 +6,56 @@
         <div class="describe_border">
           <el-form size="small" label-width="100px">
             <el-row>
-              <el-row>
-                <el-col :span="8">
-                  <el-form-item label="创建时间">
-                    <div class="content">{{workOrderDetail.create_time}}</div>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="创建人">
-                    <div class="content">
-                      <span v-if="workOrderDetail.creators">{{workOrderDetail.creators.name}}</span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="回复电话">
-                    <div class="content">
-                      <span v-if="workOrderDetail.mobile">{{workOrderDetail.mobile}}</span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-              </el-row>
+              <el-col :span="8">
+                <el-form-item label="创建时间">
+                  <div class="content">{{workOrderDetail.create_time}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="创建人">
+                  <div class="content">
+                    <span v-if="workOrderDetail.creators">{{workOrderDetail.creators.name}}</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8" style="text-align: right">
+                <el-button type="text" size="small" @click="editOrder(workOrderDetail.id)">
+                  <i class="el-icon-edit"></i>修改跟进事项
+                </el-button>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="工单编号">
+                  <div class="content">
+                    <span v-if="workOrderDetail.num">{{workOrderDetail.num}}</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="所属城市">
+                  <div class="content">{{workOrderDetail.city}}</div>
+                </el-form-item>
+              </el-col>
               <el-col :span="8">
                 <el-form-item label="工单类型">
                   <div class="content">{{workOrderDetail.types}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="回复电话">
+                  <div class="content">
+                    <span v-if="workOrderDetail.mobile">{{workOrderDetail.mobile}}</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="跟进状态">
+                  <div class="content">
+                    <span v-if="workOrderDetail.follow_statuss">{{workOrderDetail.follow_statuss}}</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -38,11 +64,6 @@
                     <span v-if="workOrderDetail.follows">{{workOrderDetail.follows.name}}</span>
                   </div>
                 </el-form-item>
-              </el-col>
-              <el-col :span="8" style="text-align: right">
-                <el-button type="text" size="small" @click="editOrder(workOrderDetail.id)">
-                  <i class="el-icon-edit"></i>修改跟进事项
-                </el-button>
               </el-col>
             </el-row>
             <el-row>
@@ -121,11 +142,44 @@
                   </div>
                 </el-form-item>
               </el-col>
+              <el-col :span="8" style="text-align: right">
+                <el-button type="text" size="small" @click="editOrder(item.id)">
+                  <i class="el-icon-edit"></i>修改跟进事项
+                </el-button>
+              </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
+                <el-form-item label="工单编号">
+                  <div class="content">
+                    <span v-if="item.num">{{item.num}}</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="所属城市">
+                  <div class="content">{{item.city}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
                 <el-form-item label="工单类型">
                   <div class="content">{{item.types}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="回复电话">
+                  <div class="content">
+                    <span v-if="item.mobile">{{item.mobile}}</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="跟进状态">
+                  <div class="content">
+                    <span v-if="item.follow_statuss">{{item.follow_statuss}}</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -135,16 +189,11 @@
                   </div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8" style="text-align: right">
-                <el-button type="text" size="small" @click="editOrder(item.id)">
-                  <i class="el-icon-edit"></i>修改跟进事项
-                </el-button>
-              </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="跟进状态">
-                  <div class="content">{{item.follow_statuss}}</div>
+                <el-form-item label="完成时间">
+                  <div class="content">{{item.finish_time}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -153,7 +202,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="期待完成时间">
+                <el-form-item label="下次跟进时间">
                   <div class="content">{{item.expected_finish_time}}</div>
                 </el-form-item>
               </el-col>
