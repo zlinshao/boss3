@@ -1,6 +1,6 @@
 <template>
   <div id="addCollectRepair">
-    <el-dialog :close-on-click-modal="false" title="添加维修" :visible.sync="addCollectRepairDialogVisible" width="60%">
+    <el-dialog :close-on-click-modal="false" title="添加维修" :visible.sync="addCollectRepairDialogVisible" width="50%">
       <div>
         <el-form size="mini" :model="form" label-width="100px">
           <el-row>
@@ -23,7 +23,11 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="客户性别">
-                <el-input v-model="form.customer_name" ></el-input>
+                <el-radio-group v-model="form.sex">
+                  <el-radio v-for="item in sexCategory" :label="item.id" :key="item.id">
+                    {{item.dictionary_name}}
+                  </el-radio>
+                </el-radio-group>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -42,7 +46,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="维修时间">
-                <el-date-picker type="date" v-model="form.repair_time" placeholder="选择日期"></el-date-picker>
+                <el-date-picker type="date" v-model="form.repair_time" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -64,29 +68,25 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="维修状态">
-                <el-select v-model="form.status" placeholder="请选择责任归属">
-                  <el-option label="区域一" value="shanghai"></el-option>
-                  <el-option label="区域二" value="beijing"></el-option>
+                <el-select v-model="form.status" placeholder="请选择维修状态">
+                  <el-option v-for="item in repairStatusCategory" :label="item.dictionary_name" :key="item.id" :value="item.id">{{item.dictionary_name}}</el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="认责人">
+                <el-select v-model="form.person_liable" placeholder="请选择认责归属" clearable>
+                  <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id" :value="item.id">{{item.dictionary_name}}</el-option>
                 </el-select>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="16">
-              <el-form-item label="备注">
-                <el-input type="textarea" v-model="form.content" ></el-input>
-              </el-form-item>
-            </el-col>
           </el-row>
           <el-row>
-            <el-col :span="8">
-              <el-form-item label="认责人">
-                <el-input placeholder="请输入内容"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="操作人">
-                <el-input placeholder="请输入内容"></el-input>
+            <el-col :span="16">
+              <el-form-item label="备注">
+                <el-input type="textarea" v-model="form.remark" ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -97,7 +97,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="addCollectRepairDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="addCollectRepairDialogVisible = false">确 定</el-button>
+        <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -123,8 +123,11 @@
           remark: '',  //备注
           status: '',  //维修状态
           person_liable: '', //认责人
-          operator_id: '', //操作人
+          module: 1, //收房
         },
+        repairStatusCategory: [],
+        responsiblePersonCategory: [],
+        sexCategory: [],
       };
     },
     watch:{
@@ -134,9 +137,45 @@
       addCollectRepairDialogVisible(val){
         if(!val){
           this.$emit('close')
+        }else{
+          this.form = {};  //新增时候清空数据
+          this.getDictionary();
         }
       }
-    }
+    },
+    mounted() {
+
+    },
+    methods: {
+      getDictionary() {
+        this.dictionary(595).then((res) => {  //维修状态
+          this.repairStatusCategory = res.data;
+        });
+        this.dictionary(604).then((res) => {  //认责人
+          this.responsiblePersonCategory = res.data;
+        });
+        this.dictionary(228).then((res) => {
+          this.sexCategory = res.data;
+        });
+      },
+      confirmAdd() {
+        this.addCollectRepairDialogVisible = false;
+        this.form.module = 1;
+        this.$http.post(globalConfig.server+ 'repaire/insert', this.form).then((res)=>{
+          if(res.data.code === '600200'){
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+          }else{
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        })
+      },
+    },
   };
 </script>
 <style lang="scss" scoped="">
