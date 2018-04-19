@@ -231,12 +231,9 @@
       //房屋右键
       houseMenu(row, event) {
         this.lists = [
-          {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '房源修改',},
-          {clickIndex: 1, headIcon: 'el-icon-circle-plus', label: '添加跟进',},
-          {clickIndex: 1, headIcon: 'el-icon-edit-outline', label: '修改看房',},
-          {clickIndex: 1, headIcon: 'el-icon-edit', label: '修改回访',},
-          {clickIndex: 4, headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
-          {clickIndex: 1, headIcon: 'el-icon-error', label: '删除房源',},
+          {clickIndex: 'add_follow', headIcon: 'el-icon-plus', label: '添加跟进',},
+          {clickIndex: 'edit_repair', headIcon: 'el-icon-edit', label: '编辑',},
+          {clickIndex: 'delete_repair', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },
