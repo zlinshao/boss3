@@ -9,8 +9,8 @@
             </div>
             <div style="flex-grow:1">
               <input id="search" placeholder="请输入企业联系人" @keyup="keywordsSearch"
-                        @keydown.8="backSpace" v-model="keywords" type="text" class="inputSearch"
-                        @keydown.down="changeDown" @keydown.up="changeUp" @keydown.13='keyDownAdd'>
+                     @keydown.8="backSpace" v-model="keywords" type="text" class="inputSearch"
+                     @keydown.down="changeDown" @keydown.up="changeUp" @keydown.13='keyDownAdd'>
             </div>
           </div>
           <div class="searchItems">
@@ -456,6 +456,7 @@
                 border: none;
                 background: #fff;
                 border-radius: 4px;
+                box-sizing: border-box;
                 color: #606266;
                 display: inline-block;
                 height: 40px;
