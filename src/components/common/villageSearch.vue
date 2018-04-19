@@ -34,12 +34,18 @@
               label="小区地址">
             </el-table-column>
             <el-table-column
-              prop="province_name"
               label="省份">
+              <template slot-scope="scope">
+                <span v-if="scope.row.province">{{scope.row.province.province_name}}</span>
+                <span v-else="">/</span>
+              </template>
             </el-table-column>
             <el-table-column
-              prop="city_name"
               label="城市">
+              <template slot-scope="scope">
+                <span v-if="scope.row.city">{{scope.row.city.city_name}}</span>
+                <span v-else="">/</span>
+              </template>
             </el-table-column>
 
           </el-table>

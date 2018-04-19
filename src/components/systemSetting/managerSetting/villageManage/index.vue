@@ -282,9 +282,9 @@
               let list = {};
               list.id = data[i].id;
               list.village_name = data[i].village_name;
-              list.province_name = data[i].province_name;
-              list.city_name = data[i].city_name;
-              list.area_name = data[i].area_name;
+              list.province_name = data[i].province.province_name;
+              list.city_name = data[i].city.city_name;
+              list.area_name = data[i].area.area_name;
               list.address = data[i].address;
               list.village_alias = data[i].village_alias !== null?data[i].village_alias: '暂无信息';
               list.house_types = data[i].house_types !== null?data[i].house_types: '暂无信息';

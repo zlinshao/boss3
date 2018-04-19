@@ -28,7 +28,7 @@ import './assets/personalCard/personalCard.js'
 
 import VueLoading from './plugin/loading/loading.js'
 
-import 'vue2-editor/node_modules/quill/dist/quill.core.css'
+import 'vue2-editor/node_modules/quill/dist/quill.bubble.css'
 
 
 // 地图
