@@ -22,13 +22,6 @@
         <h3>
           {{contractInfo.community_name}}  {{contractInfo.building}}-{{contractInfo.unit}}-{{contractInfo.doorplate}}</h3>
         <h3>
-          <!--<el-button size="mini" type="primary" v-if="contractInfo.visit_status" disabled="">-->
-            <!---->
-          <!--</el-button>-->
-
-          <!--<el-button size="mini" type="primary" v-if="contractInfo.doc_status" disabled="">-->
-            <!--{{contractInfo.doc_status.name}}-->
-          <!--</el-button>-->
           <el-dropdown>
             <el-button type="primary" size="mini">
               <span v-if="contractInfo.visit_status">
@@ -37,14 +30,22 @@
               <i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <!--<el-dropdown-item v-if="contractInfo.operation && contractInfo.operation.visit"-->
-                                <!--v-for="item in contractInfo.operation.visit" :key="item" @click.native="confirmPress(item)">-->
-                <!--<span v-if="item === 'to_customer_service_publish'">回访提交</span>-->
-              <!--</el-dropdown-item>-->
+              <div v-if="contractInfo.operation &&!Array.isArray(contractInfo.operation)&& contractInfo.operation.visit">
+                <el-dropdown-item
+                  v-for="item in contractInfo.operation.visit" :key="item"
+                  @click.native="confirmPress(item)">
+                  <span v-if="item === 'to_customer_service_publish'">回访提交</span>
+                </el-dropdown-item>
+              </div>
+              <div v-else="">
+                <el-dropdown-item>
+                  暂无数据
+                </el-dropdown-item>
+              </div>
             </el-dropdown-menu>
           </el-dropdown>
 
-          <el-dropdown >
+          <el-dropdown>
             <el-button type="primary" size="mini">
               <span v-if="contractInfo.doc_status">
                 {{contractInfo.doc_status.name}}
@@ -52,15 +53,23 @@
               <i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <!--<el-dropdown-item v-if="contractInfo.operation&&contractInfo.operation.doc"-->
-                                <!--v-for="item in contractInfo.operation.doc" :key="item" @click.native="confirmPress(item)">-->
-                <!--<span v-if="item === 'to_contract_review'">提交合同审核员审核</span>-->
-                <!--<span v-if="item === 'to_contract_approved'">合同资料无误，同意</span>-->
-                <!--<span v-if="item === 'to_cancelled'"></span>-->
-                <!--<span v-if="item === 'to_contract_rejected'">撤销审核</span>-->
-                <!--<span v-if="item === 'to_house_approved'">合同资料有误，拒绝</span>-->
-                <!--<span v-if="item === 'to_house_rejected'">房屋资料无误，同意</span>-->
-              <!--</el-dropdown-item>-->
+              <div v-if="contractInfo.operation &&!Array.isArray(contractInfo.operation)&& contractInfo.operation.doc">
+                <el-dropdown-item
+                  v-for="item in contractInfo.operation.doc" :key="item"
+                  @click.native="confirmPress(item)">
+                  <span v-if="item === 'to_contract_review'">提交合同审核员审核</span>
+                  <span v-if="item === 'to_contract_approved'">合同资料无误，同意</span>
+                  <span v-if="item === 'to_cancelled'"></span>
+                  <span v-if="item === 'to_contract_rejected'">撤销审核</span>
+                  <span v-if="item === 'to_house_approved'">合同资料有误，拒绝</span>
+                  <span v-if="item === 'to_house_rejected'">房屋资料无误，同意</span>
+                </el-dropdown-item>
+              </div>
+              <div v-else="">
+                <el-dropdown-item>
+                  暂无数据
+                </el-dropdown-item>
+              </div>
             </el-dropdown-menu>
           </el-dropdown>
         </h3>
@@ -441,7 +450,7 @@
               </el-col>
             </el-row>
 
-            <el-row >
+            <el-row>
               <el-col :span="24">
                 <el-form-item label="合同照片">
                   <div class="image" id="photo" @dragover='allowDrop($event)'>
@@ -458,34 +467,34 @@
                     <el-tabs type="border-card">
                       <el-tab-pane>
                         <span slot="label">
-                          <el-badge is-dot class="item" v-if="params.identity_photo.length<1">证件照片</el-badge>
+                          <el-badge is-dot class="item" v-if="albumObject.identity_photo.length<1">证件照片</el-badge>
                           <span v-else="">证件照片</span>
                         </span>
                         <div class="image" id="identity_photo" @dragover='allowDrop($event)'>
-                          <span v-if="params.identity_photo.length<1">暂无照片</span>
+                          <span v-if="albumObject.identity_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.identity_photo" @drag="currentPicId(key)"
                                :src="value" data-magnify="" :data-src="value">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane>
                           <span slot="label">
-                            <el-badge is-dot class="item" v-if="params.bank_photo.length<1">银行卡照片</el-badge>
+                            <el-badge is-dot class="item" v-if="albumObject.bank_photo.length<1">银行卡照片</el-badge>
                             <span v-else="">银行卡照片</span>
                           </span>
 
                         <div class="image" id="bank_photo" @dragover='allowDrop($event)'>
-                          <span v-if="params.bank_photo.length<1">暂无照片</span>
+                          <span v-if="albumObject.bank_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.bank_photo" :src="value"
                                data-magnify="" :data-src="value" @drag="currentPicId(key)">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane>
                         <span slot="label">
-                          <el-badge is-dot class="item" v-if="params.water_photo.length<1">水表照片</el-badge>
+                          <el-badge is-dot class="item" v-if="albumObject.water_photo.length<1">水表照片</el-badge>
                           <span v-else="">水表照片</span>
                         </span>
                         <div class="image" @dragover='allowDrop($event)' id="water_photo">
-                          <span v-if="params.water_photo.length<1">暂无照片</span>
+                          <span v-if="albumObject.water_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.water_photo" :src="value"
                                data-magnify="" :data-src="value" @drag="currentPicId(key)">
                         </div>
@@ -493,47 +502,46 @@
                       <el-tab-pane>
                         <span slot="label">
                           <el-badge is-dot class="item"
-                                    v-if="params.electricity_photo.length<1">电表照片</el-badge>
+                                    v-if="albumObject.electricity_photo.length<1">电表照片</el-badge>
                           <span v-else="">电表照片</span>
                         </span>
                         <div class="image" @dragover='allowDrop($event)' id="electricity_photo">
-                          <span v-if="params.electricity_photo.length<1">暂无照片</span>
+                          <span v-if="albumObject.electricity_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.electricity_photo" :src="value"
                                data-magnify="" :data-src="value" @drag="currentPicId(key)">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane>
                         <span slot="label">
-                          <el-badge is-dot class="item" v-if="params.gas_photo.length<1">燃气表照片</el-badge>
+                          <el-badge is-dot class="item" v-if="albumObject.gas_photo.length<1">燃气表照片</el-badge>
                           <span v-else="">燃气表照片</span>
                         </span>
                         <div class="image" @dragover='allowDrop($event)' id="gas_photo">
-                          <span v-if="params.gas_photo.length<1">暂无照片</span>
+                          <span v-if="albumObject.gas_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.gas_photo" :src="value"
                                data-magnify="" :data-src="value" @drag="currentPicId(key)">
                         </div>
                       </el-tab-pane>
 
 
-
                       <el-tab-pane>
                         <span slot="label">
-                          <el-badge is-dot class="item" v-if="params.property_photo.length<1">房产证照片</el-badge>
+                          <el-badge is-dot class="item" v-if="albumObject.property_photo.length<1">房产证照片</el-badge>
                           <span v-else="">房产证照片</span>
                         </span>
                         <div class="image" @dragover='allowDrop($event)' id="property_photo">
-                          <span v-if="params.property_photo.length<1">暂无照片</span>
+                          <span v-if="albumObject.property_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.property_photo" :src="value"
-                               data-magnify="":data-src="value" @drag="currentPicId(key)">
+                               data-magnify="" :data-src="value" @drag="currentPicId(key)">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane>
                         <span slot="label">
-                          <el-badge is-dot class="item" v-if="params.water_card_photo.length<1">水卡照片</el-badge>
+                          <el-badge is-dot class="item" v-if="albumObject.water_card_photo.length<1">水卡照片</el-badge>
                           <span v-else="">水卡照片</span>
                         </span>
                         <div class="image" @dragover='allowDrop($event)' id="water_card_photo">
-                          <span v-if="params.water_card_photo.length<1">暂无照片</span>
+                          <span v-if="albumObject.water_card_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.water_card_photo" :src="value"
                                data-magnify="" :data-src="value" @drag="currentPicId(key)">
                         </div>
@@ -541,11 +549,11 @@
                       <el-tab-pane>
                         <span slot="label">
                           <el-badge is-dot class="item"
-                                    v-if="params.electricity_card_photo.length<1">电卡照片</el-badge>
+                                    v-if="albumObject.electricity_card_photo.length<1">电卡照片</el-badge>
                           <span v-else="">电卡照片</span>
                         </span>
                         <div class="image" @dragover='allowDrop($event)' id="electricity_card_photo">
-                          <span v-if="params.electricity_card_photo.length<1">暂无照片</span>
+                          <span v-if="albumObject.electricity_card_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.electricity_card_photo" :src="value"
                                data-magnify="" :data-src="value" @drag="currentPicId(key)">
                         </div>
@@ -553,11 +561,11 @@
 
                       <el-tab-pane>
                         <span slot="label">
-                          <el-badge is-dot class="item" v-if="params.gas_card_photo.length<1">燃气卡照片</el-badge>
+                          <el-badge is-dot class="item" v-if="albumObject.gas_card_photo.length<1">燃气卡照片</el-badge>
                           <span v-else="">燃气卡照片</span>
                         </span>
                         <div class="image" @dragover='allowDrop($event)' id="gas_card_photo">
-                          <span v-if="params.gas_card_photo.length<1">暂无照片</span>
+                          <span v-if="albumObject.gas_card_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.gas_card_photo" :src="value"
                                data-magnify="" :data-src="value" @drag="currentPicId(key)">
                         </div>
@@ -566,11 +574,11 @@
 
                       <el-tab-pane>
                         <span slot="label">
-                          <el-badge is-dot class="item" v-if="params.checkin_photo.length<1">交接单</el-badge>
+                          <el-badge is-dot class="item" v-if="albumObject.checkin_photo.length<1">交接单</el-badge>
                           <span v-else="">交接单</span>
                         </span>
                         <div class="image" @dragover='allowDrop($event)' id="checkin_photo">
-                          <span v-if="params.checkin_photo.length<1">暂无照片</span>
+                          <span v-if="albumObject.checkin_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.checkin_photo" :src="value"
                                data-magnify="" :data-src="value" @drag="currentPicId(key)">
                         </div>
@@ -578,22 +586,22 @@
 
                       <el-tab-pane>
                         <span slot="label">
-                          <el-badge is-dot class="item" v-if="params.auth_photo.length<1">委托书</el-badge>
+                          <el-badge is-dot class="item" v-if="albumObject.auth_photo.length<1">委托书</el-badge>
                           <span v-else="">委托书</span>
                         </span>
                         <div class="image" @dragover='allowDrop($event)' id="auth_photo">
-                          <span v-if="params.auth_photo.length<1">暂无照片</span>
+                          <span v-if="albumObject.auth_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.auth_photo" :src="value"
                                data-magnify="" :data-src="value" @drag="currentPicId(key)">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane>
                         <span slot="label">
-                          <el-badge is-dot class="item" v-if="params.deposit_photo.length<1">押金收条</el-badge>
+                          <el-badge is-dot class="item" v-if="albumObject.deposit_photo.length<1">押金收条</el-badge>
                           <span v-else="">押金收条</span>
                         </span>
                         <div class="image" @dragover='allowDrop($event)' id="deposit_photo">
-                          <span v-if="params.deposit_photo.length<1">暂无照片</span>
+                          <span v-if="albumObject.deposit_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.deposit_photo" :src="value"
                                data-magnify="" :data-src="value" @drag="currentPicId(key)">
                         </div>
@@ -601,22 +609,22 @@
                       <el-tab-pane>
 
                         <span slot="label">
-                          <el-badge is-dot class="item" v-if="params.promise.length<1">承诺书照片</el-badge>
+                          <el-badge is-dot class="item" v-if="albumObject.promise.length<1">承诺书照片</el-badge>
                           <span v-else="">承诺书照片</span>
                         </span>
                         <div class="image" @dragover='allowDrop($event)' id="promise">
-                          <span v-if="params.promise.length<1">暂无照片</span>
+                          <span v-if="albumObject.promise.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.promise" :src="value"
                                data-magnify="" :data-src="value" @drag="currentPicId(key)">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane>
                         <span slot="label">
-                          <el-badge is-dot class="item" v-if="params.other_photo.length<1">补充照片</el-badge>
+                          <el-badge is-dot class="item" v-if="albumObject.other_photo.length<1">补充照片</el-badge>
                           <span v-else="">补充照片</span>
                         </span>
                         <div class="image" @dragover='allowDrop($event)' id="other_photo">
-                          <span v-if="params.other_photo.length<1">暂无照片</span>
+                          <span v-if="albumObject.other_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.other_photo" :src="value"
                                data-magnify="" :data-src="value" @drag="currentPicId(key)">
                         </div>
@@ -625,11 +633,11 @@
 
                         <span slot="label">
                           <el-badge is-dot class="item"
-                                    v-if="params.checkout_photo.length<1">退租交接单</el-badge>
+                                    v-if="albumObject.checkout_photo.length<1">退租交接单</el-badge>
                           <span v-else="">退租交接单</span>
                         </span>
                         <div class="image" @dragover='allowDrop($event)' id="checkout_photo">
-                          <span v-if="params.checkout_photo.length<1">暂无照片</span>
+                          <span v-if="albumObject.checkout_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.checkout_photo"
                                :src="value" data-magnify="" :data-src="value" @drag="currentPicId(key)">
                         </div>
@@ -639,11 +647,11 @@
 
                         <span slot="label">
                           <el-badge is-dot class="item"
-                                    v-if="params.checkout_settle_photo.length<1">退租结算单</el-badge>
+                                    v-if="albumObject.checkout_settle_photo.length<1">退租结算单</el-badge>
                           <span v-else="">退租结算单</span>
                         </span>
                         <div class="image" @dragover='allowDrop($event)' id="checkout_settle_photo">
-                          <span v-if="params.checkout_settle_photo.length<1">暂无照片</span>
+                          <span v-if="albumObject.checkout_settle_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.checkout_settle_photo" :src="value"
                                data-magnify="" :data-src="value" @drag="currentPicId(key)">
                         </div>
@@ -749,25 +757,25 @@
             </el-row>
           </el-form>
         </div>
-<!--
-        <div id="historyId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
-          <div class="title">操作历史</div>
-        </div>
+        <!--
+                <div id="historyId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
+                  <div class="title">操作历史</div>
+                </div>
 
-        <div class="operateHistoryInfo">
-          <el-form size="small" label-width="180px">
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="操作历史">
-                  <div class="content">
+                <div class="operateHistoryInfo">
+                  <el-form size="small" label-width="180px">
+                    <el-row>
+                      <el-col :span="24">
+                        <el-form-item label="操作历史">
+                          <div class="content">
 
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </div>
-        -->
+                          </div>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                  </el-form>
+                </div>
+                -->
       </div>
     </div>
 
@@ -854,32 +862,32 @@
           is_send: null,
         },
         receiverNames: '',
-        loadingStatus : true,
-        reBackData :[],
-        approveParams:{
-          is_rent:0,
-          operation :'',
+        loadingStatus: true,
+        reBackData: [],
+        approveParams: {
+          is_rent: 0,
+          operation: '',
         },
-        dragPicId : '',
+        dragPicId: '',
 
-        params:{
-          photo : [],
-          identity_photo : [],
-          bank_photo : [],
-          water_photo : [],
-          electricity_photo : [],
-          gas_photo : [],
-          property_photo : [],
-          water_card_photo : [],
-          electricity_card_photo : [],
-          gas_card_photo : [],
-          checkin_photo : [],
-          auth_photo : [],
-          deposit_photo : [],
-          promise : [],
-          other_photo : [],
-          checkout_photo : [],
-          checkout_settle_photo : [],
+        albumObject: {
+          photo: [],
+          identity_photo: [],
+          bank_photo: [],
+          water_photo: [],
+          electricity_photo: [],
+          gas_photo: [],
+          property_photo: [],
+          water_card_photo: [],
+          electricity_card_photo: [],
+          gas_card_photo: [],
+          checkin_photo: [],
+          auth_photo: [],
+          deposit_photo: [],
+          promise: [],
+          other_photo: [],
+          checkout_photo: [],
+          checkout_settle_photo: [],
         },
 
         operation: {
@@ -943,113 +951,113 @@
     methods: {
       //图片拖拽
       dragInit(){
-        let photo=document.getElementById('photo');
-        let identity_photo=document.getElementById('identity_photo');
-        let bank_photo=document.getElementById('bank_photo');
-        let water_photo=document.getElementById('water_photo');
-        let electricity_photo=document.getElementById('electricity_photo');
-        let gas_photo=document.getElementById('gas_photo');
-        let property_photo=document.getElementById('property_photo');
-        let water_card_photo=document.getElementById('water_card_photo');
-        let electricity_card_photo=document.getElementById('electricity_card_photo');
-        let gas_card_photo=document.getElementById('gas_card_photo');
-        let checkin_photo=document.getElementById('checkin_photo');
-        let auth_photo=document.getElementById('auth_photo');
-        let deposit_photo=document.getElementById('deposit_photo');
-        let promise=document.getElementById('promise');
-        let other_photo=document.getElementById('other_photo');
-        let checkout_photo=document.getElementById('checkout_photo');
-        let checkout_settle_photo=document.getElementById('checkout_settle_photo');
+        let photo = document.getElementById('photo');
+        let identity_photo = document.getElementById('identity_photo');
+        let bank_photo = document.getElementById('bank_photo');
+        let water_photo = document.getElementById('water_photo');
+        let electricity_photo = document.getElementById('electricity_photo');
+        let gas_photo = document.getElementById('gas_photo');
+        let property_photo = document.getElementById('property_photo');
+        let water_card_photo = document.getElementById('water_card_photo');
+        let electricity_card_photo = document.getElementById('electricity_card_photo');
+        let gas_card_photo = document.getElementById('gas_card_photo');
+        let checkin_photo = document.getElementById('checkin_photo');
+        let auth_photo = document.getElementById('auth_photo');
+        let deposit_photo = document.getElementById('deposit_photo');
+        let promise = document.getElementById('promise');
+        let other_photo = document.getElementById('other_photo');
+        let checkout_photo = document.getElementById('checkout_photo');
+        let checkout_settle_photo = document.getElementById('checkout_settle_photo');
 
-        let lis=document.getElementsByTagName('img');
-        for(let i=0;i<lis.length;i++){
-          lis[i].draggable=true;
-          lis[i].flag=false;
-          lis[i].ondragstart=function(){
-            this.flag=true;
+        let lis = document.getElementsByTagName('img');
+        for (let i = 0; i < lis.length; i++) {
+          lis[i].draggable = true;
+          lis[i].flag = false;
+          lis[i].ondragstart = function () {
+            this.flag = true;
 
           };
-          lis[i].ondragend=function(){
-            this.flag=false;
+          lis[i].ondragend = function () {
+            this.flag = false;
           }
         }
         let _this = this;
-        photo.ondrop = function(e) {
-          _this.changeChild(photo,lis);
+        photo.ondrop = function (e) {
+          _this.changeChild(photo, lis);
           _this.dragEnd('photo');
         };
 
-        identity_photo.ondrop = function(e) {
-          _this.changeChild(identity_photo,lis);
+        identity_photo.ondrop = function (e) {
+          _this.changeChild(identity_photo, lis);
           _this.dragEnd('identity_photo');
         };
-        bank_photo.ondrop = function(e) {
-          _this.changeChild(bank_photo,lis);
+        bank_photo.ondrop = function (e) {
+          _this.changeChild(bank_photo, lis);
           _this.dragEnd('bank_photo');
         };
-        water_photo.ondrop = function(e) {
-          _this.changeChild(water_photo,lis);
+        water_photo.ondrop = function (e) {
+          _this.changeChild(water_photo, lis);
           _this.dragEnd('water_photo');
         };
-        electricity_photo.ondrop = function(e) {
-          _this.changeChild(electricity_photo,lis);
+        electricity_photo.ondrop = function (e) {
+          _this.changeChild(electricity_photo, lis);
           _this.dragEnd('electricity_photo');
         };
-        gas_photo.ondrop = function(e) {
-          _this.changeChild(gas_photo,lis);
+        gas_photo.ondrop = function (e) {
+          _this.changeChild(gas_photo, lis);
           _this.dragEnd('gas_photo');
         };
-        property_photo.ondrop = function(e) {
-          _this.changeChild(property_photo,lis);
+        property_photo.ondrop = function (e) {
+          _this.changeChild(property_photo, lis);
           _this.dragEnd('property_photo');
         };
-        water_card_photo.ondrop = function(e) {
-          _this.changeChild(water_card_photo,lis);
+        water_card_photo.ondrop = function (e) {
+          _this.changeChild(water_card_photo, lis);
           _this.dragEnd('water_card_photo');
         };
-        electricity_card_photo.ondrop = function(e) {
-          _this.changeChild(electricity_card_photo,lis);
+        electricity_card_photo.ondrop = function (e) {
+          _this.changeChild(electricity_card_photo, lis);
           _this.dragEnd('electricity_card_photo');
         };
-        gas_card_photo.ondrop = function(e) {
-          _this.changeChild(gas_card_photo,lis);
+        gas_card_photo.ondrop = function (e) {
+          _this.changeChild(gas_card_photo, lis);
           _this.dragEnd('gas_card_photo');
         };
-        checkin_photo.ondrop = function(e) {
-          _this.changeChild(checkin_photo,lis);
+        checkin_photo.ondrop = function (e) {
+          _this.changeChild(checkin_photo, lis);
           _this.dragEnd('checkin_photo');
         };
-        auth_photo.ondrop = function(e) {
-          _this.changeChild(auth_photo,lis);
+        auth_photo.ondrop = function (e) {
+          _this.changeChild(auth_photo, lis);
           _this.dragEnd('auth_photo');
         };
-        deposit_photo.ondrop = function(e) {
-          _this.changeChild(deposit_photo,lis);
+        deposit_photo.ondrop = function (e) {
+          _this.changeChild(deposit_photo, lis);
           _this.dragEnd('deposit_photo');
         };
-        promise.ondrop = function(e) {
-          _this.changeChild(promise,lis);
+        promise.ondrop = function (e) {
+          _this.changeChild(promise, lis);
           _this.dragEnd('promise');
         };
-        other_photo.ondrop = function(e) {
-          _this.changeChild(other_photo,lis);
+        other_photo.ondrop = function (e) {
+          _this.changeChild(other_photo, lis);
           _this.dragEnd('other_photo');
         };
-        checkout_photo.ondrop = function(e) {
-          _this.changeChild(checkout_photo,lis);
+        checkout_photo.ondrop = function (e) {
+          _this.changeChild(checkout_photo, lis);
           _this.dragEnd('checkout_photo');
         };
-        checkout_settle_photo.ondrop = function(e) {
-          _this.changeChild(checkout_settle_photo,lis);
+        checkout_settle_photo.ondrop = function (e) {
+          _this.changeChild(checkout_settle_photo, lis);
           _this.dragEnd('checkout_settle_photo');
         };
 
 
       },
 
-      changeChild(boxid,lis){
+      changeChild(boxid, lis){
         for (let i = 0; i < lis.length; i++) {
-          if(lis[i].flag){ //如果flag为真，则添加一个li至box里
+          if (lis[i].flag) { //如果flag为真，则添加一个li至box里
             boxid.appendChild(lis[i]);
           }
         }
@@ -1062,81 +1070,115 @@
         this.dragPicId = key;
       },
       dragEnd(id){
-        this.params.photo = this.params.photo.filter((x)=>{return x!=this.dragPicId});
-        this.params.identity_photo = this.params.identity_photo.filter((x)=>{return x!=this.dragPicId});
-        this.params.bank_photo = this.params.bank_photo.filter((x)=>{return x!=this.dragPicId});
-        this.params.water_photo = this.params.water_photo.filter((x)=>{return x!=this.dragPicId});
-        this.params.electricity_photo = this.params.electricity_photo.filter((x)=>{return x!=this.dragPicId});
-        this.params.gas_photo = this.params.gas_photo.filter((x)=>{return x!=this.dragPicId});
-        this.params.property_photo = this.params.property_photo.filter((x)=>{return x!=this.dragPicId});
-        this.params.water_card_photo = this.params.water_card_photo.filter((x)=>{return x!=this.dragPicId});
-        this.params.electricity_card_photo = this.params.electricity_card_photo.filter((x)=>{return x!=this.dragPicId});
-        this.params.gas_card_photo = this.params.gas_card_photo.filter((x)=>{return x!=this.dragPicId});
-        this.params.checkin_photo = this.params.checkin_photo.filter((x)=>{return x!=this.dragPicId});
-        this.params.auth_photo = this.params.auth_photo.filter((x)=>{return x!=this.dragPicId});
-        this.params.deposit_photo = this.params.deposit_photo.filter((x)=>{return x!=this.dragPicId});
-        this.params.promise = this.params.promise.filter((x)=>{return x!=this.dragPicId});
-        this.params.other_photo = this.params.other_photo.filter((x)=>{return x!=this.dragPicId});
-        this.params.checkout_photo = this.params.checkout_photo.filter((x)=>{return x!=this.dragPicId});
-        this.params.checkout_settle_photo = this.params.checkout_settle_photo.filter((x)=>{return x!=this.dragPicId});
-        switch(id){
+        this.albumObject.photo = this.albumObject.photo.filter((x) => {
+          return x != this.dragPicId
+        });
+        this.albumObject.identity_photo = this.albumObject.identity_photo.filter((x) => {
+          return x != this.dragPicId
+        });
+        this.albumObject.bank_photo = this.albumObject.bank_photo.filter((x) => {
+          return x != this.dragPicId
+        });
+        this.albumObject.water_photo = this.albumObject.water_photo.filter((x) => {
+          return x != this.dragPicId
+        });
+        this.albumObject.electricity_photo = this.albumObject.electricity_photo.filter((x) => {
+          return x != this.dragPicId
+        });
+        this.albumObject.gas_photo = this.albumObject.gas_photo.filter((x) => {
+          return x != this.dragPicId
+        });
+        this.albumObject.property_photo = this.albumObject.property_photo.filter((x) => {
+          return x != this.dragPicId
+        });
+        this.albumObject.water_card_photo = this.albumObject.water_card_photo.filter((x) => {
+          return x != this.dragPicId
+        });
+        this.albumObject.electricity_card_photo = this.albumObject.electricity_card_photo.filter((x) => {
+          return x != this.dragPicId
+        });
+        this.albumObject.gas_card_photo = this.albumObject.gas_card_photo.filter((x) => {
+          return x != this.dragPicId
+        });
+        this.albumObject.checkin_photo = this.albumObject.checkin_photo.filter((x) => {
+          return x != this.dragPicId
+        });
+        this.albumObject.auth_photo = this.albumObject.auth_photo.filter((x) => {
+          return x != this.dragPicId
+        });
+        this.albumObject.deposit_photo = this.albumObject.deposit_photo.filter((x) => {
+          return x != this.dragPicId
+        });
+        this.albumObject.promise = this.albumObject.promise.filter((x) => {
+          return x != this.dragPicId
+        });
+        this.albumObject.other_photo = this.albumObject.other_photo.filter((x) => {
+          return x != this.dragPicId
+        });
+        this.albumObject.checkout_photo = this.albumObject.checkout_photo.filter((x) => {
+          return x != this.dragPicId
+        });
+        this.albumObject.checkout_settle_photo = this.albumObject.checkout_settle_photo.filter((x) => {
+          return x != this.dragPicId
+        });
+        switch (id) {
           case 'photo':
-            this.params.photo.push(this.dragPicId);
-           break;
+            this.albumObject.photo.push(this.dragPicId);
+            break;
           case 'identity_photo':
-            this.params.identity_photo.push(this.dragPicId);
+            this.albumObject.identity_photo.push(this.dragPicId);
             break;
           case 'bank_photo':
-            this.params.bank_photo.push(this.dragPicId);
+            this.albumObject.bank_photo.push(this.dragPicId);
             break;
           case 'water_photo':
-            this.params.water_photo.push(this.dragPicId);
+            this.albumObject.water_photo.push(this.dragPicId);
             break;
           case 'electricity_photo':
-            this.params.electricity_photo.push(this.dragPicId);
+            this.albumObject.electricity_photo.push(this.dragPicId);
             break;
           case 'gas_photo':
-            this.params.gas_photo.push(this.dragPicId);
+            this.albumObject.gas_photo.push(this.dragPicId);
             break;
           case 'property_photo':
-            this.params.property_photo.push(this.dragPicId);
+            this.albumObject.property_photo.push(this.dragPicId);
             break;
           case 'water_card_photo':
-            this.params.water_card_photo.push(this.dragPicId);
+            this.albumObject.water_card_photo.push(this.dragPicId);
             break;
           case 'electricity_card_photo':
-            this.params.electricity_card_photo.push(this.dragPicId);
+            this.albumObject.electricity_card_photo.push(this.dragPicId);
             break;
           case 'gas_card_photo':
-            this.params.gas_card_photo.push(this.dragPicId);
+            this.albumObject.gas_card_photo.push(this.dragPicId);
             break;
           case 'checkin_photo':
-            this.params.checkin_photo.push(this.dragPicId);
+            this.albumObject.checkin_photo.push(this.dragPicId);
             break;
           case 'auth_photo':
-            this.params.auth_photo.push(this.dragPicId);
+            this.albumObject.auth_photo.push(this.dragPicId);
             break;
           case 'deposit_photo':
-            this.params.deposit_photo.push(this.dragPicId);
+            this.albumObject.deposit_photo.push(this.dragPicId);
             break;
           case 'promise':
-            this.params.promise.push(this.dragPicId);
+            this.albumObject.promise.push(this.dragPicId);
             break;
           case 'other_photo':
-            this.params.other_photo.push(this.dragPicId);
+            this.albumObject.other_photo.push(this.dragPicId);
             break;
           case 'checkout_photo':
-            this.params.checkout_photo.push(this.dragPicId);
+            this.albumObject.checkout_photo.push(this.dragPicId);
             break;
           case 'checkout_settle_photo':
-            this.params.checkout_settle_photo.push(this.dragPicId);
+            this.albumObject.checkout_settle_photo.push(this.dragPicId);
             break;
         }
         this.sortPic()
       },
 
       sortPic(){
-        this.$http.put(globalConfig.server + 'lease/collect/move/'+this.contract_id, {album:this.params}).then((res) => {
+        this.$http.put(globalConfig.server + 'lease/collect/move/' + this.contract_id, {album: this.albumObject}).then((res) => {
           if (res.data.code === '61090') {
 
           } else {
@@ -1147,6 +1189,7 @@
           }
         });
       },
+
 
       selectPeople() {
         this.organizationDialog = true;
@@ -1189,52 +1232,52 @@
         this.receiverNames = name.join(',');
         this.type = '';
       },
-  getContractDetail() {
-    this.$http.get(globalConfig.server + 'lease/collect/' + this.contract_id).then((res) => {
+      getContractDetail() {
+        this.$http.get(globalConfig.server + 'lease/collect/' + this.contract_id).then((res) => {
           this.loadingStatus = false;
           if (res.data.code === '61010') {
 
             this.contractInfo = res.data.data;
             this.customersInfo = res.data.data.customers;
 
-            this.params.photo = this.getImgId(this.contractInfo.photo);
-            this.params.identity_photo = this.getImgId(this.contractInfo.identity_photo);
-            this.params.bank_photo = this.getImgId(this.contractInfo.bank_photo);
-            this.params.water_photo = this.getImgId(this.contractInfo.water_photo);
-            this.params.electricity_photo = this.getImgId(this.contractInfo.electricity_photo);
-            this.params.gas_photo = this.getImgId(this.contractInfo.gas_photo);
-            this.params.property_photo = this.getImgId(this.contractInfo.property_photo);
-            this.params.water_card_photo = this.getImgId(this.contractInfo.water_card_photo);
-            this.params.electricity_card_photo = this.getImgId(this.contractInfo.electricity_card_photo);
-            this.params.gas_card_photo = this.getImgId(this.contractInfo.gas_card_photo);
-            this.params.checkin_photo = this.getImgId(this.contractInfo.checkin_photo);
-            this.params.auth_photo = this.getImgId(this.contractInfo.auth_photo);
-            this.params.deposit_photo = this.getImgId(this.contractInfo.deposit_photo);
-            this.params.promise = this.getImgId(this.contractInfo.promise);
-            this.params.other_photo = this.getImgId(this.contractInfo.other_photo);
-            this.params.checkout_photo = this.getImgId(this.contractInfo.checkout_photo);
-            this.params.checkout_settle_photo = this.getImgId(this.contractInfo.checkout_settle_photo);
+            this.albumObject.photo = this.getImgId(this.contractInfo.photo);
+            this.albumObject.identity_photo = this.getImgId(this.contractInfo.identity_photo);
+            this.albumObject.bank_photo = this.getImgId(this.contractInfo.bank_photo);
+            this.albumObject.water_photo = this.getImgId(this.contractInfo.water_photo);
+            this.albumObject.electricity_photo = this.getImgId(this.contractInfo.electricity_photo);
+            this.albumObject.gas_photo = this.getImgId(this.contractInfo.gas_photo);
+            this.albumObject.property_photo = this.getImgId(this.contractInfo.property_photo);
+            this.albumObject.water_card_photo = this.getImgId(this.contractInfo.water_card_photo);
+            this.albumObject.electricity_card_photo = this.getImgId(this.contractInfo.electricity_card_photo);
+            this.albumObject.gas_card_photo = this.getImgId(this.contractInfo.gas_card_photo);
+            this.albumObject.checkin_photo = this.getImgId(this.contractInfo.checkin_photo);
+            this.albumObject.auth_photo = this.getImgId(this.contractInfo.auth_photo);
+            this.albumObject.deposit_photo = this.getImgId(this.contractInfo.deposit_photo);
+            this.albumObject.promise = this.getImgId(this.contractInfo.promise);
+            this.albumObject.other_photo = this.getImgId(this.contractInfo.other_photo);
+            this.albumObject.checkout_photo = this.getImgId(this.contractInfo.checkout_photo);
+            this.albumObject.checkout_settle_photo = this.getImgId(this.contractInfo.checkout_settle_photo);
 
-            setTimeout(()=>{
+            setTimeout(() => {
               this.dragInit()
-            },1000)
+            }, 1000)
           }
         })
 
-  },
-  getImgId(data){
-    let arr = [];
-        for(let key in data){
+      },
+      getImgId(data){
+        let arr = [];
+        for (let key in data) {
           arr.push(key);
         }
         return arr;
       },
 
       getReBackDetail(){
-        this.$http.get(globalConfig.server+'contract/feedback?contract_id='+this.contract_id+'&category=1').then((res) => {
-          if(res.data.code === '20000'){
+        this.$http.get(globalConfig.server + 'contract/feedback?contract_id=' + this.contract_id + '&category=1').then((res) => {
+          if (res.data.code === '20000') {
             this.reBackData = res.data.data.data;
-          }else {
+          } else {
             this.reBackData = [];
           }
         })
@@ -1310,24 +1353,24 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.put(globalConfig.server+'lease/status/press/'+this.contract_id,this.approveParams).then((res) => {
-            if(res.data.code === '60690'){
+          this.$http.put(globalConfig.server + 'lease/status/press/' + this.contract_id, this.approveParams).then((res) => {
+            if (res.data.code === '60690') {
               this.$notify.success({
-                title:'成功',
-                message:res.data.msg,
+                title: '成功',
+                message: res.data.msg,
               });
               this.getContractDetail();
-            }else {
+            } else {
               this.$notify.warning({
-                title:'警告',
-                message:res.data.msg,
+                title: '警告',
+                message: res.data.msg,
               });
             }
           })
         }).catch(() => {
           this.$notify.info({
-            title:'消息',
-            message:'已取消操作',
+            title: '消息',
+            message: '已取消操作',
           })
         });
       },
@@ -1336,7 +1379,7 @@
 </script>
 
 <style scoped lang="scss">
-  i.iconfont.icon-bianji--:hover{
+  i.iconfont.icon-bianji--:hover {
     photo-shadow: 0 1px 14px 1px #909399;
     border-radius: 6px;
     transition: all .5s;
@@ -1344,9 +1387,11 @@
       transform: scale(1.1);
     }
   }
-  .div_fade{
-    right: 230px!important;
+
+  .div_fade {
+    right: 230px !important;
   }
+
   #rentingDetail {
     height: 100%;
     overflow: hidden;
@@ -1379,11 +1424,11 @@
       /*photo-shadow: 0 4px 15px 0 #9093999c, 0 0 18px 0 #909399;*/
       photo-shadow: 0 0px 9px 0 #909399;
       padding: 0 10px;
-      -webkit-transition:all 0.3s linear;
-      -moz-transition:all 0.3s linear;
-      -ms-transition:all 0.3s linear;
-      -o-transition:all 0.3s linear;
-      transition:all 0.3s linear;
+      -webkit-transition: all 0.3s linear;
+      -moz-transition: all 0.3s linear;
+      -ms-transition: all 0.3s linear;
+      -o-transition: all 0.3s linear;
+      transition: all 0.3s linear;
       .panel_header {
         height: 50px;
         display: flex;
@@ -1421,24 +1466,24 @@
       min-width: 80px;
     }
     /*.el-button--primary {*/
-      /*background-color: #6a8dfb;*/
-      /*border-color: #6a8dfb;*/
-      /*photo-shadow: 0 2px 8px 0 #6a8dfb;*/
+    /*background-color: #6a8dfb;*/
+    /*border-color: #6a8dfb;*/
+    /*photo-shadow: 0 2px 8px 0 #6a8dfb;*/
     /*}*/
     /*.el-button--danger {*/
-      /*background-color: #fb4694;*/
-      /*border-color: #fb4694;*/
-      /*photo-shadow: 0 2px 8px 0 #fb4694;*/
+    /*background-color: #fb4694;*/
+    /*border-color: #fb4694;*/
+    /*photo-shadow: 0 2px 8px 0 #fb4694;*/
     /*}*/
     /*.el-button--warning {*/
-      /*background-color: #fdca41;*/
-      /*border-color: #fdca41;*/
-      /*photo-shadow: 0 2px 8px 0 #fdca41;*/
+    /*background-color: #fdca41;*/
+    /*border-color: #fdca41;*/
+    /*photo-shadow: 0 2px 8px 0 #fdca41;*/
     /*}*/
     /*.el-button--success {*/
-      /*background-color: #58d788;*/
-      /*border-color: #58d788;*/
-      /*photo-shadow: 0 2px 8px 0 #58d788;*/
+    /*background-color: #58d788;*/
+    /*border-color: #58d788;*/
+    /*photo-shadow: 0 2px 8px 0 #58d788;*/
     /*}*/
     @media screen and (min-width: 1280px) {
       .top {
@@ -1492,7 +1537,7 @@
           color: #727479;
         }
         .image {
-          min-height: 100px;
+          min-height: 90px;
           img {
             width: 120px;
             height: 80px;
