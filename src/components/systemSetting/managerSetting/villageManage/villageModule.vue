@@ -42,7 +42,8 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="小区名称" required>
-                <el-input @focus="openAddress" v-model="form.villageName" placeholder="请选择小区" readonly></el-input>
+                <el-input @focus="openAddress"  v-model="form.villageName" placeholder="请选择小区"
+                          :disabled="formList.status === '修改小区'"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">

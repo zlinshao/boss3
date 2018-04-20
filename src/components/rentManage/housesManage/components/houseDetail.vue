@@ -2,8 +2,14 @@
   <div>
     <el-dialog :close-on-click-modal="false" title="房屋照片" :visible.sync="houseDetailDialogVisible">
       <div v-if="detailData.length>0&&detailData[0].album&&detailData[0].album.album_file">
-        <img v-for="(val,key) in detailData[0].album.album_file"
+        <img v-for="(val,key) in detailData[0].album.album_file" v-if="val[0].info.ext.indexOf('image')>-1"
              :src="val[0].uri" data-magnify="" :data-src="val[0].uri">
+
+        <video v-for="(val,key) in detailData[0].album.album_file" v-if="val[0].info.ext.indexOf('video')>-1"
+          id="my-video" class="video-js" controls preload="auto" width="200" height="120"
+               data-setup="{}">
+          <source :src="val[0].uri" type="video/mp4">
+        </video>
       </div>
       <span slot="footer" class="dialog-footer">
         <!--<el-button size="small" @click="houseDetailDialogVisible = false">取 消</el-button>-->
@@ -50,6 +56,10 @@
     width: 120px;
     height: 120px;
     border-radius: 8px;
+    margin: 10px;
+  }
+  video{
+    background: #000;
     margin: 10px;
   }
 </style>

@@ -10,7 +10,6 @@ $(document).on('click', '[data-card]', function (e) {
     personal.avatar = img;
   }
   is_on_job = personal.is_on_job?'离职':'在职';
-  console.log(personal)
   let offsetLeft = e.clientX;
   let offsetTop = e.clientY;
 
@@ -59,7 +58,7 @@ function insertHtml(offsetTop,offsetLeft,personal) {
                               </div>
                                <div>
                                  <div>入职时间</div>
-                                 <div>${personal.created_at.split(' ')[0]}</div>
+                                 <div>${personal.detail.enroll}</div>
                               </div>
                               <div>
                                  <div>员工状态</div>
