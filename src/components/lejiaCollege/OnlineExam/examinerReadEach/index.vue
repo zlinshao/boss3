@@ -110,7 +110,7 @@
               style="width: 100%">
               <el-table-column
                 prop="real_name"
-                label="姓名">
+                label="考试时间">
               </el-table-column>
               <el-table-column
                 prop="exam_name"
@@ -118,7 +118,30 @@
               </el-table-column>
               <el-table-column
                 prop="score"
-                label="得分">
+                label="类型">
+              </el-table-column>
+              <el-table-column
+                prop="score"
+                label="考生姓名">
+              </el-table-column>
+              <el-table-column
+                prop="score"
+                label="考生部门">
+              </el-table-column>
+              <el-table-column
+                prop="score"
+                label="考生状态">
+              </el-table-column>
+              <el-table-column
+                prop="score"
+                label="考生成绩">
+              </el-table-column>
+              <el-table-column
+                prop="score"
+                label="试卷">
+                <template slot-scope="scope">
+                  <span>点击阅卷</span>
+                </template>
               </el-table-column>
             </el-table>
           </div>
@@ -140,7 +163,7 @@
 </template>
 
 <script>
-import Organization from "../../common/organization.vue";
+import Organization from "../../../common/organization.vue";
 export default {
   name: "index",
   components: { Organization },

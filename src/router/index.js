@@ -83,8 +83,18 @@ import ExamineAndApprove from '../components/OAWork/examineAndApprove/index.vue'
 // 乐伽大学
 import LineCollege from '../components/lejiaCollege/LineCollege/index.vue'
 import StaffRegistration from '../components/lejiaCollege/StaffRegistration/index.vue'
-import College from '../components/lejiaCollege/college/index.vue'
+import College from '../components/lejiaCollege/college/index.vue'            
+import OnlineExam from '../components/lejiaCollege/OnlineExam/index.vue'    //在线考试
 
+import ConfigExam from '../components/lejiaCollege/OnlineExam/configExam/index.vue'  //管理试卷
+import BatchQuestions from '../components/lejiaCollege/OnlineExam/batchQuestions/index.vue'  //批量导入试题
+import MyselfQuestions from '../components/lejiaCollege/OnlineExam/myselfQuestions/index.vue'  //自己录入
+import PreviewExam from '../components/lejiaCollege/OnlineExam/previewExam/index.vue'  //预览试卷
+import AnswerExam from '../components/lejiaCollege/OnlineExam/answerExam/index.vue'  //考生答题
+import LookExam from '../components/lejiaCollege/OnlineExam/lookExam/index.vue'  //查看答题试卷
+import ExaminerRead from '../components/lejiaCollege/OnlineExam/examinerRead/index.vue'  //主考官阅卷
+import ExaminerReadEach from '../components/lejiaCollege/OnlineExam/examinerReadEach/index.vue'  //主考官阅卷试题
+import ExaminerShortAn from '../components/lejiaCollege/OnlineExam/examinerShortAn/index.vue'  //主考官阅卷－简答题
 
 // 系统设置
 import ModuleSetting from '../components/systemSetting/moduleSetting/index.vue'                             //模块设置
@@ -231,6 +241,15 @@ export default new Router({
         {path: '/pictureDetail', component: PictureDetail, name: "相册详情",},
         {path: '/visitRecord', component: VisitRecord, name: "回访记录"},
         {path: '/incompleteRecord', component: IncompleteRecord, name: "合同补齐记录"},
+        {path: '/configExam', component: ConfigExam, name: "管理试卷"},
+        {path: '/batchQuestions', component: BatchQuestions, name: "批量导入试题"},
+        {path: '/myselfQuestions', component: MyselfQuestions, name: "自己录入"},
+        {path: '/previewExam', component: PreviewExam, name: "预览试卷"},
+        {path: '/answerExam', component: AnswerExam, name: "考生答题"},
+        {path: '/lookExam', component: LookExam, name: "查看试卷"},
+        {path: '/examinerRead', component: ExaminerRead, name: "阅卷管理"},
+        {path: '/examinerReadEach', component:ExaminerReadEach, name: "试卷批阅"},
+        {path: '/examinerShortAn', component: ExaminerShortAn, name: "简答批阅"},
       ]
     },
     //快捷入口
@@ -246,7 +265,7 @@ export default new Router({
         {path: '/institution', component: Institution, name: ' 制度管理 ', icon: "iconfont icon-guizhangzhidu"},
         {path: '/counter', component: Counter, name: '业绩计算器', icon: "iconfont icon-jisuanqi"},
         {path: '/college', component: College, name: ' 乐伽大学 ', icon: "iconfont icon-leqiedaxue"},
-        // {path: '/LineCollege', component: LineCollege, name: ' 成绩查询 ', icon:"iconfont icon-zaixiankaoshi"},
+        //{path: '/LineCollege', component: LineCollege, name: ' 成绩查询 ', icon:"iconfont icon-zaixiankaoshi"},
         {path: '/converge', component: Converge, name: ' 员工广场 ', icon: "iconfont icon-yuangongguangchang"},
         {path: '/individual', component: Individual, name: ' 个人门户 ', icon: "el-icons-fa-user"},
         {path: '/wholeRentManage', component: WholeRentManage, name: ' 整租管理 ', icon: "iconfont icon-pinzhizhengzu"},
@@ -439,6 +458,8 @@ export default new Router({
         {path: '/college', component: College, name: '乐伽大学 '},
         // {path: '/LineCollege', component: LineCollege, name: '成绩查询'},
         // {path: '/StaffRegistration', component: StaffRegistration, name: '员工报名'},
+        // {path: '/OnlineExam', component: OnlineExam, name: '在线考试'},
+        
       ]
     },
     {
