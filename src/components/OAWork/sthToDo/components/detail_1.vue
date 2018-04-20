@@ -174,8 +174,8 @@
             <div class="title">合同照片</div>
             <div class="content right scroll_bar" id="box" @dragover='allowDrop($event)'>
               <img data-magnify="" data-caption="图片查看器"
-                   data-src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg"
-                   src="http://imgstore.cdn.sogou.com/app/a/100540002/513711.jpg" alt="">
+                   data-src="http://static.lejias.cn/o_1cbh6aa69e131o5n1rk01vpvrot1j.jpg"
+                   src="http://static.lejias.cn/o_1cbh6aa69e131o5n1rk01vpvrot1j.jpg" alt="">
             </div>
           </el-col>
         </el-row>
