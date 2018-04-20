@@ -164,6 +164,7 @@
         this.$http.get(globalConfig.server+'customer/work_order/'+this.activeId).then((res) => {
           if(res.data.code === "10020"){
             let detail = res.data.data;
+            this.params.city = detail.city;
             this.params.matters = detail.matters;
             this.params.type = detail.type;
             this.params.follow_id = detail.follow_id;

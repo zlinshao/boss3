@@ -182,6 +182,14 @@
                   </template>
                 </el-table-column>
                 <el-table-column
+                  prop="num"
+                  label="工单编号">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.num">{{scope.row.num}}</span>
+                    <span v-if="!scope.row.num">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
                   label="房屋地址">
                   <template slot-scope="scope">
                     <span v-if="scope.row.construct">
@@ -276,6 +284,14 @@
                   <template slot-scope="scope">
                     <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
                     <span v-if="!scope.row.create_time">暂无</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="num"
+                  label="工单编号">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.num">{{scope.row.num}}</span>
+                    <span v-if="!scope.row.num">暂无</span>
                   </template>
                 </el-table-column>
                 <el-table-column

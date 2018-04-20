@@ -34,7 +34,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="所属城市">
-                  <div class="content">{{workOrderDetail.city}}</div>
+                  <div class="content">{{workOrderDetail.city_name}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -277,7 +277,6 @@
         addResultId: '',
         addResultDialog: false,
         startAddResult: false,
-
         editWorkDialog: false,
         startEdit: false,
         editId: '',
