@@ -64,7 +64,7 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="维修时间">
-                  <div class="content" >
+                  <div class="content">
                     <span v-if="repairDetail.repair_time">{{repairDetail.repair_time}}</span>
                   </div>
                 </el-form-item>
@@ -95,14 +95,14 @@
               <el-col :span="8">
                 <el-form-item label="维修状态">
                   <div class="content">
-                    <span  v-if="repairDetail.statu">{{repairDetail.statu}}</span>
+                    <span v-if="repairDetail.statu">{{repairDetail.statu}}</span>
                   </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="认责人">
                   <div class="content">
-                    <span  v-if="repairDetail.liable">{{repairDetail.liable}}</span></div>
+                    <span v-if="repairDetail.liable">{{repairDetail.liable}}</span></div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -131,14 +131,25 @@
             <div v-if="repairDetail.follow && repairDetail.follow.length>0">
               <el-form size="small" label-width="100px" v-if="repairDetail.follow">
                 <el-row v-for="item in repairDetail.follow" :key="item.id">
-                  <el-col :span="16">
-                    <el-form-item label="跟进结果">
-                      <div class="content">{{item.content}}</div>
+                  <el-col :span="12">
+                    <el-form-item label="跟进人">
+                      <div class="content">
+                        <span v-if="item.name">{{item.name}}</span>
+                      </div>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="更新时间">
-                      <div class="content">{{item.create_time}}</div>
+                  <el-col :span="12">
+                    <el-form-item label="跟进时间">
+                      <div class="content">
+                        <span v-if="item.create_time">{{item.create_time}}</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="24">
+                    <el-form-item label="跟进结果">
+                      <div class="content">
+                        <span v-if="item.content">{{item.content}}</span>
+                      </div>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -155,8 +166,9 @@
         <!--<el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>-->
       </span>
     </el-dialog>
-    <EditCollectRepair :addCollectRepairDialog="collectRepairDialog" :editId="editId"  @close="closeModal"></EditCollectRepair>
-    <EditRentRepair :addRentRepairDialog="rentRepairDialog" :editId="editId"  @close="closeModal"></EditRentRepair>
+    <EditCollectRepair :addCollectRepairDialog="collectRepairDialog" :editId="editId"
+                       @close="closeModal"></EditCollectRepair>
+    <EditRentRepair :addRentRepairDialog="rentRepairDialog" :editId="editId" @close="closeModal"></EditRentRepair>
 
     <AddResult :addResultDialog="addResultDialog" :repairId="addResultId"
                @close="closeModal"></AddResult>
@@ -170,7 +182,7 @@
 
   export default {
     name: 'repair-detail',
-    props: ['repairDetailDialog', 'repairId','activeName'],
+    props: ['repairDetailDialog', 'repairId', 'activeName'],
     components: {AddResult, EditCollectRepair, EditRentRepair},
     data() {
       return {
@@ -187,10 +199,10 @@
       repairDetailDialog(val) {
         this.repairDetailDialogVisible = val;
       },
-      repairDetailDialogVisible(val){
+      repairDetailDialogVisible(val) {
         if (!val) {
           this.$emit('close');
-        }else{
+        } else {
           this.getDetail();
         }
       },
@@ -220,9 +232,9 @@
       },
       editRepair(id) {
         this.editId = id;
-        if(this.activeName === 'first') {
+        if (this.activeName === 'first') {
           this.collectRepairDialog = true;
-        }else{
+        } else {
           this.rentRepairDialog = true;
         }
       }

@@ -395,6 +395,7 @@
       this.getCollectTableData();
       this.getDictionary();
     },
+
     methods: {
       getDictionary() {
         this.$http.get(globalConfig.server + 'setting/dictionary/595').then((res) => {
@@ -462,13 +463,18 @@
           this.operator_name = val[0].name;
         }
       },
-      closeModal() {
+      closeModal(val) {
         this.addCollectRepairDialog = false;
         this.addRentRepairDialog = false;
         this.repairDetailDialog = false;
         this.collectRepairId = '';
         this.rentRepairId = '';
         this.organizeVisible = false;
+        if (this.activeName == "first") {
+          this.getCollectTableData();
+        } else if (this.activeName == "second") {
+          this.getRentTableData();
+        }
       },
       // tabs标签页
       handleClick(tab, event) {
