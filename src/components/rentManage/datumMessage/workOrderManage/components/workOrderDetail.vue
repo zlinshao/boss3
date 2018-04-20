@@ -158,7 +158,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="所属城市">
-                  <div class="content">{{item.city}}</div>
+                  <div class="content">{{item.city_name}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -185,7 +185,7 @@
               <el-col :span="8">
                 <el-form-item label="跟进人">
                   <div class="content">
-                    <span v-if="item.follows">{{item.follows.name}}</span>
+                    <span v-if="item.follows">{{item.follows && item.follows.name}}</span>
                   </div>
                 </el-form-item>
               </el-col>

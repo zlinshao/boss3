@@ -168,7 +168,7 @@
             this.params.matters = detail.matters;
             this.params.type = detail.type;
             this.params.follow_id = detail.follow_id;
-            this.follow_name = detail.follows.name;
+            this.follow_name = detail.follows && detail.follows.name;
             this.params.expected_finish_time = detail.expected_finish_time;
             this.params.follow_status = detail.follow_status;
             this.params.follow_time = detail.follow_time;

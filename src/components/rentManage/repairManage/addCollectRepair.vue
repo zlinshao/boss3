@@ -1,21 +1,8 @@
 <template>
   <div id="addCollectRepair">
-    <el-dialog :close-on-click-modal="false" title="添加维修" :visible.sync="addCollectRepairDialogVisible" width="50%">
+    <el-dialog :close-on-click-modal="false" title="修改维修单" :visible.sync="addCollectRepairDialogVisible" width="50%">
       <div>
         <el-form size="mini" :model="form" label-width="100px">
-          <el-row>
-            <el-col :span="8">
-              <el-form-item label="合同编号">
-                <el-input v-model="form.contract_number" disabled></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="合同类型">
-                <el-input v-model="form.contract_type" disabled></el-input>
-              </el-form-item>
-            </el-col>
-
-          </el-row>
           <el-row>
             <el-col :span="8">
               <el-form-item label="客户姓名" required>
@@ -77,6 +64,13 @@
             </el-col>
           </el-row>
           <el-row>
+            <el-col :span="12">
+              <el-form-item label="所属城市" required="">
+                <el-select clearable v-model="form.city" placeholder="选择城市" value="">
+                  <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
           </el-row>
           <el-row>
             <el-col :span="16">
@@ -104,14 +98,13 @@
 
 <script>
   export default {
-    props:['addCollectRepairDialog', 'contract'],
+    props:['addCollectRepairDialog', 'editId'],
     data() {
       return {
         addCollectRepairDialogVisible:false,
         form:{
-          contract_id: '', //合同Id
-          contract_number: '', //合同编号
-          contract_type: '', //合同类型
+          id: '',  //维修单id
+          city: '',
           customer_name: '',  //客户姓名
           sex: null,     //性别
           customer_mobile: '',  //客户电话
@@ -128,6 +121,7 @@
         repairStatusCategory: [],
         responsiblePersonCategory: [],
         sexCategory: [],
+        cityCategory: [],
       };
     },
     watch:{
@@ -139,12 +133,15 @@
           this.$emit('close')
         }else{
           this.getDictionary();
+          this.form.id = this.editId;
+          this.getDetail();
         }
       },
-      contract(val) {
-        this.form.contract_id = val.contract_id;
-        this.form.contract_number = val.contract_number;
-        this.form.contract_type = val.type;
+      editId(val) {
+        if(val) {
+          // this.form.id = this.editId;
+          // this.getDetail();
+        }
       },
     },
     methods: {
@@ -158,15 +155,40 @@
         this.dictionary(228).then((res) => {
           this.sexCategory = res.data;
         });
+        this.dictionary(306).then((res) => {
+          this.cityCategory = res.data;
+        });
+      },
+      getDetail() {
+        this.$http.get(globalConfig.server + 'repaire/info/' + this.editId).then((res) => {
+          if (res.data.code === "600200") {
+            let repairDetail = res.data.data;
+            if(repairDetail){
+              this.form.customer_name = repairDetail.customer_name;
+              this.form.sex = repairDetail.sex;
+              this.form.city = repairDetail.city;
+              this.form.customer_mobile = repairDetail.customer_mobile;
+              this.form.content = repairDetail.content;
+              this.form.repair_time = repairDetail.repair_time;
+              this.form.repair_master = repairDetail.repair_master;
+              this.form.repair_result = repairDetail.repair_result;
+              this.form.repair_money = repairDetail.repair_money;
+              this.form.status = repairDetail.status;
+              this.form.remark = repairDetail.remark;
+              this.form.person_liable = repairDetail.person_liable;
+            }
+          }
+        });
       },
       confirmAdd() {
-        this.$http.post(globalConfig.server+ 'repaire/insert', this.form).then((res)=>{
+        this.$http.put(globalConfig.server+ 'repaire/update', this.form).then((res)=>{
           if(res.data.code === '600200'){
             this.$notify.success({
               title: '成功',
               message: res.data.msg
             });
             this.initial();
+            this.$emit('close','success');
             this.addCollectRepairDialogVisible = false;
           }else{
             this.$notify.warning({
@@ -179,6 +201,7 @@
       initial(){
         this.form = {
             customer_name: '',  //客户姓名
+            city: '',
             sex: null,     //性别
             customer_mobile: '',  //客户电话
             content: '',  //维修内容
