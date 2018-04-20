@@ -5,8 +5,8 @@
         <div class="tabsSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input placeholder="编号/姓名/电话/时间" v-model="form.keywords" size="mini" clearable @keyup.enter.native="">
-                <el-button slot="append" icon="el-icon-search" @click=""></el-button>
+              <el-input placeholder="编号/姓名/电话" v-model="form.keywords" size="mini" clearable @keyup.enter.native="search">
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -50,6 +50,40 @@
                         <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.id"
                                    :key="item.id"></el-option>
                       </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">城市</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select clearable v-model="form.city" placeholder="请选择城市" value="">
+                        <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
+                                   :key="item.id"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">创建人</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-input v-model="operator_name" @focus="chooseStaff" placeholder="请选择创建人"
+                                readonly>
+                        <template slot="append">
+                          <div style="cursor: pointer;" @click="closeStaff">清空</div>
+                        </template>
+                      </el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -303,6 +337,8 @@
     <AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" :collectRepairId="collectRepairId" @close="closeModal"></AddCollectRepair>
     <AddRentRepair :addRentRepairDialog="addRentRepairDialog" :rentRepairId="rentRepairId" @close="closeModal"></AddRentRepair>
     <RepairDetail :repairDetailDialog="repairDetailDialog" :repairId="repairId" :activeName="activeName" @close="closeModal"></RepairDetail>
+    <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeModal"
+                  @selectMember="selectMember"></organization>
   </div>
 </template>
 
@@ -311,10 +347,11 @@
   import AddCollectRepair from '../components/addCollectRepair';
   import AddRentRepair from '../components/addRentRepair';
   import RepairDetail from './repairDetail';
+  import Organization from '../../common/organization.vue';
 
   export default {
     name: 'repair-manage',
-    components: {RightMenu, AddCollectRepair, AddRentRepair, RepairDetail},
+    components: {RightMenu, AddCollectRepair, AddRentRepair, RepairDetail,Organization},
     data() {
       return {
         rightMenuX: 0,
@@ -327,6 +364,8 @@
           keyword: '',
           time: '',
           status: '',
+          city: '',
+          operator_id: ''
         },
         collectTableData: [],
         rentTableData: [],
@@ -346,6 +385,10 @@
         repairId: '',
         deleteId: '',
         dictionary: [],
+        cityCategory: [],
+        organizeVisible: false,
+        organizeType: '',
+        operator_name: '',
       }
     },
     mounted() {
@@ -359,10 +402,18 @@
             this.dictionary = res.data.data;
           }
         });
+        this.$http.get(globalConfig.server + 'setting/dictionary/306').then((res) => {
+          if (res.data.code === "30010") {
+            this.cityCategory = res.data.data;
+          }
+        });
       },
       getCollectTableData() {
         this.collectStatus = ' ';
         this.collectLoading = true;
+        if(!this.form.time){
+          this.form.time = [];
+        }
         this.$http.get(globalConfig.server + 'repaire/list?limit=12&module=1', {params: this.form} ).then((res) => {
           this.isHigh = false;
           this.collectLoading = false;
@@ -379,6 +430,9 @@
       getRentTableData() {
         this.rentStatus = ' ';
         this.rentLoading = true;
+        if(!this.form.time){
+          this.form.time = [];
+        }
         this.$http.get(globalConfig.server + 'repaire/list?limit=12&module=2', {params: this.form} ).then((res) => {
           this.isHigh = false;
           this.rentLoading = false;
@@ -392,13 +446,29 @@
           }
         });
       },
-
+      // 员工筛选
+      chooseStaff() {
+        this.organizeVisible = true;
+        this.organizeType = 'staff';
+      },
+      // 清空员工
+      closeStaff() {
+        this.form.operator_id = [];
+        this.operator_name = '';
+      },
+      selectMember(val) {
+        if (this.organizeType === 'staff') {
+          this.form.operator_id = val[0].id;
+          this.operator_name = val[0].name;
+        }
+      },
       closeModal() {
         this.addCollectRepairDialog = false;
         this.addRentRepairDialog = false;
         this.repairDetailDialog = false;
         this.collectRepairId = '';
         this.rentRepairId = '';
+        this.organizeVisible = false;
       },
       // tabs标签页
       handleClick(tab, event) {
@@ -421,7 +491,10 @@
       },
       // 重置
       resetting() {
-        this.isHigh = false;
+        this.form.time = '';
+        this.form.status = '';
+        this.form.city = '';
+        this.closeStaff();
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
