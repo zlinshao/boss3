@@ -72,8 +72,10 @@ export default {
   mounted() {
     //初始化个人信息
     this.personal = JSON.parse(localStorage.personal);
+    if(this.personal.detail.create_time){
     this.createTime = this.personal.detail.create_time.split(" ")[0];
-    console.log(this.personal);
+    }
+    
     this.getExam();
   },
   created() {},
