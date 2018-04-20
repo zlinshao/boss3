@@ -51,7 +51,7 @@
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
               element-loading-background="rgba(255, 255, 255, 0)"
-              @row-click="clickTable"
+              @row-dblclick="dblClickTable"
               @row-contextmenu='houseMenu'
               style="width: 100%">
               <el-table-column
@@ -152,7 +152,7 @@
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
               element-loading-background="rgba(255, 255, 255, 0)"
-              @row-click="clickTable"
+              @row-dblclick="dblClickTable"
               @row-contextmenu='houseMenu'
               style="width: 100%">
               <el-table-column
@@ -264,6 +264,7 @@
                @clickOperateMore="clickEvent"></RightMenu>
     <AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" :collectRepairId="collectRepairId" @close="closeModal"></AddCollectRepair>
     <AddRentRepair :addRentRepairDialog="addRentRepairDialog" :rentRepairId="rentRepairId" @close="closeModal"></AddRentRepair>
+    <RepairDetail :repairDetailDialog="repairDetailDialog" :repairId="repairId" :activeName="activeName" @close="closeModal"></RepairDetail>
   </div>
 </template>
 
@@ -271,11 +272,11 @@
   import RightMenu from '../../common/rightMenu.vue';
   import AddCollectRepair from '../components/addCollectRepair';
   import AddRentRepair from '../components/addRentRepair';
-
+  import RepairDetail from './repairDetail';
 
   export default {
-    name: 'hello',
-    components: {RightMenu, AddCollectRepair, AddRentRepair},
+    name: 'repair-manage',
+    components: {RightMenu, AddCollectRepair, AddRentRepair, RepairDetail},
     data() {
       return {
         rightMenuX: 0,
@@ -300,6 +301,8 @@
         addRentRepairDialog: false,
         collectRepairId: '',
         rentRepairId: '',
+        repairDetailDialog: false,
+        repairId: '',
       }
     },
     mounted() {
@@ -342,6 +345,7 @@
       closeModal() {
         this.addCollectRepairDialog = false;
         this.addRentRepairDialog = false;
+        this.repairDetailDialog = false;
         this.collectRepairId = '';
         this.rentRepairId = '';
       },
@@ -368,15 +372,16 @@
         this.form.page = val;
         console.log(`当前页: ${val}`);
       },
-      clickTable(row, event, column) {
-        console.log(row, event, column)
+      dblClickTable(row, event) {
+        this.repairId = row.id;
+        this.repairDetailDialog = true;
       },
       //右键
       houseMenu(row, event) {
         this.lists = [
-          {clickIndex: 'add_follow', headIcon: 'el-icon-plus', label: '添加跟进',},
-          {clickIndex: 'edit_repair', headIcon: 'el-icon-edit', label: '编辑', id: row.id},
-          {clickIndex: 'delete_repair', headIcon: 'el-icon-delete', label: '删除',},
+          // {clickIndex: 'add_follow', headIcon: 'el-icon-plus', label: '添加跟进',},
+          // {clickIndex: 'edit_repair', headIcon: 'el-icon-edit', label: '编辑', id: row.id},
+          // {clickIndex: 'delete_repair', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },

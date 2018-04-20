@@ -1,9 +1,16 @@
 <template>
   <div id="addFollowUp">
-    <el-dialog :close-on-click-modal="false" title="添加跟进项" :visible.sync="addChildTaskDialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="添加跟进项" :visible.sync="addChildTaskDialogVisible" width="45%">
       <div>
         <el-form size="small" :model="params" label-width="100px">
           <el-row>
+            <el-col :span="12">
+              <el-form-item label="所属城市" required="">
+                <el-select clearable v-model="params.city" placeholder="选择城市" value="">
+                  <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
             <el-col :span="12">
               <el-form-item label="工单类型" required="">
                 <el-select clearable v-model="params.type" placeholder="缴费方式" value="">
@@ -11,33 +18,39 @@
                 </el-select>
               </el-form-item>
             </el-col>
-
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="回复电话">
+                <el-input v-model="params.mobile" ></el-input>
+              </el-form-item>
+            </el-col>
             <el-col :span="12">
               <el-form-item label="跟进人" required="">
                 <el-input  v-model="follow_name" @focus="openOrganizeModal"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
-
           <el-row>
+            <el-col :span="12">
+              <el-form-item label="跟进状态">
+                <el-select clearable v-model="params.follow_status" placeholder="选择跟进状态" value="">
+                  <el-option v-for="item in dictionary_follow" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
             <el-col :span="12">
               <el-form-item label="跟进时间">
                 <el-date-picker type="datetime" placeholder="选择日期时间"
                                 value-format="yyyy-MM-dd HH:mm:ss" v-model="params.follow_time"></el-date-picker>
               </el-form-item>
             </el-col>
-
+          </el-row>
+          <el-row>
             <el-col :span="12">
               <el-form-item label="下次跟进时间">
                 <el-date-picker type="datetime" placeholder="选择日期时间"
                                 value-format="yyyy-MM-dd HH:mm:ss" v-model="params.expected_finish_time"></el-date-picker>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="12">
-              <el-form-item label="回复电话" required="">
-                <el-input  v-model="params.mobile" clearable></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -77,6 +90,7 @@
       return {
         addChildTaskDialogVisible:false,
         params:{
+          city: '',
           parent_id:'',                       //父级id
           matters:'',                        //跟进事项
           type : '',                         //'事件类型',
@@ -84,16 +98,19 @@
           expect_time  : '',                 //'期待维修时间',
           expected_finish_time : '',         //'预计完成时间',
           follow_time : '',                  //'跟进时间',
-          image_pic:[],
+          follow_status : '',                  //'跟进状态',
+          image_pic: [],
           mobile: '',
         },
         organizationDialog: false,
-        isClear:false,
-        dictionary:[],
-        follow_name:'',
+        isClear: false,
+        dictionary: [],
+        dictionary_follow: [],
+        follow_name: '',
         length:0,
         type:'',
         isDictionary :false,
+        cityCategory: [],
       };
     },
     watch:{
@@ -127,6 +144,18 @@
           if(res.data.code === "30010"){
             this.dictionary = res.data.data;
             this.isDictionary = true
+          }
+        });
+        this.$http.get(globalConfig.server+'setting/dictionary/335').then((res) => {
+          if(res.data.code === "30010"){
+            this.dictionary_follow = res.data.data;
+            this.isDictionary = true;
+          }
+        });
+        this.$http.get(globalConfig.server+'setting/dictionary/306').then((res) => {
+          if(res.data.code === "30010"){
+            this.cityCategory = res.data.data;
+            this.isDictionary = true;
           }
         });
       },
@@ -176,12 +205,14 @@
       },
       init(){
         this.params = {
+          city: '',
           matters:'',                     //跟进事项
           type : '',                      //'事件类型',
           follow_id : '',                 // '跟进人',
           expect_time  : '',              //'预计完成时间',
           expected_finish_time : '',      //'预计完成时间',
           follow_time : '',               //'跟进时间',
+          follow_status : '',               //'跟进状态',
           image_pic:[],
           parent_id:this.activeId,
           mobile: '',

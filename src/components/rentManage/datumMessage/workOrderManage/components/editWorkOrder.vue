@@ -97,7 +97,7 @@
 //          expect_time  : '',                 //'期待维修时间',
           expected_finish_time : '',         //'预计完成时间',
           follow_time : '',                  //'跟进时间',
-          follow_status : '',                  //'跟进时间',
+          follow_status : '',                  //'跟进状态',
           image_pic:[],
           mobile: '',
 //          id: '',
