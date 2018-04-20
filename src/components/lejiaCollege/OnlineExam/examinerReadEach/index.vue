@@ -189,8 +189,8 @@ export default {
       rentStatus: " ",
       rentLoading: false,
       organizationDialog: false,
-      rentStatus:' ',
-      rentLoading:false,
+      rentStatus: " ",
+      rentLoading: false,
       pickerOptions2: {
         shortcuts: [
           {
@@ -235,20 +235,17 @@ export default {
     myData(val) {
       this.form.page = val;
       this.rentStatus = " ";
-      this.rentLoading = true;  
-      this.$http
-        .get(globalConfig.server + "exam/result",)
-        .then(res => {
-          this.rentLoading = false;
-          if(res.data.code == '36010'){
-            this.tableData = res.data.data;
-            this.tableNumber = 1
-          }else{
-            this.rentStatus = '暂无数据';
-            this.tableNumber =0;
-          }
-
-        });
+      this.rentLoading = true;
+      this.$http.get(globalConfig.server + "exam/result").then(res => {
+        this.rentLoading = false;
+        if (res.data.code == "36010") {
+          this.tableData = res.data.data;
+          this.tableNumber = 1;
+        } else {
+          this.rentStatus = "暂无数据";
+          this.tableNumber = 0;
+        }
+      });
     },
     openOrganizationModal() {
       this.organizationDialog = true;

@@ -233,112 +233,108 @@
 import { VueEditor } from "vue2-editor";
 export default {
   name: "index",
-  components: {VueEditor},
+  components: { VueEditor },
   data() {
     return {
-      activeName: 'first',
-      nowAction:"first",
+      activeName: "first",
+      nowAction: "first",
       editorDisabled: false,
-      singlen:4,
-      boxlen:4,
-      spacelen:4,
-      form3:{
-        check:"",
-        score:"",
-        checkbox:[],
-        panduan:"",
-      },
+      singlen: 4,
+      boxlen: 4,
+      spacelen: 4,
+      form3: {
+        check: "",
+        score: "",
+        checkbox: [],
+        panduan: ""
+      }
     };
   },
   mounted() {},
   watch: {
-    activeName(val){
+    activeName(val) {
       this.nowAction = val;
     },
-    spacelen(val){
+    spacelen(val) {
       this.spacelen = val;
     }
   },
   methods: {
-    midaddx(){
+    midaddx() {
       this.singlen++;
     },
-    midaddbox(){
+    midaddbox() {
       this.boxlen++;
     },
-    spanceadd(){
+    spanceadd() {
       this.spacelen++;
-    },
-
-
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
 #onlineExam {
-  .qutitle{
+  .qutitle {
     width: 80%;
     margin: 0 auto;
-    .title{
+    .title {
       height: 30px;
       color: #83a0fc;
       line-height: 30px;
       text-indent: 18px;
-    }     
-  .qubody{
-    .title{
-      height: 40px;
-      color: #83a0fc;
-      line-height: 40px;
-      text-indent: 0px;
-    }   
-  } 
-  .midbody{
-    margin-top:20px;
-     .title{
-      height: 40px;
-      color: #83a0fc;
-      line-height: 40px;
-      text-indent: 0px;
-    }    
-    .midadd{
-      height: 50px;
-      padding-top:20px;
-      border:1px #eee solid;  
-      border-top:none;
-      text-align: center;
-      span{
-         width: 380px;
-         height: 30px;
-         border:1px #58d788 dashed;
-         text-align: center;
-         line-height: 30px;
-         display: block;
-         color: #58d788;
-         background: #f3fdf6;
-         margin-left:32%;
-         cursor: pointer;
+    }
+    .qubody {
+      .title {
+        height: 40px;
+        color: #83a0fc;
+        line-height: 40px;
+        text-indent: 0px;
       }
-    } 
-  }
-  .eachSore{
-    height: 120px;
+    }
+    .midbody {
+      margin-top: 20px;
+      .title {
+        height: 40px;
+        color: #83a0fc;
+        line-height: 40px;
+        text-indent: 0px;
+      }
+      .midadd {
+        height: 50px;
+        padding-top: 20px;
+        border: 1px #eee solid;
+        border-top: none;
+        text-align: center;
+        span {
+          width: 380px;
+          height: 30px;
+          border: 1px #58d788 dashed;
+          text-align: center;
+          line-height: 30px;
+          display: block;
+          color: #58d788;
+          background: #f3fdf6;
+          margin-left: 32%;
+          cursor: pointer;
+        }
+      }
+    }
+    .eachSore {
+      height: 120px;
 
-     .title{
-      height: 40px;
-      color: #83a0fc;
-      line-height: 40px;
-      text-indent: 0px;
-    }  
-  }
+      .title {
+        height: 40px;
+        color: #83a0fc;
+        line-height: 40px;
+        text-indent: 0px;
+      }
+    }
   }
   .bottom {
     width: 100%;
     height: 100px;
     text-align: center;
   }
-
-
 }
 </style>

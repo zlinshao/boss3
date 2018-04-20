@@ -54,7 +54,7 @@
               <el-form-item >
                 <el-radio-group v-model="form1[x].check" style="width:98%;margin-left:2%;">
                   <el-col :span="6" :key="index" v-for="(val,index) in answarData" style="line-height:24px;height: 24px;">
-                    <el-radio :label="val.id">{{val.id}}：{{val.name}} <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form1[x].check == val.id">正确</span></el-radio>
+                    <el-radio :disabled="!disfalg" :label="val.id">{{val.id}}：{{val.name}} <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form1[x].check == val.id">正确</span></el-radio>
                   </el-col>
                 </el-radio-group>
               </el-form-item>
@@ -70,7 +70,7 @@
               <el-form-item >
                 <el-checkbox-group v-model="form2[y].check" style="width:98%;margin-left:2%;">
                   <el-col :span="6" :key="index1" v-for="(val,index1) in answarData" style="line-height:24px;height: 24px;">
-                    <el-checkbox :label="val.id">{{val.id}}：{{val.name}}<span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form2[y].check[index1] == val.id">正确</span></el-checkbox>
+                    <el-checkbox :disabled="!disfalg" :label="val.id">{{val.id}}：{{val.name}}<span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form2[y].check[index1] == val.id">正确</span></el-checkbox>
                   </el-col>
                 </el-checkbox-group>
               </el-form-item>
@@ -86,7 +86,7 @@
               <el-form-item >
                 <el-radio-group v-model="form3[z].check" style="width:98%;margin-left:2%;">
                   <el-col :span="12" :key="index2" v-for="(val,index2) in answarData2" style="line-height:24px;height: 24px;">
-                    <el-radio :label="val.id">{{val.id}}：{{val.name}}<span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form3[z].check == val.id">正确</span></el-radio>
+                    <el-radio :disabled="!disfalg" :label="val.id">{{val.id}}：{{val.name}}<span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form3[z].check == val.id">正确</span></el-radio>
                   </el-col>
                 </el-radio-group>
               </el-form-item>
@@ -100,7 +100,7 @@
           <p style="margin-left:30px;line-height:20px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
           <el-form :model="form3[k]" >
               <el-form-item >
-                <el-input style="width:96%;margin-left:2%;margin-right:2%" v-model="form4[k].check" type="textarea"></el-input>
+                <el-input :disabled="!disfalg" style="width:96%;margin-left:2%;margin-right:2%" v-model="form4[k].check" type="textarea"></el-input>
               </el-form-item>
           </el-form>       
         </div>   
@@ -135,6 +135,7 @@ export default {
     return {
       isIndeterminate: true,
       checkAll: false,
+      disfalg: false,
       quizData: [
         {
           contract_num: 1,
@@ -162,18 +163,9 @@ export default {
         { id: "错", name: "选项答案" }
       ],
       form1: [{ check: "A" }, { check: "B" }],
-      form2: [
-        { check: ["A", "B"] },
-        { check: ["A", "B", "C", "D"] }
-      ],
-      form3: [
-        { check: "对" },
-        { check: "错" }
-      ],
-      form4: [
-        { check: " " },
-        { check: " " }
-      ],
+      form2: [{ check: ["A", "B"] }, { check: ["A", "B", "C", "D"] }],
+      form3: [{ check: "对" }, { check: "错" }],
+      form4: [{ check: " " }, { check: " " }],
       formbox: [
         { check: "" },
         { check: "" },

@@ -109,7 +109,7 @@ export default {
         { id: "错", name: "选项答案" }
       ],
       form1: [{ check: " " }, { check: " " }],
-      form2: [{ check: " " }, { check: " " }],
+      form2: [{ check: [] }, { check: [] }],
       form3: [{ check: " " }, { check: " " }],
       form4: [{ check: " " }, { check: " " }]
     };
