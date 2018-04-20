@@ -1342,6 +1342,8 @@
       //********************岗位操作函数****************
       //根据职位获取岗位
       getPosition() {
+        this.postStaffData = [];
+        this.totalPositionNum = 0;
         if (!this.onlyPositionId) {
           return false;
         } else {
@@ -1492,7 +1494,8 @@
           this.postStaffLoading = true;
           this.postStaffStatus = ' ';
         }
-        this.$http.get(globalConfig.server_user+ 'users?role='+ this.selectPostName).then((res)=>{
+        this.$http.get(globalConfig.server_user+ 'users?role='+ this.selectPostName+ '&page=' + this.postStaffParams.page
+          + '&per_page_number=' + this.postStaffParams.limit).then((res)=>{
           this.postStaffLoading = false;
           if(res.data.status === 'success'){
             this.postStaffData = res.data.data;
