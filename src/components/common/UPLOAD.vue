@@ -77,12 +77,11 @@
         }
       },
       isClear(val){
-        if(val){
-          this.imgId = [];
-          this.imgArray = [];
-          this.editImg = [];
-          $('.imgItem').remove();
-        }
+        this.imgId = [];
+        this.imgArray = [];
+        this.editImg = [];
+        $('.imgItem').remove();
+        this.uploader.splice(0, this.uploader.files.length);
       }
     },
 
