@@ -5,7 +5,7 @@
         <div class="tabsSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input placeholder="请输入标题" v-model="form.keywords" size="mini" clearable @keyup.enter.native="">
+              <el-input placeholder="编号/姓名/电话/时间" v-model="form.keywords" size="mini" clearable @keyup.enter.native="">
                 <el-button slot="append" icon="el-icon-search" @click=""></el-button>
               </el-input>
             </el-form-item>
@@ -23,18 +23,40 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">选择类别</div>
+                    <div class="el_col_label">创建时间</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-
+                      <el-date-picker
+                        v-model="form.time"
+                        type="daterange"
+                        value-format="yyyy-MM-dd"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">维修状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select clearable v-model="form.status" placeholder="请选择维修状态" value="">
+                        <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.id"
+                                   :key="item.id"></el-option>
+                      </el-select>
                     </el-form-item>
                   </el-col>
                 </el-row>
               </el-col>
             </el-row>
             <div class="btnOperate">
-              <el-button size="mini" type="primary" @click="">搜索</el-button>
+              <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
               <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
             </div>
@@ -54,12 +76,20 @@
               @row-dblclick="dblClickTable"
               @row-contextmenu='houseMenu'
               style="width: 100%">
+              <!--<el-table-column-->
+                <!--prop="contract_type"-->
+                <!--label="合同类型">-->
+                <!--<template slot-scope="scope">-->
+                  <!--<span v-if="scope.row.contract_type">{{scope.row.contract_type}}</span>-->
+                  <!--<span v-if="!scope.row.contract_type">暂无</span>-->
+                <!--</template>-->
+              <!--</el-table-column>-->
               <el-table-column
-                prop="contract_type"
-                label="合同类型">
+                prop="repaire_num"
+                label="维修编号">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.contract_type">{{scope.row.contract_type}}</span>
-                  <span v-if="!scope.row.contract_type">暂无</span>
+                  <span v-if="scope.row.repaire_num">{{scope.row.repaire_num}}</span>
+                  <span v-if="!scope.row.repaire_num">暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -155,12 +185,20 @@
               @row-dblclick="dblClickTable"
               @row-contextmenu='houseMenu'
               style="width: 100%">
+              <!--<el-table-column-->
+                <!--prop="contract_type"-->
+                <!--label="合同类型">-->
+                <!--<template slot-scope="scope">-->
+                  <!--<span v-if="scope.row.contract_type">{{scope.row.contract_type}}</span>-->
+                  <!--<span v-if="!scope.row.contract_type">暂无</span>-->
+                <!--</template>-->
+              <!--</el-table-column>-->
               <el-table-column
-                prop="contract_type"
-                label="合同类型">
+                prop="repaire_num"
+                label="维修编号">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.contract_type">{{scope.row.contract_type}}</span>
-                  <span v-if="!scope.row.contract_type">暂无</span>
+                  <span v-if="scope.row.repaire_num">{{scope.row.repaire_num}}</span>
+                  <span v-if="!scope.row.repaire_num">暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -286,6 +324,9 @@
         form: {
           page: 1,
           limit: 12,
+          keyword: '',
+          time: '',
+          status: '',
         },
         collectTableData: [],
         rentTableData: [],
@@ -303,16 +344,26 @@
         rentRepairId: '',
         repairDetailDialog: false,
         repairId: '',
+        deleteId: '',
+        dictionary: [],
       }
     },
     mounted() {
       this.getCollectTableData();
+      this.getDictionary();
     },
     methods: {
+      getDictionary() {
+        this.$http.get(globalConfig.server + 'setting/dictionary/595').then((res) => {
+          if (res.data.code === "30010") {
+            this.dictionary = res.data.data;
+          }
+        });
+      },
       getCollectTableData() {
         this.collectStatus = ' ';
         this.collectLoading = true;
-        this.$http.get(globalConfig.server + 'repaire/list?limit=12&module=1&page=' + this.form.page).then((res) => {
+        this.$http.get(globalConfig.server + 'repaire/list?limit=12&module=1', {params: this.form} ).then((res) => {
           this.isHigh = false;
           this.collectLoading = false;
           if (res.data.code === '600200') {
@@ -328,7 +379,7 @@
       getRentTableData() {
         this.rentStatus = ' ';
         this.rentLoading = true;
-        this.$http.get(globalConfig.server + 'repaire/list?limit=12&module=2&page=' + this.form.page).then((res) => {
+        this.$http.get(globalConfig.server + 'repaire/list?limit=12&module=2', {params: this.form} ).then((res) => {
           this.isHigh = false;
           this.rentLoading = false;
           if (res.data.code === '600200') {
@@ -357,6 +408,13 @@
           this.getRentTableData();
         }
       },
+      search() {
+        if(this.activeName === 'first'){
+          this.getCollectTableData();
+        }else{
+          this.getRentTableData();
+        }
+      },
       // 高级
       highGrade() {
         this.isHigh = !this.isHigh;
@@ -378,32 +436,45 @@
       },
       //右键
       houseMenu(row, event) {
+        this.deleteId = row.id;
         this.lists = [
-          // {clickIndex: 'add_follow', headIcon: 'el-icon-plus', label: '添加跟进',},
-          // {clickIndex: 'edit_repair', headIcon: 'el-icon-edit', label: '编辑', id: row.id},
-          // {clickIndex: 'delete_repair', headIcon: 'el-icon-delete', label: '删除',},
+          {clickIndex: 'delete_repair', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },
       //右键回调
       clickEvent(val) {
         switch (val.clickIndex) {
-          case 'add_follow':
-
-            break;
-          case 'edit_repair':
-            if (this.activeName === 'first') {
-              this.collectRepairId = val.id;
-              this.addCollectRepairDialog = true;
-            } else if (this.activeName === 'second') {
-              this.collectRepairId = val.id;
-              this.addRentInfoDialog = true;
-            }
-            break;
           case 'delete_repair':
-
+            this.deleteRepair();
             break;
         }
+      },
+      deleteRepair(){
+        this.$confirm('此操作将删除维修单，您确定删除吗？', '删除维修单', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.get(globalConfig.server + 'repaire/del/' + this.deleteId).then((res) => {
+            if (res.data.code === "600200") {
+              if (this.activeName == "first") {
+                this.getCollectTableData();
+              } else if (this.activeName == "second") {
+                this.getRentTableData();
+              }
+              this.$notify.success({
+                title: "成功",
+                message: res.data.msg
+              });
+            } else {
+              this.$notify.warning({
+                title: "警告",
+                message: res.data.msg
+              });
+            }
+          });
+        })
       },
       //关闭右键菜单
       closeMenu() {

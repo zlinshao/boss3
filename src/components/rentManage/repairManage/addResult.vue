@@ -70,7 +70,7 @@
       },
       init(){
         this.params = {
-          id:'',
+          repaire_id:'',
           content : '',             //'跟进内容',
         };
         this.follow_name = '';

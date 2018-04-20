@@ -49,7 +49,7 @@
               <el-col :span="8">
                 <el-form-item label="客户性别">
                   <div class="content">
-                    <span v-if="repairDetail.sex">{{repairDetail.sex}}</span>
+                    <span v-if="repairDetail.sexuality">{{repairDetail.sexuality}}</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -95,7 +95,7 @@
               <el-col :span="8">
                 <el-form-item label="维修状态">
                   <div class="content">
-                    <span  v-if="repairDetail.status">{{repairDetail.status}}</span>
+                    <span  v-if="repairDetail.statu">{{repairDetail.statu}}</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -128,9 +128,9 @@
                 <i class="el-icon-plus"></i>新增跟进结果
               </el-button>
             </div>
-            <div v-if="repairDetail.remarks && repairDetail.remarks.length>0">
-              <el-form size="small" label-width="100px" v-if="repairDetail.remarks">
-                <el-row v-for="item in repairDetail.remarks" :key="item.id">
+            <div v-if="repairDetail.follow && repairDetail.follow.length>0">
+              <el-form size="small" label-width="100px" v-if="repairDetail.follow">
+                <el-row v-for="item in repairDetail.follow" :key="item.id">
                   <el-col :span="16">
                     <el-form-item label="跟进结果">
                       <div class="content">{{item.content}}</div>
@@ -155,8 +155,8 @@
         <!--<el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>-->
       </span>
     </el-dialog>
-    <EditCollectRepair :addCollectRepairDialog="collectRepairDialog" :activeId="editId"  @close="closeModal"></EditCollectRepair>
-    <EditRentRepair :addRentRepairDialog="rentRepairDialog" :activeId="editId"  @close="closeModal"></EditRentRepair>
+    <EditCollectRepair :addCollectRepairDialog="collectRepairDialog" :editId="editId"  @close="closeModal"></EditCollectRepair>
+    <EditRentRepair :addRentRepairDialog="rentRepairDialog" :editId="editId"  @close="closeModal"></EditRentRepair>
 
     <AddResult :addResultDialog="addResultDialog" :repairId="addResultId"
                @close="closeModal"></AddResult>
