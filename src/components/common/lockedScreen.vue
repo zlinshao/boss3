@@ -121,6 +121,10 @@
       btnClick(){
         this.$http.get(globalConfig.server + 'special/special/unlock_screen?pwd_lock=' + this.keywords).then((res) => {
           if (res.data.code === '100200') {
+          this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
+            localStorage.setItem('personal', JSON.stringify(res.data.data));
+            globalConfig.personal = res.data.data.data;
+          });
             new Promise((resolve, reject) => {
               sessionStorage.setItem('lockStatus', 0);
               if (Number(sessionStorage.getItem('lockStatus')) !== 1) {
