@@ -14,7 +14,13 @@
                 <el-input v-model="form.contract_type" disabled></el-input>
               </el-form-item>
             </el-col>
-
+            <el-col :span="8">
+              <el-form-item label="所属城市" required="">
+                <el-select clearable v-model="form.city" placeholder="选择城市" value="">
+                  <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
@@ -109,6 +115,7 @@
       return {
         addCollectRepairDialogVisible:false,
         form:{
+          city: '',
           contract_id: '', //合同Id
           contract_number: '', //合同编号
           contract_type: '', //合同类型
@@ -128,6 +135,7 @@
         repairStatusCategory: [],
         responsiblePersonCategory: [],
         sexCategory: [],
+        cityCategory: [],
       };
     },
     watch:{
@@ -136,7 +144,8 @@
       },
       addCollectRepairDialogVisible(val){
         if(!val){
-          this.$emit('close')
+          this.$emit('close');
+          this.initial();
         }else{
           this.getDictionary();
         }
@@ -155,8 +164,11 @@
         this.dictionary(604).then((res) => {  //认责人
           this.responsiblePersonCategory = res.data;
         });
-        this.dictionary(228).then((res) => {
+        this.dictionary(228).then((res) => {  //性别
           this.sexCategory = res.data;
+        });
+        this.dictionary(306,1).then((res) => {  //城市
+          this.cityCategory = res.data;
         });
       },
       confirmAdd() {
@@ -166,7 +178,7 @@
               title: '成功',
               message: res.data.msg
             });
-            this.initial();
+
             this.addCollectRepairDialogVisible = false;
           }else{
             this.$notify.warning({
@@ -178,6 +190,7 @@
       },
       initial(){
         this.form = {
+            city: '',
             customer_name: '',  //客户姓名
             sex: null,     //性别
             customer_mobile: '',  //客户电话

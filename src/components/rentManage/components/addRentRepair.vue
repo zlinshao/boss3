@@ -14,12 +14,19 @@
                 <el-input v-model="form.contract_type" disabled></el-input>
               </el-form-item>
             </el-col>
-
+            <el-col :span="8">
+              <el-form-item label="所属城市" required="">
+                <el-select clearable v-model="form.city" placeholder="选择城市" value="">
+                  <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
+                             :key="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
               <el-form-item label="客户姓名" required>
-                <el-input v-model="form.customer_name" ></el-input>
+                <el-input v-model="form.customer_name"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -33,7 +40,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="回复电话" required>
-                <el-input v-model="form.customer_mobile" ></el-input>
+                <el-input v-model="form.customer_mobile"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -41,37 +48,42 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="维修时间">
-                <el-date-picker type="date" v-model="form.repair_time" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
+                <el-date-picker type="date" v-model="form.repair_time" placeholder="选择日期"
+                                value-format="yyyy-MM-dd"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="维修师傅">
-                <el-input  v-model="form.repair_master" ></el-input>
+                <el-input v-model="form.repair_master"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="维修结果">
-                <el-input  v-model="form.repair_result" ></el-input>
+                <el-input v-model="form.repair_result"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
               <el-form-item label="维修金额">
-                <el-input  v-model="form.repair_money" ></el-input>
+                <el-input v-model="form.repair_money"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="维修状态">
                 <el-select v-model="form.status" placeholder="请选择维修状态">
-                  <el-option v-for="item in repairStatusCategory" :label="item.dictionary_name" :key="item.id" :value="item.id">{{item.dictionary_name}}</el-option>
+                  <el-option v-for="item in repairStatusCategory" :label="item.dictionary_name" :key="item.id"
+                             :value="item.id">{{item.dictionary_name}}
+                  </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="认责人">
                 <el-select v-model="form.person_liable" placeholder="请选择认责归属" clearable>
-                  <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id" :value="item.id">{{item.dictionary_name}}</el-option>
+                  <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id"
+                             :value="item.id">{{item.dictionary_name}}
+                  </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -81,14 +93,14 @@
           <el-row>
             <el-col :span="16">
               <el-form-item label="维修内容">
-                <el-input type="textarea" v-model="form.content" ></el-input>
+                <el-input type="textarea" v-model="form.content"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="16">
               <el-form-item label="备注">
-                <el-input type="textarea" v-model="form.remark" ></el-input>
+                <el-input type="textarea" v-model="form.remark"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -104,11 +116,12 @@
 
 <script>
   export default {
-    props:['addRentRepairDialog', 'contract'],
+    props: ['addRentRepairDialog', 'contract'],
     data() {
       return {
-        addRentRepairDialogVisible:false,
-        form:{
+        addRentRepairDialogVisible: false,
+        form: {
+          city: '',
           contract_id: '', //合同Id
           contract_number: '', //合同编号
           contract_type: '', //合同类型
@@ -128,21 +141,22 @@
         repairStatusCategory: [],
         responsiblePersonCategory: [],
         sexCategory: [],
+        cityCategory: [],
       };
     },
-    watch:{
-      addRentRepairDialog(val){
+    watch: {
+      addRentRepairDialog(val) {
         this.addRentRepairDialogVisible = val
       },
-      addRentRepairDialogVisible(val){
-        if(!val){
-          this.$emit('close')
-        }else{
+      addRentRepairDialogVisible(val) {
+        if (!val) {
+          this.$emit('close');
+          this.initial();
+        } else {
           this.getDictionary();
         }
       },
       contract(val) {
-        console.log(val)
         this.form.contract_id = val.contract_id;
         this.form.contract_number = val.contract_number;
         this.form.contract_type = val.type;
@@ -156,20 +170,22 @@
         this.dictionary(604).then((res) => {  //认责人
           this.responsiblePersonCategory = res.data;
         });
-        this.dictionary(228).then((res) => {
+        this.dictionary(228).then((res) => { //性别
           this.sexCategory = res.data;
+        });
+        this.dictionary(306,1).then((res) => { //城市
+          this.cityCategory = res.data;
         });
       },
       confirmAdd() {
-        this.$http.post(globalConfig.server+ 'repaire/insert', this.form).then((res)=>{
-          if(res.data.code === '600200'){
+        this.$http.post(globalConfig.server + 'repaire/insert', this.form).then((res) => {
+          if (res.data.code === '600200') {
             this.$notify.success({
               title: '成功',
               message: res.data.msg
             });
-            this.initial();
             this.addRentRepairDialogVisible = false;
-          }else{
+          } else {
             this.$notify.warning({
               title: '警告',
               message: res.data.msg
@@ -177,7 +193,7 @@
           }
         })
       },
-      initial(){
+      initial() {
         this.form = {
           customer_name: '',  //客户姓名
           sex: null,     //性别
@@ -196,7 +212,7 @@
   };
 </script>
 <style lang="scss" scoped="">
-  #addRentRepair{
+  #addRentRepair {
   }
 
 </style>
