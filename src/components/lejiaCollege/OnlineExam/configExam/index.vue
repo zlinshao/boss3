@@ -33,18 +33,79 @@
               </el-col>
               <el-col :span="4" style="float:right;margin-top:20px;">
                 <el-form-item style="margin-right: 10px;">
-                  <el-input value="单择题" placeholder="搜索关键字" size="small"  class="search_input">
-                    <el-button slot="append" icon="el-icon-search" class="search_button" ></el-button>
+                  <el-input value="单择题" placeholder="搜索关键字" size="small">
+                    <el-button slot="append" style="background-color:rgb(131, 160, 252); color:#fff;" size="small" class="search_button" >搜索试题</el-button>
                   </el-input>
                 </el-form-item>                
                 </el-col>
             </el-row>
           </el-form>
+          <el-checkbox style="margin-left:2%; margin-bottom:10px;" :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+          <span style="font-size:14px; color:#fc83b6; margin-left:20px;">移除</span>
+          <span style="font-size:14px; float:right; margin-right:20px; ">共&nbsp;<span style="color:#fc83b6;">8</span>&nbsp;项查询结果</span>
         </div>
-
+        <div class="questionDiv" v-for="(total,x) in 2" >
+          <el-checkbox v-model="formbox[x].check"></el-checkbox>&nbsp;&nbsp;&nbsp;{{x+1}}.<span style="color:#6a8dfb; margin-left:20px;">单选题</span>
+          <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
+          <span style="float:right; font-size:14px; color:#fc83b6; margin-right:20px;">移除</span>
+          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">编辑</span>
+          <p style="margin-left:30px;line-height:30px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
+          <el-form :model="form1[x]" >
+              <el-form-item >
+                <el-radio-group v-model="form1[x].check" style="width:98%;margin-left:2%;">
+                  <el-col :span="6" :key="index" v-for="(val,index) in answarData" style="line-height:24px;height: 24px;">
+                    <el-radio :label="val.id">{{val.id}}：{{val.name}} <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form1[x].check == val.id">正确</span></el-radio>
+                  </el-col>
+                </el-radio-group>
+              </el-form-item>
+          </el-form>       
+        </div>
+         <div class="questionDiv" v-for="(total2,y) in 2" >
+          <el-checkbox v-model="formbox[y].check"></el-checkbox>&nbsp;&nbsp;&nbsp;{{y+1+2}}.<span style="color:#6a8dfb; margin-left:20px;">多选题</span>
+          <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
+          <span style="float:right; font-size:14px; color:#fc83b6; margin-right:20px;">移除</span>
+          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">编辑</span>
+          <p style="margin-left:30px;line-height:30px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
+          <el-form :model="form2[y]" >
+              <el-form-item >
+                <el-checkbox-group v-model="form2[y].check" style="width:98%;margin-left:2%;">
+                  <el-col :span="6" :key="index1" v-for="(val,index1) in answarData" style="line-height:24px;height: 24px;">
+                    <el-checkbox :label="val.id">{{val.id}}：{{val.name}}<span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form2[y].check[index1] == val.id">正确</span></el-checkbox>
+                  </el-col>
+                </el-checkbox-group>
+              </el-form-item>
+          </el-form>      
+        </div>
+        <div class="questionDiv" v-for="(total3,z) in 2" >
+         <el-checkbox v-model="formbox[z].check"></el-checkbox>&nbsp;&nbsp;&nbsp; {{z+1+4}}.<span style="color:#6a8dfb; margin-left:20px;">判断题</span>
+          <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
+          <span style="float:right; font-size:14px; color:#fc83b6; margin-right:20px;">移除</span>
+          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">编辑</span>
+          <p style="margin-left:30px;line-height:20px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
+          <el-form :model="form3[z]" >
+              <el-form-item >
+                <el-radio-group v-model="form3[z].check" style="width:98%;margin-left:2%;">
+                  <el-col :span="12" :key="index2" v-for="(val,index2) in answarData2" style="line-height:24px;height: 24px;">
+                    <el-radio :label="val.id">{{val.id}}：{{val.name}}<span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form3[z].check == val.id">正确</span></el-radio>
+                  </el-col>
+                </el-radio-group>
+              </el-form-item>
+          </el-form>     
+        </div>   
+        <div class="questionDiv" v-for="(total4,k) in 2" >
+          <el-checkbox v-model="formbox[k].check"></el-checkbox>&nbsp;&nbsp;&nbsp; {{k+1+6}}.<span style="color:#6a8dfb; margin-left:20px;">简单题</span>
+          <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
+          <span style="float:right; font-size:14px; color:#fc83b6; margin-right:20px;">移除</span>
+          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">编辑</span>
+          <p style="margin-left:30px;line-height:20px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
+          <el-form :model="form3[k]" >
+              <el-form-item >
+                <el-input style="width:96%;margin-left:2%;margin-right:2%" v-model="form4[k].check" type="textarea"></el-input>
+              </el-form-item>
+          </el-form>       
+        </div>   
       </div>
       </div>
-
 
     <div id="testPaperDialog">
       <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="新建试卷" width="50%">
@@ -72,6 +133,8 @@ export default {
   components: {},
   data() {
     return {
+      isIndeterminate: true,
+      checkAll: false,
       quizData: [
         {
           contract_num: 1,
@@ -87,7 +150,40 @@ export default {
       formExam: {
         name: "",
         description: ""
-      }
+      },
+      answarData: [
+        { id: "A", name: "选项答案" },
+        { id: "B", name: "选项答案" },
+        { id: "C", name: "选项答案" },
+        { id: "D", name: "选项答案" }
+      ],
+      answarData2: [
+        { id: "对", name: "选项答案" },
+        { id: "错", name: "选项答案" }
+      ],
+      form1: [{ check: "A" }, { check: "B" }],
+      form2: [
+        { check: ["A", "B"] },
+        { check: ["A", "B", "C", "D"] }
+      ],
+      form3: [
+        { check: "对" },
+        { check: "错" }
+      ],
+      form4: [
+        { check: " " },
+        { check: " " }
+      ],
+      formbox: [
+        { check: "" },
+        { check: "" },
+        { check: "" },
+        { check: "" },
+        { check: "" },
+        { check: "" },
+        { check: "" },
+        { check: "" }
+      ]
     };
   },
   mounted() {},
@@ -97,12 +193,22 @@ export default {
       this.testPaperDialog = false;
       this.$router.push({ path: "/batchQuestions" });
     },
-    myselfQuestion(){
+    myselfQuestion() {
       this.testPaperDialog = false;
-      this.$router.push({ path: "/myselfQuestions" });     
+      this.$router.push({ path: "/myselfQuestions" });
     },
     openModalDialog() {
       this.testPaperDialog = true;
+    },
+    handleCheckAllChange(val) {
+      this.checkedCities = val ? formbox : [];
+      this.isIndeterminate = false;
+    },
+    handleCheckedCitiesChange(value) {
+      let checkedCount = value.length;
+      this.checkAll = checkedCount === this.formbox.length;
+      this.isIndeterminate =
+        checkedCount > 0 && checkedCount < this.formbox.length;
     }
   }
 };
@@ -127,6 +233,14 @@ export default {
   .main {
     border: 1px #eee solid;
     border-bottom: none;
+    font-size: 16px;
+    .questionDiv {
+      width: 98%;
+      margin-left: 2%;
+      min-height: 154px;
+      padding-top: 16px;
+      border-top: 1px #eee solid;
+    }
   }
 }
 
