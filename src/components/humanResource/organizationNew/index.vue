@@ -203,6 +203,7 @@
                 </div>
               </el-tab-pane>
               <el-tab-pane label="职位管理" name="second">
+                <!--职位-->
                 <div class="tableBox">
                   <div class="blueTable">
                     <el-table
@@ -221,8 +222,12 @@
                         label="职位">
                       </el-table-column>
                       <el-table-column
-                        prop="display_name"
+                        prop="role.name"
                         label="职位标识">
+                        <template slot-scope="scope">
+                          <span v-if="scope.row.role && scope.row.role.name">{{scope.row.role && scope.row.role.name}}</span>
+                          <span v-if="!(scope.row.role && scope.row.role.name)">暂无</span>
+                        </template>
                       </el-table-column>
                       <el-table-column
                         prop="org.name"
@@ -253,6 +258,8 @@
                       element-loading-spinner="el-icon-loading"
                       element-loading-background="rgba(255, 255, 255, 0)"
                       @row-contextmenu="openPositionMenu"
+                      :row-class-name="tableRowPostClassName"
+                      @row-click="clickPostMenu"
                       style="width: 100%">
                       <el-table-column
                         prop="name"
@@ -270,7 +277,7 @@
                         label="职位">
                       </el-table-column>
                       <el-table-column
-                        prop="display_name"
+                        prop="role.name"
                         label="职位标识">
                       </el-table-column>
                       <el-table-column
@@ -281,13 +288,93 @@
                   </div>
                   <div class="tableBottom">
                     <el-pagination
-                      @size-change="handlePostSizeChange"
-                      @current-change="handlePostCurrentChange"
+                      @size-change="handlePositionSizeChange"
+                      @current-change="handlePositionCurrentChange"
                       :current-page="currentPage"
                       :page-sizes="[5, 10, 15, 20]"
                       :page-size="5"
                       layout="total, sizes, prev, pager, next, jumper"
                       :total="totalPositionNum">
+                    </el-pagination>
+                  </div>
+                </div>
+                <!--岗位下的员工-->
+                <div class="tableBox">
+                  <div class="greenTable">
+                    <el-table
+                      :data="postStaffData"
+                      :empty-text='postStaffStatus'
+                      v-loading="postStaffLoading"
+                      element-loading-text="拼命加载中"
+                      element-loading-spinner="el-icon-loading"
+                      element-loading-background="rgba(255, 255, 255, 0)"
+                      @row-contextmenu="openContextMenu"
+                      @cell-dblclick="openDetail"
+                      style="width: 100%">
+                      <el-table-column width="60px">
+                        <template slot-scope="scope">
+                          <img data-card="" v-if="scope.row.avatar" :data-src="JSON.stringify(scope.row)"
+                               :src="scope.row.avatar" style="width: 30px;height: 30px;border-radius: 50%;">
+                          <img v-else="" src="../../../assets/images/defaultHead.png" data-card=""
+                               :data-src="JSON.stringify(scope.row)"
+                               style="width: 30px;height: 30px;border-radius: 50%;filter: grayscale(100%);">
+                        </template>
+                      </el-table-column>
+                      <el-table-column
+                        prop="name"
+                        label="员工姓名">
+                      </el-table-column>
+                      <el-table-column
+                        label="部门">
+                        <template slot-scope="scope">
+                          <span v-for="item in scope.row.org">{{item.name}}</span>
+                        </template>
+                      </el-table-column>
+                      <el-table-column
+                        label="岗位">
+                        <template slot-scope="scope">
+                          <span v-for="item in scope.row.role">{{item.display_name}}</span>
+                        </template>
+                      </el-table-column>
+                      <el-table-column
+                        prop="phone"
+                        label="手机号">
+                      </el-table-column>
+                      <el-table-column
+                        prop="created_at"
+                        label="入职时间">
+                      </el-table-column>
+                      <el-table-column
+                        prop="created_at"
+                        label="账号状态">
+                        <template slot-scope="scope">
+                          <div>
+                            <span v-if="scope.row.is_enable"><el-tag type="danger">禁用</el-tag></span>
+                            <span v-if="!scope.row.is_enable"><el-tag type="success">启用</el-tag></span>
+                          </div>
+                        </template>
+                      </el-table-column>
+                      <el-table-column
+                        prop="created_at"
+                        label="在职状态">
+                        <template slot-scope="scope">
+                          <div>
+                            <span v-if="scope.row.is_on_job"><el-tag type="warning">离职</el-tag></span>
+                            <span v-if="!scope.row.is_on_job"><el-tag type="success">在职</el-tag></span>
+                          </div>
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                  </div>
+                  <div class="tableBottom">
+                    <el-pagination
+                      @size-change="handlePostStaffSizeChange"
+                      @current-change="handlePostStaffCurrentChange"
+                      :current-page="currentPage"
+                      :page-sizes="[5, 10, 15, 20]"
+                      :page-size="5"
+                      layout="total, sizes, prev, pager, next, jumper"
+                      :total="totalPostStaffNum">
                     </el-pagination>
                   </div>
                 </div>
@@ -609,6 +696,8 @@
         positionCollectLoading: false,
         postCollectStatus: ' ',
         postCollectLoading: false,
+        postStaffStatus: ' ',
+        postStaffLoading: false,
 
         staffDetail: false,
         staffDetailData: {},
@@ -636,10 +725,19 @@
           limit: 5,
           page: 1,
         },
+        positionParams: {
+          limit: 5,
+          page: 1,
+        },
+        postStaffParams: {
+          limit: 5,
+          page: 1,
+        },
 
         staffTableData: [],    //员工列表
         positionTableData: [], //岗位列表
         positionList: [],      //职位列表
+        postStaffData: [],  //岗位下的员工列表
         organizationDialog: false,
         sortable: null,
         isDepartment: false,
@@ -656,6 +754,7 @@
         totalStaffNum: 0,
         totalOnlyPositionNum: 0,
         totalPositionNum: 0,
+        totalPostStaffNum: 0,
         departId: null,
         parentId: null,
         parentName: null,
@@ -685,6 +784,7 @@
         type: '',
         setManageDepartId: '',
         departManageName: '',
+        selectPostName: '',
       }
     },
     mounted() {
@@ -1147,6 +1247,7 @@
               } else {
                 this.positionCollectStatus = '暂无数据';
                 this.postCollectStatus = '暂无数据';
+                this.postStaffStatus = '暂无数据';
               }
               this.postParams.page = 1;
             } else {
@@ -1156,6 +1257,7 @@
               });
               this.positionCollectStatus = '暂无数据';
               this.postCollectStatus = '暂无数据';
+              this.postStaffStatus = '暂无数据';
               this.positionList = [];
               this.totalOnlyPositionNum = 0;
             }
@@ -1185,6 +1287,10 @@
         this.department_name = row.org.name;
 
         this.getPosition();
+      },
+      clickPostMenu(row,event){
+        this.selectPostName = row.role.name;
+        this.getPostStaffData();
       },
       //右键职位回调
       openOnlyPositionDialog(val) {
@@ -1261,10 +1367,18 @@
             });
             this.totalPositionNum = res.data.data.count;
             this.positionTableData = res.data.data.data;
+            if (res.data.data.data.length > 0) {
+              this.selectPostName = res.data.data.data[0].role && res.data.data.data[0].role.name;
+              this.getPostStaffData();
+            } else {
+              this.postCollectStatus = '暂无数据';
+              this.postStaffStatus = '暂无数据';
+            }
           } else {
             this.totalPositionNum = 0;
             this.positionTableData = [];
             this.postCollectStatus = '暂无数据';
+            this.postStaffStatus = '暂无数据';
           }
         })
       },
@@ -1371,7 +1485,30 @@
       closeMenu() {
         this.show = false;
       },
-
+      getPostStaffData(){
+        if (!this.selectPostName) {
+          return false;
+        } else {
+          this.postStaffLoading = true;
+          this.postStaffStatus = ' ';
+        }
+        this.$http.get(globalConfig.server_user+ 'users?role='+ this.selectPostName).then((res)=>{
+          this.postStaffLoading = false;
+          if(res.data.status === 'success'){
+            this.postStaffData = res.data.data;
+            this.totalPostStaffNum = res.data.meta.total;
+            if(res.data.data.length<1){
+              this.postStaffStatus = '暂无数据';
+              this.postStaffData = [];
+              this.totalPostStaffNum = 0;
+            }
+          }else{
+            this.postStaffStatus = '暂无数据';
+            this.postStaffData = [];
+            this.totalPostStaffNum = 0;
+          }
+        });
+      },
       //********************树配置操作函数****************
       renderContent(h, {node, data, store}) {//加载节点
         let that = this;
@@ -1431,15 +1568,33 @@
         this.params.page = val;
         this.search();
       },
-
       handlePostSizeChange(val) {
         this.postParams.limit = val;
-        this.getPosition();
+        this.getOnlyPosition();
       },
       handlePostCurrentChange(val) {
         this.postParams.page = val;
+        this.getOnlyPosition();
+      },
+      //岗位
+      handlePositionSizeChange(val) {
+        this.positionParams.limit = val;
         this.getPosition();
       },
+      handlePositionCurrentChange(val) {
+        this.positionParams.page = val;
+        this.getPosition();
+      },
+      //岗位下的员工
+      handlePostStaffSizeChange(val) {
+        this.postStaffParams.limit = val;
+        this.getPostStaffData();
+      },
+      handlePostStaffCurrentChange(val) {
+        this.postStaffParams.page = val;
+        this.getPostStaffData();
+      },
+
       //---------------部门排序--------------------
       sortDepartment() {
         this.isDepartment = !this.isDepartment;
@@ -1466,6 +1621,12 @@
       //************列表变色************
       tableRowClassName({row, rowIndex}) {
         if (row.id === this.onlyPositionId) {
+          return 'success-row';
+        }
+        return '';
+      },
+      tableRowPostClassName({row, rowIndex}) {
+        if (row.role.name === this.selectPostName) {
           return 'success-row';
         }
         return '';

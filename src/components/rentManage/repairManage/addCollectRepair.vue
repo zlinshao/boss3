@@ -152,10 +152,10 @@
         this.dictionary(604).then((res) => {  //认责人
           this.responsiblePersonCategory = res.data;
         });
-        this.dictionary(228).then((res) => {
+        this.dictionary(228).then((res) => { //性别
           this.sexCategory = res.data;
         });
-        this.dictionary(306).then((res) => {
+        this.dictionary(306,1).then((res) => { //城市
           this.cityCategory = res.data;
         });
       },
