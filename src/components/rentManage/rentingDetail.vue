@@ -20,29 +20,7 @@
       <div class="top">
         <h3>{{contractInfo.community_name}}  {{contractInfo.building}}-{{contractInfo.unit}}-{{contractInfo.doorplate}}</h3>
         <h3>
-          <el-button size="mini" type="primary"
-                     v-if="contractInfo.visit_status&&contractInfo.visit_status.id == 3" disabled="">
-            {{contractInfo.visit_status.name}}
-          </el-button>
 
-          <el-button size="mini" type="primary"  @click="check(1)"
-                     v-if="contractInfo.visit_status&&contractInfo.visit_status.id == 2">
-            {{contractInfo.visit_status.name}}
-          </el-button>
-
-          <el-button size="mini" type="danger" @click="reject"
-                     v-if="contractInfo.doc_status&&contractInfo.doc_status.id > 1">驳回</el-button>
-          <el-button size="mini" type="primary" @click="check(0)"
-                     v-if="contractInfo.doc_status&&contractInfo.doc_status.id==1">
-            {{contractInfo.doc_status.name}}
-          </el-button>
-          <el-button size="mini" type="primary" @click="check(0)"
-                     v-if="contractInfo.doc_status&&contractInfo.doc_status.id==2">{{contractInfo.doc_status.name}}</el-button>
-          <el-button size="mini" type="primary" @click="check(0)"
-                     v-if="contractInfo.doc_status&&contractInfo.doc_status.id==3">{{contractInfo.doc_status.name}}</el-button>
-          <el-button size="mini" type="success" v-if="contractInfo.doc_status&&contractInfo.doc_status.id == 4" disabled="">
-            {{contractInfo.doc_status.name}}
-          </el-button>
         </h3>
       </div>
       <div id="mainContent" class="main scroll_bar" @click.stop="getText($event)">

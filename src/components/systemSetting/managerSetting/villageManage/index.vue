@@ -227,6 +227,7 @@
           city: '',
           area: '',
           region: '',
+          a : 'list',
         },
         tableData: [],
 

@@ -1,14 +1,15 @@
 <template>
   <div>
     <el-dialog :close-on-click-modal="false" title="房屋照片" :visible.sync="houseDetailDialogVisible">
-      <div v-if="detailData.length>0&&detailData[0].album&&detailData[0].album.album_file">
-        <img v-for="(val,key) in detailData[0].album.album_file" v-if="val[0].info.ext.indexOf('image')>-1"
-             :src="val[0].uri" data-magnify="" :data-src="val[0].uri">
+      <div v-if="detailData.album&&detailData.album.length>0&&detailData.album[0].album
+                 &&detailData.album[0].album.album_file&&detailData.album[0].album.album_file.length>0">
+        <img v-for="item in detailData.album[0].album.album_file" v-if="item.info.ext.indexOf('image')>-1"
+             :src="item.uri" data-magnify="" :data-src="item.uri">
 
-        <video v-for="(val,key) in detailData[0].album.album_file" v-if="val[0].info.ext.indexOf('video')>-1"
+        <video v-for="item in detailData.album[0].album.album_file" v-if="item.info.ext.indexOf('video')>-1"
           id="my-video" class="video-js" controls preload="auto" width="200" height="120"
                data-setup="{}">
-          <source :src="val[0].uri" type="video/mp4">
+          <source :src="item.uri" type="video/mp4">
         </video>
       </div>
       <span slot="footer" class="dialog-footer">
