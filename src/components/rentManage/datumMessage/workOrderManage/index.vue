@@ -226,7 +226,7 @@
                 </el-table-column>
                 <el-table-column
                   prop="expected_finish_time"
-                  label="预计完成时间">
+                  label="下次跟进时间">
                   <template slot-scope="scope">
                     <span v-if="scope.row.expected_finish_time">{{scope.row.expected_finish_time}}</span>
                     <span v-if="!scope.row.expected_finish_time">暂无</span>
