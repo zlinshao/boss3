@@ -144,10 +144,17 @@
           }
         },
         rentContractId(val) {
-          this.params.contract_id = val;
-          if(this.activeName === 'RentRepairTab'){
-            this.getTableData();
+          if(val){
+            this.params.contract_id = val;
+            if(this.activeName === 'RentRepairTab'){
+              this.getTableData();
+            }
+          }else{
+            this.tableStatus = "暂无数据";
+            this.tableData = [];
+            this.totalNum = 0;
           }
+
         },
       },
       methods: {

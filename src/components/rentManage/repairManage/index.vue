@@ -12,6 +12,9 @@
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="exportData">导出</el-button>
+            </el-form-item>
           </el-form>
         </div>
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
@@ -571,6 +574,23 @@
         this.$nextTick(() => {
           this.show = true
         })
+      },
+      exportData(){
+        this.$http.get(globalConfig.server + 'repaire/export', {
+          responseType: 'arraybuffer',
+          params: this.form
+        }).then((res) => { // 处理返回的文件流
+          if (!res.data) {
+            return;
+          }
+          let url = window.URL.createObjectURL(new Blob([res.data]));
+          let link = document.createElement('a');
+          link.style.display = 'a';
+          link.href = url;
+          link.setAttribute('download', 'excel.xls');
+          document.body.appendChild(link);
+          link.click();
+        });
       },
     }
   }
