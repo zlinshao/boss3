@@ -1,5 +1,120 @@
 <template>
   <div  @click="show=false" @contextmenu="closeMenu">
+
+    <div class="highRanking" style=" position: absolute; top: 122px; right: 20px;">
+      <div class="highSearch">
+        <el-form :inline="true" size="mini">
+          <el-form-item>
+            <el-input v-model="params.search" placeholder="搜索" @keydown.enter.native="search">
+              <el-button slot="append" type="primary" @click="search" icon="el-icon-search"></el-button>
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button v-show="selectFlag>1" type="primary" @click="createNewTask">创建任务</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button v-show="selectFlag==2 || selectFlag==4" type="primary" @click="exportContract">导出</el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
+    <div class="highRanking">
+      <div class="filter high_grade" :class="isHigh? 'highHide':''" style=" margin-top: -40px;">
+        <el-form :inline="true" size="mini" label-width="100px">
+          <div class="filterTitle">
+            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+          </div>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">开始时间</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-date-picker
+                      type="date"
+                      placeholder="选择日期"
+                      value-format="yyyy-MM-dd" v-model="params.start">
+                    </el-date-picker>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">结束时间</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-date-picker
+                      type="date"
+                      placeholder="选择日期"
+                      value-format="yyyy-MM-dd" v-model="params.end">
+                    </el-date-picker>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">员工</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input readonly="" placeholder="点击选择" v-model="staff_name" @focus="openOrganizationModal('staff')"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">部门</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input readonly="" placeholder="点击选择" v-model="depart_name" @focus="openOrganizationModal('depart')"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12" v-if="selectFlag==4">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">资料</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select v-model="params.proof" placeholder="请选择" clearable="" @change="search" value="">
+                      <el-option label="资料齐全" value="7"></el-option>
+                      <el-option label="交接单" value="1"></el-option>
+                      <el-option label="收据" value="2"></el-option>
+                      <el-option label="钥匙" value="4"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <div class="btnOperate">
+            <el-button size="mini" type="primary" @click="search()">搜索</el-button>
+            <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+            <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+          </div>
+        </el-form>
+      </div>
+    </div>
+
     <div class="tool">
       <div class="tool_left">
         <el-button size="mini" @click="selectStatus(1)" :class="selectFlag==1? 'selectButton':''">
@@ -18,32 +133,7 @@
           <i class="el-icons-fa-mail-forward"></i>&nbsp;丢失
         </el-button>
       </div>
-
-      <div style="position: absolute; top: 123px; right: 20px;">
-        <el-form :inline="true" onsubmit="return false" size="mini" class="demo-form-inline" style="display: flex;justify-content:flex-end ">
-          <el-form-item v-if="selectFlag==4">
-            <el-select v-model="params.proof" placeholder="请选择" clearable="" @change="search" value="">
-              <el-option label="资料齐全" value="7"></el-option>
-              <el-option label="交接单" value="1"></el-option>
-              <el-option label="收据" value="2"></el-option>
-              <el-option label="钥匙" value="4"></el-option>
-            </el-select>
-          </el-form-item>
-
-          <el-form-item>
-            <el-input v-model="params.search" placeholder="搜索" @keydown.enter.native="search">
-              <el-button slot="append" type="primary" @click="search" icon="el-icon-search"></el-button>
-            </el-input>
-          </el-form-item>
-
-          <el-form-item>
-            <el-button v-show="selectFlag>1" type="primary" @click="createNewTask">创建任务</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
     </div>
-
-
     <div class="main">
       <!--//汇总-->
       <div v-show="selectFlag==1">
@@ -259,7 +349,8 @@
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
 
-    <Organization :organizationDialog="organizationDialog" @close="closeModalCallback"></Organization>
+    <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
+                  @close="closeModalCallback" @selectMember="selectMember"></Organization>
 
     <Contact :contractDialog="contractDialog" :applyEditId_detail="applyEditId_detail" @close="closeModalCallback"></Contact>
     <ContactCancel :contractCancelDialog="contractCancelDialog" :cancelEditId_detail="cancelEditId_detail" @close="closeModalCallback"></ContactCancel>
@@ -323,6 +414,10 @@
           page:1,
           search:'',
           proof:'',
+          department_id : '',
+          start : '',
+          end : '',
+          staff_id : '',
         },
 
         //***********************//
@@ -366,6 +461,11 @@
 
         emptyContent : ' ',
         tableLoading : false,
+        isHigh :false,
+        staff_name : '',
+        depart_name : '',
+        length : '',
+        type : '',
       }
     },
     watch:{
@@ -407,7 +507,19 @@
         }
       },
 
+      highGrade(){
+        this.isHigh = !this.isHigh;
+      },
+      resetting(){
+        this.params.department_id = '';
+        this.params.start = '';
+        this.params.end = '';
+        this.params.staff_id = '';
+        this.staff_name = '';
+        this.depart_name = '';
+      },
       search(){
+        this.isHigh = false;
         this.params.page = 1;
         if(this.selectFlag ===2){
           this.getApplyList();
@@ -522,9 +634,21 @@
 
 
 
-      openOrganizationModal(){
+      openOrganizationModal(val){
+        this.length = 1;
+        this.type = val;
         this.organizationDialog = true
       },
+      selectMember(val){
+        if(this.type==='staff'){
+          this.staff_name = val[0].name;
+          this.params.staff_id = val[0].id;
+        }else {
+          this.depart_name = val[0].name;
+          this.params.department_id = val[0].id;
+        }
+      },
+
       //显示合同详情
       showContractDetail(row,event){
         if(this.selectFlag ===2){
@@ -699,6 +823,25 @@
         this.$nextTick(() => {
           this.show = true
         })
+      },
+
+      //导出合同
+      exportContract(){
+        if(this.selectFlag ===2){
+          this.$http.get(globalConfig.server+'contract/export/apply', {responseType: 'arraybuffer'}).then((res) => {
+            if (!res.data) {
+              return;
+            }
+            this.$exportData(res.data)
+          })
+        }else {
+          this.$http.get(globalConfig.server+'contract/export/handin', {responseType: 'arraybuffer'}).then((res) => {
+            if (!res.data) {
+              return;
+            }
+            this.$exportData(res.data)
+          })
+        }
       },
     }
 
