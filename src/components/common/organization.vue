@@ -429,6 +429,9 @@
   .hov {
     background: #f5f7fa;
   }
+  input::-webkit-input-placeholder {
+    color: #999;
+  }
   #organizationId{
     .el-dialog__wrapper{
       .el-dialog{
