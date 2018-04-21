@@ -216,6 +216,15 @@
                 </template>
               </el-table-column>
               <el-table-column
+                label="房屋影像">
+                <template slot-scope="scope">
+                  <a href="javascript:;" @click.stop="searchPic(scope.row.id)">
+                    <i style="font-size: 16px" class="el-icon-picture"></i>
+                  </a>
+                </template>
+              </el-table-column>
+
+              <el-table-column
                 label="负责人">
                 <template slot-scope="scope">
                   <span v-if="scope.row.user&&scope.row.user.name">{{scope.row.user.name}}</span>
@@ -282,7 +291,8 @@
     <AddEarlyWarning :addEarlyWarningDialog="addEarlyWarningDialog" :houseId="houseId" @close="closeModal"></AddEarlyWarning>
     <AddDecorate :addDecorateDialog="addDecorateDialog" :houseId="houseId" @close="closeModal"></AddDecorate>
 
-    <HouseDetail :houseDetailDialog="houseDetailDialog" :houseId="houseId" @close="closeModal"></HouseDetail>
+    <HouseDetail :houseDetailDialog="houseDetailDialog" :all_dic="all_dic" :isOnlyPic="isOnlyPic"
+                 :houseDetail="houseDetail" :houseId="houseId" @close="closeModal"></HouseDetail>
   </div>
 </template>
 
@@ -353,6 +363,8 @@
         all_dic: [],        //装修
 
         houseId: '',
+        isOnlyPic : false,
+
         houseDetail: {},
         collectData : [],
         rentData : [],
@@ -515,8 +527,15 @@
         return '';
       },
       //*****************************右键操作****************************//
+      searchPic(id){
+        this.isOnlyPic = true;
+        this.houseId = id;
+        this.houseDetailDialog = true;
+      },
       dblClickTable(row, event){
+        this.isOnlyPic = false;
         this.houseId = row.id;
+        this.houseDetail = row;
         this.houseDetailDialog = true;
       },
 

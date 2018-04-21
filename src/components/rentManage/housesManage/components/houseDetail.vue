@@ -1,16 +1,359 @@
 <template>
   <div>
-    <el-dialog :close-on-click-modal="false" title="房屋照片" :visible.sync="houseDetailDialogVisible">
-      <div v-if="detailData.album&&detailData.album.length>0&&detailData.album[0].album
-                 &&detailData.album[0].album.album_file&&detailData.album[0].album.album_file.length>0">
-        <img v-for="item in detailData.album[0].album.album_file" v-if="item.info.ext.indexOf('image')>-1"
-             :src="item.uri" data-magnify="" :data-src="item.uri">
+    <el-dialog :close-on-click-modal="false" title="房屋详情" width="60%" :visible.sync="houseDetailDialogVisible">
+      <div class="scroll_bar">
+        <div v-if="!isOnlyPic">
+          <div class="title">基本信息</div>
+          <div class="describe_border">
+            <el-form size="small" label-width="80px">
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="小区名称">
+                    <div class="content">
+                      <span v-if="detailData.community">{{detailData.community.name}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="小区地址">
+                    <div class="content">
+                      <span v-if="detailData.community">{{detailData.community.detailed_address}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="小区别名">
+                    <div class="content">
+                      <span v-if="detailData.community">{{detailData.community.nickname}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="门牌号">
+                    <div class="content">
+                    <span v-if="detailData.door_address">
+                      <span v-for="(item,index) in detailData.door_address">
+                        {{item}}<span v-if="index<detailData.door_address.length-1"> - </span>
+                      </span>
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="面积">
+                    <div class="content">
+                    <span v-if="detailData.area">
+                      {{detailData.area}}m²
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="装修">
+                    <div class="content">
+                    <span v-if="detailData.decorate">
+                      {{matchDictionary(detailData.decorate)}}
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="房屋类型">
+                    <div class="content">
+                      <span v-if="detailData.property_type">{{matchDictionary(detailData.property_type)}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="朝向">
+                    <div class="content">
+                      <span v-if="detailData.community">{{detailData.detailed_address}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="楼层">
+                    <div class="content">
+                    <span v-if="detailData.floor">
+                      {{detailData.floor.this}}/{{detailData.floor.all}}
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="价格">
+                    <div class="content">
+                      <span v-if="detailData.price">{{detailData.price}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="是否中介">
+                    <div class="content">
+                      <span v-if="detailData.is_agency">是</span>
+                      <span v-else="">否</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
 
-        <video v-for="item in detailData.album[0].album.album_file" v-if="item.info.ext.indexOf('video')>-1"
-          id="my-video" class="video-js" controls preload="auto" width="200" height="120"
-               data-setup="{}">
-          <source :src="item.uri" type="video/mp4">
-        </video>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="开单人">
+                    <div class="content">
+                      <span v-if="listInfo.user&&listInfo.user.name">{{listInfo.user.name}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="所属部门">
+                    <div class="content">
+                      <span v-if="listInfo.org&&listInfo.org.name">{{listInfo.org.name}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
+
+          <div class="title">房屋物品</div>
+          <div class="describe_border">
+            <el-form size="small" label-width="140px">
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="空调">
+                    <div class="content">
+                      <span v-if="detailData.house_goods">{{detailData.house_goods.air_condition}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="冰箱">
+                    <div class="content">
+                      <span v-if="detailData.house_goods">{{detailData.house_goods.fridge}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="电视">
+                    <div class="content">
+                      <span v-if="detailData.house_goods">{{detailData.house_goods.television}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="燃气灶">
+                    <div class="content">
+                      <span v-if="detailData.house_goods">{{detailData.house_goods.gas_stove}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="油烟机">
+                    <div class="content">
+                      <span v-if="detailData.house_goods">{{detailData.house_goods.hood}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="微波炉">
+                    <div class="content">
+                      <span v-if="detailData.house_goods">{{detailData.house_goods.microwave}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="洗衣机">
+                    <div class="content">
+                      <span v-if="detailData.house_goods">{{detailData.house_goods.wash_machine}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="热水器">
+                    <div class="content">
+                      <span v-if="detailData.house_goods">{{detailData.house_goods.water_heater}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="沙发">
+                    <div class="content">
+                      <span v-if="detailData.house_goods">{{detailData.house_goods.sofa}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="晾衣架">
+                    <div class="content">
+                      <span v-if="detailData.house_goods">{{detailData.house_goods.clothe_rack}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="餐桌">
+                    <div class="content">
+                      <span v-if="detailData.house_goods">{{detailData.house_goods.dining_table}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="椅子">
+                    <div class="content">
+                      <span v-if="detailData.house_goods">{{detailData.house_goods.chair}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="暖气">
+                    <div class="content">
+                    <span v-if="detailData.house_goods">
+                      <span v-if="detailData.house_goods.heater">有</span>
+                      <span v-else="">无</span>
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="天然气">
+                    <div class="content">
+                    <span v-if="detailData.house_goods">
+                      <span v-if="detailData.house_goods.gas">有</span>
+                      <span v-else="">无</span>
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="房屋交接是否干净">
+                    <div class="content">
+                    <span v-if="detailData.house_goods">
+                      <span v-if="detailData.house_goods.is_clean">是</span>
+                      <span v-else="">否</span>
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="是否每个房间有床+床垫">
+                    <div class="content">
+                    <span v-if="detailData.house_goods">
+                      <span v-if="detailData.house_goods.bed">是</span>
+                      <span v-else="">否</span>
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="是否每个房间有衣柜">
+                    <div class="content">
+                    <span v-if="detailData.house_goods">
+                      <span v-if="detailData.house_goods.wardrobe_remark">是</span>
+                      <span v-else="">否</span>
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="是否每个房间有窗帘">
+                    <div class="content">
+                    <span v-if="detailData.house_goods">
+                      <span v-if="detailData.house_goods.curtain">是</span>
+                      <span v-else="">否</span>
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="家电是否齐全">
+                    <div class="content">
+                    <span v-if="detailData.house_goods">
+                      <span v-if="detailData.house_goods.is_fill">是</span>
+                      <span v-else="">否</span>
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="房东是否予以配齐">
+                    <div class="content">
+                    <span v-if="detailData.house_goods">
+                      <span v-if="detailData.house_goods.is_lord_fill">是</span>
+                      <span v-else="">否</span>
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="16">
+                  <el-form-item label="其他家具家电">
+                    <div class="content">
+                    <span v-if="detailData.house_goods">
+                     {{detailData.house_goods.other_furniture}}
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="16">
+                  <el-form-item label="其他问题">
+                    <div class="content">
+                    <span v-if="detailData.house_goods">
+                     {{detailData.house_goods.other_remark}}
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
+        </div>
+        <div class="title">房屋影像</div>
+        <div class="describe_border">
+
+          <div v-if="detailData.house_goods&&detailData.house_goods.photo">
+            <img v-for="item in detailData.house_goods.photo" v-if="item.info.mime.indexOf('image')>-1"
+                 :src="item.uri" data-magnify="" :data-src="item.uri" alt="">
+
+            <video v-for="item in detailData.house_goods.photo" v-if="item.info.mime.indexOf('video')>-1"
+                   class="video-js" controls preload="auto" width="200" height="120"
+                   data-setup="{}">
+              <source :src="item.uri" type="video/mp4">
+            </video>
+          </div>
+
+          <div v-if="albumData&&albumData.length>0&&albumData[0].album
+                 &&albumData[0].album.album_file&&albumData[0].album.album_file.length>0">
+            <img v-for="item in albumData[0].album.album_file" v-if="item.info.mime.indexOf('image')>-1"
+                 :src="item.uri" data-magnify="" :data-src="item.uri">
+
+            <video v-for="item in albumData[0].album.album_file" v-if="item.info.mime.indexOf('video')>-1"
+                   class="video-js" controls preload="auto" width="200" height="120"
+                   data-setup="{}">
+              <source :src="item.uri" type="video/mp4">
+            </video>
+          </div>
+        </div>
       </div>
       <span slot="footer" class="dialog-footer">
         <!--<el-button size="small" @click="houseDetailDialogVisible = false">取 消</el-button>-->
@@ -22,11 +365,14 @@
 
 <script>
   export default {
-    props:['houseDetailDialog','houseId'],
+    props:['houseDetailDialog','houseId','all_dic','isOnlyPic','houseDetail'],
     data() {
       return {
         houseDetailDialogVisible:false,
-        detailData : [],
+        detailData : {},
+        albumData : [],
+        allDictionary:[],
+        listInfo:{}
       };
     },
     watch:{
@@ -38,16 +384,35 @@
           this.$emit('close');
         }else {
           this.getData();
+          this.detailData = [];
+          this.albumData = {};
+          this.listInfo = {};
         }
       },
+      all_dic(val){
+        this.allDictionary = val;
+      },
+      houseDetail(val){
+        this.listInfo = val;
+      }
     },
     methods:{
       getData(){
         this.$http.get(globalConfig.server+'house/album/'+this.houseId).then((res) => {
           if(res.data.code === '30070'){
-              this.detailData = res.data.data;
+              this.detailData = res.data.data.detail;
+              this.albumData = res.data.data.album;
           }
         })
+      },
+      matchDictionary(id) {
+        let dictionary_name = null;
+        this.all_dic.map((item) => {
+          if (item.id == id) {
+            dictionary_name = item.dictionary_name;
+          }
+        });
+        return dictionary_name;
       },
     }
   };
@@ -62,5 +427,13 @@
   video{
     background: #000;
     margin: 10px;
+  }
+  .content {
+    padding: 0 10px;
+    min-height: 32px;
+    background: #eef3fc;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #727479;
   }
 </style>
