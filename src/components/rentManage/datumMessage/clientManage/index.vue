@@ -80,8 +80,12 @@
                 label="手机号">
               </el-table-column>
               <el-table-column
-                prop="detail.identitys"
                 label="客户身份">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.renters.length>0 && scope.row.lords.length==0">客户</span>
+                  <span v-if="scope.row.renters.length==0 && scope.row.lords.length>0">房东</span>
+                  <span v-if="scope.row.renters.length>0 && scope.row.lords.length>0">客户/房东</span>
+                </template>     
               </el-table-column>
               <el-table-column
                 prop="idcard"
@@ -95,8 +99,11 @@
                 </template>                 
               </el-table-column>
               <el-table-column
-                prop="detail.name"
                 label="负责人">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.user">{{scope.row.user.name}}</span>
+                  <span v-else>暂无数据</span>
+                </template>    
               </el-table-column>
               <el-table-column
                 prop="date"

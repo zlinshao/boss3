@@ -125,6 +125,8 @@
             localStorage.setItem('personal', JSON.stringify(res.data.data));
             globalConfig.personal = res.data.data.data;
           });
+          let badge = true;
+          this.$store.dispatch('badgeFlag', badge);
             new Promise((resolve, reject) => {
               sessionStorage.setItem('lockStatus', 0);
               if (Number(sessionStorage.getItem('lockStatus')) !== 1) {

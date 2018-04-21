@@ -413,6 +413,9 @@
       },
       second_Flag(){
         return this.$store.state.secondPassword.second_Flag
+      },
+      badge_Flag(){
+        return this.$store.state.badge.badge_Flag
       }
     },
     watch: {
@@ -440,6 +443,12 @@
           }
         });
       }
+      },
+      badge_Flag(val){
+         //个人连续登录时长勋章
+        if (!this.personal.data.medal) {
+          this.badgeDialog = true;
+        }      
       }
     },
     created(){

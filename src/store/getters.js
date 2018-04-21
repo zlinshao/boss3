@@ -10,5 +10,6 @@ const getters = {
   moduleType: state => state.article.moduleType,
   articleDetail: state => state.article.articleDetail,
   secondFlag: state => state.secondPassword.secondFlag,
+  badgeFlag: state => state.badge.badgeFlag,
 }
 export default getters

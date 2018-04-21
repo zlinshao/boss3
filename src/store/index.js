@@ -9,7 +9,7 @@ import picture from './modules/picture'   //相册管理状态
 import article from './modules/article'
 import datum from './modules/datumMessage'
 import secondPassword from './modules/secondPassword'  //二级密码
-
+import badge from './modules/badge'  //每日弹窗
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -18,7 +18,8 @@ const store = new Vuex.Store({
     article,
     picture,
     datum,
-    secondPassword
+    secondPassword,
+    badge
   },
   getters
 });
