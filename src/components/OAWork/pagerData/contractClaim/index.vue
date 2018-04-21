@@ -5,7 +5,7 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input v-model="params.search" placeholder="搜索" @keydown.enter.native="search">
+            <el-input v-model="params.search" onsubmit="return false" placeholder="搜索" @keydown.enter.native="search">
               <el-button slot="append" type="primary" @click="search" icon="el-icon-search"></el-button>
             </el-input>
           </el-form-item>
@@ -27,40 +27,6 @@
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
           </div>
-          <el-row class="el_row_border">
-            <el-col :span="12">
-              <el-row>
-                <el-col :span="8">
-                  <div class="el_col_label">开始时间</div>
-                </el-col>
-                <el-col :span="16" class="el_col_option">
-                  <el-form-item>
-                    <el-date-picker
-                      type="date"
-                      placeholder="选择日期"
-                      value-format="yyyy-MM-dd" v-model="params.start">
-                    </el-date-picker>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-col>
-            <el-col :span="12">
-              <el-row>
-                <el-col :span="8">
-                  <div class="el_col_label">结束时间</div>
-                </el-col>
-                <el-col :span="16" class="el_col_option">
-                  <el-form-item>
-                    <el-date-picker
-                      type="date"
-                      placeholder="选择日期"
-                      value-format="yyyy-MM-dd" v-model="params.end">
-                    </el-date-picker>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-col>
-          </el-row>
           <el-row class="el_row_border">
             <el-col :span="12">
               <el-row>
@@ -88,6 +54,26 @@
             </el-col>
           </el-row>
           <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">选择时间范围</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>、
+                    <el-date-picker
+                      v-model="dateRange"
+                      type="daterange"
+                      value-format="yyyy-MM-dd"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期">
+                    </el-date-picker>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+
             <el-col :span="12" v-if="selectFlag==4">
               <el-row>
                 <el-col :span="8">
@@ -466,6 +452,7 @@
         depart_name : '',
         length : '',
         type : '',
+        dateRange:[],
       }
     },
     watch:{
@@ -482,6 +469,11 @@
         }else if(val === 5){
           this.getLossList();
         }
+      },
+      dateRange(val){
+        console.log(val);
+        this.params.start = val[0]
+        this.params.end = val[1]
       }
     },
     mounted(){
