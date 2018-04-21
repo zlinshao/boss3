@@ -11,6 +11,10 @@
         <el-table-column
           prop="name"
           label="房东姓名">
+          <template slot-scope="scope">
+            <span v-if="scope.row.name">{{scope.row.name}}</span>
+            <span v-if="!scope.row.name">暂无</span>
+          </template>
         </el-table-column>
         <el-table-column
           label="性别">
@@ -22,14 +26,26 @@
         <el-table-column
           prop="created_at"
           label="录入时间">
+          <template slot-scope="scope">
+            <span v-if="scope.row.created_at">{{scope.row.created_at}}</span>
+            <span v-if="!scope.row.created_at">暂无</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="idcard"
           label="证件号码">
+          <template slot-scope="scope">
+            <span v-if="scope.row.idcard">{{scope.row.idcard}}</span>
+            <span v-if="!scope.row.idcard">暂无</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="phone"
           label="手机号码">
+          <template slot-scope="scope">
+            <span v-if="scope.row.phone">{{scope.row.phone}}</span>
+            <span v-if="!scope.row.phone">暂无</span>
+          </template>
         </el-table-column>
       </el-table>
 

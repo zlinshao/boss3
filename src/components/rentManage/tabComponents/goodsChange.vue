@@ -11,10 +11,18 @@
       <el-table-column
         prop="change_type"
         label="类型">
+        <template slot-scope="scope">
+          <span v-if="scope.row.change_type">{{scope.row.change_type}}</span>
+          <span v-if="!scope.row.change_type">暂无</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="operate_time"
         label="操作时间">
+        <template slot-scope="scope">
+          <span v-if="scope.row.operate_time">{{scope.row.operate_time}}</span>
+          <span v-if="!scope.row.operate_time">暂无</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="codes"
@@ -29,22 +37,42 @@
       <el-table-column
         prop="assets_count"
         label="物品数量">
+        <template slot-scope="scope">
+          <span v-if="scope.row.assets_count">{{scope.row.assets_count}}</span>
+          <span v-if="!scope.row.assets_count">暂无</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="assets_sum"
         label="单价/总计（元）">
+        <template slot-scope="scope">
+          <span v-if="scope.row.assets_sum">{{scope.row.assets_sum}}</span>
+          <span v-if="!scope.row.assets_sum">暂无</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="extra"
         label="物品来源/去向">
+        <template slot-scope="scope">
+          <span v-if="scope.row.extra">{{scope.row.extra}}</span>
+          <span v-if="!scope.row.extra">暂无</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="house"
         label="搬出/搬入地址">
+        <template slot-scope="scope">
+          <span v-if="scope.row.house">{{scope.row.house}}</span>
+          <span v-if="!scope.row.house">暂无</span>
+        </template>
       </el-table-column>
       <el-table-column
         prop="origin_dest"
         label="原物品去向">
+        <template slot-scope="scope">
+          <span v-if="scope.row.origin_dest">{{scope.row.origin_dest}}</span>
+          <span v-if="!scope.row.origin_dest">暂无</span>
+        </template>
       </el-table-column>
     </el-table>
     <div class="pagination">

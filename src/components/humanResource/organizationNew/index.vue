@@ -30,6 +30,7 @@
                      :props="defaultProps"
                      :expand-on-click-node="false"
                      :render-content="renderContent"
+                     draggable
                      >
               <!--@node-drag-start="handleDragStart"-->
               <!--@node-drag-enter="handleDragEnter"-->
@@ -153,12 +154,14 @@
                     label="部门">
                     <template slot-scope="scope">
                       <span v-for="item in scope.row.org">{{item.name}}</span>
+                      <span v-if="scope.row.org.length<1">暂无</span>
                     </template>
                   </el-table-column>
                   <el-table-column
                     label="岗位">
                     <template slot-scope="scope">
                       <span v-for="item in scope.row.role">{{item.display_name}}</span>
+                      <span v-if="scope.row.role.length<1">暂无</span>
                     </template>
                   </el-table-column>
                   <el-table-column

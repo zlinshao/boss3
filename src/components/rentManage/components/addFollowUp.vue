@@ -153,7 +153,7 @@
             this.isDictionary = true;
           }
         });
-        this.$http.get(globalConfig.server+'setting/dictionary/306').then((res) => {
+        this.$http.get(globalConfig.server+'setting/dictionary/306',{params:{status:1}}).then((res) => {
           if(res.data.code === "30010"){
             this.cityCategory = res.data.data;
             this.isDictionary = true;
