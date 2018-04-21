@@ -3,19 +3,19 @@
     <el-dialog :close-on-click-modal="false" width="0" style="margin-top:20vh" :visible.sync="badgeDialogVisible">
     <div class="badgeup" >
       <span class="close el-icon-close"  @click="closeBadge"></span>
-      <div v-if="loginDayto == 3" class="backdiv backdiv3"></div>
-      <div v-else-if="loginDayto == 5" class="backdiv backdiv5"></div>
-      <div v-else-if="loginDayto == 15" class="backdiv backdiv15"></div>
-      <div v-else-if="loginDayto == 30" class="backdiv backdiv30"></div>
+      <div v-if="loginDay == 3" class="backdiv backdiv3"></div>
+      <div v-else-if="loginDay == 5" class="backdiv backdiv5"></div>
+      <div v-else-if="loginDay == 15" class="backdiv backdiv15"></div>
+      <div v-else-if="loginDay == 30" class="backdiv backdiv30"></div>
       <div v-else class="backdiv backdivo"></div>
       <p class="Rtitle">{{xljt}}</p>
-      <span v-if="loginDayto == 3" class="day day3">{{loginDayto}}</span>
-      <span v-else-if="loginDayto == 5" class="day day5">{{loginDayto}}</span>
-      <span v-else-if="loginDayto == 15" class="day day15">{{loginDayto}}</span>
-      <span v-else-if="loginDayto == 30" class="day day30">{{loginDayto}}</span>
-      <span v-else class="day dayo">{{loginDayto}}</span>
+      <span v-if="loginDay == 3" class="day day3">{{loginDay}}</span>
+      <span v-else-if="loginDay == 5" class="day day5">{{loginDay}}</span>
+      <span v-else-if="loginDay == 15" class="day day15">{{loginDay}}</span>
+      <span v-else-if="loginDay == 30" class="day day30">{{loginDay}}</span>
+      <span v-else class="day dayo">{{loginDay}}</span>
       <span class="span1">每日登录</span>
-      <span class="span2">"你已连续登录{{loginDayto}}天"</span>
+      <span class="span2">"你已连续登录{{loginDay}}天"</span>
     </div>
     </el-dialog>
   </div>
@@ -24,12 +24,12 @@
 <script>
 export default {
   name: "hello",
-  props: ["badgeDialog" ,"loginDay"],
+  props: ["badgeDialog"],
   data() {
     return {
       landholder: {},
       panelShow: false,
-      loginDayto: 0, //连续登陆天数
+      loginDay: '', //连续登陆天数
       badgeDialogVisible: false,
       type: 3,
       xljt: "",
@@ -39,7 +39,7 @@ export default {
         // "像蜜蜂一样勤劳工作才能享受蜜甜生活^_^",
         // "在忙，也别忘了照顾自己^_^",
         // "丢下一些包袱后，你会惊讶的发现，原来自己可以飞的那么高^_^",
-        "做一个微笑挂在嘴边，快乐放在心上的人^_^",
+        "做一个微笑挂在嘴边，快乐放在心上的人^_^"
         // "将来的你，一定会感谢现在拼命努力的你^_^",
         // "理想是一面旗帜，信念是一枚火炬^_^",
         // "休息，休息一会",
@@ -55,16 +55,21 @@ export default {
       if (!val) {
         this.$emit("close");
       } else {
+    this.$http
+      .get(globalConfig.server + "special/special/loginInfo")
+      .then(res => {
+        localStorage.setItem("personal", JSON.stringify(res.data.data));
+        globalConfig.personal = res.data.data.data;
+        this.loginDay = JSON.parse(localStorage.personal).data.loginday;
+      });
         setTimeout(() => {
           this.closeBadge();
-        }, 3000);
+        }, 4000);
       }
-    },
-    loginDay(val){
-      this. loginDayto = val;
     }
   },
   mounted() {
+
     this.getFlag();
   },
   methods: {
@@ -84,13 +89,13 @@ export default {
         });
     },
     getFlag() {
+
       let length = this.xljxArray.length;
       let num = Math.floor(Math.random() * length);
       this.xljt = this.xljxArray[num]
         ? this.xljxArray[num]
         : "乐伽不止眼前的合同，还有诗和远方的田野！";
-    },
-
+    }
   }
 };
 </script>
@@ -180,7 +185,7 @@ export default {
   bottom: 78px;
   color: #fdeb5b;
 }
-.close{
+.close {
   width: 30px;
   height: 30px;
   line-height: 30px;
@@ -188,7 +193,7 @@ export default {
   text-align: center;
   position: absolute;
   right: 31px;
-  top:18px;
+  top: 18px;
   z-index: 999;
   color: rgb(33, 0, 74);
   cursor: pointer;

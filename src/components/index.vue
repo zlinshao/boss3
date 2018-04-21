@@ -327,7 +327,7 @@
     <UnlockSecondPW :unlockSecondPWDialog="unlockSecondPWDialog" @unlockFlag="unlockFlag" :unLockName="unLockName"
                     @close="closeModalSecond"></UnlockSecondPW>
     <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
-    <BadgeView :badgeDialog="badgeDialog" :loginDay="loginDay" @close="closeModalSecond"></BadgeView>
+    <BadgeView :badgeDialog="badgeDialog" @close="closeModalSecond"></BadgeView>
     <InstitutionView :institutionDialog="institutionDialog" @close="closeModal"></InstitutionView>
     <YanFirstView :yanFirstDialog="yanFirstDialog" @close="closeModal"></YanFirstView>
     <YanSecondView :yanSecondDialog="yanSecondDialog" @close="closeModal"></YanSecondView>
@@ -505,10 +505,7 @@
     },
     methods: {
       initData() {
-        //个人连续登录时长勋章
-        if (!this.personal.data.medal) {
-          this.badgeDialog = true;
-        }
+
         //弹窗
         //this.institutionDialog = true;
         //this.noticeTitleDialog = true;
@@ -518,6 +515,11 @@
         this.loginDay = this.personal.data.loginday;
         this.loginPercent = Number(this.loginDay / 180 * 100) + "%";
         $(".percent").css("width", this.loginPercent);
+
+        //个人连续登录时长勋章
+        if (!this.personal.data.medal) {
+          this.badgeDialog = true;
+        }
 
         //判断是否存在锁屏密码
         if (this.personal.data.setting && Array.isArray(this.personal.data.setting)) {
