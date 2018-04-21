@@ -169,7 +169,7 @@
             <el-row>
               <el-checkbox-group v-model="params.candidate">
                 <el-col :span="6" v-for="(val,key) in collectCancelCollect" :key="key">
-                  <el-checkbox :label="key" name="type">{{val}}</el-checkbox>
+                  <el-checkbox :label="key">{{val}}</el-checkbox>
                 </el-col>
               </el-checkbox-group>
             </el-row>
@@ -180,7 +180,7 @@
             <el-row>
               <el-checkbox-group v-model="params.candidate">
                 <el-col :span="6" v-for="(val,key) in collectCancelRent" :key="key">
-                  <el-checkbox :label="key" name="type">{{val}}</el-checkbox>
+                  <el-checkbox :label="key">{{val}}</el-checkbox>
                 </el-col>
               </el-checkbox-group>
             </el-row>
@@ -205,7 +205,7 @@
                 <el-row >
                   <el-col :span="6">
                     <el-checkbox-group v-model="checkBox">
-                      <el-checkbox :label="item" name="type">{{collectCancelCollect[item]}}</el-checkbox>
+                      <el-checkbox :label="item">{{collectCancelCollect[item]}}</el-checkbox>
                     </el-checkbox-group>
                   </el-col>
                   <el-col :span="8">
@@ -214,9 +214,9 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="8" :offset="2">
-                    <el-checkbox v-model="handover[item]" label="1" value="1" name="type">交接单</el-checkbox>
-                    <el-checkbox v-model="receipt[item]" label="2" value="2" name="type">收据</el-checkbox>
-                    <el-checkbox v-model="keyCode[item]" label="4" value="4" name="type">钥匙</el-checkbox>
+                    <el-checkbox v-model="handover[item]">交接单</el-checkbox>
+                    <el-checkbox v-model="receipt[item]">收据</el-checkbox>
+                    <el-checkbox v-model="keyCode[item]">钥匙</el-checkbox>
                   </el-col>
                 </el-row>
 
@@ -229,7 +229,7 @@
                 <el-row >
                   <el-col :span="6">
                     <el-checkbox-group v-model="checkBox">
-                      <el-checkbox :label="item" name="type">{{collectCancelRent[item]}}</el-checkbox>
+                      <el-checkbox :label="item">{{collectCancelRent[item]}}</el-checkbox>
                     </el-checkbox-group>
                   </el-col>
                   <el-col :span="8">
@@ -238,9 +238,9 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="8" :offset="2">
-                    <el-checkbox v-model="handover[item]" label="1" value="1" name="type">交接单</el-checkbox>
-                    <el-checkbox v-model="receipt[item]" label="2" value="2" name="type">收据</el-checkbox>
-                    <el-checkbox v-model="keyCode[item]" label="4" value="4" name="type">钥匙</el-checkbox>
+                    <el-checkbox v-model="handover[item]">交接单</el-checkbox>
+                    <el-checkbox v-model="receipt[item]">收据</el-checkbox>
+                    <el-checkbox v-model="keyCode[item]">钥匙</el-checkbox>
                   </el-col>
                 </el-row>
 
@@ -266,9 +266,9 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="7" :offset="1">
-                  <el-checkbox v-model="medi_contracts_proof_1[item-1]" label="1" value="1" name="type">交接单</el-checkbox>
-                  <el-checkbox v-model="medi_contracts_proof_2[item-1]" label="2" value="2" name="type">收据</el-checkbox>
-                  <el-checkbox v-model="medi_contracts_proof_3[item-1]" label="4" value="4" name="type">钥匙</el-checkbox>
+                  <el-checkbox v-model="medi_contracts_proof_1[item-1]" label="1" value="1">交接单</el-checkbox>
+                  <el-checkbox v-model="medi_contracts_proof_2[item-1]" label="2" value="2">收据</el-checkbox>
+                  <el-checkbox v-model="medi_contracts_proof_3[item-1]" label="4" value="4">钥匙</el-checkbox>
                 </el-col>
                 <el-col  :span="2">
                   <div v-if="mediumNumberCollect>1" class="deleteNumber" @click="deleteMediumNumberCollect(item-1)">删除</div>
@@ -295,9 +295,9 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="7" :offset="1">
-                  <el-checkbox v-model="medi_contracts_proof_1_rent[item-1]" label="1" value="1" name="type">交接单</el-checkbox>
-                  <el-checkbox v-model="medi_contracts_proof_2_rent[item-1]" label="2" value="2" name="type">收据</el-checkbox>
-                  <el-checkbox v-model="medi_contracts_proof_3_rent[item-1]" label="4" value="4" name="type">钥匙</el-checkbox>
+                  <el-checkbox v-model="medi_contracts_proof_1_rent[item-1]" label="1" value="1">交接单</el-checkbox>
+                  <el-checkbox v-model="medi_contracts_proof_2_rent[item-1]" label="2" value="2">收据</el-checkbox>
+                  <el-checkbox v-model="medi_contracts_proof_3_rent[item-1]" label="4" value="4">钥匙</el-checkbox>
                 </el-col>
                 <el-col  :span="2">
                   <div v-if="mediumNumberRent>1" class="deleteNumber" @click="deleteMediumNumberRent(item-1)">删除</div>
@@ -330,9 +330,9 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="7" :offset="1">
-                  <el-checkbox v-model="personal_contracts_proof_1[item-1]" label="1" value="1" name="type">交接单</el-checkbox>
-                  <el-checkbox v-model="personal_contracts_proof_2[item-1]" label="2" value="2" name="type">收据</el-checkbox>
-                  <el-checkbox v-model="personal_contracts_proof_3[item-1]" label="4" value="4" name="type">钥匙</el-checkbox>
+                  <el-checkbox v-model="personal_contracts_proof_1[item-1]" label="1" value="1">交接单</el-checkbox>
+                  <el-checkbox v-model="personal_contracts_proof_2[item-1]" label="2" value="2">收据</el-checkbox>
+                  <el-checkbox v-model="personal_contracts_proof_3[item-1]" label="4" value="4">钥匙</el-checkbox>
                 </el-col>
                 <el-col  :span="2">
                   <div v-if="personal_mediumNumberCollect>1" class="deleteNumber" @click="personal_deleteMediumNumberCollect(item-1)">删除</div>
@@ -359,9 +359,9 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="7" :offset="1">
-                  <el-checkbox v-model="personal_contracts_proof_1_rent[item-1]" label="1" value="1" name="type">交接单</el-checkbox>
-                  <el-checkbox v-model="personal_contracts_proof_2_rent[item-1]" label="2" value="2" name="type">收据</el-checkbox>
-                  <el-checkbox v-model="personal_contracts_proof_3_rent[item-1]" label="4" value="4" name="type">钥匙</el-checkbox>
+                  <el-checkbox v-model="personal_contracts_proof_1_rent[item-1]" label="1" value="1">交接单</el-checkbox>
+                  <el-checkbox v-model="personal_contracts_proof_2_rent[item-1]" label="2" value="2">收据</el-checkbox>
+                  <el-checkbox v-model="personal_contracts_proof_3_rent[item-1]" label="4" value="4">钥匙</el-checkbox>
                 </el-col>
                 <el-col  :span="2">
                   <div v-if="personal_mediumNumberRent>1" class="deleteNumber" @click="personal_deleteMediumNumberRent(item-1)">删除</div>
@@ -383,7 +383,7 @@
             <el-row>
               <el-checkbox-group v-model="params.candidate">
                 <el-col :span="6" v-for="(val,key) in collectCancelCollect" :key="key">
-                  <el-checkbox :label="key" name="type">{{val}}</el-checkbox>
+                  <el-checkbox :label="key">{{val}}</el-checkbox>
                 </el-col>
               </el-checkbox-group>
             </el-row>
@@ -394,7 +394,7 @@
             <el-row>
               <el-checkbox-group v-model="params.candidate">
                 <el-col :span="6" v-for="(val,key) in collectCancelRent" :key="key">
-                  <el-checkbox :label="key" name="type">{{val}}</el-checkbox>
+                  <el-checkbox :label="key">{{val}}</el-checkbox>
                 </el-col>
               </el-checkbox-group>
             </el-row>
@@ -406,16 +406,16 @@
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="120px">
             <!--<el-row>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="剩余合同数（收）">-->
-                  <!--<el-input disabled="" v-model="collect"></el-input>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="剩余合同数（租）">-->
-                  <!--<el-input disabled="" v-model="rent"></el-input>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
+            <!--<el-col :span="8">-->
+            <!--<el-form-item label="剩余合同数（收）">-->
+            <!--<el-input disabled="" v-model="collect"></el-input>-->
+            <!--</el-form-item>-->
+            <!--</el-col>-->
+            <!--<el-col :span="8">-->
+            <!--<el-form-item label="剩余合同数（租）">-->
+            <!--<el-input disabled="" v-model="rent"></el-input>-->
+            <!--</el-form-item>-->
+            <!--</el-col>-->
             <!--</el-row>-->
 
             <el-row>
@@ -598,11 +598,20 @@
           if(res.data.code === '20000'){
             this.collectCancelCollect = res.data.data.collect;
             this.collectCancelRent = res.data.data.rent;
+            this.fuckCheckBug(this.collectCancelCollect);
+            this.fuckCheckBug(this.collectCancelRent);
           }else {
             this.collectCancelCollect = [];
             this.collectCancelRent = [];
           }
         })
+      },
+      fuckCheckBug(data){
+        for(let key in data){
+          if(!this.handover[key]){this.$set(this.handover,key,false)}
+          if(!this.receipt[key]){this.$set(this.receipt,key,false)}
+          if(!this.keyCode[key]){this.$set(this.keyCode,key,false)}
+        }
       },
       getContractStatus(id){
 //        this.$http.get(globalConfig.server+'contract/remain/'+id).then((res) => {
@@ -615,15 +624,15 @@
         this.params.screenshot = val[1];
       },
       addCollect(){
-          this.contractCollectNum ++;
+        this.contractCollectNum ++;
       },
       reduceCollect(){
-          if(this.contractCollectNum>0){
-            this.contractCollectNum --;
-          }
+        if(this.contractCollectNum>0){
+          this.contractCollectNum --;
+        }
       },
       addRent(){
-          this.contractRentNum ++;
+        this.contractRentNum ++;
       },
       reduceRent(){
         if(this.contractRentNum>0){
@@ -912,25 +921,24 @@
         this.params = {
           city_code:'',
 //          category:'',
-            report_time:'',
-            contract_type:'',
-            staff_id:'',
-            department_id:'',
-            collect_amount:'',
-            collect_start:'',
-            collect_end:'',
-            rent_amount:'',
-            rent_start:'',
-            rent_end:'',
-            rent_extra:[],
-            collect_extra:[],
-            remark:'',
-            screenshot:[],
-            candidate:[],
-            medi_contracts:[],//s上缴中介合同
-            personal_contracts:[],//s上缴个人合同
+          report_time:'',
+          contract_type:'',
+          staff_id:'',
+          department_id:'',
+          collect_amount:'',
+          collect_start:'',
+          collect_end:'',
+          rent_amount:'',
+          rent_start:'',
+          rent_end:'',
+          rent_extra:[],
+          collect_extra:[],
+          remark:'',
+          screenshot:[],
+          candidate:[],
+          medi_contracts:[],//s上缴中介合同
+          personal_contracts:[],//s上缴个人合同
         };
-        this.taskType = '1';
         this.cityDictionary = [];
         this.length = '';
         this.type = '';
@@ -947,7 +955,7 @@
         this.collectCancelCollect = [];
         this.collectCancelRent = [];
 
-          //公司合同备用字段
+        //公司合同备用字段
         this.rentHandinAddress = {};
         this.handover = {};
         this.receipt = {};
@@ -994,12 +1002,12 @@
   };
 </script>
 <style lang="scss" scoped="">
-.addMore{
-  text-align: right;
-  i{
-    font-size: 18px;
+  .addMore{
+    text-align: right;
+    i{
+      font-size: 18px;
+    }
   }
-}
   .deleteNumber{
     text-align: center;
     cursor: pointer;
