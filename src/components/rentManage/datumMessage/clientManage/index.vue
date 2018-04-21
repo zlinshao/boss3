@@ -82,9 +82,9 @@
               <el-table-column
                 label="客户身份">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.renters.length>0 && scope.row.lords.length==0">客户</span>
+                  <span v-if="scope.row.renters.length>0 && scope.row.lords.length==0">租客</span>
                   <span v-if="scope.row.renters.length==0 && scope.row.lords.length>0">房东</span>
-                  <span v-if="scope.row.renters.length>0 && scope.row.lords.length>0">客户/房东</span>
+                  <span v-if="scope.row.renters.length>0 && scope.row.lords.length>0">租客/房东</span>
                   <span v-if="scope.row.renters.length==0 && scope.row.lords.length==0">暂无数据</span>
                 </template>     
               </el-table-column>

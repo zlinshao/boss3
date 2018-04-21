@@ -99,6 +99,9 @@ import ExaminerShortAn from '../components/lejiaCollege/OnlineExam/examinerShort
 // 系统设置
 import ModuleSetting from '../components/systemSetting/moduleSetting/index.vue'                             //模块设置
 
+//问答中心
+import AnswerCenter from '../components/OAWork/answerCenter/index.vue'                             //问答中心
+
 // import Message from '../comments/systemSetting/message/index.vue'                                      //短信模板
 // import LoginRecord from '../comments/systemSetting/loginRecord/index.vue'                              //登陆日志
 // import UserDictionary from '../comments/systemSetting/userDictionary/index.vue'                        //用户字典
@@ -250,6 +253,7 @@ export default new Router({
         {path: '/examinerRead', component: ExaminerRead, name: "阅卷管理"},
         {path: '/examinerReadEach', component:ExaminerReadEach, name: "试卷批阅"},
         {path: '/examinerShortAn', component: ExaminerShortAn, name: "简答批阅"},
+        {path: '/answerCenter', component: AnswerCenter, name: "问答中心"},
       ]
     },
     //快捷入口
