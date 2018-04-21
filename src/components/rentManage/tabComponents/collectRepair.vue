@@ -144,10 +144,17 @@
           }
         },
         collectContractId(val) {
-          this.params.contract_id = val;
-          if(this.activeName === 'CollectRepairTab'){
-            this.getTableData();
+          if(val){
+            this.params.contract_id = val;
+            if(this.activeName === 'CollectRepairTab'){
+              this.getTableData();
+            }
+          }else{
+            this.tableStatus = "暂无数据";
+            this.tableData = [];
+            this.totalNum = 0;
           }
+
         },
       },
       methods: {
