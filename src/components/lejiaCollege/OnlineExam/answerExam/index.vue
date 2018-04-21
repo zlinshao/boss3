@@ -132,7 +132,7 @@ export default {
     return {
       isClear: false,
       pointDialog: false,
-      submitDialog:false,
+      submitDialog: false,
       faleDialog: false,
       answarData: [
         { id: "A", name: "选项答案" },
@@ -214,66 +214,64 @@ export default {
     text-align: center;
   }
 }
-#pointDialog{
-  .import_points{
-      border: 1px solid #fb4699;
-      -webkit-box-shadow: 0 0 3px 1px #fb4699;
-      box-shadow: 0 0 3px 1px #fb4699;
-      text-align: center;
-      align-items: center;
-      justify-content: center;
-      height: 190px;
-      border-radius: 5px;
-      .importbody{
-        margin-left:30%;
-        margin-top:30px;
-        img{
-          width: 130px;
-          height: 130px;
-        }
-        .importright{
-          width: 180px;
-          height: 130px;
-          margin-top:10px;
-          float:left;
-          margin-left:60px;
-          font-size: 18px;
-          text-align: left;
-          color:#6a8dfb;
-          span{
-            font-size: 50px;
-            color:#fb4699;
-          }
+#pointDialog {
+  .import_points {
+    border: 1px solid #fb4699;
+    -webkit-box-shadow: 0 0 3px 1px #fb4699;
+    box-shadow: 0 0 3px 1px #fb4699;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    height: 190px;
+    border-radius: 5px;
+    .importbody {
+      margin-left: 30%;
+      margin-top: 30px;
+      img {
+        width: 130px;
+        height: 130px;
+      }
+      .importright {
+        width: 180px;
+        height: 130px;
+        margin-top: 10px;
+        float: left;
+        margin-left: 60px;
+        font-size: 18px;
+        text-align: left;
+        color: #6a8dfb;
+        span {
+          font-size: 50px;
+          color: #fb4699;
         }
       }
+    }
   }
-  .importbo{
+  .importbo {
     width: 100%;
     height: 74px;
     text-align: center;
-    border-top:1px #eee solid;
-    margin-top:20px;
-
+    border-top: 1px #eee solid;
+    margin-top: 20px;
   }
 }
 
-#submitDialog{
-  .submit_points{
-      border: 1px solid #fb4699;
-      -webkit-box-shadow: 0 0 3px 1px #fb4699;
-      box-shadow: 0 0 3px 1px #fb4699;
-      text-align: center;
-      align-items: center;
-      justify-content: center;
-      height: 190px;
-      border-radius: 5px;
-      span{
-        color:#fb4699;
-        font-size: 40px;
-        margin-top:54px;
-        display: block;
-      }
+#submitDialog {
+  .submit_points {
+    border: 1px solid #fb4699;
+    -webkit-box-shadow: 0 0 3px 1px #fb4699;
+    box-shadow: 0 0 3px 1px #fb4699;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    height: 190px;
+    border-radius: 5px;
+    span {
+      color: #fb4699;
+      font-size: 40px;
+      margin-top: 54px;
+      display: block;
+    }
   }
-
 }
 </style>

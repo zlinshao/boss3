@@ -142,6 +142,7 @@
                       <el-input style="width:70%" size="small"  placeholder="请输入选项内容"></el-input>
                     </el-col>
                   </el-form-item>
+                  <span style="margin-left: 20%; color:rgb(252, 131, 182); margin-top:20px; margin-bottom:20px;display:block;">说明：考生填写答案须跟上方答案完全相同，才能得分。录入答案时，请不要加多余的空格等干扰字符</span>
                 </el-form>
                 <div class="midadd">
                   <span @click="spanceadd">+&nbsp;&nbsp;添加选项</span>
