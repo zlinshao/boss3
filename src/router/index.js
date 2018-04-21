@@ -462,7 +462,7 @@ export default new Router({
         {path: '/college', component: College, name: '乐伽大学 '},
         // {path: '/LineCollege', component: LineCollege, name: '成绩查询'},
         // {path: '/StaffRegistration', component: StaffRegistration, name: '员工报名'},
-        // {path: '/OnlineExam', component: OnlineExam, name: '在线考试'},
+        {path: '/OnlineExam', component: OnlineExam, name: '在线考试'},
         
       ]
     },
