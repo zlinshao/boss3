@@ -15,7 +15,7 @@
         </el-form>
       </div>
     </div>
-        <div class="comment_box">
+        <div class="comment_box" v-for="item in 3" :key="item">
           <div class="anstitle">问题问题问题问题问题问题问题问题问题问题问题</div>
           <div class="publishComment">
             <div class="portraito">
@@ -26,7 +26,7 @@
               <div class="staff_name">
                 <div>
                   <span style="color:#83a0fc">{{landholder && landholder.name}}</span>&nbsp;&nbsp;
-                  <span v-for="key in landholder && landholder.org">
+                  <span v-for="key in landholder && landholder.org" :key="key.name">
                     <span>{{key && key.name}}</span>
                   </span>
                   <span>2018-04-19 20:45:55</span>&nbsp;&nbsp;
@@ -475,6 +475,9 @@ export default {
 
   .comment_box {
     background: #f4f6fc;
+    border:1px #eee solid;
+    border-radius: 5px;
+    margin-bottom:15px;
     padding: 10px;
     .submitButt {
       text-align: right;

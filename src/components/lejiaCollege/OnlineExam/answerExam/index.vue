@@ -75,7 +75,7 @@
           <p style="margin-left:30px;line-height:20px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
           <el-form :model="form3[k]" >
               <el-form-item >
-                <el-input style="width:96%;margin-left:2%;margin-right:2%" v-model="form4[k].check" type="textarea"></el-input>
+                <el-input readonly style="width:97%;margin-left:2%;" v-model="form4[k].check" type="textarea"></el-input>
               </el-form-item>
           </el-form>       
         </div>     

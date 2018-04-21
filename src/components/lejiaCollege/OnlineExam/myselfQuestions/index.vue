@@ -121,14 +121,8 @@
               <div class="midbody">
                 <div class="title">填空信息</div>
                 <el-form :model="form3" style="border:1px #eee solid; ">
-                 <el-row>
-                  <el-form-item label="填空数量" style="margin-top:20px; margin-left:10px;">
-                    <el-col :span="4">
-                      <el-input v-model="spacelen" placeholder="请填入" >处</el-input>
-                    </el-col>
-                  </el-form-item>    
-                </el-row>                 
-                  <el-form-item style=" margin-left:10px;">
+              
+                  <el-form-item style=" margin-left:10px; margin-top:20px;">
                     <el-col :span="6" v-for="(val,index) in spacelen" :key="index">
                       <span>第{{index+1}}处答案</span>
                       <el-input style="width:70%" size="small"  placeholder="请输入选项内容"></el-input>
@@ -245,6 +239,7 @@ export default {
       this.nowAction = val;
     },
     spacelen(val) {
+      console.log(val)
       this.spacelen = val;
     }
   },
