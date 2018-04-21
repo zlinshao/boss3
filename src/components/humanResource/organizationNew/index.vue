@@ -1232,6 +1232,8 @@
       getOnlyPosition() {
         this.positionTableData = [];
         this.totalPositionNum = 0;
+        this.postStaffData = [];
+        this.totalPositionNum = 0;
         if (this.params.org_id) {
           this.positionCollectLoading = true;
           this.positionCollectStatus = ' ';
