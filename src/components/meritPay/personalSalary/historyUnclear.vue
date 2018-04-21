@@ -212,7 +212,6 @@
           if (!res.data) {
             return;
           }
-          console.log(res);
           let url = window.URL.createObjectURL(new Blob([res.data]));
           let link = document.createElement('a');
           link.style.display = 'a';

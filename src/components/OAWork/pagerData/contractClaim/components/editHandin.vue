@@ -60,6 +60,16 @@
           <el-form size="mini" :model="params" label-width="120px">
             <!--公司合同类型-->
             <div v-if="params.contract_type == '108'">
+
+              <el-row>
+                <el-col :span="8" :offset="16">
+                  <el-input size="small" v-model="search" placeholder="请输入合同编号"
+                            clearable="" @keydown.enter.native="getPersonalContract">
+                    <el-button slot="append" icon="el-icon-search" @click="getPersonalContract"></el-button>
+                  </el-input>
+                </el-col>
+              </el-row>
+
               <div class="title">
                 收房合同上缴(请勾选)
               </div>
@@ -323,6 +333,9 @@
         contractCancelCollect:[],
         contractCancelRent:[],
 
+        contractCancelCollect_old : [],
+        contractCancelRent_old : [],
+
         //公司合同备用字段
         rentHandinAddress:{},
         handover:{},
@@ -362,6 +375,9 @@
         personal_contracts_proof_1_rent:[false],
         personal_contracts_proof_2_rent:[false],
         personal_contracts_proof_3_rent:[false],
+
+
+        search:'',
       };
     },
     mounted(){
@@ -417,19 +433,13 @@
             if(Number(this.params.contract_type) === 108){    //如果是公司合同
               for(let key in arr.category){
                 if(arr.category[key] === 1){
-                  this.contractCancelCollect[key] = arr.contractNumber[key];
+                  this.contractCancelCollect_old[key] = arr.contractNumber[key];
                 }else {
-                  this.contractCancelRent[key] = arr.contractNumber[key];
+                  this.contractCancelRent_old[key] = arr.contractNumber[key];
                 }
-
               }
-              this.$http.get(globalConfig.server+'contract/staff/'+this.params.staff_id).then((res) => {
-                if(res.data.code === '20000'){
 
-                  this.contractCancelCollect = Object.assign({},this.contractCancelCollect,res.data.data.collect);
-                  this.contractCancelRent = Object.assign({},this.contractCancelRent,res.data.data.rent);
-                }
-              });
+              this.getPersonalContract();
 
               this.rentHandinAddress = arr.address;
               this.handover = arr.handover;
@@ -512,7 +522,17 @@
           }
         });
       },
-
+      getPersonalContract(){
+        this.$http.get(globalConfig.server+'contract/staff/'+this.params.staff_id+'?search='+this.search).then((res) => {
+          if(res.data.code === '20000'){
+            this.contractCancelCollect = Object.assign({},this.contractCancelCollect_old,res.data.data.collect);
+            this.contractCancelRent = Object.assign({},this.contractCancelRent_old,res.data.data.rent);
+          }else {
+            this.collectCancelCollect = this.contractCancelCollect_old;
+            this.collectCancelRent = this.contractCancelRent_old;
+          }
+        })
+      },
       //调出选人组件
       openOrganizeModal(){
         this.organizationDialog = true;
@@ -762,6 +782,9 @@
         this.contractCancelCollect = [];
         this.contractCancelRent = [];
 
+        this.contractCancelCollect_old = [];
+        this.contractCancelRent_old = [];
+
 
           //公司合同备用字段
         this.rentHandinAddress = {};
@@ -802,6 +825,8 @@
         this.personal_contracts_proof_3_rent = [false];
         this.personal_contracts_number_rent = [];
         this.personal_contracts_address_rent = [];
+
+        this.search = '';
       }
     }
   };

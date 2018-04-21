@@ -188,6 +188,15 @@
           <el-form v-if="taskType==3" size="mini" :model="params" label-width="120px">
             <!--公司合同类型-->
             <div v-if="params.contract_type == '108'">
+              <el-row>
+                <el-col :span="8" :offset="16">
+                  <el-input size="small" v-model="search" placeholder="请输入合同编号"
+                            clearable="" @keydown.enter.native="getPersonalContract">
+                    <el-button slot="append" icon="el-icon-search" @click="getPersonalContract"></el-button>
+                  </el-input>
+                </el-col>
+              </el-row>
+
               <div class="title">
                 收房合同上缴(请勾选)
               </div>
@@ -526,6 +535,9 @@
         personal_contracts_proof_3_rent:[false],
         personal_contracts_number_rent:[],
         personal_contracts_address_rent:[],
+
+
+        search:'',
       };
     },
     mounted(){
@@ -574,29 +586,24 @@
         this.staff_name = val[0].name;
         this.depart_name =  val[0].org[0].name;
         this.getContractStatus(this.params.staff_id);
-        this.getCancel(this.params.staff_id);
+        this.getPersonalContract();
 
       },
       closeModal(){
         this.organizationDialog = false
       },
       //获取作废合同信息
-      getCancel(id){
-        this.$http.get(globalConfig.server+'contract/staff/'+id).then((res) => {
+      getPersonalContract(){
+        this.$http.get(globalConfig.server+'contract/staff/'+this.params.staff_id+'?search='+this.search).then((res) => {
           if(res.data.code === '20000'){
             this.collectCancelCollect = res.data.data.collect;
             this.collectCancelRent = res.data.data.rent;
           }else {
             this.collectCancelCollect = [];
             this.collectCancelRent = [];
-//            this.$notify.warning({
-//              title:'警告',
-//              message:res.data.msg
-//            })
           }
         })
       },
-
       getContractStatus(id){
 //        this.$http.get(globalConfig.server+'contract/remain/'+id).then((res) => {
 //          this.collect = res.data.data.collect;
@@ -979,6 +986,9 @@
         this.personal_contracts_proof_3_rent = [false];
         this.personal_contracts_number_rent = [];
         this.personal_contracts_address_rent = [];
+
+
+        this.search = '';
       }
     }
   };
