@@ -18,6 +18,7 @@
                     <span v-if="repairDetail.operator">{{repairDetail.operator}}</span>
                     <span v-if="!repairDetail.operator">暂无</span>
                   </div>
+
                 </el-form-item>
               </el-col>
               <el-col :span="8" style="text-align: right">
