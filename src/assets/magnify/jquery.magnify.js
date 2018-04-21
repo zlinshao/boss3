@@ -465,7 +465,6 @@ Magnify.prototype = {
     } else {
       scale = Math.min(stageData.w / img.height, stageData.h / img.width, 1);
     }
-
     this.$image.css({
       width: Math.floor(img.width * scale) + 'px',
       height: Math.floor(img.height * scale) + 'px',
@@ -763,9 +762,7 @@ Magnify.prototype = {
 
   },
   maximize: function () {
-
     var self = this;
-
     if (!this.isMaximized) {
       // Store modal data before maximize
       this.modalData = {
@@ -787,9 +784,7 @@ Magnify.prototype = {
       this.isMaximized = true;
 
     } else {
-
       this.$magnify.removeClass('magnify-maximize');
-
       this.$magnify.css({
         width: this.modalData.width ? this.modalData.width : this.options.modalWidth,
         height: this.modalData.height ? this.modalData.height : this.options.modalHeight,
