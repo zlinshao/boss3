@@ -8,13 +8,15 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="创建时间">
-                  <div class="content">{{workOrderDetail.create_time}}</div>
+                  <div class="content" v-if="workOrderDetail.create_time">{{workOrderDetail.create_time}}</div>
+                  <div class="content" v-if="!workOrderDetail.create_time">暂无</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="创建人">
                   <div class="content">
                     <span v-if="workOrderDetail.creators">{{workOrderDetail.creators.name}}</span>
+                    <span v-if="!workOrderDetail.creators">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -29,12 +31,14 @@
                 <el-form-item label="工单编号">
                   <div class="content">
                     <span v-if="workOrderDetail.num">{{workOrderDetail.num}}</span>
+                    <span v-if="!workOrderDetail.num">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="所属城市">
-                  <div class="content">{{workOrderDetail.city_name}}</div>
+                  <div class="content" v-if="workOrderDetail.city_name">{{workOrderDetail.city_name}}</div>
+                  <div class="content" v-if="!workOrderDetail.city_name">暂无</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -48,6 +52,7 @@
                 <el-form-item label="回复电话">
                   <div class="content">
                     <span v-if="workOrderDetail.mobile">{{workOrderDetail.mobile}}</span>
+                    <span v-if="!workOrderDetail.mobile">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -69,24 +74,36 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="完成时间">
-                  <div class="content">{{workOrderDetail.finish_time}}</div>
+                  <div class="content">
+                    <span v-if="workOrderDetail.finish_time">{{workOrderDetail.finish_time}}</span>
+                    <span v-if="!workOrderDetail.finish_time">暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="跟进时间">
-                  <div class="content">{{workOrderDetail.follow_time}}</div>
+                  <div class="content">
+                    <span v-if="workOrderDetail.follow_time">{{workOrderDetail.follow_time}}</span>
+                    <span v-if="!workOrderDetail.follow_time">暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="下次跟进时间">
-                  <div class="content">{{workOrderDetail.expected_finish_time}}</div>
+                  <div class="content">
+                    <span v-if="workOrderDetail.follow_time">{{workOrderDetail.expected_finish_time}}</span>
+                    <span v-if="!workOrderDetail.follow_time">暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="24">
                 <el-form-item label="跟进事项">
-                  <div class="content">{{workOrderDetail.matters}}</div>
+                  <div class="content">
+                    <span v-if="workOrderDetail.matters">{{workOrderDetail.matters}}</span>
+                    <span v-if="!workOrderDetail.matters">暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -107,17 +124,32 @@
             </div>
             <div v-if="workOrderDetail.remarks&&workOrderDetail.remarks.length>0">
               <el-form size="small" label-width="100px" v-if="workOrderDetail.remarks">
-                <el-row v-for="item in workOrderDetail.remarks" :key="item.id">
-                  <el-col :span="16">
+                <el-row v-for="item in workOrderDetail.remarks" :key="item.id" style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;">
+                  <el-col :span="12">
+                    <el-form-item label="跟进时间">
+                      <div class="content">
+                        <span v-if="item.create_time">{{item.create_time}}</span>
+                        <span v-if="!item.create_time">暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="跟进人">
+                      <div class="content">
+                        <span v-if="item.simple_staff">{{item.simple_staff.real_name}}</span>
+                        <span v-if="!item.simple_staff">暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="24">
                     <el-form-item label="跟进结果">
-                      <div class="content">{{item.content}}</div>
+                      <div class="content">
+                        <span v-if="item.content">{{item.content}}</span>
+                        <span v-if="!item.content">暂无</span>
+                      </div>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="更新时间">
-                      <div class="content">{{item.create_time}}</div>
-                    </el-form-item>
-                  </el-col>
+
                 </el-row>
               </el-form>
             </div>
@@ -132,13 +164,17 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="创建时间">
-                  <div class="content">{{item.create_time}}</div>
+                  <div class="content">
+                    <span v-if="item.create_time">{{item.create_time}}</span>
+                    <span v-if="!item.create_time">暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="创建人">
                   <div class="content">
                     <span v-if="item.creators">{{item.creators.name}}</span>
+                    <span v-if="!item.creators">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -153,17 +189,24 @@
                 <el-form-item label="工单编号">
                   <div class="content">
                     <span v-if="item.num">{{item.num}}</span>
+                    <span v-if="!item.num">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="所属城市">
-                  <div class="content">{{item.city_name}}</div>
+                  <div class="content">
+                    <span v-if="item.city_name">{{item.city_name}}</span>
+                    <span v-if="!item.city_name">暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="工单类型">
-                  <div class="content">{{item.types}}</div>
+                  <div class="content">
+                    <span v-if="item.types">{{item.types}}</span>
+                    <span v-if="!item.types">暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -172,6 +215,7 @@
                 <el-form-item label="回复电话">
                   <div class="content">
                     <span v-if="item.mobile">{{item.mobile}}</span>
+                    <span v-if="!item.mobile">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -186,6 +230,7 @@
                 <el-form-item label="跟进人">
                   <div class="content">
                     <span v-if="item.follows">{{item.follows && item.follows.name}}</span>
+                    <span v-if="!item.follows">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -193,24 +238,36 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="完成时间">
-                  <div class="content">{{item.finish_time}}</div>
+                  <div class="content">
+                    <span v-if="item.finish_time">{{item.finish_time}}</span>
+                    <span v-if="!item.finish_time">暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="跟进时间">
-                  <div class="content">{{item.follow_time}}</div>
+                  <div class="content">
+                    <span v-if="item.follow_time">{{item.follow_time}}</span>
+                    <span v-if="!item.follow_time">暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="下次跟进时间">
-                  <div class="content">{{item.expected_finish_time}}</div>
+                  <div class="content">
+                    <span v-if="item.expected_finish_time">{{item.expected_finish_time}}</span>
+                    <span v-if="!item.expected_finish_time">暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="24">
                 <el-form-item label="跟进事项">
-                  <div class="content">{{item.matters}}</div>
+                  <div class="content">
+                    <span v-if="item.matters">{{item.matters}}</span>
+                    <span v-if="!item.matters">暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -230,15 +287,29 @@
             </div>
             <div v-if="item.remarks&&item.remarks.length>0">
               <el-form size="small" label-width="100px" v-if="item.remarks">
-                <el-row v-for="item in item.remarks" :key="item.id">
-                  <el-col :span="16">
-                    <el-form-item label="跟进结果">
-                      <div class="content">{{item.content}}</div>
+                <el-row v-for="item in item.remarks" :key="item.id" style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;">
+                  <el-col :span="12">
+                    <el-form-item label="跟进时间">
+                      <div class="content">
+                        <span v-if="item.create_time">{{item.create_time}}</span>
+                        <span v-if="!item.create_time">暂无</span>
+                      </div>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="更新时间">
-                      <div class="content">{{item.create_time}}</div>
+                  <el-col :span="12">
+                    <el-form-item label="跟进人">
+                      <div class="content">
+                        <span v-if="item.simple_staff">{{item.simple_staff.real_name}}</span>
+                        <span v-if="!item.simple_staff">暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="24">
+                    <el-form-item label="跟进结果">
+                      <div class="content">
+                        <span v-if="item.content">{{item.content}}</span>
+                        <span v-if="!item.content">暂无</span>
+                      </div>
                     </el-form-item>
                   </el-col>
                 </el-row>

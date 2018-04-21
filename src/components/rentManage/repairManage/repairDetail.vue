@@ -183,20 +183,20 @@
             </div>
             <div v-if="repairDetail.follow && repairDetail.follow.length>0">
               <el-form size="small" label-width="100px" v-if="repairDetail.follow">
-                <el-row v-for="item in repairDetail.follow" :key="item.id">
-                  <el-col :span="12">
-                    <el-form-item label="跟进人">
-                      <div class="content">
-                        <span v-if="item.name">{{item.name}}</span>
-                        <span v-if="!item.name">暂无</span>
-                      </div>
-                    </el-form-item>
-                  </el-col>
+                <el-row v-for="item in repairDetail.follow" :key="item.id" style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;">
                   <el-col :span="12">
                     <el-form-item label="跟进时间">
                       <div class="content">
                         <span v-if="item.create_time">{{item.create_time}}</span>
                         <span v-if="!item.create_time">暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="跟进人">
+                      <div class="content">
+                        <span v-if="item.simple_staff">{{item.simple_staff.real_name}}</span>
+                        <span v-if="!item.simple_staff">暂无</span>
                       </div>
                     </el-form-item>
                   </el-col>
