@@ -114,7 +114,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="维修金额">
+                <el-form-item label="预计维修金额">
                   <div class="content">
                     <span v-if="repairDetail.repair_money">{{repairDetail.repair_money}}</span>
                     <span v-if="!repairDetail.repair_money">暂无</span>

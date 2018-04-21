@@ -72,7 +72,7 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="维修时间">
+              <el-form-item label="预计维修时间">
                 <el-date-picker type="datetime" v-model="form.repair_time" placeholder="选择日期"
                                 value-format="yyyy-MM-dd hh:mm:ss" default-time="12:00:00"></el-date-picker>
               </el-form-item>

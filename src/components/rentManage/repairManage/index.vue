@@ -137,17 +137,9 @@
                   <span v-if="!scope.row.customer_name">暂无</span>
                 </template>
               </el-table-column>
-              <!--<el-table-column-->
-                <!--prop="sex"-->
-                <!--label="性别">-->
-                <!--<template slot-scope="scope">-->
-                  <!--<span v-if="scope.row.sex">{{scope.row.sex}}</span>-->
-                  <!--<span v-if="!scope.row.sex">暂无</span>-->
-                <!--</template>-->
-              <!--</el-table-column>-->
               <el-table-column
                 prop="customer_mobile"
-                label="客户电话">
+                label="回复电话">
                 <template slot-scope="scope">
                   <span v-if="scope.row.customer_mobile">{{scope.row.customer_mobile}}</span>
                   <span v-if="!scope.row.customer_mobile">暂无</span>
@@ -163,7 +155,7 @@
               </el-table-column>
               <el-table-column
                 prop="repair_time"
-                label="维修时间">
+                label="预计维修时间">
                 <template slot-scope="scope">
                   <span v-if="scope.row.repair_time">{{scope.row.repair_time}}</span>
                   <span v-if="!scope.row.repair_time">暂无</span>
@@ -179,34 +171,27 @@
               </el-table-column>
               <el-table-column
                 prop="repair_result"
-                label="维修结果">
+                label="下次跟进时间">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.repair_result">{{scope.row.repair_result}}</span>
-                  <span v-if="!scope.row.repair_result">暂无</span>
+                  <span v-if="scope.row.estimated_time">{{scope.row.estimated_time}}</span>
+                  <span v-if="!scope.row.estimated_time">暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
                 prop="repair_money"
-                label="维修金额">
+                label="跟进人">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.repair_money">{{scope.row.repair_money}}</span>
-                  <span v-if="!scope.row.repair_money">暂无</span>
+                  <span v-if="scope.row.followor">{{scope.row.followor}}</span>
+                  <span v-if="!scope.row.followor">暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
                 prop="status"
                 label="维修状态">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.status">{{scope.row.status}}</span>
+                  <el-button class="btnStatus" v-if="scope.row.status === '已完成'" type="primary" size="mini">{{scope.row.status}}</el-button>
+                  <el-button class="btnStatus" v-if="scope.row.status !== '已完成' && scope.row.status !==null " type="info" size="mini">{{scope.row.status}}</el-button>
                   <span v-if="!scope.row.status">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="person_liable"
-                label="认责人">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.liable">{{scope.row.liable}}</span>
-                  <span v-if="!scope.row.liable">暂无</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -246,14 +231,6 @@
                   <span v-if="!scope.row.customer_name">暂无</span>
                 </template>
               </el-table-column>
-              <!--<el-table-column-->
-                <!--prop="sex"-->
-                <!--label="性别">-->
-                <!--<template slot-scope="scope">-->
-                  <!--<span v-if="scope.row.sex">{{scope.row.sex}}</span>-->
-                  <!--<span v-if="!scope.row.sex">暂无</span>-->
-                <!--</template>-->
-              <!--</el-table-column>-->
               <el-table-column
                 prop="customer_mobile"
                 label="客户电话">
@@ -272,7 +249,7 @@
               </el-table-column>
               <el-table-column
                 prop="repair_time"
-                label="维修时间">
+                label="预计维修时间">
                 <template slot-scope="scope">
                   <span v-if="scope.row.repair_time">{{scope.row.repair_time}}</span>
                   <span v-if="!scope.row.repair_time">暂无</span>
@@ -288,34 +265,27 @@
               </el-table-column>
               <el-table-column
                 prop="repair_result"
-                label="维修结果">
+                label="下次跟进时间">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.repair_result">{{scope.row.repair_result}}</span>
-                  <span v-if="!scope.row.repair_result">暂无</span>
+                  <span v-if="scope.row.estimated_time">{{scope.row.estimated_time}}</span>
+                  <span v-if="!scope.row.estimated_time">暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
                 prop="repair_money"
-                label="维修金额">
+                label="跟进人">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.repair_money">{{scope.row.repair_money}}</span>
-                  <span v-if="!scope.row.repair_money">暂无</span>
+                  <span v-if="scope.row.followor">{{scope.row.followor}}</span>
+                  <span v-if="!scope.row.followor">暂无</span>
                 </template>
               </el-table-column>
               <el-table-column
                 prop="status"
                 label="维修状态">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.status">{{scope.row.status}}</span>
+                  <el-button class="btnStatus" v-if="scope.row.status === '已完成'" type="primary" size="mini">{{scope.row.status}}</el-button>
+                  <el-button class="btnStatus" v-if="scope.row.status !== '已完成' && scope.row.status !==null " type="info" size="mini">{{scope.row.status}}</el-button>
                   <span v-if="!scope.row.status">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="person_liable"
-                label="认责人">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.liable">{{scope.row.liable}}</span>
-                  <span v-if="!scope.row.liable">暂无</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -576,6 +546,11 @@
         })
       },
       exportData(){
+        if(this.activeName==='first'){
+          this.form.module = 1;
+        }else{
+          this.form.module = 2;
+        }
         this.$http.get(globalConfig.server + 'repaire/export', {
           responseType: 'arraybuffer',
           params: this.form
