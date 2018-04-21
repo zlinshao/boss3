@@ -446,6 +446,8 @@
       },
       badge_Flag(val){
          //个人连续登录时长勋章
+            let badge = false;
+            this.$store.dispatch('badgeFlag', badge);   
         if(val){
 
           this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
@@ -456,8 +458,7 @@
           console.log(JSON.parse(localStorage.personal).data.medal)
           if (!JSON.parse(localStorage.personal).data.medal) {
             this.badgeDialog = true;
-            let badge = false;
-            this.$store.dispatch('badgeFlag', badge);          
+        
           }     
         } 
       }
