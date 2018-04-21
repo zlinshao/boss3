@@ -8,13 +8,15 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="创建时间">
-                  <div class="content">{{repairDetail.create_time}}</div>
+                  <div class="content" v-if="repairDetail.create_time">{{repairDetail.create_time}}</div>
+                  <div class="content" v-if="!repairDetail.create_time">暂无</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="创建人">
                   <div class="content">
                     <span v-if="repairDetail.operator">{{repairDetail.operator}}</span>
+                    <span v-if="!repairDetail.operator">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -29,12 +31,14 @@
                 <el-form-item label="维修单编号">
                   <div class="content">
                     <span v-if="repairDetail.repaire_num">{{repairDetail.repaire_num}}</span>
+                    <span v-if="!repairDetail.repaire_num">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="所属城市">
-                  <div class="content">{{repairDetail.city_name}}</div>
+                  <div class="content" v-if="repairDetail.city_name">{{repairDetail.city_name}}</div>
+                  <div class="content" v-if="!repairDetail.city_name">暂无</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -43,6 +47,7 @@
                 <el-form-item label="客户姓名">
                   <div class="content">
                     <span v-if="repairDetail.customer_name">{{repairDetail.customer_name}}</span>
+                    <span v-if="!repairDetail.customer_name">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -50,6 +55,7 @@
                 <el-form-item label="客户性别">
                   <div class="content">
                     <span v-if="repairDetail.sexuality">{{repairDetail.sexuality}}</span>
+                    <span v-if="!repairDetail.sexuality">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -57,6 +63,7 @@
                 <el-form-item label="回复电话">
                   <div class="content">
                     <span v-if="repairDetail.customer_mobile">{{repairDetail.customer_mobile}}</span>
+                    <span v-if="!repairDetail.customer_mobile">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -66,6 +73,7 @@
                 <el-form-item label="维修时间">
                   <div class="content">
                     <span v-if="repairDetail.repair_time">{{repairDetail.repair_time}}</span>
+                    <span v-if="!repairDetail.repair_time">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -73,6 +81,7 @@
                 <el-form-item label="维修师傅">
                   <div class="content">
                     <span v-if="repairDetail.repair_master">{{repairDetail.repair_master}}</span>
+                    <span v-if="!repairDetail.repair_master">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -80,6 +89,7 @@
                 <el-form-item label="维修结果">
                   <div class="content">
                     <span v-if="repairDetail.repair_result">{{repairDetail.repair_result}}</span>
+                    <span v-if="!repairDetail.repair_result">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -89,6 +99,7 @@
                 <el-form-item label="维修金额">
                   <div class="content">
                     <span v-if="repairDetail.repair_money">{{repairDetail.repair_money}}</span>
+                    <span v-if="!repairDetail.repair_money">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -96,13 +107,16 @@
                 <el-form-item label="维修状态">
                   <div class="content">
                     <span v-if="repairDetail.statu">{{repairDetail.statu}}</span>
+                    <span v-if="!repairDetail.statu">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="认责人">
                   <div class="content">
-                    <span v-if="repairDetail.liable">{{repairDetail.liable}}</span></div>
+                    <span v-if="repairDetail.liable">{{repairDetail.liable}}</span>
+                    <span v-if="!repairDetail.liable">暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -110,7 +124,9 @@
               <el-col :span="24">
                 <el-form-item label="维修内容">
                   <div class="content">
-                    <span v-if="repairDetail.content">{{repairDetail.content}}</span></div>
+                    <span v-if="repairDetail.content">{{repairDetail.content}}</span>
+                    <span v-if="!repairDetail.content">暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -118,7 +134,9 @@
               <el-col :span="24">
                 <el-form-item label="备注">
                   <div class="content">
-                    <span v-if="repairDetail.remark">{{repairDetail.remark}}</span></div>
+                    <span v-if="repairDetail.remark">{{repairDetail.remark}}</span>
+                    <span v-if="!repairDetail.remark">暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -135,6 +153,7 @@
                     <el-form-item label="跟进人">
                       <div class="content">
                         <span v-if="item.name">{{item.name}}</span>
+                        <span v-if="!item.name">暂无</span>
                       </div>
                     </el-form-item>
                   </el-col>
@@ -142,6 +161,7 @@
                     <el-form-item label="跟进时间">
                       <div class="content">
                         <span v-if="item.create_time">{{item.create_time}}</span>
+                        <span v-if="!item.create_time">暂无</span>
                       </div>
                     </el-form-item>
                   </el-col>
@@ -149,6 +169,7 @@
                     <el-form-item label="跟进结果">
                       <div class="content">
                         <span v-if="item.content">{{item.content}}</span>
+                        <span v-if="!item.content">暂无</span>
                       </div>
                     </el-form-item>
                   </el-col>
