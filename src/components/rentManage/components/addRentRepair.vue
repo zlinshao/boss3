@@ -1,6 +1,6 @@
 <template>
   <div id="addRentRepair">
-    <el-dialog :close-on-click-modal="false" title="添加维修" :visible.sync="addRentRepairDialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="添加维修" :visible.sync="addRentRepairDialogVisible" width="50%">
       <div>
         <el-form size="mini" :model="form" label-width="100px">
           <el-row>
@@ -44,7 +44,29 @@
               </el-form-item>
             </el-col>
           </el-row>
-
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="跟进人" required>
+                <el-input v-model="follow_name" readonly  @focus="chooseStaff" placeholder="请选择跟进人">
+                  <template slot="append">
+                    <div style="cursor: pointer;" @click="emptyStaff">清空</div>
+                  </template>
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="下次跟进时间">
+                <el-date-picker type="date" v-model="form.repair_result" placeholder="请选择日期" value-format="yyyy-MM-dd"></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="初步认责人">
+                <el-select v-model="form.person_liable" placeholder="请选择认责归属" clearable>
+                  <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id" :value="item.id">{{item.dictionary_name}}</el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <el-row>
             <el-col :span="8">
               <el-form-item label="维修时间">
@@ -53,37 +75,33 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="维修师傅">
-                <el-input v-model="form.repair_master"></el-input>
+              <el-form-item label="维修金额">
+                <el-input  v-model="form.repair_money" ></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="维修结果">
-                <el-input v-model="form.repair_result"></el-input>
+              <el-form-item label="维修师傅">
+                <el-input v-model="form.repair_master"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="维修金额">
-                <el-input v-model="form.repair_money"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
               <el-form-item label="维修状态">
                 <el-select v-model="form.status" placeholder="请选择维修状态">
-                  <el-option v-for="item in repairStatusCategory" :label="item.dictionary_name" :key="item.id"
-                             :value="item.id">{{item.dictionary_name}}
-                  </el-option>
+                  <el-option v-for="item in repairStatusCategory" :label="item.dictionary_name" :key="item.id" :value="item.id">{{item.dictionary_name}}</el-option>
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
-              <el-form-item label="认责人">
-                <el-select v-model="form.person_liable" placeholder="请选择认责归属" clearable>
-                  <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id"
-                             :value="item.id">{{item.dictionary_name}}
-                  </el-option>
+            <el-col :span="8" v-if="form.status===600">
+              <el-form-item label="实际维修金额">
+                <el-input  v-model="form.real_money" ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8" v-if="form.status===600">
+              <el-form-item label="最终认责人">
+                <el-select v-model="form.final_liable" placeholder="请选择认责归属" clearable>
+                  <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id" :value="item.id">{{item.dictionary_name}}</el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -111,15 +129,20 @@
         <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
+    <Organization :organizationDialog="organizationDialog" :type="organType" @close="closeOrganization" @selectMember="selectMember"></Organization>
   </div>
 </template>
 
 <script>
+  import Organization from '../../common/organization';
   export default {
     props: ['addRentRepairDialog', 'contract'],
+    components: {Organization},
     data() {
       return {
         addRentRepairDialogVisible: false,
+        organizationDialog: false,
+        organType: '',
         form: {
           city: '',
           contract_id: '', //合同Id
@@ -137,7 +160,11 @@
           status: '',  //维修状态
           person_liable: '', //认责人
           module: 2, //租房
+          follow_id: '',  //跟进人id
+          final_liable: '', //最终认责人
+          real_money: '',  //实际维修金额
         },
+        follow_name: '', //跟进人名字
         repairStatusCategory: [],
         responsiblePersonCategory: [],
         sexCategory: [],
@@ -206,8 +233,28 @@
           remark: '',  //备注
           status: '',  //维修状态
           person_liable: '', //认责人
+          follow_id: '',  //跟进人id
+          final_liable: '', //最终认责人
+          real_money: '',  //实际维修金额
         };
+        this.follow_name = '';
       },
+      closeOrganization(){
+        this.organizeType = '';
+        this.organizationDialog = false;
+      },
+      selectMember(val){
+        this.follow_name = val[0].name;
+        this.form.follow_id = val[0].id;
+      },
+      chooseStaff(){
+        this.organizeType = 'staff';
+        this.organizationDialog = true;
+      },
+      emptyStaff(){
+        this.follow_name = '';
+        this.form.follow_id = '';
+      }
     },
   };
 </script>
