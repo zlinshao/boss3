@@ -7,7 +7,7 @@
           <span style="color:#83a0fc;">2018年春季新员工入职考试</span>
         </div>
         <div class="tool_right">
-          <el-button type="success" size="small" style="margin-right:18px; background-color:#58d788; border-color:#58d788;"  @click="openModalDialog()">
+          <el-button type="success" size="small" style="margin-right:10px; background-color:#58d788; border-color:#58d788;"  @click="openModalDialog()">
             <i class="iconfont icon-tianjiagenjin"></i>&nbsp;添加试题
           </el-button>
         </div>
@@ -49,14 +49,16 @@
           <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
           <span style="float:right; font-size:14px; color:#fc83b6; margin-right:20px;">移除</span>
           <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">编辑</span>
+          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">下一题</span>
+          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">上一题</span>          
           <p style="margin-left:30px;line-height:30px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
           <el-form :model="form1[x]" >
-              <el-form-item >
-                <el-radio-group v-model="form1[x].check" style="width:98%;margin-left:2%;">
+              <el-form-item v-model="form1[x].check" style="width:98%;margin-left:2%;">
                   <el-col :span="6" :key="index" v-for="(val,index) in answarData" style="line-height:24px;height: 24px;">
-                    <el-radio :disabled="!disfalg" :label="val.id">{{val.id}}：{{val.name}} <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form1[x].check == val.id">正确</span></el-radio>
+                     <span v-if="form1[x].check == val.id"><el-radio>{{val.id}}：{{val.name}}</el-radio></span>
+                     <span v-else>{{val.id}}：{{val.name}}</span>
+                     <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form1[x].check == val.id">正确</span>
                   </el-col>
-                </el-radio-group>
               </el-form-item>
           </el-form>       
         </div>
@@ -65,14 +67,16 @@
           <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
           <span style="float:right; font-size:14px; color:#fc83b6; margin-right:20px;">移除</span>
           <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">编辑</span>
+          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">下一题</span>
+          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">上一题</span> 
           <p style="margin-left:30px;line-height:30px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
           <el-form :model="form2[y]" >
-              <el-form-item >
-                <el-checkbox-group v-model="form2[y].check" style="width:98%;margin-left:2%;">
+              <el-form-item v-model="form2[y].check" style="width:98%;margin-left:2%;">
                   <el-col :span="6" :key="index1" v-for="(val,index1) in answarData" style="line-height:24px;height: 24px;">
-                    <el-checkbox :disabled="!disfalg" :label="val.id">{{val.id}}：{{val.name}}<span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form2[y].check[index1] == val.id">正确</span></el-checkbox>
+                    <span v-if="form2[y].check[index1] == val.id"><el-radio >{{val.id}}：{{val.name}}</el-radio></span>
+                    <span v-else>{{val.id}}：{{val.name}}</span>
+                    <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form2[y].check[index1] == val.id">正确</span>
                   </el-col>
-                </el-checkbox-group>
               </el-form-item>
           </el-form>      
         </div>
@@ -81,14 +85,16 @@
           <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
           <span style="float:right; font-size:14px; color:#fc83b6; margin-right:20px;">移除</span>
           <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">编辑</span>
+          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">下一题</span>
+          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">上一题</span>
           <p style="margin-left:30px;line-height:20px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
           <el-form :model="form3[z]" >
-              <el-form-item >
-                <el-radio-group v-model="form3[z].check" style="width:98%;margin-left:2%;">
+              <el-form-item v-model="form3[z].check" style="width:98%;margin-left:2%;">
                   <el-col :span="12" :key="index2" v-for="(val,index2) in answarData2" style="line-height:24px;height: 24px;">
-                    <el-radio :disabled="!disfalg" :label="val.id">{{val.id}}：{{val.name}}<span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form3[z].check == val.id">正确</span></el-radio>
+                    <span v-if="form3[z].check == val.id"><el-radio >{{val.id}}：{{val.name}}</el-radio></span>
+                    <span v-else>{{val.id}}：{{val.name}}</span>
+                    <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form3[z].check == val.id">正确</span>
                   </el-col>
-                </el-radio-group>
               </el-form-item>
           </el-form>     
         </div>   
@@ -97,10 +103,12 @@
           <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
           <span style="float:right; font-size:14px; color:#fc83b6; margin-right:20px;">移除</span>
           <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">编辑</span>
-          <p style="margin-left:30px;line-height:20px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
+          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">下一题</span>
+          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">上一题</span> 
+          <p style="margin-left:30px;line-height:20px;padding-right:10px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
           <el-form :model="form3[k]" >
               <el-form-item >
-                <el-input :disabled="!disfalg" style="width:96%;margin-left:2%;margin-right:2%" v-model="form4[k].check" type="textarea"></el-input>
+                <el-input readonly style="width:97%;margin-left:2%;" v-model="form4[k].check" type="textarea"></el-input>
               </el-form-item>
           </el-form>       
         </div>   
@@ -108,8 +116,8 @@
       </div>
 
     <div id="testPaperDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="新建试卷" width="50%">
-        <el-row :gutter="30">
+      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="新建试卷" width="38%" style="margin-top:18vh">
+        <el-row :gutter="30" style="margin-bottom:26px;">
           <el-col :span="12">
             <div class="import_questions" @click="importQuestion">
               <div><img src="../../../../assets/images/examination/import_question.svg"><br/>批量导入试题</div>
@@ -162,8 +170,8 @@ export default {
         { id: "对", name: "选项答案" },
         { id: "错", name: "选项答案" }
       ],
-      form1: [{ check: "A" }, { check: "B" }],
-      form2: [{ check: ["A", "B"] }, { check: ["A", "B", "C", "D"] }],
+      form1: [{ check: "B" }, { check: "D" }],
+      form2: [{ check: ["A", "B"] }, { check: ["A", "", "C", "D"] }],
       form3: [{ check: "对" }, { check: "错" }],
       form4: [{ check: " " }, { check: " " }],
       formbox: [

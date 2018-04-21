@@ -109,7 +109,7 @@
               @row-dblclick="dblClickTable"
               style="width: 100%">
               <el-table-column
-                prop="real_name"
+                prop="exam_time"
                 label="考试时间">
               </el-table-column>
               <el-table-column
@@ -117,7 +117,7 @@
                 label="试卷名称">
               </el-table-column>
               <el-table-column
-                prop="score"
+                prop="num"
                 label="总题数">
               </el-table-column>
               <el-table-column
@@ -125,26 +125,26 @@
                 label="总分值">
               </el-table-column>
               <el-table-column
-                prop="score"
+                prop="timeALL"
                 label="总时长">
               </el-table-column>
               <el-table-column
-                prop="score"
+                prop="type"
                 label="类型">
               </el-table-column>
               <el-table-column
-                prop="score"
+                prop="peonum"
                 label="考生人数">
               </el-table-column>
               <el-table-column
-                prop="score"
+                prop="unexam"
                 label="缺考">
               </el-table-column>
               <el-table-column
-                prop="score"
+                prop="more"
                 label="详情">
                 <template slot-scope="scope">
-                  <span>点击查看</span>
+                  <span @click="lookexam" style="cursor: pointer;">点击查看</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -173,7 +173,18 @@ export default {
   components: { Organization },
   data() {
     return {
-      tableData: [],
+      tableData: [
+        {
+          exam_time:"2017-8-1",
+          exam_name:"新员工入职考试",
+          num:20,
+          score:100,
+          timeALL:120,
+          type:"初级考试",
+          peonum:15,
+          unexam:5
+        }
+      ],
       tableNumber: 0,
       form: {
         page: 1,
@@ -236,6 +247,9 @@ export default {
   },
   watch: {},
   methods: {
+    lookexam(){
+      this.$router.push({ path: "/examinerReadEach" });
+    },
     myData(val) {
       this.form.page = val;
       this.rentStatus = " ";

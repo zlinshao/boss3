@@ -148,8 +148,8 @@
       </el-dialog>
     </div>
     <div id="testPaperDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="新建试卷" width="50%">
-        <el-row :gutter="30">
+      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="新建试卷" width="38%" style="margin-top:18vh">
+        <el-row :gutter="30" style="margin-bottom:26px;">
           <el-col :span="12">
             <div class="import_questions" @click="importQuestion">
               <div><img src="../../../assets/images/examination/import_question.svg"><br/>批量导入试题</div>

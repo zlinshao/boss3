@@ -4,8 +4,8 @@
       <div class="tool">
         <el-row style="width:100%;margin-top:16px;">
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
-            <div class="import_questions" style="text-align:left;" >
-              <div class="qdiv">试卷名称：<span style="color:#6a8dfb">2018春季新员工入职考试</span></div>
+            <div class="import_questions" style="text-align:left;color:#464748; " >
+              <div class="qdiv" style="margin-top:16px;">试卷名称：<span style="color:#6a8dfb">2018春季新员工入职考试</span></div>
               <div class="qdiv">试卷类型：<span style="color:#6a8dfb">新员工入职考试</span></div>
               <div class="qdiv">试卷考法：<span style="color:#6a8dfb">按总时长计时，按试卷顺序作答</span></div>
             </div>
@@ -35,12 +35,13 @@
           {{x+1}}.<span style="color:#6a8dfb; margin-left:20px;">单选题</span>
           <p style="margin-left:30px;line-height:30px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
           <el-form :model="form1[x]" >
-              <el-form-item >
-                <el-radio-group v-model="form1[x].check" style="width:98%;margin-left:2%;">
+              <el-form-item v-model="form1[x].check" style="width:98%;margin-left:2%;">
                   <el-col :span="6" :key="index" v-for="(val,index) in answarData" style="line-height:24px;height: 24px;">
-                    <el-radio :label="val.id">{{val.id}}：{{val.name}}</el-radio>
+                     <span v-if="form1[x].check == val.id"><el-radio>{{val.id}}：{{val.name}}</el-radio></span>
+                     <span v-else>{{val.id}}：{{val.name}}</span>
+                     <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form1[x].check == val.id">正确</span>
+                     <span style="color:#fc83b6;margin-left:50px;" else>错误</span>
                   </el-col>
-                </el-radio-group>
               </el-form-item>
           </el-form>       
         </div>
@@ -48,36 +49,36 @@
           {{y+1+2}}.<span style="color:#6a8dfb; margin-left:20px;">多选题</span>
           <p style="margin-left:30px;line-height:30px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
           <el-form :model="form2[y]" >
-              <el-form-item >
-                <el-checkbox-group v-model="form2[y].check" style="width:98%;margin-left:2%;">
+              <el-form-item v-model="form2[y].check" style="width:98%;margin-left:2%;">
                   <el-col :span="6" :key="index1" v-for="(val,index1) in answarData" style="line-height:24px;height: 24px;">
-                    <el-checkbox :label="val.id">{{val.id}}：{{val.name}}</el-checkbox>
+                    <span v-if="form2[y].check[index1] == val.id"><el-radio >{{val.id}}：{{val.name}}</el-radio></span>
+                    <span v-else>{{val.id}}：{{val.name}}</span>
+                    <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form2[y].check[index1] == val.id">正确</span>
                   </el-col>
-                </el-checkbox-group>
               </el-form-item>
-          </el-form>       
+          </el-form>    
         </div>
         <div class="questionDiv" v-for="(total3,z) in 2" >
           {{z+1+4}}.<span style="color:#6a8dfb; margin-left:20px;">判断题</span>
           <p style="margin-left:30px;line-height:20px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
           <el-form :model="form3[z]" >
-              <el-form-item >
-                <el-radio-group v-model="form3[z].check" style="width:98%;margin-left:2%;">
+              <el-form-item v-model="form3[z].check" style="width:98%;margin-left:2%;">
                   <el-col :span="12" :key="index2" v-for="(val,index2) in answarData2" style="line-height:24px;height: 24px;">
-                    <el-radio :label="val.id">{{val.id}}：{{val.name}}</el-radio>
+                    <span v-if="form3[z].check == val.id"><el-radio >{{val.id}}：{{val.name}}</el-radio></span>
+                    <span v-else>{{val.id}}：{{val.name}}</span>
+                    <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form3[z].check == val.id">正确</span>
                   </el-col>
-                </el-radio-group>
               </el-form-item>
-          </el-form>       
+          </el-form>      
         </div>   
         <div class="questionDiv" v-for="(total4,k) in 2" >
           {{k+1+6}}.<span style="color:#6a8dfb; margin-left:20px;">简单题</span>
           <p style="margin-left:30px;line-height:20px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
           <el-form :model="form3[k]" >
               <el-form-item >
-                <el-input style="width:96%;margin-left:2%;margin-right:2%" v-model="form4[k].check" type="textarea"></el-input>
+                <el-input readonly style="width:97%;margin-left:2%;" v-model="form4[k].check" type="textarea"></el-input>
               </el-form-item>
-          </el-form>       
+          </el-form>        
         </div>     
       </div> 
     </div>
@@ -108,10 +109,20 @@ export default {
         { id: "对", name: "选项答案" },
         { id: "错", name: "选项答案" }
       ],
-      form1: [{ check: " " }, { check: " " }],
-      form2: [{ check: [] }, { check: [] }],
-      form3: [{ check: " " }, { check: " " }],
-      form4: [{ check: " " }, { check: " " }]
+      form1: [{ check: "B" }, { check: "D" }],
+      form2: [{ check: ["A", "B"] }, { check: ["A", "", "C", "D"] }],
+      form3: [{ check: "对" }, { check: "错" }],
+      form4: [{ check: " " }, { check: " " }],
+      formbox: [
+        { check: "" },
+        { check: "" },
+        { check: "" },
+        { check: "" },
+        { check: "" },
+        { check: "" },
+        { check: "" },
+        { check: "" }
+      ]
     };
   },
 
@@ -138,9 +149,9 @@ export default {
       height: 124px;
       border-radius: 5px;
       .qdiv {
-        font-size: 16px;
-        height: 40px;
-        line-height: 40px;
+        font-size: 14px;
+        height: 30px;
+        line-height: 30px;
         margin-left: 20px;
         overflow: hidden;
       }

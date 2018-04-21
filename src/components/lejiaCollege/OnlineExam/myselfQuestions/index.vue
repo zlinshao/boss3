@@ -4,9 +4,7 @@
       <div class="qutitle">
         <div class="title">题型</div>
         <el-tabs type="border-card" v-model="activeName">
-          <el-tab-pane name="first">
-            <el-button v-if="nowAction == 'first'" size="mini" slot="label" type="primary">单选题</el-button>
-            <el-button v-else slot="label" size="mini" type="info">单选题</el-button>
+          <el-tab-pane name="first" label="单选题">
             <div class="qubody">
               <div class="topbody">
                 <div class="title">题干</div>
@@ -42,9 +40,7 @@
             </div>
           </el-tab-pane>
 
-          <el-tab-pane name="second">
-            <el-button v-if="nowAction == 'second'" size="mini" slot="label" type="primary">多选题</el-button>
-            <el-button v-else slot="label" size="mini" type="info">多选题</el-button>
+          <el-tab-pane name="second" label="多选题">
             <div class="qubody">
               <div class="topbody">
                 <div class="title">题干</div>
@@ -80,9 +76,7 @@
             </div>
           </el-tab-pane>
 
-          <el-tab-pane name="third">
-            <el-button v-if="nowAction == 'third'" size="mini" slot="label" type="primary">不定向选择</el-button>
-            <el-button v-else slot="label" size="mini" type="info">不定向选择</el-button>
+          <el-tab-pane name="third" label="不定向选择">
             <div class="qubody">
               <div class="topbody">
                 <div class="title">题干</div>
@@ -118,9 +112,7 @@
             </div>
           </el-tab-pane>
 
-          <el-tab-pane name="fourth">
-            <el-button v-if="nowAction == 'fourth'" size="mini" slot="label" type="primary">填空题</el-button>
-            <el-button v-else slot="label" size="mini" type="info">填空题</el-button>
+          <el-tab-pane name="fourth" label="填空题"> 
             <div class="qubody">
               <div class="topbody">
                 <div class="title">题干</div>
@@ -163,9 +155,7 @@
             </div>
           </el-tab-pane>
 
-          <el-tab-pane name="five">
-            <el-button v-if="nowAction == 'five'" size="mini" slot="label" type="primary">判断题</el-button>
-            <el-button v-else slot="label" size="mini" type="info">判断题</el-button>
+          <el-tab-pane name="five" label="判断题">
             <div class="qubody">
               <div class="topbody">
                 <div class="title">题干</div>
@@ -198,9 +188,7 @@
             </div>
           </el-tab-pane>
 
-          <el-tab-pane name="six">
-            <el-button v-if="nowAction == 'six'" size="mini" slot="label" type="primary">问答题</el-button>
-            <el-button v-else slot="label" size="mini" type="info">问答题</el-button>
+          <el-tab-pane name="six" label="问答题">
             <div class="qubody">
               <div class="topbody">
                 <div class="title">题干</div>

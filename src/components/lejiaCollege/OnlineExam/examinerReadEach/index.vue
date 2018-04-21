@@ -109,7 +109,7 @@
               @row-dblclick="dblClickTable"
               style="width: 100%">
               <el-table-column
-                prop="real_name"
+                prop="exam_time"
                 label="考试时间">
               </el-table-column>
               <el-table-column
@@ -117,19 +117,19 @@
                 label="试卷名称">
               </el-table-column>
               <el-table-column
-                prop="score"
+                prop="type"
                 label="类型">
               </el-table-column>
               <el-table-column
-                prop="score"
+                prop="name"
                 label="考生姓名">
               </el-table-column>
               <el-table-column
-                prop="score"
+                prop="depart"
                 label="考生部门">
               </el-table-column>
               <el-table-column
-                prop="score"
+                prop="statue"
                 label="考生状态">
               </el-table-column>
               <el-table-column
@@ -137,10 +137,9 @@
                 label="考生成绩">
               </el-table-column>
               <el-table-column
-                prop="score"
                 label="试卷">
                 <template slot-scope="scope">
-                  <span>点击阅卷</span>
+                  <span @click="lookexam" style="cursor: pointer;">点击阅卷</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -169,7 +168,17 @@ export default {
   components: { Organization },
   data() {
     return {
-      tableData: [],
+      tableData: [
+        {
+          exam_time:"2018-7-1",
+          exam_name:"新员工入职考试",
+          type:"入职考试",
+          name:"张三",
+          depart:"财务部",
+          statue:"在线",
+          score:90,
+        }
+      ],
       tableNumber: 0,
       form: {
         page: 1,
@@ -232,6 +241,9 @@ export default {
   },
   watch: {},
   methods: {
+    lookexam(){
+      this.$router.push({ path: "/examinerShortAn" });
+    },
     myData(val) {
       this.form.page = val;
       this.rentStatus = " ";

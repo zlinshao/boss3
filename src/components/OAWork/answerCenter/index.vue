@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div id="newsDetail">
     <div class="highRanking" >
       <div class="highSearch">
@@ -9,13 +10,39 @@
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-button style="background-color:#58d788; border-color:#58d788;" type="success" ><i class="el-icon-question"></i>&nbsp;&nbsp;我要提问</el-button>
+            <el-button @click="openFlag" style="background-color:#58d788; border-color:#58d788;" type="success" ><i class="el-icon-question"></i>&nbsp;&nbsp;我要提问</el-button>
           </el-form-item>
         </el-form>
       </div>
     </div>
-        <div class="comment_box" v-if="isShow">
+        <div class="comment_box">
+          <div class="anstitle">问题问题问题问题问题问题问题问题问题问题问题</div>
           <div class="publishComment">
+            <div class="portraito">
+              <img :src="landholder.avatar" v-if="landholder && landholder.avatar">
+              <img src="../../../assets/images/head.png" v-else>
+            </div>
+            <div class="comments">
+              <div class="staff_name">
+                <div>
+                  <span style="color:#83a0fc">{{landholder && landholder.name}}</span>&nbsp;&nbsp;
+                  <span v-for="key in landholder && landholder.org">
+                    <span>{{key && key.name}}</span>
+                  </span>
+                  <span>2018-04-19 20:45:55</span>&nbsp;&nbsp;
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="question">font-class是unicode使用方式的一种变种，主要是解决unicode书写不直观，语意不明确的问题。
+                与unicode使用方式相比，具有如下特点：
+                兼容性良好，支持ie8+，及所有现代浏览器。
+                相比于unicode语意明确，书写更直观。可以很容易分辨这个icon是什么。
+                因为使用class来定义图标，所以当要替换图标时，只需要修改class里面的unicode引用。
+                不过因为本质上还是使用的字体，所以多色图标还是不支持的。
+          </div>
+          <el-button type="primary" style="margin: 10px 0 20px 10px;" @click="write" size="small">写回答</el-button>
+          <div class="publishComment" v-show="isShow">
             <div class="portrait">
               <img :src="landholder.avatar" v-if="landholder && landholder.avatar">
               <img src="../../../assets/images/head.png" v-else>
@@ -32,7 +59,7 @@
             </div>
           </div>
 
-          <el-form size="small">
+          <el-form size="small" v-show="isShow">
             <el-form-item>
               <el-input type="textarea" :rows="3" v-model="addContent" placeholder="请输入评论内容"></el-input>
             </el-form-item>
@@ -44,7 +71,12 @@
             </el-form-item>
           </el-form>
 
-          <div class="commentOn" v-for="key in commentOn">
+          <div style="height:50px; color:#83a0fc; line-height:50px; margin:0 10px;">
+            <span style="float:left;">{{paging}}条回答</span>
+            <span v-if="!islook" @click="islookFlag('open')" style="float:right;">全部显示</span>
+            <span v-else @click="islookFlag('close')" style="float:right;">关闭全部显示</span>
+          </div>
+          <div class="commentOn" v-for="key in commentOn" v-if="islook">
             <div class="portrait">
               <img :src="key.staffs.avatar" v-if="key && key.staffs && key.staffs.avatar">
               <img src="../../../assets/images/head.png" v-else>
@@ -67,7 +99,29 @@
             </div>
           </div>
 
-          <div class="block pages" v-if="paging > 11">
+          <div class="commentOn" v-for="(key,index) in commentOn" v-if="!islook &&index<1">
+            <div class="portrait">
+              <img :src="key.staffs.avatar" v-if="key && key.staffs && key.staffs.avatar">
+              <img src="../../../assets/images/head.png" v-else>
+            </div>
+            <div class="comments">
+              <div class="staff_name">
+                <div>
+                  <span>{{key.staffs && key.staffs.name}}</span>&nbsp;&nbsp;
+                  <span v-for="item in key && key.staffs && key.staffs.org">
+                    <span class="staffBefore">{{item && item.name}}</span>
+                  </span>
+                </div>
+                <div>
+                  {{key.create_time}}
+                </div>
+              </div>
+              <div class="commentContent">
+                {{key.content}}
+              </div>
+            </div>
+          </div>
+          <div class="block pages" v-if="paging > 11 && islook" >
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="search"
@@ -91,6 +145,22 @@
       </div>
     </div>
   </div>
+      <div id="faleDialog">
+      <el-dialog :close-on-click-modal="false" :visible.sync="faleDialog" style="margin-top: 4vh;" title="我要提问" width="38%">
+        <span style="color:#409EFF;font-size:14px;">写下你的问题</span>
+        <div style="margin:5px 0;">描述精确的问题更易得到解答</div>
+        <el-input placeholder="问题标题"></el-input>
+        <span style="color:#409EFF;font-size:14px; margin: 10px 0 5px 0; display:block;">问题描述</span>
+        <el-input type="textarea" placeholder="问题背景、条件等信息"></el-input>
+        <div style="margin:10px 0;">
+        <el-checkbox label=""></el-checkbox>&nbsp;匿名问题
+        </div>
+        <div style="border-top:1px #eee solid">
+          <el-button type="primary" style="margin-top:30px;margin-left:40%;width:126px; height:32px;background-color:#6a8dfb; border-color:#6a8dfb; line-height:0px;">提交问卷</el-button>
+        </div>
+      </el-dialog>
+    </div>
+    </div>
 </template>
 
 <script>
@@ -100,7 +170,8 @@ export default {
     return {
       urls: globalConfig.server,
       showUp: "",
-      isShow: true,
+      isShow: false,
+      islook:false,
       colNum: 16,
       formList: {},
       staffs: {},
@@ -108,11 +179,13 @@ export default {
       commentOn: [],
       cover_pic: {},
       currentPage: 1,
+      faleDialog:false,
       paging: 0,
       page: 1,
       form: {
         status: 149,
         keywords: "",
+        limit:4,
         pages: 1
       },
       hotData: {},
@@ -131,7 +204,7 @@ export default {
     this.infoDetail();
   },
   mounted() {
-    // this.infoDetail();
+    this.myData(5,1);
   },
   watch: {
     ids(val) {
@@ -147,30 +220,23 @@ export default {
   },
   methods: {
     infoDetail() {
-      this.addRegion();
+
     },
-
-    // 热门导读
-    addRegion() {
-      this.$http
-        .get(this.urls + "oa/portal/?dict_id=" + 142, {
-          params: this.form
-        })
-        .then(res => {
-          let title,
-            data = {};
-          title =
-            res.data &&
-            res.data.data &&
-            res.data.data.data &&
-            res.data.data.data[0].title;
-          data = res.data && res.data.data && res.data.data.data;
-          this.hotData = Object.assign({}, this.hotData, {
-            title: title,
-            data: data
-          });
-
-        });
+    //我要提问
+    openFlag(){
+      this.faleDialog = true;
+    },
+    //写回答
+    write(){
+      this.isShow = !this.isShow;
+    },
+    //查看评论
+    islookFlag(val){
+      if( val == 'open'){
+        this.islook = true;
+      }else{
+        this.islook = false;
+      }
     },
 
     search(val) {
@@ -179,9 +245,9 @@ export default {
     myData(id, val) {
       this.page = val;
       this.$http
-        .get(this.urls + "oa/portal/comment/" + this.formList.id, {
+        .get(this.urls + "oa/portal/comment/5" , {
           params: {
-            pages: this.page
+            pages: this.page,
           }
         })
         .then(res => {
@@ -425,15 +491,29 @@ export default {
         @include border_radius(50%);
       }
     }
+    .portraito {
+      margin-right: 20px;
+      min-width: 50px;
+      max-width: 50px;
+      min-height: 50px;
+      max-height: 50px;
+      img {
+        width: 50px;
+        height: 50px;
+        @include border_radius(50%);
+      }
+    }
     .comments {
       line-height: 24px;
       width: 100%;
       .staff_name {
-        color: #579cff;
         @include flex;
         justify-content: space-between;
         .staffBefore + .staffBefore:before {
           content: " - ";
+        }
+        span{
+          margin: 0 10px;
         }
       }
       .commentContent {
@@ -444,6 +524,7 @@ export default {
       @include flex;
       align-items: center;
       margin-bottom: 10px;
+      text-indent: 10px;
     }
     .commentOn {
       padding: 15px;
@@ -451,6 +532,19 @@ export default {
       @include flex;
       align-items: center;
     }
+    .anstitle{
+      font-size: 20px;
+      line-height: 60px;
+      font-weight: 500;
+      color: #606266;     
+      text-indent: 10px;
+    }
+    .question{
+      font-size: 16px; 
+      margin:10px 10px;
+    }
+
+
   }
 
   .highRanking{

@@ -4,8 +4,8 @@
       <div class="tool">
         <el-row style="width:100%;margin-top:16px;">
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
-            <div class="import_questions" style="text-align:left;" >
-              <div class="qdiv">试卷名称：<span style="color:#6a8dfb">2018春季新员工入职考试</span></div>
+            <div class="import_questions" style="text-align:left;color:#464748;" >
+              <div class="qdiv" style="margin-top:16px;">试卷名称：<span style="color:#6a8dfb">2018春季新员工入职考试</span></div>
               <div class="qdiv">试卷类型：<span style="color:#6a8dfb">新员工入职考试</span></div>
               <div class="qdiv">试卷考法：<span style="color:#6a8dfb">按总时长计时，按试卷顺序作答</span></div>
             </div>
@@ -42,11 +42,12 @@
             <div class="eachSore">   
               <el-form :model="form[k]">
                 <el-row>
-                  <el-form-item label="本题得分">
+                    <el-col :span="1">
+                      <span style=" font-size:14px; color:rgb(251, 70, 153);display:block; line-height:40px;">本题得分</span>
+                    </el-col>
                     <el-col :span="2">
                       <el-input v-model="form[k].score" placeholder="请填入分值" >分</el-input>
                     </el-col>
-                  </el-form-item>    
                 </el-row>
               </el-form>
             </div>   
@@ -57,8 +58,8 @@
         </div>   
       </div> 
       <div class="bottom">
-        <el-button style="width:360px;margin-top:34px; height:32px; line-height:0px; background-color:rgb(106, 141, 251); border-color:rgb(106, 141, 251);" type="primary">提交</el-button>
         <el-button style="width:360px;margin-top:34px; height:32px; line-height:0px; background-color:#58d788; border-color:#58d788" type="primary">保存</el-button>
+        <el-button style="width:360px;margin-top:34px; height:32px; line-height:0px; background-color:rgb(106, 141, 251); border-color:rgb(106, 141, 251);" type="primary">提交</el-button>
       </div>
     </div>
   </div>
@@ -102,10 +103,10 @@ export default {
       height: 124px;
       border-radius: 5px;
       .qdiv {
-        font-size: 16px;
-        height: 40px;
-        line-height: 40px;
-        margin-left: 20px;
+        font-size: 14px;
+        height: 30px;
+        line-height: 30px;
+        margin-left: 30px;
         overflow: hidden;
       }
       .import_left {

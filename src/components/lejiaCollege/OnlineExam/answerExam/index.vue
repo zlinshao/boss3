@@ -4,8 +4,8 @@
       <div class="tool">
         <el-row style="width:100%;margin-top:16px;">
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
-            <div class="import_questions" style="text-align:left;" >
-              <div class="qdiv">试卷名称：<span style="color:#6a8dfb">2018春季新员工入职考试</span></div>
+            <div class="import_questions" style="text-align:left;color:#464748;" >
+              <div class="qdiv" style="margin-top:16px;">试卷名称：<span style="color:#6a8dfb">2018春季新员工入职考试</span></div>
               <div class="qdiv">试卷类型：<span style="color:#6a8dfb">新员工入职考试</span></div>
               <div class="qdiv">试卷考法：<span style="color:#6a8dfb">按总时长计时，按试卷顺序作答</span></div>
             </div>
@@ -86,7 +86,7 @@
     </div>
 
     <div id="pointDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="pointDialog" title="本次试题得分" width="50%">
+      <el-dialog :close-on-click-modal="false" :visible.sync="pointDialog" title="本次试题得分" style="margin-top:16vh" width="50%">
         <el-row :gutter="30">
           <el-col :span="24">
             <div class="import_points" >
@@ -102,14 +102,14 @@
           </el-col>
         </el-row>
         <div class="importbo">
-          <el-button style="margin-top:20px;background-color:rgb(106, 141, 251); border-color:rgb(106, 141, 251)" type="primary">查看试卷</el-button>
+          <el-button style="width:130px; height:32px; line-height:0px;margin-top:10px;background-color:rgb(106, 141, 251); border-color:rgb(106, 141, 251)" type="primary">查看试卷</el-button>
         </div>        
       </el-dialog>
     </div>
 
     <div id="submitDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="submitDialog" title="本次试题提交" width="50%">
-        <el-row :gutter="30">
+      <el-dialog :close-on-click-modal="false" :visible.sync="submitDialog" style="margin-top:20vh" title="本次试题提交" width="35%">
+        <el-row :gutter="30" style="margin-bottom:38px;">
           <el-col :span="24">
             <div class="submit_points" >
               <span>提交成功！</span><br/>主考官将尽快批示，您的成绩可在“乐伽大学－成绩查询”中查看，我们也会以信息的方式通知您！
@@ -153,9 +153,8 @@ export default {
 
   watch: {},
   methods: {
-    //导入试题
     getPoints() {
-      this.submitDialog = true;
+      this.pointDialog = true;
     }
   }
 };
@@ -180,9 +179,9 @@ export default {
       height: 124px;
       border-radius: 5px;
       .qdiv {
-        font-size: 16px;
-        height: 40px;
-        line-height: 40px;
+        font-size: 14px;
+        height: 30px;
+        line-height: 30px;
         margin-left: 20px;
         overflow: hidden;
       }
@@ -222,13 +221,13 @@ export default {
     text-align: center;
     align-items: center;
     justify-content: center;
-    height: 190px;
+    height: 200px;
     border-radius: 5px;
     .importbody {
       margin-left: 30%;
       margin-top: 30px;
       img {
-        width: 130px;
+        width: 105px;
         height: 130px;
       }
       .importright {
@@ -237,22 +236,23 @@ export default {
         margin-top: 10px;
         float: left;
         margin-left: 60px;
-        font-size: 18px;
+        font-size: 16px;
         text-align: left;
         color: #6a8dfb;
         span {
           font-size: 50px;
           color: #fb4699;
+          font-family: "PingFangSC-Light PingFangSC-Ultralight";
         }
       }
     }
   }
   .importbo {
     width: 100%;
-    height: 74px;
+    height: 40px;
     text-align: center;
     border-top: 1px #eee solid;
-    margin-top: 20px;
+    margin-top: 16px;
   }
 }
 

@@ -5,19 +5,18 @@
         <div class="tool_left">       
             <span style="height:130px;line-height:130px; width:120px; font-size:16px;">上传试题文件</span>
             <span><Dropzone :ID="'examOptionx'" @getImg="photo_success"  :isClear="isClear"></Dropzone></span>     
-          <el-button type="success" @click="uploadExam" size="small" style="margin-right:18px; background-color:#58d788; border-color:#58d788; margin-top:50px"  >
+          <el-button type="success" @click="uploadExam" size="small" style="margin-right:18px; width:140px; height:32px; line-height:0px; background-color:#58d788; border-color:#58d788; margin-top:50px"  >
             <i class="iconfont icon-daoru"></i>&nbsp;试题导入
-          </el-button>     
-        </div>
-        <div class="tool_right">
+          </el-button>  
           <el-button type="success" size="small" style="margin-right:18px; background-color:#fb4799; border-color:#fb4799;"  >
             <i class="el-icon-download"></i>&nbsp;下载试题模版
-          </el-button>
+          </el-button>             
         </div>
+
       </div>
       <div class="main">
-        <div style="margin-left:100px; margin-top:20px;">
-          <p><span>说明</span></p>
+        <div style="margin-left:137px; margin-top:24px;">
+          <p><span style="font-size:16px;">说明</span></p>
           <p><span>1.请不要随意变更模版文件中单元格的格式，例如合并单元格，随意增删列等；</span></p>
           <p>2.支持题型为：单选题、多选题、不定项选择题、填空题、问答题、判断题、文字拼写务必以此为准；</p>
           <p> 3.选择题的选项可以2－8项均可；每题的选项数量务必与选项内容数量一致，否则不能导入；</p>
@@ -127,8 +126,9 @@ export default {
     border: 1px #eee solid;
     border-bottom: none;
     min-height: 500px;
-    font-size: 16px;
+    font-size: 14px;
     p {
+      line-height: 16px;
       span {
         color: #fc84b6;
       }
@@ -181,6 +181,7 @@ export default {
     p {
       padding: 0 !important;
       line-height: 16px;
+      color: #8e8f91;
       span {
         color: #fc68a8;
       }
