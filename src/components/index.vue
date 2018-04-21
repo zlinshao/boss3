@@ -446,11 +446,20 @@
       },
       badge_Flag(val){
          //个人连续登录时长勋章
-         console.log(111)
-         console.log(JSON.parse(localStorage.personal).data.medal)
-        if (!JSON.parse(localStorage.personal).data.medal) {
-          this.badgeDialog = true;
-        }      
+        if(val){
+
+          this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
+            localStorage.setItem('personal', JSON.stringify(res.data.data));
+            globalConfig.personal = res.data.data.data;
+          });
+          console.log(111)
+          console.log(JSON.parse(localStorage.personal).data.medal)
+          if (!JSON.parse(localStorage.personal).data.medal) {
+            this.badgeDialog = true;
+            let badge = false;
+            this.$store.dispatch('badgeFlag', badge);          
+          }     
+        } 
       }
     },
     created(){
