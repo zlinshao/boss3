@@ -1,6 +1,6 @@
 <template>
   <div id="addRentRepair">
-    <el-dialog :close-on-click-modal="false" title="修改维修单" :visible.sync="addRentRepairDialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="修改维修单" :visible.sync="addRentRepairDialogVisible" width="50%">
       <div>
         <el-form size="mini" :model="form" label-width="100px">
           <el-row>

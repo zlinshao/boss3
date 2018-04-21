@@ -56,7 +56,11 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="下次跟进时间">
-                <el-date-picker type="datetime" v-model="form.estimated_time" placeholder="请选择日期" value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
+                <el-date-picker type="datetime"
+                                v-model="form.estimated_time"
+                                placeholder="请选择日期"
+                                value-format="yyyy-MM-dd hh:mm:ss"
+                                default-time="12:00:00"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -71,7 +75,7 @@
             <el-col :span="8">
               <el-form-item label="维修时间">
                 <el-date-picker type="datetime" v-model="form.repair_time" placeholder="选择日期"
-                                value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
+                                value-format="yyyy-MM-dd hh:mm:ss" default-time="12:00:00"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="8">
