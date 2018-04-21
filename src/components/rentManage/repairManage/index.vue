@@ -5,7 +5,7 @@
         <div class="tabsSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input placeholder="编号/姓名/电话" v-model="form.keywords" size="mini" clearable @keyup.enter.native="search">
+              <el-input placeholder="编号/姓名/电话" v-model="form.keyword" size="mini" clearable @keyup.enter.native="search">
                 <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
@@ -551,21 +551,33 @@
         }else{
           this.form.module = 2;
         }
-        this.$http.get(globalConfig.server + 'repaire/export', {
-          responseType: 'arraybuffer',
-          params: this.form
-        }).then((res) => { // 处理返回的文件流
-          if (!res.data) {
+
+        this.$http.get(globalConfig.server + 'repaire/download', { params: this.form }).then((res)=>{
+          if(res.data.code == '600201'){
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
             return;
+          }else{
+            this.$http.get(globalConfig.server + 'repaire/export', {
+              responseType: 'arraybuffer',
+              params: this.form
+            }).then((res) => { // 处理返回的文件流
+              if (!res.data) {
+                return;
+              }
+              let url = window.URL.createObjectURL(new Blob([res.data]));
+              let link = document.createElement('a');
+              link.style.display = 'a';
+              link.href = url;
+              link.setAttribute('download', 'excel.xls');
+              document.body.appendChild(link);
+              link.click();
+            });
           }
-          let url = window.URL.createObjectURL(new Blob([res.data]));
-          let link = document.createElement('a');
-          link.style.display = 'a';
-          link.href = url;
-          link.setAttribute('download', 'excel.xls');
-          document.body.appendChild(link);
-          link.click();
         });
+
       },
     }
   }
