@@ -88,6 +88,12 @@
     },
     methods: {
       getFlag(){
+          this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
+            localStorage.setItem('personal', JSON.stringify(res.data.data));
+            globalConfig.personal = res.data.data.data;
+            console.log(11);
+            console.log(JSON.parse(localStorage.personal).data.medal)
+          });
         let length = this.xljxArray.length;
         let num = Math.floor(Math.random()*length);
         this.xljt = this.xljxArray[num]?this.xljxArray[num]:'乐伽不止眼前的合同，还有诗和远方的田野！';
@@ -121,10 +127,7 @@
       btnClick(){
         this.$http.get(globalConfig.server + 'special/special/unlock_screen?pwd_lock=' + this.keywords).then((res) => {
           if (res.data.code === '100200') {
-          this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
-            localStorage.setItem('personal', JSON.stringify(res.data.data));
-            globalConfig.personal = res.data.data.data;
-          });
+
           let badge = true;
           this.$store.dispatch('badgeFlag', badge);
             new Promise((resolve, reject) => {

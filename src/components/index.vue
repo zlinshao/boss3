@@ -449,11 +449,6 @@
             let badge = false;
             this.$store.dispatch('badgeFlag', badge);   
         if(val){
-
-          this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
-            localStorage.setItem('personal', JSON.stringify(res.data.data));
-            globalConfig.personal = res.data.data.data;
-          });
           console.log(111)
           console.log(JSON.parse(localStorage.personal).data.medal)
           if (!JSON.parse(localStorage.personal).data.medal) {
