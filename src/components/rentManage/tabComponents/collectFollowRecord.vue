@@ -13,6 +13,10 @@
         <el-table-column
           prop="create_time"
           label="创建时间">
+          <template slot-scope="scope">
+            <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
+            <span v-if="!scope.row.create_time">暂无</span>
+          </template>
         </el-table-column>
         <el-table-column
           label="房屋地址">
@@ -22,31 +26,56 @@
                 {{scope.row.construct.house.name}}
               </span>
             </span>
+            <span v-if="!scope.row.construct">暂无</span>
           </template>
         </el-table-column>
         <el-table-column
           prop="events"
           label="事件数">
+          <template slot-scope="scope">
+            <span v-if="scope.row.events">{{scope.row.events}}</span>
+            <span v-if="!scope.row.events">暂无</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="matters"
           label="跟进事项">
+          <template slot-scope="scope">
+            <span v-if="scope.row.matters">{{scope.row.matters}}</span>
+            <span v-if="!scope.row.matters">暂无</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="expected_finish_time"
           label="预计完成时间">
+          <template slot-scope="scope">
+            <span v-if="scope.row.expected_finish_time">{{scope.row.expected_finish_time}}</span>
+            <span v-if="!scope.row.expected_finish_time">暂无</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="creator"
           label="创建人">
+          <template slot-scope="scope">
+            <span v-if="scope.row.creator">{{scope.row.creator}}</span>
+            <span v-if="!scope.row.creator">暂无</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="follow"
           label="跟进人">
+          <template slot-scope="scope">
+            <span v-if="scope.row.follow">{{scope.row.follow}}</span>
+            <span v-if="!scope.row.follow">暂无</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="follow_statuss"
           label="跟进状态">
+          <template slot-scope="scope">
+            <span v-if="scope.row.follow_statuss">{{scope.row.follow_statuss}}</span>
+            <span v-if="!scope.row.follow_statuss">暂无</span>
+          </template>
         </el-table-column>
       </el-table>
 

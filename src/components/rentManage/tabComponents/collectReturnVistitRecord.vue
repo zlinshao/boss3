@@ -11,14 +11,26 @@
         <el-table-column
           prop="content"
           label="回访内容">
+          <template slot-scope="scope">
+            <span v-if="scope.row.content">{{scope.row.content}}</span>
+            <span v-if="!scope.row.content">暂无</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="simple_staff.real_name"
           label="回访人">
+          <template slot-scope="scope">
+            <span v-if="scope.row.simple_staff && scope.row.simple_staff.real_name">{{scope.row.simple_staff && scope.row.simple_staff.real_name}}</span>
+            <span v-if="!(scope.row.simple_staff && scope.row.simple_staff.real_name)">暂无</span>
+          </template>
         </el-table-column>
         <el-table-column
           prop="create_time"
           label="回访时间">
+          <template slot-scope="scope">
+            <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
+            <span v-if="!scope.row.create_time">暂无</span>
+          </template>
         </el-table-column>
       </el-table>
       <div class="pagination">
