@@ -30,7 +30,7 @@ export default {
       let link = document.createElement('a');
       link.style.display = 'a';
       link.href = url;
-      link.setAttribute('download', 'excel.xlsx');
+      link.setAttribute('download', 'excel.xls');
       document.body.appendChild(link);
       link.click();
     };
