@@ -41,6 +41,14 @@
                   <div class="content" v-if="!repairDetail.city_name">暂无</div>
                 </el-form-item>
               </el-col>
+              <el-col :span="8">
+                <el-form-item label="已完成时间">
+                  <div class="content">
+                    <span v-if="repairDetail.finish_time">{{repairDetail.finish_time}}</span>
+                    <span v-if="!repairDetail.finish_time">暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
@@ -70,10 +78,45 @@
             </el-row>
             <el-row>
               <el-col :span="8">
+                <el-form-item label="跟进人">
+                  <div class="content">
+                    <span v-if="repairDetail.followor">{{repairDetail.followor}}</span>
+                    <span v-if="!repairDetail.followor">暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="下次跟进时间">
+                  <div class="content">
+                    <span v-if="repairDetail.estimated_time">{{repairDetail.estimated_time}}</span>
+                    <span v-if="!repairDetail.estimated_time">暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="初步认责人">
+                  <div class="content">
+                    <span v-if="repairDetail.liable">{{repairDetail.liable}}</span>
+                    <span v-if="!repairDetail.liable">暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="8">
                 <el-form-item label="维修时间">
                   <div class="content">
                     <span v-if="repairDetail.repair_time">{{repairDetail.repair_time}}</span>
                     <span v-if="!repairDetail.repair_time">暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="维修金额">
+                  <div class="content">
+                    <span v-if="repairDetail.repair_money">{{repairDetail.repair_money}}</span>
+                    <span v-if="!repairDetail.repair_money">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -85,24 +128,8 @@
                   </div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="维修结果">
-                  <div class="content">
-                    <span v-if="repairDetail.repair_result">{{repairDetail.repair_result}}</span>
-                    <span v-if="!repairDetail.repair_result">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
             </el-row>
             <el-row>
-              <el-col :span="8">
-                <el-form-item label="维修金额">
-                  <div class="content">
-                    <span v-if="repairDetail.repair_money">{{repairDetail.repair_money}}</span>
-                    <span v-if="!repairDetail.repair_money">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
               <el-col :span="8">
                 <el-form-item label="维修状态">
                   <div class="content">
@@ -112,10 +139,18 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="认责人">
+                <el-form-item label="实际维修金额">
                   <div class="content">
-                    <span v-if="repairDetail.liable">{{repairDetail.liable}}</span>
-                    <span v-if="!repairDetail.liable">暂无</span>
+                    <span v-if="repairDetail.real_money">{{repairDetail.real_money}}</span>
+                    <span v-if="!repairDetail.real_money">暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="最终认责人">
+                  <div class="content">
+                    <span v-if="repairDetail.final_liabler">{{repairDetail.final_liabler}}</span>
+                    <span v-if="!repairDetail.final_liabler">暂无</span>
                   </div>
                 </el-form-item>
               </el-col>

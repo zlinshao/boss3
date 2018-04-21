@@ -56,7 +56,7 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="下次跟进时间">
-                <el-date-picker type="date" v-model="form.repair_result" placeholder="请选择日期" value-format="yyyy-MM-dd"></el-date-picker>
+                <el-date-picker type="datetime" v-model="form.estimated_time" placeholder="请选择日期" value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -70,8 +70,8 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="维修时间">
-                <el-date-picker type="date" v-model="form.repair_time" placeholder="选择日期"
-                                value-format="yyyy-MM-dd"></el-date-picker>
+                <el-date-picker type="datetime" v-model="form.repair_time" placeholder="选择日期"
+                                value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -129,7 +129,7 @@
         <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
-    <Organization :organizationDialog="organizationDialog" :type="organType" @close="closeOrganization" @selectMember="selectMember"></Organization>
+    <Organization :organizationDialog="organizationDialog" :type="organizeType" @close="closeOrganization" @selectMember="selectMember"></Organization>
   </div>
 </template>
 
@@ -142,7 +142,7 @@
       return {
         addRentRepairDialogVisible: false,
         organizationDialog: false,
-        organType: '',
+        organizeType: '',
         form: {
           city: '',
           contract_id: '', //合同Id
@@ -154,7 +154,6 @@
           content: '',  //维修内容
           repair_time: '',  //维修时间
           repair_master: '',  //维修师傅
-          repair_result: '',  //维修结果
           repair_money: '',   //维修金额
           remark: '',  //备注
           status: '',  //维修状态
@@ -163,6 +162,7 @@
           follow_id: '',  //跟进人id
           final_liable: '', //最终认责人
           real_money: '',  //实际维修金额
+          estimated_time: '',  //下次跟进时间
         },
         follow_name: '', //跟进人名字
         repairStatusCategory: [],
@@ -228,7 +228,6 @@
           content: '',  //维修内容
           repair_time: '',  //维修时间
           repair_master: '',  //维修师傅
-          repair_result: '',  //维修结果
           repair_money: '',   //维修金额
           remark: '',  //备注
           status: '',  //维修状态
@@ -236,6 +235,7 @@
           follow_id: '',  //跟进人id
           final_liable: '', //最终认责人
           real_money: '',  //实际维修金额
+          estimated_time: '',
         };
         this.follow_name = '';
       },

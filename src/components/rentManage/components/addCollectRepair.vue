@@ -17,7 +17,8 @@
             <el-col :span="8">
               <el-form-item label="所属城市" required="">
                 <el-select clearable v-model="form.city" placeholder="选择城市" value="">
-                  <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
+                  <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
+                             :key="item.id"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -25,7 +26,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="客户姓名" required>
-                <el-input v-model="form.customer_name" ></el-input>
+                <el-input v-model="form.customer_name"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -39,14 +40,14 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="回复电话" required>
-                <el-input v-model="form.customer_mobile" ></el-input>
+                <el-input v-model="form.customer_mobile"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="8">
               <el-form-item label="跟进人" required>
-                <el-input v-model="follow_name" readonly  @focus="chooseStaff" placeholder="请选择跟进人">
+                <el-input v-model="follow_name" readonly @focus="chooseStaff" placeholder="请选择跟进人">
                   <template slot="append">
                     <div style="cursor: pointer;" @click="emptyStaff">清空</div>
                   </template>
@@ -55,13 +56,16 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="下次跟进时间">
-                <el-date-picker type="date" v-model="form.repair_result" placeholder="请选择日期" value-format="yyyy-MM-dd"></el-date-picker>
+                <el-date-picker type="datetime" v-model="form.estimated_time" placeholder="请选择日期"
+                                value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="初步认责人">
                 <el-select v-model="form.person_liable" placeholder="请选择认责归属" clearable>
-                  <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id" :value="item.id">{{item.dictionary_name}}</el-option>
+                  <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id"
+                             :value="item.id">{{item.dictionary_name}}
+                  </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -69,17 +73,18 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="维修时间">
-                <el-date-picker type="date" v-model="form.repair_time" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
+                <el-date-picker type="datetime" v-model="form.repair_time" placeholder="选择日期"
+                                value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="维修金额">
-                <el-input  v-model="form.repair_money" ></el-input>
+                <el-input v-model="form.repair_money"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="维修师傅">
-                <el-input  v-model="form.repair_master" ></el-input>
+                <el-input v-model="form.repair_master"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -87,19 +92,23 @@
             <el-col :span="8">
               <el-form-item label="维修状态">
                 <el-select v-model="form.status" placeholder="请选择维修状态">
-                  <el-option v-for="item in repairStatusCategory" :label="item.dictionary_name" :key="item.id" :value="item.id">{{item.dictionary_name}}</el-option>
+                  <el-option v-for="item in repairStatusCategory" :label="item.dictionary_name" :key="item.id"
+                             :value="item.id">{{item.dictionary_name}}
+                  </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="8" v-if="form.status===600">
               <el-form-item label="实际维修金额">
-                <el-input  v-model="form.real_money" ></el-input>
+                <el-input v-model="form.real_money"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8" v-if="form.status===600">
               <el-form-item label="最终认责人">
                 <el-select v-model="form.final_liable" placeholder="请选择认责归属" clearable>
-                  <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id" :value="item.id">{{item.dictionary_name}}</el-option>
+                  <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id"
+                             :value="item.id">{{item.dictionary_name}}
+                  </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -109,14 +118,14 @@
           <el-row>
             <el-col :span="16">
               <el-form-item label="维修内容">
-                <el-input type="textarea" v-model="form.content" ></el-input>
+                <el-input type="textarea" v-model="form.content"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="16">
               <el-form-item label="备注">
-                <el-input type="textarea" v-model="form.remark" ></el-input>
+                <el-input type="textarea" v-model="form.remark"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -127,21 +136,23 @@
         <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
       </span>
     </el-dialog>
-    <Organization :organizationDialog="organizationDialog" :type="organType" @close="closeOrganization" @selectMember="selectMember"></Organization>
+    <Organization :organizationDialog="organizationDialog" :type="organizeType" @close="closeOrganization"
+                  @selectMember="selectMember"></Organization>
   </div>
 </template>
 
 <script>
-import Organization from '../../common/organization';
+  import Organization from '../../common/organization';
+
   export default {
-    props:['addCollectRepairDialog', 'contract'],
+    props: ['addCollectRepairDialog', 'contract'],
     components: {Organization},
     data() {
       return {
-        addCollectRepairDialogVisible:false,
+        addCollectRepairDialogVisible: false,
         organizationDialog: false,
-        organType: '',
-        form:{
+        organizeType: '',
+        form: {
           city: '',
           contract_id: '', //合同Id
           contract_number: '', //合同编号
@@ -152,7 +163,6 @@ import Organization from '../../common/organization';
           content: '',  //维修内容
           repair_time: '',  //维修时间
           repair_master: '',  //维修师傅
-          repair_result: '',  //维修结果
           repair_money: '',   //维修金额
           remark: '',  //备注
           status: '',  //维修状态
@@ -161,6 +171,7 @@ import Organization from '../../common/organization';
           follow_id: '',  //跟进人id
           final_liable: '', //最终认责人
           real_money: '',  //实际维修金额
+          estimated_time: '',  //下次跟进时间
         },
         follow_name: '', //跟进人名字
         repairStatusCategory: [],
@@ -169,15 +180,15 @@ import Organization from '../../common/organization';
         cityCategory: [],
       };
     },
-    watch:{
-      addCollectRepairDialog(val){
+    watch: {
+      addCollectRepairDialog(val) {
         this.addCollectRepairDialogVisible = val
       },
-      addCollectRepairDialogVisible(val){
-        if(!val){
+      addCollectRepairDialogVisible(val) {
+        if (!val) {
           this.$emit('close');
           this.initial();
-        }else{
+        } else {
           this.getDictionary();
         }
       },
@@ -198,20 +209,20 @@ import Organization from '../../common/organization';
         this.dictionary(228).then((res) => {  //性别
           this.sexCategory = res.data;
         });
-        this.dictionary(306,1).then((res) => {  //城市
+        this.dictionary(306, 1).then((res) => {  //城市
           this.cityCategory = res.data;
         });
       },
       confirmAdd() {
-        this.$http.post(globalConfig.server+ 'repaire/insert', this.form).then((res)=>{
-          if(res.data.code === '600200'){
+        this.$http.post(globalConfig.server + 'repaire/insert', this.form).then((res) => {
+          if (res.data.code === '600200') {
             this.$notify.success({
               title: '成功',
               message: res.data.msg
             });
 
             this.addCollectRepairDialogVisible = false;
-          }else{
+          } else {
             this.$notify.warning({
               title: '警告',
               message: res.data.msg
@@ -219,39 +230,39 @@ import Organization from '../../common/organization';
           }
         })
       },
-      initial(){
+      initial() {
         this.form = {
-            city: '',
-            customer_name: '',  //客户姓名
-            sex: null,     //性别
-            customer_mobile: '',  //客户电话
-            content: '',  //维修内容
-            repair_time: '',  //维修时间
-            repair_master: '',  //维修师傅
-            repair_result: '',  //维修结果
-            repair_money: '',   //维修金额
-            remark: '',  //备注
-            status: '',  //维修状态
-            person_liable: '', //认责人
-            follow_id: '',  //跟进人id
-            final_liable: '', //最终认责人
-            real_money: '',  //实际维修金额
+          city: '',
+          customer_name: '',  //客户姓名
+          sex: null,     //性别
+          customer_mobile: '',  //客户电话
+          content: '',  //维修内容
+          repair_time: '',  //维修时间
+          repair_master: '',  //维修师傅
+          repair_money: '',   //维修金额
+          remark: '',  //备注
+          status: '',  //维修状态
+          person_liable: '', //认责人
+          follow_id: '',  //跟进人id
+          final_liable: '', //最终认责人
+          real_money: '',  //实际维修金额
+          estimated_time: '',
         };
         this.follow_name = '';
       },
-      closeOrganization(){
+      closeOrganization() {
         this.organizeType = '';
         this.organizationDialog = false;
       },
-      selectMember(val){
+      selectMember(val) {
         this.follow_name = val[0].name;
         this.form.follow_id = val[0].id;
       },
-      chooseStaff(){
+      chooseStaff() {
         this.organizationDialog = true;
         this.organizeType = 'staff';
       },
-      emptyStaff(){
+      emptyStaff() {
         this.follow_name = '';
         this.form.follow_id = '';
       }
@@ -259,7 +270,7 @@ import Organization from '../../common/organization';
   };
 </script>
 <style lang="scss" scoped="">
-  #addCollectRepair{
+  #addCollectRepair {
   }
 
 </style>
