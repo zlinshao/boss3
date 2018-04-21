@@ -426,7 +426,6 @@
     -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
     filter: grayscale(100%);
   }
-
   .hov {
     background: #f5f7fa;
   }
@@ -457,7 +456,7 @@
                 background: #fff;
                 border-radius: 4px;
                 box-sizing: border-box;
-                color: #606266;
+                color: #999;
                 display: inline-block;
                 height: 40px;
                 line-height: 40px;
