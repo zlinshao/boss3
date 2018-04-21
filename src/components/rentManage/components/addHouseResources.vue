@@ -491,7 +491,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="开单人">
+                      <el-form-item label="开单人" required="">
                         <el-input placeholder="请输入内容" @focus="openOrganizeModal('staff')" readonly=""
                                   v-model="params.staff_name"></el-input>
                       </el-form-item>
