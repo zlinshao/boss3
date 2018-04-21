@@ -60,7 +60,7 @@
                   <div class="el_col_label">选择时间范围</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
-                  <el-form-item>、
+                  <el-form-item>
                     <el-date-picker
                       v-model="dateRange"
                       type="daterange"
@@ -471,7 +471,6 @@
         }
       },
       dateRange(val){
-        console.log(val);
         this.params.start = val[0]
         this.params.end = val[1]
       }
