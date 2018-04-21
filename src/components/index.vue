@@ -446,6 +446,8 @@
       },
       badge_Flag(val){
          //个人连续登录时长勋章
+         console.log(111)
+         console.log(this.personal.data.medal)
         if (!this.personal.data.medal) {
           this.badgeDialog = true;
         }      
