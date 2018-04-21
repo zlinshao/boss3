@@ -506,7 +506,7 @@
       houseMenu(row, event) {
         this.deleteId = row.id;
         this.lists = [
-          // {clickIndex: 'delete_repair', headIcon: 'el-icon-delete', label: '删除',},
+          {clickIndex: 'delete_repair', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },
