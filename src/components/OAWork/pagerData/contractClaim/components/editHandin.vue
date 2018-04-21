@@ -527,11 +527,21 @@
           if(res.data.code === '20000'){
             this.contractCancelCollect = Object.assign({},this.contractCancelCollect_old,res.data.data.collect);
             this.contractCancelRent = Object.assign({},this.contractCancelRent_old,res.data.data.rent);
+            this.fuckCheckBug(res.data.data.collect);
+            this.fuckCheckBug(res.data.data.rent);
           }else {
             this.collectCancelCollect = this.contractCancelCollect_old;
             this.collectCancelRent = this.contractCancelRent_old;
           }
         })
+      },
+
+      fuckCheckBug(data){
+        for(let key in data){
+          if(!this.handover[key]){this.$set(this.handover,key,false)}
+          if(!this.receipt[key]){this.$set(this.receipt,key,false)}
+          if(!this.keyCode[key]){this.$set(this.keyCode,key,false)}
+        }
       },
       //调出选人组件
       openOrganizeModal(){

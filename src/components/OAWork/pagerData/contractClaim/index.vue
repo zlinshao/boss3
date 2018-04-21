@@ -828,14 +828,14 @@
       //导出合同
       exportContract(){
         if(this.selectFlag ===2){
-          this.$http.get(globalConfig.server+'contract/export/apply', {responseType: 'arraybuffer'}).then((res) => {
+          this.$http.get(globalConfig.server+'contract/export/apply',{responseType: 'arraybuffer',params:this.params}).then((res) => {
             if (!res.data) {
               return;
             }
             this.$exportData(res.data)
           })
         }else {
-          this.$http.get(globalConfig.server+'contract/export/handin', {responseType: 'arraybuffer'}).then((res) => {
+          this.$http.get(globalConfig.server+'contract/export/handin', {responseType: 'arraybuffer',params:this.params}).then((res) => {
             if (!res.data) {
               return;
             }
