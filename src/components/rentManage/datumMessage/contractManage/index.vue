@@ -234,6 +234,13 @@
                   @row-dblclick="dblClickTable"
                   @row-contextmenu='houseMenu'
                   style="width: 100%">
+                  <el-table-column width="40">
+                    <template slot-scope="scope">
+                  <span v-if="scope.row.contract_number&&checkContractData[scope.row.contract_number.toUpperCase()]">
+                    <i class="el-icon-success" style="color: #6a8dfb"></i>
+                  </span>
+                    </template>
+                  </el-table-column>
                   <el-table-column
                     prop="contract_number"
                     label="合同编号">
@@ -832,6 +839,9 @@
         visitTableData: [],
         visitStatus: ' ',
         visitLoading: false,
+
+        collectNumberArray : [],
+        checkContractData:[],
       }
     },
     mounted() {
@@ -947,6 +957,13 @@
           if (res.data.code === '61010') {
             this.collectData = res.data.data;
             this.totalNumbers = res.data.meta.total;
+
+            this.collectNumberArray = [];
+            this.collectData.forEach((item) => {
+              this.collectNumberArray.push(item.contract_number);
+            });
+            this.checkHandIn();
+
             if(res.data.data.length<1) {
               this.collectData = [];
               this.rentStatus = '暂无数据';
@@ -959,6 +976,20 @@
           }
         })
       },
+
+      //判斷合同是否上繳
+      checkHandIn(){
+        this.$http.post(globalConfig.server+'contract/number/check',{
+          contracts:this.collectNumberArray,
+        }).then((res) => {
+          if(res.data.code === '20000'){
+            this.checkContractData = res.data.data;
+          }else {
+            this.checkContractData = {};
+          }
+        })
+      },
+
       rentDatafunc() {
         this.rentData = [];
         this.rentStatus = " ";
