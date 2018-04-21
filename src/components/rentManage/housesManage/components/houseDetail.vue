@@ -45,7 +45,7 @@
                   <el-form-item label="面积">
                     <div class="content">
                     <span v-if="detailData.area">
-                      {{detailData.area}}m²
+                      {{detailData.area}}
                     </span>
                     </div>
                   </el-form-item>
@@ -54,7 +54,7 @@
                   <el-form-item label="装修">
                     <div class="content">
                     <span v-if="detailData.decorate">
-                      {{matchDictionary(detailData.decorate)}}
+                      {{detailData.decorate.name}}
                     </span>
                     </div>
                   </el-form-item>
@@ -64,14 +64,14 @@
                 <el-col :span="8">
                   <el-form-item label="房屋类型">
                     <div class="content">
-                      <span v-if="detailData.property_type">{{matchDictionary(detailData.property_type)}}</span>
+                      <span v-if="detailData.property_type">{{detailData.property_type.name}}</span>
                     </div>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="朝向">
                     <div class="content">
-                      <span v-if="detailData.community">{{detailData.detailed_address}}</span>
+                      <span v-if="detailData.direction">{{detailData.direction.name}}</span>
                     </div>
                   </el-form-item>
                 </el-col>
@@ -86,6 +86,13 @@
                 </el-col>
               </el-row>
               <el-row>
+                <el-col :span="8">
+                  <el-form-item label="房屋特色">
+                    <div class="content">
+                      <span v-if="detailData.house_feature">{{matchDictionary(detailData.house_feature)}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
                 <el-col :span="8">
                   <el-form-item label="价格">
                     <div class="content">
@@ -330,28 +337,40 @@
         </div>
         <div class="title">房屋影像</div>
         <div class="describe_border">
+          <div class="title">
+            {{detailData.create_time}}
+          </div>
+          <div class="describe_border">
+            <div v-if="detailData.house_goods&&detailData.house_goods.photo">
+              <img v-for="item in detailData.house_goods.photo" v-if="item.info.mime.indexOf('image')>-1"
+                   :src="item.uri" data-magnify="" :data-src="item.uri" alt="">
 
-          <div v-if="detailData.house_goods&&detailData.house_goods.photo">
-            <img v-for="item in detailData.house_goods.photo" v-if="item.info.mime.indexOf('image')>-1"
-                 :src="item.uri" data-magnify="" :data-src="item.uri" alt="">
-
-            <video v-for="item in detailData.house_goods.photo" v-if="item.info.mime.indexOf('video')>-1"
-                   class="video-js" controls preload="auto" width="200" height="120"
-                   data-setup="{}">
-              <source :src="item.uri" type="video/mp4">
-            </video>
+              <video v-for="item in detailData.house_goods.photo" v-if="item.info.mime.indexOf('video')>-1"
+                     class="video-js" controls preload="auto" width="200" height="120"
+                     data-setup="{}">
+                <source :src="item.uri" type="video/mp4">
+              </video>
+            </div>
           </div>
 
-          <div v-if="albumData&&albumData.length>0&&albumData[0].album
-                 &&albumData[0].album.album_file&&albumData[0].album.album_file.length>0">
-            <img v-for="item in albumData[0].album.album_file" v-if="item.info.mime.indexOf('image')>-1"
-                 :src="item.uri" data-magnify="" :data-src="item.uri">
+          <div v-if="albumData&&albumData.length>0" v-for="albumArray in albumData">
 
-            <video v-for="item in albumData[0].album.album_file" v-if="item.info.mime.indexOf('video')>-1"
-                   class="video-js" controls preload="auto" width="200" height="120"
-                   data-setup="{}">
-              <source :src="item.uri" type="video/mp4">
-            </video>
+            <div class="title">
+              <span style="margin-right: 50px">{{albumArray.create_time}}</span>
+              <span style="color: #444" v-if="albumArray.remark">备注：{{albumArray.remark}}</span>
+            </div>
+            <div class="describe_border">
+              <div v-if="albumArray.album&&albumArray.album.album_file&&albumArray.album.album_file.length>0">
+                <img v-for="item in albumArray.album.album_file" v-if="item.info.mime.indexOf('image')>-1"
+                     :src="item.uri" data-magnify="" :data-src="item.uri">
+
+                <video v-for="item in albumArray.album.album_file" v-if="item.info.mime.indexOf('video')>-1"
+                       class="video-js" controls preload="auto" width="200" height="120"
+                       data-setup="{}">
+                  <source :src="item.uri" type="video/mp4">
+                </video>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -372,7 +391,7 @@
         detailData : {},
         albumData : [],
         allDictionary:[],
-        listInfo:{}
+        listInfo:{},
       };
     },
     watch:{
@@ -386,7 +405,6 @@
           this.getData();
           this.detailData = [];
           this.albumData = {};
-          this.listInfo = {};
         }
       },
       all_dic(val){

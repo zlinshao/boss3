@@ -125,13 +125,13 @@
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
-              <el-table-column
-                label="出租性质">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.rent_type">{{matchDictionary(scope.row.rent_type)}}</span>
-                  <span v-else="">/</span>
-                </template>
-              </el-table-column>
+              <!--<el-table-column-->
+                <!--label="出租性质">-->
+                <!--<template slot-scope="scope">-->
+                  <!--<span v-if="scope.row.rent_type">{{matchDictionary(scope.row.rent_type)}}</span>-->
+                  <!--<span v-else="">/</span>-->
+                <!--</template>-->
+              <!--</el-table-column>-->
               <el-table-column
                 width="150"
                 label="房屋评分">
