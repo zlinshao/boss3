@@ -1,7 +1,7 @@
 <template>
   <div id="addCollectRepair">
     <el-dialog :close-on-click-modal="false" title="修改维修单" :visible.sync="addCollectRepairDialogVisible" width="50%">
-      <div>{{form}}
+      <div>
         <el-form size="mini" :model="form" label-width="100px">
           <el-row>
             <el-col :span="8">

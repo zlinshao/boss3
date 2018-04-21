@@ -195,8 +195,8 @@
                   <el-col :span="12">
                     <el-form-item label="跟进人">
                       <div class="content">
-                        <span v-if="item.simple_staff">{{item.simple_staff.real_name}}</span>
-                        <span v-if="!item.simple_staff">暂无</span>
+                        <span v-if="item.followor">{{item.followor}}</span>
+                        <span v-if="!item.followor">暂无</span>
                       </div>
                     </el-form-item>
                   </el-col>
