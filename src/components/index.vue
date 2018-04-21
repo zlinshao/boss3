@@ -447,15 +447,13 @@
       badge_Flag(val){
          //个人连续登录时长勋章
             let badge = false;
-            this.$store.dispatch('badgeFlag', badge);   
+            this.$store.dispatch('badgeFlag', badge);
         if(val){
-          console.log(111)
-          console.log(JSON.parse(localStorage.personal).data.medal)
           if (!JSON.parse(localStorage.personal).data.medal) {
             this.badgeDialog = true;
-        
-          }     
-        } 
+
+          }
+        }
       }
     },
     created(){
@@ -472,7 +470,7 @@
             globalConfig.personal = res.data.data.data;
             this.loginDay = JSON.parse(localStorage.personal).data.loginday;
           });
-      var millisecond = new Date().getTime();  
+      var millisecond = new Date().getTime();
       var expiresTime = new Date(millisecond + 60 * 1000 * 60 * 18); //设置18小时缓存
       cookie.set("reFresh", true, {expires: expiresTime});
       }
@@ -480,7 +478,6 @@
     mounted() {
       //初始化个人信息
       this.personal = JSON.parse(localStorage.personal);
-      console.log(this.personal);
       //鼠标滑动监听
       let _this = this;
       $(document).mousemove(function () {
@@ -664,7 +661,7 @@
       //二级密码回调
       unlockFlag(val) {
         this.unlockFlagpart = val;
-        var millisecondx = new Date().getTime();  
+        var millisecondx = new Date().getTime();
         var expiresTimex = new Date(millisecondx + 60 * 1000 * 60 * 18); //设置18小时缓存
         cookie.set("unlockFlagpart", val, {expires: expiresTimex});
         if (this.unlockFlagpart) {

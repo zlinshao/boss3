@@ -110,14 +110,14 @@
               @row-dblclick="dblClickTable"
               @row-contextmenu='houseMenu'
               style="width: 100%">
-              <!--<el-table-column-->
-                <!--prop="contract_type"-->
-                <!--label="合同类型">-->
-                <!--<template slot-scope="scope">-->
-                  <!--<span v-if="scope.row.contract_type">{{scope.row.contract_type}}</span>-->
-                  <!--<span v-if="!scope.row.contract_type">暂无</span>-->
-                <!--</template>-->
-              <!--</el-table-column>-->
+              <el-table-column
+                prop="contract_type"
+                label="创建时间">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
+                  <span v-if="!scope.row.create_time">暂无</span>
+                </template>
+              </el-table-column>
               <el-table-column
                 prop="repaire_num"
                 label="维修编号">
@@ -134,14 +134,14 @@
                   <span v-if="!scope.row.customer_name">暂无</span>
                 </template>
               </el-table-column>
-              <el-table-column
-                prop="sex"
-                label="性别">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.sex">{{scope.row.sex}}</span>
-                  <span v-if="!scope.row.sex">暂无</span>
-                </template>
-              </el-table-column>
+              <!--<el-table-column-->
+                <!--prop="sex"-->
+                <!--label="性别">-->
+                <!--<template slot-scope="scope">-->
+                  <!--<span v-if="scope.row.sex">{{scope.row.sex}}</span>-->
+                  <!--<span v-if="!scope.row.sex">暂无</span>-->
+                <!--</template>-->
+              <!--</el-table-column>-->
               <el-table-column
                 prop="customer_mobile"
                 label="客户电话">
