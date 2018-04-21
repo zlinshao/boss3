@@ -394,7 +394,15 @@
           if (res.data.code === '600200') {
             this.collectTableData = res.data.data.data;
             this.totalNum = res.data.data.count;
-          } else {
+          } else if(res.data.code==='600202'){
+            this.collectTableData = [];
+            this.totalNum = 0;
+            this.collectStatus = '暂无数据';
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
+          }else{
             this.collectTableData = [];
             this.totalNum = 0;
             this.collectStatus = '暂无数据';
@@ -413,7 +421,15 @@
           if (res.data.code === '600200') {
             this.rentTableData = res.data.data.data;
             this.totalNum = res.data.data.count;
-          } else {
+          } else if(res.data.code === '600202'){
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
+            this.rentTableData = [];
+            this.totalNum = 0;
+            this.rentStatus = '暂无数据';
+          }else{
             this.rentTableData = [];
             this.totalNum = 0;
             this.rentStatus = '暂无数据';
@@ -490,7 +506,7 @@
       houseMenu(row, event) {
         this.deleteId = row.id;
         this.lists = [
-          {clickIndex: 'delete_repair', headIcon: 'el-icon-delete', label: '删除',},
+          // {clickIndex: 'delete_repair', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },
@@ -551,7 +567,6 @@
         }else{
           this.form.module = 2;
         }
-
         this.$http.get(globalConfig.server + 'repaire/download', { params: this.form }).then((res)=>{
           if(res.data.code == '600201'){
             this.$notify.warning({

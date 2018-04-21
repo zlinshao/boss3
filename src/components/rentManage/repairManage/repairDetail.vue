@@ -272,6 +272,11 @@
         this.$http.get(globalConfig.server + 'repaire/info/' + this.repairId).then((res) => {
           if (res.data.code === "600200") {
             this.repairDetail = res.data.data;
+          }else{
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
           }
         });
       },

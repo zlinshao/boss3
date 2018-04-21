@@ -220,7 +220,6 @@
               title: '成功',
               message: res.data.msg
             });
-
             this.addCollectRepairDialogVisible = false;
           } else {
             this.$notify.warning({
