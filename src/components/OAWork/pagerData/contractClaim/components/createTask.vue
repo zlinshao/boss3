@@ -613,6 +613,7 @@
           if(!this.keyCode[key]){this.$set(this.keyCode,key,false)}
         }
       },
+
       getContractStatus(id){
 //        this.$http.get(globalConfig.server+'contract/remain/'+id).then((res) => {
 //          this.collect = res.data.data.collect;
