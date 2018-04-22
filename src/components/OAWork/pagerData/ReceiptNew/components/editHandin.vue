@@ -154,6 +154,7 @@
         if(val){
           this.getDictionary();
         }
+        this.init();
       }
     },
     methods:{

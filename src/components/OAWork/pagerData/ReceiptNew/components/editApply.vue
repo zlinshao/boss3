@@ -160,6 +160,7 @@
         if(val){
             this.getDictionary();
         }
+        this.closeAddModal();
       }
     },
     methods:{
@@ -256,6 +257,7 @@
               this.refresh =1;
               this.$emit('Refreshxx', this.refresh)
               this.closeAddModal();
+              this.editApplyDialogVisible = false;
 
             }else {
               this.$notify.warning({
@@ -268,7 +270,6 @@
       },
       closeAddModal(){
         $('.imgItem').remove();
-        this.editApplyDialogVisible = false;
         this.params = {
           city_code:'',
 //          category:'',

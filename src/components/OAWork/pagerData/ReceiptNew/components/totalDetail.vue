@@ -20,10 +20,12 @@
                   width="400"
                   trigger="click">
                   <div style="text-align: center;" v-if="(scope.row.applied).length<1">暂无数据</div>
-                  <span style="min-width:82px; float:left;" v-if="(scope.row.applied).length>0"
-                        v-for="item in (scope.row.applied)">
-                    {{item}}
-                  </span>
+                  <el-row>
+                    <el-col :span="8"   v-if="(scope.row.applied).length>0"
+                            v-for="item in (scope.row.applied)" :key="item">
+                      {{item}}
+                    </el-col>
+                  </el-row>
                 </el-popover>
                 <el-button size="mini" type="text" v-popover:popover2>
                   详情
@@ -75,6 +77,8 @@
       },
       totalId_detail(val){
         this.getDetail();
+        this.collectArray = [];
+        this.operateArray = [];
       },
     },
     methods:{

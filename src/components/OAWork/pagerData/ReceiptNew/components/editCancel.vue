@@ -144,6 +144,7 @@
         if(val){
           this.getDictionary();
         }
+        this.closeAddModal();
       }
     },
     methods:{
@@ -233,6 +234,7 @@
               this.refresh=2;
               this.$emit('Refreshxx', this.refresh)
               this.closeAddModal();
+              this.editCancelDialogVisible = false;
             }else {
               this.$notify.warning({
                 title:'警告',
@@ -244,7 +246,6 @@
       },
       closeAddModal(){
         $('.imgItem').remove();
-        this.editCancelDialogVisible = false;
         this.params = {
           city_code:'',
 //          category:'',
