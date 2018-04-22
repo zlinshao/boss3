@@ -74,7 +74,7 @@
     activated() {
       this.roleArray = this.powerData.role;
       this.userId = this.powerData.id;
-
+      console.log('')
     },
     watch: {
       module(val) {
