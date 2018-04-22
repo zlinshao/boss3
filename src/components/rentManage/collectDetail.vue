@@ -20,50 +20,70 @@
       <div class="top">
 
         <h3>
-          {{contractInfo.community_name}}  {{contractInfo.building}}-{{contractInfo.unit}}-{{contractInfo.doorplate}}</h3>
+          {{contractInfo.community_name}}  {{contractInfo.building}}-{{contractInfo.unit}}-{{contractInfo.doorplate}}
+        </h3>
         <h3>
-          <el-dropdown>
+
+          <div style="display: inline-block"  v-if="contractInfo.operation &&
+              !Array.isArray(contractInfo.operation)&& contractInfo.operation.visit">
+            <el-dropdown>
+              <el-button type="success" size="mini">
+              <span v-if="contractInfo.visit_status">
+                {{contractInfo.visit_status.name}}
+              </span>
+                <i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <div >
+                  <el-dropdown-item
+                    v-for="item in contractInfo.operation.visit" :key="item"
+                    @click.native="confirmPress(item)">
+                    <span v-if="item === 'to_customer_service_publish'">回访提交</span>
+                  </el-dropdown-item>
+                </div>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
+          <div v-else="" style="display: inline-block">
             <el-button type="success" size="mini">
               <span v-if="contractInfo.visit_status">
                 {{contractInfo.visit_status.name}}
               </span>
-              <i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
-            <el-dropdown-menu slot="dropdown"  v-if="contractInfo.operation &&!Array.isArray(contractInfo.operation)
-                                  && contractInfo.operation.visit">
-              <div>
-                <el-dropdown-item
-                  v-for="item in contractInfo.operation.visit" :key="item"
-                  @click.native="confirmPress(item)">
-                  <span v-if="item === 'to_customer_service_publish'">回访提交</span>
-                </el-dropdown-item>
-              </div>
-            </el-dropdown-menu>
-          </el-dropdown>
+          </div>
 
-          <el-dropdown>
+          <div  v-if="contractInfo.operation &&!Array.isArray(contractInfo.operation)&& contractInfo.operation.doc"
+                style="display: inline-block">
+            <el-dropdown>
+              <el-button type="primary" size="mini">
+              <span v-if="contractInfo.doc_status">
+                {{contractInfo.doc_status.name}}
+              </span>
+                <i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+                <div>
+                  <el-dropdown-item
+                    v-for="item in contractInfo.operation.doc" :key="item"
+                    @click.native="confirmPress(item)">
+                    <span v-if="item === 'to_contract_review'">提交合同审核员审核</span>
+                    <span v-if="item === 'to_contract_approved'">合同资料无误，同意</span>
+                    <span v-if="item === 'to_cancelled'">撤销审核</span>
+                    <span v-if="item === 'to_contract_rejected'">合同资料有误，拒绝</span>
+                    <span v-if="item === 'to_house_approved'">房屋资料无误，同意</span>
+                    <span v-if="item === 'to_house_rejected'">房屋资料有误，拒绝</span>
+                  </el-dropdown-item>
+                </div>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
+          <div v-else="" style="display: inline-block">
             <el-button type="primary" size="mini">
               <span v-if="contractInfo.doc_status">
                 {{contractInfo.doc_status.name}}
               </span>
-              <i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
-            <el-dropdown-menu slot="dropdown"  v-if="contractInfo.operation &&!Array.isArray(contractInfo.operation)
-                             && contractInfo.operation.doc">
-              <div>
-                <el-dropdown-item
-                  v-for="item in contractInfo.operation.doc" :key="item"
-                  @click.native="confirmPress(item)">
-                  <span v-if="item === 'to_contract_review'">提交合同审核员审核</span>
-                  <span v-if="item === 'to_contract_approved'">合同资料无误，同意</span>
-                  <span v-if="item === 'to_cancelled'"></span>
-                  <span v-if="item === 'to_contract_rejected'">撤销审核</span>
-                  <span v-if="item === 'to_house_approved'">合同资料有误，拒绝</span>
-                  <span v-if="item === 'to_house_rejected'">房屋资料无误，同意</span>
-                </el-dropdown-item>
-              </div>
-            </el-dropdown-menu>
-          </el-dropdown>
+          </div>
         </h3>
       </div>
       <div id="mainContent" class="main scroll_bar">
@@ -1346,7 +1366,7 @@
           type: 'warning'
         }).then(() => {
           this.$http.put(globalConfig.server + 'lease/status/press/' + this.contract_id, this.approveParams).then((res) => {
-            if (res.data.code === '60690') {
+            if (res.data.code === '60610') {
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg,
