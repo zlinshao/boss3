@@ -13,7 +13,7 @@
               label="历史领取日期">
             </el-table-column>
             <el-table-column
-              label="剩余未缴收房收据（LJSF）">
+              label="剩余未缴收据（LJSF）">
               <template slot-scope="scope">
                 <el-popover
                   ref="popover2"

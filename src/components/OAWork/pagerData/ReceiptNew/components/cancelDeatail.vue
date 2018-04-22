@@ -39,7 +39,7 @@
             </el-row>
           </el-form>
         </div>
-        <div class="title">已作废收房收据</div>
+        <div class="title">已作废收据</div>
         <div class="describe_border">
           <el-row>
             <el-col  v-for="item in detailInfo.receipt_numbers" :key="item" :span="6">

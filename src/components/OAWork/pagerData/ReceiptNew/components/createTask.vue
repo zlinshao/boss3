@@ -118,14 +118,14 @@
           </el-form>
           <el-form v-if="taskType!=1" size="mini" :model="params" label-width="120px">
             <div class="title" v-if="taskType==2">
-              收房收据作废(请勾选)
+              收据作废(请勾选)
             </div>
             <div class="title" v-if="taskType==3">
-              收房收据上缴(请勾选)
+              收据上缴(请勾选)
               <el-checkbox style="float:right" :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
             </div>
             <div class="title" v-if="taskType==4">
-              收房收据丢失(请勾选)
+              收据丢失(请勾选)
             </div>
             <el-row>
               <el-checkbox-group v-model="params.candidate" @change="handleCheckedCitiesChange">

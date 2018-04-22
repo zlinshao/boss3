@@ -46,7 +46,7 @@
             <!--公司收据类型-->
             <div>
               <div class="title">
-                收房收据上缴(请勾选)
+                收据上缴(请勾选)
               </div>
             <el-row>
               <el-checkbox-group v-model="params.candidate">

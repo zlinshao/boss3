@@ -17,7 +17,7 @@
             </el-col>
           </el-row>
         </el-form>
-        <div class="title">收房收据</div>
+        <div class="title">收据</div>
         <div class="form_border">
           <el-form size="mini" label-width="100px">
             <el-row>

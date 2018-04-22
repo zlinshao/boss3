@@ -44,7 +44,7 @@
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="120px">
             <div class="title">
-              收房收据丢失（取消勾选则不再选择）
+              收据丢失（取消勾选则不再选择）
             </div>
             <el-row>
               <el-checkbox-group v-model="params.candidate">
