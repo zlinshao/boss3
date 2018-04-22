@@ -31,7 +31,7 @@
                      :expand-on-click-node="false"
                      :render-content="renderContent"
                      draggable
-                     >
+            >
               <!--@node-drag-start="handleDragStart"-->
               <!--@node-drag-enter="handleDragEnter"-->
               <!--@node-drag-leave="handleDragLeave"-->
@@ -46,7 +46,8 @@
       <el-col :span="18">
         <div class="border right">
           <div class="top">
-            <div>{{department_name}}<span v-if="departManageName" style="color: #cc6262;font-size: 12px;"> ( <i class="iconfont icon-fuzeren"></i> {{departManageName}} )</span>   </div>
+            <div>{{department_name}}<span v-if="departManageName" style="color: #cc6262;font-size: 12px;"> ( <i
+              class="iconfont icon-fuzeren"></i> {{departManageName}} )</span></div>
             <!--<div @click="sortDepartment">-->
             <!--<el-button size="mini">部门排序</el-button>-->
             <!--&lt;!&ndash;<el-button v-if="isDepartment" style="color: #ffffff" type="text">取消排序</el-button>&ndash;&gt;-->
@@ -197,7 +198,7 @@
                   <el-pagination
                     @size-change="handleSizeChange"
                     @current-change="handleCurrentChange"
-                    :current-page="currentPage"
+                    :current-page="params.page"
                     :page-sizes="[10, 20, 30, 40]"
                     :page-size="10"
                     layout="total, sizes, prev, pager, next, jumper"
@@ -228,7 +229,8 @@
                         prop="role.name"
                         label="职位标识">
                         <template slot-scope="scope">
-                          <span v-if="scope.row.role && scope.row.role.name">{{scope.row.role && scope.row.role.name}}</span>
+                          <span
+                            v-if="scope.row.role && scope.row.role.name">{{scope.row.role && scope.row.role.name}}</span>
                           <span v-if="!(scope.row.role && scope.row.role.name)">暂无</span>
                         </template>
                       </el-table-column>
@@ -242,7 +244,7 @@
                     <el-pagination
                       @size-change="handleSizeChange"
                       @current-change="handleCurrentChange"
-                      :current-page="currentPage"
+                      :current-page="postParams.page"
                       :page-sizes="[5, 10, 15, 20]"
                       :page-size="5"
                       layout="total, sizes, prev, pager, next, jumper"
@@ -293,7 +295,7 @@
                     <el-pagination
                       @size-change="handlePositionSizeChange"
                       @current-change="handlePositionCurrentChange"
-                      :current-page="currentPage"
+                      :current-page="positionParams.page"
                       :page-sizes="[5, 10, 15, 20]"
                       :page-size="5"
                       layout="total, sizes, prev, pager, next, jumper"
@@ -373,7 +375,7 @@
                     <el-pagination
                       @size-change="handlePostStaffSizeChange"
                       @current-change="handlePostStaffCurrentChange"
-                      :current-page="currentPage"
+                      :current-page="postStaffParams.page"
                       :page-sizes="[5, 10, 15, 20]"
                       :page-size="5"
                       layout="total, sizes, prev, pager, next, jumper"
@@ -394,7 +396,7 @@
           <el-row :gutter="20">
             <el-col :span="8">
               <p>真实姓名：<span v-if="staffDetailData&& staffDetailData.detail && staffDetailData.detail.real_name">
-                {{staffDetailData&& staffDetailData.detail && staffDetailData.detail.real_name}}</span>
+                {{staffDetailData && staffDetailData.detail && staffDetailData.detail.real_name}}</span>
                 <span v-else>暂无</span>
               </p>
             </el-col>
@@ -641,7 +643,8 @@
       </span>
     </el-dialog>
 
-    <Organization :organizationDialog="organizationDialog" @close="closeOrganization" :type="type" @selectMember="selectMember"></Organization>
+    <Organization :organizationDialog="organizationDialog" @close="closeOrganization" :type="type"
+                  @selectMember="selectMember"></Organization>
     <EditDepart :editDepartDialog="editDepartDialog" :departId="departId" @close="closeEditDepart"></EditDepart>
     <AddStaff :addStaffDialog="addStaffDialog" :isEdit="isEdit" :editId="editId" @close="closeAddStaff"
               :departmentId="department_id"></AddStaff>
@@ -780,7 +783,6 @@
         addPositionParams: [],
         entryMaterialsCategory: [],
         entry_materials: [],
-        currentPage: 1,
         department: '',  //部门
         currentPost: '',  //岗位
         currentPosition: '', //职位
@@ -974,16 +976,16 @@
         this.setManageDepartId = d.id;
       },
       selectMember(val){
-        if(val){
-          this.$http.put(globalConfig.server_user+'organizations/'+this.setManageDepartId, {leader_id: val[0].id}).then((res)=>{
-            if(res.data.status === 'success'){
+        if (val) {
+          this.$http.put(globalConfig.server_user + 'organizations/' + this.setManageDepartId, {leader_id: val[0].id}).then((res) => {
+            if (res.data.status === 'success') {
               this.$notify.success({
                 title: '成功',
                 message: '设置负责人成功'
               });
               this.getDepart();
               this.getDefaultData();
-            }else{
+            } else {
               this.$notify.warning({
                 title: '警告',
                 message: res.data.message
@@ -1254,7 +1256,6 @@
                 this.postCollectStatus = '暂无数据';
                 this.postStaffStatus = '暂无数据';
               }
-              this.postParams.page = 1;
             } else {
               this.$notify.info({
                 title: '消息',
@@ -1293,7 +1294,7 @@
 
         this.getPosition();
       },
-      clickPostMenu(row,event){
+      clickPostMenu(row, event){
         this.selectPostName = row.role.name;
         this.getPostStaffData();
       },
@@ -1349,14 +1350,10 @@
       getPosition() {
         this.postStaffData = [];
         this.totalPositionNum = 0;
-        if (!this.onlyPositionId) {
-          return false;
-        } else {
-          this.postCollectLoading = true;
-          this.postCollectStatus = ' ';
-        }
-        this.$http.get(globalConfig.server + 'manager/positions?type=' + this.onlyPositionId + '&page=' + this.postParams.page
-          + '&limit=' + this.postParams.limit).then((res) => {
+        this.postCollectLoading = true;
+        this.postCollectStatus = ' ';
+        this.$http.get(globalConfig.server + 'manager/positions?type=' + this.onlyPositionId + '&page=' + this.positionParams.page
+          + '&limit=' + this.positionParams.limit).then((res) => {
           this.postCollectLoading = false;
           if (res.data.code === '20000') {
             let arr = res.data.data.data;
@@ -1499,18 +1496,18 @@
           this.postStaffLoading = true;
           this.postStaffStatus = ' ';
         }
-        this.$http.get(globalConfig.server_user+ 'users?role='+ this.selectPostName+ '&page=' + this.postStaffParams.page
-          + '&per_page_number=' + this.postStaffParams.limit).then((res)=>{
+        this.$http.get(globalConfig.server_user + 'users?role=' + this.selectPostName + '&page=' + this.postStaffParams.page
+          + '&per_page_number=' + this.postStaffParams.limit).then((res) => {
           this.postStaffLoading = false;
-          if(res.data.status === 'success'){
+          if (res.data.status === 'success') {
             this.postStaffData = res.data.data;
             this.totalPostStaffNum = res.data.meta.total;
-            if(res.data.data.length<1){
+            if (res.data.data.length < 1) {
               this.postStaffStatus = '暂无数据';
               this.postStaffData = [];
               this.totalPostStaffNum = 0;
             }
-          }else{
+          } else {
             this.postStaffStatus = '暂无数据';
             this.postStaffData = [];
             this.totalPostStaffNum = 0;

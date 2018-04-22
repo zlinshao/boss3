@@ -79,7 +79,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="8">
-              <el-form-item label="维修金额">
+              <el-form-item label="预计维修金额">
                 <el-input  v-model="form.repair_money" ></el-input>
               </el-form-item>
             </el-col>

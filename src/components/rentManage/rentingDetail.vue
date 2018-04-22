@@ -29,7 +29,7 @@
           <!--{{contractInfo.doc_status.name}}-->
           <!--</el-button>-->
           <el-dropdown>
-            <el-button type="primary" size="mini">
+            <el-button type="success" size="mini">
               <span v-if="contractInfo.visit_status">
                 {{contractInfo.visit_status.name}}
               </span>

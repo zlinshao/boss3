@@ -23,7 +23,7 @@
           {{contractInfo.community_name}}  {{contractInfo.building}}-{{contractInfo.unit}}-{{contractInfo.doorplate}}</h3>
         <h3>
           <el-dropdown>
-            <el-button type="primary" size="mini">
+            <el-button type="success" size="mini">
               <span v-if="contractInfo.visit_status">
                 {{contractInfo.visit_status.name}}
               </span>

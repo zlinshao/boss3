@@ -67,7 +67,7 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">合同开始结束范围</div>
+                    <div class="el_col_label">合同结束时间范围</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
@@ -855,8 +855,10 @@
               this.collectHouseId = this.collectData[0].house_id;
               this.collectContractId = this.collectData[0].contract_id;
             }else {
+              this.collectData = [];
               this.collectStatus = '暂无数据';
               this.rentStatus = '暂未出租';
+              this.collectTotalNum = 0;
             }
           }else {
             this.collectData = [];

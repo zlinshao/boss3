@@ -110,7 +110,9 @@
               params: {
                 page: 1,
                 limit: 3,
-                contract_id: ''
+                contract_id: '',
+                is_lease :1,
+                module : 1,
               },
 
             }
@@ -145,7 +147,7 @@
         getTableData() {
           this.tableStatus = " ";
           this.tableLoading = true;
-          this.$http.get(globalConfig.server + 'repaire/list?module=1&limit='+this.params.limit+'&page='+this.params.page+'&contract_id='+this.params.contract_id).then((res) => {
+          this.$http.get(globalConfig.server + 'repaire/list',{params:this.params}).then((res) => {
             this.tableLoading = false;
             if (res.data.code === '600200') {
               this.tableData = res.data.data.data;

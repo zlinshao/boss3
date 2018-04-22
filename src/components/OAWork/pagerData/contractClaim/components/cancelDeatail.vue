@@ -8,7 +8,11 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="申报人">
-                  <div class="content" v-if="detailInfo.simple_staff">{{detailInfo.simple_staff.real_name}}</div>
+                  <div class="content">
+                     <span v-if="detailInfo.simple_staff">
+                      {{detailInfo.simple_staff.real_name}}
+                    </span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -115,10 +119,15 @@
       contractCancelDialogVisible(val){
         if(!val){
           this.$emit('close')
+        }else {
+
         }
       },
       cancelEditId_detail(val){
         this.getDetail();
+        this.detailInfo = [];
+        this.department = '';
+        this.city_name = '';
       },
     },
     mounted(){

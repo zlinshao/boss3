@@ -103,7 +103,9 @@
           params: {
             page: 1,
             limit: 3,
-            contract_id: ''
+            contract_id: '',
+            is_lease :1,
+            is_rent :1,
           },
 
         }
@@ -131,7 +133,7 @@
         getTableData() {
           this.tableStatus = " ";
           this.tableLoading = true;
-          this.$http.get(globalConfig.server + 'lease/note/index?is_rent=1&limit='+this.params.limit+'&page='+this.params.page+'&contract_id='+this.params.contract_id).then((res) => {
+          this.$http.get(globalConfig.server + 'lease/note/index',{params:this.params}).then((res) => {
             this.tableLoading = false;
             if (res.data.code === '60510') {
               this.tableData = res.data.data;

@@ -175,6 +175,7 @@
         if (val) {
           this.getDictionary();
         }
+        this.closeAddModal();
       }
     },
     methods: {
@@ -273,6 +274,7 @@
               });
               this.$emit('close', 'success');
               this.closeAddModal();
+              this.editApplyDialogVisible = false;
             } else {
               this.$notify.warning({
                 title: '警告',
@@ -284,7 +286,6 @@
       },
       closeAddModal(){
         $('.imgItem').remove();
-        this.editApplyDialogVisible = false;
         this.params = {
           city_code: '',
 //          category:'',

@@ -105,12 +105,12 @@
             <el-row class="noMarginForm">
               <el-col :span="8">
                 <el-form-item label="领取合同数（收）">
-                  <el-input v-model="params.collect_amount" @blur="computeContractEnd('collect')"></el-input>
+                  <el-input v-model="params.collect_amount" @focus="currentType('collect')" @blur="computeContractEnd('collect')"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="合同编号">
-                  <el-input v-model="params.collect_start" @blur="computeContractEnd('collect')"></el-input>
+                  <el-input v-model="params.collect_start" @focus="currentType('collect')" @blur="computeContractEnd('collect')"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -135,12 +135,12 @@
             <el-row  class="noMarginForm">
               <el-col :span="8">
                 <el-form-item label="领取合同数（租）">
-                  <el-input v-model="params.rent_amount"  @blur="computeContractEnd('rent')"></el-input>
+                  <el-input v-model="params.rent_amount" @focus="currentType('rent')"  @blur="computeContractEnd('rent')"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="合同编号">
-                  <el-input  v-model="params.rent_start"  @blur="computeContractEnd('rent')"></el-input>
+                  <el-input  v-model="params.rent_start" @focus="currentType('rent')"  @blur="computeContractEnd('rent')"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -536,7 +536,7 @@
         personal_contracts_number_rent:[],
         personal_contracts_address_rent:[],
 
-
+        collect_rent : '',
         search:'',
       };
     },
@@ -646,12 +646,17 @@
           this.params.collect_start = res.data.data.collect;
           this.params.rent_start = res.data.data.rent;
           this.computeContractEnd('collect');
+          this.computeContractEnd('rent');
         })
       },
 
       //选择合同类型
       selectContractType(val){
         console.log(val)
+      },
+
+      currentType(val){
+        this.collect_rent = val;
       },
 
       computeContractEnd(val){
@@ -664,7 +669,6 @@
             this.params.rent_end = res.data.data;
           })
         }
-
       },
 
       //新增更多中介合同作废编号
@@ -744,20 +748,36 @@
           })
         }else {
           if(this.taskType === '1'){
-            this.$http.post(globalConfig.server+'contract/apply',this.params).then((res) => {
-              if(res.data.code ==='20010'){
-                this.$notify.success({
-                  title:'成功',
-                  message:res.data.msg
-                });
-                this.closeAddModal();
-                this.$emit('close','success');
+            new Promise((resolve,reject)=>{
+              if(this.collect_rent === 'collect'){
+                this.$http.get(globalConfig.server+'contract/end?start='+this.params.collect_start
+                                +'&count='+this.params.collect_amount).then((res) => {
+                  this.params.collect_end = res.data.data;
+                  resolve('');
+                })
               }else {
-                this.$notify.warning({
-                  title:'警告',
-                  message:res.data.msg
+                this.$http.get(globalConfig.server+'contract/end?start='+this.params.rent_start
+                                +'&count='+this.params.rent_amount).then((res) => {
+                  this.params.rent_end = res.data.data;
+                  resolve('');
                 })
               }
+            }).then((data)=>{
+              this.$http.post(globalConfig.server+'contract/apply',this.params).then((res) => {
+                if(res.data.code ==='20010'){
+                  this.$notify.success({
+                    title:'成功',
+                    message:res.data.msg
+                  });
+                  this.closeAddModal();
+                  this.$emit('close','success');
+                }else {
+                  this.$notify.warning({
+                    title:'警告',
+                    message:res.data.msg
+                  })
+                }
+              })
             })
           }else if(this.taskType === '2') {
             this.$http.post(globalConfig.server+'contract/invalidate',this.params).then((res) => {
