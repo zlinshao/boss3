@@ -35,17 +35,13 @@
               </span>
               <i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <div v-if="contractInfo.operation &&!Array.isArray(contractInfo.operation)&& contractInfo.operation.visit">
+            <el-dropdown-menu slot="dropdown" v-if="contractInfo.operation &&
+                !Array.isArray(contractInfo.operation)&& contractInfo.operation.visit">
+              <div >
                 <el-dropdown-item
                   v-for="item in contractInfo.operation.visit" :key="item"
                   @click.native="confirmPress(item)">
                   <span v-if="item === 'to_customer_service_publish'">回访提交</span>
-                </el-dropdown-item>
-              </div>
-              <div v-else="">
-                <el-dropdown-item>
-                  暂无数据
                 </el-dropdown-item>
               </div>
             </el-dropdown-menu>
@@ -58,8 +54,9 @@
               </span>
               <i class="el-icon-arrow-down el-icon--right"></i>
             </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <div v-if="contractInfo.operation &&!Array.isArray(contractInfo.operation)&& contractInfo.operation.doc">
+            <el-dropdown-menu slot="dropdown"  v-if="contractInfo.operation
+            &&!Array.isArray(contractInfo.operation)&& contractInfo.operation.doc">
+              <div>
                 <el-dropdown-item
                   v-for="item in contractInfo.operation.doc" :key="item"
                   @click.native="confirmPress(item)">
@@ -69,11 +66,6 @@
                   <span v-if="item === 'to_contract_rejected'">撤销审核</span>
                   <span v-if="item === 'to_house_approved'">合同资料有误，拒绝</span>
                   <span v-if="item === 'to_house_rejected'">房屋资料无误，同意</span>
-                </el-dropdown-item>
-              </div>
-              <div v-else="">
-                <el-dropdown-item>
-                  暂无数据
                 </el-dropdown-item>
               </div>
             </el-dropdown-menu>
