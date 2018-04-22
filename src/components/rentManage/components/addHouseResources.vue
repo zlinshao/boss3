@@ -24,7 +24,7 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="6">
-                    <el-form-item label="丘号" required="">
+                    <el-form-item label="丘号">
                       <el-input placeholder="请输入内容" v-model="params.mound_number"></el-input>
                     </el-form-item>
                   </el-col>
