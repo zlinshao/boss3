@@ -357,4 +357,7 @@ ul.el-menu.el-menu--inline {
   color: #666 !important;
   cursor: default !important; }
 
+.el-table__expanded-cell {
+  padding: 5px 20px !important; }
+
 /*# sourceMappingURL=reset.css.map */
