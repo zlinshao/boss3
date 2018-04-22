@@ -150,7 +150,7 @@
 
                   </el-row>
 
-                  <el-row v-if="false">
+                  <el-row>
                     <el-col :span="6">
                       <el-form-item label="签约日期" required="">
                         <el-date-picker disabled value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
@@ -233,7 +233,7 @@
                       <el-row>
                         <el-col :span="6">
                           <el-form-item label="押" required="">
-                            <el-select disabled v-model="payWayArray[0]" :disabled="item>1" placeholder="请选择付款方式" value="">
+                            <el-select disabled="" v-model="payWayArray[0]" placeholder="请选择付款方式" value="">
                               <el-option v-for="item in 3" :value="item-1"
                                          :key="item-1"></el-option>
                             </el-select>
@@ -290,7 +290,7 @@
                       </el-row>
                     </div>
                     <div style="text-align: center">
-                      <el-button type="text" @click="addMoreMoneyTableChange">
+                      <el-button type="text" disabled="" @click="addMoreMoneyTableChange">
                         <i class="el-icon-circle-plus"></i>添加付款方式变化条目
                       </el-button>
                     </div>
@@ -304,7 +304,7 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="违约金">
-                        <el-input disabled placeholder="请输入内容" v-model="params.penalty"></el-input>
+                        <el-input placeholder="请输入内容" v-model="params.penalty"></el-input>
                       </el-form-item>
                     </el-col>
                     <!--<el-col :span="6" class="unitMessage">-->
@@ -316,7 +316,7 @@
                     <!--</el-col>-->
                     <el-col :span="6">
                       <el-form-item label="物业费承担方">
-                        <el-select disabled v-model="params.property_payer" placeholder="请选择承担方" value="">
+                        <el-select v-model="params.property_payer" placeholder="请选择承担方" value="">
                           <el-option v-for="item in property_payer_dic" :label="item.dictionary_name" :value="item.id"
                                      :key="item.id"></el-option>
                         </el-select>
