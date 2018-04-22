@@ -38,6 +38,11 @@
       <div v-show="selectFlag==1">
         <el-table
           :data="contractTotalData"
+          :empty-text='emptyContent'
+          v-loading="tableLoading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0)"
           @row-dblclick = 'showContractDetail'
           @row-contextmenu='openTotalMenu'
           style="width: 100%">
@@ -71,6 +76,11 @@
       <div v-show="selectFlag==2">
         <el-table
           :data="contractApplyData"
+          :empty-text='emptyContent'
+          v-loading="tableLoading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0)"
           @row-dblclick = 'showContractDetail'
           @row-contextmenu='openApplyMenu'
           style="width: 100%">
@@ -97,6 +107,11 @@
       <div v-show="selectFlag==3">
         <el-table
           :data="contractCancelData"
+          :empty-text='emptyContent'
+          v-loading="tableLoading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0)"
           @row-dblclick = 'showContractDetail'
           @row-contextmenu='openCancelMenu'
           style="width: 100%">
@@ -123,6 +138,11 @@
       <div v-show="selectFlag==4">
         <el-table
           :data="contractHandInData"
+          :empty-text='emptyContent'
+          v-loading="tableLoading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0)"
           @row-dblclick = 'showContractDetail'
           @row-contextmenu='openHandInMenu'
           style="width: 100%">
@@ -149,6 +169,11 @@
       <div v-show="selectFlag==5">
         <el-table
           :data="contractLossData"
+          :empty-text='emptyContent'
+          v-loading="tableLoading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(0, 0, 0, 0)"
           @row-dblclick = 'showContractDetail'
           @row-contextmenu='openLossMenu'
           style="width: 100%">
@@ -288,6 +313,9 @@
         handInEditId_detail : '',
         lossEditId_detail : '',
         totalId_detail : '',
+
+        emptyContent : ' ',
+        tableLoading : false,
       }
     },
     watch:{
@@ -476,7 +504,10 @@
 
 
       getTotalList(){
+        this.tableLoading = true;
+        this.emptyContent = ' ';
         this.$http.get(globalConfig.server+'receipt/mission',{params:this.params}).then((res) => {
+          this.tableLoading = false;
           if(res.data.code === '21000'){
             this.contractTotalData = res.data.data.data;
             this.totalNumbers =res.data.data.count;
@@ -549,7 +580,10 @@
         this.getTotalList();
       },
       getApplyList(){
+        this.tableLoading = true;
+        this.emptyContent = ' ';
         this.$http.get(globalConfig.server+'receipt/apply',{params:this.params}).then((res) => {
+          this.tableLoading = false;
           if(res.data.code === '21000'){
             this.contractApplyData = res.data.data.data;
             this.totalNumbers =res.data.data.count;
@@ -574,7 +608,10 @@
       },
       //****************************收据作废***********************//
       getCancelList(){
+        this.tableLoading = true;
+        this.emptyContent = ' ';
         this.$http.get(globalConfig.server+'receipt/invalidate',{params:this.params}).then((res) => {
+          this.tableLoading = false;
           if(res.data.code === '21000'){
             this.contractCancelData = res.data.data.data;
             this.totalNumbers =res.data.data.count;
@@ -588,7 +625,10 @@
       //***************************收据上缴**************************//
 
       getHandInList(){
+        this.tableLoading = true;
+        this.emptyContent = ' ';
         this.$http.get(globalConfig.server+'receipt/handin',{params:this.params}).then((res) => {
+          this.tableLoading = false;
           if(res.data.code === '21000'){
             this.contractHandInData = res.data.data.data;
             this.totalNumbers =res.data.data.count;
@@ -602,7 +642,10 @@
       //***************************收据丢失**************************//
 
       getLossList(){
+        this.tableLoading = true;
+        this.emptyContent = ' ';
         this.$http.get(globalConfig.server+'receipt/loss',{params:this.params}).then((res) => {
+          this.tableLoading = false;
           if(res.data.code === '21000'){
             this.contractLossData = res.data.data.data;
             this.totalNumbers =res.data.data.count;
