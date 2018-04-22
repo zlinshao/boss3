@@ -471,8 +471,8 @@
         }
       },
       dateRange(val){
-        this.params.start = val[0]
-        this.params.end = val[1]
+        this.params.start = val[0]?val[0]:'';
+        this.params.end = val[1]? val[1]:'';
       }
     },
     mounted(){
@@ -503,6 +503,7 @@
       },
       resetting(){
         this.params.department_id = '';
+        this.dateRange = [];
         this.params.start = '';
         this.params.end = '';
         this.params.staff_id = '';
