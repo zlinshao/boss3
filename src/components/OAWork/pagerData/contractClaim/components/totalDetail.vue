@@ -144,7 +144,7 @@
             this.operateArray = res.data.data.extra;
             this.collectArray.forEach((item)=>{
               this.totalCollectArray = this.totalCollectArray.concat(item.collect,item.collect_allocated);
-              this.totalRentArray = this.totalCollectArray.concat(item.rent,item.rent_allocated);
+              this.totalRentArray = this.totalRentArray.concat(item.rent,item.rent_allocated);
             })
           }else {
             this.collectArray = [];
@@ -157,13 +157,16 @@
         return row.id;
       },
       handlerClick(row, event, column){
-          console.log(row)
         if(this.expands.length<1){
           this.expands.push(row.id);
         }else {
-          this.expands = [];
+          if(this.expands[0] != row.id){
+            this.expands = [];
+            this.expands.push(row.id);
+          }else {
+            this.expands = [];
+          }
         }
-
       },
     }
   };
