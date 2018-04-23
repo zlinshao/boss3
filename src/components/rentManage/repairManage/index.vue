@@ -497,6 +497,7 @@
       handleCurrentChange(val) {
         this.form.page = val;
         console.log(`当前页: ${val}`);
+        this.search();
       },
       dblClickTable(row, event) {
         this.repairId = row.id;
