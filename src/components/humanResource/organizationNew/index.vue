@@ -1272,7 +1272,7 @@
             if (this.staffTableData.length < 1) {
               this.userCollectStatus = '暂无数据';
             }
-            this.params.page = 1;
+//            this.params.page = 1;
           } else {
             this.userCollectStatus = '暂无数据';
             this.staffTableData = [];
