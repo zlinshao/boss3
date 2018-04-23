@@ -13,8 +13,8 @@
           </el-col>
           <el-col :span="16">
             <el-form-item label="角色名称">
-              <el-select v-model="currentRoleId" clearable placeholder="请选择" multiple>
-                <el-option v-for="item in partArrCategory" :key="item.name" :label="item.display_name" :value="item.id">{{item.display_name}}
+              <el-select v-model="partNames" clearable placeholder="请选择" multiple>
+                <el-option v-for="item in partArrCategory" :key="item.name" :label="item.display_name" :value="item.name">{{item.display_name}}
                 </el-option>
               </el-select>
             </el-form-item>
@@ -49,6 +49,8 @@
         </el-tab-pane>
       </el-tabs>
       <div slot="footer" class="dialog-footer" style="text-align: center;">
+        <el-button size="small" type="primary" @click="setPart('attach')">关联角色</el-button>
+        <el-button size="small" type="primary" @click="setPart('detach')">解除角色关联</el-button>
         <el-button size="small" type="primary" @click="empower('position')">授权给职位</el-button>
         <el-button size="small" type="primary" @click="empower('person')">授权给个人</el-button>
         <el-button size="small" @click="powerVisible = false">取&nbsp;消</el-button>
@@ -79,6 +81,7 @@
         roleArray: [],
         userId: '',
         partArrCategory: [],
+        partNames: [],
       }
     },
     mounted() {
@@ -106,13 +109,56 @@
         setTimeout(()=>{
           this.getDefaultData();
           this.getAllPartData();
+          this.getStaffPart();
         },0);
         this.currentRoleId = this.powerData.role && this.powerData.role[0] && this.powerData.role[0].id;
       }
     },
     methods: {
+      setPart(val){
+        if(val === 'attach'){
+          this.$http.put(globalConfig.server_user+ 'powers/withRole/'+ this.userId,{width: 'attach',role: this.partNames}).then((res)=>{
+            if(res.data.status === 'success'){
+              this.$notify.success({
+                title: '成功',
+                message: res.data.message
+              });
+            }else{
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.message
+              })
+            }
+          });
+        }else if(val === 'detach'){
+          this.$http.put(globalConfig.server_user+ 'powers/withRole/'+ this.userId,{params: {width: 'detach',role: this.partNames}}).then((res)=>{
+            if(res.data.status === 'success'){
+              this.$notify.success({
+                title: '成功',
+                message: res.data.message
+              });
+            }else{
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.message
+              })
+            }
+          });
+        }
+
+      },
+      getStaffPart() {
+        this.$http.get(globalConfig.server_user+ 'powers/getRole/'+ this.userId).then((res)=>{
+          if(res.data.status === 'success'){
+            let data = res.data.data;
+            for(var i=0;i<data.length;i++){
+              this.partNames.push(data.name);
+            }
+          }
+        });
+      },
       getAllPartData(){
-        this.$http.get(globalConfig.server_user+ 'roles').then((res)=>{
+        this.$http.get(globalConfig.server_user+ 'roles?per_page_number=500').then((res)=>{
           if(res.data.status === 'success'){
             this.partArrCategory = res.data.data;
           }
