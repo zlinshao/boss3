@@ -226,7 +226,7 @@ export default {
       margin-left: 20px;
       margin-top: 18px;
       span {
-        font-size: 18px;
+        font-size: 16px;
       }
     }
   }

@@ -15,7 +15,7 @@
 
       </div>
       <div class="main">
-        <div style="margin-left:137px; margin-top:24px;">
+        <div style="margin-left:137px; margin-top:38px;">
           <p><span style="font-size:16px;">说明</span></p>
           <p><span>1.请不要随意变更模版文件中单元格的格式，例如合并单元格，随意增删列等；</span></p>
           <p>2.支持题型为：单选题、多选题、不定项选择题、填空题、问答题、判断题、文字拼写务必以此为准；</p>

@@ -5,7 +5,7 @@
         <el-row style="width:100%;margin-top:16px;">
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="text-align:left;color:#464748;" >
-              <div class="qdiv" style="margin-top:16px;">试卷名称：<span style="color:#6a8dfb">2018春季新员工入职考试</span></div>
+              <div class="qdiv" style="margin-top:20px;">试卷名称：<span style="color:#6a8dfb">2018春季新员工入职考试</span></div>
               <div class="qdiv">试卷类型：<span style="color:#6a8dfb">新员工入职考试</span></div>
               <div class="qdiv">试卷考法：<span style="color:#6a8dfb">按总时长计时，按试卷顺序作答</span></div>
             </div>
@@ -111,8 +111,8 @@ export default {
       }
       .import_left {
         width: 90%;
-        height: 40px;
-        line-height: 40px;
+        height: 36px;
+        line-height: 36px;
         margin: 0 auto;
       }
     }

@@ -2,7 +2,7 @@
   <div>
     <div id="onlineExam">
       <div class="qutitle">
-        <div class="title">题型</div>
+        <div class="title1">题型</div>
         <el-tabs type="border-card" v-model="activeName">
           <el-tab-pane name="first" label="单选题">
             <div class="qubody">
@@ -268,6 +268,19 @@ export default {
       line-height: 30px;
       text-indent: 18px;
     }
+      .title1{
+        height: 40px;
+        color: #83a0fc;
+        line-height: 40px;
+        text-indent: 8px;
+          &:before {
+          border-radius: 2px;
+          margin-right: 5px;
+          background: #409EFF;
+          border-left: 1px solid #409EFF;
+          content: '|';
+        }
+      }
     .qubody {
       .title {
         height: 40px;
