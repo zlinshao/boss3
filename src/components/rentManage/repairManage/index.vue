@@ -343,7 +343,6 @@
         collectTableData: [],
         rentTableData: [],
         totalNum: 0,
-        currentPage: 1,
         isHigh: false,
         collectStatus: ' ',
         collectLoading: false,
@@ -568,9 +567,14 @@
         }else{
           this.form.module = 2;
         }
-        this.form.page = '';
-        this.form.limit = '';
-        this.$http.get(globalConfig.server + 'repaire/download', { params: this.form }).then((res)=>{
+        let exportForm = {
+            keyword: this.form.keyword,
+            time: this.form.time,
+            status: this.form.status,
+            city: this.form.city,
+            operator_id: this.form.operator_id
+        };
+        this.$http.get(globalConfig.server + 'repaire/download', { params: exportForm }).then((res)=>{
           if(res.data.code == '600201'){
             this.$notify.warning({
               title: '警告',
@@ -580,7 +584,7 @@
           }else{
             this.$http.get(globalConfig.server + 'repaire/export', {
               responseType: 'arraybuffer',
-              params: this.form
+              params: exportForm
             }).then((res) => { // 处理返回的文件流
               if (!res.data) {
                 return;
