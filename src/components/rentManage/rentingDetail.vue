@@ -277,7 +277,7 @@
                 <el-form-item label="付款方式">
                   <div class="content">
                     <span v-for="(item,index) in contractInfo.pay_way">
-                      押 {{item.pay_way}} 付 {{item.pay_way_bet}}，{{item.period}}个月<span
+                      押 {{item.pay_way_bet}} 付 {{item.pay_way}}，{{item.period}}个月<span
                       v-show="index<contractInfo.pay_way-1">;</span>
                     </span>
                   </div>
