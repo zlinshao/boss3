@@ -2,12 +2,26 @@
   <div id="addPower">
     <el-dialog :close-on-click-modal="false" title="权限" :visible.sync="powerVisible" width="60%">
       <el-form :inline="true" size="mini" onsubmit="return false;" style="border-bottom: 2px solid #e4e7ed;">
-        <el-form-item label="职位名称">
-          <el-select v-model="currentRoleId" clearable placeholder="请选择">
-            <el-option v-for="item in roleArray" :key="item.id" :label="item.display_name" :value="item.id">{{item.display_name}}
-            </el-option>
-          </el-select>
-        </el-form-item>
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="职位名称">
+              <el-select v-model="currentRoleId" clearable placeholder="请选择">
+                <el-option v-for="item in roleArray" :key="item.id" :label="item.display_name" :value="item.id">{{item.display_name}}
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="16">
+            <el-form-item label="角色名称">
+              <el-select v-model="currentRoleId" clearable placeholder="请选择" multiple>
+                <el-option v-for="item in partArrCategory" :key="item.name" :label="item.display_name" :value="item.id">{{item.display_name}}
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+
       </el-form>
       <el-radio-group v-model="tabPosition" style="width: 100%;">
         <el-tabs v-model="systemName" @tab-click="handleClick(systemName, 'sys')">
@@ -64,6 +78,7 @@
         currentRoleId: '',
         roleArray: [],
         userId: '',
+        partArrCategory: [],
       }
     },
     mounted() {
@@ -74,7 +89,6 @@
     activated() {
       this.roleArray = this.powerData.role;
       this.userId = this.powerData.id;
-      console.log('')
     },
     watch: {
       module(val) {
@@ -91,11 +105,19 @@
         this.userId = val.id;
         setTimeout(()=>{
           this.getDefaultData();
+          this.getAllPartData();
         },0);
         this.currentRoleId = this.powerData.role && this.powerData.role[0] && this.powerData.role[0].id;
       }
     },
     methods: {
+      getAllPartData(){
+        this.$http.get(globalConfig.server_user+ 'roles').then((res)=>{
+          if(res.data.status === 'success'){
+            this.partArrCategory = res.data.data;
+          }
+        });
+      },
       getDefaultData(){
         this.checkedPower = [];
         this.$http.get(globalConfig.server_user+ 'powers/'+this.userId).then( (res)=>{

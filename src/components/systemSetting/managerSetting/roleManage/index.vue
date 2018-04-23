@@ -1,47 +1,43 @@
 <template>
   <div>
-    <div class="highRanking">
-      <div class="highHide" style="text-align: right;margin-bottom: 10px;">
-        <el-button size="mini" type="primary"  @click="onSubmit"><i class="el-icon-plus"></i>&nbsp;新增角色</el-button>
+    <div class="highRanking" style=" position: absolute; top: 122px; right: 45px;">
+      <div class="highHide">
+        <el-button size="mini" type="primary" @click="openReviseRole"><i class="el-icon-plus"></i>&nbsp;新增角色</el-button>
       </div>
     </div>
-
     <el-table
       :data="tableData"
+      :empty-text='tableStatus'
+      v-loading="tableLoading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(255, 255, 255, 0)"
       style="width: 100%">
       <el-table-column
-        prop="id"
-        label="ID"
-        width="88px;">
+        prop="display_name"
+        label="角色名称">
       </el-table-column>
       <el-table-column
-        prop="describe"
-        label="描述">
+        prop="name"
+        label="角色标识">
       </el-table-column>
       <el-table-column
-        prop="module"
-        label="模块">
-      </el-table-column>
-      <el-table-column
-        prop="child_module"
-        label="子模块">
-      </el-table-column>
-      <el-table-column label="操作">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            @click="handleEdit(scope.$index, scope.row)">编辑
-          </el-button>
-          <el-button
-            size="mini"
-            type="danger"
-            @click="openDelete(scope.$index, scope.row)">删除
-          </el-button>
-        </template>
+        prop="description"
+        label="角色描述">
       </el-table-column>
     </el-table>
+    <div class="block pages">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="params.page"
+        :page-size="params.limit"
+        layout="total, prev, pager, next, jumper"
+        :total="totalNum">
+      </el-pagination>
+    </div>
 
-    <ReviseRole :module="roleModule" :name="title" @close="closeEdit"></ReviseRole>
+    <ReviseRole :reviseRoleDialog="reviseRoleDialog" @close="closeModal"></ReviseRole>
   </div>
 </template>
 
@@ -50,74 +46,64 @@
 
   export default {
     components: {ReviseRole},
-    name: 'hello',
+    name: 'role-manage',
     data() {
       return {
-        tableData: [{
-          id: 1,
-          describe: '发挥到了萨菲航空斯大林饭卡上的',
-          module: 'Manger',
-          child_module: 'conference',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          id: 2,
-          describe: '发挥到了萨菲航空斯大林饭卡上的',
-          module: 'Manger',
-          child_module: 'conference',
-          address: '上海市普陀区金沙江路 1517 弄'
-        }, {
-          id: 3,
-          describe: '发挥到了萨菲航空斯大林饭卡上的',
-          module: 'Manger',
-          child_module: 'conference',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }, {
-          id: 4,
-          describe: '发挥到了萨菲航空斯大林饭卡上的',
-          module: 'Manger',
-          child_module: 'conference',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }],
+        reviseRoleDialog: false,
+        tableData:[],
         roleModule: false,
-        title: '',
+        params: {
+          page: 1,
+          limit: 12,
+        },
+        tableStatus: ' ',
+        tableLoading: false,
+        totalNum: 0,
       }
     },
+    mounted(){
+      this.getTableData();
+    },
     methods: {
+      getTableData(){
+        this.tableStatus= ' ';
+        this.tableLoading = true;
+        this.$http.get(globalConfig.server_user+ 'roles?per_page_number=12&page='+this.params.page).then((res)=>{
+          this.tableLoading = false;
+          if(res.data.status === 'success') {
+            this.tableData = res.data.data;
+            this.totalNum = res.data.meta.total;
+            if(res.data.data<1){
+              this.tableData = [];
+              this.totalNum = 0;
+              this.tableStatus = '暂无数据';
+            }
+          }else{
+            this.tableData = [];
+            this.totalNum = 0;
+            this.tableStatus = '暂无数据';
+          }
+        })
+      },
       // 新增
-      onSubmit() {
-        this.roleModule = true;
-        this.title = '新增角色';
+      openReviseRole() {
+        this.reviseRoleDialog = true;
       },
-      // 修改
-      handleEdit(index, row) {
-        console.log(index, row);
-        this.roleModule = true;
-        this.title = '修改角色';
+      //modal 关闭回调
+      closeModal(val) {
+        this.reviseRoleDialog = false;
+        if(val === 'success'){
+          this.params.page = 1;
+          this.getTableData();
+        }
       },
-      closeEdit() {
-        this.roleModule = false;
+      handleSizeChange(val) {
+
       },
-      handleDelete(index, row) {
-        console.log(index, row);
+      handleCurrentChange(val) {
+        this.params.page = val;
+        this.getTableData();
       },
-      // 删除
-      openDelete(index, row) {
-        this.$confirm('此操作将删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
-      }
     }
   }
 </script>

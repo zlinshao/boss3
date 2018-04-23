@@ -327,6 +327,7 @@
         educationCategory: [],
         branchBankCategory: [],
         jobStatusCategory: [],
+        editPositionIds: [],
       };
     },
     watch: {
@@ -356,6 +357,12 @@
         this.positionArray = [];
         this.getPosition(val);
       },
+      editPositionIds(val){
+        this.postArray=[];
+        for (var i = 0; i < this.editPositionIds.length; i++) {
+          this.getPositions(this.editPositionIds[i]);
+        }
+      }
     },
     mounted() {
       this.getPosition(this.departmentId);
@@ -506,7 +513,7 @@
                 arr.id = item.positions.id;
                 arr.name = item.positions.name;
                 if ($.inArray(item.positions.id, this.currentPosition) === -1) {
-                  this.positionArray.push(arr);
+                  // this.positionArray.push(arr);
                   this.currentPosition.push(item.positions.id);
                 }
 
@@ -515,13 +522,25 @@
                 data.id = item.position_id;
                 data.name = item.display_name;
                 if ($.inArray(item.positions.id, this.params.position_id) === -1) {
-                  this.postArray.push(data);
+                  // this.postArray.push(data);
                   this.params.position_id.push(item.position_id);
                 }
               });
               this.postDisabled = false;
               this.positionDisabled = false;
             }
+            //列出该部门下的所有职位
+            if(this.params.department_id.length>0){
+              this.editPositionIds = [];
+              for (var i = 0; i < this.params.department_id.length; i++) {
+                this.getPosition(this.params.department_id[i]);
+              }
+              console.log(this.editPositionIds)
+
+
+            }
+
+
           } else {
             this.$notify.warning({
               title: '警告',
@@ -539,6 +558,7 @@
               position.id = item.id;
               position.name = item.name;
               this.positionArray.push(position);
+              this.editPositionIds.push(item.id);
             });
           }
         });

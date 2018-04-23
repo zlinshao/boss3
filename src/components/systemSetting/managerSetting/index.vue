@@ -10,11 +10,11 @@
       <el-tab-pane label="用户字典" name="third">
         <UserDictionary></UserDictionary>
       </el-tab-pane>
-      <!--<el-tab-pane label="角色管理" name="fourth">-->
-        <!--<RoleManage></RoleManage>-->
-      <!--</el-tab-pane>-->
-      <el-tab-pane label="权限管理" name="fifth">
+      <el-tab-pane label="权限管理" name="fourth">
         <PowerManage></PowerManage>
+      </el-tab-pane>
+      <el-tab-pane label="角色管理" name="fifth">
+        <RoleManage></RoleManage>
       </el-tab-pane>
       <!--<el-tab-pane label="小区管理" name="sixth">-->
         <!--<VillageManage></VillageManage>-->
@@ -27,13 +27,13 @@
   import Message from './message/index.vue'
   import LoginRecord from './loginRecord/index.vue'
   import UserDictionary from './userDictionary/index.vue'
-  // import RoleManage from './roleManage/index.vue'
+  import RoleManage from './roleManage/index.vue'
   import PowerManage from './powerManage/index.vue'
   import VillageManage from './villageManage/index.vue'
 
   export default {
     name: "index",
-    components: {Message, LoginRecord, UserDictionary, PowerManage, VillageManage},
+    components: {Message, LoginRecord, UserDictionary, PowerManage, VillageManage, RoleManage},
     data() {
       return {
         activeName: 'first'

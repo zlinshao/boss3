@@ -401,18 +401,13 @@
             </el-row>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="物业费(元)">
-                  <div class="content">{{contractInfo.property}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
                 <el-form-item label="物业费付款方">
-                  <div class="content">{{matchDictionary(contractInfo.property)}}</div>
+                  <div class="content">{{matchDictionary(contractInfo.property_payer)}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="水表底数(度)">
-                  <div class="content">{{contractInfo.property_payer}}</div>
+                  <div class="content">{{contractInfo.water}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
