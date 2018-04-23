@@ -464,6 +464,7 @@
       }
       //刷新
       this.refresh = cookie.get("reFresh");
+      console.log(cookie.get("reFresh"))
       if(!eval(this.refresh)){
           this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));

@@ -91,8 +91,6 @@
           this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
             globalConfig.personal = res.data.data.data;
-            console.log(11);
-            console.log(JSON.parse(localStorage.personal).data.medal)
           });
         let length = this.xljxArray.length;
         let num = Math.floor(Math.random()*length);
