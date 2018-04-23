@@ -101,7 +101,46 @@
                   <div class="filterTitle">
                     <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
                   </div>
-
+                  <el-row class="el_row_border">
+                    <el-col :span="12">
+                      <el-row>
+                        <el-col :span="8">
+                          <div class="el_col_label">入职时间</div>
+                        </el-col>
+                        <el-col :span="16" class="el_col_option">
+                            <el-form-item>
+                              <el-date-picker
+                                v-model="params.entry_time"
+                                type="daterange"
+                                value-format="yyyy-MM-dd"
+                                range-separator="至"
+                                start-placeholder="开始日期"
+                                end-placeholder="结束日期">
+                              </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                      </el-row>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-row>
+                        <el-col :span="8">
+                          <div class="el_col_label">离职时间</div>
+                        </el-col>
+                        <el-col :span="16" class="el_col_option">
+                          <el-form-item>
+                            <el-date-picker
+                              v-model="params.leave_time"
+                              type="daterange"
+                              value-format="yyyy-MM-dd"
+                              range-separator="至"
+                              start-placeholder="开始日期"
+                              end-placeholder="结束日期">
+                            </el-date-picker>
+                          </el-form-item>
+                        </el-col>
+                      </el-row>
+                    </el-col>
+                  </el-row>
                   <el-row class="el_row_border">
                     <el-col :span="12">
                       <el-row>
@@ -226,15 +265,6 @@
                         label="职位">
                       </el-table-column>
                       <el-table-column
-                        prop="role.name"
-                        label="职位标识">
-                        <template slot-scope="scope">
-                          <span
-                            v-if="scope.row.role && scope.row.role.name">{{scope.row.role && scope.row.role.name}}</span>
-                          <span v-if="!(scope.row.role && scope.row.role.name)">暂无</span>
-                        </template>
-                      </el-table-column>
-                      <el-table-column
                         prop="org.name"
                         label="部门">
                       </el-table-column>
@@ -283,7 +313,7 @@
                       </el-table-column>
                       <el-table-column
                         prop="role.name"
-                        label="职位标识">
+                        label="岗位标识">
                       </el-table-column>
                       <el-table-column
                         prop="orgName"
@@ -873,6 +903,9 @@
           page: 1,
           org_id: '',
           is_dimission: '',
+          is_recursion: 1,
+          entry_time: [],
+          leave_time: [],
         },
         //由于存在分页bug,所以暂时把职位和岗位的参数分开
         postParams: {
@@ -1224,8 +1257,13 @@
       getStaffData() {
         this.userCollectLoading = true;
         this.userCollectStatus = ' ';
-        this.$http.get(globalConfig.server + 'manager/staff?keywords=' + this.params.keywords + '&pages=' + this.params.page
-          + '&limit=' + this.params.limit + '&org_id=' + this.params.org_id + '&is_recursion=1' + '&is_dimission=' + this.params.is_dimission).then((res) => {
+        if(!this.params.entry_time){
+          this.params.entry_time = [];
+        }
+        if(!this.params.leave_time){
+          this.params.leave_time = [];
+        }
+        this.$http.get(globalConfig.server + 'manager/staff?keywords=' ,{params: this.params}).then((res) => {
           this.userCollectLoading = false;
           this.isHigh = false;
           if (res.data.code === '10000') {

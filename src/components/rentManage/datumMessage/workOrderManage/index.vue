@@ -5,7 +5,7 @@
         <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input v-model="params.keywords" placeholder="编号/跟进事项" @keyup.enter.native="search" clearable>
+              <el-input v-model="params.keywords" placeholder="跟进事项" @keyup.enter.native="search" clearable>
                 <el-button slot="append" type="primary" @click="search" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
@@ -392,7 +392,7 @@
                @clickOperate="clickEvent"></RightMenu>
 
     <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
-                  @close='closeModal' @selectMember="selectMember"></Organization>
+                  @close='closeOrganize' @selectMember="selectMember"></Organization>
     <AddChildTask :addChildTaskDialog="addChildTaskDialog" :activeId="activeId" :startAddResult="startEdit"
                   @close="closeModal"></AddChildTask>
     <OrderDetail :orderDetailDialog="orderDetailDialog" :activeId="activeId" :startDetail="startDetail"
@@ -597,21 +597,18 @@
       },
 
       closeModal(val) {
-        this.organizationDialog = false;
 //        this.editWorkDialog = false;
         this.addChildTaskDialog = false;
         this.orderDetailDialog = false;
-
         //操作状态
 //        this.startEdit = false;
         this.startAddResult = false;
         this.startDetail = false;
         this.search();
-        if (val) {
-
-        }
       },
-
+      closeOrganize() {
+        this.organizationDialog = false;
+      },
       //调出选人组件
       openOrganizeModal() {
         this.organizationDialog = true;

@@ -95,7 +95,7 @@
       },
       addPositionDialogVisible(val){
         if(!val){
-          this.$emit('close')
+          this.$emit('close');
         }
       },
       'params.type':{
