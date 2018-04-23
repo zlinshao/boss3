@@ -6,11 +6,11 @@
           <div style="width: 120px;  height: 120px; border-radius:6px;background: #f0f0f0">
             <img :src="val" alt="">
           </div>
-          <div class="remove el-icon-circle-close" @click="deleteImage(key)"></div>
+          <div class="remove el-icon-circle-close" @click="deleteImage(key)"  v-if="!onlyShow"></div>
         </div>
       </div>
       <div :id="'pickfiles'+ID" class="pickfiles">
-        <div class="upButton" :id="ID" @click.stop="getTokenMessage">
+        <div class="upButton" :id="ID" @click.stop="getTokenMessage" v-if="!onlyShow">
           <span class="el-icon-plus"></span>
         </div>
       </div>
@@ -22,7 +22,7 @@
   import fileImage from '../../assets/images/file.png'
   export default {
     name: 'hello',
-    props: ['ID','editImage','isClear'],
+    props: ['ID','editImage','isClear','onlyShow'],
     data () {
       return {
         imgArray: [],

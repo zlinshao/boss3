@@ -1071,6 +1071,18 @@
         this.payWayArray = [];
         this.pay_way_bet = [];
         this.payPeriodArray = [];
+
+        this.identity_photo = {};
+        this.photo = {};
+        this.water_photo = {};
+        this.electricity_photo = {};
+        this.gas_photo = {};
+        this.checkin_photo = {};
+        this.certificate_photo = {};
+        this.deposit_photo = {};
+        this.other_photo = {};
+        this.checkout_photo = {};
+        this.checkout_settle_photo = {};
       }
     }
   };

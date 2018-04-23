@@ -724,6 +724,7 @@
             this.params.other_photo = [];
             this.params.checkout_photo = [];
             this.params.checkout_settle_photo = [];
+
             this.imageArray(data.identity_photo, this.params.identity_photo);
 //            this.imageArray(data.photo,this.params.photo);
             this.imageArray(data.water_photo, this.params.water_photo);
@@ -1030,6 +1031,18 @@
         this.payWayArray = [];
         this.pay_way_bet = [];
         this.payPeriodArray = [];
+
+        this.identity_photo = {};
+        this.photo = {};
+        this.water_photo = {};
+        this.electricity_photo = {};
+        this.gas_photo = {};
+        this.checkin_photo = {};
+        this.certificate_photo = {};
+        this.deposit_photo = {};
+        this.other_photo = {};
+        this.checkout_photo = {};
+        this.checkout_settle_photo = {};
       }
     }
   };

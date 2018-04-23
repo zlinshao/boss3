@@ -9,7 +9,7 @@
                 <el-row>
                   <el-col :span="6">
                     <el-form-item label="小区名称" required>
-                      <el-input placeholder="请输入内容" v-model="community_name" @focus="openVillageModal" disabled=""
+                      <el-input placeholder="请输入内容" v-model="community_name" @focus="openVillageModal" :disabled="!isPc || isDoc"
                                 readonly=""></el-input>
                     </el-form-item>
                   </el-col>
@@ -33,20 +33,20 @@
                   <el-col :span="12">
                     <el-form-item label="门牌地址" required>
                       <el-col :span="8" style="padding-right: 10px">
-                        <el-input placeholder="座/栋" disabled v-model="params.building"></el-input>
+                        <el-input placeholder="座/栋" :disabled="!isPc || isDoc" v-model="params.building"></el-input>
                       </el-col>
                       <el-col :span="8" style="padding-right: 10px">
-                        <el-input placeholder="单元" disabled v-model="params.unit"></el-input>
+                        <el-input placeholder="单元" :disabled="!isPc || isDoc" v-model="params.unit"></el-input>
                       </el-col>
                       <el-col :span="8">
-                        <el-input placeholder="门牌号" disabled v-model="params.doorplate"></el-input>
+                        <el-input placeholder="门牌号" :disabled="!isPc || isDoc" v-model="params.doorplate"></el-input>
                       </el-col>
                     </el-form-item>
                   </el-col>
                   <el-col :span="12">
                     <el-form-item label="房型" required="">
                       <el-col :span="8" style="padding-right: 10px">
-                        <el-select disabled v-model="params.house_type[0]" placeholder="室" value="">
+                        <el-select :disabled="!isPc || isDoc" v-model="params.house_type[0]" placeholder="室" value="">
                           <el-option label="一室" value="1"></el-option>
                           <el-option label="二室" value="2"></el-option>
                           <el-option label="三室" value="3"></el-option>
@@ -58,7 +58,7 @@
                         </el-select>
                       </el-col>
                       <el-col :span="8" style="padding-right: 10px">
-                        <el-select disabled v-model="params.house_type[1]" placeholder="厅" value="">
+                        <el-select :disabled="!isPc || isDoc" v-model="params.house_type[1]" placeholder="厅" value="">
                           <el-option label="无" value=""></el-option>
                           <el-option label="一厅" value="1"></el-option>
                           <el-option label="二厅" value="2"></el-option>
@@ -68,7 +68,7 @@
                         </el-select>
                       </el-col>
                       <el-col :span="8">
-                        <el-select disabled v-model="params.house_type[2]" placeholder="卫" value="">
+                        <el-select :disabled="!isPc || isDoc" v-model="params.house_type[2]" placeholder="卫" value="">
                           <el-option label="无" value=""></el-option>
                           <el-option label="一卫" value="1"></el-option>
                           <el-option label="二卫" value="2"></el-option>
@@ -88,12 +88,12 @@
                   </el-col>
                   <el-col :span="6">
                     <el-form-item label="建筑面积" required>
-                      <el-input placeholder="请输入内容" disabled v-model="params.area"></el-input>
+                      <el-input placeholder="请输入内容" :disabled="!isPc || isDoc" v-model="params.area"></el-input>
                     </el-form-item>
                   </el-col>
                   <el-col :span="6">
                     <el-form-item label="装修" required="">
-                      <el-select disabled v-model="params.decorate" placeholder="请选择装修类型" value="">
+                      <el-select :disabled="!isPc || isDoc" v-model="params.decorate" placeholder="请选择装修类型" value="">
                         <el-option v-for="item in decorate_dic" :label="item.dictionary_name" :value="item.id"
                                    :key="item.id"></el-option>
                       </el-select>
@@ -102,13 +102,13 @@
                   <el-col :span="6">
                     <el-form-item label="楼层" required>
                       <el-col :span="10">
-                        <el-input placeholder="楼层" disabled v-model="params.floor"></el-input>
+                        <el-input placeholder="楼层" :disabled="!isPc || isDoc" v-model="params.floor"></el-input>
                       </el-col>
                       <el-col :span="4" style="text-align: center">
                         /
                       </el-col>
                       <el-col :span="10">
-                        <el-input placeholder="总楼层" disabled v-model="params.floors"></el-input>
+                        <el-input placeholder="总楼层" :disabled="!isPc || isDoc" v-model="params.floors"></el-input>
                       </el-col>
                     </el-form-item>
                   </el-col>
@@ -117,7 +117,7 @@
                 <el-row>
                   <el-col :span="6">
                     <el-form-item label="房屋类型" required="">
-                      <el-select disabled v-model="params.property_type" placeholder="请选择房屋类型" value="">
+                      <el-select :disabled="!isPc || isDoc" v-model="params.property_type" placeholder="请选择房屋类型" value="">
                         <el-option v-for="item in property_type_dic" :label="item.dictionary_name" :value="item.id"
                                    :key="item.id"></el-option>
                       </el-select>
@@ -142,19 +142,19 @@
                 <div style="display: flex;justify-content: space-between">
                   <div class="title" v-if="item == 1">房东信息</div>
                   <div class="title" v-else="">附属房东信息({{item - 1}})</div>
-                  <div v-if="item>1" class="deleteNumber" @click="deleteCustoms(item-1)">删除</div>
+                  <div v-if="item>1 && !isDoc" class="deleteNumber" @click="deleteCustoms(item-1)">删除</div>
                 </div>
                 <div class="form_border">
                   <el-form size="mini" :model="params" label-width="100px">
                     <el-row>
                       <el-col :span="8">
                         <el-form-item label="姓名" required>
-                          <el-input placeholder="请输入内容" :disabled="item == 1" v-model="nameArray[item-1]"></el-input>
+                          <el-input placeholder="请输入内容" :disabled="!isPc&&item == 1 || isDoc" v-model="nameArray[item-1]"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="8">
                         <el-form-item label="尊称">
-                          <el-radio-group disabled v-model="sexArray[item-1]">
+                          <el-radio-group v-model="sexArray[item-1]">
                             <el-radio label="1">先生</el-radio>
                             <el-radio label="2">女士</el-radio>
                           </el-radio-group>
@@ -162,14 +162,14 @@
                       </el-col>
                       <el-col :span="8">
                         <el-form-item label="联系电话" required>
-                          <el-input :disabled="item == 1" disabled="" placeholder="请输入内容" v-model="phoneArray[item-1]"></el-input>
+                          <el-input :disabled="!isPc&&item == 1 || isDoc" placeholder="请输入内容" v-model="phoneArray[item-1]"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row>
                     <el-row>
                       <el-col :span="8">
                         <el-form-item label="证件类型" required="">
-                          <el-select clearable v-model="id_typeArray[item-1]" placeholder="请选择装修类型" value="">
+                          <el-select :clearable="!isDoc" :disabled="isDoc" v-model="id_typeArray[item-1]" placeholder="请选择装修类型" value="">
                             <el-option v-for="item in id_type_dic" :label="item.dictionary_name" :value="item.id"
                                        :key="item.id"></el-option>
                           </el-select>
@@ -177,7 +177,7 @@
                       </el-col>
                       <el-col :span="8">
                         <el-form-item label="证件号码" required>
-                          <el-input placeholder="请输入内容" v-model="id_numberArray[item-1]"></el-input>
+                          <el-input :disabled="isDoc" placeholder="请输入内容" v-model="id_numberArray[item-1]"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -185,7 +185,7 @@
                 </div>
               </div>
               <div style="text-align: center">
-                <el-button type="text" @click="addMoreCustoms">
+                <el-button type="text" @click="addMoreCustoms" :disabled="isDoc">
                   <i class="el-icon-circle-plus"></i>新增附属房东信息
                 </el-button>
               </div>
@@ -198,30 +198,30 @@
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="是否公司单" required="">
-                        <el-switch disabled="" v-model="params.contract_type" active-value="1" inactive-value="0"></el-switch>
+                        <el-switch :disabled="!isPc || isDoc" v-model="params.contract_type" active-value="1" inactive-value="0"></el-switch>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="合同编号" required>
-                        <el-input disabled="" placeholder="请输入内容" v-model="params.contract_number"></el-input>
+                        <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" v-model="params.contract_number"></el-input>
                       </el-form-item>
                     </el-col>
 
                     <el-col :span="6">
                       <el-form-item label="签约日期" required="">
-                        <el-date-picker disabled="" value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
+                        <el-date-picker :disabled="!isPc || isDoc" value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
                                         v-model="params.sign_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6" class="unitMessage">
                       <el-form-item label="保修期" required="">
                         <el-col :span="12" style="padding-right: 10px">
-                          <el-input disabled="" placeholder="月数" v-model="params.warranty_month">
+                          <el-input :disabled="!isPc || isDoc" placeholder="月数" v-model="params.warranty_month">
                             <template slot="append">月</template>
                           </el-input>
                         </el-col>
                         <el-col :span="12">
-                          <el-input disabled="" placeholder="天数" v-model="params.warranty_day">
+                          <el-input :disabled="!isPc || isDoc" placeholder="天数" v-model="params.warranty_day">
                             <template slot="append">天</template>
                           </el-input>
                         </el-col>
@@ -233,12 +233,12 @@
                     <el-col :span="6" class="unitMessage">
                       <el-form-item label="签约时长" required>
                         <el-col :span="12" style="padding-right: 10px">
-                          <el-input disabled placeholder="月数" @blur="changeMonth" v-model="params.month">
+                          <el-input :disabled="!isPc || isDoc" placeholder="月数" @blur="changeMonth" v-model="params.month">
                             <template slot="append">月</template>
                           </el-input>
                         </el-col>
                         <el-col :span="12">
-                          <el-input disabled placeholder="天数" @blur="computedEndDate" v-model="params.day">
+                          <el-input :disabled="!isPc || isDoc" placeholder="天数" @blur="computedEndDate" v-model="params.day">
                             <template slot="append">天</template>
                           </el-input>
                         </el-col>
@@ -246,12 +246,12 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="空置期天数" required="">
-                        <el-input disabled placeholder="请输入内容" @blur="computedEndDate" v-model="params.vacancy"></el-input>
+                        <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" @blur="computedEndDate" v-model="params.vacancy"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="空置安置方式" required>
-                        <el-select disabled v-model="params.vacancy_way" @change="vacancyWay" placeholder="请选择安置方式"
+                        <el-select :disabled="!isPc || isDoc" v-model="params.vacancy_way" @change="vacancyWay" placeholder="请选择安置方式"
                                    value="">
                           <el-option v-for="item in vacancy_way_dic" :label="item.dictionary_name" :value="item.id"
                                      :key="item.id"></el-option>
@@ -260,7 +260,7 @@
                     </el-col>
                     <el-col :span="6" v-if="params.vacancy_way == 442">
                       <el-form-item label="其他" required="">
-                        <el-input disabled placeholder="请输入内容" v-model="params.vacancy_other"></el-input>
+                        <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" v-model="params.vacancy_other"></el-input>
                       </el-form-item>
                     </el-col>
 
@@ -270,28 +270,28 @@
 
                     <el-col :span="6">
                       <el-form-item label="空置开始时间" required="">
-                        <el-date-picker disabled @blur="computedEndDate" value-format="yyyy-MM-dd" type="date"
+                        <el-date-picker :disabled="!isPc || isDoc" @blur="computedEndDate" value-format="yyyy-MM-dd" type="date"
                                         placeholder="选择日期" v-model="params.begin_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="空置结束时间" required="">
-                        <el-date-picker disabled value-format="yyyy-MM-dd" type="date" placeholder="选择日期" disabled=""
+                        <el-date-picker :disabled="!isPc || isDoc" value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
                                         v-model="params.vacancy_end_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
 
                     <el-col :span="6">
                       <el-form-item label="合同开始时间" required="">
-                        <el-date-picker disabled value-format="yyyy-MM-dd"
-                                        type="date" placeholder="选择日期" disabled=""
+                        <el-date-picker :disabled="!isPc || isDoc" value-format="yyyy-MM-dd"
+                                        type="date" placeholder="选择日期"
                                         v-model="params.begin_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="合同结束时间" required="">
-                        <el-date-picker disabled value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
-                                        v-model="params.end_date" disabled=""></el-date-picker>
+                        <el-date-picker :disabled="!isPc || isDoc" value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
+                                        v-model="params.end_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
 
@@ -301,23 +301,23 @@
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="是否中介" required="">
-                        <el-switch disabled v-model="params.is_agency" active-value="1" inactive-value="0"></el-switch>
+                        <el-switch :disabled="!isPc || isDoc" v-model="params.is_agency" active-value="1" inactive-value="0"></el-switch>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="押金" required>
-                        <el-input disabled placeholder="请输入内容" v-model="params.deposit"></el-input>
+                        <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" v-model="params.deposit"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="第一次打房租" required="">
-                        <el-date-picker disabled value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
+                        <el-date-picker :disabled="!isPc || isDoc" value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
                                         v-model="params.pay_first_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="第二次打房租" required="">
-                        <el-date-picker disabled value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
+                        <el-date-picker :disabled="!isPc || isDoc" value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
                                         v-model="params.pay_second_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
@@ -329,12 +329,12 @@
                       <el-row>
                         <el-col :span="6">
                           <el-form-item label="月单价" required="">
-                            <el-input disabled placeholder="请输入内容" v-model="priceArray[item-1]"></el-input>
+                            <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" v-model="priceArray[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
                         <el-col :span="6">
                           <el-form-item label="变化周期(月)" required="">
-                            <el-input placeholder="请输入内容" disabled
+                            <el-input placeholder="请输入内容" :disabled="!isPc || isDoc"
                                       v-model="periodArray[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
@@ -346,7 +346,7 @@
                       </el-row>
                     </div>
                     <div style="text-align: center">
-                      <el-button type="text" disabled="" @click="addMorePriceChange">
+                      <el-button type="text" :disabled="!isPc || isDoc" @click="addMorePriceChange">
                         <i class="el-icon-circle-plus"></i>添加月单价变化条目
                       </el-button>
                     </div>
@@ -358,7 +358,7 @@
                       <el-row>
                         <el-col :span="6">
                           <el-form-item label="付款方式" required="">
-                            <el-select disabled v-model="payWayArray[item-1]" placeholder="请选择付款方式" value="">
+                            <el-select :disabled="!isPc || isDoc" v-model="payWayArray[item-1]" placeholder="请选择付款方式" value="">
                               <el-option v-for="item in pay_way_dic" :label="item.dictionary_name" :value="item.id"
                                          :key="item.id"></el-option>
                             </el-select>
@@ -366,7 +366,7 @@
                         </el-col>
                         <el-col :span="6">
                           <el-form-item label="变化周期(月)" required="">
-                            <el-input placeholder="请输入内容" disabled
+                            <el-input placeholder="请输入内容" :disabled="!isPc || isDoc"
                                       v-model="payPeriodArray[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
@@ -378,7 +378,7 @@
                       </el-row>
                     </div>
                     <div style="text-align: center">
-                      <el-button type="text" disabled="" @click="addMorePayWayChange">
+                      <el-button type="text" :disabled="!isPc || isDoc" @click="addMorePayWayChange">
                         <i class="el-icon-circle-plus"></i>添加付款方式变化条目
                       </el-button>
                     </div>
@@ -387,19 +387,19 @@
 
                     <el-col :span="6">
                       <el-form-item label="收款姓名" required="">
-                        <el-input disabled="" placeholder="请输入内容" v-model="params.account_name"></el-input>
+                        <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" v-model="params.account_name"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="与房东关系" required="">
-                        <el-input disabled="" placeholder="请输入内容" v-model="params.relationship"></el-input>
+                        <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" v-model="params.relationship"></el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="支付方式" required="">
-                        <el-select disabled v-model="params.purchase_way" placeholder="请选择支付方式" value="">
+                        <el-select :disabled="!isPc || isDoc" v-model="params.purchase_way" placeholder="请选择支付方式" value="">
                           <el-option v-for="item in purchase_way_dic" :label="item.dictionary_name" :value="item.id"
                                      :key="item.id"></el-option>
                         </el-select>
@@ -407,17 +407,17 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="账号" required="">
-                        <el-input disabled placeholder="请输入内容" v-model="params.account"></el-input>
+                        <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" v-model="params.account"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="开户行" required="" v-if="params.purchase_way == 509 || params.purchase_way == 510">
-                        <el-input disabled placeholder="请输入内容" v-model="params.bank"></el-input>
+                        <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" v-model="params.bank"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="支行" required="" v-if="params.purchase_way == 509 || params.purchase_way == 510">
-                        <el-input disabled placeholder="请输入内容" v-model="params.subbranch"></el-input>
+                        <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" v-model="params.subbranch"></el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -426,12 +426,12 @@
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="中介费">
-                        <el-input disabled placeholder="请输入内容" v-model="params.agency"></el-input>
+                        <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" v-model="params.agency"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="违约金" required="">
-                        <el-input disabled placeholder="请输入内容" v-model="params.penalty"></el-input>
+                        <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" v-model="params.penalty"></el-input>
                       </el-form-item>
                     </el-col>
                     <!--<el-col :span="6">-->
@@ -443,7 +443,7 @@
                     <!--</el-col>-->
                     <el-col :span="6">
                       <el-form-item label="物业费承担方" required="">
-                        <el-select disabled v-model="params.property_payer" placeholder="请选择承担方" value="">
+                        <el-select :disabled="!isPc || isDoc" v-model="params.property_payer" placeholder="请选择承担方" value="">
                           <el-option v-for="item in property_payer_dic" :label="item.dictionary_name" :value="item.id"
                                      :key="item.id"></el-option>
                         </el-select>
@@ -491,7 +491,7 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="开单人" required="">
-                        <el-input disabled placeholder="请输入内容" @focus="openOrganizeModal('staff')" readonly="" v-model="staff_name"></el-input>
+                        <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" @focus="openOrganizeModal('staff')" readonly="" v-model="staff_name"></el-input>
                       </el-form-item>
                     </el-col>
                     <!--<el-col :span="6">-->
@@ -501,7 +501,7 @@
                     <!--</el-col>-->
                     <el-col :span="6">
                       <el-form-item label="部门" required="">
-                        <el-input disabled placeholder="请输入内容" @focus="openOrganizeModal('depart')" readonly="" v-model="department_name"></el-input>
+                        <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" @focus="openOrganizeModal('depart')" readonly="" v-model="department_name"></el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -538,13 +538,16 @@
             <div class="scroll_bar">
               <el-form label-width="100px">
                 <el-form-item label="证件照片" required="">
-                  <UpLoad :ID="'editHouse_id_card'" :isClear="isClear" :editImage="identity_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'editHouse_id_card'" :isClear="isClear" :onlyShow="isDoc"
+                          :editImage="identity_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="银行卡照片" required="">
-                  <UpLoad :ID="'editHouse_bank_card'" :isClear="isClear" :editImage="bank_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'editHouse_bank_card'" :isClear="isClear" :onlyShow="isDoc"
+                          :editImage="bank_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="合同照片" required="">
-                  <UpLoad :ID="'editHouse_contract_card'" :isClear="isClear" :editImage="photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'editHouse_contract_card'" :isClear="isClear" :onlyShow="!isPc || isDoc"
+                          :editImage="photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="水表照片">
                   <UpLoad :ID="'editHouse_water_card'" :isClear="isClear" :editImage="water_photo" @getImg="getImg"></UpLoad>
@@ -573,13 +576,16 @@
                   <UpLoad :ID="'editHouse_hand_over_card'" :isClear="isClear" :editImage="checkin_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="委托书" required="">
-                  <UpLoad :ID="'editHouse_proxy_card'" :isClear="isClear" :editImage="auth_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'editHouse_proxy_card'" :isClear="isClear" :onlyShow="isDoc"
+                          :editImage="auth_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="押金收条" required="">
-                  <UpLoad :ID="'editHouse_deposit_card'" :isClear="isClear" :editImage="deposit_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'editHouse_deposit_card'" :isClear="isClear" :onlyShow="isDoc"
+                          :editImage="deposit_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="承诺书" required="">
-                  <UpLoad :ID="'editHouse_commitment_card'" :isClear="isClear" :editImage="promise" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'editHouse_commitment_card'" :isClear="isClear" :onlyShow="isDoc"
+                          :editImage="promise" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="补充照片">
                   <UpLoad :ID="'editHouse_other_card'" :isClear="isClear" :editImage="other_photo" @getImg="getImg"></UpLoad>
@@ -749,12 +755,10 @@
         water_photo : {},
         electricity_photo : {},
         gas_photo : {},
-
         property_photo : {},
         water_card_photo : {},
         electricity_card_photo : {},
         gas_card_photo : {},
-
         checkin_photo : {},
         auth_photo : {},
         deposit_photo : {},
@@ -762,6 +766,8 @@
         other_photo : {},
         checkout_photo : {},
         checkout_settle_photo : {},
+        isPc : false,
+        isDoc : false,
       };
     },
     watch:{
@@ -814,7 +820,11 @@
             this.phoneArray = [];
 
             let data = res.data.data;
+
+            this.isPc = data.generate_from==2;
+            this.isDoc = data.doc_status.id>2;
             //房屋信息
+
             this.params.type = data.type;
             this.params.community_id = data.community_id;
             this.community_name = data.community_name;
@@ -1290,6 +1300,27 @@
         this.payWayChangeAmount = 1;
         this.payWayArray = [];
         this.payPeriodArray = [];
+
+
+        this.identity_photo  = {};
+        this.bank_photo  = {};
+        this.photo  = {};
+        this.water_photo  = {};
+        this.electricity_photo  = {};
+        this.gas_photo  = {};
+        this.property_photo  = {};
+        this.water_card_photo  = {};
+        this.electricity_card_photo  = {};
+        this.gas_card_photo  = {};
+        this.checkin_photo  = {};
+        this.auth_photo  = {};
+        this.deposit_photo  = {};
+        this.promise  = {};
+        this.other_photo  = {};
+        this.checkout_photo  = {};
+        this.checkout_settle_photo  = {};
+        this.isPc = false;
+        this.isDoc = false;
       }
     }
   };

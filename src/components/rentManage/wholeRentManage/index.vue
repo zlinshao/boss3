@@ -163,20 +163,6 @@
                 </template>
               </el-table-column>
               <el-table-column
-                label="审核状态">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.doc_status&&scope.row.doc_status.name">{{scope.row.doc_status.name}}</span>
-                  <span v-else="">/</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="回访状态">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
-                  <span v-else="">/</span>
-                </template>
-              </el-table-column>
-              <el-table-column
                 prop="deposit"
                 label="收房押金">
                 <template slot-scope="scope">
@@ -277,10 +263,20 @@
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
-              <!--<el-table-column-->
-                <!--prop="leader_name"-->
-                <!--label="负责人">-->
-              <!--</el-table-column>-->
+              <el-table-column
+                label="回访状态">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="审核状态">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.doc_status&&scope.row.doc_status.name">{{scope.row.doc_status.name}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
           <div class="tableBottom">
@@ -348,20 +344,7 @@
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
-              <el-table-column
-                label="审核状态">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.doc_status&&scope.row.doc_status.name">{{scope.row.doc_status.name}}</span>
-                  <span v-else="">/</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="回访状态">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
-                  <span v-else="">/</span>
-                </template>
-              </el-table-column>
+
               <el-table-column
                 label="出租价格">
                 <template slot-scope="scope">
@@ -427,10 +410,6 @@
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
-              <!--<el-table-column-->
-              <!--prop="agency"-->
-              <!--label="中介费">-->
-              <!--</el-table-column>-->
               <el-table-column
                 label="所属部门">
                 <template slot-scope="scope">
@@ -445,10 +424,14 @@
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
-              <!--<el-table-column-->
-                <!--prop="leader_name"-->
-                <!--label="负责人">-->
-              <!--</el-table-column>-->
+              <el-table-column
+                label="回访状态">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+
             </el-table>
           </div>
           <div class="tableBottom">
@@ -890,7 +873,7 @@
         this.contractModule = 1;
         this.collectContract = row;
         this.lists = [
-          {clickIndex: 'editHouseResourcesDialog', headIcon: 'el-icons-fa-home', label: '修改房源',},
+          {clickIndex: 'editHouseResourcesDialog', headIcon: 'el-icons-fa-home', label: '修改房源',disabled:row.doc_status.id>3},
           {clickIndex: 'addRentInfoDialog', headIcon :'el-icons-fa-plus', label: '登记租客信息',},
           {
             clickIndex: '', headIcon: 'el-icons-fa-pencil-square-o', tailIcon: 'el-icon-arrow-right', label: '房东续约/延期',
@@ -981,7 +964,7 @@
         this.contractModule = 2;
         this.rentContract = row;
         this.lists = [
-          {clickIndex: 'editRentInfoDialog',headIcon: 'el-icon-edit', label: '修改租客信息',},
+          {clickIndex: 'editRentInfoDialog',headIcon: 'el-icon-edit', label: '修改租客信息',disabled:row.doc_status.id>3},
           {clickIndex: 'rentVacationDialog',headIcon: 'el-icons-fa-reply', label: '租客退房',},
           {clickIndex: 'subleaseDialog', headIcon: 'el-icons-fa-refresh', label: '房屋转租',},
           {clickIndex: 'rentRenewDialog', headIcon: 'el-icon-share', label: '租客续约',},
