@@ -20,6 +20,7 @@
     </div>
     </el-dialog>
   </div>
+
 </template>
 
 <script>
@@ -43,7 +44,7 @@ export default {
     badgeDialogVisible(val) {
       if (!val) {
         this.$emit("close");
-      } 
+      }
     }
   },
   mounted() {
@@ -132,7 +133,7 @@ export default {
   bottom:15px;
 }
 .el-button {
-  width: 130px; 
+  width: 130px;
   height: 32px;
 
 
