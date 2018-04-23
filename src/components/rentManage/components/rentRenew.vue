@@ -346,7 +346,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="燃气表底数" required>
+                      <el-form-item label="燃气表底数">
                         <el-input placeholder="请输入内容" v-model="params.gas"></el-input>
                       </el-form-item>
                     </el-col>
@@ -374,7 +374,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="资料补齐时间">
+                      <el-form-item label="资料补齐时间"  required="">
                         <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
                                         v-model="params.data_date"></el-date-picker>
                       </el-form-item>
