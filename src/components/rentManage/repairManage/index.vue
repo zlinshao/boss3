@@ -5,7 +5,8 @@
         <div class="tabsSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input placeholder="编号/姓名/电话" v-model="form.keyword" size="mini" clearable @keyup.enter.native="search">
+              <el-input placeholder="编号/姓名/电话" v-model="form.keyword" size="mini" clearable
+                        @keyup.enter.native="search">
                 <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
@@ -189,8 +190,12 @@
                 prop="status"
                 label="维修状态">
                 <template slot-scope="scope">
-                  <el-button class="btnStatus" v-if="scope.row.status === '已完成'" type="primary" size="mini">{{scope.row.status}}</el-button>
-                  <el-button class="btnStatus" v-if="scope.row.status !== '已完成' && scope.row.status !==null " type="info" size="mini">{{scope.row.status}}</el-button>
+                  <el-button class="btnStatus" v-if="scope.row.status === '已完成'" type="primary" size="mini">
+                    {{scope.row.status}}
+                  </el-button>
+                  <el-button class="btnStatus" v-if="scope.row.status !== '已完成' && scope.row.status !==null "
+                             type="info" size="mini">{{scope.row.status}}
+                  </el-button>
                   <span v-if="!scope.row.status">暂无</span>
                 </template>
               </el-table-column>
@@ -283,8 +288,12 @@
                 prop="status"
                 label="维修状态">
                 <template slot-scope="scope">
-                  <el-button class="btnStatus" v-if="scope.row.status === '已完成'" type="primary" size="mini">{{scope.row.status}}</el-button>
-                  <el-button class="btnStatus" v-if="scope.row.status !== '已完成' && scope.row.status !==null " type="info" size="mini">{{scope.row.status}}</el-button>
+                  <el-button class="btnStatus" v-if="scope.row.status === '已完成'" type="primary" size="mini">
+                    {{scope.row.status}}
+                  </el-button>
+                  <el-button class="btnStatus" v-if="scope.row.status !== '已完成' && scope.row.status !==null "
+                             type="info" size="mini">{{scope.row.status}}
+                  </el-button>
                   <span v-if="!scope.row.status">暂无</span>
                 </template>
               </el-table-column>
@@ -307,9 +316,12 @@
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
-    <AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" :collectRepairId="collectRepairId" @close="closeModal"></AddCollectRepair>
-    <AddRentRepair :addRentRepairDialog="addRentRepairDialog" :rentRepairId="rentRepairId" @close="closeModal"></AddRentRepair>
-    <RepairDetail :repairDetailDialog="repairDetailDialog" :repairId="repairId" :activeName="activeName" @close="closeModal"></RepairDetail>
+    <AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" :collectRepairId="collectRepairId"
+                      @close="closeModal"></AddCollectRepair>
+    <AddRentRepair :addRentRepairDialog="addRentRepairDialog" :rentRepairId="rentRepairId"
+                   @close="closeModal"></AddRentRepair>
+    <RepairDetail :repairDetailDialog="repairDetailDialog" :repairId="repairId" :activeName="activeName"
+                  @close="closeModal"></RepairDetail>
     <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeModal"
                   @selectMember="selectMember"></organization>
   </div>
@@ -324,7 +336,7 @@
 
   export default {
     name: 'repair-manage',
-    components: {RightMenu, AddCollectRepair, AddRentRepair, RepairDetail,Organization},
+    components: {RightMenu, AddCollectRepair, AddRentRepair, RepairDetail, Organization},
     data() {
       return {
         rightMenuX: 0,
@@ -343,7 +355,6 @@
         collectTableData: [],
         rentTableData: [],
         totalNum: 0,
-        currentPage: 1,
         isHigh: false,
         collectStatus: ' ',
         collectLoading: false,
@@ -385,16 +396,16 @@
       getCollectTableData() {
         this.collectStatus = ' ';
         this.collectLoading = true;
-        if(!this.form.time){
+        if (!this.form.time) {
           this.form.time = [];
         }
-        this.$http.get(globalConfig.server + 'repaire/list?limit=12&module=1', {params: this.form} ).then((res) => {
+        this.$http.get(globalConfig.server + 'repaire/list?limit=12&module=1', {params: this.form}).then((res) => {
           this.isHigh = false;
           this.collectLoading = false;
           if (res.data.code === '600200') {
             this.collectTableData = res.data.data.data;
             this.totalNum = res.data.data.count;
-          } else if(res.data.code==='600202'){
+          } else if (res.data.code === '600202') {
             this.collectTableData = [];
             this.totalNum = 0;
             this.collectStatus = '暂无数据';
@@ -402,7 +413,7 @@
               title: '警告',
               message: res.data.msg,
             });
-          }else{
+          } else {
             this.collectTableData = [];
             this.totalNum = 0;
             this.collectStatus = '暂无数据';
@@ -412,16 +423,16 @@
       getRentTableData() {
         this.rentStatus = ' ';
         this.rentLoading = true;
-        if(!this.form.time){
+        if (!this.form.time) {
           this.form.time = [];
         }
-        this.$http.get(globalConfig.server + 'repaire/list?limit=12&module=2', {params: this.form} ).then((res) => {
+        this.$http.get(globalConfig.server + 'repaire/list?limit=12&module=2', {params: this.form}).then((res) => {
           this.isHigh = false;
           this.rentLoading = false;
           if (res.data.code === '600200') {
             this.rentTableData = res.data.data.data;
             this.totalNum = res.data.data.count;
-          } else if(res.data.code === '600202'){
+          } else if (res.data.code === '600202') {
             this.$notify.warning({
               title: '警告',
               message: res.data.msg,
@@ -429,7 +440,7 @@
             this.rentTableData = [];
             this.totalNum = 0;
             this.rentStatus = '暂无数据';
-          }else{
+          } else {
             this.rentTableData = [];
             this.totalNum = 0;
             this.rentStatus = '暂无数据';
@@ -474,9 +485,9 @@
         }
       },
       search() {
-        if(this.activeName === 'first'){
+        if (this.activeName === 'first') {
           this.getCollectTableData();
-        }else{
+        } else {
           this.getRentTableData();
         }
       },
@@ -519,7 +530,7 @@
             break;
         }
       },
-      deleteRepair(){
+      deleteRepair() {
         this.$confirm('此操作将删除维修单，您确定删除吗？', '删除维修单', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -562,23 +573,31 @@
           this.show = true
         })
       },
-      exportData(){
-        if(this.activeName==='first'){
+      exportData() {
+        if (this.activeName === 'first') {
           this.form.module = 1;
-        }else{
+        } else {
           this.form.module = 2;
         }
-        this.$http.get(globalConfig.server + 'repaire/download', { params: this.form }).then((res)=>{
-          if(res.data.code == '600201'){
+        let exportForm = {
+          keyword: this.form.keyword,
+          time: this.form.time,
+          status: this.form.status,
+          city: this.form.city,
+          operator_id: this.form.operator_id,
+          module: this.form.module
+        };
+        this.$http.get(globalConfig.server + 'repaire/download', {params: exportForm}).then((res) => {
+          if (res.data.code == '600201') {
             this.$notify.warning({
               title: '警告',
               message: res.data.msg
             });
             return;
-          }else{
+          } else {
             this.$http.get(globalConfig.server + 'repaire/export', {
               responseType: 'arraybuffer',
-              params: this.form
+              params: exportForm
             }).then((res) => { // 处理返回的文件流
               if (!res.data) {
                 return;
