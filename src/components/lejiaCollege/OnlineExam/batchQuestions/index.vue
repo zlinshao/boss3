@@ -3,14 +3,15 @@
     <div id="onlineExam">
       <div class="tool">
         <div class="tool_left">       
-            <span style="height:130px;line-height:130px; width:120px; font-size:16px;">上传试题文件</span>
-            <span><Dropzone :ID="'examOptionx'" @getImg="photo_success"  :isClear="isClear"></Dropzone></span>     
-          <el-button type="success" @click="uploadExam" size="small" style="margin-right:18px; width:140px; height:32px; line-height:0px; background-color:#58d788; border-color:#58d788; margin-top:50px"  >
-            <i class="iconfont icon-daoru"></i>&nbsp;试题导入
-          </el-button>  
-          <el-button type="success" size="small" style="margin-right:18px; background-color:#fb4799; border-color:#fb4799;"  >
-            <i class="el-icon-download"></i>&nbsp;下载试题模版
-          </el-button>             
+            <span style="height:130px;line-height:32px; width:120px; font-size:14px;">上传试题文件</span>
+            <el-button type="success" @click="uploadExam" size="small" style=" width:120px; height:32px; line-height:0px; background-color:#58d788; border-color:#58d788;"  >
+              <i class="iconfont icon-daoru"></i>&nbsp;试题导入
+            </el-button>             
+            <br />
+            <el-button type="success" size="small" style="margin-top:12px;width:120px; height:32px; background-color:#fb4799; border-color:#fb4799;"  >
+              <i class="el-icon-download"></i>&nbsp;下载试题模版
+            </el-button> 
+            <Dropzone :ID="'examOptionx'" @getImg="photo_success"  :isClear="isClear"></Dropzone>          
         </div>
 
       </div>
@@ -109,13 +110,13 @@ export default {
 <style lang="scss" scoped>
 #onlineExam {
   .tool {
-    height: 160px;
+    height: 250px;
     border-radius: 5px;
     border: 1px #eee solid;
     border-bottom: none;
     padding: 0;
     .tool_left {
-      margin-left: 20px;
+      margin-left: 17px;
       margin-top: 18px;
       span {
         float: left;
