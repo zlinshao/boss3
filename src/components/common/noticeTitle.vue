@@ -3,6 +3,7 @@
     <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false"  width="0" style="margin-top:20vh" :visible.sync="noticeTitleVisible">
     <div class="badgeup" >
       <span class="span1">制度标题制度标题制度标题制度标题</span>
+
       <div class="msg">
         <img src="../../assets/images/head.jpg" />
         <span style="float:left; line-height:40px;">李巧俊&nbsp;&nbsp;&nbsp;&nbsp;研发部-产品经理</span>
@@ -43,7 +44,7 @@ export default {
     noticeTitleVisible(val) {
       if (!val) {
         this.$emit("close");
-      } 
+      }
     }
   },
   mounted() {
@@ -132,7 +133,7 @@ export default {
   text-align: center;
 }
 .el-button {
-  width: 130px; 
+  width: 130px;
   height: 32px;
 
 
