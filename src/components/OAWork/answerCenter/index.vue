@@ -61,7 +61,7 @@
 
           <el-form size="small" v-show="isShow">
             <el-form-item>
-              <el-input type="textarea" :rows="3" v-model="addContent" placeholder="请输入评论内容"></el-input>
+              <el-input type="textarea" :rows="3" v-model="addContent" placeholder="请输入答案内容"></el-input>
             </el-form-item>
             <!--<span  v-if="landholder.data" style="float: left">{{landholder.data.signature && landholder.data.signature.content}}</span>-->
             <el-form-item>
@@ -73,10 +73,10 @@
 
           <div style="height:50px; color:#83a0fc; line-height:50px; margin:0 10px;">
             <span style="float:left;">{{paging}}条回答</span>
-            <span v-if="!islook" @click="islookFlag('open')" style="float:right;">全部显示</span>
-            <span v-else @click="islookFlag('close')" style="float:right;">关闭全部显示</span>
+            <span v-if="showlen == 1" @click="islookFlag('open')" style="cursor: pointer;float:right; margin-right:6px;">全部显示</span>
+            <span v-else @click="islookFlag('close')" style="cursor: pointer;float:right; margin-right:6px;">关闭全部显示</span>
           </div>
-          <div class="commentOn" v-for="key in commentOn" v-if="islook">
+          <div class="commentOn" v-for="(key,index) in commentOn" v-if="index< showlen" >
             <div class="portrait">
               <img :src="key.staffs.avatar" v-if="key && key.staffs && key.staffs.avatar">
               <img src="../../../assets/images/head.png" v-else>
@@ -87,40 +87,51 @@
                   <span>{{key.staffs && key.staffs.name}}</span>&nbsp;&nbsp;
                   <span v-for="item in key && key.staffs && key.staffs.org">
                     <span class="staffBefore">{{item && item.name}}</span>
-                  </span>
+                  </span>&nbsp;&nbsp;
+                  <span>{{key.create_time}}</span>
                 </div>
-                <div>
-                  {{key.create_time}}
+                <div @click="openpy" style="cursor: pointer;">
+                  <i class="iconfont icon-xinxi"></i>
+                  <span class="infopy">评论（2）</span>
                 </div>
               </div>
               <div class="commentContent">
                 {{key.content}}
               </div>
             </div>
+          <!-- <div class="commentOn" v-for="(key,index) in commentOn" v-if="index< 1" >
+            <div class="portrait">
+              <img :src="key.staffs.avatar" v-if="key && key.staffs && key.staffs.avatar">
+              <img src="../../../assets/images/head.png" v-else>
+            </div>
+            <div class="comments">
+              <div class="staff_name">
+                <div>
+                  <span>{{key.staffs && key.staffs.name}}</span>&nbsp;&nbsp;
+                  <span v-for="item in key && key.staffs && key.staffs.org">
+                    <span class="staffBefore">{{item && item.name}}</span>
+                  </span>&nbsp;&nbsp;
+                  <span>{{key.create_time}}</span>
+                </div>
+              </div>
+              <div class="commentContent">
+                {{key.content}}
+              </div>
+            </div>
+          </div>
+          <el-form size="small" v-show="isShow">
+            <el-form-item>
+              <el-input type="textarea" :rows="3" v-model="addContent" placeholder="请输入答案内容"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <div class="submitButt">
+                <el-button type="success" size="small" @click="addReply(formList.id)">发表</el-button>
+              </div>
+            </el-form-item>
+          </el-form> -->
           </div>
 
-          <div class="commentOn" v-for="(key,index) in commentOn" v-if="!islook &&index<1">
-            <div class="portrait">
-              <img :src="key.staffs.avatar" v-if="key && key.staffs && key.staffs.avatar">
-              <img src="../../../assets/images/head.png" v-else>
-            </div>
-            <div class="comments">
-              <div class="staff_name">
-                <div>
-                  <span>{{key.staffs && key.staffs.name}}</span>&nbsp;&nbsp;
-                  <span v-for="item in key && key.staffs && key.staffs.org">
-                    <span class="staffBefore">{{item && item.name}}</span>
-                  </span>
-                </div>
-                <div>
-                  {{key.create_time}}
-                </div>
-              </div>
-              <div class="commentContent">
-                {{key.content}}
-              </div>
-            </div>
-          </div>
+
           <div class="block pages" v-if="paging > 11 && islook" >
             <el-pagination
               @size-change="handleSizeChange"
@@ -174,6 +185,7 @@ export default {
       islook:false,
       colNum: 16,
       formList: {},
+      showlen:1,
       staffs: {},
       addContent: "",
       commentOn: [],
@@ -230,15 +242,19 @@ export default {
     write(){
       this.isShow = !this.isShow;
     },
-    //查看评论
+    //显示所有回答
     islookFlag(val){
       if( val == 'open'){
-        this.islook = true;
+        this.showlen = 10;
       }else{
-        this.islook = false;
+        this.showlen = 1;
       }
     },
 
+    //显示所有评论
+    openpy(){
+      
+    },
     search(val) {
       this.myData(this.formList.id, val);
     },
@@ -518,6 +534,10 @@ export default {
         span{
           margin: 0 10px;
         }
+        .infopy{
+          margin: -2px 4px 0 0 ;
+          float:right;
+        }
       }
       .commentContent {
         color: #676767;
@@ -531,6 +551,8 @@ export default {
     }
     .commentOn {
       padding: 15px;
+      width: 97%;
+      margin-left:2%;
       border-top: 1px solid #eeeeee;
       @include flex;
       align-items: center;

@@ -521,8 +521,10 @@
     methods: {
       initData() {
 
-        //弹窗
-        //this.institutionDialog = true;
+        //制度弹窗
+        if (!this.personal.data.system) {
+        this.institutionDialog = true;
+        }
         //this.noticeTitleDialog = true;
         //this.yanFirstDialog = true;
         //版本更新

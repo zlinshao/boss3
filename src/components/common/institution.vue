@@ -2,25 +2,29 @@
   <div>
     <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false"  width="0" style="margin-top:20vh" :visible.sync="badgeDialogVisible">
     <div class="badgeup" >
-      <span class="span1">制度标题制度标题制度标题制度标题</span>
+      <span class="span1">{{institInfo.title}}</span>
       <div class="msg">
-        <img src="../../assets/images/head.jpg" />
-        <span style="float:left; line-height:40px;">李巧俊&nbsp;&nbsp;&nbsp;&nbsp;研发部-产品经理</span>
-        <span style="float:right;margin-right:20px;">2017-11-26&nbsp;21:41:20</span>
+        <img :src="peopore.avatar" />
+        <span style="float:left; line-height:40px;">{{peopore.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{deport}}-{{center}}</span>
+        <span style="float:right;margin-right:20px;">{{institInfo.create_time}}</span>
       </div>
-      <div class="article scroll_bar">
-        我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工
-        我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工
-        我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工
-        我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工
+      <div class="article scroll_bar" >
+        <div v-html="institInfo.content"></div>
+      <img v-if="images.cover_pic!=[]" data-magnify
+        v-for="(val,key) in images.cover_pic" :data-src="val.uri" :src="val.uri" alt="" :key="key">
       </div>
+
+
+
+    
+
+   
       <div class="button">
        <el-button size="small" @click="close" type="primary">我知道了</el-button>
       </div>
     </div>
     </el-dialog>
   </div>
-
 </template>
 
 <script>
@@ -35,6 +39,11 @@ export default {
       badgeDialogVisible: false,
       type: 3,
       xljt: "",
+      institInfo:{},
+      images:[],
+      peopore:"",
+      deport:"",
+      center:"",
     };
   },
   watch: {
@@ -44,30 +53,31 @@ export default {
     badgeDialogVisible(val) {
       if (!val) {
         this.$emit("close");
-      }
+      } 
     }
   },
   mounted() {
     this.landholder = JSON.parse(localStorage.personal);
+    this.getinfo();
   },
   methods: {
+    getinfo() {
+      this.$http
+        .get(globalConfig.server + "oa/portal/last")
+        .then(res => {
+          if (res.data.code === "800110") {
+            this.institInfo = res.data.data;
+            this.images = res.data.data.album;
+            if(res.data.data.staffs !=[]){
+              this.peopore = res.data.data.staffs;
+              this.deport = res.data.data.staffs.org[0].name;
+              this.center = res.data.data.staffs.role[0].description;
+            }
+          }
+        });
+    },    
     close(){
       this.badgeDialogVisible=false;
-    },
-    closeBadge() {
-      // this.$http
-      //   .post(globalConfig.server + "manager/staff_record", { type: this.type })
-      //   .then(res => {
-      //     if (res.data.code === "30010") {
-      //       this.badgeDialogVisible = false;
-      //       this.$http
-      //         .get(globalConfig.server + "special/special/loginInfo")
-      //         .then(res => {
-      //           localStorage.setItem("personal", JSON.stringify(res.data.data));
-      //           globalConfig.personal = res.data.data.data;
-      //         });
-      //     }
-      //   });
     },
 
   }
@@ -117,7 +127,7 @@ export default {
   }
 .article{
   width: 660px;
-  height: 270px;
+  height: 220px;
   position: absolute;
   left: 10px;
   top:100px;
@@ -133,7 +143,7 @@ export default {
   bottom:15px;
 }
 .el-button {
-  width: 130px;
+  width: 130px; 
   height: 32px;
 
 

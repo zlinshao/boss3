@@ -8,8 +8,10 @@
         <span v-if="versionInfo.staffs && versionInfo.staffs.real_name" style="float:left; line-height:40px;">{{versionInfo.staffs.real_name}}</span>
         <span style="float:right;margin-right:20px;">{{versionInfo.create_time}}</span>
       </div>
-      <div class="article scroll_bar">
-       {{versionInfo.content}}
+      <div class="article scroll_bar" >
+        <div v-html="versionInfo.content"></div>
+              <img v-if="images.image_pic!=[]" data-magnify
+        v-for="(val,key) in images.image_pic" :data-src="val.uri" :src="val.uri" alt="" :key="key">
       </div>
       <div class="button">
         <el-button style="background:#fb4799;border-color:#fb4799" @click="close"  size="small" type="success">我知道了</el-button>
@@ -17,7 +19,6 @@
     </div>
     </el-dialog>
   </div>
-
 </template>
 
 <script>
@@ -32,7 +33,8 @@ export default {
       badgeDialogVisible: false,
       type: 3,
       xljt: "",
-      versionInfo: {}
+      versionInfo: {},
+      images:[],
     };
   },
   watch: {
@@ -56,6 +58,7 @@ export default {
         .then(res => {
           if (res.data.code === "50040") {
             this.versionInfo = res.data.data;
+            this.images = res.data.data.album;
           }
         });
     },
