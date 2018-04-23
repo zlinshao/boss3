@@ -568,6 +568,8 @@
         }else{
           this.form.module = 2;
         }
+        this.form.page = '';
+        this.form.limit = '';
         this.$http.get(globalConfig.server + 'repaire/download', { params: this.form }).then((res)=>{
           if(res.data.code == '600201'){
             this.$notify.warning({
