@@ -15,7 +15,7 @@
         我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工
       </div>
       <div class="button">
-        <el-button size="small" type="success">下一条</el-button><el-button size="small" @click="close" type="primary">我知道了</el-button>
+       <el-button size="small" @click="close" type="primary">我知道了</el-button>
       </div>
     </div>
     </el-dialog>
@@ -125,9 +125,10 @@ export default {
 }
 .button{
   position: absolute;
-  width: 300px;
+  width: 680px;
+  text-align: center;
   height: 32px;
-  left:213px;
+  left:10px;
   bottom:15px;
 }
 .el-button {

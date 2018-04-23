@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false"  width="0" style="margin-top:20vh" :visible.sync="badgeDialogVisible">
+    <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false"  width="0" style="margin-top:20vh" :visible.sync="noticeTitleVisible">
     <div class="badgeup" >
       <span class="span1">制度标题制度标题制度标题制度标题</span>
       <div class="msg">
@@ -15,7 +15,7 @@
         我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工
       </div>
       <div class="button">
-        <el-button size="small" type="success">下一条</el-button><el-button size="small" @click="close" type="primary">我知道了</el-button>
+        <el-button size="small" @click="close" type="primary">我知道了</el-button>
       </div>
     </div>
     </el-dialog>
@@ -31,16 +31,16 @@ export default {
       landholder: {},
       panelShow: false,
       loginDay: 0, //连续登陆天数
-      badgeDialogVisible: false,
+      noticeTitleVisible: false,
       type: 3,
       xljt: "",
     };
   },
   watch: {
     noticeTitleDialog(val) {
-      this.badgeDialogVisible = val;
+      this.noticeTitleVisible = val;
     },
-    badgeDialogVisible(val) {
+    noticeTitleVisible(val) {
       if (!val) {
         this.$emit("close");
       } 
@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     close(){
-      this.badgeDialogVisible=false;
+      this.noticeTitleVisible=false;
     },
     closeBadge() {
       // this.$http
@@ -125,10 +125,11 @@ export default {
 }
 .button{
   position: absolute;
-  width: 300px;
+  width: 680px;
   height: 32px;
-  left:213px;
+  left:10px;
   bottom:15px;
+  text-align: center;
 }
 .el-button {
   width: 130px; 

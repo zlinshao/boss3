@@ -329,6 +329,7 @@
     <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
     <BadgeView :badgeDialog="badgeDialog" @close="closeModalSecond"></BadgeView>
     <InstitutionView :institutionDialog="institutionDialog" @close="closeModal"></InstitutionView>
+    <NoticeTitleView :noticeTitleDialog="noticeTitleDialog" @close="closeModal"></NoticeTitleView>
     <YanFirstView :yanFirstDialog="yanFirstDialog" @close="closeModal"></YanFirstView>
     <YanSecondView :yanSecondDialog="yanSecondDialog" @close="closeModal"></YanSecondView>
   </div>
@@ -524,8 +525,10 @@
         //this.institutionDialog = true;
         //this.noticeTitleDialog = true;
         //this.yanFirstDialog = true;
-        //this.yanSecondDialog = true;
-
+        //版本更新
+        if (!this.personal.data.record) {
+          this.yanSecondDialog = true;
+        }
         this.loginDay = this.personal.data.loginday;
         this.loginPercent = Number(this.loginDay / 180 * 100) + "%";
         $(".percent").css("width", this.loginPercent);

@@ -33,7 +33,7 @@
       <div class="main"> 
         <div class="questionDiv" v-for="(val,k) in 2" :key="val">
           {{k+1}}.<span style="color:#6a8dfb; margin-left:20px;">简单题</span><span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
-          <p style="margin-left:30px;line-height:20px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
+          <p style="margin-left:30px;line-height:20px;width:96%">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
           <div>
             <div class="eachAN scroll_bar">
                 对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 
@@ -130,7 +130,7 @@ export default {
       padding-top: 16px;
       border-top: 1px #eee solid;
       .eachAN {
-        width: 96%;
+        width: 94.5%;
         margin-left: 2%;
         margin-right: 2%;
         border: 1px #eee solid;
@@ -140,7 +140,7 @@ export default {
         padding: 8px 8px;
       }
       .eachSore {
-        width: 96%;
+        width: 94.5%;
         margin-left: 2%;
         margin-right: 2%;
         border: 1px #eee solid;

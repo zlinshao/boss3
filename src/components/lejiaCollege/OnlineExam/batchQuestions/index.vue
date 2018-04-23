@@ -102,7 +102,35 @@ export default {
     },
     iKonw() {
       this.faleDialog = false;
-    }
+    },
+    //下载
+    down(){
+        // this.$http.get(globalConfig.server + 'repaire/download', { params: this.form }).then((res)=>{
+        //   if(res.data.code == '600201'){
+        //     this.$notify.warning({
+        //       title: '警告',
+        //       message: res.data.msg
+        //     });
+        //     return;
+        //   }else{
+        //     this.$http.get(globalConfig.server + 'repaire/export', {
+        //       responseType: 'arraybuffer',
+        //       params: this.form
+        //     }).then((res) => { // 处理返回的文件流
+        //       if (!res.data) {
+        //         return;
+        //       }
+        //       let url = window.URL.createObjectURL(new Blob([res.data]));
+        //       let link = document.createElement('a');
+        //       link.style.display = 'a';
+        //       link.href = url;
+        //       link.setAttribute('download', 'excel.xls');
+        //       document.body.appendChild(link);
+        //       link.click();
+        //     });
+        //   }
+        // });
+    },
   }
 };
 </script>
@@ -110,7 +138,8 @@ export default {
 <style lang="scss" scoped>
 #onlineExam {
   .tool {
-    height: 250px;
+    min-height: 250px;
+    margin-bottom:28px;
     border-radius: 5px;
     border: 1px #eee solid;
     border-bottom: none;
