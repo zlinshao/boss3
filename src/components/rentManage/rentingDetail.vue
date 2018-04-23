@@ -8,7 +8,7 @@
     <div class="stepLine">
       <el-steps direction="vertical" :active="steps" style="cursor: pointer">
         <el-step title="房源信息" @click.native="changeStep(0)"></el-step>
-        <el-step title="房东信息" @click.native="changeStep(1)"></el-step>
+        <el-step title="租客信息" @click.native="changeStep(1)"></el-step>
         <el-step title="合同信息" @click.native="changeStep(2)"></el-step>
         <!--<el-step title="财务信息" @click.native="changeStep(3)"></el-step>-->
         <el-step title="回访记录" @click.native="changeStep(4)"></el-step>
