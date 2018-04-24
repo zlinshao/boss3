@@ -193,7 +193,7 @@
                   <el-button class="btnStatus" v-if="scope.row.status === '已完成'" type="primary" size="mini">
                     {{scope.row.status}}
                   </el-button>
-                  <el-button class="btnStatus" v-if="scope.row.status !== '已完成' && scope.row.status !==null "
+                  <el-button class="btnStatus" v-if="scope.row.status !== '已完成' && scope.row.status "
                              type="info" size="mini">{{scope.row.status}}
                   </el-button>
                   <span v-if="!scope.row.status">暂无</span>
@@ -291,7 +291,7 @@
                   <el-button class="btnStatus" v-if="scope.row.status === '已完成'" type="primary" size="mini">
                     {{scope.row.status}}
                   </el-button>
-                  <el-button class="btnStatus" v-if="scope.row.status !== '已完成' && scope.row.status !==null "
+                  <el-button class="btnStatus" v-if="scope.row.status !== '已完成' && scope.row.status"
                              type="info" size="mini">{{scope.row.status}}
                   </el-button>
                   <span v-if="!scope.row.status">暂无</span>

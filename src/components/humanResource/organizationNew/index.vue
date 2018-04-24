@@ -1008,6 +1008,7 @@
           this.isGetStaff = true;
         } else if (this.activeName === 'second') {
           this.positionParams.page = 1;
+          this.postParams.page = 1;
           this.getOnlyPosition();
           this.isGetOnlyPosition = true;
         }
