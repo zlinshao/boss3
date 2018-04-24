@@ -272,9 +272,9 @@
                   </div>
                   <div class="tableBottom">
                     <el-pagination
-                      @size-change="handlePostSizeChange"
-                      @current-change="handlePostCurrentChange"
-                      :current-page="postParams.page"
+                      @size-change="handlePositionSizeChange"
+                      @current-change="handlePositionCurrentChange"
+                      :current-page="positionParams.page"
                       :page-sizes="[5, 10, 15, 20]"
                       :page-size="5"
                       layout="total, sizes, prev, pager, next, jumper"
@@ -323,16 +323,14 @@
                   </div>
                   <div class="tableBottom">
                     <el-pagination
-                      @size-change="handlePositionSizeChange"
-                      @current-change="handlePositionCurrentChange"
-                      :current-page="currentPage"
-                      :page-sizes="[3, 6, 15, 20]"
-                      :page-size="3"
+                      @size-change="handlePostSizeChange"
+                      @current-change="handlePostCurrentChange"
+                      :current-page="postParams.page"
+                      :page-sizes="[5, 10, 15, 20]"
+                      :page-size="5"
                       layout="total, sizes, prev, pager, next, jumper"
-                      :total="totalPositionNum">
+                      :total="totalPostNum">
                     </el-pagination>
-                    {{positionParams.page}}
-
                   </div>
                 </div>
                 <!--岗位下的员工-->
@@ -879,10 +877,13 @@
         collectLoading: false,
         userCollectStatus: ' ',
         userCollectLoading: false,
+        //职位
         positionCollectStatus: ' ',
         positionCollectLoading: false,
+        //岗位
         postCollectStatus: ' ',
         postCollectLoading: false,
+        //岗位下的员工
         postStaffStatus: ' ',
         postStaffLoading: false,
 
@@ -911,12 +912,14 @@
           leave_time: [],
         },
         //由于存在分页bug,所以暂时把职位和岗位的参数分开
-        postParams: {
+       //职位
+        positionParams: {
           limit: 5,
           page: 1,
         },
-        positionParams: {
-          limit: 3,
+        //岗位
+        postParams: {
+          limit: 5,
           page: 1,
         },
         postStaffParams: {
@@ -942,8 +945,8 @@
         isEdit: false,
         editId: null,
         totalStaffNum: 0,
-        totalOnlyPositionNum: 0,
-        totalPositionNum: 0,
+        totalOnlyPositionNum: 0, //职位总条数
+        totalPostNum: 0,  //岗位总条数
         totalPostStaffNum: 0,
         departId: null,
         parentId: null,
@@ -975,7 +978,6 @@
         departManageName: '',
         selectPostName: '',
         growthData: '',
-        currentPage: 1,
       }
     },
     mounted() {
@@ -1002,7 +1004,7 @@
         this.onlyPositionId = '';
         this.onlyPositionName = '';
         if (this.activeName === 'first') {
-          this.params.page = 1;
+          // this.params.page = 1;
           this.getStaffData();
           this.isGetStaff = true;
         } else if (this.activeName === 'second') {
@@ -1025,6 +1027,12 @@
           this.isGetOnlyPosition = true;
         }
       },
+      // 'postParams.page': {
+      //   deep: true,
+      //   handler(val,old){
+      //     alert(val);
+      //   }
+      // },
     },
     methods: {
       highGrade() {
@@ -1186,7 +1194,7 @@
       addDepart(data) {
         this.parentId = data.id;
         this.parentName = data.name;
-        this.addDepartDialog = true
+        this.addDepartDialog = true;
       },
       closeAddDepart(val) {
         this.addDepartDialog = false;
@@ -1253,7 +1261,6 @@
             if (this.staffTableData.length < 1) {
               this.userCollectStatus = '暂无数据';
             }
-
           } else {
             this.userCollectStatus = '暂无数据';
             this.staffTableData = [];
@@ -1450,8 +1457,8 @@
         if (this.params.org_id) {
           this.positionCollectLoading = true;
           this.positionCollectStatus = ' ';
-          this.$http.get(globalConfig.server + 'manager/position?department_id=' + this.params.org_id + '&page=' + this.postParams.page
-            + '&limit=' + this.postParams.limit).then((res) => {
+          this.$http.get(globalConfig.server + 'manager/position?department_id=' + this.params.org_id + '&page=' + this.positionParams.page
+            + '&limit=' + this.positionParams.limit).then((res) => {
             this.positionCollectLoading = false;
             if (res.data.code === '20000') {
               this.positionList = res.data.data.data;
@@ -1484,7 +1491,8 @@
         this.onlyPositionName = row.name;
         this.department_id = row.org_id;
         this.department_name = row.org.name;
-        this.getPosition();
+
+        // this.getPosition();
         this.menuType = 'onlyPosition';
         this.lists = [
           {clickIndex: 'addPost', headIcon: 'el-icon-plus', label: '增加岗位',},
@@ -1500,6 +1508,7 @@
         this.department_id = row.org.id;
         this.department_name = row.org.name;
 
+        this.postParams.page = 1;
         this.getPosition();
       },
       clickPostMenu(row, event) {
@@ -1557,11 +1566,11 @@
       //根据职位获取岗位
       getPosition() {
         this.postStaffData = [];
-        this.totalPositionNum = 0;
+        this.totalPostNum = 0;
         this.postCollectLoading = true;
         this.postCollectStatus = ' ';
-        this.$http.get(globalConfig.server + 'manager/positions?type=' + this.onlyPositionId + '&page=' + this.positionParams.page
-          + '&limit=' + this.positionParams.limit).then((res) => {
+        console.log(this.postParams.page);
+        this.$http.get(globalConfig.server + 'manager/positions?type='+ this.onlyPositionId + '&page='+ this.postParams.page+ '&limit=' + this.postParams.limit).then((res) => {
           this.postCollectLoading = false;
           if (res.data.code === '20000') {
             let arr = res.data.data.data;
@@ -1573,11 +1582,9 @@
               });
             }
             arr.forEach((item) => {
-              // item.pName = this.onlyPositionName;
-              // item.orgId = this.department_id;
               item.orgName = this.department_name;
             });
-            this.totalPositionNum = res.data.data.count;
+            this.totalPostNum = res.data.data.count;
             this.positionTableData = res.data.data.data;
             if (res.data.data.data.length > 0) {
               this.selectPostName = res.data.data.data[0].role && res.data.data.data[0].role.name;
@@ -1587,7 +1594,7 @@
               this.postStaffStatus = '暂无数据';
             }
           } else {
-            this.totalPositionNum = 0;
+            this.totalPostNum = 0;
             this.positionTableData = [];
             this.postCollectStatus = '暂无数据';
             this.postStaffStatus = '暂无数据';
@@ -1779,21 +1786,25 @@
         this.params.page = val;
         this.search();
       },
-      handlePostSizeChange(val) {
-        this.postParams.limit = val;
-        this.getOnlyPosition();
-      },
-      handlePostCurrentChange(val) {
-        this.postParams.page = val;
-        this.getOnlyPosition();
-      },
-      //岗位
+
+      //职位
       handlePositionSizeChange(val) {
         this.positionParams.limit = val;
-        this.getPosition();
+        this.getOnlyPosition();
       },
       handlePositionCurrentChange(val) {
         this.positionParams.page = val;
+        this.getOnlyPosition();
+      },
+      //岗位
+      handlePostSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+        this.postParams.limit = val;
+        this.getPosition();
+      },
+      handlePostCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.postParams.page = val;
         this.getPosition();
       },
       //岗位下的员工
