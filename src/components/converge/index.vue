@@ -204,7 +204,6 @@
                 </div>
               </div>
             </el-col>
-
             <!--公司生活-->
             <el-col :span="12">
               <div class="title color1 a1">公司生活</div>
@@ -247,7 +246,56 @@
               </div>
             </el-col>
           </el-row>
+        </el-col>
+        <!--热门导读-->
+        <el-col :span="8">
+          <div class="title color4 a4">热门导读</div>
+          <div class="hotReady" v-for="(key,index) in hotData.data" v-if="index === 0 && hotData.data[0] !== ''">
+            <div class="elPadding">
+              <div class="titleImg box">
+                 <span @click="routerDetail(key.id)" v-for="pic in key && key.album && key.album.cover_pic">
+                    <img v-for="p in pic" :src="p.uri">
+                  </span>
+              </div>
+              <div class="headline box" @click="routerDetail(key.id)">{{key.title}}</div>
+              <div class="titleTime box">
+                <span>{{key.create_time}}</span>
+                <span>
+                  <i class="iconfont icon-pinglun"></i>{{key.comments_count}}
+                  <i class="iconfont icon-zan"></i>{{key.favor_num}}
+                  <i class="el-icon-view"></i>{{key.read_num}}
+                </span>
+              </div>
+              <div class="titleMain text box" v-html="key.content">
+              </div>
+              <h6 class="a4"></h6>
+              <div class="onBtn box">
+                <el-button type="primary" size="mini" @click="routerDetail(key.id)">更多</el-button>
+              </div>
+              <div class="bottom">
+                <div class="mainRight">
+                  <div class="a" v-for="(key,index) in hotData.data" v-if="index !== 0" @click="routerDetail(key.id)">
+                    <div>
+                       <span v-for="pic in key && key.album && key.album.cover_pic">
+                         <img v-for="p in pic" :src="p.uri">
+                       </span>
+                    </div>
+                    <div>
+                      <p class="headline">{{key.title}}</p>
+                      <span class="titleMain" v-html="key.content">
+                    </span>
+                      <h6 class="a4"></h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </el-col>
+      </el-row>
 
+      <el-row :gutter="10" style="display: -webkit-flex;display: flex;">
+        <el-col :span="16">
           <!--人物志-->
           <div class="title color1 a1">
             人物志
@@ -338,51 +386,14 @@
             </el-col>
           </el-row>
         </el-col>
-
-        <!--热门导读-->
         <el-col :span="8">
-          <div class="title color4 a4">热门导读</div>
-          <div class="hotReady" v-for="(key,index) in hotData.data" v-if="index === 0 && hotData.data[0] !== ''">
-            <div class="elPadding">
-              <div class="titleImg box">
-                 <span @click="routerDetail(key.id)" v-for="pic in key && key.album && key.album.cover_pic">
-                    <img v-for="p in pic" :src="p.uri">
-                  </span>
-              </div>
-              <div class="headline box" @click="routerDetail(key.id)">{{key.title}}</div>
-              <div class="titleTime box">
-                <span>{{key.create_time}}</span>
-                <span>
-                  <i class="iconfont icon-pinglun"></i>{{key.comments_count}}
-                  <i class="iconfont icon-zan"></i>{{key.favor_num}}
-                  <i class="el-icon-view"></i>{{key.read_num}}
-                </span>
-              </div>
-              <div class="titleMain text box" v-html="key.content">
-              </div>
-              <h6 class="a4"></h6>
-              <div class="onBtn box">
-                <el-button type="primary" size="mini" @click="routerDetail(key.id)">更多</el-button>
-              </div>
-              <div class="bottom">
-                <div class="mainRight">
-                  <div class="a" v-for="(key,index) in hotData.data" v-if="index !== 0" @click="routerDetail(key.id)">
-                    <div>
-                       <span v-for="pic in key && key.album && key.album.cover_pic">
-                         <img v-for="p in pic" :src="p.uri">
-                       </span>
-                    </div>
-                    <div>
-                      <p class="headline">{{key.title}}</p>
-                      <span class="titleMain" v-html="key.content">
-                    </span>
-                      <h6 class="a4"></h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <!--问答中心-->
+          <div class="title color3 a3">
+            问答中心
           </div>
+          <el-row class="answer_center">
+            <img src="../../assets/images/answerCenter.png" @click="goAnswerCenter">
+          </el-row>
         </el-col>
       </el-row>
     </div>
@@ -415,7 +426,7 @@
     mounted() {
       this.addRegion();
     },
-    activated(){
+    activated() {
       this.addRegion();
     },
     created() {
@@ -454,6 +465,9 @@
         let data = {ids: id, detail: 'converge'};
         this.$router.push({path: '/Infodetails', query: data});
         this.$store.dispatch('articleDetail', data);
+      },
+      goAnswerCenter() {
+        this.$router.push({path: '/answerCenter'});
       },
       addRegion() {
         // 主轮播
@@ -567,6 +581,12 @@
 </script>
 
 <style lang="scss">
+  .answer_center {
+    height: 355px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+  }
+
   #converge {
     $color: #409EFF;
     $colorBor: #ddd;
@@ -866,7 +886,7 @@
         }
       }
       .hotReady .elPadding {
-        height: 1006px;
+        height: 615px;
         .mainRight {
           .a {
             margin-bottom: 29px;
