@@ -85,7 +85,7 @@
               v-loading="tableLoading"
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
-              element-loading-background="rgba(0, 0, 0, 0)"
+              element-loading-background="rgba(255, 255, 255, .7)"
               @row-contextmenu="houseMenu"
               @row-dblclick="dblClickTable"
               @row-click = 'clickTable'
@@ -356,7 +356,7 @@
         emptyContent: ' ',
         tableLoading: false,
         dicts: {
-          room: ['1室', '2室', '3室', '4室', '5室', '6室', '7室', '8室'],
+          room: ['','1室', '2室', '3室', '4室', '5室', '6室', '7室', '8室'],
           hall: ['无', '1厅', '2厅', '3厅', '4厅', '5厅'],
           toilet: ['无', '1卫', '2卫', '3卫', '4卫', '5卫'],
         },
