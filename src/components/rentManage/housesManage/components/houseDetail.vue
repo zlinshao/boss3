@@ -1,7 +1,11 @@
 <template>
   <div>
     <el-dialog :close-on-click-modal="false" title="房屋详情" width="60%" :visible.sync="houseDetailDialogVisible">
-      <div class="scroll_bar">
+      <div class="scroll_bar"
+           v-loading="tableLoading"
+           element-loading-text="拼命加载中"
+           element-loading-spinner="el-icon-loading"
+           element-loading-background="rgba(255, 255, 255, .7)">
         <div v-if="!isOnlyPic">
           <div class="title">基本信息</div>
           <div class="describe_border">
@@ -393,6 +397,7 @@
         albumData : [],
         allDictionary:[],
         listInfo:{},
+        tableLoading: false,
       };
     },
     watch:{
@@ -417,10 +422,17 @@
     },
     methods:{
       getData(){
+        this.tableLoading = true;
         this.$http.get(globalConfig.server+'house/album/'+this.houseId).then((res) => {
+          this.tableLoading = false;
           if(res.data.code === '30070'){
-              this.detailData = res.data.data.detail;
-              this.albumData = res.data.data.album;
+            this.detailData = res.data.data.detail;
+            this.albumData = res.data.data.album;
+          }else {
+            this.$notify.warning({
+              title:"警告",
+              message:res.data.msg,
+            })
           }
         })
       },
