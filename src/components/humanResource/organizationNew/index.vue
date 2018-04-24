@@ -209,7 +209,7 @@
                     label="手机号">
                   </el-table-column>
                   <el-table-column
-                    prop="created_at"
+                    prop="detail.enroll"
                     label="入职时间">
                   </el-table-column>
                   <el-table-column
@@ -615,6 +615,15 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
+                <el-form-item label="离职时间">
+                  <div class="content">
+                    <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_time">
+                      {{staffDetailData && staffDetailData.detail && staffDetailData.detail.dismiss_time}}</span>
+                    <span v-else>暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
                 <el-form-item label="薪资">
                   <div class="content">
                     <span v-if="staffDetailData && staffDetailData.detail && staffDetailData.detail.salary">
@@ -807,8 +816,8 @@
       <div>
         <el-form size="mini" onsubmit="return false;" :model="form" label-width="100px" style="padding: 0 20px;">
           <el-form-item label="离职日期" required>
-            <el-date-picker v-model="form.dismiss_time" type="datetime" placeholder="请选择离职日期"
-                            value-format="yyyy-MM-dd hh:mm:ss">
+            <el-date-picker v-model="form.dismiss_time" type="date" placeholder="请选择离职日期"
+                            value-format="yyyy-MM-dd">
             </el-date-picker>
           </el-form-item>
         </el-form>
@@ -1029,12 +1038,6 @@
           this.isGetOnlyPosition = true;
         }
       },
-      // 'postParams.page': {
-      //   deep: true,
-      //   handler(val,old){
-      //     alert(val);
-      //   }
-      // },
     },
     methods: {
       highGrade() {
@@ -1042,6 +1045,8 @@
       },
       resetting() {
         this.params.is_dimission = '';
+        this.params.entry_time = '';
+        this.params.leave_time = '';
       },
       //入职材料
       getEntryMaterials() {
@@ -1494,7 +1499,6 @@
         this.department_id = row.org_id;
         this.department_name = row.org.name;
 
-        // this.getPosition();
         this.menuType = 'onlyPosition';
         this.lists = [
           {clickIndex: 'addPost', headIcon: 'el-icon-plus', label: '增加岗位',},
@@ -1586,8 +1590,9 @@
             arr.forEach((item) => {
               item.orgName = this.department_name;
             });
-            this.totalPostNum = res.data.data.count;
+            // this.postParams.page = 2;
             this.positionTableData = res.data.data.data;
+            this.totalPostNum = res.data.data.count;
             if (res.data.data.data.length > 0) {
               this.selectPostName = res.data.data.data[0].role && res.data.data.data[0].role.name;
               this.getPostStaffData();
