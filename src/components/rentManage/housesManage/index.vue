@@ -85,7 +85,7 @@
               v-loading="tableLoading"
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
-              element-loading-background="rgba(255, 255, 255, .7)"
+              element-loading-background="rgba(255, 255, 255, 0)"
               @row-contextmenu="houseMenu"
               @row-dblclick="dblClickTable"
               @row-click = 'clickTable'
@@ -150,7 +150,7 @@
                 </template>
               </el-table-column>
               <el-table-column
-                label="参考价格">
+                label="建议价格">
                 <template slot-scope="scope">
                   <span v-if="scope.row.suggest_price">{{scope.row.suggest_price}}</span>
                   <span v-else="">/</span>

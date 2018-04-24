@@ -99,7 +99,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                  <el-form-item label="价格">
+                  <el-form-item label="建议价格">
                     <div class="content">
                       <span v-if="detailData.price">{{detailData.price}}</span>
                     </div>
