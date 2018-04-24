@@ -1445,8 +1445,8 @@
         this.editId = '';
         if (val === 'success') {
           this.getStaffData();
+          this.getDepart();
         }
-        this.getDepart();
       },
 
       //********************职位操作函数****************
