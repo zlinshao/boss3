@@ -268,7 +268,7 @@
   import Organization from '../../../common/organization.vue';
 
   export default {
-    props: ['addStaffDialog', 'isEdit', 'editId', 'departmentId'],
+    props: ['addStaffDialog', 'isEdit', 'editId'],
     components: {Organization},
     data() {
       return {
@@ -318,6 +318,7 @@
         length: null,
         positionArray: [],  //职位
         postArray: [],  //岗位
+        postArrayIds: [],
         sexCategory: [],
         fertilityStatusCategory: [],
         accountStatusCategory: [],
@@ -354,20 +355,12 @@
           this.getStaffInfo();
         }
       },
-      departmentId(val) {
-        this.positionArray = [];
-        this.editPositionIds = [];
-        this.getPosition(val);
-      },
       editPositionIds(val){
         this.postArray=[];
         for (var i = 0; i < this.editPositionIds.length; i++) {
           this.getPositions(this.editPositionIds[i]);
         }
       }
-    },
-    mounted() {
-      this.getPosition(this.departmentId);
     },
     methods: {
       getDictionaries() {
@@ -435,6 +428,7 @@
       selectDepartment() {
         if (this.department) {
           this.positionArray = [];
+          this.postArray = [];
           this.currentPosition = [];
           this.params.position_id = [];
           this.positionDisabled = false;  //职位可选
@@ -562,13 +556,17 @@
       },
       //获取岗位
       getPositions(id) {
+        this.postArrayIds = [];
         this.$http.get(globalConfig.server + 'manager/positions?type=' + id).then((res) => {
           if (res.data.code === '20000') {
             res.data.data.data.forEach((item) => {
               let data = {};
               data.id = item.id;
               data.name = item.name;
-              this.postArray.push(data);
+              if($.inArray(item.id, this.postArrayIds) === -1){
+                this.postArray.push(data);
+                this.postArrayIds.push(item.id); //用来判断数组里有没有重复的数据
+              }
             });
           }
         });
@@ -637,6 +635,7 @@
       selectMember(val) {
         if (this.type === 'depart') {
           this.params.department_id = [];
+          this.postArrayIds = [];
           let departNameArray = [];
           if (val.length > 0) {
             val.forEach((item) => {
