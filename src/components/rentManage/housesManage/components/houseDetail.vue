@@ -106,6 +106,16 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
+                  <el-form-item label="报备价格">
+                    <div class="content">
+                      <span v-if="detailData.house_goods&&detailData.house_goods.price">{{detailData.house_goods.price}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+
+              <el-row>
+                <el-col :span="8">
                   <el-form-item label="是否中介">
                     <div class="content">
                       <span v-if="detailData.is_agency">是</span>
@@ -113,9 +123,6 @@
                     </div>
                   </el-form-item>
                 </el-col>
-              </el-row>
-
-              <el-row>
                 <el-col :span="8">
                   <el-form-item label="开单人">
                     <div class="content">
@@ -342,34 +349,44 @@
         </div>
         <div class="title">房屋影像</div>
         <div class="describe_border">
-          <div class="title">
-            {{detailData.create_time}}
-          </div>
-          <div class="describe_border">
-            <div v-if="detailData.house_goods&&detailData.house_goods.photo">
-              <img v-for="item in detailData.house_goods.photo" v-if="item.info.mime.indexOf('image')>-1"
-                   :src="item.uri" data-magnify="" :data-src="item.uri" alt="">
 
-              <video v-for="item in detailData.house_goods.photo" v-if="item.info.mime.indexOf('video')>-1"
-                     class="video-js" controls preload="auto" width="200" height="120"
-                     data-setup="{}">
-                <source :src="item.uri" type="video/mp4">
-              </video>
+          <div v-if="detailData.house_goods&&detailData.house_goods.photo">
+            <div class="title">
+              {{detailData.create_time}}
+            </div>
+            <div class="describe_border">
+              <div v-if="detailData.house_goods&&detailData.house_goods.photo"
+                   v-for="item in detailData.house_goods.photo" style="display: inline-block">
+                <img v-if="item.info.mime&&item.info.mime.indexOf('image')>-1"
+                     :src="item.uri" data-magnify="" :data-src="item.uri" alt="">
+                <img v-if="!item.info.mime" :src="item.uri" data-magnify="" :data-src="item.uri">
+                <video v-if="item.info.mime&&item.info.mime.indexOf('video')>-1"
+                       class="video-js" controls preload="auto" width="200" height="120" data-setup="{}">
+                  <source :src="item.uri" type="video/mp4">
+                </video>
+              </div>
             </div>
           </div>
 
           <div v-if="albumData&&albumData.length>0" v-for="albumArray in albumData">
-
             <div class="title">
-              <span style="margin-right: 50px">{{albumArray.create_time}}</span>
-              <span style="color: #444" v-if="albumArray.remark">备注：{{albumArray.remark}}</span>
+              <span style="margin-right: 30px">{{albumArray.create_time}}</span>
+              <span style="margin-right: 30px;color: #444" v-if="albumArray.remark">备注：{{albumArray.remark}}</span>
+              <span style="margin-right: 30px;color: #444" v-if="albumArray.staffs&&albumArray.staffs.name">上传人：{{albumArray.staffs.name}}</span>
+              <span style="color: #444" v-if="albumArray.staffs&&albumArray.staffs.org&&albumArray.staffs.org.length>0">
+                部门：
+                <span v-for="item in albumArray.staffs.org">
+                  <span>{{item.name}}&nbsp;&nbsp;  </span>
+                </span>
+              </span>
             </div>
             <div class="describe_border">
-              <div v-if="albumArray.album&&albumArray.album.album_file&&albumArray.album.album_file.length>0">
-                <img v-for="item in albumArray.album.album_file" v-if="item.info.mime.indexOf('image')>-1"
+              <div v-if="albumArray.album&&albumArray.album.album_file&&albumArray.album.album_file.length>0"
+                   v-for="item in albumArray.album.album_file" style="display: inline-block">
+                <img  v-if="item.info.mime&&item.info.mime.indexOf('image')>-1"
                      :src="item.uri" data-magnify="" :data-src="item.uri">
-
-                <video v-for="item in albumArray.album.album_file" v-if="item.info.mime.indexOf('video')>-1"
+                <img v-if="!item.info.mime" :src="item.uri" data-magnify="" :data-src="item.uri">
+                <video  v-if="item.info.mime&&item.info.mime.indexOf('video')>-1" v-for="item in albumArray.album.album_file"
                        class="video-js" controls preload="auto" width="200" height="120"
                        data-setup="{}">
                   <source :src="item.uri" type="video/mp4">
