@@ -342,6 +342,7 @@
           if (!this.editId) {
             this.initial(); //新增时候清除
           }
+          this.editPositionIds = [];
           this.getDictionaries(); //新增或者修改打开弹框时候才请求字典
         }
       },
