@@ -472,9 +472,7 @@
             globalConfig.personal = res.data.data.data;
             this.loginDay = JSON.parse(localStorage.personal).data.loginday;
           });
-      var millisecond = new Date().getTime();
-      var expiresTime = new Date(millisecond + 60 * 1000 * 60 * 18); //设置18小时缓存
-      cookie.set("reFresh", true, {expires: expiresTime});
+      cookie.set("reFresh", true, {expires: 0.5});
       }
     },
     mounted() {
