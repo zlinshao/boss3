@@ -301,7 +301,7 @@
                         label="岗位">
                       </el-table-column>
                       <el-table-column
-                        label="上级岗位">
+                        label="下级岗位">
                         <template slot-scope="scope">
                           <span v-if="scope.row.parent_name">{{scope.row.parent_name}}</span>
                           <span v-else=""> &nbsp;暂无&nbsp; </span>

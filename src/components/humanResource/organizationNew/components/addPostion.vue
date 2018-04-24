@@ -28,8 +28,8 @@
               </el-form-item>
             </el-col>
             <el-col :span="24" v-if="type==='post'">
-              <el-form-item label="上级岗位">
-                <el-select v-model="params.parent_id" clearable="" placeholder="请选择上级岗位">
+              <el-form-item label="下级岗位">
+                <el-select v-model="params.parent_id" clearable="" placeholder="请选择下级岗位">
                   <el-option v-for="item in postData" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </el-select>
               </el-form-item>
