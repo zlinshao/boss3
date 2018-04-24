@@ -30,7 +30,7 @@
                     <span>{{item && item.role}}</span>
                     <span>{{item.create_time}}</span>
                   </span>
-                  
+
                 </div>
               </div>
             </div>
@@ -110,7 +110,7 @@
                     {{keyx.content}}
                   </div>
                 </div>
-              </div> 
+              </div>
 
             </div>
               <div class="publishComment" v-show="pinglunId == key.id" style="width:92%;margin-left:8%;">
@@ -138,7 +138,7 @@
                       <el-button type="success" size="small" @click="addChatReply(item.id,key.id)">发表</el-button>
                     </div>
                   </el-form-item>
-              </el-form>           
+              </el-form>
           </div>
         </div>
           <div class="block pages" v-if="paging > 14" >
@@ -171,7 +171,7 @@
         <span style="color:#409EFF;font-size:14px; margin: 10px 0 5px 0; display:block;">问题描述</span>
         <el-input v-model="form.description" type="textarea" placeholder="问题背景、条件等信息"></el-input>
         <div style="margin:10px 0;">
-        <el-checkbox v-model="anonymous" ></el-checkbox>&nbsp;匿名问题
+        <el-checkbox v-model="anonymous" >匿名问题</el-checkbox>&nbsp;
         </div>
         <div style="border-top:1px #eee solid">
           <el-button @click="submitque" type="primary" style="margin-top:30px;margin-left:40%;width:126px; height:32px;background-color:#6a8dfb; border-color:#6a8dfb; line-height:0px;">提交问题</el-button>
