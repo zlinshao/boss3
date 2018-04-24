@@ -108,16 +108,16 @@
                           <div class="el_col_label">入职时间</div>
                         </el-col>
                         <el-col :span="16" class="el_col_option">
-                            <el-form-item>
-                              <el-date-picker
-                                v-model="params.entry_time"
-                                type="daterange"
-                                value-format="yyyy-MM-dd"
-                                range-separator="至"
-                                start-placeholder="开始日期"
-                                end-placeholder="结束日期">
-                              </el-date-picker>
-                            </el-form-item>
+                          <el-form-item>
+                            <el-date-picker
+                              v-model="params.entry_time"
+                              type="daterange"
+                              value-format="yyyy-MM-dd"
+                              range-separator="至"
+                              start-placeholder="开始日期"
+                              end-placeholder="结束日期">
+                            </el-date-picker>
+                          </el-form-item>
                         </el-col>
                       </el-row>
                     </el-col>
@@ -272,8 +272,8 @@
                   </div>
                   <div class="tableBottom">
                     <el-pagination
-                      @size-change="handleSizeChange"
-                      @current-change="handleCurrentChange"
+                      @size-change="handlePostSizeChange"
+                      @current-change="handlePostCurrentChange"
                       :current-page="postParams.page"
                       :page-sizes="[5, 10, 15, 20]"
                       :page-size="5"
@@ -325,12 +325,14 @@
                     <el-pagination
                       @size-change="handlePositionSizeChange"
                       @current-change="handlePositionCurrentChange"
-                      :current-page="positionParams.page"
-                      :page-sizes="[5, 10, 15, 20]"
-                      :page-size="5"
+                      :current-page="currentPage"
+                      :page-sizes="[3, 6, 15, 20]"
+                      :page-size="3"
                       layout="total, sizes, prev, pager, next, jumper"
                       :total="totalPositionNum">
                     </el-pagination>
+                    {{positionParams.page}}
+
                   </div>
                 </div>
                 <!--岗位下的员工-->
@@ -604,7 +606,7 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-row>
+            <el-row :gutter="20">
               <el-col :span="8">
                 <el-form-item label="入职时间">
                   <div class="content">
@@ -776,7 +778,7 @@
           <div class="title">成长轨迹</div>
           <div class="form_border">
             <div v-if="growthData.length>0">
-              <el-form size="small"  v-if="growthData">
+              <el-form size="small" v-if="growthData">
                 <el-row :gutter="20" v-for="item in growthData" :key="item.id" style="margin-bottom: 15px;">
                   <el-col :span="4">
                     <div class="content">
@@ -807,7 +809,8 @@
       <div>
         <el-form size="mini" onsubmit="return false;" :model="form" label-width="100px" style="padding: 0 20px;">
           <el-form-item label="离职日期" required>
-            <el-date-picker v-model="form.dismiss_time" type="datetime" placeholder="请选择离职日期" value-format="yyyy-MM-dd hh:mm:ss">
+            <el-date-picker v-model="form.dismiss_time" type="datetime" placeholder="请选择离职日期"
+                            value-format="yyyy-MM-dd hh:mm:ss">
             </el-date-picker>
           </el-form-item>
         </el-form>
@@ -913,7 +916,7 @@
           page: 1,
         },
         positionParams: {
-          limit: 5,
+          limit: 3,
           page: 1,
         },
         postStaffParams: {
@@ -972,6 +975,7 @@
         departManageName: '',
         selectPostName: '',
         growthData: '',
+        currentPage: 1,
       }
     },
     mounted() {
@@ -998,6 +1002,7 @@
         this.onlyPositionId = '';
         this.onlyPositionName = '';
         if (this.activeName === 'first') {
+          this.params.page = 1;
           this.getStaffData();
           this.isGetStaff = true;
         } else if (this.activeName === 'second') {
@@ -1012,6 +1017,7 @@
           this.params.limit = 5;
         }
         if (val === 'first' && !this.isGetStaff) {
+          this.params.page = 1;
           this.getStaffData();
           this.isGetStaff = true;
         } else if (val === 'second' && !this.isGetOnlyPosition) {
@@ -1021,31 +1027,6 @@
       },
     },
     methods: {
-      // allowDrop(draggingNode, dropNode) {
-      //   // console.log(draggingNode, dropNode)
-      // },
-      // allowDrag(draggingNode) {
-      //   // console.log(draggingNode)
-      // },
-      // handleDragStart(node, ev) {
-      //   console.log('drag start', node);
-      // },
-      // handleDragEnter(draggingNode, dropNode, ev) {
-      //   console.log('tree drag enter: ', dropNode.label);
-      // },
-      // handleDragLeave(draggingNode, dropNode, ev) {
-      //   console.log('tree drag leave: ', dropNode.label);
-      // },
-      // handleDragOver(draggingNode, dropNode, ev) {
-      //   console.log('tree drag over: ', dropNode.label);
-      // },
-      // handleDragEnd(draggingNode, dropNode, dropType, ev) {
-      //   console.log('tree drag end: ', dropNode && dropNode, dropType);
-      // },
-      // handleDrop(draggingNode, dropNode, dropType, ev) {
-      //   console.log('tree drop: ', dropNode.label, dropType);
-      // },
-
       highGrade() {
         this.isHigh = !this.isHigh;
       },
@@ -1257,13 +1238,13 @@
       getStaffData() {
         this.userCollectLoading = true;
         this.userCollectStatus = ' ';
-        if(!this.params.entry_time){
+        if (!this.params.entry_time) {
           this.params.entry_time = [];
         }
-        if(!this.params.leave_time){
+        if (!this.params.leave_time) {
           this.params.leave_time = [];
         }
-        this.$http.get(globalConfig.server + 'manager/staff?keywords=' ,{params: this.params}).then((res) => {
+        this.$http.get(globalConfig.server + 'manager/staff', {params: this.params}).then((res) => {
           this.userCollectLoading = false;
           this.isHigh = false;
           if (res.data.code === '10000') {
@@ -1272,7 +1253,7 @@
             if (this.staffTableData.length < 1) {
               this.userCollectStatus = '暂无数据';
             }
-//            this.params.page = 1;
+
           } else {
             this.userCollectStatus = '暂无数据';
             this.staffTableData = [];
@@ -1323,13 +1304,16 @@
         this.contextParams(event);
       },
       //离职日期
-      notOnJob(){
+      notOnJob() {
         this.$confirm('员工在职状态将会改变, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.put(globalConfig.server + 'manager/staff/dismiss/' + this.currentStaffId, {type: 'is_on_job',dismiss_time: this.form.dismiss_time}).then((res) => {
+          this.$http.put(globalConfig.server + 'manager/staff/dismiss/' + this.currentStaffId, {
+            type: 'is_on_job',
+            dismiss_time: this.form.dismiss_time
+          }).then((res) => {
             if (res.data.code === '10040') {
               this.$notify.success({
                 title: '成功',
@@ -1413,7 +1397,7 @@
           }).catch(() => {
 
           });
-        }else if(val.clickIndex === 'on_job'){
+        } else if (val.clickIndex === 'on_job') {
           this.notOnJobDialog = true;
           this.currentStaffId = val.id;
           this.form.dismiss_time = '';
@@ -1466,8 +1450,8 @@
         if (this.params.org_id) {
           this.positionCollectLoading = true;
           this.positionCollectStatus = ' ';
-          this.$http.get(globalConfig.server + 'manager/position?department_id=' + this.params.org_id + '&page=' + this.params.page
-            + '&limit=' + this.params.limit).then((res) => {
+          this.$http.get(globalConfig.server + 'manager/position?department_id=' + this.params.org_id + '&page=' + this.postParams.page
+            + '&limit=' + this.postParams.limit).then((res) => {
             this.positionCollectLoading = false;
             if (res.data.code === '20000') {
               this.positionList = res.data.data.data;
@@ -1589,8 +1573,8 @@
               });
             }
             arr.forEach((item) => {
-              item.pName = this.onlyPositionName;
-              item.orgId = this.department_id;
+              // item.pName = this.onlyPositionName;
+              // item.orgId = this.department_id;
               item.orgName = this.department_name;
             });
             this.totalPositionNum = res.data.data.count;
@@ -1755,13 +1739,11 @@
           }
         });
       },
-
       //*************选人框**********************
       //关闭回调
       closeOrganization() {
         this.organizationDialog = false;
       },
-
       //确定排序
       confirmSave() {
         this.$confirm('您确定保存吗?', '提示', {

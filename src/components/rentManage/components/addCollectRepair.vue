@@ -231,6 +231,9 @@
       },
       initial() {
         this.form = {
+          contract_id: this.contract.contract_id, //合同Id
+          contract_number: this.contract.contract_number, //合同编号
+          contract_type: this.contract.type, //合同类型
           city: '',
           customer_name: '',  //客户姓名
           sex: null,     //性别
