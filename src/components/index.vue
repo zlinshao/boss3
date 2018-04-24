@@ -521,14 +521,21 @@
 
         //制度弹窗
         if (!this.personal.data.system) {
-        this.institutionDialog = true;
+        //this.institutionDialog = true;
         }
         //this.noticeTitleDialog = true;
         //this.yanFirstDialog = true;
         //版本更新
-        if (!this.personal.data.record) {
-          this.yanSecondDialog = true;
-        }
+      this.$http
+        .get(globalConfig.server + "setting/update/read?a=1")
+        .then(res => {
+          if (res.data.code === "50040") {
+            if (!JSON.parse(localStorage.personal).data.record) {
+              this.yanSecondDialog = true;
+            }
+          }
+        });
+
         this.loginDay = this.personal.data.loginday;
         this.loginPercent = Number(this.loginDay / 180 * 100) + "%";
         $(".percent").css("width", this.loginPercent);

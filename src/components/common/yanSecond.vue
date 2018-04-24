@@ -60,6 +60,7 @@ export default {
             this.versionInfo = res.data.data;
             this.images = res.data.data.album;
           }
+
         });
     },
     close() {
