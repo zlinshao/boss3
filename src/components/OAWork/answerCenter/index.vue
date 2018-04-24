@@ -37,7 +37,7 @@
           </div>
           <div class="question">{{item.description}}</div>
           <el-button type="primary" style="margin: 10px 0 20px 10px;" @click="write(item.id)" size="small">写回答</el-button>
-          <div class="publishComment" v-show="isShow && item.id == answarid">
+          <div class="publishComment" v-show="item.id == answarid">
             <div class="portrait">
               <img :src="landholder.avatar" v-if="landholder && landholder.avatar">
               <img src="../../../assets/images/head.png" v-else>
@@ -46,7 +46,7 @@
               <div class="staff_name">
                 <div>
                   <span>{{landholder && landholder.name}}</span>&nbsp;&nbsp;
-                  <span v-for="key in landholder && landholder.org">
+                  <span v-for="key in landholder && landholder.org" :key="key.name">
                     <span>{{key && key.name}}</span>
                   </span>
                 </div>
@@ -54,11 +54,10 @@
             </div>
           </div>
 
-          <el-form size="small" v-show="isShow && item.id == answarid">
+          <el-form size="small" v-show="item.id == answarid">
             <el-form-item>
               <el-input type="textarea" :rows="3" v-model="content" placeholder="请输入答案内容"></el-input>
             </el-form-item>
-            <!--<span  v-if="landholder.data" style="float: left">{{landholder.data.signature && landholder.data.signature.content}}</span>-->
             <el-form-item>
               <div class="submitButt">
                 <el-button type="success" size="small" @click="addReply(item.id)">发表</el-button>
@@ -123,7 +122,7 @@
                   <div class="staff_name">
                     <div>
                       <span>{{landholder && landholder.name}}</span>&nbsp;&nbsp;
-                      <span v-for="key in landholder && landholder.org">
+                      <span v-for="key in landholder && landholder.org" :key="key.name">
                         <span>{{key && key.name}}</span>
                       </span>
                     </div>
@@ -188,40 +187,33 @@ export default {
   data() {
     return {
       urls: globalConfig.server,
-      showUp: "",
       isShow: false,
-      islook:false,
-      pinglun:false,
-      yFlag:0,
-      colNum: 16,
-      formList: {},
-      showlen:1,
-      staffs: {},
+      islook: false,
+      pinglun: false,
+      yFlag: 0,
+      showlen: 1,
       addContent: "",
       commentOn: [],
-      cover_pic: {},
+      showlen: 1,
       currentPage: 1,
-      faleDialog:false,
+      faleDialog: false,
       paging: 0,
-      questions:[],
+      questions: [],
       page: 1,
       form: {
-        keywords:"",
+        keywords: "",
         title: "",
         description: "",
-        is_anonymous:0,
-        limit:4,
+        is_anonymous: 0,
+        limit: 4,
         pages: 1
       },
-      anonymous:"false",
-      hotData: {},
+      anonymous: "false",
       loading: false, //点赞
-      query: {},
-      ids: "",
       landholder: {}, //个人信息
-      answarid:"",  // 问题编号ID
-      content:"",  //回答内容
-      pinglunId:"" //评论编号ID
+      answarid: "", // 问题编号ID
+      content: "", //回答内容
+      pinglunId: "" //评论编号ID
     };
   },
   created() {
@@ -231,61 +223,52 @@ export default {
   mounted() {
     this.myData(1);
   },
-  watch: {
-    ids(val) {
-      if (val) {
-        this.loading = true;
-      }
-    },
-    formList(val) {
-      if (val) {
-        this.loading = false;
-      }
-    }
-  },
+  watch: {},
   methods: {
-    clearque(){
-      this.keywords = ""
+    clearque() {
+      this.keywords = "";
       this.myData(1);
     },
     //我要提问
-    openFlag(){
+    openFlag() {
       this.faleDialog = true;
     },
     //写回答
-    write(id){
+    write(id) {
       this.isShow = !this.isShow;
-      this.answarid =id;
+      this.answarid = id;
     },
     //显示所有回答
-    islookFlag(y){
+    islookFlag(y) {
       this.pinglun = !this.pinglun;
-      this.yFlag= y;
+      this.yFlag = y;
     },
 
     //显示所有评论
-    openpy(id){
+    openpy(id) {
       this.islook = !this.islook;
       this.pinglunId = id;
     },
     search(val) {
       this.myData(val);
     },
-    searchx(){
+    searchx() {
       this.myData(1);
     },
     myData(val) {
       this.page = val;
+      this.loading = true;
       this.$http
-        .get(this.urls + "ans/list" , {
+        .get(this.urls + "ans/list", {
           params: {
             page: this.page,
-            limit:15,
-            keywords: this.form.keywords,
+            limit: 15,
+            keywords: this.form.keywords
           }
         })
         .then(res => {
           if (res.data.code === "199200") {
+            this.loading = false;
             this.questions = res.data.data.data;
             this.paging = res.data.data.count;
           } else {
@@ -295,34 +278,36 @@ export default {
         });
     },
     //提问
-    submitque(){
-      if(this.anonymous == true){
-        this.form.is_anonymous = 1
-      }
-      else{
-        this.form.is_anonymous = 0
+    submitque() {
+      if (this.anonymous == true) {
+        this.form.is_anonymous = 1;
+      } else {
+        this.form.is_anonymous = 0;
       }
       this.$http
         .post(this.urls + "ans/insert", {
-          title : this.form.title,
-          description : this.form.description,
-          is_anonymous : this.form.is_anonymous,
+          title: this.form.title,
+          description: this.form.description,
+          is_anonymous: this.form.is_anonymous
         })
         .then(res => {
           if (res.data.code === "199200") {
             this.faleDialog = false;
+            this.form.title = "";
+            this.form.description = "";
+            this.anonymous = false;
             this.$notify({
-              title: '成功',
+              title: "成功",
               message: res.data.msg,
-              type: 'success'
-            });         
-            this.myData(1);  
+              type: "success"
+            });
+            this.myData(1);
           } else {
             this.$notify({
-              title: '警告',
+              title: "警告",
               message: res.data.msg,
-              type: 'warning'
-            });           
+              type: "warning"
+            });
           }
         });
     },
@@ -331,29 +316,29 @@ export default {
       this.$http
         .post(this.urls + "ans/comment", {
           obj_id: id,
-          content: this.content,
+          content: this.content
         })
         .then(res => {
           if (res.data.code === "199200") {
             this.myData(1);
             this.$notify({
-              title: '成功',
+              title: "成功",
               message: res.data.msg,
-              type: 'success'
-            });   
+              type: "success"
+            });
             this.content = "";
           } else {
             this.$notify({
-              title: '警告',
+              title: "警告",
               message: res.data.msg,
-              type: 'warning'
-            }); 
+              type: "warning"
+            });
           }
         });
     },
 
     //评论
-    addChatReply(itemId,keyId){
+    addChatReply(itemId, keyId) {
       this.$http
         .post(this.urls + "ans/comment", {
           obj_id: itemId,
@@ -364,23 +349,23 @@ export default {
           if (res.data.code === "199200") {
             this.myData(1);
             this.$notify({
-              title: '成功',
+              title: "成功",
               message: res.data.msg,
-              type: 'success'
-            });   
+              type: "success"
+            });
             this.addContent = "";
           } else {
             this.$notify({
-              title: '警告',
+              title: "警告",
               message: res.data.msg,
-              type: 'warning'
-            }); 
+              type: "warning"
+            });
           }
         });
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
-    },
+    }
   }
 };
 </script>
@@ -558,9 +543,9 @@ export default {
 
   .comment_box {
     background: #f4f6fc;
-    border:1px #eee solid;
+    border: 1px #eee solid;
     border-radius: 5px;
-    margin-bottom:15px;
+    margin-bottom: 15px;
     padding: 10px;
     .submitButt {
       text-align: right;
@@ -598,12 +583,12 @@ export default {
         .staffBefore + .staffBefore:before {
           content: " - ";
         }
-        span{
-          margin-right:10px;
+        span {
+          margin-right: 10px;
         }
-        .infopy{
-          margin: -2px 4px 0 0 ;
-          float:right;
+        .infopy {
+          margin: -2px 4px 0 0;
+          float: right;
         }
       }
       .commentContent {
@@ -619,28 +604,25 @@ export default {
     .commentOn {
       padding: 15px;
       width: 97%;
-      margin-left:2%;
+      margin-left: 2%;
       border-top: 1px solid #eeeeee;
       @include flex;
       align-items: center;
     }
-    .anstitle{
+    .anstitle {
       font-size: 20px;
       line-height: 60px;
       font-weight: 500;
-      color: #606266;     
+      color: #606266;
       text-indent: 10px;
     }
-    .question{
-      font-size: 16px; 
-      margin:10px 10px;
+    .question {
+      font-size: 16px;
+      margin: 10px 10px;
     }
-
-
   }
-
-  .highRanking{
-    margin-top:10px;
+  .highRanking {
+    margin-top: 10px;
   }
 }
 </style>
