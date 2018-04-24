@@ -6,15 +6,17 @@
           <el-col :span="8">
             <el-form-item label="职位名称">
               <el-select v-model="currentRoleId" clearable placeholder="请选择">
-                <el-option v-for="item in roleArray" :key="item.id" :label="item.display_name" :value="item.id">{{item.display_name}}
+                <el-option v-for="item in roleArray" :key="item.id" :label="item.display_name" :value="item.id">
+                  {{item.display_name}}
                 </el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="16">
             <el-form-item label="角色名称">
-              <el-select v-model="partNames" clearable placeholder="请选择" multiple>
-                <el-option v-for="item in partArrCategory" :key="item.name" :label="item.display_name" :value="item.name">{{item.display_name}}
+              <el-select v-model="partNames" placeholder="请选择" multiple>
+                <el-option v-for="item in partArrCategory" :key="item.name" :label="item.display_name"
+                           :value="item.name">{{item.display_name}}
                 </el-option>
               </el-select>
             </el-form-item>
@@ -39,7 +41,7 @@
               <el-checkbox-group v-model="checkedPower" @change="powerChange">'
                 <el-row>
                   <el-col :span="6" v-for="key in permissionData" :key="key.id">
-                    <el-checkbox  :label="key.id" >{{key.display_name}}</el-checkbox>
+                    <el-checkbox :label="key.id">{{key.display_name}}</el-checkbox>
                   </el-col>
                 </el-row>
 
@@ -56,6 +58,7 @@
         <el-button size="small" @click="powerVisible = false">取&nbsp;消</el-button>
       </div>
     </el-dialog>
+
   </div>
 </template>
 
@@ -101,43 +104,57 @@
       powerVisible(val) {
         if (!val) {
           this.$emit('close');
+        } else {
+          this.getAllPartData();
+          if (this.userId) {
+            this.getStaffPart();
+          }
         }
       },
       powerData(val) {
         this.roleArray = val.role;
         this.userId = val.id;
-        setTimeout(()=>{
-          this.getDefaultData();
-          this.getAllPartData();
-          this.getStaffPart();
-        },0);
+        setTimeout(() => {
+          if(this.userId){
+            this.getDefaultData();
+          }
+        }, 0);
         this.currentRoleId = this.powerData.role && this.powerData.role[0] && this.powerData.role[0].id;
       }
     },
     methods: {
-      setPart(val){
-        if(val === 'attach'){
-          this.$http.put(globalConfig.server_user+ 'powers/withRole/'+ this.userId,{width: 'attach',role: this.partNames}).then((res)=>{
-            if(res.data.status === 'success'){
+      setPart(val) {
+        let partNames = this.partNames.join(',');
+        if (val === 'attach') {
+          this.$http.put(globalConfig.server_user + 'powers/withRole/' + this.userId, {
+            with: 'attach',
+            role: partNames
+          }).then((res) => {
+            if (res.data.status === 'success') {
               this.$notify.success({
                 title: '成功',
                 message: res.data.message
               });
-            }else{
+              this.powerVisible = false;
+            } else {
               this.$notify.warning({
                 title: '警告',
                 message: res.data.message
               })
             }
           });
-        }else if(val === 'detach'){
-          this.$http.put(globalConfig.server_user+ 'powers/withRole/'+ this.userId,{params: {width: 'detach',role: this.partNames}}).then((res)=>{
-            if(res.data.status === 'success'){
+        } else if (val === 'detach') {
+          this.$http.put(globalConfig.server_user + 'powers/withRole/' + this.userId, {
+              with: 'detach',
+              role: partNames
+          }).then((res) => {
+            if (res.data.status === 'success') {
               this.$notify.success({
                 title: '成功',
                 message: res.data.message
               });
-            }else{
+              this.powerVisible = false;
+            } else {
               this.$notify.warning({
                 title: '警告',
                 message: res.data.message
@@ -148,28 +165,29 @@
 
       },
       getStaffPart() {
-        this.$http.get(globalConfig.server_user+ 'powers/getRole/'+ this.userId).then((res)=>{
-          if(res.data.status === 'success'){
+        this.partNames = [];
+        this.$http.get(globalConfig.server_user + 'powers/getRole/' + this.userId).then((res) => {
+          if (res.data.status === 'success') {
             let data = res.data.data;
-            for(var i=0;i<data.length;i++){
-              this.partNames.push(data.name);
+            for (var i = 0; i < data.length; i++) {
+              this.partNames.push(data[i].name);
             }
           }
         });
       },
-      getAllPartData(){
-        this.$http.get(globalConfig.server_user+ 'roles?per_page_number=500').then((res)=>{
-          if(res.data.status === 'success'){
+      getAllPartData() {
+        this.$http.get(globalConfig.server_user + 'roles?per_page_number=500').then((res) => {
+          if (res.data.status === 'success') {
             this.partArrCategory = res.data.data;
           }
         });
       },
-      getDefaultData(){
+      getDefaultData() {
         this.checkedPower = [];
-        this.$http.get(globalConfig.server_user+ 'powers/'+this.userId).then( (res)=>{
+        this.$http.get(globalConfig.server_user + 'powers/' + this.userId).then((res) => {
           if (res.data.status === 'success') {
             let powers = res.data.data;
-            powers.forEach((item)=>{
+            powers.forEach((item) => {
               this.checkedPower.push(item.id);
             })
           }
@@ -247,7 +265,7 @@
       // 系统
       systemList() {
         this.$http.get(this.urls + 'systems?per_page_number=100&page=1').then((res) => {
-          if (res.data.status === 'success'&& res.data.data.length !== 0) {
+          if (res.data.status === 'success' && res.data.data.length !== 0) {
             let data = res.data.data;
             this.systemData = data;
             this.systemName = data[0].name;
@@ -260,7 +278,7 @@
       // 模块
       moduleList(val) {
         this.$http.get(this.urls + 'modules?per_page_number=100&page=1&sys_id=' + val).then((res) => {
-          if (res.data.status === 'success'&& res.data.data.length !== 0) {
+          if (res.data.status === 'success' && res.data.data.length !== 0) {
             let data = res.data.data;
             this.moduleData = data;
             this.moduleName = data && data[0] && data[0].name;
@@ -275,7 +293,7 @@
       permissionList(val) {
         this.$http.get(this.urls + 'permissions?per_page_number=100&page=1&mod_id=' + val).then((res) => {
           this.checkAllPower = [];
-          if (res.data.status === 'success'&& res.data.data.length !== 0) {
+          if (res.data.status === 'success' && res.data.data.length !== 0) {
             let data = res.data.data;
             this.permissionData = data;
             for (let i = 0; i < data.length; i++) {
@@ -332,8 +350,8 @@
         margin-right: 30px;
       }
     }
-    .el-tabs--left .el-tabs__header.is-left{
-        width: 120px;
-      }
+    .el-tabs--left .el-tabs__header.is-left {
+      width: 120px;
+    }
   }
 </style>
