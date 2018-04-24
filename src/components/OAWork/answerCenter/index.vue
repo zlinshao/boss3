@@ -15,7 +15,7 @@
         </el-form>
       </div>
     </div>
-        <div class="comment_box" v-for="(item,y) in questions" :key="item.id">
+        <div class="comment_box" v-for="item in questions" :key="item.id">
           <div class="anstitle">{{item.title}}</div>
           <div class="publishComment">
             <div class="portraito">
@@ -27,7 +27,7 @@
                 <div>
                   <span style="color:#83a0fc">{{item && item.name}}</span>&nbsp;&nbsp;
                   <span>
-                    <span>{{item && item.org}}-{{item && item.role}}</span>
+                    <span>{{item && item.role}}</span>
                     <span>{{item.create_time}}</span>
                   </span>
                   
@@ -599,7 +599,7 @@ export default {
           content: " - ";
         }
         span{
-          margin: 0 10px;
+          margin-right:10px;
         }
         .infopy{
           margin: -2px 4px 0 0 ;
