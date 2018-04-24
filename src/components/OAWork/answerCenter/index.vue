@@ -3,10 +3,10 @@
   <div id="newsDetail">
     <div class="highRanking" >
       <div class="highSearch">
-        <el-form :inline="true" size="small">
+        <el-form :model="form" :inline="true" size="small">
           <el-form-item>
-            <el-input placeholder="搜索问题" clearable  >
-              <el-button slot="append"  icon="el-icon-search" ></el-button>
+            <el-input v-model="form.keywords" placeholder="搜索问题" clearable @clear="clearque"  >
+              <el-button @click="searchx()" slot="append"  icon="el-icon-search" ></el-button>
             </el-input>
           </el-form-item>
           <el-form-item>
@@ -15,34 +15,29 @@
         </el-form>
       </div>
     </div>
-        <div class="comment_box" v-for="item in 3" :key="item">
-          <div class="anstitle">问题问题问题问题问题问题问题问题问题问题问题</div>
+        <div class="comment_box" v-for="(item,y) in questions" :key="item.id">
+          <div class="anstitle">{{item.title}}</div>
           <div class="publishComment">
             <div class="portraito">
-              <img :src="landholder.avatar" v-if="landholder && landholder.avatar">
+              <img :src="item.avatar" v-if="item &&item.avatar && item.avatar !='无' && item.avatar !=''">
               <img src="../../../assets/images/head.png" v-else>
             </div>
             <div class="comments">
               <div class="staff_name">
                 <div>
-                  <span style="color:#83a0fc">{{landholder && landholder.name}}</span>&nbsp;&nbsp;
-                  <span v-for="key in landholder && landholder.org" :key="key.name">
-                    <span>{{key && key.name}}</span>
+                  <span style="color:#83a0fc">{{item && item.name}}</span>&nbsp;&nbsp;
+                  <span>
+                    <span>{{item && item.org}}-{{item && item.role}}</span>
+                    <span>{{item.create_time}}</span>
                   </span>
-                  <span>2018-04-19 20:45:55</span>&nbsp;&nbsp;
+                  
                 </div>
               </div>
             </div>
           </div>
-          <div class="question">font-class是unicode使用方式的一种变种，主要是解决unicode书写不直观，语意不明确的问题。
-                与unicode使用方式相比，具有如下特点：
-                兼容性良好，支持ie8+，及所有现代浏览器。
-                相比于unicode语意明确，书写更直观。可以很容易分辨这个icon是什么。
-                因为使用class来定义图标，所以当要替换图标时，只需要修改class里面的unicode引用。
-                不过因为本质上还是使用的字体，所以多色图标还是不支持的。
-          </div>
-          <el-button type="primary" style="margin: 10px 0 20px 10px;" @click="write" size="small">写回答</el-button>
-          <div class="publishComment" v-show="isShow">
+          <div class="question">{{item.description}}</div>
+          <el-button type="primary" style="margin: 10px 0 20px 10px;" @click="write(item.id)" size="small">写回答</el-button>
+          <div class="publishComment" v-show="isShow && item.id == answarid">
             <div class="portrait">
               <img :src="landholder.avatar" v-if="landholder && landholder.avatar">
               <img src="../../../assets/images/head.png" v-else>
@@ -59,91 +54,104 @@
             </div>
           </div>
 
-          <el-form size="small" v-show="isShow">
+          <el-form size="small" v-show="isShow && item.id == answarid">
             <el-form-item>
-              <el-input type="textarea" :rows="3" v-model="addContent" placeholder="请输入答案内容"></el-input>
+              <el-input type="textarea" :rows="3" v-model="content" placeholder="请输入答案内容"></el-input>
             </el-form-item>
             <!--<span  v-if="landholder.data" style="float: left">{{landholder.data.signature && landholder.data.signature.content}}</span>-->
             <el-form-item>
               <div class="submitButt">
-                <el-button type="success" size="small" @click="addReply(formList.id)">发表</el-button>
+                <el-button type="success" size="small" @click="addReply(item.id)">发表</el-button>
               </div>
             </el-form-item>
           </el-form>
 
           <div style="height:50px; color:#83a0fc; line-height:50px; margin:0 10px;">
-            <span style="float:left;">{{paging}}条回答</span>
-            <span v-if="showlen == 1" @click="islookFlag('open')" style="cursor: pointer;float:right; margin-right:6px;">全部显示</span>
-            <span v-else @click="islookFlag('close')" style="cursor: pointer;float:right; margin-right:6px;">关闭全部显示</span>
+            <span style="float:left;">{{item.answer.length}}条回答</span>
+            <span v-if="item.id != yFlag && item.answer.length >2" @click="islookFlag(item.id)" style="cursor: pointer;float:right; margin-right:6px;">全部显示</span>
           </div>
-          <div class="commentOn" v-for="(key,index) in commentOn" v-if="index< showlen" >
-            <div class="portrait">
-              <img :src="key.staffs.avatar" v-if="key && key.staffs && key.staffs.avatar">
-              <img src="../../../assets/images/head.png" v-else>
-            </div>
-            <div class="comments">
-              <div class="staff_name">
-                <div>
-                  <span>{{key.staffs && key.staffs.name}}</span>&nbsp;&nbsp;
-                  <span v-for="item in key && key.staffs && key.staffs.org">
-                    <span class="staffBefore">{{item && item.name}}</span>
-                  </span>&nbsp;&nbsp;
-                  <span>{{key.create_time}}</span>
-                </div>
-                <div @click="openpy" style="cursor: pointer;">
-                  <i class="iconfont icon-xinxi"></i>
-                  <span class="infopy">评论（2）</span>
-                </div>
+          <div v-for="(key,index) in item.answer" v-if="item.id == yFlag || index<2 " :key="key.id">
+          <div class="commentOn" >
+              <div class="portrait">
+                <img :src="key.avatar" v-if="key && key.avatar">
+                <img src="../../../assets/images/head.png" v-else>
               </div>
-              <div class="commentContent">
-                {{key.content}}
-              </div>
-            </div>
-          <!-- <div class="commentOn" v-for="(key,index) in commentOn" v-if="index< 1" >
-            <div class="portrait">
-              <img :src="key.staffs.avatar" v-if="key && key.staffs && key.staffs.avatar">
-              <img src="../../../assets/images/head.png" v-else>
-            </div>
-            <div class="comments">
-              <div class="staff_name">
-                <div>
-                  <span>{{key.staffs && key.staffs.name}}</span>&nbsp;&nbsp;
-                  <span v-for="item in key && key.staffs && key.staffs.org">
-                    <span class="staffBefore">{{item && item.name}}</span>
-                  </span>&nbsp;&nbsp;
-                  <span>{{key.create_time}}</span>
+              <div class="comments">
+                <div class="staff_name">
+                  <div>
+                    <span>{{key.staff}}</span>&nbsp;&nbsp;
+                      <span class="staffBefore">{{key && key.role}}</span>&nbsp;&nbsp;
+                    <span>{{key.create_time}}</span>
+                  </div>
+                  <div @click="openpy(key.id)" style="cursor: pointer;">
+                    <i class="iconfont icon-xinxi"></i>
+                    <span class="infopy">评论（{{key.comments.length}}）</span>
+                  </div>
+                </div>
+                <div class="commentContent">
+                  {{key.content}}
                 </div>
               </div>
-              <div class="commentContent">
-                {{key.content}}
-              </div>
-            </div>
           </div>
-          <el-form size="small" v-show="isShow">
-            <el-form-item>
-              <el-input type="textarea" :rows="3" v-model="addContent" placeholder="请输入答案内容"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <div class="submitButt">
-                <el-button type="success" size="small" @click="addReply(formList.id)">发表</el-button>
-              </div>
-            </el-form-item>
-          </el-form> -->
-          </div>
+            <div v-for="keyx in key.comments" :key="keyx.id" v-show="pinglunId == key.id">
+              <div class="commentOn" style="width:94%;margin-left:4%;" >
+                <div class="portrait">
+                  <img :src="keyx.avatar" v-if="keyx && keyx.avatar">
+                  <img src="../../../assets/images/head.png" v-else>
+                </div>
+                <div class="comments">
+                  <div class="staff_name">
+                    <div>
+                      <span>{{keyx.staff}}</span>&nbsp;&nbsp;
+                        <span class="staffBefore">{{item.role}}</span>&nbsp;&nbsp;
+                      <span>{{keyx.create_time}}</span>
+                    </div>
+                  </div>
+                  <div class="commentContent">
+                    {{keyx.content}}
+                  </div>
+                </div>
+              </div> 
 
-
-          <div class="block pages" v-if="paging > 11 && islook" >
+            </div>
+              <div class="publishComment" v-show="pinglunId == key.id" style="width:92%;margin-left:8%;">
+                <div class="portrait">
+                  <img :src="landholder.avatar" v-if="landholder && landholder.avatar">
+                  <img src="../../../assets/images/head.png" v-else>
+                </div>
+                <div class="comments">
+                  <div class="staff_name">
+                    <div>
+                      <span>{{landholder && landholder.name}}</span>&nbsp;&nbsp;
+                      <span v-for="key in landholder && landholder.org">
+                        <span>{{key && key.name}}</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+               <el-form size="small" style="width:92%;margin-left:8%;" v-show="pinglunId == key.id">
+                  <el-form-item>
+                    <el-input type="textarea" :rows="2" v-model="addContent" placeholder="请输入评论内容"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <div class="submitButt">
+                      <el-button type="success" size="small" @click="addChatReply(item.id,key.id)">发表</el-button>
+                    </div>
+                  </el-form-item>
+              </el-form>           
+          </div>
+        </div>
+          <div class="block pages" v-if="paging > 14" >
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="search"
               :current-page="currentPage"
-              :page-size="10"
+              :page-size="15"
               layout="total, prev, pager, next, jumper"
               :total="paging">
             </el-pagination>
           </div>
-        </div>
-
     <div class="loadingDiv" v-show="loading">
       <div class="loader">
         <div class="loader-inner pacman">
@@ -160,14 +168,14 @@
       <el-dialog :close-on-click-modal="false" :visible.sync="faleDialog" style="margin-top: 4vh;" title="我要提问" width="38%">
         <span style="color:#409EFF;font-size:14px;">写下你的问题</span>
         <div style="margin:5px 0;">描述精确的问题更易得到解答</div>
-        <el-input placeholder="问题标题"></el-input>
+        <el-input v-model="form.title" placeholder="问题标题"></el-input>
         <span style="color:#409EFF;font-size:14px; margin: 10px 0 5px 0; display:block;">问题描述</span>
-        <el-input type="textarea" placeholder="问题背景、条件等信息"></el-input>
+        <el-input v-model="form.description" type="textarea" placeholder="问题背景、条件等信息"></el-input>
         <div style="margin:10px 0;">
-        <el-checkbox label=""></el-checkbox>&nbsp;匿名问题
+        <el-checkbox v-model="anonymous" ></el-checkbox>&nbsp;匿名问题
         </div>
         <div style="border-top:1px #eee solid">
-          <el-button type="primary" style="margin-top:30px;margin-left:40%;width:126px; height:32px;background-color:#6a8dfb; border-color:#6a8dfb; line-height:0px;">提交问卷</el-button>
+          <el-button @click="submitque" type="primary" style="margin-top:30px;margin-left:40%;width:126px; height:32px;background-color:#6a8dfb; border-color:#6a8dfb; line-height:0px;">提交问题</el-button>
         </div>
       </el-dialog>
     </div>
@@ -183,6 +191,8 @@ export default {
       showUp: "",
       isShow: false,
       islook:false,
+      pinglun:false,
+      yFlag:0,
       colNum: 16,
       formList: {},
       showlen:1,
@@ -193,30 +203,33 @@ export default {
       currentPage: 1,
       faleDialog:false,
       paging: 0,
+      questions:[],
       page: 1,
       form: {
-        status: 149,
-        keywords: "",
+        keywords:"",
+        title: "",
+        description: "",
+        is_anonymous:0,
         limit:4,
         pages: 1
       },
+      anonymous:"false",
       hotData: {},
       loading: false, //点赞
       query: {},
       ids: "",
-      landholder: {} //个人信息
+      landholder: {}, //个人信息
+      answarid:"",  // 问题编号ID
+      content:"",  //回答内容
+      pinglunId:"" //评论编号ID
     };
   },
   created() {
     this.landholder = JSON.parse(localStorage.personal);
+  },
 
-    this.infoDetail();
-  },
-  activated() {
-    this.infoDetail();
-  },
   mounted() {
-    this.myData(5,1);
+    this.myData(1);
   },
   watch: {
     ids(val) {
@@ -231,89 +244,143 @@ export default {
     }
   },
   methods: {
-    infoDetail() {
-
+    clearque(){
+      this.keywords = ""
+      this.myData(1);
     },
     //我要提问
     openFlag(){
       this.faleDialog = true;
     },
     //写回答
-    write(){
+    write(id){
       this.isShow = !this.isShow;
+      this.answarid =id;
     },
     //显示所有回答
-    islookFlag(val){
-      if( val == 'open'){
-        this.showlen = 10;
-      }else{
-        this.showlen = 1;
-      }
+    islookFlag(y){
+      this.pinglun = !this.pinglun;
+      this.yFlag= y;
     },
 
     //显示所有评论
-    openpy(){
-      
+    openpy(id){
+      this.islook = !this.islook;
+      this.pinglunId = id;
     },
     search(val) {
-      this.myData(this.formList.id, val);
+      this.myData(val);
     },
-    myData(id, val) {
+    searchx(){
+      this.myData(1);
+    },
+    myData(val) {
       this.page = val;
       this.$http
-        .get(this.urls + "oa/portal/comment/5" , {
+        .get(this.urls + "ans/list" , {
           params: {
-            pages: this.page,
+            page: this.page,
+            limit:15,
+            keywords: this.form.keywords,
           }
         })
         .then(res => {
-          if (res.data.code === "80090") {
-            this.commentOn = res.data.data.data;
+          if (res.data.code === "199200") {
+            this.questions = res.data.data.data;
             this.paging = res.data.data.count;
           } else {
-            this.commentOn = [];
+            this.questions = [];
             this.paging = 0;
           }
         });
     },
-
-    // 回复 /发表
-    addReply(id) {
+    //提问
+    submitque(){
+      if(this.anonymous == true){
+        this.form.is_anonymous = 1
+      }
+      else{
+        this.form.is_anonymous = 0
+      }
       this.$http
-        .post(this.urls + "oa/portal/comment", {
-          obj_id: this.formList.id,
-          content: this.addContent,
-          video_file: this.addContent,
-          parent_id: id
+        .post(this.urls + "ans/insert", {
+          title : this.form.title,
+          description : this.form.description,
+          is_anonymous : this.form.is_anonymous,
         })
         .then(res => {
-          this.addContent = "";
-          if (res.data.code === "80060") {
-            this.myData(1);
-            this.prompt(res.data.msg, 1);
+          if (res.data.code === "199200") {
+            this.faleDialog = false;
+            this.$notify({
+              title: '成功',
+              message: res.data.msg,
+              type: 'success'
+            });         
+            this.myData(1);  
           } else {
-            this.prompt(res.data.msg, 2);
+            this.$notify({
+              title: '警告',
+              message: res.data.msg,
+              type: 'warning'
+            });           
+          }
+        });
+    },
+    // 回答
+    addReply(id) {
+      this.$http
+        .post(this.urls + "ans/comment", {
+          obj_id: id,
+          content: this.content,
+        })
+        .then(res => {
+          if (res.data.code === "199200") {
+            this.myData(1);
+            this.$notify({
+              title: '成功',
+              message: res.data.msg,
+              type: 'success'
+            });   
+            this.content = "";
+          } else {
+            this.$notify({
+              title: '警告',
+              message: res.data.msg,
+              type: 'warning'
+            }); 
+          }
+        });
+    },
+
+    //评论
+    addChatReply(itemId,keyId){
+      this.$http
+        .post(this.urls + "ans/comment", {
+          obj_id: itemId,
+          content: this.addContent,
+          parent_id: keyId
+        })
+        .then(res => {
+          if (res.data.code === "199200") {
+            this.myData(1);
+            this.$notify({
+              title: '成功',
+              message: res.data.msg,
+              type: 'success'
+            });   
+            this.addContent = "";
+          } else {
+            this.$notify({
+              title: '警告',
+              message: res.data.msg,
+              type: 'warning'
+            }); 
           }
         });
     },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
     },
-    prompt(val, stu) {
-      if (stu === 1) {
-        this.$notify({
-          title: "成功",
-          message: val,
-          type: "success"
-        });
-      } else {
-        this.$notify({
-          title: "警告",
-          message: val,
-          type: "warning"
-        });
-      }
-    }
   }
 };
 </script>

@@ -472,7 +472,7 @@
             globalConfig.personal = res.data.data.data;
             this.loginDay = JSON.parse(localStorage.personal).data.loginday;
           });
-      cookie.set("reFresh", true, {expires: 0.5});
+      cookie.set("reFresh", true);
       }
     },
     mounted() {

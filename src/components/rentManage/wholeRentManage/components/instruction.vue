@@ -1,12 +1,13 @@
 <template>
   <div id="instruction">
     <el-dialog :close-on-click-modal="false" title="功能说明" :visible.sync="instructionDialogVisible" width="62%">
-      <div>
+      <div  v-loading="rentLoading" element-loading-text="拼命加载中" element-loading-background="rgba(255, 255, 255, 0)" element-loading-spinner="el-icon-loading">
         <el-row :gutter="20" class="instruct_main">
           <el-col :span="6" class="instruct_right scroll_bar">
           <div id="dragTree">
             <el-tree ref="expandMenuList" class="expand-tree"
-                     :data="setTree"
+                    :data="setTree"
+                    :empty-text = 'rentStatus'
                      node-key="id"                    
                      @node-click="nodeClick"
                      :default-expanded-keys="defaultExpandKeys"
@@ -16,7 +17,7 @@
             </el-tree>
           </div>
           </el-col>
-          <el-col :span="18" class="instruct_left">
+          <el-col :span="18" class="instruct_left" >
             <div style="font-size:16px;margin-left:4px; color: #409EFF;">{{titleName}}</div>
             <div v-if="arr[a] ==index" class="imgdiv" v-for="(key,index) in form.image_pic" :key="key.id">
               <img :src="pic.uri" v-for="pic in key" data-magnify :data-src="pic.uri" :key="pic.id" />
@@ -58,7 +59,9 @@ export default {
       len: null,
       setTree: [],
       arr: [],
-      titleName:""
+      titleName:"",
+      rentStatus:' ',
+      rentLoading:false,
     };
   },
   watch: {
@@ -79,7 +82,10 @@ export default {
       this.setTree = [];
       this.titleName= "";
       this.form.image_pic = [];
+      this.rentStatus = " ";
+      this.rentLoading = true;
       this.$http.get(globalConfig.server + "des/tree").then(res => {
+        this.rentLoading = false;
         this.setTree = res.data.data;
         this.form.id = res.data.data[0].id;
         this.nodeClick(res.data.data[0]);
@@ -93,9 +99,12 @@ export default {
       this.form.id = data.id;
       this.arr = [];
       this.form.image_pic = [];
+      this.rentStatus = " ";
+      this.rentLoading = true;
       this.$http
         .get(globalConfig.server + "des/info/" + this.form.id)
         .then(res => {
+          this.rentLoading = false;
           this.form.image_pic = res.data.data.album;
           for (let key in this.form.image_pic) this.arr.push(key);
           this.len = this.arr.length;
