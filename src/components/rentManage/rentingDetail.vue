@@ -1029,6 +1029,11 @@
                 this.dragInit();
               }, 1000)
             }
+          }else {
+            this.$notify.warning({
+              title:'警告',
+              message:res.data.msg
+            })
           }
         })
       },
