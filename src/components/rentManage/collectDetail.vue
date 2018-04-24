@@ -115,7 +115,7 @@
               <el-col :span="8">
                 <el-form-item label="门牌地址">
                   <div class="content">
-                    {{contractInfo.building}}-{{contractInfo.unit}}-{{contractInfo.doorplate}}
+                    {{contractInfo.doorplate_str }}
                   </div>
                 </el-form-item>
               </el-col>
