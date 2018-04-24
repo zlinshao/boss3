@@ -105,7 +105,7 @@
           mobile: '',
         },
         organizationDialog: false,
-        isClear:false,
+        isClear: false,
         dictionary:[],
         dictionary_follow:[],
         follow_name:'',
@@ -123,7 +123,9 @@
       addFollowUpDialogVisible(val){
         if(!val){
           this.$emit('close');
+          this.isClear = true;
         }else {
+          this.init();
           this.isClear = false;
           if(!this.isDictionary){
             this.getDictionary();
@@ -196,7 +198,6 @@
                 title:'成功',
                 message:res.data.msg
               });
-              this.init();
               this.$emit('close','workOrder')
               this.addFollowUpDialogVisible = false;
             }else {
