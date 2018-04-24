@@ -1023,6 +1023,12 @@
             this.albumObject.other_photo = this.getImgId(this.contractInfo.other_photo);
             this.albumObject.checkout_photo = this.getImgId(this.contractInfo.checkout_photo);
             this.albumObject.checkout_settle_photo = this.getImgId(this.contractInfo.checkout_settle_photo);
+
+            if(this.contractInfo.doc_status.id<4){
+              setTimeout(() => {
+                this.dragInit();
+              }, 1000)
+            }
           }
         })
       },
