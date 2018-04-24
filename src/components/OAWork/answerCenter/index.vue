@@ -5,7 +5,7 @@
       <div class="highSearch">
         <el-form :model="form" :inline="true" size="small">
           <el-form-item>
-            <el-input v-model="form.keywords" placeholder="搜索问题" clearable @clear="clearque"  >
+            <el-input v-model="keywords" placeholder="搜索问题" clearable  >
               <el-button @click="searchx()" slot="append"  icon="el-icon-search" ></el-button>
             </el-input>
           </el-form-item>
@@ -200,8 +200,8 @@ export default {
       paging: 0,
       questions: [],
       page: 1,
+      keywords: "",
       form: {
-        keywords: "",
         title: "",
         description: "",
         is_anonymous: 0,
@@ -223,12 +223,15 @@ export default {
   mounted() {
     this.myData(1);
   },
-  watch: {},
+  watch: {
+    keywords(val){
+      console.log(val)
+      if(val == ""){
+        this.myData(1);
+      }
+    }
+  },
   methods: {
-    clearque() {
-      this.keywords = "";
-      this.myData(1);
-    },
     //我要提问
     openFlag() {
       this.faleDialog = true;
@@ -263,7 +266,7 @@ export default {
           params: {
             page: this.page,
             limit: 15,
-            keywords: this.form.keywords
+            keywords: this.keywords
           }
         })
         .then(res => {
@@ -326,6 +329,7 @@ export default {
               message: res.data.msg,
               type: "success"
             });
+            this.answarid = "";
             this.content = "";
           } else {
             this.$notify({
