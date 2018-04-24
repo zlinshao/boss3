@@ -1004,10 +1004,11 @@
         this.onlyPositionId = '';
         this.onlyPositionName = '';
         if (this.activeName === 'first') {
-          // this.params.page = 1;
+          this.params.page = 1;
           this.getStaffData();
           this.isGetStaff = true;
         } else if (this.activeName === 'second') {
+          this.positionParams.page = 1;
           this.getOnlyPosition();
           this.isGetOnlyPosition = true;
         }
@@ -1023,6 +1024,7 @@
           this.getStaffData();
           this.isGetStaff = true;
         } else if (val === 'second' && !this.isGetOnlyPosition) {
+          this.positionParams.page = 1;
           this.getOnlyPosition();
           this.isGetOnlyPosition = true;
         }
@@ -1569,8 +1571,8 @@
         this.totalPostNum = 0;
         this.postCollectLoading = true;
         this.postCollectStatus = ' ';
-        console.log(this.postParams.page);
-        this.$http.get(globalConfig.server + 'manager/positions?type='+ this.onlyPositionId + '&page='+ this.postParams.page+ '&limit=' + this.postParams.limit).then((res) => {
+        this.$http.get(globalConfig.server + 'manager/positions?type='+ this.onlyPositionId + '&page='+
+          this.postParams.page+ '&limit=' + this.postParams.limit).then((res) => {
           this.postCollectLoading = false;
           if (res.data.code === '20000') {
             let arr = res.data.data.data;
