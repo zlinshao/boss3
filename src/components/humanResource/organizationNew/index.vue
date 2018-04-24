@@ -822,8 +822,7 @@
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization" :type="type"
                   @selectMember="selectMember"></Organization>
     <EditDepart :editDepartDialog="editDepartDialog" :departId="departId" @close="closeEditDepart"></EditDepart>
-    <AddStaff :addStaffDialog="addStaffDialog" :isEdit="isEdit" :editId="editId" @close="closeAddStaff"
-              :departmentId="department_id"></AddStaff>
+    <AddStaff :addStaffDialog="addStaffDialog" :isEdit="isEdit" :editId="editId" @close="closeAddStaff"></AddStaff>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
     <AddDepart :addDepartDialog="addDepartDialog" :parentId="parentId" :parentName="parentName"
