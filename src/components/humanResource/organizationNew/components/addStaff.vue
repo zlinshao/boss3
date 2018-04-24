@@ -356,6 +356,7 @@
       },
       departmentId(val) {
         this.positionArray = [];
+        this.editPositionIds = [];
         this.getPosition(val);
       },
       editPositionIds(val){
@@ -536,12 +537,7 @@
               for (var i = 0; i < this.params.department_id.length; i++) {
                 this.getPosition(this.params.department_id[i]);
               }
-              console.log(this.editPositionIds)
-
-
             }
-
-
           } else {
             this.$notify.warning({
               title: '警告',
