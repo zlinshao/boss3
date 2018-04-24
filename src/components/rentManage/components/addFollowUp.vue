@@ -124,6 +124,7 @@
         if(!val){
           this.$emit('close');
         }else {
+          this.init();
           this.isClear = false;
           if(!this.isDictionary){
             this.getDictionary();
@@ -196,7 +197,6 @@
                 title:'成功',
                 message:res.data.msg
               });
-              this.init();
               this.$emit('close','workOrder')
               this.addFollowUpDialogVisible = false;
             }else {

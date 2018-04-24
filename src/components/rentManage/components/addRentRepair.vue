@@ -182,8 +182,8 @@
       addRentRepairDialogVisible(val) {
         if (!val) {
           this.$emit('close');
-          this.initial();
         } else {
+          this.initial();
           this.getDictionary();
         }
       },
