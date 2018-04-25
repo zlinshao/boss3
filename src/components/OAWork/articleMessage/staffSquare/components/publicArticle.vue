@@ -321,6 +321,9 @@
 </script>
 
 <style lang="scss">
+  .ql-editor {
+    max-height: 700px;
+  }
   #publicArticle {
     @mixin flex {
       display: -webkit-flex;
