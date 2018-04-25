@@ -6,11 +6,16 @@
         <div class="highSearch" style="justify-content: space-between">
           <div class="earlyWarning">
             <el-button class="warningItem" type="text">空置房源: {{houseStatus.emptyHouse}}套</el-button>
-            <el-button class="warningItem" type="text" style="color: #FFCC00">黄色预警房源:{{houseStatus.yellowHouse}}套</el-button>
-            <el-button class="warningItem" type="text" style="color: #FF9900">橙色预警房源:{{houseStatus.orangeHouse}}套</el-button>
-            <el-button class="warningItem" type="text" style="color: #FF3900">红色预警房源:{{houseStatus.redHouse}}套</el-button>
-            <el-button class="warningItem" type="text" style="color: #409EFF">正在运营中房源: {{houseStatus.lord_end_at}}套</el-button>
-            <el-button class="warningItem" type="text" style="color: #409EFF">待收房源: {{houseStatus.wait_lord_at}}套</el-button>
+            <el-button class="warningItem" type="text" style="color: #FFCC00">黄色预警房源:{{houseStatus.yellowHouse}}套
+            </el-button>
+            <el-button class="warningItem" type="text" style="color: #FF9900">橙色预警房源:{{houseStatus.orangeHouse}}套
+            </el-button>
+            <el-button class="warningItem" type="text" style="color: #FF3900">红色预警房源:{{houseStatus.redHouse}}套
+            </el-button>
+            <el-button class="warningItem" type="text" style="color: #409EFF">正在运营中房源: {{houseStatus.lord_end_at}}套
+            </el-button>
+            <el-button class="warningItem" type="text" style="color: #409EFF">待收房源: {{houseStatus.wait_lord_at}}套
+            </el-button>
           </div>
 
           <el-form :inline="true" size="mini" onsubmit="return false">
@@ -20,13 +25,19 @@
               </el-input>
             </el-form-item>
             <el-form-item>
+              <el-button type="primary" size="mini" @click="refreshList">
+                <i class="el-icons-fa-refresh"></i>
+              </el-button>
+            </el-form-item>
+            <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary":disabled="!operateArray.length" @click="openOrganizationModal('dispatch')">分配</el-button>
+              <el-button type="primary" :disabled="!operateArray.length" @click="openOrganizationModal('dispatch')">分配
+              </el-button>
             </el-form-item>
             <!--<el-form-item>-->
-              <!--<el-button type="primary"><i class="el-icon-sort"></i></el-button>-->
+            <!--<el-button type="primary"><i class="el-icon-sort"></i></el-button>-->
             <!--</el-form-item>-->
           </el-form>
         </div>
@@ -59,7 +70,8 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input readonly="" @focus="openOrganizationModal('filter')" v-model="department_name" placeholder="点击选择部门">
+                      <el-input readonly="" @focus="openOrganizationModal('filter')" v-model="department_name"
+                                placeholder="点击选择部门">
 
                       </el-input>
                     </el-form-item>
@@ -88,7 +100,7 @@
               element-loading-background="rgba(255, 255, 255, 0)"
               @row-contextmenu="houseMenu"
               @row-dblclick="dblClickTable"
-              @row-click = 'clickTable'
+              @row-click='clickTable'
               :row-class-name="tableRowCollectName"
               @selection-change="handleSelectionChange"
               style="width: 100%">
@@ -126,11 +138,11 @@
                 </template>
               </el-table-column>
               <!--<el-table-column-->
-                <!--label="出租性质">-->
-                <!--<template slot-scope="scope">-->
-                  <!--<span v-if="scope.row.rent_type">{{matchDictionary(scope.row.rent_type)}}</span>-->
-                  <!--<span v-else="">/</span>-->
-                <!--</template>-->
+              <!--label="出租性质">-->
+              <!--<template slot-scope="scope">-->
+              <!--<span v-if="scope.row.rent_type">{{matchDictionary(scope.row.rent_type)}}</span>-->
+              <!--<span v-else="">/</span>-->
+              <!--</template>-->
               <!--</el-table-column>-->
               <el-table-column
                 width="150"
@@ -270,10 +282,12 @@
                             :houseId="houseId" :activeName="activeName"></EarlyWarning>
             </el-tab-pane>
             <el-tab-pane name="forth" label="收房合同详情">
-              <CollectContractTab :all_dic="all_dic" :collectData="collectData" :activeName="activeName"></CollectContractTab>
+              <CollectContractTab :all_dic="all_dic" :collectData="collectData"
+                                  :activeName="activeName"></CollectContractTab>
             </el-tab-pane>
             <el-tab-pane name="fifth" label="租房合同详情">
-              <RentContractTab :all_dic="all_dic" :collectId="collectId" :rentData="rentData" :activeName="activeName"></RentContractTab>
+              <RentContractTab :all_dic="all_dic" :collectId="collectId" :rentData="rentData"
+                               :activeName="activeName"></RentContractTab>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -288,7 +302,8 @@
                    @close="closeModal"></EditHouseInfo>
     <AddFollow :addFollowDialog="addFollowDialog" :houseId="houseId" @close="closeModal"></AddFollow>
     <UpLoadPic :upLoadDialog="upLoadDialog" :houseId="houseId" @close="closeModal"></UpLoadPic>
-    <AddEarlyWarning :addEarlyWarningDialog="addEarlyWarningDialog" :houseId="houseId" @close="closeModal"></AddEarlyWarning>
+    <AddEarlyWarning :addEarlyWarningDialog="addEarlyWarningDialog" :houseId="houseId"
+                     @close="closeModal"></AddEarlyWarning>
     <AddDecorate :addDecorateDialog="addDecorateDialog" :houseId="houseId" @close="closeModal"></AddDecorate>
 
     <HouseDetail :houseDetailDialog="houseDetailDialog" :all_dic="all_dic" :isOnlyPic="isOnlyPic"
@@ -314,8 +329,8 @@
   export default {
     name: 'hello',
     components: {
-      RightMenu, Organization, FollowRecordTab, DecorateRecordTab, EarlyWarning, EditHouseInfo,HouseDetail,
-      AddFollow, UpLoadPic, AddEarlyWarning, AddDecorate,CollectContractTab,RentContractTab
+      RightMenu, Organization, FollowRecordTab, DecorateRecordTab, EarlyWarning, EditHouseInfo, HouseDetail,
+      AddFollow, UpLoadPic, AddEarlyWarning, AddDecorate, CollectContractTab, RentContractTab
     },
     data () {
       return {
@@ -328,14 +343,14 @@
           q: '',
           per_page_number: 5,
           page: 1,
-          status : '',
-          org_id : '',
-          is_nrcy : 0,
-          is_lord : 1,
+          status: '',
+          org_id: '',
+          is_nrcy: 0,
+          is_lord: 1,
         },
-        department_name : '',
-        length : '',
-        type : '',
+        department_name: '',
+        length: '',
+        type: '',
 
         tableData: [],
         totalNumber: 0,
@@ -356,23 +371,23 @@
         emptyContent: ' ',
         tableLoading: false,
         dicts: {
-          room: ['','1室', '2室', '3室', '4室', '5室', '6室', '7室', '8室'],
+          room: ['', '1室', '2室', '3室', '4室', '5室', '6室', '7室', '8室'],
           hall: ['无', '1厅', '2厅', '3厅', '4厅', '5厅'],
           toilet: ['无', '1卫', '2卫', '3卫', '4卫', '5卫'],
         },
         all_dic: [],        //装修
 
         houseId: '',
-        isOnlyPic : false,
+        isOnlyPic: false,
 
         houseDetail: {},
-        collectData : [],
-        rentData : [],
-        collectId : '',
-        houseStatus:{},
-        operateArray : [],    //选中数组
-        organizationType : '',
-        changeHouseStatus : false,
+        collectData: [],
+        rentData: [],
+        collectId: '',
+        houseStatus: {},
+        operateArray: [],    //选中数组
+        organizationType: '',
+        changeHouseStatus: false,
       }
     },
     mounted(){
@@ -408,7 +423,7 @@
             this.totalNumber = res.data.meta.total;
             if (res.data.data.length > 0) {
               this.tableData = res.data.data;
-              if(!this.houseId){
+              if (!this.houseId) {
                 this.houseId = res.data.data[0].id;
               }
             } else {
@@ -432,7 +447,7 @@
       //复选框变化
       handleSelectionChange(val){
         this.operateArray = [];
-        if(val.length>0){
+        if (val.length > 0) {
           val.forEach((item) => {
             this.operateArray.push(item.id);
           })
@@ -474,7 +489,7 @@
 
       selectMember(val){
         this.organizationDialog = false;
-        if(this.organizationType === 'dispatch'){
+        if (this.organizationType === 'dispatch') {
           this.$confirm('分配后将不可撤回, 是否继续?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -483,11 +498,11 @@
             this.dispatchHouse(val[0].id)
           }).catch(() => {
             this.$notify.success({
-              title:'消息',
-              message:'已取消分配',
+              title: '消息',
+              message: '已取消分配',
             })
           });
-        }else {
+        } else {
           this.formInline.org_id = val[0].id;
           this.department_name = val[0].name;
         }
@@ -496,16 +511,16 @@
       dispatchHouse(departId){
         let object = {};
         let update = {};
-        let org = {org_id :departId};
+        let org = {org_id: departId};
         this.operateArray.forEach((item) => {
           object[item] = org;
         });
         update.update = object;
-        this.$http.post(globalConfig.server_user + 'houses/batch',{'batch':JSON.stringify(update)}).then((res) => {
+        this.$http.post(globalConfig.server_user + 'houses/batch', {'batch': JSON.stringify(update)}).then((res) => {
           if (res.data.status === 'success') {
             this.$notify.success({
-              title:'成功',
-              message:'操作成功',
+              title: '成功',
+              message: '操作成功',
             });
             this.getData();
           }
@@ -515,7 +530,7 @@
       clickTable(row, event){
         this.houseId = row.id;
         this.collectData = row.lords;
-        if(this.collectData.length>0){
+        if (this.collectData.length > 0) {
           this.collectId = this.collectData[0].id;
         }
         this.rentData = row.renters;
@@ -544,7 +559,7 @@
         this.houseId = row.id;
         this.houseDetail = row;
         this.collectData = row.lords;
-        if(this.collectData.length>0){
+        if (this.collectData.length > 0) {
           this.collectId = this.collectData[0].id;
         }
         this.rentData = row.renters;
@@ -553,7 +568,12 @@
           {clickIndex: 'upLoadDialog', headIcon: 'el-icon-upload2', label: '上传房屋照片',},
           {clickIndex: 'addFollowDialog', headIcon: 'iconfont icon-tianjiagengjinjilu', label: '添加跟进记录',},
           {clickIndex: 'addDecorateDialog', headIcon: 'iconfont icon-tianjiazhuangxiujilu', label: '添加装修记录',},
-          {clickIndex: 'addEarlyWarningDialog', headIcon: 'iconfont icon-tianjiayujingjilu', label: '添加预警状态',disabled:row.status},
+          {
+            clickIndex: 'addEarlyWarningDialog',
+            headIcon: 'iconfont icon-tianjiayujingjilu',
+            label: '添加预警状态',
+            disabled: row.status
+          },
         ];
         this.contextMenuParam(event);
       },
@@ -589,15 +609,15 @@
         this.houseDetailDialog = false;
         if (val === 'success') {
           this.getData();
-        }else if (val === 'success_tab_first'){
+        } else if (val === 'success_tab_first') {
           this.activeName = 'first';
           this.changeHouseStatus = true;
           this.getData();
-        }else if(val === 'success_tab_second'){
+        } else if (val === 'success_tab_second') {
           this.activeName = 'second';
           this.changeHouseStatus = true;
           this.getData();
-        }else if(val === 'success_tab_third'){
+        } else if (val === 'success_tab_third') {
           this.activeName = 'third';
           this.changeHouseStatus = true;
           this.getData();
@@ -621,6 +641,21 @@
         this.$nextTick(() => {
           this.show = true
         })
+      },
+
+      refreshList(){
+        this.formInline = {
+          q: '',
+          per_page_number: 5,
+          page: 1,
+          status: '',
+          org_id: '',
+          is_nrcy: 0,
+          is_lord: 1,
+        };
+        this.department_name = '';
+        this.getData();
+        this.getCharts();
       },
     }
   }
