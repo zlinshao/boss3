@@ -1572,7 +1572,6 @@
       //根据职位获取岗位
       getPosition() {
         this.postStaffData = [];
-        this.totalPostNum = 0;
         this.postCollectLoading = true;
         this.postCollectStatus = ' ';
         this.$http.get(globalConfig.server + 'manager/positions?type='+ this.onlyPositionId + '&page='+
