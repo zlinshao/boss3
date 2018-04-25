@@ -173,9 +173,15 @@
           }
         })
       },
-      newVersionDetail(){
+      newVersionDetail(id){
+        if(id){
             this.form.name = this.info.version
             this.form.htmlForEditor = this.info.content;
+        }
+        else{
+            this.form.name = ""
+            this.form.htmlForEditor = ""       
+        }
       },
       getDict() {
         switch (this.moduleType) {

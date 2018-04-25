@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false"  width="0" style="margin-top:20vh" :visible.sync="badgeDialogVisible">
+    <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false"  width="0" z-index="2000" style="margin-top:20vh" :visible.sync="badgeDialogVisible">
     <div class="badgeup" >
       <span class="span1">版本更新</span>
       <div class="msg">

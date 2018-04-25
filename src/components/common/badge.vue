@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :close-on-click-modal="false" width="0" style="margin-top:20vh" :visible.sync="badgeDialogVisible">
+    <el-dialog :close-on-click-modal="false" width="0" z-index="3000" style="margin-top:20vh" :visible.sync="badgeDialogVisible">
     <div class="badgeup" >
       <span class="close el-icon-close"  @click="closeBadge"></span>
       <div v-if="loginDay == 3" class="backdiv backdiv3"></div>
