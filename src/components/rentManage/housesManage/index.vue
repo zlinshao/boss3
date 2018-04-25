@@ -70,6 +70,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
+
                       <el-input readonly="" @focus="openOrganizationModal('filter')" v-model="department_name"
                                 placeholder="点击选择部门">
 
