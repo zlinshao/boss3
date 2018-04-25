@@ -10,6 +10,7 @@ const article = {
     company_page: 1,
     staff_page: 1,
     system_page: 1,
+    new_version:"",
   },
   mutations: {
     ARTICLE_ID:(state,view) => {
@@ -37,6 +38,9 @@ const article = {
     SYSTEM_PAGE:(state,view) => {
       state.system_page = view;
     },
+    NEW_VERSION:(state,view) => {
+      state.new_version = view;
+    },
   },
   actions: {
     articleId({commit},view){
@@ -63,6 +67,9 @@ const article = {
     },
     systemPage({commit},view){
       commit('SYSTEM_PAGE',view);
+    },
+    newversion({commit},view){
+      commit('NEW_VERSION',view);
     },
   }
 };

@@ -471,6 +471,10 @@
             localStorage.setItem('personal', JSON.stringify(res.data.data));
             globalConfig.personal = res.data.data.data;
             this.loginDay = JSON.parse(localStorage.personal).data.loginday;
+            //个人连续登录时长勋章
+            if (!JSON.parse(localStorage.personal).data.medal) {
+              this.badgeDialog = true;
+            }
           });
       cookie.set("reFresh", true);
       }

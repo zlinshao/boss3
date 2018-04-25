@@ -13,6 +13,9 @@
       <el-tab-pane label="制度管理" name="fourth">
         <systemManageMent></systemManageMent>
       </el-tab-pane>
+      <el-tab-pane label="版本更新" name="five">
+        <newVersionUpdate></newVersionUpdate>
+      </el-tab-pane>
     </el-tabs>
     <!--<el-button type="success" size="mini" @click="openModalDialog('instructionDialog')" class="user_introction">-->
       <!--<i class="el-icon-tickets"></i>&nbsp;功能说明-->
@@ -26,6 +29,7 @@
   import CompanyPortal from './companyPortal/index.vue';
   import StaffSquare from './staffSquare/index.vue';
   import SystemManageMent from './systemManageMent/index.vue';
+  import NewVersionUpdate from './newVersionUpdate/index.vue';   //版本更新
   import Instruction from '../../rentManage/wholeRentManage/components/instruction.vue'            //使用说明
 
   export default {
@@ -36,6 +40,7 @@
       CompanyPortal,
       SystemManageMent,
       Instruction,
+      NewVersionUpdate
     },
     data() {
       return {

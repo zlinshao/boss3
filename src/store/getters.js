@@ -11,5 +11,6 @@ const getters = {
   articleDetail: state => state.article.articleDetail,
   secondFlag: state => state.secondPassword.secondFlag,
   badgeFlag: state => state.badge.badgeFlag,
+  newversion: state => state.article.newversion,
 }
 export default getters

@@ -14,7 +14,7 @@
           <div class="userInfo" style="margin-top: 18px">
             <div class="publishInfo">
               <div class="headPic">
-                <img :src="staffs.avatar" v-if="staffs && staffs.avatar">
+                <img :src="staffs.avatar" v-if="staffs && staffs.avatar && moduleType !='newVersionUpdate'">
                 <img src="../../../assets/images/head.png" v-else>
               </div>
               <div class="publishName">{{staffs && staffs.name}}</div>
@@ -33,7 +33,7 @@
               <div class="newsDate">{{formList.create_time}}</div>
             </div>
           </div>
-          <div class="frontCover">
+          <div class="frontCover" v-if="moduleType !='newVersionUpdate'">
             <!--<p>封面图</p>-->
             <h1 v-for="key in cover_pic">
               <img :src="pic.uri" v-for="pic in key">
@@ -43,7 +43,7 @@
 
           </div>
 
-          <div v-if="isShow">
+          <div v-if="isShow && moduleType !='newVersionUpdate'">
             <div class="lines"></div>
             <div class="readerInfos">
               <div></div>
@@ -70,7 +70,7 @@
           </div>
         </div>
 
-        <div class="comment_box" v-if="isShow">
+        <div class="comment_box" v-if="isShow && moduleType !='newVersionUpdate'">
           <div class="publishComment">
             <div class="portrait">
               <img :src="landholder.avatar" v-if="landholder && landholder.avatar">
@@ -88,7 +88,7 @@
             </div>
           </div>
 
-          <el-form size="mini">
+          <el-form size="mini" v-if="moduleType !='newVersionUpdate'">
             <el-form-item>
               <el-input type="textarea" :rows="3" v-model="addContent" placeholder="请输入评论内容"></el-input>
             </el-form-item>
@@ -100,7 +100,7 @@
             </el-form-item>
           </el-form>
 
-          <div class="commentOn" v-for="key in commentOn">
+          <div class="commentOn" v-for="key in commentOn" v-if="moduleType !='newVersionUpdate'">
             <div class="portrait">
               <img :src="key.staffs.avatar" v-if="key && key.staffs && key.staffs.avatar">
               <img src="../../../assets/images/head.png" v-else>
@@ -123,7 +123,7 @@
             </div>
           </div>
 
-          <div class="block pages" v-if="paging > 11">
+          <div class="block pages" v-if="paging > 11 && moduleType !='newVersionUpdate'">
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="search"
@@ -205,6 +205,7 @@
         commentOn: [],
         cover_pic: {},
         currentPage: 1,
+        info:'',
         paging: 0,
         page: 1,
         form: {
@@ -217,7 +218,8 @@
         loading: false,     //点赞
         query:{},
         ids: '',
-        landholder:{}     //个人信息
+        landholder:{},     //个人信息
+        moduleType:''
       }
     },
     created() {
@@ -257,23 +259,38 @@
     methods: {
       infoDetail(){
         //刷新保存
-        if(!this.$route.query.ids) {
-          this.$router.push({path:"/Infodetails",query:{ids:this.$store.state.article.article_detail.ids,detail:this.$store.state.article.article_detail.detail}});
+        this.moduleType = this.$route.query.moduleType
+        if(this.$route.query.moduleType != 'newVersionUpdate'){
+          if(!this.$route.query.ids) {
+            this.$router.push({path:"/Infodetails",query:{ids:this.$store.state.article.article_detail.ids,detail:this.$store.state.article.article_detail.detail}});
+          }
+          this.addRegion();
+          let query = this.$route.query;
+          this.$store.dispatch('articleDetail',query);
+          if (JSON.stringify(query) !== '{}') {
+            this.ids = query.ids;
+            this.publicDetail(query.ids);
+            // if (query.detail === 'port') {
+            //   this.isShow = false;
+            //   this.colNum = 24;
+            // } else {
+            this.isShow = true;
+            this.colNum = 16;
+            // }
+          };
         }
-        this.addRegion();
-        let query = this.$route.query;
-        this.$store.dispatch('articleDetail',query);
-        if (JSON.stringify(query) !== '{}') {
-          this.ids = query.ids;
-          this.publicDetail(query.ids);
-          // if (query.detail === 'port') {
-          //   this.isShow = false;
-          //   this.colNum = 24;
-          // } else {
-          this.isShow = true;
-          this.colNum = 16;
-          // }
-        };
+        else{
+          this.addRegion();
+          this.info =this.$store.state.article.new_version;
+          this.formList.title = this.info.version;
+          this.formList.fine = null;
+          this.formList.top = null;
+          console.log(this.info)
+          this.formList.dict_ids = "版本更新";
+          this.staffs.name =this.info.staffs.real_name;
+          this.formList.create_time =this.info.create_time;
+          $('#htmlForEditor').html(this.info.content)
+        }
       },
       // 详情
       routerDetail(id) {

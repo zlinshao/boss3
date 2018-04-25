@@ -2,10 +2,13 @@
   <div id="publicArticle">
     <div class="title" v-show="previewShow">文章发布</div>
     <el-form v-show="previewShow" label-width="100px">
-      <el-form-item label="标题">
+      <el-form-item label="标题" v-if="moduleType !='newVersionUpdate'">
         <el-input v-model="form.name" placeholder="请输入标题"></el-input>
       </el-form-item>
-      <el-form-item label="分类" required="">
+      <el-form-item label="版本" v-else>
+        <el-input v-model="form.name" placeholder="请输入版本号"></el-input>
+      </el-form-item>
+      <el-form-item label="分类" required="" v-if="moduleType !='newVersionUpdate'">
         <el-select v-model="form.region" clearable placeholder="请选择类别">
           <el-option v-for="(key,index) in dict.region" :label="key.dictionary_name" :value="key.id"
                      :key="index"></el-option>
@@ -18,11 +21,11 @@
 
       </el-form-item>
 
-      <el-form-item label="封面图片">
+      <el-form-item label="封面图片" v-if="moduleType !='newVersionUpdate'">
         <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
 
-      <el-form-item style="text-align: center;">
+      <el-form-item style="text-align: center;" v-if="moduleType !='newVersionUpdate'">
         <el-button size="small" type="default" @click="goBack">取消</el-button>
         <el-button size="small" type="warning" @click="preview">预览</el-button>
         <el-button v-for="(key,index) in dict.status" size="small" type="primary" @click="onSubmit(key.id)" :key="index"
@@ -30,6 +33,10 @@
           <span v-if="key.dictionary_name === '已发布'">发布</span>
           <span v-else>{{key.dictionary_name}}</span>
         </el-button>
+      </el-form-item>
+      <el-form-item style="text-align: center;" v-else>
+        <el-button size="small" type="default" @click="goBack">取消</el-button>
+        <el-button size="small" type="primary" @click="onSubmitNew()">发布</el-button>
       </el-form-item>
     </el-form>
 
@@ -74,6 +81,7 @@
         personal: {},
         times: '',
         pitch: '',
+        info:'',
         cover_pic: {},
         file: {},
         cover_id: [],
@@ -121,11 +129,22 @@
         }
         let query = this.$route.query;
         this.moduleType = query.moduleType;
+
         this.getDict();
         this.pitch = '';
         if (query.ids !== undefined) {
-          this.publicDetail(query.ids);
-          this.pitch = query.ids;
+          if(this.moduleType !='newVersionUpdate'){
+            this.publicDetail(query.ids);
+            this.pitch = query.ids;           
+          }
+          else{
+            if(this.$store.state.article.new_version){
+              this.info = this.$store.state.article.new_version;
+            }
+            this.newVersionDetail(query.ids);
+            this.pitch = query.ids;              
+          }
+
         }
         if (query.ids) {
           this.$store.dispatch('articleId', query.ids);
@@ -153,6 +172,11 @@
             this.cover_pic = arr;
           }
         })
+      },
+      newVersionDetail(){
+            console.log(this.info)
+            this.form.name = this.info.version
+            this.form.htmlForEditor = this.info.content;
       },
       getDict() {
         switch (this.moduleType) {
@@ -225,6 +249,40 @@
             this.prompt(2, res.data.msg);
           }
         });
+      },
+      //发布版本
+      onSubmitNew(){
+        let type;
+        //新增
+        if (this.pitch !== '') {
+          type = this.$http.put;
+          type(this.urls + 'setting/update/' + this.pitch , {
+          version: this.form.name,
+          content: this.form.htmlForEditor,
+        }).then((res) => {
+          if (res.data.code === '50050') {
+            this.goBack();
+            this.prompt(1, res.data.msg);
+          } else {
+            this.prompt(2, res.data.msg);
+          }
+        });  
+        //修改
+        } else {
+          type = this.$http.post;
+          type(this.urls + 'setting/update', {
+          version: this.form.name,
+          content: this.form.htmlForEditor,
+        }).then((res) => {
+          if (res.data.code === '50030') {
+            this.goBack();
+            this.prompt(1, res.data.msg);
+          } else {
+            this.prompt(2, res.data.msg);
+          }
+        });  
+        }
+      
       },
       goBack() {
         //点击取消清掉ids
