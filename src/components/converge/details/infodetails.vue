@@ -285,7 +285,6 @@
           this.formList.title = this.info.version;
           this.formList.fine = null;
           this.formList.top = null;
-          console.log(this.info)
           this.formList.dict_ids = "版本更新";
           this.staffs.name =this.info.staffs.real_name;
           this.formList.create_time =this.info.create_time;

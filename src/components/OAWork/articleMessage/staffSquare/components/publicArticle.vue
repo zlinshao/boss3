@@ -174,7 +174,6 @@
         })
       },
       newVersionDetail(){
-            console.log(this.info)
             this.form.name = this.info.version
             this.form.htmlForEditor = this.info.content;
       },

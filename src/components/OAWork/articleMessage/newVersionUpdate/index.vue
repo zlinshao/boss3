@@ -4,51 +4,18 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入标题" v-model="form.keywords" size="mini" clearable
-                      @keyup.enter.native="getLejiaTableData()">
+            <el-input placeholder="请输入关键字" v-model="keyword" size="mini" clearable @keyup.enter.native="getLejiaTableData()">
               <el-button slot="append" icon="el-icon-search" @click="getLejiaTableData()"></el-button>
             </el-input>
           </el-form-item>
-          <el-form-item>
-            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
-          </el-form-item>
+
           <el-form-item>
             <el-button type="success" @click="publicArticle">发布文章</el-button>
           </el-form-item>
         </el-form>
       </div>
     </div>
-    <div class="highRanking">
-      <div class="filter high_grade" :class="isHigh? 'highHide':''" style=" margin-top: -40px;">
-        <el-form :inline="true" :model="form" size="mini" label-width="100px">
-          <div class="filterTitle">
-            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
-          </div>
-          <!-- <el-row class="el_row_border">
-            <el-col :span="12">
-              <el-row>
-                <el-col :span="8">
-                  <div class="el_col_label">选择状态</div>
-                </el-col>
-                <el-col :span="16" class="el_col_option">
-                  <el-form-item>
-                    <el-select v-model="form.status" clearable placeholder="请选择状态">
-                      <el-option v-for="(key,index) in dict.status" :label="key.dictionary_name" :value="key.id"
-                                 :key="index"></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-col>
-          </el-row> -->
-          <div class="btnOperate">
-            <el-button size="mini" type="primary" @click="getLejiaTableData()">搜索</el-button>
-            <el-button size="mini" type="primary" @click="resetting">重置</el-button>
-            <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
-          </div>
-        </el-form>
-      </div>
-    </div>
+
     <div class="main">
       <div class="blueTable left_table">
         <el-table
@@ -63,14 +30,20 @@
           style="width: 100%">
           <el-table-column
             prop="version"
+            width="300px"
             label="版本">
           </el-table-column>
           <el-table-column
-            prop="content"
             label="内容">
+            <template slot-scope="scope">
+            <div  style="display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            <span class="mpn" v-html="scope.row.content"></span>
+            </div>
+            </template>
           </el-table-column>
           <el-table-column
             prop="staffs.name"
+            width="300px"
             label="发布人">
             <template slot-scope="scope">
               <span v-if="scope.row.staffs && scope.row.staffs.real_name">{{scope.row.staffs && scope.row.staffs.real_name}}</span>
@@ -79,6 +52,7 @@
           </el-table-column>
           <el-table-column
             prop="create_time"
+            width="300px"
             label="创建时间">
           </el-table-column>
         </el-table>
@@ -126,7 +100,9 @@
         form: {
           limit: 12,
           page: 1,
+          keywords:"",
         },
+        keyword:"",
         totalNum: 0,
         tableData: [],
         pitch: '',
@@ -206,6 +182,7 @@
         this.info = row;
           this.lists = [
             {clickIndex: 'revise', headIcon: 'iconfont icon-bianji--', label: '编辑'},
+            {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除'},
           ];
 
         this.contextMenuParam(event);
@@ -247,8 +224,8 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.get(this.urls + 'oa/portal/delete/' + id).then((res) => {
-            if (res.data.code === '80040') {
+          this.$http.get(this.urls + 'setting/update/delete/' + id).then((res) => {
+            if (res.data.code === '50060') {
               this.getLejiaTableData();
               this.prompt(1, res.data.msg);
             } else {
@@ -290,6 +267,13 @@
           this.form.dict_id = val;
         }
       },
+      keyword(val){
+        this.form.keywords = val;
+        if( val == ""){
+           this.getLejiaTableData();
+        }
+       
+      }
     },
     computed: {
       currentPage() {
@@ -313,6 +297,9 @@
   .btnStatus {
     cursor: inherit;
     min-width: 68px;
+  }
+  .mpn p{
+    line-height: 0px;
   }
 
 </style>
