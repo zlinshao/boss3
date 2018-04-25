@@ -1,632 +1,374 @@
 <template>
   <div>
-  <div id="newsDetail">
-    <div class="highRanking" >
-      <div class="highSearch">
-        <el-form :model="form" :inline="true" size="small">
-          <el-form-item>
-            <el-input v-model="keywords" placeholder="搜索问题" clearable  >
-              <el-button @click="searchx()" slot="append"  icon="el-icon-search" ></el-button>
-            </el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button @click="openFlag" style="background-color:#58d788; border-color:#58d788;" type="success" ><i class="el-icon-question"></i>&nbsp;&nbsp;我要提问</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-    </div>
-        <div class="comment_box" v-for="item in questions" :key="item.id">
-          <div class="anstitle">{{item.title}}</div>
-          <div class="publishComment">
-            <div class="portraito">
-              <img :src="item.avatar" v-if="item &&item.avatar && item.avatar !='无' && item.avatar !=''">
-              <img src="../../../assets/images/head.png" v-else>
-            </div>
-            <div class="comments">
-              <div class="staff_name">
-                <div>
-                  <span style="color:#83a0fc">{{item && item.name}}</span>&nbsp;&nbsp;
-                  <span>
-                    <span>{{item && item.role}}</span>
-                    <span>{{item.create_time}}</span>
-                  </span>
-
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="question">{{item.description}}</div>
-          <el-button type="primary" style="margin: 10px 0 20px 10px;" @click="write(item.id)" size="small">写回答</el-button>
-          <div class="publishComment" v-show="item.id == answarid">
-            <div class="portrait">
-              <img :src="landholder.avatar" v-if="landholder && landholder.avatar">
-              <img src="../../../assets/images/head.png" v-else>
-            </div>
-            <div class="comments">
-              <div class="staff_name">
-                <div>
-                  <span>{{landholder && landholder.name}}</span>&nbsp;&nbsp;
-                  <span v-for="key in landholder && landholder.org" :key="key.name">
-                    <span>{{key && key.name}}</span>
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <el-form size="small" v-show="item.id == answarid">
+    <div id="onlineExam">
+      <div class="tool">
+        <div class="tool_left">
+          <el-button type="success" size="mini" @click="openModalDialog('examDialog')">
+            <i class="iconfont icon-jinrukaoshi" style="font-size: 14px;"></i>&nbsp;新建考试
+          </el-button>
+          <el-button type="danger" size="mini" style="background: #fb4699;" @click="openModalDialog('testPaperDialog')">
+            <i class="iconfont icon-xinjianshijuan" style="font-size: 14px;"></i>&nbsp;新建试卷
+          </el-button>
+        </div>
+        <div class="tool_right">
+          <el-form>
             <el-form-item>
-              <el-input type="textarea" :rows="3" v-model="content" placeholder="请输入答案内容"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <div class="submitButt">
-                <el-button type="success" size="small" @click="addReply(item.id)">发表</el-button>
-              </div>
+              <span>选择类型</span>
+              <el-select v-model="formInline.type" size="mini" placeholder="请选择" clearable>
+                <el-option v-for="item in 4" :key="item.id" label="C语言" :value="item.value"></el-option>
+              </el-select>
             </el-form-item>
           </el-form>
-
-          <div style="height:50px; color:#83a0fc; line-height:50px; margin:0 10px;">
-            <span style="float:left;">{{item.answer.length}}条回答</span>
-            <span v-if="item.id != yFlag && item.answer.length >2" @click="islookFlag(item.id)" style="cursor: pointer;float:right; margin-right:6px;">全部显示</span>
-          </div>
-          <div v-for="(key,index) in item.answer" v-if="item.id == yFlag || index<2 " :key="key.id">
-          <div class="commentOn" >
-              <div class="portrait">
-                <img :src="key.avatar" v-if="key && key.avatar">
-                <img src="../../../assets/images/head.png" v-else>
-              </div>
-              <div class="comments">
-                <div class="staff_name">
-                  <div>
-                    <span>{{key.staff}}</span>&nbsp;&nbsp;
-                      <span class="staffBefore">{{key && key.role}}</span>&nbsp;&nbsp;
-                    <span>{{key.create_time}}</span>
-                  </div>
-                  <div @click="openpy(key.id)" style="cursor: pointer;">
-                    <i class="iconfont icon-xinxi"></i>
-                    <span class="infopy">评论（{{key.comments.length}}）</span>
-                  </div>
-                </div>
-                <div class="commentContent">
-                  {{key.content}}
-                </div>
-              </div>
-          </div>
-            <div v-for="keyx in key.comments" :key="keyx.id" v-show="pinglunId == key.id">
-              <div class="commentOn" style="width:94%;margin-left:4%;" >
-                <div class="portrait">
-                  <img :src="keyx.avatar" v-if="keyx && keyx.avatar">
-                  <img src="../../../assets/images/head.png" v-else>
-                </div>
-                <div class="comments">
-                  <div class="staff_name">
-                    <div>
-                      <span>{{keyx.staff}}</span>&nbsp;&nbsp;
-                        <span class="staffBefore">{{item.role}}</span>&nbsp;&nbsp;
-                      <span>{{keyx.create_time}}</span>
-                    </div>
-                  </div>
-                  <div class="commentContent">
-                    {{keyx.content}}
-                  </div>
-                </div>
-              </div>
-
-            </div>
-              <div class="publishComment" v-show="pinglunId == key.id" style="width:92%;margin-left:8%;">
-                <div class="portrait">
-                  <img :src="landholder.avatar" v-if="landholder && landholder.avatar">
-                  <img src="../../../assets/images/head.png" v-else>
-                </div>
-                <div class="comments">
-                  <div class="staff_name">
-                    <div>
-                      <span>{{landholder && landholder.name}}</span>&nbsp;&nbsp;
-                      <span v-for="key in landholder && landholder.org" :key="key.name">
-                        <span>{{key && key.name}}</span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-               <el-form size="small" style="width:92%;margin-left:8%;" v-show="pinglunId == key.id">
-                  <el-form-item>
-                    <el-input type="textarea" :rows="2" v-model="addContent" placeholder="请输入评论内容"></el-input>
-                  </el-form-item>
-                  <el-form-item>
-                    <div class="submitButt">
-                      <el-button type="success" size="small" @click="addChatReply(item.id,key.id)">发表</el-button>
-                    </div>
-                  </el-form-item>
-              </el-form>
-          </div>
+          <el-form>
+            <el-form-item style="margin-right: 10px;">
+              <el-input placeholder="搜索关键字" v-model="search" size="mini" class="search_input">
+                <el-button slot="append" icon="el-icon-search" class="search_button"></el-button>
+              </el-input>
+            </el-form-item>
+          </el-form>
         </div>
-          <div class="block pages" v-if="paging > 14" >
+      </div>
+      <div class="main">
+        <div class="myHouse">
+          <div>
+            <el-table
+              :data="quizData"
+              :empty-text='rentStatus'
+              v-loading="rentLoading"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(255, 255, 255, 0)"
+              @row-dblclick="dblClickTable"
+              @row-contextmenu='openContextMenu'
+              style="width: 100%">
+              <el-table-column
+                prop="contract_num"
+                label="总题数">
+              </el-table-column>
+              <el-table-column
+                prop="address"
+                label="试卷名称">
+              </el-table-column>
+              <el-table-column
+                prop="house_type"
+                label="总分值">
+              </el-table-column>
+              <el-table-column
+                prop="deposit"
+                label="总时长">
+              </el-table-column>
+              <el-table-column
+                prop="price"
+                label="类型">
+              </el-table-column>
+            </el-table>
+          </div>
+          <div class="blocks page" >
             <el-pagination
               @size-change="handleSizeChange"
-              @current-change="search"
-              :current-page="currentPage"
-              :page-size="15"
+              @current-change="handleCurrentChange"
+              :current-page="params.page"
+              :page-size="10"
               layout="total, prev, pager, next, jumper"
-              :total="paging">
+              :total="totalNum">
             </el-pagination>
           </div>
-    <div class="loadingDiv" v-show="loading">
-      <div class="loader">
-        <div class="loader-inner pacman">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
         </div>
       </div>
     </div>
-  </div>
-      <div id="faleDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="faleDialog" style="margin-top: 4vh;" title="我要提问" width="38%">
-        <span style="color:#409EFF;font-size:14px;">写下你的问题</span>
-        <div style="margin:5px 0;">描述精确的问题更易得到解答</div>
-        <el-input v-model="form.title" placeholder="问题标题"></el-input>
-        <span style="color:#409EFF;font-size:14px; margin: 10px 0 5px 0; display:block;">问题描述</span>
-        <el-input v-model="form.description" type="textarea" placeholder="问题背景、条件等信息"></el-input>
-        <div style="margin:10px 0;">
-        <el-checkbox v-model="anonymous" >匿名问题</el-checkbox>&nbsp;
-        </div>
-        <div style="border-top:1px #eee solid">
-          <el-button @click="submitque" type="primary" style="margin-top:30px;margin-left:40%;width:126px; height:32px;background-color:#6a8dfb; border-color:#6a8dfb; line-height:0px;">提交问题</el-button>
+
+    <div id="examDialog">
+      <el-dialog :close-on-click-modal="false" :visible.sync="examDialog" title="新建考试" width="50%">
+        <div>
+          <div style="color: #6a8dfb;">新建考试信息</div>
+          <div class="exam_content">
+            <el-form size="mini" onsubmit="return false;" :model="formExam" label-width="70px">
+              <el-row :gutter="50">
+                <el-col :span="12">
+                  <el-form-item label="场次名称" required>
+                    <el-input v-model="formExam.name" placeholder="请输入场次"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="试卷类型" required>
+                    <el-select v-model="formExam.name" size="mini" placeholder="请选择类型" clearable>
+                      <el-option v-for="item in 4" :key="item.id" label="C语言" :value="item.value"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="50">
+                <el-col :span="12">
+                  <el-form-item label="使用试卷">
+                    <el-select v-model="formExam.name" size="mini" placeholder="请选择试卷" clearable>
+                      <el-option v-for="item in 4" :key="item.id" label="C语言" :value="item.value"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-checkbox label="试卷随机"></el-checkbox>
+              </el-row>
+              <el-row :gutter="50">
+                <el-col :span="12">
+                  <el-form-item label="开考时间">
+                    <el-date-picker v-model="formExam.name" type="datetime" placeholder="请选择"></el-date-picker>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="试卷时长">
+                    <el-input placeholder="请输入分钟" v-model="formExam.name">
+                      <template slot="append">分钟</template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="50">
+                <el-col :span="12">
+                  <el-form-item label="开考后">
+                    <el-input placeholder="请输入分钟" v-model="formExam.name">
+                      <template slot="append">分钟</template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <span class="vt_align">设定时间后不能在登陆考试系统</span>
+
+              </el-row>
+              <el-row :gutter="50">
+                <el-col :span="12">
+                  <el-form-item label="考生选择">
+                    <el-select v-model="formExam.name" size="mini" placeholder="请选择类型" clearable>
+                      <el-option v-for="item in 4" :key="item.id" label="C语言" :value="item.value"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
+          <span slot="footer" class="dialog-footer">
+            <el-button size="small" type="primary" @click="saveExam" style="padding: 10px 20px;">保存</el-button>
+          </span>
         </div>
       </el-dialog>
     </div>
+    <div id="testPaperDialog">
+      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="新建试卷" width="38%"
+                 style="margin-top:18vh">
+        <el-row :gutter="30" style="margin-bottom:26px;">
+          <el-col :span="12">
+            <div class="import_questions" @click="importQuestion">
+              <div><img src="../../../assets/images/examination/import_question.svg"><br/>批量导入试题</div>
+            </div>
+          </el-col>
+          <el-col :span="12">
+            <div class="import_questions" @click="myselfQuestion"
+                 style="border: 1px solid #fda2cc;box-shadow: 0 0 3px 1px #fda2cc;">
+              <div><img src="../../../assets/images/examination/self_entry.svg"><br/>自己录入</div>
+            </div>
+          </el-col>
+        </el-row>
+      </el-dialog>
     </div>
+    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+               @clickOperate="clickEvent"></RightMenu>
+  </div>
 </template>
 
 <script>
-export default {
-  name: "infodetails",
-  data() {
-    return {
-      urls: globalConfig.server,
-      isShow: false,
-      islook: false,
-      pinglun: false,
-      yFlag: 0,
-      showlen: 1,
-      addContent: "",
-      commentOn: [],
-      showlen: 1,
-      currentPage: 1,
-      faleDialog: false,
-      paging: 0,
-      questions: [],
-      page: 1,
-      keywords: "",
-      form: {
-        title: "",
-        description: "",
-        is_anonymous: 0,
-        limit: 4,
-        pages: 1
+  import RightMenu from "../../common/rightMenu.vue"; //右键
+  export default {
+    name: "index",
+    components: {RightMenu},
+    data() {
+      return {
+        rightMenuX: 0,
+        rightMenuY: 0,
+        show: false,
+        lists: [],
+        rentStatus: ' ',
+        rentLoading: false,
+        formInline: {
+          type: ""
+        },
+        params: {
+          page: 1,
+          limit:10
+        },
+        totalNum: 0,
+        search: "",
+        quizData: [],
+        examType: [
+          {id: 1, name: "新员工入职"},
+          {id: 2, name: "初级晋升考试"},
+          {id: 3, name: "中级晋升考试"}
+        ],
+        examDialog: false,
+        testPaperDialog: false,
+        examTypeDialog: false,
+        formExam: {
+          name: "",
+          description: ""
+        },
+        currentPage: 1
+      };
+    },
+    mounted() {
+      this.getTestPaperData();
+    },
+    watch: {},
+    methods: {
+      saveExam() {
+        this.examDialog = false;
       },
-      anonymous: "false",
-      loading: false, //点赞
-      landholder: {}, //个人信息
-      answarid: "", // 问题编号ID
-      content: "", //回答内容
-      pinglunId: "" //评论编号ID
-    };
-  },
-  created() {
-    this.landholder = JSON.parse(localStorage.personal);
-  },
 
-  mounted() {
-    this.myData(1);
-  },
-  watch: {
-    keywords(val){
-      console.log(val)
-      if(val == ""){
-        this.myData(1);
+      importQuestion() {
+        this.testPaperDialog = false;
+        this.$router.push({path: "/batchQuestions"});
+      },
+      myselfQuestion() {
+        this.testPaperDialog = false;
+        this.$router.push({path: "/myselfQuestions"});
+      },
+      dblClickTable() {
+      },
+      openModalDialog(val) {
+        switch (val) {
+          case "testPaperDialog":
+            this.testPaperDialog = true;
+            break;
+          case "examDialog":
+            this.examDialog = true;
+            break;
+        }
+      },
+      getTestPaperData() {
+        this.$http.get(globalConfig.server+ 'exam/paper', {params: this.params}).then((res)=>{
+          if(res.data.code === ''){
+
+          }else{
+
+          }
+        });
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.params.page = val;
+        this.getTestPaperData();
+      },
+      //右键菜单
+      openContextMenu(row, event) {
+        this.lists = [
+          {
+            clickIndex: "configExamDialog",
+            headIcon: "el-icon-edit",
+            label: "编辑试卷"
+          },
+          {
+            clickIndex: "deleteExam",
+            headIcon: "el-icons-fa-hdd-o",
+            label: "删除试卷"
+          },
+          {
+            clickIndex: "lookExamDialog",
+            headIcon: "el-icons-fa-mail-reply",
+            label: "预览试卷"
+          }
+        ];
+        let e = event || window.event; //support firefox contextmenu
+        this.show = false;
+        this.rightMenuX =
+          e.clientX +
+          document.documentElement.scrollLeft -
+          document.documentElement.clientLeft;
+        this.rightMenuY =
+          e.clientY +
+          document.documentElement.scrollTop -
+          document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true;
+        });
+      },
+      //右键回调时间
+      clickEvent(index) {
+        //右键修改
+        if (index == "configExamDialog") {
+          // var data = {ids: row.id, detail: 'port'};
+          this.$router.push({path: "/configExam"});
+        }
+        if (index == "deleteExam") {
+          this.$confirm("删除后不可恢复, 是否继续?", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            type: "warning"
+          })
+            .then(() => {
+            })
+            .catch(() => {
+              this.$message({
+                type: "info",
+                message: "已取消删除"
+              });
+            });
+        }
+        if (index == "lookExamDialog") {
+          this.$router.push({path: "/previewExam"});
+        }
       }
     }
-  },
-  methods: {
-    //我要提问
-    openFlag() {
-      this.faleDialog = true;
-    },
-    //写回答
-    write(id) {
-      this.isShow = !this.isShow;
-      this.answarid = id;
-    },
-    //显示所有回答
-    islookFlag(y) {
-      this.pinglun = !this.pinglun;
-      this.yFlag = y;
-    },
-
-    //显示所有评论
-    openpy(id) {
-      this.islook = !this.islook;
-      this.pinglunId = id;
-    },
-    search(val) {
-      this.myData(val);
-    },
-    searchx() {
-      this.myData(1);
-    },
-    myData(val) {
-      this.page = val;
-      this.loading = true;
-      this.$http
-        .get(this.urls + "ans/list", {
-          params: {
-            page: this.page,
-            limit: 15,
-            keywords: this.keywords
-          }
-        })
-        .then(res => {
-          if (res.data.code === "199200") {
-            this.loading = false;
-            this.questions = res.data.data.data;
-            this.paging = res.data.data.count;
-          } else {
-            this.questions = [];
-            this.paging = 0;
-          }
-        });
-    },
-    //提问
-    submitque() {
-      if (this.anonymous == true) {
-        this.form.is_anonymous = 1;
-      } else {
-        this.form.is_anonymous = 0;
-      }
-      this.$http
-        .post(this.urls + "ans/insert", {
-          title: this.form.title,
-          description: this.form.description,
-          is_anonymous: this.form.is_anonymous
-        })
-        .then(res => {
-          if (res.data.code === "199200") {
-            this.faleDialog = false;
-            this.form.title = "";
-            this.form.description = "";
-            this.anonymous = false;
-            this.$notify({
-              title: "成功",
-              message: res.data.msg,
-              type: "success"
-            });
-            this.myData(1);
-          } else {
-            this.$notify({
-              title: "警告",
-              message: res.data.msg,
-              type: "warning"
-            });
-          }
-        });
-    },
-    // 回答
-    addReply(id) {
-      this.$http
-        .post(this.urls + "ans/comment", {
-          obj_id: id,
-          content: this.content
-        })
-        .then(res => {
-          if (res.data.code === "199200") {
-            this.myData(1);
-            this.$notify({
-              title: "成功",
-              message: res.data.msg,
-              type: "success"
-            });
-            this.answarid = "";
-            this.content = "";
-          } else {
-            this.$notify({
-              title: "警告",
-              message: res.data.msg,
-              type: "warning"
-            });
-          }
-        });
-    },
-
-    //评论
-    addChatReply(itemId, keyId) {
-      this.$http
-        .post(this.urls + "ans/comment", {
-          obj_id: itemId,
-          content: this.addContent,
-          parent_id: keyId
-        })
-        .then(res => {
-          if (res.data.code === "199200") {
-            this.myData(1);
-            this.$notify({
-              title: "成功",
-              message: res.data.msg,
-              type: "success"
-            });
-            this.addContent = "";
-          } else {
-            this.$notify({
-              title: "警告",
-              message: res.data.msg,
-              type: "warning"
-            });
-          }
-        });
-    },
-    handleSizeChange(val) {
-      console.log(`每页 ${val} 条`);
-    }
-  }
-};
+  };
 </script>
 
-<style lang="scss">
-.loader {
-  box-sizing: border-box;
-  display: flex;
-  flex: 0 1 auto;
-  flex-direction: column;
-  flex-grow: 1;
-  flex-shrink: 0;
-  flex-basis: 25%;
-  max-width: 25%;
-  height: 200px;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 43%;
-  left: 50%;
-  z-index: 999;
-}
-.pacman {
-  position: relative;
-}
-.pacman > div:first-of-type {
-  width: 0px;
-  height: 0px;
-  border-right: 25px solid transparent;
-  border-top: 25px solid #6a8dfb;
-  border-left: 25px solid #6a8dfb;
-  border-bottom: 25px solid #6a8dfb;
-  border-radius: 25px;
-  -webkit-animation: rotate_pacman_half_up 0.5s 0s infinite;
-  animation: rotate_pacman_half_up 0.5s 0s infinite;
-  position: relative;
-  left: -30px;
-}
-@keyframes rotate_pacman_half_up {
-  0% {
-    -webkit-transform: rotate(270deg);
-    transform: rotate(270deg);
-  }
-  50% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-  100% {
-    -webkit-transform: rotate(270deg);
-    transform: rotate(270deg);
-  }
-}
-@keyframes rotate_pacman_half_down {
-  0% {
-    -webkit-transform: rotate(90deg);
-    transform: rotate(90deg);
-  }
-  50% {
-    -webkit-transform: rotate(0deg);
-    transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(90deg);
-    transform: rotate(90deg);
-  }
-}
-@keyframes pacman-balls {
-  75% {
-    opacity: 0.7;
-  }
-  100% {
-    -webkit-transform: translate(-100px, -6.25px);
-    transform: translate(-100px, -6.25px);
-  }
-}
-.pacman > div:nth-child(2) {
-  width: 0px;
-  height: 0px;
-  border-right: 25px solid transparent;
-  border-top: 25px solid #6a8dfb;
-  border-left: 25px solid #6a8dfb;
-  border-bottom: 25px solid #6a8dfb;
-  border-radius: 25px;
-  -webkit-animation: rotate_pacman_half_down 0.5s 0s infinite;
-  animation: rotate_pacman_half_down 0.5s 0s infinite;
-  margin-top: -50px;
-  position: relative;
-  left: -30px;
-}
-.pacman > div:nth-child(3),
-.pacman > div:nth-child(4),
-.pacman > div:nth-child(5),
-.pacman > div:nth-child(6) {
-  background-color: #6a8dfb;
-  width: 15px;
-  height: 15px;
-  border-radius: 100%;
-  margin: 2px;
-  width: 10px;
-  height: 10px;
-  position: absolute;
-  -webkit-transform: translate(0, -6.25px);
-  -ms-transform: translate(0, -6.25px);
-  transform: translate(0, -6.25px);
-  top: 25px;
-  left: 70px;
-}
-
-.pacman > div:nth-child(3) {
-  -webkit-animation: pacman-balls 1s -0.66s infinite linear;
-  animation: pacman-balls 1s -0.66s infinite linear;
-}
-.pacman > div:nth-child(4) {
-  -webkit-animation: pacman-balls 1s -0.33s infinite linear;
-  animation: pacman-balls 1s -0.33s infinite linear;
-}
-.pacman > div:nth-child(5) {
-  -webkit-animation: pacman-balls 1s 0s infinite linear;
-  animation: pacman-balls 1s 0s infinite linear;
-}
-.loadingDiv {
-  width: 100%;
-  height: 100%;
-  /*background: rgba(0, 0, 0, 0.3);*/
-  background: rgba(255, 255, 255, 1);
-  position: fixed;
-  top: 0;
-  left: 0;
-}
-.loadingDiv img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  z-index: 999;
-  display: block;
-}
-#newsDetail {
-  @mixin flex {
-    display: -webkit-flex;
-    display: flex;
-  }
-
-  @mixin border_radius($n) {
-    -webkit-border-radius: $n;
-    -moz-border-radius: $n;
-    border-radius: $n;
-  }
-  img {
-    max-width: 100%;
-  }
-
-  @keyframes color-me-in {
-    0% {
-      -moz-transform: scale(1, 1);
-      -webkit-transform: scale(1, 1);
-      -o-transform: scale(1, 1);
-    }
-    50% {
-      -moz-transform: scale(2, 2);
-      -webkit-transform: scale(2, 2);
-      -o-transform: scale(2, 2);
-    }
-    100% {
-      -moz-transform: scale(1, 1);
-      -webkit-transform: scale(1, 1);
-      -o-transform: scale(1, 1);
-    }
-  }
-
-  @include border_radius(5px);
-  border: 1px solid #dfe6fb;
-  margin-top: 10px;
-
-  overflow: hidden;
-
-  .comment_box {
-    background: #f4f6fc;
-    border: 1px #eee solid;
-    border-radius: 5px;
-    margin-bottom: 15px;
-    padding: 10px;
-    .submitButt {
-      text-align: right;
-    }
-    .portrait {
-      margin-right: 20px;
-      min-width: 40px;
-      max-width: 40px;
-      min-height: 40px;
-      max-height: 40px;
-      img {
-        width: 40px;
-        height: 40px;
-        @include border_radius(50%);
-      }
-    }
-    .portraito {
-      margin-right: 20px;
-      min-width: 50px;
-      max-width: 50px;
-      min-height: 50px;
-      max-height: 50px;
-      img {
-        width: 50px;
-        height: 50px;
-        @include border_radius(50%);
-      }
-    }
-    .comments {
-      line-height: 24px;
-      width: 100%;
-      .staff_name {
-        @include flex;
-        justify-content: space-between;
-        .staffBefore + .staffBefore:before {
-          content: " - ";
-        }
-        span {
-          margin-right: 10px;
-        }
-        .infopy {
-          margin: -2px 4px 0 0;
-          float: right;
+<style lang="scss" scoped>
+  #onlineExam {
+    .tool {
+      .tool_right {
+        .search_input {
+          margin-left: 10px;
+          /*border: 1px solid #6a8dfb;*/
+          color: #6a8dfb;
+          .search_button {
+            /*background: #6a8dfb;*/
+            /*color: #fff;*/
+          }
         }
       }
-      .commentContent {
-        color: #676767;
-      }
     }
-    .publishComment {
-      @include flex;
+  }
+
+  #examDialog {
+    .el-dialog__title {
+      color: #6a8dfb !important;
+    }
+    .exam_content {
+      border: 1px solid #dfe6fb;
+      padding: 10px;
+    }
+    .vt_align {
+      vertical-align: middle;
+      vertical-align: -webkit-baseline-middle;
+    }
+    .dialog-footer {
+      text-align: center;
+      display: block;
+      margin-top: 20px;
+    }
+  }
+
+  #testPaperDialog {
+    padding: 25px 15px;
+    .import_questions {
+      border: 1px solid #b4c6fd;
+      -webkit-box-shadow: 0 0 3px 1px #b4c6fd;
+      box-shadow: 0 0 3px 1px #b4c6fd;
+      text-align: center;
+      display: flex;
       align-items: center;
-      margin-bottom: 10px;
-      text-indent: 10px;
-    }
-    .commentOn {
-      padding: 15px;
-      width: 97%;
-      margin-left: 2%;
-      border-top: 1px solid #eeeeee;
-      @include flex;
-      align-items: center;
-    }
-    .anstitle {
-      font-size: 20px;
-      line-height: 60px;
-      font-weight: 500;
-      color: #606266;
-      text-indent: 10px;
-    }
-    .question {
-      font-size: 16px;
-      margin: 10px 10px;
+      justify-content: center;
+      height: 180px;
+      border-radius: 5px;
     }
   }
-  .highRanking {
-    margin-top: 10px;
-  }
-}
 </style>
