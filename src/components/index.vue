@@ -528,14 +528,14 @@
         //this.institutionDialog = true;
         }
         //this.noticeTitleDialog = true;
-        //this.yanFirstDialog = true;
+        //this.yanSecondDialog= true;
         //版本更新
       this.$http
         .get(globalConfig.server + "setting/update/read?a=1")
         .then(res => {
           if (res.data.code === "50040") {
             if (!JSON.parse(localStorage.personal).data.record) {
-              this.yanSecondDialog = true;
+              this.yanFirstDialog = true;
             }
           }
         });

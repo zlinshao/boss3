@@ -102,6 +102,9 @@ import ModuleSetting from '../components/systemSetting/moduleSetting/index.vue' 
 //问答中心
 import AnswerCenter from '../components/OAWork/answerCenter/index.vue'                             //问答中心
 
+//问卷调查
+import Questionnaire from '../components/OAWork/questionnaire/index.vue'                             //问卷调查
+
 // import Message from '../comments/systemSetting/message/index.vue'                                      //短信模板
 // import LoginRecord from '../comments/systemSetting/loginRecord/index.vue'                              //登陆日志
 // import UserDictionary from '../comments/systemSetting/userDictionary/index.vue'                        //用户字典
@@ -254,6 +257,7 @@ export default new Router({
         {path: '/examinerReadEach', component:ExaminerReadEach, name: "试卷批阅"},
         {path: '/examinerShortAn', component: ExaminerShortAn, name: "简答批阅"},
         {path: '/answerCenter', component: AnswerCenter, name: "问答中心"},
+        {path: '/questionnaire', component: Questionnaire, name: "问卷调查"},
       ]
     },
     //快捷入口

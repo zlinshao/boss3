@@ -2,20 +2,16 @@
   <div>
     <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false"  width="0" style="margin-top:20vh" :visible.sync="badgeDialogVisible">
     <div class="badgeup" >
-      <span class="span1">制度标题制度标题制度标题制度标题</span>
+      <span class="span1">版本更新</span>
       <div class="msg">
         <img src="../../assets/images/head.jpg" />
-        <span style="float:left; line-height:40px;">李巧俊&nbsp;&nbsp;&nbsp;&nbsp;研发部-产品经理</span>
-        <span style="float:right;margin-right:20px;">2017-11-26&nbsp;21:41:20</span>
+        <span v-if="versionInfo.staffs && versionInfo.staffs.real_name" style="float:left; line-height:40px;">{{versionInfo.staffs.real_name}}</span>
+        <span style="float:right;margin-right:20px;">{{versionInfo.create_time}}</span>
       </div>
-      <div class="article scroll_bar">
-        我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工
-        我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工
-        我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工
-        我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工我的世界不能不工我爱迪生基夺 工
+      <div class="article scroll_bar" v-html="versionInfo.content">
       </div>
       <div class="button">
-        <el-button @click="close"  size="small" type="success">我知道了</el-button>
+        <el-button  size="small"  @click="close" type="success">我知道了</el-button>
       </div>
     </div>
     </el-dialog>
@@ -34,6 +30,8 @@ export default {
       badgeDialogVisible: false,
       type: 3,
       xljt: "",
+      versionInfo: {},
+      images:[],
     };
   },
   watch: {
@@ -48,26 +46,29 @@ export default {
   },
   mounted() {
     this.landholder = JSON.parse(localStorage.personal);
+    this.getinfo();
   },
   methods: {
-    close(){
-      this.badgeDialogVisible=false;
-    },
-    closeBadge() {
-      // this.$http
-      //   .post(globalConfig.server + "manager/staff_record", { type: this.type })
-      //   .then(res => {
-      //     if (res.data.code === "30010") {
-      //       this.badgeDialogVisible = false;
-      //       this.$http
-      //         .get(globalConfig.server + "special/special/loginInfo")
-      //         .then(res => {
-      //           localStorage.setItem("personal", JSON.stringify(res.data.data));
-      //           globalConfig.personal = res.data.data.data;
-      //         });
-      //     }
-      //   });
-    },
+     getinfo() {
+      this.$http
+        .get(globalConfig.server + "setting/update/read?a=1")
+        .then(res => {
+          if (res.data.code === "50040") {
+            this.versionInfo = res.data.data;
+            this.images = res.data.data.album;
+          }
+
+        });
+    },   
+    close() {
+      this.badgeDialogVisible = false;
+      this.$http
+        .get(globalConfig.server + "special/special/loginInfo")
+        .then(res => {
+          localStorage.setItem("personal", JSON.stringify(res.data.data));
+          globalConfig.personal = res.data.data.data;
+        });
+    }
 
   }
 };
