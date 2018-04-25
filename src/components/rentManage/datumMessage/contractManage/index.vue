@@ -249,14 +249,14 @@
                       <span v-if="!scope.row.contract_number">暂无</span>
                     </template>
                   </el-table-column>
-                  <el-table-column
-                    prop="bulletin_time"
-                    label="上传时间">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.bulletin_time">{{scope.row.bulletin_time}}</span>
-                      <span v-if="!scope.row.bulletin_time">暂无</span>
-                    </template>
-                  </el-table-column>
+                  <!--<el-table-column-->
+                    <!--prop="bulletin_time"-->
+                    <!--label="上传时间">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.bulletin_time">{{scope.row.bulletin_time}}</span>-->
+                      <!--<span v-if="!scope.row.bulletin_time">暂无</span>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
                   <el-table-column
                     prop="customer_name"
                     label="业主姓名">
@@ -310,14 +310,14 @@
                       <span v-if="!scope.row.complete_date">暂无</span>
                     </template>
                   </el-table-column>
-                  <el-table-column
-                    prop="return_visit"
-                    label="回访情况">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.return_visit">{{scope.row.return_visit}}</span>
-                      <span v-if="!scope.row.return_visit">暂无</span>
-                    </template>
-                  </el-table-column>
+                  <!--<el-table-column-->
+                    <!--prop="return_visit"-->
+                    <!--label="回访情况">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.return_visit">{{scope.row.return_visit}}</span>-->
+                      <!--<span v-if="!scope.row.return_visit">暂无</span>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
                   <el-table-column
                     prop="staff_name"
                     width="80px;"
@@ -327,14 +327,14 @@
                       <span v-if="!scope.row.staff_name">暂无</span>
                     </template>
                   </el-table-column>
-                  <el-table-column
-                    prop="leader_name"
-                    label="负责人">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>
-                      <span v-if="!scope.row.leader_name">暂无</span>
-                    </template>
-                  </el-table-column>
+                  <!--<el-table-column-->
+                    <!--prop="leader_name"-->
+                    <!--label="负责人">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>-->
+                      <!--<span v-if="!scope.row.leader_name">暂无</span>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
                   <el-table-column
                     prop="department_name"
                     label="部门">
@@ -344,11 +344,17 @@
                     </template>
                   </el-table-column>
                   <el-table-column
-                    prop="approval_status"
+                    label="回访状态">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
+                      <span v-else="">/</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
                     label="审核状态">
                     <template slot-scope="scope">
-                      <el-button class="btnStatus" type="primary" size="mini" v-if="scope.row.approval_status">{{scope.row.approval_status}}</el-button>
-                      <span v-if="!scope.row.approval_status">暂无</span>
+                      <span v-if="scope.row.doc_status&&scope.row.doc_status.name">{{scope.row.doc_status.name}}</span>
+                      <span v-else="">/</span>
                     </template>
                   </el-table-column>
                 </el-table>
@@ -375,14 +381,14 @@
                       <span v-if="!scope.row.contract_number">暂无</span>
                     </template>
                   </el-table-column>
-                  <el-table-column
-                    prop="bulletin_time"
-                    label="上传时间">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.bulletin_time">{{scope.row.bulletin_time}}</span>
-                      <span v-if="!scope.row.bulletin_time">暂无</span>
-                    </template>
-                  </el-table-column>
+                  <!--<el-table-column-->
+                    <!--prop="bulletin_time"-->
+                    <!--label="上传时间">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.bulletin_time">{{scope.row.bulletin_time}}</span>-->
+                      <!--<span v-if="!scope.row.bulletin_time">暂无</span>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
                   <el-table-column
                     prop="customer_name"
                     label="业主姓名">
@@ -436,14 +442,14 @@
                       <span v-if="!scope.row.complete_date">暂无</span>
                     </template>
                   </el-table-column>
-                  <el-table-column
-                    prop="return_visit"
-                    label="回访情况">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.return_visit">{{scope.row.return_visit}}</span>
-                      <span v-if="!scope.row.return_visit">暂无</span>
-                    </template>
-                  </el-table-column>
+                  <!--<el-table-column-->
+                    <!--prop="return_visit"-->
+                    <!--label="回访情况">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.return_visit">{{scope.row.return_visit}}</span>-->
+                      <!--<span v-if="!scope.row.return_visit">暂无</span>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
                   <el-table-column
                     prop="staff_name"
                     width="80px"
@@ -453,14 +459,14 @@
                       <span v-if="!scope.row.staff_name">暂无</span>
                     </template>
                   </el-table-column>
-                  <el-table-column
-                    prop="leader_name"
-                    label="负责人">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>
-                      <span v-if="!scope.row.leader_name">暂无</span>
-                    </template>
-                  </el-table-column>
+                  <!--<el-table-column-->
+                    <!--prop="leader_name"-->
+                    <!--label="负责人">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>-->
+                      <!--<span v-if="!scope.row.leader_name">暂无</span>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
                   <el-table-column
                     prop="department_name"
                     label="部门">
@@ -470,11 +476,17 @@
                     </template>
                   </el-table-column>
                   <el-table-column
-                    prop="approval_status"
+                    label="回访状态">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
+                      <span v-else="">/</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
                     label="审核状态">
                     <template slot-scope="scope">
-                      <el-button class="btnStatus" type="primary" size="mini" v-if="scope.row.approval_status">{{scope.row.approval_status}}</el-button>
-                      <span v-if="!scope.row.approval_status">暂无</span>
+                      <span v-if="scope.row.doc_status&&scope.row.doc_status.name">{{scope.row.doc_status.name}}</span>
+                      <span v-else="">/</span>
                     </template>
                   </el-table-column>
                 </el-table>
