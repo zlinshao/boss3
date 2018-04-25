@@ -44,12 +44,14 @@ export default {
     badgeDialogVisible(val) {
       if (!val) {
         this.$emit("close");
+      }else{
+        this.getinfo();
       }
     }
   },
   mounted() {
     this.landholder = JSON.parse(localStorage.personal);
-    this.getinfo();
+    
   },
   methods: {
     getinfo() {
