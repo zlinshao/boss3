@@ -11,17 +11,16 @@
           </el-button>
         </div>
         <div class="tool_right">
-          <el-form>
-            <el-form-item>
-              <span>选择类型</span>
-              <el-select v-model="formInline.type" size="mini" placeholder="请选择" clearable>
-                <el-option v-for="item in 4" :key="item.id" label="C语言" :value="item.value"></el-option>
+          <el-form :inline="true" :model="params" onsubmit="return false;">
+            <el-form-item label="选择类型">
+              <el-select v-model="params.type" size="mini" placeholder="请选择" clearable>
+                <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
+                  {{item.dictionary_name}}
+                </el-option>
               </el-select>
             </el-form-item>
-          </el-form>
-          <el-form>
-            <el-form-item style="margin-right: 10px;">
-              <el-input placeholder="搜索关键字" v-model="search" size="mini" class="search_input">
+            <el-form-item style="margin-right: 15px;">
+              <el-input placeholder="搜索关键字" v-model="params.keywords" size="mini" style="vertical-align: initial;">
                 <el-button slot="append" icon="el-icon-search" class="search_button"></el-button>
               </el-input>
             </el-form-item>
@@ -32,9 +31,9 @@
         <div class="myHouse">
           <div>
             <el-table
-              :data="quizData"
-              :empty-text='rentStatus'
-              v-loading="rentLoading"
+              :data="quizTableData"
+              :empty-text='tableStatus'
+              v-loading="tableLoading"
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
               element-loading-background="rgba(255, 255, 255, 0)"
@@ -42,28 +41,28 @@
               @row-contextmenu='openContextMenu'
               style="width: 100%">
               <el-table-column
-                prop="contract_num"
+                prop="question_count"
                 label="总题数">
               </el-table-column>
               <el-table-column
-                prop="address"
+                prop="name"
                 label="试卷名称">
               </el-table-column>
               <el-table-column
-                prop="house_type"
+                prop="score"
                 label="总分值">
               </el-table-column>
               <el-table-column
-                prop="deposit"
+                prop="duration"
                 label="总时长">
               </el-table-column>
               <el-table-column
-                prop="price"
+                prop="paper.category"
                 label="类型">
               </el-table-column>
             </el-table>
           </div>
-          <div class="blocks page" >
+          <div class="block page" style="float: right;">
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
@@ -76,14 +75,13 @@
         </div>
       </div>
     </div>
-
     <div id="examDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="examDialog" title="新建考试" width="50%">
+      <el-dialog :close-on-click-modal="false" :visible.sync="examDialog" title="新建考试" width="45%">
         <div>
-          <div style="color: #6a8dfb;">新建考试信息</div>
-          <div class="exam_content">
-            <el-form size="mini" onsubmit="return false;" :model="formExam" label-width="70px">
-              <el-row :gutter="50">
+          <div class="title">新建考试信息</div>
+          <div class="describe_border" style="padding: 25px 10px;">
+            <el-form size="mini" onsubmit="return false;" :model="formExam" label-width="100px">
+              <el-row :gutter="30">
                 <el-col :span="12">
                   <el-form-item label="场次名称" required>
                     <el-input v-model="formExam.name" placeholder="请输入场次"></el-input>
@@ -91,62 +89,93 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="试卷类型" required>
-                    <el-select v-model="formExam.name" size="mini" placeholder="请选择类型" clearable>
-                      <el-option v-for="item in 4" :key="item.id" label="C语言" :value="item.value"></el-option>
+                    <el-select v-model="formExam.type" size="mini" placeholder="请选择" clearable>
+                      <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
+                        {{item.dictionary_name}}
+                      </el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
               </el-row>
-              <el-row :gutter="50">
+              <el-row :gutter="30">
                 <el-col :span="12">
-                  <el-form-item label="使用试卷">
-                    <el-select v-model="formExam.name" size="mini" placeholder="请选择试卷" clearable>
-                      <el-option v-for="item in 4" :key="item.id" label="C语言" :value="item.value"></el-option>
+                  <el-form-item label="使用试卷" required>
+                    <el-select v-model="formExam.paper_id" size="mini" placeholder="请选择试卷" clearable>
+                      <el-option v-for="item in examType" :key="item.id" :label="item.name" :value="item.id">
+                        {{item.name}}
+                      </el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-checkbox label="试卷随机"></el-checkbox>
+                <el-checkbox label="试卷随机" style="line-height: 30px;"></el-checkbox>
               </el-row>
-              <el-row :gutter="50">
+              <el-row :gutter="30">
                 <el-col :span="12">
-                  <el-form-item label="开考时间">
-                    <el-date-picker v-model="formExam.name" type="datetime" placeholder="请选择"></el-date-picker>
+                  <el-form-item label="开考时间" required>
+                    <el-date-picker v-model="formExam.start_time" type="datetime" placeholder="请选择"
+                                    value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                  <el-form-item label="试卷时长">
-                    <el-input placeholder="请输入分钟" v-model="formExam.name">
+                  <el-form-item label="试卷时长" required>
+                    <el-input placeholder="请输入分钟" v-model="formExam.duration">
                       <template slot="append">分钟</template>
                     </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
-              <el-row :gutter="50">
+              <el-row :gutter="30">
                 <el-col :span="12">
                   <el-form-item label="开考后">
-                    <el-input placeholder="请输入分钟" v-model="formExam.name">
+                    <el-input placeholder="请输入分钟" v-model="formExam.limited_time">
                       <template slot="append">分钟</template>
                     </el-input>
                   </el-form-item>
                 </el-col>
-                <span class="vt_align">设定时间后不能在登陆考试系统</span>
-
+                <span class="vt_align tips">* 设定时间后不能再登陆考试系统</span>
               </el-row>
-              <el-row :gutter="50">
+              <el-row :gutter="30">
                 <el-col :span="12">
                   <el-form-item label="考生选择">
-                    <el-select v-model="formExam.name" size="mini" placeholder="请选择类型" clearable>
-                      <el-option v-for="item in 4" :key="item.id" label="C语言" :value="item.value"></el-option>
-                    </el-select>
+                    <el-input v-model="examinees_name" readonly @focus="chooseStaff" placeholder="请选择">
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="emptyStaff">清空</div>
+                      </template>
+                    </el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
             </el-form>
           </div>
           <span slot="footer" class="dialog-footer">
-            <el-button size="small" type="primary" @click="saveExam" style="padding: 10px 20px;">保存</el-button>
+            <el-button size="small" @click="examDialog = false">取消</el-button>
+            <el-button size="small" type="primary" @click="saveExam">保存</el-button>
           </span>
         </div>
+      </el-dialog>
+    </div>
+    <div id="paperTypeDialog">
+      <el-dialog :close-on-click-modal="false" :visible.sync="paperTypeDialog" title="新建试卷" width="30%">
+        <el-form :model="paperTypeForm" onsubmit="return false;" label-width="100px">
+          <el-row>
+            <el-form-item label="试卷类型">
+              <el-select v-model="paperTypeForm.type" size="mini" placeholder="请选择" clearable>
+                <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
+                  {{item.dictionary_name}}
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-row>
+          <el-row>
+            <el-form-item label="试卷名称">
+              <el-input v-model="paperTypeForm.name" size="mini" placeholder="请输入名称" clearable></el-input>
+            </el-form-item>
+          </el-row>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+            <el-button size="small" @click="paperTypeDialog = false">取消</el-button>
+            <el-button size="small" type="primary" @click="paperTypeBtn">保存</el-button>
+        </span>
       </el-dialog>
     </div>
     <div id="testPaperDialog">
@@ -169,56 +198,88 @@
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
+    <Organization :organizationDialog="organizationDialog" :type="organizeType" @close="closeOrganization"
+                  @selectMember="selectMember"></Organization>
   </div>
 </template>
 
 <script>
   import RightMenu from "../../common/rightMenu.vue"; //右键
+  import Organization from "../../common/organization";
+
   export default {
     name: "index",
-    components: {RightMenu},
+    components: {RightMenu, Organization},
     data() {
       return {
+        organizationDialog: false,
+        organizeType: '',
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
         lists: [],
-        rentStatus: ' ',
-        rentLoading: false,
-        formInline: {
-          type: ""
-        },
+        tableStatus: ' ',
+        tableLoading: false,
+        totalNum: 0,
+        quizTableData: [],
+        //考试列表分页搜索
         params: {
           page: 1,
-          limit:10
+          limit: 10,
+          keywords: '',
+          type: ''
         },
-        totalNum: 0,
-        search: "",
-        quizData: [],
-        examType: [
-          {id: 1, name: "新员工入职"},
-          {id: 2, name: "初级晋升考试"},
-          {id: 3, name: "中级晋升考试"}
-        ],
-        examDialog: false,
-        testPaperDialog: false,
-        examTypeDialog: false,
+        examType: [],
+        examDialog: false,  //新建考试模态框
+        testPaperDialog: false, //新建试卷模态框
+        paperTypeDialog: false,  //新建试卷 选择类型模态框
+        //新增考试表单
         formExam: {
-          name: "",
-          description: ""
+          name: '',    //考试名称
+          start_time: '',  //开考时间
+          duration: '',   //考试时长
+          paper_id: '',    //试卷id
+          examinees: [],  //报考考生id
+          type: '',  //试卷类型
+          limited_time: '', //开考后多长时间不能登陆
         },
-        currentPage: 1
+        examinees_name: '',//新建考试报名考生
+        // 新建试卷 类型和名称
+        paperTypeForm: {
+          type: '',
+          name: '',
+        }
       };
     },
     mounted() {
       this.getTestPaperData();
+      this.getDictionary();
     },
     watch: {},
     methods: {
       saveExam() {
-        this.examDialog = false;
-      },
+        this.$http.post(globalConfig.server + 'exam', this.formExam).then((res) => {
+          if (res.data.code === '30010') {
+            this.examDialog = false;
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
 
+      },
+      getDictionary() {
+        //试卷类型
+        this.dictionary(613).then((res) => {
+          this.examType = res.data;
+        });
+      },
       importQuestion() {
         this.testPaperDialog = false;
         this.$router.push({path: "/batchQuestions"});
@@ -232,7 +293,8 @@
       openModalDialog(val) {
         switch (val) {
           case "testPaperDialog":
-            this.testPaperDialog = true;
+            // this.testPaperDialog = true;
+            this.paperTypeDialog = true;
             break;
           case "examDialog":
             this.examDialog = true;
@@ -240,11 +302,17 @@
         }
       },
       getTestPaperData() {
-        this.$http.get(globalConfig.server+ 'exam/paper', {params: this.params}).then((res)=>{
-          if(res.data.code === ''){
-
-          }else{
-
+        this.tableStatus = " ";
+        this.tableLoading = true;
+        this.$http.get(globalConfig.server + 'exam', {params: this.params}).then((res) => {
+          this.tableLoading = false;
+          if (res.data.code === '30000') {
+            this.quizTableData = res.data.data.data;
+            this.totalNum = res.data.data.count;
+          } else {
+            this.quizTableData = [];
+            this.totalNum = 0;
+            this.tableStatus = "暂无数据";
           }
         });
       },
@@ -316,6 +384,34 @@
         if (index == "lookExamDialog") {
           this.$router.push({path: "/previewExam"});
         }
+      },
+      closeOrganization() {
+        this.organizationDialog = false;
+        this.organizeType = '';
+      },
+      paperTypeBtn(){
+        this.paperTypeDialog = false;
+        this.testPaperDialog = true;
+      },
+      selectMember(val) {
+        this.examinees_name = '';
+        this.formExam.examinees = [];
+        var names = [];
+        if (val.length > 0) {
+          val.forEach((item) => {
+            this.formExam.examinees.push(item.id);
+            names.push(item.name);
+          });
+        }
+        this.examinees_name = names.join(',');
+      },
+      chooseStaff() {
+        this.organizeType = 'staff';
+        this.organizationDialog = true;
+      },
+      emptyStaff() {
+        this.examinees_name = '';
+        this.formExam.examinees = [];
       }
     }
   };
@@ -339,16 +435,13 @@
   }
 
   #examDialog {
-    .el-dialog__title {
-      color: #6a8dfb !important;
-    }
-    .exam_content {
-      border: 1px solid #dfe6fb;
-      padding: 10px;
-    }
     .vt_align {
       vertical-align: middle;
       vertical-align: -webkit-baseline-middle;
+    }
+    .tips {
+      color: #409EFF;
+      opacity: .7;
     }
     .dialog-footer {
       text-align: center;

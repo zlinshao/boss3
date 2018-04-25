@@ -30,15 +30,7 @@
                      :props="defaultProps"
                      :expand-on-click-node="false"
                      :render-content="renderContent"
-                     draggable
             >
-              <!--@node-drag-start="handleDragStart"-->
-              <!--@node-drag-enter="handleDragEnter"-->
-              <!--@node-drag-leave="handleDragLeave"-->
-              <!--@node-drag-over="handleDragOver"-->
-              <!--@node-drag-end="handleDragEnd"-->
-              <!--@node-drop="handleDrop"-->
-              <!--draggable-->
             </el-tree>
           </div>
         </div>
@@ -920,7 +912,7 @@
           leave_time: [],
         },
         //由于存在分页bug,所以暂时把职位和岗位的参数分开
-       //职位
+        //职位
         positionParams: {
           limit: 5,
           page: 1,
@@ -1574,8 +1566,8 @@
         this.postStaffData = [];
         this.postCollectLoading = true;
         this.postCollectStatus = ' ';
-        this.$http.get(globalConfig.server + 'manager/positions?type='+ this.onlyPositionId + '&page='+
-          this.postParams.page+ '&limit=' + this.postParams.limit).then((res) => {
+        this.$http.get(globalConfig.server + 'manager/positions?type=' + this.onlyPositionId + '&page=' +
+          this.postParams.page + '&limit=' + this.postParams.limit).then((res) => {
           this.postCollectLoading = false;
           if (res.data.code === '20000') {
             let arr = res.data.data.data;

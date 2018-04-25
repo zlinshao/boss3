@@ -2,16 +2,16 @@
   <div>
     <div id="onlineExam">
       <div class="tool">
-        <div class="tool_left">       
+        <div class="tool_left">
             <span style="height:130px;line-height:32px; width:120px; font-size:14px;">上传试题文件</span>
             <el-button type="success" @click="uploadExam" size="small" style=" width:120px; height:32px; line-height:0px; background-color:#58d788; border-color:#58d788;"  >
               <i class="iconfont icon-daoru"></i>&nbsp;试题导入
-            </el-button>             
+            </el-button>
             <br />
-            <el-button type="success" size="small" style="margin-top:12px;width:120px; height:32px; background-color:#fb4799; border-color:#fb4799;"  >
-              <i class="el-icon-download"></i>&nbsp;下载试题模版
-            </el-button> 
-            <Dropzone :ID="'examOptionx'" @getImg="photo_success"  :isClear="isClear"></Dropzone>          
+            <el-button type="success" size="small" style="margin-top:12px;width:120px; background-color:#fb4799; border-color:#fb4799;"  >
+              <i class="iconfont icon-xiazai" style="font-size: 14px;"></i>&nbsp;下载试题模板
+            </el-button>
+            <Dropzone :ID="'examOptionx'" @getImg="photo_success"  :isClear="isClear"></Dropzone>
         </div>
 
       </div>
@@ -26,7 +26,7 @@
           <p>6.问答题的选项数量、答案、两项内容，可以不填写；填空题的答案，可以不填；</p>
           <p><span>7.题分：只支持整数，不可输入小数点形式。</span></p>
         </div>
-      </div> 
+      </div>
     </div>
 
     <div id="testPaperDialog">
@@ -73,7 +73,7 @@
     </div>
 
   </div>
- 
+
 </template>
 
 <script>
@@ -92,7 +92,9 @@ export default {
   watch: {},
   methods: {
     // 上传成功
-    photo_success(val) {},
+    photo_success(val) {
+      console.log(val)
+    },
     //导入试题
     uploadExam() {
       this.testPaperDialog = true;
