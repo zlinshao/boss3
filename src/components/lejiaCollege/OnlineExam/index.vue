@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div @click="show=false" @contextmenu="closeMenu">
     <div id="onlineExam">
-      <div class="tool">
+      <div class="tool" style="padding-top: 10px;padding-bottom: 0">
         <div class="tool_left">
           <el-button type="success" size="mini" @click="openModalDialog('examDialog')">
             <i class="iconfont icon-jinrukaoshi" style="font-size: 14px;"></i>&nbsp;新建考试
@@ -158,8 +158,8 @@
       <el-dialog :close-on-click-modal="false" :visible.sync="paperTypeDialog" title="新建试卷" width="30%">
         <el-form :model="paperTypeForm" onsubmit="return false;" label-width="100px">
           <el-row>
-            <el-form-item label="试卷类型">
-              <el-select v-model="paperTypeForm.type" size="mini" placeholder="请选择" clearable>
+            <el-form-item label="试卷类型" required>
+              <el-select v-model="paperTypeForm.type" id="testPaperType" size="mini" placeholder="请选择" clearable>
                 <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
                   {{item.dictionary_name}}
                 </el-option>
@@ -167,7 +167,7 @@
             </el-form-item>
           </el-row>
           <el-row>
-            <el-form-item label="试卷名称">
+            <el-form-item label="试卷名称" required>
               <el-input v-model="paperTypeForm.name" size="mini" placeholder="请输入名称" clearable></el-input>
             </el-form-item>
           </el-row>
@@ -282,13 +282,22 @@
       },
       importQuestion() {
         this.testPaperDialog = false;
-        this.$router.push({path: "/batchQuestions"});
+        var type_name = $('#testPaperType').val();
+        this.$router.push({
+          path: "/batchQuestions",
+          query: {name: this.paperTypeForm.name, type_id: this.paperTypeForm.type,type_name: type_name}
+        });
       },
       myselfQuestion() {
         this.testPaperDialog = false;
         this.$router.push({path: "/myselfQuestions"});
       },
       dblClickTable() {
+
+      },
+      //关闭右键菜单
+      closeMenu() {
+        this.show = false;
       },
       openModalDialog(val) {
         switch (val) {
@@ -389,7 +398,21 @@
         this.organizationDialog = false;
         this.organizeType = '';
       },
-      paperTypeBtn(){
+      paperTypeBtn() {
+        if (!this.paperTypeForm.type) {
+          this.$notify.warning({
+            title: '警告',
+            message: '试卷类型不能为空'
+          });
+          return;
+        }
+        if (!this.paperTypeForm.name) {
+          this.$notify.warning({
+            title: '警告',
+            message: '试卷名称不能为空'
+          });
+          return;
+        }
         this.paperTypeDialog = false;
         this.testPaperDialog = true;
       },
@@ -412,7 +435,10 @@
       emptyStaff() {
         this.examinees_name = '';
         this.formExam.examinees = [];
-      }
+      },
+      initial() {
+
+      },
     }
   };
 </script>
