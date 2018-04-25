@@ -289,10 +289,10 @@
               list.area_name = data[i].area.area_name;
               list.region_name = data[i].region.region_name;
               list.address = data[i].address;
-              list.village_alias = data[i].village_alias !== null?data[i].village_alias: '暂无信息';
-              list.house_types = data[i].house_types !== null?data[i].house_types: '暂无信息';
+              list.village_alias = data[i].village_alias?data[i].village_alias: '暂无信息';
+              list.house_types = data[i].house_types?data[i].house_types: '暂无信息';
               list.built_year = data[i].built_year;
-              list.total_buildings = data[i].total_buildings !== ''?data[i].total_buildings: '暂无信息';
+              list.total_buildings = data[i].total_buildings?data[i].total_buildings: '暂无信息';
               this.tableData.push(list);
             }
             this.paging = res.data.data.count;
