@@ -2,14 +2,14 @@
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="onlineExam">
       <div class="tool">
-        <div class="tool_left">
+        <div style="margin: 4px 0 0 10px;">
           <el-button type="danger" size="mini" style="background: #fb4699;" @click="openModalDialog('testPaperDialog')">
             <i class="iconfont icon-xinjianshijuan" style="font-size: 14px;"></i>&nbsp;新建任务
           </el-button>
         </div>
         <div class="tool_right">
           <el-form>
-            <el-form-item>
+            <el-form-item style="margin-bottom:0px;">
               <span>选择状态</span>
               <el-select v-model="formInline.type" size="mini" placeholder="请选择状态" clearable>
                 <el-option v-for="item in 4" :key="item.id" label="C语言" :value="item.value"></el-option>
@@ -17,7 +17,7 @@
             </el-form-item>
           </el-form>
           <el-form>
-            <el-form-item style="margin-right: 10px;">
+            <el-form-item style="margin-right: 10px; margin-bottom:0px;">
               <el-input placeholder="搜索关键字" v-model="search" size="mini" class="search_input">
                 <el-button slot="append" icon="el-icon-search" class="search_button"></el-button>
               </el-input>
