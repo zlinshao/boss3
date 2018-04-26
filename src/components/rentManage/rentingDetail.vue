@@ -243,6 +243,11 @@
             </el-row>
             <el-row>
               <el-col :span="8">
+                <el-form-item label="合同上传时间">
+                  <div class="content">{{contractInfo.contract_create_time}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
                 <el-form-item label="合同签约时间">
                   <div class="content">{{contractInfo.sign_date}}</div>
                 </el-form-item>
@@ -252,13 +257,14 @@
                   <div class="content">{{contractInfo.begin_date}}</div>
                 </el-form-item>
               </el-col>
+
+            </el-row>
+            <el-row>
               <el-col :span="8">
                 <el-form-item label="合同结束时间">
                   <div class="content">{{contractInfo.end_date}}</div>
                 </el-form-item>
               </el-col>
-            </el-row>
-            <el-row>
               <el-col :span="8">
                 <el-form-item label="押金(元)">
                   <div class="content">{{contractInfo.deposit}}</div>
@@ -273,6 +279,9 @@
                   </div>
                 </el-form-item>
               </el-col>
+
+            </el-row>
+            <el-row>
               <el-col :span="8">
                 <el-form-item label="付款方式">
                   <div class="content">
@@ -283,8 +292,6 @@
                   </div>
                 </el-form-item>
               </el-col>
-            </el-row>
-            <el-row>
               <el-col :span="8">
                 <el-form-item label="总收入金额">
                   <div class="content">{{contractInfo.money_sum}}</div>

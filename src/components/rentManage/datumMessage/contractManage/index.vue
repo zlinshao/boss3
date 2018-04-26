@@ -294,6 +294,14 @@
                     </template>
                   </el-table-column>
                   <el-table-column
+                    width="136px"
+                    label="合同上传时间">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.contract_create_time">{{scope.row.contract_create_time}}</span>
+                      <span v-if="!scope.row.contract_create_time">暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
                     prop="end_date"
                     width="136px"
                     label="合同到期时间">
@@ -436,6 +444,14 @@
                     <template slot-scope="scope">
                       <span v-if="scope.row.phone">{{scope.row.phone}}</span>
                       <span v-if="!scope.row.phone">暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    width="136px"
+                    label="合同上传时间">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.contract_create_time">{{scope.row.contract_create_time}}</span>
+                      <span v-if="!scope.row.contract_create_time">暂无</span>
                     </template>
                   </el-table-column>
                   <el-table-column
