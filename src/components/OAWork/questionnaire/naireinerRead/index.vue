@@ -144,7 +144,7 @@
                 prop="more"
                 label="详情">
                 <template slot-scope="scope">
-                  <span @click="lookexam" style="cursor: pointer;">点击查看</span>
+                  <span  style="cursor: pointer;">点击查看</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -253,9 +253,9 @@ export default {
     myData(val) {
       this.form.page = val;
       this.rentStatus = " ";
-      this.rentLoading = true;
+      this.rentLoading = false;
       this.$http.get(globalConfig.server + "exam/result").then(res => {
-        this.rentLoading = false;
+        
         if (res.data.code == "36010") {
           this.tableData = res.data.data;
           this.tableNumber = 1;
