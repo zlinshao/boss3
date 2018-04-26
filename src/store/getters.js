@@ -12,5 +12,6 @@ const getters = {
   secondFlag: state => state.secondPassword.secondFlag,
   badgeFlag: state => state.badge.badgeFlag,
   newversion: state => state.article.newversion,
+  onlineExam: state => state.onlineExam.test_paper,
 }
 export default getters

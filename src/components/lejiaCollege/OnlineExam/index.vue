@@ -20,7 +20,8 @@
               </el-select>
             </el-form-item>
             <el-form-item style="margin-right: 15px;">
-              <el-input placeholder="搜索关键字" v-model="params.keywords" size="mini" style="vertical-align: initial;">
+              <el-input placeholder="搜索关键字" v-model="params.keywords" size="mini" clearable
+                        style="vertical-align: initial;">
                 <el-button slot="append" icon="el-icon-search" class="search_button"></el-button>
               </el-input>
             </el-form-item>
@@ -255,7 +256,18 @@
       this.getTestPaperData();
       this.getDictionary();
     },
-    watch: {},
+    watch: {
+      examDialog(val){
+        if(val){
+          this.initial();
+        }
+      },
+      paperTypeDialog(val){
+        if(val){
+          this.initial();
+        }
+      },
+    },
     methods: {
       saveExam() {
         this.$http.post(globalConfig.server + 'exam', this.formExam).then((res) => {
@@ -285,7 +297,7 @@
         var type_name = $('#testPaperType').val();
         this.$router.push({
           path: "/batchQuestions",
-          query: {name: this.paperTypeForm.name, type_id: this.paperTypeForm.type,type_name: type_name}
+          query: {name: this.paperTypeForm.name, type_id: this.paperTypeForm.type, type_name: type_name}
         });
       },
       myselfQuestion() {
@@ -437,6 +449,21 @@
         this.formExam.examinees = [];
       },
       initial() {
+        this.formExam = {
+          name: '',    //考试名称
+          start_time: '',  //开考时间
+          duration: '',   //考试时长
+          paper_id: '',    //试卷id
+          examinees: [],  //报考考生id
+          type: '',  //试卷类型
+          limited_time: '', //开考后多长时间不能登陆
+        };
+        this.examinees_name = '';//新建考试报名考生
+        // 新建试卷 类型和名称
+        this.paperTypeForm = {
+          type: '',
+          name: '',
+        };
 
       },
     }
