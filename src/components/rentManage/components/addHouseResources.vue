@@ -645,7 +645,7 @@
         params: {
           is_submit: 0,
           id: '',      //草稿id
-          draft: '',
+          draft: 0,
           type: 1,
           //------------------小区详情--------------------//
           community_id: '',            //小区id
@@ -1242,7 +1242,7 @@
         this.params = {
           is_submit:0,
           id: '',      //草稿id
-          draft: '',
+          draft: 0,
           type: 1,
           //------------------小区详情--------------------//
           community_id: '',            //小区id
