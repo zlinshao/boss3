@@ -274,7 +274,7 @@ export default {
       if (!this.paperTypeForm.name) {
         this.$notify.warning({
           title: "警告",
-          message: "问卷名称不能为空"
+          message: "问卷标题不能为空"
         });
         return;
       }
