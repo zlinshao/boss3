@@ -38,9 +38,7 @@
                   <el-form-item label="门牌号">
                     <div class="content">
                     <span v-if="detailData.door_address">
-                      <span v-for="(item,index) in detailData.door_address">
-                        {{item}}<span v-if="index<detailData.door_address.length-1"> - </span>
-                      </span>
+                      {{detailData.door_address}}
                     </span>
                     </div>
                   </el-form-item>
@@ -373,10 +371,16 @@
               <span style="margin-right: 30px">{{albumArray.create_time}}</span>
               <span style="margin-right: 30px;color: #444" v-if="albumArray.remark">备注：{{albumArray.remark}}</span>
               <span style="margin-right: 30px;color: #444" v-if="albumArray.staffs&&albumArray.staffs.name">上传人：{{albumArray.staffs.name}}</span>
-              <span style="color: #444" v-if="albumArray.staffs&&albumArray.staffs.org&&albumArray.staffs.org.length>0">
+              <span style="margin-right: 30px;color: #444" v-if="albumArray.staffs&&albumArray.staffs.org&&albumArray.staffs.org.length>0">
                 部门：
                 <span v-for="item in albumArray.staffs.org">
                   <span>{{item.name}}&nbsp;&nbsp;  </span>
+                </span>
+              </span>
+              <span style="color: #444" v-if="albumArray.staffs&&albumArray.staffs.role&&albumArray.staffs.role.length>0">
+                岗位：
+                <span v-for="item in albumArray.staffs.role">
+                  <span>{{item.display_name}}&nbsp;&nbsp;  </span>
                 </span>
               </span>
             </div>

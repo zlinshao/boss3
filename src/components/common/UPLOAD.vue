@@ -10,7 +10,7 @@
         </div>
       </div>
       <div :id="'pickfiles'+ID" class="pickfiles">
-        <div class="upButton" :id="ID" @click.stop="getTokenMessage" v-if="!onlyShow">
+        <div class="upButton" :id="ID" @click.stop="getTokenMessage">
           <span class="el-icon-plus"></span>
         </div>
       </div>
