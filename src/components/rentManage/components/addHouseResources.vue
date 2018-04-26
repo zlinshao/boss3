@@ -1173,7 +1173,9 @@
       },
 
       confirmAdd(val){
-        this.params.draft = val;
+        if(val===0 || val ===1){
+          this.params.draft = val;
+        }
         if(val === 0){
           this.params.is_submit=0;
         }else if(val===2){
