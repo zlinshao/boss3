@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false"  width="0" z-index="2000" style="margin-top:20vh" :visible.sync="badgeDialogVisible">
+    <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false"  width="0" z-index="2000" style="margin-top:20vh" :visible.sync="yanDialogVisible">
     <div class="badgeup" >
       <span class="span1">版本更新</span>
       <div class="msg">
@@ -27,7 +27,7 @@ export default {
       landholder: {},
       panelShow: false,
       loginDay: 0, //连续登陆天数
-      badgeDialogVisible: false,
+      yanDialogVisible: false,
       type: 3,
       xljt: "",
       versionInfo: {},
@@ -36,9 +36,9 @@ export default {
   },
   watch: {
     yanFirstDialog(val) {
-      this.badgeDialogVisible = val;
+      this.yanDialogVisible = val;
     },
-    badgeDialogVisible(val) {
+    yanDialogVisible(val) {
       if (!val) {
         this.$emit("close");
       } else{
@@ -63,7 +63,7 @@ export default {
         });
     },   
     close() {
-      this.badgeDialogVisible = false;
+      this.yanDialogVisible = false;
       this.$http
         .get(globalConfig.server + "special/special/loginInfo")
         .then(res => {

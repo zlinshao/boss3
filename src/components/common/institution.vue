@@ -13,12 +13,6 @@
       <img v-if="images.cover_pic!=[]" data-magnify
         v-for="(val,key) in images.cover_pic" :data-src="val.uri" :src="val.uri" alt="" :key="key">
       </div>
-
-
-
-    
-
-   
       <div class="button">
        <el-button size="small" @click="close" type="primary">我知道了</el-button>
       </div>
@@ -79,6 +73,12 @@ export default {
     },    
     close(){
       this.badgeDialogVisible=false;
+      this.$http
+        .get(globalConfig.server + "special/special/loginInfo")
+        .then(res => {
+          localStorage.setItem("personal", JSON.stringify(res.data.data));
+          globalConfig.personal = res.data.data.data;
+        });
     },
 
   }

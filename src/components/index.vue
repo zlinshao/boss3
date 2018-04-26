@@ -328,9 +328,9 @@
                     @close="closeModalSecond"></UnlockSecondPW>
     <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
     <BadgeView :badgeDialog="badgeDialog" @close="closeModalSecond"></BadgeView>
-    <InstitutionView :institutionDialog="institutionDialog" @close="closeModal"></InstitutionView>
+    <InstitutionView :institutionDialog="institutionDialog" @close="closeinsModal"></InstitutionView>
     <NoticeTitleView :noticeTitleDialog="noticeTitleDialog" @close="closeModal"></NoticeTitleView>
-    <YanFirstView :yanFirstDialog="yanFirstDialog" @close="closeModal"></YanFirstView>
+    <YanFirstView :yanFirstDialog="yanFirstDialog" @close="closeyanModal"></YanFirstView>
     <YanSecondView :yanSecondDialog="yanSecondDialog" @close="closeModal"></YanSecondView>
   </div>
 </template>
@@ -524,9 +524,15 @@
       initData() {
 
         //制度弹窗
-        if (!this.personal.data.system) {
-        //this.institutionDialog = true;
-        }
+        this.$http
+        .get(globalConfig.server + "oa/portal/last")
+        .then(res => {
+          if (res.data.code === "800110") {
+            if (!this.personal.data.system) {
+            this.institutionDialog = true;
+            }
+          }
+        });
         //this.noticeTitleDialog = true;
         //this.yanSecondDialog= true;
         //版本更新
@@ -668,6 +674,12 @@
         this.noticeTitleDialog = false;
         this.yanFirstDialog = false;
         this.yanSecondDialog = false;
+      },
+      closeinsModal(){
+        this.institutionDialog = false;
+      },
+      closeyanModal(){
+        this.yanFirstDialog = false;
       },
       closeModalSecond(){
         this.unlockSecondPWDialog = false;
