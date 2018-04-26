@@ -604,7 +604,8 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="editHouseResourcesDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="confirmAdd">修 改</el-button>
+        <el-button size="small" type="primary" @click="confirmAdd(0)">修 改</el-button>
+        <el-button size="small" type="primary" @click="confirmAdd(1)">保存并提交</el-button>
       </span>
     </el-dialog>
 
@@ -633,6 +634,7 @@
         type:'',
 
         params: {
+          is_submit: 0,
           type : '',
           //------------------小区详情--------------------//
           community_id : '',            //小区id
@@ -1137,7 +1139,8 @@
         }
       },
 
-      confirmAdd(){
+      confirmAdd(val){
+        this.params.is_submit = val;
         //房东
         let customItem = {};
         this.params.customers = [];
@@ -1198,6 +1201,7 @@
       clearData(){
         this.isClear = false;
         this.params = {
+          is_submit: 0,
           type : '',
           //------------------小区详情--------------------//
           community_id : '',            //小区id

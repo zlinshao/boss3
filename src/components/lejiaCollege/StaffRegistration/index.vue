@@ -214,8 +214,7 @@ export default {
       this.form.page = val;
       this.rentStatus = " ";
       this.rentLoading = true;
-      this.$http
-        .get(globalConfig.server + "exam/enroll", { params: this.form })
+      this.$http.get(globalConfig.server + "exam/enroll", { params: this.form })
         .then(res => {
           if(res.data.code == '36000'){
           this.rentLoading = false;

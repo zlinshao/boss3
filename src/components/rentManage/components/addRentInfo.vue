@@ -470,7 +470,9 @@
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="addRentInfoDialogVisible = false">取 消</el-button>
         <!--<el-button size="small" type="primary" @click="confirmAdd(1)">草 稿</el-button>-->
-        <el-button size="small" type="primary" @click="confirmAdd">发 布</el-button>
+        <el-button size="small" type="primary" @click="confirmAdd(0)">发 布</el-button>
+        <el-button size="small" type="primary" @click="confirmAdd(1)">保存并提交</el-button>
+
       </span>
     </el-dialog>
     <VillageModal :villageDialog="villageDialog" @close="closeVillageModal"></VillageModal>
@@ -499,6 +501,7 @@
 
         houseInfo: {},                //房屋相关信息
         params: {
+          is_submit: 0,
           house_id: '',   //合同id
           type: 1,
           //------------------小区详情--------------------//
@@ -837,7 +840,8 @@
         }
       },
 
-      confirmAdd(){
+      confirmAdd(val){
+        this.params.is_submit = val;
         //租客
         let customItem = {};
         this.params.customers = [];
@@ -908,6 +912,7 @@
       clearData(){
         this.isClear = false;
         this.params = {
+          is_submit:0 ,
           house_id: '',   //合同id
           type: 1,
           customers: [],               //租客数组

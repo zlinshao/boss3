@@ -8,7 +8,7 @@
             <el-form :model="singleForm" onsubmit="return false;">
               <div class="qubody">
                 <div class="topbody">
-                  <div class="title">题干</div>
+                  <div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>
                   <vue-editor id="singleEditor" useCustomImageHandler :disabled="editorDisabled"
                               v-model="singleForm.stem"></vue-editor>
                 </div>
@@ -47,7 +47,7 @@
             <el-form :model="multiForm" onsubmit="return false;">
               <div class="qubody">
                 <div class="topbody">
-                  <div class="title">题干</div>
+                  <div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>
                   <vue-editor id="multiEditor" v-model="multiForm.stem" useCustomImageHandler
                               :disabled="editorDisabled"></vue-editor>
                 </div>
@@ -86,7 +86,7 @@
             <el-form :model="multiForm" onsubmit="return false;">
               <div class="qubody">
                 <div class="topbody">
-                  <div class="title">题干</div>
+                  <div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>
                   <vue-editor id="nonDirectionalEditor" v-model="multiForm.stem" useCustomImageHandler
                               :disabled="editorDisabled"></vue-editor>
                 </div>
@@ -125,7 +125,7 @@
             <el-form :model="judgeForm" onsubmit="return false;">
               <div class="qubody">
                 <div class="topbody">
-                  <div class="title">题干</div>
+                  <div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>
                   <vue-editor id="judgeEditor" v-model="judgeForm.stem" useCustomImageHandler
                               :disabled="editorDisabled"></vue-editor>
                 </div>
@@ -160,7 +160,7 @@
             <el-form :model="blankForm" onsubmit="return false;">
               <div class="qubody">
                 <div class="topbody">
-                  <div class="title">题干</div>
+                  <div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>
                   <vue-editor id="completionEditor" v-model="blankForm.stem" useCustomImageHandler
                               :disabled="editorDisabled"></vue-editor>
                 </div>
@@ -203,7 +203,7 @@
             <el-form :model="answerForm" onsubmit="return false;">
               <div class="qubody">
                 <div class="topbody">
-                  <div class="title">题干</div>
+                  <div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>
                   <vue-editor id="editor" v-model="answerForm.stem" useCustomImageHandler
                               :disabled="editorDisabled"></vue-editor>
                 </div>
