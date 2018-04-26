@@ -257,13 +257,13 @@
       this.getDictionary();
     },
     watch: {
-      examDialog(val){
-        if(val){
+      examDialog(val) {
+        if (val) {
           this.initial();
         }
       },
-      paperTypeDialog(val){
-        if(val){
+      paperTypeDialog(val) {
+        if (val) {
           this.initial();
         }
       },
@@ -302,7 +302,11 @@
       },
       myselfQuestion() {
         this.testPaperDialog = false;
-        this.$router.push({path: "/myselfQuestions"});
+        var type_name = $('#testPaperType').val();
+        this.$router.push({
+          path: "/myselfQuestions",
+          query: {name: this.paperTypeForm.name, type_id: this.paperTypeForm.type, type_name: type_name}
+        });
       },
       dblClickTable() {
 

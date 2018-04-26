@@ -137,7 +137,6 @@
       },
       //导入试题
       uploadExam() {
-
         let params = {};
         params.doc_id = this.docId;
         params.category = this.testPaper.type_id;

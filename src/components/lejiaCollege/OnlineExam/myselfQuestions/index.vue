@@ -2,13 +2,13 @@
   <div>
     <div id="onlineExam">
       <div class="qutitle">
-        <div class="title1">题型</div>
+        <div class="title1">题型{{testPaper}}</div>
         <el-tabs type="border-card" v-model="activeName">
           <el-tab-pane name="first" label="单选题">
             <div class="qubody">
               <div class="topbody">
                 <div class="title">题干</div>
-                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>              
+                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>
               </div>
               <div class="midbody">
                 <div class="title">选项</div>
@@ -23,20 +23,20 @@
                 </el-form>
                 <div class="midadd">
                   <span @click="midaddx">+&nbsp;&nbsp;添加选项</span>
-                </div>                               
+                </div>
               </div>
-            <div class="eachSore"> 
-              <div class="title">默认分值</div>  
+            <div class="eachSore">
+              <div class="title">默认分值</div>
               <el-form :model="form3" style="border:1px #eee solid; text-indent:20px;">
                 <el-row>
                   <el-form-item label="默认分值" style="margin-top:20px;">
                     <el-col :span="4">
                       <el-input v-model="form3.score" placeholder="请填入分值" >分</el-input>
                     </el-col>
-                  </el-form-item>    
+                  </el-form-item>
                 </el-row>
               </el-form>
-            </div>   
+            </div>
             </div>
           </el-tab-pane>
 
@@ -44,7 +44,7 @@
             <div class="qubody">
               <div class="topbody">
                 <div class="title">题干</div>
-                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>              
+                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>
               </div>
               <div class="midbody">
                 <div class="title">选项</div>
@@ -59,20 +59,20 @@
                 </el-form>
                 <div class="midadd">
                   <span @click="midaddbox">+&nbsp;&nbsp;添加选项</span>
-                </div>                               
+                </div>
               </div>
-            <div class="eachSore"> 
-              <div class="title">默认分值</div>  
+            <div class="eachSore">
+              <div class="title">默认分值</div>
               <el-form :model="form3" style="border:1px #eee solid; text-indent:20px;">
                 <el-row>
                   <el-form-item label="默认分值" style="margin-top:20px;">
                     <el-col :span="4">
                       <el-input v-model="form3.score" placeholder="请填入分值" >分</el-input>
                     </el-col>
-                  </el-form-item>    
+                  </el-form-item>
                 </el-row>
               </el-form>
-            </div>   
+            </div>
             </div>
           </el-tab-pane>
 
@@ -80,7 +80,7 @@
             <div class="qubody">
               <div class="topbody">
                 <div class="title">题干</div>
-                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>              
+                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>
               </div>
               <div class="midbody">
                 <div class="title">选项</div>
@@ -95,33 +95,33 @@
                 </el-form>
                 <div class="midadd">
                   <span @click="midaddbox">+&nbsp;&nbsp;添加选项</span>
-                </div>                               
+                </div>
               </div>
-            <div class="eachSore"> 
-              <div class="title">默认分值</div>  
+            <div class="eachSore">
+              <div class="title">默认分值</div>
               <el-form :model="form3" style="border:1px #eee solid; text-indent:20px;">
                 <el-row>
                   <el-form-item label="默认分值" style="margin-top:20px;">
                     <el-col :span="4">
                       <el-input v-model="form3.score" placeholder="请填入分值" >分</el-input>
                     </el-col>
-                  </el-form-item>    
+                  </el-form-item>
                 </el-row>
               </el-form>
-            </div>   
+            </div>
             </div>
           </el-tab-pane>
 
-          <el-tab-pane name="fourth" label="填空题"> 
+          <el-tab-pane name="fourth" label="填空题">
             <div class="qubody">
               <div class="topbody">
                 <div class="title">题干</div>
-                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>              
+                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>
               </div>
               <div class="midbody">
                 <div class="title">填空信息</div>
                 <el-form :model="form3" style="border:1px #eee solid; ">
-              
+
                   <el-form-item style=" margin-left:10px; margin-top:20px;">
                     <el-col :span="6" v-for="(val,index) in spacelen" :key="index">
                       <span>第{{index+1}}处答案</span>
@@ -132,20 +132,20 @@
                 </el-form>
                 <div class="midadd">
                   <span @click="spanceadd">+&nbsp;&nbsp;添加选项</span>
-                </div>                               
+                </div>
               </div>
-            <div class="eachSore"> 
-              <div class="title">默认分值</div>  
+            <div class="eachSore">
+              <div class="title">默认分值</div>
               <el-form :model="form3" style="border:1px #eee solid; text-indent:20px;">
                 <el-row>
                   <el-form-item label="默认分值" style="margin-top:20px;">
                     <el-col :span="4">
                       <el-input v-model="form3.score" placeholder="请填入分值" >分</el-input>
                     </el-col>
-                  </el-form-item>    
+                  </el-form-item>
                 </el-row>
               </el-form>
-            </div>   
+            </div>
             </div>
           </el-tab-pane>
 
@@ -153,7 +153,7 @@
             <div class="qubody">
               <div class="topbody">
                 <div class="title">题干</div>
-                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>              
+                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>
               </div>
               <div class="midbody">
                 <div class="title">选项</div>
@@ -165,20 +165,20 @@
                       </el-col>
                     </el-radio-group>
                   </el-form-item>
-                </el-form>                  
+                </el-form>
               </div>
-            <div class="eachSore"> 
-              <div class="title">默认分值</div>  
+            <div class="eachSore">
+              <div class="title">默认分值</div>
               <el-form :model="form3" style="border:1px #eee solid; text-indent:20px;">
                 <el-row>
                   <el-form-item label="默认分值" style="margin-top:20px;">
                     <el-col :span="4">
                       <el-input v-model="form3.score" placeholder="请填入分值" >分</el-input>
                     </el-col>
-                  </el-form-item>    
+                  </el-form-item>
                 </el-row>
               </el-form>
-            </div>   
+            </div>
             </div>
           </el-tab-pane>
 
@@ -186,20 +186,20 @@
             <div class="qubody">
               <div class="topbody">
                 <div class="title">题干</div>
-                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>              
+                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>
               </div>
-            <div class="eachSore"> 
-              <div class="title">默认分值</div>  
+            <div class="eachSore">
+              <div class="title">默认分值</div>
               <el-form :model="form3" style="border:1px #eee solid; text-indent:20px;">
                 <el-row>
                   <el-form-item label="默认分值" style="margin-top:20px;">
                     <el-col :span="4">
                       <el-input v-model="form3.score" placeholder="请填入分值" >分</el-input>
                     </el-col>
-                  </el-form-item>    
+                  </el-form-item>
                 </el-row>
               </el-form>
-            </div>   
+            </div>
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -209,7 +209,7 @@
       </div>
     </div>
   </div>
- 
+
 </template>
 
 <script>
@@ -230,10 +230,13 @@ export default {
         score: "",
         checkbox: [],
         panduan: ""
-      }
+      },
+      testPaper: '',  //试卷
     };
   },
-  mounted() {},
+  activated(){
+    this.getQueryData();
+  },
   watch: {
     activeName(val) {
       this.nowAction = val;
@@ -244,6 +247,21 @@ export default {
     }
   },
   methods: {
+    getQueryData() {
+      if (!this.$route.query.name) {
+        let data = {};
+        data.name = this.$store.state.onlineExam.myself_test_paper.name;
+        data.type_id = this.$store.state.onlineExam.myself_test_paper.type_id;
+        data.type_name = this.$store.state.onlineExam.myself_test_paper.type_name;
+        this.testPaper = data;
+        this.$router.push({path: '/myselfQuestions', query: data});
+      } else {
+        let query = this.$route.query;
+        this.$store.dispatch('myselfTestPaper', query);
+        this.testPaper = query;
+      }
+
+    },
     midaddx() {
       this.singlen++;
     },
