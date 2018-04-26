@@ -25,18 +25,6 @@
                   <span @click="midaddx">+&nbsp;&nbsp;添加选项</span>
                 </div>                               
               </div>
-            <div class="eachSore"> 
-              <div class="title">默认分值</div>  
-              <el-form :model="form3" style="border:1px #eee solid; text-indent:20px;">
-                <el-row>
-                  <el-form-item label="默认分值" style="margin-top:20px;">
-                    <el-col :span="4">
-                      <el-input v-model="form3.score" placeholder="请填入分值" >分</el-input>
-                    </el-col>
-                  </el-form-item>    
-                </el-row>
-              </el-form>
-            </div>   
             </div>
           </el-tab-pane>
 
@@ -60,19 +48,7 @@
                 <div class="midadd">
                   <span @click="midaddbox">+&nbsp;&nbsp;添加选项</span>
                 </div>                               
-              </div>
-            <div class="eachSore"> 
-              <div class="title">默认分值</div>  
-              <el-form :model="form3" style="border:1px #eee solid; text-indent:20px;">
-                <el-row>
-                  <el-form-item label="默认分值" style="margin-top:20px;">
-                    <el-col :span="4">
-                      <el-input v-model="form3.score" placeholder="请填入分值" >分</el-input>
-                    </el-col>
-                  </el-form-item>    
-                </el-row>
-              </el-form>
-            </div>   
+              </div> 
             </div>
           </el-tab-pane>
 
@@ -97,109 +73,15 @@
                   <span @click="midaddbox">+&nbsp;&nbsp;添加选项</span>
                 </div>                               
               </div>
-            <div class="eachSore"> 
-              <div class="title">默认分值</div>  
-              <el-form :model="form3" style="border:1px #eee solid; text-indent:20px;">
-                <el-row>
-                  <el-form-item label="默认分值" style="margin-top:20px;">
-                    <el-col :span="4">
-                      <el-input v-model="form3.score" placeholder="请填入分值" >分</el-input>
-                    </el-col>
-                  </el-form-item>    
-                </el-row>
-              </el-form>
-            </div>   
             </div>
           </el-tab-pane>
 
-          <el-tab-pane name="fourth" label="填空题"> 
+          <el-tab-pane name="four" label="问答题">
             <div class="qubody">
               <div class="topbody">
                 <div class="title">题干</div>
                   <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>              
-              </div>
-              <div class="midbody">
-                <div class="title">填空信息</div>
-                <el-form :model="form3" style="border:1px #eee solid; ">
-              
-                  <el-form-item style=" margin-left:10px; margin-top:20px;">
-                    <el-col :span="6" v-for="(val,index) in spacelen" :key="index">
-                      <span>第{{index+1}}处答案</span>
-                      <el-input style="width:70%" size="small"  placeholder="请输入选项内容"></el-input>
-                    </el-col>
-                  </el-form-item>
-                  <span style="margin-left: 20%; color:rgb(252, 131, 182); margin-top:20px; margin-bottom:20px;display:block;">说明：考生填写答案须跟上方答案完全相同，才能得分。录入答案时，请不要加多余的空格等干扰字符</span>
-                </el-form>
-                <div class="midadd">
-                  <span @click="spanceadd">+&nbsp;&nbsp;添加选项</span>
-                </div>                               
-              </div>
-            <div class="eachSore"> 
-              <div class="title">默认分值</div>  
-              <el-form :model="form3" style="border:1px #eee solid; text-indent:20px;">
-                <el-row>
-                  <el-form-item label="默认分值" style="margin-top:20px;">
-                    <el-col :span="4">
-                      <el-input v-model="form3.score" placeholder="请填入分值" >分</el-input>
-                    </el-col>
-                  </el-form-item>    
-                </el-row>
-              </el-form>
-            </div>   
-            </div>
-          </el-tab-pane>
-
-          <el-tab-pane name="five" label="判断题">
-            <div class="qubody">
-              <div class="topbody">
-                <div class="title">题干</div>
-                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>              
-              </div>
-              <div class="midbody">
-                <div class="title">选项</div>
-                <el-form :model="form3" style="border:1px #eee solid">
-                  <el-form-item>
-                    <el-radio-group v-model="form3.panduan" style="width:98%;margin-left:2%;">
-                      <el-col :span="12" :key="val" v-for="(val,index) in 2" style="line-height:50px;height:50px;padding-top:14px;">
-                        <el-radio :label="index"><el-input size="small"  placeholder="请输入选项内容"></el-input></el-radio>
-                      </el-col>
-                    </el-radio-group>
-                  </el-form-item>
-                </el-form>                  
-              </div>
-            <div class="eachSore"> 
-              <div class="title">默认分值</div>  
-              <el-form :model="form3" style="border:1px #eee solid; text-indent:20px;">
-                <el-row>
-                  <el-form-item label="默认分值" style="margin-top:20px;">
-                    <el-col :span="4">
-                      <el-input v-model="form3.score" placeholder="请填入分值" >分</el-input>
-                    </el-col>
-                  </el-form-item>    
-                </el-row>
-              </el-form>
-            </div>   
-            </div>
-          </el-tab-pane>
-
-          <el-tab-pane name="six" label="问答题">
-            <div class="qubody">
-              <div class="topbody">
-                <div class="title">题干</div>
-                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>              
-              </div>
-            <div class="eachSore"> 
-              <div class="title">默认分值</div>  
-              <el-form :model="form3" style="border:1px #eee solid; text-indent:20px;">
-                <el-row>
-                  <el-form-item label="默认分值" style="margin-top:20px;">
-                    <el-col :span="4">
-                      <el-input v-model="form3.score" placeholder="请填入分值" >分</el-input>
-                    </el-col>
-                  </el-form-item>    
-                </el-row>
-              </el-form>
-            </div>   
+              </div> 
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -250,9 +132,6 @@ export default {
     midaddbox() {
       this.boxlen++;
     },
-    spanceadd() {
-      this.spacelen++;
-    }
   }
 };
 </script>
@@ -317,16 +196,7 @@ export default {
         }
       }
     }
-    .eachSore {
-      height: 120px;
 
-      .title {
-        height: 40px;
-        color: #83a0fc;
-        line-height: 40px;
-        text-indent: 0px;
-      }
-    }
   }
   .bottom {
     width: 100%;

@@ -63,11 +63,11 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">选择试卷</div>
+                  <div class="el_col_label">选择问卷</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.type" clearable placeholder="请选择试卷">
+                    <el-select v-model="form.type" clearable placeholder="请选择问卷">
                       <el-option v-for="(key,index) in forms" :label="key.name" :value="key.id"
                                  :key="index"></el-option>
                     </el-select>
@@ -114,7 +114,7 @@
               </el-table-column>
               <el-table-column
                 prop="exam_name"
-                label="试卷名称">
+                label="问卷名称">
               </el-table-column>
               <el-table-column
                 prop="num"

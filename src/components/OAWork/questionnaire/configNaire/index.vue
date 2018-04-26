@@ -3,7 +3,7 @@
     <div id="onlineExam">
       <div class="tool">
         <div class="tool_left">
-          <span>试卷名称</span><br />
+          <span>问卷名称</span><br />
           <span style="color:#83a0fc;">2018年春季新员工入职考试</span>
         </div>
         <div class="tool_right">
@@ -55,9 +55,8 @@
           <el-form :model="form1[x]" >
               <el-form-item v-model="form1[x].check" style="width:98%;margin-left:2%;">
                   <el-col :span="6" :key="index" v-for="(val,index) in answarData" style="line-height:24px;height: 24px;">
-                     <span v-if="form1[x].check == val.id"><el-radio>{{val.id}}：{{val.name}}</el-radio></span>
+                     <span v-if="form1[x].check == val.id">{{val.id}}：{{val.name}}</span>
                      <span v-else>{{val.id}}：{{val.name}}</span>
-                     <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form1[x].check == val.id">正确</span>
                   </el-col>
               </el-form-item>
           </el-form>       
@@ -73,31 +72,13 @@
           <el-form :model="form2[y]" >
               <el-form-item v-model="form2[y].check" style="width:98%;margin-left:2%;">
                   <el-col :span="6" :key="index1" v-for="(val,index1) in answarData" style="line-height:24px;height: 24px;">
-                    <span v-if="form2[y].check[index1] == val.id"><el-radio >{{val.id}}：{{val.name}}</el-radio></span>
+                    <span v-if="form2[y].check[index1] == val.id">{{val.id}}：{{val.name}}</span>
                     <span v-else>{{val.id}}：{{val.name}}</span>
-                    <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form2[y].check[index1] == val.id">正确</span>
                   </el-col>
               </el-form-item>
           </el-form>      
         </div>
-        <div class="questionDiv" v-for="(total3,z) in 2" >
-         <el-checkbox v-model="formbox[z].check"></el-checkbox>&nbsp;&nbsp;&nbsp; {{z+1+4}}.<span style="color:#6a8dfb; margin-left:20px;">判断题</span>
-          <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
-          <span style="float:right; font-size:14px; color:#fc83b6; margin-right:20px;">移除</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">编辑</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">下一题</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">上一题</span>
-          <p style="margin-left:30px;line-height:20px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
-          <el-form :model="form3[z]" >
-              <el-form-item v-model="form3[z].check" style="width:98%;margin-left:2%;">
-                  <el-col :span="12" :key="index2" v-for="(val,index2) in answarData2" style="line-height:24px;height: 24px;">
-                    <span v-if="form3[z].check == val.id"><el-radio >{{val.id}}：{{val.name}}</el-radio></span>
-                    <span v-else>{{val.id}}：{{val.name}}</span>
-                    <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form3[z].check == val.id">正确</span>
-                  </el-col>
-              </el-form-item>
-          </el-form>     
-        </div>   
+ 
         <div class="questionDiv" v-for="(total4,k) in 2" >
           <el-checkbox v-model="formbox[k].check"></el-checkbox>&nbsp;&nbsp;&nbsp; {{k+1+6}}.<span style="color:#6a8dfb; margin-left:20px;">简单题</span>
           <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
@@ -116,7 +97,7 @@
       </div>
 
     <div id="testPaperDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="新建试卷" width="38%" style="margin-top:18vh">
+      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="新建问卷" width="38%" style="margin-top:18vh">
         <el-row :gutter="30" style="margin-bottom:26px;">
           <el-col :span="12">
             <div class="import_questions" @click="importQuestion">
