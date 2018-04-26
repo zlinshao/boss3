@@ -2,210 +2,228 @@
   <div>
     <div id="onlineExam">
       <div class="qutitle">
-        <div class="title1">题型{{testPaper}}</div>
+        <div class="title1">题型</div>
         <el-tabs type="border-card" v-model="activeName">
           <el-tab-pane name="first" label="单选题">
-            <div class="qubody">
-              <div class="topbody">
-                <div class="title">题干</div>
-                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>
-              </div>
-              <div class="midbody">
-                <div class="title">选项</div>
-                <el-form :model="form3" style="border:1px #eee solid">
-                  <el-form-item>
-                    <el-radio-group v-model="form3.check" style="width:98%;margin-left:2%;">
-                      <el-col :span="12" :key="val" v-for="(val,index) in singlen" style="line-height:50px;height:50px;padding-top:14px;">
-                        <el-radio :label="index"><el-input size="small"  placeholder="请输入选项内容"></el-input></el-radio>
+            <el-form :model="singleForm" onsubmit="return false;">
+              <div class="qubody">
+                <div class="topbody">
+                  <div class="title">题干</div>
+                  <vue-editor id="singleEditor" useCustomImageHandler :disabled="editorDisabled"
+                              v-model="singleForm.stem"></vue-editor>
+                </div>
+                <div class="midbody">
+                  <div class="title">选项</div>
+                  <el-form-item style="border:1px #eee solid; padding-bottom: 15px;border-radius: 5px;">
+                    <el-radio-group v-model="optionsSelect" style="width:98%;margin-left:2%;">
+                      <el-col :span="12" :key="val" v-for="(val,index) in singlen"
+                              style="line-height:50px;height:50px;padding-top:14px;">
+                        <el-radio :label="index">
+                          <el-input size="small" v-model="options[index]" placeholder="请输入选项内容"></el-input>
+                          <i class="el-icon-close" style="color: #c0c4cc;" @click="singleSub(index)"></i>
+                        </el-radio>
                       </el-col>
                     </el-radio-group>
                   </el-form-item>
-                </el-form>
-                <div class="midadd">
-                  <span @click="midaddx">+&nbsp;&nbsp;添加选项</span>
+                  <div class="midadd">
+                    <span @click="singleAdd">+&nbsp;&nbsp;添加选项</span>
+                  </div>
+                </div>
+                <div class="eachSore">
+                  <div class="title">默认分值</div>
+                  <el-row style="border:1px #eee solid; text-indent:20px;border-radius: 5px;">
+                    <el-form-item label="默认分值" style="margin-top:20px;">
+                      <el-col :span="4">
+                        <el-input v-model="singleForm.score" placeholder="请填入分值">分</el-input>
+                      </el-col>
+                    </el-form-item>
+                  </el-row>
                 </div>
               </div>
-            <div class="eachSore">
-              <div class="title">默认分值</div>
-              <el-form :model="form3" style="border:1px #eee solid; text-indent:20px;">
-                <el-row>
-                  <el-form-item label="默认分值" style="margin-top:20px;">
-                    <el-col :span="4">
-                      <el-input v-model="form3.score" placeholder="请填入分值" >分</el-input>
-                    </el-col>
-                  </el-form-item>
-                </el-row>
-              </el-form>
-            </div>
-            </div>
+            </el-form>
           </el-tab-pane>
 
           <el-tab-pane name="second" label="多选题">
-            <div class="qubody">
-              <div class="topbody">
-                <div class="title">题干</div>
-                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>
-              </div>
-              <div class="midbody">
-                <div class="title">选项</div>
-                <el-form :model="form3" style="border:1px #eee solid">
-                  <el-form-item>
-                    <el-checkbox-group v-model="form3.checkbox" style="width:98%;margin-left:2%;">
-                      <el-col :span="12" :key="val" v-for="(val,index) in boxlen" style="line-height:50px;height:50px;padding-top:14px;">
-                        <el-checkbox :label="index"><el-input size="small"  placeholder="请输入选项内容"></el-input></el-checkbox>
+            <el-form :model="multiForm" onsubmit="return false;">
+              <div class="qubody">
+                <div class="topbody">
+                  <div class="title">题干</div>
+                  <vue-editor id="multiEditor" v-model="multiForm.stem" useCustomImageHandler
+                              :disabled="editorDisabled"></vue-editor>
+                </div>
+                <div class="midbody">
+                  <div class="title">选项</div>
+                  <el-form-item style="border:1px #eee solid;padding-bottom: 20px;border-radius: 5px;">
+                    <el-checkbox-group v-model="multiOptionsSelect" style="width:98%;margin-left:2%;">
+                      <el-col :span="12" :key="val" v-for="(val,index) in boxlen"
+                              style="line-height:50px;height:50px;padding-top:14px;">
+                        <el-checkbox :label="index">
+                          <el-input size="small" placeholder="请输入选项内容" v-model="multiOptions[index]"></el-input>
+                          <i class="el-icon-close" style="color: #c0c4cc;" @click="multiSub(index)"></i>
+                        </el-checkbox>
                       </el-col>
                     </el-checkbox-group>
                   </el-form-item>
-                </el-form>
-                <div class="midadd">
-                  <span @click="midaddbox">+&nbsp;&nbsp;添加选项</span>
+                  <div class="midadd">
+                    <span @click="multiAdd">+&nbsp;&nbsp;添加选项</span>
+                  </div>
+                </div>
+                <div class="eachSore">
+                  <div class="title">默认分值</div>
+                  <el-row style="border:1px #eee solid; text-indent:20px;">
+                    <el-form-item label="默认分值" style="margin-top:20px;">
+                      <el-col :span="4">
+                        <el-input v-model="multiForm.score" placeholder="请填入分值">分</el-input>
+                      </el-col>
+                    </el-form-item>
+                  </el-row>
                 </div>
               </div>
-            <div class="eachSore">
-              <div class="title">默认分值</div>
-              <el-form :model="form3" style="border:1px #eee solid; text-indent:20px;">
-                <el-row>
-                  <el-form-item label="默认分值" style="margin-top:20px;">
-                    <el-col :span="4">
-                      <el-input v-model="form3.score" placeholder="请填入分值" >分</el-input>
-                    </el-col>
-                  </el-form-item>
-                </el-row>
-              </el-form>
-            </div>
-            </div>
+            </el-form>
           </el-tab-pane>
 
           <el-tab-pane name="third" label="不定向选择">
-            <div class="qubody">
-              <div class="topbody">
-                <div class="title">题干</div>
-                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>
-              </div>
-              <div class="midbody">
-                <div class="title">选项</div>
-                <el-form :model="form3" style="border:1px #eee solid">
-                  <el-form-item>
-                    <el-checkbox-group v-model="form3.checkbox" style="width:98%;margin-left:2%;">
-                      <el-col :span="12" :key="val" v-for="(val,index) in boxlen" style="line-height:50px;height:50px;padding-top:14px;">
-                        <el-checkbox :label="index"><el-input size="small"  placeholder="请输入选项内容"></el-input></el-checkbox>
+            <el-form :model="multiForm" onsubmit="return false;">
+              <div class="qubody">
+                <div class="topbody">
+                  <div class="title">题干</div>
+                  <vue-editor id="nonDirectionalEditor" v-model="multiForm.stem" useCustomImageHandler
+                              :disabled="editorDisabled"></vue-editor>
+                </div>
+                <div class="midbody">
+                  <div class="title">选项</div>
+                  <el-form-item style="border:1px #eee solid;padding-bottom: 20px;border-radius: 5px;">
+                    <el-checkbox-group v-model="multiOptionsSelect" style="width:98%;margin-left:2%;">
+                      <el-col :span="12" :key="val" v-for="(val,index) in boxlen"
+                              style="line-height:50px;height:50px;padding-top:14px;">
+                        <el-checkbox :label="index">
+                          <el-input size="small" placeholder="请输入选项内容" v-model="multiOptions[index]"></el-input>
+                          <i class="el-icon-close" style="color: #c0c4cc;" @click="multiSub(index)"></i>
+                        </el-checkbox>
                       </el-col>
                     </el-checkbox-group>
                   </el-form-item>
-                </el-form>
-                <div class="midadd">
-                  <span @click="midaddbox">+&nbsp;&nbsp;添加选项</span>
+                  <div class="midadd">
+                    <span @click="multiAdd">+&nbsp;&nbsp;添加选项</span>
+                  </div>
+                </div>
+                <div class="eachSore">
+                  <div class="title">默认分值</div>
+                  <el-row style="border:1px #eee solid; text-indent:20px;">
+                    <el-form-item label="默认分值" style="margin-top:20px;">
+                      <el-col :span="4">
+                        <el-input v-model="multiForm.score" placeholder="请填入分值">分</el-input>
+                      </el-col>
+                    </el-form-item>
+                  </el-row>
                 </div>
               </div>
-            <div class="eachSore">
-              <div class="title">默认分值</div>
-              <el-form :model="form3" style="border:1px #eee solid; text-indent:20px;">
-                <el-row>
-                  <el-form-item label="默认分值" style="margin-top:20px;">
-                    <el-col :span="4">
-                      <el-input v-model="form3.score" placeholder="请填入分值" >分</el-input>
-                    </el-col>
-                  </el-form-item>
-                </el-row>
-              </el-form>
-            </div>
-            </div>
+            </el-form>
           </el-tab-pane>
 
-          <el-tab-pane name="fourth" label="填空题">
-            <div class="qubody">
-              <div class="topbody">
-                <div class="title">题干</div>
-                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>
-              </div>
-              <div class="midbody">
-                <div class="title">填空信息</div>
-                <el-form :model="form3" style="border:1px #eee solid; ">
-
-                  <el-form-item style=" margin-left:10px; margin-top:20px;">
-                    <el-col :span="6" v-for="(val,index) in spacelen" :key="index">
-                      <span>第{{index+1}}处答案</span>
-                      <el-input style="width:70%" size="small"  placeholder="请输入选项内容"></el-input>
-                    </el-col>
-                  </el-form-item>
-                  <span style="margin-left: 20%; color:rgb(252, 131, 182); margin-top:20px; margin-bottom:20px;display:block;">说明：考生填写答案须跟上方答案完全相同，才能得分。录入答案时，请不要加多余的空格等干扰字符</span>
-                </el-form>
-                <div class="midadd">
-                  <span @click="spanceadd">+&nbsp;&nbsp;添加选项</span>
+          <el-tab-pane name="fourth" label="判断题">
+            <el-form :model="judgeForm" onsubmit="return false;">
+              <div class="qubody">
+                <div class="topbody">
+                  <div class="title">题干</div>
+                  <vue-editor id="judgeEditor" v-model="judgeForm.stem" useCustomImageHandler
+                              :disabled="editorDisabled"></vue-editor>
                 </div>
-              </div>
-            <div class="eachSore">
-              <div class="title">默认分值</div>
-              <el-form :model="form3" style="border:1px #eee solid; text-indent:20px;">
-                <el-row>
-                  <el-form-item label="默认分值" style="margin-top:20px;">
-                    <el-col :span="4">
-                      <el-input v-model="form3.score" placeholder="请填入分值" >分</el-input>
-                    </el-col>
-                  </el-form-item>
-                </el-row>
-              </el-form>
-            </div>
-            </div>
-          </el-tab-pane>
-
-          <el-tab-pane name="five" label="判断题">
-            <div class="qubody">
-              <div class="topbody">
-                <div class="title">题干</div>
-                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>
-              </div>
-              <div class="midbody">
-                <div class="title">选项</div>
-                <el-form :model="form3" style="border:1px #eee solid">
-                  <el-form-item>
-                    <el-radio-group v-model="form3.panduan" style="width:98%;margin-left:2%;">
-                      <el-col :span="12" :key="val" v-for="(val,index) in 2" style="line-height:50px;height:50px;padding-top:14px;">
-                        <el-radio :label="index"><el-input size="small"  placeholder="请输入选项内容"></el-input></el-radio>
+                <div class="midbody">
+                  <div class="title">选项</div>
+                  <el-form-item style="border:1px #eee solid;padding-bottom: 20px;border-radius: 5px;">
+                    <el-radio-group v-model="judgeOptionsSelect" style="width:98%;margin-left:2%;">
+                      <el-col :span="12" :key="val" v-for="(val,index) in 2"
+                              style="line-height:50px;height:50px;padding-top:14px;">
+                        <el-radio :label="index">
+                          <el-input size="small" v-model="judgeOptions[index]" placeholder="请输入选项内容"></el-input>
+                        </el-radio>
                       </el-col>
                     </el-radio-group>
                   </el-form-item>
-                </el-form>
+                </div>
+                <div class="eachSore">
+                  <div class="title">默认分值</div>
+                  <el-row style="border:1px #eee solid; text-indent:20px;border-radius: 5px;">
+                    <el-form-item label="默认分值" style="margin-top:20px;">
+                      <el-col :span="4">
+                        <el-input v-model="judgeForm.score" placeholder="请填入分值">分</el-input>
+                      </el-col>
+                    </el-form-item>
+                  </el-row>
+                </div>
               </div>
-            <div class="eachSore">
-              <div class="title">默认分值</div>
-              <el-form :model="form3" style="border:1px #eee solid; text-indent:20px;">
-                <el-row>
-                  <el-form-item label="默认分值" style="margin-top:20px;">
-                    <el-col :span="4">
-                      <el-input v-model="form3.score" placeholder="请填入分值" >分</el-input>
-                    </el-col>
+            </el-form>
+          </el-tab-pane>
+
+          <el-tab-pane name="five" label="填空题">
+            <el-form :model="blankForm" onsubmit="return false;">
+              <div class="qubody">
+                <div class="topbody">
+                  <div class="title">题干</div>
+                  <vue-editor id="completionEditor" v-model="blankForm.stem" useCustomImageHandler
+                              :disabled="editorDisabled"></vue-editor>
+                </div>
+                <div class="midbody">
+                  <div class="title">填空信息</div>
+                  <el-form-item style="border:1px #eee solid; padding: 15px;border-radius: 5px;">
+                    <el-row :gutter="20">
+                      <el-col :span="8" v-for="(val,index) in spacelen" :key="index">
+                        <span>第{{index+1}}处答案</span>
+                        <el-input style="width:70%" size="small" placeholder="请输入选项内容"
+                                  v-model="blankForm.answer[index]"></el-input>
+                        <i class="el-icon-close" style="color: #c0c4cc;" @click="blankSub(index)"></i>
+                      </el-col>
+                    </el-row>
+
                   </el-form-item>
-                </el-row>
-              </el-form>
-            </div>
-            </div>
+                  <span
+                    style="margin-left: 20%; color:rgb(252, 131, 182); margin-top:20px; margin-bottom:20px;display:block;">
+                      说明：考生填写答案须跟上方答案完全相同，才能得分。录入答案时，请不要加多余的空格等干扰字符
+                    </span>
+                  <div class="midadd">
+                    <span @click="blankAdd">+&nbsp;&nbsp;添加选项</span>
+                  </div>
+                </div>
+                <div class="eachSore">
+                  <div class="title">默认分值</div>
+                  <el-row style="border:1px #eee solid; text-indent:20px;border-radius: 5px;">
+                    <el-form-item label="默认分值" style="margin-top:20px;">
+                      <el-col :span="4">
+                        <el-input v-model="blankForm.score" placeholder="请填入分值">分</el-input>
+                      </el-col>
+                    </el-form-item>
+                  </el-row>
+                </div>
+              </div>
+            </el-form>
           </el-tab-pane>
 
           <el-tab-pane name="six" label="问答题">
-            <div class="qubody">
-              <div class="topbody">
-                <div class="title">题干</div>
-                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>
+            <el-form :model="answerForm" onsubmit="return false;">
+              <div class="qubody">
+                <div class="topbody">
+                  <div class="title">题干</div>
+                  <vue-editor id="editor" v-model="answerForm.stem" useCustomImageHandler
+                              :disabled="editorDisabled"></vue-editor>
+                </div>
+                <div class="eachSore">
+                  <div class="title">默认分值</div>
+                  <el-row style="border:1px #eee solid; text-indent:20px;border-radius: 5px;">
+                    <el-form-item label="默认分值" style="margin-top:20px;">
+                      <el-col :span="4">
+                        <el-input v-model="answerForm.score" placeholder="请填入分值">分</el-input>
+                      </el-col>
+                    </el-form-item>
+                  </el-row>
+                </div>
               </div>
-            <div class="eachSore">
-              <div class="title">默认分值</div>
-              <el-form :model="form3" style="border:1px #eee solid; text-indent:20px;">
-                <el-row>
-                  <el-form-item label="默认分值" style="margin-top:20px;">
-                    <el-col :span="4">
-                      <el-input v-model="form3.score" placeholder="请填入分值" >分</el-input>
-                    </el-col>
-                  </el-form-item>
-                </el-row>
-              </el-form>
-            </div>
-            </div>
+            </el-form>
           </el-tab-pane>
         </el-tabs>
       </div>
       <div class="bottom">
-        <el-button  style="width:360px;margin-top:34px; height:32px; line-height:0px; background-color:rgb(106, 141, 251); border-color:rgb(106, 141, 251);" type="primary">提交</el-button>
+        <el-button class="btn_submit" type="primary" @click="onSubmit" :disabled="submitDisabled">提交</el-button>
       </div>
     </div>
   </div>
@@ -213,85 +231,294 @@
 </template>
 
 <script>
-import { VueEditor } from "vue2-editor";
-export default {
-  name: "index",
-  components: { VueEditor },
-  data() {
-    return {
-      activeName: "first",
-      nowAction: "first",
-      editorDisabled: false,
-      singlen: 4,
-      boxlen: 4,
-      spacelen: 4,
-      form3: {
-        check: "",
-        score: "",
-        checkbox: [],
-        panduan: ""
-      },
-      testPaper: '',  //试卷
-    };
-  },
-  activated(){
-    this.getQueryData();
-  },
-  watch: {
-    activeName(val) {
-      this.nowAction = val;
+  import {VueEditor} from "vue2-editor";
+
+  export default {
+    name: "index",
+    components: {VueEditor},
+    data() {
+      return {
+        activeName: "first",
+        editorDisabled: false,
+        form3: {
+          check: "",
+          score: "",
+          checkbox: [],
+          panduan: ""
+        },
+        //单选
+        singlen: 4,
+        singleForm: {
+          stem: '',  //题干
+          category: '',  //题目类型
+          choice: {},  //选项
+          answer: '',  //正确答案
+          score: '',   //默认分值
+          paper_id: '',  //试卷Id
+        },
+        options: [],  //试卷选项
+        optionsSelect: '',  //试卷答案
+        //多选 不定项选择
+        boxlen: 4,
+        multiForm: {
+          paper_id: '',
+          stem: '',  //题干
+          category: '',  //题目类型
+          choice: {},  //选项
+          answer: [],  //正确答案
+          score: '',   //默认分值
+        },
+        multiOptions: [],
+        multiOptionsSelect: [],
+
+        //判断题
+        judgeForm: {
+          paper_id: '',
+          stem: '',
+          category: '',
+          choice: {},
+          answer: '',
+          score: ''
+        },
+        judgeOptions: [],
+        judgeOptionsSelect: '',
+
+        //填空题
+        spacelen: 3,
+        blankForm: {
+          paper_id: '',
+          stem: '',
+          category: '',
+          choice: {},
+          answer: [],
+          score: '',
+        },
+
+        //问答题
+        answerForm: {
+          paper_id: '',
+          stem: '',
+          category: '',
+          choice: {},
+          answer: null,
+          score: '',
+        },
+        submitDisabled: false,
+      };
     },
-    spacelen(val) {
-      console.log(val)
-      this.spacelen = val;
-    }
-  },
-  methods: {
-    getQueryData() {
-      if (!this.$route.query.name) {
-        let data = {};
-        data.name = this.$store.state.onlineExam.myself_test_paper.name;
-        data.type_id = this.$store.state.onlineExam.myself_test_paper.type_id;
-        data.type_name = this.$store.state.onlineExam.myself_test_paper.type_name;
-        this.testPaper = data;
-        this.$router.push({path: '/myselfQuestions', query: data});
-      } else {
-        let query = this.$route.query;
-        this.$store.dispatch('myselfTestPaper', query);
-        this.testPaper = query;
-      }
+    activated() {
+      this.getQueryData();
+    },
+    watch: {
+      activeName(val) {
+        this.submitDisabled = false;
+      },
+      spacelen(val) {
+        console.log(val);
+        this.spacelen = val;
+      },
+      options(val) {
+        if (val.length > 0) {
+          for (var i = 0; i < val.length; i++) {
+            this.singleForm.choice[String.fromCharCode(65 + i)] = val[i];
+          }
+        }
+      },
+      optionsSelect(val) {
+        this.singleForm.answer = String.fromCharCode(65 + Number(val));
+      },
+      'singleForm': {
+        deep: true,
+        handler(val, old) {
+          this.submitDisabled = false;
+        }
+      },
+      multiOptions(val) {
+        if (val.length > 0) {
+          for (var i = 0; i < val.length; i++) {
+            this.multiForm.choice[String.fromCharCode(65 + i)] = val[i];
+          }
+        }
+      },
+      multiOptionsSelect(val) {
+        this.multiForm.answer = [];
+        if (val) {
+          console.log(val);
+          for (var i = 0; i < val.length; i++) {
+            this.multiForm.answer.push(String.fromCharCode(65 + Number(val[i])));
+          }
+        }
+      },
+      'multiForm': {
+        deep: true,
+        handler(val, old) {
+          this.submitDisabled = false;
+        }
+      },
+      judgeOptions(val) {
+        if (val.length > 0) {
+          for (var i = 0; i < val.length; i++) {
+            this.judgeForm.choice[String.fromCharCode(65 + i)] = val[i];
+          }
+        }
+      },
+      judgeOptionsSelect(val) {
+        this.judgeForm.answer = String.fromCharCode(65 + Number(val));
+      },
+      'judgeForm': {
+        deep: true,
+        handler(val, old) {
+          this.submitDisabled = false;
+        }
+      },
+      'blankForm': {
+        deep: true,
+        handler(val, old) {
+          this.submitDisabled = false;
+        }
+      },
+      'answerForm': {
+        deep: true,
+        handler(val, old) {
+          this.submitDisabled = false;
+        }
+      },
 
     },
-    midaddx() {
-      this.singlen++;
-    },
-    midaddbox() {
-      this.boxlen++;
-    },
-    spanceadd() {
-      this.spacelen++;
+    methods: {
+      getQueryData() {
+        if (!this.$route.query.name) {
+          let data = {};
+          data.name = this.$store.state.onlineExam.myself_test_paper.name;
+          data.paper_id = this.$store.state.onlineExam.myself_test_paper.paper_id;
+          this.singleForm.paper_id = data.paper_id;
+          this.multiForm.paper_id = data.paper_id;
+          this.judgeForm.paper_id = data.paper_id;
+          this.blankForm.paper_id = data.paper_id;
+          this.answerForm.paper_id = data.paper_id;
+          this.$router.push({path: '/myselfQuestions', query: data});
+        } else {
+          let query = this.$route.query;
+          this.singleForm.paper_id = query.paper_id;
+          this.multiForm.paper_id = query.paper_id;
+          this.judgeForm.paper_id = query.paper_id;
+          this.blankForm.paper_id = query.paper_id;
+          this.answerForm.paper_id = query.paper_id;
+          this.$store.dispatch('myselfTestPaper', query);
+        }
+
+      },
+      getDictionary() {
+        //题目类型
+        this.dictionary(152).then((res) => {
+          //153---158
+        });
+      },
+      onSubmit() {
+        switch (this.activeName) {
+          case 'first':
+            this.singleForm.category = 153;
+            this.confirmAdd(this.singleForm);
+            break;
+          case 'second':
+            this.multiForm.category = 154;
+            this.confirmAdd(this.multiForm);
+            break;
+          case 'third':
+            this.multiForm.category = 155;
+            this.confirmAdd(this.multiForm);
+            break;
+          case 'fourth':
+            this.judgeForm.category = 156;
+            this.confirmAdd(this.judgeForm);
+            break;
+          case 'five':
+            this.blankForm.category = 157;
+            this.confirmAdd(this.blankForm);
+            break;
+          case 'six':
+            this.answerForm.category = 158;
+            this.confirmAdd(this.answerForm);
+            break;
+        }
+      },
+      singleAdd() {
+        this.singlen++;
+      },
+      confirmAdd(val) {
+        this.$http.post(globalConfig.server + 'exam/question', val).then((res) => {
+          if (res.data.code === '30010') {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.submitDisabled = true;
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
+      singleSub(index) {
+        this.options[index] = '';
+        for (var i = index; i < this.singlen; i++) {
+          this.options[i] = this.options[i + 1];
+        }
+        this.singlen--;
+        this.singleForm.choice = {};
+        for (var i = 0; i < this.options.length; i++) {
+          this.singleForm.choice[String.fromCharCode(65 + i)] = this.options[i];
+        }
+        this.singleForm.answer = '';
+      },
+      multiSub(index) {
+        this.multiOptions[index] = '';
+        for (var i = index; i < this.boxlen; i++) {
+          this.multiOptions[i] = this.multiOptions[i + 1];
+        }
+        this.boxlen--;
+        this.multiForm.choice = {};
+        for (var i = 0; i < this.multiOptions.length; i++) {
+          this.multiForm.choice[String.fromCharCode(65 + i)] = this.multiOptions[i];
+        }
+        this.multiForm.answer = [];
+      },
+      multiAdd() {
+        this.boxlen++;
+      },
+      blankAdd() {
+        this.spacelen++;
+      },
+      blankSub(index) {
+        this.blankForm.answer[index] = '';
+        for (var i = index; i < this.spacelen; i++) {
+          this.blankForm.answer[i] = this.blankForm.answer[i + 1];
+        }
+        this.spacelen--;
+      },
     }
-  }
-};
+  };
 </script>
 
 <style lang="scss" scoped>
-#onlineExam {
-  .qutitle {
-    width: 80%;
-    margin: 0 auto;
-    .title {
-      height: 30px;
-      color: #83a0fc;
-      line-height: 30px;
-      text-indent: 18px;
-    }
-      .title1{
+  #onlineExam {
+    .qutitle {
+      width: 80%;
+      margin: 0 auto;
+      .title {
+        height: 30px;
+        color: #83a0fc;
+        line-height: 30px;
+        text-indent: 18px;
+      }
+      .title1 {
         height: 40px;
         color: #83a0fc;
         line-height: 40px;
         text-indent: 8px;
-          &:before {
+        &:before {
           border-radius: 2px;
           margin-right: 5px;
           background: #409EFF;
@@ -299,57 +526,75 @@ export default {
           content: '|';
         }
       }
-    .qubody {
-      .title {
-        height: 40px;
-        color: #83a0fc;
-        line-height: 40px;
-        text-indent: 0px;
+      .qubody {
+        .title {
+          height: 40px;
+          color: #83a0fc;
+          line-height: 40px;
+          text-indent: 0px;
+        }
       }
-    }
-    .midbody {
-      margin-top: 20px;
-      .title {
-        height: 40px;
-        color: #83a0fc;
-        line-height: 40px;
-        text-indent: 0px;
-      }
-      .midadd {
-        height: 50px;
-        padding-top: 20px;
-        border: 1px #eee solid;
-        border-top: none;
-        text-align: center;
-        span {
-          width: 380px;
-          height: 30px;
-          border: 1px #58d788 dashed;
+      .midbody {
+        margin-top: 20px;
+        .title {
+          height: 40px;
+          color: #83a0fc;
+          line-height: 40px;
+          text-indent: 0px;
+        }
+        .midadd {
+          height: 50px;
+          /*padding-top: 20px;*/
+          /*border: 1px #eee solid;*/
+          /*border-top: none;*/
           text-align: center;
-          line-height: 30px;
-          display: block;
-          color: #58d788;
-          background: #f3fdf6;
-          margin-left: 32%;
-          cursor: pointer;
+          span {
+            width: 380px;
+            height: 30px;
+            border: 1px #58d788 dashed;
+            text-align: center;
+            line-height: 30px;
+            display: block;
+            color: #58d788;
+            background: #f3fdf6;
+            margin-left: 32%;
+            cursor: pointer;
+          }
+        }
+      }
+      .eachSore {
+        height: 120px;
+
+        .title {
+          height: 40px;
+          color: #83a0fc;
+          line-height: 40px;
+          text-indent: 0px;
         }
       }
     }
-    .eachSore {
-      height: 120px;
+    .bottom {
+      width: 100%;
+      height: 100px;
+      text-align: center;
 
-      .title {
-        height: 40px;
-        color: #83a0fc;
-        line-height: 40px;
-        text-indent: 0px;
+      .btn_submit {
+        width: 360px;
+        margin-top: 34px;
+        height: 32px;
+        line-height: 0px;
+        background-color: rgb(106, 141, 251);
+        border-color: rgb(106, 141, 251);
       }
     }
   }
-  .bottom {
-    width: 100%;
-    height: 100px;
-    text-align: center;
+
+  .el-button--primary.is-disabled,
+  .el-button--primary.is-disabled:active,
+  .el-button--primary.is-disabled:focus,
+  .el-button--primary.is-disabled:hover {
+    color: #fff !important;
+    background-color: #8faafc !important;
+    border-color: #8faafc !important;
   }
-}
 </style>
