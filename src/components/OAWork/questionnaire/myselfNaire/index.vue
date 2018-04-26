@@ -13,12 +13,10 @@
               <div class="midbody">
                 <div class="title">选项</div>
                 <el-form :model="form3" style="border:1px #eee solid">
-                  <el-form-item>
-                    <el-radio-group v-model="form3.check" style="width:98%;margin-left:2%;">
-                      <el-col :span="12" :key="val" v-for="(val,index) in singlen" style="line-height:50px;height:50px;padding-top:14px;">
-                        <el-radio :label="index"><el-input size="small"  placeholder="请输入选项内容"></el-input></el-radio>
+                  <el-form-item v-model="form3.check" style="width:98%;margin-left:2%;">
+                      <el-col :span="12" :key="val" v-for="val in singlen" style="line-height:50px;height:50px;padding-top:14px;">
+                        <el-input style="width:200px;" size="small"  placeholder="请输入选项内容"></el-input>
                       </el-col>
-                    </el-radio-group>
                   </el-form-item>
                 </el-form>
                 <div class="midadd">
@@ -37,12 +35,10 @@
               <div class="midbody">
                 <div class="title">选项</div>
                 <el-form :model="form3" style="border:1px #eee solid">
-                  <el-form-item>
-                    <el-checkbox-group v-model="form3.checkbox" style="width:98%;margin-left:2%;">
-                      <el-col :span="12" :key="val" v-for="(val,index) in boxlen" style="line-height:50px;height:50px;padding-top:14px;">
-                        <el-checkbox :label="index"><el-input size="small"  placeholder="请输入选项内容"></el-input></el-checkbox>
+                  <el-form-item v-model="form3.checkbox" style="width:98%;margin-left:2%;">
+                      <el-col :span="12" :key="val" v-for="val in boxlen" style="line-height:50px;height:50px;padding-top:14px;">
+                       <el-input style="width:200px;" size="small"  placeholder="请输入选项内容"></el-input>
                       </el-col>
-                    </el-checkbox-group>
                   </el-form-item>
                 </el-form>
                 <div class="midadd">
@@ -61,12 +57,10 @@
               <div class="midbody">
                 <div class="title">选项</div>
                 <el-form :model="form3" style="border:1px #eee solid">
-                  <el-form-item>
-                    <el-checkbox-group v-model="form3.checkbox" style="width:98%;margin-left:2%;">
-                      <el-col :span="12" :key="val" v-for="(val,index) in boxlen" style="line-height:50px;height:50px;padding-top:14px;">
-                        <el-checkbox :label="index"><el-input size="small"  placeholder="请输入选项内容"></el-input></el-checkbox>
+                  <el-form-item v-model="form3.checkbox" style="width:98%;margin-left:2%;">
+                      <el-col :span="12" :key="val" v-for="val in boxlen" style="line-height:50px;height:50px;padding-top:14px;">
+                        <el-input style="width:200px;" size="small"  placeholder="请输入选项内容"></el-input>
                       </el-col>
-                    </el-checkbox-group>
                   </el-form-item>
                 </el-form>
                 <div class="midadd">
