@@ -79,7 +79,7 @@
           }else {
             this.$notify({
               title: '警告',
-              message: res.data.message,
+              message: res.data.msg,
               type:'warning'
             });
           }
