@@ -160,7 +160,7 @@
         <el-form :model="paperTypeForm" onsubmit="return false;" label-width="100px">
           <el-row>
             <el-form-item label="试卷类型" required>
-              <el-select v-model="paperTypeForm.type" id="testPaperType" size="mini" placeholder="请选择" clearable>
+              <el-select v-model="paperTypeForm.category" id="testPaperType" size="mini" placeholder="请选择" clearable>
                 <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
                   {{item.dictionary_name}}
                 </el-option>
@@ -247,9 +247,10 @@
         examinees_name: '',//新建考试报名考生
         // 新建试卷 类型和名称
         paperTypeForm: {
-          type: '',
+          category: '',
           name: '',
-        }
+        },
+        paperId: '', //新增成功后的试卷id, 用于自己录入的时候使用
       };
     },
     mounted() {
@@ -297,15 +298,14 @@
         var type_name = $('#testPaperType').val();
         this.$router.push({
           path: "/batchQuestions",
-          query: {name: this.paperTypeForm.name, type_id: this.paperTypeForm.type, type_name: type_name}
+          query: {name: this.paperTypeForm.name, type_id: this.paperTypeForm.category, type_name: type_name}
         });
       },
       myselfQuestion() {
         this.testPaperDialog = false;
-        var type_name = $('#testPaperType').val();
         this.$router.push({
           path: "/myselfQuestions",
-          query: {name: this.paperTypeForm.name, type_id: this.paperTypeForm.type, type_name: type_name}
+          query: {name: this.paperTypeForm.name, paper_id: this.paperId}
         });
       },
       dblClickTable() {
@@ -415,7 +415,7 @@
         this.organizeType = '';
       },
       paperTypeBtn() {
-        if (!this.paperTypeForm.type) {
+        if (!this.paperTypeForm.category) {
           this.$notify.warning({
             title: '警告',
             message: '试卷类型不能为空'
@@ -429,8 +429,22 @@
           });
           return;
         }
-        this.paperTypeDialog = false;
-        this.testPaperDialog = true;
+        this.$http.post(globalConfig.server+ 'exam/paper', this.paperTypeForm).then((res)=>{
+          if(res.data.code === '36010') {
+            this.paperTypeDialog = false;
+            this.testPaperDialog = true;
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.paperId = res.data.data;
+          }else{
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
       },
       selectMember(val) {
         this.examinees_name = '';
