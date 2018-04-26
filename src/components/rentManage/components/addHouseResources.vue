@@ -615,6 +615,7 @@
         <el-button size="small" @click="addHouseResourcesDialogVisible = false">取 消</el-button>
         <el-button size="small" type="primary" @click="confirmAdd(1)">草 稿</el-button>
         <el-button size="small" type="primary" @click="confirmAdd(0)">发 布</el-button>
+        <el-button size="small" type="primary" @click="confirmAdd(2)">保存并提交</el-button>
       </span>
     </el-dialog>
     <VillageModal :villageDialog="villageDialog" @close="closeVillageModal"></VillageModal>
@@ -642,6 +643,7 @@
         type: '',
 
         params: {
+          is_submit: 0,
           id: '',      //草稿id
           draft: '',
           type: 1,
@@ -1172,6 +1174,11 @@
 
       confirmAdd(val){
         this.params.draft = val;
+        if(val === 0){
+          this.params.is_submit=0;
+        }else if(val===2){
+          this.params.is_submit=1;
+        }
         //房东
         let customItem = {};
         this.params.customers = [];
@@ -1231,6 +1238,7 @@
       clearData(){
         this.isClear = false;
         this.params = {
+          is_submit:0,
           id: '',      //草稿id
           draft: '',
           type: 1,
