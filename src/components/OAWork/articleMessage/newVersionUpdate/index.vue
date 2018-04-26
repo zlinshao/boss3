@@ -36,7 +36,7 @@
           <el-table-column
             label="内容">
             <template slot-scope="scope">
-            <div  style="display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            <div  style=" height:41px;display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
             <span class="mpn" v-html="scope.row.content"></span>
             </div>
             </template>
