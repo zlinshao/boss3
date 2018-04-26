@@ -13,7 +13,7 @@
           <p style="margin-left:30px;line-height:30px;width:96%">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
           <el-form :model="form1[x]" >
               <el-form-item >
-                <el-radio-group v-model="form1[x].check" style="width:98%;margin-left:2%;">
+                <el-radio-group v-model="form1[x].check" style="width:97%;margin-left:3%;">
                   <el-col :span="6" :key="index" v-for="(val,index) in answarData" style="line-height:24px;height: 24px;">
                     <el-radio :label="val.id">{{val.id}}：{{val.name}}</el-radio>
                   </el-col>
@@ -26,7 +26,7 @@
           <p style="margin-left:30px;line-height:30px;width:96%">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
           <el-form :model="form2[y]" >
               <el-form-item >
-                <el-checkbox-group v-model="form2[y].check" style="width:98%;margin-left:2%;">
+                <el-checkbox-group v-model="form2[y].check" style="width:97%;margin-left:3%;">
                   <el-col :span="6" :key="index1" v-for="(val,index1) in answarData" style="line-height:24px;height: 24px;">
                     <el-checkbox :label="val.id">{{val.id}}：{{val.name}}</el-checkbox>
                   </el-col>

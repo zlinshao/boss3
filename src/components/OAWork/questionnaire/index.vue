@@ -92,7 +92,8 @@
           </el-row>
           <el-row>
             <el-form-item label="有效时间" required>
-              <el-date-picker v-model="value1" type="datetime" placeholder="选择日期时间"></el-date-picker>
+              <el-date-picker size="mini" v-model="value5" type="datetimerange" :picker-options="pickerOptions2" range-separator="至"  start-placeholder="开始日期"
+              end-placeholder="结束日期" align="right"></el-date-picker>
             </el-form-item>
           </el-row>
           <el-row>
@@ -139,12 +140,44 @@ import Organization from "../../common/organization";
 import PreviewNaire from "./previewNaire/index.vue";
 export default {
   name: "index",
-  components: { RightMenu, Organization ,PreviewNaire },
+  components: { RightMenu, Organization, PreviewNaire },
   data() {
     return {
+      pickerOptions2: {
+        shortcuts: [
+          {
+            text: "最近一周",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近一个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit("pick", [start, end]);
+            }
+          },
+          {
+            text: "最近三个月",
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit("pick", [start, end]);
+            }
+          }
+        ]
+      },
+      value5: "",
       organizationDialog: false,
       organizeType: "",
-      previewNaireDialog:false,
+      previewNaireDialog: false,
       rightMenuX: 0,
       rightMenuY: 0,
       show: false,
@@ -160,10 +193,7 @@ export default {
       },
       totalNum: 0,
       search: "",
-      quizData: [
-        {"title":"好的"},
-        {"title":"好的"}
-      ],
+      quizData: [{ title: "好的" }, { title: "好的" }],
       examType: [
         { id: 1, name: "新员工入职" },
         { id: 2, name: "初级晋升考试" },
@@ -185,7 +215,6 @@ export default {
       paperTypeForm: {
         name: ""
       },
-      value1:"",
       currentPage: 1
     };
   },
@@ -228,6 +257,7 @@ export default {
         case "testPaperDialog":
           // this.testPaperDialog = true;
           this.paperTypeDialog = true;
+          this.value5 = "";
           break;
       }
     },
@@ -241,7 +271,6 @@ export default {
         });
     },
     paperTypeBtn() {
-
       if (!this.paperTypeForm.name) {
         this.$notify.warning({
           title: "警告",
@@ -267,17 +296,17 @@ export default {
           clickIndex: "configExamDialog",
           headIcon: "iconfont icon-shangjia--",
           label: "发布任务"
-        }, 
+        },
         {
           clickIndex: "configExamDialog",
           headIcon: "iconfont icon-xiajia--",
           label: "下架任务"
-        }, 
+        },
         {
           clickIndex: "configExamDialog",
           headIcon: "el-icon-edit",
           label: "修改任务信息"
-        },        
+        },
         {
           clickIndex: "configExamDialog",
           headIcon: "el-icon-edit",
@@ -310,10 +339,10 @@ export default {
         this.show = true;
       });
     },
-      //关闭右键菜单
-      closeMenu() {
-        this.show = false;
-      },
+    //关闭右键菜单
+    closeMenu() {
+      this.show = false;
+    },
     //右键回调时间
     clickEvent(index) {
       //右键修改
@@ -339,7 +368,7 @@ export default {
         this.previewNaireDialog = true;
       }
     },
-    closepreviewNaireDialog(){
+    closepreviewNaireDialog() {
       this.previewNaireDialog = false;
     },
     closeOrganization() {
