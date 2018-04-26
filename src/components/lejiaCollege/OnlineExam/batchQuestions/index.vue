@@ -47,7 +47,7 @@
         <el-row>
           <el-col :span="24">
             <span class="sp1">导入试题成功</span>
-            <span class="sp2">总试题60题</span>
+            <span class="sp2">总试题{{totalQuestions}}题</span>
           </el-col>
         </el-row>
         <el-row :gutter="30">
@@ -55,15 +55,15 @@
             <div class="import_questions">
               <div class="import_left"><span style="float:left; font-size:14px;">导入成功</span><i
                 style="float:right; color:#58d788;font-size:16px;" class="iconfont icon-chenggong"></i></div>
-              <div><span style="font-size:70px; color:#58d788">8</span>题</div>
+              <div><span style="font-size:70px; color:#58d788">{{successQuestions}}</span>题</div>
             </div>
           </el-col>
           <el-col :span="12">
             <div class="import_questions" style="border: 1px solid #fb4699;box-shadow: 0 0 3px 1px #fb4699;">
               <div class="import_left"><span style="float:left; font-size:14px;">导入失败</span><i
                 style="float:right; color:#fb4699;font-size:16px;" class="iconfont icon-tupianjiazaishibai-"></i></div>
-              <div><span style="font-size:70px; color:#fb4699">6</span>题</div>
-              <el-button type="primary" @click="faleDtail"
+              <div><span style="font-size:70px; color:#fb4699">{{failQuestions}}</span>题</div>
+              <el-button type="primary" @click="faleDtail" v-if="failQuestions>0"
                          style="margin-top:10px;width:126px; height:32px;background-color:#fb4799; border-color:#fb4799; line-height:0px;">
                 查看明细
               </el-button>
@@ -77,13 +77,9 @@
       <el-dialog :close-on-click-modal="false" :visible.sync="faleDialog" title="导入失败明细" width="50%">
         <span class="faleTitle">请检查</span>
         <div style="height:160px; overflow: auto;" class="scroll_bar">
-          <div class="falediv">
-            <p>第6行题目，有错啊</p>
-            <p><span>第6行题目，有错啊</span></p>
-          </div>
-          <div class="falediv">
-            <p>第6行题目，有错啊</p>
-            <p><span>第6行题目，有错啊</span></p>
+          <div class="falediv" v-for="(item,key) in errorsDetail">
+            <!--<p>第6行题目，有错啊</p>-->
+            <p><span>{{key+1}}. {{item}}</span></p>
           </div>
         </div>
         <el-button @click="iKonw" type="primary"
@@ -92,9 +88,7 @@
         </el-button>
       </el-dialog>
     </div>
-
   </div>
-
 </template>
 
 <script>
@@ -108,40 +102,60 @@
         isClear: false,
         testPaperDialog: false,
         faleDialog: false,
-        testPaper: '',
-        docId: '',
+        testPaper: '',  //试卷
+        docId: '',  // 上传文件id
+        totalQuestions: null, //总题数
+        successQuestions: null, //导入成功题数
+        failQuestions: null, //导入失败题数
+        errorsDetail: [],
       };
     },
-    mounted() {
-      this.testPaper = this.$route.query;
-    },
     activated() {
-      this.testPaper = this.$route.query;
+      this.getQueryData();
     },
-    watch: {
-      testPaper(val) {
-        console.log(val)
-      },
-    },
+    watch: {},
     methods: {
+      getQueryData() {
+        if (!this.$route.query.name) {
+          let data = {};
+          data.name = this.$store.state.onlineExam.test_paper.name;
+          data.type_id = this.$store.state.onlineExam.test_paper.type_id;
+          data.type_name = this.$store.state.onlineExam.test_paper.type_name;
+          this.testPaper = data;
+          this.$router.push({path: '/batchQuestions', query: data});
+        } else {
+          let query = this.$route.query;
+          this.$store.dispatch('testPaper', query);
+          this.testPaper = query;
+        }
+
+      },
       // 上传成功
       photo_success(val) {
-        console.log(val)
+        console.log(val);
         this.docId = val[1][0];
       },
       //导入试题
       uploadExam() {
-        this.testPaperDialog = true;
+
         let params = {};
         params.doc_id = this.docId;
         params.category = this.testPaper.type_id;
         params.name = this.testPaper.name;
         this.$http.post(globalConfig.server + 'exam/paper/upload', params).then((res) => {
           if (res.data.code === '36010') {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
+            // this.$notify.success({
+            //   title: '成功',
+            //   message: res.data.msg
+            // });
+            if (res.data.data && res.data.data.result) {
+              let result = res.data.data.result;
+              this.successQuestions = Number(result.success);
+              this.failQuestions = Number(result.fail);
+              this.totalQuestions = Number(result.fail) + Number(result.success);
+            }
+            this.testPaperDialog = true;
+            this.errorsDetail = res.data.data.errors;
           } else {
             this.$notify.warning({
               title: '警告',
@@ -251,7 +265,6 @@
       width: 90%;
       float: right;
       border-bottom: 1px #eee solid;
-      height: 76px;
       p {
         padding: 0 !important;
         line-height: 16px;
