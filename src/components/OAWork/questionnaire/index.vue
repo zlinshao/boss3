@@ -10,8 +10,8 @@
         <div class="tool_right">
           <el-form>
             <el-form-item>
-              <span>选择类型</span>
-              <el-select v-model="formInline.type" size="mini" placeholder="请选择" clearable>
+              <span>选择状态</span>
+              <el-select v-model="formInline.type" size="mini" placeholder="请选择状态" clearable>
                 <el-option v-for="item in 4" :key="item.id" label="C语言" :value="item.value"></el-option>
               </el-select>
             </el-form-item>
@@ -265,12 +265,12 @@ export default {
       this.lists = [
         {
           clickIndex: "configExamDialog",
-          headIcon: "el-icon-edit",
+          headIcon: "iconfont icon-shangjia--",
           label: "发布任务"
         }, 
         {
           clickIndex: "configExamDialog",
-          headIcon: "el-icon-edit",
+          headIcon: "iconfont icon-xiajia--",
           label: "下架任务"
         }, 
         {
