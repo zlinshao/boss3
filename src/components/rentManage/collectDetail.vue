@@ -115,7 +115,7 @@
               <el-col :span="8">
                 <el-form-item label="门牌地址">
                   <div class="content">
-                    {{contractInfo.doorplate_str }}
+                    {{contractInfo.doorplate_str}}
                   </div>
                 </el-form-item>
               </el-col>
@@ -285,7 +285,7 @@
                 <el-form-item label="空置结束时间">
                   <div class="content">{{contractInfo.vacancy_end_date}}</div>
                 </el-form-item>
-              </el-col>             
+              </el-col>
               <el-col :span="8">
                 <el-form-item label="空置期安置方式">
                   <div class="content">{{matchDictionary(contractInfo.vacancy_way)}}</div>
@@ -330,11 +330,11 @@
                 <el-form-item label="付款方式">
                   <div class="content">
                     <span v-for="(item,index) in contractInfo.pay_way">
-                      {{item.pay_way}}元，{{item.period}}个月 <span v-show="index<contractInfo.pay_way-1">;</span>
+                      {{matchDictionary(item.pay_way)}}，{{item.period}}个月 <span v-show="index<contractInfo.pay_way-1">;</span>
                     </span>
                   </div>
                 </el-form-item>
-              </el-col>              
+              </el-col>
               <el-col :span="8">
 
                 <el-form-item label="第一次打房租时间">
@@ -357,7 +357,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="收款人与房东关系">
-                  <div class="content">{{contractInfo.account_name}}</div>
+                  <div class="content">{{contractInfo.relationship}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
