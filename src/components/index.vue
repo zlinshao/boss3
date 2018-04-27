@@ -475,6 +475,25 @@
             if (!JSON.parse(localStorage.personal).data.medal) {
               this.badgeDialog = true;
             }
+            this.$http
+            .get(globalConfig.server + "oa/portal/last")
+            .then(res => {
+              if (res.data.code === "800110") {
+                if (!JSON.parse(localStorage.personal).data.system) {
+                this.institutionDialog = true;
+                }
+              }
+            });
+
+            this.$http
+              .get(globalConfig.server + "setting/update/read?a=1")
+              .then(res => {
+                if (res.data.code === "50040") {
+                  if (!JSON.parse(localStorage.personal).data.record) {
+                    this.yanFirstDialog = true;
+                  }
+                }
+              });            
           });
       cookie.set("reFresh", true);
       }
@@ -528,7 +547,7 @@
         .get(globalConfig.server + "oa/portal/last")
         .then(res => {
           if (res.data.code === "800110") {
-            if (!this.personal.data.system) {
+            if (!JSON.parse(localStorage.personal).data.system) {
             this.institutionDialog = true;
             }
           }
