@@ -77,7 +77,7 @@
                 <div style="display: flex;justify-content: space-between">
                   <div class="title" v-if="item == 1">租客信息</div>
                   <div class="title" v-else="">附属租客信息({{item - 1}})</div>
-                  <div v-if="item>1 && !isDoc" class="deleteNumber" @click="deleteCustoms(item-1)">删除</div>
+                  <div v-if="item>1 && !isDoc&&!isAll" class="deleteNumber" @click="deleteCustoms(item-1)">删除</div>
                 </div>
                 <div class="form_border">
                   <el-form size="mini" :model="params" label-width="100px">
@@ -85,7 +85,7 @@
                       <el-col :span="8">
                         <el-form-item label="姓名" required>
                           <el-input disabled="" placeholder="请输入内容" v-model="nameArray[item-1]"
-                                    :disabled="!isPc&&item == 1 || isDoc"></el-input>
+                                    :disabled="(!isPc&&item == 1 || isDoc)&& !isAll"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="8">
@@ -99,14 +99,14 @@
                       <el-col :span="8">
                         <el-form-item label="联系电话" required>
                           <el-input disabled placeholder="请输入内容" v-model="phoneArray[item-1]"
-                                    :disabled="!isPc&&item == 1 || isDoc"></el-input>
+                                    :disabled="(!isPc&&item == 1 || isDoc) && !isAll"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row>
                     <el-row>
                       <el-col :span="8">
                         <el-form-item label="证件类型" required="">
-                          <el-select :clearable="!isDoc" :disabled="isDoc" v-model="id_typeArray[item-1]"
+                          <el-select :clearable="!isDoc || isAll" :disabled="isDoc && !isAll" v-model="id_typeArray[item-1]"
                                      placeholder="请选择装修类型" value="">
                             <el-option v-for="item in id_type_dic" :label="item.dictionary_name" :value="item.id"
                                        :key="item.id"></el-option>
@@ -115,7 +115,7 @@
                       </el-col>
                       <el-col :span="8">
                         <el-form-item label="证件号码" required>
-                          <el-input :disabled="isDoc" placeholder="请输入内容" v-model="id_numberArray[item-1]"></el-input>
+                          <el-input :disabled="isDoc && !isAll" placeholder="请输入内容" v-model="id_numberArray[item-1]"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row>
@@ -123,7 +123,7 @@
                 </div>
               </div>
               <div style="text-align: center">
-                <el-button type="text" @click="addMoreCustoms" :disabled="isDoc">
+                <el-button type="text" @click="addMoreCustoms" :disabled="isDoc && !isAll">
                   <i class="el-icon-circle-plus"></i>新增附属租客信息
                 </el-button>
               </div>
@@ -137,7 +137,7 @@
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="是否公司单" required="">
-                        <el-switch :disabled="!isPc || isDoc" v-model="params.contract_type" active-value="1" inactive-value="0"></el-switch>
+                        <el-switch :disabled="(!isPc || isDoc) && !isAll" v-model="params.contract_type" active-value="1" inactive-value="0"></el-switch>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -147,7 +147,7 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="是否中介" required="">
-                        <el-switch :disabled="!isPc || isDoc" v-model="params.is_agency" active-value="1" inactive-value="0"></el-switch>
+                        <el-switch :disabled="(!isPc || isDoc) && !isAll" v-model="params.is_agency" active-value="1" inactive-value="0"></el-switch>
                       </el-form-item>
                     </el-col>
 
@@ -156,25 +156,25 @@
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="签约日期" required="">
-                        <el-date-picker :disabled="!isPc || isDoc" value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
+                        <el-date-picker :disabled="(!isPc || isDoc) && !isAll" value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
                                         v-model="params.sign_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="合同开始时间" required="">
-                        <el-date-picker :disabled="!isPc || isDoc" @blur="computedEndDate" value-format="yyyy-MM-dd"
+                        <el-date-picker :disabled="(!isPc || isDoc) && !isAll" @blur="computedEndDate" value-format="yyyy-MM-dd"
                                         type="date" placeholder="选择日期" v-model="params.begin_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6" class="unitMessage">
                       <el-form-item label="签约月数" required>
                         <el-col :span="12" style="padding-right: 10px">
-                          <el-input :disabled="!isPc || isDoc" placeholder="月数" @blur="changeMonth" v-model="params.month">
+                          <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="月数" @blur="changeMonth" v-model="params.month">
                             <template slot="append">月</template>
                           </el-input>
                         </el-col>
                         <el-col :span="12">
-                          <el-input :disabled="!isPc || isDoc" placeholder="天数" @blur="computedEndDate" v-model="params.day">
+                          <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="天数" @blur="computedEndDate" v-model="params.day">
                             <template slot="append">天</template>
                           </el-input>
                         </el-col>
@@ -182,7 +182,7 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="合同结束时间" required="">
-                        <el-date-picker :disabled="!isPc || isDoc" value-format="yyyy-MM-dd" type="date"
+                        <el-date-picker :disabled="(!isPc || isDoc) && !isAll" value-format="yyyy-MM-dd" type="date"
                                         placeholder="选择日期" v-model="params.end_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
@@ -191,12 +191,12 @@
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="押金" required>
-                        <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" v-model="params.deposit"></el-input>
+                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" v-model="params.deposit"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="总收款金额" required>
-                        <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" v-model="params.money_sum"></el-input>
+                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" v-model="params.money_sum"></el-input>
                       </el-form-item>
                     </el-col>
                   </el-row>
@@ -207,12 +207,12 @@
                       <el-row>
                         <el-col :span="6">
                           <el-form-item label="月单价" required="">
-                            <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" v-model="priceArray[item-1]"></el-input>
+                            <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" v-model="priceArray[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
                         <el-col :span="6">
                           <el-form-item label="变化周期(月)" required="">
-                            <el-input placeholder="请输入内容" :disabled="!isPc || isDoc"
+                            <el-input placeholder="请输入内容" :disabled="(!isPc || isDoc) && !isAll"
                                       v-model="periodArray[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
@@ -224,7 +224,7 @@
                       </el-row>
                     </div>
                     <div style="text-align: center">
-                      <el-button type="text" :disabled="!isPc || isDoc" @click="addMorePriceChange">
+                      <el-button type="text" :disabled="(!isPc || isDoc) && !isAll" @click="addMorePriceChange">
                         <i class="el-icon-circle-plus"></i>添加月单价变化条目
                       </el-button>
                     </div>
@@ -236,7 +236,7 @@
                       <el-row>
                         <el-col :span="6">
                           <el-form-item label="押" required="">
-                            <el-select :disabled="!isPc || isDoc" v-model="payWayArray[0]" placeholder="请选择付款方式" value="">
+                            <el-select :disabled="(!isPc || isDoc) && !isAll" v-model="payWayArray[0]" placeholder="请选择付款方式" value="">
                               <el-option v-for="item in 3" :value="item-1"
                                          :key="item-1"></el-option>
                             </el-select>
@@ -244,13 +244,13 @@
                         </el-col>
                         <el-col :span="6">
                           <el-form-item label="付" required="">
-                            <el-input :disabled="!isPc || isDoc" placeholder="请输入内容"
+                            <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
                                       v-model="pay_way_bet[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
                         <el-col :span="6">
                           <el-form-item label="变化周期(月)" required="">
-                            <el-input placeholder="请输入内容" :disabled="!isPc || isDoc"
+                            <el-input placeholder="请输入内容" :disabled="(!isPc || isDoc) && !isAll"
                                       v-model="payPeriodArray[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
@@ -262,7 +262,7 @@
                       </el-row>
                     </div>
                     <div style="text-align: center">
-                      <el-button type="text" :disabled="!isPc || isDoc" @click="addMorePayWayChange">
+                      <el-button type="text" :disabled="(!isPc || isDoc) && !isAll" @click="addMorePayWayChange">
                         <i class="el-icon-circle-plus"></i>添加付款方式变化条目
                       </el-button>
                     </div>
@@ -274,7 +274,7 @@
                       <el-row>
                         <el-col :span="6">
                           <el-form-item label="支付方式" required="">
-                            <el-select :disabled="!isPc || isDoc" v-model="moneyWayArray[item-1]"
+                            <el-select :disabled="(!isPc || isDoc) && !isAll" v-model="moneyWayArray[item-1]"
                                        placeholder="请选择支付方式" value="">
                               <el-option v-for="item in purchase_way_dic" :label="item.dictionary_name" :value="item.id"
                                          :key="item.id"></el-option>
@@ -283,7 +283,7 @@
                         </el-col>
                         <el-col :span="6">
                           <el-form-item label="金额（元）" required="">
-                            <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" v-model="moneySepArray[item-1]"></el-input>
+                            <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" v-model="moneySepArray[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
                         <el-col :span="6" v-if="false">
@@ -294,7 +294,7 @@
                       </el-row>
                     </div>
                     <div style="text-align: center">
-                      <el-button type="text" :disabled="!isPc || isDoc" @click="addMoreMoneyTableChange">
+                      <el-button type="text" :disabled="(!isPc || isDoc) && !isAll" @click="addMoreMoneyTableChange">
                         <i class="el-icon-circle-plus"></i>添加付款方式变化条目
                       </el-button>
                     </div>
@@ -303,7 +303,7 @@
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="中介费">
-                        <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" v-model="params.agency"></el-input>
+                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" v-model="params.agency"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -367,13 +367,13 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="收据编号" required>
-                        <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" v-model="params.receipt"></el-input>
+                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" v-model="params.receipt"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="尾款补齐时间" required="">
                         <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
-                                        :disabled="!isPc || isDoc" v-model="params.retainage_date"></el-date-picker>
+                                        :disabled="(!isPc || isDoc) && !isAll" v-model="params.retainage_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -386,7 +386,7 @@
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="开单人">
-                        <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" @focus="openOrganizeModal('staff')" readonly=""
+                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" @focus="openOrganizeModal('staff')" readonly=""
                                   v-model="staff_name"></el-input>
                       </el-form-item>
                     </el-col>
@@ -398,7 +398,7 @@
                     <!--</el-col>-->
                     <el-col :span="6">
                       <el-form-item label="部门">
-                        <el-input :disabled="!isPc || isDoc" placeholder="请输入内容" @focus="openOrganizeModal('depart')" readonly=""
+                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" @focus="openOrganizeModal('depart')" readonly=""
                                   v-model="department_name"></el-input>
                       </el-form-item>
                     </el-col>
@@ -424,11 +424,11 @@
             <div class="scroll_bar">
               <el-form label-width="100px">
                 <el-form-item label="证件照片" required="">
-                  <UpLoad :ID="'editRent_id_card'" :isClear="isClear" :onlyShow="isDoc"
+                  <UpLoad :ID="'editRent_id_card'" :isClear="isClear" :onlyShow="isDoc && !isAll"
                           :editImage="identity_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="合同照片" required="">
-                  <UpLoad :ID="'editRent_contract_card'" :isClear="isClear" :onlyShow="isDoc"
+                  <UpLoad :ID="'editRent_contract_card'" :isClear="isClear" :onlyShow="isDoc && !isAll"
                           :editImage="photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="水表照片">
@@ -447,11 +447,11 @@
                           @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="截图凭证" required="">
-                  <UpLoad :ID="'editRent_certificate_photo'" :onlyShow="!isPc || isDoc"
+                  <UpLoad :ID="'editRent_certificate_photo'" :onlyShow="(!isPc || isDoc) && !isAll"
                           :isClear="isClear" :editImage="certificate_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="押金收条" required="">
-                  <UpLoad :ID="'editRent_deposit_card'" :isClear="isClear" :onlyShow="isDoc"
+                  <UpLoad :ID="'editRent_deposit_card'" :isClear="isClear" :onlyShow="isDoc && !isAll"
                           :editImage="deposit_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
 
@@ -612,6 +612,7 @@
 
         isPc : false,
         isDoc : false,
+        isAll : false,
       };
     },
     watch: {
@@ -711,6 +712,7 @@
 
             this.isPc = data.generate_from==2;
             this.isDoc = data.doc_status.id>2;
+            this.isAll = data.auth_level == 'all';
 
             //租客信息
             this.customersAmount = data.customers.length;
@@ -1138,6 +1140,7 @@
 
         this.isPc = false;
         this.isDoc = false;
+        this.isAll = false;
       }
     }
   };
