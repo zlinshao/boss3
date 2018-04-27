@@ -493,18 +493,19 @@
                 }
               }
             });
-            //版本更新
-            this.$http
-              .get(globalConfig.server + "setting/update/read?a=1")
-              .then(res => {
-                if (res.data.code === "50040") {
-                    this.yanFirstInfo = res.data.data;
-                    this.yanFirstDialog = true;
-                }
-              });            
+           
           });
       cookie.set("reFresh", true);
       }
+      //版本更新
+      this.$http
+        .get(globalConfig.server + "setting/update/read?a=1")
+        .then(res => {
+        if (res.data.code === "50040") {
+          this.yanFirstInfo = res.data.data;
+          this.yanFirstDialog = true;
+        }
+      }); 
     },
     mounted() {
       //初始化个人信息
