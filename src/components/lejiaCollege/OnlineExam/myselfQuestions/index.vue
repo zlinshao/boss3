@@ -304,17 +304,79 @@
           score: '',
         },
         submitDisabled: false,
+        quesId: '',  //编辑时候的题目id
+        editQuesCategory: '',  //编辑时候的题目类型
       };
     },
     activated() {
       this.getQueryData();
     },
     watch: {
+      quesId(val) {
+        if (val) {
+          this.$http.get(globalConfig.server + 'exam/question/' + val).then((res) => {
+            if (res.data.code === '30000') {
+              switch (this.activeName) {
+                case 'first':
+                  this.options = [];
+                  this.singleForm.stem = res.data.data.stem;
+                  this.singleForm.score = res.data.data.score;
+                  for (var i in res.data.data.choice) {
+                    this.options[i.charCodeAt() - 65] = res.data.data.choice[i];
+                  }
+                  this.singlen = this.options.length;
+                  this.optionsSelect = res.data.data.answer.charCodeAt() - 65;
+                  break;
+                case 'second':
+                  this.multiForm = res.data.data;
+                  break;
+                case 'third':
+                  this.multiForm = res.data.data;
+                  break;
+                case 'fourth':
+                  this.judgeForm = res.data.data;
+                  break;
+                case 'five':
+                  this.blankForm = res.data.data;
+                  break;
+                case 'six':
+                  this.answerForm = res.data.data;
+                  break;
+              }
+            }
+          });
+        } else {
+
+        }
+      },
+      editQuesCategory(val) {
+        if (val) {
+          switch (Number(val)) {
+            case 153:
+              this.activeName = 'first';
+              break;
+            case 154:
+              this.activeName = 'second';
+              break;
+            case 155:
+              this.activeName = 'third';
+              break;
+            case 156:
+              this.activeName = 'fourth';
+              break;
+            case 157:
+              this.activeName = 'five';
+              break;
+            case 158:
+              this.activeName = 'six';
+              break;
+          }
+        }
+      },
       activeName(val) {
         this.submitDisabled = false;
       },
       spacelen(val) {
-        console.log(val);
         this.spacelen = val;
       },
       options(val) {
@@ -343,7 +405,6 @@
       multiOptionsSelect(val) {
         this.multiForm.answer = [];
         if (val) {
-          console.log(val);
           for (var i = 0; i < val.length; i++) {
             this.multiForm.answer.push(String.fromCharCode(65 + Number(val[i])));
           }
@@ -387,15 +448,18 @@
     },
     methods: {
       getQueryData() {
-        if (!this.$route.query.name) {
+        if (!this.$route.query.paper_id) {
           let data = {};
-          data.name = this.$store.state.onlineExam.myself_test_paper.name;
           data.paper_id = this.$store.state.onlineExam.myself_test_paper.paper_id;
+          data.quesId = this.quesId = this.$store.state.onlineExam.myself_test_paper.quesId;
+          data.category = this.editQuesCategory = this.$store.state.onlineExam.myself_test_paper.category;
+          data.type = this.editQuesCategory = this.$store.state.onlineExam.myself_test_paper.type;
           this.singleForm.paper_id = data.paper_id;
           this.multiForm.paper_id = data.paper_id;
           this.judgeForm.paper_id = data.paper_id;
           this.blankForm.paper_id = data.paper_id;
           this.answerForm.paper_id = data.paper_id;
+
           this.$router.push({path: '/myselfQuestions', query: data});
         } else {
           let query = this.$route.query;
@@ -404,6 +468,13 @@
           this.judgeForm.paper_id = query.paper_id;
           this.blankForm.paper_id = query.paper_id;
           this.answerForm.paper_id = query.paper_id;
+          if (query.type === 'add') {
+            this.quesId = '';
+            this.editQuesCategory = '';
+          } else if (query.type === 'edit') {
+            this.quesId = query.quesId;
+            this.editQuesCategory = query.category;
+          }
           this.$store.dispatch('myselfTestPaper', query);
         }
 
@@ -446,7 +517,13 @@
         this.singlen++;
       },
       confirmAdd(val) {
-        this.$http.post(globalConfig.server + 'exam/question', val).then((res) => {
+        let header = '';
+        if (this.quesId) {
+          header = this.$http.put(globalConfig.server + 'exam/question/' + this.quesId, val);
+        } else {
+          header = this.$http.post(globalConfig.server + 'exam/question', val);
+        }
+        header.then((res) => {
           if (res.data.code === '30010') {
             this.$notify.success({
               title: '成功',

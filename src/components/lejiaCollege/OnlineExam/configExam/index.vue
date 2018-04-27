@@ -60,7 +60,7 @@
           style="color:#6a8dfb; margin-left:20px;">单选题</span>
           <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
-          <span class="edit_question">编辑</span>
+          <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)">下移</span>
           <span class="move_up" @click="moveUp(item.id)">上移</span>
           <p style="margin-left:30px;line-height:30px;">{{item.stem}}</p>
@@ -78,7 +78,7 @@
           style="color:#6a8dfb; margin-left:20px;">多选题</span>
           <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
-          <span class="edit_question">编辑</span>
+          <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)">下移</span>
           <span class="move_up" @click="moveUp(item.id)">上移</span>
           <p style="margin-left:30px;line-height:30px;">{{item.stem}}</p>
@@ -95,7 +95,7 @@
           style="color:#6a8dfb; margin-left:20px;">判断题</span>
           <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
-          <span class="edit_question">编辑</span>
+          <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)">下移</span>
           <span class="move_up" @click="moveUp(item.id)">上移</span>
           <p style="margin-left:30px;line-height:20px;">{{item.stem}}</p>
@@ -114,7 +114,7 @@
           style="color:#6a8dfb; margin-left:20px;">简单题</span>
           <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
-          <span class="edit_question">编辑</span>
+          <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)">下移</span>
           <span class="move_up" @click="moveUp(item.id)">上移</span>
           <p style="margin-left:30px;line-height:20px;padding-right:10px;">{{item.stem}}</p>
@@ -305,8 +305,11 @@
             message: "已取消删除"
           });
         });
+      },
+      //编辑题目
+      editQues(val) {
+        this.$router.push({path: '/myselfQuestions', query: {paper_id: this.testPaperId, quesId: val.id, category:val.category,type: 'edit'}});
       }
-
     }
   };
 </script>

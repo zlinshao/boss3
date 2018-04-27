@@ -227,7 +227,8 @@
         this.params.category = '';
         this.getTestPaperData();
       },
-      dblClickTable() {},
+      dblClickTable() {
+      },
       paperTypeBtn() {
         if (!this.paperTypeForm.category) {
           this.$notify.warning({
@@ -272,6 +273,7 @@
               message: res.data.msg
             });
             this.paperId = res.data.data;
+            this.getTestPaperData();
           } else {
             this.$notify.warning({
               title: '警告',
@@ -281,7 +283,7 @@
         });
         this.$router.push({
           path: "/myselfQuestions",
-          query: {name: this.paperTypeForm.name, paper_id: this.paperId}
+          query: {paper_id: this.paperId,type: 'add'}
         });
       },
       getTestPaperData() {
@@ -348,7 +350,7 @@
       clickEvent(index) {
         switch (index) {
           case 'editTestPaper':
-            this.$router.push({path: "/configExam", query: {id: this.testPaperId }});
+            this.$router.push({path: "/configExam", query: {id: this.testPaperId}});
             break;
           case 'deleteTestPaper':
             this.$confirm("删除后不可恢复, 是否继续?", "提示", {
@@ -356,26 +358,26 @@
               cancelButtonText: "取消",
               type: "warning"
             }).then(() => {
-              this.$http.post(globalConfig.server+ 'exam/paper/delete/'+this.testPaperId).then((res)=>{
-                if(res.data.code==='36000'){
+              this.$http.post(globalConfig.server + 'exam/paper/delete/' + this.testPaperId).then((res) => {
+                if (res.data.code === '36000') {
                   this.$notify.success({
                     title: "成功",
                     message: res.data.msg
                   });
                   this.getTestPaperData();
-                }else{
+                } else {
                   this.$notify.warning({
                     title: "警告",
                     message: res.data.msg
                   });
                 }
               });
-              }).catch(() => {
-                this.$notify.info({
-                  title: "提示",
-                  message: "已取消删除"
-                });
+            }).catch(() => {
+              this.$notify.info({
+                title: "提示",
+                message: "已取消删除"
               });
+            });
             break;
           case 'lookTestPaper':
             this.$router.push({path: "/previewExam"});
