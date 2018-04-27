@@ -56,6 +56,13 @@
         </template>
       </el-table-column>
       <el-table-column
+        label="合同上传时间">
+        <template slot-scope="scope">
+          <span v-if="scope.row.created_at">{{scope.row.created_at}}</span>
+          <span v-else="">/</span>
+        </template>
+      </el-table-column>
+      <el-table-column
         prop="start_at"
         width="180px"
         label="开始日期">
