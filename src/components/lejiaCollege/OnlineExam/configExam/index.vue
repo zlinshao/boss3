@@ -3,120 +3,140 @@
     <div id="onlineExam">
       <div class="tool">
         <div class="tool_left">
-          <span>试卷名称</span><br />
-          <span style="color:#83a0fc;">2018年春季新员工入职考试</span>
+          <span>试卷名称</span><br/>
+          <span style="color:#83a0fc;">{{testPaperData.name}}</span>
         </div>
         <div class="tool_right">
-          <el-button type="success" size="small" style="margin-right:10px; background-color:#58d788; border-color:#58d788;"  @click="openModalDialog()">
+          <el-button type="success" size="small"
+                     style="margin-right:10px; background-color:#58d788; border-color:#58d788;"
+                     @click="openModalDialog()">
+            <i class="iconfont icon-tianjiagenjin"></i>&nbsp;关联的考试
+          </el-button>
+          <el-button type="success" size="small"
+                     style="margin-right:10px; background-color:#58d788; border-color:#58d788;"
+                     @click="openModalDialog()">
             <i class="iconfont icon-tianjiagenjin"></i>&nbsp;添加试题
           </el-button>
         </div>
-
       </div>
       <div class="main">
         <div>
-          <el-form :model="formExam" >
+          <el-form :model="params">
             <el-row>
               <el-col :span="5" style="margin-left:20px; margin-top:20px;">
                 <el-form-item label="题目类型">
-                    <el-select size="small" :model="formExam" value="单择题">
-                      <el-option value="单择题">单择题</el-option>
-                      <el-option value="多选题">多选题</el-option>
-                      <el-option value="判断题">判断题</el-option>
-                    </el-select>  
+                  <el-select size="small" v-model="params.category">
+                    <el-option v-for="item in questionTypeCategory" :key="item.id" :label="item.dictionary_name"
+                               :value="item.id">{{item.dictionary_name}}
+                    </el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="5" style="margin-top:20px;"> 
+              <el-col :span="5" style="margin-top:20px;">
                 <el-form-item label="试题编号">
-                  <el-input style="width:200px;" value="单择题" size="small"></el-input>
+                  <el-input style="width:200px;" size="small"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4" style="float:right;margin-top:20px;">
                 <el-form-item style="margin-right: 10px;">
-                  <el-input value="单择题" placeholder="搜索关键字" size="small">
-                    <el-button slot="append" style="background-color:rgb(131, 160, 252); color:#fff;" size="small" class="search_button" >搜索试题</el-button>
+                  <el-input value="单选题" placeholder="搜索关键字" size="small">
+                    <el-button slot="append" style="background-color:rgb(131, 160, 252); color:#fff;" size="small"
+                               class="search_button">搜索试题
+                    </el-button>
                   </el-input>
-                </el-form-item>                
-                </el-col>
+                </el-form-item>
+              </el-col>
             </el-row>
           </el-form>
-          <el-checkbox style="margin-left:2%; margin-bottom:10px;" :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+          <el-checkbox style="margin-left:2%; margin-bottom:10px;" :indeterminate="isIndeterminate" v-model="checkAll"
+                       @change="handleCheckAllChange">全选
+          </el-checkbox>
           <span style="font-size:14px; color:#fc83b6; margin-left:20px;">移除</span>
-          <span style="font-size:14px; float:right; margin-right:20px; ">共&nbsp;<span style="color:#fc83b6;">8</span>&nbsp;项查询结果</span>
+          <span style="font-size:14px; float:right; margin-right:20px; ">共&nbsp;
+            <span style="color:#fc83b6;" v-if="testPaperData && testPaperData.questions">{{testPaperData.questions.length}}</span>&nbsp;项查询结果</span>
         </div>
-        <div class="questionDiv" v-for="(total,x) in 2" >
-          <el-checkbox v-model="formbox[x].check"></el-checkbox>&nbsp;&nbsp;&nbsp;{{x+1}}.<span style="color:#6a8dfb; margin-left:20px;">单选题</span>
-          <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
-          <span style="float:right; font-size:14px; color:#fc83b6; margin-right:20px;">移除</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">编辑</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">下一题</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">上一题</span>          
-          <p style="margin-left:30px;line-height:30px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
-          <el-form :model="form1[x]" >
-              <el-form-item v-model="form1[x].check" style="width:98%;margin-left:2%;">
-                  <el-col :span="6" :key="index" v-for="(val,index) in answarData" style="line-height:24px;height: 24px;">
-                     <span v-if="form1[x].check == val.id"><el-radio>{{val.id}}：{{val.name}}</el-radio></span>
-                     <span v-else>{{val.id}}：{{val.name}}</span>
-                     <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form1[x].check == val.id">正确</span>
-                  </el-col>
-              </el-form-item>
-          </el-form>       
+        <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===153">
+          <el-checkbox v-model="formbox[key] && formbox[key].check"></el-checkbox>&nbsp;&nbsp;&nbsp;{{key+1}}.<span
+          style="color:#6a8dfb; margin-left:20px;">单选题</span>
+          <span class="ques_score">({{item.score}}分)</span>
+          <span class="remove">移除</span>
+          <span class="edit_question">编辑</span>
+          <span class="move_down" @click="moveDown(item.id)">下移</span>
+          <span class="move_up"  @click="moveUp(item.id)">上移</span>
+          <p style="margin-left:30px;line-height:30px;">{{item.stem}}</p>
+          <div style="width:98%;margin-left:2%;">
+            <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:25px;height: 25px;">
+              <span v-if="item.answer == index"><el-radio>{{item.answer}}：{{val}}</el-radio></span>
+              <span v-else>{{index}}：{{val}}</span>
+              <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="item.answer == index">正确</span>
+            </el-col>
+          </div>
         </div>
-         <div class="questionDiv" v-for="(total2,y) in 2" >
-          <el-checkbox v-model="formbox[y].check"></el-checkbox>&nbsp;&nbsp;&nbsp;{{y+1+2}}.<span style="color:#6a8dfb; margin-left:20px;">多选题</span>
-          <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
-          <span style="float:right; font-size:14px; color:#fc83b6; margin-right:20px;">移除</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">编辑</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">下一题</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">上一题</span> 
-          <p style="margin-left:30px;line-height:30px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
-          <el-form :model="form2[y]" >
-              <el-form-item v-model="form2[y].check" style="width:98%;margin-left:2%;">
-                  <el-col :span="6" :key="index1" v-for="(val,index1) in answarData" style="line-height:24px;height: 24px;">
-                    <span v-if="form2[y].check[index1] == val.id"><el-radio >{{val.id}}：{{val.name}}</el-radio></span>
-                    <span v-else>{{val.id}}：{{val.name}}</span>
-                    <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form2[y].check[index1] == val.id">正确</span>
-                  </el-col>
-              </el-form-item>
-          </el-form>      
+        <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
+             v-if="item.category===154 || item.category===155">
+          <el-checkbox v-model="formbox[key] && formbox[key].check"></el-checkbox>&nbsp;&nbsp;&nbsp;{{key+1}}.<span
+          style="color:#6a8dfb; margin-left:20px;">多选题</span>
+          <span class="ques_score">({{item.score}}分)</span>
+          <span class="remove">移除</span>
+          <span class="edit_question">编辑</span>
+          <span class="move_down" @click="moveDown(item.id)">下移</span>
+          <span class="move_up" @click="moveUp(item.id)">上移</span>
+          <p style="margin-left:30px;line-height:30px;">{{item.stem}}</p>
+          <div style="width:98%;margin-left:2%;">
+            <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:25px;height: 25px;">
+              <span v-if=" item.answer.indexOf(index)>-1 "><el-radio>{{index}}：{{val}}</el-radio></span>
+              <span v-else>{{index}}：{{val}}</span>
+              <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="item.answer.indexOf(index)>-1">正确</span>
+            </el-col>
+          </div>
         </div>
-        <div class="questionDiv" v-for="(total3,z) in 2" >
-         <el-checkbox v-model="formbox[z].check"></el-checkbox>&nbsp;&nbsp;&nbsp; {{z+1+4}}.<span style="color:#6a8dfb; margin-left:20px;">判断题</span>
-          <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
-          <span style="float:right; font-size:14px; color:#fc83b6; margin-right:20px;">移除</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">编辑</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">下一题</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">上一题</span>
-          <p style="margin-left:30px;line-height:20px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
-          <el-form :model="form3[z]" >
-              <el-form-item v-model="form3[z].check" style="width:98%;margin-left:2%;">
-                  <el-col :span="12" :key="index2" v-for="(val,index2) in answarData2" style="line-height:24px;height: 24px;">
-                    <span v-if="form3[z].check == val.id"><el-radio >{{val.id}}：{{val.name}}</el-radio></span>
-                    <span v-else>{{val.id}}：{{val.name}}</span>
-                    <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form3[z].check == val.id">正确</span>
-                  </el-col>
-              </el-form-item>
-          </el-form>     
-        </div>   
-        <div class="questionDiv" v-for="(total4,k) in 2" >
-          <el-checkbox v-model="formbox[k].check"></el-checkbox>&nbsp;&nbsp;&nbsp; {{k+1+6}}.<span style="color:#6a8dfb; margin-left:20px;">简单题</span>
-          <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
-          <span style="float:right; font-size:14px; color:#fc83b6; margin-right:20px;">移除</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">编辑</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">下一题</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">上一题</span> 
-          <p style="margin-left:30px;line-height:20px;padding-right:10px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
-          <el-form :model="form3[k]" >
-              <el-form-item >
-                <el-input readonly style="width:97%;margin-left:2%;" v-model="form4[k].check" type="textarea"></el-input>
-              </el-form-item>
-          </el-form>       
-        </div>   
+        <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===156">
+          <el-checkbox v-model="formbox[key] && formbox[key].check"></el-checkbox>&nbsp;&nbsp;&nbsp; {{key+1}}.<span
+          style="color:#6a8dfb; margin-left:20px;">判断题</span>
+          <span class="ques_score">({{item.score}}分)</span>
+          <span class="remove">移除</span>
+          <span class="edit_question">编辑</span>
+          <span class="move_down" @click="moveDown(item.id)">下移</span>
+          <span class="move_up" @click="moveUp(item.id)">上移</span>
+          <p style="margin-left:30px;line-height:20px;">{{item.stem}}</p>
+          <div style="width:98%;margin-left:2%;">
+            <el-col :span="12" :key="index" v-for="(val,index) in item.choice"
+                    style="line-height:25px;height: 25px;">
+              <span v-if="item.answer == index"><el-radio>{{index}}：{{val}}</el-radio></span>
+              <span v-else>{{index}}：{{val}}</span>
+              <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="item.answer == index">正确</span>
+            </el-col>
+          </div>
+        </div>
+        <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===157 || item.category===158">
+          <el-checkbox v-model="formbox[key].check"></el-checkbox>&nbsp;&nbsp;&nbsp; {{key+1}}.<span
+          style="color:#6a8dfb; margin-left:20px;">简单题</span>
+          <span class="ques_score">({{item.score}}分)</span>
+          <span class="remove">移除</span>
+          <span class="edit_question">编辑</span>
+          <span class="move_down" @click="moveDown(item.id)">下移</span>
+          <span class="move_up" @click="moveUp(item.id)">上移</span>
+          <p style="margin-left:30px;line-height:20px;padding-right:10px;">{{item.stem}}</p>
+          <div style="width:98%;margin-left:2%;">
+            <el-col :span="12" :key="index" v-for="(val,index) in item.answer" v-if="item.answer.length>0"
+                    style="line-height:25px;height: 25px;">
+              <div v-if="item.category===157">
+                <span style="color:#409EFF;">第{{index+1}}处答案：</span>
+                <span>{{val}}</span>
+              </div>
+              <div v-if="item.category===158">
+                <span style="color:#409EFF;">答案：</span>
+                <span>{{val}}</span>
+              </div>
+            </el-col>
+            <el-col v-if="!item.answer || item.answer.length===0">暂无答案</el-col>
+          </div>
+        </div>
       </div>
-      </div>
-
+    </div>
     <div id="testPaperDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="新建试卷" width="38%" style="margin-top:18vh">
+      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="新建试卷" width="38%"
+                 style="margin-top:18vh">
         <el-row :gutter="30" style="margin-bottom:26px;">
           <el-col :span="12">
             <div class="import_questions" @click="importQuestion">
@@ -124,138 +144,194 @@
             </div>
           </el-col>
           <el-col :span="12">
-            <div class="import_questions" @click="myselfQuestion" style="border: 1px solid #fda2cc;box-shadow: 0 0 3px 1px #fda2cc;">
+            <div class="import_questions" @click="myselfQuestion"
+                 style="border: 1px solid #fda2cc;box-shadow: 0 0 3px 1px #fda2cc;">
               <div><img src="../../../../assets/images/examination/self_entry.svg"><br/>自己录入</div>
             </div>
           </el-col>
         </el-row>
       </el-dialog>
     </div>
-
   </div>
 </template>
-
 <script>
-export default {
-  name: "index",
-  components: {},
-  data() {
-    return {
-      isIndeterminate: true,
-      checkAll: false,
-      disfalg: false,
-      quizData: [
-        {
-          contract_num: 1,
-          address: "abc"
+  export default {
+    name: "index",
+    components: {},
+    data() {
+      return {
+        isIndeterminate: true,
+        checkAll: false,
+        testPaperDialog: false,
+        params: {
+          category: '',
+        },
+        formbox: [],   //选中的题目
+        questionTypeCategory: [], //题目类型
+        testPaperId: '',
+        testPaperData: {},
+      };
+    },
+    mounted() {
+      this.getDictionary();
+      this.testPaperId = this.$route.query.id;
+      this.getTestPaperDetail();
+    },
+    activated() {
+      this.testPaperId = this.$route.query.id;
+      this.getTestPaperDetail();
+    },
+    watch: {
+      "testPaperData": {
+        deep: true,
+        handler(val, oldVal) {
+          if (val.questions.length > 0) {
+            this.formbox = [];
+            for (var i = 0; i < val.questions.length; i++) {
+              this.formbox.push({check: ''});
+            }
+          }
         }
-      ],
-      examType: [
-        { id: 1, name: "新员工入职" },
-        { id: 2, name: "初级晋升考试" },
-        { id: 3, name: "中级晋升考试" }
-      ],
-      testPaperDialog: false,
-      formExam: {
-        name: "",
-        description: ""
+      }
+    },
+    methods: {
+      getDictionary() {
+        //试卷类型
+        this.dictionary(152).then((res) => {
+          this.questionTypeCategory = res.data;
+        });
       },
-      answarData: [
-        { id: "A", name: "选项答案" },
-        { id: "B", name: "选项答案" },
-        { id: "C", name: "选项答案" },
-        { id: "D", name: "选项答案" }
-      ],
-      answarData2: [
-        { id: "对", name: "选项答案" },
-        { id: "错", name: "选项答案" }
-      ],
-      form1: [{ check: "B" }, { check: "D" }],
-      form2: [{ check: ["A", "B"] }, { check: ["A", "", "C", "D"] }],
-      form3: [{ check: "对" }, { check: "错" }],
-      form4: [{ check: " " }, { check: " " }],
-      formbox: [
-        { check: "" },
-        { check: "" },
-        { check: "" },
-        { check: "" },
-        { check: "" },
-        { check: "" },
-        { check: "" },
-        { check: "" }
-      ]
-    };
-  },
-  mounted() {},
-  watch: {},
-  methods: {
-    importQuestion() {
-      this.testPaperDialog = false;
-      this.$router.push({ path: "/batchQuestions" });
-    },
-    myselfQuestion() {
-      this.testPaperDialog = false;
-      this.$router.push({ path: "/myselfQuestions" });
-    },
-    openModalDialog() {
-      this.testPaperDialog = true;
-    },
-    handleCheckAllChange(val) {
-      this.checkedCities = val ? formbox : [];
-      this.isIndeterminate = false;
-    },
-    handleCheckedCitiesChange(value) {
-      let checkedCount = value.length;
-      this.checkAll = checkedCount === this.formbox.length;
-      this.isIndeterminate =
-        checkedCount > 0 && checkedCount < this.formbox.length;
+      getTestPaperDetail() {
+        if (this.testPaperId) {
+          this.$http.get(globalConfig.server + 'exam/paper/' + this.testPaperId).then((res) => {
+            if (res.data.code === '36010') {
+              this.testPaperData = res.data.data;
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              })
+            }
+          });
+        }
+      },
+      importQuestion() {
+        this.testPaperDialog = false;
+        this.$router.push({path: "/batchQuestions"});
+      },
+      myselfQuestion() {
+        this.testPaperDialog = false;
+        this.$router.push({path: "/myselfQuestions"});
+      },
+      openModalDialog() {
+        this.testPaperDialog = true;
+      },
+      handleCheckAllChange(val) {
+        this.checkedCities = val ? formbox : [];
+        this.isIndeterminate = false;
+      },
+      handleCheckedCitiesChange(value) {
+        let checkedCount = value.length;
+        this.checkAll = checkedCount === this.formbox.length;
+        this.isIndeterminate =
+          checkedCount > 0 && checkedCount < this.formbox.length;
+      },
+      moveDown(id) {
+        this.$http.post(globalConfig.server+ 'exam/question/down/'+ id).then((res)=>{
+          if(res.data.code==="30010"){
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.getTestPaperDetail();
+          }else{
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
+      moveUp(id) {
+        this.$http.post(globalConfig.server+ 'exam/question/up/'+ id).then((res)=>{
+          if(res.data.code==="30010"){
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.getTestPaperDetail();
+          }else{
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
     }
-  }
-};
+  };
 </script>
-
 <style lang="scss" scoped>
-#onlineExam {
-  .tool {
-    height: 78px;
-    border-radius: 5px;
-    border: 1px #eee solid;
-    border-bottom: none;
-    padding: 0;
-    .tool_left {
-      margin-left: 20px;
-      margin-top: 18px;
-      span {
-        font-size: 16px;
+  #onlineExam {
+    .tool {
+      height: 78px;
+      border-radius: 5px;
+      border: 1px #eee solid;
+      border-bottom: none;
+      padding: 0;
+      .tool_left {
+        margin-left: 20px;
+        margin-top: 18px;
+        span {
+          font-size: 16px;
+        }
+      }
+    }
+    .main {
+      border: 1px #eee solid;
+      border-bottom: none;
+      font-size: 16px;
+      .questionDiv {
+        width: 98%;
+        margin-left: 2%;
+        min-height: 154px;
+        padding-top: 16px;
+        border-top: 1px #eee solid;
+        .ques_score{
+          font-size:14px;
+          color:#fc83b6;
+          margin-left:20px;
+        }
+        .remove{
+          float:right;
+          font-size:14px;
+          color:#fc83b6;
+          margin-right:20px;
+          cursor: pointer;
+        }
+        .edit_question, .move_down, .move_up{
+          float:right;
+          font-size:14px;
+          color:rgb(88, 215, 136);
+          margin-right:20px;
+          cursor: pointer;
+        }
       }
     }
   }
-  .main {
-    border: 1px #eee solid;
-    border-bottom: none;
-    font-size: 16px;
-    .questionDiv {
-      width: 98%;
-      margin-left: 2%;
-      min-height: 154px;
-      padding-top: 16px;
-      border-top: 1px #eee solid;
+
+  #testPaperDialog {
+    padding: 25px 15px;
+    .import_questions {
+      border: 1px solid #b4c6fd;
+      -webkit-box-shadow: 0 0 3px 1px #b4c6fd;
+      box-shadow: 0 0 3px 1px #b4c6fd;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 180px;
+      border-radius: 5px;
     }
   }
-}
-
-#testPaperDialog {
-  padding: 25px 15px;
-  .import_questions {
-    border: 1px solid #b4c6fd;
-    -webkit-box-shadow: 0 0 3px 1px #b4c6fd;
-    box-shadow: 0 0 3px 1px #b4c6fd;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 180px;
-    border-radius: 5px;
-  }
-}
 </style>
