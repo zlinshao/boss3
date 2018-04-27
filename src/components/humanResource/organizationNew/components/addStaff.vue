@@ -578,9 +578,6 @@
             if (res.data.code === '10030') {
               this.$emit('close', 'success');
               this.addStaffDialogVisible = false;
-          this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
-            localStorage.setItem('personal', JSON.stringify(res.data.data));           
-          });
               this.initial();
               this.$notify.success({
                 title: '成功',
@@ -611,7 +608,9 @@
             }
           });
         }
-
+        this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
+          localStorage.setItem('personal', JSON.stringify(res.data.data));           
+        });
       },
       selectDepart() {
         this.organizationDialog = true;

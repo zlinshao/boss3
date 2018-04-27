@@ -217,11 +217,12 @@ export default {
     };
   },
   created() {
-    this.landholder = JSON.parse(localStorage.personal);
+    
   },
 
   mounted() {
     this.myData(1);
+    this.landholder = JSON.parse(localStorage.personal);
   },
   watch: {
     keywords(val){
