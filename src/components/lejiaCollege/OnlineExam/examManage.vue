@@ -4,60 +4,33 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入标题" v-model="form.keywords" size="mini" clearable
-                      @keyup.enter.native="getLejiaTableData()">
-              <el-button slot="append" icon="el-icon-search" @click="getLejiaTableData()"></el-button>
+            <el-input placeholder="请输入标题" v-model="params.keywords" size="mini" clearable
+                      @keyup.enter.native="getExamData()">
+              <el-button slot="append" icon="el-icon-search" size="mini" @click="getExamData()"></el-button>
             </el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="success" @click="publicArticle">发布文章</el-button>
+            <el-button type="primary" size="mini" @click="examDialog = true">
+              <i class="iconfont icon-jinrukaoshi" style="font-size: 14px;"></i>&nbsp;新建考试
+            </el-button>
           </el-form-item>
         </el-form>
       </div>
     </div>
     <div class="highRanking">
       <div class="filter high_grade" :class="isHigh? 'highHide':''" style=" margin-top: -40px;">
-        <el-form :inline="true" :model="form" size="mini" label-width="100px">
+        <el-form :inline="true" size="mini" label-width="100px">
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
           </div>
           <el-row class="el_row_border">
-            <el-col :span="12">
-              <el-row>
-                <el-col :span="8">
-                  <div class="el_col_label">选择类别</div>
-                </el-col>
-                <el-col :span="16" class="el_col_option">
-                  <el-form-item>
-                    <el-select v-model="moduleId" clearable placeholder="请选择类别">
-                      <el-option v-for="(key,index) in dict.region" :label="key.dictionary_name" :value="key.id"
-                                 :key="index"></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-col>
-            <el-col :span="12">
-              <el-row>
-                <el-col :span="8">
-                  <div class="el_col_label">选择状态</div>
-                </el-col>
-                <el-col :span="16" class="el_col_option">
-                  <el-form-item>
-                    <el-select v-model="form.status" clearable placeholder="请选择状态">
-                      <el-option v-for="(key,index) in dict.status" :label="key.dictionary_name" :value="key.id"
-                                 :key="index"></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-col>
+
           </el-row>
           <div class="btnOperate">
-            <el-button size="mini" type="primary" @click="getLejiaTableData()">搜索</el-button>
+            <el-button size="mini" type="primary" @click="getExamData">搜索</el-button>
             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
             <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
           </div>
@@ -65,71 +38,170 @@
       </div>
     </div>
     <div class="main">
-      <div class="blueTable left_table">
-        <el-table
-          :data="tableData"
-          :empty-text='collectStatus'
-          v-loading="collectLoading"
-          element-loading-text="拼命加载中"
-          element-loading-spinner="el-icon-loading"
-          element-loading-background="rgba(255, 255, 255, 0)"
-          @row-contextmenu='openContextMenu'
-          @cell-dblclick='openDetail'
-          style="width: 100%">
-          <el-table-column
-            prop="title"
-            label="标题">
-          </el-table-column>
-          <el-table-column
-            prop="dict_ids"
-            label="类型">
-          </el-table-column>
-          <el-table-column
-            prop="staffs.name"
-            label="发布人">
-            <template slot-scope="scope">
-              <span v-if="scope.row.staffs && scope.row.staffs.name">{{scope.row.staffs && scope.row.staffs.name}}</span>
-              <span v-if="!(scope.row.staffs && scope.row.staffs.name)">暂无</span>
-            </template>
-          </el-table-column>
-          <el-table-column
-            prop="create_time"
-            label="创建时间">
-          </el-table-column>
-          <el-table-column
-            label="状态">
-            <template slot-scope="scope">
-              <el-button class="btnStatus" v-if="scope.row.statuss === '已发布'" type="primary" size="mini">
-                {{scope.row.statuss}}
-              </el-button>
-              <el-button class="btnStatus" v-if="scope.row.statuss === '已结束'" type="warning" size="mini">
-                {{scope.row.statuss}}
-              </el-button>
-              <el-button class="btnStatus" v-if="scope.row.statuss === '草稿'" type="info" size="mini">
-                {{scope.row.statuss}}
-              </el-button>
-              <el-tag type="success" v-if="scope.row.top !== null ">置顶</el-tag>
-              <el-tag type="warning" v-if="scope.row.fine !==null ">精华</el-tag>
-            </template>
-          </el-table-column>
-        </el-table>
+      <div class="myHouse">
+        <div>
+          <el-table
+            :data="tableData"
+            :empty-text='tableStatus'
+            v-loading="tableLoading"
+            element-loading-text="拼命加载中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(255, 255, 255, 0)"
+            @row-dblclick="dblClickTable"
+            @row-contextmenu='openContextMenu'
+            style="width: 100%">
+            <el-table-column
+              prop="name"
+              label="考试场次">
+              <template slot-scope="scope">
+                <span v-if="scope.row.name">{{scope.row.name}}</span>
+                <span v-if="!scope.row.name">暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="paper.name"
+              label="试卷名称">
+              <template slot-scope="scope">
+                <span v-if="scope.row.paper && scope.row.paper.name">{{scope.row.paper && scope.row.paper.name}}</span>
+                <span v-if="!(scope.row.paper && scope.row.paper.name)">暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="paper.category"
+              label="试卷类型">
+              <template slot-scope="scope">
+                <span v-if="scope.row.paper && scope.row.paper.category">{{scope.row.paper && scope.row.paper.category}}</span>
+                <span v-if="!(scope.row.paper && scope.row.paper.category)">暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="start_time"
+              label="开考时间">
+              <template slot-scope="scope">
+                <span v-if="scope.row.start_time">{{scope.row.start_time}}</span>
+                <span v-if="!scope.row.start_time">暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="duration"
+              label="考试时长">
+              <template slot-scope="scope">
+                <span v-if="scope.row.duration">{{scope.row.duration}}</span>
+                <span v-if="!scope.row.duration">暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="count"
+              label="总考生(人数)">
+              <template slot-scope="scope">
+                <span v-if="scope.row.count">{{scope.row.count}}</span>
+                <span v-if="!scope.row.count">暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="status"
+              label="考试状态">
+              <template slot-scope="scope">
+                <span v-if="scope.row.status">{{scope.row.status}}</span>
+                <span v-if="!scope.row.status">暂无</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        <div class="block page" style="float: right;">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="params.page"
+            :page-size="10"
+            layout="total, prev, pager, next, jumper"
+            :total="totalNum">
+          </el-pagination>
+        </div>
       </div>
-
-      <div class="block pages">
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="form.pages"
-          :page-size="form.list"
-          layout="total, prev, pager, next, jumper"
-          :total="totalNum">
-        </el-pagination>
-      </div>
+    </div>
+    <div id="examDialog">
+      <el-dialog :close-on-click-modal="false" :visible.sync="examDialog" title="新建考试" width="45%">
+        <div>
+          <div class="title">新建考试信息</div>
+          <div class="describe_border" style="padding: 25px 10px;">
+            <el-form size="mini" onsubmit="return false;" :model="formExam" label-width="100px">
+              <el-row :gutter="30">
+                <el-col :span="12">
+                  <el-form-item label="场次名称" required>
+                    <el-input v-model="formExam.name" placeholder="请输入场次"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="试卷类型" required>
+                    <el-select v-model="formExam.type" size="mini" placeholder="请选择" clearable>
+                      <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
+                        {{item.dictionary_name}}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="30">
+                <el-col :span="12">
+                  <el-form-item label="使用试卷" required>
+                    <el-select v-model="formExam.paper_id" size="mini" placeholder="请选择试卷" clearable>
+                      <el-option v-for="item in examType" :key="item.id" :label="item.name" :value="item.id">
+                        {{item.name}}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-checkbox label="试卷随机" style="line-height: 30px;"></el-checkbox>
+              </el-row>
+              <el-row :gutter="30">
+                <el-col :span="12">
+                  <el-form-item label="开考时间" required>
+                    <el-date-picker v-model="formExam.start_time" type="datetime" placeholder="请选择"
+                                    value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="试卷时长" required>
+                    <el-input placeholder="请输入分钟" v-model="formExam.duration">
+                      <template slot="append">分钟</template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="30">
+                <el-col :span="12">
+                  <el-form-item label="开考后">
+                    <el-input placeholder="请输入分钟" v-model="formExam.limited_time">
+                      <template slot="append">分钟</template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <span class="vt_align tips">* 设定时间后不能再登陆考试系统</span>
+              </el-row>
+              <!--<el-row :gutter="30">-->
+                <!--<el-col :span="12">-->
+                  <!--<el-form-item label="考生选择">-->
+                    <!--<el-input v-model="examinees_name" readonly @focus="chooseStaff" placeholder="请选择">-->
+                      <!--<template slot="append">-->
+                        <!--<div style="cursor: pointer;" @click="emptyStaff">清空</div>-->
+                      <!--</template>-->
+                    <!--</el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+              <!--</el-row>-->
+            </el-form>
+          </div>
+          <span slot="footer" class="dialog-footer">
+            <el-button size="small" @click="examDialog = false">取消</el-button>
+            <el-button size="small" type="primary" @click="saveExam">保存</el-button>
+          </span>
+        </div>
+      </el-dialog>
     </div>
 
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-               @clickOperateMore="clickEvent"></RightMenu>
-
+               @clickOperate="clickEvent"></RightMenu>
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
   </div>
 </template>
@@ -143,79 +215,64 @@
     name: 'exam-manage',
     data() {
       return {
-        urls: globalConfig.server,
+        activeName: 'first',
+        organizationDialog: false,
+        organizeType: '',
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
-        isHigh: false,
         lists: [],
-        /***********/
-        dict: {
-          region: [],
-          status: [],
-        },
-        form: {
-          list: 12,
-          dict_id: 361,
-          status: '',
-          keywords: '',
-          pages: 1,
-        },
+        tableStatus: ' ',
+        tableLoading: false,
         totalNum: 0,
         tableData: [],
-        pitch: '',
-        if_shows: '',
-        organizationDialog: false,
-        moduleId: '',
-        moduleType: 'lejiaCollege',
-        collectStatus: ' ',
-        collectLoading: false,
-      }
+        isHigh: false,
+        //考试列表分页搜索
+        params: {
+          page: 1,
+          limit: 10,
+          keywords: '',
+          type: ''
+        },
+        examType: [],
+        examDialog: false,  //新建考试模态框
+        testPaperDialog: false, //新建试卷模态框
+        paperTypeDialog: false,  //新建试卷 选择类型模态框
+        //新增考试表单
+        formExam: {
+          name: '',    //考试名称
+          start_time: '',  //开考时间
+          duration: '',   //考试时长
+          paper_id: '',    //试卷id
+          examinees: [],  //报考考生id
+          type: '',  //试卷类型
+          limited_time: '', //开考后多长时间不能登陆
+        },
+        examinees_name: '',//新建考试报名考生
+        // 新建试卷 类型和名称
+        paperTypeForm: {
+          category: '',
+          name: '',
+        },
+        paperId: '', //新增成功后的试卷id, 用于自己录入的时候使用
+      };
     },
-    mounted() {
-      this.getLejiaTableData();
-      this.getDict();
+    mounted(){
+      this.getExamData();
+      this.getDictionary();
     },
     activated() {
-      let refresh = this.$route.query.refresh;
-      if (refresh) {
-        this.getLejiaTableData();
-      }
+      this.getExamData();
+      this.getDictionary();
     },
-    created() {
-      this.form.pages = this.currentPage;
+    watch: {
+      examDialog(val) {
+        if (val) {
+          this.initial();
+        }
+      },
     },
     methods: {
-      getDict() {
-        this.$http.get(this.urls + 'setting/dictionary/361').then((res) => {
-          this.dict.region = res.data.data;
-        });
-        this.$http.get(this.urls + 'setting/dictionary/147').then((res) => {
-          this.dict.status = res.data.data;
-        });
-      },
-      getLejiaTableData() {
-        this.collectLoading = true;
-        this.collectStatus = ' ';
-        this.$http.get(this.urls + 'oa/portal/', {params: this.form}).then((res) => {
-          this.isHigh = false;
-          this.collectLoading = false;
-          if (res.data.code === '80000') {
-            this.tableData = res.data.data.data;
-            this.totalNum = res.data.data.count;
-          } else {
-            this.collectStatus = '暂无数据';
-            this.tableData = [];
-            this.totalNum = 0;
-          }
-        });
-      },
-      // 详情
-      openDetail(row) {
-        var data = {ids: row.id, detail: 'port'};
-        this.$store.dispatch('articleDetail', data);
-        this.$router.push({path: '/Infodetails', query: data});
-      },
       // 高级
       highGrade() {
         this.isHigh = !this.isHigh;
@@ -223,100 +280,126 @@
       // 重置
       resetting() {
         this.isHigh = false;
-        this.form.dict_id = '';
-        this.form.status = '';
-        this.form.keywords = '';
-        this.getLejiaTableData();
+
       },
-      // 文章发布
-      publicArticle() {
-        this.$store.dispatch('deleteArticleId');
-        this.$router.push({path: '/publicArticle', query: {moduleType: this.moduleType}});
-        this.$store.dispatch('moduleType', this.moduleType);
+      dblClickTable() {
+
+      },
+      getExamData() {
+        this.tableStatus = " ";
+        this.tableLoading = true;
+        this.$http.get(globalConfig.server + 'exam', {params: this.params}).then((res) => {
+          this.tableLoading = false;
+          if (res.data.code === '30000') {
+            this.tableData = res.data.data.data;
+            this.totalNum = res.data.data.count;
+          } else {
+            this.tableData = [];
+            this.totalNum = 0;
+            this.tableStatus = "暂无数据";
+          }
+        });
+      },
+      saveExam() {
+        this.$http.post(globalConfig.server + 'exam', this.formExam).then((res) => {
+          if (res.data.code === '30010') {
+            this.examDialog = false;
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+
+      },
+      getDictionary() {
+        //试卷类型
+        this.dictionary(613).then((res) => {
+          this.examType = res.data;
+        });
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
-        this.form.pages = val;
-        this.$store.dispatch('lejiaPage', val);
-        this.getLejiaTableData();
-
+        this.params.page = val;
+        this.getExamData();
       },
-
-      // 右键
+      //右键菜单
       openContextMenu(row, event) {
-        this.pitch = row.id;
-        console.log(row.statuss);
-        if (row.statuss !== '已发布') {
-          this.statuss = '已发布';
-          this.lists = [
-            {clickIndex: 'revise', headIcon: 'iconfont icon-bianji--', label: '编辑'},
-            {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除'},
-            {clickIndex: 'grounding', headIcon: 'iconfont icon-shangjia--', label: '上架'},
-          ];
-        } else {
-          this.statuss = '已结束';
-          if (row.top === null && row.fine === null) {
-            this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'iconfont icon-xiajia--', label: '下架'},
-              {clickIndex: 'top', headIcon: 'iconfont icon-zhiding--', label: '置顶',},
-              {clickIndex: 'essence', headIcon: 'iconfont icon-jinghua--', label: '精华',},
-            ];
-          } else if (row.top !== null && row.fine === null) {
-            this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'iconfont icon-xiajia--', label: '下架', top: true},
-              {clickIndex: 'top', headIcon: 'el-icon-download', label: '取消置顶',},
-              {clickIndex: 'essence', headIcon: 'iconfont icon-jinghua--', label: '精华',},
-            ];
-          } else if (row.top === null && row.fine !== null) {
-            this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'iconfont icon-xiajia--', label: '下架', fine: true},
-              {clickIndex: 'top', headIcon: 'iconfont icon-zhiding--', label: '置顶',},
-              {clickIndex: 'essence', headIcon: 'iconfont icon-jinghua--', label: '取消精华',},
-            ];
-          } else {
-            this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'iconfont icon-xiajia--', label: '下架', top: true, fine: true},
-              {clickIndex: 'top', headIcon: 'el-icon-download', label: '取消置顶',},
-              {clickIndex: 'essence', headIcon: 'iconfont icon-jinghua--', label: '取消精华',},
-            ];
+        this.lists = [
+          {
+            clickIndex: "editExam",
+            headIcon: "el-icon-edit",
+            label: "编辑考试"
+          },
+          {
+            clickIndex: "deleteExam",
+            headIcon: "el-icon-delete",
+            label: "删除考试"
+          },
+          {
+            clickIndex: "manageExaminee",
+            headIcon: "el-icon-view",
+            label: "查看/添加考生"
+          },
+          {
+            clickIndex: "informExaminee",
+            headIcon: "el-icons-fa-mail-reply",
+            label: "通知考生"
           }
-
-        }
-        this.contextMenuParam(event);
+        ];
+        let e = event || window.event; //support firefox contextmenu
+        this.show = false;
+        this.rightMenuX =
+          e.clientX +
+          document.documentElement.scrollLeft -
+          document.documentElement.clientLeft;
+        this.rightMenuY =
+          e.clientY +
+          document.documentElement.scrollTop -
+          document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true;
+        });
       },
-      // 右键回调
-      clickEvent(val) {
-        switch (val.clickIndex) {
-          case 'revise':
-            this.$router.push({path: '/publicArticle', query: {ids: this.pitch, moduleType: this.moduleType}});
-            this.$store.dispatch('moduleType', this.moduleType);
+      //右键回调事件
+      clickEvent(index) {
+        switch (index) {
+          case 'editExam':
+
             break;
-          case 'delete':
-            this.deleteInfo(this.pitch);
+          case 'deleteExam':
+            this.$confirm("删除后不可恢复, 是否继续?", "提示", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "warning"
+            }).then(() => {
+
+              }).catch(() => {
+                this.$message({
+                  type: "info",
+                  message: "已取消删除"
+                });
+              });
             break;
-          case 'grounding':
-            var top_fine = {};
-            this.upperShelf(this.pitch, '上架', top_fine);
+          case 'manageExaminee':
+
             break;
-          case 'undercarriage':
-            var top_fine = {};
-            if (val.top) {
-              top_fine.top = true;
-            }
-            if (val.fine) {
-              top_fine.fine = true;
-            }
-            this.upperShelf(this.pitch, '下架', top_fine);
+
+          case 'informExaminee':
+
             break;
-          case 'top':
-            this.top(this.pitch, '置顶');
-            break;
-          case 'essence':
-            this.essence(this.pitch, '精华');
-            break;
+
+
         }
       },
       //关闭右键菜单
@@ -342,116 +425,24 @@
       closeOrganization() {
         this.organizationDialog = false;
       },
-      // 删除
-      deleteInfo(id) {
-        this.$confirm('删除后不可恢复, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$http.get(this.urls + 'oa/portal/delete/' + id).then((res) => {
-            if (res.data.code === '80040') {
-              this.getLejiaTableData();
-              this.prompt(1, res.data.msg);
-            } else {
-              this.prompt(2, res.data.msg);
-            }
-          });
-        }).catch(() => {
-          this.$notify.info({
-            title: '提示',
-            message: '已取消删除'
-          });
-        });
-      },
+      initial() {
+        this.formExam = {
+          name: '',    //考试名称
+          start_time: '',  //开考时间
+          duration: '',   //考试时长
+          paper_id: '',    //试卷id
+          examinees: [],  //报考考生id
+          type: '',  //试卷类型
+          limited_time: '', //开考后多长时间不能登陆
+        };
+        this.examinees_name = '';//新建考试报名考生
+        // 新建试卷 类型和名称
+        this.paperTypeForm = {
+          type: '',
+          name: '',
+        };
 
-      // 上架下架
-      upperShelf(id, title, status) {
-        console.log(status);
-        this.$confirm('此操作将' + title + '文章, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$http.get(this.urls + 'oa/portal/if_show/' + id).then((res) => {
-            if (res.data.code === '80080' || res.data.code === '80010') {
-              this.getLejiaTableData();
-              this.prompt(1, res.data.msg);
-              if (title === '下架') {
-                if (status.top) {
-                  this.top(id, '置顶');
-                }
-                if (status.fine) {
-                  this.essence(id, '精华');
-                }
-              }
-            } else {
-              this.prompt(2, res.data.msg);
-            }
-          });
-        }).catch(() => {
-          this.$notify.info({
-            title: '提示',
-            message: '已取消操作'
-          });
-        });
       },
-
-      // 提示信息
-      prompt(val, info) {
-        if (val === 1) {
-          this.$notify.success({
-            title: '成功',
-            message: info,
-          });
-        } else {
-          this.$notify.warning({
-            title: '提示',
-            message: info,
-          });
-        }
-      },
-
-      //置顶
-      top(id, info) {
-        this.$http.put(globalConfig.server + "oa/portal/status/" + id, {type: 'top'}).then((res) => {
-          if (res.data.code == "800100" || res.data.code == "800110") {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
-            this.getLejiaTableData();
-            this.getDict();
-          }
-        });
-      },
-      //精华
-      essence(id, info) {
-        this.$http.put(globalConfig.server + "oa/portal/status/" + id, {type: 'fine'}).then((res) => {
-          if (res.data.code == "800100" || res.data.code == "800110") {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
-            this.getLejiaTableData();
-            this.getDict();
-          }
-        });
-      },
-    },
-    watch: {
-      moduleId(val) {
-        if (!val) {
-          this.form.dict_id = 361;
-        } else {
-          this.form.dict_id = val;
-        }
-      },
-    },
-    computed: {
-      currentPage() {
-        return this.$store.state.article.lejia_page;
-      }
     },
 
   }
@@ -459,17 +450,19 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-  .el-table th {
-    text-align: left !important;
+  #examDialog {
+    .vt_align {
+      vertical-align: middle;
+      vertical-align: -webkit-baseline-middle;
+    }
+    .tips {
+      color: #409EFF;
+      opacity: .7;
+    }
+    .dialog-footer {
+      text-align: center;
+      display: block;
+      margin-top: 20px;
+    }
   }
-
-  .el-table__body td {
-    text-align: left !important;
-  }
-
-  .btnStatus {
-    cursor: inherit;
-    min-width: 68px;
-  }
-
 </style>
