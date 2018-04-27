@@ -67,11 +67,11 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop="question_count"
+              prop="count"
               label="总题数">
               <template slot-scope="scope">
-                <span v-if="scope.row.question_count">{{scope.row.question_count}}</span>
-                <span v-if="!scope.row.question_count">暂无</span>
+                <span v-if="scope.row.count">{{scope.row.count}}</span>
+                <span v-if="!scope.row.count">暂无</span>
               </template>
             </el-table-column>
             <el-table-column
@@ -173,19 +173,9 @@
           type: ''
         },
         examType: [],
-        examDialog: false,  //新建考试模态框
         testPaperDialog: false, //新建试卷模态框
         paperTypeDialog: false,  //新建试卷 选择类型模态框
-        //新增考试表单
-        formExam: {
-          name: '',    //考试名称
-          start_time: '',  //开考时间
-          duration: '',   //考试时长
-          paper_id: '',    //试卷id
-          examinees: [],  //报考考生id
-          type: '',  //试卷类型
-          limited_time: '', //开考后多长时间不能登陆
-        },
+
         examinees_name: '',//新建考试报名考生
         // 新建试卷 类型和名称
         paperTypeForm: {
@@ -193,16 +183,24 @@
           name: '',
         },
         paperId: '', //新增成功后的试卷id, 用于自己录入的时候使用
+        testPaperId: '',
       };
     },
 
-    mounted(){
+    mounted() {
       this.getTestPaperData();
       this.getDictionary();
     },
     activated() {
       this.getTestPaperData();
       this.getDictionary();
+    },
+    watch: {
+      paperTypeDialog(val) {
+        if (val) {
+          this.initial();
+        }
+      },
     },
     methods: {
       // 高级
@@ -232,8 +230,8 @@
           });
           return;
         }
-        this.$http.post(globalConfig.server+ 'exam/paper', this.paperTypeForm).then((res)=>{
-          if(res.data.code === '36010') {
+        this.$http.post(globalConfig.server + 'exam/paper', this.paperTypeForm).then((res) => {
+          if (res.data.code === '36010') {
             this.paperTypeDialog = false;
             this.testPaperDialog = true;
             this.$notify.success({
@@ -241,7 +239,7 @@
               message: res.data.msg
             });
             this.paperId = res.data.data;
-          }else{
+          } else {
             this.$notify.warning({
               title: '警告',
               message: res.data.msg
@@ -295,19 +293,20 @@
       },
       //右键菜单
       openContextMenu(row, event) {
+        this.testPaperId = row.id;
         this.lists = [
           {
-            clickIndex: "configExamDialog",
+            clickIndex: "editTestPaper",
             headIcon: "el-icon-edit",
             label: "编辑试卷"
           },
           {
-            clickIndex: "deleteExam",
+            clickIndex: "deleteTestPaper",
             headIcon: "el-icon-delete",
             label: "删除试卷"
           },
           {
-            clickIndex: "lookExamDialog",
+            clickIndex: "lookTestPaper",
             headIcon: "el-icons-fa-mail-reply",
             label: "预览试卷"
           }
@@ -330,28 +329,40 @@
       },
       //右键回调事件
       clickEvent(index) {
-        //右键修改
-        if (index == "configExamDialog") {
-          // var data = {ids: row.id, detail: 'port'};
-          this.$router.push({path: "/configExam"});
-        }
-        if (index == "deleteExam") {
-          this.$confirm("删除后不可恢复, 是否继续?", "提示", {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning"
-          })
-            .then(() => {
-            })
-            .catch(() => {
-              this.$message({
-                type: "info",
-                message: "已取消删除"
+        switch (index) {
+          case 'editTestPaper':
+            this.$router.push({path: "/configExam", query: {id: this.testPaperId }});
+            break;
+          case 'deleteTestPaper':
+            this.$confirm("删除后不可恢复, 是否继续?", "提示", {
+              confirmButtonText: "确定",
+              cancelButtonText: "取消",
+              type: "warning"
+            }).then(() => {
+              this.$http.post(globalConfig.server+ 'exam/paper/delete/'+this.testPaperId).then((res)=>{
+                if(res.data.code==='36000'){
+                  this.$notify.success({
+                    title: "成功",
+                    message: res.data.msg
+                  });
+                  this.getTestPaperData();
+                }else{
+                  this.$notify.warning({
+                    title: "警告",
+                    message: res.data.msg
+                  });
+                }
               });
-            });
-        }
-        if (index == "lookExamDialog") {
-          this.$router.push({path: "/previewExam"});
+              }).catch(() => {
+                this.$notify.info({
+                  title: "提示",
+                  message: "已取消删除"
+                });
+              });
+            break;
+          case 'lookTestPaper':
+            this.$router.push({path: "/previewExam"});
+            break;
         }
       },
       //关闭右键菜单
@@ -378,16 +389,6 @@
         this.organizationDialog = false;
       },
       initial() {
-        this.formExam = {
-          name: '',    //考试名称
-          start_time: '',  //开考时间
-          duration: '',   //考试时长
-          paper_id: '',    //试卷id
-          examinees: [],  //报考考生id
-          type: '',  //试卷类型
-          limited_time: '', //开考后多长时间不能登陆
-        };
-        this.examinees_name = '';//新建考试报名考生
         // 新建试卷 类型和名称
         this.paperTypeForm = {
           type: '',
@@ -396,13 +397,7 @@
 
       },
     },
-    watch: {
-      paperTypeDialog(val) {
-        if (val) {
-          this.initial();
-        }
-      },
-    },
+
   }
 </script>
 
