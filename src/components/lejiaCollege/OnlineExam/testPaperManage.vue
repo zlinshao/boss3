@@ -4,7 +4,7 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入标题" v-model="params.keywords" size="mini" clearable
+            <el-input placeholder="试卷名称" v-model="params.search" size="mini" clearable
                       @keyup.enter.native="getTestPaperData()">
               <el-button slot="append" icon="el-icon-search" @click="getTestPaperData()"></el-button>
             </el-input>
@@ -24,10 +24,25 @@
       <div class="filter high_grade" :class="isHigh? 'highHide':''" style=" margin-top: -40px;">
         <el-form :inline="true" size="mini" label-width="100px">
           <div class="filterTitle">
-            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索{{params}}
           </div>
           <el-row class="el_row_border">
-
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">试卷类型</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select v-model="params.category" clearable placeholder="请选择">
+                      <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
+                        {{item.dictionary_name}}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
           </el-row>
           <div class="btnOperate">
             <el-button size="mini" type="primary" @click="getTestPaperData">搜索</el-button>
@@ -169,8 +184,8 @@
         params: {
           page: 1,
           limit: 10,
-          keywords: '',
-          type: ''
+          search: '',
+          category: '',
         },
         examType: [],
         testPaperDialog: false, //新建试卷模态框
@@ -209,12 +224,10 @@
       },
       // 重置
       resetting() {
-        this.isHigh = false;
-
+        this.params.category = '';
+        this.getTestPaperData();
       },
-      dblClickTable() {
-
-      },
+      dblClickTable() {},
       paperTypeBtn() {
         if (!this.paperTypeForm.category) {
           this.$notify.warning({
@@ -230,10 +243,30 @@
           });
           return;
         }
+        this.paperTypeDialog = false;
+        this.testPaperDialog = true;
+      },
+      getDictionary() {
+        //试卷类型
+        this.dictionary(613).then((res) => {
+          this.examType = res.data;
+        });
+      },
+      //批量导入
+      importQuestion() {
+        this.testPaperDialog = false;
+        var type_name = $('#testPaperType').val();
+        this.$router.push({
+          path: "/batchQuestions",
+          query: {name: this.paperTypeForm.name, type_id: this.paperTypeForm.category, type_name: type_name}
+        });
+      },
+      //自己录入
+      myselfQuestion() {
+        this.testPaperDialog = false;
+        //创建试卷
         this.$http.post(globalConfig.server + 'exam/paper', this.paperTypeForm).then((res) => {
           if (res.data.code === '36010') {
-            this.paperTypeDialog = false;
-            this.testPaperDialog = true;
             this.$notify.success({
               title: '成功',
               message: res.data.msg
@@ -246,23 +279,6 @@
             });
           }
         });
-      },
-      getDictionary() {
-        //试卷类型
-        this.dictionary(613).then((res) => {
-          this.examType = res.data;
-        });
-      },
-      importQuestion() {
-        this.testPaperDialog = false;
-        var type_name = $('#testPaperType').val();
-        this.$router.push({
-          path: "/batchQuestions",
-          query: {name: this.paperTypeForm.name, type_id: this.paperTypeForm.category, type_name: type_name}
-        });
-      },
-      myselfQuestion() {
-        this.testPaperDialog = false;
         this.$router.push({
           path: "/myselfQuestions",
           query: {name: this.paperTypeForm.name, paper_id: this.paperId}
@@ -273,6 +289,7 @@
         this.tableLoading = true;
         this.$http.get(globalConfig.server + 'exam/paper', {params: this.params}).then((res) => {
           this.tableLoading = false;
+          this.isHigh = false;
           if (res.data.code === '36000') {
             this.testPaperTableData = res.data.data.data;
             this.totalNum = res.data.data.count;

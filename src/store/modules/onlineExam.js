@@ -3,9 +3,9 @@
  */
 const onlineExam = {
   state: {
-    test_paper : {},
-    myself_test_paper : {},
-
+    test_paper : {}, //批量导入
+    myself_test_paper : {}, //自己录入
+    edit_paper_id: '', //编辑试卷id
   },
   mutations: {
     TEST_PAPER:(state,view) => {
@@ -18,6 +18,11 @@ const onlineExam = {
         state.myself_test_paper = view;
       }
     },
+    EDIT_PAPER_ID:(state,view) => {
+      if(view){
+        state.edit_paper_id = view;
+      }
+    },
   },
   actions: {
     testPaper({commit},view){
@@ -25,6 +30,9 @@ const onlineExam = {
     },
     myselfTestPaper({commit},view){
       commit('MYSELF_TEST_PAPER',view);
+    },
+    editPaperId({commit},view){
+      commit('EDIT_PAPER_ID',view);
     },
 
   }
