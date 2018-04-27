@@ -12,6 +12,11 @@
           <el-form-item>
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="paperTypeDialog = true">
+              <i class="iconfont icon-xinjianshijuan" style="font-size: 14px;"></i>&nbsp;新建试卷
+            </el-button>
+          </el-form-item>
         </el-form>
       </div>
     </div>
@@ -48,18 +53,34 @@
             <el-table-column
               prop="name"
               label="试卷名称">
+              <template slot-scope="scope">
+                <span v-if="scope.row.name">{{scope.row.name}}</span>
+                <span v-if="!scope.row.name">暂无</span>
+              </template>
             </el-table-column>
             <el-table-column
               prop="category"
               label="试卷类型">
+              <template slot-scope="scope">
+                <span v-if="scope.row.category">{{scope.row.category}}</span>
+                <span v-if="!scope.row.category">暂无</span>
+              </template>
             </el-table-column>
             <el-table-column
               prop="question_count"
               label="总题数">
+              <template slot-scope="scope">
+                <span v-if="scope.row.question_count">{{scope.row.question_count}}</span>
+                <span v-if="!scope.row.question_count">暂无</span>
+              </template>
             </el-table-column>
             <el-table-column
               prop="score"
               label="总分值">
+              <template slot-scope="scope">
+                <span v-if="scope.row.score">{{scope.row.score}}</span>
+                <span v-if="!scope.row.score">暂无</span>
+              </template>
             </el-table-column>
           </el-table>
         </div>
@@ -75,7 +96,48 @@
         </div>
       </div>
     </div>
-
+    <div id="paperTypeDialog">
+      <el-dialog :close-on-click-modal="false" :visible.sync="paperTypeDialog" title="新建试卷" width="30%">
+        <el-form :model="paperTypeForm" onsubmit="return false;" label-width="100px">
+          <el-row>
+            <el-form-item label="试卷类型" required>
+              <el-select v-model="paperTypeForm.category" id="testPaperType" size="mini" placeholder="请选择" clearable>
+                <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
+                  {{item.dictionary_name}}
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-row>
+          <el-row>
+            <el-form-item label="试卷名称" required>
+              <el-input v-model="paperTypeForm.name" size="mini" placeholder="请输入名称" clearable></el-input>
+            </el-form-item>
+          </el-row>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+            <el-button size="small" @click="paperTypeDialog = false">取消</el-button>
+            <el-button size="small" type="primary" @click="paperTypeBtn">保存</el-button>
+        </span>
+      </el-dialog>
+    </div>
+    <div id="testPaperDialog">
+      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="新建试卷" width="38%"
+                 style="margin-top:18vh">
+        <el-row :gutter="30" style="margin-bottom:26px;">
+          <el-col :span="12">
+            <div class="import_questions" @click="importQuestion">
+              <div><img src="../../../assets/images/examination/import_question.svg"><br/>批量导入试题</div>
+            </div>
+          </el-col>
+          <el-col :span="12">
+            <div class="import_questions" @click="myselfQuestion"
+                 style="border: 1px solid #fda2cc;box-shadow: 0 0 3px 1px #fda2cc;">
+              <div><img src="../../../assets/images/examination/self_entry.svg"><br/>自己录入</div>
+            </div>
+          </el-col>
+        </el-row>
+      </el-dialog>
+    </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
@@ -134,8 +196,13 @@
       };
     },
 
+    mounted(){
+      this.getTestPaperData();
+      this.getDictionary();
+    },
     activated() {
       this.getTestPaperData();
+      this.getDictionary();
     },
     methods: {
       // 高级
@@ -149,6 +216,59 @@
       },
       dblClickTable() {
 
+      },
+      paperTypeBtn() {
+        if (!this.paperTypeForm.category) {
+          this.$notify.warning({
+            title: '警告',
+            message: '试卷类型不能为空'
+          });
+          return;
+        }
+        if (!this.paperTypeForm.name) {
+          this.$notify.warning({
+            title: '警告',
+            message: '试卷名称不能为空'
+          });
+          return;
+        }
+        this.$http.post(globalConfig.server+ 'exam/paper', this.paperTypeForm).then((res)=>{
+          if(res.data.code === '36010') {
+            this.paperTypeDialog = false;
+            this.testPaperDialog = true;
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.paperId = res.data.data;
+          }else{
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
+      getDictionary() {
+        //试卷类型
+        this.dictionary(613).then((res) => {
+          this.examType = res.data;
+        });
+      },
+      importQuestion() {
+        this.testPaperDialog = false;
+        var type_name = $('#testPaperType').val();
+        this.$router.push({
+          path: "/batchQuestions",
+          query: {name: this.paperTypeForm.name, type_id: this.paperTypeForm.category, type_name: type_name}
+        });
+      },
+      myselfQuestion() {
+        this.testPaperDialog = false;
+        this.$router.push({
+          path: "/myselfQuestions",
+          query: {name: this.paperTypeForm.name, paper_id: this.paperId}
+        });
       },
       getTestPaperData() {
         this.tableStatus = " ";
@@ -257,15 +377,49 @@
       closeOrganization() {
         this.organizationDialog = false;
       },
+      initial() {
+        this.formExam = {
+          name: '',    //考试名称
+          start_time: '',  //开考时间
+          duration: '',   //考试时长
+          paper_id: '',    //试卷id
+          examinees: [],  //报考考生id
+          type: '',  //试卷类型
+          limited_time: '', //开考后多长时间不能登陆
+        };
+        this.examinees_name = '';//新建考试报名考生
+        // 新建试卷 类型和名称
+        this.paperTypeForm = {
+          type: '',
+          name: '',
+        };
 
+      },
     },
     watch: {
-
+      paperTypeDialog(val) {
+        if (val) {
+          this.initial();
+        }
+      },
     },
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-
+  #testPaperDialog {
+    padding: 25px 15px;
+    .import_questions {
+      border: 1px solid #b4c6fd;
+      -webkit-box-shadow: 0 0 3px 1px #b4c6fd;
+      box-shadow: 0 0 3px 1px #b4c6fd;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 180px;
+      border-radius: 5px;
+    }
+  }
 </style>
