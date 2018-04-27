@@ -1254,6 +1254,7 @@
         this.$http.get(globalConfig.server + 'manager/staff', {params: this.params}).then((res) => {
           this.userCollectLoading = false;
           this.isHigh = false;
+
           if (res.data.code === '10000') {
             this.staffTableData = res.data.data.data;
             this.totalStaffNum = res.data.data.count;

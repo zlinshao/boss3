@@ -46,8 +46,8 @@
               <div class="staff_name">
                 <div>
                   <span>{{landholder && landholder.name}}</span>&nbsp;&nbsp;
-                  <span v-for="key in landholder && landholder.org" :key="key.name">
-                    <span>{{key && key.name}}</span>
+                  <span v-for="key in landholder && landholder.role" :key="key.display_name">
+                    <span>{{key && key.display_name}}</span>
                   </span>
                 </div>
               </div>
@@ -122,8 +122,8 @@
                   <div class="staff_name">
                     <div>
                       <span>{{landholder && landholder.name}}</span>&nbsp;&nbsp;
-                      <span v-for="key in landholder && landholder.org" :key="key.name">
-                        <span>{{key && key.name}}</span>
+                      <span v-for="key in landholder && landholder.role" :key="key.display_name">
+                        <span>{{key && key.display_name}}</span>
                       </span>
                     </div>
                   </div>
