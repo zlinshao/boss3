@@ -4,7 +4,7 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入标题" v-model="params.keywords" size="mini" clearable
+            <el-input placeholder="考试场次" v-model="params.search" size="mini" clearable
                       @keyup.enter.native="getExamData()">
               <el-button slot="append" icon="el-icon-search" size="mini" @click="getExamData()"></el-button>
             </el-input>
@@ -27,7 +27,37 @@
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
           </div>
           <el-row class="el_row_border">
-
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">试卷类型</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select v-model="params.category" clearable placeholder="请选择">
+                      <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
+                        {{item.dictionary_name}}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">考试状态</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select v-model="params.status" clearable placeholder="请选择">
+                      <el-option v-for="item in examStatus" :label="item.name" :value="item.id"
+                                 :key="item.id"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
           </el-row>
           <div class="btnOperate">
             <el-button size="mini" type="primary" @click="getExamData">搜索</el-button>
@@ -109,7 +139,7 @@
             </el-table-column>
           </el-table>
         </div>
-        <div class="block page" style="float: right;">
+        <div class="block pages" style="float: right;">
           <el-pagination
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -147,13 +177,13 @@
                 <el-col :span="12">
                   <el-form-item label="使用试卷" required>
                     <el-select v-model="formExam.paper_id" size="mini" placeholder="请选择试卷" clearable>
-                      <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
-                        {{item.dictionary_name}}
+                      <el-option v-for="item in useTestPapers" :key="item.id" :label="item.name" :value="item.id">
+                        {{item.name}}
                       </el-option>
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-checkbox label="试卷随机" style="line-height: 30px;"></el-checkbox>
+                <el-checkbox label="试卷随机" v-model="formExam.rand" style="line-height: 30px;"></el-checkbox>
               </el-row>
               <el-row :gutter="30">
                 <el-col :span="12">
@@ -232,13 +262,21 @@
         params: {
           page: 1,
           limit: 10,
-          keywords: '',
-          category: ''
+          search: '',
+          category: '',  //试卷类型
+          status: '',   //考试状态
         },
+        //考试状态
+        examStatus: [
+          {id: 1, name: '未开始'},
+          {id: 2, name: '已开始'},
+          {id: 3, name: '已结束'},
+        ],
         examType: [],
         examDialog: false,  //新建考试模态框
         //新增考试表单
         formExam: {
+          rand: true,
           name: '',    //考试名称
           start_time: '',  //开考时间
           duration: '',   //考试时长
@@ -246,7 +284,9 @@
           category: '',  //试卷类型
           late_tolerance: '', //开考后多长时间不能登陆
         },
+
         examId: '', //考试场次的id
+        useTestPapers: [],
       };
     },
     mounted() {
@@ -261,8 +301,41 @@
       examDialog(val) {
         if (val) {
           this.initial();
-          if(this.examId){
+          if (this.examId) {
             this.getExamDetail();
+          }
+        }
+      },
+      "formExam.category": {
+        deep: true,
+        handler(val, oldVal) {
+          if (val) {
+            this.$http.get(globalConfig.server + 'exam/paper/search?category=' + val).then((res) => {
+              if (res.data.code === '36000') {
+                this.useTestPapers = res.data.data;
+              } else {
+                this.useTestPapers = [];
+              }
+            });
+          }
+        }
+      },
+      "formExam.rand": {
+        deep: true,
+        handler(val, oldVal) {
+          if (val) {
+            if (this.useTestPapers.length < 1) {
+              this.$notify.warning({
+                title: '警告',
+                message: '没有可使用的试卷'
+              });
+              this.formExam.rand = false;
+            } else {
+              var key = Math.floor((Math.random() * this.useTestPapers.length));
+              this.formExam.paper_id = this.useTestPapers[key].id;
+            }
+          } else {
+
           }
         }
       },
@@ -274,25 +347,27 @@
       },
       // 重置
       resetting() {
-        this.isHigh = false;
-
+        this.params.category = '';
+        this.params.status = '';
+        this.getExamData();
       },
       dblClickTable() {
 
       },
-      getExamDetail(){
-        this.$http.get(globalConfig.server+'exam/'+this.examId).then((res)=>{
-          if(res.data.code === '30000') {
+      //考试详情
+      getExamDetail() {
+        this.$http.get(globalConfig.server + 'exam/' + this.examId).then((res) => {
+          if (res.data.code === '30000') {
             let detail = res.data.data;
-            if(detail) {
+            if (detail) {
               this.formExam.name = detail.name;
               this.formExam.start_time = detail.start_time;
               this.formExam.duration = detail.duration;
-              this.formExam.paper_id = detail.paper_id;
-              this.formExam.category = detail.category;
+              this.formExam.category = detail.paper && detail.paper.category_id;
               this.formExam.late_tolerance = detail.late_tolerance;
+              this.formExam.paper_id = detail.paper && detail.paper.id;
             }
-          }else{
+          } else {
             this.$notify.warning({
               title: '警告',
               message: res.data.msg
@@ -300,11 +375,13 @@
           }
         });
       },
+      //考试列表
       getExamData() {
         this.tableStatus = " ";
         this.tableLoading = true;
         this.$http.get(globalConfig.server + 'exam', {params: this.params}).then((res) => {
           this.tableLoading = false;
+          this.isHigh = false;
           if (res.data.code === '30000') {
             this.tableData = res.data.data.data;
             this.totalNum = res.data.data.count;
@@ -319,15 +396,15 @@
           }
         });
       },
+      //保存/新增试卷
       saveExam() {
-        let header='';
-        if(this.examId){
-          header = this.$http.put(globalConfig.server + 'exam/'+this.examId, this.formExam);
-        }else{
+        let header = '';
+        if (this.examId) {
+          header = this.$http.put(globalConfig.server + 'exam/' + this.examId, this.formExam);
+        } else {
           header = this.$http.post(globalConfig.server + 'exam', this.formExam);
         }
         header.then((res) => {
-
           if (res.data.code === '30010') {
             this.examDialog = false;
             this.examId = '';
@@ -335,6 +412,8 @@
               title: '成功',
               message: res.data.msg
             });
+            this.getExamData();
+
           } else {
             this.$notify.warning({
               title: '警告',
@@ -342,7 +421,6 @@
             });
           }
         });
-
       },
       getDictionary() {
         //试卷类型
@@ -412,13 +490,13 @@
               type: "warning"
             }).then(() => {
               this.$http.post(globalConfig.server + 'exam/delete/' + this.examId).then((res) => {
-                if(res.data.code==="30010"){
+                if (res.data.code === "30010") {
                   this.$notify.warning({
                     title: '警告',
                     message: res.data.msg
                   });
                   this.getExamData();
-                }else{
+                } else {
                   this.$notify.warning({
                     title: '警告',
                     message: res.data.msg
@@ -468,6 +546,7 @@
       },
       initial() {
         this.formExam = {
+          rand: false,   //默认0 勾选之后为1
           name: '',    //考试名称
           start_time: '',  //开考时间
           duration: '',   //考试时长

@@ -59,10 +59,10 @@
           <el-checkbox v-model="formbox[key] && formbox[key].check"></el-checkbox>&nbsp;&nbsp;&nbsp;{{key+1}}.<span
           style="color:#6a8dfb; margin-left:20px;">单选题</span>
           <span class="ques_score">({{item.score}}分)</span>
-          <span class="remove">移除</span>
+          <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question">编辑</span>
           <span class="move_down" @click="moveDown(item.id)">下移</span>
-          <span class="move_up"  @click="moveUp(item.id)">上移</span>
+          <span class="move_up" @click="moveUp(item.id)">上移</span>
           <p style="margin-left:30px;line-height:30px;">{{item.stem}}</p>
           <div style="width:98%;margin-left:2%;">
             <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:25px;height: 25px;">
@@ -77,7 +77,7 @@
           <el-checkbox v-model="formbox[key] && formbox[key].check"></el-checkbox>&nbsp;&nbsp;&nbsp;{{key+1}}.<span
           style="color:#6a8dfb; margin-left:20px;">多选题</span>
           <span class="ques_score">({{item.score}}分)</span>
-          <span class="remove">移除</span>
+          <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question">编辑</span>
           <span class="move_down" @click="moveDown(item.id)">下移</span>
           <span class="move_up" @click="moveUp(item.id)">上移</span>
@@ -94,7 +94,7 @@
           <el-checkbox v-model="formbox[key] && formbox[key].check"></el-checkbox>&nbsp;&nbsp;&nbsp; {{key+1}}.<span
           style="color:#6a8dfb; margin-left:20px;">判断题</span>
           <span class="ques_score">({{item.score}}分)</span>
-          <span class="remove">移除</span>
+          <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question">编辑</span>
           <span class="move_down" @click="moveDown(item.id)">下移</span>
           <span class="move_up" @click="moveUp(item.id)">上移</span>
@@ -108,11 +108,12 @@
             </el-col>
           </div>
         </div>
-        <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===157 || item.category===158">
+        <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
+             v-if="item.category===157 || item.category===158">
           <el-checkbox v-model="formbox[key].check"></el-checkbox>&nbsp;&nbsp;&nbsp; {{key+1}}.<span
           style="color:#6a8dfb; margin-left:20px;">简单题</span>
           <span class="ques_score">({{item.score}}分)</span>
-          <span class="remove">移除</span>
+          <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question">编辑</span>
           <span class="move_down" @click="moveDown(item.id)">下移</span>
           <span class="move_up" @click="moveUp(item.id)">上移</span>
@@ -174,11 +175,9 @@
     },
     mounted() {
       this.getDictionary();
-      this.testPaperId = this.$route.query.id;
-      this.getTestPaperDetail();
     },
     activated() {
-      this.testPaperId = this.$route.query.id;
+      this.getQueryData();
       this.getTestPaperDetail();
     },
     watch: {
@@ -195,6 +194,15 @@
       }
     },
     methods: {
+      getQueryData() {
+        if (!this.$route.query.id) {
+          this.testPaperId = this.$store.state.onlineExam.edit_paper_id;
+          this.$router.push({path: '/configExam', query: {id: this.$store.state.onlineExam.edit_paper_id}});
+        } else {
+          this.$store.dispatch('editPaperId', this.$route.query.id);
+          this.testPaperId = this.$route.query.id;
+        }
+      },
       getDictionary() {
         //试卷类型
         this.dictionary(152).then((res) => {
@@ -236,15 +244,16 @@
         this.isIndeterminate =
           checkedCount > 0 && checkedCount < this.formbox.length;
       },
+      //题目下移
       moveDown(id) {
-        this.$http.post(globalConfig.server+ 'exam/question/down/'+ id).then((res)=>{
-          if(res.data.code==="30010"){
+        this.$http.post(globalConfig.server + 'exam/question/down/' + id).then((res) => {
+          if (res.data.code === "30010") {
             this.$notify.success({
               title: '成功',
               message: res.data.msg
             });
             this.getTestPaperDetail();
-          }else{
+          } else {
             this.$notify.warning({
               title: '警告',
               message: res.data.msg
@@ -252,15 +261,16 @@
           }
         });
       },
+      //题目上移
       moveUp(id) {
-        this.$http.post(globalConfig.server+ 'exam/question/up/'+ id).then((res)=>{
-          if(res.data.code==="30010"){
+        this.$http.post(globalConfig.server + 'exam/question/up/' + id).then((res) => {
+          if (res.data.code === "30010") {
             this.$notify.success({
               title: '成功',
               message: res.data.msg
             });
             this.getTestPaperDetail();
-          }else{
+          } else {
             this.$notify.warning({
               title: '警告',
               message: res.data.msg
@@ -268,6 +278,35 @@
           }
         });
       },
+      //删除题目
+      deleteQues(id) {
+        this.$confirm("删除后不可恢复, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          this.$http.post(globalConfig.server + 'exam/question/delete/' + id).then((res) => {
+            if (res.data.code === "30010") {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.getTestPaperDetail();
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }).catch(() => {
+          this.$notify.info({
+            title: "提示",
+            message: "已取消删除"
+          });
+        });
+      }
+
     }
   };
 </script>
@@ -297,23 +336,23 @@
         min-height: 154px;
         padding-top: 16px;
         border-top: 1px #eee solid;
-        .ques_score{
-          font-size:14px;
-          color:#fc83b6;
-          margin-left:20px;
+        .ques_score {
+          font-size: 14px;
+          color: #fc83b6;
+          margin-left: 20px;
         }
-        .remove{
-          float:right;
-          font-size:14px;
-          color:#fc83b6;
-          margin-right:20px;
+        .remove {
+          float: right;
+          font-size: 14px;
+          color: #fc83b6;
+          margin-right: 20px;
           cursor: pointer;
         }
-        .edit_question, .move_down, .move_up{
-          float:right;
-          font-size:14px;
-          color:rgb(88, 215, 136);
-          margin-right:20px;
+        .edit_question, .move_down, .move_up {
+          float: right;
+          font-size: 14px;
+          color: rgb(88, 215, 136);
+          margin-right: 20px;
           cursor: pointer;
         }
       }
