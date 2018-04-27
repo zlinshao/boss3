@@ -102,7 +102,7 @@
                   <div class="staff_name">
                     <div>
                       <span>{{keyx.staff}}</span>&nbsp;&nbsp;
-                        <span class="staffBefore">{{item.role}}</span>&nbsp;&nbsp;
+                        <span class="staffBefore">{{keyx.role}}</span>&nbsp;&nbsp;
                       <span>{{keyx.create_time}}</span>
                     </div>
                   </div>
@@ -217,11 +217,12 @@ export default {
     };
   },
   created() {
-    this.landholder = JSON.parse(localStorage.personal);
+    
   },
 
   mounted() {
     this.myData(1);
+    this.landholder = JSON.parse(localStorage.personal);
   },
   watch: {
     keywords(val){

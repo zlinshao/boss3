@@ -608,7 +608,9 @@
             }
           });
         }
-
+        this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
+          localStorage.setItem('personal', JSON.stringify(res.data.data));           
+        });
       },
       selectDepart() {
         this.organizationDialog = true;

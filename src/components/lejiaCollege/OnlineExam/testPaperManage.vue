@@ -303,7 +303,7 @@
           },
           {
             clickIndex: "deleteExam",
-            headIcon: "el-icons-fa-hdd-o",
+            headIcon: "el-icon-delete",
             label: "删除试卷"
           },
           {

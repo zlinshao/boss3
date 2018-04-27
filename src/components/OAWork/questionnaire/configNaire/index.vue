@@ -8,7 +8,7 @@
         </div>
         <div class="tool_right">
           <el-button type="success" size="small" style="margin-right:10px; background-color:#58d788; border-color:#58d788;"  @click="openModalDialog()">
-            <i class="iconfont icon-tianjiagenjin"></i>&nbsp;添加试题
+            <i class="iconfont icon-tianjiagenjin"></i>&nbsp;添加题目
           </el-button>
         </div>
 
@@ -34,7 +34,7 @@
               <el-col :span="4" style="float:right;margin-top:20px;">
                 <el-form-item style="margin-right: 10px;">
                   <el-input value="单择题" placeholder="搜索关键字" size="small">
-                    <el-button slot="append" style="background-color:rgb(131, 160, 252); color:#fff;" size="small" class="search_button" >搜索试题</el-button>
+                    <el-button slot="append" style="background-color:rgb(131, 160, 252); color:#fff;" size="small" class="search_button" >搜索题目</el-button>
                   </el-input>
                 </el-form-item>                
                 </el-col>
@@ -49,8 +49,8 @@
           <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
           <span style="float:right; font-size:14px; color:#fc83b6; margin-right:20px;">移除</span>
           <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">编辑</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">下一题</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">上一题</span>          
+          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">下移</span>
+          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">上移</span>          
           <p style="margin-left:30px;line-height:30px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
           <el-form :model="form1[x]" >
               <el-form-item v-model="form1[x].check" style="width:98%;margin-left:2%;">
@@ -66,8 +66,8 @@
           <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
           <span style="float:right; font-size:14px; color:#fc83b6; margin-right:20px;">移除</span>
           <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">编辑</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">下一题</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">上一题</span> 
+          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">下移</span>
+          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">上移</span> 
           <p style="margin-left:30px;line-height:30px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
           <el-form :model="form2[y]" >
               <el-form-item v-model="form2[y].check" style="width:98%;margin-left:2%;">
@@ -84,8 +84,8 @@
           <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
           <span style="float:right; font-size:14px; color:#fc83b6; margin-right:20px;">移除</span>
           <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">编辑</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">下一题</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">上一题</span> 
+          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">下移</span>
+          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">上移</span> 
           <p style="margin-left:30px;line-height:20px;padding-right:10px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
           <el-form :model="form3[k]" >
               <el-form-item >
@@ -97,11 +97,11 @@
       </div>
 
     <div id="testPaperDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="新建问卷" width="38%" style="margin-top:18vh">
+      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="新建调查" width="38%" style="margin-top:18vh">
         <el-row :gutter="30" style="margin-bottom:26px;">
           <el-col :span="12">
             <div class="import_questions" @click="importQuestion">
-              <div><img src="../../../../assets/images/examination/import_question.svg"><br/>批量导入试题</div>
+              <div><img src="../../../../assets/images/examination/import_question.svg"><br/>批量导入调查</div>
             </div>
           </el-col>
           <el-col :span="12">

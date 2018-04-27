@@ -21,7 +21,7 @@
 <script>
 export default {
   name: "hello",
-  props: ["yanFirstDialog"],
+  props: ["yanFirstDialog","yanFirstInfo"],
   data() {
     return {
       landholder: {},
@@ -38,12 +38,13 @@ export default {
     yanFirstDialog(val) {
       this.yanDialogVisible = val;
     },
+    yanFirstInfo(val){
+      this.versionInfo = val;
+    },
     yanDialogVisible(val) {
       if (!val) {
         this.$emit("close");
-      } else{
-        this.getinfo();
-      }
+      } 
     }
   },
   mounted() {
@@ -51,17 +52,7 @@ export default {
 
   },
   methods: {
-     getinfo() {
-      this.$http
-        .get(globalConfig.server + "setting/update/read?a=1")
-        .then(res => {
-          if (res.data.code === "50040") {
-            this.versionInfo = res.data.data;
-            this.images = res.data.data.album;
-          }
-
-        });
-    },   
+ 
     close() {
       this.yanDialogVisible = false;
       this.$http

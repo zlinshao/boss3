@@ -330,7 +330,7 @@
     <BadgeView :badgeDialog="badgeDialog" @close="closeModalSecond"></BadgeView>
     <InstitutionView :institutionDialog="institutionDialog" @close="closeinsModal"></InstitutionView>
     <NoticeTitleView :noticeTitleDialog="noticeTitleDialog" @close="closeModal"></NoticeTitleView>
-    <YanFirstView :yanFirstDialog="yanFirstDialog" @close="closeyanModal"></YanFirstView>
+    <YanFirstView :yanFirstDialog="yanFirstDialog" :yanFirstInfo="yanFirstInfo" @close="closeyanModal"></YanFirstView>
     <YanSecondView :yanSecondDialog="yanSecondDialog" @close="closeModal"></YanSecondView>
   </div>
 </template>
@@ -396,6 +396,7 @@
         yanFirstDialog:false,       //研发1
         yanSecondDialog:false,      //研发2
         refresh:false,  //每天刷新一次
+        yanFirstInfo:{},
 
       };
     },
@@ -446,14 +447,22 @@
       }
       },
       badge_Flag(val){
+        console.log(val)
          //个人连续登录时长勋章
             let badge = false;
             this.$store.dispatch('badgeFlag', badge);
-        if(val){
-          if (!JSON.parse(localStorage.personal).data.medal) {
-            this.badgeDialog = true;
-
-          }
+            if(val){
+              if (!JSON.parse(localStorage.personal).data.medal) {
+                this.badgeDialog = true;
+              }
+            this.$http
+              .get(globalConfig.server + "setting/update/read?a=1")
+              .then(res => {
+                if (res.data.code === "50040") {
+                    this.yanFirstInfo = res.data.data;
+                    this.yanFirstDialog = true;
+                }
+              }); 
         }
       }
     },
@@ -484,14 +493,13 @@
                 }
               }
             });
-
+            //版本更新
             this.$http
               .get(globalConfig.server + "setting/update/read?a=1")
               .then(res => {
                 if (res.data.code === "50040") {
-                  if (!JSON.parse(localStorage.personal).data.record) {
+                    this.yanFirstInfo = res.data.data;
                     this.yanFirstDialog = true;
-                  }
                 }
               });            
           });
@@ -555,15 +563,7 @@
         //this.noticeTitleDialog = true;
         //this.yanSecondDialog= true;
         //版本更新
-      this.$http
-        .get(globalConfig.server + "setting/update/read?a=1")
-        .then(res => {
-          if (res.data.code === "50040") {
-            if (!JSON.parse(localStorage.personal).data.record) {
-              this.yanFirstDialog = true;
-            }
-          }
-        });
+
 
         this.loginDay = this.personal.data.loginday;
         this.loginPercent = Number(this.loginDay / 180 * 100) + "%";

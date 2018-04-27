@@ -70,7 +70,8 @@
               prop="paper.category"
               label="试卷类型">
               <template slot-scope="scope">
-                <span v-if="scope.row.paper && scope.row.paper.category">{{scope.row.paper && scope.row.paper.category}}</span>
+                <span
+                  v-if="scope.row.paper && scope.row.paper.category">{{scope.row.paper && scope.row.paper.category}}</span>
                 <span v-if="!(scope.row.paper && scope.row.paper.category)">暂无</span>
               </template>
             </el-table-column>
@@ -134,7 +135,7 @@
                 </el-col>
                 <el-col :span="12">
                   <el-form-item label="试卷类型" required>
-                    <el-select v-model="formExam.type" size="mini" placeholder="请选择" clearable>
+                    <el-select v-model="formExam.category" size="mini" placeholder="请选择" clearable>
                       <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
                         {{item.dictionary_name}}
                       </el-option>
@@ -146,8 +147,8 @@
                 <el-col :span="12">
                   <el-form-item label="使用试卷" required>
                     <el-select v-model="formExam.paper_id" size="mini" placeholder="请选择试卷" clearable>
-                      <el-option v-for="item in examType" :key="item.id" :label="item.name" :value="item.id">
-                        {{item.name}}
+                      <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
+                        {{item.dictionary_name}}
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -172,7 +173,7 @@
               <el-row :gutter="30">
                 <el-col :span="12">
                   <el-form-item label="开考后">
-                    <el-input placeholder="请输入分钟" v-model="formExam.limited_time">
+                    <el-input placeholder="请输入分钟" v-model="formExam.late_tolerance">
                       <template slot="append">分钟</template>
                     </el-input>
                   </el-form-item>
@@ -180,20 +181,20 @@
                 <span class="vt_align tips">* 设定时间后不能再登陆考试系统</span>
               </el-row>
               <!--<el-row :gutter="30">-->
-                <!--<el-col :span="12">-->
-                  <!--<el-form-item label="考生选择">-->
-                    <!--<el-input v-model="examinees_name" readonly @focus="chooseStaff" placeholder="请选择">-->
-                      <!--<template slot="append">-->
-                        <!--<div style="cursor: pointer;" @click="emptyStaff">清空</div>-->
-                      <!--</template>-->
-                    <!--</el-input>-->
-                  <!--</el-form-item>-->
-                <!--</el-col>-->
+              <!--<el-col :span="12">-->
+              <!--<el-form-item label="考生选择">-->
+              <!--<el-input v-model="examinees_name" readonly @focus="chooseStaff" placeholder="请选择">-->
+              <!--<template slot="append">-->
+              <!--<div style="cursor: pointer;" @click="emptyStaff">清空</div>-->
+              <!--</template>-->
+              <!--</el-input>-->
+              <!--</el-form-item>-->
+              <!--</el-col>-->
               <!--</el-row>-->
             </el-form>
           </div>
           <span slot="footer" class="dialog-footer">
-            <el-button size="small" @click="examDialog = false">取消</el-button>
+            <el-button size="small" @click="examDialog = false;examId = '';">取消</el-button>
             <el-button size="small" type="primary" @click="saveExam">保存</el-button>
           </span>
         </div>
@@ -232,32 +233,23 @@
           page: 1,
           limit: 10,
           keywords: '',
-          type: ''
+          category: ''
         },
         examType: [],
         examDialog: false,  //新建考试模态框
-        testPaperDialog: false, //新建试卷模态框
-        paperTypeDialog: false,  //新建试卷 选择类型模态框
         //新增考试表单
         formExam: {
           name: '',    //考试名称
           start_time: '',  //开考时间
           duration: '',   //考试时长
           paper_id: '',    //试卷id
-          examinees: [],  //报考考生id
-          type: '',  //试卷类型
-          limited_time: '', //开考后多长时间不能登陆
+          category: '',  //试卷类型
+          late_tolerance: '', //开考后多长时间不能登陆
         },
-        examinees_name: '',//新建考试报名考生
-        // 新建试卷 类型和名称
-        paperTypeForm: {
-          category: '',
-          name: '',
-        },
-        paperId: '', //新增成功后的试卷id, 用于自己录入的时候使用
+        examId: '', //考试场次的id
       };
     },
-    mounted(){
+    mounted() {
       this.getExamData();
       this.getDictionary();
     },
@@ -269,6 +261,9 @@
       examDialog(val) {
         if (val) {
           this.initial();
+          if(this.examId){
+            this.getExamDetail();
+          }
         }
       },
     },
@@ -285,6 +280,26 @@
       dblClickTable() {
 
       },
+      getExamDetail(){
+        this.$http.get(globalConfig.server+'exam/'+this.examId).then((res)=>{
+          if(res.data.code === '30000') {
+            let detail = res.data.data;
+            if(detail) {
+              this.formExam.name = detail.name;
+              this.formExam.start_time = detail.start_time;
+              this.formExam.duration = detail.duration;
+              this.formExam.paper_id = detail.paper_id;
+              this.formExam.category = detail.category;
+              this.formExam.late_tolerance = detail.late_tolerance;
+            }
+          }else{
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
       getExamData() {
         this.tableStatus = " ";
         this.tableLoading = true;
@@ -297,13 +312,25 @@
             this.tableData = [];
             this.totalNum = 0;
             this.tableStatus = "暂无数据";
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
           }
         });
       },
       saveExam() {
-        this.$http.post(globalConfig.server + 'exam', this.formExam).then((res) => {
+        let header='';
+        if(this.examId){
+          header = this.$http.put(globalConfig.server + 'exam/'+this.examId, this.formExam);
+        }else{
+          header = this.$http.post(globalConfig.server + 'exam', this.formExam);
+        }
+        header.then((res) => {
+
           if (res.data.code === '30010') {
             this.examDialog = false;
+            this.examId = '';
             this.$notify.success({
               title: '成功',
               message: res.data.msg
@@ -333,6 +360,7 @@
       },
       //右键菜单
       openContextMenu(row, event) {
+        this.examId = row.id;
         this.lists = [
           {
             clickIndex: "editExam",
@@ -375,7 +403,7 @@
       clickEvent(index) {
         switch (index) {
           case 'editExam':
-
+            this.examDialog = true;
             break;
           case 'deleteExam':
             this.$confirm("删除后不可恢复, 是否继续?", "提示", {
@@ -383,13 +411,26 @@
               cancelButtonText: "取消",
               type: "warning"
             }).then(() => {
-
-              }).catch(() => {
-                this.$message({
-                  type: "info",
-                  message: "已取消删除"
-                });
+              this.$http.post(globalConfig.server + 'exam/delete/' + this.examId).then((res) => {
+                if(res.data.code==="30010"){
+                  this.$notify.warning({
+                    title: '警告',
+                    message: res.data.msg
+                  });
+                  this.getExamData();
+                }else{
+                  this.$notify.warning({
+                    title: '警告',
+                    message: res.data.msg
+                  });
+                }
               });
+            }).catch(() => {
+              this.$message({
+                type: "info",
+                message: "已取消删除"
+              });
+            });
             break;
           case 'manageExaminee':
 
@@ -431,15 +472,8 @@
           start_time: '',  //开考时间
           duration: '',   //考试时长
           paper_id: '',    //试卷id
-          examinees: [],  //报考考生id
-          type: '',  //试卷类型
-          limited_time: '', //开考后多长时间不能登陆
-        };
-        this.examinees_name = '';//新建考试报名考生
-        // 新建试卷 类型和名称
-        this.paperTypeForm = {
-          type: '',
-          name: '',
+          category: '',  //试卷类型
+          late_tolerance: '', //开考后多长时间不能登陆
         };
 
       },

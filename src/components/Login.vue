@@ -201,6 +201,8 @@
           this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
             globalConfig.personal = res.data.data.data;
+          let badge = true;
+          this.$store.dispatch('badgeFlag', badge);
             this.$router.push({path: '/main'});
           });
         });
