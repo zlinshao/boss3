@@ -686,7 +686,6 @@
           this.isDictionary = true
         });
       },
-
       getHouseInfo(){
         this.tableLoading = true;
         this.$http.get(globalConfig.server + 'lease/collect/' + this.collectContractId).then((res) => {

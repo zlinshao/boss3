@@ -803,7 +803,6 @@
         this.dictionary(425,1).then((res) => {this.house_feature_dic = res.data;this.isDictionary = true});
         this.dictionary(404,1).then((res) => {this.decorate_dic = res.data;this.isDictionary = true});
         this.dictionary(409,1).then((res) => {this.id_type_dic = res.data;this.isDictionary = true});
-
         this.dictionary(430,1).then((res) => {this.contract_type_dic = res.data;this.isDictionary = true});
         this.dictionary(437,1).then((res) => {this.vacancy_way_dic = res.data;this.isDictionary = true});
         this.dictionary(443,1).then((res) => {this.pay_way_dic = res.data;this.isDictionary = true});
