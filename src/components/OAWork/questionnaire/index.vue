@@ -4,7 +4,7 @@
       <div class="tool">
         <div style="margin: 4px 0 0 10px;">
           <el-button type="danger" size="mini" style="background: #fb4699;" @click="openModalDialog('testPaperDialog')">
-            <i class="iconfont icon-xinjianshijuan" style="font-size: 14px;"></i>&nbsp;新建任务
+            <i class="iconfont icon-xinjianshijuan" style="font-size: 14px;"></i>&nbsp;新建调查
           </el-button>
         </div>
         <div class="tool_right">
@@ -56,7 +56,7 @@
               </el-table-column>
               <el-table-column
                 prop="price"
-                label="任务对象">
+                label="调查对象">
               </el-table-column>
               <el-table-column
                 prop="price"
@@ -83,11 +83,11 @@
     </div>
 
     <div id="paperTypeDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="paperTypeDialog" title="新建问卷" width="30%">
+      <el-dialog :close-on-click-modal="false" :visible.sync="paperTypeDialog" title="新建调查" width="30%">
         <el-form :model="paperTypeForm" onsubmit="return false;" label-width="100px">
           <el-row>
             <el-form-item label="标题" required>
-              <el-input v-model="paperTypeForm.name" size="mini" placeholder="请输入问卷名称" clearable></el-input>
+              <el-input v-model="paperTypeForm.name" size="mini" placeholder="请输入调查名称" clearable></el-input>
             </el-form-item>
           </el-row>
           <el-row>
@@ -98,7 +98,7 @@
           </el-row>
           <el-row>
             <el-form-item label="任务对象" required>
-              <el-input v-model="examinees_name" @click.native="chooseStaff" size="mini" placeholder="请选择任务对象" clearable></el-input>
+              <el-input v-model="examinees_name" @click.native="chooseStaff" size="mini" placeholder="请选择调查对象" clearable></el-input>
             </el-form-item>
           </el-row>
         </el-form>
@@ -109,12 +109,12 @@
       </el-dialog>
     </div>
     <div id="testPaperDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="新建问卷" width="38%"
+      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="新建调查" width="38%"
                  style="margin-top:18vh">
         <el-row :gutter="30" style="margin-bottom:26px;">
           <el-col :span="12">
             <div class="import_questions" @click="importQuestion">
-              <div><img src="../../../assets/images/examination/import_question.svg"><br/>批量导入试题</div>
+              <div><img src="../../../assets/images/examination/import_question.svg"><br/>批量导入调查</div>
             </div>
           </el-col>
           <el-col :span="12">
@@ -203,12 +203,12 @@ export default {
       examTypeDialog: false,
       paperTypeDialog: false,
       formExam: {
-        name: "", //考试名称
+        name: "", //调查名称
         start_time: "", //开考时间
-        duration: "", //考试时长
-        paper_id: "", //问卷id
+        duration: "", //调查时长
+        paper_id: "", //调查id
         examinees: [], //报考考生id
-        type: "", //问卷类型
+        type: "", //调查类型
         limited_time: "" //开考后多长时间不能登陆
       },
       examinees_name: "",
@@ -274,7 +274,7 @@ export default {
       if (!this.paperTypeForm.name) {
         this.$notify.warning({
           title: "警告",
-          message: "问卷标题不能为空"
+          message: "调查标题不能为空"
         });
         return;
       }
@@ -295,32 +295,32 @@ export default {
         {
           clickIndex: "configExamDialog",
           headIcon: "iconfont icon-shangjia--",
-          label: "发布任务"
+          label: "发布调查"
         },
         {
           clickIndex: "configExamDialog",
           headIcon: "iconfont icon-xiajia--",
-          label: "下架任务"
+          label: "下架调查"
         },
         {
           clickIndex: "configExamDialog",
           headIcon: "el-icon-edit",
-          label: "修改任务信息"
+          label: "修改调查信息"
         },
         {
           clickIndex: "configExamDialog",
           headIcon: "el-icon-edit",
-          label: "编辑任务"
+          label: "编辑调查"
         },
         {
           clickIndex: "deleteExam",
           headIcon: "el-icons-fa-hdd-o",
-          label: "删除任务"
+          label: "删除调查"
         },
         {
           clickIndex: "lookExamDialog",
           headIcon: "el-icons-fa-mail-reply",
-          label: "预览问卷"
+          label: "预览调查"
         }
       ];
       let e = event || window.event; //support firefox contextmenu

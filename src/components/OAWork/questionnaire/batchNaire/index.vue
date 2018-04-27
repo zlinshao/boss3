@@ -3,13 +3,7 @@
     <div id="onlineExam">
       <div class="tool">
         <div class="tool_left">
-          <div>
-            <el-row>
-              <el-col :span="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 问卷标题</el-col>
-              <el-col :span="6"><span style="color: #409EFF;opacity: .7;">{{testPaper.name}}</span></el-col>
-            </el-row>
-            <br/>
-          </div>
+
           <span style="height:130px;line-height:75px; width:120px; font-size:14px;">上传问卷文件</span>
           <div style="display: inline-block;float: left;">
             <Dropzone :ID="'examOptionx'" @getImg="photo_success" :isClear="isClear"></Dropzone>
@@ -29,10 +23,8 @@
           <p><span style="font-size:16px;">说明</span></p>
           <p><span>1.请不要随意变更模版文件中单元格的格式，例如合并单元格，随意增删列等；</span></p>
           <p>2.支持题型为：单选题、多选题、不定项选择题、问答题、文字拼写务必以此为准；</p>
-          <p> 3.选择题的选项可以2－8项均可；每题的选项数量务必与选项内容数量一致，否则不能导入；</p>
-          <p><span>4.选择题答案务必大写格式，多选项字母务必连着拼写，不要有空格或者符号间隔；</span></p>
-          <p><span>5.填空题最多支持10个空，每个答案务必回车换行隔开，</span>考生做大内容跟录入内容完全一致时，系统会自动判分；</p>
-          <p>6.问答题的选项数量、答案、两项内容，可以不填写；填空题的答案，可以不填；</p>
+          <p><span>3.选择题答案务必大写格式，多选项字母务必连着拼写，不要有空格或者符号间隔；</span></p>
+          <p>4.问答题的选项数量、答案、两项内容，可以不填写；填空题的答案，可以不填；</p>
         </div>
       </div>
     </div>
