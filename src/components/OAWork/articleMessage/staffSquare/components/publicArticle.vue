@@ -135,14 +135,14 @@
         if (query.ids !== undefined) {
           if(this.moduleType !='newVersionUpdate'){
             this.publicDetail(query.ids);
-            this.pitch = query.ids;           
+            this.pitch = query.ids;
           }
           else{
             if(this.$store.state.article.new_version){
               this.info = this.$store.state.article.new_version;
             }
             this.newVersionDetail(query.ids);
-            this.pitch = query.ids;              
+            this.pitch = query.ids;
           }
 
         }
@@ -180,7 +180,7 @@
         }
         else{
             this.form.name = ""
-            this.form.htmlForEditor = ""       
+            this.form.htmlForEditor = ""
         }
       },
       getDict() {
@@ -271,7 +271,7 @@
           } else {
             this.prompt(2, res.data.msg);
           }
-        });  
+        });
         //修改
         } else {
           type = this.$http.post;
@@ -285,9 +285,9 @@
           } else {
             this.prompt(2, res.data.msg);
           }
-        });  
+        });
         }
-      
+
       },
       goBack() {
         //点击取消清掉ids
@@ -383,7 +383,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .ql-editor {
     max-height: 700px;
   }

@@ -111,6 +111,10 @@
               style="width: 100%">
               <el-table-column
                 prop="name"
+                label="考试时间">
+              </el-table-column>
+              <el-table-column
+                prop="name"
                 label="试卷名称">
               </el-table-column>
               <el-table-column

@@ -293,10 +293,10 @@
       this.getExamData();
       this.getDictionary();
     },
-    activated() {
-      this.getExamData();
-      this.getDictionary();
-    },
+    // activated() {
+    //   this.getExamData();
+    //   this.getDictionary();
+    // },
     watch: {
       examDialog(val) {
         if (val) {

@@ -206,10 +206,10 @@
       this.getTestPaperData();
       this.getDictionary();
     },
-    activated() {
-      this.getTestPaperData();
-      this.getDictionary();
-    },
+    // activated() {
+    //   this.getTestPaperData();
+    //   this.getDictionary();
+    // },
     watch: {
       paperTypeDialog(val) {
         if (val) {
