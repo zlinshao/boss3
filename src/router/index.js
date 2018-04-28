@@ -108,6 +108,8 @@ import ConfigNaire  from '../components/OAWork/questionnaire/configNaire/index.v
 import BatchNaire from '../components/OAWork/questionnaire/batchNaire/index.vue'  //批量导入问卷
 import MyselfNaire from '../components/OAWork/questionnaire/myselfNaire/index.vue'  //自己录入问卷
 import LookNaire from '../components/OAWork/questionnaire/lookNaire/index.vue'  //问卷调查统计
+import AnswerAll from '../components/OAWork/questionnaire/answerAll/index.vue'  //问卷调查统计
+
 
 // import Message from '../comments/systemSetting/message/index.vue'                                      //短信模板
 // import LoginRecord from '../comments/systemSetting/loginRecord/index.vue'                              //登陆日志
@@ -267,6 +269,7 @@ export default new Router({
         {path: '/batchNaire', component: BatchNaire, name: "批量导入问卷"},
         {path: '/myselfNaire', component: MyselfNaire, name: "自己录入问卷"},
         {path: '/lookNaire', component: LookNaire, name: "调查统计"},
+        {path: '/answerAll', component: AnswerAll, name: "所有回答"},
       ]
     },
     //快捷入口

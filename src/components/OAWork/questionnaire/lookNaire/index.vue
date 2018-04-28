@@ -25,15 +25,10 @@
             </el-row> 
         </div> 
           <div class="questionDiv" v-for="(total3,y) in 2" >
-          {{y+1+2}}.<span style="color:#6a8dfb; margin-left:20px;">填空题</span>
+          {{y+1+2}}.<span style="color:#6a8dfb; margin-left:20px;">简答题</span>
           <p style="margin-left:30px;line-height:30px;width:96%">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：
             <span @click="openAll"  style="color:rgb(106, 141, 251);cursor: pointer;">查看全部回答</span>
           </p>        
-          <div class="allAnswer" v-if="allAnswer">
-            1.对打包后的文件进行一次全局的 envify 转换。这使得对打包后的文件进行一次全局的 envify 转换。这使得对打包后的文件进行一次全局的 envify 转换。这使得<br />
-            2.对打包后的文件进行一次全局的 envify 转换。这使得对打包后的文件进行一次全局的 envify 转换。这使得对打包后的文件进行一次全局的 envify 转换。这使得<br />
-            3.对打包后的文件进行一次全局的 envify 转换。这使得对打包后的文件进行一次全局的 envify 转换。这使得对打包后的文件进行一次全局的 envify 转换。这使得
-          </div>
         </div>  
       </div> 
     </div>
@@ -46,14 +41,13 @@ import Dropzone from "../../../common/UPLOAD.vue";
 export default {
   name: "index",
   components: { Dropzone },
-  props:['previewNaireDialog'],
+  props: ["previewNaireDialog"],
   data() {
     return {
       isClear: false,
       testPaperDialog: false,
       faleDialog: false,
       disfalg: false,
-      allAnswer:false,
       answarData: [
         { id: "A", name: "选项答案" },
         { id: "B", name: "选项答案" },
@@ -71,12 +65,12 @@ export default {
     };
   },
 
-  watch: {
-  
-  },
+  watch: {},
   methods: {
-    openAll(){
-      this.allAnswer=true;
+    openAll() {
+      this.$router.push({
+        path: "/answerAll",
+      });
     }
   }
 };
@@ -86,13 +80,13 @@ export default {
 #onlineExam {
   .tool {
     position: relative;
-    span{
+    span {
       position: absolute;
-      left:0px;
-      top:0px;
+      left: 0px;
+      top: 0px;
       height: 142px;
       line-height: 142px;
-      font-size:24px;
+      font-size: 24px;
       text-indent: 2%;
       color: #fff;
     }
@@ -110,9 +104,9 @@ export default {
       min-height: 154px;
       padding-top: 16px;
       border-top: 1px #eee solid;
-      .allAnswer{
-        width:97%;
-        margin-left:2%;
+      .allAnswer {
+        width: 97%;
+        margin-left: 2%;
       }
     }
   }
