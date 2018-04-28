@@ -83,7 +83,7 @@ import ExamineAndApprove from '../components/OAWork/examineAndApprove/index.vue'
 // 乐伽大学
 import LineCollege from '../components/lejiaCollege/LineCollege/index.vue'
 import StaffRegistration from '../components/lejiaCollege/StaffRegistration/index.vue'
-import College from '../components/lejiaCollege/college/index.vue'            
+import College from '../components/lejiaCollege/college/index.vue'
 import OnlineExam from '../components/lejiaCollege/OnlineExam/index.vue'    //在线考试
 
 import ConfigExam from '../components/lejiaCollege/OnlineExam/configExam/index.vue'  //管理试卷
@@ -270,6 +270,7 @@ export default new Router({
         {path: '/myselfNaire', component: MyselfNaire, name: "自己录入问卷"},
         {path: '/lookNaire', component: LookNaire, name: "调查统计"},
         {path: '/answerAll', component: AnswerAll, name: "所有回答"},
+        {path: '/LineCollege', component: LineCollege, name: '我的考试', icon:"iconfont icon-zaixiankaoshi"}
       ]
     },
     //快捷入口
@@ -480,7 +481,7 @@ export default new Router({
         // {path: '/StaffRegistration', component: StaffRegistration, name: '员工报名'},
         {path: '/OnlineExam', component: OnlineExam, name: '在线考试'},
         {path: '/examinerRead', component: ExaminerRead, name: '考官判卷'},
-        
+
       ]
     },
     {

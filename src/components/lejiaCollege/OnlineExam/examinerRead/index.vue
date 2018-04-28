@@ -150,7 +150,7 @@
               </el-table-column>
             </el-table>
           </div>
-          <div class="block page" style="float: right;">
+          <div class="block pages">
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="myData"
@@ -247,7 +247,7 @@
         this.form.page = val;
         this.rentStatus = " ";
         this.rentLoading = true;
-        this.$http.get(globalConfig.server + "exam/paper").then(res => {
+        this.$http.get(globalConfig.server + "exam/result").then(res => {
           this.rentLoading = false;
           if (res.data.code == "36000") {
             this.tableData = res.data.data.data;
