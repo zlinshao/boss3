@@ -236,7 +236,7 @@
                       <el-row>
                         <el-col :span="6">
                           <el-form-item label="押" required="">
-                            <el-select :disabled="(!isPc || isDoc) && !isAll" v-model="payWayArray[0]" placeholder="请选择付款方式" value="">
+                            <el-select :disabled="(!isPc || isDoc) && !isAll" v-model="pay_way_bet[0]" placeholder="请选择付款方式" value="">
                               <el-option v-for="item in 3" :value="item-1"
                                          :key="item-1"></el-option>
                             </el-select>
@@ -245,7 +245,7 @@
                         <el-col :span="6">
                           <el-form-item label="付" required="">
                             <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"
-                                      v-model="pay_way_bet[item-1]"></el-input>
+                                      v-model="payWayArray[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
                         <el-col :span="6">
@@ -919,8 +919,8 @@
         this.payWayChangeAmount++;
       },
       deletePayWayChange(item){
-//        this.payWayArray.splice(item, 1);
-        this.pay_way_bet.splice(item, 1);
+//        this.pay_way_bet.splice(item, 1);
+        this.payWayArray.splice(item, 1);
         this.payPeriodArray.splice(item, 1);
         this.payWayChangeAmount--;
       },
@@ -1006,8 +1006,8 @@
         this.params.pay_way = [];
         for (let i = 0; i < this.payWayChangeAmount; i++) {
           payWayItem = {};
-          payWayItem.pay_way = this.payWayArray[0] ? this.payWayArray[0] : '';
-          payWayItem.pay_way_bet = this.pay_way_bet[i] ? this.pay_way_bet[i] : '';
+          payWayItem.pay_way_bet = this.pay_way_bet[0] ? this.pay_way_bet[0] : '';
+          payWayItem.pay_way = this.payWayArray[i] ? this.payWayArray[i] : '';
           payWayItem.period = this.payPeriodArray[i] ? this.payPeriodArray[i] : '';
           this.params.pay_way.push(payWayItem);
         }
