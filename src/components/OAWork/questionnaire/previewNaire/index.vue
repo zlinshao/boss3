@@ -17,19 +17,9 @@
               </el-form-item>
           </el-form>       
         </div>
-         <div class="questionDiv" v-for="(total2,y) in 2" >
-          {{y+1+2}}.<span style="color:#6a8dfb; margin-left:20px;">多选题</span>
-          <p style="margin-left:30px;line-height:30px;width:96%">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
-          <el-form :model="form2[y]" >
-              <el-form-item v-model="form2[y].check" style="width:97%;margin-left:3%;">
-                  <el-col :span="6" :key="index1" v-for="(val,index1) in answarData" style="line-height:24px;height: 24px;">
-                    {{val.id}}：{{val.name}}
-                  </el-col>
-              </el-form-item>
-          </el-form>       
-        </div> 
+
         <div class="questionDiv" v-for="(total4,k) in 2" >
-          {{k+1+6}}.<span style="color:#6a8dfb; margin-left:20px;">简单题</span>
+          {{k+1+2}}.<span style="color:#6a8dfb; margin-left:20px;">简单题</span>
           <p style="margin-left:30px;line-height:20px;width:96%">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
           <el-form :model="form3[k]" >
               <el-form-item >

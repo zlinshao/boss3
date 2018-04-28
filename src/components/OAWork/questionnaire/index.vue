@@ -348,7 +348,7 @@ export default {
       //右键修改
       if (index == "configExamDialog") {
         // var data = {ids: row.id, detail: 'port'};
-        this.$router.push({ path: "/configExam" });
+        this.$router.push({ path: "/configNaire" });
       }
       if (index == "deleteExam") {
         this.$confirm("删除后不可恢复, 是否继续?", "提示", {

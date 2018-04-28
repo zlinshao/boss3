@@ -28,12 +28,12 @@
               </el-col>
               <el-col :span="5" style="margin-top:20px;"> 
                 <el-form-item label="试题编号">
-                  <el-input style="width:200px;" value="单择题" size="small"></el-input>
+                  <el-input style="width:200px;" value="选择题" size="small"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4" style="float:right;margin-top:20px;">
                 <el-form-item style="margin-right: 10px;">
-                  <el-input value="单择题" placeholder="搜索关键字" size="small">
+                  <el-input value="选择题" placeholder="搜索关键字" size="small">
                     <el-button slot="append" style="background-color:rgb(131, 160, 252); color:#fff;" size="small" class="search_button" >搜索题目</el-button>
                   </el-input>
                 </el-form-item>                
@@ -45,7 +45,7 @@
           <span style="font-size:14px; float:right; margin-right:20px; ">共&nbsp;<span style="color:#fc83b6;">8</span>&nbsp;项查询结果</span>
         </div>
         <div class="questionDiv" v-for="(total,x) in 2" >
-          <el-checkbox v-model="formbox[x].check"></el-checkbox>&nbsp;&nbsp;&nbsp;{{x+1}}.<span style="color:#6a8dfb; margin-left:20px;">单选题</span>
+          <el-checkbox v-model="formbox[x].check"></el-checkbox>&nbsp;&nbsp;&nbsp;{{x+1}}.<span style="color:#6a8dfb; margin-left:20px;">选择题</span>
           <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
           <span style="float:right; font-size:14px; color:#fc83b6; margin-right:20px;">移除</span>
           <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">编辑</span>
@@ -61,26 +61,10 @@
               </el-form-item>
           </el-form>       
         </div>
-         <div class="questionDiv" v-for="(total2,y) in 2" >
-          <el-checkbox v-model="formbox[y].check"></el-checkbox>&nbsp;&nbsp;&nbsp;{{y+1+2}}.<span style="color:#6a8dfb; margin-left:20px;">多选题</span>
-          <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
-          <span style="float:right; font-size:14px; color:#fc83b6; margin-right:20px;">移除</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">编辑</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">下移</span>
-          <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">上移</span> 
-          <p style="margin-left:30px;line-height:30px;">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
-          <el-form :model="form2[y]" >
-              <el-form-item v-model="form2[y].check" style="width:98%;margin-left:2%;">
-                  <el-col :span="6" :key="index1" v-for="(val,index1) in answarData" style="line-height:24px;height: 24px;">
-                    <span v-if="form2[y].check[index1] == val.id">{{val.id}}：{{val.name}}</span>
-                    <span v-else>{{val.id}}：{{val.name}}</span>
-                  </el-col>
-              </el-form-item>
-          </el-form>      
-        </div>
+
  
         <div class="questionDiv" v-for="(total4,k) in 2" >
-          <el-checkbox v-model="formbox[k].check"></el-checkbox>&nbsp;&nbsp;&nbsp; {{k+1+6}}.<span style="color:#6a8dfb; margin-left:20px;">简单题</span>
+          <el-checkbox v-model="formbox[k].check"></el-checkbox>&nbsp;&nbsp;&nbsp; {{k+1+2}}.<span style="color:#6a8dfb; margin-left:20px;">简单题</span>
           <span style="font-size:14px; color:#fc83b6; margin-left:20px;">(5分)</span>
           <span style="float:right; font-size:14px; color:#fc83b6; margin-right:20px;">移除</span>
           <span style="float:right; font-size:14px; color:rgb(88, 215, 136); margin-right:20px;">编辑</span>

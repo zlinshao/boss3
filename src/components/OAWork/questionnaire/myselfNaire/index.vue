@@ -26,51 +26,7 @@
             </div>
           </el-tab-pane>
 
-          <el-tab-pane name="second" label="多选题">
-            <div class="qubody">
-              <div class="topbody">
-                <div class="title">题干</div>
-                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>              
-              </div>
-              <div class="midbody">
-                <div class="title">选项</div>
-                <el-form :model="form3" style="border:1px #eee solid">
-                  <el-form-item v-model="form3.checkbox" style="width:98%;margin-left:2%;">
-                      <el-col :span="12" :key="val" v-for="val in boxlen" style="line-height:50px;height:50px;padding-top:14px;">
-                       <el-input style="width:200px;" size="small"  placeholder="请输入选项内容"></el-input>
-                      </el-col>
-                  </el-form-item>
-                </el-form>
-                <div class="midadd">
-                  <span @click="midaddbox">+&nbsp;&nbsp;添加选项</span>
-                </div>                               
-              </div> 
-            </div>
-          </el-tab-pane>
-
-          <el-tab-pane name="third" label="不定向选择">
-            <div class="qubody">
-              <div class="topbody">
-                <div class="title">题干</div>
-                  <vue-editor id="editor" useCustomImageHandler :disabled="editorDisabled"></vue-editor>              
-              </div>
-              <div class="midbody">
-                <div class="title">选项</div>
-                <el-form :model="form3" style="border:1px #eee solid">
-                  <el-form-item v-model="form3.checkbox" style="width:98%;margin-left:2%;">
-                      <el-col :span="12" :key="val" v-for="val in boxlen" style="line-height:50px;height:50px;padding-top:14px;">
-                        <el-input style="width:200px;" size="small"  placeholder="请输入选项内容"></el-input>
-                      </el-col>
-                  </el-form-item>
-                </el-form>
-                <div class="midadd">
-                  <span @click="midaddbox">+&nbsp;&nbsp;添加选项</span>
-                </div>                               
-              </div>
-            </div>
-          </el-tab-pane>
-
-          <el-tab-pane name="four" label="问答题">
+          <el-tab-pane name="second" label="问答题">
             <div class="qubody">
               <div class="topbody">
                 <div class="title">题干</div>

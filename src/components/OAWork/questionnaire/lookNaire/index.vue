@@ -7,7 +7,7 @@
       </div>
       <div class="main">
         <div class="questionDiv" v-for="(total,x) in 2" >
-          {{x+1}}.<span style="color:#6a8dfb; margin-left:20px;">单选题</span>
+          {{x+1}}.<span style="color:#6a8dfb; margin-left:20px;">选择题</span>
           <p style="margin-left:30px;line-height:30px;width:96%">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
             <el-row :key="index" v-for="(val,index) in answarData" style="width:97%;margin-left:3%;">
               <span>{{val.id}}：{{val.name}}</span><br />
@@ -15,15 +15,7 @@
               {{index}}
             </el-row> 
         </div>
-         <div class="questionDiv" v-for="(total2,y) in 2" >
-          {{y+1+2}}.<span style="color:#6a8dfb; margin-left:20px;">多选题</span>
-          <p style="margin-left:30px;line-height:30px;width:96%">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>        
-            <el-row :key="index" v-for="(val,index) in answarData" style="width:97%;margin-left:3%;">
-              <span>{{val.id}}：{{val.name}}</span><br />
-              <el-progress style="width:30%;display: inline-block;" :text-inside="true" :stroke-width="18" :percentage="60/(index+1)"></el-progress>
-              {{index}}
-            </el-row> 
-        </div> 
+
           <div class="questionDiv" v-for="(total3,y) in 2" >
           {{y+1+2}}.<span style="color:#6a8dfb; margin-left:20px;">简答题</span>
           <p style="margin-left:30px;line-height:30px;width:96%">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：
