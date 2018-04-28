@@ -33,13 +33,6 @@
                 </el-form-item>
               </el-col>
               <el-col :span="5" style="margin-top:20px;float:right;">
-                <el-form-item label="试题编号">
-                  <el-input style="width:200px;" size="small">
-                    <el-button slot="append" icon="el-icon-search" @click="getTestPaperDetail"></el-button>
-                  </el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="5" style="margin-left:20px; margin-top:20px;float:right;">
                 <el-form-item label="题目类型">
                   <el-select size="small" v-model="params.category">
                     <el-option v-for="item in questionTypeCategory" :key="item.id" :label="item.dictionary_name"
@@ -58,7 +51,7 @@
             <span style="color:#fc83b6;" v-if="testPaperData && testPaperData.questions">{{testPaperData.questions.length}}</span>&nbsp;项查询结果</span>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===153">
-          <el-checkbox :label="item.id" v-model="formbox"></el-checkbox>&nbsp;&nbsp;&nbsp;{{key+1}}.<span
+          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>&nbsp;&nbsp;&nbsp;{{key+1}}.<span
           style="color:#6a8dfb; margin-left:20px;">单选题</span>
           <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
@@ -76,7 +69,7 @@
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===154 || item.category===155">
-          <el-checkbox :label="item.id" v-model="formbox"></el-checkbox>&nbsp;&nbsp;&nbsp;{{key+1}}.<span
+          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>&nbsp;&nbsp;&nbsp;{{key+1}}.<span
           style="color:#6a8dfb; margin-left:20px;"><span v-if="item.category===154">多选题</span><span
           v-if="item.category===155">不定向选择题</span></span>
           <span class="ques_score">({{item.score}}分)</span>
@@ -94,7 +87,7 @@
           </div>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===156">
-          <el-checkbox :label="item.id" v-model="formbox"></el-checkbox>&nbsp;&nbsp;&nbsp; {{key+1}}.<span
+          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>&nbsp;&nbsp;&nbsp; {{key+1}}.<span
           style="color:#6a8dfb; margin-left:20px;">判断题</span>
           <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
@@ -112,7 +105,7 @@
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===157 || item.category===158">
-          <el-checkbox :label="item.id" v-model="formbox"></el-checkbox>&nbsp;&nbsp;&nbsp; {{key+1}}.<span
+          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>&nbsp;&nbsp;&nbsp; {{key+1}}.<span
           style="color:#6a8dfb; margin-left:20px;"><span v-if="item.category===157">填空题</span><span
           v-if="item.category===158">简答题</span></span>
           <span class="ques_score">({{item.score}}分)</span>
@@ -234,14 +227,13 @@
         this.testPaperDialog = true;
       },
       handleCheckAllChange(val) {
-        this.checkedCities = val ? formbox : [];
         this.isIndeterminate = false;
       },
-      handleCheckedCitiesChange(value) {
+      handleCheckedChange(value) {
         let checkedCount = value.length;
-        this.checkAll = checkedCount === this.formbox.length;
+        this.checkAll = checkedCount === this.testPaperData.questions.length;
         this.isIndeterminate =
-          checkedCount > 0 && checkedCount < this.formbox.length;
+          checkedCount > 0 && checkedCount < this.testPaperData.questions.length;
       },
       //题目下移
       moveDown(id) {
