@@ -445,7 +445,7 @@
                   <UpLoad :ID="'addRent_certificate_photo'" :isClear="isClear" :editImage="certificate_photo"
                           @getImg="getImg"></UpLoad>
                 </el-form-item>
-                <el-form-item label="押金收条" required="">
+                <el-form-item label="押金收条">
                   <UpLoad :ID="'addRent_deposit_card'" :isClear="isClear" :editImage="deposit_photo"
                           @getImg="getImg"></UpLoad>
                 </el-form-item>

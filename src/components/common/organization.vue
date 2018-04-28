@@ -232,6 +232,8 @@
           //获取顶级部门名称
         this.currentPage_depart = 1;
         this.currentPage_user = 1;
+        this.departmentList = [];
+        this.departmentStaff = [];
         this.$http.get(globalConfig.server_user+'organizations/1').then((res) => {
           if(res.data.status === 'success'){
             this.highestDepart = res.data.data.name;

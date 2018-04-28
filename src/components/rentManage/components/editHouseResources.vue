@@ -575,16 +575,16 @@
                 <el-form-item label="交接单照片">
                   <UpLoad :ID="'editHouse_hand_over_card'" :isClear="isClear" :editImage="checkin_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
-                <el-form-item label="委托书" required="">
-                  <UpLoad :ID="'editHouse_proxy_card'" :isClear="isClear" :onlyShow="isDoc && !isAll"
+                <el-form-item label="委托书">
+                  <UpLoad :ID="'editHouse_proxy_card'" :isClear="isClear"
                           :editImage="auth_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
-                <el-form-item label="押金收条" required="">
-                  <UpLoad :ID="'editHouse_deposit_card'" :isClear="isClear" :onlyShow="isDoc && !isAll"
+                <el-form-item label="押金收条">
+                  <UpLoad :ID="'editHouse_deposit_card'" :isClear="isClear"
                           :editImage="deposit_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
-                <el-form-item label="承诺书" required="">
-                  <UpLoad :ID="'editHouse_commitment_card'" :isClear="isClear" :onlyShow="isDoc && !isAll"
+                <el-form-item label="承诺书">
+                  <UpLoad :ID="'editHouse_commitment_card'" :isClear="isClear"
                           :editImage="promise" @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="补充照片">

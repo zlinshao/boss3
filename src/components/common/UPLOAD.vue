@@ -128,7 +128,7 @@
           browse_button: _this.ID,       //上传按钮的ID
           uptoken: _this.token,                   // uptoken是上传凭证，由其他程序生成
 
-          get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
+          get_new_uptoken: true,             // 设置上传文件的时候是否每次都重新获取新的uptoken
           unique_names: true,                 // 默认false，key为文件
           domain: globalConfig.domain,  // bucket域名，下载资源时用到，必需
 

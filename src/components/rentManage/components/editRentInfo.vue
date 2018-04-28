@@ -450,8 +450,8 @@
                   <UpLoad :ID="'editRent_certificate_photo'" :onlyShow="(!isPc || isDoc) && !isAll"
                           :isClear="isClear" :editImage="certificate_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
-                <el-form-item label="押金收条" required="">
-                  <UpLoad :ID="'editRent_deposit_card'" :isClear="isClear" :onlyShow="isDoc && !isAll"
+                <el-form-item label="押金收条">
+                  <UpLoad :ID="'editRent_deposit_card'" :isClear="isClear"
                           :editImage="deposit_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
 

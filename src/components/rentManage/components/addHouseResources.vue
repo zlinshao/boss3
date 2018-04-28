@@ -582,15 +582,15 @@
                   <UpLoad :ID="'addHouse_hand_over_card'" :isClear="isClear" :editImage="checkin_photo"
                           @getImg="getImg"></UpLoad>
                 </el-form-item>
-                <el-form-item label="委托书" required="">
+                <el-form-item label="委托书">
                   <UpLoad :ID="'addHouse_proxy_card'" :isClear="isClear" :editImage="auth_photo"
                           @getImg="getImg"></UpLoad>
                 </el-form-item>
-                <el-form-item label="押金收条" required="">
+                <el-form-item label="押金收条">
                   <UpLoad :ID="'addHouse_deposit_card'" :isClear="isClear" :editImage="deposit_photo"
                           @getImg="getImg"></UpLoad>
                 </el-form-item>
-                <el-form-item label="承诺书" required="">
+                <el-form-item label="承诺书">
                   <UpLoad :ID="'addHouse_commitment_card'" :isClear="isClear" :editImage="promise"
                           @getImg="getImg"></UpLoad>
                 </el-form-item>
