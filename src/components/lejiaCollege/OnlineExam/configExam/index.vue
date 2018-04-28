@@ -75,7 +75,8 @@
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===154 || item.category===155">
           <el-checkbox v-model="formbox[key] && formbox[key].check"></el-checkbox>&nbsp;&nbsp;&nbsp;{{key+1}}.<span
-          style="color:#6a8dfb; margin-left:20px;">多选题</span>
+          style="color:#6a8dfb; margin-left:20px;"><span v-if="item.category===154">多选题</span><span
+          v-if="item.category===155">不定向选择题</span></span>
           <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
@@ -111,7 +112,8 @@
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===157 || item.category===158">
           <el-checkbox v-model="formbox[key].check"></el-checkbox>&nbsp;&nbsp;&nbsp; {{key+1}}.<span
-          style="color:#6a8dfb; margin-left:20px;">简单题</span>
+          style="color:#6a8dfb; margin-left:20px;"><span v-if="item.category===157">填空题</span><span
+          v-if="item.category===158">简答题</span></span>
           <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
@@ -125,12 +127,8 @@
                 <span style="color:#409EFF;">第{{index+1}}处答案：</span>
                 <span>{{val}}</span>
               </div>
-              <div v-if="item.category===158">
-                <span style="color:#409EFF;">答案：</span>
-                <span>{{val}}</span>
-              </div>
+              <div v-if="item.category===158"></div>
             </el-col>
-            <el-col v-if="!item.answer || item.answer.length===0">暂无答案</el-col>
           </div>
         </div>
       </div>
@@ -225,11 +223,14 @@
       },
       importQuestion() {
         this.testPaperDialog = false;
-        this.$router.push({path: "/batchQuestions"});
+        this.$router.push({
+          path: "/batchQuestions",
+          query: {name: this.testPaperData.name, type_id: this.testPaperData.category_id, type_name: this.testPaperData.category_name}
+        });
       },
       myselfQuestion() {
         this.testPaperDialog = false;
-        this.$router.push({path: "/myselfQuestions"});
+        this.$router.push({path: "/myselfQuestions", query: {paper_id: this.testPaperData.id,type: 'add'}});
       },
       openModalDialog() {
         this.testPaperDialog = true;
@@ -308,7 +309,10 @@
       },
       //编辑题目
       editQues(val) {
-        this.$router.push({path: '/myselfQuestions', query: {paper_id: this.testPaperId, quesId: val.id, category:val.category,type: 'edit'}});
+        this.$router.push({
+          path: '/myselfQuestions',
+          query: {paper_id: this.testPaperId, quesId: val.id, category: val.category, type: 'edit'}
+        });
       }
     }
   };

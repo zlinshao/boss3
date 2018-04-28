@@ -4,7 +4,7 @@
       <div class="qutitle">
         <div class="title1">题型</div>
         <el-tabs type="border-card" v-model="activeName">
-          <el-tab-pane name="first" label="单选题">
+          <el-tab-pane name="first" label="单选题" :disabled="tabDisabled[0]">
             <el-form :model="singleForm" onsubmit="return false;">
               <div class="qubody">
                 <div class="topbody">
@@ -43,7 +43,7 @@
             </el-form>
           </el-tab-pane>
 
-          <el-tab-pane name="second" label="多选题">
+          <el-tab-pane name="second" label="多选题" :disabled="tabDisabled[1]">
             <el-form :model="multiForm" onsubmit="return false;">
               <div class="qubody">
                 <div class="topbody">
@@ -82,7 +82,7 @@
             </el-form>
           </el-tab-pane>
 
-          <el-tab-pane name="third" label="不定向选择">
+          <el-tab-pane name="third" label="不定向选择" :disabled="tabDisabled[2]">
             <el-form :model="multiForm" onsubmit="return false;">
               <div class="qubody">
                 <div class="topbody">
@@ -121,7 +121,7 @@
             </el-form>
           </el-tab-pane>
 
-          <el-tab-pane name="fourth" label="判断题">
+          <el-tab-pane name="fourth" label="判断题" :disabled="tabDisabled[3]">
             <el-form :model="judgeForm" onsubmit="return false;">
               <div class="qubody">
                 <div class="topbody">
@@ -156,7 +156,7 @@
             </el-form>
           </el-tab-pane>
 
-          <el-tab-pane name="five" label="填空题">
+          <el-tab-pane name="five" label="填空题" :disabled="tabDisabled[4]">
             <el-form :model="blankForm" onsubmit="return false;">
               <div class="qubody">
                 <div class="topbody">
@@ -199,7 +199,7 @@
             </el-form>
           </el-tab-pane>
 
-          <el-tab-pane name="six" label="问答题">
+          <el-tab-pane name="six" label="问答题" :disabled="tabDisabled[5]">
             <el-form :model="answerForm" onsubmit="return false;">
               <div class="qubody">
                 <div class="topbody">
@@ -240,12 +240,6 @@
       return {
         activeName: "first",
         editorDisabled: false,
-        form3: {
-          check: "",
-          score: "",
-          checkbox: [],
-          panduan: ""
-        },
         //单选
         singlen: 4,
         singleForm: {
@@ -306,6 +300,8 @@
         submitDisabled: false,
         quesId: '',  //编辑时候的题目id
         editQuesCategory: '',  //编辑时候的题目类型
+        tabDisabled: [false, false, false, false, false, false],
+
       };
     },
     activated() {
@@ -318,6 +314,13 @@
             if (res.data.code === '30000') {
               switch (this.activeName) {
                 case 'first':
+                  for (var i = 0; i < this.tabDisabled.length; i++) {
+                    if (i === 0) {
+                      this.tabDisabled[i] = false;
+                    } else {
+                      this.tabDisabled[i] = true;
+                    }
+                  }
                   this.options = [];
                   this.singleForm.stem = res.data.data.stem;
                   this.singleForm.score = res.data.data.score;
@@ -328,25 +331,90 @@
                   this.optionsSelect = res.data.data.answer.charCodeAt() - 65;
                   break;
                 case 'second':
-                  this.multiForm = res.data.data;
+                  for (var i = 0; i < this.tabDisabled.length; i++) {
+                    if (i === 1) {
+                      this.tabDisabled[i] = false;
+                    } else {
+                      this.tabDisabled[i] = true;
+                    }
+                  }
+                  this.multiOptions = [];
+                  this.multiOptionsSelect = [];
+                  this.multiForm.stem = res.data.data.stem;
+                  this.multiForm.score = res.data.data.score;
+                  for (var i in res.data.data.choice) {
+                    this.multiOptions[i.charCodeAt() - 65] = res.data.data.choice[i];
+                  }
+                  this.boxlen = this.multiOptions.length;
+                  for (var i = 0; i < res.data.data.answer.length; i++) {
+                    this.multiOptionsSelect.push(i);
+                  }
                   break;
                 case 'third':
-                  this.multiForm = res.data.data;
+                  for (var i = 0; i < this.tabDisabled.length; i++) {
+                    if (i === 2) {
+                      this.tabDisabled[i] = false;
+                    } else {
+                      this.tabDisabled[i] = true;
+                    }
+                  }
+                  this.multiOptions = [];
+                  this.multiOptionsSelect = [];
+                  this.multiForm.stem = res.data.data.stem;
+                  this.multiForm.score = res.data.data.score;
+                  for (var i in res.data.data.choice) {
+                    this.multiOptions[i.charCodeAt() - 65] = res.data.data.choice[i];
+                  }
+                  this.boxlen = this.multiOptions.length;
+                  for (var i = 0; i < res.data.data.answer.length; i++) {
+                    this.multiOptionsSelect.push(i);
+                  }
                   break;
                 case 'fourth':
-                  this.judgeForm = res.data.data;
+                  for (var i = 0; i < this.tabDisabled.length; i++) {
+                    if (i === 3) {
+                      this.tabDisabled[i] = false;
+                    } else {
+                      this.tabDisabled[i] = true;
+                    }
+                  }
+                  this.judgeOptions = [];
+                  this.judgeForm.stem = res.data.data.stem;
+                  this.judgeForm.score = res.data.data.score;
+                  for (var i in res.data.data.choice) {
+                    this.judgeOptions[i.charCodeAt() - 65] = res.data.data.choice[i];
+                  }
+                  this.judgeOptionsSelect = res.data.data.answer.charCodeAt() - 65;
                   break;
                 case 'five':
-                  this.blankForm = res.data.data;
+                  for (var i = 0; i < this.tabDisabled.length; i++) {
+                    if (i === 4) {
+                      this.tabDisabled[i] = false;
+                    } else {
+                      this.tabDisabled[i] = true;
+                    }
+                  }
+                  this.blankForm.stem = res.data.data.stem;
+                  this.blankForm.score = res.data.data.score;
+                  this.blankForm.answer = res.data.data.answer;
+                  this.spacelen = res.data.data.answer.length;
                   break;
                 case 'six':
-                  this.answerForm = res.data.data;
+                  for (var i = 0; i < this.tabDisabled.length; i++) {
+                    if (i === 5) {
+                      this.tabDisabled[i] = false;
+                    } else {
+                      this.tabDisabled[i] = true;
+                    }
+                  }
+                  this.answerForm.stem = res.data.data.stem;
+                  this.answerForm.score = res.data.data.score;
                   break;
               }
             }
           });
         } else {
-
+          this.tabDisabled = [false, false, false, false, false, false];
         }
       },
       editQuesCategory(val) {
@@ -444,7 +512,6 @@
           this.submitDisabled = false;
         }
       },
-
     },
     methods: {
       getQueryData() {
@@ -460,6 +527,16 @@
           this.blankForm.paper_id = data.paper_id;
           this.answerForm.paper_id = data.paper_id;
 
+          if (data.type === 'add') {
+            this.quesId = '';
+            this.editQuesCategory = '';
+            for (var i = 0; i < this.tabDisabled.length; i++) {
+              this.tabDisabled[i] = false;
+            }
+          } else if (data.type === 'edit') {
+            this.quesId = data.quesId;
+            this.editQuesCategory = data.category;
+          }
           this.$router.push({path: '/myselfQuestions', query: data});
         } else {
           let query = this.$route.query;
@@ -471,6 +548,9 @@
           if (query.type === 'add') {
             this.quesId = '';
             this.editQuesCategory = '';
+            for (var i = 0; i < this.tabDisabled.length; i++) {
+              this.tabDisabled[i] = false;
+            }
           } else if (query.type === 'edit') {
             this.quesId = query.quesId;
             this.editQuesCategory = query.category;
@@ -552,6 +632,7 @@
       },
       multiSub(index) {
         this.multiOptions[index] = '';
+        this.multiOptionsSelect[index] = '';
         for (var i = index; i < this.boxlen; i++) {
           this.multiOptions[i] = this.multiOptions[i + 1];
         }
