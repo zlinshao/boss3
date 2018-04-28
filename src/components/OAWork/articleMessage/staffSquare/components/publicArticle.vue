@@ -383,10 +383,7 @@
   }
 </script>
 
-<style lang="scss" scoped>
-  .ql-editor {
-    max-height: 700px;
-  }
+<style lang="scss">
   #publicArticle {
     @mixin flex {
       display: -webkit-flex;
@@ -426,6 +423,7 @@
     }
     .ql-editor {
       padding: 0;
+      max-height: 700px;
     }
     .staff_name {
       @include flex;
