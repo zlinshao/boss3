@@ -6,7 +6,7 @@
       <div class="navigation">
       <div class="navigation_left" @mouseover="showKey('achievement')" @click="clickKey('achievement')" @mouseout="outHide('achievement') ">
       <img src="../../../assets/images/university/勋章.svg" v-if="achievementImgShow" style="width:40px;"/>
-      <div v-if="!achievementImgShow">成绩查询</div>
+      <div v-if="!achievementImgShow">我的考试</div>
       </div>
       <div class="navigation_right" @mouseover="showKey('sign')" @click="clickKey('sign')" @mouseout="outHide('sign') ">
       <img src="../../../assets/images/university/在线报名.svg" v-if="signImgShow" style="width:32px;position: absolute;right: 26px;"/>
@@ -354,6 +354,7 @@ import StarffAdd from "./StarffAdd.vue";
       this.getTeachers();
       this.getPictureAppreciation();
       $("ul.el-carousel__indicators").css("display", "none");
+
     },
     activated() {
       this.getCourseStatus();
