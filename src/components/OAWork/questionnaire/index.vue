@@ -29,7 +29,7 @@
         <div class="myHouse">
           <div>
             <el-table
-              :data="quizData"
+              :data="tableData1"
               :empty-text='rentStatus'
               v-loading="rentLoading"
               element-loading-text="拼命加载中"
@@ -39,15 +39,18 @@
               @row-contextmenu='openContextMenu'
               style="width: 100%">
               <el-table-column
-                prop="title"
                 label="标题">
+              <template slot-scope="scope">
+                <span v-if="scope.row.name">{{scope.row.name}}</span>
+                <span v-if="!scope.row.name">暂无</span>
+              </template>
               </el-table-column>
               <el-table-column
-                prop="house_type"
                 label="发布人">
+
               </el-table-column>
               <el-table-column
-                prop="deposit"
+                prop="start_time"
                 label="发布时间">
               </el-table-column>
               <el-table-column
@@ -130,7 +133,8 @@
                @clickOperate="clickEvent"></RightMenu>
     <Organization :organizationDialog="organizationDialog" :type="organizeType" @close="closeOrganization"
                   @selectMember="selectMember"></Organization>
-    <PreviewNaire :previewNaireDialog="previewNaireDialog"  @close="closepreviewNaireDialog"></PreviewNaire>
+    <PreviewNaire :previewNaireDialog="previewNaireDialog" :testPaperId="testPaperId"  @close="closepreviewNaireDialog"></PreviewNaire>
+    <AnswerNaire :answerNaireDialog="answerNaireDialog" :testPaperId="testPaperId"  @close="closepreviewNaireDialog"></AnswerNaire>
   </div>
 </template>
 
@@ -138,9 +142,10 @@
 import RightMenu from "../../common/rightMenu.vue"; //右键
 import Organization from "../../common/organization";
 import PreviewNaire from "./previewNaire/index.vue";
+import AnswerNaire from "./answerNaire/index.vue";
 export default {
   name: "index",
-  components: { RightMenu, Organization, PreviewNaire },
+  components: { RightMenu, Organization, PreviewNaire,AnswerNaire },
   data() {
     return {
       pickerOptions2: {
@@ -178,6 +183,7 @@ export default {
       organizationDialog: false,
       organizeType: "",
       previewNaireDialog: false,
+      answerNaireDialog: false,
       rightMenuX: 0,
       rightMenuY: 0,
       show: false,
@@ -193,7 +199,7 @@ export default {
       },
       totalNum: 0,
       search: "",
-      quizData: [{ title: "好的" }, { title: "好的" }],
+      tableData1: [],
       examType: [
         { id: 1, name: "新员工入职" },
         { id: 2, name: "初级晋升考试" },
@@ -215,11 +221,12 @@ export default {
       paperTypeForm: {
         name: ""
       },
-      currentPage: 1
+      currentPage: 1,
+      testPaperId: '',
     };
   },
   mounted() {
-    this.getTestPaperData();
+    this.getExamData();
   },
   watch: {
     paperTypeDialog(val) {
@@ -261,15 +268,27 @@ export default {
           break;
       }
     },
-    getTestPaperData() {
-      this.$http
-        .get(globalConfig.server + "exam/paper", { params: this.params })
-        .then(res => {
-          if (res.data.code === "") {
+      //考试列表
+      getExamData() {
+        this.tableStatus = " ";
+        this.tableLoading = true;
+        this.$http.get(globalConfig.server + 'exam/paper', {params: this.params}).then((res) => {
+          this.tableLoading = false;
+          this.isHigh = false;
+          if (res.data.code === '36000') {
+            this.tableData1 = res.data.data.data;
+            this.totalNum = res.data.data.count;
           } else {
+            this.tableData1 = [];
+            this.totalNum = 0;
+            this.tableStatus = "暂无数据";
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
           }
         });
-    },
+      },
     paperTypeBtn() {
       if (!this.paperTypeForm.name) {
         this.$notify.warning({
@@ -291,6 +310,7 @@ export default {
     },
     //右键菜单
     openContextMenu(row, event) {
+      this.testPaperId = row.id;
       this.lists = [
         {
           clickIndex: "configExamDialog",
@@ -347,29 +367,31 @@ export default {
     clickEvent(index) {
       //右键修改
       if (index == "configExamDialog") {
-        // var data = {ids: row.id, detail: 'port'};
-        this.$router.push({ path: "/configNaire" });
+        this.$router.push({path: "/configNaire", query: {id: this.testPaperId}});
       }
       if (index == "deleteExam") {
-        this.$confirm("删除后不可恢复, 是否继续?", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-          .then(() => {})
-          .catch(() => {
-            this.$message({
-              type: "info",
-              message: "已取消删除"
-            });
-          });
+        this.answerNaireDialog = true;
+        // this.$confirm("删除后不可恢复, 是否继续?", "提示", {
+        //   confirmButtonText: "确定",
+        //   cancelButtonText: "取消",
+        //   type: "warning"
+        // })
+        //   .then(() => {})
+        //   .catch(() => {
+        //     this.$message({
+        //       type: "info",
+        //       message: "已取消删除"
+        //     });
+        //   });
       }
       if (index == "lookExamDialog") {
         this.previewNaireDialog = true;
+    
       }
     },
     closepreviewNaireDialog() {
       this.previewNaireDialog = false;
+      this.answerNaireDialog = false;
     },
     closeOrganization() {
       this.organizationDialog = false;

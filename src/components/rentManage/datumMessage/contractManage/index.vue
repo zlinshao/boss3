@@ -848,6 +848,7 @@
           un_upload: '',   // 是否上传合同
           org_id: [],  // 部门
           status: '',   // 房屋状态1:未签约， 2：已签约， 3：快到期（60天内）， 4：已结束， 5：已过期
+          contract_index:'1',
         },
         department: '',
         type: '',
