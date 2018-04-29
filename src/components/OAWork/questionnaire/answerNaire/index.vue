@@ -20,7 +20,7 @@
           </el-form>       
         </div>
 
-        <div class="questionDiv"v-for="(item,key) in testPaperData.questions" v-if="item.category===158" :key="key">
+        <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===158" :key="key">
           {{key+1+2}}.<span style="color:#6a8dfb; margin-left:20px;">简答题</span>
         <p style="margin-left:30px;line-height:20px;padding-right:10px;">{{item.stem}}</p> 
           <el-form :model="form4[key]" >
