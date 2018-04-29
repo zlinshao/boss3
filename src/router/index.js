@@ -12,6 +12,10 @@ import Lock from '../components/common/lockedScreen.vue'
 import WholeRentManage from '../components/rentManage/wholeRentManage/index.vue'
 import JointRentManage from '../components/rentManage/jointRentManage/index.vue'
 
+//客服中心
+// import ExpenseAccount from '../components/customService/expenseAccount/index.vue'   //报销
+// import ReturnVisit from '../components/customService/returnVisit/index.vue'         //回访
+
 // import ContractManage from '../components/rentManage/datumMessage/contractManage/index.vue'
 // import ClientManage from '../components/rentManage/datumMessage/clientManage/index.vue'
 import HousesManage from '../components/rentManage/housesManage/index.vue'                      //产品管控中心
@@ -83,7 +87,7 @@ import ExamineAndApprove from '../components/OAWork/examineAndApprove/index.vue'
 // 乐伽大学
 import LineCollege from '../components/lejiaCollege/LineCollege/index.vue'
 import StaffRegistration from '../components/lejiaCollege/StaffRegistration/index.vue'
-import College from '../components/lejiaCollege/college/index.vue'            
+import College from '../components/lejiaCollege/college/index.vue'
 import OnlineExam from '../components/lejiaCollege/OnlineExam/index.vue'    //在线考试
 
 import ConfigExam from '../components/lejiaCollege/OnlineExam/configExam/index.vue'  //管理试卷
@@ -323,7 +327,7 @@ export default new Router({
         // {path: '/datumMessage', component: DatumMessage, name: '资料管理',},
         {path: '/clientManage', component: ClientManage, name: '客户管理',},
         {path: '/contractManage', component: ContractManage, name: '合同管理',},
-        {path: '/workOrderManage', component: WorkOrderManage, name: '工单管理',},
+        // {path: '/workOrderManage', component: WorkOrderManage, name: '工单管理',},
         // {path: '/retreatManage', component: RetreatManage, name: '退租管理',},
         // {
         //   path: '/datumMessage', component: DatumMessage, icon: 'el-icons-fa-money', name: '资料管理',
@@ -333,10 +337,21 @@ export default new Router({
         //     {path: '/datumMessage/contractManage', component: ContractManage, name: '合同管理',},
         //   ]
         // },
-        {path: '/repairManage', component: RepairManage, name: '维修管理',}
+        // {path: '/repairManage', component: RepairManage, name: '维修管理',}
       ]
     },
-
+    {
+      path: '/',
+      component: Index,
+      name: '客服中心',
+      icon: 'iconfont icon-zulin',
+      children: [
+        {path: '/workOrderManage', component: WorkOrderManage, name: '工单管理',},
+        {path: '/repairManage', component: RepairManage, name: '维修管理',},
+        // {path: '/ExpenseAccount', component: ExpenseAccount, name: '报销',},
+        // {path: '/ReturnVisit', component: RepairManage, name: '回访',},
+      ]
+    },
     //
     // {
     //   path: '/',
@@ -464,7 +479,7 @@ export default new Router({
         // {path: '/StaffRegistration', component: StaffRegistration, name: '员工报名'},
         {path: '/OnlineExam', component: OnlineExam, name: '在线考试'},
         {path: '/examinerRead', component: ExaminerRead, name: '考官判卷'},
-        
+
       ]
     },
     {
