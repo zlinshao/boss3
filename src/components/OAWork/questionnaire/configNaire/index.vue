@@ -53,8 +53,8 @@
           <span class="move_up" @click="moveUp(item.id)">上移</span>
           <p style="margin-left:30px;line-height:30px;" v-html="item.stem"></p>
           <div style="width:98%;margin-left:2%;">
-            <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:25px;height: 25px;">
-              <span>{{index}}：{{val}}</span>
+            <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:25px;height: 25px; overflow: hidden;">
+              <span :title="val">{{index}}：{{val}}</span>
             </el-col>
           </div>
         </div>
