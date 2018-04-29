@@ -4,13 +4,15 @@
       <el-form size="mini" label-width="110px">
         <el-row v-if="JSON.stringify(show_content) !== '{}'">
           <el-col :span="8" v-for="(key,index) in show_content" :key="index"
-                  v-if="index !== '领导报备截图' && index !== '款项结清截图' && index !== '特殊情况领导截图' && index !== '合同照片' && index !== '截图' && index !== '组长同意截图'">
+                  v-if="printscreen.indexOf(index) === -1">
             <el-form-item v-if="!Array.isArray(key)" :label="index">
-              <div class="special">{{key}}</div>
+              <div class="special" v-if="index !== '房屋类型'">{{key}}</div>
+              <div class="special" v-if="index === '房屋类型'">{{key.name}}</div>
             </el-form-item>
             <el-form-item v-if="Array.isArray(key)" :label="index">
               <div class="special">
-                <span style="display: block;" v-for="(item,index) in key">
+                <span v-if="index === '定金和收款方式' || index === '补交定金和收款方式'" v-for="item in key">{{item}}</span>
+                <span style="display: block;" v-for="(item,index) in key" v-else>
                   {{item.msg}}&nbsp;&nbsp;&nbsp;{{item.period}}
                 </span>
               </div>
@@ -20,7 +22,9 @@
             <el-form-item :label="index">
               <div class="special imgs">
                 <span v-for="(p,index) in key">
-                  <img data-magnify="" data-caption="图片查看器" :data-src="p" :src="p">
+                  <img data-magnify="" data-caption="图片查看器" :data-src="p.uri" :src="p.uri" v-if="!p.is_video">
+                  <!--<img src="../../../../assets/images/file.png" @click="checkTv(pic.uri)"  v-if="p.is_video">-->
+                  <video :src="p.uri" controls v-if="p.is_video" width="120px" height="80px"></video>
                 </span>
               </div>
             </el-form-item>
@@ -45,11 +49,16 @@
         reportVisible: false,
         show_content: {},
         processId: '',
+        printscreen: ['款项结清截图', '特殊情况领导截图', '特殊情况同意截图', '领导报备截图', '凭证截图', '合同照片', '截图', '领导同意截图', '房屋影像', '房屋照片', '退租交接单'],
+        videoSrc: '',
       }
     },
     mounted() {
     },
     watch: {
+      checkTv(val) {
+        this.videoSrc = val;
+      },
       module(val) {
         this.reportVisible = val;
       },
@@ -70,7 +79,7 @@
       process(val) {
         this.$http.get(this.address + 'process/' + val).then((res) => {
           if (res.data.status === 'success' && res.data.data.length !== 0) {
-            this.show_content = res.data.data.process.content.show_content;
+            this.show_content = JSON.parse(res.data.data.process.content.show_content_compress);
           }
         })
       }
