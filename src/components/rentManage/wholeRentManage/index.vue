@@ -21,7 +21,8 @@
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input placeholder="请输入内容" v-model="collectParams.search" @keyup.enter.native="search"  size="mini">
+              <el-input placeholder="请输入内容" clearable v-model="collectParams.search"
+                        @keyup.enter.native="search"  size="mini">
                 <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>

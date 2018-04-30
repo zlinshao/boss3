@@ -6,7 +6,7 @@
         <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input v-model="params.q" placeholder="搜索" clearable>
+              <el-input v-model="params.search" placeholder="搜索" clearable>
                 <el-button @click="search()" slot="append" type="primary" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
@@ -86,7 +86,7 @@
                   </el-col>
                 </el-row>
               </el-col>
-              <el-col :span="12" v-if="activeName == 'first' ">
+              <el-col :span="12" v-if="activeName == 'first'">
               <el-row>
                 <el-col :span="8">
                   <div class="el_col_label">合同结束时间</div>
@@ -778,7 +778,8 @@
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
-    <Organization :organizationDialog="organizationDialog" @close="closeOrganization" @selectMember="selectMember"></Organization>
+    <Organization :organizationDialog="organizationDialog" :type="type" :length="length"
+                  @close="closeOrganization" @selectMember="selectMember"></Organization>
     <visit-record :visitRecordDialog="visitRecordDialog" :contractId="contractOperateId"
                   :category="contractModule" @close="closeModal"></visit-record>
   </div>
@@ -837,8 +838,8 @@
         totalNumbers: 0,   //总数
         params: {
           page: 1,
-          per_page_number: '12',
-          q: '',      //模糊搜索
+          limit: '12',
+          search: '',      //模糊搜索
           publish_time: [],     //发布时间
           lord_start_time: [],  //收房合同开始时间
           lord_end_time: [],   //收房合同结束时间
@@ -846,12 +847,13 @@
           renter_end_time: [], //租房合同结束时间
           sign_time: [],   // 签约日期
           un_upload: '',   // 是否上传合同
-          org_id: [],  // 部门
+          org_id: '',  // 部门
           status: '',   // 房屋状态1:未签约， 2：已签约， 3：快到期（60天内）， 4：已结束， 5：已过期
           contract_index:'1',
         },
         department: '',
         type: '',
+        length:'',
         currentPage: 1,
         options: [
           {
@@ -963,16 +965,19 @@
       },
       selectMember(val) {
         if (this.type === 'depart') {
-          this.params.org_id = [];
-          let departNameArray = [];
-          if (val.length > 0) {
-            val.forEach((item) => {
-              this.params.org_id.push(item.id);
-              departNameArray.push(item.name);
-            });
-          }
-          this.department = departNameArray.join(',');
-          this.type = null;
+//          this.params.org_id = [];
+//          let departNameArray = [];
+//          if (val.length > 0) {
+//            val.forEach((item) => {
+//              this.params.org_id.push(item.id);
+//              departNameArray.push(item.name);
+//            });
+//          }
+//          this.department = departNameArray.join(',');
+//          this.type = null;
+
+          this.params.org_id = val[0].id;
+          this.department = val[0].name;
         }
         this.organizationDialog = false;
       },
@@ -983,7 +988,7 @@
         this.addressDialog = false;
         console.log(val);
         if(val){
-          this.params.q = val.address;
+          this.params.search = val.address;
         }
       },
       //查看补齐记录，跳转页面
@@ -1167,6 +1172,7 @@
       },
       selectDepart() {
         this.type = 'depart';
+        this.length = 1;
         this.organizationDialog = true;
       },
       emptyDepart() {
@@ -1195,7 +1201,7 @@
         this.department = '';
         this.params = {
           page: 1,
-          per_page_number: '',
+          limit: '',
           q: '',      //模糊搜索
           publish_time: [],     //发布时间
           lord_start_time: [],  //收房合同开始时间
@@ -1204,7 +1210,7 @@
           renter_end_time: [], //租房合同结束时间
           sign_time: [],   // 签约日期
           un_upload: '',   // 是否上传合同
-          org_id: [],  // 部门
+          org_id: '',  // 部门
           status: '',   // 房屋状态1:未签约， 2：已签约， 3：快到期（60天内）， 4：已结束， 5：已过期
           contract_index:'1',
         };
