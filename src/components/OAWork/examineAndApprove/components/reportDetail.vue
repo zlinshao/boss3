@@ -22,7 +22,7 @@
                 <span>{{personal.name}}<span v-for="(key,index) in personal.org"
                                              v-if="index === 0">-{{key.name}}</span></span>
               </div>
-              <div class="auditStatus">{{place.display_name}}</div>
+              <div class="auditStatus" v-if="placeFalse"><i class="iconfont icon-yanqi--"></i>&nbsp;{{place.display_name}}</div>
               <div class="statuss"
                    :class="{'statusSuccess':place.status === 'published', 'statusFail':place.status === 'rejected', 'cancelled':place.status === 'cancelled'}"></div>
             </div>
