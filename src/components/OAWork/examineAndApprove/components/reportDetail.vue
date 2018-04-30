@@ -74,6 +74,7 @@
                     <div class="commentA">
                       <span class="headSculpture">
                          <img :src="key.user.avatar" v-if="key.user.avatar !== '' && key.user.avatar !== null">
+                         <img src="../../../../assets/images/head.png" v-else>
                       </span>
                       {{key.user.name}}
                       <span v-for="(item,index) in key.user.org" v-if="index === 0">-{{item.name}}</span>
