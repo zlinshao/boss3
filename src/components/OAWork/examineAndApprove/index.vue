@@ -545,8 +545,8 @@
         <!--label="报备类型">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
-          <!--prop="name"-->
-          <!--label="报备人">-->
+        <!--prop="name"-->
+        <!--label="报备人">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
         <!--prop="house_name"-->
@@ -640,8 +640,8 @@
         <!--label="报备类型">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
-          <!--prop="name"-->
-          <!--label="报备人">-->
+        <!--prop="name"-->
+        <!--label="报备人">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
         <!--prop="house_name"-->
@@ -672,8 +672,8 @@
         <!--label="报备类型">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
-          <!--prop="name"-->
-          <!--label="报备人">-->
+        <!--prop="name"-->
+        <!--label="报备人">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
         <!--prop="house_name"-->
@@ -948,13 +948,13 @@
               user.created_at = data[i].created_at;
               user.finish_at = data[i].finish_at !== null ? data[i].finish_at : '/';
               if (val.type === 3) {
+                if (data[i].content.house) {
+                  user.house_name = data[i].content.house.name;
+                } else {
+                  user.house_name = '/';
+                }
                 if (data[i].user) {
                   user.avatar = data[i].user.avatar;
-                  if(data[i].content.house){
-                    user.house_name = data[i].content.house.name;
-                  }else{
-                    user.house_name = '/';
-                  }
                   user.name = data[i].user.name;
                   user.depart = data[i].user.org[0].name;
                 } else {
@@ -970,14 +970,14 @@
               if (val.type === 1 || val.type === 2 || val.type === 4) {
                 user.bulletin = data[i].title;
                 if (data[i].flow) {
+                  if (user.house_name = data[i].flow.content.house) {
+                    user.house_name = data[i].flow.content.house.name;
+                  } else {
+                    user.house_name = '/';
+                  }
                   if (data[i].user) {
                     user.avatar = data[i].flow.user.avatar;
                     user.name = data[i].flow.user.name;
-                    if(user.house_name = data[i].flow.content.house){
-                      user.house_name = data[i].flow.content.house.name;
-                    }else{
-                      user.house_name = '/';
-                    }
                     user.depart = data[i].flow.user.org[0].name;
                   } else {
                     user.avatar = '';
