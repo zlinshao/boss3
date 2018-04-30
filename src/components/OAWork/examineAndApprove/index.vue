@@ -403,24 +403,24 @@
             @row-dblclick="dblClickTable"
             style="width: 100%">
             <el-table-column
-              prop="title"
-              label="审批标题">
-            </el-table-column>
-            <el-table-column
-              prop="summary"
-              label="审批摘要">
-            </el-table-column>
-            <el-table-column
               prop="created_at"
               label="发起时间">
             </el-table-column>
             <el-table-column
-              prop="finish_at"
-              label="完成时间">
+              prop="bulletin"
+              label="报备类型">
             </el-table-column>
             <el-table-column
-              prop="status"
+              prop="address"
+              label="房屋地址">
+            </el-table-column>
+            <el-table-column
+              prop="place"
               label="状态">
+            </el-table-column>
+            <el-table-column
+              prop="finish_at"
+              label="完成时间">
             </el-table-column>
           </el-table>
         </div>
@@ -437,24 +437,24 @@
           @row-dblclick="dblClickTable"
           style="width: 100%">
           <el-table-column
-            prop="title"
-            label="审批标题">
-          </el-table-column>
-          <el-table-column
-            prop="summary"
-            label="审批摘要">
-          </el-table-column>
-          <el-table-column
             prop="created_at"
             label="发起时间">
           </el-table-column>
           <el-table-column
-            prop="finish_at"
-            label="完成时间">
+            prop="bulletin"
+            label="报备类型">
           </el-table-column>
           <el-table-column
-            prop="status"
+            prop="address"
+            label="房屋地址">
+          </el-table-column>
+          <el-table-column
+            prop="place"
             label="状态">
+          </el-table-column>
+          <el-table-column
+            prop="finish_at"
+            label="完成时间">
           </el-table-column>
         </el-table>
       </el-tab-pane>
@@ -490,24 +490,24 @@
               @row-dblclick="dblClickTable"
               style="width: 100%">
               <el-table-column
-                prop="title"
-                label="审批标题">
-              </el-table-column>
-              <el-table-column
-                prop="summary"
-                label="审批摘要">
-              </el-table-column>
-              <el-table-column
                 prop="created_at"
                 label="发起时间">
               </el-table-column>
               <el-table-column
-                prop="finish_at"
-                label="完成时间">
+                prop="bulletin"
+                label="报备类型">
               </el-table-column>
               <el-table-column
-                prop="status"
+                prop="address"
+                label="房屋地址">
+              </el-table-column>
+              <el-table-column
+                prop="place"
                 label="状态">
+              </el-table-column>
+              <el-table-column
+                prop="finish_at"
+                label="完成时间">
               </el-table-column>
             </el-table>
           </div>
@@ -525,24 +525,24 @@
         <!--@row-dblclick="dblClickTable"-->
         <!--style="width: 100%">-->
         <!--<el-table-column-->
-        <!--prop="title"-->
-        <!--label="审批标题">-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
-        <!--prop="summary"-->
-        <!--label="审批摘要">-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
         <!--prop="created_at"-->
         <!--label="发起时间">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
-        <!--prop="finish_at"-->
-        <!--label="完成时间">-->
+        <!--prop="bulletin"-->
+        <!--label="报备类型">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
-        <!--prop="status"-->
+        <!--prop="address"-->
+        <!--label="房屋地址">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+        <!--prop="place"-->
         <!--label="状态">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+        <!--prop="finish_at"-->
+        <!--label="完成时间">-->
         <!--</el-table-column>-->
         <!--</el-table>-->
         <!--</el-tab-pane>-->
@@ -581,24 +581,24 @@
               @row-dblclick="dblClickTable"
               style="width: 100%">
               <el-table-column
-                prop="title"
-                label="审批标题">
-              </el-table-column>
-              <el-table-column
-                prop="summary"
-                label="审批摘要">
-              </el-table-column>
-              <el-table-column
                 prop="created_at"
                 label="发起时间">
               </el-table-column>
               <el-table-column
-                prop="finish_at"
-                label="完成时间">
+                prop="bulletin"
+                label="报备类型">
               </el-table-column>
               <el-table-column
-                prop="status"
+                prop="address"
+                label="房屋地址">
+              </el-table-column>
+              <el-table-column
+                prop="place"
                 label="状态">
+              </el-table-column>
+              <el-table-column
+                prop="finish_at"
+                label="完成时间">
               </el-table-column>
             </el-table>
           </div>
@@ -612,24 +612,24 @@
         <!--@row-dblclick="dblClickTable"-->
         <!--style="width: 100%">-->
         <!--<el-table-column-->
-        <!--prop="title"-->
-        <!--label="审批标题">-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
-        <!--prop="summary"-->
-        <!--label="审批摘要">-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
         <!--prop="created_at"-->
         <!--label="发起时间">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
-        <!--prop="finish_at"-->
-        <!--label="完成时间">-->
+        <!--prop="bulletin"-->
+        <!--label="报备类型">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
-        <!--prop="status"-->
+        <!--prop="address"-->
+        <!--label="房屋地址">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+        <!--prop="place"-->
         <!--label="状态">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+        <!--prop="finish_at"-->
+        <!--label="完成时间">-->
         <!--</el-table-column>-->
         <!--</el-table>-->
         <!--</el-tab-pane>-->
@@ -640,24 +640,28 @@
         <!--@row-dblclick="dblClickTable"-->
         <!--style="width: 100%">-->
         <!--<el-table-column-->
-        <!--prop="title"-->
-        <!--label="审批标题">-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
-        <!--prop="summary"-->
-        <!--label="审批摘要">-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
         <!--prop="created_at"-->
         <!--label="发起时间">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+        <!--prop="bulletin"-->
+        <!--label="报备类型">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+        <!--prop="address"-->
+        <!--label="房屋地址">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
         <!--prop="finish_at"-->
         <!--label="完成时间">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
-        <!--prop="status"-->
+        <!--prop="place"-->
         <!--label="状态">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+        <!--prop="finish_at"-->
+        <!--label="完成时间">-->
         <!--</el-table-column>-->
         <!--</el-table>-->
         <!--</el-tab-pane>-->
@@ -774,8 +778,8 @@
     data() {
       return {
         address: globalConfig.server_user,
-        paging: 0,
         amount: 0,
+        paging: 0,
         params: {
           page: 1,
         },
@@ -906,27 +910,52 @@
           this.examineLoading = false;
           let data = res.data.data;
           if (res.data.status === 'success' && data.length !== 0) {
-            if ((val.type === 3 && val.published === 0) || (val.type === 4 && val.read_at === 0)) {
-              this.amount = res.data.meta.total;
-            }
+            // if ((val.type === 3 && val.published === 0) || (val.type === 4 && val.read_at === 0)) {
+            //   this.amount = res.data.meta.total;
+            // }
             this.paging = res.data.meta.total;
             let dataList = [];
             for (let i = 0; i < data.length; i++) {
-              let list = {};
-              list.id = data[i].id;
-              list.created_at = data[i].created_at;
-              list.finish_at = data[i].finish_at !== null ? data[i].finish_at : '未完成';
+              let user = {};
+              user.created_at = data[i].created_at;
+              user.finish_at = data[i].finish_at !== null ? data[i].finish_at : '/';
               if (val.type === 3) {
-                list.title = '发起的XXXXXX报备';
-                list.summary = '摘要';
-                list.status = data[i].place.display_name;
-              } else {
-                list.title = data[i].title;
-                if (data[i].flow !== null) {
-                  list.status = data[i].flow.place.display_name;
+                if (data[i].user) {
+                  user.avatar = data[i].user.avatar;
+                  user.name = data[i].user.name;
+                  user.depart = data[i].user.org[0].name;
+                } else {
+                  user.avatar = '';
+                  user.name = '';
+                  user.staff = '';
+                }
+                user.id = data[i].id;
+                user.place = data[i].place.display_name;
+                user.status = data[i].place.status;
+                user.bulletin = '我的' + data[i].content.bulletin_name;
+              }
+              if (val.type === 1 || val.type === 2 || val.type === 4) {
+                user.bulletin = data[i].title;
+                if (data[i].flow) {
+                  if (data[i].user) {
+                    user.avatar = data[i].flow.user.avatar;
+                    user.name = data[i].flow.user.name;
+                    user.depart = data[i].flow.user.org[0].name;
+                  } else {
+                    user.avatar = '';
+                    user.name = '';
+                    user.staff = '';
+                  }
+                  user.id = data[i].flow.id;
+                  user.place = data[i].flow.place.display_name;
+                  user.status = data[i].flow.place.status;
+                } else {
+                  user.place = '';
+                  user.status = '';
+                  user.bulletin = '';
                 }
               }
-              dataList.push(list);
+              dataList.push(user);
             }
             this.tableData = dataList;
           } else {
