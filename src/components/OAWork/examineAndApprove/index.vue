@@ -411,7 +411,11 @@
               label="报备类型">
             </el-table-column>
             <el-table-column
-              prop="address"
+              prop="name"
+              label="报备人">
+            </el-table-column>
+            <el-table-column
+              prop="house_name"
               label="房屋地址">
             </el-table-column>
             <el-table-column
@@ -445,7 +449,11 @@
             label="报备类型">
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="name"
+            label="报备人">
+          </el-table-column>
+          <el-table-column
+            prop="house_name"
             label="房屋地址">
           </el-table-column>
           <el-table-column
@@ -498,7 +506,11 @@
                 label="报备类型">
               </el-table-column>
               <el-table-column
-                prop="address"
+                prop="name"
+                label="报备人">
+              </el-table-column>
+              <el-table-column
+                prop="house_name"
                 label="房屋地址">
               </el-table-column>
               <el-table-column
@@ -533,7 +545,11 @@
         <!--label="报备类型">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
-        <!--prop="address"-->
+          <!--prop="name"-->
+          <!--label="报备人">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+        <!--prop="house_name"-->
         <!--label="房屋地址">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
@@ -589,7 +605,11 @@
                 label="报备类型">
               </el-table-column>
               <el-table-column
-                prop="address"
+                prop="name"
+                label="报备人">
+              </el-table-column>
+              <el-table-column
+                prop="house_name"
                 label="房屋地址">
               </el-table-column>
               <el-table-column
@@ -620,7 +640,11 @@
         <!--label="报备类型">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
-        <!--prop="address"-->
+          <!--prop="name"-->
+          <!--label="报备人">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+        <!--prop="house_name"-->
         <!--label="房屋地址">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
@@ -648,7 +672,11 @@
         <!--label="报备类型">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
-        <!--prop="address"-->
+          <!--prop="name"-->
+          <!--label="报备人">-->
+        <!--</el-table-column>-->
+        <!--<el-table-column-->
+        <!--prop="house_name"-->
         <!--label="房屋地址">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
@@ -922,12 +950,17 @@
               if (val.type === 3) {
                 if (data[i].user) {
                   user.avatar = data[i].user.avatar;
+                  if(data[i].content.house){
+                    user.house_name = data[i].content.house.name;
+                  }else{
+                    user.house_name = '/';
+                  }
                   user.name = data[i].user.name;
                   user.depart = data[i].user.org[0].name;
                 } else {
-                  user.avatar = '';
-                  user.name = '';
-                  user.staff = '';
+                  user.avatar = '/';
+                  user.name = '/';
+                  user.staff = '/';
                 }
                 user.id = data[i].id;
                 user.place = data[i].place.display_name;
@@ -940,6 +973,11 @@
                   if (data[i].user) {
                     user.avatar = data[i].flow.user.avatar;
                     user.name = data[i].flow.user.name;
+                    if(user.house_name = data[i].flow.content.house){
+                      user.house_name = data[i].flow.content.house.name;
+                    }else{
+                      user.house_name = '/';
+                    }
                     user.depart = data[i].flow.user.org[0].name;
                   } else {
                     user.avatar = '';
@@ -950,9 +988,9 @@
                   user.place = data[i].flow.place.display_name;
                   user.status = data[i].flow.place.status;
                 } else {
-                  user.place = '';
-                  user.status = '';
-                  user.bulletin = '';
+                  user.place = '/';
+                  user.status = '/';
+                  user.bulletin = '/';
                 }
               }
               dataList.push(user);
