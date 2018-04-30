@@ -282,13 +282,16 @@
               <EarlyWarning :changeHouseStatus="changeHouseStatus" :all_dic="all_dic"
                             :houseId="houseId" :activeName="activeName"></EarlyWarning>
             </el-tab-pane>
-            <el-tab-pane name="forth" label="收房合同详情">
+            <el-tab-pane name="forth" label="收房合同列表">
               <CollectContractTab :all_dic="all_dic" :collectData="collectData"
                                   :activeName="activeName"></CollectContractTab>
             </el-tab-pane>
-            <el-tab-pane name="fifth" label="租房合同详情">
+            <el-tab-pane name="fifth" label="租房合同列表">
               <RentContractTab :all_dic="all_dic" :collectId="collectId" :rentData="rentData"
                                :activeName="activeName"></RentContractTab>
+            </el-tab-pane>
+            <el-tab-pane name="sixth" label="报备列表">
+              <ReportRecord :all_dic="all_dic" :houseId="houseId" :activeName="activeName"></ReportRecord>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -309,6 +312,7 @@
 
     <HouseDetail :houseDetailDialog="houseDetailDialog" :all_dic="all_dic" :isOnlyPic="isOnlyPic"
                  :houseDetail="houseDetail" :houseId="houseId" @close="closeModal"></HouseDetail>
+
   </div>
 </template>
 
@@ -320,6 +324,7 @@
   import EarlyWarning from './components/earlyWarningTab.vue'
   import CollectContractTab from './components/collectContractTab.vue'
   import RentContractTab from './components/rentContractTab.vue'
+  import ReportRecord from './components/reportRecord'
 
   import EditHouseInfo from './components/editHouseInfo.vue'
   import AddFollow from './components/addFollowRecord.vue'
@@ -331,7 +336,7 @@
     name: 'hello',
     components: {
       RightMenu, Organization, FollowRecordTab, DecorateRecordTab, EarlyWarning, EditHouseInfo, HouseDetail,
-      AddFollow, UpLoadPic, AddEarlyWarning, AddDecorate, CollectContractTab, RentContractTab
+      AddFollow, UpLoadPic, AddEarlyWarning, AddDecorate, CollectContractTab, RentContractTab,ReportRecord
     },
     data () {
       return {
