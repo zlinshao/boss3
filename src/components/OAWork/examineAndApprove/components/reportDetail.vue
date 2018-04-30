@@ -405,6 +405,7 @@
         font-size: 16px;
       }
       .statuss {
+        margin-left: 30px;
         width: 80px;
         height: 80px;
       }
