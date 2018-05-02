@@ -8,6 +8,15 @@
         prop="contract_number"
         label="合同编号">
       </el-table-column>
+
+      <el-table-column
+        label="合同上传时间">
+        <template slot-scope="scope">
+          <span v-if="scope.row.created_at">{{scope.row.created_at}}</span>
+          <span v-else="">/</span>
+        </template>
+      </el-table-column>
+
       <el-table-column
         prop="mortgage_price"
         label="收房押金">
@@ -63,13 +72,7 @@
           <span v-if="scope.row.duration_days">{{scope.row.duration_days}}</span>
         </template>
       </el-table-column>
-      <el-table-column
-        label="合同上传时间">
-        <template slot-scope="scope">
-          <span v-if="scope.row.created_at">{{scope.row.created_at}}</span>
-          <span v-else="">/</span>
-        </template>
-      </el-table-column>
+
       <el-table-column
         prop="start_at"
         width="180px"

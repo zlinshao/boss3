@@ -109,6 +109,15 @@
                 type="selection"
                 width="30">
               </el-table-column>
+
+              <el-table-column
+                label="合同上传时间">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.created_at">{{scope.row.created_at}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+
               <el-table-column
                 label="地址">
                 <template slot-scope="scope">
