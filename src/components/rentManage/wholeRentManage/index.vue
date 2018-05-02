@@ -621,9 +621,8 @@
     <ReturnVisit :returnVisitDialog="returnVisitDialog" @close="closeModal"></ReturnVisit>
     <TopForm :topFormSetDialog="topFormSetDialog" @close="closeModal"></TopForm>
     <Setting :settingDialog="settingDialog" @close="closeModal"></Setting>
-    <visit-record :visitRecordDialog="visitRecordDialog" :contractId="contractOperateId"
-                  :category="contractModule" @close="closeModal"></visit-record>
-
+    <AddReturnvisit :addReturnvisitDialog="addReturnvisitDialog" :ToActiveName="ToActiveName" :addReturnInfo="addReturnInfo" 
+                      @close="closeModal"></AddReturnvisit>
 
   </div>
 </template>
@@ -657,7 +656,7 @@
   import ReturnVisit from '../components/returnVisit.vue'   //查看回访
   import TopForm from '../components/topFormSet.vue'    //表头列表
   import Setting from './components/setting.vue'
-  import VisitRecord from './../components/visitRecord.vue'    //添加回访
+  import AddReturnvisit from "../../../components/rentManage/customerService/addReturnvisit.vue";   //添加回访
   //--------------------------tabs content-----------------------------------------------------------------//
   import GoodsChangeTab from '../tabComponents/goodsChange.vue'
   import OwnerInfoTab from '../tabComponents/ownerInfo.vue'
@@ -710,7 +709,7 @@
       ReturnVisit,
       TopForm,
       Setting,
-      VisitRecord,
+      AddReturnvisit,
 
       //-------tabs------//
       GoodsChangeTab,
@@ -771,7 +770,7 @@
         returnVisitDialog:false,      //查看回访
         topFormSetDialog:false,       //选择列
         settingDialog : false,        //设置
-        visitRecordDialog: false,    //添加回访
+        addReturnvisitDialog: false,    //添加回访
 
         isHigh: false,
         /*******************收房*********************/
@@ -813,6 +812,8 @@
         rentLoading:false,
         collectContract: '',
         rentContract: '',
+        addReturnInfo:[],
+        ToActiveName:""
       }
     },
 
@@ -919,6 +920,8 @@
       //房屋右键
       houseMenu(row, event){
         this.collectInfo = row;
+        this.ToActiveName = "first";
+        this.addReturnInfo = row;
         this.collectHouseId = row.house_id;
         this.collectContractId = row.contract_id;   //收房id
         this.contractOperateId = row.contract_id;   //通用合同ID
@@ -947,7 +950,7 @@
           },
          {clickIndex: 'addCollectRepairDialog', headIcon: 'el-icons-fa-gear', label: '添加维修单',},
 //          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
-          {clickIndex: 'visitRecordDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加回访记录',},
+          {clickIndex: 'addReturnvisitDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加回访记录',},
         ];
         this.contextMenuParam(event);
       },
@@ -1011,6 +1014,8 @@
       //租客右键
       clientMenu(row, event){
         this.rentContractInfo = row;
+        this.ToActiveName = "second";
+        this.addReturnInfo = row;
         this.rentContractId = row.contract_id;
         this.contractOperateId = row.contract_id;   //通用合同ID
         this.contractModule = 2;
@@ -1025,7 +1030,7 @@
          {clickIndex: 'addRentRepairDialog', headIcon: 'el-icons-fa-gear', label: '添加维修单',},
 //          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
           {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单',},
-          {clickIndex: 'visitRecordDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加回访记录',},
+          {clickIndex: 'addReturnvisitDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加回访记录',},
         ];
         this.contextMenuParam(event);
       },
@@ -1170,8 +1175,8 @@
           case 'settingDialog':     //转到合租
             this.settingDialog = true;
             break;
-          case 'visitRecordDialog':
-            this.visitRecordDialog = true;
+          case 'addReturnvisitDialog':
+            this.addReturnvisitDialog = true;
             break;
         }
 
@@ -1221,7 +1226,7 @@
         this.returnVisitDialog = false;
         this.topFormSetDialog = false;
         this.settingDialog = false;
-        this.visitRecordDialog = false;
+        this.addReturnvisitDialog = false;
         this.contractModule = '';
         this.contractOperateId = '';
         if(val === 'updateCollect'){

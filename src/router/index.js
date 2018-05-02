@@ -14,7 +14,7 @@ import JointRentManage from '../components/rentManage/jointRentManage/index.vue'
 
 //客服中心
 // import ExpenseAccount from '../components/customService/expenseAccount/index.vue'   //报销
-// import ReturnVisit from '../components/customService/returnVisit/index.vue'         //回访
+ import CustomerService from '../components/rentManage/customerService/index.vue'                //回访
 
 // import ContractManage from '../components/rentManage/datumMessage/contractManage/index.vue'
 // import ClientManage from '../components/rentManage/datumMessage/clientManage/index.vue'
@@ -365,6 +365,7 @@ export default new Router({
       children: [
         {path: '/workOrderManage', component: WorkOrderManage, name: '工单管理',},
         {path: '/repairManage', component: RepairManage, name: '维修管理',},
+        {path: '/customerService', component: CustomerService, name: '回访',},
         // {path: '/ExpenseAccount', component: ExpenseAccount, name: '报销',},
         // {path: '/ReturnVisit', component: RepairManage, name: '回访',},
       ]
