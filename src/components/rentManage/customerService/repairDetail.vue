@@ -66,7 +66,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row v-for="index in priceLen" :key="index">
+          <el-row v-for="index in priceLen" :key="index" v-if="index>0">
             <el-col :span="12">
               <el-form-item label="月单价" >
                 <el-input class="input" style="width:45%" v-model="repairDetail.unit_price[0][index-1][0]" readonly ></el-input> -
@@ -82,7 +82,7 @@
               <el-checkbox style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col>      
           </el-row>
-          <el-row v-for="index in payForLen" :key="index+55">
+          <el-row v-for="index in payForLen" :key="index+55" v-if="index>0">
             <el-col :span="12">
               <el-form-item label="付款方式">
                 <el-input class="input" style="width:45%" v-model="repairDetail.pay_type[0][index-1][0]" readonly ></el-input> -
@@ -116,7 +116,7 @@
               <el-checkbox style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col>   
           </el-row>
-          <el-row  v-for="index in payTypeLen" v-if="activeName == 'second'" :key="index+111">
+          <el-row  v-for="index in payTypeLen" v-if="activeName == 'second' && index>0" :key="index+111" >
             <el-col :span="10">
               <el-form-item label="支付方式" >
                   <el-input v-for="item in payTypeInfo" :key="item.id" v-model="item.dictionary_name" v-if="repairDetail.pay_method[0][index-1] == item.id"></el-input>
@@ -294,10 +294,16 @@ export default {
         .then(res => {
           if (res.data.code === "1212200") {
             this.repairDetail = res.data.data;
-            this.priceLen =  res.data.data.unit_price[0].length;
-            this.payForLen =  res.data.data.pay_type[0].length;
-            this.payTypeLen =  res.data.data.pay_method[0].length;
-           
+            if(res.data.data.unit_price != ""){
+              this.priceLen =  res.data.data.unit_price[0].length;
+            }
+            if(res.data.data.pay_type != ""){
+              this.payForLen =  res.data.data.pay_type[0].length;
+            }       
+            if(res.data.data.pay_method != ""){
+               this.payTypeLen =  res.data.data.pay_method[0].length;
+            }
+             
           } else {
             this.$notify.warning({
               title: "警告",
