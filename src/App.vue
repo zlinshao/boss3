@@ -181,7 +181,7 @@
     }
   }
 
-  .el-table__body-wrapper.is-scroll-right, .el-table__body-wrapper.is-scroll-left, .el-table__body-wrapper.is-scroll-middle {
+  .el-table__body-wrapper.is-scroll-right, .el-table__body-wrapper.is-scroll-left, .el-table__body-wrapper.is-scroll-middle,.el-table__body-wrapper.is-scrolling-none {
     &::-webkit-scrollbar {
       width: 4px;
       height: 5px;
