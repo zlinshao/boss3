@@ -1,5 +1,18 @@
 <template>
   <div id="examineAndApprove">
+
+    <div class="highRanking" style=" position: absolute; top: 122px; right: 30px;z-index: 6;">
+      <div class="highSearch">
+        <el-form :inline="true" onsubmit="return false" size="mini">
+          <el-form-item>
+            <el-input placeholder="小区名称/地址/位置" v-model="params.q" @keyup.enter.native="search(1)" size="mini"
+                      clearable>
+              <el-button slot="append" icon="el-icon-search" @click="search(1)"></el-button>
+            </el-input>
+          </el-form-item>
+        </el-form>
+      </div>
+    </div>
     <el-tabs v-model="activeName" @tab-click="tabActive(activeName)">
 
       <div>
@@ -808,9 +821,7 @@
         address: globalConfig.server_user,
         amount: 0,
         paging: 0,
-        params: {
-          page: 1,
-        },
+        params: {},
         activeName: 'second',
         finActive: 'unfinished',
         readActive: 'unread',
@@ -997,6 +1008,8 @@
             }
             this.tableData = dataList;
           } else {
+            this.tableData = [];
+            this.paging = 0;
             this.emptyContent = '暂无数据';
           }
         })
