@@ -32,9 +32,9 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="报备时间">
+        label="所属部门">
         <template slot-scope="scope">
-          <span v-if="scope.row.created_at">{{scope.row.created_at}}</span>
+          <span v-if="scope.row.content">{{scope.row.content.department_name}}</span>
           <span v-else="">/</span>
         </template>
       </el-table-column>
@@ -46,9 +46,9 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="所属部门">
+        label="报备时间">
         <template slot-scope="scope">
-          <span v-if="scope.row.content">{{scope.row.content.department_name}}</span>
+          <span v-if="scope.row.created_at">{{scope.row.created_at}}</span>
           <span v-else="">/</span>
         </template>
       </el-table-column>

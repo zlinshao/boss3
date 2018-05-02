@@ -34,7 +34,7 @@
               </el-col>
               <el-col :span="5" style="margin-top:20px;float:right;">
                 <el-form-item label="题目类型">
-                  <el-select size="small" v-model="params.category">
+                  <el-select size="small" v-model="params.category" clearable>
                     <el-option v-for="item in questionTypeCategory" :key="item.id" :label="item.dictionary_name"
                                :value="item.id">{{item.dictionary_name}}
                     </el-option>
@@ -181,9 +181,7 @@
       "params.category": {
         deep: true,
         handler(val, oldVal) {
-          if (val) {
-            this.getTestPaperDetail();
-          }
+          this.getTestPaperDetail();
         }
       },
     },
