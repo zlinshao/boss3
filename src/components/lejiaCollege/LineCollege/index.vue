@@ -5,9 +5,9 @@
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input placeholder="标题/内容关键字" v-model="form.search" @keyup.enter.native="myData(1)" size="mini"
+              <el-input placeholder="标题/内容关键字" v-model="form.search" @keyup.enter.native="myData()" size="mini"
                         clearable>
-                <el-button slot="append" icon="el-icon-search" @click="myData(1)"></el-button>
+                <el-button slot="append" icon="el-icon-search" @click="myData()"></el-button>
                 <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
               </el-input>
             </el-form-item>
@@ -90,7 +90,7 @@
               </el-col>
             </el-row>
             <div class="btnOperate">
-              <el-button size="mini" type="primary" @click="myData(1)">搜索</el-button>
+              <el-button size="mini" type="primary" @click="myData()">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
               <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
             </div>
@@ -118,24 +118,30 @@
                 label="试卷名称">
               </el-table-column>
               <el-table-column
-                prop="category"
+                prop="paper.category"
                 label="试卷类型">
               </el-table-column>
               <el-table-column
-                prop="staff_name"
                 label="姓名">
+                <template slot-scope="scope">
+                  <span>{{personal && personal.name}}</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="org_name"
                 label="所在部门">
+                <template slot-scope="scope">
+                  <span>{{department}}</span>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="score"
                 label="得分">
               </el-table-column>
               <el-table-column
-                prop=""
                 label="操作">
+                <template slot-scope="scope">
+                  <el-button size="mini" type="primary" @click="answerExam(scope.row.id)">立即答题</el-button>
+                </template>
               </el-table-column>
             </el-table>
           </div>
@@ -144,7 +150,7 @@
               @size-change="handleSizeChange"
               @current-change="myData"
               :current-page="form.page"
-              :page-size="2"
+              :page-size="12"
               layout="total, prev, pager, next, jumper"
               :total="tableNumber">
             </el-pagination>
@@ -169,7 +175,7 @@
         tableNumber: 0,
         form: {
           page: 1,
-          limit: 2,
+          limit: 12,
           type: "",
           search: "",
           department_id: ""
@@ -220,23 +226,40 @@
         },
         value4: "",
         len: 0,
-        depart: ""
+        depart: "",
+        personal: {},
+        department: '',
       };
     },
     mounted() {
-      this.myData(1);
+      this.myData();
+      //初始化个人信息
+      this.personal = JSON.parse(localStorage.personal);
+      let departNameArray = [];
+      if (this.personal.org && this.personal.org.length > 0) {
+        this.personal.org.forEach((item) => {
+          departNameArray.push(item.name);
+        });
+      }
+      this.department = departNameArray.join(',');
+    },
+    activated(){
+      this.myData();
     },
     watch: {},
     methods: {
+      answerExam(id){
+        console.log(id);
+        this.$router.push({path: '/answerExam', query: {id: id}});
+      },
       myData(val) {
-        this.form.page = val;
         this.rentStatus = " ";
         this.rentLoading = true;
-        this.$http.get(globalConfig.server + "exam/result",).then(res => {
+        this.$http.get(globalConfig.server + "/exam/exam/my?enrolled=1").then((res) => {
             this.rentLoading = false;
-            if (res.data.code == '36010') {
-              this.tableData = res.data.data;
-              this.tableNumber = 1
+            if (res.data.code == '30000') {
+              this.tableData = res.data.data.data;
+              this.tableNumber = res.data.data.count;
             } else {
               this.rentStatus = '暂无数据';
               this.tableNumber = 0;
