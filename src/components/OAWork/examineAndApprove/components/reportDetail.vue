@@ -375,7 +375,7 @@
 
     .reportDialog {
       .el-dialog {
-        margin-top: 4vh !important;
+        margin-top: 8vh !important;
       }
     }
     /*报备状态*/

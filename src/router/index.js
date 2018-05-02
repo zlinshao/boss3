@@ -361,7 +361,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '客服中心',
-      icon: 'iconfont icon-zulin',
+      icon: 'iconfont icon-kefu1',
       children: [
         {path: '/workOrderManage', component: WorkOrderManage, name: '工单管理',},
         {path: '/repairManage', component: RepairManage, name: '维修管理',},
