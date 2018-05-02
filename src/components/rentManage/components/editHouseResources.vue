@@ -82,7 +82,7 @@
                 </el-row>
                 <el-row>
                   <el-col :span="6">
-                    <el-form-item label="房产证号" required>
+                    <el-form-item label="房产证号">
                       <el-input placeholder="请输入内容" v-model="params.property_number"></el-input>
                     </el-form-item>
                   </el-col>
