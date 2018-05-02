@@ -2,7 +2,7 @@
   <div>
     <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false"  width="0" z-index="2000" style="margin-top:20vh" :visible.sync="yanDialogVisible">
     <div class="badgeup" >
-      <span class="span1">版本更新</span>
+      <span class="span1">版本更新 - {{versionInfo.version}}</span>
       <div class="msg">
         <img src="../../assets/images/head.jpg" />
         <span v-if="versionInfo.staffs && versionInfo.staffs.real_name" style="float:left; line-height:40px;">{{versionInfo.staffs.real_name}}</span>
