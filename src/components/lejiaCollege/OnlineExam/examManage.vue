@@ -491,10 +491,11 @@
             }).then(() => {
               this.$http.post(globalConfig.server + 'exam/delete/' + this.examId).then((res) => {
                 if (res.data.code === "30010") {
-                  this.$notify.warning({
-                    title: '警告',
+                  this.$notify.success({
+                    title: '成功',
                     message: res.data.msg
                   });
+                  this.params.page=1;
                   this.getExamData();
                 } else {
                   this.$notify.warning({

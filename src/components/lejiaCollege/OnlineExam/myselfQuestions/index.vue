@@ -415,6 +415,7 @@
           });
         } else {
           this.tabDisabled = [false, false, false, false, false, false];
+          this.initial();
         }
       },
       editQuesCategory(val) {
@@ -455,7 +456,7 @@
         }
       },
       optionsSelect(val) {
-        if(val !== ''){
+        if (val !== '') {
           this.singleForm.answer = String.fromCharCode(65 + Number(val));
         }
       },
@@ -494,7 +495,7 @@
         }
       },
       judgeOptionsSelect(val) {
-        if(val !== ''){
+        if (val !== '') {
           this.judgeForm.answer = String.fromCharCode(65 + Number(val));
         }
       },
@@ -665,6 +666,44 @@
         }
         this.spacelen--;
         this.blankForm.answer.splice(this.spacelen, 1);
+      },
+      initial() {
+        //单选
+        this.singleForm.stem = '';
+        this.singleForm.category = '';
+        this.singleForm.choice = {};
+        this.singleForm.answer = '';
+        this.singleForm.score = '';
+        this.options = [];
+        this.optionsSelect = '';
+        //多选 不定项选择
+        this.multiForm.stem = '';
+        this.multiForm.category = '';
+        this.multiForm.choice = {};
+        this.multiForm.score = '';
+        this.multiOptions = [];
+        this.multiOptionsSelect = [];
+        //判断题
+        this.judgeForm.stem = '';
+        this.judgeForm.category = '';
+        this.judgeForm.choice = {};
+        this.judgeForm.answer = '';
+        this.judgeForm.score = '';
+        this.judgeOptions = [];
+        this.judgeOptionsSelect = [];
+        //填空题
+        this.blankForm.stem = '';
+        this.blankForm.category = '';
+        this.blankForm.choice = {};
+        this.blankForm.answer = [];
+        this.blankForm.score = '';
+        //问答题
+        this.answerForm.stem = '';
+        this.answerForm.category = '';
+        this.answerForm.choice = {};
+        this.answerForm.answer = null;
+        this.answerForm.score = '';
+
       },
     }
   };

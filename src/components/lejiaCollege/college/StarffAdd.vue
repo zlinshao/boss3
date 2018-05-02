@@ -80,7 +80,6 @@
         department: '',
       };
     },
-    computed: {},
     mounted() {
       //初始化个人信息
       this.personal = JSON.parse(localStorage.personal);
@@ -91,7 +90,6 @@
         });
       }
       this.department = departNameArray.join(',');
-
       this.getExam();
     },
     created() {
@@ -103,6 +101,8 @@
       starffAddDialogVisible(val) {
         if (!val) {
           this.$emit("close");
+        }else{
+          this.getExam();
         }
       }
     },
@@ -126,7 +126,7 @@
         });
       },
       getExam() {
-        this.$http.get(globalConfig.server + "exam?status=1&limit=100&page=1").then(res => {
+        this.$http.get(globalConfig.server + "/exam/exam/my?enrolled=0").then(res => {
           if (res.data.code === "30000") {
             this.enroableExam = res.data.data.data;
           }

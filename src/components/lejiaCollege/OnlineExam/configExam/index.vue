@@ -54,10 +54,10 @@
           <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>&nbsp;&nbsp;&nbsp;{{key+1}}.<span
           style="color:#6a8dfb; margin-left:20px;">单选题</span>
           <span class="ques_score">({{item.score}}分)</span>
-          <span class="remove" @click="deleteQues(item.id)">移除</span>
+          <span class="remove" @click="deleteQues(item.id)" >移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
-          <span class="move_down" @click="moveDown(item.id)">下移</span>
-          <span class="move_up" @click="moveUp(item.id)">上移</span>
+          <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
+          <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
           <p style="margin-left:30px;line-height:30px;" v-html="item.stem"></p>
           <div style="width:98%;margin-left:2%;">
             <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
@@ -76,8 +76,8 @@
           <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
-          <span class="move_down" @click="moveDown(item.id)">下移</span>
-          <span class="move_up" @click="moveUp(item.id)">上移</span>
+          <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
+          <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
           <p style="margin-left:30px;line-height:30px;" v-html="item.stem"></p>
           <div style="width:98%;margin-left:2%;">
             <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
@@ -95,9 +95,9 @@
           <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
-          <span class="move_down" @click="moveDown(item.id)">下移</span>
-          <span class="move_up" @click="moveUp(item.id)">上移</span>
-          <p style="margin-left:30px;line-height:20px;">{{item.stem}}</p>
+          <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
+          <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
+          <p style="margin-left:30px;line-height:20px;" v-html="item.stem"></p>
           <div style="width:98%;margin-left:2%;">
             <el-col :span="12" :key="index" v-for="(val,index) in item.choice">
               <span v-if="item.answer == index"><el-radio
@@ -116,9 +116,9 @@
           <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
-          <span class="move_down" @click="moveDown(item.id)">下移</span>
-          <span class="move_up" @click="moveUp(item.id)">上移</span>
-          <p style="margin-left:30px;line-height:20px;padding-right:10px;">{{item.stem}}</p>
+          <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
+          <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
+          <p style="margin-left:30px;line-height:20px;padding-right:10px;" v-html="item.stem"></p>
           <div style="width:98%;margin-left:2%;">
             <el-col :span="12" :key="index" v-for="(val,index) in item.answer" v-if="item.answer.length>0">
               <div v-if="item.category===157">
