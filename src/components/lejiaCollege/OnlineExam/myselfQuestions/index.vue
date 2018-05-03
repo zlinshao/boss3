@@ -16,13 +16,17 @@
                   <div class="title">选项</div>
                   <el-form-item style="border:1px #eee solid; padding-bottom: 15px;border-radius: 5px;">
                     <el-radio-group v-model="optionsSelect" style="width:98%;margin-left:2%;">
-                      <el-col :span="12" :key="val" v-for="(val,index) in singlen"
-                              style="line-height:50px;height:50px;padding-top:14px;">
-                        <el-radio :label="index">
-                          <el-input size="small" v-model="options[index]" placeholder="请输入选项内容"></el-input>
-                          <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="singleSub(index)"></i>
-                        </el-radio>
-                      </el-col>
+                      <el-row :gutter="20">
+                        <el-col :span="12" :key="val" v-for="(val,index) in singlen"
+                                style="line-height:50px;height:50px;padding-top:14px;">
+                          <el-radio :label="index">
+                            <el-input size="small" v-model="options[index]" placeholder="请输入选项内容"></el-input>
+                            <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="singleSub(index)"></i>
+                            <span style="color:rgb(88, 215, 136);" v-if="index == optionsSelect">正确</span>
+                          </el-radio>
+                        </el-col>
+                      </el-row>
+
                     </el-radio-group>
                   </el-form-item>
                   <div class="midadd">
@@ -60,6 +64,7 @@
                         <el-checkbox :label="index">
                           <el-input size="small" placeholder="请输入选项内容" v-model="multiOptions[index]"></el-input>
                           <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="multiSub(index)"></i>
+                          <span style="color:rgb(88, 215, 136);" v-if="multiOptionsSelect.indexOf(index)>-1">正确</span>
                         </el-checkbox>
                       </el-col>
                     </el-checkbox-group>
@@ -99,6 +104,7 @@
                         <el-checkbox :label="index">
                           <el-input size="small" placeholder="请输入选项内容" v-model="multiOptions[index]"></el-input>
                           <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="multiSub(index)"></i>
+                          <span style="color:rgb(88, 215, 136);" v-if="multiOptionsSelect.indexOf(index)>-1">正确</span>
                         </el-checkbox>
                       </el-col>
                     </el-checkbox-group>
@@ -538,6 +544,7 @@
             for (var i = 0; i < this.tabDisabled.length; i++) {
               this.tabDisabled[i] = false;
             }
+            this.initial();
           } else if (data.type === 'edit') {
             this.quesId = data.quesId;
             this.editQuesCategory = data.category;
@@ -556,6 +563,7 @@
             for (var i = 0; i < this.tabDisabled.length; i++) {
               this.tabDisabled[i] = false;
             }
+            this.initial();
           } else if (query.type === 'edit') {
             this.quesId = query.quesId;
             this.editQuesCategory = query.category;
@@ -612,6 +620,11 @@
               message: res.data.msg
             });
             this.submitDisabled = true;
+            let view = {};
+            view.name=' 自己录入 ';
+            view.path='/myselfQuestions';
+            this.$store.dispatch('delVisitedViews', view);
+            this.$router.push({path: '/configExam'});
           } else {
             this.$notify.warning({
               title: '警告',

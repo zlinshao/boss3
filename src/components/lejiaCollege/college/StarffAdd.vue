@@ -45,7 +45,7 @@
             <el-form :model="form" size="mini" class="elformot scroll_bar" style="padding-left: 23px;">
               <el-form-item>
                 <el-radio-group v-model="form.check">
-                  <el-row v-for="item in enroableExam" :key="item.id">
+                  <el-row v-for="item in enroableExam" :key="item.id" >
                     <el-col  style="line-height:28px;height: 28px;">
                       <el-radio :label="item.id" :key="item.id">
                         {{item.name}}
@@ -53,8 +53,10 @@
                     </el-col>
                   </el-row>
                 </el-radio-group>
+                <el-row v-if="enroableExam.length<1" style="text-align: center;">暂无数据...</el-row>
               </el-form-item>
             </el-form>
+
           </el-row>
         </el-form>
       </div>
@@ -111,16 +113,14 @@
         this.$http.post(globalConfig.server + "exam/enroll/" + this.form.check).then(res => {
           if (res.data.code === "30010") {
             this.starffAddDialogVisible = false;
-            this.$notify({
+            this.$notify.success({
               title: "成功",
               message: res.data.msg,
-              type: "success"
             });
           } else {
-            this.$notify({
+            this.$notify.warning({
               title: "失败",
               message: res.data.msg,
-              type: "warning"
             });
           }
         });
@@ -129,6 +129,8 @@
         this.$http.get(globalConfig.server + "/exam/exam/my?enrolled=0").then(res => {
           if (res.data.code === "30000") {
             this.enroableExam = res.data.data.data;
+          }else{
+            this.enroableExam = [];
           }
         });
       }

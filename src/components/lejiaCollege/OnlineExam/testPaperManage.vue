@@ -264,12 +264,18 @@
         //创建试卷
         this.$http.post(globalConfig.server + 'exam/paper', this.paperTypeForm).then((res) => {
           if (res.data.code === '36010') {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
+            // this.$notify.success({
+            //   title: '成功',
+            //   message: res.data.msg
+            // });
             this.paperId = res.data.data;
             this.getTestPaperData();
+            if (this.paperId) {
+              this.$router.push({
+                path: "/myselfQuestions",
+                query: {paper_id: this.paperId, type: 'add'}
+              });
+            }
           } else {
             this.$notify.warning({
               title: '警告',
@@ -277,10 +283,7 @@
             });
           }
         });
-        this.$router.push({
-          path: "/myselfQuestions",
-          query: {paper_id: this.paperId,type: 'add'}
-        });
+
       },
       getTestPaperData() {
         this.tableStatus = " ";
@@ -376,7 +379,7 @@
             });
             break;
           case 'lookTestPaper':
-            this.$router.push({path: "/previewExam", query:{id: this.testPaperId}});
+            this.$router.push({path: "/previewExam", query: {id: this.testPaperId}});
             break;
         }
       },
