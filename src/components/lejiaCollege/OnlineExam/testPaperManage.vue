@@ -24,7 +24,7 @@
       <div class="filter high_grade" :class="isHigh? 'highHide':''" style=" margin-top: -40px;">
         <el-form :inline="true" size="mini" label-width="100px">
           <div class="filterTitle">
-            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索{{params}}
+            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
           </div>
           <el-row class="el_row_border">
             <el-col :span="12">
@@ -104,7 +104,7 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="params.page"
-            :page-size="10"
+            :page-size="12"
             layout="total, prev, pager, next, jumper"
             :total="totalNum">
           </el-pagination>
@@ -183,7 +183,7 @@
         //考试列表分页搜索
         params: {
           page: 1,
-          limit: 10,
+          limit: 12,
           search: '',
           category: '',
         },

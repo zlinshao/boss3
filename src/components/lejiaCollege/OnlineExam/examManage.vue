@@ -13,7 +13,7 @@
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" size="mini" @click="examDialog = true">
+            <el-button type="primary" size="mini" @click="examDialog = true;examId = '';">
               <i class="iconfont icon-jinrukaoshi" style="font-size: 14px;"></i>&nbsp;新建考试
             </el-button>
           </el-form-item>
@@ -144,7 +144,7 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="params.page"
-            :page-size="10"
+            :page-size="12"
             layout="total, prev, pager, next, jumper"
             :total="totalNum">
           </el-pagination>
@@ -307,7 +307,7 @@
         //考试列表分页搜索
         params: {
           page: 1,
-          limit: 10,
+          limit: 12,
           search: '',
           category: '',  //试卷类型
           status: '',   //考试状态

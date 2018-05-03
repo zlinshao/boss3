@@ -8,6 +8,7 @@ const onlineExam = {
     edit_paper_id: '', //编辑试卷id
     answer_exam_id: '', //答题试卷id
     preview_paper_id: '', //预览试卷id
+    examiner_read_id: '', //批阅试卷id
   },
   mutations: {
     TEST_PAPER:(state,view) => {
@@ -35,6 +36,12 @@ const onlineExam = {
         state.preview_paper_id = view;
       }
     },
+    EXAMINER_READ_ID:(state,view) => {
+      if(view){
+        state.examiner_read_id = view;
+      }
+    },
+
   },
   actions: {
     testPaper({commit},view){
@@ -52,6 +59,10 @@ const onlineExam = {
     previewPaperId({commit},view){
       commit('PREVIEW_PAPER_ID',view);
     },
+    examinerReadId({commit},view){
+      commit('EXAMINER_READ_ID',view);
+    },
+
   }
 };
 

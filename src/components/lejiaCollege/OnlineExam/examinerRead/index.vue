@@ -110,7 +110,7 @@
               @row-dblclick="dblClickTable"
               style="width: 100%">
               <el-table-column
-                prop="name"
+                prop="start_time"
                 label="考试时间">
               </el-table-column>
               <el-table-column
@@ -118,7 +118,7 @@
                 label="试卷名称">
               </el-table-column>
               <el-table-column
-                prop="num"
+                prop="question_count"
                 label="总题数">
               </el-table-column>
               <el-table-column
@@ -126,15 +126,15 @@
                 label="总分值">
               </el-table-column>
               <el-table-column
-                prop="timeALL"
+                prop="duration"
                 label="总时长">
               </el-table-column>
               <el-table-column
-                prop="category"
+                prop="paper.category"
                 label="类型">
               </el-table-column>
               <el-table-column
-                prop="peonum"
+                prop="examinees_count"
                 label="考生人数">
               </el-table-column>
               <el-table-column
@@ -145,7 +145,7 @@
                 prop="more"
                 label="详情">
                 <template slot-scope="scope">
-                  <span @click="lookexam" style="cursor: pointer;">点击查看</span>
+                  <span @click="lookExam(scope.row.id)" style="cursor: pointer;">点击查看</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -153,7 +153,7 @@
           <div class="block pages">
             <el-pagination
               @size-change="handleSizeChange"
-              @current-change="myData"
+              @current-change="handleCurrentChange"
               :current-page="form.page"
               :page-size="2"
               layout="total, prev, pager, next, jumper"
@@ -240,15 +240,15 @@
     },
     watch: {},
     methods: {
-      lookexam() {
-        this.$router.push({path: "/examinerReadEach"});
+      lookExam(id) {
+        this.$router.push({path: "/examinerReadEach", query: {id: id}});
       },
       myData() {
         this.rentStatus = " ";
         this.rentLoading = true;
-        this.$http.get(globalConfig.server + "exam/result").then((res) => {
+        this.$http.get(globalConfig.server + "exam?status=3").then((res) => {
           this.rentLoading = false;
-          if (res.data.code == "36010") {
+          if (res.data.code == "30000") {
             this.tableData = res.data.data.data;
             this.tableNumber = res.data.data.count;
           } else {
@@ -285,13 +285,12 @@
       // 重置
       resetting() {
         this.isHigh = false;
-        (this.form = {
+        this.form = {
           page: 1,
           limit: 12,
           type: "",
           search: ""
-        }),
-          this.init(1);
+        };
       },
 
       dblClickTable() {
@@ -299,6 +298,10 @@
 
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        this.form.page = val;
+        this.myData();
       }
     }
   };
