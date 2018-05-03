@@ -4,10 +4,6 @@
       :data="tableData"
       @row-dblclick="dblClickTable"
       style="width: 100%">
-      <el-table-column
-        prop="contract_number"
-        label="合同编号">
-      </el-table-column>
 
       <el-table-column
         label="合同上传时间">
@@ -16,6 +12,13 @@
           <span v-else="">/</span>
         </template>
       </el-table-column>
+
+      <el-table-column
+        prop="contract_number"
+        label="合同编号">
+      </el-table-column>
+
+
 
       <el-table-column
         prop="mortgage_price"

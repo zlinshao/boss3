@@ -131,8 +131,25 @@
                       </el-select>
                     </el-form-item>
                   </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="水卡卡号">
+                      <el-input placeholder="请输入内容" v-model="params.water_card_number"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="电卡卡号">
+                      <el-input placeholder="请输入内容" v-model="params.electricity_card_number "></el-input>
+                    </el-form-item>
+                  </el-col>
                 </el-row>
 
+                <el-row>
+                  <el-col :span="6">
+                    <el-form-item label="气卡卡号">
+                      <el-input placeholder="请输入内容" v-model="params.gas_card_number"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
               </el-form>
             </div>
           </el-tab-pane>
@@ -662,7 +679,9 @@
           floors: '',                  //层数
           property_type: '',           //房屋类型
           house_feature: '',           //房屋特色
-
+          water_card_number : '',
+          electricity_card_number : '',
+          gas_card_number : '',
           customers: [],               //房东数组
           //-------------------合同详情--------------------//
           contract_type: '1',           // 订单性质（合同种类）
@@ -879,6 +898,10 @@
             this.params.decorate = data.decorate;
             this.params.floor = data.floor;
             this.params.floors = data.floors;
+            this.params.water_card_number = data.water_card_number;
+            this.params.electricity_card_number = data.electricity_card_number;
+            this.params.gas_card_number = data.gas_card_number;
+
             this.params.property_type = data.property_type;
             this.params.house_feature = data.house_feature;
             //房东信息
@@ -1259,7 +1282,9 @@
           floors: '',                  //层数
           property_type: '',           //房屋类型
           house_feature: '',           //房屋特色
-
+          water_card_number : '',
+          electricity_card_number : '',
+          gas_card_number : '',
           customers: [],               //房东数组
           //-------------------合同详情--------------------//
           contract_type: '1',           // 订单性质（合同种类）

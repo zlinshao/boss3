@@ -106,7 +106,8 @@
                 <el-col :span="8">
                   <el-form-item label="报备价格">
                     <div class="content">
-                      <span v-if="detailData.house_goods&&detailData.house_goods.price">{{detailData.house_goods.price}}</span>
+                      <span
+                        v-if="detailData.house_goods&&detailData.house_goods.price">{{detailData.house_goods.price}}</span>
                     </div>
                   </el-form-item>
                 </el-col>
@@ -346,6 +347,7 @@
           </div>
         </div>
         <div class="title">房屋影像</div>
+        <el-button @click="downLoad">sss</el-button>
         <div class="describe_border">
 
           <div v-if="detailData.house_goods&&detailData.house_goods.photo">
@@ -371,13 +373,15 @@
               <span style="margin-right: 30px">{{albumArray.create_time}}</span>
               <span style="margin-right: 30px;color: #444" v-if="albumArray.remark">备注：{{albumArray.remark}}</span>
               <span style="margin-right: 30px;color: #444" v-if="albumArray.staffs&&albumArray.staffs.name">上传人：{{albumArray.staffs.name}}</span>
-              <span style="margin-right: 30px;color: #444" v-if="albumArray.staffs&&albumArray.staffs.org&&albumArray.staffs.org.length>0">
+              <span style="margin-right: 30px;color: #444"
+                    v-if="albumArray.staffs&&albumArray.staffs.org&&albumArray.staffs.org.length>0">
                 部门：
                 <span v-for="item in albumArray.staffs.org">
                   <span>{{item.name}}&nbsp;&nbsp;  </span>
                 </span>
               </span>
-              <span style="color: #444" v-if="albumArray.staffs&&albumArray.staffs.role&&albumArray.staffs.role.length>0">
+              <span style="color: #444"
+                    v-if="albumArray.staffs&&albumArray.staffs.role&&albumArray.staffs.role.length>0">
                 岗位：
                 <span v-for="item in albumArray.staffs.role">
                   <span>{{item.display_name}}&nbsp;&nbsp;  </span>
@@ -387,10 +391,11 @@
             <div class="describe_border">
               <div v-if="albumArray.album&&albumArray.album.album_file&&albumArray.album.album_file.length>0"
                    v-for="item in albumArray.album.album_file" style="display: inline-block">
-                <img  v-if="item.info.mime&&item.info.mime.indexOf('image')>-1"
+                <img v-if="item.info.mime&&item.info.mime.indexOf('image')>-1"
                      :src="item.uri" data-magnify="" :data-src="item.uri">
                 <img v-if="!item.info.mime" :src="item.uri" data-magnify="" :data-src="item.uri">
-                <video  v-if="item.info.mime&&item.info.mime.indexOf('video')>-1" v-for="item in albumArray.album.album_file"
+                <video v-if="item.info.mime&&item.info.mime.indexOf('video')>-1"
+                       v-for="item in albumArray.album.album_file"
                        class="video-js" controls preload="auto" width="200" height="120"
                        data-setup="{}">
                   <source :src="item.uri" type="video/mp4">
@@ -410,49 +415,60 @@
 
 <script>
   export default {
-    props:['houseDetailDialog','houseId','all_dic','isOnlyPic','houseDetail'],
+    props: ['houseDetailDialog', 'houseId', 'all_dic', 'isOnlyPic', 'houseDetail'],
     data() {
       return {
-        houseDetailDialogVisible:false,
-        detailData : {},
-        albumData : [],
-        allDictionary:[],
-        listInfo:{},
+        houseDetailDialogVisible: false,
+        detailData: {},
+        albumData: [],
+        allDictionary: [],
+        listInfo: {},
         tableLoading: false,
       };
     },
-    watch:{
-      houseDetailDialog(val){
+    watch: {
+      houseDetailDialog(val) {
         this.houseDetailDialogVisible = val
       },
-      houseDetailDialogVisible(val){
-        if(!val){
+      houseDetailDialogVisible(val) {
+        if (!val) {
           this.$emit('close');
-        }else {
+        } else {
           this.getData();
           this.detailData = [];
           this.albumData = {};
         }
       },
-      all_dic(val){
+      all_dic(val) {
         this.allDictionary = val;
       },
-      houseDetail(val){
+      houseDetail(val) {
         this.listInfo = val;
       }
     },
-    methods:{
-      getData(){
+    methods: {
+      downLoad() {
+        var imgs = ['http://b.hiphotos.baidu.com/baike/w%3D268%3Bg%3D0/sign=6de1d31a39292df597c3ab13840a3b5d/b999a9014c086e06e49a297e01087bf40ad1cbd1.jpg',
+          'https://imgsa.baidu.com/baike/s%3D220/sign=a289f851554e9258a23481ecac83d1d1/8694a4c27d1ed21ba55e3ed0ae6eddc451da3f6b.jpg'];
+        imgs.map(function (i) {
+          var a = document.createElement('a');
+          a.setAttribute('download', '');
+          a.href = i;
+          document.body.appendChild(a);
+          a.click();
+        })
+      },
+      getData() {
         this.tableLoading = true;
-        this.$http.get(globalConfig.server+'house/album/'+this.houseId).then((res) => {
+        this.$http.get(globalConfig.server + 'house/album/' + this.houseId).then((res) => {
           this.tableLoading = false;
-          if(res.data.code === '30070'){
+          if (res.data.code === '30070') {
             this.detailData = res.data.data.detail;
             this.albumData = res.data.data.album;
-          }else {
+          } else {
             this.$notify.warning({
-              title:"警告",
-              message:res.data.msg,
+              title: "警告",
+              message: res.data.msg,
             })
           }
         })
@@ -470,16 +486,18 @@
   };
 </script>
 <style lang="scss" scoped="">
-  img{
+  img {
     width: 120px;
     height: 120px;
     border-radius: 8px;
     margin: 10px;
   }
-  video{
+
+  video {
     background: #000;
     margin: 10px;
   }
+
   .content {
     padding: 0 10px;
     min-height: 32px;
