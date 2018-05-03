@@ -164,7 +164,7 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="是否收取其他费用" class="detailTitle">
-                <el-select v-model="form.status" placeholder="请选择">
+                <el-select v-model="form.has_extra" placeholder="请选择">
                   <el-option v-for="item in yesOrNo" :label="item.value" :key="item.id"
                              :value="item.id">{{item.value}}
                   </el-option>
@@ -186,15 +186,15 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row v-if="form.status == 1">
+          <el-row v-if="form.has_extra == 1">
             <el-col :span="12">
               <el-form-item label="费用名称">
-                <el-input v-model="form.repair_money"></el-input>
+                <el-input v-model="form.pay_use"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="价格">
-                <el-input v-model="form.repair_money"></el-input>
+                <el-input v-model="form.array"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -229,8 +229,8 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="合同照片">
-                <!-- <img v-if="workOrderDetail.album.image_pic!=[]" data-magnify :key="key"
-                v-for="(val,key) in workOrderDetail.album.image_pic" :data-src="val[0].uri" :src="val[0].uri" alt=""> -->
+                <img v-if="contractInfo.photo!=[]" style="max-width:120px; max-height:80px;" data-magnify :key="val"
+                v-for="val in contractInfo.photo" :data-src="val" :src="val" alt="">
               </el-form-item>
             </el-col>
           </el-row>
@@ -275,7 +275,9 @@
           sale_remark:"",    //业务员专业度
           remark:"",         //备注
           audited_fields:"", //审核状态
-          pay_use:"",        //支付用途
+          pay_use:"",        //支付名称
+          array:"",          //费用
+          has_extra:"",      //是否收取费用
           unit_price:[
             [],
             [],
@@ -288,14 +290,15 @@
           module:"",         //收租(1:收[默认],2:租)
           amount:"",         //总额
           has_pay:"",        //已支付的费用
-          pay_use:"",        //支付用途
           pay_method:[
             [],
             [],
           ],      //支付方式
           star:null,           //星级
           remark_clause:"",  //备注条款
+          
         },
+        contractInfo:[],
         pickerOptions2: {
           shortcuts: [{
             text: '最近一周',
@@ -351,18 +354,32 @@
       },
       ToActiveName(val) {
         if (val) {
-          console.log(val)
           this.activeName = val;
         }
       },
       addReturnInfo(val){
+
         this.addReturnVisitInfo = val;
         this.form.contract_create_time = val.contract_create_time;  //合同创建时间
         this.form.huifang = val.staff_name;
         this.form.address = val.address;
         this.form.contract_type = val.type;
         this.form.contract_id = val.contract_id;
-      },
+        if(this.activeName == 'first'){
+        this.$http.get(globalConfig.server + 'lease/collect/' + val.contract_id).then((res) => {
+          if (res.data.code === '61010') {
+            this.contractInfo = res.data.data;
+          }
+        })
+        }
+        else{
+        this.$http.get(globalConfig.server + 'lease/rent/' + val.contract_id).then((res) => {
+          if (res.data.code === '61110') {
+            this.contractInfo = res.data.data;
+          }
+        })          
+      }
+      }
     },
     methods: {
       getDictionary() {
@@ -422,7 +439,9 @@
           sale_remark:"",    //业务员专业度
           remark:"",         //备注
           audited_fields:"", //审核状态
-          pay_use:"",        //支付用途
+          pay_use:"",        //支付名称
+          array:"",          //费用
+          has_extra:"",      //是否收取费用
           unit_price:[
             [],
             [],
@@ -435,7 +454,6 @@
           module:"",         //收租(1:收[默认],2:租)
           amount:"",         //总额
           has_pay:"",        //已支付的费用
-          pay_use:"",        //支付用途
           pay_method:[
             [],
             [],
@@ -443,6 +461,7 @@
           star:null,           //星级
           remark_clause:"",  //备注条款
         };
+        contractInfo:[],
         this.follow_name = '';
       },
       closeOrganization() {

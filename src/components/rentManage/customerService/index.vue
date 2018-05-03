@@ -289,7 +289,7 @@
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
-    <RepairDetail :repairDetailDialog="repairDetailDialog" :ToActiveName="activeName" :repairId="repairId"
+    <RepairDetail :repairDetailDialog="repairDetailDialog" :ToActiveName="activeName" :repairId="repairId" :photopic="photopic"
                   @close="closeModal"></RepairDetail>
     <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeModal"
                   @selectMember="selectMember"></organization>
@@ -339,7 +339,8 @@ export default {
       organizeVisible: false,
       organizeType: "",
       operator_name: "",
-      passStatus: []
+      passStatus: [],
+      photopic:[],
     };
   },
   mounted() {
@@ -479,6 +480,7 @@ export default {
     },
     dblClickTable(row, event) {
       this.repairId = row.id;
+      this.photopic = row.album;
       this.repairDetailDialog = true;
     },
     //右键
