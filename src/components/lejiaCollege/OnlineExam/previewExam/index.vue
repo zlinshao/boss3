@@ -22,7 +22,7 @@
             <div class="import_questions" style="border: 1px solid #fdca41;box-shadow: 0 0 3px 1px #fdca41;">
               <div class="import_left"><span style="float:left; font-size:14px;">总题数</span><i
                 style="float:right; color:#fdca41;font-size:20px;" class="iconfont icon-shujutu"></i></div>
-              <div><span style="font-size:70px; color:#fdca41">{{testPaperData.questions.length}}</span>题</div>
+              <div><span style="font-size:70px; color:#fdca41">{{testPaperData.questions && testPaperData.questions.length}}</span>题</div>
             </div>
           </el-col>
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
@@ -71,7 +71,7 @@
           v-if="item.category===158">简答题</span></span>
           <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
           <div v-if="item.category===157">
-            <el-col v-for="value in item.answer" :span="12"><el-input size="small" style="width:95.5%;margin-left:2%;" readOnly></el-input></el-col>
+            <el-col v-for="value in item.answer" :key="value" :span="12"><el-input size="small" style="width:95.5%;margin-left:2%;" readOnly></el-input></el-col>
           </div>
           <div v-if="item.category===158">
             <el-input style="width:95.5%;margin-left:2%;" readOnly type="textarea"></el-input>

@@ -249,7 +249,6 @@
     watch: {},
     methods: {
       answerExam(id){
-        console.log(id);
         this.$router.push({path: '/answerExam', query: {id: id}});
       },
       myData(val) {
