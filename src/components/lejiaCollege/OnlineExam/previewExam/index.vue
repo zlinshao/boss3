@@ -22,14 +22,14 @@
             <div class="import_questions" style="border: 1px solid #fdca41;box-shadow: 0 0 3px 1px #fdca41;">
               <div class="import_left"><span style="float:left; font-size:14px;">总题数</span><i
                 style="float:right; color:#fdca41;font-size:20px;" class="iconfont icon-shujutu"></i></div>
-              <div><span style="font-size:70px; color:#fdca41">{{testPaperData.questions && testPaperData.questions.length}}</span>题</div>
+              <div><span style="font-size:70px; color:#fdca41">{{testPaperData.count}}</span>题</div>
             </div>
           </el-col>
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="border: 1px solid #fb4699;box-shadow: 0 0 3px 1px #fb4699;">
               <div class="import_left"><span style="float:left; font-size:14px;">总分值</span><i
                 style="float:right; color:#fb4699;font-size:20px;" class="iconfont icon-chengjiguanli"></i></div>
-              <div><span style="font-size:70px; color:#fb4699">90</span>分</div>
+              <div><span style="font-size:70px; color:#fb4699">{{testPaperData.score}}</span>分</div>
             </div>
           </el-col>
         </el-row>
