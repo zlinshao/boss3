@@ -247,15 +247,19 @@
         this.form.page = val;
         this.rentStatus = " ";
         this.rentLoading = true;
-        this.$http.get(globalConfig.server + "exam/result").then(res => {
+        this.$http.get(globalConfig.server + "exam/result").then((res) => {
           this.rentLoading = false;
-          if (res.data.code == "36000") {
+          if (res.data.code == "36010") {
             this.tableData = res.data.data.data;
             this.tableNumber = res.data.data.count;
           } else {
             this.rentStatus = "暂无数据";
             this.tableNumber = 0;
             this.tableData = [];
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
           }
         });
       },
