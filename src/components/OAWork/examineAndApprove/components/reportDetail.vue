@@ -22,7 +22,8 @@
                 <span>{{personal.name}}<span v-for="(key,index) in personal.org"
                                              v-if="index === 0">-{{key.name}}</span></span>
               </div>
-              <div class="auditStatus" v-if="placeFalse"><i class="iconfont icon-yanqi--"></i>&nbsp;{{place.display_name}}</div>
+              <div class="auditStatus" v-if="placeFalse"><i class="iconfont icon-yanqi--"></i>&nbsp;{{place.display_name}}
+              </div>
               <div class="statuss"
                    :class="{'statusSuccess':place.status === 'published', 'statusFail':place.status === 'rejected', 'cancelled':place.status === 'cancelled'}"></div>
             </div>
@@ -135,8 +136,8 @@
         </el-form>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button size="small" type="primary" @click="manager">确定</el-button>
         <el-button size="small" type="primary" @click="commentVisible = false">关&nbsp;闭</el-button>
+        <el-button size="small" type="primary" @click="manager">确定</el-button>
       </div>
     </el-dialog>
 
@@ -213,15 +214,6 @@
             this.show_content = JSON.parse(res.data.data.process.content.show_content_compress);
             this.operation = res.data.data.operation;
 
-            // let houseName = res.data.data.process.content;
-            // if (houseName.address) {
-            //   this.address = houseName.address;
-            // } else if (houseName.rent_without_collect_address) {
-            //   this.address = houseName.rent_without_collect_address;
-            // } else {
-            //   this.address = houseName.house.name;
-            // }
-
             let pro = res.data.data.process;
             this.personal = pro.user;
             this.place = pro.place;
@@ -266,10 +258,10 @@
       // 确认评论
       manager() {
         if (this.form.operation !== 'to_comment') {
-          this.sureComment();
+          this.sureComment(this.form.operation);
         } else {
           if (this.form.comment !== '' || this.form.album.length !== 0) {
-            this.sureComment();
+            this.sureComment(this.form.operation);
           } else {
             this.$notify.warning({
               title: '警告',
@@ -278,12 +270,16 @@
           }
         }
       },
-      sureComment() {
+      sureComment(val) {
         if (this.picStatus) {
           this.$http.put(this.address + 'process/' + this.processId, this.form).then((res) => {
             if (res.data.status === 'success') {
               this.close_();
-              this.comments(this.processId, 1);
+              if (val === 'to_comment') {
+                this.comments(this.processId, 1);
+              } else {
+                this.process(this.processId);
+              }
               this.$notify.success({
                 title: '成功',
                 message: res.data.message,
