@@ -241,6 +241,16 @@
                   </span>
                     </template>
                   </el-table-column>
+
+
+                  <el-table-column
+                    width="136px"
+                    label="合同上传时间">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.contract_create_time">{{scope.row.contract_create_time}}</span>
+                      <span v-if="!scope.row.contract_create_time">暂无</span>
+                    </template>
+                  </el-table-column>
                   <el-table-column
                     prop="contract_number"
                     label="合同编号">
@@ -249,6 +259,7 @@
                       <span v-if="!scope.row.contract_number">暂无</span>
                     </template>
                   </el-table-column>
+
                   <!--<el-table-column-->
                     <!--prop="bulletin_time"-->
                     <!--label="上传时间">-->
@@ -293,14 +304,7 @@
                       <span v-if="!scope.row.phone">暂无</span>
                     </template>
                   </el-table-column>
-                  <el-table-column
-                    width="136px"
-                    label="合同上传时间">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.contract_create_time">{{scope.row.contract_create_time}}</span>
-                      <span v-if="!scope.row.contract_create_time">暂无</span>
-                    </template>
-                  </el-table-column>
+
                   <el-table-column
                     prop="end_date"
                     width="136px"
@@ -395,6 +399,14 @@
                   @row-contextmenu='houseMenu'
                   style="width: 100%">
                   <el-table-column
+                    width="136px"
+                    label="合同上传时间">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.contract_create_time">{{scope.row.contract_create_time}}</span>
+                      <span v-if="!scope.row.contract_create_time">暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
                     prop="contract_number"
                     label="合同编号">
                     <template slot-scope="scope">
@@ -402,6 +414,7 @@
                       <span v-if="!scope.row.contract_number">暂无</span>
                     </template>
                   </el-table-column>
+
                   <!--<el-table-column-->
                     <!--prop="bulletin_time"-->
                     <!--label="上传时间">-->
@@ -446,14 +459,7 @@
                       <span v-if="!scope.row.phone">暂无</span>
                     </template>
                   </el-table-column>
-                  <el-table-column
-                    width="136px"
-                    label="合同上传时间">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.contract_create_time">{{scope.row.contract_create_time}}</span>
-                      <span v-if="!scope.row.contract_create_time">暂无</span>
-                    </template>
-                  </el-table-column>
+
                   <el-table-column
                     prop="end_date"
                     width="136px"
