@@ -140,7 +140,8 @@
               <el-table-column
                 label="操作">
                 <template slot-scope="scope">
-                  <el-button size="mini" type="primary" @click="answerExam(scope.row.id)">立即答题</el-button>
+                  <el-button size="mini" type="primary" v-if="scope.row.score == 0" @click="answerExam(scope.row.id)">立即答题</el-button>
+                  <el-button size="mini" type="info" v-if="scope.row.score !== 0" @click="lookExam(scope.row.id)">查看试卷</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -248,6 +249,9 @@
     },
     watch: {},
     methods: {
+      lookExam(id){
+        this.$router.push({path: '/lookExam', query: {id: id}});
+      },
       answerExam(id){
         this.$router.push({path: '/answerExam', query: {id: id}});
       },

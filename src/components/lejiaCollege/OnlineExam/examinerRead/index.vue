@@ -145,7 +145,7 @@
                 prop="more"
                 label="详情">
                 <template slot-scope="scope">
-                  <span @click="lookExam(scope.row.id)" style="cursor: pointer;">点击查看</span>
+                  <span @click="lookExam(scope.row.id)" style="cursor: pointer;color: #6a8dfb;">点击查看</span>
                 </template>
               </el-table-column>
             </el-table>

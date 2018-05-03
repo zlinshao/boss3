@@ -4,13 +4,14 @@
       <div class="tool">
         <div class="tool_left">
           <span>试卷名称</span><br/>
-          <span style="color:#83a0fc;">{{testPaperData.name}}</span>
+          <span style="color:#83a0fc;" >{{testPaperData.name}}</span>
+          <el-input size="mini" v-model="testPaperData.name" v-if="editTestPaper"></el-input>
         </div>
         <div class="tool_right">
           <el-button type="success" size="small"
                      style="margin-right:10px; background-color:#58d788; border-color:#58d788;"
-                     @click="">
-            <i class="iconfont icon-tianjiagenjin"></i>&nbsp;关联的考试
+                     @click="associatedExam">
+            <i class="iconfont icon-jinrukaoshi"></i>&nbsp;关联的考试
           </el-button>
           <el-button type="success" size="small"
                      style="margin-right:10px; background-color:#58d788; border-color:#58d788;"
@@ -149,6 +150,33 @@
         </el-row>
       </el-dialog>
     </div>
+    <div id="associatedExamDialog">
+      <el-dialog :close-on-click-modal="false" :visible.sync="associatedExamDialog" title="关联的考试" width="45%">
+        <div style="margin-top: 20px;">
+          <el-table
+            :data="associatedExamData"
+            :empty-text='tableStatus'
+            v-loading="tableLoading"
+            element-loading-text="拼命加载中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(255, 255, 255, 0)"
+            style="width: 100%">
+            <el-table-column
+              prop=""
+              label="考试名称">
+            </el-table-column>
+            <el-table-column
+              prop=""
+              label="开考时间">
+            </el-table-column>
+          </el-table>
+        </div>
+        <div slot="footer" class="dialog-footer" style="text-align: center;">
+            <el-button size="small" @click="associatedExamDialog=false">取消</el-button>
+            <el-button size="small" type="primary" @click="synchroTestPaper">同步到考试</el-button>
+        </div>
+      </el-dialog>
+    </div>
   </div>
 </template>
 <script>
@@ -168,6 +196,11 @@
         questionTypeCategory: [], //题目类型
         testPaperId: '',
         testPaperData: {},
+        associatedExamDialog: false,
+        tableStatus: ' ',
+        tableLoading: false,
+        associatedExamData: [],
+        editTestPaper: false,
       };
     },
     mounted() {
@@ -186,6 +219,13 @@
       },
     },
     methods: {
+      associatedExam(){
+        this.associatedExamDialog = true;
+      },
+      synchroTestPaper(){
+        this.associatedExamDialog = false;
+        //同步试卷最新数据到考试的接口
+      },
       getQueryData() {
         if (!this.$route.query.id) {
           this.testPaperId = this.$store.state.onlineExam.edit_paper_id;

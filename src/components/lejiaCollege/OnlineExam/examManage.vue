@@ -133,7 +133,9 @@
               prop="status"
               label="考试状态">
               <template slot-scope="scope">
-                <span v-if="scope.row.status">{{scope.row.status}}</span>
+                <el-button v-if="scope.row.status === 1" type="primary" size="mini">未开始</el-button>
+                <el-button v-if="scope.row.status === 2" type="warning" size="mini">已开始</el-button>
+                <el-button v-if="scope.row.status === 3" type="info" size="mini">已结束</el-button>
                 <span v-if="!scope.row.status">暂无</span>
               </template>
             </el-table-column>

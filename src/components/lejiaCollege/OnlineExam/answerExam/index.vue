@@ -98,7 +98,7 @@
             <el-form>
               <el-form-item>
                 <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak">
-                  <el-input style="width:95.5%;margin-left:2%;" size="small" v-model="answerData[item.id][ak]"></el-input>
+                  <el-input style="width:95.5%;margin-left:2%;" size="small" v-model="answerData[item.id][ak]" placeholder="请填写答案"></el-input>
                 </el-col>
               </el-form-item>
             </el-form>
@@ -111,7 +111,7 @@
             <el-form>
               <el-form-item>
                 <el-input  style="width:95.5%;margin-left:2%;" v-model="answerData[item.id]"
-                          type="textarea"></el-input>
+                          type="textarea" placeholder="请填写答案"></el-input>
               </el-form-item>
             </el-form>
           </div>

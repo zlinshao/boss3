@@ -110,37 +110,46 @@
               @row-dblclick="dblClickTable"
               style="width: 100%">
               <el-table-column
-                prop="exam_time"
+                prop="start_time"
                 label="考试时间">
               </el-table-column>
               <el-table-column
-                prop="exam_name"
+                prop="name"
                 label="试卷名称">
               </el-table-column>
               <el-table-column
-                prop="type"
-                label="类型">
+                prop="category"
+                label="试卷类型">
               </el-table-column>
               <el-table-column
-                prop="name"
+                prop="examinee.real_name"
                 label="考生姓名">
               </el-table-column>
-              <el-table-column
-                prop="depart"
-                label="考生部门">
-              </el-table-column>
+              <!--<el-table-column-->
+              <!--prop="depart"-->
+              <!--label="考生部门">-->
+              <!--</el-table-column>-->
               <el-table-column
                 prop="statue"
                 label="考生状态">
-              </el-table-column>
-              <el-table-column
-                prop="score"
-                label="考生成绩">
-              </el-table-column>
-              <el-table-column
-                label="试卷">
                 <template slot-scope="scope">
-                  <span @click="lookexam" style="cursor: pointer;">点击阅卷</span>
+                  <span v-if="scope.row.result_id == 0">缺考</span>
+                  <span v-if="scope.row.result_id !== 0">完成考试</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="result_info.score"
+                label="考生成绩">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.result_id==0">0</span>
+                  <span v-if="scope.row.result_id!==0">{{scope.row.result_info && scope.row.result_info.score}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="操作">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.result_id == 0">已完成</span>
+                  <span v-if="scope.row.result_id !== 0 && scope.row.result_info && scope.row.result_info.waiting && scope.row.result_info.waiting.length>0" @click="lookExam(scope.row)" style="cursor: pointer;color: #6a8dfb;">点击阅卷</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -236,8 +245,9 @@
     },
     watch: {},
     methods: {
-      lookexam() {
-        this.$router.push({path: "/examinerShortAn"});
+      lookExam(val) {
+        console.log(val)
+        this.$router.push({path: "/examinerShortAn", query: {result_id: val.result_id, exam_id: val.exam_id}});
       },
       getQueryData() {
         if (!this.$route.query.id) {
@@ -251,14 +261,15 @@
       myData() {
         this.rentStatus = " ";
         this.rentLoading = true;
-        this.$http.get(globalConfig.server + "exam/result/"+this.examId).then(res => {
+        this.$http.get(globalConfig.server + "exam/finished/" + this.examId).then(res => {
           this.rentLoading = false;
-          if (res.data.code == "36010") {
-            this.tableData = res.data.data;
-            this.tableNumber = 1;
+          if (res.data.code == "30000") {
+            this.tableData = res.data.data.data;
+            this.tableNumber = res.data.data.count;
           } else {
-            this.rentStatus = "暂无数据";
+            this.tableData = [];
             this.tableNumber = 0;
+            this.rentStatus = "暂无数据";
           }
         });
       },
@@ -292,7 +303,8 @@
           search: ""
         };
       },
-      dblClickTable() {},
+      dblClickTable() {
+      },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
