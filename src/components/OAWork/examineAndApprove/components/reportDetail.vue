@@ -114,7 +114,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button
-          v-if="!fullLoading && (index === 'to_appraiser-officer_approved' || index === 'to_appraiser-officer_rejected' || index === 'to_comment')"
+          v-if="!fullLoading && index !== 'to_cancelled'"
           size="small" type="primary" v-for="(key,index) in operation" :key="index"
           @click="commentOn(index)">
           {{key}}
