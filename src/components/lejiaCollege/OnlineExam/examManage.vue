@@ -152,9 +152,9 @@
       </div>
     </div>
     <div id="examDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="examDialog" title="新建考试" width="45%">
+      <el-dialog :close-on-click-modal="false" :visible.sync="examDialog" :title="examTitle" width="45%">
         <div>
-          <div class="title">新建考试信息</div>
+          <div class="title">考试信息</div>
           <div class="describe_border" style="padding: 25px 10px;">
             <el-form size="mini" onsubmit="return false;" :model="formExam" label-width="100px">
               <el-row :gutter="30">
@@ -230,10 +230,55 @@
         </div>
       </el-dialog>
     </div>
-
+    <div id="examineeDialog">
+      <el-dialog :close-on-click-modal="false" :visible.sync="examineeDialog" title="考生信息" width="45%">
+        <div>
+          <el-row :gutter="10">
+            <el-col :span="18">
+              <el-input size="mini" placeholder="请选择考生" v-model="selectExaminees" readOnly @focus="openOrganize">
+                <template slot="append">
+                  <div style="cursor: pointer;" @click="emptyExaminees">清空</div>
+                </template>
+              </el-input>
+            </el-col>
+            <el-col :span="6">
+              <el-button type="primary" size="mini" @click="addExaminees">新增</el-button>
+            </el-col>
+          </el-row>
+        </div>
+        <div style="margin-top: 20px;">
+          <el-table
+            :data="examineesData"
+            :empty-text='tableStatus'
+            v-loading="tableLoading"
+            element-loading-text="拼命加载中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(255, 255, 255, 0)"
+            style="width: 100%">
+            <el-table-column
+              prop="real_name"
+              label="考生姓名">
+              <template slot-scope="scope">
+                <span v-if="scope.row.real_name">{{scope.row.real_name}}</span>
+                <span v-if="!scope.row.real_name">暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="pivot.enroll_time"
+              label="报名时间">
+              <template slot-scope="scope">
+                <span v-if="scope.row.pivot && scope.row.pivot.enroll_time">{{scope.row.pivot && scope.row.pivot.enroll_time}}</span>
+                <span v-if="!(scope.row.pivot && scope.row.pivot.enroll_time)">暂无</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </el-dialog>
+    </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
-    <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
+    <Organization :organizationDialog="organizationDialog" :type="organizeType" @selectMember="selectMember"
+                  @close="closeOrganization"></Organization>
   </div>
 </template>
 
@@ -258,6 +303,7 @@
         totalNum: 0,
         tableData: [],
         isHigh: false,
+        examTitle: '新建考试',
         //考试列表分页搜索
         params: {
           page: 1,
@@ -284,25 +330,27 @@
           category: '',  //试卷类型
           late_tolerance: '', //开考后多长时间不能登陆
         },
-
+        examineeDialog: false,
         examId: '', //考试场次的id
         useTestPapers: [],
+        examineesData: [],
+        selectExaminees: '',
+        selectExamineeIds: [],
       };
     },
     mounted() {
       this.getExamData();
       this.getDictionary();
     },
-    // activated() {
-    //   this.getExamData();
-    //   this.getDictionary();
-    // },
     watch: {
       examDialog(val) {
         if (val) {
           this.initial();
           if (this.examId) {
+            this.examTitle = '编辑考试';
             this.getExamDetail();
+          }else{
+            this.examTitle = '新建考试';
           }
         }
       },
@@ -354,6 +402,43 @@
       dblClickTable() {
 
       },
+      //打开选人组件
+      openOrganize() {
+        this.organizationDialog = true;
+        this.organizeType = 'staff';
+      },
+      selectMember(val) {
+        this.selectExaminees = '';
+        this.selectExamineeIds = [];
+        let names = [];
+        val.forEach((item) => {
+          this.selectExamineeIds.push(item.id);
+          names.push(item.name);
+        });
+        this.selectExaminees = names.join(',');
+        this.organizeType = '';
+      },
+      emptyExaminees(){
+        this.selectExaminees = '';
+        this.selectExamineeIds = [];
+      },
+      addExaminees(){
+        this.$http.post(globalConfig.server+ 'exam/batch_enroll/'+ this.examId,{examinees: this.selectExamineeIds}).then((res)=>{
+          if(res.data.code === '30010'){
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.getExamDetail();
+            this.emptyExaminees();
+          }else{
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
       //考试详情
       getExamDetail() {
         this.$http.get(globalConfig.server + 'exam/' + this.examId).then((res) => {
@@ -366,6 +451,8 @@
               this.formExam.category = detail.paper && detail.paper.category_id;
               this.formExam.late_tolerance = detail.late_tolerance;
               this.formExam.paper_id = detail.paper && detail.paper.id;
+              //考生信息
+              this.examineesData = detail.examinees;
             }
           } else {
             this.$notify.warning({
@@ -495,7 +582,7 @@
                     title: '成功',
                     message: res.data.msg
                   });
-                  this.params.page=1;
+                  this.params.page = 1;
                   this.getExamData();
                 } else {
                   this.$notify.warning({
@@ -512,7 +599,8 @@
             });
             break;
           case 'manageExaminee':
-
+            this.examineeDialog = true;
+            this.getExamDetail();
             break;
 
           case 'informExaminee':

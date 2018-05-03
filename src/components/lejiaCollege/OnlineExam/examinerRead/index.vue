@@ -5,9 +5,9 @@
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input placeholder="标题/内容关键字" v-model="form.search" @keyup.enter.native="myData(1)" size="mini"
+              <el-input placeholder="标题/内容关键字" v-model="form.search" @keyup.enter.native="myData" size="mini"
                         clearable>
-                <el-button slot="append" icon="el-icon-search" @click="myData(1)"></el-button>
+                <el-button slot="append" icon="el-icon-search" @click="myData"></el-button>
                 <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
               </el-input>
             </el-form-item>
@@ -90,7 +90,7 @@
               </el-col>
             </el-row>
             <div class="btnOperate">
-              <el-button size="mini" type="primary" @click="myData(1)">搜索</el-button>
+              <el-button size="mini" type="primary" @click="myData">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
               <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
             </div>
@@ -236,15 +236,14 @@
       };
     },
     activated() {
-      this.myData(1);
+      this.myData();
     },
     watch: {},
     methods: {
       lookexam() {
         this.$router.push({path: "/examinerReadEach"});
       },
-      myData(val) {
-        this.form.page = val;
+      myData() {
         this.rentStatus = " ";
         this.rentLoading = true;
         this.$http.get(globalConfig.server + "exam/result").then((res) => {
