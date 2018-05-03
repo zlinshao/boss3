@@ -120,7 +120,7 @@
       <div class="bottom">
         <el-button @click="onSubmit"
                    style="width:360px;margin-top:34px; height:32px; line-height:0px; background-color:rgb(106, 141, 251); border-color:rgb(106, 141, 251);"
-                   type="primary">提交
+                   type="primary" :disabled="submitDisabled">提交
         </el-button>
       </div>
     </div>
@@ -155,7 +155,7 @@
         <el-row :gutter="30" style="margin-bottom:38px;">
           <el-col :span="24">
             <div class="submit_points">
-              <span>提交成功！</span><br/>主考官将尽快批示，您的成绩可在“乐伽大学－成绩查询”中查看，我们也会以信息的方式通知您！
+              <span>提交成功！</span><br/>主考官将尽快批示，您的成绩可在“乐伽大学－我的考试”中查看，我们也会以信息的方式通知您！
             </div>
           </el-col>
         </el-row>
@@ -182,6 +182,7 @@
         paperId: '',  //当前答题的考试id
         questionData: {},  //题目的内容
         answerData: {},  //答题的内容
+        submitDisabled: false,
       };
     },
     activated() {
@@ -256,10 +257,11 @@
               message: res.data.msg
             });
             if(this.questionData[158] && this.questionData[158].length>0){
-              this.pointDialog = true;
-            }else{
               this.submitDialog = true;
+            }else{
+              this.pointDialog = true;
             }
+            this.submitDisabled = true;
           }else{
             this.$notify.warning({
               title: '警告',
@@ -386,5 +388,13 @@
         display: block;
       }
     }
+  }
+  .el-button--primary.is-disabled,
+  .el-button--primary.is-disabled:active,
+  .el-button--primary.is-disabled:focus,
+  .el-button--primary.is-disabled:hover {
+    color: #fff !important;
+    background-color: #8faafc !important;
+    border-color: #8faafc !important;
   }
 </style>
