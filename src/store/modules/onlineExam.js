@@ -7,6 +7,7 @@ const onlineExam = {
     myself_test_paper : {}, //自己录入
     edit_paper_id: '', //编辑试卷id
     answer_exam_id: '', //答题试卷id
+    preview_paper_id: '', //预览试卷id
   },
   mutations: {
     TEST_PAPER:(state,view) => {
@@ -28,7 +29,12 @@ const onlineExam = {
       if(view){
         state.answer_exam_id = view;
       }
-    }
+    },
+    PREVIEW_PAPER_ID:(state,view) => {
+      if(view){
+        state.preview_paper_id = view;
+      }
+    },
   },
   actions: {
     testPaper({commit},view){
@@ -43,7 +49,9 @@ const onlineExam = {
     answerExamId({commit},view){
       commit('ANSWER_EXAM_ID',view);
     },
-
+    previewPaperId({commit},view){
+      commit('PREVIEW_PAPER_ID',view);
+    },
   }
 };
 
