@@ -452,6 +452,7 @@
       downLoad() {
         this.imgArray.map( (img) => {
           fetch(img).then(res => res.blob().then(blob => {
+            console.log(blob)
             let a = document.createElement('a');
             let url = window.URL.createObjectURL(blob);
             let filename = '';
