@@ -425,7 +425,7 @@
                   <!--</el-table-column>-->
                   <el-table-column
                     prop="customer_name"
-                    label="业主姓名">
+                    label="租客姓名">
                     <template slot-scope="scope">
                       <span v-if="scope.row.customer_name">{{scope.row.customer_name}}</span>
                       <span v-if="!scope.row.customer_name">暂无</span>

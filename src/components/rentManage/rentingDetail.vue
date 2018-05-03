@@ -83,7 +83,7 @@
           </div>
         </h3>
       </div>
-      <div id="mainContent" class="main scroll_bar" @click.stop="getText($event)">
+      <div id="mainContent" class="main scroll_bar">
 
         <div id="houseId" style="zborder-bottom: 1px solid #ccc;margin: 10px 0 50px 150px;">
           <div class="title">房屋信息</div>
