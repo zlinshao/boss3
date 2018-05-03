@@ -830,6 +830,10 @@
       collectHouseId(val){
         if(val){
           this.getRentData(val);
+        }else {
+          this.rentingData = [];
+          this.rentTotalNum = 0;
+          this.rentStatus = '暂未出租';
         }
       }
     },
