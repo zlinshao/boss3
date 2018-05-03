@@ -70,9 +70,11 @@
             </div>
           </el-col>
         </el-row>
+        <div slot="footer" class="dialog-footer" style="text-align: center;">
+            <el-button size="small" type="primary" @click="closeTestPaperDialog">确定</el-button>
+        </div>
       </el-dialog>
     </div>
-
     <div id="faleDialog">
       <el-dialog :close-on-click-modal="false" :visible.sync="faleDialog" title="导入失败明细" width="50%">
         <span class="faleTitle">请检查</span>
@@ -112,9 +114,18 @@
     },
     activated() {
       this.getQueryData();
+      console.log(this.$store.state.app.visitedViews);
     },
     watch: {},
     methods: {
+      closeTestPaperDialog(){
+        this.testPaperDialog = false;
+        let view = {};
+        view.name=' 批量导入试题 ';
+        view.path='/batchQuestions';
+        this.$store.dispatch('delVisitedViews', view);
+        this.$router.push({path: '/configExam'});
+      },
       getQueryData() {
         if (!this.$route.query.name) {
           let data = {};

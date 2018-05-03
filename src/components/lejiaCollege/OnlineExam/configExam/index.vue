@@ -9,7 +9,7 @@
         <div class="tool_right">
           <el-button type="success" size="small"
                      style="margin-right:10px; background-color:#58d788; border-color:#58d788;"
-                     @click="openModalDialog()">
+                     @click="">
             <i class="iconfont icon-tianjiagenjin"></i>&nbsp;关联的考试
           </el-button>
           <el-button type="success" size="small"
@@ -59,14 +59,14 @@
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
           <p style="margin-left:30px;line-height:30px;" v-html="item.stem"></p>
-          <div style="width:98%;margin-left:2%;">
+          <el-row :gutter="20" style="width:98%;margin-left:2%;">
             <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
               <span v-if="item.answer == index"><el-radio
                 style="white-space: initial;">{{item.answer}}：{{val}}</el-radio></span>
               <span v-else>{{index}}：{{val}}</span>
               <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="item.answer == index">正确</span>
             </el-col>
-          </div>
+          </el-row>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===154 || item.category===155">
@@ -79,14 +79,14 @@
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
           <p style="margin-left:30px;line-height:30px;" v-html="item.stem"></p>
-          <div style="width:98%;margin-left:2%;">
+          <el-row :gutter="20" style="width:98%;margin-left:2%;">
             <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
               <span v-if=" item.answer.indexOf(index)>-1 "><el-radio
                 style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
               <span v-else>{{index}}：{{val}}</span>
               <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="item.answer.indexOf(index)>-1">正确</span>
             </el-col>
-          </div>
+          </el-row>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===156">
           <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>&nbsp;&nbsp;&nbsp;
@@ -98,14 +98,14 @@
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
           <p style="margin-left:30px;line-height:20px;" v-html="item.stem"></p>
-          <div style="width:98%;margin-left:2%;">
+          <el-row :gutter="20" style="width:98%;margin-left:2%;">
             <el-col :span="12" :key="index" v-for="(val,index) in item.choice">
               <span v-if="item.answer == index"><el-radio
                 style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
               <span v-else>{{index}}：{{val}}</span>
               <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="item.answer == index">正确</span>
             </el-col>
-          </div>
+          </el-row>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===157 || item.category===158">
@@ -119,7 +119,7 @@
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
           <p style="margin-left:30px;line-height:20px;padding-right:10px;" v-html="item.stem"></p>
-          <div style="width:98%;margin-left:2%;">
+          <el-row :gutter="20" style="width:98%;margin-left:2%;">
             <el-col :span="12" :key="index" v-for="(val,index) in item.answer" v-if="item.answer.length>0">
               <div v-if="item.category===157">
                 <span style="color:#409EFF;">第{{index+1}}处答案：</span>
@@ -127,7 +127,7 @@
               </div>
               <div v-if="item.category===158"></div>
             </el-col>
-          </div>
+          </el-row>
         </div>
       </div>
     </div>
