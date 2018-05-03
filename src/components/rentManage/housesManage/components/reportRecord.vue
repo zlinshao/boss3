@@ -7,6 +7,7 @@
       element-loading-text="拼命加载中"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(0, 0, 0, 0)"
+      @row-dblclick="dblClickTable"
       style="width: 100%">
 
       <el-table-column
@@ -31,9 +32,9 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="报备时间">
+        label="所属部门">
         <template slot-scope="scope">
-          <span v-if="scope.row.created_at">{{scope.row.created_at}}</span>
+          <span v-if="scope.row.content">{{scope.row.content.department_name}}</span>
           <span v-else="">/</span>
         </template>
       </el-table-column>
@@ -45,9 +46,9 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="所属部门">
+        label="报备时间">
         <template slot-scope="scope">
-          <span v-if="scope.row.content">{{scope.row.content.department_name}}</span>
+          <span v-if="scope.row.created_at">{{scope.row.created_at}}</span>
           <span v-else="">/</span>
         </template>
       </el-table-column>
@@ -70,13 +71,15 @@
 
       </div>
     </el-dialog>
-
+    <ReportDetail :module="reportDetailDialog" :ids="reportId" @close="closeModal"></ReportDetail>
   </div>
 </template>
 
 <script>
+  import ReportDetail from '../../../OAWork/examineAndApprove/components/reportDetail'
   export default {
     props:['houseId','activeName','all_dic',],
+    components:{ReportDetail},
     data () {
       return {
         tableData:[],
@@ -91,6 +94,8 @@
         followId : '',
         fileObject :{},
         dialogFileVisible : false,
+        reportDetailDialog:false,
+        reportId : '',
       }
     },
     watch:{
@@ -127,11 +132,16 @@
         this.tableData = [];
         this.totalNumber = 0;
         this.params.page = 1;
-        this.$http.get(globalConfig.server_user + 'process?house_id=420',{params:this.params}).then((res) => {
+        this.$http.get(globalConfig.server_user + 'process?house_id='+this.houseId,{params:this.params}).then((res) => {
           this.tableLoading = false;
           if(res.data.status === 'success'){
             this.tableData = res.data.data;
             this.totalNumber = res.data.meta.total;
+            if(res.data.data.length<1){
+              this.emptyContent = '暂无数据';
+            }
+          }else {
+            this.emptyContent = '暂无数据';
           }
         })
       },
@@ -139,6 +149,14 @@
       openModal(val){
         this.fileObject = val;
         this.dialogFileVisible = true;
+      },
+
+      dblClickTable(row, event){
+        this.reportDetailDialog = true;
+        this.reportId = row.id;
+      },
+      closeModal(){
+        this.reportDetailDialog = false;
       },
     }
   }

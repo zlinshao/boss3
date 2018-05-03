@@ -3,7 +3,7 @@
     <div id="onlineExam">
       <div class="tool">
         <div class="tool_left">
-          <span>试卷名称{{formbox}}</span><br/>
+          <span>试卷名称</span><br/>
           <span style="color:#83a0fc;">{{testPaperData.name}}</span>
         </div>
         <div class="tool_right">
@@ -25,7 +25,7 @@
             <el-row>
               <el-col :span="4" style="float:right;margin-top:20px;">
                 <el-form-item style="margin-right: 10px;">
-                  <el-input  placeholder="搜索关键字" size="small" v-model="params.search">
+                  <el-input placeholder="搜索关键字" size="small" v-model="params.search">
                     <el-button slot="append" style="background-color:rgb(131, 160, 252); color:#fff;" size="small"
                                class="search_button" @click="getTestPaperDetail">搜索试题
                     </el-button>
@@ -34,7 +34,7 @@
               </el-col>
               <el-col :span="5" style="margin-top:20px;float:right;">
                 <el-form-item label="题目类型">
-                  <el-select size="small" v-model="params.category">
+                  <el-select size="small" v-model="params.category" clearable>
                     <el-option v-for="item in questionTypeCategory" :key="item.id" :label="item.dictionary_name"
                                :value="item.id">{{item.dictionary_name}}
                     </el-option>
@@ -46,7 +46,7 @@
           <el-checkbox style="margin-left:2%; margin-bottom:10px;" :indeterminate="isIndeterminate" v-model="checkAll"
                        @change="handleCheckAllChange">全选
           </el-checkbox>
-          <span style="font-size:14px; color:#fc83b6; margin-left:20px;" @click="batchDelete">批量移除</span>
+          <span style="font-size:14px; color:#fc83b6; margin-left:20px;cursor: pointer" @click="batchDelete">批量移除</span>
           <span style="font-size:14px; float:right; margin-right:20px; ">共&nbsp;
             <span style="color:#fc83b6;" v-if="testPaperData && testPaperData.questions">{{testPaperData.questions.length}}</span>&nbsp;项查询结果</span>
         </div>
@@ -54,14 +54,15 @@
           <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>&nbsp;&nbsp;&nbsp;{{key+1}}.<span
           style="color:#6a8dfb; margin-left:20px;">单选题</span>
           <span class="ques_score">({{item.score}}分)</span>
-          <span class="remove" @click="deleteQues(item.id)">移除</span>
+          <span class="remove" @click="deleteQues(item.id)" >移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
-          <span class="move_down" @click="moveDown(item.id)">下移</span>
-          <span class="move_up" @click="moveUp(item.id)">上移</span>
+          <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
+          <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
           <p style="margin-left:30px;line-height:30px;" v-html="item.stem"></p>
           <div style="width:98%;margin-left:2%;">
             <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
-              <span v-if="item.answer == index"><el-radio style="white-space: initial;">{{item.answer}}：{{val}}</el-radio></span>
+              <span v-if="item.answer == index"><el-radio
+                style="white-space: initial;">{{item.answer}}：{{val}}</el-radio></span>
               <span v-else>{{index}}：{{val}}</span>
               <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="item.answer == index">正确</span>
             </el-col>
@@ -75,29 +76,32 @@
           <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
-          <span class="move_down" @click="moveDown(item.id)">下移</span>
-          <span class="move_up" @click="moveUp(item.id)">上移</span>
+          <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
+          <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
           <p style="margin-left:30px;line-height:30px;" v-html="item.stem"></p>
           <div style="width:98%;margin-left:2%;">
             <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
-              <span v-if=" item.answer.indexOf(index)>-1 "><el-radio style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
+              <span v-if=" item.answer.indexOf(index)>-1 "><el-radio
+                style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
               <span v-else>{{index}}：{{val}}</span>
               <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="item.answer.indexOf(index)>-1">正确</span>
             </el-col>
           </div>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===156">
-          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>&nbsp;&nbsp;&nbsp; {{key+1}}.<span
+          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>&nbsp;&nbsp;&nbsp;
+          {{key+1}}.<span
           style="color:#6a8dfb; margin-left:20px;">判断题</span>
           <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
-          <span class="move_down" @click="moveDown(item.id)">下移</span>
-          <span class="move_up" @click="moveUp(item.id)">上移</span>
-          <p style="margin-left:30px;line-height:20px;">{{item.stem}}</p>
+          <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
+          <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
+          <p style="margin-left:30px;line-height:20px;" v-html="item.stem"></p>
           <div style="width:98%;margin-left:2%;">
             <el-col :span="12" :key="index" v-for="(val,index) in item.choice">
-              <span v-if="item.answer == index"><el-radio style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
+              <span v-if="item.answer == index"><el-radio
+                style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
               <span v-else>{{index}}：{{val}}</span>
               <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="item.answer == index">正确</span>
             </el-col>
@@ -105,15 +109,16 @@
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===157 || item.category===158">
-          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>&nbsp;&nbsp;&nbsp; {{key+1}}.<span
+          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>&nbsp;&nbsp;&nbsp;
+          {{key+1}}.<span
           style="color:#6a8dfb; margin-left:20px;"><span v-if="item.category===157">填空题</span><span
           v-if="item.category===158">简答题</span></span>
           <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
-          <span class="move_down" @click="moveDown(item.id)">下移</span>
-          <span class="move_up" @click="moveUp(item.id)">上移</span>
-          <p style="margin-left:30px;line-height:20px;padding-right:10px;">{{item.stem}}</p>
+          <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
+          <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
+          <p style="margin-left:30px;line-height:20px;padding-right:10px;" v-html="item.stem"></p>
           <div style="width:98%;margin-left:2%;">
             <el-col :span="12" :key="index" v-for="(val,index) in item.answer" v-if="item.answer.length>0">
               <div v-if="item.category===157">
@@ -176,9 +181,7 @@
       "params.category": {
         deep: true,
         handler(val, oldVal) {
-          if (val) {
-            this.getTestPaperDetail();
-          }
+          this.getTestPaperDetail();
         }
       },
     },
@@ -216,21 +219,35 @@
         this.testPaperDialog = false;
         this.$router.push({
           path: "/batchQuestions",
-          query: {name: this.testPaperData.name, type_id: this.testPaperData.category_id, type_name: this.testPaperData.category}
+          query: {
+            name: this.testPaperData.name,
+            type_id: this.testPaperData.category_id,
+            type_name: this.testPaperData.category
+          }
         });
       },
       myselfQuestion() {
         this.testPaperDialog = false;
-        this.$router.push({path: "/myselfQuestions", query: {paper_id: this.testPaperData.id,type: 'add'}});
+        this.$router.push({path: "/myselfQuestions", query: {paper_id: this.testPaperData.id, type: 'add'}});
       },
       openModalDialog() {
         this.testPaperDialog = true;
       },
       handleCheckAllChange(val) {
+        if (val) {
+          if (this.testPaperData.questions && this.testPaperData.questions.length > 0) {
+            this.formbox = [];
+            for (var i = 0; i < this.testPaperData.questions.length; i++) {
+              this.formbox.push(this.testPaperData.questions[i].id);
+            }
+          }
+        } else {
+          this.formbox = [];
+        }
         this.isIndeterminate = false;
       },
       handleCheckedChange(value) {
-        let checkedCount = value.length;
+        let checkedCount = this.formbox.length;
         this.checkAll = checkedCount === this.testPaperData.questions.length;
         this.isIndeterminate =
           checkedCount > 0 && checkedCount < this.testPaperData.questions.length;
@@ -304,8 +321,8 @@
           query: {paper_id: this.testPaperId, quesId: val.id, category: val.category, type: 'edit'}
         });
       },
-      batchDelete(){
-        if(this.formbox.length>0){
+      batchDelete() {
+        if (this.formbox.length > 0) {
           let batchQuesIds = this.formbox.join(',');
           this.$confirm("删除后不可恢复, 是否继续?", "提示", {
             confirmButtonText: "确定",

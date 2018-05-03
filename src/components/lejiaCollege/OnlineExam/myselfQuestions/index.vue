@@ -20,7 +20,7 @@
                               style="line-height:50px;height:50px;padding-top:14px;">
                         <el-radio :label="index">
                           <el-input size="small" v-model="options[index]" placeholder="请输入选项内容"></el-input>
-                          <i class="el-icon-close" style="color: #c0c4cc;" @click="singleSub(index)"></i>
+                          <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="singleSub(index)"></i>
                         </el-radio>
                       </el-col>
                     </el-radio-group>
@@ -59,7 +59,7 @@
                               style="line-height:50px;height:50px;padding-top:14px;">
                         <el-checkbox :label="index">
                           <el-input size="small" placeholder="请输入选项内容" v-model="multiOptions[index]"></el-input>
-                          <i class="el-icon-close" style="color: #c0c4cc;" @click="multiSub(index)"></i>
+                          <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="multiSub(index)"></i>
                         </el-checkbox>
                       </el-col>
                     </el-checkbox-group>
@@ -98,7 +98,7 @@
                               style="line-height:50px;height:50px;padding-top:14px;">
                         <el-checkbox :label="index">
                           <el-input size="small" placeholder="请输入选项内容" v-model="multiOptions[index]"></el-input>
-                          <i class="el-icon-close" style="color: #c0c4cc;" @click="multiSub(index)"></i>
+                          <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="multiSub(index)"></i>
                         </el-checkbox>
                       </el-col>
                     </el-checkbox-group>
@@ -172,7 +172,7 @@
                         <span>第{{index+1}}处答案</span>
                         <el-input style="width:70%" size="small" placeholder="请输入选项内容"
                                   v-model="blankForm.answer[index]"></el-input>
-                        <i class="el-icon-close" style="color: #c0c4cc;" @click="blankSub(index)"></i>
+                        <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="blankSub(index)"></i>
                       </el-col>
                     </el-row>
 
@@ -415,6 +415,7 @@
           });
         } else {
           this.tabDisabled = [false, false, false, false, false, false];
+          this.initial();
         }
       },
       editQuesCategory(val) {
@@ -455,7 +456,9 @@
         }
       },
       optionsSelect(val) {
-        this.singleForm.answer = String.fromCharCode(65 + Number(val));
+        if (val !== '') {
+          this.singleForm.answer = String.fromCharCode(65 + Number(val));
+        }
       },
       'singleForm': {
         deep: true,
@@ -492,7 +495,9 @@
         }
       },
       judgeOptionsSelect(val) {
-        this.judgeForm.answer = String.fromCharCode(65 + Number(val));
+        if (val !== '') {
+          this.judgeForm.answer = String.fromCharCode(65 + Number(val));
+        }
       },
       'judgeForm': {
         deep: true,
@@ -593,9 +598,6 @@
             break;
         }
       },
-      singleAdd() {
-        this.singlen++;
-      },
       confirmAdd(val) {
         let header = '';
         if (this.quesId) {
@@ -629,10 +631,10 @@
           this.singleForm.choice[String.fromCharCode(65 + i)] = this.options[i];
         }
         this.singleForm.answer = '';
+        this.optionsSelect = '';
       },
       multiSub(index) {
         this.multiOptions[index] = '';
-        this.multiOptionsSelect[index] = '';
         for (var i = index; i < this.boxlen; i++) {
           this.multiOptions[i] = this.multiOptions[i + 1];
         }
@@ -642,19 +644,66 @@
           this.multiForm.choice[String.fromCharCode(65 + i)] = this.multiOptions[i];
         }
         this.multiForm.answer = [];
+        this.multiOptionsSelect = [];
       },
       multiAdd() {
         this.boxlen++;
+        this.submitDisabled = false;
       },
       blankAdd() {
         this.spacelen++;
+        this.submitDisabled = false;
+      },
+      singleAdd() {
+        this.singlen++;
+        this.submitDisabled = false;
       },
       blankSub(index) {
         this.blankForm.answer[index] = '';
+
         for (var i = index; i < this.spacelen; i++) {
           this.blankForm.answer[i] = this.blankForm.answer[i + 1];
         }
         this.spacelen--;
+        this.blankForm.answer.splice(this.spacelen, 1);
+      },
+      initial() {
+        //单选
+        this.singleForm.stem = '';
+        this.singleForm.category = '';
+        this.singleForm.choice = {};
+        this.singleForm.answer = '';
+        this.singleForm.score = '';
+        this.options = [];
+        this.optionsSelect = '';
+        //多选 不定项选择
+        this.multiForm.stem = '';
+        this.multiForm.category = '';
+        this.multiForm.choice = {};
+        this.multiForm.score = '';
+        this.multiOptions = [];
+        this.multiOptionsSelect = [];
+        //判断题
+        this.judgeForm.stem = '';
+        this.judgeForm.category = '';
+        this.judgeForm.choice = {};
+        this.judgeForm.answer = '';
+        this.judgeForm.score = '';
+        this.judgeOptions = [];
+        this.judgeOptionsSelect = [];
+        //填空题
+        this.blankForm.stem = '';
+        this.blankForm.category = '';
+        this.blankForm.choice = {};
+        this.blankForm.answer = [];
+        this.blankForm.score = '';
+        //问答题
+        this.answerForm.stem = '';
+        this.answerForm.category = '';
+        this.answerForm.choice = {};
+        this.answerForm.answer = null;
+        this.answerForm.score = '';
+
       },
     }
   };

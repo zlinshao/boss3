@@ -138,6 +138,14 @@
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
+
+              <el-table-column
+                label="合同上传时间">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.contract_create_time">{{scope.row.contract_create_time}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
               <el-table-column
                 label="房屋地址">
                 <template slot-scope="scope">
@@ -232,13 +240,7 @@
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
-              <el-table-column
-                label="合同上传时间">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.contract_create_time">{{scope.row.contract_create_time}}</span>
-                  <span v-else="">/</span>
-                </template>
-              </el-table-column>
+
               <el-table-column
                 label="开始日期">
                 <template slot-scope="scope">
@@ -340,6 +342,15 @@
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
+
+              <el-table-column
+                label="合同上传时间">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.contract_create_time">{{scope.row.contract_create_time}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+
               <el-table-column
                 label="房屋地址">
                 <template slot-scope="scope">
@@ -417,13 +428,7 @@
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
-              <el-table-column
-                label="合同上传时间">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.contract_create_time">{{scope.row.contract_create_time}}</span>
-                  <span v-else="">/</span>
-                </template>
-              </el-table-column>
+
               <el-table-column
                 label="开始日期">
                 <template slot-scope="scope">

@@ -410,7 +410,7 @@ ul.el-menu.el-menu--inline {
   text-align: center;
   color: #FFFFFF; }
 
-.questionDiv .el-checkbox span.el-checkbox__label {
+#onlineExam .questionDiv .el-checkbox span.el-checkbox__label {
   display: none; }
 
 /*# sourceMappingURL=reset.css.map */
