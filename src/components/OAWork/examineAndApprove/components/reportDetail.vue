@@ -136,7 +136,7 @@
         </el-form>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button size="small" type="primary" @click="commentVisible = false">关&nbsp;闭</el-button>
+        <el-button size="small" @click="commentVisible = false">关&nbsp;闭</el-button>
         <el-button size="small" type="primary" @click="manager">确定</el-button>
       </div>
     </el-dialog>
