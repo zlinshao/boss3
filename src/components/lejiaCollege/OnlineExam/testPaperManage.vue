@@ -206,10 +206,6 @@
       this.getTestPaperData();
       this.getDictionary();
     },
-    // activated() {
-    //   this.getTestPaperData();
-    //   this.getDictionary();
-    // },
     watch: {
       paperTypeDialog(val) {
         if (val) {
@@ -380,7 +376,7 @@
             });
             break;
           case 'lookTestPaper':
-            this.$router.push({path: "/previewExam"});
+            this.$router.push({path: "/previewExam", query:{id: this.testPaperId}});
             break;
         }
       },
