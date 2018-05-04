@@ -17,7 +17,7 @@
 
   export default {
     name: "index",
-    component:{CollectReimbursement, RentReimbursement},
+    components:{CollectReimbursement, RentReimbursement},
     data() {
       return {
         activeName: 'first',

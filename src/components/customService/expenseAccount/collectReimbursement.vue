@@ -1,316 +1,241 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
-    <div id="clientContainer">
-      <div class="highRanking">
-        <div class="tabsSearch">
-          <el-form :inline="true" size="mini">
-            <el-form-item>
-              <el-input placeholder="编号/姓名/电话" v-model="form.keyword" size="mini" clearable
-                        @keyup.enter.native="search">
-                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
-              </el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" size="mini" @click="exportData">导出</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
-        <div class="filter high_grade" :class="isHigh? 'highHide':''">
-          <el-form :inline="true" :model="form" size="mini" label-width="100px">
-            <div class="filterTitle">
-              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
-            </div>
-            <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">创建时间</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-date-picker
-                        v-model="form.time"
-                        type="daterange"
-                        value-format="yyyy-MM-dd"
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
-                      </el-date-picker>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">维修状态</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select clearable v-model="form.status" placeholder="请选择维修状态" value="">
-                        <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.id"
-                                   :key="item.id"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
-            <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">城市</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select clearable v-model="form.city" placeholder="请选择城市" value="">
-                        <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
-                                   :key="item.id"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">创建人</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-input v-model="operator_name" @focus="chooseStaff" placeholder="请选择创建人"
-                                readonly>
-                        <template slot="append">
-                          <div style="cursor: pointer;" @click="closeStaff">清空</div>
-                        </template>
-                      </el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
-            <div class="btnOperate">
-              <el-button size="mini" type="primary" @click="search">搜索</el-button>
-              <el-button size="mini" type="primary" @click="resetting">重置</el-button>
-              <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
-            </div>
-          </el-form>
-        </div>
+    <div class="highRanking" style=" position: absolute; top: 122px; right: 20px;">
+      <div class="highSearch">
+        <el-form :inline="true" size="mini">
+          <el-form-item>
+            <el-input placeholder="房屋地址" v-model="form.keyword" size="mini" clearable
+                      @keyup.enter.native="search">
+              <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="exportData">导出</el-button>
+          </el-form-item>
+        </el-form>
       </div>
-      <div class="main">
-        <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="收房维修记录" name="first">
-            <el-table
-              :data="collectTableData"
-              :empty-text='collectStatus'
-              v-loading="collectLoading"
-              element-loading-text="拼命加载中"
-              element-loading-spinner="el-icon-loading"
-              element-loading-background="rgba(255, 255, 255, 0)"
-              @row-dblclick="dblClickTable"
-              @row-contextmenu='houseMenu'
-              style="width: 100%">
-              <el-table-column
-                prop="contract_type"
-                label="创建时间">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
-                  <span v-if="!scope.row.create_time">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="repaire_num"
-                label="维修编号">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.repaire_num">{{scope.row.repaire_num}}</span>
-                  <span v-if="!scope.row.repaire_num">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="customer_name"
-                label="客户姓名">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.customer_name">{{scope.row.customer_name}}</span>
-                  <span v-if="!scope.row.customer_name">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="customer_mobile"
-                label="回复电话">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.customer_mobile">{{scope.row.customer_mobile}}</span>
-                  <span v-if="!scope.row.customer_mobile">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="content"
-                label="维修内容">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.content">{{scope.row.content}}</span>
-                  <span v-if="!scope.row.content">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="repair_time"
-                label="预计维修时间">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.repair_time">{{scope.row.repair_time}}</span>
-                  <span v-if="!scope.row.repair_time">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="repair_master"
-                label="维修师傅">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.repair_master">{{scope.row.repair_master}}</span>
-                  <span v-if="!scope.row.repair_master">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="repair_result"
-                label="下次跟进时间">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.estimated_time">{{scope.row.estimated_time}}</span>
-                  <span v-if="!scope.row.estimated_time">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="repair_money"
-                label="跟进人">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.followor">{{scope.row.followor}}</span>
-                  <span v-if="!scope.row.followor">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="status"
-                label="维修状态">
-                <template slot-scope="scope">
-                  <el-button class="btnStatus" v-if="scope.row.status === '已完成'" type="primary" size="mini">
-                    {{scope.row.status}}
-                  </el-button>
-                  <el-button class="btnStatus" v-if="scope.row.status !== '已完成' && scope.row.status "
-                             type="info" size="mini">{{scope.row.status}}
-                  </el-button>
-                  <span v-if="!scope.row.status">暂无</span>
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-tab-pane>
-          <el-tab-pane label="租房维修记录" name="second">
-            <el-table
-              :data="rentTableData"
-              :empty-text='rentStatus'
-              v-loading="rentLoading"
-              element-loading-text="拼命加载中"
-              element-loading-spinner="el-icon-loading"
-              element-loading-background="rgba(255, 255, 255, 0)"
-              @row-dblclick="dblClickTable"
-              @row-contextmenu='houseMenu'
-              style="width: 100%">
-              <el-table-column
-                prop="contract_type"
-                label="创建时间">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
-                  <span v-if="!scope.row.create_time">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="repaire_num"
-                label="维修编号">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.repaire_num">{{scope.row.repaire_num}}</span>
-                  <span v-if="!scope.row.repaire_num">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="customer_name"
-                label="客户姓名">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.customer_name">{{scope.row.customer_name}}</span>
-                  <span v-if="!scope.row.customer_name">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="customer_mobile"
-                label="客户电话">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.customer_mobile">{{scope.row.customer_mobile}}</span>
-                  <span v-if="!scope.row.customer_mobile">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="content"
-                label="维修内容">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.content">{{scope.row.content}}</span>
-                  <span v-if="!scope.row.content">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="repair_time"
-                label="预计维修时间">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.repair_time">{{scope.row.repair_time}}</span>
-                  <span v-if="!scope.row.repair_time">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="repair_master"
-                label="维修师傅">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.repair_master">{{scope.row.repair_master}}</span>
-                  <span v-if="!scope.row.repair_master">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="repair_result"
-                label="下次跟进时间">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.estimated_time">{{scope.row.estimated_time}}</span>
-                  <span v-if="!scope.row.estimated_time">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="repair_money"
-                label="跟进人">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.followor">{{scope.row.followor}}</span>
-                  <span v-if="!scope.row.followor">暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="status"
-                label="维修状态">
-                <template slot-scope="scope">
-                  <el-button class="btnStatus" v-if="scope.row.status === '已完成'" type="primary" size="mini">
-                    {{scope.row.status}}
-                  </el-button>
-                  <el-button class="btnStatus" v-if="scope.row.status !== '已完成' && scope.row.status"
-                             type="info" size="mini">{{scope.row.status}}
-                  </el-button>
-                  <span v-if="!scope.row.status">暂无</span>
-                </template>
-              </el-table-column>
-            </el-table>
-          </el-tab-pane>
-        </el-tabs>
-        <div class="block pages">
-          <div class="left">
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="form.page"
-              :page-size="12"
-              layout="total, prev, pager, next, jumper"
-              :total="totalNum">
-            </el-pagination>
+    </div>
+    <div class="highRanking">
+      <div class="filter high_grade" :class="isHigh? 'highHide':''" style=" margin-top: -40px;">
+        <el-form :inline="true" :model="form" size="mini" label-width="100px">
+          <div class="filterTitle">
+            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
           </div>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">创建时间</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-date-picker
+                      v-model="form.time"
+                      type="daterange"
+                      value-format="yyyy-MM-dd"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期">
+                    </el-date-picker>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">创建人</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input v-model="operator_name" @focus="chooseStaff" placeholder="请选择创建人"
+                              readonly>
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="closeStaff">清空</div>
+                      </template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">报销类型</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select clearable v-model="form.status" placeholder="请选择维修状态" value="">
+                      <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.id"
+                                 :key="item.id"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">来源</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select clearable v-model="form.city" placeholder="请选择城市" value="">
+                      <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
+                                 :key="item.id"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">完成情况</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select clearable v-model="form.city" placeholder="请选择城市" value="">
+                      <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
+                                 :key="item.id"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <div class="btnOperate">
+            <el-button size="mini" type="primary" @click="search">搜索</el-button>
+            <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+            <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+          </div>
+        </el-form>
+      </div>
+    </div>
+    <div class="main">
+      <div>
+        <el-table
+          :data="collectTableData"
+          :empty-text='collectStatus'
+          v-loading="collectLoading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(255, 255, 255, 0)"
+          @row-dblclick="dblClickTable"
+          @row-contextmenu='houseMenu'
+          style="width: 100%">
+          <el-table-column
+            prop="contract_type"
+            label="创建时间">
+            <template slot-scope="scope">
+              <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
+              <span v-if="!scope.row.create_time">暂无</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="repaire_num"
+            label="创建人">
+            <template slot-scope="scope">
+              <span v-if="scope.row.repaire_num">{{scope.row.repaire_num}}</span>
+              <span v-if="!scope.row.repaire_num">暂无</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="customer_name"
+            label="来源">
+            <template slot-scope="scope">
+              <span v-if="scope.row.customer_name">{{scope.row.customer_name}}</span>
+              <span v-if="!scope.row.customer_name">暂无</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="customer_mobile"
+            label="房屋地址">
+            <template slot-scope="scope">
+              <span v-if="scope.row.customer_mobile">{{scope.row.customer_mobile}}</span>
+              <span v-if="!scope.row.customer_mobile">暂无</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="content"
+            label="报销类型">
+            <template slot-scope="scope">
+              <span v-if="scope.row.content">{{scope.row.content}}</span>
+              <span v-if="!scope.row.content">暂无</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="repair_time"
+            label="报销金额">
+            <template slot-scope="scope">
+              <span v-if="scope.row.repair_time">{{scope.row.repair_time}}</span>
+              <span v-if="!scope.row.repair_time">暂无</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="repair_master"
+            label="开户行">
+            <template slot-scope="scope">
+              <span v-if="scope.row.repair_master">{{scope.row.repair_master}}</span>
+              <span v-if="!scope.row.repair_master">暂无</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="repair_result"
+            label="支行">
+            <template slot-scope="scope">
+              <span v-if="scope.row.estimated_time">{{scope.row.estimated_time}}</span>
+              <span v-if="!scope.row.estimated_time">暂无</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="repair_money"
+            label="账号">
+            <template slot-scope="scope">
+              <span v-if="scope.row.followor">{{scope.row.followor}}</span>
+              <span v-if="!scope.row.followor">暂无</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="repair_money"
+            label="开户人">
+            <template slot-scope="scope">
+              <span v-if="scope.row.followor">{{scope.row.followor}}</span>
+              <span v-if="!scope.row.followor">暂无</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="status"
+            label="报销状态">
+            <template slot-scope="scope">
+              <el-button class="btnStatus" v-if="scope.row.status === '已完成'" type="primary" size="mini">
+                {{scope.row.status}}
+              </el-button>
+              <el-button class="btnStatus" v-if="scope.row.status !== '已完成' && scope.row.status "
+                         type="info" size="mini">{{scope.row.status}}
+              </el-button>
+              <span v-if="!scope.row.status">暂无</span>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div class="block pages" style="margin: 40px 0;">
+        <div class="left">
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="form.page"
+            :page-size="12"
+            layout="total, prev, pager, next, jumper"
+            :total="totalNum">
+          </el-pagination>
         </div>
       </div>
     </div>
@@ -402,7 +327,7 @@
         if (!this.form.time) {
           this.form.time = [];
         }
-        this.$http.get(globalConfig.server + 'repaire/list?limit=12&module=1', {params: this.form}).then((res) => {
+        this.$http.get(globalConfig.server + 'customer/reimbursement?limit=12', {params: this.form}).then((res) => {
           this.isHigh = false;
           this.collectLoading = false;
           if (res.data.code === '600200') {
