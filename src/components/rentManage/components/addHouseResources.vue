@@ -138,7 +138,7 @@
                   </el-col>
                   <el-col :span="6">
                     <el-form-item label="电卡卡号">
-                      <el-input placeholder="请输入内容" v-model="params.electricity_card_number "></el-input>
+                      <el-input placeholder="请输入内容" v-model="params.electricity_card_number"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
