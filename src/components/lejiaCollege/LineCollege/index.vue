@@ -141,7 +141,7 @@
                 label="操作">
                 <template slot-scope="scope">
                   <el-button size="mini" type="primary" v-if="scope.row.score == 0" @click="answerExam(scope.row.id)">立即答题</el-button>
-                  <el-button size="mini" type="info" v-if="scope.row.score !== 0" @click="lookExam(scope.row.id)">查看试卷</el-button>
+                  <el-button size="mini" type="info" v-if="scope.row.score !== 0" @click="lookExam(scope.row)">查看试卷</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -249,8 +249,9 @@
     },
     watch: {},
     methods: {
-      lookExam(id){
-        this.$router.push({path: '/lookExam', query: {id: id}});
+      lookExam(val){
+        console.log(val);
+        // this.$router.push({path: '/lookExam', query: {result_id: val.result_id, exam_id: val.id}});
       },
       answerExam(id){
         this.$router.push({path: '/answerExam', query: {id: id}});

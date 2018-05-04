@@ -5,10 +5,10 @@
         <el-row style="width:100%;margin-top:16px;">
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="text-align:left;color:#464748; ">
-              <div class="qdiv" style="margin-top:20px;">试卷名称：<span style="color:#6a8dfb">{{examData.name}}</span></div>
+              <div class="qdiv" style="margin-top:30px;">试卷名称：<span style="color:#6a8dfb">{{examData.name}}</span></div>
               <div class="qdiv">试卷类型：<span style="color:#6a8dfb">{{examData.paper && examData.paper.category}}</span>
               </div>
-              <div class="qdiv">试卷考法：<span style="color:#6a8dfb">按总时长计时，按试卷顺序作答</span></div>
+              <!--<div class="qdiv">试卷考法：<span style="color:#6a8dfb">按总时长计时，按试卷顺序作答</span></div>-->
             </div>
           </el-col>
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
@@ -25,13 +25,6 @@
               <div><span style="font-size:70px; color:#fdca41">{{examData.question_count}}</span>题</div>
             </div>
           </el-col>
-          <el-col :span="5" style="margin-left:2%; margin-right:2%">
-            <div class="import_questions" style="border: 1px solid #fb4699;box-shadow: 0 0 3px 1px #fb4699;">
-              <div class="import_left"><span style="float:left; font-size:14px;">总分值</span><i
-                style="float:right; color:#fb4699;font-size:20px;" class="iconfont icon-chengjiguanli"></i></div>
-              <div><span style="font-size:70px; color:#fb4699">{{examData.score}}</span>分</div>
-            </div>
-          </el-col>
         </el-row>
       </div>
       <div class="main">
@@ -39,7 +32,8 @@
           <div v-for="(item, key) in questionData[k]">
             {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">单选题</span>
             <p style="margin-left:30px;line-height:30px;width:96%" v-html="item.stem"></p>
-            <div style="width:98%;margin-left:2%;" v-if="answerData[item.id] && resultData.answer[item.id]">
+            <div style="width:98%;margin-left:2%;"
+                 v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
               <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
               <el-row :gutter="20">
                 <el-col :span="6" :key="index" v-for="(val,index) in item.choice"
@@ -60,8 +54,9 @@
             <span v-if="k==154">{{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">多选题</span></span>
             <span v-if="k==155">{{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">不定向选择题</span></span>
             <p style="margin-left:30px;line-height:30px;width:96%" v-html="item.stem"></p>
-            <div style="width:98%;margin-left:2%;" v-if="answerData[item.id] && resultData.answer[item.id]">
-              <el-row style="line-height: 30px;" >正确答案： {{answerData[item.id]}}</el-row>
+            <div style="width:98%;margin-left:2%;"
+                 v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
+              <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
               <el-row :gutter="20">
                 <el-col :span="6" :key="index" v-for="(val,index) in item.choice"
                         style="line-height:24px;height: 24px;">
@@ -80,7 +75,8 @@
           <div v-for="(item, key) in questionData[k]">
             {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">判断题</span>
             <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
-            <div style="width:98%;margin-left:2%;">
+            <div style="width:98%;margin-left:2%;"
+                 v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
               <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
               <el-col :span="12" :key="index" v-for="(val,index) in item.choice"
                       style="line-height:26px;height: 26px;">
@@ -98,17 +94,20 @@
           <div v-for="(item, key) in questionData[k]">
             {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">填空题</span>
             <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
-            <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
-            <el-row :gutter="20">
-              <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak">
-                <el-input readOnly style="width:95.5%;margin-left:2%;" size="small"
-                          v-model="resultData.answer[item.id][ak]" placeholder="请填写答案"></el-input>
-                <span style="color:rgb(88, 215, 136);margin-left:50px;" v-for="(vv, kk) in resultData.answer[item.id]"
-                      v-if="answerData[item.id].indexOf(vv)>-1 && kk==ak ">正确</span>
-                <span style="color:#fc83b6;margin-left:50px;"  v-for="(vv, kk) in resultData.answer[item.id]"
-                      v-if="answerData[item.id].indexOf(vv)<0 && kk==ak">错误</span>
-              </el-col>
-            </el-row>
+            <div style="width:98%;margin-left:2%;"
+                 v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
+              <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
+              <el-row :gutter="20">
+                <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak">
+                  <el-input readOnly style="width:95.5%;margin-left:2%;" size="small"
+                            v-model="resultData.answer[item.id][ak]" placeholder="请填写答案"></el-input>
+                  <span style="color:rgb(88, 215, 136);margin-left:50px;" v-for="(vv, kk) in resultData.answer[item.id]"
+                        v-if="answerData[item.id].indexOf(vv)>-1 && kk==ak ">正确</span>
+                  <span style="color:#fc83b6;margin-left:50px;" v-for="(vv, kk) in resultData.answer[item.id]"
+                        v-if="answerData[item.id].indexOf(vv)<0 && kk==ak">错误</span>
+                </el-col>
+              </el-row>
+            </div>
           </div>
         </div>
         <div class="questionDiv" v-for="(v,k) in questionData" v-if="k==158 && questionData[k].length>0">
@@ -116,7 +115,7 @@
             {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">简答题</span>
             <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
             <div>
-              <el-input readonly style="width:95.5%;margin-left:2%;" size="small" v-model="resultData.answer[item.id]"
+              <el-input readonly style="width:95.5%;margin-left:2%;" size="small" v-model="resultData && resultData.answer && resultData.answer[item.id]"
                         type="textarea"></el-input>
             </div>
           </div>
