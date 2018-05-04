@@ -1,6 +1,8 @@
 <template>
   <div>
     <div id="lookExam">
+      <!--answerData==={{answerData}}<br/>-->
+      <!--resultData==={{resultData.answer}}-->
       <div class="tool">
         <el-row style="width:100%;margin-top:16px;">
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
@@ -37,67 +39,94 @@
       <div class="main">
         <div class="questionDiv" v-for="(v, k) in questionData" v-if="k==153 && questionData[k].length>0">
           <div v-for="(item, key) in questionData[k]">
-            {{k+1}}.<span style="color:#6a8dfb; margin-left:20px;">单选题</span>
+            {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">单选题</span>
             <p style="margin-left:30px;line-height:30px;width:96%" v-html="item.stem"></p>
             <div style="width:98%;margin-left:2%;">
-              <el-col :span="6" :key="index" v-for="(val,index) in item.answer" style="line-height:24px;height: 24px;">
-                <span v-if="form1[x].check == val.id"><el-radio>{{val.id}}：{{val.name}}</el-radio></span>
-                <span v-else>{{val.id}}：{{val.name}}</span>
-                <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form1[x].check == val.id">正确</span>
-                <span style="color:#fc83b6;margin-left:50px;" else>错误</span>
+              <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
+              <el-row :gutter="20">
+                <el-col :span="6" :key="index" v-for="(val,index) in item.choice"
+                        style="line-height:24px;height: 24px;">
+                  <span v-if="index == answerData[item.id]"><el-radio>{{index}}：{{val}}</el-radio></span>
+                  <span v-else>{{index}}：{{val}}</span>
+                  <span style="color:rgb(88, 215, 136);margin-left:50px;"
+                        v-if="resultData.answer && resultData.answer[item.id] == answerData[item.id]">正确</span>
+                  <span style="color:#fc83b6;margin-left:50px;"
+                        v-if="resultData.answer[item.id] != answerData[item.id]">错误</span>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+        </div>
+        <div class="questionDiv" v-for="(v, k) in questionData" v-if="(k==154 || k==155) && questionData[k].length>0">
+          <div v-for="(item, key) in questionData[k]">
+            <span v-if="k==154">{{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">多选题{{item.id}}</span></span>
+            <span v-if="k==155">{{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">不定向选择题{{item.id}}</span></span>
+            <p style="margin-left:30px;line-height:30px;width:96%" v-html="item.stem"></p>
+            <div style="width:98%;margin-left:2%;">
+              <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
+              <el-row :gutter="20">
+                <el-col :span="6" :key="index" v-for="(val,index) in item.choice"
+                        style="line-height:24px;height: 24px;">
+                  <span v-if="answerData[item.id].indexOf(index)>-1"><el-radio>{{index}}：{{val}}</el-radio></span>
+                  <span v-else>{{index}}：{{val}}</span>
+                  <span style="color:rgb(88, 215, 136);margin-left:50px;" v-for="ans in answerData[item.id]"
+                        v-if="resultData.answer[item.id].indexOf(ans)>-1">正确</span>
+                  <span style="color:#fc83b6;margin-left:50px;" v-for="ans in answerData[item.id]"
+                        v-if="resultData.answer[item.id].indexOf(ans)<0">错误</span>
+                </el-col>
+              </el-row>
+            </div>
+          </div>
+        </div>
+        <div class="questionDiv" v-for="(v,k) in questionData" v-if="k==156 && questionData[k].length>0">
+          <div v-for="(item, key) in questionData[k]">
+            {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">判断题</span>
+            <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
+            <div style="width:98%;margin-left:2%;">
+              <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
+              <el-col :span="12" :key="index" v-for="(val,index) in item.choice"
+                      style="line-height:24px;height: 24px;">
+                <span v-if="index == answerData[item.id]"><el-radio>{{index}}：{{val}}</el-radio></span>
+                <span v-else>{{index}}：{{val}}</span>
+                <span style="color:rgb(88, 215, 136);margin-left:50px;"
+                      v-if="resultData.answer[item.id] == answerData[item.id]">正确</span>
+                <span style="color:#fc83b6;margin-left:50px;"
+                      v-if="resultData.answer[item.id] != answerData[item.id]">错误</span>
               </el-col>
             </div>
           </div>
         </div>
-        <div class="questionDiv" v-for="(total2,y) in 2">
-          {{y+1+2}}.<span style="color:#6a8dfb; margin-left:20px;">多选题</span>
-          <p style="margin-left:30px;line-height:30px;width:96%">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue
-            源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>
-          <el-form :model="form2[y]">
-            <el-form-item v-model="form2[y].check" style="width:98%;margin-left:2%;">
-              <el-col :span="6" :key="index1" v-for="(val,index1) in answarData" style="line-height:24px;height: 24px;">
-                <span v-if="form2[y].check[index1] == val.id"><el-radio>{{val.id}}：{{val.name}}</el-radio></span>
-                <span v-else>{{val.id}}：{{val.name}}</span>
+        <div class="questionDiv" v-for="(v,k) in questionData" v-if="k==157 && questionData[k].length>0">
+          <div v-for="(item, key) in questionData[k]">
+            {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">填空题</span>
+            <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
+            <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
+            <el-row :gutter="20">
+              <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak">
+                <el-input readOnly style="width:95.5%;margin-left:2%;" size="small"
+                          v-model="resultData.answer[item.id][ak]" placeholder="请填写答案"></el-input>
                 <span style="color:rgb(88, 215, 136);margin-left:50px;"
-                      v-if="form2[y].check[index1] == val.id">正确</span>
+                      v-if="resultData.answer[item.id] == answerData[item.id][ak]">正确</span>
+                <span style="color:#fc83b6;margin-left:50px;"
+                      v-if="resultData.answer[item.id] != answerData[item.id][ak]">错误</span>
               </el-col>
-            </el-form-item>
-          </el-form>
+            </el-row>
+          </div>
         </div>
-        <div class="questionDiv" v-for="(total3,z) in 2">
-          {{z+1+4}}.<span style="color:#6a8dfb; margin-left:20px;">判断题</span>
-          <p style="margin-left:30px;line-height:20px;width:96%">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue
-            源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>
-          <el-form :model="form3[z]">
-            <el-form-item v-model="form3[z].check" style="width:98%;margin-left:2%;">
-              <el-col :span="12" :key="index2" v-for="(val,index2) in answarData2"
-                      style="line-height:24px;height: 24px;">
-                <span v-if="form3[z].check == val.id"><el-radio>{{val.id}}：{{val.name}}</el-radio></span>
-                <span v-else>{{val.id}}：{{val.name}}</span>
-                <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="form3[z].check == val.id">正确</span>
-              </el-col>
-            </el-form-item>
-          </el-form>
-        </div>
-        <div class="questionDiv" v-for="(total4,k) in 2">
-          {{k+1+6}}.<span style="color:#6a8dfb; margin-left:20px;">简单题</span>
-          <p style="margin-left:30px;line-height:20px;width:96%">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue
-            源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：</p>
-          <el-form :model="form3[k]">
-            <el-form-item>
-              <el-input readonly style="width:95.5%;margin-left:2%;" v-model="form4[k].check"
+        <div class="questionDiv" v-for="(v,k) in questionData" v-if="k==158 && questionData[k].length>0">
+          <div v-for="(item, key) in questionData[k]">
+            {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">简答题</span>
+            <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
+            <div>
+              <el-input readonly style="width:95.5%;margin-left:2%;" size="small" v-model="resultData.answer[item.id]"
                         type="textarea"></el-input>
-            </el-form-item>
-          </el-form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
-
   </div>
-
 </template>
-
 <script>
   import Dropzone from "../../../common/UPLOAD.vue";
 
@@ -106,53 +135,58 @@
     components: {Dropzone},
     data() {
       return {
-        isClear: false,
-        testPaperDialog: false,
-        faleDialog: false,
-        disfalg: false,
-        answarData: [
-          {id: "A", name: "选项答案"},
-          {id: "B", name: "选项答案"},
-          {id: "C", name: "选项答案"},
-          {id: "D", name: "选项答案"}
-        ],
-        answarData2: [
-          {id: "对", name: "选项答案"},
-          {id: "错", name: "选项答案"}
-        ],
-        form1: [{check: "B"}, {check: "D"}],
-        form2: [{check: ["A", "B"]}, {check: ["A", "", "C", "D"]}],
-        form3: [{check: "对"}, {check: "错"}],
-        form4: [{check: " "}, {check: " "}],
-        formbox: [
-          {check: ""},
-          {check: ""},
-          {check: ""},
-          {check: ""},
-          {check: ""},
-          {check: ""},
-          {check: ""},
-          {check: ""}
-        ],
+        resultId: '',
         examId: '',
-        examData: [],
-        questionData: [],
+        examData: {},
+        questionData: {},
+        resultData: {},
+        answarData: {},
       };
     },
     activated() {
       this.getQueryData();
-      this.getExamData();
+      // this.getExamData();
+      this.myData();
     },
     watch: {},
     methods: {
       getQueryData() {
-        if (!this.$route.query.id) {
-          this.examId = this.$store.state.onlineExam.look_exam_id;
-          this.$router.push({path: '/lookExam', query: {id: this.$store.state.onlineExam.look_exam_id}});
+        if (!this.$route.query.exam_id) {
+          this.examId = this.$store.state.onlineExam.look_exam.exam_id;
+          this.resultId = this.$store.state.onlineExam.look_exam.result_id;
+          this.$router.push({
+            path: '/lookExam',
+            query: {
+              result_id: this.$store.state.onlineExam.look_exam.result_id,
+              exam_id: this.$store.state.onlineExam.look_exam.exam_id
+            }
+          });
         } else {
-          this.$store.dispatch('lookExamId', this.$route.query.id);
-          this.examId = this.$route.query.id;
+          this.$store.dispatch('lookExam', this.$route.query);
+          this.resultId = this.$route.query.result_id;
+          this.examId = this.$route.query.exam_id;
         }
+      },
+      myData() {
+        this.$http.get(globalConfig.server + "exam/" + this.examId + '?see=answer').then((res) => {
+          if (res.data.code == "30000") {
+            this.examData = res.data.data;
+            this.questionData = res.data.data.question_set;
+            this.answerData = res.data.data.reference_set;
+          } else {
+            this.examData = {};
+            this.questionData = {};
+          }
+        });
+
+        this.$http.get(globalConfig.server + 'exam/result/' + this.resultId).then((res) => {
+          if (res.data.code === '36000') {
+            this.resultData = res.data.data;
+            this.objective_score = this.totalScore = res.data.data.score;
+          } else {
+            this.resultData = {};
+          }
+        });
       },
       getExamData() {
         this.$http.get(globalConfig.server + 'exam/result/my/' + this.examId).then((res) => {

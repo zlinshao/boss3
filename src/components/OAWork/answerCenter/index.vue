@@ -217,7 +217,7 @@ export default {
     };
   },
   created() {
-    
+
   },
 
   mounted() {
@@ -271,8 +271,8 @@ export default {
           }
         })
         .then(res => {
+          this.loading = false;
           if (res.data.code === "199200") {
-            this.loading = false;
             this.questions = res.data.data.data;
             this.paging = res.data.data.count;
           } else {
