@@ -361,7 +361,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '客服中心',
-      icon: 'iconfont icon-kefu1',
+      icon: 'iconfont icon--1',
       children: [
         {path: '/workOrderManage', component: WorkOrderManage, name: '工单管理',},
         {path: '/repairManage', component: RepairManage, name: '维修管理',},
@@ -525,7 +525,7 @@ export default new Router({
       path: '/',
       component: Index,
       name: '业绩工资',
-      icon: 'el-icons-fa-money',
+      icon: 'iconfont icon--',
       children: [
         {path: '/periodicTable', component: PeriodicTable, name: '周期表',},
         {path: '/achievement', component: Achievement, name: '业绩',},
