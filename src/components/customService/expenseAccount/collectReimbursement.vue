@@ -70,8 +70,8 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select clearable v-model="form.status" placeholder="请选择维修状态" value="">
-                      <el-option v-for="item in dictionary" :label="item.dictionary_name" :value="item.id"
+                    <el-select clearable v-model="form.type" placeholder="请选择类型" value="">
+                      <el-option v-for="item in reimbursementTypeCategory" :label="item.dictionary_name" :value="item.id"
                                  :key="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -85,8 +85,8 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select clearable v-model="form.city" placeholder="请选择城市" value="">
-                      <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
+                    <el-select clearable v-model="form.source" placeholder="请选择来源" value="">
+                      <el-option v-for="item in reimbursementSourceCategory" :label="item.dictionary_name" :value="item.id"
                                  :key="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -98,12 +98,12 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">完成情况</div>
+                  <div class="el_col_label">完成状态</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select clearable v-model="form.city" placeholder="请选择城市" value="">
-                      <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
+                    <el-select clearable v-model="form.status" placeholder="请选择状态" value="">
+                      <el-option v-for="item in finishedStatusCategory" :label="item.dictionary_name" :value="item.id"
                                  :key="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -132,7 +132,7 @@
           @row-contextmenu='houseMenu'
           style="width: 100%">
           <el-table-column
-            prop="contract_type"
+            prop="create_time"
             label="创建时间">
             <template slot-scope="scope">
               <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
@@ -140,88 +140,60 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="repaire_num"
+            prop="staffs.real_name"
             label="创建人">
+          </el-table-column>
+          <el-table-column
+            prop="reimbursement_number"
+            label="报销单编号">
             <template slot-scope="scope">
-              <span v-if="scope.row.repaire_num">{{scope.row.repaire_num}}</span>
-              <span v-if="!scope.row.repaire_num">暂无</span>
+              <span v-if="scope.row.reimbursement_number">{{scope.row.reimbursement_number}}</span>
+              <span v-if="!scope.row.reimbursement_number">暂无</span>
             </template>
           </el-table-column>
           <el-table-column
-            prop="customer_name"
+            prop="source.dictionary_name"
             label="来源">
-            <template slot-scope="scope">
-              <span v-if="scope.row.customer_name">{{scope.row.customer_name}}</span>
-              <span v-if="!scope.row.customer_name">暂无</span>
-            </template>
           </el-table-column>
           <el-table-column
-            prop="customer_mobile"
+            prop="contracts.house.name"
             label="房屋地址">
-            <template slot-scope="scope">
-              <span v-if="scope.row.customer_mobile">{{scope.row.customer_mobile}}</span>
-              <span v-if="!scope.row.customer_mobile">暂无</span>
-            </template>
           </el-table-column>
           <el-table-column
-            prop="content"
+            prop="type.dictionary_name"
             label="报销类型">
-            <template slot-scope="scope">
-              <span v-if="scope.row.content">{{scope.row.content}}</span>
-              <span v-if="!scope.row.content">暂无</span>
-            </template>
           </el-table-column>
           <el-table-column
-            prop="repair_time"
+            prop="amount"
             label="报销金额">
-            <template slot-scope="scope">
-              <span v-if="scope.row.repair_time">{{scope.row.repair_time}}</span>
-              <span v-if="!scope.row.repair_time">暂无</span>
-            </template>
           </el-table-column>
           <el-table-column
-            prop="repair_master"
+            prop="account_bank"
             label="开户行">
-            <template slot-scope="scope">
-              <span v-if="scope.row.repair_master">{{scope.row.repair_master}}</span>
-              <span v-if="!scope.row.repair_master">暂无</span>
-            </template>
           </el-table-column>
           <el-table-column
-            prop="repair_result"
+            prop="branch_bank"
             label="支行">
-            <template slot-scope="scope">
-              <span v-if="scope.row.estimated_time">{{scope.row.estimated_time}}</span>
-              <span v-if="!scope.row.estimated_time">暂无</span>
-            </template>
           </el-table-column>
           <el-table-column
-            prop="repair_money"
-            label="账号">
-            <template slot-scope="scope">
-              <span v-if="scope.row.followor">{{scope.row.followor}}</span>
-              <span v-if="!scope.row.followor">暂无</span>
-            </template>
+            prop="bank_num"
+            label="银行卡号">
           </el-table-column>
           <el-table-column
-            prop="repair_money"
+            prop="account_name"
             label="开户人">
-            <template slot-scope="scope">
-              <span v-if="scope.row.followor">{{scope.row.followor}}</span>
-              <span v-if="!scope.row.followor">暂无</span>
-            </template>
           </el-table-column>
           <el-table-column
-            prop="status"
+            prop="status.dictionary_name"
             label="报销状态">
             <template slot-scope="scope">
-              <el-button class="btnStatus" v-if="scope.row.status === '已完成'" type="primary" size="mini">
-                {{scope.row.status}}
+              <el-button class="btnStatus" v-if="scope.row.status.id == 654" type="primary" size="mini">
+                {{scope.row.status.dictionary_name}}
               </el-button>
-              <el-button class="btnStatus" v-if="scope.row.status !== '已完成' && scope.row.status "
-                         type="info" size="mini">{{scope.row.status}}
+              <el-button class="btnStatus" v-if="scope.row.status.id !== 654 && scope.row.status.id "
+                         type="info" size="mini">{{scope.row.status.dictionary_name}}
               </el-button>
-              <span v-if="!scope.row.status">暂无</span>
+              <span v-if="!scope.row.status.dictionary_name">暂无</span>
             </template>
           </el-table-column>
         </el-table>
@@ -269,13 +241,15 @@
         show: false,
         lists: [],
         form: {
+          module: 1,
           page: 1,
           limit: 12,
           keyword: '',
           time: '',
           status: '',
-          city: '',
-          operator_id: ''
+          source: '',
+          type: '',
+          staff_id: '',
         },
         collectTableData: [],
         rentTableData: [],
@@ -294,10 +268,13 @@
         repairId: '',
         deleteId: '',
         dictionary: [],
-        cityCategory: [],
+
         organizeVisible: false,
         organizeType: '',
         operator_name: '',
+        reimbursementTypeCategory: [],  //报销类型
+        reimbursementSourceCategory: [],  //报销来源
+        finishedStatusCategory: [], //完成状态
       }
     },
     mounted() {
@@ -310,14 +287,19 @@
     },
     methods: {
       getDictionary() {
-        this.$http.get(globalConfig.server + 'setting/dictionary/595').then((res) => {
+        this.$http.get(globalConfig.server + 'setting/dictionary/640').then((res) => {
           if (res.data.code === "30010") {
-            this.dictionary = res.data.data;
+            this.reimbursementTypeCategory = res.data.data;
           }
         });
-        this.$http.get(globalConfig.server + 'setting/dictionary/306').then((res) => {
+        this.$http.get(globalConfig.server + 'setting/dictionary/641').then((res) => {
           if (res.data.code === "30010") {
-            this.cityCategory = res.data.data;
+            this.reimbursementSourceCategory = res.data.data;
+          }
+        });
+        this.$http.get(globalConfig.server + 'setting/dictionary/642').then((res) => {
+          if (res.data.code === "30010") {
+            this.finishedStatusCategory = res.data.data;
           }
         });
       },
@@ -330,17 +312,9 @@
         this.$http.get(globalConfig.server + 'customer/reimbursement?limit=12', {params: this.form}).then((res) => {
           this.isHigh = false;
           this.collectLoading = false;
-          if (res.data.code === '600200') {
+          if (res.data.code === '30000') {
             this.collectTableData = res.data.data.data;
             this.totalNum = res.data.data.count;
-          } else if (res.data.code === '600202') {
-            this.collectTableData = [];
-            this.totalNum = 0;
-            this.collectStatus = '暂无数据';
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
-            });
           } else {
             this.collectTableData = [];
             this.totalNum = 0;
@@ -349,31 +323,7 @@
         });
       },
       getRentTableData() {
-        this.rentStatus = ' ';
-        this.rentLoading = true;
-        if (!this.form.time) {
-          this.form.time = [];
-        }
-        this.$http.get(globalConfig.server + 'repaire/list?limit=12&module=2', {params: this.form}).then((res) => {
-          this.isHigh = false;
-          this.rentLoading = false;
-          if (res.data.code === '600200') {
-            this.rentTableData = res.data.data.data;
-            this.totalNum = res.data.data.count;
-          } else if (res.data.code === '600202') {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
-            });
-            this.rentTableData = [];
-            this.totalNum = 0;
-            this.rentStatus = '暂无数据';
-          } else {
-            this.rentTableData = [];
-            this.totalNum = 0;
-            this.rentStatus = '暂无数据';
-          }
-        });
+
       },
       // 员工筛选
       chooseStaff() {
