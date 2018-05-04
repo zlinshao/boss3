@@ -99,6 +99,38 @@
                   </el-col>
                 </el-row>
               </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">审核状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="collectParams.doc_status" clearable placeholder="请选择">
+                        <el-option v-for="(key,index) in doc_sta" :label="key.title" :value="key.value"
+                                   :key="index"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">回访状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="collectParams.visit_status" clearable placeholder="请选择">
+                        <el-option v-for="(key,index) in visit_sta" :label="key.title" :value="key.value"
+                                   :key="index"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
             </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
@@ -624,7 +656,7 @@
     <ReturnVisit :returnVisitDialog="returnVisitDialog" @close="closeModal"></ReturnVisit>
     <TopForm :topFormSetDialog="topFormSetDialog" @close="closeModal"></TopForm>
     <Setting :settingDialog="settingDialog" @close="closeModal"></Setting>
-    <AddReturnvisit :addReturnvisitDialog="addReturnvisitDialog" :ToActiveName="ToActiveName" :addReturnInfo="addReturnInfo" 
+    <AddReturnvisit :addReturnvisitDialog="addReturnvisitDialog" :ToActiveName="ToActiveName" :addReturnInfo="addReturnInfo"
                       @close="closeModal"></AddReturnvisit>
 
   </div>
@@ -784,7 +816,41 @@
           lord_start_time:[],
           lord_end_time:[],
           org_id:'',
+          doc_status:'',
+          visit_status:'',
         },
+        doc_sta:[
+          {
+            value: 'draft',
+            title: '等待提交',
+          },
+          {
+            value: 'wait_contract_review',
+            title: '合同审核员审核中',
+          },
+          {
+            value: 'wait_house_review',
+            title: '房屋审核员审核中',
+          },
+          {
+            value: 'published',
+            title: '已通过',
+          },
+        ],
+        visit_sta:[
+          {
+            value: 'draft',
+            title: '等待提交',
+          },
+          {
+            value: 'wait_customer_service_review',
+            title: '等待回访',
+          },
+          {
+            value: 'published',
+            title: '已回访',
+          },
+        ],
         collectTotalNum:0,
         collectData: [],    //收房列表数据
         collectHouseId:'',   //房屋id
@@ -1255,9 +1321,12 @@
         this.isHigh = !this.isHigh;
       },
       resetting(){
+        this.highGrade();
         this.collectParams.lord_start_time = [];
         this.collectParams.lord_end_time = [];
         this.collectParams.org_id = '';
+        this.collectParams.doc_status = '';
+        this.collectParams.visit_status = '';
         this.department_name = '';
       },
 
