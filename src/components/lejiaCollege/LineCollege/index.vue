@@ -140,8 +140,8 @@
               <el-table-column
                 label="操作">
                 <template slot-scope="scope">
-                  <el-button size="mini" type="primary" v-if="scope.row.score == 0" @click="answerExam(scope.row.id)">立即答题</el-button>
-                  <el-button size="mini" type="info" v-if="scope.row.score !== 0" @click="lookExam(scope.row)">查看试卷</el-button>
+                  <el-button size="mini" type="primary" v-if="scope.row.result_id == 0" @click="answerExam(scope.row.id)">立即答题</el-button>
+                  <el-button size="mini" type="info" v-if="scope.row.result_id !== 0" @click="lookExam(scope.row)">查看试卷</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -251,7 +251,7 @@
     methods: {
       lookExam(val){
         console.log(val);
-        // this.$router.push({path: '/lookExam', query: {result_id: val.result_id, exam_id: val.id}});
+        this.$router.push({path: '/lookExam', query: {result_id: val.result_id, exam_id: val.id}});
       },
       answerExam(id){
         this.$router.push({path: '/answerExam', query: {id: id}});
@@ -259,7 +259,7 @@
       myData(val) {
         this.rentStatus = " ";
         this.rentLoading = true;
-        this.$http.get(globalConfig.server + "/exam/exam/my?enrolled=1").then((res) => {
+        this.$http.get(globalConfig.server + "exam/exam/my?enrolled=1").then((res) => {
             this.rentLoading = false;
             if (res.data.code == '30000') {
               this.tableData = res.data.data.data;

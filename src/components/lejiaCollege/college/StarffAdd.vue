@@ -126,7 +126,7 @@
         });
       },
       getExam() {
-        this.$http.get(globalConfig.server + "/exam/exam/my?enrolled=0").then(res => {
+        this.$http.get(globalConfig.server + "exam/exam/my?enrolled=0").then(res => {
           if (res.data.code === "30000") {
             this.enroableExam = res.data.data.data;
           }else{

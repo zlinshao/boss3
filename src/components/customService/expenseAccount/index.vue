@@ -12,8 +12,8 @@
 </template>
 
 <script>
-  import CollectReimbursement from './collectReimbursement';
-  import RentReimbursement from './rentReimbursement';
+  import CollectReimbursement from './components/collectReimbursement';
+  import RentReimbursement from './components/rentReimbursement';
 
   export default {
     name: "index",
