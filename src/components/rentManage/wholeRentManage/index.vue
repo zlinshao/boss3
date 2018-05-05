@@ -22,7 +22,7 @@
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
               <el-input placeholder="请输入内容" clearable v-model="collectParams.search"
-                        @keyup.enter.native="search" size="mini">
+                        @keyup.enter.native="search"  size="mini">
                 <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
@@ -33,7 +33,7 @@
               <i class="el-icon-document"></i>&nbsp;登记房源
             </el-button>
             <!--<el-form-item>-->
-            <!--<el-button type="success">导出房源</el-button>-->
+              <!--<el-button type="success">导出房源</el-button>-->
             <!--</el-form-item>-->
           </el-form>
         </div>
@@ -99,6 +99,38 @@
                   </el-col>
                 </el-row>
               </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">审核状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="collectParams.doc_status" clearable placeholder="请选择">
+                        <el-option v-for="(key,index) in doc_sta" :label="key.title" :value="key.value"
+                                   :key="index"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">回访状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="collectParams.visit_status" clearable placeholder="请选择">
+                        <el-option v-for="(key,index) in visit_sta" :label="key.title" :value="key.value"
+                                   :key="index"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
             </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
@@ -114,7 +146,7 @@
           <div class="blueTable" @contextmenu="houseHeadMenu($event)">
             <el-table
               :data="collectData"
-              :empty-text='collectStatus'
+              :empty-text = 'collectStatus'
               v-loading="collectLoading"
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
@@ -156,8 +188,8 @@
                 </template>
               </el-table-column>
               <!--<el-table-column-->
-              <!--prop="property_type"-->
-              <!--label="房屋类型">-->
+                <!--prop="property_type"-->
+                <!--label="房屋类型">-->
               <!--</el-table-column>-->
               <el-table-column
                 label="合同性质">
@@ -258,8 +290,8 @@
                 </template>
               </el-table-column>
               <!--<el-table-column-->
-              <!--prop="agency"-->
-              <!--label="中介费">-->
+                <!--prop="agency"-->
+                <!--label="中介费">-->
               <!--</el-table-column>-->
               <el-table-column
                 label="所属部门">
@@ -278,8 +310,7 @@
               <el-table-column
                 label="回访状态">
                 <template slot-scope="scope">
-                  <span
-                    v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
+                  <span v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
@@ -328,7 +359,7 @@
           <div class="greenTable" @contextmenu="houseHeadMenu($event)">
             <el-table
               :data="rentingData"
-              :empty-text='rentStatus'
+              :empty-text = 'rentStatus'
               v-loading="rentLoading"
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
@@ -352,6 +383,7 @@
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
+
 
 
               <el-table-column
@@ -398,7 +430,7 @@
                   <span v-if="scope.row.price&&scope.row.price.length>0">
                     {{scope.row.price[0].price}}&nbsp;
                   </span>
-                  <el-button v-popover:rentPrice size="mini" v-if="scope.row.price.length>1" type="text">变化</el-button>
+                  <el-button v-popover:rentPrice size="mini"  v-if="scope.row.price.length>1" type="text">变化</el-button>
                 </template>
               </el-table-column>
               <el-table-column
@@ -421,8 +453,7 @@
                   <span v-if="scope.row.pay_way&&scope.row.pay_way.length>0">
                     {{scope.row.pay_way[0].pay_way_str}}&nbsp;
                   </span>
-                  <el-button size="mini" type="text" v-show="scope.row.pay_way.length>1" v-popover:payWayRent>变化
-                  </el-button>
+                  <el-button size="mini" type="text" v-show="scope.row.pay_way.length>1" v-popover:payWayRent>变化</el-button>
                 </template>
               </el-table-column>
               <el-table-column
@@ -464,8 +495,7 @@
               <el-table-column
                 label="回访状态">
                 <template slot-scope="scope">
-                  <span
-                    v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
+                  <span v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
@@ -518,13 +548,11 @@
               <RentInfoTab :rentContractId="rentContractId" :activeName="activeName"></RentInfoTab>
             </el-tab-pane>
             <el-tab-pane label="物品增减" name="GoodsChangeTab">
-              <GoodsChangeTab :collectHouseId="collectHouseId" :tabStatusChange="tabStatusChange"
-                              :activeName="activeName"></GoodsChangeTab>
+              <GoodsChangeTab :collectHouseId="collectHouseId" :tabStatusChange="tabStatusChange" :activeName="activeName"></GoodsChangeTab>
             </el-tab-pane>
 
             <el-tab-pane label="房东退房记录" name="CollectReturnRomeInfoTab">
-              <CollectReturnRomeInfoTab :collectContractId="collectContractId"
-                                        :activeName="activeName"></CollectReturnRomeInfoTab>
+              <CollectReturnRomeInfoTab :collectContractId="collectContractId" :activeName="activeName"></CollectReturnRomeInfoTab>
             </el-tab-pane>
             <el-tab-pane label="租客退房记录" name="rentReturnRomeInfoTab">
               <rentReturnRomeInfoTab :rentContractId="rentContractId" :activeName="activeName"></rentReturnRomeInfoTab>
@@ -548,11 +576,10 @@
 
             -->
             <el-tab-pane label="资料备忘(收)" name="CollectMemorandumTab">
-              <CollectMemorandumTab :collectContractId="collectContractId"
-                                    :activeName="activeName"></CollectMemorandumTab>
+              <CollectMemorandumTab :collectContractId="collectContractId" :activeName="activeName" ></CollectMemorandumTab>
             </el-tab-pane>
             <el-tab-pane label="资料备忘(租)" name="RentMemorandumTab">
-              <RentMemorandumTab :rentContractId="rentContractId" :activeName="activeName"></RentMemorandumTab>
+              <RentMemorandumTab :rentContractId="rentContractId" :activeName="activeName" ></RentMemorandumTab>
             </el-tab-pane>
             <el-tab-pane label="回访记录(收)" name="CollectReturnVisitRecordTab">
               <CollectReturnVisitRecordTab :collectContractId="collectContractId" :tabStatusChange="tabStatusChange"
@@ -571,10 +598,10 @@
                                    :activeName="activeName"></RentFollowRecordTab>
             </el-tab-pane>
             <el-tab-pane label="维修单(收)" name="CollectRepairTab">
-              <CollectRepairTab :collectContractId="collectContractId" :activeName="activeName"></CollectRepairTab>
+              <CollectRepairTab :collectContractId="collectContractId" :activeName="activeName" ></CollectRepairTab>
             </el-tab-pane>
             <el-tab-pane label="维修单(租)" name="RentRepairTab">
-              <RentRepairTab :rentContractId="rentContractId" :activeName="activeName"></RentRepairTab>
+              <RentRepairTab :rentContractId="rentContractId" :activeName="activeName" ></RentRepairTab>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -590,30 +617,24 @@
     <BackUp :backUpDialog="backUpDialog" @close="closeModal"></BackUp>
     <Advanced :advancedDialog="advancedDialog" @close="closeModal"></Advanced>
     <OwnerDelay :ownerDelayDialog="ownerDelayDialog" @close="closeModal"></OwnerDelay>
-    <IncreaseGoods :increaseGoodsDialog="increaseGoodsDialog" :collectHouseId="collectHouseId"
-                   @close="closeModal"></IncreaseGoods>
-    <DecreaseGoods :decreaseGoodsDialog="decreaseGoodsDialog" :collectHouseId="collectHouseId"
-                   @close="closeModal"></DecreaseGoods>
+    <IncreaseGoods :increaseGoodsDialog="increaseGoodsDialog" :collectHouseId="collectHouseId" @close="closeModal"></IncreaseGoods>
+    <DecreaseGoods :decreaseGoodsDialog="decreaseGoodsDialog" :collectHouseId="collectHouseId" @close="closeModal"></DecreaseGoods>
     <OwnerArrears :ownerArrearsDialog="ownerArrearsDialog" @close="closeModal"></OwnerArrears>
     <!--收房续约-->
-    <OwnerRenew :ownerRenewDialog="ownerRenewDialog" :collectContractId="collectContractId"
-                @close="closeModal"></OwnerRenew>
+    <OwnerRenew :ownerRenewDialog="ownerRenewDialog" :collectContractId="collectContractId" @close="closeModal"></OwnerRenew>
     <AddFollowUp :addFollowUpDialog="addFollowUpDialog" :contractModule="contractModule"
                  :contractOperateId="contractOperateId" @close="closeModal"></AddFollowUp>
     <CollectVacation :collectVacationDialog="collectVacationDialog" :collectInfo="collectInfo"
                      :collectContractId="collectContractId" @close="closeModal"></CollectVacation>
-    <AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" :contract="collectContract"
-                      @close="closeModal"></AddCollectRepair>
-    <AddRentRepair :addRentRepairDialog="addRentRepairDialog" :contract="rentContract"
-                   @close="closeModal"></AddRentRepair>
+    <AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog"  :contract="collectContract" @close="closeModal"></AddCollectRepair>
+    <AddRentRepair :addRentRepairDialog="addRentRepairDialog"  :contract="rentContract" @close="closeModal"></AddRentRepair>
 
     <AddCollectReimbursement :addCollectReimbursementDialog="addCollectReimbursementDialog" :contract="collectContract"
                              @close="closeModal"></AddCollectReimbursement>
     <AddRentReimbursement :addRentReimbursementDialog="addRentReimbursementDialog" :contract="rentContract"
                           @close="closeModal"></AddRentReimbursement>
     <!--租客调房-->
-    <RentChangeRoom :rentChangeRoomDialog="rentChangeRoomDialog" :rentContractId="rentContractId"
-                    :collectHouseId="collectHouseId"
+    <RentChangeRoom :rentChangeRoomDialog="rentChangeRoomDialog" :rentContractId="rentContractId" :collectHouseId="collectHouseId"
                     :rentContractInfo="rentContractInfo" @close="closeModal"></RentChangeRoom>
     <!--房屋转租-->
     <Sublease :subleaseDialog="subleaseDialog" :rentContractId="rentContractId" :collectHouseId="collectHouseId"
@@ -625,8 +646,7 @@
     <AddRentInfo :addRentInfoDialog="addRentInfoDialog" :collectContractId="collectContractId"
                  :collectHouseId="collectHouseId" @close="closeModal"></AddRentInfo>
     <!--编辑租客-->
-    <EditRentInfo :editRentInfoDialog="editRentInfoDialog" :rentContractId="rentContractId"
-                  :collectHouseId="collectHouseId"
+    <EditRentInfo :editRentInfoDialog="editRentInfoDialog" :rentContractId="rentContractId" :collectHouseId="collectHouseId"
                   :collectContractId="collectContractId" @close="closeModal"></EditRentInfo>
     <!--租客退房-->
     <RentVacation :rentVacationDialog="rentVacationDialog" :rentContractId="rentContractId"
@@ -640,10 +660,8 @@
     <ReturnVisit :returnVisitDialog="returnVisitDialog" @close="closeModal"></ReturnVisit>
     <TopForm :topFormSetDialog="topFormSetDialog" @close="closeModal"></TopForm>
     <Setting :settingDialog="settingDialog" @close="closeModal"></Setting>
-    <AddReturnvisit :addReturnvisitDialog="addReturnvisitDialog" :ToActiveName="ToActiveName"
-                    :addReturnInfo="addReturnInfo"
-                    @close="closeModal"></AddReturnvisit>
-
+    <AddReturnvisit :addReturnvisitDialog="addReturnvisitDialog" :ToActiveName="ToActiveName" :addReturnInfo="addReturnInfo"
+                      @close="closeModal"></AddReturnvisit>
 
   </div>
 </template>
@@ -685,7 +703,7 @@
   import GoodsChangeTab from '../tabComponents/goodsChange.vue'
   import OwnerInfoTab from '../tabComponents/ownerInfo.vue'
   import RentInfoTab from '../tabComponents/rentInfo.vue'
-  //  import InDebtInfoTab from '../tabComponents/InDebtInfo.vue'
+//  import InDebtInfoTab from '../tabComponents/InDebtInfo.vue'
   import CollectReturnRomeInfoTab from '../tabComponents/collectReturnInfo.vue'   //退还房
   import rentReturnRomeInfoTab from '../tabComponents/rentReturnInfo.vue'   //退还房
   import CollectRenewContractTab from '../tabComponents/collcetRenewContract.vue'
@@ -702,7 +720,7 @@
   import CollectRepairTab from '../tabComponents/collectRepair.vue'
   import RentRepairTab from '../tabComponents/rentRepair.vue'
 
-  //  import ServiceRecordTab from '../tabComponents/serviceRecord.vue'
+//  import ServiceRecordTab from '../tabComponents/serviceRecord.vue'
   export default {
     name: 'hello',
     components: {
@@ -759,17 +777,17 @@
       RentRepairTab,
 //      ServiceRecordTab,
     },
-    data() {
+    data () {
       return {
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
         lists: [],
         /***********/
-        organizationDialog: false,
-        length: 0,
-        type: '',
-        department_name: '',
+        organizationDialog:false,
+        length:0,
+        type:'',
+        department_name:'',
         //模态框
         instructionDialog: false,//使用说明
         backUpDialog: false, //备份
@@ -804,14 +822,49 @@
         isHigh: false,
         /*******************收房*********************/
         collectParams: {
-          page: 1,
-          limit: 5,
-          search: '',
-          lord_start_time: [],
-          lord_end_time: [],
-          org_id: '',
+          page:1,
+          limit:5,
+          search:'',
+          lord_start_time:[],
+          lord_end_time:[],
+          org_id:'',
+          doc_status:'',
+          visit_status:'',
         },
         collectTotalNum: 0,
+        doc_sta:[
+          {
+            value: 'draft',
+            title: '等待提交',
+          },
+          {
+            value: 'wait_contract_review',
+            title: '合同审核员审核中',
+          },
+          {
+            value: 'wait_house_review',
+            title: '房屋审核员审核中',
+          },
+          {
+            value: 'published',
+            title: '已通过',
+          },
+        ],
+        visit_sta:[
+          {
+            value: 'draft',
+            title: '等待提交',
+          },
+          {
+            value: 'wait_customer_service_review',
+            title: '等待回访',
+          },
+          {
+            value: 'published',
+            title: '已回访',
+          },
+        ],
+        collectTotalNum:0,
         collectData: [],    //收房列表数据
         collectHouseId: '',   //房屋id
         collectContractId: '', //  收房合同id
@@ -1060,13 +1113,8 @@
         this.contractModule = 2;
         this.rentContract = row;
         this.lists = [
-          {
-            clickIndex: 'editRentInfoDialog',
-            headIcon: 'el-icon-edit',
-            label: '修改租客信息',
-            disabled: row.doc_status.id > 3
-          },
-          {clickIndex: 'rentVacationDialog', headIcon: 'el-icons-fa-reply', label: '租客退房',},
+          {clickIndex: 'editRentInfoDialog',headIcon: 'el-icon-edit', label: '修改租客信息',disabled:row.doc_status.id>3},
+          {clickIndex: 'rentVacationDialog',headIcon: 'el-icons-fa-reply', label: '租客退房',},
           {clickIndex: 'subleaseDialog', headIcon: 'el-icons-fa-refresh', label: '房屋转租',},
           {clickIndex: 'rentRenewDialog', headIcon: 'el-icon-share', label: '租客续约',},
           {clickIndex: 'rentChangeRoomDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '租客调房',},
@@ -1304,9 +1352,12 @@
         this.isHigh = !this.isHigh;
       },
       resetting() {
+        this.highGrade();
         this.collectParams.lord_start_time = [];
         this.collectParams.lord_end_time = [];
         this.collectParams.org_id = '';
+        this.collectParams.doc_status = '';
+        this.collectParams.visit_status = '';
         this.department_name = '';
       },
 
