@@ -5,8 +5,8 @@
         <el-form :inline="true" size="mini">
           <el-form-item>
             <el-input placeholder="房屋地址" v-model="form.keyword" size="mini" clearable
-                      @keyup.enter.native="search">
-              <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+                      @keyup.enter.native="getRentTableData">
+              <el-button slot="append" icon="el-icon-search" @click="getRentTableData"></el-button>
             </el-input>
           </el-form-item>
           <el-form-item>
@@ -22,7 +22,7 @@
       <div class="filter high_grade" :class="isHigh? 'highHide':''" style=" margin-top: -40px;">
         <el-form :inline="true" :model="form" size="mini" label-width="100px">
           <div class="filterTitle">
-            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索{{form}}
           </div>
           <el-row class="el_row_border">
             <el-col :span="12">
@@ -51,7 +51,7 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-input v-model="operator_name" @focus="chooseStaff" placeholder="请选择创建人"
+                    <el-input v-model="staff_name" @focus="chooseStaff" placeholder="请选择创建人"
                               readonly>
                       <template slot="append">
                         <div style="cursor: pointer;" @click="closeStaff">清空</div>
@@ -71,7 +71,8 @@
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-select clearable v-model="form.type" placeholder="请选择类型" value="">
-                      <el-option v-for="item in reimbursementTypeCategory" :label="item.dictionary_name" :value="item.id"
+                      <el-option v-for="item in reimbursementTypeCategory" :label="item.dictionary_name"
+                                 :value="item.id"
                                  :key="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -86,7 +87,8 @@
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-select clearable v-model="form.source" placeholder="请选择来源" value="">
-                      <el-option v-for="item in reimbursementSourceCategory" :label="item.dictionary_name" :value="item.id"
+                      <el-option v-for="item in reimbursementSourceCategory" :label="item.dictionary_name"
+                                 :value="item.id"
                                  :key="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -112,7 +114,7 @@
             </el-col>
           </el-row>
           <div class="btnOperate">
-            <el-button size="mini" type="primary" @click="search">搜索</el-button>
+            <el-button size="mini" type="primary" @click="getRentTableData">搜索</el-button>
             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
             <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
           </div>
@@ -160,14 +162,16 @@
             label="房屋地址">
             <template slot-scope="scope">
               <span v-if="scope.row.contracts && scope.row.contracts.house && scope.row.contracts.house.name">{{scope.row.contracts.house.name}}</span>
-              <span v-if="!(scope.row.contracts && scope.row.contracts.house && scope.row.contracts.house.name)">暂无</span>
+              <span
+                v-if="!(scope.row.contracts && scope.row.contracts.house && scope.row.contracts.house.name)">暂无</span>
             </template>
           </el-table-column>
           <el-table-column
             prop="source.dictionary_name"
             label="来源">
             <template slot-scope="scope">
-              <span v-if="scope.row.source && scope.row.source.dictionary_name">{{scope.row.source.dictionary_name}}</span>
+              <span
+                v-if="scope.row.source && scope.row.source.dictionary_name">{{scope.row.source.dictionary_name}}</span>
               <span v-if="!(scope.row.source && scope.row.source.dictionary_name)">暂无</span>
             </template>
           </el-table-column>
@@ -249,27 +253,25 @@
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
-    <!--<AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" :collectRepairId="collectRepairId"-->
-    <!--@close="closeModal"></AddCollectRepair>-->
-    <!--<AddRentRepair :addRentRepairDialog="addRentRepairDialog" :rentRepairId="rentRepairId"-->
-    <!--@close="closeModal"></AddRentRepair>-->
-    <!--<RepairDetail :repairDetailDialog="repairDetailDialog" :repairId="repairId" :activeName="activeName"-->
-    <!--@close="closeModal"></RepairDetail>-->
-    <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeModal"
+    <EditReimbursement :editReimbursementDialog="editReimbursementDialog"
+                              :reimbursementId="reimbursementId" :module="2"
+                              @close="closeModal"></EditReimbursement>
+    <ReimbursementDetail :reimbursementDetailDialog="reimbursementDetailDialog" :reimbursementId="reimbursementId"
+                         @close="closeModal"></ReimbursementDetail>
+    <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize"
                   @selectMember="selectMember"></organization>
   </div>
 </template>
 
 <script>
   import RightMenu from '../../../common/rightMenu.vue';
-  // import AddCollectRepair from '../components/addCollectRepair';
-  // import AddRentRepair from '../components/addRentRepair';
-  // import RepairDetail from './repairDetail';
   import Organization from '../../../common/organization.vue';
+  import ReimbursementDetail from './reimbursementDetail';
+  import EditReimbursement from './editReimbursement';
 
   export default {
     name: 'repair-manage',
-    components: {RightMenu, Organization},
+    components: {RightMenu, Organization, ReimbursementDetail, EditReimbursement},
     data() {
       return {
         rightMenuX: 0,
@@ -281,65 +283,56 @@
           page: 1,
           limit: 12,
           keyword: '',
-          time: '',
-          status: '',
-          source: '',
-          type: '',
-          staff_id: '',
+          time: '',  //时间搜索
+          status: '',  //完成状态
+          source: '',  //来源
+          type: '',  //报销类型
+          staff_id: '',  //创建人
         },
+        staff_name: '',
         collectTableData: [],
-        rentTableData: [],
         totalNum: 0,
         isHigh: false,
         collectStatus: ' ',
         collectLoading: false,
-        rentStatus: ' ',
-        rentLoading: false,
-        activeName: 'first',
-        addCollectRepairDialog: false,
-        addRentRepairDialog: false,
-        collectRepairId: '',
-        rentRepairId: '',
-        repairDetailDialog: false,
-        repairId: '',
-        deleteId: '',
-        dictionary: [],
-
         organizeVisible: false,
         organizeType: '',
-        operator_name: '',
+
+        reimbursementDetailDialog: false,
         reimbursementTypeCategory: [],  //报销类型
         reimbursementSourceCategory: [],  //报销来源
         finishedStatusCategory: [], //完成状态
+        reimbursementId: '',  //报销单id
+        editReimbursementDialog: false,
       }
     },
     mounted() {
-      this.getCollectTableData();
+      this.getRentTableData();
       this.getDictionary();
     },
     activated() {
-      this.getCollectTableData();
+      this.getRentTableData();
       this.getDictionary();
     },
     methods: {
       getDictionary() {
         this.$http.get(globalConfig.server + 'setting/dictionary/640').then((res) => {
           if (res.data.code === "30010") {
-            this.reimbursementTypeCategory = res.data.data;
+            this.reimbursementTypeCategory = res.data.data;  //报销类型
           }
         });
         this.$http.get(globalConfig.server + 'setting/dictionary/641').then((res) => {
           if (res.data.code === "30010") {
-            this.reimbursementSourceCategory = res.data.data;
+            this.reimbursementSourceCategory = res.data.data;  //报销来源
           }
         });
         this.$http.get(globalConfig.server + 'setting/dictionary/642').then((res) => {
           if (res.data.code === "30010") {
-            this.finishedStatusCategory = res.data.data;
+            this.finishedStatusCategory = res.data.data;   //完成状态
           }
         });
       },
-      getCollectTableData() {
+      getRentTableData() {
         this.collectStatus = ' ';
         this.collectLoading = true;
         if (!this.form.time) {
@@ -358,9 +351,6 @@
           }
         });
       },
-      getRentTableData() {
-
-      },
       // 员工筛选
       chooseStaff() {
         this.organizeVisible = true;
@@ -368,42 +358,22 @@
       },
       // 清空员工
       closeStaff() {
-        this.form.operator_id = [];
-        this.operator_name = '';
+        this.form.staff_id = '';
+        this.staff_name = '';
       },
       selectMember(val) {
         if (this.organizeType === 'staff') {
-          this.form.operator_id = val[0].id;
-          this.operator_name = val[0].name;
+          this.form.staff_id = val[0].id;
+          this.staff_name = val[0].name;
         }
       },
       closeModal(val) {
-        this.addCollectRepairDialog = false;
-        this.addRentRepairDialog = false;
-        this.repairDetailDialog = false;
-        this.collectRepairId = '';
-        this.rentRepairId = '';
+        this.editReimbursementDialog = false;
+        this.reimbursementDetailDialog = false;
+        this.getRentTableData();
+      },
+      closeOrganize() {
         this.organizeVisible = false;
-        if (this.activeName == "first") {
-          this.getCollectTableData();
-        } else if (this.activeName == "second") {
-          this.getRentTableData();
-        }
-      },
-      // tabs标签页
-      handleClick(tab, event) {
-        if (this.activeName == "first") {
-          this.getCollectTableData();
-        } else if (this.activeName == "second") {
-          this.getRentTableData();
-        }
-      },
-      search() {
-        if (this.activeName === 'first') {
-          this.getCollectTableData();
-        } else {
-          this.getRentTableData();
-        }
       },
       // 高级
       highGrade() {
@@ -413,8 +383,10 @@
       resetting() {
         this.form.time = '';
         this.form.status = '';
-        this.form.city = '';
-        this.closeStaff();
+        this.form.source = '';
+        this.form.type = '';
+        this.form.staff_id = '';
+        this.staff_name = '';
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -422,24 +394,38 @@
       handleCurrentChange(val) {
         this.form.page = val;
         console.log(`当前页: ${val}`);
-        this.search();
+        this.getRentTableData();
       },
       dblClickTable(row, event) {
-        this.repairId = row.id;
-        this.repairDetailDialog = true;
+        this.reimbursementId = row.id;
+        this.reimbursementDetailDialog = true;
       },
       //右键
       houseMenu(row, event) {
-        this.deleteId = row.id;
-        this.lists = [
-          {clickIndex: 'delete_repair', headIcon: 'el-icon-delete', label: '删除',},
-        ];
+        this.reimbursementId = row.id;
+        if (row.results && row.results.id) {
+          this.lists = [
+            {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',},
+            {clickIndex: 'edit_reimbursement_result', headIcon: 'el-icon-edit', label: '编辑报销结果',},
+            // {clickIndex: 'delete_reimbursement', headIcon: 'el-icon-delete', label: '删除报销单',},
+          ];
+        } else {
+          this.lists = [
+            {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',},
+            {clickIndex: 'add_reimbursement_result', headIcon: 'iconfont icon-zengjia1', label: '新增报销结果',},
+            // {clickIndex: 'delete_reimbursement', headIcon: 'el-icon-delete', label: '删除报销单',},
+          ];
+        }
+
         this.contextMenuParam(event);
       },
       //右键回调
       clickEvent(val) {
         switch (val.clickIndex) {
-          case 'delete_repair':
+          case 'edit_reimbursement':
+            this.editReimbursementDialog = true;
+            break;
+          case 'delete_reimbursement':
             this.deleteRepair();
             break;
         }
@@ -450,13 +436,9 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.get(globalConfig.server + 'repaire/del/' + this.deleteId).then((res) => {
+          this.$http.get(globalConfig.server + 'repaire/del/' + this.reimbursementId).then((res) => {
             if (res.data.code === "600200") {
-              if (this.activeName == "first") {
-                this.getCollectTableData();
-              } else if (this.activeName == "second") {
-                this.getRentTableData();
-              }
+              this.getRentTableData();
               this.$notify.success({
                 title: "成功",
                 message: res.data.msg
@@ -488,18 +470,14 @@
         })
       },
       exportData() {
-        if (this.activeName === 'first') {
-          this.form.module = 1;
-        } else {
-          this.form.module = 2;
-        }
         let exportForm = {
+          module: 2,
           keyword: this.form.keyword,
           time: this.form.time,
           status: this.form.status,
-          city: this.form.city,
-          operator_id: this.form.operator_id,
-          module: this.form.module
+          source: this.form.source,
+          type: this.form.type,
+          staff_id: this.form.staff_id
         };
         this.$http.get(globalConfig.server + 'repaire/download', {params: exportForm}).then((res) => {
           if (res.data.code == '600201') {

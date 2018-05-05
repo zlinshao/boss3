@@ -8,17 +8,16 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="创建时间">
-                  <div class="content" v-if="repairDetail.create_time">{{repairDetail.create_time}}</div>
-                  <div class="content" v-if="!repairDetail.create_time">暂无</div>
+                  <div class="content" v-if="reimDetail.create_time">{{reimDetail.create_time}}</div>
+                  <div class="content" v-else>暂无</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="创建人">
                   <div class="content">
-                    <span v-if="repairDetail.operator">{{repairDetail.operator}}</span>
-                    <span v-if="!repairDetail.operator">暂无</span>
+                    <span v-if="reimDetail.staffs && reimDetail.staffs.real_name">{{reimDetail.staffs.real_name}}</span>
+                    <span v-else>暂无</span>
                   </div>
-
                 </el-form-item>
               </el-col>
               <el-col :span="8" style="text-align: right">
@@ -29,10 +28,10 @@
             </el-row>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="维修单编号">
+                <el-form-item label="报销单编号">
                   <div class="content">
-                    <span v-if="repairDetail.repaire_num">{{repairDetail.repaire_num}}</span>
-                    <span v-if="!repairDetail.repaire_num">暂无</span>
+                    <span v-if="reimDetail.reimbursement_number">{{reimDetail.reimbursement_number}}</span>
+                    <span v-else>暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
@@ -239,11 +238,12 @@
 
   export default {
     name: 'reimbursement-detail',
-    props: ['reimbursementDetailDialog', 'id', 'module'],
+    props: ['reimbursementDetailDialog', 'reimbursementId', 'module'],
     // components: {AddResult, EditCollectRepair, EditRentRepair},
     data() {
       return {
         reimbursementDetailDialogVisible: false,
+        reimDetail: {},  //报销单详情
         repairDetail: {},
         addResultId: '',
         addResultDialog: false,
@@ -269,10 +269,11 @@
     },
     methods: {
       getDetail() {
-        this.$http.get(globalConfig.server + 'repaire/info/' + this.repairId).then((res) => {
-          if (res.data.code === "600200") {
-            this.repairDetail = res.data.data;
+        this.$http.get(globalConfig.server + 'customer/reimbursement/' + this.reimbursementId).then((res) => {
+          if (res.data.code === "30020") {
+            this.reimDetail = res.data.data;
           }else{
+            this.reimDetail = {};
             this.$notify.warning({
               title: '警告',
               message: res.data.msg,
@@ -304,7 +305,7 @@
   };
 </script>
 <style lang="scss" scoped="">
-  #addFollowUp {
+  #reimbursementDetail {
     .content {
       padding: 0 10px;
       min-height: 32px;
