@@ -8,7 +8,6 @@
               <div class="qdiv" style="margin-top:28px;">试卷名称：<span style="color:#6a8dfb">{{examData.name}}</span></div>
               <div class="qdiv">试卷类型：<span style="color:#6a8dfb">{{examData.paper && examData.paper.category}}</span>
               </div>
-              <!--<div class="qdiv">试卷考法：<span style="color:#6a8dfb">按总时长计时，按试卷顺序作答</span></div>-->
             </div>
           </el-col>
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
@@ -23,6 +22,13 @@
               <div class="import_left"><span style="float:left; font-size:14px;">总题数</span><i
                 style="float:right; color:#fdca41;font-size:20px;" class="iconfont icon-shujutu"></i></div>
               <div><span style="font-size:70px; color:#fdca41">{{examData.question_count}}</span>题</div>
+            </div>
+          </el-col>
+          <el-col :span="5" style="margin-left:2%; margin-right:2%" v-if="$route.query.from == 'manage'">
+            <div class="import_questions" style="border: 1px solid #fb4699;box-shadow: 0 0 3px 1px #fb4699;">
+              <div class="import_left"><span style="float:left; font-size:14px;">总分值</span><i
+                style="float:right; color:#fb4699;font-size:20px;" class="iconfont icon-chengjiguanli"></i></div>
+              <div><span style="font-size:70px; color:#fb4699">{{examData.score}}</span>分</div>
             </div>
           </el-col>
         </el-row>
@@ -155,7 +161,8 @@
             path: '/lookExam',
             query: {
               result_id: this.$store.state.onlineExam.look_exam.result_id,
-              exam_id: this.$store.state.onlineExam.look_exam.exam_id
+              exam_id: this.$store.state.onlineExam.look_exam.exam_id,
+              from: this.$store.state.onlineExam.look_exam.from,
             }
           });
         } else {

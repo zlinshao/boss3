@@ -148,8 +148,8 @@
               <el-table-column
                 label="操作">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.result_id == 0">已完成</span>
-                  <span v-if="scope.row.result_id !== 0 && scope.row.result_info && scope.row.result_info.waiting && scope.row.result_info.waiting.length>0" @click="lookExam(scope.row)" style="cursor: pointer;color: #6a8dfb;">点击阅卷</span>
+                  <span v-if="scope.row.result_info && scope.row.result_info.waiting && scope.row.result_info.waiting.length == 0" style="cursor: pointer;color: #6a8dfb;" @click="lookExam(scope.row)">已完成,点击查看</span>
+                  <span v-else @click="correctExam(scope.row)" style="cursor: pointer;color: #6a8dfb;">点击阅卷</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -245,9 +245,11 @@
     },
     watch: {},
     methods: {
-      lookExam(val) {
-        console.log(val)
+      correctExam(val) {
         this.$router.push({path: "/examinerShortAn", query: {result_id: val.result_id, exam_id: val.exam_id}});
+      },
+      lookExam(val){
+        this.$router.push({path: '/lookExam', query: {result_id: val.result_id, exam_id: val.exam_id, from: 'manage'}});
       },
       getQueryData() {
         if (!this.$route.query.id) {

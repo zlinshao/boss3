@@ -61,13 +61,13 @@
                 <el-checkbox-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;" v-if="k==154">
                   <el-col :span="6" :key="index" v-for="(val,index) in item.choice"
                           style="line-height:24px;height: 24px;">
-                    <el-checkbox :label="index" style="white-space: initial;">{{item.choice[index]}}</el-checkbox>
+                    <el-checkbox :label="index" style="white-space: initial;">{{index}}:{{item.choice[index]}}</el-checkbox>
                   </el-col>
                 </el-checkbox-group>
                 <el-checkbox-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;" v-if="k==155">
                   <el-col :span="6" :key="index" v-for="(val,index) in item.choice"
                           style="line-height:24px;height: 24px;">
-                    <el-checkbox :label="index" style="white-space: initial;">{{item.choice[index]}}</el-checkbox>
+                    <el-checkbox :label="index" style="white-space: initial;">{{index}}:{{item.choice[index]}}</el-checkbox>
                   </el-col>
                 </el-checkbox-group>
               </el-form-item>
@@ -83,7 +83,7 @@
                 <el-radio-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;">
                   <el-col :span="12" :key="index" v-for="(val,index) in item.choice"
                           style="line-height:24px;height: 24px;">
-                    <el-radio :label="index">{{val}}</el-radio>
+                    <el-radio :label="index">{{index}}:{{val}}</el-radio>
                   </el-col>
                 </el-radio-group>
               </el-form-item>
@@ -154,7 +154,7 @@
       <el-dialog :close-on-click-modal="false" :show-close="false" :visible.sync="submitDialog" style="margin-top:20vh"
                  title="本次试题提交"
                  width="35%">
-        <el-row :gutter="30" style="margin-bottom:38px;">
+        <el-row :gutter="30" style="margin-bottom:15px;">
           <el-col :span="24">
             <div class="submit_points">
               <span>提交成功！</span><br/>主考官将尽快批示，您的成绩可在“乐伽大学－我的考试”中查看，我们也会以信息的方式通知您！
@@ -182,6 +182,7 @@
         isClear: false,
         pointDialog: false,
         pointScore: '',
+        resultId: '',
         submitDialog: false,
         faleDialog: false,
         paperData: {}, //考试的内容
@@ -189,13 +190,30 @@
         questionData: {},  //题目的内容
         answerData: {},  //答题的内容
         submitDisabled: false,
+        confirmArrival: [],
+        answers: {},
       };
     },
     activated() {
       this.getQueryData();
       this.getPaperData();
+      this.confirmArrival = localStorage.getItem('confirmArrival');
+      this.answers = JSON.stringify(localStorage.getItem('answers'));
+      // if (this.paperId) {
+      //   if (this.confirmArrival && this.confirmArrival.length > 0 && this.confirmArrival.indexOf(this.paperId) > -1) {
+      //     // this.$set(this.answerData, localStorage.getItem('answers'));
+      //   }
+      // }
     },
-    watch: {},
+    watch: {
+      'answerData': {
+        deep: true,
+        handler(val, oldVal) {
+          localStorage.setItem('answers', JSON.stringify(val));
+          console.log(JSON.stringify(localStorage.getItem('answers')));
+        }
+      }
+    },
     methods: {
       combinaData() {
         if (this.questionData[153] && this.questionData[153].length > 0) {
@@ -205,7 +223,12 @@
         }
         if (this.questionData[154] && this.questionData[154].length > 0) {
           this.questionData[154].forEach((item) => {
-            this.$set(this.answerData, item.id, []);
+            // if (this.answers && this.answers[item.id]) {
+            //   alert(this.answers);
+            //   this.$set(this.answerData, item.id, this.answers[item.id]);
+            // } else {
+              this.$set(this.answerData, item.id, []);
+            // }
           });
         }
         if (this.questionData[155] && this.questionData[155].length > 0) {
@@ -265,6 +288,8 @@
               title: '成功',
               message: res.data.msg
             });
+            this.pointScore = res.data.data.score;
+            this.resultId = res.data.data.id;
             if (this.questionData[158] && this.questionData[158].length > 0) {
               this.submitDialog = true;
             } else {
@@ -294,9 +319,8 @@
         view.name = ' 考生答题 ';
         view.path = '/answerExam';
         this.$store.dispatch('delVisitedViews', view);
-        // this.$router.push({path: '/lookExam', query: {result_id: val.result_id, exam_id: this.paperId}});
+        this.$router.push({path: '/lookExam', query: {result_id: this.resultId, exam_id: this.paperId}});
       },
-
     }
   };
 </script>
