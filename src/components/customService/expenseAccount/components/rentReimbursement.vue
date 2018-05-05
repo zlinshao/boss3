@@ -142,6 +142,10 @@
           <el-table-column
             prop="staffs.real_name"
             label="创建人">
+            <template slot-scope="scope">
+              <span v-if="scope.row.staffs && scope.row.staffs.real_name">{{scope.row.staffs.real_name}}</span>
+              <span v-if="!(scope.row.staffs && scope.row.staffs.real_name)">暂无</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="reimbursement_number"
@@ -152,36 +156,68 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="source.dictionary_name"
-            label="来源">
-          </el-table-column>
-          <el-table-column
             prop="contracts.house.name"
             label="房屋地址">
+            <template slot-scope="scope">
+              <span v-if="scope.row.contracts && scope.row.contracts.house && scope.row.contracts.house.name">{{scope.row.contracts.house.name}}</span>
+              <span v-if="!(scope.row.contracts && scope.row.contracts.house && scope.row.contracts.house.name)">暂无</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="source.dictionary_name"
+            label="来源">
+            <template slot-scope="scope">
+              <span v-if="scope.row.source && scope.row.source.dictionary_name">{{scope.row.source.dictionary_name}}</span>
+              <span v-if="!(scope.row.source && scope.row.source.dictionary_name)">暂无</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="type.dictionary_name"
             label="报销类型">
+            <template slot-scope="scope">
+              <span v-if="scope.row.type && scope.row.type.dictionary_name">{{scope.row.type.dictionary_name}}</span>
+              <span v-if="!(scope.row.type && scope.row.type.dictionary_name)">暂无</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="amount"
             label="报销金额">
+            <template slot-scope="scope">
+              <span v-if="scope.row.amount">{{scope.row.amount}}</span>
+              <span v-if="!scope.row.amount">暂无</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="account_bank"
             label="开户行">
+            <template slot-scope="scope">
+              <span v-if="scope.row.account_bank">{{scope.row.account_bank}}</span>
+              <span v-if="!scope.row.account_bank">暂无</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="branch_bank"
             label="支行">
+            <template slot-scope="scope">
+              <span v-if="scope.row.branch_bank">{{scope.row.branch_bank}}</span>
+              <span v-if="!scope.row.branch_bank">暂无</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="bank_num"
             label="银行卡号">
+            <template slot-scope="scope">
+              <span v-if="scope.row.bank_num">{{scope.row.bank_num}}</span>
+              <span v-if="!scope.row.bank_num">暂无</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="account_name"
             label="开户人">
+            <template slot-scope="scope">
+              <span v-if="scope.row.account_name">{{scope.row.account_name}}</span>
+              <span v-if="!scope.row.account_name">暂无</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="status.dictionary_name"
@@ -225,11 +261,11 @@
 </template>
 
 <script>
-  import RightMenu from '../../common/rightMenu.vue';
+  import RightMenu from '../../../common/rightMenu.vue';
   // import AddCollectRepair from '../components/addCollectRepair';
   // import AddRentRepair from '../components/addRentRepair';
   // import RepairDetail from './repairDetail';
-  import Organization from '../../common/organization.vue';
+  import Organization from '../../../common/organization.vue';
 
   export default {
     name: 'repair-manage',
@@ -241,7 +277,7 @@
         show: false,
         lists: [],
         form: {
-          module: 1,
+          module: 2,
           page: 1,
           limit: 12,
           keyword: '',

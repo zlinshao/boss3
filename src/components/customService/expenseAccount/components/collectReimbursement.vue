@@ -5,8 +5,8 @@
         <el-form :inline="true" size="mini">
           <el-form-item>
             <el-input placeholder="房屋地址" v-model="form.keyword" size="mini" clearable
-                      @keyup.enter.native="search">
-              <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+                      @keyup.enter.native="getCollectTableData">
+              <el-button slot="append" icon="el-icon-search" @click="getCollectTableData"></el-button>
             </el-input>
           </el-form-item>
           <el-form-item>
@@ -71,7 +71,8 @@
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-select clearable v-model="form.type" placeholder="请选择类型" value="">
-                      <el-option v-for="item in reimbursementTypeCategory" :label="item.dictionary_name" :value="item.id"
+                      <el-option v-for="item in reimbursementTypeCategory" :label="item.dictionary_name"
+                                 :value="item.id"
                                  :key="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -86,7 +87,8 @@
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
                     <el-select clearable v-model="form.source" placeholder="请选择来源" value="">
-                      <el-option v-for="item in reimbursementSourceCategory" :label="item.dictionary_name" :value="item.id"
+                      <el-option v-for="item in reimbursementSourceCategory" :label="item.dictionary_name"
+                                 :value="item.id"
                                  :key="item.id"></el-option>
                     </el-select>
                   </el-form-item>
@@ -112,7 +114,7 @@
             </el-col>
           </el-row>
           <div class="btnOperate">
-            <el-button size="mini" type="primary" @click="search">搜索</el-button>
+            <el-button size="mini" type="primary" @click="getCollectTableData">搜索</el-button>
             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
             <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
           </div>
@@ -142,6 +144,10 @@
           <el-table-column
             prop="staffs.real_name"
             label="创建人">
+            <template slot-scope="scope">
+              <span v-if="scope.row.staffs && scope.row.staffs.real_name">{{scope.row.staffs.real_name}}</span>
+              <span v-if="!(scope.row.staffs && scope.row.staffs.real_name)">暂无</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="reimbursement_number"
@@ -152,36 +158,70 @@
             </template>
           </el-table-column>
           <el-table-column
-            prop="source.dictionary_name"
-            label="来源">
-          </el-table-column>
-          <el-table-column
             prop="contracts.house.name"
             label="房屋地址">
+            <template slot-scope="scope">
+              <span v-if="scope.row.contracts && scope.row.contracts.house && scope.row.contracts.house.name">{{scope.row.contracts.house.name}}</span>
+              <span
+                v-if="!(scope.row.contracts && scope.row.contracts.house && scope.row.contracts.house.name)">暂无</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="source.dictionary_name"
+            label="来源">
+            <template slot-scope="scope">
+              <span
+                v-if="scope.row.source && scope.row.source.dictionary_name">{{scope.row.source.dictionary_name}}</span>
+              <span v-if="!(scope.row.source && scope.row.source.dictionary_name)">暂无</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="type.dictionary_name"
             label="报销类型">
+            <template slot-scope="scope">
+              <span v-if="scope.row.type && scope.row.type.dictionary_name">{{scope.row.type.dictionary_name}}</span>
+              <span v-if="!(scope.row.type && scope.row.type.dictionary_name)">暂无</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="amount"
             label="报销金额">
+            <template slot-scope="scope">
+              <span v-if="scope.row.amount">{{scope.row.amount}}</span>
+              <span v-if="!scope.row.amount">暂无</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="account_bank"
             label="开户行">
+            <template slot-scope="scope">
+              <span v-if="scope.row.account_bank">{{scope.row.account_bank}}</span>
+              <span v-if="!scope.row.account_bank">暂无</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="branch_bank"
             label="支行">
+            <template slot-scope="scope">
+              <span v-if="scope.row.branch_bank">{{scope.row.branch_bank}}</span>
+              <span v-if="!scope.row.branch_bank">暂无</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="bank_num"
             label="银行卡号">
+            <template slot-scope="scope">
+              <span v-if="scope.row.bank_num">{{scope.row.bank_num}}</span>
+              <span v-if="!scope.row.bank_num">暂无</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="account_name"
             label="开户人">
+            <template slot-scope="scope">
+              <span v-if="scope.row.account_name">{{scope.row.account_name}}</span>
+              <span v-if="!scope.row.account_name">暂无</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="status.dictionary_name"
@@ -215,25 +255,22 @@
                @clickOperateMore="clickEvent"></RightMenu>
     <!--<AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" :collectRepairId="collectRepairId"-->
     <!--@close="closeModal"></AddCollectRepair>-->
-    <!--<AddRentRepair :addRentRepairDialog="addRentRepairDialog" :rentRepairId="rentRepairId"-->
-    <!--@close="closeModal"></AddRentRepair>-->
-    <!--<RepairDetail :repairDetailDialog="repairDetailDialog" :repairId="repairId" :activeName="activeName"-->
-    <!--@close="closeModal"></RepairDetail>-->
+    <ReimbursementDetail :reimbursementDetailDialog="reimbursementDetailDialog" :id="reimbursementId"
+    @close="closeModal"></ReimbursementDetail>
     <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeModal"
                   @selectMember="selectMember"></organization>
   </div>
 </template>
 
 <script>
-  import RightMenu from '../../common/rightMenu.vue';
+  import RightMenu from '../../../common/rightMenu.vue';
+  import Organization from '../../../common/organization.vue';
+  import ReimbursementDetail from './reimbursementDetail';
   // import AddCollectRepair from '../components/addCollectRepair';
   // import AddRentRepair from '../components/addRentRepair';
-  // import RepairDetail from './repairDetail';
-  import Organization from '../../common/organization.vue';
-
   export default {
     name: 'repair-manage',
-    components: {RightMenu, Organization},
+    components: {RightMenu, Organization, ReimbursementDetail},
     data() {
       return {
         rightMenuX: 0,
@@ -241,7 +278,7 @@
         show: false,
         lists: [],
         form: {
-          module: 2,
+          module: 1,
           page: 1,
           limit: 12,
           keyword: '',
@@ -259,22 +296,20 @@
         collectLoading: false,
         rentStatus: ' ',
         rentLoading: false,
-        activeName: 'first',
         addCollectRepairDialog: false,
         addRentRepairDialog: false,
         collectRepairId: '',
         rentRepairId: '',
-        repairDetailDialog: false,
-        repairId: '',
-        deleteId: '',
-        dictionary: [],
-
         organizeVisible: false,
         organizeType: '',
         operator_name: '',
+
+
+        reimbursementDetailDialog: false,
         reimbursementTypeCategory: [],  //报销类型
         reimbursementSourceCategory: [],  //报销来源
         finishedStatusCategory: [], //完成状态
+        reimbursementId: '',
       }
     },
     mounted() {
@@ -289,17 +324,17 @@
       getDictionary() {
         this.$http.get(globalConfig.server + 'setting/dictionary/640').then((res) => {
           if (res.data.code === "30010") {
-            this.reimbursementTypeCategory = res.data.data;
+            this.reimbursementTypeCategory = res.data.data;  //报销类型
           }
         });
         this.$http.get(globalConfig.server + 'setting/dictionary/641').then((res) => {
           if (res.data.code === "30010") {
-            this.reimbursementSourceCategory = res.data.data;
+            this.reimbursementSourceCategory = res.data.data;  //报销来源
           }
         });
         this.$http.get(globalConfig.server + 'setting/dictionary/642').then((res) => {
           if (res.data.code === "30010") {
-            this.finishedStatusCategory = res.data.data;
+            this.finishedStatusCategory = res.data.data;   //完成状态
           }
         });
       },
@@ -322,9 +357,6 @@
           }
         });
       },
-      getRentTableData() {
-
-      },
       // 员工筛选
       chooseStaff() {
         this.organizeVisible = true;
@@ -343,31 +375,10 @@
       },
       closeModal(val) {
         this.addCollectRepairDialog = false;
-        this.addRentRepairDialog = false;
-        this.repairDetailDialog = false;
-        this.collectRepairId = '';
-        this.rentRepairId = '';
+        this.reimbursementDetailDialog = false;
+
         this.organizeVisible = false;
-        if (this.activeName == "first") {
-          this.getCollectTableData();
-        } else if (this.activeName == "second") {
-          this.getRentTableData();
-        }
-      },
-      // tabs标签页
-      handleClick(tab, event) {
-        if (this.activeName == "first") {
-          this.getCollectTableData();
-        } else if (this.activeName == "second") {
-          this.getRentTableData();
-        }
-      },
-      search() {
-        if (this.activeName === 'first') {
-          this.getCollectTableData();
-        } else {
-          this.getRentTableData();
-        }
+        this.getCollectTableData();
       },
       // 高级
       highGrade() {
@@ -375,9 +386,7 @@
       },
       // 重置
       resetting() {
-        this.form.time = '';
-        this.form.status = '';
-        this.form.city = '';
+
         this.closeStaff();
       },
       handleSizeChange(val) {
@@ -386,24 +395,31 @@
       handleCurrentChange(val) {
         this.form.page = val;
         console.log(`当前页: ${val}`);
-        this.search();
+        this.getCollectTableData();
       },
       dblClickTable(row, event) {
-        this.repairId = row.id;
-        this.repairDetailDialog = true;
+        this.reimbursementId = row.id;
+        this.reimbursementDetailDialog = true;
       },
       //右键
       houseMenu(row, event) {
-        this.deleteId = row.id;
+        this.reimbursementId = row.id;
         this.lists = [
-          {clickIndex: 'delete_repair', headIcon: 'el-icon-delete', label: '删除',},
+          {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',},
+          {clickIndex: 'delete_reimbursement', headIcon: 'el-icon-delete', label: '删除报销单',},
         ];
         this.contextMenuParam(event);
       },
       //右键回调
       clickEvent(val) {
         switch (val.clickIndex) {
-          case 'delete_repair':
+          case 'edit_reimbursement':
+            console.log("111---编辑报销单");
+            this.$http.get(globalConfig.server + 'customer/reimbursement/'+this.reimbursementId).then((res)=>{
+
+            });
+            break;
+          case 'delete_reimbursement':
             this.deleteRepair();
             break;
         }
@@ -414,13 +430,9 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.get(globalConfig.server + 'repaire/del/' + this.deleteId).then((res) => {
+          this.$http.get(globalConfig.server + 'repaire/del/' + this.reimbursementId).then((res) => {
             if (res.data.code === "600200") {
-              if (this.activeName == "first") {
-                this.getCollectTableData();
-              } else if (this.activeName == "second") {
-                this.getRentTableData();
-              }
+              this.getCollectTableData();
               this.$notify.success({
                 title: "成功",
                 message: res.data.msg
@@ -452,12 +464,8 @@
         })
       },
       exportData() {
-        if (this.activeName === 'first') {
-          this.form.module = 1;
-        } else {
-          this.form.module = 2;
-        }
         let exportForm = {
+          module: 1,
           keyword: this.form.keyword,
           time: this.form.time,
           status: this.form.status,

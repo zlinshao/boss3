@@ -5,10 +5,9 @@
         <el-row style="width:100%;margin-top:16px;">
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="text-align:left;color:#464748;">
-              <div class="qdiv" style="margin-top:20px;">试卷名称：<span style="color:#6a8dfb">{{testPaperData.name}}</span>
+              <div class="qdiv" style="margin-top:28px;">试卷名称：<span style="color:#6a8dfb">{{testPaperData.name}}</span>
               </div>
               <div class="qdiv">试卷类型：<span style="color:#6a8dfb">{{testPaperData.category}}</span></div>
-              <div class="qdiv">试卷考法：<span style="color:#6a8dfb">按总时长计时，按试卷顺序作答</span></div>
             </div>
           </el-col>
           <!--<el-col :span="5" style="margin-left:2%; margin-right:2%">-->
@@ -71,10 +70,10 @@
           v-if="item.category===158">简答题</span></span>
           <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
           <div v-if="item.category===157">
-            <el-col v-for="value in item.answer" :key="value" :span="12"><el-input size="small" style="width:95.5%;margin-left:2%;" readOnly></el-input></el-col>
+            <el-col v-for="value in item.answer" :key="value" :span="12"><el-input size="small" style="width:95.5%;margin-left:2%;" readOnly placeholder="请填写答案"></el-input></el-col>
           </div>
           <div v-if="item.category===158">
-            <el-input style="width:95.5%;margin-left:2%;" readOnly type="textarea"></el-input>
+            <el-input style="width:95.5%;margin-left:2%;" readOnly type="textarea" placeholder="请填写答案"></el-input>
           </div>
         </div>
       </div>
@@ -144,8 +143,8 @@
         border-radius: 5px;
         .qdiv {
           font-size: 14px;
-          height: 30px;
-          line-height: 30px;
+          height: 35px;
+          line-height: 35px;
           margin-left: 20px;
           overflow: hidden;
         }
