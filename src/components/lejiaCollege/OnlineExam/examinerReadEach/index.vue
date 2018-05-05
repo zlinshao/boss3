@@ -148,7 +148,7 @@
               <el-table-column
                 label="操作">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.result_info && scope.row.result_info.waiting && scope.row.result_info.waiting.length == 0" style="cursor: pointer;color: #6a8dfb;" @click="lookExam(scope.row)">已完成,点击查看</span>
+                  <span v-if="scope.row.result_id == 0 || (scope.row.result_info && scope.row.result_info.waiting && scope.row.result_info.waiting.length == 0)" style="cursor: pointer;color: #6a8dfb;" @click="lookExam(scope.row)">已完成,点击查看</span>
                   <span v-else @click="correctExam(scope.row)" style="cursor: pointer;color: #6a8dfb;">点击阅卷</span>
                 </template>
               </el-table-column>
