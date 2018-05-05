@@ -51,7 +51,7 @@
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-input v-model="operator_name" @focus="chooseStaff" placeholder="请选择创建人"
+                    <el-input v-model="staff_name" @focus="chooseStaff" placeholder="请选择创建人"
                               readonly>
                       <template slot="append">
                         <div style="cursor: pointer;" @click="closeStaff">清空</div>
@@ -253,11 +253,11 @@
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
-    <!--<AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog" :collectRepairId="collectRepairId"-->
-    <!--@close="closeModal"></AddCollectRepair>-->
-    <ReimbursementDetail :reimbursementDetailDialog="reimbursementDetailDialog" :id="reimbursementId"
-    @close="closeModal"></ReimbursementDetail>
-    <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeModal"
+    <EditReimbursement :editReimbursementDialog="editReimbursementDialog" :reimbursementId="reimbursementId" module="1"
+                       @close="closeModal"></EditReimbursement>
+    <ReimbursementDetail :reimbursementDetailDialog="reimbursementDetailDialog" :reimbursementId="reimbursementId"
+                         @close="closeModal"></ReimbursementDetail>
+    <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize"
                   @selectMember="selectMember"></organization>
   </div>
 </template>
@@ -266,11 +266,11 @@
   import RightMenu from '../../../common/rightMenu.vue';
   import Organization from '../../../common/organization.vue';
   import ReimbursementDetail from './reimbursementDetail';
-  // import AddCollectRepair from '../components/addCollectRepair';
-  // import AddRentRepair from '../components/addRentRepair';
+  import EditReimbursement from './editReimbursement';
+
   export default {
     name: 'repair-manage',
-    components: {RightMenu, Organization, ReimbursementDetail},
+    components: {RightMenu, Organization, ReimbursementDetail, EditReimbursement},
     data() {
       return {
         rightMenuX: 0,
@@ -282,34 +282,27 @@
           page: 1,
           limit: 12,
           keyword: '',
-          time: '',
-          status: '',
-          source: '',
-          type: '',
-          staff_id: '',
+          time: '',  //时间搜索
+          status: '',  //完成状态
+          source: '',  //来源
+          type: '',  //报销类型
+          staff_id: '',  //创建人
         },
+        staff_name: '',
         collectTableData: [],
-        rentTableData: [],
         totalNum: 0,
         isHigh: false,
         collectStatus: ' ',
         collectLoading: false,
-        rentStatus: ' ',
-        rentLoading: false,
-        addCollectRepairDialog: false,
-        addRentRepairDialog: false,
-        collectRepairId: '',
-        rentRepairId: '',
         organizeVisible: false,
         organizeType: '',
-        operator_name: '',
-
 
         reimbursementDetailDialog: false,
         reimbursementTypeCategory: [],  //报销类型
         reimbursementSourceCategory: [],  //报销来源
         finishedStatusCategory: [], //完成状态
-        reimbursementId: '',
+        reimbursementId: '',  //报销单id
+        editReimbursementDialog: false,
       }
     },
     mounted() {
@@ -364,21 +357,22 @@
       },
       // 清空员工
       closeStaff() {
-        this.form.operator_id = [];
-        this.operator_name = '';
+        this.form.staff_id = '';
+        this.staff_name = '';
       },
       selectMember(val) {
         if (this.organizeType === 'staff') {
-          this.form.operator_id = val[0].id;
-          this.operator_name = val[0].name;
+          this.form.staff_id = val[0].id;
+          this.staff_name = val[0].name;
         }
       },
       closeModal(val) {
-        this.addCollectRepairDialog = false;
+        this.editReimbursementDialog = false;
         this.reimbursementDetailDialog = false;
-
-        this.organizeVisible = false;
         this.getCollectTableData();
+      },
+      closeOrganize() {
+        this.organizeVisible = false;
       },
       // 高级
       highGrade() {
@@ -386,8 +380,12 @@
       },
       // 重置
       resetting() {
-
-        this.closeStaff();
+        this.form.time = '';
+        this.form.status = '';
+        this.form.source = '';
+        this.form.type = '';
+        this.form.staff_id = '';
+        this.staff_name = '';
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -404,20 +402,27 @@
       //右键
       houseMenu(row, event) {
         this.reimbursementId = row.id;
-        this.lists = [
-          {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',},
-          {clickIndex: 'delete_reimbursement', headIcon: 'el-icon-delete', label: '删除报销单',},
-        ];
+        if (row.results && row.results.id) {
+          this.lists = [
+            {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',},
+            {clickIndex: 'edit_reimbursement_result', headIcon: 'el-icon-edit', label: '编辑报销结果',},
+            // {clickIndex: 'delete_reimbursement', headIcon: 'el-icon-delete', label: '删除报销单',},
+          ];
+        } else {
+          this.lists = [
+            {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',},
+            {clickIndex: 'add_reimbursement_result', headIcon: 'iconfont icon-zengjia1', label: '新增报销结果',},
+            // {clickIndex: 'delete_reimbursement', headIcon: 'el-icon-delete', label: '删除报销单',},
+          ];
+        }
+
         this.contextMenuParam(event);
       },
       //右键回调
       clickEvent(val) {
         switch (val.clickIndex) {
           case 'edit_reimbursement':
-            console.log("111---编辑报销单");
-            this.$http.get(globalConfig.server + 'customer/reimbursement/'+this.reimbursementId).then((res)=>{
-
-            });
+            this.editReimbursementDialog = true;
             break;
           case 'delete_reimbursement':
             this.deleteRepair();
@@ -469,9 +474,9 @@
           keyword: this.form.keyword,
           time: this.form.time,
           status: this.form.status,
-          city: this.form.city,
-          operator_id: this.form.operator_id,
-          module: this.form.module
+          source: this.form.source,
+          type: this.form.type,
+          staff_id: this.form.staff_id
         };
         this.$http.get(globalConfig.server + 'repaire/download', {params: exportForm}).then((res) => {
           if (res.data.code == '600201') {
