@@ -138,7 +138,7 @@
                 label="考生人数">
               </el-table-column>
               <el-table-column
-                prop="unexam"
+                prop="absence_count"
                 label="缺考">
               </el-table-column>
               <el-table-column

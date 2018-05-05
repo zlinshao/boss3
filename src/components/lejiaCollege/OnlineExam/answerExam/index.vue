@@ -61,13 +61,15 @@
                 <el-checkbox-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;" v-if="k==154">
                   <el-col :span="6" :key="index" v-for="(val,index) in item.choice"
                           style="line-height:24px;height: 24px;">
-                    <el-checkbox :label="index" style="white-space: initial;">{{index}}:{{item.choice[index]}}</el-checkbox>
+                    <el-checkbox :label="index" style="white-space: initial;">{{index}}:{{item.choice[index]}}
+                    </el-checkbox>
                   </el-col>
                 </el-checkbox-group>
                 <el-checkbox-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;" v-if="k==155">
                   <el-col :span="6" :key="index" v-for="(val,index) in item.choice"
                           style="line-height:24px;height: 24px;">
-                    <el-checkbox :label="index" style="white-space: initial;">{{index}}:{{item.choice[index]}}</el-checkbox>
+                    <el-checkbox :label="index" style="white-space: initial;">{{index}}:{{item.choice[index]}}
+                    </el-checkbox>
                   </el-col>
                 </el-checkbox-group>
               </el-form-item>
@@ -186,7 +188,7 @@
         submitDialog: false,
         faleDialog: false,
         paperData: {}, //考试的内容
-        paperId: '',  //当前答题的考试id
+        examId: '',  //当前答题的考试id
         questionData: {},  //题目的内容
         answerData: {},  //答题的内容
         submitDisabled: false,
@@ -197,13 +199,17 @@
     activated() {
       this.getQueryData();
       this.getPaperData();
-      this.confirmArrival = localStorage.getItem('confirmArrival');
+      this.confirmArrival = localStorage.getItem('confirmArrival');  //check_in签到状态考试id数组
       this.answers = JSON.stringify(localStorage.getItem('answers'));
-      // if (this.paperId) {
-      //   if (this.confirmArrival && this.confirmArrival.length > 0 && this.confirmArrival.indexOf(this.paperId) > -1) {
+      // if (this.examId) {
+      //   if (this.confirmArrival && this.confirmArrival.length > 0 && this.confirmArrival.indexOf(this.examId) > -1) {
       //     // this.$set(this.answerData, localStorage.getItem('answers'));
       //   }
       // }
+      this.clockSubmit();
+      setTimeout(() => {
+        this.clockSubmit();
+      }, 1000 * 60);
     },
     watch: {
       'answerData': {
@@ -227,7 +233,7 @@
             //   alert(this.answers);
             //   this.$set(this.answerData, item.id, this.answers[item.id]);
             // } else {
-              this.$set(this.answerData, item.id, []);
+            this.$set(this.answerData, item.id, []);
             // }
           });
         }
@@ -254,15 +260,15 @@
       },
       getQueryData() {
         if (!this.$route.query.id) {
-          this.paperId = this.$store.state.onlineExam.answer_exam_id;
+          this.examId = this.$store.state.onlineExam.answer_exam_id;
           this.$router.push({path: '/answerExam', query: {id: this.$store.state.onlineExam.answer_exam_id}});
         } else {
           this.$store.dispatch('answerExamId', this.$route.query.id);
-          this.paperId = this.$route.query.id;
+          this.examId = this.$route.query.id;
         }
       },
       getPaperData() {
-        this.$http.get(globalConfig.server + 'exam/' + this.paperId).then((res) => {
+        this.$http.get(globalConfig.server + 'exam/' + this.examId).then((res) => {
           if (res.data.code === '30000') {
             this.paperData = res.data.data;
             this.questionData = res.data.data.question_set;
@@ -280,7 +286,7 @@
       },
       onSubmit() {
         this.$http.post(globalConfig.server + 'exam/result', {
-          exam_id: this.paperId,
+          exam_id: this.examId,
           answer: this.answerData
         }).then((res) => {
           if (res.data.code === '36010') {
@@ -319,7 +325,18 @@
         view.name = ' 考生答题 ';
         view.path = '/answerExam';
         this.$store.dispatch('delVisitedViews', view);
-        this.$router.push({path: '/lookExam', query: {result_id: this.resultId, exam_id: this.paperId}});
+        this.$router.push({path: '/lookExam', query: {result_id: this.resultId, exam_id: this.examId}});
+      },
+      //计时器轮询check_in提交
+      clockSubmit() {
+        if (this.examId) {
+          this.$http.get(globalConfig.server + 'exam/poll/' + this.examId).then((res) => {
+            if(res.data.code === '30000'){
+              this.onSubmit();
+              // alert('强制提交。。。')
+            }
+          });
+        }
       },
     }
   };
