@@ -6,7 +6,7 @@
         <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input v-model="params.search" placeholder="搜索" clearable>
+              <el-input v-model="params.search" placeholder="搜索"  @keyup.enter.native="search()" clearable>
                 <el-button @click="search()" slot="append" type="primary" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
