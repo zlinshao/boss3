@@ -829,6 +829,9 @@
 
     <EditHouseResources :editHouseResourcesDialog="editHouseResourcesDialog"
                         :collectContractId="contractOperateId" @close="closeModal"></EditHouseResources>
+    //回访                    
+    <AddReturnvisit :addReturnvisitDialog="addReturnvisitDialog" :ToActiveName="ToActiveName" :addReturnInfo="addReturnInfo"
+                      @close="closeModal"></AddReturnvisit>
 
   </div>
 </template>
@@ -839,9 +842,11 @@
   import VisitRecord from '../../components/visitRecord.vue'    //添加回访
   import EditRentInfo from '../../components/editRentInfo'
   import EditHouseResources from '../../components/editHouseResources'
+  import AddReturnvisit from "../../../../components/rentManage/customerService/addReturnvisit.vue";   //添加回访
+
   export default {
     name: 'hello',
-    components: {RightMenu, Organization, VisitRecord , EditRentInfo , EditHouseResources},
+    components: {RightMenu, Organization, VisitRecord , EditRentInfo , EditHouseResources,AddReturnvisit},
     data() {
       return {
         rightMenuX: 0,
@@ -885,6 +890,8 @@
           house: '',
         },
         totalNumbers: 0,   //总数
+        addReturnInfo: [],
+        ToActiveName: "",
         params: {
           page: 1,
           limit: '12',
@@ -987,6 +994,7 @@
 
         collectNumberArray: [],
         checkContractData: [],
+        addReturnvisitDialog:false,
       }
     },
     mounted() {
@@ -1052,6 +1060,7 @@
         this.viewVisitRecordDialog = false;
         this.editRentInfoDialog = false;
         this.editHouseResourcesDialog = false;
+        this.addReturnvisitDialog = false;
 
         if (val === 'updateCollect') {
           this.collectDatafunc();
@@ -1200,8 +1209,9 @@
 
         this.collectHouseId = row.house_id;   //收房id
         this.contractOperateId = row.contract_id;   //通用合同ID
-
+        this.addReturnInfo = row;
         if(this.is_rent){
+          this.ToActiveName = "second";
           this.lists = [
             {
               clickIndex: 'visit', headIcon: 'el-icons-fa-eye', tailIcon: 'el-icon-arrow-right', label: '回访记录',
@@ -1214,8 +1224,10 @@
             {clickIndex: 'editRentInfoDialog',headIcon: 'el-icon-edit', label: '修改租客信息',disabled:row.doc_status.id>3},
 
             {clickIndex: 'lookMemorandum', headIcon: 'el-icons-fa-eye', label: '查看合同备忘', contract_id: row.contract_id},
+            {clickIndex: 'addReturnvisitDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '增加回访记录', contract_id: row.contract_id},
           ];
         }else {
+          this.ToActiveName = "first";
           this.lists = [
             {
               clickIndex: 'visit', headIcon: 'el-icons-fa-eye', tailIcon: 'el-icon-arrow-right', label: '回访记录',
@@ -1233,6 +1245,7 @@
             },
 
             {clickIndex: 'lookMemorandum', headIcon: 'el-icons-fa-eye', label: '查看合同备忘', contract_id: row.contract_id},
+            {clickIndex: 'addReturnvisitDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '增加回访记录', contract_id: row.contract_id},
           ];
         }
 
@@ -1259,6 +1272,9 @@
             break;
           case 'editHouseResourcesDialog':   //修改房源信息
             this.editHouseResourcesDialog = true;
+            break;
+          case 'addReturnvisitDialog':   //回访记录
+            this.addReturnvisitDialog = true;
             break;
         }
       },
