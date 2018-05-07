@@ -222,12 +222,13 @@
 
             },
 
-            'Error': function (up, err, errTip) {
 //              console.log(errTip);
+              'Error': function (up, err, errTip) {
             },
             'UploadComplete': function (uploader,files) {
               //队列文件处理完毕后，处理相关的事情
               _this.isUploading = false;
+              _this.$emit('getImg', [_this.ID, _this.imgId, _this.isUploading]);
               _this.$notify.success({
                 title: '成功',
                 message: '文件已全部上传成功！'
