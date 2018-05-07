@@ -29,7 +29,7 @@
             </el-row>
             <el-row>
             <el-col :span="12">
-              <el-form-item label="合同周期">
+              <el-form-item label="合同周期" required >
                 <el-input class="input" v-model="form.contract_month" style="width:50%;float:left;">
                   <template slot="append">
                     <div>月</div>
@@ -43,7 +43,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="来源">
+              <el-form-item label="来源" required >
                 <el-select v-model="form.originate" placeholder="请选择来源" clearable>
                   <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id"
                              :value="item.id">{{item.dictionary_name}}
@@ -54,19 +54,19 @@
           </el-row>
           <el-row v-if="form.originate === 623">
             <el-col :span="12">
-              <el-form-item label="中介名称">
+              <el-form-item label="中介名称" required>
                 <el-input v-model="form.agency"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="中间价格">
+              <el-form-item label="中间价格" required>
                 <el-input v-model="form.agency_price"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row v-for="index in priceLen" :key="index">
             <el-col :span="14">
-              <el-form-item label="月单价">
+              <el-form-item label="月单价" required>
                 <el-date-picker
                   v-model="form.unit_price[0][index-1]"
                   type="daterange"
@@ -93,7 +93,7 @@
           </el-row>
           <el-row v-for="index in payForLen" :key="index+111">
             <el-col :span="14">
-              <el-form-item label="付款方式">
+              <el-form-item label="付款方式" required>
                 <el-date-picker
                   v-model="form.pay_type[0][index-1]"
                   type="daterange"
@@ -134,14 +134,14 @@
           </el-row>
           <el-row v-if=" activeName == 'second'">
             <el-col :span="12">
-              <el-form-item label="已付金额">
+              <el-form-item label="已付金额" required>
                 <el-input v-model="form.has_pay"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row v-for="index in payTypeLen"  v-if="activeName == 'second'" :key="index+222">
             <el-col :span="12">
-              <el-form-item label="支付方式">
+              <el-form-item label="支付方式" required>
                 <el-select v-model="form.pay_method[0][index-1]" placeholder="请选择" clearable>
                   <el-option v-for="item in payTypeInfo" :label="item.dictionary_name" :key="item.id"
                              :value="item.id">{{item.dictionary_name}}
@@ -163,7 +163,7 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="是否收取其他费用" class="detailTitle">
+              <el-form-item label="是否收取其他费用" class="detailTitle" required>
                 <el-select v-model="form.has_extra" placeholder="请选择">
                   <el-option v-for="item in yesOrNo" :label="item.value" :key="item.id"
                              :value="item.id">{{item.value}}
@@ -172,7 +172,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="12" >
-              <el-form-item label="保修期">
+              <el-form-item label="保修期" required>
                 <el-input class="input" v-model="form.guarantee_month" style="width:50%;float:left;">
                   <template slot="append">
                     <div>月</div>
@@ -188,12 +188,12 @@
           </el-row>
           <el-row v-if="form.has_extra == 1">
             <el-col :span="12">
-              <el-form-item label="费用名称">
+              <el-form-item label="费用名称" required >
                 <el-input v-model="form.pay_use"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="价格">
+              <el-form-item label="价格" required>
                 <el-input v-model="form.array"></el-input>
               </el-form-item>
             </el-col>
@@ -207,14 +207,14 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="业务员态度" required="">
+              <el-form-item label="业务员态度" required>
                 <el-rate v-model="form.star"></el-rate>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="业务员专业度" class="detailTitle2">
+              <el-form-item label="业务员专业度" class="detailTitle2" required >
                 <el-input type="textarea" v-model="form.sale_remark"></el-input>
               </el-form-item>
             </el-col>
@@ -258,6 +258,7 @@
         organizationDialog: false,
         organizeType: '',
         addReturnVisitInfo:[],
+        validateFlag:true,
         form: {
           contract_create_time:"",  //创建时间 
           huifang:"",        //回访人
@@ -340,16 +341,18 @@
         payTypeLen:1,
       };
     },
+    mounted(){
+      this.getDictionary();
+    },
     watch: {
       addReturnvisitDialog(val) {
         this.addReturnvisitDialogVisible = val
       },
       addReturnvisitDialogVisible(val) {
         if (!val) {
-          this.initial();
           this.$emit('close');
         } else {
-          this.getDictionary();
+          
         }
       },
       ToActiveName(val) {
@@ -365,6 +368,7 @@
         this.form.address = val.address;
         this.form.contract_type = val.type;
         this.form.contract_id = val.contract_id;
+        this.initial();
         if(this.activeName == 'first'){
         this.$http.get(globalConfig.server + 'lease/collect/' + val.contract_id).then((res) => {
           if (res.data.code === '61010') {
@@ -398,12 +402,16 @@
       },
 
       confirmAdd() {
+        this.validateFlag = true;
+
         if(this.activeName == 'first'){
           this.form.module = 1;
         }
         else{
           this.form.module = 2;
         }
+        this.validate();
+        if(this.validateFlag == true){        
         this.$http.post(globalConfig.server + 'contract/feedback', this.form).then((res) => {
           if (res.data.code === '1212200') {
             this.$notify.success({
@@ -420,48 +428,122 @@
             });
           }
         })
+        }
+      },
+      validate(){
+        if((this.form.contract_month =="" || this.form.contract_day =="") && this.validateFlag == true){
+            this.validateFlag =false;
+            this.$notify.warning({
+              title: '警告',
+              message: "合同周期不能为空"
+            });          
+        }
+        if((this.form.originate =="" ) && this.validateFlag == true){
+            this.validateFlag =false;
+            this.$notify.warning({
+              title: '警告',
+              message: "来源不能为空"
+            });          
+        }
+        if(this.form.agency =="" && this.form.originate === 623  && this.validateFlag == true){
+            this.validateFlag =false;
+            this.$notify.warning({
+              title: '警告',
+              message: "中介名称不能为空"
+            });          
+        }
+        if(this.form.agency_price =="" && this.form.originate === 623  && this.validateFlag == true){
+            this.validateFlag =false;
+            this.$notify.warning({
+              title: '警告',
+              message: "中介费用不能为空"
+            });          
+        }
+        if((this.form.unit_price[0].length== 0 || this.form.unit_price[1].length ==0) && this.validateFlag == true){
+            this.validateFlag =false;
+            this.$notify.warning({
+              title: '警告',
+              message: "月单价不能为空"
+            });          
+        }
+        if((this.form.pay_type[0].length == 0 || this.form.pay_type[1].length == 0 || this.form.pay_type[2].length == 0 && this.form.module =='2') && this.validateFlag == true){
+            this.validateFlag =false;
+            this.$notify.warning({
+              title: '警告',
+              message: "付款方式不能为空"
+            });          
+        }
+        if( this.form.has_extra ==""  && this.validateFlag == true){
+            this.validateFlag =false;
+            this.$notify.warning({
+              title: '警告',
+              message: "其他费用不能为空"
+            });          
+        }
+        if((this.form.guarantee_month =="" || this.form.guarantee_day =="") && this.validateFlag == true){
+            this.validateFlag =false;
+            this.$notify.warning({
+              title: '警告',
+              message: "保修期不能为空"
+            });          
+        }
+        if( !this.form.star  && this.validateFlag == true){
+            this.validateFlag =false;
+            this.$notify.warning({
+              title: '警告',
+              message: "业务员态度不能为空"
+            });          
+        }
+        if( this.form.has_pay == "" && this.form.module =='2'  && this.validateFlag == true){
+            this.validateFlag =false;
+            this.$notify.warning({
+              title: '警告',
+              message: "已付金额不能为空"
+            });          
+        }
+        if((this.form.pay_method[0].length == 0 || this.form.pay_method[1].length == 0) && this.form.module =='2' && this.validateFlag == true){
+            this.validateFlag =false;
+            this.$notify.warning({
+              title: '警告',
+              message: "支付方式不能为空"
+            });          
+        }
       },
       initial() {
-        this.form = {
-          contract_create_time:"",  //创建时间 
-          huifang:"",        //回访人
-          address:"",        //房屋地址
-          contract_type:"",  //合同类型
-          contract_id:"",    //合同编号
-          agency:"",         //中介名称
-          agency_price:"",   //中介费用
-          audit:"",          //审核状态
-          originate:"",      //来源
-          contract_month:"", //合同周期_月
-          contract_day:"",   //合同周期_日
-          guarantee_month:"",//保修期_月
-          guarantee_day:"",  //保修期_日
-          sale_remark:"",    //业务员专业度
-          remark:"",         //备注
-          audited_fields:"", //审核状态
-          pay_use:"",        //支付名称
-          array:"",          //费用
-          has_extra:"",      //是否收取费用
-          unit_price:[
+          this.form.agency ="";        //中介名称
+          this.form.agency_price ="";   //中介费用
+          this.form.audit="",          //审核状态
+          this.form.originate="",      //来源
+          this.form.contract_month="", //合同周期_月
+          this.form.contract_day="",   //合同周期_日
+          this.form.guarantee_month="",//保修期_月
+          this.form.guarantee_day="",  //保修期_日
+          this.form.sale_remark="",    //业务员专业度
+          this.form.remark="",         //备注
+          this.form.audited_fields="", //审核状态
+          this.form.pay_use="",        //支付名称
+          this.form.array="",          //费用
+          this.form.has_extra="",      //是否收取费用
+          this.form.unit_price=[
             [],
             [],
           ],      //月单价
-          pay_type:[
+          this.form.pay_type=[
             [],
             [],
             [],
           ],       //付款方式
-          module:"",         //收租(1:收[默认],2:租)
-          amount:"",         //总额
-          has_pay:"",        //已支付的费用
-          pay_method:[
+          this.form.module="",         //收租(1:收[默认],2:租)
+          this.form.amount="",         //总额
+          this.form.has_pay="",        //已支付的费用
+          this.form.pay_method=[
             [],
             [],
           ],      //支付方式
-          star:null,           //星级
-          remark_clause:"",  //备注条款
-        };
-        contractInfo:[],
+          this.form.star=null,           //星级
+          this.form.remark_clause="",  //备注条款
+
+        this.contractInfo=[],
         this.follow_name = '';
       },
       closeOrganization() {

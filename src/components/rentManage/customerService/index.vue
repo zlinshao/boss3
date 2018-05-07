@@ -104,7 +104,7 @@
       </div>
       <div class="main">
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="收房维修记录" name="first">
+          <el-tab-pane label="收房回访记录" name="first">
             <el-table
               :data="collectTableData"
               :empty-text='collectStatus'
@@ -187,7 +187,7 @@
               </el-table-column>
             </el-table>
           </el-tab-pane>
-          <el-tab-pane label="租房维修记录" name="second">
+          <el-tab-pane label="租房回访记录" name="second">
             <el-table
               :data="rentTableData"
               :empty-text='rentStatus'
@@ -373,6 +373,14 @@ export default {
           if (res.data.code === "1212200") {
             this.collectTableData = res.data.data.data;
             this.totalNum = res.data.data.count;
+          }else if(res.data.code === "1212202"){
+            this.collectTableData = [];
+            this.totalNum = 0;
+            this.collectStatus = "暂无数据";
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
           } else {
             this.collectTableData = [];
             this.totalNum = 0;
@@ -394,6 +402,14 @@ export default {
           if (res.data.code === "1212200") {
             this.rentTableData = res.data.data.data;
             this.totalNum = res.data.data.count;
+          }else if(res.data.code === "1212202"){
+            this.rentTableData = [];
+            this.totalNum = 0;
+            this.rentStatus = "暂无数据";
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
           } else {
             this.rentTableData = [];
             this.totalNum = 0;
