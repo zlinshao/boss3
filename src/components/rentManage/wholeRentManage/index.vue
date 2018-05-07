@@ -1370,6 +1370,7 @@
 <style lang="scss" scoped="">
 
   #wholeRentContainer {
+    padding-bottom: 30px;
     .tool {
       border-bottom: 1px solid #eee;
       display: flex;
