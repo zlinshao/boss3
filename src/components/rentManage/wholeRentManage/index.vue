@@ -667,37 +667,36 @@
 </template>
 
 <script>
-  import RightMenu from '../../common/rightMenu.vue'    //右键
-  import Organization from '../../common/organization.vue'
-
-  import Instruction from './components/instruction.vue'            //使用说明
-  import BackUp from '../components/back-up.vue'                    //备份
-  import Advanced from '../components/advancedSearch.vue'           //高级搜索
-  import OwnerDelay from '../components/ownerDelay.vue'              //房东延期
-  import OwnerRenew from '../components/ownerRenew.vue'              //房东续约
-  import RentVacation from '../components/rentVacation.vue'          //租客续约
-  import IncreaseGoods from '../components/increaseGoods.vue' //物品增加
-  import DecreaseGoods from '../components/decreaseGoods.vue' //物品减少
-  import OwnerArrears from '../components/OwnerArrears.vue'   //房东欠款
-  import AddFollowUp from '../components/addFollowUp.vue'     //增加跟进记录
-  import CollectVacation from '../components/collectVacation.vue' //房东退房
-  import AddCollectRepair from '../components/addCollectRepair.vue' //添加房东维修
-  import AddRentRepair from '../components/addRentRepair.vue'//添加租客维修
-  import RentChangeRoom from '../components/rentChangeRoom.vue'   //租客换房
-  import Sublease from '../components/sublease.vue'     //转租
-  import RentRenew from '../components/rentRenew.vue'     //租客续约
-  import AddRentInfo from '../components/addRentInfo.vue' //登记租客
-  import EditRentInfo from '../components/editRentInfo.vue' //修改租客信息
-  import SendMessage from '../../common/sendMessage.vue'  //发送短信
-  import AddHouseResources from '../components/addHouseResources.vue' //登记房源
-  import EditHouseResources from '../components/editHouseResources.vue' //修改房源
+  import RightMenu from '../../common/rightMenu.vue'                                //右键
+  import Organization from '../../common/organization.vue'                          //选人组件
+  import Instruction from './components/instruction.vue'                            //使用说明
+  import BackUp from '../components/back-up.vue'                                    //备份
+  import Advanced from '../components/advancedSearch.vue'                           //高级搜索
+  import OwnerDelay from '../components/ownerDelay.vue'                             //房东延期
+  import OwnerRenew from '../components/ownerRenew.vue'                             //房东续约
+  import RentVacation from '../components/rentVacation.vue'                         //租客续约
+  import IncreaseGoods from '../components/increaseGoods.vue'                       //物品增加
+  import DecreaseGoods from '../components/decreaseGoods.vue'                       //物品减少
+  import OwnerArrears from '../components/OwnerArrears.vue'                         //房东欠款
+  import AddFollowUp from '../components/addFollowUp.vue'                           //增加跟进记录
+  import CollectVacation from '../components/collectVacation.vue'                   //房东退房
+  import AddCollectRepair from '../components/addCollectRepair.vue'                 //添加房东维修
+  import AddRentRepair from '../components/addRentRepair.vue'                       //添加租客维修
+  import RentChangeRoom from '../components/rentChangeRoom.vue'                     //租客换房
+  import Sublease from '../components/sublease.vue'                                 //转租
+  import RentRenew from '../components/rentRenew.vue'                               //租客续约
+  import AddRentInfo from '../components/addRentInfo.vue'                           //登记租客
+  import EditRentInfo from '../components/editRentInfo.vue'                         //修改租客信息
+  import SendMessage from '../../common/sendMessage.vue'                            //发送短信
+  import AddHouseResources from '../components/addHouseResources.vue'               //登记房源
+  import EditHouseResources from '../components/editHouseResources.vue'             //修改房源
   import Repayment from '../components/rentRepayment.vue'
   import ReturnVisit from '../components/returnVisit.vue'   //查看回访
-  import TopForm from '../components/topFormSet.vue'    //表头列表
+  import TopForm from '../components/topFormSet.vue'                                //表头列表
   import Setting from './components/setting.vue'
   import AddReturnvisit from "../../../components/rentManage/customerService/addReturnvisit.vue";   //添加回访
-  import AddCollectReimbursement from "../components/addCollectReimbursement.vue"; //添加房屋报销单
-  import AddRentReimbursement from "../components/addRentReimbursement.vue"; //添加租客报销单
+  import AddCollectReimbursement from "../components/addCollectReimbursement.vue";  //添加房屋报销单
+  import AddRentReimbursement from "../components/addRentReimbursement.vue";        //添加租客报销单
 
   //--------------------------tabs content-----------------------------------------------------------------//
   import GoodsChangeTab from '../tabComponents/goodsChange.vue'
@@ -908,7 +907,8 @@
     watch: {
       collectHouseId(val) {
         if (val) {
-          this.getRentData(val);
+          this.rentParams.page = 1;
+          this.getRentData();
         } else {
           this.rentingData = [];
           this.rentTotalNum = 0;
@@ -1073,8 +1073,8 @@
         window.open(href, '_blank', 'width=1920,height=1080');
       },
       //*********************************租房*******************************************************//
-      getRentData(id) {
-        this.rentParams.house_id = id;
+      getRentData() {
+        this.rentParams.house_id = this.collectHouseId;
         this.rentLoading = true;
         this.rentStatus = ' ';
         this.$http.get(globalConfig.server + 'lease/rent', {params: this.rentParams}).then((res) => {
@@ -1097,9 +1097,11 @@
       },
       rentSizeChange(val) {
         this.rentParams.limit = val;
+        this.getRentData();
       },
       rentPageChange(val) {
         this.rentParams.page = val;
+        this.getRentData();
       },
 
       //租客右键
@@ -1334,7 +1336,7 @@
         if (val === 'updateCollect') {
           this.getCollectData();
         } else if (val === 'updateRent') {
-          this.getRentData(this.collectHouseId);
+          this.getRentData();
         } else if (val === 'changeGoods') {
           this.tabStatusChange = 'GoodsChangeTab';
         } else if (val === 'visitRecord') {

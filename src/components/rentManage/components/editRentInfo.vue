@@ -13,61 +13,73 @@
                 <el-row>
                   <el-col :span="8">
                     <el-form-item label="小区名称">
-                      <div class="content">{{houseInfo.community_name}}</div>
+                      <div class="content">
+                        <span v-if="houseInfo.community">{{houseInfo.community.name}}</span>
+                      </div>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="小区地址">
-                      <div class="content">{{houseInfo.community_address}}</div>
+                      <div class="content">
+                        <span v-if="houseInfo.community">{{houseInfo.community.detailed_address}}</span>
+                      </div>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="小区别名">
-                      <div class="content">{{houseInfo.community_nickname}}</div>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span="8">
-                    <el-form-item label="门牌地址">
                       <div class="content">
-                        {{houseInfo.building}}-{{houseInfo.unit}}-{{houseInfo.doorplate}}
+                        <span v-if="houseInfo.community">{{houseInfo.community.nickname}}</span>
                       </div>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="房型">
-                      <div class="content" v-if="houseInfo.house_type">
-                        <span>{{houseInfo.house_type[0]}}</span>室
-                        <span>{{houseInfo.house_type[1]}}</span>厅
-                        <span>{{houseInfo.house_type[2]}}</span>卫
-                      </div>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="房产证号">
-                      <div class="content">{{houseInfo.property_number}}</div>
                     </el-form-item>
                   </el-col>
                 </el-row>
                 <el-row>
                   <el-col :span="8">
-                    <el-form-item label="建筑面积">
-                      <div class="content">{{houseInfo.area}}</div>
+                    <el-form-item label="门牌号">
+                      <div class="content">
+                    <span v-if="houseInfo.door_address">
+                      {{houseInfo.door_address}}
+                    </span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="面积">
+                      <div class="content">
+                    <span v-if="houseInfo.area">
+                      {{houseInfo.area}}
+                    </span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="朝向">
+                      <div class="content">
+                    <span v-if="houseInfo.direction">
+                      {{houseInfo.direction.name}}
+                    </span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="8">
+                    <el-form-item label="房屋类型">
+                      <div class="content">
+                        <span v-if="houseInfo.property_type">{{houseInfo.property_type.name}}</span>
+                      </div>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
                     <el-form-item label="楼层">
-                      <div class="content">{{houseInfo.floor}}</div>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="8">
-                    <el-form-item label="楼层数">
-                      <div class="content">{{houseInfo.floors}}</div>
+                      <div class="content">
+                    <span v-if="houseInfo.floor">
+                      {{houseInfo.floor.this}}/{{houseInfo.floor.all}}
+                    </span>
+                      </div>
                     </el-form-item>
                   </el-col>
                 </el-row>
-
               </el-form>
             </div>
           </el-tab-pane>
@@ -686,12 +698,13 @@
           this.isDictionary = true
         });
       },
+
       getHouseInfo(){
         this.tableLoading = true;
-        this.$http.get(globalConfig.server + 'lease/collect/' + this.collectContractId).then((res) => {
+        this.$http.get(globalConfig.server + 'house/album/' + this.collectHouseId).then((res) => {
           this.tableLoading = false;
-          if (res.data.code === '61010') {
-            this.houseInfo = res.data.data;
+          if (res.data.code === '30070') {
+            this.houseInfo = res.data.data.detail;
           }
         })
       },
