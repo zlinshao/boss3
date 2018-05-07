@@ -723,7 +723,7 @@
         this.dictionary(642).then((res) => {  //完成情况
           this.finishedStatusCategory = res.data;
         });
-        this.dictionary(643,1).then((res) => {  //认责人
+        this.dictionary(643, 1).then((res) => {  //认责人
           this.responsiblePersonCategory = res.data;
         });
       },
@@ -780,29 +780,42 @@
         });
       },
       confirmAdd(val) {
-        let header = '';
-        if (this.reimbursementId) {
-          //编辑
-          header = this.$http.put(globalConfig.server + 'customer/reimbursement_result/' + this.reimbursementId, this.form);
-        } else {
-          //新增
-          header = this.$http.post(globalConfig.server + 'customer/reimbursement_result', this.form);
-        }
         this.form.status = val;
-        header.then((res) => {
-          if (res.data.code === '40010') {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
-            this.reimResultDialogVisible = false;
-          } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            });
-          }
-        })
+        if (this.type === 'edit') {
+          //编辑
+          this.$http.put(globalConfig.server + 'customer/reimbursement_result/' + this.reimbursementId, this.form).then((res) => {
+            if (res.data.code === '40030') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.reimResultDialogVisible = false;
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        } else if (this.type === 'add') {
+          //新增
+          this.$http.post(globalConfig.server + 'customer/reimbursement_result', this.form).then((res) => {
+            if (res.data.code === '40010') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.reimResultDialogVisible = false;
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }
+
+
       },
       initial() {
         this.form = {

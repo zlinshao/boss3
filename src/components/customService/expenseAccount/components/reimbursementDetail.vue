@@ -151,7 +151,7 @@
                   <el-col :span="8">
                     <el-form-item label="认责人">
                       <div class="content">
-                        <span v-if="item.accuser">{{item.accuser}}</span>
+                        <span v-if="item.accusers">{{item.accusers}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -159,7 +159,7 @@
                   <el-col :span="8">
                     <el-form-item label="认责人姓名">
                       <div class="content">
-                        <span v-if="item.accuser_name">{{item.accuser_name}}</span>
+                        <span v-if="item.accuser_id_name">{{item.accuser_id_name}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -219,7 +219,8 @@
                   <el-col :span="12">
                     <el-form-item label="电费">
                       <div class="content">
-                        <span v-if="reimDetail.results.electricity_fee && reimDetail.results.electricity_fee.time.length>0">{{reimDetail.results.electricity_fee.time[0]}}——{{reimDetail.results.electricity_fee.time[0]}}</span>
+                        <span
+                          v-if="reimDetail.results.electricity_fee && reimDetail.results.electricity_fee.time.length>0">{{reimDetail.results.electricity_fee.time[0]}}——{{reimDetail.results.electricity_fee.time[0]}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -246,7 +247,7 @@
                   <el-col :span="8">
                     <el-form-item label="认责人">
                       <div class="content">
-                        <span v-if="item.accuser">{{item.accuser}}</span>
+                        <span v-if="item.accusers">{{item.accusers}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -254,7 +255,7 @@
                   <el-col :span="8">
                     <el-form-item label="认责人姓名">
                       <div class="content">
-                        <span v-if="item.accuser_name">{{item.accuser_name}}</span>
+                        <span v-if="item.accuser_id_name">{{item.accuser_id_name}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -389,7 +390,7 @@
                   <el-col :span="8">
                     <el-form-item label="认责人">
                       <div class="content">
-                        <span v-if="item.accuser">{{item.accuser}}</span>
+                        <span v-if="item.accusers">{{item.accusers}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -397,7 +398,7 @@
                   <el-col :span="8">
                     <el-form-item label="认责人姓名">
                       <div class="content">
-                        <span v-if="item.accuser_name">{{item.accuser_name}}</span>
+                        <span v-if="item.accuser_id_name">{{item.accuser_id_name}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -457,7 +458,8 @@
                   <el-col :span="12">
                     <el-form-item label="物管费">
                       <div class="content">
-                        <span v-if="reimDetail.results.property_management_fee && reimDetail.results.property_management_fee.time.length>0">{{reimDetail.results.property_management_fee.time[0]}}——{{reimDetail.results.property_management_fee.time[0]}}</span>
+                        <span
+                          v-if="reimDetail.results.property_management_fee && reimDetail.results.property_management_fee.time.length>0">{{reimDetail.results.property_management_fee.time[0]}}——{{reimDetail.results.property_management_fee.time[0]}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -465,7 +467,8 @@
                   <el-col :span="12">
                     <el-form-item label="总金额">
                       <div class="content">
-                        <span v-if="reimDetail.results.property_management_fee && reimDetail.results.property_management_fee.total">{{reimDetail.results.property_management_fee.total}}</span>
+                        <span
+                          v-if="reimDetail.results.property_management_fee && reimDetail.results.property_management_fee.total">{{reimDetail.results.property_management_fee.total}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -484,7 +487,7 @@
                   <el-col :span="8">
                     <el-form-item label="认责人">
                       <div class="content">
-                        <span v-if="item.accuser">{{item.accuser}}</span>
+                        <span v-if="item.accusers">{{item.accusers}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -492,7 +495,7 @@
                   <el-col :span="8">
                     <el-form-item label="认责人姓名">
                       <div class="content">
-                        <span v-if="item.accuser_name">{{item.accuser_name}}</span>
+                        <span v-if="item.accuser_id_name">{{item.accuser_id_name}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -555,6 +558,27 @@
                   </el-col>
                 </el-row>
               </el-form>
+              <el-form size="small" label-width="100px">
+                <el-row>
+                  <el-col :span="24" v-if="reimDetail.results.album">
+                    <el-form-item label="截图">
+                      <img v-if="reimDetail.album.image_pic!=[]" data-magnify
+                           v-for="(val,key) in reimDetail.album.image_pic" :data-src="val.uri" :src="val.uri"
+                           alt="">
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col :span="24">
+                    <el-form-item label="备注">
+                      <div class="content">
+                        <span v-if="reimDetail.results && reimDetail.results.remark">{{reimDetail.results.remark}}</span>
+                        <span v-else>暂无</span>
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-form>
             </div>
             <div class="content" v-else="" style="text-align: center;line-height: 30px">
               暂无数据
@@ -586,6 +610,7 @@
       reimbursementDetailDialogVisible(val) {
         if (!val) {
           this.$emit('close');
+          this.reimDetail = {};
         } else {
           this.getDetail();
         }
