@@ -122,11 +122,11 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop="count"
+              prop="examinees_count"
               label="总考生(人数)">
               <template slot-scope="scope">
-                <span v-if="scope.row.count">{{scope.row.count}}</span>
-                <span v-if="!scope.row.count">暂无</span>
+                <span v-if="scope.row.examinees_count">{{scope.row.examinees_count}}</span>
+                <span v-if="!scope.row.examinees_count">暂无</span>
               </template>
             </el-table-column>
             <el-table-column

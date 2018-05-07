@@ -5,11 +5,10 @@
         <el-row style="width:100%;margin-top:16px;">
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="text-align:left;color:#464748;">
-              <div class="qdiv" style="margin-top:20px;">试卷名称：<span style="color:#6a8dfb">{{paperData.name}}</span>
+              <div class="qdiv" style="margin-top:28px;">试卷名称：<span style="color:#6a8dfb">{{paperData.name}}</span>
               </div>
               <div class="qdiv">试卷类型：<span style="color:#6a8dfb">{{paperData.paper && paperData.paper.category}}</span>
               </div>
-              <div class="qdiv">试卷考法：<span style="color:#6a8dfb">按总时长计时，按试卷顺序作答</span></div>
             </div>
           </el-col>
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
@@ -38,7 +37,7 @@
       <div class="main">
         <div class="questionDiv" v-for="(v, k) in questionData" v-if="k==153 && questionData[k].length>0">
           <div v-for="(item, key) in questionData[k]">
-            {{ key+1}}.<span style="color:#6a8dfb; margin-left:20px;">单选题</span>
+            {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">单选题</span>
             <p style="margin-left:30px;line-height:30px;width:96%" v-html="item.stem"></p>
             <el-form>
               <el-form-item>
@@ -54,21 +53,23 @@
         </div>
         <div class="questionDiv" v-for="(v,k) in questionData" v-if="(k==154 || k==155) && questionData[k].length>0">
           <div v-for="(item, key) in questionData[k]">
-            <span v-if="k==154">{{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">多选题</span></span>
-            <span v-if="k==155">{{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">不定向选择题</span></span>
+            <span v-if="k==154">{{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">多选题</span></span>
+            <span v-if="k==155">{{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">不定向选择题</span></span>
             <p style="margin-left:30px;line-height:30px;width:96%" v-html="item.stem"></p>
             <el-form>
               <el-form-item>
                 <el-checkbox-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;" v-if="k==154">
                   <el-col :span="6" :key="index" v-for="(val,index) in item.choice"
                           style="line-height:24px;height: 24px;">
-                    <el-checkbox :label="index" style="white-space: initial;">{{item.choice[index]}}</el-checkbox>
+                    <el-checkbox :label="index" style="white-space: initial;">{{index}}:{{item.choice[index]}}
+                    </el-checkbox>
                   </el-col>
                 </el-checkbox-group>
-                <el-checkbox-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;"  v-if="k==155">
+                <el-checkbox-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;" v-if="k==155">
                   <el-col :span="6" :key="index" v-for="(val,index) in item.choice"
                           style="line-height:24px;height: 24px;">
-                    <el-checkbox :label="index" style="white-space: initial;">{{item.choice[index]}}</el-checkbox>
+                    <el-checkbox :label="index" style="white-space: initial;">{{index}}:{{item.choice[index]}}
+                    </el-checkbox>
                   </el-col>
                 </el-checkbox-group>
               </el-form-item>
@@ -77,14 +78,14 @@
         </div>
         <div class="questionDiv" v-for="(v,k) in questionData" v-if="k==156 && questionData[k].length>0">
           <div v-for="(item, key) in questionData[k]">
-            {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">判断题</span>
+            {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">判断题</span>
             <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
             <el-form>
               <el-form-item>
                 <el-radio-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;">
                   <el-col :span="12" :key="index" v-for="(val,index) in item.choice"
                           style="line-height:24px;height: 24px;">
-                    <el-radio :label="index">{{val}}</el-radio>
+                    <el-radio :label="index">{{index}}:{{val}}</el-radio>
                   </el-col>
                 </el-radio-group>
               </el-form-item>
@@ -93,12 +94,13 @@
         </div>
         <div class="questionDiv" v-for="(v,k) in questionData" v-if="k==157 && questionData[k].length>0">
           <div v-for="(item, key) in questionData[k]">
-            {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">填空题</span>
+            {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">填空题</span>
             <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
             <el-form>
               <el-form-item>
                 <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak">
-                  <el-input style="width:95.5%;margin-left:2%;" size="small" v-model="answerData[item.id][ak]" placeholder="请填写答案"></el-input>
+                  <el-input style="width:95.5%;margin-left:2%;" size="small" v-model="answerData[item.id][ak]"
+                            placeholder="请填写答案"></el-input>
                 </el-col>
               </el-form-item>
             </el-form>
@@ -106,11 +108,11 @@
         </div>
         <div class="questionDiv" v-for="(v,k) in questionData" v-if="k==158 && questionData[k].length>0">
           <div v-for="(item, key) in questionData[k]">
-            {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">简单题</span>
+            {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">简单题</span>
             <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
             <el-form>
               <el-form-item>
-                <el-input  style="width:95.5%;margin-left:2%;" v-model="answerData[item.id]"
+                <el-input style="width:95.5%;margin-left:2%;" v-model="answerData[item.id]"
                           type="textarea" placeholder="请填写答案"></el-input>
               </el-form-item>
             </el-form>
@@ -125,7 +127,8 @@
       </div>
     </div>
     <div id="pointDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="pointDialog" title="本次试题得分" style="margin-top:16vh"
+      <el-dialog :close-on-click-modal="false" :show-close="false" :visible.sync="pointDialog" title="本次试题得分"
+                 style="margin-top:16vh"
                  width="50%">
         <el-row :gutter="30">
           <el-col :span="24">
@@ -135,7 +138,7 @@
                 <span class="importright">
               恭喜您！<br/>
               您的本次成绩是<br/><br/>
-              <span>80</span>分
+              <span>{{pointScore}}</span>分
               </span>
               </div>
             </div>
@@ -144,21 +147,25 @@
         <div class="importbo">
           <el-button
             style="width:130px; height:32px; line-height:0px;margin-top:10px;background-color:rgb(106, 141, 251); border-color:rgb(106, 141, 251)"
-            type="primary">查看试卷
+            type="primary" @click="seeTestPaper">查看试卷
           </el-button>
         </div>
       </el-dialog>
     </div>
     <div id="submitDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="submitDialog" style="margin-top:20vh" title="本次试题提交"
+      <el-dialog :close-on-click-modal="false" :show-close="false" :visible.sync="submitDialog" style="margin-top:20vh"
+                 title="本次试题提交"
                  width="35%">
-        <el-row :gutter="30" style="margin-bottom:38px;">
+        <el-row :gutter="30" style="margin-bottom:15px;">
           <el-col :span="24">
             <div class="submit_points">
               <span>提交成功！</span><br/>主考官将尽快批示，您的成绩可在“乐伽大学－我的考试”中查看，我们也会以信息的方式通知您！
             </div>
           </el-col>
         </el-row>
+        <div style="text-align: center;">
+          <el-button class="confirm_btn" type="primary" @click="closeAnswer">确定</el-button>
+        </div>
       </el-dialog>
     </div>
 
@@ -176,64 +183,92 @@
       return {
         isClear: false,
         pointDialog: false,
+        pointScore: '',
+        resultId: '',
         submitDialog: false,
         faleDialog: false,
         paperData: {}, //考试的内容
-        paperId: '',  //当前答题的考试id
+        examId: '',  //当前答题的考试id
         questionData: {},  //题目的内容
         answerData: {},  //答题的内容
         submitDisabled: false,
+        confirmArrival: [],
+        answers: {},
       };
     },
     activated() {
       this.getQueryData();
       this.getPaperData();
+      this.confirmArrival = localStorage.getItem('confirmArrival');  //check_in签到状态考试id数组
+      this.answers = JSON.stringify(localStorage.getItem('answers'));
+      // if (this.examId) {
+      //   if (this.confirmArrival && this.confirmArrival.length > 0 && this.confirmArrival.indexOf(this.examId) > -1) {
+      //     // this.$set(this.answerData, localStorage.getItem('answers'));
+      //   }
+      // }
+      this.clockSubmit();
+      setTimeout(() => {
+        this.clockSubmit();
+      }, 1000 * 60);
     },
-    watch: {},
+    watch: {
+      'answerData': {
+        deep: true,
+        handler(val, oldVal) {
+          localStorage.setItem('answers', JSON.stringify(val));
+          console.log(JSON.stringify(localStorage.getItem('answers')));
+        }
+      }
+    },
     methods: {
-      combinaData(){
-        if(this.questionData[153] && this.questionData[153].length>0){
-          this.questionData[153].forEach((item)=>{
+      combinaData() {
+        if (this.questionData[153] && this.questionData[153].length > 0) {
+          this.questionData[153].forEach((item) => {
             this.$set(this.answerData, item.id, '');
           });
         }
-        if(this.questionData[154] && this.questionData[154].length>0){
-          this.questionData[154].forEach((item)=>{
+        if (this.questionData[154] && this.questionData[154].length > 0) {
+          this.questionData[154].forEach((item) => {
+            // if (this.answers && this.answers[item.id]) {
+            //   alert(this.answers);
+            //   this.$set(this.answerData, item.id, this.answers[item.id]);
+            // } else {
+            this.$set(this.answerData, item.id, []);
+            // }
+          });
+        }
+        if (this.questionData[155] && this.questionData[155].length > 0) {
+          this.questionData[155].forEach((item) => {
             this.$set(this.answerData, item.id, []);
           });
         }
-        if(this.questionData[155] && this.questionData[155].length>0){
-          this.questionData[155].forEach((item)=>{
-            this.$set(this.answerData, item.id, []);
-          });
-        }
-        if(this.questionData[156] && this.questionData[156].length>0){
-          this.questionData[156].forEach((item)=>{
+        if (this.questionData[156] && this.questionData[156].length > 0) {
+          this.questionData[156].forEach((item) => {
             this.$set(this.answerData, item.id, '');
           });
         }
-        if(this.questionData[157] && this.questionData[157].length>0){
-          this.questionData[157].forEach((item)=>{
+        if (this.questionData[157] && this.questionData[157].length > 0) {
+          this.questionData[157].forEach((item) => {
             this.$set(this.answerData, item.id, []);
           });
         }
-        if(this.questionData[158] && this.questionData[158].length>0){
-          this.questionData[158].forEach((item)=>{
+        if (this.questionData[158] && this.questionData[158].length > 0) {
+          this.questionData[158].forEach((item) => {
             this.$set(this.answerData, item.id, '');
           });
         }
       },
       getQueryData() {
         if (!this.$route.query.id) {
-          this.paperId = this.$store.state.onlineExam.answer_exam_id;
+          this.examId = this.$store.state.onlineExam.answer_exam_id;
           this.$router.push({path: '/answerExam', query: {id: this.$store.state.onlineExam.answer_exam_id}});
         } else {
           this.$store.dispatch('answerExamId', this.$route.query.id);
-          this.paperId = this.$route.query.id;
+          this.examId = this.$route.query.id;
         }
       },
       getPaperData() {
-        this.$http.get(globalConfig.server + 'exam/' + this.paperId).then((res) => {
+        this.$http.get(globalConfig.server + 'exam/' + this.examId).then((res) => {
           if (res.data.code === '30000') {
             this.paperData = res.data.data;
             this.questionData = res.data.data.question_set;
@@ -250,31 +285,74 @@
         });
       },
       onSubmit() {
-        this.$http.post(globalConfig.server + 'exam/result', {exam_id: this.paperId, answer: this.answerData }).then((res)=>{
-          if(res.data.code === '36010'){
+        this.$http.post(globalConfig.server + 'exam/result', {
+          exam_id: this.examId,
+          answer: this.answerData
+        }).then((res) => {
+          if (res.data.code === '36010') {
             this.$notify.success({
               title: '成功',
               message: res.data.msg
             });
-            if(this.questionData[158] && this.questionData[158].length>0){
+            this.pointScore = res.data.data.score;
+            this.resultId = res.data.data.id;
+            if (this.questionData[158] && this.questionData[158].length > 0) {
               this.submitDialog = true;
-            }else{
+            } else {
               this.pointDialog = true;
             }
             this.submitDisabled = true;
-          }else{
+          } else {
             this.$notify.warning({
               title: '警告',
               message: res.data.msg
             });
           }
         });
-      }
+      },
+      closeAnswer() {
+        this.submitDialog = false;
+        let view = {};
+        view.name = ' 考生答题 ';
+        view.path = '/answerExam';
+        this.$store.dispatch('delVisitedViews', view);
+        this.$router.push({path: '/LineCollege'});
+      },
+      //查看试卷
+      seeTestPaper() {
+        this.pointDialog = false;
+        let view = {};
+        view.name = ' 考生答题 ';
+        view.path = '/answerExam';
+        this.$store.dispatch('delVisitedViews', view);
+        this.$router.push({path: '/lookExam', query: {result_id: this.resultId, exam_id: this.examId}});
+      },
+      //计时器轮询check_in提交
+      clockSubmit() {
+        if (this.examId) {
+          this.$http.get(globalConfig.server + 'exam/poll/' + this.examId).then((res) => {
+            if(res.data.code === '30000'){
+              this.onSubmit();
+              // alert('强制提交。。。')
+            }
+          });
+        }
+      },
     }
   };
 </script>
 
 <style lang="scss" scoped>
+  .confirm_btn {
+    width: 100px;
+    height: 35px;
+    line-height: 0px;
+    text-align: center;
+    margin-top: 10px;
+    background-color: #fb4699;
+    border-color: #fb4699;
+  }
+
   #answerExam {
     position: relative;
     .tool {
@@ -294,8 +372,8 @@
         border-radius: 5px;
         .qdiv {
           font-size: 14px;
-          height: 30px;
-          line-height: 30px;
+          height: 35px;
+          line-height: 35px;
           margin-left: 20px;
           overflow: hidden;
         }
@@ -389,6 +467,7 @@
       }
     }
   }
+
   .el-button--primary.is-disabled,
   .el-button--primary.is-disabled:active,
   .el-button--primary.is-disabled:focus,
