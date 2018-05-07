@@ -192,15 +192,15 @@
           this.$http.get(this.urls + 'setting/dictionary/show/' + val.id).then((res) => {
             if (res.data.code === '30050') {
               if (s === 'dict') {
-                this.dictList(val.id);
+                this.dictTitle();
               } else {
                 this.initExpand(2);
-                if(res.data.msg === '下架成功'){
+                if (res.data.msg === '下架成功') {
                   this.dynamicTags = [];
                   this.dynamicTagsStatus = true;
                 }
-                if(res.data.msg === '上架成功'){
-                  this.dictList(val.id);
+                if (res.data.msg === '上架成功') {
+                  this.dictTitle();
                   this.dynamicTagsStatus = false;
                 }
               }

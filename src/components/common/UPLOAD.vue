@@ -6,11 +6,11 @@
           <div style="width: 120px;  height: 120px; border-radius:6px;background: #f0f0f0">
             <img :src="val" alt="">
           </div>
-          <div class="remove el-icon-circle-close" @click="deleteImage(key)"  v-if="!onlyShow"></div>
+          <div class="remove el-icon-circle-close" @click="deleteImage(key)" v-if="!onlyShow"></div>
         </div>
       </div>
       <div :id="'pickfiles'+ID" class="pickfiles">
-        <div class="upButton" :id="ID" @click.stop="getTokenMessage">
+        <div class="upButton" :id="ID" @click.stop="getToken">
           <span class="el-icon-plus"></span>
         </div>
       </div>
@@ -21,31 +21,25 @@
 
 <script>
   import fileImage from '../../assets/images/file.png'
+
   export default {
     name: 'hello',
-    props: ['ID','editImage','isClear','onlyShow'],
-    data () {
+    props: ['ID', 'editImage', 'isClear', 'onlyShow'],
+    data() {
       return {
         imgArray: [],
         imgId: [],
         isUploading: false,
         activeIndex: null,
         uploader: null,
-        editImg:{},
-        isUpId:'',
+        editImg: {},
+        isUpId: '',
         token: '',
-        isStatus: true,
       }
     },
-
-    activated() {
-      this.isStatus = true;
-    },
-
-    mounted(){
-      this.isStatus = true;
+    mounted() {
       let _this = this;
-      $(document).on('click', '#pickfiles'+this.ID+' '+'.pic_delete', function () {
+      $(document).on('click', '#pickfiles' + this.ID + ' ' + '.pic_delete', function () {
         let id = $(this).attr("data-val");
         let toremove = '';
         for (let i in _this.uploader.files) {
@@ -58,8 +52,10 @@
         for (let i = 0; i < _this.imgArray.length; i++) {
           if (_this.imgArray[i].name.indexOf(id) > -1) {
             _this.imgId.forEach((item) => {
-              if(_this.imgArray[i].id === item){
-                _this.imgId = _this.imgId.filter((x) =>{return x!==item})
+              if (_this.imgArray[i].id === item) {
+                _this.imgId = _this.imgId.filter((x) => {
+                  return x !== item
+                })
               }
             });
             _this.imgArray.splice(i, 1);
@@ -67,23 +63,20 @@
         }
         _this.$emit('getImg', [_this.ID, _this.imgId, _this.isUploading]);
       });
-
       this.getTokenMessage();
-
     },
-
     watch: {
       editImage: {
         deep: true,
-        handler(val, old){
+        handler(val, old) {
           this.editImg = this.editImage;
           this.imgId = [];
-          for(let key in val){
+          for (let key in val) {
             this.imgId.push(key)
           }
         }
       },
-      isClear(val){
+      isClear(val) {
         this.imgId = [];
         this.imgArray = [];
         this.editImg = [];
@@ -91,37 +84,39 @@
         this.uploader.splice(0, this.uploader.files.length);
       }
     },
-
     methods: {
-      mouseOver(index){
+      mouseOver(index) {
         this.activeIndex = index;
       },
-      mouseOut(){
+      mouseOut() {
         this.activeIndex = null;
       },
-      deleteImage(key){
-        this.imgId = this.imgId.filter((x) => {return x !== key});
+      deleteImage(key) {
+        this.imgId = this.imgId.filter((x) => {
+          return x !== key
+        });
         this.$emit('getImg', [this.ID, this.imgId, this.isUploading]);
         let imgObject = {};
-        for(let img in this.editImg){
-          if(img !== key){
+        for (let img in this.editImg) {
+          if (img !== key) {
             imgObject[img] = this.editImg[img];
           }
         }
         this.editImg = {};
         this.editImg = imgObject;
       },
+      getToken() {
+        this.$http.get(globalConfig.server_user + 'files').then((res) => {
+          this.token = res.data.data;
+        })
+      },
       getTokenMessage() {
         this.$http.get(globalConfig.server_user + 'files').then((res) => {
           this.token = res.data.data;
-          if (this.isStatus) {
-            this.uploaderReady();
-          }
+          this.uploaderReady();
         })
       },
-
-      uploaderReady(token) {
-        this.isStatus = false;
+      uploaderReady() {
         let _this = this;
         _this.uploader = Qiniu.uploader({
           runtimes: 'html5,flash,html4',      // 上传模式，依次退化
@@ -195,7 +190,7 @@
 
                 if (file.percent < 100) {
                   document.getElementById(file.id).getElementsByTagName('p')[0].innerHTML = `
-                  <div role="progressbar" aria-valuenow="10" aria-valuemin="${file.percent}" aria-valuemax="100" class="el-progress el-progress--circle"><div class="el-progress-circle" style="height: 80px; width: 80px;background: #fff;opacity:.7;border-radius: 50%;"><svg viewBox="0 0 100 100"><path d="M 50 50 m 0 -47 a 47 47 0 1 1 0 94 a 47 47 0 1 1 0 -94" stroke="#e5e9f2" stroke-width="4.8" fill="none" class="el-progress-circle__track"></path><path d="M 50 50 m 0 -47 a 47 47 0 1 1 0 94 a 47 47 0 1 1 0 -94" stroke-linecap="round" stroke="#20a0ff" stroke-width="4.8" fill="none" class="el-progress-circle__path" style="stroke-dasharray: 299.08px, 299.08px; stroke-dashoffset: ${299.08 - (299.08/100)*file.percent}px; transition: stroke-dashoffset 0.6s ease 0s, stroke 0.6s ease;"></path></svg></div><div class="el-progress__text" style="font-size: 16px;color: #409EFF">${file.percent}%</div></div>
+                  <div role="progressbar" aria-valuenow="10" aria-valuemin="${file.percent}" aria-valuemax="100" class="el-progress el-progress--circle"><div class="el-progress-circle" style="height: 80px; width: 80px;background: #fff;opacity:.7;border-radius: 50%;"><svg viewBox="0 0 100 100"><path d="M 50 50 m 0 -47 a 47 47 0 1 1 0 94 a 47 47 0 1 1 0 -94" stroke="#e5e9f2" stroke-width="4.8" fill="none" class="el-progress-circle__track"></path><path d="M 50 50 m 0 -47 a 47 47 0 1 1 0 94 a 47 47 0 1 1 0 -94" stroke-linecap="round" stroke="#20a0ff" stroke-width="4.8" fill="none" class="el-progress-circle__path" style="stroke-dasharray: 299.08px, 299.08px; stroke-dashoffset: ${299.08 - (299.08 / 100) * file.percent}px; transition: stroke-dashoffset 0.6s ease 0s, stroke 0.6s ease;"></path></svg></div><div class="el-progress__text" style="font-size: 16px;color: #409EFF">${file.percent}%</div></div>
                   `;
                 } else {
                   document.getElementById(file.id).getElementsByTagName('p')[0].innerHTML = '<span class="el-icon-success"></span>';
@@ -213,9 +208,9 @@
               _this.$http.post(globalConfig.server_user + 'files', {
                 url: sourceLink,
                 name: url.key,
-                raw_name : file.name,
+                raw_name: file.name,
                 type: file.type,
-                size:file.size
+                size: file.size
               }).then((res) => {
                 if (res.data.status === "success") {
                   _this.imgId.push(res.data.data.id);
@@ -228,7 +223,7 @@
                 }
               })
             },
-            'FilesRemoved':function (uploader,files) {
+            'FilesRemoved': function (uploader, files) {
 
             },
 
@@ -239,8 +234,8 @@
               //队列文件处理完毕后，处理相关的事情
               _this.isUploading = false;
               _this.$notify.success({
-                title:'成功',
-                message:'文件已全部上传成功！'
+                title: '成功',
+                message: '文件已全部上传成功！'
               })
             },
             'Key': function (up, file) {
@@ -278,14 +273,14 @@
     display: flex;
     display: -webkit-flex; /* Safari */
     flex-wrap: wrap;
-    .editImg{
+    .editImg {
       display: flex;
       display: -webkit-flex; /* Safari */
       flex-wrap: wrap;
       > div {
         margin-right: 15px;
         margin-top: 15px;
-        &:first-child{
+        &:first-child {
           margin-left: 0;
         }
       }
@@ -315,7 +310,7 @@
       > div {
         margin-right: 15px;
         margin-top: 15px;
-        &:first-child{
+        &:first-child {
           margin-left: 0;
         }
       }
@@ -368,12 +363,11 @@
       height: 120px;
       border-radius: 6px;
     }
-    .el-icon-success{
+    .el-icon-success {
       background: #37ff32;
       border-radius: 50%;
     }
   }
-
 
 
 </style>

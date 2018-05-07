@@ -87,27 +87,27 @@
                 </el-row>
               </el-col>
               <el-col :span="12" v-if="activeName == 'first'">
-              <el-row>
-                <el-col :span="8">
-                  <div class="el_col_label">合同结束时间</div>
-                </el-col>
-                <el-col :span="16" class="el_col_option">
-                  <el-form-item>
-                    <el-date-picker
-                      v-model="params.lord_end_time"
-                      type="daterange"
-                      align="right"
-                      unlink-panels
-                      range-separator="至"
-                      start-placeholder="开始日期"
-                      end-placeholder="结束日期"
-                      value-format="yyyy-MM-dd"
-                      :picker-options="pickerOptions">
-                    </el-date-picker>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-col>
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">合同结束时间</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-date-picker
+                        v-model="params.lord_end_time"
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        value-format="yyyy-MM-dd"
+                        :picker-options="pickerOptions">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
               <el-col :span="12" v-if="activeName == 'second' ">
                 <el-row>
                   <el-col :span="8">
@@ -209,6 +209,38 @@
                   </el-col>
                 </el-row>
               </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">审核状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="params.doc_status" clearable placeholder="请选择">
+                        <el-option v-for="(key,index) in doc_sta" :label="key.title" :value="key.value"
+                                   :key="index"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">回访状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="params.visit_status" clearable placeholder="请选择">
+                        <el-option v-for="(key,index) in visit_sta" :label="key.title" :value="key.value"
+                                   :key="index"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
             </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="highSearch()">搜索</el-button>
@@ -261,12 +293,12 @@
                   </el-table-column>
 
                   <!--<el-table-column-->
-                    <!--prop="bulletin_time"-->
-                    <!--label="上传时间">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.bulletin_time">{{scope.row.bulletin_time}}</span>-->
-                      <!--<span v-if="!scope.row.bulletin_time">暂无</span>-->
-                    <!--</template>-->
+                  <!--prop="bulletin_time"-->
+                  <!--label="上传时间">-->
+                  <!--<template slot-scope="scope">-->
+                  <!--<span v-if="scope.row.bulletin_time">{{scope.row.bulletin_time}}</span>-->
+                  <!--<span v-if="!scope.row.bulletin_time">暂无</span>-->
+                  <!--</template>-->
                   <!--</el-table-column>-->
                   <el-table-column
                     prop="customer_name"
@@ -323,12 +355,12 @@
                     </template>
                   </el-table-column>
                   <!--<el-table-column-->
-                    <!--prop="return_visit"-->
-                    <!--label="回访情况">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.return_visit">{{scope.row.return_visit}}</span>-->
-                      <!--<span v-if="!scope.row.return_visit">暂无</span>-->
-                    <!--</template>-->
+                  <!--prop="return_visit"-->
+                  <!--label="回访情况">-->
+                  <!--<template slot-scope="scope">-->
+                  <!--<span v-if="scope.row.return_visit">{{scope.row.return_visit}}</span>-->
+                  <!--<span v-if="!scope.row.return_visit">暂无</span>-->
+                  <!--</template>-->
                   <!--</el-table-column>-->
                   <el-table-column
                     prop="staff_name"
@@ -340,12 +372,12 @@
                     </template>
                   </el-table-column>
                   <!--<el-table-column-->
-                    <!--prop="leader_name"-->
-                    <!--label="负责人">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>-->
-                      <!--<span v-if="!scope.row.leader_name">暂无</span>-->
-                    <!--</template>-->
+                  <!--prop="leader_name"-->
+                  <!--label="负责人">-->
+                  <!--<template slot-scope="scope">-->
+                  <!--<span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>-->
+                  <!--<span v-if="!scope.row.leader_name">暂无</span>-->
+                  <!--</template>-->
                   <!--</el-table-column>-->
                   <el-table-column
                     prop="department_name"
@@ -358,7 +390,8 @@
                   <el-table-column
                     label="回访状态">
                     <template slot-scope="scope">
-                      <span v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
+                      <span
+                        v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
                       <span v-else="">/</span>
                     </template>
                   </el-table-column>
@@ -416,12 +449,12 @@
                   </el-table-column>
 
                   <!--<el-table-column-->
-                    <!--prop="bulletin_time"-->
-                    <!--label="上传时间">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.bulletin_time">{{scope.row.bulletin_time}}</span>-->
-                      <!--<span v-if="!scope.row.bulletin_time">暂无</span>-->
-                    <!--</template>-->
+                  <!--prop="bulletin_time"-->
+                  <!--label="上传时间">-->
+                  <!--<template slot-scope="scope">-->
+                  <!--<span v-if="scope.row.bulletin_time">{{scope.row.bulletin_time}}</span>-->
+                  <!--<span v-if="!scope.row.bulletin_time">暂无</span>-->
+                  <!--</template>-->
                   <!--</el-table-column>-->
                   <el-table-column
                     prop="customer_name"
@@ -478,12 +511,12 @@
                     </template>
                   </el-table-column>
                   <!--<el-table-column-->
-                    <!--prop="return_visit"-->
-                    <!--label="回访情况">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.return_visit">{{scope.row.return_visit}}</span>-->
-                      <!--<span v-if="!scope.row.return_visit">暂无</span>-->
-                    <!--</template>-->
+                  <!--prop="return_visit"-->
+                  <!--label="回访情况">-->
+                  <!--<template slot-scope="scope">-->
+                  <!--<span v-if="scope.row.return_visit">{{scope.row.return_visit}}</span>-->
+                  <!--<span v-if="!scope.row.return_visit">暂无</span>-->
+                  <!--</template>-->
                   <!--</el-table-column>-->
                   <el-table-column
                     prop="staff_name"
@@ -495,12 +528,12 @@
                     </template>
                   </el-table-column>
                   <!--<el-table-column-->
-                    <!--prop="leader_name"-->
-                    <!--label="负责人">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>-->
-                      <!--<span v-if="!scope.row.leader_name">暂无</span>-->
-                    <!--</template>-->
+                  <!--prop="leader_name"-->
+                  <!--label="负责人">-->
+                  <!--<template slot-scope="scope">-->
+                  <!--<span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>-->
+                  <!--<span v-if="!scope.row.leader_name">暂无</span>-->
+                  <!--</template>-->
                   <!--</el-table-column>-->
                   <el-table-column
                     prop="department_name"
@@ -513,7 +546,8 @@
                   <el-table-column
                     label="回访状态">
                     <template slot-scope="scope">
-                      <span v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
+                      <span
+                        v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
                       <span v-else="">/</span>
                     </template>
                   </el-table-column>
@@ -750,7 +784,7 @@
           </div>
         </el-dialog>
       </div>
-      <div >
+      <div>
         <el-dialog :close-on-click-modal="false" title="回访记录" :visible.sync="viewVisitRecordDialog" width="50%">
           <div>
             <el-table
@@ -855,11 +889,45 @@
           un_upload: '',   // 是否上传合同
           org_id: '',  // 部门
           status: '',   // 房屋状态1:未签约， 2：已签约， 3：快到期（60天内）， 4：已结束， 5：已过期
-          contract_index:'1',
+          contract_index: '1',
+          doc_status: '',
+          visit_status: '',
         },
+        doc_sta: [
+          {
+            value: 'draft',
+            title: '等待提交',
+          },
+          {
+            value: 'wait_contract_review',
+            title: '合同审核员审核中',
+          },
+          {
+            value: 'wait_house_review',
+            title: '房屋审核员审核中',
+          },
+          {
+            value: 'published',
+            title: '已通过',
+          },
+        ],
+        visit_sta: [
+          {
+            value: 'draft',
+            title: '等待提交',
+          },
+          {
+            value: 'wait_customer_service_review',
+            title: '等待回访',
+          },
+          {
+            value: 'published',
+            title: '已回访',
+          },
+        ],
         department: '',
         type: '',
-        length:'',
+        length: '',
         currentPage: 1,
         options: [
           {
@@ -896,15 +964,15 @@
         is_rent: 0,
         selectContractId: '',
         visitRecordDialog: false,
-        contractModule : '',
-        contractOperateId : '',
+        contractModule: '',
+        contractOperateId: '',
         viewVisitRecordDialog: false,
         visitTableData: [],
         visitStatus: ' ',
         visitLoading: false,
 
-        collectNumberArray : [],
-        checkContractData:[],
+        collectNumberArray: [],
+        checkContractData: [],
       }
     },
     mounted() {
@@ -939,26 +1007,26 @@
         }
       },
       visitRecordDialog(val) {
-        if(!val){
+        if (!val) {
           this.contractOperateId = '';
           this.contractModule = '';
         }
       },
       viewVisitRecordDialog(val) {
-        if(val) {
+        if (val) {
           this.visitLoading = true;
           this.visitStatus = ' ';
           this.visitTableData = [];
-          this.$http.get(globalConfig.server+'contract/feedback?limit=100&category='+this.contractModule+'&contract_id='+this.contractOperateId).then((res) => {
+          this.$http.get(globalConfig.server + 'contract/feedback?limit=100&category=' + this.contractModule + '&contract_id=' + this.contractOperateId).then((res) => {
             this.visitLoading = false;
-            if(res.data.code === '20000'){
+            if (res.data.code === '20000') {
               this.visitTableData = res.data.data.data;
-            }else {
+            } else {
               this.visitTableData = [];
               this.visitStatus = '暂无数据';
             }
           });
-        }else{
+        } else {
           this.contractOperateId = '';
           this.contractModule = '';
         }
@@ -993,7 +1061,7 @@
       closeAddressDialog(val) {
         this.addressDialog = false;
         console.log(val);
-        if(val){
+        if (val) {
           this.params.search = val.address;
         }
       },
@@ -1030,7 +1098,7 @@
             });
             this.checkHandIn();
 
-            if(res.data.data.length<1) {
+            if (res.data.data.length < 1) {
               this.collectData = [];
               this.rentStatus = '暂无数据';
               this.totalNumbers = 0;
@@ -1044,13 +1112,13 @@
       },
 
       //判斷合同是否上繳
-      checkHandIn(){
-        this.$http.post(globalConfig.server+'contract/number/check',{
-          contracts:this.collectNumberArray,
+      checkHandIn() {
+        this.$http.post(globalConfig.server + 'contract/number/check', {
+          contracts: this.collectNumberArray,
         }).then((res) => {
-          if(res.data.code === '20000'){
+          if (res.data.code === '20000') {
             this.checkContractData = res.data.data;
-          }else {
+          } else {
             this.checkContractData = {};
           }
         })
@@ -1065,7 +1133,7 @@
           if (res.data.code === '61110') {
             this.rentData = res.data.data;
             this.totalNumbers = res.data.meta.total;
-            if (res.data.data.length<1) {
+            if (res.data.data.length < 1) {
               this.collectData = [];
               this.rentStatus = '暂无数据';
               this.totalNumbers = 0;
@@ -1093,13 +1161,13 @@
       clickTable(row, event, column) {
         // console.log(row, event, column)
       },
-      dblClickTable(row, event){  //双击详情
-        if(this.activeName === 'first'){
-          const {href} = this.$router.resolve({path: '/collectDetail',query:{id:row.contract_id}});
-          window.open(href,'_blank','width=1920,height=1080');
-        }else if(this.activeName === 'second'){
-          const {href} = this.$router.resolve({path: '/rentingDetail',query:{id:row.contract_id}});
-          window.open(href,'_blank','width=1920,height=1080');
+      dblClickTable(row, event) {  //双击详情
+        if (this.activeName === 'first') {
+          const {href} = this.$router.resolve({path: '/collectDetail', query: {id: row.contract_id}});
+          window.open(href, '_blank', 'width=1920,height=1080');
+        } else if (this.activeName === 'second') {
+          const {href} = this.$router.resolve({path: '/rentingDetail', query: {id: row.contract_id}});
+          window.open(href, '_blank', 'width=1920,height=1080');
         }
 
       },
@@ -1116,7 +1184,7 @@
             children: [
               {clickIndex: 'viewVisit', headIcon: 'el-icons-fa-eye', label: '查看回访记录'},
               {clickIndex: 'addVisit', headIcon: 'el-icons-fa-plus', label: '添加回访记录'},
-              ]
+            ]
           },
           // {clickIndex: 'maintenanceDialog', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
           {clickIndex: 'lookMemorandum', headIcon: 'el-icon-edit', label: '查看合同备忘', contract_id: row.contract_id},
@@ -1204,6 +1272,7 @@
         this.isHigh = !this.isHigh;
       },
       resetting() {
+        this.highGrade();
         this.department = '';
         this.params = {
           page: 1,
@@ -1218,7 +1287,9 @@
           un_upload: '',   // 是否上传合同
           org_id: '',  // 部门
           status: '',   // 房屋状态1:未签约， 2：已签约， 3：快到期（60天内）， 4：已结束， 5：已过期
-          contract_index:'1',
+          contract_index: '1',
+          doc_status: '',
+          visit_status: '',
         };
       }
     },
