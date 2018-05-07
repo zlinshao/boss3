@@ -259,7 +259,7 @@
                          @close="closeModal"></ReimbursementDetail>
     <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize"
                   @selectMember="selectMember"></organization>
-    <ReimResult :reimResultDialog="reimResultDialog" :reimbursementId="reimbursementId" :type="resultType" :resultId="resultId"
+    <ReimResult :reimResultDialog="reimResultDialog" :reimbursementId="reimbursementId" :type="resultType"
                 @close="closeModal"></ReimResult>
   </div>
 </template>
@@ -272,7 +272,7 @@
   import ReimResult from './reimResult';
 
   export default {
-    name: 'repair-manage',
+    name: 'reim-manage',
     components: {RightMenu, Organization, ReimbursementDetail, EditReimbursement, ReimResult},
     data() {
       return {
@@ -308,7 +308,6 @@
         editReimbursementDialog: false,  //编辑报销单
         reimResultDialog: false,  //报销结果
         resultType: '',   //报销结果类型 add/edit
-        resultId: '',  //报销结果id
       }
     },
     mounted() {
@@ -410,7 +409,6 @@
       houseMenu(row, event) {
         this.reimbursementId = row.id;
         if (row.results && row.results.id) {
-          this.resultId = row.results.id;
           this.lists = [
             {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',},
             {clickIndex: 'edit_reimbursement_result', headIcon: 'el-icon-edit', label: '编辑报销结果', },
@@ -446,26 +444,7 @@
         }
       },
       deleteRepair() {
-        this.$confirm('此操作将删除维修单，您确定删除吗？', '删除维修单', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$http.get(globalConfig.server + 'repaire/del/' + this.reimbursementId).then((res) => {
-            if (res.data.code === "600200") {
-              this.getCollectTableData();
-              this.$notify.success({
-                title: "成功",
-                message: res.data.msg
-              });
-            } else {
-              this.$notify.warning({
-                title: "警告",
-                message: res.data.msg
-              });
-            }
-          });
-        })
+
       },
       //关闭右键菜单
       closeMenu() {

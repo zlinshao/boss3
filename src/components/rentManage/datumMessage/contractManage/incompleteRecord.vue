@@ -44,8 +44,8 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input v-model="params.staff" @focus="selectStaff" readonly placeholder="请选择开单人">
-                        <el-button style="cursor: pointer;" slot="append" @click="emptyStaff">清空</el-button>
+                      <el-input v-model="params.staff" @focus="selectStaff('staff')" readonly placeholder="请选择开单人">
+                        <el-button style="cursor: pointer;" slot="append" @click="emptyStaff('staff')">清空</el-button>
                       </el-input>
                     </el-form-item>
                   </el-col>
@@ -71,6 +71,20 @@
                         value-format="yyyy-MM-dd"
                         :picker-options="pickerOptions">
                       </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">发送人</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-input v-model="params.sender" @focus="selectStaff('sender')" readonly placeholder="请选择发送人">
+                        <el-button style="cursor: pointer;" slot="append" @click="emptyStaff('sender')">清空</el-button>
+                      </el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -193,7 +207,7 @@
     </div>
     <Organization :organizationDialog="organizationDialog" :type="type" @close="closeOrganization"
                   @selectMember="selectMember"></Organization>
-    <AddressSearch :addressDialog="addressDialog" @close="closeAddressDialog" ></AddressSearch>
+    <AddressSearch :addressDialog="addressDialog" @close="closeAddressDialog"></AddressSearch>
   </div>
 </template>
 
@@ -246,7 +260,10 @@
           limit: 12,
           department: '',
           staff: '',
+          sender_id: '',  //发送人id
+          sender: '', //发送人名字
         },
+        staffType: '',
         organizationDialog: false,
         activeName: 'first',
         isHigh: false,
@@ -272,7 +289,7 @@
       closeAddressDialog(val) {
         this.addressDialog = false;
         console.log(val);
-        if(val){
+        if (val) {
           this.params.q = val.address;
           this.params.contract_id = val.contract_id;
         }
@@ -297,7 +314,7 @@
         }
       },
       search() {
-       this.getIncompleteRecordData();
+        this.getIncompleteRecordData();
       },
       exportData() {
         this.$http.get(globalConfig.server + 'lease/note/index?limit=12&is_rent=' + this.is_rent + '&output=1', {responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
@@ -361,6 +378,8 @@
           limit: 12,
           department: '',
           staff: '',
+          sender: '',
+          sender_id: '',
         }
       },
       selectDepart() {
@@ -371,11 +390,17 @@
         this.params.department_id = [];
         this.params.department = '';
       },
-      emptyStaff() {
-        this.params.staff_id = [];
-        this.params.staff = '';
+      emptyStaff(val) {
+        if (this.staffType == 'staff') {
+          this.params.staff_id = [];
+          this.params.staff = '';
+        } else if (this.staffType == 'sender') {
+          this.params.sender_id = [];
+          this.params.sender = '';
+        }
       },
-      selectStaff() {
+      selectStaff(val) {
+        this.staffType = val;
         this.type = 'staff';
         this.organizationDialog = true
       },
@@ -394,14 +419,26 @@
           });
           this.params.department = names.join(',');
         } else if (this.type === 'staff') {
-          this.params.staff = '';
-          this.params.staff_id = [];
-          let names = [];
-          val.forEach((item) => {
-            this.params.staff_id.push(item.id);
-            names.push(item.name);
-          });
-          this.params.staff = names.join(',');
+          if (this.staffType == 'staff') {
+            this.params.staff = '';
+            this.params.staff_id = [];
+            let names = [];
+            val.forEach((item) => {
+              this.params.staff_id.push(item.id);
+              names.push(item.name);
+            });
+            this.params.staff = names.join(',');
+          } else if (this.staffType == 'sender') {
+            this.params.sender = '';
+            this.params.sender_id = [];
+            let senders = [];
+            val.forEach((item) => {
+              this.params.sender_id.push(item.id);
+              senders.push(item.name);
+            });
+            this.params.sender = senders.join(',');
+          }
+
         }
       },
     }

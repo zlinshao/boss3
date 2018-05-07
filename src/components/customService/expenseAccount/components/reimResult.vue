@@ -485,12 +485,13 @@
             this.resultTitle = '新增报销结果';
           } else if (this.type == 'edit') {
             this.resultTitle = '编辑报销结果';
-            if(this.resultId){
+            if (this.reimbursementId) {
               this.getReimResultDetail();
             }
           }
           this.isClear = false;
           this.form.reimbursement_id = this.reimbursementId;
+
         }
       },
       'form.water_data': {
@@ -722,7 +723,7 @@
         this.dictionary(642).then((res) => {  //完成情况
           this.finishedStatusCategory = res.data;
         });
-        this.dictionary(604).then((res) => {  //认责人
+        this.dictionary(643,1).then((res) => {  //认责人
           this.responsiblePersonCategory = res.data;
         });
       },
@@ -740,10 +741,30 @@
       },
       //获取报销单详情
       getReimResultDetail() {
-        this.$http.get(globalConfig.server + 'customer/reimbursement_result/' + this.resultId).then((res) => {
+        this.$http.get(globalConfig.server + 'customer/reimbursement_result/' + this.reimbursementId).then((res) => {
           if (res.data.code === '40020') {
             let detail = res.data.data;
             if (detail) {
+              this.form.water_fee = detail.water_fee;
+              this.form.water_data = detail.water_data;
+              this.waterAccComLength = detail.water_data.length;
+              this.waterAccCom = detail.water_data.length > 0 ? true : false;
+
+              this.form.electricity_fee = detail.electricity_fee;
+              this.form.electricity_data = detail.electricity_data;
+              this.elecAccComLength = detail.electricity_data.length;
+              this.elecAccCom = detail.electricity_data.length > 0 ? true : false;
+
+              this.form.gas_fee = detail.gas_fee;
+              this.form.gas_data = detail.gas_data;
+              this.gasAccComLength = detail.gas_data.length;
+              this.gasAccCom = detail.gas_data.length > 0 ? true : false;
+
+              this.form.property_management_fee = detail.property_management_fee;
+              this.form.property_management_data = detail.property_management_data;
+              this.propAccComLength = detail.property_management_data.length;
+              this.propAccCom = detail.property_management_data.length > 0 ? true : false;
+
               this.form.remark = detail.remark;
               let pic = detail.album.image_pic;
               this.form.image_pic = [];
@@ -759,8 +780,16 @@
         });
       },
       confirmAdd(val) {
+        let header = '';
+        if (this.reimbursementId) {
+          //编辑
+          header = this.$http.put(globalConfig.server + 'customer/reimbursement_result/' + this.reimbursementId, this.form);
+        } else {
+          //新增
+          header = this.$http.post(globalConfig.server + 'customer/reimbursement_result', this.form);
+        }
         this.form.status = val;
-        this.$http.post(globalConfig.server + 'customer/reimbursement_result', this.form).then((res) => {
+        header.then((res) => {
           if (res.data.code === '40010') {
             this.$notify.success({
               title: '成功',
@@ -777,7 +806,7 @@
       },
       initial() {
         this.form = {
-          reimbursement_id : '',
+          reimbursement_id: '',
           water_fee: {
             time: [],
             total: '',
