@@ -636,8 +636,8 @@
     }
     .detailTitle {
       label {
-        width:60px !important;
-        margin-left:20px;
+        width:70px !important;
+        margin-left:10px;
         line-height: 15px;
         height: 30px;
         @include flex;

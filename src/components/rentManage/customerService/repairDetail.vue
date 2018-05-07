@@ -558,7 +558,7 @@ export default {
       width: 54px !important;
       margin-left: 26px;
       line-height: 15px;
-      height: 48px;
+      height: 28px;
       @include flex;
       align-items: center;
       justify-content: flex-end;
