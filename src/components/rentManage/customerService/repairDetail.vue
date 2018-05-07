@@ -185,7 +185,7 @@
           <el-row>
             <el-col :span="22">
               <el-form-item label="业务员态度" required="">
-                <el-rate v-model="repairDetail.star" readonly></el-rate>
+                <el-rate v-model="repairDetail.star" disabled></el-rate>
               </el-form-item>
             </el-col>
           </el-row>
