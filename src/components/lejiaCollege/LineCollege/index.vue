@@ -115,7 +115,7 @@
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="试卷名称">
+                label="考试名称">
               </el-table-column>
               <el-table-column
                 prop="paper.category"
@@ -140,8 +140,8 @@
               <el-table-column
                 label="操作">
                 <template slot-scope="scope">
-                  <el-button size="mini" type="primary" v-if="scope.row.score == 0" @click="answerExam(scope.row.id)">立即答题</el-button>
-                  <el-button size="mini" type="info" v-if="scope.row.score !== 0" @click="lookExam(scope.row)">查看试卷</el-button>
+                  <el-button size="mini" type="primary" v-if="scope.row.result_id == 0" @click="answerExam(scope.row.id)">立即答题</el-button>
+                  <el-button size="mini" type="info" v-if="scope.row.result_id !== 0" @click="lookExam(scope.row)">查看试卷</el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -230,6 +230,7 @@
         depart: "",
         personal: {},
         department: '',
+        confirmArrival: [],
       };
     },
     mounted() {
@@ -246,20 +247,38 @@
     },
     activated(){
       this.myData();
+      this.confirmArrival = localStorage.getItem('confirmArrival');
     },
     watch: {},
     methods: {
       lookExam(val){
-        console.log(val);
-        // this.$router.push({path: '/lookExam', query: {result_id: val.result_id, exam_id: val.id}});
+        this.$router.push({path: '/lookExam', query: {result_id: val.result_id, exam_id: val.id,from: ''}});
       },
       answerExam(id){
-        this.$router.push({path: '/answerExam', query: {id: id}});
+        if (this.confirmArrival && this.confirmArrival.length>0 && this.confirmArrival.indexOf(id)>-1) {
+          this.$router.push({path: '/answerExam', query: {id: id}});
+        }else{
+          this.$http.post(globalConfig.server + 'exam/check_in/' + id).then((res) => {
+            if (res.data.code === '30000') {
+              let arr = [];
+              arr.push(id);
+              localStorage.setItem('confirmArrival', arr);  //保存已到场的考试id
+              this.$router.push({path: '/answerExam', query: {id: id}});
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }
+
+
       },
       myData(val) {
         this.rentStatus = " ";
         this.rentLoading = true;
-        this.$http.get(globalConfig.server + "/exam/exam/my?enrolled=1").then((res) => {
+        this.$http.get(globalConfig.server + "exam/exam/my?enrolled=1").then((res) => {
             this.rentLoading = false;
             if (res.data.code == '30000') {
               this.tableData = res.data.data.data;

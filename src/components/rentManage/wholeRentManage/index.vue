@@ -629,6 +629,10 @@
     <AddCollectRepair :addCollectRepairDialog="addCollectRepairDialog"  :contract="collectContract" @close="closeModal"></AddCollectRepair>
     <AddRentRepair :addRentRepairDialog="addRentRepairDialog"  :contract="rentContract" @close="closeModal"></AddRentRepair>
 
+    <AddCollectReimbursement :addCollectReimbursementDialog="addCollectReimbursementDialog" :contract="collectContract"
+                             @close="closeModal"></AddCollectReimbursement>
+    <AddRentReimbursement :addRentReimbursementDialog="addRentReimbursementDialog" :contract="rentContract"
+                          @close="closeModal"></AddRentReimbursement>
     <!--租客调房-->
     <RentChangeRoom :rentChangeRoomDialog="rentChangeRoomDialog" :rentContractId="rentContractId" :collectHouseId="collectHouseId"
                     :rentContractInfo="rentContractInfo" @close="closeModal"></RentChangeRoom>
@@ -692,6 +696,9 @@
   import TopForm from '../components/topFormSet.vue'    //表头列表
   import Setting from './components/setting.vue'
   import AddReturnvisit from "../../../components/rentManage/customerService/addReturnvisit.vue";   //添加回访
+  import AddCollectReimbursement from "../components/addCollectReimbursement.vue"; //添加房屋报销单
+  import AddRentReimbursement from "../components/addRentReimbursement.vue"; //添加租客报销单
+
   //--------------------------tabs content-----------------------------------------------------------------//
   import GoodsChangeTab from '../tabComponents/goodsChange.vue'
   import OwnerInfoTab from '../tabComponents/ownerInfo.vue'
@@ -745,6 +752,8 @@
       TopForm,
       Setting,
       AddReturnvisit,
+      AddCollectReimbursement,
+      AddRentReimbursement,
 
       //-------tabs------//
       GoodsChangeTab,
@@ -789,23 +798,26 @@
         decreaseGoodsDialog: false,  //物品搬出
         increaseGoodsDialog: false,  //物品增加
         ownerArrearsDialog: false,   //房东欠款
-        addFollowUpDialog :false,     //添加工单
-        collectVacationDialog:false,     //房东退房
-        addCollectRepairDialog:false,    //房东添加维修
-        addRentRepairDialog:false,       //租客添加维修
-        rentChangeRoomDialog:false,      //租客换房
-        subleaseDialog:false,           //转租
-        rentRenewDialog:false,          //租客续约
-        addRentInfoDialog:false,      //登记租客信息
-        editRentInfoDialog:false,      //修改租客信息
-        sendMessageDialog:false,      //发送短信
-        addHouseResourcesDialog:false,  //登记房源
-        editHouseResourcesDialog:false,  //修改房源
-        repaymentDialog:false,        //还款
-        returnVisitDialog:false,      //查看回访
-        topFormSetDialog:false,       //选择列
-        settingDialog : false,        //设置
+        addFollowUpDialog: false,     //添加工单
+        collectVacationDialog: false,     //房东退房
+        addCollectRepairDialog: false,    //房东添加维修
+        addRentRepairDialog: false,       //租客添加维修
+        rentChangeRoomDialog: false,      //租客换房
+        subleaseDialog: false,           //转租
+        rentRenewDialog: false,          //租客续约
+        addRentInfoDialog: false,      //登记租客信息
+        editRentInfoDialog: false,      //修改租客信息
+        sendMessageDialog: false,      //发送短信
+        addHouseResourcesDialog: false,  //登记房源
+        editHouseResourcesDialog: false,  //修改房源
+        repaymentDialog: false,        //还款
+        returnVisitDialog: false,      //查看回访
+        topFormSetDialog: false,       //选择列
+        settingDialog: false,        //设置
         addReturnvisitDialog: false,    //添加回访
+        addCollectReimbursementDialog: false,  //添加房屋报销单
+        addRentReimbursementDialog: false,  //添加租客报销单
+
 
         isHigh: false,
         /*******************收房*********************/
@@ -853,51 +865,51 @@
         ],
         collectTotalNum:0,
         collectData: [],    //收房列表数据
-        collectHouseId:'',   //房屋id
-        collectContractId:'', //  收房合同id
-        collectInfo : {},
+        collectHouseId: '',   //房屋id
+        collectContractId: '', //  收房合同id
+        collectInfo: {},
         //*******************租房*******************//
-        rentParams:{
-          page:1,
-          limit:3,
-          house_id:'',
+        rentParams: {
+          page: 1,
+          limit: 3,
+          house_id: '',
         },
-        rentingData:[],     //租房列表数据
-        rentTotalNum:0,
-        rentHouseId : '',
-        rentContractId : '',
-        rentContractInfo:{},
-        contractModule : '',
-        contractOperateId : '',
+        rentingData: [],     //租房列表数据
+        rentTotalNum: 0,
+        rentHouseId: '',
+        rentContractId: '',
+        rentContractInfo: {},
+        contractModule: '',
+        contractOperateId: '',
 
-        activeName:'OwnerInfoTab',    //tab name
-        pay_way_dic:[],
-        tabStatusChange:'',
-        collectNumberArray:[],
-        checkContractData:{},
-        collectStatus:' ',
-        collectLoading:false,
-        rentStatus:' ',
-        rentLoading:false,
+        activeName: 'OwnerInfoTab',    //tab name
+        pay_way_dic: [],
+        tabStatusChange: '',
+        collectNumberArray: [],
+        checkContractData: {},
+        collectStatus: ' ',
+        collectLoading: false,
+        rentStatus: ' ',
+        rentLoading: false,
         collectContract: '',
         rentContract: '',
-        addReturnInfo:[],
-        ToActiveName:""
+        addReturnInfo: [],
+        ToActiveName: ""
       }
     },
 
-    created(){
+    created() {
       this.getDictionary()
     },
-    mounted(){
+    mounted() {
       this.initData();
     },
 
-    watch:{
-      collectHouseId(val){
-        if(val){
+    watch: {
+      collectHouseId(val) {
+        if (val) {
           this.getRentData(val);
-        }else {
+        } else {
           this.rentingData = [];
           this.rentTotalNum = 0;
           this.rentStatus = '暂未出租';
@@ -906,16 +918,16 @@
     },
 
     methods: {
-      getDictionary(){
+      getDictionary() {
         this.dictionary(443, 1).then((res) => {
           this.pay_way_dic = res.data;
         });
       },
 
-      matchDictionary(id){
+      matchDictionary(id) {
         let dictionary_name = null;
         this.pay_way_dic.map((item) => {
-          if(item.id == id ){
+          if (item.id == id) {
             dictionary_name = item.dictionary_name;
           }
         });
@@ -923,36 +935,36 @@
       },
 
       //数据初始化
-      initData(){
+      initData() {
         this.getCollectData();
       },
 
-      openOrganizeModal(){
+      openOrganizeModal() {
         this.organizationDialog = true;
         this.length = 1;
         this.type = 'depart';
       },
-      selectMember(val){
+      selectMember(val) {
         this.organizationDialog = false;
         this.collectParams.org_id = val[0].id;
-        this.department_name =  val[0].name;
+        this.department_name = val[0].name;
       },
 
       /*****************************收房*********************************************************/
-      search(){
+      search() {
         this.isHigh = false;
         this.collectParams.page = 1;
         this.getCollectData();
       },
 
-      getCollectData(){
+      getCollectData() {
         this.collectHouseId = '';
         this.collectContractId = '';
         this.collectLoading = true;
         this.collectStatus = ' ';
-        this.$http.get(globalConfig.server+'lease/collect',{params:this.collectParams}).then((res) => {
+        this.$http.get(globalConfig.server + 'lease/collect', {params: this.collectParams}).then((res) => {
           this.collectLoading = false;
-          if(res.data.code === '61010'){
+          if (res.data.code === '61010') {
             this.collectData = res.data.data;
             this.collectTotalNum = res.data.meta.total;
             this.collectNumberArray = [];
@@ -960,16 +972,16 @@
               this.collectNumberArray.push(item.contract_number);
             });
             this.checkHandIn();
-            if(res.data.data.length>0){
+            if (res.data.data.length > 0) {
               this.collectHouseId = this.collectData[0].house_id;
               this.collectContractId = this.collectData[0].contract_id;
-            }else {
+            } else {
               this.collectData = [];
               this.collectStatus = '暂无数据';
               this.rentStatus = '暂未出租';
               this.collectTotalNum = 0;
             }
-          }else {
+          } else {
             this.collectData = [];
             this.collectStatus = '暂无数据';
             this.rentStatus = '暂未出租';
@@ -978,20 +990,20 @@
         })
       },
 
-      checkHandIn(){
-         this.$http.post(globalConfig.server+'contract/number/check',{
-           contracts:this.collectNumberArray,
-         }).then((res) => {
-            if(res.data.code === '20000'){
-              this.checkContractData = res.data.data;
-            }else {
-              this.checkContractData = {};
-            }
-         })
+      checkHandIn() {
+        this.$http.post(globalConfig.server + 'contract/number/check', {
+          contracts: this.collectNumberArray,
+        }).then((res) => {
+          if (res.data.code === '20000') {
+            this.checkContractData = res.data.data;
+          } else {
+            this.checkContractData = {};
+          }
+        })
       },
 
       //房屋右键
-      houseMenu(row, event){
+      houseMenu(row, event) {
         this.collectInfo = row;
         this.ToActiveName = "first";
         this.addReturnInfo = row;
@@ -1001,8 +1013,13 @@
         this.contractModule = 1;
         this.collectContract = row;
         this.lists = [
-          {clickIndex: 'editHouseResourcesDialog', headIcon: 'el-icons-fa-home', label: '修改房源',disabled:row.doc_status.id>3},
-          {clickIndex: 'addRentInfoDialog', headIcon :'el-icons-fa-plus', label: '登记租客信息',},
+          {
+            clickIndex: 'editHouseResourcesDialog',
+            headIcon: 'el-icons-fa-home',
+            label: '修改房源',
+            disabled: row.doc_status.id > 3
+          },
+          {clickIndex: 'addRentInfoDialog', headIcon: 'el-icons-fa-plus', label: '登记租客信息',},
           {
             clickIndex: '', headIcon: 'el-icons-fa-pencil-square-o', tailIcon: 'el-icon-arrow-right', label: '房东续约/延期',
             children: [
@@ -1012,7 +1029,7 @@
           },
           {clickIndex: 'collectVacationDialog', headIcon: 'el-icons-fa-reply', label: '房东退房',},
 //          {clickIndex: 'switchToJoint', headIcon :' el-icons-fa-refresh', label: '转到合租',},
-          {clickIndex: 'addFollowUpDialog',headIcon :'el-icons-fa-plus', label: '添加工单',},
+          {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单',},
 //          {clickIndex: 'ownerArrearsDialog', headIcon: 'el-icons-fa-cny', label: '房东欠款',},
           {
             clickIndex: '', headIcon: 'el-icons-fa-inbox', tailIcon: 'el-icon-arrow-right', label: '物品增减',
@@ -1021,15 +1038,16 @@
               {clickIndex: 'increaseGoodsDialog', label: '物品增进',}
             ]
           },
-         {clickIndex: 'addCollectRepairDialog', headIcon: 'el-icons-fa-gear', label: '添加维修单',},
+          {clickIndex: 'addCollectRepairDialog', headIcon: 'el-icons-fa-gear', label: '添加维修单',},
 //          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
           {clickIndex: 'addReturnvisitDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加回访记录',},
+          {clickIndex: 'addCollectReimbursementDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加报销单',},
         ];
         this.contextMenuParam(event);
       },
 
       //单机收房列表
-      clickCollectTable(row, event, column){
+      clickCollectTable(row, event, column) {
         this.collectHouseId = row.house_id;
         this.collectContractId = row.contract_id;
       },
@@ -1050,27 +1068,27 @@
         this.collectParams.page = val;
         this.getCollectData();
       },
-      dblClickTable(row, event){   //双击
-        const {href} = this.$router.resolve({path: '/collectDetail',query:{id:row.contract_id}});
-        window.open(href,'_blank','width=1920,height=1080');
+      dblClickTable(row, event) {   //双击
+        const {href} = this.$router.resolve({path: '/collectDetail', query: {id: row.contract_id}});
+        window.open(href, '_blank', 'width=1920,height=1080');
       },
       //*********************************租房*******************************************************//
-      getRentData(id){
+      getRentData(id) {
         this.rentParams.house_id = id;
         this.rentLoading = true;
         this.rentStatus = ' ';
-        this.$http.get(globalConfig.server+'lease/rent',{params:this.rentParams}).then((res) => {
+        this.$http.get(globalConfig.server + 'lease/rent', {params: this.rentParams}).then((res) => {
           this.rentLoading = false;
-          if(res.data.code === '61110'){
+          if (res.data.code === '61110') {
             this.rentingData = res.data.data;
             this.rentTotalNum = res.data.meta.total;
-            if(res.data.data.length>0){
+            if (res.data.data.length > 0) {
               this.rentContractId = res.data.data[0].contract_id;
-            }else {
+            } else {
               this.rentContractId = '';
               this.rentStatus = '暂未出租';
             }
-          }else {
+          } else {
             this.rentingData = [];
             this.rentTotalNum = 0;
             this.rentStatus = '暂未出租';
@@ -1085,7 +1103,7 @@
       },
 
       //租客右键
-      clientMenu(row, event){
+      clientMenu(row, event) {
         this.rentContractInfo = row;
         this.ToActiveName = "second";
         this.addReturnInfo = row;
@@ -1100,10 +1118,11 @@
           {clickIndex: 'rentRenewDialog', headIcon: 'el-icon-share', label: '租客续约',},
           {clickIndex: 'rentChangeRoomDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '租客调房',},
 //          {clickIndex: 'ownerArrearsDialog', headIcon: 'el-icons-fa-cny', label: '租客欠款',},
-         {clickIndex: 'addRentRepairDialog', headIcon: 'el-icons-fa-gear', label: '添加维修单',},
+          {clickIndex: 'addRentRepairDialog', headIcon: 'el-icons-fa-gear', label: '添加维修单',},
 //          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
           {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单',},
           {clickIndex: 'addReturnvisitDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加回访记录',},
+          {clickIndex: 'addRentReimbursementDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加报销单',},
         ];
         this.contextMenuParam(event);
       },
@@ -1116,18 +1135,21 @@
         return '';
       },
       //单机租房列表
-      clickRentTable(row, event, column){
+      clickRentTable(row, event, column) {
         this.rentHouseId = row.house_id;
         this.rentContractId = row.contract_id;
       },
-      dblClickRentTable(row, event){
-        const {href} = this.$router.resolve({path: '/rentingDetail',query:{id:row.contract_id,collectId:this.collectContractId}});
-        window.open(href,'_blank','width=1920,height=1080');
+      dblClickRentTable(row, event) {
+        const {href} = this.$router.resolve({
+          path: '/rentingDetail',
+          query: {id: row.contract_id, collectId: this.collectContractId}
+        });
+        window.open(href, '_blank', 'width=1920,height=1080');
       },
 
       /*****************************************右键处理函数******************************************/
       //合同表头右键
-      houseHeadMenu(e){
+      houseHeadMenu(e) {
 //        this.lists = [
 //          {clickIndex: 'topFormSetDialog', headIcon: 'el-icons-fa-home', label: '选择列选项',},
 //        ];
@@ -1135,7 +1157,7 @@
       },
 
       //详情表头右键
-      detailMenu(e){
+      detailMenu(e) {
 //        if (e.target.className.indexOf('el-tabs__item') > -1 || e.target.className.indexOf('el-tabs__nav-scroll') > -1) {
 //          this.lists = [
 //            {clickIndex: 1, headIcon: 'el-icons-fa-home', label: '选择列选项',},
@@ -1145,16 +1167,16 @@
       },
 
       //右键回调时间
-      clickEvent (index) {
+      clickEvent(index) {
         this.openModalDialog(index);
       },
       //关闭右键菜单
-      closeMenu(){
+      closeMenu() {
         this.show = false;
       },
 
       //右键参数
-      contextMenuParam(event){
+      contextMenuParam(event) {
         //param: user right param
         let e = event || window.event;	//support firefox contextmenu
         this.show = false;
@@ -1168,7 +1190,7 @@
         })
       },
       /*****************************模态框打开******************************/
-      openModalDialog(type){
+      openModalDialog(type) {
         switch (type) {
           case 'instructionDialog':   //说明书
             this.instructionDialog = true;
@@ -1251,10 +1273,16 @@
           case 'addReturnvisitDialog':
             this.addReturnvisitDialog = true;
             break;
+          case 'addCollectReimbursementDialog':
+            this.addCollectReimbursementDialog = true;
+            break;
+          case 'addRentReimbursementDialog':
+            this.addRentReimbursementDialog = true;
+            break;
         }
 
       },
-      switchToJoint(){
+      switchToJoint() {
         this.$confirm('转移以后不可恢复, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -1271,7 +1299,7 @@
           });
         });
       },
-      closeModal(val){
+      closeModal(val) {
         this.tabStatusChange = '';
         this.instructionDialog = false;
         this.organizationDialog = false;
@@ -1302,25 +1330,27 @@
         this.addReturnvisitDialog = false;
         this.contractModule = '';
         this.contractOperateId = '';
-        if(val === 'updateCollect'){
+        this.addCollectReimbursementDialog = false;
+        this.addRentReimbursementDialog = false;
+        if (val === 'updateCollect') {
           this.getCollectData();
-        }else if(val === 'updateRent'){
+        } else if (val === 'updateRent') {
           this.getRentData(this.collectHouseId);
-        }else if(val === 'changeGoods'){
+        } else if (val === 'changeGoods') {
           this.tabStatusChange = 'GoodsChangeTab';
-        }else if(val === 'visitRecord'){
+        } else if (val === 'visitRecord') {
           this.tabStatusChange = 'visitRecord';
-        }else if(val === 'workOrder'){
+        } else if (val === 'workOrder') {
           this.tabStatusChange = 'workOrder';
         }
       },
 
 
       //****************************高级搜索函数**************************//
-      highGrade(){
+      highGrade() {
         this.isHigh = !this.isHigh;
       },
-      resetting(){
+      resetting() {
         this.highGrade();
         this.collectParams.lord_start_time = [];
         this.collectParams.lord_end_time = [];
@@ -1382,7 +1412,7 @@
           }
         }
       }
-      .myHouse,.myClient {
+      .myHouse, .myClient {
         border: 1px solid #dfe6fb;
         margin-bottom: 20px;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .12), 0 0 6px 0 rgba(0, 0, 0, .04);
