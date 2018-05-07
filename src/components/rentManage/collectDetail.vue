@@ -170,6 +170,23 @@
             </el-row>
             <el-row>
               <el-col :span="8">
+                <el-form-item label="水卡卡号">
+                  <div class="content">{{contractInfo.water_card_number}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="电卡卡号">
+                  <div class="content">{{contractInfo.electricity_card_number}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="燃气卡卡号">
+                  <div class="content">{{contractInfo.gas_card_number}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="8">
                 <el-form-item label="房屋特色">
                   <div class="content">{{matchDictionary(contractInfo.house_feature)}}</div>
                 </el-form-item>

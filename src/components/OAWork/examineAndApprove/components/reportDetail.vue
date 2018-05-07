@@ -300,6 +300,10 @@
       },
       close_() {
         this.isClear = true;
+        setTimeout(() => {
+          this.isClear = false;
+        });
+        $('.imgItem').remove();
         this.commentVisible = false;
         this.form.operation = '';
         this.form.comment = '';

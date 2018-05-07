@@ -831,7 +831,6 @@
           doc_status:'',
           visit_status:'',
         },
-        collectTotalNum: 0,
         doc_sta:[
           {
             value: 'draft',
