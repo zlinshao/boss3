@@ -22,7 +22,7 @@
                 <span>{{personal.name}}<span v-for="(key,index) in personal.org"
                                              v-if="index === 0">-{{key.name}}</span></span>
               </div>
-              <div class="auditStatus" v-if="placeFalse"><i class="iconfont icon-yanqi--"></i>&nbsp;{{place.display_name}}
+              <div class="auditStatus" v-if="placeFalse" @click="approvePersonal"><i class="iconfont icon-yanqi--"></i>&nbsp;{{place.display_name}}
               </div>
               <div class="statuss"
                    :class="{'statusSuccess':place.status === 'published', 'statusFail':place.status === 'rejected', 'cancelled':place.status === 'cancelled'}"></div>
@@ -141,6 +141,25 @@
       </div>
     </el-dialog>
 
+    <!--审核人-->
+    <el-dialog :close-on-click-modal="false" title="审核人" :visible.sync="showContent" width="30%">
+      <div class="scroll_bar" style="padding: 0;">
+        <div v-for="key in role_name" class="showContent">
+          <p class="contentP">
+            <img :src="key.avatar" v-if="key.avatar !== '' && key.avatar !== null">
+            <img src="../../../../assets/images/head.png" v-else>
+          </p>
+          <div>
+            <p>姓名：{{key.name}}</p>
+            <p>手机号：<a>{{key.phone}}</a></p>
+          </div>
+        </div>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="small" @click="showContent = false">关&nbsp;闭</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -177,6 +196,9 @@
           comment: '',
           album: [],
         },
+
+        role_name: [],
+        showContent: false,
       }
     },
 
@@ -206,6 +228,13 @@
       }
     },
     methods: {
+      // 审批人信息
+      approvePersonal() {
+        if (this.place.auditors) {
+          this.role_name = this.place.auditors;
+          this.showContent = true;
+        }
+      },
       process(val) {
         this.fullLoading = true;
         this.$http.get(this.address + 'process/' + val).then((res) => {
@@ -404,6 +433,7 @@
         color: #409EFF;
         margin-left: 30px;
         font-size: 16px;
+        cursor: pointer;
       }
       .statuss {
         margin-left: 30px;
@@ -426,6 +456,30 @@
         -webkit-animation: manger .6s ease-in-out;
         -o-animation: manger .6s ease-in-out;
         animation: manger .6s ease-in-out;
+      }
+    }
+
+    /*审批人*/
+    .showContent {
+      @include flex;
+      align-items: center;
+      width: 50%;
+      float: left;
+      .contentP {
+        min-width: 40px;
+        max-width: 40px;
+        height: 40px;
+        margin-right: 12px;
+        img {
+          width: 100%;
+          height: 100%;
+          @include border_(50%);
+        }
+      }
+      div {
+        P {
+          margin: 0;
+        }
       }
     }
 
