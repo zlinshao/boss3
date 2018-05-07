@@ -13,11 +13,11 @@
       <img v-if="item.album.cover_pic!=[]" data-magnify
         v-for="(val,key) in item.album.cover_pic" :data-src="val.uri" :src="val.uri" alt="" :key="key">
       </div>
-      <div class="button" v-if="len>1">
+      <div class="button" >
             <el-button v-show="a <= len-1 && a>0 " class="elbuttom1" size="small" @click="preimg" type="primary">上一张</el-button>
             <el-button v-show="a == 0" class="elbuttom1" size="small" type="info">上一张</el-button>
             <el-button v-show="a < len - 1" class="elbuttom2" size="small" @click="nextimg(item.id)" type="primary">下一张</el-button>
-            <el-button v-show="a == len -1" class="elbuttom2" size="small" @click="close(item.id)"  type="info">下一张</el-button>
+            <el-button v-show="a == len -1" class="elbuttom2" size="small" @click="close(item.id)"  type="primary">我知道了</el-button>
       </div>
     </div>
     </el-dialog>
