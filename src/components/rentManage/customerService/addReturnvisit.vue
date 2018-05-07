@@ -487,11 +487,11 @@
               message: "其他费用不能为空"
             });          
         }
-        if( (this.form.pay_use[0].length ==0 || this.form.pay_use[1].length== 0)  && this.validateFlag == true){
+        if( (this.form.pay_use[0].length ==0 || this.form.pay_use[1].length== 0) && this.form.has_extra =="1"  && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
-              message: "其他费用不能为空"
+              message: "其他费用明细不能为空"
             });          
         }
         if((this.form.guarantee_month =="" || this.form.guarantee_day =="") && this.validateFlag == true){
