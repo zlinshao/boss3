@@ -186,21 +186,27 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row v-if="form.has_extra == 1">
-            <el-col :span="12">
+          <el-row v-if="form.has_extra == 1" v-for="index in payUseLen" :key="index+1111">
+            <el-col :span="11">
               <el-form-item label="费用名称" required >
-                <el-input v-model="form.pay_use"></el-input>
+                <el-input v-model="form.pay_use[0][index-1]"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="11">
               <el-form-item label="价格" required>
-                <el-input v-model="form.array"></el-input>
+                <el-input v-model="form.pay_use[1][index-1]"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="2" style="float: right;" v-if="index == 1">
+              <i @click="addPayUseLen" class="el-icon-circle-plus-outline addicon"></i>
+            </el-col>  
+            <el-col :span="2" style="float: right;" v-if="index != 1">
+              <i @click="romovePayUseLen(index-1)" class="el-icon-remove-outline addicon"></i>
+            </el-col>   
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="备注条款">
+              <el-form-item label="备注条款" required >
                 <el-input v-model="form.remark_clause"></el-input>
               </el-form-item>
             </el-col>
@@ -339,6 +345,7 @@
         priceLen:1,
         payForLen:1,
         payTypeLen:1,
+        payUseLen:1,
       };
     },
     mounted(){
@@ -480,6 +487,13 @@
               message: "其他费用不能为空"
             });          
         }
+        if( (this.form.pay_use[0].length ==0 || this.form.pay_use[1].length== 0)  && this.validateFlag == true){
+            this.validateFlag =false;
+            this.$notify.warning({
+              title: '警告',
+              message: "其他费用不能为空"
+            });          
+        }
         if((this.form.guarantee_month =="" || this.form.guarantee_day =="") && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
@@ -521,8 +535,10 @@
           this.form.sale_remark="",    //业务员专业度
           this.form.remark="",         //备注
           this.form.audited_fields="", //审核状态
-          this.form.pay_use="",        //支付名称
-          this.form.array="",          //费用
+          this.form.pay_use=[
+            [],
+            []
+          ],        //支付名称
           this.form.has_extra="",      //是否收取费用
           this.form.unit_price=[
             [],
@@ -594,6 +610,14 @@
         this.payTypeLen--;
         this.form.pay_method[0].splice(index, 1);
         this.form.pay_method[1].splice(index, 1);
+      },
+      addPayUseLen(index){
+        this.payUseLen++;
+      },
+      romovePayUseLen(index){
+        this.payUseLen--;
+        this.form.pay_use[0].splice(index, 1);
+        this.form.pay_use[1].splice(index, 1);
       },
     },
   };
