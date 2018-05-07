@@ -1213,13 +1213,13 @@
         if(this.is_rent){
           this.ToActiveName = "second";
           this.lists = [
-            {
-              clickIndex: 'visit', headIcon: 'el-icons-fa-eye', tailIcon: 'el-icon-arrow-right', label: '回访记录',
-              children: [
-                {clickIndex: 'viewVisit', headIcon: 'el-icons-fa-eye', label: '查看回访记录'},
-                {clickIndex: 'addVisit', headIcon: 'el-icons-fa-plus', label: '添加回访记录'},
-              ]
-            },
+            // {
+            //   clickIndex: 'visit', headIcon: 'el-icons-fa-eye', tailIcon: 'el-icon-arrow-right', label: '回访记录',
+            //   children: [
+            //     {clickIndex: 'viewVisit', headIcon: 'el-icons-fa-eye', label: '查看回访记录'},
+            //     {clickIndex: 'addVisit', headIcon: 'el-icons-fa-plus', label: '添加回访记录'},
+            //   ]
+            // },
             // {clickIndex: 'maintenanceDialog', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
             {clickIndex: 'editRentInfoDialog',headIcon: 'el-icon-edit', label: '修改租客信息',disabled:row.doc_status.id>3},
 
@@ -1229,13 +1229,13 @@
         }else {
           this.ToActiveName = "first";
           this.lists = [
-            {
-              clickIndex: 'visit', headIcon: 'el-icons-fa-eye', tailIcon: 'el-icon-arrow-right', label: '回访记录',
-              children: [
-                {clickIndex: 'viewVisit', headIcon: 'el-icons-fa-eye', label: '查看回访记录'},
-                {clickIndex: 'addVisit', headIcon: 'el-icons-fa-plus', label: '添加回访记录'},
-              ]
-            },
+            // {
+            //   clickIndex: 'visit', headIcon: 'el-icons-fa-eye', tailIcon: 'el-icon-arrow-right', label: '回访记录',
+            //   children: [
+            //     {clickIndex: 'viewVisit', headIcon: 'el-icons-fa-eye', label: '查看回访记录'},
+            //     {clickIndex: 'addVisit', headIcon: 'el-icons-fa-plus', label: '添加回访记录'},
+            //   ]
+            // },
             // {clickIndex: 'maintenanceDialog', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
             {
               clickIndex: 'editHouseResourcesDialog',
