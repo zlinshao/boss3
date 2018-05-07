@@ -20,13 +20,11 @@
                   </div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8" style="text-align: right">
-                <el-button type="text" size="small" @click="editRepair(repairDetail.id)">
-                  <i class="el-icon-edit"></i>修改维修单
-                </el-button>
-              </el-col>
-            </el-row>
-            <el-row>
+              <!--<el-col :span="8" style="text-align: right">-->
+              <!--<el-button type="text" size="small" @click="editRepair(repairDetail.id)">-->
+              <!--<i class="el-icon-edit"></i>修改维修单-->
+              <!--</el-button>-->
+              <!--</el-col>-->
               <el-col :span="8">
                 <el-form-item label="报销单编号">
                   <div class="content">
@@ -35,133 +33,88 @@
                   </div>
                 </el-form-item>
               </el-col>
+            </el-row>
+            <el-row>
               <el-col :span="8">
-                <el-form-item label="所属城市">
-                  <div class="content" v-if="repairDetail.city_name">{{repairDetail.city_name}}</div>
-                  <div class="content" v-if="!repairDetail.city_name">暂无</div>
+                <el-form-item label="房屋地址">
+                  <div class="content"
+                       v-if="reimDetail.contract_id && reimDetail.contract_id.house && reimDetail.contract_id.house.name">
+                    {{reimDetail.contract_id.house.name}}
+                  </div>
+                  <div class="content" v-else>暂无</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="已完成时间">
+                <el-form-item label="报销类型">
+                  <div class="content" v-if="reimDetail.type">{{reimDetail.type}}</div>
+                  <div class="content" v-else>暂无</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="来源">
+                  <div class="content" v-if="reimDetail.source">{{reimDetail.source}}</div>
+                  <div class="content" v-else>暂无</div>
+                </el-form-item>
+              </el-col>
+              <!--<el-col :span="8">-->
+              <!--<el-form-item label="已完成时间">-->
+              <!--<div class="content">-->
+              <!--<span v-if="repairDetail.finish_time">{{repairDetail.finish_time}}</span>-->
+              <!--<span v-if="!repairDetail.finish_time">暂无</span>-->
+              <!--</div>-->
+              <!--</el-form-item>-->
+              <!--</el-col>-->
+            </el-row>
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="报销金额">
                   <div class="content">
-                    <span v-if="repairDetail.finish_time">{{repairDetail.finish_time}}</span>
-                    <span v-if="!repairDetail.finish_time">暂无</span>
+                    <span v-if="reimDetail.amount">{{reimDetail.amount}}</span>
+                    <span v-else>暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="开户行">
+                  <div class="content">
+                    <span v-if="reimDetail.account_bank">{{repairDetail.account_bank}}</span>
+                    <span v-else>暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="支行">
+                  <div class="content">
+                    <span v-if="reimDetail.branch_bank">{{reimDetail.branch_bank}}</span>
+                    <span v-else>暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="客户姓名">
+                <el-form-item label="开户人">
                   <div class="content">
-                    <span v-if="repairDetail.customer_name">{{repairDetail.customer_name}}</span>
-                    <span v-if="!repairDetail.customer_name">暂无</span>
+                    <span v-if="reimDetail.account_name">{{reimDetail.account_name}}</span>
+                    <span v-else>暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="客户性别">
+                <el-form-item label="银行卡号">
                   <div class="content">
-                    <span v-if="repairDetail.sexuality">{{repairDetail.sexuality}}</span>
-                    <span v-if="!repairDetail.sexuality">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="回复电话">
-                  <div class="content">
-                    <span v-if="repairDetail.customer_mobile">{{repairDetail.customer_mobile}}</span>
-                    <span v-if="!repairDetail.customer_mobile">暂无</span>
+                    <span v-if="reimDetail.bank_num">{{reimDetail.bank_num}}</span>
+                    <span v-else>暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="8">
-                <el-form-item label="跟进人">
-                  <div class="content">
-                    <span v-if="repairDetail.followor">{{repairDetail.followor}}</span>
-                    <span v-if="!repairDetail.followor">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="下次跟进时间">
-                  <div class="content">
-                    <span v-if="repairDetail.estimated_time">{{repairDetail.estimated_time}}</span>
-                    <span v-if="!repairDetail.estimated_time">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="初步认责人">
-                  <div class="content">
-                    <span v-if="repairDetail.liable">{{repairDetail.liable}}</span>
-                    <span v-if="!repairDetail.liable">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="维修时间">
-                  <div class="content">
-                    <span v-if="repairDetail.repair_time">{{repairDetail.repair_time}}</span>
-                    <span v-if="!repairDetail.repair_time">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="预计维修金额">
-                  <div class="content">
-                    <span v-if="repairDetail.repair_money">{{repairDetail.repair_money}}</span>
-                    <span v-if="!repairDetail.repair_money">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="维修师傅">
-                  <div class="content">
-                    <span v-if="repairDetail.repair_master">{{repairDetail.repair_master}}</span>
-                    <span v-if="!repairDetail.repair_master">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="维修状态">
-                  <div class="content">
-                    <span v-if="repairDetail.statu">{{repairDetail.statu}}</span>
-                    <span v-if="!repairDetail.statu">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="实际维修金额">
-                  <div class="content">
-                    <span v-if="repairDetail.real_money">{{repairDetail.real_money}}</span>
-                    <span v-if="!repairDetail.real_money">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="最终认责人">
-                  <div class="content">
-                    <span v-if="repairDetail.final_liabler">{{repairDetail.final_liabler}}</span>
-                    <span v-if="!repairDetail.final_liabler">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="维修内容">
-                  <div class="content">
-                    <span v-if="repairDetail.content">{{repairDetail.content}}</span>
-                    <span v-if="!repairDetail.content">暂无</span>
-                  </div>
+              <el-col :span="24" v-if="reimDetail.album">
+                <el-form-item label="截图">
+                  <img v-if="reimDetail.album.image_pic!=[]" data-magnify
+                       v-for="(val,key) in reimDetail.album.image_pic" :data-src="val[0].uri" :src="val[0].uri"
+                       alt="">
                 </el-form-item>
               </el-col>
             </el-row>
@@ -169,21 +122,22 @@
               <el-col :span="24">
                 <el-form-item label="备注">
                   <div class="content">
-                    <span v-if="repairDetail.remark">{{repairDetail.remark}}</span>
-                    <span v-if="!repairDetail.remark">暂无</span>
+                    <span v-if="reimDetail.remark">{{reimDetail.remark}}</span>
+                    <span v-else>暂无</span>
                   </div>
                 </el-form-item>
               </el-col>
             </el-row>
             <div class="follow_result">
-              <div class="title">跟进结果</div>
-              <el-button type="text" size="small" @click="addResult(repairDetail.id)">
-                <i class="el-icon-plus"></i>新增跟进结果
-              </el-button>
+              <div class="title">报销结果</div>
+              <!--<el-button type="text" size="small" @click="addResult(repairDetail.id)">-->
+                <!--<i class="el-icon-plus"></i>新增跟进结果-->
+              <!--</el-button>-->
             </div>
             <div v-if="repairDetail.follow && repairDetail.follow.length>0">
               <el-form size="small" label-width="100px" v-if="repairDetail.follow">
-                <el-row v-for="item in repairDetail.follow" :key="item.id" style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;">
+                <el-row v-for="item in repairDetail.follow" :key="item.id"
+                        style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;">
                   <el-col :span="12">
                     <el-form-item label="跟进时间">
                       <div class="content">
@@ -217,17 +171,17 @@
           </el-form>
         </div>
       </div>
-      <span slot="footer" class="dialog-footer">
+      <!--<span slot="footer" class="dialog-footer">-->
         <!--<el-button size="small" @click="orderDetailDialogVisible = false">取 消</el-button>-->
         <!--<el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>-->
-      </span>
+      <!--</span>-->
     </el-dialog>
     <!--<EditCollectRepair :addCollectRepairDialog="collectRepairDialog" :editId="editId"-->
-                       <!--@close="closeModal"></EditCollectRepair>-->
+    <!--@close="closeModal"></EditCollectRepair>-->
     <!--<EditRentRepair :addRentRepairDialog="rentRepairDialog" :editId="editId" @close="closeModal"></EditRentRepair>-->
 
     <!--<AddResult :addResultDialog="addResultDialog" :repairId="addResultId"-->
-               <!--@close="closeModal"></AddResult>-->
+    <!--@close="closeModal"></AddResult>-->
   </div>
 </template>
 
@@ -272,7 +226,7 @@
         this.$http.get(globalConfig.server + 'customer/reimbursement/' + this.reimbursementId).then((res) => {
           if (res.data.code === "30020") {
             this.reimDetail = res.data.data;
-          }else{
+          } else {
             this.reimDetail = {};
             this.$notify.warning({
               title: '警告',

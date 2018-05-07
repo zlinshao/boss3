@@ -151,6 +151,22 @@
               </template>
             </el-table-column>
             <el-table-column
+              prop="staff"
+              label="开单人">
+              <template slot-scope="scope">
+                <span v-if="scope.row.staff">{{scope.row.staff}}</span>
+                <span v-if="!scope.row.staff">暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="department"
+              label="开单人部门">
+              <template slot-scope="scope">
+                <span v-if="scope.row.department">{{scope.row.department}}</span>
+                <span v-if="!scope.row.department">暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
               prop="is_send"
               label="操作类型">
               <template slot-scope="scope">

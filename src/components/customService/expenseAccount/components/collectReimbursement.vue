@@ -259,6 +259,8 @@
                          @close="closeModal"></ReimbursementDetail>
     <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize"
                   @selectMember="selectMember"></organization>
+    <ReimResult :reimResultDialog="reimResultDialog" :reimbursementId="reimbursementId" :type="resultType" :resultId="resultId"
+                @close="closeModal"></ReimResult>
   </div>
 </template>
 
@@ -267,10 +269,11 @@
   import Organization from '../../../common/organization.vue';
   import ReimbursementDetail from './reimbursementDetail';
   import EditReimbursement from './editReimbursement';
+  import ReimResult from './reimResult';
 
   export default {
     name: 'repair-manage',
-    components: {RightMenu, Organization, ReimbursementDetail, EditReimbursement},
+    components: {RightMenu, Organization, ReimbursementDetail, EditReimbursement, ReimResult},
     data() {
       return {
         rightMenuX: 0,
@@ -302,7 +305,10 @@
         reimbursementSourceCategory: [],  //报销来源
         finishedStatusCategory: [], //完成状态
         reimbursementId: '',  //报销单id
-        editReimbursementDialog: false,
+        editReimbursementDialog: false,  //编辑报销单
+        reimResultDialog: false,  //报销结果
+        resultType: '',   //报销结果类型 add/edit
+        resultId: '',  //报销结果id
       }
     },
     mounted() {
@@ -369,6 +375,7 @@
       closeModal(val) {
         this.editReimbursementDialog = false;
         this.reimbursementDetailDialog = false;
+        this.reimResultDialog = false;
         this.getCollectTableData();
       },
       closeOrganize() {
@@ -403,9 +410,10 @@
       houseMenu(row, event) {
         this.reimbursementId = row.id;
         if (row.results && row.results.id) {
+          this.resultId = row.results.id;
           this.lists = [
             {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',},
-            {clickIndex: 'edit_reimbursement_result', headIcon: 'el-icon-edit', label: '编辑报销结果',},
+            {clickIndex: 'edit_reimbursement_result', headIcon: 'el-icon-edit', label: '编辑报销结果', },
             // {clickIndex: 'delete_reimbursement', headIcon: 'el-icon-delete', label: '删除报销单',},
           ];
         } else {
@@ -426,6 +434,14 @@
             break;
           case 'delete_reimbursement':
             this.deleteRepair();
+            break;
+          case 'edit_reimbursement_result':
+            this.reimResultDialog = true;
+            this.resultType = 'edit';
+            break;
+          case 'add_reimbursement_result':
+            this.reimResultDialog = true;
+            this.resultType = 'add';
             break;
         }
       },
