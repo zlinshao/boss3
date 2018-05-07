@@ -254,7 +254,7 @@
         <div>
           <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="收房合同" name="first">
-              <div class="myTable" @contextmenu="houseHeadMenu($event)">
+              <div class="myTable">
                 <el-table
                   :data="collectData"
                   :empty-text='rentStatus'
@@ -419,7 +419,7 @@
               </div>
             </el-tab-pane>
             <el-tab-pane label="租房合同" name="second">
-              <div class="myTable" @contextmenu="houseHeadMenu($event)">
+              <div class="myTable">
                 <el-table
                   :data="rentData"
                   :empty-text='rentStatus'
@@ -822,6 +822,14 @@
                   @close="closeOrganization" @selectMember="selectMember"></Organization>
     <visit-record :visitRecordDialog="visitRecordDialog" :contractId="contractOperateId"
                   :category="contractModule" @close="closeModal"></visit-record>
+
+    <!--编辑租客-->
+    <EditRentInfo :editRentInfoDialog="editRentInfoDialog" :collectHouseId="collectHouseId"
+                  :rentContractId="contractOperateId" @close="closeModal"></EditRentInfo>
+
+    <EditHouseResources :editHouseResourcesDialog="editHouseResourcesDialog"
+                        :collectContractId="contractOperateId" @close="closeModal"></EditHouseResources>
+
   </div>
 </template>
 
@@ -829,10 +837,11 @@
   import RightMenu from '../../../common/rightMenu.vue';
   import Organization from '../../../common/organization.vue';
   import VisitRecord from '../../components/visitRecord.vue'    //添加回访
-
+  import EditRentInfo from '../../components/editRentInfo'
+  import EditHouseResources from '../../components/editHouseResources'
   export default {
     name: 'hello',
-    components: {RightMenu, Organization, VisitRecord},
+    components: {RightMenu, Organization, VisitRecord , EditRentInfo , EditHouseResources},
     data() {
       return {
         rightMenuX: 0,
@@ -967,6 +976,11 @@
         contractModule: '',
         contractOperateId: '',
         viewVisitRecordDialog: false,
+
+        editHouseResourcesDialog : false,
+        editRentInfoDialog : false,
+        collectHouseId : '',
+
         visitTableData: [],
         visitStatus: ' ',
         visitLoading: false,
@@ -1033,9 +1047,17 @@
       }
     },
     methods: {
-      closeModal() {
+      closeModal(val) {
         this.visitRecordDialog = false;
         this.viewVisitRecordDialog = false;
+        this.editRentInfoDialog = false;
+        this.editHouseResourcesDialog = false;
+
+        if (val === 'updateCollect') {
+          this.collectDatafunc();
+        } else if (val === 'updateRent') {
+          this.rentDatafunc();
+        }
       },
       selectMember(val) {
         if (this.type === 'depart') {
@@ -1175,43 +1197,50 @@
       houseMenu(row, event) {
         this.contractModule = !this.is_rent ? 1 : 2;
         this.collectContractId = row.contract_id;   //收房id
+
+        this.collectHouseId = row.house_id;   //收房id
         this.contractOperateId = row.contract_id;   //通用合同ID
-        this.lists = [
-          // {clickIndex: 'stick', headIcon: 'el-icons-fa-arrow-up', label: '置顶',},
-          // {clickIndex: 'cancel', headIcon: 'el-icons-fa-scissors', label: '作废',},
-          {
-            clickIndex: 'visit', headIcon: 'el-icons-fa-eye', tailIcon: 'el-icon-arrow-right', label: '回访记录',
-            children: [
-              {clickIndex: 'viewVisit', headIcon: 'el-icons-fa-eye', label: '查看回访记录'},
-              {clickIndex: 'addVisit', headIcon: 'el-icons-fa-plus', label: '添加回访记录'},
-            ]
-          },
-          // {clickIndex: 'maintenanceDialog', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
-          {clickIndex: 'lookMemorandum', headIcon: 'el-icon-edit', label: '查看合同备忘', contract_id: row.contract_id},
-        ];
+
+        if(this.is_rent){
+          this.lists = [
+            {
+              clickIndex: 'visit', headIcon: 'el-icons-fa-eye', tailIcon: 'el-icon-arrow-right', label: '回访记录',
+              children: [
+                {clickIndex: 'viewVisit', headIcon: 'el-icons-fa-eye', label: '查看回访记录'},
+                {clickIndex: 'addVisit', headIcon: 'el-icons-fa-plus', label: '添加回访记录'},
+              ]
+            },
+            // {clickIndex: 'maintenanceDialog', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
+            {clickIndex: 'editRentInfoDialog',headIcon: 'el-icon-edit', label: '修改租客信息',disabled:row.doc_status.id>3},
+
+            {clickIndex: 'lookMemorandum', headIcon: 'el-icons-fa-eye', label: '查看合同备忘', contract_id: row.contract_id},
+          ];
+        }else {
+          this.lists = [
+            {
+              clickIndex: 'visit', headIcon: 'el-icons-fa-eye', tailIcon: 'el-icon-arrow-right', label: '回访记录',
+              children: [
+                {clickIndex: 'viewVisit', headIcon: 'el-icons-fa-eye', label: '查看回访记录'},
+                {clickIndex: 'addVisit', headIcon: 'el-icons-fa-plus', label: '添加回访记录'},
+              ]
+            },
+            // {clickIndex: 'maintenanceDialog', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
+            {
+              clickIndex: 'editHouseResourcesDialog',
+              headIcon: 'el-icons-fa-home',
+              label: '修改房源',
+              disabled: row.doc_status.id > 3
+            },
+
+            {clickIndex: 'lookMemorandum', headIcon: 'el-icons-fa-eye', label: '查看合同备忘', contract_id: row.contract_id},
+          ];
+        }
+
         this.contextMenuParam(event);
       },
       //右键回调事件
       clickEvent(val) {
-        console.log(val)
         switch (val.clickIndex) {
-          case 'cancel':
-            this.$confirm('您确定将其作废吗', '提示', {
-              confirmButtonText: '确定',
-              cancelButtonText: '取消',
-              type: 'warning'
-            }).then(() => {
-              this.$message.success({
-                title: '成功',
-                message: '作废成功!'
-              });
-            }).catch(() => {
-              this.$message.info({
-                title: '提示',
-                message: '已取消作废'
-              });
-            });
-            break;
           case 'maintenanceDialog':
             this.maintenanceDialog = true;
             break;
@@ -1224,6 +1253,12 @@
           case 'lookMemorandum':
             this.memoDialog = true;
             this.selectContractId = val.contract_id;
+            break;
+          case 'editRentInfoDialog':         //修改租客信息
+            this.editRentInfoDialog = true;
+            break;
+          case 'editHouseResourcesDialog':   //修改房源信息
+            this.editHouseResourcesDialog = true;
             break;
         }
       },
