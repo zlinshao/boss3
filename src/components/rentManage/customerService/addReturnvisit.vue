@@ -222,7 +222,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="备注">
-                <el-input v-model="form.remark "></el-input>
+                <el-input v-model="form.remark"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
