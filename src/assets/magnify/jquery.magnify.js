@@ -56,8 +56,8 @@ var $W = $(window),
     movable: true,
     keyboard: true,
     title: true,
-    modalWidth: 800,
-    modalHeight: 600,
+    modalWidth: 400,
+    modalHeight: 300,
     fixedContent: true,
     fixedModalSize: false,
     initMaximized: false,
@@ -390,7 +390,7 @@ Magnify.prototype = {
     }
 
   },
-  setModalSize: function (img) {
+  setModalSize: function (img,isJump) {
 
     var self = this,
       winWidth = $W.width(),
@@ -411,10 +411,12 @@ Magnify.prototype = {
     };
 
     // Modal size should calc with stage css value
-    var modalWidth = img.width + getNumFromCSSValue(stageCSS.left) + getNumFromCSSValue(stageCSS.right) +
-      getNumFromCSSValue(stageCSS.borderLeft) + getNumFromCSSValue(stageCSS.borderRight),
-      modalHeight = img.height + getNumFromCSSValue(stageCSS.top) + getNumFromCSSValue(stageCSS.bottom) +
-        getNumFromCSSValue(stageCSS.borderTop) + getNumFromCSSValue(stageCSS.borderBottom);
+    // var modalWidth = img.width/2 + getNumFromCSSValue(stageCSS.left) + getNumFromCSSValue(stageCSS.right) +
+    //   getNumFromCSSValue(stageCSS.borderLeft) + getNumFromCSSValue(stageCSS.borderRight),
+    //   modalHeight = img.height + getNumFromCSSValue(stageCSS.top) + getNumFromCSSValue(stageCSS.bottom) +
+    //     getNumFromCSSValue(stageCSS.borderTop) + getNumFromCSSValue(stageCSS.borderBottom);
+    var modalWidth = 800,
+        modalHeight = 600;
 
     var gapThreshold = (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1,
       // modal scale to window
@@ -425,13 +427,21 @@ Magnify.prototype = {
 
     minWidth = this.options.fixedModalSize ? this.options.modalWidth : Math.ceil(minWidth);
     minHeight = this.options.fixedModalSize ? this.options.modalHeight : Math.ceil(minHeight);
-
-    var modalCSSObj = {
-      width: minWidth + 'px',
-      height: minHeight + 'px',
-      left: (winWidth - minWidth) / 2 + scrollLeft + 'px',
-      top: (winHeight - minHeight) / 2 + scrollTop + 'px'
+    var modalCSSObj = {};
+    if(isJump === 'jump'){
+       modalCSSObj = {
+        width: minWidth + 'px',
+        height: minHeight + 'px',
+      };
+    }else {
+       modalCSSObj = {
+        width: minWidth + 'px',
+        height: minHeight + 'px',
+        left: (winWidth - minWidth) / 2 + scrollLeft + 'px',
+        top: (winHeight - minHeight) / 2 + scrollTop + 'px'
+      };
     }
+
 
     // Add modal init animation
     if (this.options.initAnimation) {
@@ -495,7 +505,7 @@ Magnify.prototype = {
     }
 
   },
-  loadImg: function (imgSrc) {
+  loadImg: function (imgSrc,isJump) {
 
     var self = this;
 
@@ -521,7 +531,7 @@ Magnify.prototype = {
       if (self.isMaximized || ( self.isOpened && self.options.changeImgWithModalFixed)) {
         self.setImageSize(img);
       } else {
-        self.setModalSize(img);
+        self.setModalSize(img,isJump);
       }
 
       self.$stage.removeClass('stage-ready');
@@ -595,7 +605,7 @@ Magnify.prototype = {
 
     this.groupIndex = index;
 
-    this.loadImg(this.groupData[index].src);
+    this.loadImg(this.groupData[index].src,'jump');
 
   },
   wheel: function (e) {
@@ -751,7 +761,7 @@ Magnify.prototype = {
         if (self.isMaximized) {
           self.setImageSize({ width: self.imageData.originalWidth, height: self.imageData.originalHeight });
         } else {
-          self.setModalSize({ width: self.imageData.originalWidth, height: self.imageData.originalHeight });
+          self.setModalSize({ width: self.imageData.originalWidth, height: self.imageData.originalHeight },'');
         }
 
       }
