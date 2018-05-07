@@ -51,7 +51,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select clearable v-model="form.status" placeholder="请选择审核状态" value="">
+                      <el-select clearable v-model="form.audit" placeholder="请选择审核状态" value="">
                         <el-option v-for="item in passStatus" :label="item.dictionary_name" :value="item.id"
                                    :key="item.id"></el-option>
                       </el-select>
@@ -263,7 +263,6 @@
                 </template>
               </el-table-column>
               <el-table-column
-                prop="status"
                 label="部门">
                 <template slot-scope="scope">
                   <span v-if="scope.row.department">{{scope.row.department}}</span>
@@ -318,7 +317,7 @@ export default {
         originate: "",
         operator_id: "",
         create_time: "",
-        keywords: ""
+        keywords: "",
       },
       collectTableData: [],
       rentTableData: [],
@@ -345,7 +344,7 @@ export default {
   },
   mounted() {
     this.getCollectTableData();
-
+    this.getDictionary();
   },
 
   methods: {
