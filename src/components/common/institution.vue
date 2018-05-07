@@ -1,20 +1,23 @@
 <template>
   <div>
     <el-dialog :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false"  width="0" style="margin-top:20vh" :visible.sync="badgeDialogVisible">
-    <div class="badgeup" >
-      <span class="span1">{{institInfo.title}}</span>
+    <div class="badgeup" v-for="(item,index) in infoMore" :key="item.id" v-if="a ==index">
+      <span class="span1">{{item.title}}</span>
       <div class="msg">
-        <img :src="peopore.avatar" />
-        <span style="float:left; line-height:40px;">{{peopore.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{deport}}-{{center}}</span>
-        <span style="float:right;margin-right:20px;">{{institInfo.create_time}}</span>
+        <img :src="item.staffs.avatar" />
+        <span style="float:left; line-height:40px;">{{item.staffs.name}}&nbsp;&nbsp;&nbsp;&nbsp;{{item.staffs.org[0].name}}</span>
+        <span style="float:right;margin-right:20px;">{{item.create_time}}</span>
       </div>
       <div class="article scroll_bar" >
-        <div v-html="institInfo.content"></div>
-      <img v-if="images.cover_pic!=[]" data-magnify
-        v-for="(val,key) in images.cover_pic" :data-src="val.uri" :src="val.uri" alt="" :key="key">
+        <div v-html="item.content"></div>
+      <img v-if="item.album.cover_pic!=[]" data-magnify
+        v-for="(val,key) in item.album.cover_pic" :data-src="val.uri" :src="val.uri" alt="" :key="key">
       </div>
-      <div class="button">
-       <el-button size="small" @click="close" type="primary">我知道了</el-button>
+      <div class="button" >
+            <el-button v-show="a <= len-1 && a>0 " class="elbuttom1" size="small" @click="preimg" type="primary">上一张</el-button>
+            <el-button v-show="a == 0" class="elbuttom1" size="small" type="info">上一张</el-button>
+            <el-button v-show="a < len - 1" class="elbuttom2" size="small" @click="nextimg(item.id)" type="primary">下一张</el-button>
+            <el-button v-show="a == len -1" class="elbuttom2" size="small" @click="close(item.id)"  type="primary">我知道了</el-button>
       </div>
     </div>
     </el-dialog>
@@ -24,7 +27,7 @@
 <script>
 export default {
   name: "hello",
-  props: ["institutionDialog"],
+  props: ["institutionDialog","institutionMore"],
   data() {
     return {
       landholder: {},
@@ -38,17 +41,26 @@ export default {
       peopore:"",
       deport:"",
       center:"",
+      infoMore:[],
+      len:0,
+      a:0,
+      form:{
+        id:""
+      }
     };
   },
   watch: {
     institutionDialog(val) {
       this.badgeDialogVisible = val;
     },
+    institutionMore(val){
+      this.infoMore = this.institutionMore;
+      this.len = this.institutionMore.length;
+    },
     badgeDialogVisible(val) {
       if (!val) {
         this.$emit("close");
       } else{
-        this.getinfo();
       }
     }
   },
@@ -56,28 +68,23 @@ export default {
     this.landholder = JSON.parse(localStorage.personal);
   },
   methods: {
-    getinfo() {
+    preimg() {
+      this.a = this.a - 1;
+    },
+    nextimg(id) {
+      this.a = this.a + 1;
+      this.form.id=id;   
       this.$http
-        .get(globalConfig.server + "oa/portal/last")
+        .get(globalConfig.server + "oa/portal/know",{params: this.form})
         .then(res => {
-          if (res.data.code === "800110") {
-            this.institInfo = res.data.data;
-            this.images = res.data.data.album;
-            if(res.data.data.staffs !=[]){
-              this.peopore = res.data.data.staffs;
-              this.deport = res.data.data.staffs.org[0].name;
-              this.center = res.data.data.staffs.role[0].description;
-            }
-          }
         });
-    },    
-    close(){
-      this.badgeDialogVisible=false;
+    },  
+    close(id){
+      this.form.id=id;   
       this.$http
-        .get(globalConfig.server + "special/special/loginInfo")
+        .get(globalConfig.server + "oa/portal/know",{params: this.form})
         .then(res => {
-          localStorage.setItem("personal", JSON.stringify(res.data.data));
-          globalConfig.personal = res.data.data.data;
+          this.badgeDialogVisible=false;
         });
     },
 
@@ -143,10 +150,12 @@ export default {
   left:10px;
   bottom:15px;
 }
-.el-button {
-  width: 130px; 
-  height: 32px;
-
-
-}
+      .elbuttom1 {
+        float: left;
+        margin-left: 35%;
+      }
+      .elbuttom2 {
+        float: left;
+        margin-left:40px;
+      }
 </style>

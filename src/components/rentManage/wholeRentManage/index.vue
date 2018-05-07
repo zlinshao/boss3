@@ -864,39 +864,6 @@
             title: '已回访',
           },
         ],
-        doc_sta:[
-          {
-            value: 'draft',
-            title: '等待提交',
-          },
-          {
-            value: 'wait_contract_review',
-            title: '合同审核员审核中',
-          },
-          {
-            value: 'wait_house_review',
-            title: '房屋审核员审核中',
-          },
-          {
-            value: 'published',
-            title: '已通过',
-          },
-        ],
-        visit_sta:[
-          {
-            value: 'draft',
-            title: '等待提交',
-          },
-          {
-            value: 'wait_customer_service_review',
-            title: '等待回访',
-          },
-          {
-            value: 'published',
-            title: '已回访',
-          },
-        ],
-        collectTotalNum:0,
         collectData: [],    //收房列表数据
         collectHouseId: '',   //房屋id
         collectContractId: '', //  收房合同id

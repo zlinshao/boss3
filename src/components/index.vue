@@ -328,7 +328,7 @@
                     @close="closeModalSecond"></UnlockSecondPW>
     <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
     <BadgeView :badgeDialog="badgeDialog" @close="closeModalSecond"></BadgeView>
-    <InstitutionView :institutionDialog="institutionDialog" @close="closeinsModal"></InstitutionView>
+    <InstitutionView :institutionDialog="institutionDialog" :institutionMore="institutionMore" @close="closeinsModal"></InstitutionView>
     <NoticeTitleView :noticeTitleDialog="noticeTitleDialog" @close="closeModal"></NoticeTitleView>
     <YanFirstView :yanFirstDialog="yanFirstDialog" :yanFirstInfo="yanFirstInfo" @close="closeyanModal"></YanFirstView>
     <YanSecondView :yanSecondDialog="yanSecondDialog" @close="closeModal"></YanSecondView>
@@ -397,6 +397,7 @@
         yanSecondDialog:false,      //研发2
         refresh:false,  //每天刷新一次
         yanFirstInfo:{},
+        institutionMore:[],
 
       };
     },
@@ -463,6 +464,16 @@
                     this.yanFirstDialog = true;
                 }
               }); 
+            //制度弹窗
+            this.$http
+            .get(globalConfig.server + "oa/portal/last")
+            .then(res => {
+              if (res.data.code === "800110") {
+                this.institutionMore = res.data.data;
+                this.institutionDialog = true;
+
+              }
+            });              
         }
       }
     },
@@ -484,15 +495,6 @@
             if (!JSON.parse(localStorage.personal).data.medal) {
               this.badgeDialog = true;
             }
-            this.$http
-            .get(globalConfig.server + "oa/portal/last")
-            .then(res => {
-              if (res.data.code === "800110") {
-                if (!JSON.parse(localStorage.personal).data.system) {
-                this.institutionDialog = true;
-                }
-              }
-            });
            
           });
       cookie.set("reFresh", true);
@@ -505,7 +507,8 @@
           this.yanFirstInfo = res.data.data;
           this.yanFirstDialog = true;
         }
-      }); 
+      });
+      
     },
     mounted() {
       //初始化个人信息
@@ -516,6 +519,14 @@
         _this.clickScreen();
       });
 
+      this.$http
+      .get(globalConfig.server + "oa/portal/last")
+      .then(res => {
+        if (res.data.code === "800110") {
+          this.institutionMore = res.data.data;
+          this.institutionDialog = true;
+        }
+      }); 
       //根据个人信息进行操作事项
       this.initData();
       //多页面锁屏
@@ -551,16 +562,6 @@
     methods: {
       initData() {
 
-        //制度弹窗
-        this.$http
-        .get(globalConfig.server + "oa/portal/last")
-        .then(res => {
-          if (res.data.code === "800110") {
-            if (!JSON.parse(localStorage.personal).data.system) {
-            this.institutionDialog = true;
-            }
-          }
-        });
         //this.noticeTitleDialog = true;
         //this.yanSecondDialog= true;
         //版本更新
@@ -690,7 +691,6 @@
         this.messageDialog = false;
         this.setLockPwdDialog = false;
         this.instructionDialog = false;
-        this.institutionDialog = false;
         this.noticeTitleDialog = false;
         this.yanFirstDialog = false;
         this.yanSecondDialog = false;

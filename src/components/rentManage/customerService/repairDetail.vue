@@ -5,12 +5,12 @@
           <el-row>
             <el-col :span="10">
               <el-form-item label="创建时间" >
-                <el-input v-model="repairDetail.create_time" readonly ></el-input>
+                <div class="content">{{repairDetail.create_time}}</div>
               </el-form-item>
             </el-col> 
             <el-col :span="10" style="margin-left:8.33333%">
               <el-form-item label="回访人" >
-                <el-input v-model="repairDetail.operator" readonly ></el-input>
+                <div class="content">{{repairDetail.operator}}</div>
               </el-form-item>
             </el-col>
             <el-col :span="2">
@@ -19,7 +19,7 @@
           <el-row>
             <el-col :span="10">
               <el-form-item label="房屋地址" >
-                <el-input v-model="repairDetail.address"  readonly></el-input>
+                <div class="content">{{repairDetail.address}}</div>
               </el-form-item>
             </el-col>
             <el-col :span="2">
@@ -27,7 +27,7 @@
             </el-col>  
             <el-col :span="10">
               <el-form-item label="合同类型" >
-                <el-input v-model="repairDetail.contract_type"  readonly></el-input>
+                <div class="content">{{repairDetail.contract_type}}</div>
               </el-form-item>
             </el-col>
             <el-col :span="2">
@@ -36,10 +36,10 @@
             <el-row>
             <el-col :span="10">
               <el-form-item label="合同周期">
-                <el-input v-model="repairDetail.contract_month" readonly style="width:35%;float:left;">
-                </el-input><span style="float:left;">月</span>
-                <el-input v-model="repairDetail.contract_day" readonly style="width:35%;float:left;">
-                </el-input><span style="float:left;">天</span>
+                <div class="content" style="width:25%;float:left;">{{repairDetail.contract_month}}</div>
+                <span style="float:left;">月</span>
+                <div class="content" style="width:25%;float:left;">{{repairDetail.contract_day}}</div>
+                <span style="float:left;">天</span>
               </el-form-item>
             </el-col>
             <el-col :span="2">
@@ -47,7 +47,7 @@
             </el-col>  
             <el-col :span="10">
               <el-form-item label="来源">
-                <el-input v-model="repairDetail.originate_name" readonly ></el-input>
+                <div class="content">{{repairDetail.originate_name}}</div>
               </el-form-item>
             </el-col>
             <el-col :span="2">
@@ -57,25 +57,25 @@
           <el-row v-if="repairDetail.originate === 623">
             <el-col :span="11">
               <el-form-item label="中介名称">
-                <el-input v-model="repairDetail.agency" readonly></el-input>
+                <div class="content">{{repairDetail.agency}}</div>
               </el-form-item>
             </el-col>
             <el-col :span="11">
               <el-form-item label="中间价格">
-                <el-input v-model="repairDetail.agency_price" readonly></el-input>
+                <div class="content">{{repairDetail.agency_price}}</div>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row v-for="index in priceLen" :key="index" v-if="index>0">
             <el-col :span="12">
               <el-form-item label="月单价" >
-                <el-input class="input" style="width:45%" v-model="repairDetail.unit_price[0][index-1][0]" readonly ></el-input> -
-                <el-input class="input" style="width:45%" v-model="repairDetail.unit_price[0][index-1][1]" readonly ></el-input>
+                <div class="content" style="width:36%;float:left;">{{repairDetail.unit_price[0][index-1][0]}}</div> <span style="float:left;">&nbsp;-&nbsp;</span> 
+                <div class="content" style="width:36%;float:left;">{{repairDetail.unit_price[0][index-1][1]}}</div>
               </el-form-item>
             </el-col>         
             <el-col :span="10" >
               <el-form-item>
-                <el-input v-model="repairDetail.unit_price[1][index-1]"  readonly ></el-input>
+                <div class="content">{{repairDetail.unit_price[1][index-1]}}</div>
               </el-form-item>
             </el-col>
             <el-col :span="2">
@@ -85,21 +85,22 @@
           <el-row v-for="index in payForLen" :key="index+55" v-if="index>0">
             <el-col :span="12">
               <el-form-item label="付款方式">
-                <el-input class="input" style="width:45%" v-model="repairDetail.pay_type[0][index-1][0]" readonly ></el-input> -
-                <el-input class="input" style="width:45%" v-model="repairDetail.pay_type[0][index-1][1]" readonly ></el-input>
+                <div class="content" style="width:36%;float:left;">{{repairDetail.pay_type[0][index-1][0]}}</div> <span style="float:left;">&nbsp;-&nbsp;</span> 
+                <div class="content" style="width:36%;float:left;">{{repairDetail.pay_type[0][index-1][1]}}</div>
               </el-form-item>
             </el-col>            
             <el-col :span="10"  v-if=" activeName !='second'">
               <el-form-item>
-                <el-input  v-model="repairDetail.pay_type[1][index-1]" readonly ></el-input>
+                <div class="content" v-for="item in payTypeInfo" :key="item.id" v-if="repairDetail.pay_type[1][index-1] == item.id">
+                  {{item.dictionary_name}}</div>
               </el-form-item>
             </el-col>
             <el-col :span="10" v-if=" activeName =='second'">
                 <el-form-item label="">
-                  <span>押</span>
-                  <el-input size="mini" style="width:46px;" v-model="repairDetail.pay_type[1][index-1]" readonly></el-input>
-                  <span>付</span>
-                  <el-input size="mini" style="width:46px;" v-model="repairDetail.pay_type[2][index-1]" readonly></el-input>
+                  <span style="float:left">押</span>
+                  <div class="content" style="width:40px;float:left">{{repairDetail.pay_type[1][index-1]}}</div>
+                  <span style="float:left">付</span>
+                  <div class="content" style="width:40px;float:left">{{repairDetail.pay_type[2][index-1]}}</div>
                 </el-form-item>
             </el-col>
             <el-col :span="2" >
@@ -109,7 +110,7 @@
           <el-row v-if=" activeName == 'second'">
             <el-col :span="10">
               <el-form-item label="已付金额">
-                <el-input v-model="repairDetail.has_pay" readonly ></el-input>
+                <div class="content">{{repairDetail.has_pay}}</div>
               </el-form-item>
             </el-col>
             <el-col :span="2" >
@@ -119,14 +120,15 @@
           <el-row  v-for="index in payTypeLen" v-if="activeName == 'second' && index>0" :key="index+111" >
             <el-col :span="10">
               <el-form-item label="支付方式" >
-                  <el-input v-for="item in payTypeInfo" :key="item.id" v-model="item.dictionary_name" readonly v-if="repairDetail.pay_method[0][index-1] == item.id"></el-input>
+                <div class="content" v-for="item in payTypeInfo" :key="item.id" v-if="repairDetail.pay_method[0][index-1] == item.id">
+                  {{item.dictionary_name}}</div>
               </el-form-item>
             </el-col>
             <el-col :span="2" >
             </el-col>                
             <el-col :span="10" style="margin-left:8.3333%">
               <el-form-item label="金额">
-                <el-input size="mini" v-model="repairDetail.pay_method[1][index-1]" readonly  ></el-input>
+                <div class="content">{{repairDetail.pay_method[1][index-1]}}</div>
               </el-form-item>
             </el-col>
             <el-col :span="2" >
@@ -136,7 +138,7 @@
           <el-row>
             <el-col :span="10">
               <el-form-item label="是否收取其他费用" class="detailTitle">
-                <el-input v-model="repairDetail.has_extra" readonly ></el-input>
+                <div class="content">{{repairDetail.has_extra}}</div>
               </el-form-item>
             </el-col>
             <el-col :span="2" >
@@ -144,38 +146,36 @@
             </el-col>   
             <el-col :span="10" >
               <el-form-item label="保修期">
-                <el-input v-model="repairDetail.guarantee_month" readonly style="width:35%;float:left;">
-                </el-input><span style="float:left;">月</span>
-                <el-input v-model="repairDetail.guarantee_day" readonly style="width:35%;float:left;">
-                </el-input><span style="float:left;">天</span>
+                <div class="content" style="width:25%;float:left;">{{repairDetail.guarantee_month}}</div>
+                <span style="float:left;">月</span>
+                <div class="content" style="width:25%;float:left;">{{repairDetail.guarantee_day}}</div>
+                <span style="float:left;">天</span>
               </el-form-item>
             </el-col>
             <el-col :span="2" >
               <el-checkbox v-model="audited_fields.guarantee_month" :disabled="audited_fieldsxx.guarantee_month" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col>   
           </el-row>
-          <el-row v-if="repairDetail.has_extra == '是' ">
-            <el-col :span="10">
+          <el-row v-if="repairDetail.has_extra == '是' " v-for="index in payUseLen" :key="index+999">
+            <el-col :span="11">
               <el-form-item label="费用名称">
-                <el-input v-model="repairDetail.pay_use" readonly></el-input>
+                <div class="content">{{repairDetail.pay_use[0][index-1]}}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="2" >
-              <el-checkbox v-model="audited_fields.pay_use" :disabled="audited_fieldsxx.pay_use" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
-            </el-col>  
-            <el-col :span="10">
+
+            <el-col :span="11">
               <el-form-item label="价格">
-                <el-input v-model="repairDetail.array" readonly></el-input>
+                <div class="content">{{repairDetail.pay_use[1][index-1]}}</div>
               </el-form-item>
             </el-col>
             <el-col :span="2" >
-              <el-checkbox v-model="audited_fields.array" :disabled="audited_fieldsxx.array" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
+              <el-checkbox v-model="audited_fields.pay_use[index-1]" :disabled="audited_fieldsxx.pay_use[index-1]" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col>  
           </el-row>
           <el-row>
             <el-col :span="22">
               <el-form-item label="备注条款">
-                <el-input v-model="repairDetail.remark_clause" readonly></el-input>
+                <div class="content">{{repairDetail.remark_clause}}</div>
               </el-form-item>
             </el-col>
             <el-col :span="2" >
@@ -185,14 +185,14 @@
           <el-row>
             <el-col :span="22">
               <el-form-item label="业务员态度" required="">
-                <el-rate v-model="repairDetail.star" readonly></el-rate>
+                <el-rate v-model="repairDetail.star" disabled></el-rate>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="22">
               <el-form-item label="业务员专业度" class="detailTitle2">
-                <el-input type="textarea" v-model="repairDetail.sale_remark" readonly></el-input>
+                <div class="content">{{repairDetail.sale_remark}}</div>
               </el-form-item>
             </el-col>
             <el-col :span="2" >
@@ -202,7 +202,7 @@
           <el-row>
             <el-col :span="22">
               <el-form-item label="备注">
-                <el-input v-model="repairDetail.remark" readonly></el-input>
+                <div class="content">{{repairDetail.remark}}</div>
               </el-form-item>
             </el-col>
           </el-row>
@@ -243,6 +243,7 @@ export default {
       priceLen: 0,
       payForLen: 0,
       payTypeLen: 0,
+      payUseLen: 0,
       feedBackInfo: [],
       audited_fields: [],
       album: [],
@@ -255,7 +256,7 @@ export default {
         pay_type: [],
         pay_method: [],
         has_extra: "",
-        has_pay:"",
+        has_pay: "",
         pay_use: "",
         array: "",
         guarantee_month: "",
@@ -272,7 +273,7 @@ export default {
         pay_type: [],
         pay_method: [],
         has_extra: "",
-        has_pay:"",
+        has_pay: "",
         pay_use: "",
         array: "",
         guarantee_month: "",
@@ -351,51 +352,124 @@ export default {
         .then(res => {
           if (res.data.code === "1212200") {
             this.repairDetail = res.data.data;
-            this.audited_fields.address = res.data.data.audited_fields.address == "1" ? true : false;
-            this.audited_fields.contract_month = res.data.data.audited_fields.contract_month == "1" ? true : false;
-            this.audited_fields.contract_day = res.data.data.audited_fields.contract_day == "1" ? true : false;
-            this.audited_fields.originate_name = res.data.data.audited_fields.originate_name == "1" ? true : false;
-            this.audited_fields.has_pay = res.data.data.audited_fields.has_pay == "1" ? true : false;
-            if(res.data.data.audited_fields.unit_price !=[] && res.data.data.audited_fields != "" ){
-              for(let i=0;i<res.data.data.audited_fields.unit_price.length;i++){
-                this.audited_fields.unit_price[i]=res.data.data.audited_fields.unit_price[i]  == "1" ? true : false;
-                this.audited_fieldsxx.unit_price[i]=res.data.data.audited_fields.unit_price[i]  == "1" ? true : false;
+            this.audited_fields.address =
+              res.data.data.audited_fields.address == "1" ? true : false;
+            this.audited_fields.contract_month =
+              res.data.data.audited_fields.contract_month == "1" ? true : false;
+            this.audited_fields.contract_day =
+              res.data.data.audited_fields.contract_day == "1" ? true : false;
+            this.audited_fields.originate_name =
+              res.data.data.audited_fields.originate_name == "1" ? true : false;
+            this.audited_fields.has_pay =
+              res.data.data.audited_fields.has_pay == "1" ? true : false;
+            if (
+              res.data.data.audited_fields.unit_price != [] &&
+              res.data.data.audited_fields != ""
+            ) {
+              for (
+                let i = 0;
+                i < res.data.data.audited_fields.unit_price.length;
+                i++
+              ) {
+                this.audited_fields.unit_price[i] =
+                  res.data.data.audited_fields.unit_price[i] == "1"
+                    ? true
+                    : false;
+                this.audited_fieldsxx.unit_price[i] =
+                  res.data.data.audited_fields.unit_price[i] == "1"
+                    ? true
+                    : false;
               }
             }
-            if(res.data.data.audited_fields.pay_type !=[] && res.data.data.audited_fields != ""){
-              for(let j=0;j<res.data.data.audited_fields.pay_type.length;j++){
-                this.audited_fields.pay_type[j]=res.data.data.audited_fields.pay_type[j]  == "1" ? true : false;
-                this.audited_fieldsxx.pay_type[j]=res.data.data.audited_fields.pay_type[j]  == "1" ? true : false;           
+            if (
+              res.data.data.audited_fields.pay_type != [] &&
+              res.data.data.audited_fields != ""
+            ) {
+              for (
+                let j = 0;
+                j < res.data.data.audited_fields.pay_type.length;
+                j++
+              ) {
+                this.audited_fields.pay_type[j] =
+                  res.data.data.audited_fields.pay_type[j] == "1"
+                    ? true
+                    : false;
+                this.audited_fieldsxx.pay_type[j] =
+                  res.data.data.audited_fields.pay_type[j] == "1"
+                    ? true
+                    : false;
               }
             }
 
-            if(res.data.data.audited_fields.pay_method !=[] && res.data.data.audited_fields != ""){
-              for(let k=0;k<res.data.data.audited_fields.pay_method.length;k++){
-                this.audited_fields.pay_method[k]=res.data.data.audited_fields.pay_method[k]  == "1" ? true : false;
-                this.audited_fieldsxx.pay_method[k]=res.data.data.audited_fields.pay_method[k]  == "1" ? true : false;
+            if (
+              res.data.data.audited_fields.pay_method != [] &&
+              res.data.data.audited_fields != ""
+            ) {
+              for (
+                let k = 0;
+                k < res.data.data.audited_fields.pay_method.length;
+                k++
+              ) {
+                this.audited_fields.pay_method[k] =
+                  res.data.data.audited_fields.pay_method[k] == "1"
+                    ? true
+                    : false;
+                this.audited_fieldsxx.pay_method[k] =
+                  res.data.data.audited_fields.pay_method[k] == "1"
+                    ? true
+                    : false;
               }
             }
-            this.audited_fields.has_extra = res.data.data.audited_fields.has_extra == "1" ? true : false;
-            this.audited_fields.pay_use = res.data.data.audited_fields.pay_use == "1" ? true : false;
-            this.audited_fields.array = res.data.data.audited_fields.array == "1" ? true : false;
-            this.audited_fields.guarantee_month = res.data.data.audited_fields.guarantee_month == "1"? true: false;
-            this.audited_fields.guarantee_day = res.data.data.audited_fields.guarantee_day == "1" ? true : false;
-            this.audited_fields.remark_clause = res.data.data.audited_fields.remark_clause == "1" ? true : false;
-            this.audited_fields.sale_remark = res.data.data.audited_fields.sale_remark == "1" ? true : false;
-            
+            if (
+              res.data.data.audited_fields.pay_use != [] &&
+              res.data.data.audited_fields != ""
+            ) {
+              for (
+                let k = 0;
+                k < res.data.data.audited_fields.pay_use.length;
+                k++
+              ) {
+                this.audited_fields.pay_use[k] =
+                  res.data.data.audited_fields.pay_use[k] == "1" ? true : false;
+                this.audited_fieldsxx.pay_use[k] =
+                  res.data.data.audited_fields.pay_use[k] == "1" ? true : false;
+              }
+            }
+            this.audited_fields.has_extra =
+              res.data.data.audited_fields.has_extra == "1" ? true : false;
+            this.audited_fields.guarantee_month =
+              res.data.data.audited_fields.guarantee_month == "1"
+                ? true
+                : false;
+            this.audited_fields.guarantee_day =
+              res.data.data.audited_fields.guarantee_day == "1" ? true : false;
+            this.audited_fields.remark_clause =
+              res.data.data.audited_fields.remark_clause == "1" ? true : false;
+            this.audited_fields.sale_remark =
+              res.data.data.audited_fields.sale_remark == "1" ? true : false;
 
-            this.audited_fieldsxx.address = res.data.data.audited_fields.address == "1" ? true : false;
-            this.audited_fieldsxx.contract_month = res.data.data.audited_fields.contract_month == "1" ? true : false;
-            this.audited_fieldsxx.contract_day = res.data.data.audited_fields.contract_day == "1" ? true : false;
-            this.audited_fieldsxx.originate_name =  res.data.data.audited_fields.originate_name == "1" ? true : false;
-            this.audited_fieldsxx.has_extra = res.data.data.audited_fields.has_extra == "1" ? true : false;
-            this.audited_fieldsxx.pay_use = res.data.data.audited_fields.pay_use == "1" ? true : false;
-            this.audited_fieldsxx.array = res.data.data.audited_fields.array == "1" ? true : false;
-            this.audited_fieldsxx.guarantee_month = res.data.data.audited_fields.guarantee_month == "1" ? true : false;
-            this.audited_fieldsxx.guarantee_day = res.data.data.audited_fields.guarantee_day == "1" ? true : false;
-            this.audited_fieldsxx.remark_clause = res.data.data.audited_fields.remark_clause == "1" ? true : false;
-            this.audited_fieldsxx.sale_remark =  res.data.data.audited_fields.sale_remark == "1" ? true : false;
-            this.audited_fieldsxx.has_pay = res.data.data.audited_fields.has_pay == "1" ? true : false;
+            this.audited_fieldsxx.address =
+              res.data.data.audited_fields.address == "1" ? true : false;
+            this.audited_fieldsxx.contract_month =
+              res.data.data.audited_fields.contract_month == "1" ? true : false;
+            this.audited_fieldsxx.contract_day =
+              res.data.data.audited_fields.contract_day == "1" ? true : false;
+            this.audited_fieldsxx.originate_name =
+              res.data.data.audited_fields.originate_name == "1" ? true : false;
+            this.audited_fieldsxx.has_extra =
+              res.data.data.audited_fields.has_extra == "1" ? true : false;
+            this.audited_fieldsxx.guarantee_month =
+              res.data.data.audited_fields.guarantee_month == "1"
+                ? true
+                : false;
+            this.audited_fieldsxx.guarantee_day =
+              res.data.data.audited_fields.guarantee_day == "1" ? true : false;
+            this.audited_fieldsxx.remark_clause =
+              res.data.data.audited_fields.remark_clause == "1" ? true : false;
+            this.audited_fieldsxx.sale_remark =
+              res.data.data.audited_fields.sale_remark == "1" ? true : false;
+            this.audited_fieldsxx.has_pay =
+              res.data.data.audited_fields.has_pay == "1" ? true : false;
 
             if (res.data.data.unit_price != "") {
               this.priceLen = res.data.data.unit_price[0].length;
@@ -405,6 +479,9 @@ export default {
             }
             if (res.data.data.pay_method != "") {
               this.payTypeLen = res.data.data.pay_method[0].length;
+            }
+            if (res.data.data.pay_use != "") {
+              this.payUseLen = res.data.data.pay_use[0].length;
             }
             if (this.repairDetail.has_extra == 1) {
               this.repairDetail.has_extra = "是";
@@ -450,6 +527,14 @@ export default {
   @mixin flex {
     display: flex;
     display: -webkit-flex;
+  }
+  .content {
+    padding: 0 10px;
+    min-height: 28px;
+    background: #eef3fc;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #727479;
   }
   .addicon {
     font-size: 20px;

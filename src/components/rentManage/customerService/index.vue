@@ -5,7 +5,7 @@
         <div class="tabsSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input placeholder="请输入关键字" v-model="form.keywords" size="mini" clearable
+              <el-input placeholder="请输入房屋地址" v-model="form.keywords" size="mini" clearable
                         @keyup.enter.native="search">
                 <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
@@ -51,7 +51,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select clearable v-model="form.status" placeholder="请选择审核状态" value="">
+                      <el-select clearable v-model="form.audit" placeholder="请选择审核状态" value="">
                         <el-option v-for="item in passStatus" :label="item.dictionary_name" :value="item.id"
                                    :key="item.id"></el-option>
                       </el-select>
@@ -104,7 +104,7 @@
       </div>
       <div class="main">
         <el-tabs v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="收房维修记录" name="first">
+          <el-tab-pane label="收房回访记录" name="first">
             <el-table
               :data="collectTableData"
               :empty-text='collectStatus'
@@ -187,7 +187,7 @@
               </el-table-column>
             </el-table>
           </el-tab-pane>
-          <el-tab-pane label="租房维修记录" name="second">
+          <el-tab-pane label="租房回访记录" name="second">
             <el-table
               :data="rentTableData"
               :empty-text='rentStatus'
@@ -263,7 +263,6 @@
                 </template>
               </el-table-column>
               <el-table-column
-                prop="status"
                 label="部门">
                 <template slot-scope="scope">
                   <span v-if="scope.row.department">{{scope.row.department}}</span>
@@ -318,7 +317,7 @@ export default {
         originate: "",
         operator_id: "",
         create_time: "",
-        keywords: ""
+        keywords: "",
       },
       collectTableData: [],
       rentTableData: [],
@@ -345,7 +344,7 @@ export default {
   },
   mounted() {
     this.getCollectTableData();
-
+    this.getDictionary();
   },
 
   methods: {
@@ -373,6 +372,14 @@ export default {
           if (res.data.code === "1212200") {
             this.collectTableData = res.data.data.data;
             this.totalNum = res.data.data.count;
+          }else if(res.data.code === "1212202"){
+            this.collectTableData = [];
+            this.totalNum = 0;
+            this.collectStatus = "暂无数据";
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
           } else {
             this.collectTableData = [];
             this.totalNum = 0;
@@ -394,6 +401,14 @@ export default {
           if (res.data.code === "1212200") {
             this.rentTableData = res.data.data.data;
             this.totalNum = res.data.data.count;
+          }else if(res.data.code === "1212202"){
+            this.rentTableData = [];
+            this.totalNum = 0;
+            this.rentStatus = "暂无数据";
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
           } else {
             this.rentTableData = [];
             this.totalNum = 0;
