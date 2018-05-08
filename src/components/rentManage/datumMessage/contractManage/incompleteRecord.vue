@@ -281,14 +281,20 @@
     activated() {
       this.getDefaultData();
     },
-    watch: {},
+    watch: {
+      address(val){
+        if(!val){
+          this.params.contract_id = '';
+          this.getIncompleteRecordData();
+        }
+      }
+    },
     methods: {
       openAddressDialog() {
         this.addressDialog = true;
       },
       closeAddressDialog(val) {
         this.addressDialog = false;
-        console.log(val);
         if (val) {
           this.params.q = val.address;
           this.params.contract_id = val.contract_id;

@@ -18,7 +18,8 @@
           <div class="personalSign">
             <span v-if="!isEdit && landholder.data && landholder.data.signature" style="cursor: pointer"
                   @click.stop="showInput">{{landholder.data.signature.content}}</span>
-            <span v-if="!isEdit && (!landholder.data || !landholder.data.signature)" style="cursor: pointer" @click.stop="showInput">添加工作状态...</span>
+            <span v-if="!isEdit && (!landholder.data || !landholder.data.signature)" style="cursor: pointer"
+                  @click.stop="showInput">添加工作状态...</span>
             <el-input id="editInput" size="mini" v-if="isEdit" @blur="editPersonalSign($event)"
                       @keyup.enter.native="editPersonalSign($event)" v-model="params.content"></el-input>
           </div>
@@ -37,7 +38,7 @@
                 </div>
                 <div class="aRight">
                   <p>BACKLOG</p>
-                  <p>待办事项<span>&nbsp;0</span></p>
+                  <p>待办事项<span>&nbsp;{{backLogNum}}</span></p>
                 </div>
               </div>
               <div class="a" @click="routerLink('/dailyRecord')">
@@ -46,7 +47,7 @@
                 </div>
                 <div class="aRight">
                   <p>JOURNAL</p>
-                  <p>日志管理<span>&nbsp;0</span></p>
+                  <p>日志管理<span>&nbsp;{{logNum}}</span></p>
                 </div>
               </div>
               <div class="a" @click="routerLink('/pictureManage')">
@@ -246,7 +247,8 @@
       </el-row>
     </div>
 
-    <Announcement :announcementDialog="announcementDialog" :announcementId="announcementId"  @close="closeWarning" ></Announcement>
+    <Announcement :announcementDialog="announcementDialog" :announcementId="announcementId"
+                  @close="closeWarning"></Announcement>
   </div>
 </template>
 
@@ -256,22 +258,22 @@
   import Announcement from "./components/announcement.vue"; //announcement detail page
   export default {
     name: "index",
-    components:{Announcement},
+    components: {Announcement},
     data() {
       return {
-        announcementDialog:false,
+        announcementDialog: false,
         landholder: {},
         isEdit: false,
         params: {
           content: '',
         },
         isChanged: false,
-        albumNum:0, //相册数量
+        albumNum: 0, //相册数量
         chartLine: null,
-        praiseData:{},
-        punishmentData:{},
-        announcementId:'',
-        creditTotal:'',     //总积分
+        praiseData: {},
+        punishmentData: {},
+        announcementId: '',
+        creditTotal: '',     //总积分
         systemData: [],
 
         //考勤
@@ -280,7 +282,10 @@
         absent: 0,  //旷工
         not_signed: 0,  // 未打卡
         attend: 0, //出勤天数
-        loginDay:0,  //连续登陆天数
+        loginDay: 0,  //连续登陆天数
+
+        backLogNum: 0, //待办
+        logNum: 0,  //日志
       }
     },
     activated() {
@@ -293,10 +298,15 @@
       this.getCredit();
       //获取晋升通道的数据
       this.getSystemTableData();
+      //获取待办事项
+      this.getBackNum();
+      //获取日志条数
+      this.getLogNum();
     },
     mounted() {
       this.landholder = JSON.parse(localStorage.personal);
-      this.loginDay = this.landholder.data.loginday;;
+      this.loginDay = this.landholder.data.loginday;
+      ;
       this.getAlbumNum();
       this.drawLineChart();
       this.getPraise();
@@ -308,7 +318,7 @@
     },
     watch: {
       'params.content': {
-        handler(val, oldVal){
+        handler(val, oldVal) {
           if (val !== oldVal && oldVal) {
             this.isChanged = true;
           }
@@ -316,8 +326,9 @@
       }
     },
     methods: {
-      routerLink(val,type) {
-        this.$router.push({path: val,query:{type:type}})
+
+      routerLink(val, type) {
+        this.$router.push({path: val, query: {type: type}})
       },
       // 详情
       routerDetail(id) {
@@ -326,26 +337,40 @@
         this.$store.dispatch('articleDetail', data);
       },
       getSystemTableData() {
-        this.$http.get(globalConfig.server + 'oa/portal/', { params: {dict_id: 552, pages: 1}}).then((res) => {
+        this.$http.get(globalConfig.server + 'oa/portal/', {params: {dict_id: 552, pages: 1}}).then((res) => {
           if (res.data.code === '80000') {
             this.systemData = res.data.data.data;
           }
         })
       },
-      getAlbumNum(){
-        this.$http.get(globalConfig.server + "album?page="+ this.currentPage+"&limit=16").then((res) =>{
+      getAlbumNum() {
+        this.$http.get(globalConfig.server + "album?page=" + this.currentPage + "&limit=16").then((res) => {
           if (res.data.code === "20110") {
             this.albumNum = res.data.num;
           }
         });
       },
-
+      getLogNum() {
+        this.$http.get(globalConfig.server + 'oa/daily_tmp/index?style=count&self=1&limit=500').then((res) => {
+          if (res.data.code === '80000') {
+            this.logNum = res.data.data.count;
+          }
+        });
+      },
+      getBackNum() {
+        this.$http.get(globalConfig.server_user + 'process').then((res) => {
+          let data = res.data.data;
+          if (res.data.status === 'success' && data.length !== 0) {
+            this.backLogNum = res.data.meta.total;
+          }
+        })
+      },
       //显示个人签名的input
-      showInput(){
+      showInput() {
         this.isEdit = true;
-        if(this.landholder.data.signature){
+        if (this.landholder.data.signature) {
           this.params.content = this.landholder.data.signature.content;
-        }else {
+        } else {
           this.params.content = ''
         }
 
@@ -355,7 +380,7 @@
         })
       },
       //编辑个人签名
-      editPersonalSign(){
+      editPersonalSign() {
         this.isEdit = false;
         if (this.isChanged) {
           this.$http.post(globalConfig.server + 'manager/staff_record', this.params).then((res) => {
@@ -374,8 +399,8 @@
         }
       },
       //个人考勤
-      getCheckWork(){
-        let data = new Date().getFullYear() + '-' + (new Date().getMonth()+1);
+      getCheckWork() {
+        let data = new Date().getFullYear() + '-' + (new Date().getMonth() + 1);
         this.$http.get(globalConfig.server + 'attendance?year_month=' + data).then((res) => {
           if (res.data.code === '20010') {
             this.late = res.data.data.late;
@@ -388,31 +413,31 @@
       },
 
       //getAnnouncement
-      getPraise(){
-        this.$http.get(globalConfig.server +'announcement/Praise', this.params).then((res) => {
-          if(res.data.code === '80010'){
+      getPraise() {
+        this.$http.get(globalConfig.server + 'announcement/Praise', this.params).then((res) => {
+          if (res.data.code === '80010') {
             this.praiseData = res.data.data;
           }
         })
       },
-      getPunishment(){
-        this.$http.get(globalConfig.server +'announcement/Punishment', this.params).then((res) => {
-          if(res.data.code === '80010'){
+      getPunishment() {
+        this.$http.get(globalConfig.server + 'announcement/Punishment', this.params).then((res) => {
+          if (res.data.code === '80010') {
             this.punishmentData = res.data.data;
           }
         })
       },
       //查看公告详情
-      showAnnouncement(val){
+      showAnnouncement(val) {
         this.announcementDialog = true;
         this.announcementId = val.id;
       },
-      closeWarning(){
+      closeWarning() {
         this.announcementDialog = false;
       },
 
       //获取积分总数
-      getCredit(){
+      getCredit() {
         this.$http.get(globalConfig.server + 'credit/manage/self').then((res) => {
           if (res.data.code === '30310') {
             this.creditTotal = res.data.data;
@@ -421,7 +446,7 @@
       },
       //折线图
       drawLineChart() {
-        this.chartLine = ECharts.init(document.getElementById('chartLine'),'macarons');
+        this.chartLine = ECharts.init(document.getElementById('chartLine'), 'macarons');
         this.chartLine.setOption({
           title: {
             text: '个人业绩'
@@ -441,16 +466,16 @@
           xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: ['一月', '二月', '三月','四月', '五月', '六月', '七月']
+            data: ['一月', '二月', '三月', '四月', '五月', '六月', '七月']
           },
           yAxis: {
             type: 'value'
           },
           series: [
             {
-              name:'业绩',
-              type:'line',
-              data:[100000, 110000, 150000, 300000, 200000, 430000, 300000],
+              name: '业绩',
+              type: 'line',
+              data: [100000, 110000, 150000, 300000, 200000, 430000, 300000],
               markPoint: {
                 data: [
                   {type: 'max', name: '最大值'},
@@ -503,7 +528,7 @@
 <style lang="scss" scoped="">
   #individual {
 
-    .integralTab{
+    .integralTab {
       cursor: pointer;
     }
     $colorBor: rgba(255, 255, 255, .8);
@@ -524,11 +549,11 @@
       background-size: 100% 100%;
     }
     /*<!--@mixin backLiner($a,$b) {-->*/
-      /*<!--background: $a;-->*/
-      /*<!--background: -webkit-gradient(linear, left top, right top, from($a), to($b));-->*/
-      /*<!--background: -o-linear-gradient(left, $a, $b);-->*/
-      /*<!--background: -moz-linear-gradientleft, (left,$a, $b);-->*/
-      /*<!--background: linear-gradient(left, $a, $b);-->*/
+    /*<!--background: $a;-->*/
+    /*<!--background: -webkit-gradient(linear, left top, right top, from($a), to($b));-->*/
+    /*<!--background: -o-linear-gradient(left, $a, $b);-->*/
+    /*<!--background: -moz-linear-gradientleft, (left,$a, $b);-->*/
+    /*<!--background: linear-gradient(left, $a, $b);-->*/
     /*<!--}-->*/
     img {
       width: 100%;
@@ -579,26 +604,26 @@
               text-align: center;
 
             }
-            .span3{
+            .span3 {
               background: url("../../assets/images/individual/3days.png") no-repeat top;
             }
-            .span5{
-              line-height:30px;
+            .span5 {
+              line-height: 30px;
               color: #f9c38d;
               background: url("../../assets/images/individual/5days.png") no-repeat top;
             }
-            .span15{
-              line-height:30px;
+            .span15 {
+              line-height: 30px;
               color: #ffd200;
               background: url("../../assets/images/individual/15days.png") no-repeat top;
             }
-            .span30{
-              line-height:30px;
+            .span30 {
+              line-height: 30px;
               color: #fce0cc;
               background: url("../../assets/images/individual/30days.png") no-repeat top;
             }
-            .otherspan{
-              text-indent:-3px;
+            .otherspan {
+              text-indent: -3px;
               line-height: 32px;
               color: #c3fb74;
               background: url("../../assets/images/individual/otherday.png") no-repeat top;
@@ -689,12 +714,12 @@
             }
           }
           div.a:nth-of-type(1) {
-            background:#6F86F7;
+            background: #6F86F7;
             background: -webkit-linear-gradient(to right, #6F86F7, #60BDF8); /* 标准的语法（必须放在最后） */
             background: linear-gradient(to right, #6F86F7, #60BDF8); /* 标准的语法（必须放在最后） */
           }
           div.a:nth-of-type(2) {
-            background:#EE7A88;
+            background: #EE7A88;
             background: -webkit-linear-gradient(to right, #EE7A88, #EE9A89); /* 标准的语法（必须放在最后） */
             background: linear-gradient(to right, #EE7A88, #EE9A89); /* 标准的语法（必须放在最后） */
             .aLeft {
@@ -707,7 +732,7 @@
             }
           }
           div.a:nth-of-type(3) {
-            background:#51B4D4;
+            background: #51B4D4;
             background: -webkit-linear-gradient(to right, #51B4D4, #6EE6AC); /* 标准的语法（必须放在最后） */
             background: linear-gradient(to right, #51B4D4, #6EE6AC); /* 标准的语法（必须放在最后） */
             .aLeft {
@@ -720,9 +745,9 @@
             }
           }
           div.a:nth-of-type(4) {
-            background:#b0b3b9;
+            background: #b0b3b9;
             background: -webkit-linear-gradient(to right, #b0b3b9, #d4d9df); /* 标准的语法（必须放在最后） */
-            background: linear-gradient(to right, #b0b3b9,#d4d9df); /* 标准的语法（必须放在最后） */
+            background: linear-gradient(to right, #b0b3b9, #d4d9df); /* 标准的语法（必须放在最后） */
             .aLeft {
 
             }
@@ -850,7 +875,7 @@
           .achievement {
             border: 1px solid #DDDDDD;
             border-radius: 6px;
-            .achieveContent{
+            .achieveContent {
               width: 100%;
               /*padding: 0 10px*/
             }
