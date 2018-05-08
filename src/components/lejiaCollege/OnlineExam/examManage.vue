@@ -544,11 +544,11 @@
             headIcon: "el-icon-view",
             label: "查看/添加考生"
           },
-          {
-            clickIndex: "informExaminee",
-            headIcon: "el-icons-fa-mail-reply",
-            label: "通知考生"
-          }
+          // {
+          //   clickIndex: "informExaminee",
+          //   headIcon: "el-icons-fa-mail-reply",
+          //   label: "通知考生"
+          // }
         ];
         let e = event || window.event; //support firefox contextmenu
         this.show = false;

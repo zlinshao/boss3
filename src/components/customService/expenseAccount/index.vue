@@ -413,6 +413,7 @@
           source: '',  //来源
           type: '',  //报销类型
           staff_id: '',  //创建人
+          contract_id: '',
         },
         address: '',
         collectTableData: [],
@@ -442,6 +443,14 @@
     mounted() {
       this.getCollectTableData();
       this.getDictionary();
+    },
+    watch: {
+      address(val){
+        if(!val){
+          this.form.contract_id = '';
+          this.search();
+        }
+      }
     },
     methods: {
       openAddressDialog() {
