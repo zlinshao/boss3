@@ -288,7 +288,6 @@
       },
       closeAddressDialog(val) {
         this.addressDialog = false;
-        console.log(val);
         if (val) {
           this.params.q = val.address;
           this.params.contract_id = val.contract_id;
