@@ -126,6 +126,7 @@
           this.$emit('close');
           this.initial();
         } else {
+          this.isClear = false;
           this.getNumber();
         }
       },

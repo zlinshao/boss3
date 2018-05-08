@@ -162,11 +162,11 @@
             element-loading-background="rgba(255, 255, 255, 0)"
             style="width: 100%">
             <el-table-column
-              prop=""
+              prop="name"
               label="考试名称">
             </el-table-column>
             <el-table-column
-              prop=""
+              prop="start_time"
               label="开考时间">
             </el-table-column>
           </el-table>
@@ -217,14 +217,32 @@
           this.getTestPaperDetail();
         }
       },
+      associatedExamDialog(val){
+        if(val){
+          this.getAssociatedExam();
+        }
+      },
     },
     methods: {
       associatedExam(){
         this.associatedExamDialog = true;
       },
+      getAssociatedExam(){
+        this.tableStatus = ' ';
+        this.tableLoading = true;
+        this.$http.get(globalConfig.server+ 'exam/paper/exams/'+this.testPaperId).then((res)=>{
+          this.tableLoading = false;
+          if(res.data.code === '36000'){
+            this.associatedExamData = res.data.data;
+          }else{
+            this.tableStatus = '暂无数据';
+          }
+        });
+      },
       synchroTestPaper(){
         this.associatedExamDialog = false;
         //同步试卷最新数据到考试的接口
+
       },
       getQueryData() {
         if (!this.$route.query.id) {
