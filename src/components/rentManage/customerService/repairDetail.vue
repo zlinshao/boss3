@@ -208,8 +208,8 @@
           </el-row>
           <el-row>
             <el-col :span="22">
-              <el-form-item label="合同照片">
-                <img v-if="album!=[]" style="max-width:120px; max-height:80px;" data-magnify :key="val"
+              <el-form-item label="合同照片" style="max-height:160px;" class="scroll_bar">
+                <img v-if="album!=[]" style="width:120px; height:80px;border-radius:5px; margin: 0 8px;" data-magnify :key="val"
                 v-for="val in album" :data-src="val" :src="val" alt="">
               </el-form-item>
             </el-col>
