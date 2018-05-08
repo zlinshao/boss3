@@ -259,6 +259,8 @@
                          @close="closeModal"></ReimbursementDetail>
     <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize"
                   @selectMember="selectMember"></organization>
+    <ReimResult :reimResultDialog="reimResultDialog" :reimbursementId="reimbursementId" :type="resultType"
+                @close="closeModal"></ReimResult>
   </div>
 </template>
 
@@ -267,10 +269,11 @@
   import Organization from '../../../common/organization.vue';
   import ReimbursementDetail from './reimbursementDetail';
   import EditReimbursement from './editReimbursement';
+  import ReimResult from './reimResult';
 
   export default {
-    name: 'repair-manage',
-    components: {RightMenu, Organization, ReimbursementDetail, EditReimbursement},
+    name: 'reim-manage',
+    components: {RightMenu, Organization, ReimbursementDetail, EditReimbursement, ReimResult},
     data() {
       return {
         rightMenuX: 0,
@@ -302,7 +305,9 @@
         reimbursementSourceCategory: [],  //报销来源
         finishedStatusCategory: [], //完成状态
         reimbursementId: '',  //报销单id
-        editReimbursementDialog: false,
+        editReimbursementDialog: false,  //编辑报销单
+        reimResultDialog: false,  //报销结果
+        resultType: '',   //报销结果类型 add/edit
       }
     },
     mounted() {
@@ -369,6 +374,7 @@
       closeModal(val) {
         this.editReimbursementDialog = false;
         this.reimbursementDetailDialog = false;
+        this.reimResultDialog = false;
         this.getCollectTableData();
       },
       closeOrganize() {
@@ -405,7 +411,7 @@
         if (row.results && row.results.id) {
           this.lists = [
             {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',},
-            {clickIndex: 'edit_reimbursement_result', headIcon: 'el-icon-edit', label: '编辑报销结果',},
+            {clickIndex: 'edit_reimbursement_result', headIcon: 'el-icon-edit', label: '编辑报销结果', },
             // {clickIndex: 'delete_reimbursement', headIcon: 'el-icon-delete', label: '删除报销单',},
           ];
         } else {
@@ -427,29 +433,18 @@
           case 'delete_reimbursement':
             this.deleteRepair();
             break;
+          case 'edit_reimbursement_result':
+            this.reimResultDialog = true;
+            this.resultType = 'edit';
+            break;
+          case 'add_reimbursement_result':
+            this.reimResultDialog = true;
+            this.resultType = 'add';
+            break;
         }
       },
       deleteRepair() {
-        this.$confirm('此操作将删除维修单，您确定删除吗？', '删除维修单', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$http.get(globalConfig.server + 'repaire/del/' + this.reimbursementId).then((res) => {
-            if (res.data.code === "600200") {
-              this.getCollectTableData();
-              this.$notify.success({
-                title: "成功",
-                message: res.data.msg
-              });
-            } else {
-              this.$notify.warning({
-                title: "警告",
-                message: res.data.msg
-              });
-            }
-          });
-        })
+
       },
       //关闭右键菜单
       closeMenu() {

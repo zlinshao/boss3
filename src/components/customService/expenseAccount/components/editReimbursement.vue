@@ -126,6 +126,7 @@
           this.$emit('close');
           this.initial();
         } else {
+          this.isClear = false;
           this.getReimbursementDetail();
         }
       },
@@ -174,7 +175,7 @@
               this.form.account_bank = detail.account_bank;
               this.form.branch_bank = detail.branch_bank;
               this.form.bank_num = detail.bank_num;
-              this.address = detail.contract_id.house.name;
+              this.address = detail.contract_id && detail.contract_id.house && detail.contract_id.house.name;
               this.form.remark = detail.remark;
               let pic = detail.album.image_pic;
               this.form.image_pic = [];
