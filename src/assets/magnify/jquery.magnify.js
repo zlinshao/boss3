@@ -410,13 +410,21 @@ Magnify.prototype = {
       borderBottom: this.$stage.css('border-bottom-width')
     };
 
+
     // Modal size should calc with stage css value
     // var modalWidth = img.width/2 + getNumFromCSSValue(stageCSS.left) + getNumFromCSSValue(stageCSS.right) +
     //   getNumFromCSSValue(stageCSS.borderLeft) + getNumFromCSSValue(stageCSS.borderRight),
     //   modalHeight = img.height + getNumFromCSSValue(stageCSS.top) + getNumFromCSSValue(stageCSS.bottom) +
     //     getNumFromCSSValue(stageCSS.borderTop) + getNumFromCSSValue(stageCSS.borderBottom);
-    var modalWidth = 800,
-        modalHeight = 600;
+    var modalWidth, modalHeight;
+    if(isJump === 'jump'){
+      modalWidth = this.$magnify.width();
+      modalHeight = this.$magnify.height();
+    }else {
+      modalWidth = 800;
+      modalHeight = 600;
+    }
+
 
     var gapThreshold = (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1,
       // modal scale to window
