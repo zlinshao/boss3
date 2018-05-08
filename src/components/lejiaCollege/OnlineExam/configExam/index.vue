@@ -4,7 +4,7 @@
       <div class="tool">
         <div class="tool_left">
           <span>试卷名称</span><br/>
-          <span style="color:#83a0fc;" >{{testPaperData.name}}</span>
+          <span style="color:#83a0fc;">{{testPaperData.name}}</span>
           <el-input size="mini" v-model="testPaperData.name" v-if="editTestPaper"></el-input>
         </div>
         <div class="tool_right">
@@ -55,7 +55,7 @@
           <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>&nbsp;&nbsp;&nbsp;{{key+1}}.<span
           style="color:#6a8dfb; margin-left:20px;">单选题</span>
           <span class="ques_score">({{item.score}}分)</span>
-          <span class="remove" @click="deleteQues(item.id)" >移除</span>
+          <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
@@ -160,7 +160,15 @@
             element-loading-text="拼命加载中"
             element-loading-spinner="el-icon-loading"
             element-loading-background="rgba(255, 255, 255, 0)"
+            @row-click="rowClick"
             style="width: 100%">
+            <el-table-column width="65">
+              <template slot-scope="scope">
+                <el-checkbox v-model="selectExamIds" :label="scope.row.id">
+                  <span style="display: none">1</span>
+                </el-checkbox>
+              </template>
+            </el-table-column>
             <el-table-column
               prop="name"
               label="考试名称">
@@ -172,8 +180,8 @@
           </el-table>
         </div>
         <div slot="footer" class="dialog-footer" style="text-align: center;">
-            <el-button size="small" @click="associatedExamDialog=false">取消</el-button>
-            <el-button size="small" type="primary" @click="synchroTestPaper">同步到考试</el-button>
+          <el-button size="small" @click="associatedExamDialog=false">取消</el-button>
+          <el-button size="small" type="primary" @click="synchroTestPaper">同步到考试</el-button>
         </div>
       </el-dialog>
     </div>
@@ -201,6 +209,7 @@
         tableLoading: false,
         associatedExamData: [],
         editTestPaper: false,
+        selectExamIds: [],
       };
     },
     mounted() {
@@ -217,32 +226,48 @@
           this.getTestPaperDetail();
         }
       },
-      associatedExamDialog(val){
-        if(val){
+      associatedExamDialog(val) {
+        if (val) {
           this.getAssociatedExam();
         }
       },
     },
     methods: {
-      associatedExam(){
+      associatedExam() {
         this.associatedExamDialog = true;
       },
-      getAssociatedExam(){
+      getAssociatedExam() {
         this.tableStatus = ' ';
         this.tableLoading = true;
-        this.$http.get(globalConfig.server+ 'exam/paper/exams/'+this.testPaperId).then((res)=>{
+        this.$http.get(globalConfig.server + 'exam/paper/exams/' + this.testPaperId).then((res) => {
           this.tableLoading = false;
-          if(res.data.code === '36000'){
+          if (res.data.code === '36000') {
             this.associatedExamData = res.data.data;
-          }else{
+          } else {
+            this.associatedExamData = [];
             this.tableStatus = '暂无数据';
           }
         });
       },
-      synchroTestPaper(){
-        this.associatedExamDialog = false;
+      synchroTestPaper() {
         //同步试卷最新数据到考试的接口
-
+        this.$http.post(globalConfig.server + 'exam/paper/sync/' + this.testPaperId, {ids: this.selectExamIds}).then((res) => {
+          if (res.data.code === '36000') {
+            this.associatedExamDialog = false;
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
+      rowClick(row, event, column) {
+        this.radio = row.id;
       },
       getQueryData() {
         if (!this.$route.query.id) {
@@ -268,7 +293,7 @@
               this.$notify.warning({
                 title: '警告',
                 message: res.data.msg
-              })
+              });
             }
           });
         }
