@@ -4,12 +4,11 @@
       <div class="highRanking">
         <div class="tabsSearch">
           <el-form :inline="true" size="mini">
-            <!--<el-form-item>-->
-              <!--<el-input placeholder="房屋地址" v-model="form.keyword" size="mini" clearable-->
-                        <!--@keyup.enter.native="search">-->
-                <!--<el-button slot="append" icon="el-icon-search" @click="search"></el-button>-->
-              <!--</el-input>-->
-            <!--</el-form-item>-->
+            <el-form-item>
+              <el-input placeholder="房屋地址" v-model="address" size="mini"readOnly clearable @focus="openAddressDialog">
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+              </el-input>
+            </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
@@ -383,6 +382,7 @@
                          @close="closeModal"></ReimbursementDetail>
     <ReimResult :reimResultDialog="reimResultDialog" :reimbursementId="reimbursementId" :type="resultType"
                 @close="closeModal"></ReimResult>
+    <AddressSearch :addressDialog="addressDialog" @close="closeAddressDialog"></AddressSearch>
   </div>
 </template>
 
@@ -392,10 +392,11 @@
   import ReimbursementDetail from './components/reimbursementDetail';
   import EditReimbursement from './components/editReimbursement';
   import ReimResult from './components/reimResult';
+  import AddressSearch from '../../common/addressSearch';
 
   export default {
     name: 'repair-manage',
-    components: {RightMenu, Organization, ReimbursementDetail, EditReimbursement, ReimResult},
+    components: {RightMenu, Organization, ReimbursementDetail, EditReimbursement, ReimResult, AddressSearch},
     data() {
       return {
         rightMenuX: 0,
@@ -413,6 +414,7 @@
           type: '',  //报销类型
           staff_id: '',  //创建人
         },
+        address: '',
         collectTableData: [],
         rentTableData: [],
         totalNum: 0,
@@ -434,6 +436,7 @@
         reimResultDialog: false,  //报销结果
         resultType: '',   //报销结果类型 add/edit
         module: 1,
+        addressDialog: false,
       }
     },
     mounted() {
@@ -441,6 +444,16 @@
       this.getDictionary();
     },
     methods: {
+      openAddressDialog() {
+        this.addressDialog = true;
+      },
+      closeAddressDialog(val) {
+        this.addressDialog = false;
+        if (val) {
+          this.address = val.address;
+          this.form.contract_id = val.contract_id;
+        }
+      },
       getDictionary() {
         this.$http.get(globalConfig.server + 'setting/dictionary/640').then((res) => {
           if (res.data.code === "30010") {
