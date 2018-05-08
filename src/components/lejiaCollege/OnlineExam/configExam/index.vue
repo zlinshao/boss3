@@ -268,11 +268,6 @@
           this.getAssociatedExam();
         }
       },
-      paperTypeDialog(val){
-        if(val){
-
-        }
-      }
     },
     methods: {
       editPaper(){
@@ -288,6 +283,7 @@
               title: '成功',
               message: res.data.msg
             });
+            this.getTestPaperDetail();
             this.paperTypeDialog = false;
           }else{
             this.$notify.warning({
