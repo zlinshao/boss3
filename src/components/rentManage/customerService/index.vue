@@ -458,6 +458,7 @@ export default {
       }
     },
     search() {
+      this.form.page =1;
       if (this.activeName === "first") {
         this.form.module = 1;
         this.getCollectTableData();  
