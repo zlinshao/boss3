@@ -46,9 +46,9 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="7" v-show="form.water_data[key].accuser === 658">
                   <el-form-item label="认责人姓名">
-                    <el-input v-model="form.water_data[key].accuser_name" readonly @focus="chooseStaff('water',key)"
+                    <el-input v-model="form.water_data[key].accuser_id_name" readonly @focus="chooseStaff('water',key)"
                               placeholder="请选择">
                       <template slot="append">
                         <div style="cursor: pointer;" @click="emptyStaff('water',key)">清空</div>
@@ -56,7 +56,7 @@
                     </el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="3">
                   <i class="el-icon-circle-plus-outline  add_com" @click="addAccCom('water')"></i>
                   <i class="el-icon-remove-outline  sub_com" @click="subAccCom('water',key)"></i>
                 </el-col>
@@ -137,7 +137,18 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="7">
+                  <el-form-item label="认责人姓名" v-show="form.electricity_data[key].accuser === 658">
+                    <el-input v-model="form.electricity_data[key].accuser_id_name" readonly
+                              @focus="chooseStaff('electricity',key)"
+                              placeholder="请选择">
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="emptyStaff('electricity',key)">清空</div>
+                      </template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3">
                   <i class="el-icon-circle-plus-outline  add_com" @click="addAccCom('electricity')"></i>
                   <i class="el-icon-remove-outline  sub_com" @click="subAccCom('electricity',key)"></i>
                 </el-col>
@@ -250,7 +261,17 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="7">
+                  <el-form-item label="认责人姓名" v-show="form.gas_data[key].accuser === 658">
+                    <el-input v-model="form.gas_data[key].accuser_id_name" readonly @focus="chooseStaff('gas',key)"
+                              placeholder="请选择">
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="emptyStaff('gas',key)">清空</div>
+                      </template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3">
                   <i class="el-icon-circle-plus-outline  add_com" @click="addAccCom('gas')"></i>
                   <i class="el-icon-remove-outline  sub_com" @click="subAccCom('gas',key)"></i>
                 </el-col>
@@ -331,7 +352,18 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="4">
+                <el-col :span="7">
+                  <el-form-item label="认责人姓名" v-show="form.property_management_data[key].accuser === 658">
+                    <el-input v-model="form.property_management_data[key].accuser_id_name" readonly
+                              @focus="chooseStaff('prop',key)"
+                              placeholder="请选择">
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="emptyStaff('prop',key)">清空</div>
+                      </template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="3">
                   <i class="el-icon-circle-plus-outline  add_com" @click="addAccCom('prop')"></i>
                   <i class="el-icon-remove-outline  sub_com" @click="subAccCom('prop',key)"></i>
                 </el-col>
@@ -461,6 +493,9 @@
         waterAccCom: false,  //水费认责组成
         waterAccComLength: 1,  //水费认责组成的长度
         waterKey: '',  //当前选中的水费认责组成
+        elecKey: '',
+        gasKey: '',
+        propKey: '',
 
         elecAccCom: false,
         elecAccComLength: 1,
@@ -470,6 +505,7 @@
 
         propAccCom: false,
         propAccComLength: 1,
+        currentOrganize: '',  //当前选人组件被谁打开  water/elec/gas/prop
       };
     },
     watch: {
@@ -571,7 +607,7 @@
           time: [],
           accuser: '',  //认责人下拉框
           accuser_id: '',  // 认责人id
-          accuser_name: '',   //认责人姓名
+          accuser_id_name: '',   //认责人姓名
           last: '',  //上次底数
           now: '',  //本次底数
           unit_price: '',  //单价
@@ -593,6 +629,8 @@
             let elecData = {
               time: [],
               accuser: '',
+              accuser_id: '',  // 认责人id
+              accuser_id_name: '',   //认责人姓名
               peak_last: '',
               peak_now: '',
               peak_unit_price: '',
@@ -621,6 +659,8 @@
             let propData = {
               time: [],
               accuser: '',
+              accuser_id: '',  // 认责人id
+              accuser_id_name: '',   //认责人姓名
               last: '',
               now: '',
               water: '',
@@ -639,7 +679,7 @@
           time: [],
           accuser: '',  //认责人下拉框
           accuser_id: '',  // 认责人id
-          accuser_name: '',   //认责人姓名
+          accuser_id_name: '',   //认责人姓名
           last: '',  //上次底数
           now: '',  //本次底数
           unit_price: '',  //单价
@@ -657,6 +697,8 @@
             let elecData = {
               time: [],
               accuser: '',
+              accuser_id: '',  // 认责人id
+              accuser_id_name: '',   //认责人姓名
               peak_last: '',
               peak_now: '',
               peak_unit_price: '',
@@ -681,6 +723,8 @@
             let propData = {
               time: [],
               accuser: '',
+              accuser_id: '',  // 认责人id
+              accuser_id_name: '',   //认责人姓名
               last: '',
               now: '',
               water: '',
@@ -860,20 +904,57 @@
         this.organizationDialog = false;
       },
       selectMember(val) {
-        this.form.water_data[this.waterKey].accuser_name = val[0].name;
-        this.form.water_data[this.waterKey].accuser_id = val[0].id;
+        switch(this.currentOrganize){
+          case 'water':
+            this.form.water_data[this.waterKey].accuser_id_name = val[0].name;
+            this.form.water_data[this.waterKey].accuser_id = val[0].id;
+            break;
+          case 'electricity':
+            this.form.electricity_data[this.elecKey].accuser_id_name = val[0].name;
+            this.form.electricity_data[this.elecKey].accuser_id = val[0].id;
+            break;
+          case 'gas':
+            this.form.gas_data[this.gasKey].accuser_id_name = val[0].name;
+            this.form.gas_data[this.gasKey].accuser_id = val[0].id;
+            break;
+          case 'prop':
+            this.form.property_management_data[this.propKey].accuser_id_name = val[0].name;
+            this.form.property_management_data[this.propKey].accuser_id = val[0].id;
+            break;
+        }
+
       },
       chooseStaff(val, key) {
         this.organizationDialog = true;
         this.organizeType = 'staff';
         if (val == 'water') {
+          this.currentOrganize = 'water';
           this.waterKey = key;
+        } else if (val === 'electricity') {
+          this.currentOrganize = 'electricity';
+          this.elecKey = key;
+        } else if (val === 'gas') {
+          this.currentOrganize = 'gas';
+          this.gasKey = key;
+        } else if (val === 'prop') {
+          this.currentOrganize = 'prop';
+          this.propKey = key;
         }
       },
+      //清空认责人
       emptyStaff(val, key) {
-        if (val == 'water') {
-          this.form.water_data[key].accuser_name = '';
+        if (val === 'water') {
+          this.form.water_data[key].accuser_id_name = '';
           this.form.water_data[key].accuser_id = '';
+        } else if (val === 'electricity') {
+          this.form.electricity_data[key].accuser_id_name = '';
+          this.form.electricity_data[key].accuser_id = '';
+        } else if (val === 'gas') {
+          this.form.gas_data[key].accuser_id_name = '';
+          this.form.gas_data[key].accuser_id = '';
+        } else if (val === 'prop') {
+          this.form.property_management_data[key].accuser_id_name = '';
+          this.form.property_management_data[key].accuser_id = '';
         }
       }
     },

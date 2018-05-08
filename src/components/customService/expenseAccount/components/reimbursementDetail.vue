@@ -562,8 +562,8 @@
                 <el-row>
                   <el-col :span="24" v-if="reimDetail.results.album">
                     <el-form-item label="截图">
-                      <img v-if="reimDetail.album.image_pic!=[]" data-magnify
-                           v-for="(val,key) in reimDetail.album.image_pic" :data-src="val.uri" :src="val.uri"
+                      <img v-if="reimDetail.results.album.image_pic!=[]" data-magnify
+                           v-for="(val,key) in reimDetail.results.album.image_pic" :data-src="val.uri" :src="val.uri"
                            alt="">
                     </el-form-item>
                   </el-col>
