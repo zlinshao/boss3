@@ -200,12 +200,6 @@
       this.getQueryData();
       this.getPaperData();
       this.confirmArrival = localStorage.getItem('confirmArrival');  //check_in签到状态考试id数组
-      this.answers = JSON.stringify(localStorage.getItem('answers'));
-      // if (this.examId) {
-      //   if (this.confirmArrival && this.confirmArrival.length > 0 && this.confirmArrival.indexOf(this.examId) > -1) {
-      //     // this.$set(this.answerData, localStorage.getItem('answers'));
-      //   }
-      // }
       this.clockSubmit();
       setTimeout(() => {
         this.clockSubmit();
@@ -215,47 +209,49 @@
       'answerData': {
         deep: true,
         handler(val, oldVal) {
-          localStorage.setItem('answers', JSON.stringify(val));
-          console.log(JSON.stringify(localStorage.getItem('answers')));
+          localStorage.setItem('answers_' + this.examId, JSON.stringify(val));
         }
       }
     },
     methods: {
       combinaData() {
-        if (this.questionData[153] && this.questionData[153].length > 0) {
-          this.questionData[153].forEach((item) => {
-            this.$set(this.answerData, item.id, '');
-          });
-        }
-        if (this.questionData[154] && this.questionData[154].length > 0) {
-          this.questionData[154].forEach((item) => {
-            // if (this.answers && this.answers[item.id]) {
-            //   alert(this.answers);
-            //   this.$set(this.answerData, item.id, this.answers[item.id]);
-            // } else {
-            this.$set(this.answerData, item.id, []);
-            // }
-          });
-        }
-        if (this.questionData[155] && this.questionData[155].length > 0) {
-          this.questionData[155].forEach((item) => {
-            this.$set(this.answerData, item.id, []);
-          });
-        }
-        if (this.questionData[156] && this.questionData[156].length > 0) {
-          this.questionData[156].forEach((item) => {
-            this.$set(this.answerData, item.id, '');
-          });
-        }
-        if (this.questionData[157] && this.questionData[157].length > 0) {
-          this.questionData[157].forEach((item) => {
-            this.$set(this.answerData, item.id, []);
-          });
-        }
-        if (this.questionData[158] && this.questionData[158].length > 0) {
-          this.questionData[158].forEach((item) => {
-            this.$set(this.answerData, item.id, '');
-          });
+        if (localStorage.getItem('answers_' + this.examId) && localStorage.getItem('answers_' + this.examId) != 'null') {
+          this.answerData = JSON.parse(localStorage.getItem('answers_' + this.examId));
+        } else {
+          if (this.questionData[153] && this.questionData[153].length > 0) {
+            this.questionData[153].forEach((item) => {
+              this.$set(this.answerData, item.id, '');
+            });
+          }
+          if (this.questionData[154] && this.questionData[154].length > 0) {
+            this.questionData[154].forEach((item) => {
+              if (this.answers && this.answers[item.id]) {
+                this.$set(this.answerData, item.id, this.answers[item.id]);
+              } else {
+                this.$set(this.answerData, item.id, []);
+              }
+            });
+          }
+          if (this.questionData[155] && this.questionData[155].length > 0) {
+            this.questionData[155].forEach((item) => {
+              this.$set(this.answerData, item.id, []);
+            });
+          }
+          if (this.questionData[156] && this.questionData[156].length > 0) {
+            this.questionData[156].forEach((item) => {
+              this.$set(this.answerData, item.id, '');
+            });
+          }
+          if (this.questionData[157] && this.questionData[157].length > 0) {
+            this.questionData[157].forEach((item) => {
+              this.$set(this.answerData, item.id, []);
+            });
+          }
+          if (this.questionData[158] && this.questionData[158].length > 0) {
+            this.questionData[158].forEach((item) => {
+              this.$set(this.answerData, item.id, '');
+            });
+          }
         }
       },
       getQueryData() {
@@ -302,6 +298,7 @@
               this.pointDialog = true;
             }
             this.submitDisabled = true;
+            localStorage.removeItem("answers_"+this.examId);
           } else {
             this.$notify.warning({
               title: '警告',
@@ -331,7 +328,7 @@
       clockSubmit() {
         if (this.examId) {
           this.$http.get(globalConfig.server + 'exam/poll/' + this.examId).then((res) => {
-            if(res.data.code === '30000'){
+            if (res.data.code === '30000') {
               this.onSubmit();
               // alert('强制提交。。。')
             }
