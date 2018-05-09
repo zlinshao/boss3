@@ -31,7 +31,13 @@
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(255, 255, 255, 0)">
         <div class="header">
-          <div class="headName">消息列表</div>
+          <div v-if="theIndex == 1" class="headName">@我</div>
+          <div v-if="theIndex == 2" class="headName">通知</div>
+          <div v-if="theIndex == 3" class="headName">报备</div>
+          <div v-if="theIndex == 4" class="headName">审批</div>
+          <div v-if="theIndex == 5" class="headName">评论</div>
+          <div v-if="theIndex == 6" class="headName">公告</div>
+          <div v-if="theIndex == 7" class="headName">私信</div>
           <div class="filterGroup">
             <div class="buttonGroup">
               <el-button size="small" type="primary" @click="isRead"> 全部消息</el-button>
@@ -43,22 +49,24 @@
             </div>
           </div>
         </div>
+        
         <div class="mainContent">
-          <div class="contentItem" v-for="item in messageTable" :key="item.id">
-
+          <div class="contentItem" v-for="(item,index) in messageTable" :key="item.id">
             <div class="itemMain" @dblclick="showMessageDetail(item)">
-
               <div class="itemMainContent">
                 <div class="title">
                   <div class="titleWord" v-if="item.content"><i class="iconfont icon-weiduyoujian" style="margin: 0 5px"></i>{{item.content.title}}</div>
                   <div class="from">
                     <span v-if="item.read_at" style="color: #8de1ab"><el-button size="small" type="primary">标记为未读</el-button></span>
-                    <span v-else="" style="color: #fc76af"><el-button size="small" type="primary">标记为已读</el-button></span>
+                    <span v-else style="color: #fc76af"><el-button size="small" type="primary">标记为已读</el-button></span>
                   </div>
                 </div>
-                <!-- <div class="messageInfo" v-if="item.content">
-                  {{item.content.content}}
-                </div> -->
+                <div class="messageInfo" v-if="item.content">
+                  <div @click="openMore(index)" v-if="openIndex != index" class="lookMore">显示更多<i class="el-icon-arrow-down" style="margin: 0 5px"></i></div>
+                  <span style="margin-left:22px;display:block" v-if="openIndex == index">{{item.content.content}}<br />
+                  <div @click="closeMore()" class="closeMore">收起<i class="el-icon-arrow-up" style="margin: 0 5px"></i></div>                  
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -106,7 +114,8 @@ export default {
       isGetMore: true,
       scrollHeight: "",
       tableLoading: false,
-      theIndex: 1
+      theIndex: 1,
+      openIndex:null,
     };
   },
   mounted() {
@@ -126,7 +135,12 @@ export default {
       this.params.page = val;
       console.log(`当前页: ${val}`);
     },
-
+    openMore(index){
+      this.openIndex = index;
+    },
+    closeMore(){
+      this.openIndex = null;
+    },
     getMessage() {
       this.tableLoading = true;
       this.$http
@@ -246,7 +260,6 @@ export default {
   }
 
   .mainContent {
-    padding-top: 5px;
     .contentItem {
       display: flex;
       &:last-child {
@@ -309,7 +322,8 @@ export default {
             margin-top: 20px;
           }
           .title {
-            margin: 6px 0;
+            margin: 0;
+            height: 32px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -317,11 +331,22 @@ export default {
               color: #444;
               font-weight: 600;
             }
+            .from{
+              display: none;
+              margin-top: 20px;
+            }
           }
           .messageInfo {
+            .lookMore{
+              margin-left:22px;
+            }
+            .closeMore{
+              padding:5px 0;
+            }
             line-height: 150%;
+            margin-left:1%;
             text-align: justify;
-            min-height: 39px;
+            min-height: 24px;
             text-justify: inter-ideograph;
             display: -webkit-box;
             -webkit-box-orient: vertical;
@@ -329,6 +354,11 @@ export default {
             overflow: hidden;
           }
         }
+          .itemMainContent:hover{
+             .from{
+              display: block;
+            }           
+          }
       }
     }
   }
