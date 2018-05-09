@@ -27,11 +27,11 @@
 </template>
 
 <script>
-  // import Communication from './communication/index.vue'
-  // import Programme from './programme/index.vue'
+  // import Communication from './communication/index1.vue'
+  // import Programme from './programme/index1.vue'
   import Institution from './institution/index.vue'
    import Vote from './vote/index.vue'
-  // import Counter from './counter/index.vue'
+  // import Counter from './counter/index1.vue'
   import Notice from './notice/index.vue'
 
   export default {
