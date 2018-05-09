@@ -81,7 +81,13 @@
           <span v-else="">/</span>
         </template>
       </el-table-column>
-
+      <el-table-column
+        label="创建人">
+        <template slot-scope="scope">
+          <span v-if="scope.row.creators&&scope.row.creators.real_name">{{scope.row.creators.real_name}}</span>
+          <span v-else="">/</span>
+        </template>
+      </el-table-column>
       <el-table-column
         label="截图">
         <template slot-scope="scope">
