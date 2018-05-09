@@ -4,13 +4,14 @@
                :before-close="closeDialog">
       <div class="content">
         <div class="filter-container">
-          <!--<el-form :inline="true" onsubmit="return false" size="mini" class="demo-form-inline">-->
-          <!--<el-form-item>-->
-          <!--<el-input v-model="params.q" placeholder="请输入内容" class="input-with-select"  @keyup.enter.native="search" clearable>-->
-          <!--<el-button slot="append" icon="el-icon-search" @click="search"></el-button>-->
-          <!--</el-input>-->
-          <!--</el-form-item>-->
-          <!--</el-form>-->
+          <el-form :inline="true" onsubmit="return false" size="mini" class="demo-form-inline">
+            <el-form-item>
+              <el-input v-model="params.search" placeholder="请输入内容" class="input-with-select" @keyup.enter.native="search"
+                        clearable>
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+              </el-input>
+            </el-form-item>
+          </el-form>
         </div>
         <div class="tableList scroll_bar">
           <el-table
@@ -55,7 +56,7 @@
 <script>
 
   export default {
-    props: ['addressDialog'],
+    props: ['addressDialog','isRent'],
     data() {
       return {
         addressDialogVisible: false,
@@ -64,7 +65,7 @@
         selectedItem: [],
         params: {
           pages: 1,
-          q: '',
+          search: '',
           limit: 500
         },
         addressStatus: ' ',
@@ -91,15 +92,28 @@
       search() { //关键词 搜索线上高德数据
         this.addressStatus = ' ';
         this.addressLoading = true;
-        this.$http.get(globalConfig.server + 'lease/collect', {params: this.params}).then((res) => {
-          this.addressLoading = false;
-          if (res.data.code === '61010') {
-            this.tableData = res.data.data;
-          }else{
-            this.addressStatus = '暂无数据';
-            this.tableData = [];
-          }
-        })
+        if(this.isRent === 0){
+          this.$http.get(globalConfig.server + 'lease/collect', {params: this.params}).then((res) => {
+            this.addressLoading = false;
+            if (res.data.code === '61010') {
+              this.tableData = res.data.data;
+            } else {
+              this.addressStatus = '暂无数据';
+              this.tableData = [];
+            }
+          });
+        }else{
+          this.$http.get(globalConfig.server + 'lease/rent', {params: this.params}).then((res) => {
+            this.addressLoading = false;
+            if (res.data.code === '61110') {
+              this.tableData = res.data.data;
+            } else {
+              this.addressStatus = '暂无数据';
+              this.tableData = [];
+            }
+          });
+        }
+
       },
       closeDialog(done) {    //关闭模态框回调
         if (done === 'yes') {
