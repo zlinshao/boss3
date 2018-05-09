@@ -738,7 +738,7 @@
           electricity_photo: [],
           gas_photo: [],
 
-          property_photo : [],
+          property_photo   : [],
           water_card_photo : [],
           electricity_card_photo : [],
           gas_card_photo : [],

@@ -451,8 +451,7 @@
     methods: {
       downLoad() {
         this.imgArray.map( (img) => {
-          fetch(img).then(res => res.blob().then(blob => {
-            console.log(blob)
+          fetch(img).then(res => {res.blob().then(blob => {
             let a = document.createElement('a');
             let url = window.URL.createObjectURL(blob);
             let filename = '';
@@ -460,7 +459,7 @@
             a.download = filename;
             a.click();
             window.URL.revokeObjectURL(url);
-          }))
+          })})
         })
       },
       getData() {
