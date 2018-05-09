@@ -365,8 +365,8 @@ export default new Router({
       children: [
         {path: '/workOrderManage', component: WorkOrderManage, name: '工单管理',},
         {path: '/repairManage', component: RepairManage, name: '维修管理',},
-        {path: '/customerService', component: CustomerService, name: '回访',},
-        {path: '/ExpenseAccount', component: ExpenseAccount, name: '报销',},
+        {path: '/customerService', component: CustomerService, name: '回访管理',},
+        {path: '/ExpenseAccount', component: ExpenseAccount, name: '报销管理',},
       ]
     },
     //

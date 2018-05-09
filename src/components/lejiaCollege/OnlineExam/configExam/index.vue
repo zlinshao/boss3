@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="onlineExam">
+    <div id="configExam">
       <div class="tool">
         <div class="tool_left">
           <span style="font-size: 14px;line-height: 22px;">试卷名称:</span><span style="color:#83a0fc;"> {{testPaperData.name}}</span><br/>
@@ -67,7 +67,7 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="margin-left:30px;line-height:30px;" v-html="item.stem"></p>
+          <p style="margin-left:30px;line-height:30px;" class="ql-editor" v-html="item.stem"></p>
           <el-row :gutter="20" style="width:98%;margin-left:2%;">
             <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
               <span v-if="item.answer == index"><el-radio
@@ -87,7 +87,7 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="margin-left:30px;line-height:30px;" v-html="item.stem"></p>
+          <p style="margin-left:30px;line-height:30px;" class="ql-editor"  v-html="item.stem"></p>
           <el-row :gutter="20" style="width:98%;margin-left:2%;">
             <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
               <span v-if=" item.answer.indexOf(index)>-1 "><el-radio
@@ -106,7 +106,7 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="margin-left:30px;line-height:20px;" v-html="item.stem"></p>
+          <p style="margin-left:30px;line-height:20px;" class="ql-editor"  v-html="item.stem"></p>
           <el-row :gutter="20" style="width:98%;margin-left:2%;">
             <el-col :span="12" :key="index" v-for="(val,index) in item.choice">
               <span v-if="item.answer == index"><el-radio
@@ -127,7 +127,7 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="margin-left:30px;line-height:20px;padding-right:10px;" v-html="item.stem"></p>
+          <p style="margin-left:30px;line-height:20px;padding-right:10px;" class="ql-editor"  v-html="item.stem"></p>
           <el-row :gutter="20" style="width:98%;margin-left:2%;">
             <el-col :span="12" :key="index" v-for="(val,index) in item.answer" v-if="item.answer.length>0">
               <div v-if="item.category===157">
@@ -501,8 +501,10 @@
   };
 </script>
 <style lang="scss" scoped>
-
-  #onlineExam {
+  .ql-editor{
+    min-height: initial!important;
+  }
+  #configExam {
     .tool {
       height: 78px;
       border-radius: 5px;

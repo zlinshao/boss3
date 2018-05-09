@@ -30,7 +30,7 @@
         <div class="questionDiv" v-for="(v, k) in questionData" v-if="k==153 && questionData[k].length>0">
           <div v-for="(item, key) in questionData[k]">
             {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">单选题</span>
-            <p style="margin-left:30px;line-height:30px;width:96%" v-html="item.stem"></p>
+            <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor"  v-html="item.stem"></p>
             <div style="width:98%;margin-left:2%;"
                  v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
               <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
@@ -52,7 +52,7 @@
           <div v-for="(item, key) in questionData[k]">
             <span v-if="k==154">{{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">多选题</span></span>
             <span v-if="k==155">{{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">不定向选择题</span></span>
-            <p style="margin-left:30px;line-height:30px;width:96%" v-html="item.stem"></p>
+            <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor"  v-html="item.stem"></p>
             <div style="width:98%;margin-left:2%;"
                  v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
               <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
@@ -73,7 +73,7 @@
         <div class="questionDiv" v-for="(v,k) in questionData" v-if="k==156 && questionData[k].length>0">
           <div v-for="(item, key) in questionData[k]">
             {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">判断题</span>
-            <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
+            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor"  v-html="item.stem"></p>
             <div style="width:98%;margin-left:2%;"
                  v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
               <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
@@ -92,7 +92,7 @@
         <div class="questionDiv" v-for="(v,k) in questionData" v-if="k==157 && questionData[k].length>0">
           <div v-for="(item, key) in questionData[k]">
             {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">填空题</span>
-            <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
+            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor"  v-html="item.stem"></p>
             <div style="width:98%;margin-left:2%;"
                  v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
               <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
@@ -113,7 +113,7 @@
           <div v-for="(item, key) in questionData[k]">
             {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">简答题</span><span
             style="font-size:14px; color:#fc83b6; margin-left:20px;">({{item.score}}分)</span>
-            <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
+            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor"  v-html="item.stem"></p>
             <div>
               <div class="eachAN scroll_bar">{{item.answer}}</div>
               <div class="eachSore">
@@ -247,6 +247,9 @@
 </script>
 
 <style lang="scss" scoped>
+  .ql-editor{
+    min-height: initial!important;
+  }
   #shortAnExam {
     .tool {
       height: 160px;

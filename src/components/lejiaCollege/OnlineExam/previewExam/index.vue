@@ -36,7 +36,7 @@
       <div class="main">
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===153">
           {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">单选题</span>
-          <p style="margin-left:30px;line-height:30px;width:96%" v-html="item.stem"></p>
+          <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor"  v-html="item.stem"></p>
           <div style="width:98%;margin-left:2%;">
             <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;height: 24px;">
               {{index}}：{{val}}
@@ -48,7 +48,7 @@
           {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">
           <span v-if="item.category===154">多选题</span>
           <span v-if="item.category===155">不定向选择题</span></span>
-          <p style="margin-left:30px;line-height:30px;width:96%" v-html="item.stem"></p>
+          <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor"  v-html="item.stem"></p>
           <div style="width:98%;margin-left:2%;">
             <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;height: 24px;">
               {{index}}：{{val}}
@@ -57,7 +57,7 @@
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===156">
           {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">判断题</span>
-          <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
+          <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor"  v-html="item.stem"></p>
           <div style="width:98%;margin-left:2%;">
             <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;height: 24px;">
               {{index}}：{{val}}
@@ -68,7 +68,7 @@
              v-if="item.category===157 || item.category===158">
           {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;"><span v-if="item.category===157">填空题</span><span
           v-if="item.category===158">简答题</span></span>
-          <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
+          <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor"  v-html="item.stem"></p>
           <div v-if="item.category===157">
             <el-col v-for="value in item.answer" :key="value" :span="12"><el-input size="small" style="width:95.5%;margin-left:2%;" readOnly placeholder="请填写答案"></el-input></el-col>
           </div>
