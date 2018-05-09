@@ -59,8 +59,20 @@
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="中间价格" required>
+              <el-form-item label="中介价格" required>
                 <el-input v-model="form.agency_price"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row v-if="form.originate === 623">
+            <el-col :span="12">
+              <el-form-item label="中介人" required>
+                <el-input v-model="form.agency_person"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="中介电话" required>
+                <el-input v-model="form.agency_tel"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -235,7 +247,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="合同照片">
-                <img v-if="contractInfo.photo!=[]" style="max-width:120px; max-height:80px;" data-magnify :key="val"
+                <img v-if="contractInfo.photo!=[]" style="width:120px; height:80px;border-radius:5px; margin: 0 8px;" data-magnify :key="val"
                 v-for="val in contractInfo.photo" :data-src="val" :src="val" alt="">
               </el-form-item>
             </el-col>
@@ -273,6 +285,8 @@
           contract_id:"",    //合同编号
           agency:"",         //中介名称
           agency_price:"",   //中介费用
+          agency_person:"",  //中介人
+          agency_tel:"",     //中介电话
           audit:"",          //审核状态
           originate:"",      //来源
           contract_month:"", //合同周期_月
@@ -466,6 +480,20 @@
               message: "中介费用不能为空"
             });          
         }
+        if(this.form.agency_person =="" && this.form.originate === 623  && this.validateFlag == true){
+            this.validateFlag =false;
+            this.$notify.warning({
+              title: '警告',
+              message: "中介人不能为空"
+            });          
+        }
+        if(this.form.agency_tel  =="" && this.form.originate === 623  && this.validateFlag == true){
+            this.validateFlag =false;
+            this.$notify.warning({
+              title: '警告',
+              message: "中介电话不能为空"
+            });          
+        }
         if((this.form.unit_price[0].length== 0 || this.form.unit_price[1].length ==0) && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
@@ -526,15 +554,17 @@
       initial() {
           this.form.agency ="";        //中介名称
           this.form.agency_price ="";   //中介费用
-          this.form.audit="",          //审核状态
-          this.form.originate="",      //来源
-          this.form.contract_month="", //合同周期_月
-          this.form.contract_day="",   //合同周期_日
-          this.form.guarantee_month="",//保修期_月
-          this.form.guarantee_day="",  //保修期_日
-          this.form.sale_remark="",    //业务员专业度
-          this.form.remark="",         //备注
-          this.form.audited_fields="", //审核状态
+          this.form.agency_person="";  //中介人
+          this.form.agency_tel = "";     //中介电话
+          this.form.audit="";          //审核状态
+          this.form.originate="";      //来源
+          this.form.contract_month=""; //合同周期_月
+          this.form.contract_day="";   //合同周期_日
+          this.form.guarantee_month="";//保修期_月
+          this.form.guarantee_day="";  //保修期_日
+          this.form.sale_remark="";    //业务员专业度
+          this.form.remark="";         //备注
+          this.form.audited_fields=""; //审核状态
           this.form.pay_use=[
             [],
             []
