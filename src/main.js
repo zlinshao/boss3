@@ -45,6 +45,7 @@ Vue.use(VueRouter);
 Vue.use(Vuex);
 Vue.use(Cookies);
 Vue.prototype.$http = axios;
+
 axios.defaults.withCredentials = true;
 axios.defaults.headers.common['Env'] = globalConfig.env;
 axios.defaults.headers = globalConfig.header;
