@@ -38,7 +38,7 @@
         <div class="questionDiv" v-for="(v, k) in questionData" v-if="k==153 && questionData[k].length>0">
           <div v-for="(item, key) in questionData[k]">
             {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">单选题</span>
-            <p style="margin-left:30px;line-height:30px;width:96%" v-html="item.stem"></p>
+            <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor"  v-html="item.stem"></p>
             <el-form>
               <el-form-item>
                 <el-radio-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;">
@@ -55,7 +55,7 @@
           <div v-for="(item, key) in questionData[k]">
             <span v-if="k==154">{{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">多选题</span></span>
             <span v-if="k==155">{{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">不定向选择题</span></span>
-            <p style="margin-left:30px;line-height:30px;width:96%" v-html="item.stem"></p>
+            <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor"  v-html="item.stem"></p>
             <el-form>
               <el-form-item>
                 <el-checkbox-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;" v-if="k==154">
@@ -79,7 +79,7 @@
         <div class="questionDiv" v-for="(v,k) in questionData" v-if="k==156 && questionData[k].length>0">
           <div v-for="(item, key) in questionData[k]">
             {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">判断题</span>
-            <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
+            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor"  v-html="item.stem"></p>
             <el-form>
               <el-form-item>
                 <el-radio-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;">
@@ -95,7 +95,7 @@
         <div class="questionDiv" v-for="(v,k) in questionData" v-if="k==157 && questionData[k].length>0">
           <div v-for="(item, key) in questionData[k]">
             {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">填空题</span>
-            <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
+            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor"  v-html="item.stem"></p>
             <el-form>
               <el-form-item>
                 <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak">
@@ -109,7 +109,7 @@
         <div class="questionDiv" v-for="(v,k) in questionData" v-if="k==158 && questionData[k].length>0">
           <div v-for="(item, key) in questionData[k]">
             {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">简单题</span>
-            <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
+            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor"  v-html="item.stem"></p>
             <el-form>
               <el-form-item>
                 <el-input style="width:95.5%;margin-left:2%;" v-model="answerData[item.id]"
@@ -340,6 +340,9 @@
 </script>
 
 <style lang="scss" scoped>
+  .ql-editor{
+    min-height: initial!important;
+  }
   .confirm_btn {
     width: 100px;
     height: 35px;

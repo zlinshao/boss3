@@ -110,21 +110,23 @@
         successQuestions: null, //导入成功题数
         failQuestions: null, //导入失败题数
         errorsDetail: [],
+        paperId: '',
       };
     },
     activated() {
       this.getQueryData();
-      console.log(this.$store.state.app.visitedViews);
+      this.isClear = false;
     },
     watch: {},
     methods: {
       closeTestPaperDialog(){
         this.testPaperDialog = false;
+        this.isClear = true;
         let view = {};
         view.name=' 批量导入试题 ';
         view.path='/batchQuestions';
         this.$store.dispatch('delVisitedViews', view);
-        this.$router.push({path: '/configExam'});
+        this.$router.push({path: '/configExam', query: {id: this.paperId}});
       },
       getQueryData() {
         if (!this.$route.query.name) {
@@ -163,6 +165,7 @@
               this.successQuestions = Number(result.success);
               this.failQuestions = Number(result.fail);
               this.totalQuestions = Number(result.fail) + Number(result.success);
+              this.paperId = result.paper_id;
             }
             this.testPaperDialog = true;
             this.errorsDetail = res.data.data.errors;

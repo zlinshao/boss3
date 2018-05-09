@@ -1,22 +1,26 @@
 <template>
   <div>
-    <div id="onlineExam">
+    <div id="configExam">
       <div class="tool">
         <div class="tool_left">
-          <span>试卷名称</span><br/>
-          <span style="color:#83a0fc;">{{testPaperData.name}}</span>
-          <el-input size="mini" v-model="testPaperData.name" v-if="editTestPaper"></el-input>
+          <span style="font-size: 14px;line-height: 22px;">试卷名称:</span><span style="color:#83a0fc;"> {{testPaperData.name}}</span><br/>
+          <span style="font-size: 14px;line-height: 22px;">试卷类型:</span><span style="color:#83a0fc;"> {{testPaperData.category}}</span><br/>
         </div>
         <div class="tool_right">
-          <el-button type="success" size="small"
+          <el-button type="success" size="mini"
                      style="margin-right:10px; background-color:#58d788; border-color:#58d788;"
                      @click="associatedExam">
-            <i class="iconfont icon-jinrukaoshi"></i>&nbsp;关联的考试
+            <i class="iconfont icon-jinrukaoshi" style="font-size: 14px;"></i>&nbsp;关联的考试
           </el-button>
-          <el-button type="success" size="small"
+          <el-button type="success" size="mini"
                      style="margin-right:10px; background-color:#58d788; border-color:#58d788;"
-                     @click="openModalDialog()">
-            <i class="iconfont icon-tianjiagenjin"></i>&nbsp;添加试题
+                     @click="myselfQuestion">
+            <i class="iconfont icon-tianjiagenjin" style="font-size: 14px;"></i>&nbsp;添加试题
+          </el-button>
+          <el-button type="success" size="mini"
+                     style="margin-right:10px; background-color:#58d788; border-color:#58d788;"
+                     @click="editPaper">
+            <i class="el-icon-edit"></i>&nbsp;修改试卷
           </el-button>
         </div>
       </div>
@@ -26,14 +30,14 @@
             <el-row>
               <el-col :span="4" style="float:right;margin-top:20px;">
                 <el-form-item style="margin-right: 10px;">
-                  <el-input placeholder="搜索关键字" size="small" v-model="params.search">
+                  <el-input placeholder="搜索关键字" size="small" v-model="params.search" @keyup.enter.native="getTestPaperDetail">
                     <el-button slot="append" style="background-color:rgb(131, 160, 252); color:#fff;" size="small"
                                class="search_button" @click="getTestPaperDetail">搜索试题
                     </el-button>
                   </el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="5" style="margin-top:20px;float:right;">
+              <el-col :span="6 " style="margin-top:20px;float:right;">
                 <el-form-item label="题目类型">
                   <el-select size="small" v-model="params.category" clearable>
                     <el-option v-for="item in questionTypeCategory" :key="item.id" :label="item.dictionary_name"
@@ -49,7 +53,11 @@
           </el-checkbox>
           <span style="font-size:14px; color:#fc83b6; margin-left:20px;cursor: pointer" @click="batchDelete">批量移除</span>
           <span style="font-size:14px; float:right; margin-right:20px; ">共&nbsp;
-            <span style="color:#fc83b6;" v-if="testPaperData && testPaperData.questions">{{testPaperData.questions.length}}</span>&nbsp;项查询结果</span>
+            <span style="color:#fc83b6;" v-if="testPaperData && testPaperData.questions">{{testPaperData.questions.length}}</span>&nbsp;项查询结果
+          </span>
+          <span style="font-size:14px; float:right; margin-right:20px; ">共&nbsp;
+            <span style="color:#fc83b6;" v-if="testPaperData && testPaperData.score">{{testPaperData.score}}</span>&nbsp;分
+          </span>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===153">
           <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>&nbsp;&nbsp;&nbsp;{{key+1}}.<span
@@ -59,7 +67,7 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="margin-left:30px;line-height:30px;" v-html="item.stem"></p>
+          <p style="margin-left:30px;line-height:30px;" class="ql-editor" v-html="item.stem"></p>
           <el-row :gutter="20" style="width:98%;margin-left:2%;">
             <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
               <span v-if="item.answer == index"><el-radio
@@ -79,7 +87,7 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="margin-left:30px;line-height:30px;" v-html="item.stem"></p>
+          <p style="margin-left:30px;line-height:30px;" class="ql-editor"  v-html="item.stem"></p>
           <el-row :gutter="20" style="width:98%;margin-left:2%;">
             <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
               <span v-if=" item.answer.indexOf(index)>-1 "><el-radio
@@ -98,7 +106,7 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="margin-left:30px;line-height:20px;" v-html="item.stem"></p>
+          <p style="margin-left:30px;line-height:20px;" class="ql-editor"  v-html="item.stem"></p>
           <el-row :gutter="20" style="width:98%;margin-left:2%;">
             <el-col :span="12" :key="index" v-for="(val,index) in item.choice">
               <span v-if="item.answer == index"><el-radio
@@ -119,7 +127,7 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="margin-left:30px;line-height:20px;padding-right:10px;" v-html="item.stem"></p>
+          <p style="margin-left:30px;line-height:20px;padding-right:10px;" class="ql-editor"  v-html="item.stem"></p>
           <el-row :gutter="20" style="width:98%;margin-left:2%;">
             <el-col :span="12" :key="index" v-for="(val,index) in item.answer" v-if="item.answer.length>0">
               <div v-if="item.category===157">
@@ -148,6 +156,30 @@
             </div>
           </el-col>
         </el-row>
+      </el-dialog>
+    </div>
+    <div id="paperTypeDialog">
+      <el-dialog :close-on-click-modal="false" :visible.sync="paperTypeDialog" title="编辑试卷" width="30%">
+        <el-form :model="paperTypeForm" onsubmit="return false;" label-width="100px">
+          <el-row>
+            <el-form-item label="试卷类型" required>
+              <el-select v-model="paperTypeForm.category" id="testPaperType" size="mini" placeholder="请选择" clearable>
+                <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
+                  {{item.dictionary_name}}
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-row>
+          <el-row>
+            <el-form-item label="试卷名称" required>
+              <el-input v-model="paperTypeForm.name" size="mini" placeholder="请输入名称" clearable></el-input>
+            </el-form-item>
+          </el-row>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+            <el-button size="small" @click="paperTypeDialog = false">取消</el-button>
+            <el-button size="small" type="primary" @click="editPaperConfirm">保存</el-button>
+        </span>
       </el-dialog>
     </div>
     <div id="associatedExamDialog">
@@ -208,8 +240,13 @@
         tableStatus: ' ',
         tableLoading: false,
         associatedExamData: [],
-        editTestPaper: false,
         selectExamIds: [],
+        paperTypeDialog: false,  //编辑试卷 选择类型模态框
+        paperTypeForm: {
+          category: '',
+          name: '',
+        },
+        examType: [],
       };
     },
     mounted() {
@@ -233,8 +270,28 @@
       },
     },
     methods: {
+      editPaper(){
+        this.paperTypeDialog = true;
+      },
       associatedExam() {
         this.associatedExamDialog = true;
+      },
+      editPaperConfirm(){
+        this.$http.put(globalConfig.server+ 'exam/paper/'+ this.testPaperId, this.paperTypeForm).then((res)=>{
+          if (res.data.code === '36010') {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.getTestPaperDetail();
+            this.paperTypeDialog = false;
+          }else{
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
       },
       getAssociatedExam() {
         this.tableStatus = ' ';
@@ -279,9 +336,13 @@
         }
       },
       getDictionary() {
-        //试卷类型
+        //题目类型
         this.dictionary(152).then((res) => {
           this.questionTypeCategory = res.data;
+        });
+        //试卷类型
+        this.dictionary(613).then((res) => {
+          this.examType = res.data;
         });
       },
       getTestPaperDetail() {
@@ -289,6 +350,8 @@
           this.$http.get(globalConfig.server + 'exam/paper/' + this.testPaperId, {params: this.params}).then((res) => {
             if (res.data.code === '36010') {
               this.testPaperData = res.data.data;
+              this.paperTypeForm.category = res.data.data.category_id;
+              this.paperTypeForm.name = res.data.data.name;
             } else {
               this.$notify.warning({
                 title: '警告',
@@ -438,8 +501,10 @@
   };
 </script>
 <style lang="scss" scoped>
-
-  #onlineExam {
+  .ql-editor{
+    min-height: initial!important;
+  }
+  #configExam {
     .tool {
       height: 78px;
       border-radius: 5px;
