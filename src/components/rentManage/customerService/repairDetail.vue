@@ -1,6 +1,6 @@
 <template>
   <div id="addFollowUp">
-    <el-dialog :close-on-click-modal="false" title="回访详情" :visible.sync="repairDetailDialogVisible" width="600px">
+    <el-dialog :close-on-click-modal="false" title="回访详情" :visible.sync="repairDetailDialogVisible" width="720px">
         <el-form size="mini" :model="form" label-width="86px">
           <el-row>
             <el-col :span="10">
@@ -55,16 +55,40 @@
             </el-col>  
           </el-row>
           <el-row v-if="repairDetail.originate === 623">
-            <el-col :span="11">
+            <el-col :span="10">
               <el-form-item label="中介名称">
                 <div class="content">{{repairDetail.agency}}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="11">
+            <el-col :span="2" >
+              <el-checkbox v-model="audited_fields.agency" :disabled="audited_fieldsxx.agency" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
+            </el-col> 
+            <el-col :span="10">
               <el-form-item label="中间价格">
                 <div class="content">{{repairDetail.agency_price}}</div>
               </el-form-item>
             </el-col>
+            <el-col :span="2" >
+              <el-checkbox v-model="audited_fields.agency_price" :disabled="audited_fieldsxx.agency_price" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
+            </el-col> 
+          </el-row>
+          <el-row v-if="repairDetail.originate === 623">
+            <el-col :span="10">
+              <el-form-item label="中介人">
+                <div class="content">{{repairDetail.agency_person}}</div>
+              </el-form-item>
+            </el-col>
+            <el-col :span="2" >
+              <el-checkbox v-model="audited_fields.agency_person" :disabled="audited_fieldsxx.agency_person" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
+            </el-col> 
+            <el-col :span="10">
+              <el-form-item label="中间电话">
+                <div class="content">{{repairDetail.agency_tel}}</div>
+              </el-form-item>
+            </el-col>
+            <el-col :span="2" >
+              <el-checkbox v-model="audited_fields.agency_tel" :disabled="audited_fieldsxx.agency_tel" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
+            </el-col> 
           </el-row>
           <el-row v-for="index in priceLen" :key="index" v-if="index>0">
             <el-col :span="12">
@@ -296,6 +320,10 @@ export default {
           contract_month: "",
           contract_day: "",
           originate_name: "",
+          agency:"",
+          agency_person:"",
+          agency_price:"",
+          agency_tel:"",
           unit_price: [],
           pay_type: [],
           pay_method: [],
@@ -312,6 +340,10 @@ export default {
             contract_month: "",
             contract_day: "",
             originate_name: "",
+            agency:"",
+            agency_person:"",
+            agency_price:"",
+            agency_tel:"",
             unit_price: [],
             pay_type: [],
             pay_method: [],
@@ -352,124 +384,62 @@ export default {
         .then(res => {
           if (res.data.code === "1212200") {
             this.repairDetail = res.data.data;
-            this.audited_fields.address =
-              res.data.data.audited_fields.address == "1" ? true : false;
-            this.audited_fields.contract_month =
-              res.data.data.audited_fields.contract_month == "1" ? true : false;
-            this.audited_fields.contract_day =
-              res.data.data.audited_fields.contract_day == "1" ? true : false;
-            this.audited_fields.originate_name =
-              res.data.data.audited_fields.originate_name == "1" ? true : false;
-            this.audited_fields.has_pay =
-              res.data.data.audited_fields.has_pay == "1" ? true : false;
-            if (
-              res.data.data.audited_fields.unit_price != [] &&
-              res.data.data.audited_fields != ""
-            ) {
-              for (
-                let i = 0;
-                i < res.data.data.audited_fields.unit_price.length;
-                i++
-              ) {
-                this.audited_fields.unit_price[i] =
-                  res.data.data.audited_fields.unit_price[i] == "1"
-                    ? true
-                    : false;
-                this.audited_fieldsxx.unit_price[i] =
-                  res.data.data.audited_fields.unit_price[i] == "1"
-                    ? true
-                    : false;
+            this.audited_fields.address = res.data.data.audited_fields.address == "1" ? true : false;
+            this.audited_fields.contract_month = res.data.data.audited_fields.contract_month == "1" ? true : false;
+            this.audited_fields.contract_day = res.data.data.audited_fields.contract_day == "1" ? true : false;
+            this.audited_fields.originate_name = res.data.data.audited_fields.originate_name == "1" ? true : false;
+            this.audited_fields.has_pay = res.data.data.audited_fields.has_pay == "1" ? true : false;
+            if (res.data.data.audited_fields.unit_price != [] && res.data.data.audited_fields != "" ) {
+              for (let i = 0; i < res.data.data.audited_fields.unit_price.length; i++) {
+                this.audited_fields.unit_price[i] =  res.data.data.audited_fields.unit_price[i] == "1" ? true : false;
+                this.audited_fieldsxx.unit_price[i] = res.data.data.audited_fields.unit_price[i] == "1" ? true : false;
               }
             }
-            if (
-              res.data.data.audited_fields.pay_type != [] &&
-              res.data.data.audited_fields != ""
-            ) {
-              for (
-                let j = 0;
-                j < res.data.data.audited_fields.pay_type.length;
-                j++
-              ) {
-                this.audited_fields.pay_type[j] =
-                  res.data.data.audited_fields.pay_type[j] == "1"
-                    ? true
-                    : false;
-                this.audited_fieldsxx.pay_type[j] =
-                  res.data.data.audited_fields.pay_type[j] == "1"
-                    ? true
-                    : false;
+            if (res.data.data.audited_fields.pay_type != [] && res.data.data.audited_fields != "") {
+              for (let j = 0;j < res.data.data.audited_fields.pay_type.length; j++) {
+                this.audited_fields.pay_type[j] = res.data.data.audited_fields.pay_type[j] == "1" ? true : false;
+                this.audited_fieldsxx.pay_type[j] = res.data.data.audited_fields.pay_type[j] == "1" ? true : false;
               }
             }
 
-            if (
-              res.data.data.audited_fields.pay_method != [] &&
-              res.data.data.audited_fields != ""
-            ) {
-              for (
-                let k = 0;
-                k < res.data.data.audited_fields.pay_method.length;
-                k++
-              ) {
-                this.audited_fields.pay_method[k] =
-                  res.data.data.audited_fields.pay_method[k] == "1"
-                    ? true
-                    : false;
-                this.audited_fieldsxx.pay_method[k] =
-                  res.data.data.audited_fields.pay_method[k] == "1"
-                    ? true
-                    : false;
+            if (res.data.data.audited_fields.pay_method != [] && res.data.data.audited_fields != "") {
+              for (let k = 0; k < res.data.data.audited_fields.pay_method.length; k++) {
+                this.audited_fields.pay_method[k] = res.data.data.audited_fields.pay_method[k] == "1" ? true : false;
+                this.audited_fieldsxx.pay_method[k] = res.data.data.audited_fields.pay_method[k] == "1" ? true : false;
               }
             }
-            if (
-              res.data.data.audited_fields.pay_use != [] &&
-              res.data.data.audited_fields != ""
-            ) {
-              for (
-                let k = 0;
-                k < res.data.data.audited_fields.pay_use.length;
-                k++
-              ) {
-                this.audited_fields.pay_use[k] =
-                  res.data.data.audited_fields.pay_use[k] == "1" ? true : false;
-                this.audited_fieldsxx.pay_use[k] =
-                  res.data.data.audited_fields.pay_use[k] == "1" ? true : false;
+            if (res.data.data.audited_fields.pay_use != [] && res.data.data.audited_fields != "") {
+              for (let k = 0; k < res.data.data.audited_fields.pay_use.length; k++) {
+                this.audited_fields.pay_use[k] = res.data.data.audited_fields.pay_use[k] == "1" ? true : false;
+                this.audited_fieldsxx.pay_use[k] = res.data.data.audited_fields.pay_use[k] == "1" ? true : false;
               }
             }
-            this.audited_fields.has_extra =
-              res.data.data.audited_fields.has_extra == "1" ? true : false;
-            this.audited_fields.guarantee_month =
-              res.data.data.audited_fields.guarantee_month == "1"
-                ? true
-                : false;
-            this.audited_fields.guarantee_day =
-              res.data.data.audited_fields.guarantee_day == "1" ? true : false;
-            this.audited_fields.remark_clause =
-              res.data.data.audited_fields.remark_clause == "1" ? true : false;
-            this.audited_fields.sale_remark =
-              res.data.data.audited_fields.sale_remark == "1" ? true : false;
+            this.audited_fields.has_extra = res.data.data.audited_fields.has_extra == "1" ? true : false;
+            this.audited_fields.guarantee_month = res.data.data.audited_fields.guarantee_month == "1" ? true : false;
+            this.audited_fields.guarantee_day = res.data.data.audited_fields.guarantee_day == "1" ? true : false;
+            this.audited_fields.remark_clause = res.data.data.audited_fields.remark_clause == "1" ? true : false;
+            this.audited_fields.sale_remark = res.data.data.audited_fields.sale_remark == "1" ? true : false;
 
-            this.audited_fieldsxx.address =
-              res.data.data.audited_fields.address == "1" ? true : false;
-            this.audited_fieldsxx.contract_month =
-              res.data.data.audited_fields.contract_month == "1" ? true : false;
-            this.audited_fieldsxx.contract_day =
-              res.data.data.audited_fields.contract_day == "1" ? true : false;
-            this.audited_fieldsxx.originate_name =
-              res.data.data.audited_fields.originate_name == "1" ? true : false;
-            this.audited_fieldsxx.has_extra =
-              res.data.data.audited_fields.has_extra == "1" ? true : false;
-            this.audited_fieldsxx.guarantee_month =
-              res.data.data.audited_fields.guarantee_month == "1"
-                ? true
-                : false;
-            this.audited_fieldsxx.guarantee_day =
-              res.data.data.audited_fields.guarantee_day == "1" ? true : false;
-            this.audited_fieldsxx.remark_clause =
-              res.data.data.audited_fields.remark_clause == "1" ? true : false;
-            this.audited_fieldsxx.sale_remark =
-              res.data.data.audited_fields.sale_remark == "1" ? true : false;
-            this.audited_fieldsxx.has_pay =
-              res.data.data.audited_fields.has_pay == "1" ? true : false;
+            this.audited_fields.agency = res.data.data.audited_fields.agency == "1" ? true : false;
+            this.audited_fields.agency_person = res.data.data.audited_fields.agency_person == "1" ? true : false;
+            this.audited_fields.agency_price = res.data.data.audited_fields.agency_price == "1" ? true : false;
+            this.audited_fields.agency_tel = res.data.data.audited_fields.agency_tel == "1" ? true : false;
+
+            this.audited_fieldsxx.address = res.data.data.audited_fields.address == "1" ? true : false;
+            this.audited_fieldsxx.contract_month = res.data.data.audited_fields.contract_month == "1" ? true : false;
+            this.audited_fieldsxx.contract_day = res.data.data.audited_fields.contract_day == "1" ? true : false;
+            this.audited_fieldsxx.originate_name = res.data.data.audited_fields.originate_name == "1" ? true : false;
+            this.audited_fieldsxx.has_extra = res.data.data.audited_fields.has_extra == "1" ? true : false;
+            this.audited_fieldsxx.guarantee_month = res.data.data.audited_fields.guarantee_month == "1" ? true : false;
+            this.audited_fieldsxx.guarantee_day = res.data.data.audited_fields.guarantee_day == "1" ? true : false;
+            this.audited_fieldsxx.remark_clause = res.data.data.audited_fields.remark_clause == "1" ? true : false;
+            this.audited_fieldsxx.sale_remark = res.data.data.audited_fields.sale_remark == "1" ? true : false;
+            this.audited_fieldsxx.has_pay = res.data.data.audited_fields.has_pay == "1" ? true : false;
+
+            this.audited_fieldsxx.agency = res.data.data.audited_fields.agency == "1" ? true : false;
+            this.audited_fieldsxx.agency_person = res.data.data.audited_fields.agency_person == "1" ? true : false;
+            this.audited_fieldsxx.agency_price = res.data.data.audited_fields.agency_price == "1" ? true : false;
+            this.audited_fieldsxx.agency_tel = res.data.data.audited_fields.agency_tel == "1" ? true : false;
 
             if (res.data.data.unit_price != "") {
               this.priceLen = res.data.data.unit_price[0].length;
