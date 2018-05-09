@@ -62,6 +62,14 @@
           <span v-else="">/</span>
         </template>
       </el-table-column>
+
+      <el-table-column
+        label="跟进人">
+        <template slot-scope="scope">
+          <span v-if="scope.row.follows&&scope.row.follows.real_name">{{scope.row.follows.real_name}}</span>
+          <span v-else="">/</span>
+        </template>
+      </el-table-column>
       <el-table-column
         label="跟进方式">
         <template slot-scope="scope">
