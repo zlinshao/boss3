@@ -30,7 +30,8 @@
             <el-row>
               <el-col :span="4" style="float:right;margin-top:20px;">
                 <el-form-item style="margin-right: 10px;">
-                  <el-input placeholder="搜索关键字" size="small" v-model="params.search" @keyup.enter.native="getTestPaperDetail">
+                  <el-input placeholder="搜索关键字" size="small" v-model="params.search"
+                            @keyup.enter.native="getTestPaperDetail">
                     <el-button slot="append" style="background-color:rgb(131, 160, 252); color:#fff;" size="small"
                                class="search_button" @click="getTestPaperDetail">搜索试题
                     </el-button>
@@ -68,14 +69,18 @@
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
           <p style="margin-left:30px;line-height:30px;" class="ql-editor" v-html="item.stem"></p>
-          <el-row :gutter="20" style="width:98%;margin-left:2%;">
-            <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
-              <span v-if="item.answer == index"><el-radio
-                style="white-space: initial;">{{item.answer}}：{{val}}</el-radio></span>
-              <span v-else>{{index}}：{{val}}</span>
-              <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="item.answer == index">正确</span>
-            </el-col>
-          </el-row>
+          <el-form>
+            <el-form-item style="width:98%;margin-left:2%;">
+              <el-row :gutter="20">
+                <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
+                  <span v-if="item.answer == index"><el-radio
+                    style="white-space: initial;">{{item.answer}}：{{val}}</el-radio></span>
+                  <span v-else>{{index}}：{{val}}</span>
+                  <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="item.answer == index">正确</span>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-form>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===154 || item.category===155">
@@ -87,15 +92,19 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="margin-left:30px;line-height:30px;" class="ql-editor"  v-html="item.stem"></p>
-          <el-row :gutter="20" style="width:98%;margin-left:2%;">
-            <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
-              <span v-if=" item.answer.indexOf(index)>-1 "><el-radio
-                style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
-              <span v-else>{{index}}：{{val}}</span>
-              <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="item.answer.indexOf(index)>-1">正确</span>
-            </el-col>
-          </el-row>
+          <p style="margin-left:30px;line-height:30px;" class="ql-editor" v-html="item.stem"></p>
+          <el-form>
+            <el-form-item style="width:98%;margin-left:2%;">
+              <el-row :gutter="20">
+                <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
+                  <span v-if=" item.answer.indexOf(index)>-1 "><el-radio
+                    style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
+                  <span v-else>{{index}}：{{val}}</span>
+                  <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="item.answer.indexOf(index)>-1">正确</span>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-form>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===156">
           <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>&nbsp;&nbsp;&nbsp;
@@ -106,15 +115,18 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="margin-left:30px;line-height:20px;" class="ql-editor"  v-html="item.stem"></p>
-          <el-row :gutter="20" style="width:98%;margin-left:2%;">
-            <el-col :span="12" :key="index" v-for="(val,index) in item.choice">
-              <span v-if="item.answer == index"><el-radio
-                style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
-              <span v-else>{{index}}：{{val}}</span>
-              <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="item.answer == index">正确</span>
-            </el-col>
-          </el-row>
+          <p style="margin-left:30px;line-height:20px;" class="ql-editor" v-html="item.stem"></p>
+          <el-form>
+            <el-form-item style="width:98%;margin-left:2%;">
+              <el-row :gutter="20">
+                <el-col :span="12" :key="index" v-for="(val,index) in item.choice" style="line-height: 24px;">
+                  <span v-if="item.answer == index"><el-radio style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
+                  <span v-else>{{index}}：{{val}}</span>
+                  <span style="color:rgb(88, 215, 136);margin-left:50px;" v-if="item.answer == index">正确</span>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-form>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===157 || item.category===158">
@@ -127,16 +139,21 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="margin-left:30px;line-height:20px;padding-right:10px;" class="ql-editor"  v-html="item.stem"></p>
-          <el-row :gutter="20" style="width:98%;margin-left:2%;">
-            <el-col :span="12" :key="index" v-for="(val,index) in item.answer" v-if="item.answer.length>0">
-              <div v-if="item.category===157">
-                <span style="color:#409EFF;">第{{index+1}}处答案：</span>
-                <span>{{val}}</span>
-              </div>
-              <div v-if="item.category===158"></div>
-            </el-col>
-          </el-row>
+          <p style="margin-left:30px;line-height:20px;padding-right:10px;" class="ql-editor" v-html="item.stem"></p>
+          <el-form>
+            <el-form-item style="width:98%;margin-left:2%;">
+              <el-row :gutter="20">
+                <el-col :span="12" :key="index" v-for="(val,index) in item.answer" v-if="item.answer.length>0"
+                        style="line-height: 24px;">
+                  <div v-if="item.category===157">
+                    <span style="color:#409EFF;">第{{index+1}}处答案：</span>
+                    <span>{{val}}</span>
+                  </div>
+                  <div v-if="item.category===158"></div>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-form>
         </div>
       </div>
     </div>
@@ -270,14 +287,14 @@
       },
     },
     methods: {
-      editPaper(){
+      editPaper() {
         this.paperTypeDialog = true;
       },
       associatedExam() {
         this.associatedExamDialog = true;
       },
-      editPaperConfirm(){
-        this.$http.put(globalConfig.server+ 'exam/paper/'+ this.testPaperId, this.paperTypeForm).then((res)=>{
+      editPaperConfirm() {
+        this.$http.put(globalConfig.server + 'exam/paper/' + this.testPaperId, this.paperTypeForm).then((res) => {
           if (res.data.code === '36010') {
             this.$notify.success({
               title: '成功',
@@ -285,7 +302,7 @@
             });
             this.getTestPaperDetail();
             this.paperTypeDialog = false;
-          }else{
+          } else {
             this.$notify.warning({
               title: '警告',
               message: res.data.msg
@@ -501,9 +518,10 @@
   };
 </script>
 <style lang="scss" scoped>
-  .ql-editor{
-    min-height: initial!important;
+  .ql-editor {
+    min-height: initial !important;
   }
+
   #configExam {
     .tool {
       height: 78px;
