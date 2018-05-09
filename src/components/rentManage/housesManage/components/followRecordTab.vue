@@ -141,21 +141,21 @@
     watch:{
       activeName(val){
         if(val === 'first'){
-          this.getData();
+          this.reGetData();
         }
       },
       houseId(val){
         if(val){
           this.params.id = val;
           if(this.activeName === 'first'){
-            this.getData();
+            this.reGetData();
           }
         }
       },
       changeHouseStatus(val){
         if(val){
           if(this.activeName === 'first'){
-            this.getData();
+            this.reGetData();
           }
         }
       },
@@ -174,11 +174,15 @@
         });
         return dictionary_name;
       },
+      //房屋变化，重新从第一页开始请求数据
+      reGetData(){
+        this.params.page = 1;
+        this.getData();
+      },
+
       getData(){
         this.emptyContent = ' ';
         this.tableLoading = true;
-        this.tableData = [];
-        this.totalNumber = 0;
         this.tableData = [];
         this.totalNumber = 0;
         this.$http.get(globalConfig.server + 'core/follow', {params: this.params}).then((res) => {

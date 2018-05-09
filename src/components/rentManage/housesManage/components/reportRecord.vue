@@ -101,13 +101,13 @@
     watch:{
       activeName(val){
         if(val === 'sixth'){
-          this.getData();
+          this.reGetData();
         }
       },
       houseId(val){
         if(val){
           if(this.activeName  == 'sixth'){
-            this.getData();
+            this.reGetData();
           }
         }
       },
@@ -126,12 +126,17 @@
         });
         return dictionary_name;
       },
+
+      //房屋变化，重新从第一页开始请求数据
+      reGetData(){
+        this.params.page = 1;
+        this.getData();
+      },
       getData(){
         this.emptyContent = ' ';
         this.tableLoading = true;
         this.tableData = [];
         this.totalNumber = 0;
-        this.params.page = 1;
         this.$http.get(globalConfig.server_user + 'process?house_id='+this.houseId,{params:this.params}).then((res) => {
           this.tableLoading = false;
           if(res.data.status === 'success'){

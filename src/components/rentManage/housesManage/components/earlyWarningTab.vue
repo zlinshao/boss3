@@ -136,21 +136,21 @@
     watch:{
       activeName(val){
         if(val === 'third'){
-          this.getData();
+          this.reGetData();
         }
       },
       houseId(val){
         if(val){
           this.params.id = val;
           if(this.activeName === 'third'){
-            this.getData();
+            this.reGetData();
           }
         }
       },
       changeHouseStatus(val){
         if(val){
           if(this.activeName === 'third'){
-            this.getData();
+            this.reGetData();
           }
         }
       },
@@ -169,6 +169,13 @@
         });
         return dictionary_name;
       },
+
+      //房屋变化，重新从第一页开始请求数据
+      reGetData(){
+        this.params.page = 1;
+        this.getData();
+      },
+
       getData(){
         this.emptyContent = ' ';
         this.tableLoading = true;
