@@ -9,7 +9,7 @@
               <div class="qubody">
                 <div class="topbody">
                   <div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>
-                  <vue-editor id="singleEditor" useCustomImageHandler :disabled="editorDisabled"
+                  <vue-editor id="singleEditor" useCustomImageHandler @imageAdded="handleImageAdded"
                               v-model="singleForm.stem"></vue-editor>
                 </div>
                 <div class="midbody">
@@ -53,7 +53,7 @@
                 <div class="topbody">
                   <div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>
                   <vue-editor id="multiEditor" v-model="multiForm.stem" useCustomImageHandler
-                              :disabled="editorDisabled"></vue-editor>
+                              @imageAdded="handleImageAdded"></vue-editor>
                 </div>
                 <div class="midbody">
                   <div class="title">选项</div>
@@ -93,7 +93,7 @@
                 <div class="topbody">
                   <div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>
                   <vue-editor id="nonDirectionalEditor" v-model="multiForm.stem" useCustomImageHandler
-                              :disabled="editorDisabled"></vue-editor>
+                              @imageAdded="handleImageAdded"></vue-editor>
                 </div>
                 <div class="midbody">
                   <div class="title">选项</div>
@@ -133,7 +133,7 @@
                 <div class="topbody">
                   <div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>
                   <vue-editor id="judgeEditor" v-model="judgeForm.stem" useCustomImageHandler
-                              :disabled="editorDisabled"></vue-editor>
+                              @imageAdded="handleImageAdded"></vue-editor>
                 </div>
                 <div class="midbody">
                   <div class="title">选项</div>
@@ -168,7 +168,7 @@
                 <div class="topbody">
                   <div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>
                   <vue-editor id="completionEditor" v-model="blankForm.stem" useCustomImageHandler
-                              :disabled="editorDisabled"></vue-editor>
+                              @imageAdded="handleImageAdded"></vue-editor>
                 </div>
                 <div class="midbody">
                   <div class="title">填空信息</div>
@@ -211,7 +211,7 @@
                 <div class="topbody">
                   <div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>
                   <vue-editor id="editor" v-model="answerForm.stem" useCustomImageHandler
-                              :disabled="editorDisabled"></vue-editor>
+                              @imageAdded="handleImageAdded"></vue-editor>
                 </div>
                 <div class="eachSore">
                   <div class="title">默认分值</div>
@@ -245,7 +245,6 @@
     data() {
       return {
         activeName: "first",
-        editorDisabled: false,
         //单选
         singlen: 4,
         singleForm: {
@@ -525,6 +524,26 @@
       },
     },
     methods: {
+      handleImageAdded(file, Editor, cursorLocation, resetUploader) {
+        let formData = new FormData();
+        formData.append('file', file);
+        let config = {
+          headers: {'Content-Type': 'multipart/form-data'}
+        };
+        if (file.size > 1024 * 1024 * 2) {
+          this.$notify.warning({
+            title: '警告',
+            message: '只能上传jpg/png文件，且不超过2M'
+          })
+        } else {
+          this.$http.post(globalConfig.server_user + 'files', formData, config).then((res) => {
+            if (res.data.status === 'success') {
+              Editor.insertEmbed(cursorLocation, 'image', res.data.data.uri);
+            }
+          })
+        }
+
+      },
       getQueryData() {
         if (!this.$route.query.paper_id) {
           let data = {};
