@@ -424,8 +424,6 @@ Magnify.prototype = {
       modalWidth = 800;
       modalHeight = 600;
     }
-
-
     var gapThreshold = (this.options.gapThreshold > 0 ? this.options.gapThreshold : 0) + 1,
       // modal scale to window
       scale = Math.min(winWidth / (modalWidth * gapThreshold), winHeight / (modalHeight * gapThreshold), 1);
@@ -439,7 +437,7 @@ Magnify.prototype = {
     if(isJump === 'jump'){
        modalCSSObj = {
         width: minWidth + 'px',
-        height: minHeight + 'px',
+        height: minHeight + 'px', 
       };
     }else {
        modalCSSObj = {
