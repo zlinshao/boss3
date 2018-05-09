@@ -1,6 +1,6 @@
 <template>
   <div id="addFollowUp">
-    <el-dialog :close-on-click-modal="false" title="添加跟进" :visible.sync="addFollowUpDialogVisible" width="45%">
+    <el-dialog :close-on-click-modal="false" title="添加工单" :visible.sync="addFollowUpDialogVisible" width="45%">
       <div>
         <el-form size="small" :model="params" label-width="100px">
           <el-row>

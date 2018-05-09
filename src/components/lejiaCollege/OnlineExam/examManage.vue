@@ -448,6 +448,7 @@
             let detail = res.data.data;
             if (detail) {
               this.formExam.name = detail.name;
+              this.formExam.rand = detail.rand;
               this.formExam.start_time = detail.start_time;
               this.formExam.duration = detail.duration;
               this.formExam.category = detail.paper && detail.paper.category_id;

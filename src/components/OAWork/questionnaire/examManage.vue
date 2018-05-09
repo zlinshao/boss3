@@ -77,7 +77,6 @@
             element-loading-text="拼命加载中"
             element-loading-spinner="el-icon-loading"
             element-loading-background="rgba(255, 255, 255, 0)"
-            @row-dblclick="dblClickTable"
             @row-contextmenu='openContextMenu'
             style="width: 100%">
             <el-table-column
@@ -106,35 +105,43 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop="start_time"
+              prop=""
               label="发布人">
               <template slot-scope="scope">
-                <span v-if="scope.row.start_time">{{scope.row.start_time}}</span>
-                <span v-if="!scope.row.start_time">暂无</span>
+                <span v-if="scope.row.staff_name">{{scope.row.staff_name}}</span>
+                <span v-else>暂无</span>
               </template>
             </el-table-column>
             <el-table-column
-              prop="start_time"
+              prop="create_time"
               label="发布时间">
               <template slot-scope="scope">
-                <span v-if="scope.row.start_time">{{scope.row.start_time}}</span>
-                <span v-if="!scope.row.start_time">暂无</span>
+                <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
+                <span v-else>暂无</span>
               </template>
             </el-table-column>
             <el-table-column
               prop="start_time"
-              label="问卷周期">
+              label="开始时间">
               <template slot-scope="scope">
                 <span v-if="scope.row.start_time">{{scope.row.start_time}}</span>
-                <span v-if="!scope.row.start_time">暂无</span>
+                <span v-else>暂无</span>
               </template>
             </el-table-column>
             <el-table-column
               prop="duration"
-              label="回复量">
+              label="有效期(天)">
               <template slot-scope="scope">
                 <span v-if="scope.row.duration">{{scope.row.duration}}</span>
-                <span v-if="!scope.row.duration">暂无</span>
+                <span v-else>暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop=""
+              label="回复量">
+              <template slot-scope="scope">
+                <span v-if="scope.row.answerNum">{{scope.row.answerNum}}</span>
+                <span v-else>暂无</span>
               </template>
             </el-table-column>
             <el-table-column
@@ -172,61 +179,60 @@
     <div id="examDialog">
       <el-dialog :close-on-click-modal="false" :visible.sync="examDialog" :title="examTitle" width="40%">
         <div>
-          <el-form size="mini" onsubmit="return false;" :model="formExam" label-width="100px">
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="标题" required>
-                  <el-input v-model="formExam.name" size="mini" placeholder="请输入调查名称" clearable></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="试卷类型" required>
-                  <el-select v-model="formExam.category" size="mini" placeholder="请选择" clearable>
-                    <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
-                      {{item.dictionary_name}}
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="30">
-              <el-col :span="12">
-                <el-form-item label="使用试卷" required>
-                  <el-select v-model="formExam.paper_id" size="mini" placeholder="请选择试卷" clearable>
-                    <el-option v-for="item in useTestPapers" :key="item.id" :label="item.name" :value="item.id">
-                      {{item.name}}
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-checkbox label="试卷随机" v-model="formExam.rand" style="line-height: 30px;"></el-checkbox>
-            </el-row>
-            <el-row :gutter="30">
-              <el-col :span="20">
-                <el-form-item label="有效时间" required>
-                  <el-date-picker size="mini" v-model="formExam.time" type="datetimerange"
-                                  :picker-options="pickerOptions"
-                                  range-separator="至"
-                                  start-placeholder="开始日期"
-                                  end-placeholder="结束日期"
-                                  value-format="yyyy-MM-dd HH:mm:ss"
-                                  align="right"></el-date-picker>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row :gutter="30">
-              <el-col :span="20">
-                <el-form-item label="调查对象" required>
-                  <el-input v-model="examinees_name" @click.native="chooseStaff" size="mini" placeholder="请选择调查对象"
-                            clearable>
-                    <template slot="append">
-                      <div style="cursor: pointer;" @click="emptyRespondent">清空</div>
-                    </template>
-                  </el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
+          <div class="title">问卷调查</div>
+          <div class="describe_border" style="padding: 25px 10px;">
+            <el-form size="mini" onsubmit="return false;" :model="formExam" label-width="100px">
+              <el-row :gutter="30">
+                <el-col :span="12">
+                  <el-form-item label="标题" required>
+                    <el-input v-model="formExam.name" size="mini" placeholder="请输入调查名称" clearable></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="试卷类型" required>
+                    <el-select v-model="formExam.category" size="mini" placeholder="请选择" clearable>
+                      <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
+                        {{item.dictionary_name}}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="使用试卷" required>
+                    <el-select v-model="formExam.paper_id" size="mini" placeholder="请选择试卷" clearable>
+                      <el-option v-for="item in useTestPapers" :key="item.id" :label="item.name" :value="item.id">
+                        {{item.name}}
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+
+                <el-col :span="12">
+                  <el-form-item label="开考时间" required>
+                    <el-date-picker v-model="formExam.start_time" type="datetime" placeholder="请选择"
+                                    value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="有效期" required>
+                    <el-input placeholder="请输入天数" v-model="formExam.duration">
+                      <template slot="append">天</template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="20">
+                  <el-form-item label="调查对象">
+                    <el-input v-model="examinees_name" @click.native="chooseStaff" size="mini" placeholder="请选择调查对象"
+                              clearable>
+                      <template slot="append">
+                        <div style="cursor: pointer;" @click="emptyRespondent">清空</div>
+                      </template>
+                    </el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
           <span slot="footer" class="dialog-footer">
             <el-button size="small" @click="examDialog = false;examId = '';">取消</el-button>
             <el-button size="small" type="primary" @click="saveExam">保存</el-button>
@@ -326,9 +332,9 @@
         examDialog: false,  //新建考试模态框
         //新增问卷调查
         formExam: {
-          rand: true,
           name: '',    //考试名称
-          time: '',  //时间周期
+          start_time: '',  //时间周期
+          duration: '',  //有效期
           paper_id: '',    //试卷id
           category: '',  //试卷类型
           examinees: '',
@@ -425,7 +431,7 @@
     },
     methods: {
       //清除调查对象
-      emptyRespondent(){
+      emptyRespondent() {
 
       },
       // 高级
@@ -437,9 +443,6 @@
         this.params.category = '';
         this.params.status = '';
         this.getExamData();
-      },
-      dblClickTable() {
-
       },
       chooseStaff() {
         // this.organizeType = "staff";
@@ -573,18 +576,18 @@
           {
             clickIndex: "editExam",
             headIcon: "el-icon-edit",
-            label: "编辑考试"
+            label: "编辑问卷"
           },
           {
             clickIndex: "deleteExam",
             headIcon: "el-icon-delete",
-            label: "删除考试"
+            label: "删除问卷"
           },
-          {
-            clickIndex: "manageExaminee",
-            headIcon: "el-icon-view",
-            label: "查看/添加考生"
-          },
+          // {
+          //   clickIndex: "manageExaminee",
+          //   headIcon: "el-icon-view",
+          //   label: "查看/添加调查对象"
+          // },
           // {
           //   clickIndex: "informExaminee",
           //   headIcon: "el-icons-fa-mail-reply",
@@ -680,7 +683,8 @@
         this.formExam = {
           rand: false,
           name: '',    //考试名称
-          time: '',  //时间周期
+          start_time: '',  //时间周期
+          duration: '',  //有效期
           paper_id: '',    //试卷id
           category: '',  //试卷类型
           examinees: '',
@@ -688,7 +692,6 @@
         this.examinees_name = '';
       },
     },
-
   }
 </script>
 
