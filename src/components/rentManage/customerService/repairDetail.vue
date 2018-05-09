@@ -1,6 +1,6 @@
 <template>
   <div id="addFollowUp">
-    <el-dialog :close-on-click-modal="false" title="回访详情" :visible.sync="repairDetailDialogVisible" width="600px">
+    <el-dialog :close-on-click-modal="false" title="回访详情" :visible.sync="repairDetailDialogVisible" width="720px">
         <el-form size="mini" :model="form" label-width="86px">
           <el-row>
             <el-col :span="10">

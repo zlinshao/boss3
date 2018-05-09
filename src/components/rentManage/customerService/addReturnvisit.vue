@@ -1,6 +1,6 @@
 <template>
   <div id="addCollectRepair">
-    <el-dialog :close-on-click-modal="false" title="新建回访记录" :visible.sync="addReturnvisitDialogVisible" width="600px">
+    <el-dialog :close-on-click-modal="false" title="新建回访记录" :visible.sync="addReturnvisitDialogVisible" width="720px">
       <div>
         <el-form size="mini" :model="form" label-width="82px">
           <el-row>

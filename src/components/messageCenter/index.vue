@@ -62,9 +62,9 @@
                   </div>
                 </div>
                 <div class="messageInfo" v-if="item.content">
-                  <div @click="openMore(index)" v-if="openIndex != index" class="lookMore">显示更多<i class="el-icon-arrow-down" style="margin: 0 5px"></i></div>
+                  <div style="cursor:pointer" @click="openMore(index)" v-if="openIndex != index" class="lookMore">显示更多<i class="el-icon-arrow-down" style="margin: 0 5px"></i></div>
                   <span style="margin-left:22px;display:block" v-if="openIndex == index">{{item.content.content}}<br />
-                  <div @click="closeMore()" class="closeMore">收起<i class="el-icon-arrow-up" style="margin: 0 5px"></i></div>                  
+                  <div style="cursor:pointer" @click="closeMore()" class="closeMore">收起<i class="el-icon-arrow-up" style="margin: 0 5px"></i></div>                  
                   </span>
                 </div>
               </div>
