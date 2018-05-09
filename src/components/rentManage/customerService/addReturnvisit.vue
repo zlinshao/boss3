@@ -246,7 +246,7 @@
           </el-row>
           <el-row>
             <el-col :span="24">
-              <el-form-item label="合同照片">
+              <el-form-item label="合同照片" style="max-height:160px;" class="scroll_bar">
                 <img v-if="contractInfo.photo!=[]" style="width:120px; height:80px;border-radius:5px; margin: 0 8px;" data-magnify :key="val"
                 v-for="val in contractInfo.photo" :data-src="val" :src="val" alt="">
               </el-form-item>
