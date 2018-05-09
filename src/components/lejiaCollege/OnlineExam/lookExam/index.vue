@@ -34,94 +34,110 @@
         </el-row>
       </div>
       <div class="main">
-        <div class="questionDiv" v-for="(v, k) in questionData" v-if="k==153 && questionData[k].length>0">
-          <div v-for="(item, key) in questionData[k]">
+        <div v-for="(v, k) in questionData" v-if="k==153 && questionData[k].length>0">
+          <div class="questionDiv" v-for="(item, key) in questionData[k]">
             {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">单选题</span>
-            <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor"  v-html="item.stem"></p>
-            <div style="width:98%;margin-left:2%;"
-                 v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
-              <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
-              <el-row :gutter="20">
-                <el-col :span="6" :key="index" v-for="(val,index) in item.choice"
-                        style="line-height:24px;height: 24px;">
-                  <span v-if="index == answerData[item.id]"><el-radio>{{index}}：{{val}}</el-radio></span>
-                  <span v-else>{{index}}：{{val}}</span>
-                  <span style="color:rgb(88, 215, 136);margin-left:50px;"
-                        v-if="resultData.answer[item.id] == answerData[item.id] && resultData.answer[item.id]==index">正确</span>
-                  <span style="color:#fc83b6;margin-left:50px;"
-                        v-if="resultData.answer[item.id] != answerData[item.id] && resultData.answer[item.id]==index">错误</span>
-                </el-col>
-              </el-row>
-            </div>
+            <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor" v-html="item.stem"></p>
+            <el-form>
+              <el-form-item style="width:98%;margin-left:2%;">
+                <div
+                  v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
+                  <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
+                  <el-row :gutter="20">
+                    <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
+                      <span v-if="index == answerData[item.id]"><el-radio>{{index}}：{{val}}</el-radio></span>
+                      <span v-else>{{index}}：{{val}}</span>
+                      <span style="color:rgb(88, 215, 136);margin-left:50px;"
+                            v-if="resultData.answer[item.id] == answerData[item.id] && resultData.answer[item.id]==index">正确</span>
+                      <span style="color:#fc83b6;margin-left:50px;"
+                            v-if="resultData.answer[item.id] != answerData[item.id] && resultData.answer[item.id]==index">错误</span>
+                    </el-col>
+                  </el-row>
+                </div>
+              </el-form-item>
+            </el-form>
           </div>
         </div>
-        <div class="questionDiv" v-for="(v, k) in questionData" v-if="(k==154 || k==155) && questionData[k].length>0">
-          <div v-for="(item, key) in questionData[k]">
+        <div v-for="(v, k) in questionData" v-if="(k==154 || k==155) && questionData[k].length>0">
+          <div class="questionDiv" v-for="(item, key) in questionData[k]">
             <span v-if="k==154">{{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">多选题</span></span>
             <span v-if="k==155">{{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">不定向选择题</span></span>
-            <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor"  v-html="item.stem"></p>
-            <div style="width:98%;margin-left:2%;"
-                 v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
-              <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
-              <el-row :gutter="20">
-                <el-col :span="6" :key="index" v-for="(val,index) in item.choice"
-                        style="line-height:24px;height: 24px;">
-                  <span v-if="answerData[item.id].indexOf(index)>-1"><el-radio>{{index}}：{{val}}</el-radio></span>
-                  <span v-else>{{index}}：{{val}}</span>
-                  <span style="color:rgb(88, 215, 136);margin-left:50px;" v-for="ans in resultData.answer[item.id]"
-                        v-if="answerData[item.id].indexOf(ans)>-1 && ans==index">正确</span>
-                  <span style="color:#fc83b6;margin-left:50px;" v-for="ans in resultData.answer[item.id]"
-                        v-if="answerData[item.id].indexOf(ans)<0 && ans==index">错误</span>
-                </el-col>
-              </el-row>
-            </div>
+            <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor" v-html="item.stem"></p>
+            <el-form>
+              <el-form-item style="width:98%;margin-left:2%;">
+                <div
+                  v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
+                  <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
+                  <el-row :gutter="20">
+                    <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
+                      <span v-if="answerData[item.id].indexOf(index)>-1"><el-radio>{{index}}：{{val}}</el-radio></span>
+                      <span v-else>{{index}}：{{val}}</span>
+                      <span style="color:rgb(88, 215, 136);margin-left:50px;" v-for="ans in resultData.answer[item.id]"
+                            v-if="answerData[item.id].indexOf(ans)>-1 && ans==index">正确</span>
+                      <span style="color:#fc83b6;margin-left:50px;" v-for="ans in resultData.answer[item.id]"
+                            v-if="answerData[item.id].indexOf(ans)<0 && ans==index">错误</span>
+                    </el-col>
+                  </el-row>
+                </div>
+              </el-form-item>
+            </el-form>
           </div>
         </div>
-        <div class="questionDiv" v-for="(v,k) in questionData" v-if="k==156 && questionData[k].length>0">
-          <div v-for="(item, key) in questionData[k]">
+        <div v-for="(v,k) in questionData" v-if="k==156 && questionData[k].length>0">
+          <div class="questionDiv" v-for="(item, key) in questionData[k]">
             {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">判断题</span>
-            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor"  v-html="item.stem"></p>
-            <div style="width:98%;margin-left:2%;"
-                 v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
-              <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
-              <el-col :span="12" :key="index" v-for="(val,index) in item.choice"
-                      style="line-height:26px;height: 26px;">
-                <span v-if="index == answerData[item.id]"><el-radio>{{index}}：{{val}}</el-radio></span>
-                <span v-else>{{index}}：{{val}}</span>
-                <span style="color:rgb(88, 215, 136);margin-left:50px;"
-                      v-if="resultData.answer[item.id] == answerData[item.id] && resultData.answer[item.id]==index">正确</span>
-                <span style="color:#fc83b6;margin-left:50px;"
-                      v-if="resultData.answer[item.id] != answerData[item.id] && resultData.answer[item.id]==index">错误</span>
-              </el-col>
-            </div>
+            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor" v-html="item.stem"></p>
+            <el-form>
+              <el-form-item style="width:98%;margin-left:2%;">
+                <div
+                  v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
+                  <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
+                  <el-col :span="12" :key="index" v-for="(val,index) in item.choice"
+                          style="line-height:24px;">
+                    <span v-if="index == answerData[item.id]"><el-radio>{{index}}：{{val}}</el-radio></span>
+                    <span v-else>{{index}}：{{val}}</span>
+                    <span style="color:rgb(88, 215, 136);margin-left:50px;"
+                          v-if="resultData.answer[item.id] == answerData[item.id] && resultData.answer[item.id]==index">正确</span>
+                    <span style="color:#fc83b6;margin-left:50px;"
+                          v-if="resultData.answer[item.id] != answerData[item.id] && resultData.answer[item.id]==index">错误</span>
+                  </el-col>
+                </div>
+              </el-form-item>
+            </el-form>
           </div>
         </div>
-        <div class="questionDiv" v-for="(v,k) in questionData" v-if="k==157 && questionData[k].length>0">
-          <div v-for="(item, key) in questionData[k]">
+        <div v-for="(v,k) in questionData" v-if="k==157 && questionData[k].length>0">
+          <div class="questionDiv" v-for="(item, key) in questionData[k]">
             {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">填空题</span>
-            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor"  v-html="item.stem"></p>
-            <div style="width:98%;margin-left:2%;"
-                 v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
-              <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
-              <el-row :gutter="20">
-                <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak">
-                  <el-input readOnly style="width:95.5%;margin-left:2%;" size="small"
-                            v-model="resultData.answer[item.id][ak]" placeholder="请填写答案"></el-input>
-                  <span style="color:rgb(88, 215, 136);margin-left:50px;" v-for="(vv, kk) in resultData.answer[item.id]"
-                        v-if="answerData[item.id].indexOf(vv)>-1 && kk==ak ">正确</span>
-                  <span style="color:#fc83b6;margin-left:50px;" v-for="(vv, kk) in resultData.answer[item.id]"
-                        v-if="answerData[item.id].indexOf(vv)<0 && kk==ak">错误</span>
-                </el-col>
-              </el-row>
-            </div>
+            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor" v-html="item.stem"></p>
+            <el-form>
+              <el-form-item style="width:98%;margin-left:2%;">
+                <div
+                     v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
+                  <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
+                  <el-row :gutter="20">
+                    <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak" style="line-height: 24px;">
+                      <el-input readOnly style="width:95.5%;margin-left:2%;" size="small"
+                                v-model="resultData.answer[item.id][ak]" placeholder="请填写答案"></el-input>
+                      <span style="color:rgb(88, 215, 136);margin-left:30px;"
+                            v-for="(vv, kk) in resultData.answer[item.id]"
+                            v-if="answerData[item.id].indexOf(vv)>-1 && kk==ak ">正确</span>
+                      <span style="color:#fc83b6;margin-left:30px;" v-for="(vv, kk) in resultData.answer[item.id]"
+                            v-if="answerData[item.id].indexOf(vv)<0 && kk==ak">错误</span>
+                    </el-col>
+                  </el-row>
+                </div>
+              </el-form-item>
+            </el-form>
           </div>
         </div>
-        <div class="questionDiv" v-for="(v,k) in questionData" v-if="k==158 && questionData[k].length>0">
-          <div v-for="(item, key) in questionData[k]">
+        <div v-for="(v,k) in questionData" v-if="k==158 && questionData[k].length>0">
+          <div class="questionDiv" v-for="(item, key) in questionData[k]">
             {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">简答题</span>
-            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor"  v-html="item.stem"></p>
+            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor" v-html="item.stem"></p>
             <div>
-              <el-input readonly style="width:95.5%;margin-left:2%;" size="small" v-model="resultData && resultData.answer && resultData.answer[item.id]"
+              <el-input readonly style="width:95.5%;margin-left:2%;" size="small"
+                        v-model="resultData && resultData.answer && resultData.answer[item.id]"
                         type="textarea" placeholder="请填写答案"></el-input>
             </div>
           </div>
@@ -212,9 +228,10 @@
 </script>
 
 <style lang="scss" scoped>
-  .ql-editor{
-    min-height: initial!important;
+  .ql-editor {
+    min-height: initial !important;
   }
+
   #lookExam {
     .tool {
       height: 160px;
