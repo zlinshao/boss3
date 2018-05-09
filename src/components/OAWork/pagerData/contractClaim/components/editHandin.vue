@@ -432,13 +432,18 @@
             }
 
             if(Number(this.params.contract_type) === 108){    //如果是公司合同
+              let contractCancelCollect_old = {};
+              let contractCancelRent_old = {};
               for(let key in arr.category){
-                if(arr.category[key] === 1){
-                  this.contractCancelCollect_old[key] = arr.contractNumber[key];
+                if(arr.category[key] == 1){
+                  contractCancelCollect_old[key] = arr.contractNumber[key];
                 }else {
-                  this.contractCancelRent_old[key] = arr.contractNumber[key];
+                  contractCancelRent_old[key] = arr.contractNumber[key];
                 }
               }
+              this.contractCancelCollect_old = contractCancelCollect_old;
+              this.contractCancelRent_old = contractCancelRent_old;
+
 
               this.getPersonalContract();
 
@@ -523,6 +528,7 @@
           }
         });
       },
+      //获取个人可上交合同
       getPersonalContract(){
         this.$http.get(globalConfig.server+'contract/staff/'+this.params.staff_id+'?search='+this.search).then((res) => {
           if(res.data.code === '20000'){
@@ -531,8 +537,8 @@
             this.fuckCheckBug(res.data.data.collect);
             this.fuckCheckBug(res.data.data.rent);
           }else {
-            this.collectCancelCollect = this.contractCancelCollect_old;
-            this.collectCancelRent = this.contractCancelRent_old;
+            this.contractCancelCollect = this.contractCancelCollect_old;
+            this.contractCancelRent = this.contractCancelRent_old;
           }
         })
       },
