@@ -5,11 +5,11 @@
         <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input v-model="params.q" placeholder="请输入搜索" readOnly clearable @focus="openAddressDialog">
-                <el-button @click="search()" slot="append" type="primary" icon="el-icon-search"></el-button>
-                <!--<template slot="append">-->
-                  <!--<div style="cursor: pointer;" @click="emptySearch">清空</div>-->
-                <!--</template>-->
+              <el-input v-model="params.q" placeholder="请选择房屋地址" readOnly @focus="openAddressDialog">
+                <!--<el-button @click="search()" slot="append" type="primary" icon="el-icon-search"></el-button>-->
+                <template slot="append">
+                  <div style="cursor: pointer;" @click="emptySearch">清空</div>
+                </template>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -290,12 +290,16 @@
         handler(val, oldVal) {
           if (!val) {
             this.params.contract_id = '';
-            this.getIncompleteRecordData();
           }
+          this.getIncompleteRecordData();
         }
       },
     },
     methods: {
+      emptySearch() {
+        this.params.contract_id = '';
+        this.params.q = '';
+      },
       openAddressDialog() {
         this.addressDialog = true;
       },
@@ -324,9 +328,6 @@
         } else {
           this.is_rent = 1;
         }
-      },
-      search() {
-        this.getIncompleteRecordData();
       },
       exportData() {
         this.$http.get(globalConfig.server + 'lease/note/index?limit=12&is_rent=' + this.is_rent + '&output=1', {responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
