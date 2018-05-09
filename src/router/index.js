@@ -107,7 +107,7 @@ import ModuleSetting from '../components/systemSetting/moduleSetting/index.vue' 
 import AnswerCenter from '../components/OAWork/answerCenter/index.vue'                             //问答中心
 
 //问卷调查
-import Questionnaire from '../components/OAWork/questionnaire/index.vue'                             //问卷调查
+import Questionnaire from '../components/OAWork/questionnaire/index.vue'               //问卷调查
 import ConfigNaire  from '../components/OAWork/questionnaire/configNaire/index.vue'  //管理问卷
 import BatchNaire from '../components/OAWork/questionnaire/batchNaire/index.vue'  //批量导入问卷
 import MyselfNaire from '../components/OAWork/questionnaire/myselfNaire/index.vue'  //自己录入问卷
@@ -268,7 +268,7 @@ export default new Router({
         {path: '/examinerShortAn', component: ExaminerShortAn, name: "简答批阅"},
         {path: '/answerCenter', component: AnswerCenter, name: "问答中心"},
 
-        {path: '/questionnaire', component: Questionnaire, name: "问卷调查"},
+
         {path: '/configNaire', component: ConfigNaire, name: "管理问卷"},
         {path: '/batchNaire', component: BatchNaire, name: "批量导入问卷"},
         {path: '/myselfNaire', component: MyselfNaire, name: "自己录入问卷"},
@@ -481,6 +481,7 @@ export default new Router({
         // {path: '/contractClaim', component: ContractClaim, name: '合同认领',},
         {path: '/pagerData', component: PagerData, name: '纸质资料'},
         // {path: '/knowledge', component: Knowledge, name: '知识管理',},
+        // {path: '/questionnaire', component: Questionnaire, name: "问卷调查"},
 
       ]
     },

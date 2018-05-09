@@ -7,6 +7,9 @@
             <el-form-item>
               <el-input v-model="params.q" placeholder="请输入搜索" readOnly clearable @focus="openAddressDialog">
                 <el-button @click="search()" slot="append" type="primary" icon="el-icon-search"></el-button>
+                <!--<template slot="append">-->
+                  <!--<div style="cursor: pointer;" @click="emptySearch">清空</div>-->
+                <!--</template>-->
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -207,7 +210,7 @@
     </div>
     <Organization :organizationDialog="organizationDialog" :type="type" @close="closeOrganization"
                   @selectMember="selectMember"></Organization>
-    <AddressSearch :addressDialog="addressDialog" @close="closeAddressDialog"></AddressSearch>
+    <AddressSearch :addressDialog="addressDialog" @close="closeAddressDialog" :isRent="is_rent"></AddressSearch>
   </div>
 </template>
 
@@ -282,12 +285,15 @@
       this.getDefaultData();
     },
     watch: {
-      address(val){
-        if(!val){
-          this.params.contract_id = '';
-          this.getIncompleteRecordData();
+      'params.q': {
+        deep: true,
+        handler(val, oldVal) {
+          if (!val) {
+            this.params.contract_id = '';
+            this.getIncompleteRecordData();
+          }
         }
-      }
+      },
     },
     methods: {
       openAddressDialog() {
@@ -375,7 +381,7 @@
       resetting() {
         this.params = {
           page: 1,
-          address: '',      //模糊搜索
+          q: '',      //模糊搜索
           department_id: [],   //开单人部门id
           staff_id: [],    //开单人id
           date_range: [], //创建时间范围 数组
