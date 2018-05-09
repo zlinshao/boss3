@@ -5,8 +5,11 @@
         <div class="tabsSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-input placeholder="房屋地址" v-model="address" size="mini"readOnly clearable @focus="openAddressDialog">
-                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+              <el-input placeholder="请选择房屋地址" v-model="address" size="mini" readOnly @focus="openAddressDialog">
+                <!--<el-button slot="append" icon="el-icon-search" @click="search"></el-button>-->
+                <template slot="append">
+                  <div style="cursor: pointer;" @click="emptySearch">清空</div>
+                </template>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -382,7 +385,7 @@
                          @close="closeModal"></ReimbursementDetail>
     <ReimResult :reimResultDialog="reimResultDialog" :reimbursementId="reimbursementId" :type="resultType"
                 @close="closeModal"></ReimResult>
-    <AddressSearch :addressDialog="addressDialog" @close="closeAddressDialog"></AddressSearch>
+    <AddressSearch :addressDialog="addressDialog" @close="closeAddressDialog" :isRent="isRent"></AddressSearch>
   </div>
 </template>
 
@@ -395,7 +398,7 @@
   import AddressSearch from '../../common/addressSearch';
 
   export default {
-    name: 'repair-manage',
+    name: 'reim-manage',
     components: {RightMenu, Organization, ReimbursementDetail, EditReimbursement, ReimResult, AddressSearch},
     data() {
       return {
@@ -438,6 +441,7 @@
         resultType: '',   //报销结果类型 add/edit
         module: 1,
         addressDialog: false,
+        isRent: 0,
       }
     },
     mounted() {
@@ -448,11 +452,15 @@
       address(val){
         if(!val){
           this.form.contract_id = '';
-          this.search();
         }
+        this.search();
       }
     },
     methods: {
+      emptySearch(){
+        this.form.contract_id = '';
+        this.address = '';
+      },
       openAddressDialog() {
         this.addressDialog = true;
       },
@@ -553,9 +561,11 @@
       handleClick(tab, event) {
         if (this.activeName == "first") {
           this.module = 1;
+          this.isRent = 0;
           this.getCollectTableData();
         } else if (this.activeName == "second") {
           this.module = 2;
+          this.isRent = 1;
           this.getRentTableData();
         }
       },
