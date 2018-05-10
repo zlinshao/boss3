@@ -278,16 +278,16 @@
               </template>
             </el-table-column>
           </el-table>
-          <div class="block pages" style="margin-right: 50px;">
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page="params.page"
-              :page-size="12"
-              layout="total, prev, pager, next, jumper"
-              :total="examineesData.length">
-            </el-pagination>
-          </div>
+          <!--<div class="block pages" style="margin-right: 50px;">-->
+            <!--<el-pagination-->
+              <!--@size-change="handleSizeChange"-->
+              <!--@current-change="handleCurrentChange"-->
+              <!--:current-page="params.page"-->
+              <!--:page-size="12"-->
+              <!--layout="total, prev, pager, next, jumper"-->
+              <!--:total="examineesData.length">-->
+            <!--</el-pagination>-->
+          <!--</div>-->
         </div>
       </el-dialog>
     </div>

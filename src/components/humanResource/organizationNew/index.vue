@@ -1030,6 +1030,12 @@
           this.isGetOnlyPosition = true;
         }
       },
+      'params.is_dimission':{
+        deep: true,
+        handler(val, oldVal) {
+
+        }
+      }
     },
     methods: {
       highGrade() {
@@ -1771,19 +1777,29 @@
       //****************搜索*************
       search() {
         if (this.activeName === 'first') {
+          this.params.page = 1;
           this.getStaffData();
         } else if (this.activeName === 'second') {
+          this.positionParams.page = 1;
           this.getOnlyPosition();
         }
       },
       //**********分页************************
       handleSizeChange(val) {
         this.params.limit = val;
-        this.search();
+        if (this.activeName === 'first') {
+          this.getStaffData();
+        } else if (this.activeName === 'second') {
+          this.getOnlyPosition();
+        }
       },
       handleCurrentChange(val) {
         this.params.page = val;
-        this.search();
+        if (this.activeName === 'first') {
+          this.getStaffData();
+        } else if (this.activeName === 'second') {
+          this.getOnlyPosition();
+        }
       },
 
       //职位
