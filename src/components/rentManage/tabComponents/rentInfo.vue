@@ -81,6 +81,8 @@
         if (this.activeName === 'RentInfoTab') {
           this.getData();
           this.isRequestData = true;
+        }else {
+          this.collectData = [];
         }
       },
       activeName(val) {

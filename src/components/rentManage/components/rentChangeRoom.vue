@@ -647,7 +647,7 @@
       rentChangeRoomDialogVisible(val){
         if (!val) {
           this.$emit('close');
-          this.isClear = false;
+          this.clearData();
         } else {
           this.getDetail();
           this.isClear = true;
