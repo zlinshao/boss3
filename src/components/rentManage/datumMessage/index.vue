@@ -15,9 +15,9 @@
 <!--</template>-->
 
 <!--<script>-->
-  <!--import ClientManage from './clientManage/index.vue'-->
-  <!--import ContractManage from './contractManage/index.vue'-->
-  <!--import WorkOrderManage from './workOrderManage/index.vue'-->
+  <!--import ClientManage from './clientManage/index1.vue'-->
+  <!--import ContractManage from './contractManage/index1.vue'-->
+  <!--import WorkOrderManage from './workOrderManage/index1.vue'-->
 
   <!--export default {-->
     <!--name: "datum",-->

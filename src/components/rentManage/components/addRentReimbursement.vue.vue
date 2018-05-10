@@ -126,6 +126,7 @@
           this.$emit('close');
           this.initial();
         } else {
+          this.isClear = false;
           this.getNumber();
         }
       },
@@ -168,6 +169,7 @@
               title: '成功',
               message: res.data.msg
             });
+            this.$emit('close','reimbursement');
             this.addRentReimbursementDialogVisible = false;
           } else {
             this.$notify.warning({
@@ -183,6 +185,8 @@
         this.form.source = '';
         this.form.account_bank = '';
         this.form.branch_bank = '';
+        this.form.amount = '';
+        this.form.account_name = '';
         this.form.bank_num = '';
         this.form.image_pic = '';
         this.form.remark = '';

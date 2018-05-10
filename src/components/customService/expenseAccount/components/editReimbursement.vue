@@ -1,6 +1,6 @@
 <template>
-  <div id="addCollectReimbursement">
-    <el-dialog :close-on-click-modal="false" title="添加报销单" :visible.sync="editReimbursementDialogVisible"
+  <div id="editReimbursement">
+    <el-dialog :close-on-click-modal="false" title="编辑报销单" :visible.sync="editReimbursementDialogVisible"
                width="50%">
       <div>
         <el-form size="mini" :model="form" label-width="100px">
@@ -168,7 +168,7 @@
               this.form.reimbursement_number = detail.reimbursement_number;
               this.form.type = detail.type;
               this.form.module = detail.module;
-              this.form.contract_id = detail.contract_id.id;
+              this.form.contract_id = detail.contract_id && detail.contract_id.id;
               this.form.source = detail.source;
               this.form.amount = detail.amount;
               this.form.account_name = detail.account_name;

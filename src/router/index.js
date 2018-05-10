@@ -14,16 +14,16 @@ import JointRentManage from '../components/rentManage/jointRentManage/index.vue'
 
 //客服中心
 import ExpenseAccount from '../components/customService/expenseAccount/index.vue'   //报销
- import CustomerService from '../components/rentManage/customerService/index.vue'                //回访
+import CustomerService from '../components/rentManage/customerService/index.vue'                //回访
 
-// import ContractManage from '../components/rentManage/datumMessage/contractManage/index.vue'
-// import ClientManage from '../components/rentManage/datumMessage/clientManage/index.vue'
+// import ContractManage from '../components/rentManage/datumMessage/contractManage/index1.vue'
+// import ClientManage from '../components/rentManage/datumMessage/clientManage/index1.vue'
 import HousesManage from '../components/rentManage/housesManage/index.vue'                      //产品管控中心
 import RepairManage from '../components/rentManage/repairManage/index.vue'
 import ClientManage from '../components/rentManage/datumMessage/clientManage/index.vue'         //客户管理
 import ContractManage from '../components/rentManage/datumMessage/contractManage/index.vue'     //合同管理
 import WorkOrderManage from '../components/rentManage/datumMessage/workOrderManage/index.vue'   //工单管理
-// import RetreatManage from '../components/rentManage/datumMessage/retreatManage/index.vue' //退租管理
+// import RetreatManage from '../components/rentManage/datumMessage/retreatManage/index1.vue' //退租管理
 
 // 财务账本
 // import AccountManage from '../comments/finance/accountManage/index'                      //账户管理
@@ -42,27 +42,27 @@ import IncomeFlow from '../components/finance/incomeFlow/index'                 
 
 
 // 微信管理
-// import Reimbursement from '../comments/wechatMessage/reimbursement/index.vue'            //微信报销
-// import Complain from '../comments/wechatMessage/complain/index.vue'                      //微信投诉
-// import LookHouse from '../comments/wechatMessage/lookHouse/index.vue'                    //预约看房
-// import League from '../comments/wechatMessage/league/index.vue'                          //房东加盟
-// import Feedback from '../comments/wechatMessage/feedback/index.vue'                      //意见反馈
+// import Reimbursement from '../comments/wechatMessage/reimbursement/index1.vue'            //微信报销
+// import Complain from '../comments/wechatMessage/complain/index1.vue'                      //微信投诉
+// import LookHouse from '../comments/wechatMessage/lookHouse/index1.vue'                    //预约看房
+// import League from '../comments/wechatMessage/league/index1.vue'                          //房东加盟
+// import Feedback from '../comments/wechatMessage/feedback/index1.vue'                      //意见反馈
 import WechatMessage from '../components/wechatMessage/index.vue'                           //微信管理
 
 
 //人资管理
-// import StaffManage from '../comments/humanResource/staffManage/index.vue'
-// import Organization from '../components/humanResource/organization/index.vue'
-// import Achievement from '../comments/humanResource/achievement/index.vue'
+// import StaffManage from '../comments/humanResource/staffManage/index1.vue'
+// import Organization from '../components/humanResource/organization/index1.vue'
+// import Achievement from '../comments/humanResource/achievement/index1.vue'
 import IntegralManage from '../components/humanResource/integralManage/index.vue'
 import OrganizationNew from '../components/humanResource/organizationNew/index.vue'       // add by cj 组织架构
 
 
 //OA办公
-// import Communication from '../comments/OAWork/communication/index.vue'                 //通讯管理
-// import Programme from '../components/OAWork/management/programme/index.vue'               //日程管理
+// import Communication from '../comments/OAWork/communication/index1.vue'                 //通讯管理
+// import Programme from '../components/OAWork/management/programme/index1.vue'               //日程管理
 import Institution from '../components/OAWork/management/institution/index.vue'           //制度管理
-// import Vote from '../comments/OAWork/vote/index.vue'                                   //投票管理
+// import Vote from '../comments/OAWork/vote/index1.vue'                                   //投票管理
 import Counter from '../components/OAWork/management/counter/index.vue'                   //业绩计算器
 import Management from '../components/OAWork/management/index.vue'                        //办公管理
 
@@ -72,14 +72,14 @@ import Management from '../components/OAWork/management/index.vue'              
 // import CapitalGather from '../comments/OAWork/property/items/capitalAssetsGather.vue'                   //固定资产总汇
 import Property from '../components/OAWork/property/index.vue'                                               //资产管理
 
-// import ArticleMessage from '../comments/OAWork/articleMessage/staffSquare/index.vue'                    //员工广场
+// import ArticleMessage from '../comments/OAWork/articleMessage/staffSquare/index1.vue'                    //员工广场
 import PublicArticle from '../components/OAWork/articleMessage/staffSquare/components/publicArticle.vue'     //文章发布
 import ArticleMessage from '../components/OAWork/articleMessage/index.vue'                                   //文章管理
 
-// import ContractClaim from '../comments/OAWork/pagerData/contractClaim/index.vue'
+// import ContractClaim from '../comments/OAWork/pagerData/contractClaim/index1.vue'
 import PagerData from '../components/OAWork/pagerData/index.vue'                        //纸质资料
 
-// import Knowledge from '../comments/OAWork/knowledge/index.vue'                     //知识管理
+// import Knowledge from '../comments/OAWork/knowledge/index1.vue'                     //知识管理
 
 import ExamineAndApprove from '../components/OAWork/examineAndApprove/index.vue'
 
@@ -107,27 +107,29 @@ import ModuleSetting from '../components/systemSetting/moduleSetting/index.vue' 
 import AnswerCenter from '../components/OAWork/answerCenter/index.vue'                             //问答中心
 
 //问卷调查
-import Questionnaire from '../components/OAWork/questionnaire/index.vue'                             //问卷调查
-import ConfigNaire  from '../components/OAWork/questionnaire/configNaire/index.vue'  //管理问卷
+import Questionnaire from '../components/OAWork/questionnaire/index.vue'               //问卷调查
+import ConfigNaire from '../components/OAWork/questionnaire/configNaire/index.vue'  //管理问卷
+import PreviewNaire from '../components/OAWork/questionnaire/previewNaire/index.vue'  //管理问卷
 import BatchNaire from '../components/OAWork/questionnaire/batchNaire/index.vue'  //批量导入问卷
 import MyselfNaire from '../components/OAWork/questionnaire/myselfNaire/index.vue'  //自己录入问卷
 import LookNaire from '../components/OAWork/questionnaire/lookNaire/index.vue'  //问卷调查统计
 import AnswerAll from '../components/OAWork/questionnaire/answerAll/index.vue'  //问卷调查统计
+import AnswerNaire from '../components/OAWork/questionnaire/answerNaire/index.vue'  //问卷作答
 
 
-// import Message from '../comments/systemSetting/message/index.vue'                                      //短信模板
-// import LoginRecord from '../comments/systemSetting/loginRecord/index.vue'                              //登陆日志
-// import UserDictionary from '../comments/systemSetting/userDictionary/index.vue'                        //用户字典
-// import RoleManage from '../comments/systemSetting/roleManage/index.vue'                                //角色管理
-// import PowerManage from '../comments/systemSetting/powerManage/index.vue'                              //权限管理
+// import Message from '../comments/systemSetting/message/index1.vue'                                      //短信模板
+// import LoginRecord from '../comments/systemSetting/loginRecord/index1.vue'                              //登陆日志
+// import UserDictionary from '../comments/systemSetting/userDictionary/index1.vue'                        //用户字典
+// import RoleManage from '../comments/systemSetting/roleManage/index1.vue'                                //角色管理
+// import PowerManage from '../comments/systemSetting/powerManage/index1.vue'                              //权限管理
 import VillageManage from '../components/systemSetting/managerSetting/villageManage/index.vue'              //小区管理
 import VillageDetail from '../components/systemSetting/managerSetting/villageManage/villageDetail.vue'      //小区管理详情
 import ManagerSetting from '../components/systemSetting/managerSetting/index.vue'                           //管理员设置
 
 
-// import Recycle from '../comments/systemSetting/recycleBin/index.vue'                                   //回收站
-// import contractModule from '../comments/systemSetting/contractModule/index.vue'                        //合同模板
-// import ExportManage from '../comments/systemSetting/exportManage/index.vue'                            //导出管理
+// import Recycle from '../comments/systemSetting/recycleBin/index1.vue'                                   //回收站
+// import contractModule from '../comments/systemSetting/contractModule/index1.vue'                        //合同模板
+// import ExportManage from '../comments/systemSetting/exportManage/index1.vue'                            //导出管理
 
 
 //喜报管理
@@ -262,19 +264,23 @@ export default new Router({
         {path: '/myselfQuestions', component: MyselfQuestions, name: "自己录入"},
         {path: '/previewExam', component: PreviewExam, name: "预览试卷"},
         {path: '/answerExam', component: AnswerExam, name: "考生答题"},
+        {path: '/LineCollege', component: LineCollege, name: '我的考试', icon: "iconfont icon-zaixiankaoshi"},
         {path: '/lookExam', component: LookExam, name: "查看试卷"},
         {path: '/examinerRead', component: ExaminerRead, name: "阅卷管理"},
-        {path: '/examinerReadEach', component:ExaminerReadEach, name: "试卷批阅"},
+        {path: '/examinerReadEach', component: ExaminerReadEach, name: "试卷批阅"},
         {path: '/examinerShortAn', component: ExaminerShortAn, name: "简答批阅"},
         {path: '/answerCenter', component: AnswerCenter, name: "问答中心"},
 
-        {path: '/questionnaire', component: Questionnaire, name: "问卷调查"},
+
         {path: '/configNaire', component: ConfigNaire, name: "管理问卷"},
+        {path: '/previewNaire', component: PreviewNaire, name: "预览问卷"},
         {path: '/batchNaire', component: BatchNaire, name: "批量导入问卷"},
         {path: '/myselfNaire', component: MyselfNaire, name: "自己录入问卷"},
         {path: '/lookNaire', component: LookNaire, name: "调查统计"},
         {path: '/answerAll', component: AnswerAll, name: "所有回答"},
-        {path: '/LineCollege', component: LineCollege, name: '我的考试', icon:"iconfont icon-zaixiankaoshi"}
+        {path: '/answerNaire', component: AnswerNaire, name: "问卷作答"},
+
+
       ]
     },
     //快捷入口
@@ -365,8 +371,8 @@ export default new Router({
       children: [
         {path: '/workOrderManage', component: WorkOrderManage, name: '工单管理',},
         {path: '/repairManage', component: RepairManage, name: '维修管理',},
-        {path: '/customerService', component: CustomerService, name: '回访',},
-        // {path: '/ExpenseAccount', component: ExpenseAccount, name: '报销',},
+        {path: '/customerService', component: CustomerService, name: '回访管理',},
+        {path: '/ExpenseAccount', component: ExpenseAccount, name: '报销管理',},
       ]
     },
     //
@@ -481,6 +487,7 @@ export default new Router({
         // {path: '/contractClaim', component: ContractClaim, name: '合同认领',},
         {path: '/pagerData', component: PagerData, name: '纸质资料'},
         // {path: '/knowledge', component: Knowledge, name: '知识管理',},
+        // {path: '/questionnaire', component: Questionnaire, name: "问卷调查"},
 
       ]
     },
@@ -492,8 +499,6 @@ export default new Router({
       icon: 'iconfont icon-daxue',
       children: [
         {path: '/college', component: College, name: '乐伽大学 '},
-        // {path: '/LineCollege', component: LineCollege, name: '成绩查询'},
-        // {path: '/StaffRegistration', component: StaffRegistration, name: '员工报名'},
         {path: '/OnlineExam', component: OnlineExam, name: '在线考试'},
         {path: '/examinerRead', component: ExaminerRead, name: '考官判卷'},
 

@@ -458,6 +458,7 @@ export default {
       }
     },
     search() {
+      this.form.page =1;
       if (this.activeName === "first") {
         this.form.module = 1;
         this.getCollectTableData();  
@@ -491,7 +492,13 @@ export default {
     handleCurrentChange(val) {
       this.form.page = val;
       console.log(`当前页: ${val}`);
-      this.search();
+      if (this.activeName === "first") {
+        this.form.module = 1;
+        this.getCollectTableData();  
+      } else {
+        this.form.module = 2;
+        this.getRentTableData();
+      }
     },
     dblClickTable(row, event) {
       this.repairId = row.id;

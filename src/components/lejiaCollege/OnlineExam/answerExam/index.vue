@@ -35,40 +35,39 @@
         </el-row>
       </div>
       <div class="main">
-        <div class="questionDiv" v-for="(v, k) in questionData" v-if="k==153 && questionData[k].length>0">
-          <div v-for="(item, key) in questionData[k]">
+        <div v-for="(v, k) in questionData" v-if="k==153 && questionData[k].length>0">
+          <div class="questionDiv" v-for="(item, key) in questionData[k]">
             {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">单选题</span>
-            <p style="margin-left:30px;line-height:30px;width:96%" v-html="item.stem"></p>
+            <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor" v-html="item.stem"></p>
             <el-form>
-              <el-form-item>
+              <el-form-item >
                 <el-radio-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;">
-                  <el-col :span="6" :key="index" v-for="(val,index) in item.choice"
-                          style="line-height:24px;height: 24px;">
-                    <el-radio :label="index" style="white-space: initial;">{{index}}：{{val}}</el-radio>
-                  </el-col>
+                  <el-row :gutter="20">
+                    <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
+                      <el-radio :label="index" style="white-space: initial;line-height:24px;">{{index}}：{{val}}</el-radio>
+                    </el-col>
+                  </el-row>
                 </el-radio-group>
               </el-form-item>
             </el-form>
           </div>
         </div>
-        <div class="questionDiv" v-for="(v,k) in questionData" v-if="(k==154 || k==155) && questionData[k].length>0">
-          <div v-for="(item, key) in questionData[k]">
+        <div v-for="(v,k) in questionData" v-if="(k==154 || k==155) && questionData[k].length>0">
+          <div class="questionDiv" v-for="(item, key) in questionData[k]">
             <span v-if="k==154">{{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">多选题</span></span>
             <span v-if="k==155">{{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">不定向选择题</span></span>
-            <p style="margin-left:30px;line-height:30px;width:96%" v-html="item.stem"></p>
+            <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor" v-html="item.stem"></p>
             <el-form>
               <el-form-item>
                 <el-checkbox-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;" v-if="k==154">
-                  <el-col :span="6" :key="index" v-for="(val,index) in item.choice"
-                          style="line-height:24px;height: 24px;">
-                    <el-checkbox :label="index" style="white-space: initial;">{{index}}:{{item.choice[index]}}
+                  <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
+                    <el-checkbox :label="index" style="white-space: initial;line-height:24px;">{{index}}:{{item.choice[index]}}
                     </el-checkbox>
                   </el-col>
                 </el-checkbox-group>
                 <el-checkbox-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;" v-if="k==155">
-                  <el-col :span="6" :key="index" v-for="(val,index) in item.choice"
-                          style="line-height:24px;height: 24px;">
-                    <el-checkbox :label="index" style="white-space: initial;">{{index}}:{{item.choice[index]}}
+                  <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
+                    <el-checkbox :label="index" style="white-space: initial;line-height:24px;">{{index}}:{{item.choice[index]}}
                     </el-checkbox>
                   </el-col>
                 </el-checkbox-group>
@@ -76,26 +75,25 @@
             </el-form>
           </div>
         </div>
-        <div class="questionDiv" v-for="(v,k) in questionData" v-if="k==156 && questionData[k].length>0">
-          <div v-for="(item, key) in questionData[k]">
+        <div v-for="(v,k) in questionData" v-if="k==156 && questionData[k].length>0">
+          <div class="questionDiv"  v-for="(item, key) in questionData[k]">
             {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">判断题</span>
-            <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
+            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor" v-html="item.stem"></p>
             <el-form>
               <el-form-item>
                 <el-radio-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;">
-                  <el-col :span="12" :key="index" v-for="(val,index) in item.choice"
-                          style="line-height:24px;height: 24px;">
-                    <el-radio :label="index">{{index}}:{{val}}</el-radio>
+                  <el-col :span="12" :key="index" v-for="(val,index) in item.choice">
+                    <el-radio :label="index" style="line-height:24px;">{{index}}:{{val}}</el-radio>
                   </el-col>
                 </el-radio-group>
               </el-form-item>
             </el-form>
           </div>
         </div>
-        <div class="questionDiv" v-for="(v,k) in questionData" v-if="k==157 && questionData[k].length>0">
-          <div v-for="(item, key) in questionData[k]">
+        <div v-for="(v,k) in questionData" v-if="k==157 && questionData[k].length>0">
+          <div class="questionDiv" v-for="(item, key) in questionData[k]">
             {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">填空题</span>
-            <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
+            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor" v-html="item.stem"></p>
             <el-form>
               <el-form-item>
                 <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak">
@@ -106,10 +104,10 @@
             </el-form>
           </div>
         </div>
-        <div class="questionDiv" v-for="(v,k) in questionData" v-if="k==158 && questionData[k].length>0">
-          <div v-for="(item, key) in questionData[k]">
+        <div v-for="(v,k) in questionData" v-if="k==158 && questionData[k].length>0">
+          <div class="questionDiv" v-for="(item, key) in questionData[k]">
             {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">简单题</span>
-            <p style="margin-left:30px;line-height:20px;width:96%" v-html="item.stem"></p>
+            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor" v-html="item.stem"></p>
             <el-form>
               <el-form-item>
                 <el-input style="width:95.5%;margin-left:2%;" v-model="answerData[item.id]"
@@ -200,12 +198,6 @@
       this.getQueryData();
       this.getPaperData();
       this.confirmArrival = localStorage.getItem('confirmArrival');  //check_in签到状态考试id数组
-      this.answers = JSON.stringify(localStorage.getItem('answers'));
-      // if (this.examId) {
-      //   if (this.confirmArrival && this.confirmArrival.length > 0 && this.confirmArrival.indexOf(this.examId) > -1) {
-      //     // this.$set(this.answerData, localStorage.getItem('answers'));
-      //   }
-      // }
       this.clockSubmit();
       setTimeout(() => {
         this.clockSubmit();
@@ -215,47 +207,49 @@
       'answerData': {
         deep: true,
         handler(val, oldVal) {
-          localStorage.setItem('answers', JSON.stringify(val));
-          console.log(JSON.stringify(localStorage.getItem('answers')));
+          localStorage.setItem('answers_' + this.examId, JSON.stringify(val));
         }
       }
     },
     methods: {
       combinaData() {
-        if (this.questionData[153] && this.questionData[153].length > 0) {
-          this.questionData[153].forEach((item) => {
-            this.$set(this.answerData, item.id, '');
-          });
-        }
-        if (this.questionData[154] && this.questionData[154].length > 0) {
-          this.questionData[154].forEach((item) => {
-            // if (this.answers && this.answers[item.id]) {
-            //   alert(this.answers);
-            //   this.$set(this.answerData, item.id, this.answers[item.id]);
-            // } else {
-            this.$set(this.answerData, item.id, []);
-            // }
-          });
-        }
-        if (this.questionData[155] && this.questionData[155].length > 0) {
-          this.questionData[155].forEach((item) => {
-            this.$set(this.answerData, item.id, []);
-          });
-        }
-        if (this.questionData[156] && this.questionData[156].length > 0) {
-          this.questionData[156].forEach((item) => {
-            this.$set(this.answerData, item.id, '');
-          });
-        }
-        if (this.questionData[157] && this.questionData[157].length > 0) {
-          this.questionData[157].forEach((item) => {
-            this.$set(this.answerData, item.id, []);
-          });
-        }
-        if (this.questionData[158] && this.questionData[158].length > 0) {
-          this.questionData[158].forEach((item) => {
-            this.$set(this.answerData, item.id, '');
-          });
+        if (localStorage.getItem('answers_' + this.examId) && localStorage.getItem('answers_' + this.examId) != 'null') {
+          this.answerData = JSON.parse(localStorage.getItem('answers_' + this.examId));
+        } else {
+          if (this.questionData[153] && this.questionData[153].length > 0) {
+            this.questionData[153].forEach((item) => {
+              this.$set(this.answerData, item.id, '');
+            });
+          }
+          if (this.questionData[154] && this.questionData[154].length > 0) {
+            this.questionData[154].forEach((item) => {
+              if (this.answers && this.answers[item.id]) {
+                this.$set(this.answerData, item.id, this.answers[item.id]);
+              } else {
+                this.$set(this.answerData, item.id, []);
+              }
+            });
+          }
+          if (this.questionData[155] && this.questionData[155].length > 0) {
+            this.questionData[155].forEach((item) => {
+              this.$set(this.answerData, item.id, []);
+            });
+          }
+          if (this.questionData[156] && this.questionData[156].length > 0) {
+            this.questionData[156].forEach((item) => {
+              this.$set(this.answerData, item.id, '');
+            });
+          }
+          if (this.questionData[157] && this.questionData[157].length > 0) {
+            this.questionData[157].forEach((item) => {
+              this.$set(this.answerData, item.id, []);
+            });
+          }
+          if (this.questionData[158] && this.questionData[158].length > 0) {
+            this.questionData[158].forEach((item) => {
+              this.$set(this.answerData, item.id, '');
+            });
+          }
         }
       },
       getQueryData() {
@@ -302,6 +296,7 @@
               this.pointDialog = true;
             }
             this.submitDisabled = true;
+            localStorage.removeItem("answers_" + this.examId);
           } else {
             this.$notify.warning({
               title: '警告',
@@ -331,7 +326,7 @@
       clockSubmit() {
         if (this.examId) {
           this.$http.get(globalConfig.server + 'exam/poll/' + this.examId).then((res) => {
-            if(res.data.code === '30000'){
+            if (res.data.code === '30000') {
               this.onSubmit();
               // alert('强制提交。。。')
             }
@@ -343,6 +338,10 @@
 </script>
 
 <style lang="scss" scoped>
+  .ql-editor {
+    min-height: initial !important;
+  }
+
   .confirm_btn {
     width: 100px;
     height: 35px;

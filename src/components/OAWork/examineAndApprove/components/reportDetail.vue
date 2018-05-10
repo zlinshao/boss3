@@ -39,10 +39,8 @@
                     <div class="special">
                       <span v-if="index === '定金和收款方式' || index === '补交定金和收款方式'" v-for="item in key">{{item}}</span>
                       <span v-else>
-                        <span v-for="(item,index) in key">
-                          <span style="display: block">{{item.msg}}</span>
-                          <span style="display: block">{{item.period}}</span>
-                        </span>
+                        <span style="display: block">{{item.msg}}</span>
+                        <span style="display: block">{{item.period}}</span>
                       </span>
                     </div>
                   </el-form-item>
