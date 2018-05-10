@@ -19,6 +19,7 @@
         </div>
         <div class="tableList scroll_bar">
           <el-table :data="tableData" @row-click="rowClick" style="width: 100%">
+
             <el-table-column width="65">
               <template slot-scope="scope">
                 <el-radio v-model="radio" :label="scope.row.id">
