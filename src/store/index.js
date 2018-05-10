@@ -11,6 +11,7 @@ import datum from './modules/datumMessage';
 import secondPassword from './modules/secondPassword';  //二级密码
 import badge from './modules/badge';  //每日弹窗
 import onlineExam from './modules/onlineExam';  //乐伽大学在线考试
+import quesNaire from './modules/quesNaire';  //问卷调查
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -22,6 +23,7 @@ const store = new Vuex.Store({
     secondPassword,
     badge,
     onlineExam,
+    quesNaire,
   },
   getters
 });

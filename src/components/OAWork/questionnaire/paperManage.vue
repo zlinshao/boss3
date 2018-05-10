@@ -13,7 +13,7 @@
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" size="mini" @click="paperTypeDialog = true">
+            <el-button type="primary" size="mini" @click="paperDialog = true">
               <i class="iconfont icon-xinjianshijuan" style="font-size: 14px;"></i>&nbsp;新建试卷
             </el-button>
           </el-form-item>
@@ -103,26 +103,17 @@
         </div>
       </div>
     </div>
-    <div id="paperTypeDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="paperTypeDialog" title="新建试卷" width="30%">
-        <el-form :model="paperTypeForm" onsubmit="return false;" label-width="100px">
-          <el-row>
-            <el-form-item label="试卷类型" required>
-              <el-select v-model="paperTypeForm.category" id="testPaperType" size="mini" placeholder="请选择" clearable>
-                <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
-                  {{item.dictionary_name}}
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-row>
+    <div id="paperDialog">
+      <el-dialog :close-on-click-modal="false" :visible.sync="paperDialog" title="新建试卷" width="30%">
+        <el-form :model="paperForm" onsubmit="return false;" label-width="100px">
           <el-row>
             <el-form-item label="试卷名称" required>
-              <el-input v-model="paperTypeForm.name" size="mini" placeholder="请输入名称" clearable></el-input>
+              <el-input v-model="paperForm.name" size="mini" placeholder="请输入名称" clearable></el-input>
             </el-form-item>
           </el-row>
         </el-form>
         <span slot="footer" class="dialog-footer">
-            <el-button size="small" @click="paperTypeDialog = false">取消</el-button>
+            <el-button size="small" @click="paperDialog = false">取消</el-button>
             <el-button size="small" type="primary" @click="paperTypeBtn">保存</el-button>
         </span>
       </el-dialog>
@@ -157,7 +148,7 @@
 
   export default {
     components: {RightMenu, Organization},
-    name: 'testpaper-manage',
+    name: 'paper-manage',
     data() {
       return {
         activeName: 'first',
@@ -180,14 +171,14 @@
           category: '',
         },
         examType: [],
-        testPaperDialog: false, //新建试卷模态框
-        paperTypeDialog: false,  //新建试卷 选择类型模态框
+        testPaperDialog: false, //新建试卷录入题目方式模态框
+        paperDialog: false,  //新建试卷模态框
 
         examinees_name: '',//新建考试报名考生
         // 新建试卷 类型和名称
-        paperTypeForm: {
-          category: '',
+        paperForm: {
           name: '',
+          is_questionnaire: 1,
         },
         paperId: '', //新增成功后的试卷id, 用于自己录入的时候使用
         testPaperId: '',
@@ -199,7 +190,7 @@
       this.getDictionary();
     },
     watch: {
-      paperTypeDialog(val) {
+      paperDialog(val) {
         if (val) {
           this.initial();
         }
@@ -218,21 +209,14 @@
       dblClickTable() {
       },
       paperTypeBtn() {
-        if (!this.paperTypeForm.category) {
-          this.$notify.warning({
-            title: '警告',
-            message: '试卷类型不能为空'
-          });
-          return;
-        }
-        if (!this.paperTypeForm.name) {
+        if (!this.paperForm.name) {
           this.$notify.warning({
             title: '警告',
             message: '试卷名称不能为空'
           });
           return;
         }
-        this.paperTypeDialog = false;
+        this.paperDialog = false;
         this.testPaperDialog = true;
       },
       getDictionary() {
@@ -246,25 +230,21 @@
         this.testPaperDialog = false;
         var type_name = $('#testPaperType').val();
         this.$router.push({
-          path: "/batchQuestions",
-          query: {name: this.paperTypeForm.name, type_id: this.paperTypeForm.category, type_name: type_name}
+          path: "/batchNaire",
+          query: {name: this.paperForm.name}
         });
       },
       //自己录入
       myselfQuestion() {
         this.testPaperDialog = false;
         //创建试卷
-        this.$http.post(globalConfig.server + 'exam/paper', this.paperTypeForm).then((res) => {
+        this.$http.post(globalConfig.server + 'exam/paper', this.paperForm).then((res) => {
           if (res.data.code === '36010') {
-            // this.$notify.success({
-            //   title: '成功',
-            //   message: res.data.msg
-            // });
             this.paperId = res.data.data;
-            this.getTestPaperData();
+            // this.getTestPaperData();
             if (this.paperId) {
               this.$router.push({
-                path: "/myselfQuestions",
+                path: "/myselfNaire",
                 query: {paper_id: this.paperId, type: 'add'}
               });
             }
@@ -341,7 +321,7 @@
       clickEvent(index) {
         switch (index) {
           case 'editTestPaper':
-            this.$router.push({path: "/configExam", query: {id: this.testPaperId}});
+            this.$router.push({path: "/configNaire", query: {id: this.testPaperId}});
             break;
           case 'deleteTestPaper':
             this.$confirm("删除后不可恢复, 是否继续?", "提示", {
@@ -399,10 +379,10 @@
         this.organizationDialog = false;
       },
       initial() {
-        // 新建试卷 类型和名称
-        this.paperTypeForm = {
-          type: '',
+        // 新建调查试卷
+        this.paperForm = {
           name: '',
+          is_questionnaire: 1,
         };
 
       },

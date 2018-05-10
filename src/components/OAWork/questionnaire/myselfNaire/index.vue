@@ -9,40 +9,161 @@
               <div class="qubody">
                 <div class="topbody">
                   <div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>
-                  <vue-editor id="singleEditor" useCustomImageHandler :disabled="editorDisabled"
+                  <vue-editor id="singleEditor" useCustomImageHandler @imageAdded="handleImageAdded"
                               v-model="singleForm.stem"></vue-editor>
                 </div>
                 <div class="midbody">
                   <div class="title">选项</div>
-                  <div class="title"><span style="cursor:pointer;" @click="naireFlagT">文字选项</span>&nbsp;&nbsp;&nbsp;<span style="cursor:pointer;" @click="naireFlagF">图片选项</span></div>
-                  <el-form-item style="border:1px #eee solid; padding-bottom: 15px;border-radius: 5px; " v-model="optionsSelect" v-show="!naireFlag">
-                      <el-col :span="12" :key="val" v-for="(val,index) in singlen"
-                              style="line-height:50px;height:50px;padding-top:14px;">
-                          <el-input size="small" style="width:60%; margin-left:5%;" v-model="options[index]" placeholder="请输入选项内容"></el-input>
-                          <i class="el-icon-close" style="color: #c0c4cc;" @click="singleSub(index)"></i>
-                      </el-col>
-                  </el-form-item>
-                  <el-form-item style=" padding-bottom: 15px;border-radius: 5px; " v-model="optionsSelect" v-show="naireFlag">
-                    <Dropzone :ID="'naire'" @getImg="photo_success" :isClear="isClear"></Dropzone>
+                  <el-form-item style="border:1px #eee solid; padding-bottom: 15px;border-radius: 5px;">
+                    <el-radio-group v-model="optionsSelect" style="width:98%;margin-left:2%;">
+                      <el-row :gutter="20">
+                        <el-col :span="12" :key="val" v-for="(val,index) in singlen"
+                                style="line-height:50px;height:50px;padding-top:14px;">
+                          <el-radio :label="index">
+                            <el-input size="small" v-model="options[index]" placeholder="请输入选项内容"></el-input>
+                            <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="singleSub(index)"></i>
+                            <!--<span style="color:rgb(88, 215, 136);" v-if="index == optionsSelect">正确</span>-->
+                          </el-radio>
+                        </el-col>
+                      </el-row>
+
+                    </el-radio-group>
                   </el-form-item>
                   <div class="midadd">
                     <span @click="singleAdd">+&nbsp;&nbsp;添加选项</span>
                   </div>
                 </div>
-
               </div>
             </el-form>
           </el-tab-pane>
 
-          <el-tab-pane name="second" label="问答题" :disabled="tabDisabled[1]">
+          <el-tab-pane name="second" label="多选题" :disabled="tabDisabled[1]">
+            <el-form :model="multiForm" onsubmit="return false;">
+              <div class="qubody">
+                <div class="topbody">
+                  <div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>
+                  <vue-editor id="multiEditor" v-model="multiForm.stem" useCustomImageHandler
+                              @imageAdded="handleImageAdded"></vue-editor>
+                </div>
+                <div class="midbody">
+                  <div class="title">选项</div>
+                  <el-form-item style="border:1px #eee solid;padding-bottom: 20px;border-radius: 5px;">
+                    <el-checkbox-group v-model="multiOptionsSelect" style="width:98%;margin-left:2%;">
+                      <el-col :span="12" :key="val" v-for="(val,index) in boxlen"
+                              style="line-height:50px;height:50px;padding-top:14px;">
+                        <el-checkbox :label="index">
+                          <el-input size="small" placeholder="请输入选项内容" v-model="multiOptions[index]"></el-input>
+                          <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="multiSub(index)"></i>
+                          <!--<span style="color:rgb(88, 215, 136);" v-if="multiOptionsSelect.indexOf(index)>-1">正确</span>-->
+                        </el-checkbox>
+                      </el-col>
+                    </el-checkbox-group>
+                  </el-form-item>
+                  <div class="midadd">
+                    <span @click="multiAdd">+&nbsp;&nbsp;添加选项</span>
+                  </div>
+                </div>
+              </div>
+            </el-form>
+          </el-tab-pane>
+
+          <el-tab-pane name="third" label="不定向选择" :disabled="tabDisabled[2]">
+            <el-form :model="multiForm" onsubmit="return false;">
+              <div class="qubody">
+                <div class="topbody">
+                  <div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>
+                  <vue-editor id="nonDirectionalEditor" v-model="multiForm.stem" useCustomImageHandler
+                              @imageAdded="handleImageAdded"></vue-editor>
+                </div>
+                <div class="midbody">
+                  <div class="title">选项</div>
+                  <el-form-item style="border:1px #eee solid;padding-bottom: 20px;border-radius: 5px;">
+                    <el-checkbox-group v-model="multiOptionsSelect" style="width:98%;margin-left:2%;">
+                      <el-col :span="12" :key="val" v-for="(val,index) in boxlen"
+                              style="line-height:50px;height:50px;padding-top:14px;">
+                        <el-checkbox :label="index">
+                          <el-input size="small" placeholder="请输入选项内容" v-model="multiOptions[index]"></el-input>
+                          <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="multiSub(index)"></i>
+                          <!--<span style="color:rgb(88, 215, 136);" v-if="multiOptionsSelect.indexOf(index)>-1">正确</span>-->
+                        </el-checkbox>
+                      </el-col>
+                    </el-checkbox-group>
+                  </el-form-item>
+                  <div class="midadd">
+                    <span @click="multiAdd">+&nbsp;&nbsp;添加选项</span>
+                  </div>
+                </div>
+              </div>
+            </el-form>
+          </el-tab-pane>
+
+          <el-tab-pane name="fourth" label="判断题" :disabled="tabDisabled[3]">
+            <el-form :model="judgeForm" onsubmit="return false;">
+              <div class="qubody">
+                <div class="topbody">
+                  <div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>
+                  <vue-editor id="judgeEditor" v-model="judgeForm.stem" useCustomImageHandler
+                              @imageAdded="handleImageAdded"></vue-editor>
+                </div>
+                <div class="midbody">
+                  <div class="title">选项</div>
+                  <el-form-item style="border:1px #eee solid;padding-bottom: 20px;border-radius: 5px;">
+                    <el-radio-group v-model="judgeOptionsSelect" style="width:98%;margin-left:2%;">
+                      <el-col :span="12" :key="val" v-for="(val,index) in 2"
+                              style="line-height:50px;height:50px;padding-top:14px;">
+                        <el-radio :label="index">
+                          <el-input size="small" v-model="judgeOptions[index]" placeholder="请输入选项内容"></el-input>
+                          <!--<span style="color:rgb(88, 215, 136);" v-if="index == judgeOptionsSelect">正确</span>-->
+                        </el-radio>
+                      </el-col>
+                    </el-radio-group>
+                  </el-form-item>
+                </div>
+              </div>
+            </el-form>
+          </el-tab-pane>
+
+          <el-tab-pane name="five" label="填空题" :disabled="tabDisabled[4]">
+            <el-form :model="blankForm" onsubmit="return false;">
+              <div class="qubody">
+                <div class="topbody">
+                  <div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>
+                  <vue-editor id="completionEditor" v-model="blankForm.stem" useCustomImageHandler
+                              @imageAdded="handleImageAdded"></vue-editor>
+                </div>
+                <!--<div class="midbody">-->
+                  <!--<div class="title">填空信息</div>-->
+                  <!--<el-form-item style="border:1px #eee solid; padding: 15px;border-radius: 5px;">-->
+                    <!--<el-row :gutter="20">-->
+                      <!--<el-col :span="8" v-for="(val,index) in spacelen" :key="index">-->
+                        <!--<span>第{{index+1}}处答案</span>-->
+                        <!--<el-input style="width:70%" size="small" placeholder="请输入选项内容"-->
+                                  <!--v-model="blankForm.answer[index]"></el-input>-->
+                        <!--<i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="blankSub(index)"></i>-->
+                      <!--</el-col>-->
+                    <!--</el-row>-->
+
+                  <!--</el-form-item>-->
+                  <!--<span-->
+                    <!--style="margin-left: 20%; color:rgb(252, 131, 182); margin-top:20px; margin-bottom:20px;display:block;">-->
+                      <!--说明：考生填写答案须跟上方答案完全相同，才能得分。录入答案时，请不要加多余的空格等干扰字符-->
+                    <!--</span>-->
+                  <!--<div class="midadd">-->
+                    <!--<span @click="blankAdd">+&nbsp;&nbsp;添加选项</span>-->
+                  <!--</div>-->
+                <!--</div>-->
+              </div>
+            </el-form>
+          </el-tab-pane>
+
+          <el-tab-pane name="six" label="问答题" :disabled="tabDisabled[5]">
             <el-form :model="answerForm" onsubmit="return false;">
               <div class="qubody">
                 <div class="topbody">
                   <div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>
                   <vue-editor id="editor" v-model="answerForm.stem" useCustomImageHandler
-                              :disabled="editorDisabled"></vue-editor>
+                              @imageAdded="handleImageAdded"></vue-editor>
                 </div>
-
               </div>
             </el-form>
           </el-tab-pane>
@@ -58,29 +179,56 @@
 
 <script>
   import {VueEditor} from "vue2-editor";
-  import Dropzone from "../../../common/UPLOAD.vue";
+
   export default {
     name: "index",
-    components: {VueEditor,Dropzone},
+    components: {VueEditor},
     data() {
       return {
         activeName: "first",
-        editorDisabled: false,
-        naireFlag:false,
         //单选
         singlen: 4,
-        singReal:0,
-        singmax:0,
         singleForm: {
           stem: '',  //题干
           category: '',  //题目类型
           choice: {},  //选项
           answer: '',  //正确答案
           paper_id: '',  //试卷Id
-          pic_choice:[],  //图片标识
         },
         options: [],  //试卷选项
         optionsSelect: '',  //试卷答案
+        //多选 不定项选择
+        boxlen: 4,
+        multiForm: {
+          paper_id: '',
+          stem: '',  //题干
+          category: '',  //题目类型
+          choice: {},  //选项
+          answer: [],  //正确答案
+        },
+        multiOptions: [],
+        multiOptionsSelect: [],
+
+        //判断题
+        judgeForm: {
+          paper_id: '',
+          stem: '',
+          category: '',
+          choice: {},
+          answer: '',
+        },
+        judgeOptions: [],
+        judgeOptionsSelect: '',
+
+        //填空题
+        spacelen: 3,
+        blankForm: {
+          paper_id: '',
+          stem: '',
+          category: '',
+          choice: {},
+          answer: [],
+        },
 
         //问答题
         answerForm: {
@@ -93,11 +241,8 @@
         submitDisabled: false,
         quesId: '',  //编辑时候的题目id
         editQuesCategory: '',  //编辑时候的题目类型
-        tabDisabled: [false, false],
-        isClear: false,
-        cover_id: [],
-        uploadStatus: false,
-        
+        tabDisabled: [false, false, false, false, false, false],
+
       };
     },
     activated() {
@@ -125,8 +270,72 @@
                   this.singlen = this.options.length;
                   this.optionsSelect = res.data.data.answer.charCodeAt() - 65;
                   break;
-
                 case 'second':
+                  for (var i = 0; i < this.tabDisabled.length; i++) {
+                    if (i === 1) {
+                      this.tabDisabled[i] = false;
+                    } else {
+                      this.tabDisabled[i] = true;
+                    }
+                  }
+                  this.multiOptions = [];
+                  this.multiOptionsSelect = [];
+                  this.multiForm.stem = res.data.data.stem;
+                  for (var i in res.data.data.choice) {
+                    this.multiOptions[i.charCodeAt() - 65] = res.data.data.choice[i];
+                  }
+                  this.boxlen = this.multiOptions.length;
+                  for (var i = 0; i < res.data.data.answer.length; i++) {
+                    this.multiOptionsSelect.push(i);
+                  }
+                  break;
+                case 'third':
+                  for (var i = 0; i < this.tabDisabled.length; i++) {
+                    if (i === 2) {
+                      this.tabDisabled[i] = false;
+                    } else {
+                      this.tabDisabled[i] = true;
+                    }
+                  }
+                  this.multiOptions = [];
+                  this.multiOptionsSelect = [];
+                  this.multiForm.stem = res.data.data.stem;
+                  for (var i in res.data.data.choice) {
+                    this.multiOptions[i.charCodeAt() - 65] = res.data.data.choice[i];
+                  }
+                  this.boxlen = this.multiOptions.length;
+                  for (var i = 0; i < res.data.data.answer.length; i++) {
+                    this.multiOptionsSelect.push(i);
+                  }
+                  break;
+                case 'fourth':
+                  for (var i = 0; i < this.tabDisabled.length; i++) {
+                    if (i === 3) {
+                      this.tabDisabled[i] = false;
+                    } else {
+                      this.tabDisabled[i] = true;
+                    }
+                  }
+                  this.judgeOptions = [];
+                  this.judgeForm.stem = res.data.data.stem;
+                  for (var i in res.data.data.choice) {
+                    this.judgeOptions[i.charCodeAt() - 65] = res.data.data.choice[i];
+                  }
+                  this.judgeOptionsSelect = res.data.data.answer.charCodeAt() - 65;
+                  break;
+                case 'five':
+                  for (var i = 0; i < this.tabDisabled.length; i++) {
+                    if (i === 4) {
+                      this.tabDisabled[i] = false;
+                    } else {
+                      this.tabDisabled[i] = true;
+                    }
+                  }
+                  this.blankForm.stem = res.data.data.stem;
+                  this.blankForm.answer = res.data.data.answer;
+                  this.spacelen = res.data.data.answer.length;
+                  break;
+                case 'six':
                   for (var i = 0; i < this.tabDisabled.length; i++) {
                     if (i === 5) {
                       this.tabDisabled[i] = false;
@@ -140,7 +349,8 @@
             }
           });
         } else {
-          this.tabDisabled = [false, false];
+          this.tabDisabled = [false, false, false, false, false, false];
+          this.initial();
         }
       },
       editQuesCategory(val) {
@@ -149,8 +359,20 @@
             case 153:
               this.activeName = 'first';
               break;
-            case 158:
+            case 154:
               this.activeName = 'second';
+              break;
+            case 155:
+              this.activeName = 'third';
+              break;
+            case 156:
+              this.activeName = 'fourth';
+              break;
+            case 157:
+              this.activeName = 'five';
+              break;
+            case 158:
+              this.activeName = 'six';
               break;
           }
         }
@@ -162,13 +384,63 @@
         this.spacelen = val;
       },
       options(val) {
-        this.singReal = val.length;      
-
+        if (val.length > 0) {
+          for (var i = 0; i < val.length; i++) {
+            this.singleForm.choice[String.fromCharCode(65 + i)] = val[i];
+          }
+        }
       },
       optionsSelect(val) {
-        this.singleForm.answer = String.fromCharCode(65 + Number(val));
+        if (val !== '') {
+          this.singleForm.answer = String.fromCharCode(65 + Number(val));
+        }
       },
       'singleForm': {
+        deep: true,
+        handler(val, old) {
+          this.submitDisabled = false;
+        }
+      },
+      multiOptions(val) {
+        if (val.length > 0) {
+          for (var i = 0; i < val.length; i++) {
+            this.multiForm.choice[String.fromCharCode(65 + i)] = val[i];
+          }
+        }
+      },
+      multiOptionsSelect(val) {
+        this.multiForm.answer = [];
+        if (val) {
+          for (var i = 0; i < val.length; i++) {
+            this.multiForm.answer.push(String.fromCharCode(65 + Number(val[i])));
+          }
+        }
+      },
+      'multiForm': {
+        deep: true,
+        handler(val, old) {
+          this.submitDisabled = false;
+        }
+      },
+      judgeOptions(val) {
+        if (val.length > 0) {
+          for (var i = 0; i < val.length; i++) {
+            this.judgeForm.choice[String.fromCharCode(65 + i)] = val[i];
+          }
+        }
+      },
+      judgeOptionsSelect(val) {
+        if (val !== '') {
+          this.judgeForm.answer = String.fromCharCode(65 + Number(val));
+        }
+      },
+      'judgeForm': {
+        deep: true,
+        handler(val, old) {
+          this.submitDisabled = false;
+        }
+      },
+      'blankForm': {
         deep: true,
         handler(val, old) {
           this.submitDisabled = false;
@@ -181,16 +453,38 @@
         }
       },
     },
-  
     methods: {
+      handleImageAdded(file, Editor, cursorLocation, resetUploader) {
+        let formData = new FormData();
+        formData.append('file', file);
+        let config = {
+          headers: {'Content-Type': 'multipart/form-data'}
+        };
+        if (file.size > 1024 * 1024 * 2) {
+          this.$notify.warning({
+            title: '警告',
+            message: '只能上传jpg/png文件，且不超过2M'
+          })
+        } else {
+          this.$http.post(globalConfig.server_user + 'files', formData, config).then((res) => {
+            if (res.data.status === 'success') {
+              Editor.insertEmbed(cursorLocation, 'image', res.data.data.uri);
+            }
+          })
+        }
+
+      },
       getQueryData() {
         if (!this.$route.query.paper_id) {
           let data = {};
-          data.paper_id = this.$store.state.onlineExam.myself_test_paper.paper_id;
-          data.quesId = this.quesId = this.$store.state.onlineExam.myself_test_paper.quesId;
-          data.category = this.editQuesCategory = this.$store.state.onlineExam.myself_test_paper.category;
-          data.type = this.editQuesCategory = this.$store.state.onlineExam.myself_test_paper.type;
+          data.paper_id = this.$store.state.quesNaire.naire_myself_paper.paper_id;
+          data.quesId = this.quesId = this.$store.state.quesNaire.naire_myself_paper.quesId;
+          data.category = this.editQuesCategory = this.$store.state.quesNaire.naire_myself_paper.category;
+          data.type = this.editQuesCategory = this.$store.state.quesNaire.naire_myself_paper.type;
           this.singleForm.paper_id = data.paper_id;
+          this.multiForm.paper_id = data.paper_id;
+          this.judgeForm.paper_id = data.paper_id;
+          this.blankForm.paper_id = data.paper_id;
           this.answerForm.paper_id = data.paper_id;
 
           if (data.type === 'add') {
@@ -199,6 +493,7 @@
             for (var i = 0; i < this.tabDisabled.length; i++) {
               this.tabDisabled[i] = false;
             }
+            this.initial();
           } else if (data.type === 'edit') {
             this.quesId = data.quesId;
             this.editQuesCategory = data.category;
@@ -207,22 +502,22 @@
         } else {
           let query = this.$route.query;
           this.singleForm.paper_id = query.paper_id;
+          this.multiForm.paper_id = query.paper_id;
+          this.judgeForm.paper_id = query.paper_id;
+          this.blankForm.paper_id = query.paper_id;
           this.answerForm.paper_id = query.paper_id;
           if (query.type === 'add') {
             this.quesId = '';
             this.editQuesCategory = '';
-
-            this.singleForm.stem ="";
-            
-            this.answerForm.stem = "";
             for (var i = 0; i < this.tabDisabled.length; i++) {
               this.tabDisabled[i] = false;
             }
+            this.initial();
           } else if (query.type === 'edit') {
             this.quesId = query.quesId;
             this.editQuesCategory = query.category;
           }
-          this.$store.dispatch('myselfTestPaper', query);
+          this.$store.dispatch('naireMyselfPaper', query);
         }
 
       },
@@ -239,28 +534,29 @@
             this.confirmAdd(this.singleForm);
             break;
           case 'second':
+            this.multiForm.category = 154;
+            this.confirmAdd(this.multiForm);
+            break;
+          case 'third':
+            this.multiForm.category = 155;
+            this.confirmAdd(this.multiForm);
+            break;
+          case 'fourth':
+            this.judgeForm.category = 156;
+            this.confirmAdd(this.judgeForm);
+            break;
+          case 'five':
+            this.blankForm.category = 157;
+            this.confirmAdd(this.blankForm);
+            break;
+          case 'six':
             this.answerForm.category = 158;
             this.confirmAdd(this.answerForm);
             break;
         }
       },
-      singleAdd() {
-        this.singlen++;
-      },
       confirmAdd(val) {
         let header = '';
-        if (this.singReal > 0) {
-          for (var i = 0; i < this.singReal; i++) {
-            this.singleForm.choice[String.fromCharCode(65 + i)] = this.options[i];;
-          }
-        }
-          if(this.cover_id.length>0){
-            this.singleForm.pic_choice =[];
-            for (var k = 0; k < this.cover_id.length; k++) {
-            this.singleForm.choice[String.fromCharCode(65 + this.singReal  + k)] = this.cover_id[k];
-            this.singleForm.pic_choice.push(String.fromCharCode(65 + this.singReal  + k))
-          }
-          }
         if (this.quesId) {
           header = this.$http.put(globalConfig.server + 'exam/question/' + this.quesId, val);
         } else {
@@ -273,6 +569,11 @@
               message: res.data.msg
             });
             this.submitDisabled = true;
+            let view = {};
+            view.name=' 自己录入问卷 ';
+            view.path='/myselfNaire';
+            this.$store.dispatch('delVisitedViews', view);
+            this.$router.push({path: '/configNaire',query: {id: this.singleForm.paper_id}});
           } else {
             this.$notify.warning({
               title: '警告',
@@ -288,24 +589,78 @@
         }
         this.singlen--;
         this.singleForm.choice = {};
-        this.singReal = this.cover_id.length;
         for (var i = 0; i < this.options.length; i++) {
-          this.singleForm.choice[String.fromCharCode(65 +this.singReal + i)] = this.options[i];
+          this.singleForm.choice[String.fromCharCode(65 + i)] = this.options[i];
         }
-
         this.singleForm.answer = '';
+        this.optionsSelect = '';
       },
-      // 上传成功
-      photo_success(val) {
-        this.cover_id = val[1];          
-        this.uploadStatus = val[2];
+      multiSub(index) {
+        this.multiOptions[index] = '';
+        for (var i = index; i < this.boxlen; i++) {
+          this.multiOptions[i] = this.multiOptions[i + 1];
+        }
+        this.boxlen--;
+        this.multiForm.choice = {};
+        for (var i = 0; i < this.multiOptions.length; i++) {
+          this.multiForm.choice[String.fromCharCode(65 + i)] = this.multiOptions[i];
+        }
+        this.multiForm.answer = [];
+        this.multiOptionsSelect = [];
       },
-      naireFlagT(){
-        this.naireFlag = false;
+      multiAdd() {
+        this.boxlen++;
+        this.submitDisabled = false;
       },
-      naireFlagF(){
-        this.naireFlag = true;
-      }
+      blankAdd() {
+        this.spacelen++;
+        this.submitDisabled = false;
+      },
+      singleAdd() {
+        this.singlen++;
+        this.submitDisabled = false;
+      },
+      blankSub(index) {
+        this.blankForm.answer[index] = '';
+
+        for (var i = index; i < this.spacelen; i++) {
+          this.blankForm.answer[i] = this.blankForm.answer[i + 1];
+        }
+        this.spacelen--;
+        this.blankForm.answer.splice(this.spacelen, 1);
+      },
+      initial() {
+        //单选
+        this.singleForm.stem = '';
+        this.singleForm.category = '';
+        this.singleForm.choice = {};
+        this.singleForm.answer = '';
+        this.options = [];
+        this.optionsSelect = '';
+        //多选 不定项选择
+        this.multiForm.stem = '';
+        this.multiForm.category = '';
+        this.multiForm.choice = {};
+        this.multiOptions = [];
+        this.multiOptionsSelect = [];
+        //判断题
+        this.judgeForm.stem = '';
+        this.judgeForm.category = '';
+        this.judgeForm.choice = {};
+        this.judgeForm.answer = '';
+        this.judgeOptions = [];
+        this.judgeOptionsSelect = [];
+        //填空题
+        this.blankForm.stem = '';
+        this.blankForm.category = '';
+        this.blankForm.choice = {};
+        this.blankForm.answer = [];
+        //问答题
+        this.answerForm.stem = '';
+        this.answerForm.category = '';
+        this.answerForm.choice = {};
+        this.answerForm.answer = null;
+      },
     }
   };
 </script>
@@ -368,6 +723,16 @@
             margin-left: 32%;
             cursor: pointer;
           }
+        }
+      }
+      .eachSore {
+        height: 120px;
+
+        .title {
+          height: 40px;
+          color: #83a0fc;
+          line-height: 40px;
+          text-indent: 0px;
         }
       }
     }
