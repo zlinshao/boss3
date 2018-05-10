@@ -231,8 +231,8 @@
         selectExamIds: [],
         paperTypeDialog: false,  //编辑试卷 选择类型模态框
         paperTypeForm: {
-          category: '',
           name: '',
+          is_questionnaire: 1,
         },
         examType: [],
       };
