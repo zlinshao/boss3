@@ -6,9 +6,10 @@ const quesNaire = {
     naire_paper : {}, //批量导入
     naire_myself_paper : {}, //自己录入
     edit_naire_paper_id: '', //编辑试卷id
+    preview_naire_paper_id: '', //预览试卷id
 
     answer_exam_id: '', //答题试卷id
-    preview_paper_id: '', //预览试卷id
+
     examiner_read_id: '', //批阅试卷id
     look_exam_id: '', //查看试卷id
     examiner_each: {}, //批阅试卷result_id, exam_id
@@ -30,17 +31,18 @@ const quesNaire = {
         state.edit_naire_paper_id = view;
       }
     },
+    PREVIEW_NAIRE_PAPER_ID:(state,view) => {
+      if(view){
+        state.preview_naire_paper_id = view;
+      }
+    },
 
     ANSWER_EXAM_ID:(state,view) => {
       if(view){
         state.answer_exam_id = view;
       }
     },
-    PREVIEW_PAPER_ID:(state,view) => {
-      if(view){
-        state.preview_paper_id = view;
-      }
-    },
+
     EXAMINER_READ_ID:(state,view) => {
       if(view){
         state.examiner_read_id = view;
@@ -72,12 +74,12 @@ const quesNaire = {
     editNairePaperId({commit},view){
       commit('EDIT_NAIRE_PAPER_ID',view);
     },
+    previewNairePaperId({commit},view){
+      commit('PREVIEW_NAIRE_PAPER_ID',view);
+    },
 
     answerExamId({commit},view){
       commit('ANSWER_EXAM_ID',view);
-    },
-    previewPaperId({commit},view){
-      commit('PREVIEW_PAPER_ID',view);
     },
     examinerReadId({commit},view){
       commit('EXAMINER_READ_ID',view);

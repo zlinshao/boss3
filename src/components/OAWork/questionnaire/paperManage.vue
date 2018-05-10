@@ -10,9 +10,6 @@
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
-          </el-form-item>
-          <el-form-item>
             <el-button type="primary" size="mini" @click="paperDialog = true">
               <i class="iconfont icon-xinjianshijuan" style="font-size: 14px;"></i>&nbsp;新建试卷
             </el-button>
@@ -20,40 +17,8 @@
         </el-form>
       </div>
     </div>
-    <div class="highRanking">
-      <div class="filter high_grade" :class="isHigh? 'highHide':''" style=" margin-top: -40px;">
-        <el-form :inline="true" size="mini" label-width="100px">
-          <div class="filterTitle">
-            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
-          </div>
-          <el-row class="el_row_border">
-            <el-col :span="12">
-              <el-row>
-                <el-col :span="8">
-                  <div class="el_col_label">问卷类型</div>
-                </el-col>
-                <el-col :span="16" class="el_col_option">
-                  <el-form-item>
-                    <el-select v-model="params.category" clearable placeholder="请选择">
-                      <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
-                        {{item.dictionary_name}}
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-col>
-          </el-row>
-          <div class="btnOperate">
-            <el-button size="mini" type="primary" @click="getTestPaperData">搜索</el-button>
-            <el-button size="mini" type="primary" @click="resetting">重置</el-button>
-            <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
-          </div>
-        </el-form>
-      </div>
-    </div>
     <div class="main">
-      <div class="myHouse">
+      <div>
         <div>
           <el-table
             :data="testPaperTableData"
@@ -62,23 +27,14 @@
             element-loading-text="拼命加载中"
             element-loading-spinner="el-icon-loading"
             element-loading-background="rgba(255, 255, 255, 0)"
-            @row-dblclick="dblClickTable"
             @row-contextmenu='openContextMenu'
             style="width: 100%">
             <el-table-column
               prop="name"
-              label="问卷名称">
+              label="试卷名称">
               <template slot-scope="scope">
                 <span v-if="scope.row.name">{{scope.row.name}}</span>
                 <span v-if="!scope.row.name">暂无</span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="category"
-              label="问卷类型">
-              <template slot-scope="scope">
-                <span v-if="scope.row.category">{{scope.row.category}}</span>
-                <span v-if="!scope.row.category">暂无</span>
               </template>
             </el-table-column>
             <el-table-column
@@ -170,7 +126,6 @@
           search: '',
           category: '',
         },
-        examType: [],
         testPaperDialog: false, //新建试卷录入题目方式模态框
         paperDialog: false,  //新建试卷模态框
 
@@ -184,15 +139,18 @@
         testPaperId: '',
       };
     },
-
     mounted() {
       this.getTestPaperData();
-      this.getDictionary();
     },
     watch: {
       paperDialog(val) {
         if (val) {
           this.initial();
+        }
+      },
+      testPaperDialog(val) {
+        if (!val) {
+          this.getTestPaperData();
         }
       },
     },
@@ -206,8 +164,6 @@
         this.params.category = '';
         this.getTestPaperData();
       },
-      dblClickTable() {
-      },
       paperTypeBtn() {
         if (!this.paperForm.name) {
           this.$notify.warning({
@@ -218,12 +174,6 @@
         }
         this.paperDialog = false;
         this.testPaperDialog = true;
-      },
-      getDictionary() {
-        //试卷类型
-        this.dictionary(613).then((res) => {
-          this.examType = res.data;
-        });
       },
       //批量导入
       importQuestion() {
@@ -241,7 +191,7 @@
         this.$http.post(globalConfig.server + 'exam/paper', this.paperForm).then((res) => {
           if (res.data.code === '36010') {
             this.paperId = res.data.data;
-            // this.getTestPaperData();
+            this.getTestPaperData();
             if (this.paperId) {
               this.$router.push({
                 path: "/myselfNaire",
@@ -260,7 +210,7 @@
       getTestPaperData() {
         this.tableStatus = " ";
         this.tableLoading = true;
-        this.$http.get(globalConfig.server + 'exam/paper', {params: this.params}).then((res) => {
+        this.$http.get(globalConfig.server + 'exam/paper?qtn=1', {params: this.params}).then((res) => {
           this.tableLoading = false;
           this.isHigh = false;
           if (res.data.code === '36000') {
@@ -296,7 +246,7 @@
             label: "删除试卷"
           },
           {
-            clickIndex: "lookTestPaper",
+            clickIndex: "previewTestPaper",
             headIcon: "el-icons-fa-mail-reply",
             label: "预览试卷"
           }
@@ -350,8 +300,8 @@
               });
             });
             break;
-          case 'lookTestPaper':
-            this.$router.push({path: "/previewExam", query: {id: this.testPaperId}});
+          case 'previewTestPaper':
+            this.$router.push({path: "/previewNaire", query: {id: this.testPaperId}});
             break;
         }
       },

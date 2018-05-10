@@ -175,27 +175,18 @@
       </div>
     </div>
     <div id="examDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="examDialog" :title="examTitle" width="40%">
+      <el-dialog :close-on-click-modal="false" :visible.sync="examDialog" :title="examTitle" width="30%">
         <div>
           <div class="title">问卷调查</div>
           <div class="describe_border" style="padding: 25px 10px;">
             <el-form size="mini" onsubmit="return false;" :model="formExam" label-width="100px">
               <el-row :gutter="30">
-                <el-col :span="12">
+                <el-col :span="22">
                   <el-form-item label="标题" required>
                     <el-input v-model="formExam.name" size="mini" placeholder="请输入调查名称" clearable></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="12">
-                  <el-form-item label="试卷类型" required>
-                    <el-select v-model="formExam.category" size="mini" placeholder="请选择" clearable>
-                      <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
-                        {{item.dictionary_name}}
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
+                <el-col :span="22">
                   <el-form-item label="使用试卷" required>
                     <el-select v-model="formExam.paper_id" size="mini" placeholder="请选择试卷" clearable>
                       <el-option v-for="item in useTestPapers" :key="item.id" :label="item.name" :value="item.id">
@@ -204,13 +195,13 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-                <el-col :span="12">
+                <el-col :span="22">
                   <el-form-item label="开考时间" required>
                     <el-date-picker v-model="formExam.start_time" type="datetime" placeholder="请选择"
                                     value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
                   </el-form-item>
                 </el-col>
-                <el-col :span="12">
+                <el-col :span="22">
                   <el-form-item label="有效期" required>
                     <el-input placeholder="请输入天数" v-model="formExam.duration">
                       <template slot="append">天</template>
@@ -254,7 +245,7 @@
         </div>
         <div style="margin-top: 20px;">
           <el-table
-            :data="examineesData"
+            :data="examineesPageData"
             :empty-text='tableStatus'
             v-loading="tableLoading"
             element-loading-text="拼命加载中"
@@ -278,16 +269,16 @@
               </template>
             </el-table-column>
           </el-table>
-          <!--<div class="block pages" style="margin-right: 50px;">-->
-            <!--<el-pagination-->
-              <!--@size-change="handleSizeChange"-->
-              <!--@current-change="handleCurrentChange"-->
-              <!--:current-page="params.page"-->
-              <!--:page-size="12"-->
-              <!--layout="total, prev, pager, next, jumper"-->
-              <!--:total="examineesData.length">-->
-            <!--</el-pagination>-->
-          <!--</div>-->
+          <div class="block pages" style="margin-right: 50px;">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="params.page"
+              :page-size="12"
+              layout="total, prev, pager, next, jumper"
+              :total="examineesData.length">
+            </el-pagination>
+          </div>
         </div>
       </el-dialog>
     </div>
@@ -342,7 +333,6 @@
           start_time: '',  //时间周期
           duration: '',  //有效期
           paper_id: '',    //试卷id
-          category: '',  //试卷类型
           examinees: [],
         },
         examiness_name: [],
@@ -351,6 +341,7 @@
         examId: '', //考试场次的id
         useTestPapers: [],
         examineesData: [],
+        examineesPageData:[],
 
         pickerOptions: {
           shortcuts: [
@@ -388,6 +379,7 @@
     mounted() {
       this.getExamData();
       this.getDictionary();
+      this.getPaperData();
     },
     watch: {
       examDialog(val) {
@@ -399,20 +391,7 @@
           } else {
             this.examTitle = '新建调查';
           }
-        }
-      },
-      "formExam.category": {
-        deep: true,
-        handler(val, oldVal) {
-          if (val) {
-            this.$http.get(globalConfig.server + 'exam/paper/search?category=' + val).then((res) => {
-              if (res.data.code === '36000') {
-                this.useTestPapers = res.data.data;
-              } else {
-                this.useTestPapers = [];
-              }
-            });
-          }
+
         }
       },
       examineeDialog(val){
@@ -423,6 +402,20 @@
 
     },
     methods: {
+      getPaperData(){
+        this.$http.get(globalConfig.server + 'exam/paper?qtn=1', {params: this.params}).then((res) => {
+          this.tableLoading = false;
+          this.isHigh = false;
+          if (res.data.code === '36000') {
+            this.useTestPapers = res.data.data.data;
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
       // 高级
       highGrade() {
         this.isHigh = !this.isHigh;
@@ -494,10 +487,12 @@
               this.formExam.name = detail.name;
               this.formExam.start_time = detail.start_time;
               this.formExam.duration = detail.duration;
-              this.formExam.category = detail.paper_category;
               this.formExam.paper_id = detail.paper_id;
               //考生信息
               this.examineesData = detail.examinees;
+              if(detail.examinees.length>0){
+                this.examineesPageData = detail.examinees[0];
+              }
             }
           } else {
             this.$notify.warning({
@@ -528,7 +523,7 @@
           }
         });
       },
-      //保存/新增试卷
+      //保存/新增考试
       saveExam() {
         let header = '';
         if (this.examId) {
@@ -565,7 +560,7 @@
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
         this.params.page = val;
-        this.getExamData();
+        this.examineesPageData = this.examineesData[val-1];
       },
       //右键菜单
       openContextMenu(row, event) {
@@ -641,12 +636,6 @@
             this.examineeDialog = true;
             this.getExamDetail();
             break;
-
-          case 'informExaminee':
-
-            break;
-
-
         }
       },
       //关闭右键菜单
@@ -674,12 +663,10 @@
       },
       initial() {
         this.formExam = {
-          rand: false,
           name: '',    //考试名称
           start_time: '',  //时间周期
           duration: '',  //有效期
           paper_id: '',    //试卷id
-          category: '',  //试卷类型
           examinees: '',
         };
         this.selectExaminees = '';

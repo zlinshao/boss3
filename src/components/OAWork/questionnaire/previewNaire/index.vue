@@ -1,129 +1,173 @@
 <template>
   <div>
-    <el-dialog :close-on-click-modal="false" :visible.sync="previewNaireDialogVisible" title="问卷调查" width="60%">
-    <div id="onlineExam">
+    <div id="previewNaire">
       <div class="tool">
-        <span>{{testPaperData.name}}</span>
+        <el-row style="width:100%;margin-top:16px;">
+          <el-col :span="5" style="margin-left:2%; margin-right:2%">
+            <div class="import_questions" style="text-align:left;color:#464748;">
+              <div class="qdiv" style="margin-top: 48px;font-size: 18px;">试卷名称：<span style="color:#6a8dfb">{{testPaperData.name}}</span></div>
+            </div>
+          </el-col>
+          <el-col :span="5" style="margin-left:2%; margin-right:2%">
+            <div class="import_questions" style="border: 1px solid #fdca41;box-shadow: 0 0 3px 1px #fdca41;">
+              <div class="import_left"><span style="float:left; font-size:14px;">总题数</span><i
+                style="float:right; color:#fdca41;font-size:20px;" class="iconfont icon-shujutu"></i></div>
+              <div><span style="font-size:70px; color:#fdca41">{{testPaperData.count}}</span>题</div>
+            </div>
+          </el-col>
+        </el-row>
       </div>
       <div class="main">
-        <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===153" :key="key">
+        <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===153">
           {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">单选题</span>
-          <p style="margin-left:30px;line-height:30px;" v-html="item.stem"></p>
-          <div style="width:98%;margin-left:2%;">
-            <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:25px;height: 25px;">
-              <span>{{index}}：{{val}}</span>
-            </el-col>
-          </div>   
+          <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor" v-html="item.stem"></p>
+          <el-form>
+            <el-form-item style="width:98%;margin-left:2%;">
+              <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
+                {{index}}：{{val}}
+              </el-col>
+            </el-form-item>
+          </el-form>
         </div>
-
-        <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===158" :key="key">
-          {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">简单题</span>
-          <p style="margin-left:30px;line-height:20px;padding-right:10px;">{{item.stem}}</p>
-          <div style="width:98%;margin-left:2%;">
-            <el-col :span="12" :key="index" v-for="(val,index) in item.answer" v-if="item.answer.length>0"
-                    style="line-height:25px;height: 25px;">
-              <div></div>
-            </el-col>
-          </div>     
-        </div> 
-      </div> 
+        <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
+             v-if="item.category===154 || item.category===155">
+          {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">
+          <span v-if="item.category===154">多选题</span>
+          <span v-if="item.category===155">不定向选择题</span></span>
+          <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor" v-html="item.stem"></p>
+          <el-form>
+            <el-form-item style="width:98%;margin-left:2%;">
+              <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
+                {{index}}：{{val}}
+              </el-col>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===156">
+          {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">判断题</span>
+          <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor" v-html="item.stem"></p>
+          <el-form>
+            <el-form-item style="width:98%;margin-left:2%;">
+              <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
+                {{index}}：{{val}}
+              </el-col>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
+             v-if="item.category===157 || item.category===158">
+          {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;"><span v-if="item.category===157">填空题</span><span
+          v-if="item.category===158">简答题</span></span>
+          <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor" v-html="item.stem"></p>
+          <el-form>
+            <el-form-item style="width:98%;margin-left:2%;" v-if="item.category===157">
+              <el-col v-for="value in item.answer" :key="value" :span="12">
+                <el-input size="small" style="width:95.5%;margin-left:2%;" readOnly placeholder="请填写答案"></el-input>
+              </el-col>
+            </el-form-item>
+            <el-form-item  v-if="item.category===158">
+              <el-input style="width:95.5%;margin-left:2%;" readOnly type="textarea" placeholder="请填写答案"></el-input>
+            </el-form-item>
+          </el-form>
+        </div>
+      </div>
     </div>
-    </el-dialog>
   </div>
- 
+
 </template>
 
 <script>
-import Dropzone from "../../../common/UPLOAD.vue";
-export default {
-  name: "index",
-  components: { Dropzone },
-  props: ["previewNaireDialog", "testPaperId"],
-  data() {
-    return {
-      isClear: false,
-      previewNaireDialogVisible: false,
-      testPaperDialog: false,
-      faleDialog: false,
-      disfalg: false,
-      questionTypeCategory: [], //题目类型
-      testPaperIdx: "",
-      testPaperData: {}
-    };
-  },
-  mounted() {
-    this.getDictionary();
-  },
 
-  watch: {
-    previewNaireDialog(val) {
-      this.previewNaireDialogVisible = val;
+  export default {
+    name: "index",
+    data() {
+      return {
+        testPaperId: '',
+        testPaperData: {},
+      };
     },
-    previewNaireDialogVisible(val) {
-      if (!val) {
-        this.$emit("close");
-      }
-    },
-    testPaperId(val) {
-      this.testPaperIdx = val;
+    activated() {
+      this.getQueryData();
       this.getTestPaperDetail();
-    }
-  },
-  methods: {
-    getDictionary() {
-      //试卷类型
-      this.dictionary(152).then(res => {
-        this.questionTypeCategory = res.data;
-      });
     },
-    //获取试题
-    getTestPaperDetail() {
-      if (this.testPaperIdx) {
-        this.$http
-          .get(globalConfig.server + "exam/paper/" + this.testPaperIdx)
-          .then(res => {
-            if (res.data.code === "36010") {
+    watch: {},
+    methods: {
+      getQueryData() {
+        if (!this.$route.query.id) {
+          this.testPaperId = this.$store.state.quesNaire.preview_naire_paper_id;
+          this.$router.push({path: '/previewNaire', query: {id: this.$store.state.quesNaire.preview_naire_paper_id}});
+        } else {
+          this.$store.dispatch('previewNairePaperId', this.$route.query.id);
+          this.testPaperId = this.$route.query.id;
+        }
+      },
+      getTestPaperDetail() {
+        if (this.testPaperId) {
+          this.$http.get(globalConfig.server + 'exam/paper/' + this.testPaperId, {params: this.params}).then((res) => {
+            if (res.data.code === '36010') {
               this.testPaperData = res.data.data;
             } else {
               this.$notify.warning({
-                title: "警告",
+                title: '警告',
                 message: res.data.msg
-              });
+              })
             }
           });
-      }
+        }
+      },
     }
-  }
-};
+  };
 </script>
 
 <style lang="scss" scoped>
-#onlineExam {
-  .tool {
-    height: 142px;
-    padding: 0;
-    background: url("../../../../assets/images/preview.png") no-repeat center;
-    span {
-      height: 142px;
-      line-height: 142px;
-      font-size: 24px;
-      text-indent: 2%;
-      color: #fff;
+  .ql-editor {
+    min-height: initial !important;
+  }
+
+  #previewNaire {
+    .tool {
+      height: 160px;
+      border-radius: 5px;
+      border: 1px #eee solid;
+      border-bottom: none;
+      padding: 0;
+      .import_questions {
+        border: 1px solid #6a8dfb;
+        -webkit-box-shadow: 0 0 3px 1px #6a8dfb;
+        box-shadow: 0 0 3px 1px #6a8dfb;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        height: 124px;
+        border-radius: 5px;
+        .qdiv {
+          font-size: 14px;
+          height: 35px;
+          line-height: 35px;
+          margin-left: 20px;
+          overflow: hidden;
+        }
+        .import_left {
+          width: 90%;
+          height: 36px;
+          line-height: 36px;
+          margin: 0 auto;
+        }
+      }
+    }
+    .main {
+      border: 1px #eee solid;
+      border-bottom: none;
+      border-top: none;
+      min-height: 500px;
+      font-size: 16px;
+      .questionDiv {
+        width: 98%;
+        margin-left: 2%;
+        min-height: 154px;
+        padding-top: 16px;
+        border-top: 1px #eee solid;
+      }
     }
   }
-  .main {
-    border: 1px #eee solid;
-    margin-bottom: 30px;
-    border-top: none;
-    min-height: 500px;
-    font-size: 16px;
-    .questionDiv {
-      width: 98%;
-      margin-left: 2%;
-      min-height: 154px;
-      padding-top: 16px;
-      border-top: 1px #eee solid;
-    }
-  }
-}
 </style>
