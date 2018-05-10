@@ -81,6 +81,8 @@
         if (this.collectContractId && this.activeName === 'OwnerInfoTab') {
           this.getData();
           this.isRequestData = true;
+        }else {
+          this.collectData = [];
         }
       },
       activeName(val) {
