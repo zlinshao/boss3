@@ -9,7 +9,7 @@
         element-loading-background="rgba(255, 255, 255, 0)"
         style="width: 100%">
         <el-table-column
-          prop="contract_type"
+          prop="create_time"
           label="创建时间">
           <template slot-scope="scope">
             <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
@@ -17,67 +17,99 @@
           </template>
         </el-table-column>
         <el-table-column
-          prop="customer_name"
-          label="客户姓名">
+          prop="staffs.real_name"
+          label="创建人">
           <template slot-scope="scope">
-            <span v-if="scope.row.customer_name">{{scope.row.customer_name}}</span>
-            <span v-if="!scope.row.customer_name">暂无</span>
+            <span v-if="scope.row.staffs && scope.row.staffs.real_name">{{scope.row.staffs.real_name}}</span>
+            <span v-if="!(scope.row.staffs && scope.row.staffs.real_name)">暂无</span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="customer_mobile"
-          label="回复电话">
+          prop="reimbursement_number"
+          label="报销单编号">
           <template slot-scope="scope">
-            <span v-if="scope.row.customer_mobile">{{scope.row.customer_mobile}}</span>
-            <span v-if="!scope.row.customer_mobile">暂无</span>
+            <span v-if="scope.row.reimbursement_number">{{scope.row.reimbursement_number}}</span>
+            <span v-if="!scope.row.reimbursement_number">暂无</span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="content"
-          label="维修内容">
+          prop="contracts.house.name"
+          label="房屋地址">
           <template slot-scope="scope">
-            <span v-if="scope.row.content">{{scope.row.content}}</span>
-            <span v-if="!scope.row.content">暂无</span>
+            <span v-if="scope.row.contracts && scope.row.contracts.house && scope.row.contracts.house.name">{{scope.row.contracts.house.name}}</span>
+            <span
+              v-if="!(scope.row.contracts && scope.row.contracts.house && scope.row.contracts.house.name)">暂无</span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="repair_time"
-          label="预计维修时间">
+          prop="source.dictionary_name"
+          label="来源">
           <template slot-scope="scope">
-            <span v-if="scope.row.repair_time">{{scope.row.repair_time}}</span>
-            <span v-if="!scope.row.repair_time">暂无</span>
+              <span
+                v-if="scope.row.source && scope.row.source.dictionary_name">{{scope.row.source.dictionary_name}}</span>
+            <span v-if="!(scope.row.source && scope.row.source.dictionary_name)">暂无</span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="repair_master"
-          label="维修师傅">
+          prop="type.dictionary_name"
+          label="报销类型">
           <template slot-scope="scope">
-            <span v-if="scope.row.repair_master">{{scope.row.repair_master}}</span>
-            <span v-if="!scope.row.repair_master">暂无</span>
+                  <span
+                    v-if="scope.row.type && scope.row.type.dictionary_name">{{scope.row.type.dictionary_name}}</span>
+            <span v-if="!(scope.row.type && scope.row.type.dictionary_name)">暂无</span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="repair_result"
-          label="下次跟进时间">
+          prop="amount"
+          label="报销金额">
           <template slot-scope="scope">
-            <span v-if="scope.row.estimated_time">{{scope.row.estimated_time}}</span>
-            <span v-if="!scope.row.estimated_time">暂无</span>
+            <span v-if="scope.row.amount">{{scope.row.amount}}</span>
+            <span v-if="!scope.row.amount">暂无</span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="repair_money"
-          label="跟进人">
+          prop="account_bank"
+          label="开户行">
           <template slot-scope="scope">
-            <span v-if="scope.row.followor">{{scope.row.followor}}</span>
-            <span v-if="!scope.row.followor">暂无</span>
+            <span v-if="scope.row.account_bank">{{scope.row.account_bank}}</span>
+            <span v-if="!scope.row.account_bank">暂无</span>
           </template>
         </el-table-column>
         <el-table-column
-          prop="status"
-          label="维修状态">
+          prop="branch_bank"
+          label="支行">
           <template slot-scope="scope">
-            <span v-if="scope.row.status">{{scope.row.status}}</span>
-            <span v-if="!scope.row.status">暂无</span>
+            <span v-if="scope.row.branch_bank">{{scope.row.branch_bank}}</span>
+            <span v-if="!scope.row.branch_bank">暂无</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="bank_num"
+          label="银行卡号">
+          <template slot-scope="scope">
+            <span v-if="scope.row.bank_num">{{scope.row.bank_num}}</span>
+            <span v-if="!scope.row.bank_num">暂无</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="account_name"
+          label="开户人">
+          <template slot-scope="scope">
+            <span v-if="scope.row.account_name">{{scope.row.account_name}}</span>
+            <span v-if="!scope.row.account_name">暂无</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="status.dictionary_name"
+          label="报销状态">
+          <template slot-scope="scope">
+            <el-button class="btnStatus" v-if="scope.row.status.id == 654" type="primary" size="mini">
+              {{scope.row.status.dictionary_name}}
+            </el-button>
+            <el-button class="btnStatus" v-if="scope.row.status.id !== 654 && scope.row.status.id "
+                       type="info" size="mini">{{scope.row.status.dictionary_name}}
+            </el-button>
+            <span v-if="!scope.row.status.dictionary_name">暂无</span>
           </template>
         </el-table-column>
       </el-table>
@@ -100,7 +132,7 @@
 <script>
     export default {
         name: 'hello',
-        props: ['activeName', 'collectContractId', 'tabStatusChange'],
+        props: ['activeName', 'collectContractId','tabStatusChange'],
         data () {
             return {
               tableStatus: ' ',
@@ -111,7 +143,6 @@
                 page: 1,
                 limit: 3,
                 contract_id: '',
-                is_lease :1,
                 module : 1,
               },
 
@@ -125,14 +156,16 @@
       },
       watch: {
         activeName(val){
-          if(val=== 'CollectRepairTab'){
+          if(val=== 'CollectReimTab'){
+            this.params.page = 1;
             this.getTableData();
           }
         },
         collectContractId(val) {
           if(val){
             this.params.contract_id = val;
-            if(this.activeName === 'CollectRepairTab'){
+            this.params.page = 1;
+            if(this.activeName === 'CollectReimTab'){
               this.getTableData();
             }
           }else{
@@ -142,7 +175,7 @@
           }
         },
         tabStatusChange(val){
-          if(val=== 'repair'){
+          if(val=== 'reimbursement'){
             this.getTableData();
           }
         },
@@ -151,9 +184,9 @@
         getTableData() {
           this.tableStatus = " ";
           this.tableLoading = true;
-          this.$http.get(globalConfig.server + 'repaire/list',{params:this.params}).then((res) => {
+          this.$http.get(globalConfig.server + 'customer/reimbursement',{params:this.params}).then((res) => {
             this.tableLoading = false;
-            if (res.data.code === '600200') {
+            if (res.data.code === '30000') {
               this.tableData = res.data.data.data;
               this.totalNum = res.data.data.count;
               if (res.data.data.data.length < 1) {

@@ -68,7 +68,7 @@
       </div>
     </div>
     <div class="main">
-      <div class="myHouse">
+      <div>
         <div>
           <el-table
             :data="tableData"
@@ -105,10 +105,9 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop=""
               label="发布人">
               <template slot-scope="scope">
-                <span v-if="scope.row.staff_name">{{scope.row.staff_name}}</span>
+                <span v-if="(scope.row.simple_staff && scope.row.simple_staff.real_name)">{{scope.row.simple_staff.real_name}}</span>
                 <span v-else>暂无</span>
               </template>
             </el-table-column>
@@ -137,10 +136,9 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop=""
               label="回复量">
               <template slot-scope="scope">
-                <span v-if="scope.row.answerNum">{{scope.row.answerNum}}</span>
+                <span v-if="scope.row.finished_count != null">{{scope.row.finished_count}}</span>
                 <span v-else>暂无</span>
               </template>
             </el-table-column>
@@ -148,8 +146,8 @@
               prop="examinees_count"
               label="调查对象(人数)">
               <template slot-scope="scope">
-                <span v-if="scope.row.examinees_count">{{scope.row.examinees_count}}</span>
-                <span v-if="!scope.row.examinees_count">暂无</span>
+                <span v-if="scope.row.examinees_count != null">{{scope.row.examinees_count}}</span>
+                <span v-else>暂无</span>
               </template>
             </el-table-column>
             <el-table-column
@@ -177,27 +175,18 @@
       </div>
     </div>
     <div id="examDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="examDialog" :title="examTitle" width="40%">
+      <el-dialog :close-on-click-modal="false" :visible.sync="examDialog" :title="examTitle" width="30%">
         <div>
           <div class="title">问卷调查</div>
           <div class="describe_border" style="padding: 25px 10px;">
             <el-form size="mini" onsubmit="return false;" :model="formExam" label-width="100px">
               <el-row :gutter="30">
-                <el-col :span="12">
+                <el-col :span="22">
                   <el-form-item label="标题" required>
                     <el-input v-model="formExam.name" size="mini" placeholder="请输入调查名称" clearable></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="12">
-                  <el-form-item label="试卷类型" required>
-                    <el-select v-model="formExam.category" size="mini" placeholder="请选择" clearable>
-                      <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
-                        {{item.dictionary_name}}
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12">
+                <el-col :span="22">
                   <el-form-item label="使用试卷" required>
                     <el-select v-model="formExam.paper_id" size="mini" placeholder="请选择试卷" clearable>
                       <el-option v-for="item in useTestPapers" :key="item.id" :label="item.name" :value="item.id">
@@ -206,30 +195,28 @@
                     </el-select>
                   </el-form-item>
                 </el-col>
-
-                <el-col :span="12">
+                <el-col :span="22">
                   <el-form-item label="开考时间" required>
                     <el-date-picker v-model="formExam.start_time" type="datetime" placeholder="请选择"
                                     value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
                   </el-form-item>
                 </el-col>
-                <el-col :span="12">
+                <el-col :span="22">
                   <el-form-item label="有效期" required>
                     <el-input placeholder="请输入天数" v-model="formExam.duration">
                       <template slot="append">天</template>
                     </el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="20">
-                  <el-form-item label="调查对象">
-                    <el-input v-model="examinees_name" @click.native="chooseStaff" size="mini" placeholder="请选择调查对象"
-                              clearable>
-                      <template slot="append">
-                        <div style="cursor: pointer;" @click="emptyRespondent">清空</div>
-                      </template>
-                    </el-input>
-                  </el-form-item>
-                </el-col>
+                <!--<el-col :span="20">-->
+                  <!--<el-form-item label="调查对象">-->
+                    <!--<el-input v-model="selectExaminees" @focus="openOrganize" size="mini" placeholder="请选择调查对象">-->
+                      <!--<template slot="append">-->
+                        <!--<div style="cursor: pointer;" @click="emptyExaminees">清空</div>-->
+                      <!--</template>-->
+                    <!--</el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
               </el-row>
             </el-form>
           </div>
@@ -241,11 +228,11 @@
       </el-dialog>
     </div>
     <div id="examineeDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="examineeDialog" title="考生信息" width="45%">
+      <el-dialog :close-on-click-modal="false" :visible.sync="examineeDialog" title="调查对象" width="45%">
         <div>
           <el-row :gutter="10">
             <el-col :span="18">
-              <el-input size="mini" placeholder="请选择考生" v-model="selectExaminees" readOnly @focus="openOrganize">
+              <el-input size="mini" placeholder="请选择调查对象" v-model="selectExaminees" readOnly @focus="openOrganize">
                 <template slot="append">
                   <div style="cursor: pointer;" @click="emptyExaminees">清空</div>
                 </template>
@@ -258,7 +245,7 @@
         </div>
         <div style="margin-top: 20px;">
           <el-table
-            :data="examineesData"
+            :data="examineesPageData"
             :empty-text='tableStatus'
             v-loading="tableLoading"
             element-loading-text="拼命加载中"
@@ -282,6 +269,16 @@
               </template>
             </el-table-column>
           </el-table>
+          <div class="block pages" style="margin-right: 50px;">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="params.page"
+              :page-size="12"
+              layout="total, prev, pager, next, jumper"
+              :total="examineesCount">
+            </el-pagination>
+          </div>
         </div>
       </el-dialog>
     </div>
@@ -336,16 +333,17 @@
           start_time: '',  //时间周期
           duration: '',  //有效期
           paper_id: '',    //试卷id
-          category: '',  //试卷类型
-          examinees: '',
+          examinees: [],
         },
-        examinees_name: '',
+        examiness_name: [],
+        examineesCount: 0,
+        selectExaminees: '',
         examineeDialog: false,
         examId: '', //考试场次的id
         useTestPapers: [],
         examineesData: [],
-        selectExaminees: '',
-        selectExamineeIds: [],
+        examineesPageData:[],
+
         pickerOptions: {
           shortcuts: [
             {
@@ -382,6 +380,7 @@
     mounted() {
       this.getExamData();
       this.getDictionary();
+      this.getPaperData();
     },
     watch: {
       examDialog(val) {
@@ -393,46 +392,30 @@
           } else {
             this.examTitle = '新建调查';
           }
-        }
-      },
-      "formExam.category": {
-        deep: true,
-        handler(val, oldVal) {
-          if (val) {
-            this.$http.get(globalConfig.server + 'exam/paper/search?category=' + val).then((res) => {
-              if (res.data.code === '36000') {
-                this.useTestPapers = res.data.data;
-              } else {
-                this.useTestPapers = [];
-              }
-            });
-          }
-        }
-      },
-      "formExam.rand": {
-        deep: true,
-        handler(val, oldVal) {
-          if (val) {
-            if (this.useTestPapers.length < 1) {
-              this.$notify.warning({
-                title: '警告',
-                message: '没有可使用的试卷'
-              });
-              this.formExam.rand = false;
-            } else {
-              var key = Math.floor((Math.random() * this.useTestPapers.length));
-              this.formExam.paper_id = this.useTestPapers[key].id;
-            }
-          } else {
 
-          }
         }
       },
+      examineeDialog(val){
+        if(!val) {
+          this.examineesData = [];
+        }
+      }
+
     },
     methods: {
-      //清除调查对象
-      emptyRespondent() {
-
+      getPaperData(){
+        this.$http.get(globalConfig.server + 'exam/paper?qtn=1', {params: this.params}).then((res) => {
+          this.tableLoading = false;
+          this.isHigh = false;
+          if (res.data.code === '36000') {
+            this.useTestPapers = res.data.data.data;
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
       },
       // 高级
       highGrade() {
@@ -444,33 +427,43 @@
         this.params.status = '';
         this.getExamData();
       },
-      chooseStaff() {
-        // this.organizeType = "staff";
-        this.organizationDialog = true;
-      },
       //打开选人组件
       openOrganize() {
         this.organizationDialog = true;
-        this.organizeType = 'staff';
       },
       selectMember(val) {
-        console.log(val)
+        this.formExam.examinees = [];
+        this.examiness_name = [];
         this.selectExaminees = '';
-        this.selectExamineeIds = [];
-        let names = [];
         val.forEach((item) => {
-          this.selectExamineeIds.push(item.id);
-          names.push(item.name);
+          if (typeof item.avatar != 'undefined') {
+            //选的是人
+            this.formExam.examinees.push(item.id);
+            this.examiness_name.push(item.name);
+          } else {
+            //选的部门
+            this.$http.get(globalConfig.server + 'manager/staff?is_recursion=1&page=1&limit=500&org_id=' + item.id).then((res) => {
+              if (res.data.code === '10000') {
+                let data = res.data.data.data;
+                data.forEach((value) => {
+                  this.formExam.examinees.push(value.id);
+                  this.examiness_name.push(value.name);
+                  this.selectExaminees = '';
+                  this.selectExaminees = this.examiness_name.join(',');
+                });
+              }
+            })
+          }
         });
-        this.selectExaminees = names.join(',');
-        this.organizeType = '';
+        this.selectExaminees = this.examiness_name.join(',');
       },
       emptyExaminees() {
         this.selectExaminees = '';
-        this.selectExamineeIds = [];
+        this.examiness_name = '';
+        this.formExam.examinees = [];
       },
       addExaminees() {
-        this.$http.post(globalConfig.server + 'exam/batch_enroll/' + this.examId, {examinees: this.selectExamineeIds}).then((res) => {
+        this.$http.post(globalConfig.server + 'questionnaire/batch_enroll/' + this.examId, {examinees: this.formExam.examinees}).then((res) => {
           if (res.data.code === '30010') {
             this.$notify.success({
               title: '成功',
@@ -488,18 +481,21 @@
       },
       //考试详情
       getExamDetail() {
-        this.$http.get(globalConfig.server + 'exam/' + this.examId).then((res) => {
+        this.$http.get(globalConfig.server + 'questionnaire/' + this.examId).then((res) => {
           if (res.data.code === '30000') {
             let detail = res.data.data;
             if (detail) {
               this.formExam.name = detail.name;
               this.formExam.start_time = detail.start_time;
               this.formExam.duration = detail.duration;
-              this.formExam.category = detail.paper && detail.paper.category_id;
-              this.formExam.late_tolerance = detail.late_tolerance;
-              this.formExam.paper_id = detail.paper && detail.paper.id;
+              this.formExam.paper_id = detail.paper_id;
               //考生信息
               this.examineesData = detail.examinees;
+              this.examineesCount = detail.examinees_count;
+
+              if(detail.examinees.length>0){
+                this.examineesPageData = detail.examinees[0];
+              }
             }
           } else {
             this.$notify.warning({
@@ -530,7 +526,7 @@
           }
         });
       },
-      //保存/新增试卷
+      //保存/新增考试
       saveExam() {
         let header = '';
         if (this.examId) {
@@ -566,8 +562,7 @@
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
-        this.params.page = val;
-        this.getExamData();
+        this.examineesPageData = this.examineesData[val-1];
       },
       //右键菜单
       openContextMenu(row, event) {
@@ -583,16 +578,16 @@
             headIcon: "el-icon-delete",
             label: "删除问卷"
           },
-          // {
-          //   clickIndex: "manageExaminee",
-          //   headIcon: "el-icon-view",
-          //   label: "查看/添加调查对象"
-          // },
-          // {
-          //   clickIndex: "informExaminee",
-          //   headIcon: "el-icons-fa-mail-reply",
-          //   label: "通知考生"
-          // }
+          {
+            clickIndex: "manageExaminee",
+            headIcon: "el-icon-view",
+            label: "查看/添加调查对象"
+          },
+          {
+            clickIndex: "answer",
+            headIcon: "el-icon-view",
+            label: "问卷作答"
+          }
         ];
         let e = event || window.event; //support firefox contextmenu
         this.show = false;
@@ -648,12 +643,9 @@
             this.examineeDialog = true;
             this.getExamDetail();
             break;
-
-          case 'informExaminee':
-
+          case 'answer':
+            this.$router.push({path: 'answerNaire', query:{id: this.examId}});
             break;
-
-
         }
       },
       //关闭右键菜单
@@ -681,15 +673,14 @@
       },
       initial() {
         this.formExam = {
-          rand: false,
           name: '',    //考试名称
           start_time: '',  //时间周期
           duration: '',  //有效期
           paper_id: '',    //试卷id
-          category: '',  //试卷类型
           examinees: '',
         };
-        this.examinees_name = '';
+        this.selectExaminees = '';
+        this.examiness_name = '';
       },
     },
   }

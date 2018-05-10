@@ -220,6 +220,7 @@
               title: '成功',
               message: res.data.msg
             });
+            this.$emit('close','repair');
             this.addCollectRepairDialogVisible = false;
           } else {
             this.$notify.warning({
@@ -231,6 +232,7 @@
       },
       initial() {
         this.form = {
+          module: 1, //收房
           contract_id: this.contract.contract_id, //合同Id
           contract_number: this.contract.contract_number, //合同编号
           contract_type: this.contract.type, //合同类型

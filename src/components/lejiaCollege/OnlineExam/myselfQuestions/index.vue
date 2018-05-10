@@ -143,6 +143,7 @@
                               style="line-height:50px;height:50px;padding-top:14px;">
                         <el-radio :label="index">
                           <el-input size="small" v-model="judgeOptions[index]" placeholder="请输入选项内容"></el-input>
+                          <span style="color:rgb(88, 215, 136);" v-if="index == judgeOptionsSelect">正确</span>
                         </el-radio>
                       </el-col>
                     </el-radio-group>
@@ -643,7 +644,7 @@
             view.name=' 自己录入 ';
             view.path='/myselfQuestions';
             this.$store.dispatch('delVisitedViews', view);
-            this.$router.push({path: '/configExam'});
+            this.$router.push({path: '/configExam', query: {id: this.singleForm.paper_id}});
           } else {
             this.$notify.warning({
               title: '警告',
