@@ -1,30 +1,33 @@
 <template>
   <div id="messageCent">
     <div>
-      <el-menu  default-active="1" class="el-menu-vertical-demo elMenu" @select="handleSelect">
-        <el-menu-item index="1">
-          <span slot="title">@我</span>
-        </el-menu-item>
-        <el-menu-item index="2">
-          <span slot="title">通知</span>
-        </el-menu-item>
-        <el-menu-item index="3">
-          <span slot="title">报备</span>
-        </el-menu-item>
-        <el-menu-item index="4">
-          <span slot="title">审批</span>
-        </el-menu-item>
-        <el-menu-item index="5">
-          <span slot="title">评论</span>
-        </el-menu-item>
-        <el-menu-item index="6">
-          <span slot="title">公告</span>
-        </el-menu-item>
-        <el-menu-item index="7">
-          <span slot="title">私信</span>
-        </el-menu-item>
-      </el-menu>
-    
+      <el-row>
+        <el-col :span="3">
+          <span class="msgtit">消息中心</span>
+          <el-menu  default-active="1" class="el-menu-vertical-demo elMenu" @select="handleSelect">
+            <el-menu-item index="1">
+              <span slot="title">@我</span>
+            </el-menu-item>
+            <el-menu-item index="2">
+              <span slot="title">通知</span>
+            </el-menu-item>
+            <el-menu-item index="3">
+              <span slot="title">报备</span>
+            </el-menu-item>
+            <el-menu-item index="4">
+              <span slot="title">审批</span>
+            </el-menu-item>
+            <el-menu-item index="5">
+              <span slot="title">评论</span>
+            </el-menu-item>
+            <el-menu-item index="6">
+              <span slot="title">公告</span>
+            </el-menu-item>
+            <el-menu-item index="7">
+              <span slot="title">私信</span>
+            </el-menu-item>
+          </el-menu>
+        </el-col>
       <div class="container"
           v-loading="tableLoading"
           element-loading-text="拼命加载中..."
@@ -86,7 +89,7 @@
         </div>
       </div>
 
-
+</el-row>
     </div>
     <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeMessage"></MessageDetail>
   </div>
@@ -115,7 +118,7 @@ export default {
       scrollHeight: "",
       tableLoading: false,
       theIndex: 1,
-      openIndex:null,
+      openIndex: null
     };
   },
   mounted() {
@@ -135,10 +138,10 @@ export default {
       this.params.page = val;
       console.log(`当前页: ${val}`);
     },
-    openMore(index){
+    openMore(index) {
       this.openIndex = index;
     },
-    closeMore(){
+    closeMore() {
       this.openIndex = null;
     },
     getMessage() {
@@ -211,18 +214,24 @@ export default {
   background-color: #58d788;
   border-color: #58d788;
 }
-#messageCent{
+#messageCent {
   border: 1px solid rgba(64, 158, 255, 0.3);
   box-shadow: 0 2px 4px 0 rgba(64, 158, 255, 0.12),
     0 0 6px 0 rgba(64, 158, 255, 0.08);
   border-radius: 5px;
+  .msgtit{
+    display: block;
+    height: 70px;
+    line-height: 70px;
+    text-align: center;
+    font-size: 20px;
+    background-color: #66b1ff;
+    color: #fff;
+  }
 }
 .elMenu {
-  width: 12%;
   text-align: center;
-  display: inline-grid;
-  border:0;
-
+  border: 0;
 }
 
 .container {
@@ -238,8 +247,17 @@ export default {
     border-bottom: 1px solid #eeeeee;
     .headName {
       color: #6a8dfb;
-      font-size: 16px;
-      margin-left: 20px;
+      font-size: 18px;
+      padding-left: 20px;
+      opacity: 0.7;
+      margin: 12px 0;
+      &:before {
+        border-radius: 2px;
+        margin-right: 5px;
+        background: #409eff;
+        border-left: 1px solid #409eff;
+        content: "|";
+      }
     }
     .el-input-group__append {
       &:hover {
@@ -322,29 +340,31 @@ export default {
             margin-top: 20px;
           }
           .title {
-            margin: 0;
+            margin-left:8px;
             height: 32px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             .titleWord {
               color: #444;
+              font-size: 14px;
               font-weight: 600;
             }
-            .from{
+            .from {
               display: none;
               margin-top: 20px;
             }
           }
           .messageInfo {
-            .lookMore{
-              margin-left:22px;
+            font-size: 12px;
+            .lookMore {
+              margin-left: 22px;
             }
-            .closeMore{
-              padding:5px 0;
+            .closeMore {
+              padding: 5px 0;
             }
             line-height: 150%;
-            margin-left:1%;
+            margin-left: 22px;
             text-align: justify;
             min-height: 24px;
             text-justify: inter-ideograph;
@@ -353,11 +373,11 @@ export default {
             overflow: hidden;
           }
         }
-          .itemMainContent:hover{
-             .from{
-              display: block;
-            }           
+        .itemMainContent:hover {
+          .from {
+            display: block;
           }
+        }
       }
     }
   }
