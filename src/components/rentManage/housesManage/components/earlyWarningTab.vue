@@ -99,7 +99,7 @@
     <div class="pagination">
       <el-pagination
         @current-change="currentChange"
-        :current-page="params.page"
+        :current-page="warningParams.page"
         :page-size="3"
         layout="total, prev, pager, next, jumper"
         :total="totalNumber">
@@ -120,7 +120,7 @@
     data () {
       return {
         tableData:[],
-        params:{
+        warningParams:{
           page:1,
           limit:3,
           id:'',
@@ -141,7 +141,7 @@
       },
       houseId(val){
         if(val){
-          this.params.id = val;
+          this.warningParams.id = val;
           if(this.activeName === 'third'){
             this.reGetData();
           }
@@ -157,7 +157,7 @@
     },
     methods:{
       currentChange(val){
-        this.params.page = val;
+        this.warningParams.page = val;
         this.getData();
       },
       matchDictionary(id) {
@@ -172,7 +172,7 @@
 
       //房屋变化，重新从第一页开始请求数据
       reGetData(){
-        this.params.page = 1;
+        this.warningParams.page = 1;
         this.getData();
       },
 
@@ -181,7 +181,7 @@
         this.tableLoading = true;
         this.tableData = [];
         this.totalNumber = 0;
-        this.$http.get(globalConfig.server + 'core/warning', {params: this.params}).then((res) => {
+        this.$http.get(globalConfig.server + 'core/warning', {params: this.warningParams}).then((res) => {
           this.tableLoading = false;
           if (res.data.code === '40000') {
             this.totalNumber = res.data.data.count;

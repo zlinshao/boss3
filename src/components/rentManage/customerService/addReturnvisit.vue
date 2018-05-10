@@ -364,6 +364,7 @@
     },
     mounted(){
       this.getDictionary();
+      this.form.huifang =  JSON.parse(localStorage.personal).name;
     },
     watch: {
       addReturnvisitDialog(val) {
@@ -385,7 +386,6 @@
 
         this.addReturnVisitInfo = val;
         this.form.contract_create_time = val.contract_create_time;  //合同创建时间
-        this.form.huifang = val.staff_name;
         this.form.address = val.address;
         this.form.contract_type = val.type;
         this.form.contract_id = val.contract_id;

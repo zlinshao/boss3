@@ -100,7 +100,7 @@
 <script>
     export default {
         name: 'hello',
-      props: ['activeName', 'rentContractId'],
+      props: ['activeName', 'rentContractId', 'tabStatusChange'],
       data () {
         return {
           tableStatus: ' ',
@@ -139,7 +139,11 @@
             this.tableData = [];
             this.totalNum = 0;
           }
-
+        },
+        tabStatusChange(val){
+          if(val=== 'repair'){
+            this.getTableData();
+          }
         },
       },
       methods: {
