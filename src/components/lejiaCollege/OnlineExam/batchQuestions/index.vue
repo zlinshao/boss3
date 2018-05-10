@@ -43,7 +43,7 @@
     </div>
 
     <div id="testPaperDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="导入试题反馈" width="50%">
+      <el-dialog :close-on-click-modal="false" :show-close="false"   :visible.sync="testPaperDialog" title="导入试题反馈" width="50%">
         <el-row>
           <el-col :span="24">
             <span class="sp1">导入试题成功</span>
@@ -76,7 +76,7 @@
       </el-dialog>
     </div>
     <div id="faleDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="faleDialog" title="导入失败明细" width="50%">
+      <el-dialog :close-on-click-modal="false" :show-close="false" :visible.sync="faleDialog" title="导入失败明细" width="50%">
         <span class="faleTitle">请检查</span>
         <div style="height:160px; overflow: auto;" class="scroll_bar">
           <div class="falediv" v-for="(item,key) in errorsDetail">
@@ -116,6 +116,7 @@
     activated() {
       this.getQueryData();
       this.isClear = false;
+      this.docId = '';
     },
     watch: {},
     methods: {
@@ -156,10 +157,6 @@
         params.name = this.testPaper.name;
         this.$http.post(globalConfig.server + 'exam/paper/upload', params).then((res) => {
           if (res.data.code === '36010') {
-            // this.$notify.success({
-            //   title: '成功',
-            //   message: res.data.msg
-            // });
             if (res.data.data && res.data.data.result) {
               let result = res.data.data.result;
               this.successQuestions = Number(result.success);
