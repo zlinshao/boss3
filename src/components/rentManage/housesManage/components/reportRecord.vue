@@ -53,11 +53,10 @@
         </template>
       </el-table-column>
     </el-table>
-
     <div class="pagination">
       <el-pagination
         @current-change="currentChange"
-        :current-page="params.page"
+        :current-page="reprotParams.page"
         :page-size="3"
         layout="total, prev, pager, next, jumper"
         :total="totalNumber">
@@ -83,9 +82,9 @@
     data () {
       return {
         tableData:[],
-        params:{
+        reprotParams:{
           per_page_number:3,
-          page:1,
+          page:2,
         },
         totalNumber:0,
         emptyContent: '暂无数据',
@@ -114,7 +113,7 @@
     },
     methods:{
       currentChange(val){
-        this.params.page = val;
+        this.reprotParams.page = val;
         this.getData();
       },
       matchDictionary(id) {
@@ -129,24 +128,25 @@
 
       //房屋变化，重新从第一页开始请求数据
       reGetData(){
-        this.params.page = 1;
+        this.reprotParams.page = 1;
         this.getData();
       },
       getData(){
         this.emptyContent = ' ';
         this.tableLoading = true;
         this.tableData = [];
-        this.totalNumber = 0;
-        this.$http.get(globalConfig.server_user + 'process?house_id='+this.houseId,{params:this.params}).then((res) => {
+        this.$http.get(globalConfig.server_user + 'process?house_id='+this.houseId,{params:this.reprotParams}).then((res) => {
           this.tableLoading = false;
           if(res.data.status === 'success'){
             this.tableData = res.data.data;
             this.totalNumber = res.data.meta.total;
             if(res.data.data.length<1){
               this.emptyContent = '暂无数据';
+              this.totalNumber = 0;
             }
           }else {
             this.emptyContent = '暂无数据';
+            this.totalNumber = 0;
           }
         })
       },
