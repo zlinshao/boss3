@@ -273,7 +273,7 @@ export default {
         .get(globalConfig.server + "credit/manage", { params: this.form })
         .then(res => {
           this.rentLoading = false;
-          if (res.data.code === "30310") {
+          if (res.data.code === "30310" && res.data.data.length>0) {
             this.totalNumber = res.data.num;
             this.tableData = res.data.data;
             // this.remark = res.data.data.last_remark;
@@ -294,7 +294,7 @@ export default {
         })
         .then(res => {
           this.rentLoading = false;
-          if (res.data.code === "30310") {
+          if (res.data.code === "30310" && res.data.data.length>0) {
             this.totalNumber = res.data.num;
             this.tableData2 = res.data.data;
           } else {
