@@ -200,7 +200,7 @@
               let domain = up.getOption('domain');
               let url = JSON.parse(info);
               let sourceLink = domain + "/" + url.key;
-              _this.$http.defaults.timeout = 60000;
+              _this.$http.defaults.timeout = 5000;
               _this.$http.post(globalConfig.server_user + 'files', {
                 url: sourceLink,
                 name: url.key,
@@ -208,6 +208,7 @@
                 type: file.type,
                 size: file.size
               }).then((res) => {
+                _this.$http.defaults.timeout = null;
                 if (res.data.status === "success") {
                   _this.imgId.push(res.data.data.id);
                   let object = {};
@@ -218,6 +219,7 @@
                   document.getElementById(file.id).getElementsByTagName('p')[0].innerHTML = '<span class="el-icon-success"></span>';
                 }
               }).catch(error => {
+                  _this.$http.defaults.timeout = null;
                   document.getElementById(file.id).getElementsByTagName('p')[0].innerHTML = '<span class="el-icon-error"></span>';
               });
             },
@@ -232,10 +234,10 @@
               //队列文件处理完毕后，处理相关的事情
               _this.isUploading = false;
               _this.$emit('getImg', [_this.ID, _this.imgId, _this.isUploading]);
-              _this.$notify.success({
-                title: '成功',
-                message: '文件已全部上传成功！'
-              })
+              // _this.$notify.success({
+              //   title: '成功',
+              //   message: '文件已全部上传成功！'
+              // })
             },
             'Key': function (up, file) {
               // 若想在前端对每个文件的key进行个性化处理，可以配置该函数
