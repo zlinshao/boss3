@@ -212,6 +212,11 @@
           this.initial();
         }
       },
+      testPaperDialog(val) {
+        if (!val) {
+          this.getTestPaperData();
+        }
+      },
     },
     methods: {
       // 高级

@@ -227,6 +227,7 @@
       },
       initial() {
         this.form = {
+          module: 2, //租房
           contract_id: this.contract.contract_id, //合同Id
           contract_number: this.contract.contract_number, //合同编号
           contract_type: this.contract.type, //合同类型
