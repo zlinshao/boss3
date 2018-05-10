@@ -624,7 +624,7 @@
       subleaseDialogVisible(val){
         if (!val) {
           this.$emit('close');
-          this.isClear = false;
+          this.clearData();
         } else {
           this.getHouseInfo();
           this.getDetail();

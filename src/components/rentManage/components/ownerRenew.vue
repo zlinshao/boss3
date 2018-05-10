@@ -769,7 +769,8 @@
       },
       ownerRenewDialogVisible(val){
         if(!val){
-          this.$emit('close')
+          this.$emit('close');
+          this.clearData();
         }else {
           this.isClear = true;
           this.getDetail();
@@ -1051,7 +1052,6 @@
         if(!this.isUpPic){
           this.$http.put(globalConfig.server+'lease/collect/'+this.collectContractId,this.params).then((res) => {
             if(res.data.code === '61010'){
-              this.clearData();
               this.editHouseResourcesDialogVisible = false;
               this.$emit('close','updateCollect');
               this.$notify.success({
