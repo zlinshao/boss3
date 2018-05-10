@@ -232,6 +232,11 @@ export default {
 .elMenu {
   text-align: center;
   border: 0;
+  .el-menu-item:hover{
+    color: #fff;
+    background-color:rgb(85, 113, 201);
+  }
+
 }
 
 .container {
