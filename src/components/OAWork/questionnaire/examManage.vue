@@ -276,7 +276,7 @@
               :current-page="params.page"
               :page-size="12"
               layout="total, prev, pager, next, jumper"
-              :total="examineesData.length">
+              :total="examineesCount">
             </el-pagination>
           </div>
         </div>
@@ -336,6 +336,7 @@
           examinees: [],
         },
         examiness_name: [],
+        examineesCount: 0,
         selectExaminees: '',
         examineeDialog: false,
         examId: '', //考试场次的id
@@ -490,6 +491,8 @@
               this.formExam.paper_id = detail.paper_id;
               //考生信息
               this.examineesData = detail.examinees;
+              this.examineesCount = detail.examinees_count;
+
               if(detail.examinees.length>0){
                 this.examineesPageData = detail.examinees[0];
               }
@@ -559,7 +562,6 @@
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
-        this.params.page = val;
         this.examineesPageData = this.examineesData[val-1];
       },
       //右键菜单
@@ -581,6 +583,11 @@
             headIcon: "el-icon-view",
             label: "查看/添加调查对象"
           },
+          {
+            clickIndex: "answer",
+            headIcon: "el-icon-view",
+            label: "问卷作答"
+          }
         ];
         let e = event || window.event; //support firefox contextmenu
         this.show = false;
@@ -635,6 +642,9 @@
           case 'manageExaminee':
             this.examineeDialog = true;
             this.getExamDetail();
+            break;
+          case 'answer':
+            this.$router.push({path: 'answerNaire', query:{id: this.examId}});
             break;
         }
       },

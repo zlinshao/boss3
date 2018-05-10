@@ -14,7 +14,7 @@ import JointRentManage from '../components/rentManage/jointRentManage/index.vue'
 
 //客服中心
 import ExpenseAccount from '../components/customService/expenseAccount/index.vue'   //报销
- import CustomerService from '../components/rentManage/customerService/index.vue'                //回访
+import CustomerService from '../components/rentManage/customerService/index.vue'                //回访
 
 // import ContractManage from '../components/rentManage/datumMessage/contractManage/index1.vue'
 // import ClientManage from '../components/rentManage/datumMessage/clientManage/index1.vue'
@@ -108,12 +108,13 @@ import AnswerCenter from '../components/OAWork/answerCenter/index.vue'          
 
 //问卷调查
 import Questionnaire from '../components/OAWork/questionnaire/index.vue'               //问卷调查
-import ConfigNaire  from '../components/OAWork/questionnaire/configNaire/index.vue'  //管理问卷
-import PreviewNaire  from '../components/OAWork/questionnaire/previewNaire/index.vue'  //管理问卷
+import ConfigNaire from '../components/OAWork/questionnaire/configNaire/index.vue'  //管理问卷
+import PreviewNaire from '../components/OAWork/questionnaire/previewNaire/index.vue'  //管理问卷
 import BatchNaire from '../components/OAWork/questionnaire/batchNaire/index.vue'  //批量导入问卷
 import MyselfNaire from '../components/OAWork/questionnaire/myselfNaire/index.vue'  //自己录入问卷
 import LookNaire from '../components/OAWork/questionnaire/lookNaire/index.vue'  //问卷调查统计
 import AnswerAll from '../components/OAWork/questionnaire/answerAll/index.vue'  //问卷调查统计
+import AnswerNaire from '../components/OAWork/questionnaire/answerNaire/index.vue'  //问卷作答
 
 
 // import Message from '../comments/systemSetting/message/index1.vue'                                      //短信模板
@@ -263,9 +264,10 @@ export default new Router({
         {path: '/myselfQuestions', component: MyselfQuestions, name: "自己录入"},
         {path: '/previewExam', component: PreviewExam, name: "预览试卷"},
         {path: '/answerExam', component: AnswerExam, name: "考生答题"},
+        {path: '/LineCollege', component: LineCollege, name: '我的考试', icon: "iconfont icon-zaixiankaoshi"},
         {path: '/lookExam', component: LookExam, name: "查看试卷"},
         {path: '/examinerRead', component: ExaminerRead, name: "阅卷管理"},
-        {path: '/examinerReadEach', component:ExaminerReadEach, name: "试卷批阅"},
+        {path: '/examinerReadEach', component: ExaminerReadEach, name: "试卷批阅"},
         {path: '/examinerShortAn', component: ExaminerShortAn, name: "简答批阅"},
         {path: '/answerCenter', component: AnswerCenter, name: "问答中心"},
 
@@ -276,7 +278,9 @@ export default new Router({
         {path: '/myselfNaire', component: MyselfNaire, name: "自己录入问卷"},
         {path: '/lookNaire', component: LookNaire, name: "调查统计"},
         {path: '/answerAll', component: AnswerAll, name: "所有回答"},
-        {path: '/LineCollege', component: LineCollege, name: '我的考试', icon:"iconfont icon-zaixiankaoshi"}
+        {path: '/answerNaire', component: AnswerNaire, name: "问卷作答"},
+
+
       ]
     },
     //快捷入口
@@ -495,8 +499,6 @@ export default new Router({
       icon: 'iconfont icon-daxue',
       children: [
         {path: '/college', component: College, name: '乐伽大学 '},
-        // {path: '/LineCollege', component: LineCollege, name: '成绩查询'},
-        // {path: '/StaffRegistration', component: StaffRegistration, name: '员工报名'},
         {path: '/OnlineExam', component: OnlineExam, name: '在线考试'},
         {path: '/examinerRead', component: ExaminerRead, name: '考官判卷'},
 
