@@ -501,6 +501,11 @@
           if (res.data.code === '30000') {
             this.collectTableData = res.data.data.data;
             this.totalNum = res.data.data.count;
+            if (res.data.data.data.length < 1) {
+              this.collectStatus = "暂无数据";
+              this.collectTableData = [];
+              this.totalNum = 0;
+            }
           } else {
             this.collectTableData = [];
             this.totalNum = 0;
@@ -521,6 +526,11 @@
           if (res.data.code === '30000') {
             this.rentTableData = res.data.data.data;
             this.totalNum = res.data.data.count;
+            if (res.data.data.data.length < 1) {
+              this.rentStatus = "暂无数据";
+              this.rentTableData = [];
+              this.totalNum = 0;
+            }
           } else {
             this.rentTableData = [];
             this.totalNum = 0;

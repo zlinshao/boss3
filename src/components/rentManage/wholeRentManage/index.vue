@@ -598,10 +598,16 @@
                                    :activeName="activeName"></RentFollowRecordTab>
             </el-tab-pane>
             <el-tab-pane label="维修单(收)" name="CollectRepairTab">
-              <CollectRepairTab :collectContractId="collectContractId" :activeName="activeName" ></CollectRepairTab>
+              <CollectRepairTab :collectContractId="collectContractId" :activeName="activeName" :tabStatusChange="tabStatusChange"></CollectRepairTab>
             </el-tab-pane>
             <el-tab-pane label="维修单(租)" name="RentRepairTab">
-              <RentRepairTab :rentContractId="rentContractId" :activeName="activeName" ></RentRepairTab>
+              <RentRepairTab :rentContractId="rentContractId" :activeName="activeName" :tabStatusChange="tabStatusChange"></RentRepairTab>
+            </el-tab-pane>
+            <el-tab-pane label="报销单(收)" name="CollectReimTab">
+              <CollectReimTab :collectContractId="collectContractId" :activeName="activeName" :tabStatusChange="tabStatusChange"></CollectReimTab>
+            </el-tab-pane>
+            <el-tab-pane label="报销单(租)" name="RentReimTab">
+              <RentReimTab :rentContractId="rentContractId" :activeName="activeName" :tabStatusChange="tabStatusChange"></RentReimTab>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -703,21 +709,23 @@
   import OwnerInfoTab from '../tabComponents/ownerInfo.vue'
   import RentInfoTab from '../tabComponents/rentInfo.vue'
 //  import InDebtInfoTab from '../tabComponents/InDebtInfo.vue'
-  import CollectReturnRomeInfoTab from '../tabComponents/collectReturnInfo.vue'   //退还房
-  import rentReturnRomeInfoTab from '../tabComponents/rentReturnInfo.vue'   //退还房
-  import CollectRenewContractTab from '../tabComponents/collcetRenewContract.vue'
-  import RentRenewContractTab from '../tabComponents/rentRenewContract.vue'
-  import subletRecordTab from '../tabComponents/subletRecord.vue'
-  import ReceivableItemTab from '../tabComponents/receivableItem.vue'
-  import PayableItemTab from '../tabComponents/payableItem.vue'
-  import CollectMemorandumTab from '../tabComponents/collectMemorandum.vue'
-  import RentMemorandumTab from '../tabComponents/rentMemorandum.vue'
-  import CollectReturnVisitRecordTab from '../tabComponents/collectReturnVistitRecord.vue'
-  import RentReturnVisitRecordTab from '../tabComponents/rentReturnVistitRecord.vue'
-  import CollectFollowRecordTab from '../tabComponents/collectFollowRecord.vue'
-  import RentFollowRecordTab from '../tabComponents/rentFollowRecord.vue'
-  import CollectRepairTab from '../tabComponents/collectRepair.vue'
-  import RentRepairTab from '../tabComponents/rentRepair.vue'
+  import CollectReturnRomeInfoTab from '../tabComponents/collectReturnInfo.vue';   //退还房
+  import rentReturnRomeInfoTab from '../tabComponents/rentReturnInfo.vue';   //退还房
+  import CollectRenewContractTab from '../tabComponents/collcetRenewContract.vue';
+  import RentRenewContractTab from '../tabComponents/rentRenewContract.vue';
+  import subletRecordTab from '../tabComponents/subletRecord.vue';
+  import ReceivableItemTab from '../tabComponents/receivableItem.vue';
+  import PayableItemTab from '../tabComponents/payableItem.vue';
+  import CollectMemorandumTab from '../tabComponents/collectMemorandum.vue';
+  import RentMemorandumTab from '../tabComponents/rentMemorandum.vue';
+  import CollectReturnVisitRecordTab from '../tabComponents/collectReturnVistitRecord.vue';
+  import RentReturnVisitRecordTab from '../tabComponents/rentReturnVistitRecord.vue';
+  import CollectFollowRecordTab from '../tabComponents/collectFollowRecord.vue';
+  import RentFollowRecordTab from '../tabComponents/rentFollowRecord.vue';
+  import CollectRepairTab from '../tabComponents/collectRepair.vue';
+  import RentRepairTab from '../tabComponents/rentRepair.vue';
+  import CollectReimTab from '../tabComponents/collectReim.vue';   //收房报销单
+  import RentReimTab from '../tabComponents/rentReim.vue';   //租房报销单
 
 //  import ServiceRecordTab from '../tabComponents/serviceRecord.vue'
   export default {
@@ -774,6 +782,8 @@
       RentFollowRecordTab,
       CollectRepairTab,
       RentRepairTab,
+      CollectReimTab,
+      RentReimTab,
 //      ServiceRecordTab,
     },
     data () {
@@ -1344,6 +1354,10 @@
           this.tabStatusChange = 'visitRecord';
         } else if (val === 'workOrder') {
           this.tabStatusChange = 'workOrder';
+        }else if (val === 'repair') {
+          this.tabStatusChange = 'repair';
+        }else if (val === 'reimbursement') {
+          this.tabStatusChange = 'reimbursement';
         }
       },
 

@@ -220,6 +220,7 @@
               title: '成功',
               message: res.data.msg
             });
+            this.$emit('close','repair');
             this.addCollectRepairDialogVisible = false;
           } else {
             this.$notify.warning({

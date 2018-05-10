@@ -215,6 +215,7 @@
               title: '成功',
               message: res.data.msg
             });
+            this.$emit('close','repair');
             this.addRentRepairDialogVisible = false;
           } else {
             this.$notify.warning({
