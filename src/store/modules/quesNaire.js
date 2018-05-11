@@ -9,6 +9,7 @@ const quesNaire = {
     preview_naire_paper_id: '', //预览试卷id
     naire_answer_exam_id: '', //答题试卷id
     naire_stastic_id: '',   //调查统计id
+    naire_answer_all: {},
   },
   mutations: {
     NAIRE_PAPER:(state,view) => {
@@ -41,6 +42,11 @@ const quesNaire = {
         state.naire_stastic_id = view;
       }
     },
+    NAIRE_ANSWER_ALL:(state,view) => {
+      if(view){
+        state.naire_answer_all = view;
+      }
+    },
   },
   actions: {
     nairePaper({commit},view){
@@ -60,6 +66,9 @@ const quesNaire = {
     },
     naireStasticId({commit},view){
       commit('NAIRE_STASTIC_ID',view);
+    },
+    naireAnswerAll({commit},view){
+      commit('NAIRE_ANSWER_ALL',view);
     },
   }
 };
