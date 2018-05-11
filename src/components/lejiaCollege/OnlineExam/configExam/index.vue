@@ -565,6 +565,10 @@
           cursor: pointer;
           padding: 3px 8px;
           border: 1px solid #fff;
+          border: 1px solid #dcdfe6;
+          padding: 3px 8px;
+          border-radius: 5px;
+          box-shadow: 0 0 3px 1px #eee;
         }
 
         .edit_question, .move_down, .move_up {
@@ -575,8 +579,6 @@
           cursor: pointer;
           padding: 3px 8px;
           border: 1px solid #fff;
-        }
-        .remove:hover, .edit_question:hover, .move_down:hover, .move_up:hover {
           border: 1px solid #dcdfe6;
           padding: 3px 8px;
           border-radius: 5px;
