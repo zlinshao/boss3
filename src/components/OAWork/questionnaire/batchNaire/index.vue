@@ -3,18 +3,24 @@
     <div id="onlineExam">
       <div class="tool">
         <div class="tool_left">
-
-          <span style="height:130px;line-height:75px; width:120px; font-size:14px;">上传问卷文件</span>
+          <div>
+            <el-row>
+              <el-col :span="6">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 试卷名称</el-col>
+              <el-col :span="6"><span style="color: #409EFF;opacity: .7;">{{testPaper.name}}</span></el-col>
+            </el-row>
+            <br/>
+          </div>
+          <span style="height:130px;line-height:75px; width:120px; font-size:14px;">上传试题文件</span>
           <div style="display: inline-block;float: left;">
-            <Dropzone :ID="'examOptionx'" @getImg="photo_success" :isClear="isClear"></Dropzone>
+            <Dropzone :ID="'naireOption'" @getImg="photo_success" :isClear="isClear"></Dropzone>
           </div>
           <el-button type="success" @click="uploadExam" size="small"
                      style="margin-top: 20px; height:32px; line-height:0px; background-color:#58d788; border-color:#58d788;">
-            <i class="iconfont icon-daoru"></i>&nbsp;问卷导入
+            <i class="iconfont icon-daoru"></i>&nbsp;试题导入
           </el-button>
           <el-button type="success" size="small" @click="downTemplate"
                      style="margin-top: 20px; background-color:#fb4799; border-color:#fb4799;">
-            <i class="iconfont icon-xiazai" style="font-size: 14px;"></i>&nbsp;下载问卷模板
+            <i class="iconfont icon-xiazai" style="font-size: 14px;"></i>&nbsp;下载试题模板
           </el-button>
         </div>
       </div>
@@ -30,7 +36,7 @@
     </div>
 
     <div id="testPaperDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="导入试题反馈" width="50%">
+      <el-dialog :close-on-click-modal="false" :show-close="false"  :visible.sync="testPaperDialog" title="导入试题反馈" width="50%">
         <el-row>
           <el-col :span="24">
             <span class="sp1">导入问卷成功</span>
@@ -57,11 +63,14 @@
             </div>
           </el-col>
         </el-row>
+        <div slot="footer" class="dialog-footer" style="text-align: center;">
+          <el-button size="small" type="primary" @click="closeTestPaperDialog">确定</el-button>
+        </div>
       </el-dialog>
     </div>
 
     <div id="faleDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="faleDialog" title="导入失败明细" width="50%">
+      <el-dialog :close-on-click-modal="false" :show-close="false"  :visible.sync="faleDialog" title="导入失败明细" width="50%">
         <span class="faleTitle">请检查</span>
         <div style="height:160px; overflow: auto;" class="scroll_bar">
           <div class="falediv" v-for="(item,key) in errorsDetail">
@@ -95,27 +104,36 @@
         successQuestions: null, //导入成功题数
         failQuestions: null, //导入失败题数
         errorsDetail: [],
+        paperId: '',
       };
     },
     activated() {
       this.getQueryData();
+      this.isClear = false;
+      this.docId = '';
     },
     watch: {},
     methods: {
+      closeTestPaperDialog(){
+        this.testPaperDialog = false;
+        this.isClear = true;
+        let view = {};
+        view.name=' 批量导入问卷 ';
+        view.path='/batchNaire';
+        this.$store.dispatch('delVisitedViews', view);
+        this.$router.push({path: '/configNaire', query: {id: this.paperId}});
+      },
       getQueryData() {
         if (!this.$route.query.name) {
           let data = {};
-          data.name = this.$store.state.onlineExam.test_paper.name;
-          data.type_id = this.$store.state.onlineExam.test_paper.type_id;
-          data.type_name = this.$store.state.onlineExam.test_paper.type_name;
+          data.name = this.$store.state.quesNaire.naire_paper.name;
           this.testPaper = data;
           this.$router.push({path: '/batchNaire', query: data});
         } else {
           let query = this.$route.query;
-          this.$store.dispatch('testPaper', query);
+          this.$store.dispatch('nairePaper', query);
           this.testPaper = query;
         }
-
       },
       // 上传成功
       photo_success(val) {
@@ -126,19 +144,16 @@
       uploadExam() {
         let params = {};
         params.doc_id = this.docId;
-        params.category = this.testPaper.type_id;
         params.name = this.testPaper.name;
+        params.is_questionnaire = 1;
         this.$http.post(globalConfig.server + 'exam/paper/upload', params).then((res) => {
           if (res.data.code === '36010') {
-            // this.$notify.success({
-            //   title: '成功',
-            //   message: res.data.msg
-            // });
             if (res.data.data && res.data.data.result) {
               let result = res.data.data.result;
               this.successQuestions = Number(result.success);
               this.failQuestions = Number(result.fail);
               this.totalQuestions = Number(result.fail) + Number(result.success);
+              this.paperId = result.paper_id;
             }
             this.testPaperDialog = true;
             this.errorsDetail = res.data.data.errors;

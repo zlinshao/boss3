@@ -3,7 +3,7 @@
     <div>
       <el-tabs v-model="activeName">
         <el-tab-pane label="试卷管理" name="first">
-          <TestPaperManage></TestPaperManage>
+          <PaperManage></PaperManage>
         </el-tab-pane>
         <el-tab-pane label="问卷调查" name="second">
           <ExamManage></ExamManage>
@@ -11,17 +11,14 @@
       </el-tabs>
     </div>
   </div>
-
-
 </template>
-
 <script>
-  import TestPaperManage from "./testPaperManage.vue";
+  import PaperManage from "./paperManage.vue";
   import ExamManage from "./examManage.vue";
 
   export default {
     name: "index",
-    components: {TestPaperManage, ExamManage},
+    components: {PaperManage, ExamManage},
     data() {
       return {
         activeName: 'first',

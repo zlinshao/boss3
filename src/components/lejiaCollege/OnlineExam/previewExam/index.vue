@@ -135,6 +135,9 @@
 </script>
 
 <style lang="scss" scoped>
+  .ql-editor {
+    min-height: initial !important;
+  }
   #previewExam {
     .tool {
       height: 160px;
