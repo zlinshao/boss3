@@ -122,40 +122,38 @@
               </div>
             </el-form>
           </el-tab-pane>
+          <!--<el-tab-pane name="five" label="填空题" :disabled="tabDisabled[4]">-->
+            <!--<el-form :model="blankForm" onsubmit="return false;">-->
+              <!--<div class="qubody">-->
+                <!--<div class="topbody">-->
+                  <!--<div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>-->
+                  <!--<vue-editor id="completionEditor" v-model="blankForm.stem" useCustomImageHandler-->
+                              <!--@imageAdded="handleImageAdded"></vue-editor>-->
+                <!--</div>-->
+                <!--<div class="midbody">-->
+                  <!--<div class="title">填空信息</div>-->
+                  <!--<el-form-item style="border:1px #eee solid; padding: 15px;border-radius: 5px;">-->
+                    <!--<el-row :gutter="20">-->
+                      <!--<el-col :span="8" v-for="(val,index) in spacelen" :key="index">-->
+                        <!--<span>第{{index+1}}处答案</span>-->
+                        <!--<el-input style="width:70%" size="small" placeholder="请输入选项内容"-->
+                                  <!--v-model="blankForm.answer[index]"></el-input>-->
+                        <!--<i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="blankSub(index)"></i>-->
+                      <!--</el-col>-->
+                    <!--</el-row>-->
 
-          <el-tab-pane name="five" label="填空题" :disabled="tabDisabled[4]">
-            <el-form :model="blankForm" onsubmit="return false;">
-              <div class="qubody">
-                <div class="topbody">
-                  <div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>
-                  <vue-editor id="completionEditor" v-model="blankForm.stem" useCustomImageHandler
-                              @imageAdded="handleImageAdded"></vue-editor>
-                </div>
-                <div class="midbody">
-                  <div class="title">填空信息</div>
-                  <el-form-item style="border:1px #eee solid; padding: 15px;border-radius: 5px;">
-                    <el-row :gutter="20">
-                      <el-col :span="8" v-for="(val,index) in spacelen" :key="index">
-                        <span>第{{index+1}}处答案</span>
-                        <el-input style="width:70%" size="small" placeholder="请输入选项内容"
-                                  v-model="blankForm.answer[index]"></el-input>
-                        <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="blankSub(index)"></i>
-                      </el-col>
-                    </el-row>
-
-                  </el-form-item>
-                  <!--<span-->
-                    <!--style="margin-left: 20%; color:rgb(252, 131, 182); margin-top:20px; margin-bottom:20px;display:block;">-->
-                      <!--说明：考生填写答案须跟上方答案完全相同，才能得分。录入答案时，请不要加多余的空格等干扰字符-->
-                    <!--</span>-->
-                  <div class="midadd">
-                    <span @click="blankAdd">+&nbsp;&nbsp;添加选项</span>
-                  </div>
-                </div>
-              </div>
-            </el-form>
-          </el-tab-pane>
-
+                  <!--</el-form-item>-->
+                  <!--&lt;!&ndash;<span&ndash;&gt;-->
+                    <!--&lt;!&ndash;style="margin-left: 20%; color:rgb(252, 131, 182); margin-top:20px; margin-bottom:20px;display:block;">&ndash;&gt;-->
+                      <!--&lt;!&ndash;说明：考生填写答案须跟上方答案完全相同，才能得分。录入答案时，请不要加多余的空格等干扰字符&ndash;&gt;-->
+                    <!--&lt;!&ndash;</span>&ndash;&gt;-->
+                  <!--<div class="midadd">-->
+                    <!--<span @click="blankAdd">+&nbsp;&nbsp;添加选项</span>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</el-form>-->
+          <!--</el-tab-pane>-->
           <el-tab-pane name="six" label="问答题" :disabled="tabDisabled[5]">
             <el-form :model="answerForm" onsubmit="return false;">
               <div class="qubody">

@@ -177,7 +177,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="22">
-                  <el-form-item label="开考时间" required>
+                  <el-form-item label="开始时间" required>
                     <el-date-picker v-model="formExam.start_time" type="datetime" placeholder="请选择"
                                     value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
                   </el-form-item>
@@ -590,7 +590,7 @@
               cancelButtonText: "取消",
               type: "warning"
             }).then(() => {
-              this.$http.post(globalConfig.server + 'exam/delete/' + this.examId).then((res) => {
+              this.$http.post(globalConfig.server + 'questionnaire/delete/' + this.examId).then((res) => {
                 if (res.data.code === "30010") {
                   this.$notify.success({
                     title: '成功',

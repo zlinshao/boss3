@@ -17,10 +17,14 @@
             <p style="line-height:30px;width:98%;margin-left:2%;" v-html="item.stem"></p>
             <el-row :key="index" v-for="(val,index) in item.choice" style="width:98%;margin-left:2%;">
               <span>{{index}}：{{val}}</span><br/>
-              <el-row :key="kk" v-for="(vv,kk) in statisticData[item.id].answer" v-if="kk==index">
+              <el-row :key="kk" v-for="(vv,kk) in statisticData[item.id] && statisticData[item.id].answer"
+                      v-if="kk==index">
                 <el-progress style="width:30%;display: inline-block;" :text-inside="true" :stroke-width="18"
                              :percentage="Math.round(vv*100/statisticData[item.id].count)"></el-progress>
                 {{vv}}
+              </el-row>
+              <el-row style="color: #fb4699;padding: 8px 0;" v-if="!(statisticData[item.id] && statisticData[item.id].answer)">
+                暂无统计数据...
               </el-row>
             </el-row>
           </div>
@@ -34,27 +38,18 @@
             <p style="line-height:30px;width:98%;margin-left:2%;" v-html="item.stem"></p>
             <span @click="openAll(item.id, k)"
                   style="color:rgb(106, 141, 251);cursor: pointer;width:98%;margin-left:2%;">查看全部回答</span>
-            <!--<el-row :key="index" v-for="(val,index) in statisticData[item.id]" style="width:98%;margin-left:2%;"-->
-                    <!--v-if="k==157">-->
-              <!--<span>第{{index}}个选项的答案：</span><br/>-->
-              <!--<el-row :key="kk" v-for="(vv,kk) in statisticData[item.id][index].answer"-->
-                     <!--&gt;-->
+
+            <!--<el-row style="width:98%;margin-left:2%;" v-if="k==158">-->
+              <!--<el-row :key="kk" v-for="(vv,kk) in statisticData[item.id] && statisticData[item.id].answer">-->
                 <!--<span>{{kk}}</span><br/>-->
                 <!--<el-progress style="width:30%;display: inline-block;" :text-inside="true" :stroke-width="18"-->
-                             <!--:percentage="Math.round(vv*100/statisticData[item.id][index].count)"></el-progress>-->
+                             <!--:percentage="Math.round(vv*100/statisticData[item.id].count)"></el-progress>-->
                 <!--{{vv}}-->
               <!--</el-row>-->
+              <!--<el-row style="color: #fb4699;padding: 8px 0;" v-if="!(statisticData[item.id] && statisticData[item.id].answer)">-->
+                <!--暂无统计数据...-->
+              <!--</el-row>-->
             <!--</el-row>-->
-            <el-row style="width:98%;margin-left:2%;" v-if="k==158">
-              <el-row :key="kk" v-for="(vv,kk) in statisticData[item.id] && statisticData[item.id].answer"
-                      v-if="statisticData[item.id] && statisticData[item.id].answer">
-                <span>{{kk}}</span><br/>
-                <el-progress style="width:30%;display: inline-block;" :text-inside="true" :stroke-width="18"
-                             :percentage="Math.round(vv*100/statisticData[item.id].count)"></el-progress>
-                {{vv}}
-              </el-row>
-
-            </el-row>
           </div>
         </div>
       </div>
@@ -99,6 +94,8 @@
         this.$http.get(globalConfig.server + 'questionnaire/' + this.quesNaireId).then((res) => {
           if (res.data.code === '30000') {
             this.quesNaireData = res.data.data;
+          } else {
+            this.quesNaireData = {};
           }
         });
       },
@@ -108,10 +105,10 @@
             this.statisticData = res.data.data;
           } else {
             this.statisticData = [];
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            })
+            // this.$notify.warning({
+            //   title: '警告',
+            //   message: res.data.msg
+            // })
           }
         });
       },

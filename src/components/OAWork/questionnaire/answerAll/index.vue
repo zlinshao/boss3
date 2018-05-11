@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="answerAll">
+    <div id="lookNaire">
       <div class="tool">
         <img width="100%" height="142px" src="../../../../assets/images/preview.png"/>
         <span>{{quesNaireData.name}}</span>
@@ -13,13 +13,13 @@
           </span>
             <p style="line-height:30px;width:98%;margin-left:2%;" v-html="item.stem"></p>
             <el-row style="width:98%;margin-left:2%;" v-if="k==158 && category==158">
-              <el-row v-if="statisticData[item.id] && statisticData[item.id].answer" :key="kk"
-                      v-for="(vv,kk) in statisticData[item.id].answer">
+              <el-row :key="kk" v-for="(vv,kk) in statisticData[item.id] && statisticData[item.id].answer">
                 <span>{{kk}}</span><br/>
                 <el-progress style="width:30%;display: inline-block;" :text-inside="true" :stroke-width="18"
                              :percentage="Math.round(vv*100/statisticData[item.id].count)"></el-progress>
                 {{vv}}
               </el-row>
+              <el-row style="color: #fb4699;padding: 8px 0;" v-if="!(statisticData[item.id] && statisticData[item.id].answer)">暂无统计数据......</el-row>
             </el-row>
           </div>
         </div>
@@ -70,6 +70,8 @@
         this.$http.get(globalConfig.server + 'questionnaire/' + this.quesNaireId).then((res) => {
           if (res.data.code === '30000') {
             this.quesNaireData = res.data.data;
+          } else {
+            this.quesNaireData = {};
           }
         });
       },
@@ -79,10 +81,10 @@
             this.statisticData = res.data.data;
           } else {
             this.statisticData = [];
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            })
+            // this.$notify.warning({
+            //   title: '警告',
+            //   message: res.data.msg
+            // })
           }
         });
       },
@@ -91,7 +93,7 @@
 </script>
 
 <style lang="scss" scoped>
-  #answerAll {
+  #lookNaire {
     .tool {
       position: relative;
       span {
