@@ -413,4 +413,7 @@ ul.el-menu.el-menu--inline {
 #configExam .questionDiv .el-checkbox span.el-checkbox__label {
   display: none; }
 
+#lookNaire .questionDiv .el-progress--text-inside .el-progress-bar {
+  padding: 8px 0; }
+
 /*# sourceMappingURL=reset.css.map */
