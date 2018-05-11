@@ -87,9 +87,11 @@ export default {
       this.$http.get(globalConfig.server + "des/tree").then(res => {
         this.rentLoading = false;
         this.setTree = res.data.data;
-        this.form.id = res.data.data[0].id;
-        this.nodeClick(res.data.data[0]);
-        this.defaultExpandKeys.push(res.data.data[0].id);
+        if(res.data.data[0].son.length>0 &&res.data.data[0].son &&res.data.data.length>0){
+        this.form.id = res.data.data[0].son[0].id;
+        this.nodeClick(res.data.data[0].son[0]);
+        this.defaultExpandKeys.push(res.data.data[0].son[0].id);
+        }
       });
     },
     //点击节点
