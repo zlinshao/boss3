@@ -556,11 +556,11 @@
             headIcon: "el-icon-view",
             label: "查看/添加调查对象"
           },
-          {
-            clickIndex: "answer",
-            headIcon: "el-icon-view",
-            label: "问卷作答"
-          }
+          // {
+          //   clickIndex: "answer",
+          //   headIcon: "el-icon-view",
+          //   label: "问卷作答"
+          // }
         ];
         let e = event || window.event; //support firefox contextmenu
         this.show = false;
