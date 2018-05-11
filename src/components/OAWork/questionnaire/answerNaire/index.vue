@@ -264,7 +264,7 @@
         view.name = ' 问卷作答 ';
         view.path = '/answerNaire';
         this.$store.dispatch('delVisitedViews', view);
-        this.$router.push({path: '/questionnaire'});
+        this.$router.push({path: '/main'});
       },
     }
   };
