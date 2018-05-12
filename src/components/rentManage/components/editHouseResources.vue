@@ -159,7 +159,7 @@
                 <div style="display: flex;justify-content: space-between">
                   <div class="title" v-if="item == 1">房东信息</div>
                   <div class="title" v-else="">附属房东信息({{item - 1}})</div>
-                  <div v-if="item>1 && !isDoc && !isAll" class="deleteNumber" @click="deleteCustoms(item-1)">删除</div>
+                  <div v-if="(isAll || (isPc && !isDoc)) && item>1" class="deleteNumber" @click="deleteCustoms(item-1)">删除</div>
                 </div>
                 <div class="form_border">
                   <el-form size="mini" :model="params" label-width="100px">
@@ -355,7 +355,7 @@
                                       v-model="periodArray[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
-                        <el-col :span="6" v-if="false">
+                        <el-col :span="6"  v-if="(isAll || (isPc && !isDoc)) && item>1">
                           <div class="deleteNumber">
                             <span @click="deletePriceChange(item-1)">删除</span>
                           </div>
@@ -387,7 +387,7 @@
                                       v-model="payPeriodArray[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
-                        <el-col :span="6" v-if="false">
+                        <el-col :span="6"  v-if="(isAll || (isPc && !isDoc)) && item>1">
                           <div class="deleteNumber">
                             <span @click="deletePayWayChange(item-1)">删除</span>
                           </div>

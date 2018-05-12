@@ -259,7 +259,6 @@
                   <div class="content">{{contractInfo.month}}</div>
                 </el-form-item>
               </el-col>
-
             </el-row>
             <el-row>
               <el-col :span="8">
