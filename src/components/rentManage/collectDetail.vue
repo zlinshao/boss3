@@ -469,11 +469,6 @@
                   <div class="content">{{contractInfo.department_name}}</div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="合同上传时间">
-                  <div class="content">{{contractInfo.contract_create_time}}</div>
-                </el-form-item>
-              </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
