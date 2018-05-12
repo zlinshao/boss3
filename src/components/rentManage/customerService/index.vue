@@ -68,7 +68,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select clearable v-model="form.originate" placeholder="请选择城市" value="">
+                      <el-select clearable v-model="form.originate" placeholder="请选择信息来源" value="">
                         <el-option v-for="item in cityCategory" :label="item.dictionary_name" :value="item.id"
                                    :key="item.id"></el-option>
                       </el-select>
