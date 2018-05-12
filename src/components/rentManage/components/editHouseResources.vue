@@ -255,7 +255,7 @@
                           </el-input>
                         </el-col>
                         <el-col :span="12">
-                          <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="天数" @blur="computedEndDate" v-model="params.day">
+                          <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="天数" v-model="params.day">
                             <template slot="append">天</template>
                           </el-input>
                         </el-col>
@@ -263,7 +263,7 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="空置期天数" required="">
-                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" @blur="computedEndDate" v-model="params.vacancy"></el-input>
+                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容"  v-model="params.vacancy"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -287,7 +287,7 @@
 
                     <el-col :span="6">
                       <el-form-item label="空置开始时间" required="">
-                        <el-date-picker :disabled="(!isPc || isDoc) && !isAll" @blur="computedEndDate" value-format="yyyy-MM-dd" type="date"
+                        <el-date-picker :disabled="(!isPc || isDoc) && !isAll" value-format="yyyy-MM-dd" type="date"
                                         placeholder="选择日期" v-model="params.begin_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
@@ -1017,7 +1017,6 @@
 
       //改变收房月数
       changeMonth(){
-        this.computedEndDate();
         this.periodArray[0] = this.params.month;
         this.payPeriodArray[0] = this.params.month;
         this.priceArray.splice(1,this.priceArray.length);
