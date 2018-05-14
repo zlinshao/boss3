@@ -1,100 +1,130 @@
 <template>
   <div>
-    <div id="onlineExam">
+    <div id="lookNaire">
       <div class="tool">
-        <img width="100%" height="142px" src="../../../../assets/images/preview.png" />
-        <span>问卷调查问卷调查问卷调查问卷调查问卷调查</span>
+        <img width="100%" height="142px" src="../../../../assets/images/preview.png"/>
+        <span>{{quesNaireData.name}}</span>
       </div>
       <div class="main">
-
-          <div class="questionDiv" v-for="(total3,y) in 2" >
-          {{y+1}}.<span style="color:#6a8dfb; margin-left:20px;">简答题</span>
-          <p style="margin-left:30px;line-height:30px;width:96%">对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：对打包后的文件进行一次全局的 envify 转换。这使得压缩工具能清除调 Vue 源码中所有用环境变量条件包裹起来的警告语句。例如：
-          </p>        
-          <div class="allAnswer" >
-            1.对打包后的文件进行一次全局的 envify 转换。这使得对打包后的文件进行一次全局的 envify 转换。这使得对打包后的文件进行一次全局的 envify 转换。这使得<br />
-            2.对打包后的文件进行一次全局的 envify 转换。这使得对打包后的文件进行一次全局的 envify 转换。这使得对打包后的文件进行一次全局的 envify 转换。这使得<br />
-            3.对打包后的文件进行一次全局的 envify 转换。这使得对打包后的文件进行一次全局的 envify 转换。这使得对打包后的文件进行一次全局的 envify 转换。这使得
+        <div class="questionDiv" v-for="(v,k) in quesNaireData.question_set" v-if="k==158 && category==158">
+          <div v-for="(item,key) in v">
+            {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">
+            <span v-if="k==158 && category==158">简答题</span>
+          </span>
+            <p style="line-height:30px;width:98%;margin-left:2%;" v-html="item.stem"></p>
+            <el-row style="width:98%;margin-left:2%;" v-if="k==158 && category==158">
+              <el-row :key="kk" v-for="(vv,kk) in statisticData[item.id] && statisticData[item.id].answer">
+                <span>{{kk}}</span><br/>
+                <el-progress style="width:30%;display: inline-block;" :text-inside="true" :stroke-width="18"
+                             :percentage="Math.round(vv*100/statisticData[item.id].count)"></el-progress>
+                {{vv}}
+              </el-row>
+              <el-row style="color: #fb4699;padding: 8px 0;" v-if="!(statisticData[item.id] && statisticData[item.id].answer)">暂无统计数据......</el-row>
+            </el-row>
           </div>
-        </div>  
-      </div> 
+        </div>
+      </div>
     </div>
   </div>
- 
+
 </template>
 
 <script>
-export default {
-  name: "index",
-  components: { },
-  props:['previewNaireDialog'],
-  data() {
-    return {
-      isClear: false,
-      testPaperDialog: false,
-      faleDialog: false,
-      disfalg: false,
-      answarData: [
-        { id: "A", name: "选项答案" },
-        { id: "B", name: "选项答案" },
-        { id: "C", name: "选项答案" },
-        { id: "D", name: "选项答案" }
-      ],
-      answarData2: [
-        { id: "对", name: "选项答案" },
-        { id: "错", name: "选项答案" }
-      ],
-      form1: [{ check: " " }, { check: " " }],
-      form2: [{ check: " " }, { check: " " }],
-      form3: [{ check: " " }, { check: " " }],
-      form4: [{ check: " " }, { check: " " }]
-    };
-  },
+  export default {
+    name: "index",
+    components: {},
+    props: ['previewNaireDialog'],
+    data() {
+      return {
+        quesNaireId: '',  //问卷调查的id
+        statisticData: [],
+        quesNaireData: {},
+        quesId: '',  //这道题目的id
+        category: '',   //这道题目的题型
+      };
 
-  watch: {
-  
-  },
-  methods: {
-    openAll(){
-      this.allAnswer=true;
+    },
+
+    watch: {},
+    activated() {
+      this.getQueryData();
+      this.getStatisticData();
+      this.getQuestionNaireData();
+    },
+    methods: {
+      getQueryData() {
+        if (!this.$route.query.id) {
+          let data = {};
+          this.quesNaireId = data.id = this.$store.state.quesNaire.naire_answer_all.id;
+          this.quesId = data.ques_id = this.$store.state.quesNaire.naire_answer_all.ques_id;
+          this.category = data.category = this.$store.state.quesNaire.naire_answer_all.category;
+          this.$router.push({path: '/answerAll', query: data});
+        } else {
+          this.$store.dispatch('naireAnswerAll', this.$route.query);
+          this.quesNaireId = this.$route.query.id;
+          this.quesId = this.$route.query.ques_id;
+          this.category = this.$route.query.category;
+        }
+      },
+      getQuestionNaireData() {
+        this.$http.get(globalConfig.server + 'questionnaire/' + this.quesNaireId).then((res) => {
+          if (res.data.code === '30000') {
+            this.quesNaireData = res.data.data;
+          } else {
+            this.quesNaireData = {};
+          }
+        });
+      },
+      getStatisticData() {
+        this.$http.get(globalConfig.server + 'questionnaire/statistic/' + this.quesNaireId).then((res) => {
+          if (res.data.code === '30000') {
+            this.statisticData = res.data.data;
+          } else {
+            this.statisticData = [];
+            // this.$notify.warning({
+            //   title: '警告',
+            //   message: res.data.msg
+            // })
+          }
+        });
+      },
     }
-  }
-};
+  };
 </script>
 
 <style lang="scss" scoped>
-#onlineExam {
-  .tool {
-    position: relative;
-    span{
-      position: absolute;
-      left:0px;
-      top:0px;
-      height: 142px;
-      line-height: 142px;
-      font-size:24px;
-      text-indent: 2%;
-      color: #fff;
+  #lookNaire {
+    .tool {
+      position: relative;
+      span {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        height: 142px;
+        line-height: 142px;
+        font-size: 24px;
+        text-indent: 2%;
+        color: #fff;
+      }
     }
-  }
-  .main {
-    border: 1px #eee solid;
-    margin-bottom: 30px;
-    border-top: none;
-    min-height: 500px;
-    font-size: 16px;
-    .questionDiv {
-      width: 98%;
-      margin-left: 2%;
-      margin-bottom: 20px;
-      min-height: 154px;
-      padding-top: 16px;
-      border-top: 1px #eee solid;
-      .allAnswer{
-        width:97%;
-        margin-left:2%;
+    .main {
+      border: 1px #eee solid;
+      margin-bottom: 30px;
+      border-top: none;
+      min-height: 500px;
+      font-size: 16px;
+      .questionDiv {
+        width: 98%;
+        margin-left: 2%;
+        margin-bottom: 20px;
+        min-height: 154px;
+        padding-top: 16px;
+        border-top: 1px #eee solid;
+        .allAnswer {
+          width: 97%;
+          margin-left: 2%;
+        }
       }
     }
   }
-}
 </style>

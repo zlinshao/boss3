@@ -416,4 +416,7 @@ ul.el-menu.el-menu--inline {
 .blueColor .el-form-item__label, .blueColor div {
   color: #409EFF !important; }
 
+#lookNaire .questionDiv .el-progress--text-inside .el-progress-bar {
+  padding: 8px 0; }
+
 /*# sourceMappingURL=reset.css.map */

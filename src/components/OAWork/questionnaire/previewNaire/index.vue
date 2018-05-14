@@ -5,24 +5,23 @@
         <el-row style="width:100%;margin-top:16px;">
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="text-align:left;color:#464748;">
-              <div class="qdiv" style="margin-top: 48px;font-size: 18px;">试卷名称：<span style="color:#6a8dfb">{{testPaperData.name}}</span></div>
-            </div>
-          </el-col>
-          <el-col :span="5" style="margin-left:2%; margin-right:2%">
-            <div class="import_questions" style="border: 1px solid #fdca41;box-shadow: 0 0 3px 1px #fdca41;">
-              <div class="import_left"><span style="float:left; font-size:14px;">总题数</span><i
-                style="float:right; color:#fdca41;font-size:20px;" class="iconfont icon-shujutu"></i></div>
-              <div><span style="font-size:70px; color:#fdca41">{{testPaperData.count}}</span>题</div>
+              <div class="qdiv" style="margin-top: 25px;">试卷名称： <span style="color:#6a8dfb;font-size: 18px;">{{testPaperData.name}}</span>
+              </div>
+              <div class="qdiv" style="margin-top: 10px;">总题数： <span style="color:#6a8dfb;font-size: 18px;">{{testPaperData.count}}</span>
+                题
+              </div>
             </div>
           </el-col>
         </el-row>
       </div>
       <div class="main">
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===153">
-          {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">单选题</span>
-          <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor" v-html="item.stem"></p>
+          <span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
+          <span style="color:#6a8dfb;">单选题</span>
+          <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+             v-html="item.stem"></p>
           <el-form>
-            <el-form-item style="width:98%;margin-left:2%;">
+            <el-form-item style="width:97%;margin-left:2.5%;">
               <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                 {{index}}：{{val}}
               </el-col>
@@ -31,12 +30,14 @@
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===154 || item.category===155">
-          {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">
+          <span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
+          <span style="color:#6a8dfb;">
           <span v-if="item.category===154">多选题</span>
           <span v-if="item.category===155">不定向选择题</span></span>
-          <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor" v-html="item.stem"></p>
+          <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+             v-html="item.stem"></p>
           <el-form>
-            <el-form-item style="width:98%;margin-left:2%;">
+            <el-form-item style="width:97%;margin-left:2.5%;">
               <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                 {{index}}：{{val}}
               </el-col>
@@ -44,10 +45,12 @@
           </el-form>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===156">
-          {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;">判断题</span>
-          <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor" v-html="item.stem"></p>
+          <span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
+          <span style="color:#6a8dfb;">判断题</span>
+          <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+             v-html="item.stem"></p>
           <el-form>
-            <el-form-item style="width:98%;margin-left:2%;">
+            <el-form-item style="width:97%;margin-left:2.5%;">
               <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                 {{index}}：{{val}}
               </el-col>
@@ -55,25 +58,20 @@
           </el-form>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
-             v-if="item.category===157 || item.category===158">
-          {{key+1}}.<span style="color:#6a8dfb; margin-left:20px;"><span v-if="item.category===157">填空题</span><span
-          v-if="item.category===158">简答题</span></span>
-          <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor" v-html="item.stem"></p>
+             v-if="item.category===158">
+          <span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
+          <span style="color:#6a8dfb;"><span v-if="item.category===158">简答题</span></span>
+          <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+             v-html="item.stem"></p>
           <el-form>
-            <el-form-item style="width:98%;margin-left:2%;" v-if="item.category===157">
-              <el-col v-for="value in item.answer" :key="value" :span="12">
-                <el-input size="small" style="width:95.5%;margin-left:2%;" readOnly placeholder="请填写答案"></el-input>
-              </el-col>
-            </el-form-item>
-            <el-form-item  v-if="item.category===158">
-              <el-input style="width:95.5%;margin-left:2%;" readOnly type="textarea" placeholder="请填写答案"></el-input>
+            <el-form-item v-if="item.category===158">
+              <el-input style="width:97%;margin-left:2.5%;" readOnly type="textarea" placeholder="请填写答案"></el-input>
             </el-form-item>
           </el-form>
         </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -142,8 +140,8 @@
         border-radius: 5px;
         .qdiv {
           font-size: 14px;
-          height: 35px;
-          line-height: 35px;
+          height: 30px;
+          line-height: 30px;
           margin-left: 20px;
           overflow: hidden;
         }
@@ -164,7 +162,7 @@
       .questionDiv {
         width: 98%;
         margin-left: 2%;
-        min-height: 154px;
+        min-height: 100px;
         padding-top: 16px;
         border-top: 1px #eee solid;
       }

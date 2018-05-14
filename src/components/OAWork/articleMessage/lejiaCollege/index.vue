@@ -5,8 +5,8 @@
         <el-form :inline="true" size="mini">
           <el-form-item>
             <el-input placeholder="请输入标题" v-model="form.keywords" size="mini" clearable
-                      @keyup.enter.native="getLejiaTableData()">
-              <el-button slot="append" icon="el-icon-search" @click="getLejiaTableData()"></el-button>
+                      @keyup.enter.native="search">
+              <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
             </el-input>
           </el-form-item>
           <el-form-item>
@@ -57,7 +57,7 @@
             </el-col>
           </el-row>
           <div class="btnOperate">
-            <el-button size="mini" type="primary" @click="getLejiaTableData()">搜索</el-button>
+            <el-button size="mini" type="primary" @click="search">搜索</el-button>
             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
             <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
           </div>
@@ -187,7 +187,25 @@
     created() {
       this.form.pages = this.currentPage;
     },
+    watch: {
+      moduleId(val) {
+        if (!val) {
+          this.form.dict_id = 361;
+        } else {
+          this.form.dict_id = val;
+        }
+      },
+    },
+    computed: {
+      currentPage() {
+        return this.$store.state.article.lejia_page;
+      }
+    },
     methods: {
+      search(){
+        this.form.pages = 1;
+        this.getLejiaTableData();
+      },
       getDict() {
         this.$http.get(this.urls + 'setting/dictionary/361').then((res) => {
           this.dict.region = res.data.data;
@@ -224,11 +242,11 @@
       },
       // 重置
       resetting() {
-        this.isHigh = false;
-        this.form.dict_id = '';
+        this.moduleId = '';
+        this.form.dict_id = 361;
         this.form.status = '';
         this.form.keywords = '';
-        this.getLejiaTableData();
+        this.search();
       },
       // 文章发布
       publicArticle() {
@@ -441,20 +459,7 @@
         });
       },
     },
-    watch: {
-      moduleId(val) {
-        if (!val) {
-          this.form.dict_id = 361;
-        } else {
-          this.form.dict_id = val;
-        }
-      },
-    },
-    computed: {
-      currentPage() {
-        return this.$store.state.article.lejia_page;
-      }
-    },
+
 
   }
 </script>

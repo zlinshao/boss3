@@ -81,7 +81,7 @@
         personal: {},
         times: '',
         pitch: '',
-        info:'',
+        info: '',
         cover_pic: {},
         file: {},
         cover_id: [],
@@ -116,7 +116,7 @@
           this.form.region = '';
           this.form.htmlForEditor = '';
           this.cover_pic = '';
-          if(this.$route.query.moduleType){
+          if (this.$route.query.moduleType) {
             this.$store.dispatch('moduleType', this.$route.query.moduleType);
           }
           this.$router.push({
@@ -133,12 +133,12 @@
         this.getDict();
         this.pitch = '';
         if (query.ids !== undefined) {
-          if(this.moduleType !='newVersionUpdate'){
+          if (this.moduleType != 'newVersionUpdate') {
             this.publicDetail(query.ids);
             this.pitch = query.ids;
           }
-          else{
-            if(this.$store.state.article.new_version){
+          else {
+            if (this.$store.state.article.new_version) {
               this.info = this.$store.state.article.new_version;
             }
             this.newVersionDetail(query.ids);
@@ -173,14 +173,14 @@
           }
         })
       },
-      newVersionDetail(id){
-        if(id){
-            this.form.name = this.info.version
-            this.form.htmlForEditor = this.info.content;
+      newVersionDetail(id) {
+        if (id) {
+          this.form.name = this.info.version
+          this.form.htmlForEditor = this.info.content;
         }
-        else{
-            this.form.name = ""
-            this.form.htmlForEditor = ""
+        else {
+          this.form.name = ""
+          this.form.htmlForEditor = ""
         }
       },
       getDict() {
@@ -256,36 +256,36 @@
         });
       },
       //发布版本
-      onSubmitNew(){
+      onSubmitNew() {
         let type;
         //新增
         if (this.pitch !== '') {
           type = this.$http.put;
-          type(this.urls + 'setting/update/' + this.pitch , {
-          version: this.form.name,
-          content: this.form.htmlForEditor,
-        }).then((res) => {
-          if (res.data.code === '50050') {
-            this.goBack();
-            this.prompt(1, res.data.msg);
-          } else {
-            this.prompt(2, res.data.msg);
-          }
-        });
-        //修改
+          type(this.urls + 'setting/update/' + this.pitch, {
+            version: this.form.name,
+            content: this.form.htmlForEditor,
+          }).then((res) => {
+            if (res.data.code === '50050') {
+              this.goBack();
+              this.prompt(1, res.data.msg);
+            } else {
+              this.prompt(2, res.data.msg);
+            }
+          });
+          //修改
         } else {
           type = this.$http.post;
           type(this.urls + 'setting/update', {
-          version: this.form.name,
-          content: this.form.htmlForEditor,
-        }).then((res) => {
-          if (res.data.code === '50030') {
-            this.goBack();
-            this.prompt(1, res.data.msg);
-          } else {
-            this.prompt(2, res.data.msg);
-          }
-        });
+            version: this.form.name,
+            content: this.form.htmlForEditor,
+          }).then((res) => {
+            if (res.data.code === '50030') {
+              this.goBack();
+              this.prompt(1, res.data.msg);
+            } else {
+              this.prompt(2, res.data.msg);
+            }
+          });
         }
 
       },

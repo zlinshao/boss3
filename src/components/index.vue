@@ -47,13 +47,14 @@
               <i class="el-icons-fa-comment-o"></i>
               消 息
             </el-badge>
-            <el-badge v-else  class="item">
+            <el-badge v-else class="item">
               <i class="el-icons-fa-comment-o"></i>
               消 息
             </el-badge>
             <el-dropdown-menu slot="dropdown" class="menuLists">
               <!--消息图标-->
-              <el-dropdown-item v-for="(item,index) in unReadMessageData" v-if="index<2 && unReadMessageData.length>0" :key="index">
+              <el-dropdown-item v-for="(item,index) in unReadMessageData" v-if="index<2 && unReadMessageData.length>0"
+                                :key="index">
                 <div class="first">
                   <el-row @click.native="showMessageDetail(item)">
                     <el-col :span="4">
@@ -70,7 +71,7 @@
                   </el-row>
                 </div>
               </el-dropdown-item>
-              <el-dropdown-item >
+              <el-dropdown-item>
                 <el-row v-if="unReadMessageData.length >0" @click.native="showOtherDetail('unread')">
                   <el-col :span="24">
                     <div style="display:block; margin-top:10px; text-align:center; color:#409EFF">查看全部<span
@@ -80,10 +81,12 @@
                 </el-row>
               </el-dropdown-item>
               <el-dropdown-item class="not" v-if="unReadMessageData.length <=0">
-                <el-row  style="cursor:default; ">
+                <el-row style="cursor:default; ">
                   <el-col :span="24">
                     <i style="font-size:50px;color:#eee; display:block; text-align:center;" class="el-icon-warning"></i>
-                    <div style=" width:180px;color:#aaa; height:40px; display:block; line-height:40px; text-align:center">您当前还没有消息提醒
+                    <div
+                      style=" width:180px;color:#aaa; height:40px; display:block; line-height:40px; text-align:center">
+                      您当前还没有消息提醒
                     </div>
                   </el-col>
                 </el-row>
@@ -273,7 +276,8 @@
                 <span slot="title"> {{child.name}}</span>
               </el-menu-item>
 
-              <el-submenu :index="item.name+''" :disabled="chinese.indexOf(item.name)>-1" @click.native="openBadge(item.name)"
+              <el-submenu :index="item.name+''" :disabled="chinese.indexOf(item.name)>-1"
+                          @click.native="openBadge(item.name)"
                           v-if="!item.hidden && !item.abnormal">
                 <!--二级菜单标题-->
                 <template slot="title">
@@ -321,6 +325,51 @@
         </el-main>
       </el-container>
     </div>
+    <div id="quesNaireDialog">
+      <el-dialog :close-on-click-modal="false" :visible.sync="quesNaireDialog" title="调查问卷" width="45%">
+        <div style="margin-top: 20px;">
+          <el-table
+            :data="questionNaireData"
+            :empty-text='tableStatus'
+            v-loading="tableLoading"
+            element-loading-text="拼命加载中"
+            element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(255, 255, 255, 0)"
+            style="width: 100%">
+            <el-table-column
+              prop="name"
+              label="问卷名称">
+              <template slot-scope="scope">
+                <span v-if="scope.row.name">{{scope.row.name}}</span>
+                <span v-else>暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="start_time"
+              label="开始时间">
+              <template slot-scope="scope">
+                <span v-if="scope.row.start_time">{{scope.row.start_time}}</span>
+                <span v-else>暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="end_time"
+              label="结束时间">
+              <template slot-scope="scope">
+                <span v-if="scope.row.end_time">{{scope.row.end_time}}</span>
+                <span v-else>暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="操作">
+              <template slot-scope="scope">
+                <el-button type="primary" size="mini" @click="answerNaire(scope.row.id)">点击作答</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </el-dialog>
+    </div>
 
     <MessageDetail :messageDialog="messageDialog" :messageDetail="messageDetail" @close="closeModal"></MessageDetail>
     <SetLockPwd :setLockPwdDialog="setLockPwdDialog" @close="closeModal"></SetLockPwd>
@@ -328,7 +377,8 @@
                     @close="closeModalSecond"></UnlockSecondPW>
     <Instruction :instructionDialog="instructionDialog" @close="closeModal"></Instruction>
     <BadgeView :badgeDialog="badgeDialog" @close="closeModalSecond"></BadgeView>
-    <InstitutionView :institutionDialog="institutionDialog" :institutionMore="institutionMore" @close="closeinsModal"></InstitutionView>
+    <InstitutionView :institutionDialog="institutionDialog" :institutionMore="institutionMore"
+                     @close="closeinsModal"></InstitutionView>
     <NoticeTitleView :noticeTitleDialog="noticeTitleDialog" @close="closeModal"></NoticeTitleView>
     <YanFirstView :yanFirstDialog="yanFirstDialog" :yanFirstInfo="yanFirstInfo" @close="closeyanModal"></YanFirstView>
     <YanSecondView :yanSecondDialog="yanSecondDialog" @close="closeModal"></YanSecondView>
@@ -348,6 +398,7 @@
   import YanFirstView from "./common/yanFirst.vue";   // 研发弹窗
   import YanSecondView from "./common/yanSecond.vue";   // 研发2弹窗
   import cookie from 'js-cookie'
+
   export default {
     name: "Index",
     components: {
@@ -372,9 +423,9 @@
         screenStatus: false,
         defaultArray: [],
         messageDialog: false,
-        unLockName:"",
+        unLockName: "",
         unReadMessageData: [],
-        messageTotal:0,
+        messageTotal: 0,
         messageDetail: [],
         interval: null,
         messageInterval: null,
@@ -390,15 +441,19 @@
         sendId: "",
         badgeDialog: false, //徽章模态框
         unlockFlagpart: false,//二级密码标识
-        gladFlag:false, //喜报标识
-        institutionDialog:false,    //制度模态框
-        noticeTitleDialog:false,    //公告模态框
-        yanFirstDialog:false,       //研发1
-        yanSecondDialog:false,      //研发2
-        refresh:false,  //每天刷新一次
-        yanFirstInfo:{},
-        institutionMore:[],
+        gladFlag: false, //喜报标识
+        institutionDialog: false,    //制度模态框
+        noticeTitleDialog: false,    //公告模态框
+        yanFirstDialog: false,       //研发1
+        yanSecondDialog: false,      //研发2
+        refresh: false,  //每天刷新一次
+        yanFirstInfo: {},
+        institutionMore: [],
 
+        questionNaireData: [], //当前登陆人还有多少问卷未填写
+        tableStatus: ' ',
+        tableLoading: false,
+        quesNaireDialog: false,
       };
     },
     computed: {
@@ -414,10 +469,10 @@
         });
         return isShortcutPath;
       },
-      second_Flag(){
+      second_Flag() {
         return this.$store.state.secondPassword.second_Flag
       },
-      badge_Flag(){
+      badge_Flag() {
         return this.$store.state.badge.badge_Flag
       }
     },
@@ -430,42 +485,42 @@
           this.countTime();
         }
       },
-      second_Flag(val){
-      if(val){
-        this.$http.get(globalConfig.server + "setting/dictionary/220").then(res => {
-          if (res.data.code === "30010") {
-            this.dictionary2 = res.data.data;
-            for (let i = 0; i < res.data.data.length; i++) {
-              for (let key in JSON.parse(localStorage.personal).data.secondary_password) {
-                if (res.data.data[i].id == JSON.parse(localStorage.personal).data.secondary_password[key]
-                ) {
-                  this.chinese.push(res.data.data[i].dictionary_name);
+      second_Flag(val) {
+        if (val) {
+          this.$http.get(globalConfig.server + "setting/dictionary/220").then(res => {
+            if (res.data.code === "30010") {
+              this.dictionary2 = res.data.data;
+              for (let i = 0; i < res.data.data.length; i++) {
+                for (let key in JSON.parse(localStorage.personal).data.secondary_password) {
+                  if (res.data.data[i].id == JSON.parse(localStorage.personal).data.secondary_password[key]
+                  ) {
+                    this.chinese.push(res.data.data[i].dictionary_name);
+                  }
                 }
               }
             }
-          }
-        });
-      }
+          });
+        }
       },
-      badge_Flag(val){
+      badge_Flag(val) {
         console.log(val)
-         //个人连续登录时长勋章
-            let badge = false;
-            this.$store.dispatch('badgeFlag', badge);
-            if(val){
-              if (!JSON.parse(localStorage.personal).data.medal) {
-                this.badgeDialog = true;
+        //个人连续登录时长勋章
+        let badge = false;
+        this.$store.dispatch('badgeFlag', badge);
+        if (val) {
+          if (!JSON.parse(localStorage.personal).data.medal) {
+            this.badgeDialog = true;
+          }
+          this.$http
+            .get(globalConfig.server + "setting/update/read?a=1")
+            .then(res => {
+              if (res.data.code === "50040") {
+                this.yanFirstInfo = res.data.data;
+                this.yanFirstDialog = true;
               }
-            this.$http
-              .get(globalConfig.server + "setting/update/read?a=1")
-              .then(res => {
-                if (res.data.code === "50040") {
-                    this.yanFirstInfo = res.data.data;
-                    this.yanFirstDialog = true;
-                }
-              }); 
-            //制度弹窗
-            this.$http
+            });
+          //制度弹窗
+          this.$http
             .get(globalConfig.server + "oa/portal/last")
             .then(res => {
               if (res.data.code === "800110") {
@@ -473,11 +528,11 @@
                 this.institutionDialog = true;
 
               }
-            });              
+            });
         }
-      }
+      },
     },
-    created(){
+    created() {
       //缓存二级密码解锁状态
       this.unlockFlagpart = cookie.get("unlockFlagpart");
       if (!eval(this.unlockFlagpart)) {
@@ -486,29 +541,29 @@
       //刷新
       this.refresh = cookie.get("reFresh");
       console.log(cookie.get("reFresh"))
-      if(!eval(this.refresh)){
-          this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
-            localStorage.setItem('personal', JSON.stringify(res.data.data));
-            globalConfig.personal = res.data.data.data;
-            this.loginDay = JSON.parse(localStorage.personal).data.loginday;
-            //个人连续登录时长勋章
-            if (!JSON.parse(localStorage.personal).data.medal) {
-              this.badgeDialog = true;
-            }
-           
-          });
-      cookie.set("reFresh", true);
+      if (!eval(this.refresh)) {
+        this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
+          localStorage.setItem('personal', JSON.stringify(res.data.data));
+          globalConfig.personal = res.data.data.data;
+          this.loginDay = JSON.parse(localStorage.personal).data.loginday;
+          //个人连续登录时长勋章
+          if (!JSON.parse(localStorage.personal).data.medal) {
+            this.badgeDialog = true;
+          }
+
+        });
+        cookie.set("reFresh", true);
       }
       //版本更新
       this.$http
         .get(globalConfig.server + "setting/update/read?a=1")
         .then(res => {
-        if (res.data.code === "50040") {
-          this.yanFirstInfo = res.data.data;
-          this.yanFirstDialog = true;
-        }
-      });
-      
+          if (res.data.code === "50040") {
+            this.yanFirstInfo = res.data.data;
+            this.yanFirstDialog = true;
+          }
+        });
+
     },
     mounted() {
       //初始化个人信息
@@ -520,13 +575,13 @@
       });
 
       this.$http
-      .get(globalConfig.server + "oa/portal/last")
-      .then(res => {
-        if (res.data.code === "800110") {
-          this.institutionMore = res.data.data;
-          this.institutionDialog = true;
-        }
-      }); 
+        .get(globalConfig.server + "oa/portal/last")
+        .then(res => {
+          if (res.data.code === "800110") {
+            this.institutionMore = res.data.data;
+            this.institutionDialog = true;
+          }
+        });
       //根据个人信息进行操作事项
       this.initData();
       //多页面锁屏
@@ -538,8 +593,10 @@
       //定时器 轮巡获取最新消息
       this.getUnreadTermly();
       this.getUnReadMessage();
+      //调查问卷
+      this.getQuesNaireData();
     },
-    activated(){
+    activated() {
       //初始化个人信息
       this.personal = JSON.parse(localStorage.personal);
       //鼠标滑动监听
@@ -560,13 +617,27 @@
       this.getUnreadTermly();
     },
     methods: {
+      answerNaire(id) {
+        this.quesNaireDialog = false;
+        setTimeout(()=>{
+          this.$router.push({path: '/answerNaire', query: {id: id}});
+        }, 0);
+      },
+      getQuesNaireData() {
+        this.$http.get(globalConfig.server + 'questionnaire/daily_check').then((res) => {
+          if (res.data.code === '30000') {
+            this.questionNaireData = res.data.data;
+            this.quesNaireDialog = true;
+          } else {
+            this.questionNaireData = [];
+            this.quesNaireDialog = false;
+          }
+        });
+      },
       initData() {
-
         //this.noticeTitleDialog = true;
         //this.yanSecondDialog= true;
         //版本更新
-
-
         this.loginDay = this.personal.data.loginday;
         this.loginPercent = Number(this.loginDay / 180 * 100) + "%";
         $(".percent").css("width", this.loginPercent);
@@ -581,14 +652,14 @@
           if (this.personal.data.setting.length < 1 || !this.personal.detail.pwd_lock) {
             this.setLockPwdDialog = true;
           }
-        }else {
+        } else {
           this.setLockPwdDialog = true;
         }
 
       },
 
       //定时器 轮巡获取最新消息
-      getUnreadTermly(){
+      getUnreadTermly() {
         clearInterval(this.messageInterval);
         this.messageInterval = null;
         this.messageInterval = setInterval(() => {
@@ -599,10 +670,10 @@
       },
 
       //验证二级密码弹框
-      openBadge(key){
+      openBadge(key) {
         if (!eval(this.unlockFlagpart)) {
-          for(let chi in this.chinese){
-            if(this.chinese[chi] == key){
+          for (let chi in this.chinese) {
+            if (this.chinese[chi] == key) {
               this.unLockName = key;
               this.unlockSecondPWDialog = true;
             }
@@ -613,7 +684,7 @@
       multiPageLock() {
         this.$http.interceptors.response.use(response => {
             //配置请求回来的信息
-            if(this.$route.path !== '/lock'){
+            if (this.$route.path !== '/lock') {
               if (response.data.code == "7777") {
                 clearInterval(this.interval);
                 this.interval = null;
@@ -633,7 +704,7 @@
         );
       },
       //多页面同开状态下验证，统一倒计时时间
-      watchCount(){
+      watchCount() {
         let _this = this;
         setInterval(function () {
           if (localStorage.getItem("initCount") == 1) {
@@ -669,7 +740,7 @@
       },
 
       showOtherDetail(val) {
-        if(val == 'unread'){
+        if (val == 'unread') {
           this.$router.push({
             path: "/messageCenter",
             query: {
@@ -677,7 +748,7 @@
             }
           });
         }
-        else{
+        else {
           this.$router.push({
             path: "/messageCenter",
             query: {
@@ -695,13 +766,13 @@
         this.yanFirstDialog = false;
         this.yanSecondDialog = false;
       },
-      closeinsModal(){
+      closeinsModal() {
         this.institutionDialog = false;
       },
-      closeyanModal(){
+      closeyanModal() {
         this.yanFirstDialog = false;
       },
-      closeModalSecond(){
+      closeModalSecond() {
         this.unlockSecondPWDialog = false;
         this.badgeDialog = false;
       },
@@ -833,7 +904,7 @@
       },
 
       //获取积分总数
-      getCredit(){
+      getCredit() {
         this.$http.get(globalConfig.server + 'credit/manage/self').then((res) => {
           if (res.data.code === '30310') {
             this.creditTotal = res.data.data;
@@ -842,8 +913,8 @@
       },
 
       //喜报关闭
-      glad_close(){
-        this.gladFlag =false;
+      glad_close() {
+        this.gladFlag = false;
       }
     }
   }
@@ -1169,23 +1240,23 @@
                   flex-wrap: wrap;
                   align-items: flex-start;
                 }
-                .glad_card_right{
+                .glad_card_right {
                   position: absolute;
                   width: 77px;
                   height: 77px;
-                  top:40px;
-                  right:10px;
+                  top: 40px;
+                  right: 10px;
                   background: url("../assets/images/gladright.png") no-repeat;
-                  .gladsp1{
+                  .gladsp1 {
                     position: absolute;
-                    top:12px;
-                    left:22px;
-                    color:#fb4699;
+                    top: 12px;
+                    left: 22px;
+                    color: #fb4699;
                     height: 40px;
                     line-height: 40px;
                     font-size: 20px;
                     font-weight: bold;
-                    span{
+                    span {
                       font-size: 13px;
                       height: 20px;
                       line-height: 20px;
@@ -1194,10 +1265,10 @@
                       left: -14px;
                     }
                   }
-                  .gladsp2{
+                  .gladsp2 {
                     position: absolute;
-                    bottom:6px;
-                    left:22px;
+                    bottom: 6px;
+                    left: 22px;
                     color: #fff;
                     font-size: 12px;
                   }
@@ -1209,24 +1280,24 @@
               height: 83px;
               background: url("../assets/images/xibaobottom.png") no-repeat;
               background-size: 100%;
-              .glad_close{
+              .glad_close {
                 display: block;
                 height: 42px;
                 width: 100%;
                 line-height: 42px;
                 text-align: center;
                 z-index: 111;
-                margin-top:40px;
+                margin-top: 40px;
                 color: #fff;
                 cursor: pointer;
               }
-              .glad_close:hover{
+              .glad_close:hover {
                 font-size: 20px;
               }
             }
           }
           .gladBackground {
-            cursor:default;
+            cursor: default;
             position: absolute;
             width: 628px;
             height: 403px;
@@ -1413,6 +1484,12 @@
       }
     }
   }
-  .not:hover{background: none !important;}
-  .not{border:none !important;}
+
+  .not:hover {
+    background: none !important;
+  }
+
+  .not {
+    border: none !important;
+  }
 </style>
