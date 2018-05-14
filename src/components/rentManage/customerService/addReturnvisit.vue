@@ -502,7 +502,7 @@
         }
       },
       validate(){
-        if((this.form.contract_month =="" || this.form.contract_day =="") && this.validateFlag == true){
+        if((this.form.contract_month =="" && this.form.contract_day =="") && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
@@ -572,7 +572,7 @@
               message: "其他费用明细不能为空"
             });          
         }
-        if((this.form.guarantee_month =="" || this.form.guarantee_day =="") && this.validateFlag == true){
+        if((this.form.guarantee_month =="" && this.form.guarantee_day =="") && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
