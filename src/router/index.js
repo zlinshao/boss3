@@ -175,6 +175,8 @@ import PictureDetail from '../components/pictureManage/pictureDetail.vue';      
 import VisitRecord from '../components/rentManage/components/visitRecord.vue';               //回访记录
 import IncompleteRecord from '../components/rentManage/datumMessage/contractManage/incompleteRecord.vue'; //合同不齐记录
 
+import ReportManage from '../components/reportManage/index.vue'
+
 Vue.use(Router);
 
 export default new Router({
@@ -310,7 +312,7 @@ export default new Router({
         },
         {path: '/examineAndApprove', component: ExamineAndApprove, name: ' 报备管理 ', icon: "iconfont icon-daiban"},
         // {path: '/examineAndApprove', component: ExamineAndApprove, name:  ' 审批 ', icon:"el-icon-edit-outline"},
-        {path: '/sthToDoDetail_2', component: SthToDoDetail_2, name: ' 喜报 ', icon: "iconfont icon-xibaoguanli"},
+        {path: '/reportManage', component: ReportManage, name: ' 喜报 ', icon: "iconfont icon-xibaoguanli"},
         {path: '/integralManage', component: IntegralManage, name: ' 积分管理 ', icon: "iconfont icon-jifen"},
 
       ]
