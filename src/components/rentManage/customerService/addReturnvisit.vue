@@ -245,6 +245,37 @@
             </el-col>
           </el-row>
           <el-row>
+            <el-col :span="12">
+              <el-form-item label="中介费" >
+                <el-input v-model="agency_price_origin " readonly ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="现中介费" >
+                <el-input v-model="agency_price_now" readonly ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="中介名" >
+                <el-input v-model="agency_name" readonly ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="中介人" >
+                <el-input v-model="agency_user_name" readonly ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="中介人" >
+                <el-input v-model="agency_phone" readonly ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="24">
               <el-form-item label="合同照片" style="max-height:160px;" class="scroll_bar">
                 <img v-if="contractInfo.photo!=[]" style="width:120px; height:80px;border-radius:5px; margin: 0 8px;" data-magnify :key="val"
@@ -277,6 +308,11 @@
         organizeType: '',
         addReturnVisitInfo:[],
         validateFlag:true,
+        agency_price_origin:"",            //中介费
+        agency_price_now:"",               //现中介费
+        agency_name:"",                    //中介名
+        agency_user_name:"",               //中介人
+        agency_phone:"",                   //手机号
         form: {
           contract_create_time:"",  //创建时间 
           huifang:"",        //回访人
@@ -374,7 +410,7 @@
         if (!val) {
           this.$emit('close');
         } else {
-          
+          this.initial();
         }
       },
       ToActiveName(val) {
@@ -389,11 +425,18 @@
         this.form.address = val.address;
         this.form.contract_type = val.type;
         this.form.contract_id = val.contract_id;
-        this.initial();
+        
         if(this.activeName == 'first'){
         this.$http.get(globalConfig.server + 'lease/collect/' + val.contract_id).then((res) => {
           if (res.data.code === '61010') {
             this.contractInfo = res.data.data;
+            if(res.data.data.agency_info){
+              this.agency_price_origin = res.data.data.agency_info.agency_price_origin;
+              this.agency_price_now = res.data.data.agency_info.agency_price_now;
+              this.agency_name = res.data.data.agency_info.agency_name;
+              this.agency_user_name = res.data.data.agency_info.agency_user_name;
+              this.agency_phone = res.data.data.agency_info.agency_phone;
+            }
           }
         })
         }
@@ -401,6 +444,13 @@
         this.$http.get(globalConfig.server + 'lease/rent/' + val.contract_id).then((res) => {
           if (res.data.code === '61110') {
             this.contractInfo = res.data.data;
+            if(res.data.data.agency_info){
+              this.agency_price_origin = res.data.data.agency_info.agency_price_origin;
+              this.agency_price_now = res.data.data.agency_info.agency_price_now;
+              this.agency_name = res.data.data.agency_info.agency_name;
+              this.agency_user_name = res.data.data.agency_info.agency_user_name;
+              this.agency_phone = res.data.data.agency_info.agency_phone;
+            }
           }
         })          
       }
@@ -414,7 +464,7 @@
         this.dictionary(622).then((res) => {  //回访来源
           this.responsiblePersonCategory = res.data;
         });
-        this.dictionary(629).then((res) => {  //支付方式
+        this.dictionary(443).then((res) => {  //支付方式
           this.payTypeInfo = res.data;
         });
         this.dictionary(306, 1).then((res) => { //城市
@@ -452,7 +502,7 @@
         }
       },
       validate(){
-        if((this.form.contract_month =="" || this.form.contract_day =="") && this.validateFlag == true){
+        if((this.form.contract_month =="" && this.form.contract_day =="") && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
@@ -522,7 +572,7 @@
               message: "其他费用明细不能为空"
             });          
         }
-        if((this.form.guarantee_month =="" || this.form.guarantee_day =="") && this.validateFlag == true){
+        if((this.form.guarantee_month =="" && this.form.guarantee_day =="") && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
@@ -552,6 +602,11 @@
         }
       },
       initial() {
+          this.agency_price_origin = "",            //中介费
+          this.lagency_price_now = "",               //现中介费
+          this.agency_name = "",                    //中介名
+          this.agency_user_name = "",               //中介人
+          this.agency_phone = "",                   //手机号
           this.form.agency ="";        //中介名称
           this.form.agency_price ="";   //中介费用
           this.form.agency_person="";  //中介人

@@ -7,13 +7,9 @@ const quesNaire = {
     naire_myself_paper : {}, //自己录入
     edit_naire_paper_id: '', //编辑试卷id
     preview_naire_paper_id: '', //预览试卷id
-
-    answer_exam_id: '', //答题试卷id
-
-    examiner_read_id: '', //批阅试卷id
-    look_exam_id: '', //查看试卷id
-    examiner_each: {}, //批阅试卷result_id, exam_id
-    look_exam: {}, //考生查看试卷
+    naire_answer_exam_id: '', //答题试卷id
+    naire_stastic_id: '',   //调查统计id
+    naire_answer_all: {},
   },
   mutations: {
     NAIRE_PAPER:(state,view) => {
@@ -36,31 +32,19 @@ const quesNaire = {
         state.preview_naire_paper_id = view;
       }
     },
-
-    ANSWER_EXAM_ID:(state,view) => {
+    NAIRE_ANSWER_EXAM_ID:(state,view) => {
       if(view){
-        state.answer_exam_id = view;
+        state.naire_answer_exam_id = view;
       }
     },
-
-    EXAMINER_READ_ID:(state,view) => {
+    NAIRE_STASTIC_ID:(state,view) => {
       if(view){
-        state.examiner_read_id = view;
+        state.naire_stastic_id = view;
       }
     },
-    LOOK_EXAM_ID:(state,view) => {
+    NAIRE_ANSWER_ALL:(state,view) => {
       if(view){
-        state.look_exam_id = view;
-      }
-    },
-    EXAMINER_EACH:(state,view) => {
-      if(view){
-        state.examiner_each= view;
-      }
-    },
-    LOOK_EXAM:(state,view) => {
-      if(view){
-        state.look_exam= view;
+        state.naire_answer_all = view;
       }
     },
   },
@@ -77,21 +61,14 @@ const quesNaire = {
     previewNairePaperId({commit},view){
       commit('PREVIEW_NAIRE_PAPER_ID',view);
     },
-
-    answerExamId({commit},view){
-      commit('ANSWER_EXAM_ID',view);
+    naireAnswerExamId({commit},view){
+      commit('NAIRE_ANSWER_EXAM_ID',view);
     },
-    examinerReadId({commit},view){
-      commit('EXAMINER_READ_ID',view);
+    naireStasticId({commit},view){
+      commit('NAIRE_STASTIC_ID',view);
     },
-    lookExamId({commit},view){
-      commit('LOOK_EXAM_ID',view);
-    },
-    examinerEach({commit},view){
-      commit('EXAMINER_EACH',view);
-    },
-    lookExam({commit},view){
-      commit('LOOK_EXAM',view);
+    naireAnswerAll({commit},view){
+      commit('NAIRE_ANSWER_ALL',view);
     },
   }
 };

@@ -36,10 +36,12 @@
       <div class="main">
         <div v-for="(v, k) in questionData" v-if="k==153 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">单选题</span>
-            <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor" v-html="item.stem"></p>
+            <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
+            <span style="color:#6a8dfb;">单选题</span>
+            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+               v-html="item.stem"></p>
             <el-form>
-              <el-form-item style="width:98%;margin-left:2%;">
+              <el-form-item style="width:97%;margin-left:2.5%;">
                 <div
                   v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
                   <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
@@ -60,11 +62,15 @@
         </div>
         <div v-for="(v, k) in questionData" v-if="(k==154 || k==155) && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span v-if="k==154">{{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">多选题</span></span>
-            <span v-if="k==155">{{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">不定向选择题</span></span>
-            <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor" v-html="item.stem"></p>
+            <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
+            <span style="color:#6a8dfb;">
+              <span v-if="k==154">多选题</span>
+              <span v-if="k==155">不定向选择题</span>
+            </span>
+            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+               v-html="item.stem"></p>
             <el-form>
-              <el-form-item style="width:98%;margin-left:2%;">
+              <el-form-item style="width:97%;margin-left:2.5%;">
                 <div
                   v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
                   <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
@@ -85,10 +91,12 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==156 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">判断题</span>
-            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor" v-html="item.stem"></p>
+            <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
+            <span style="color:#6a8dfb;">判断题</span>
+            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+               v-html="item.stem"></p>
             <el-form>
-              <el-form-item style="width:98%;margin-left:2%;">
+              <el-form-item style="width:97%;margin-left:2.5%;">
                 <div
                   v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
                   <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
@@ -108,16 +116,18 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==157 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">填空题</span>
-            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor" v-html="item.stem"></p>
+            <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
+            <span style="color:#6a8dfb;">填空题</span>
+            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+               v-html="item.stem"></p>
             <el-form>
-              <el-form-item style="width:98%;margin-left:2%;">
+              <el-form-item style="width:97%;margin-left:2.5%;">
                 <div
-                     v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
+                  v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
                   <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
                   <el-row :gutter="20">
                     <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak" style="line-height: 24px;">
-                      <el-input readOnly style="width:95.5%;margin-left:2%;" size="small"
+                      <el-input readOnly style="width:95.5%;margin-left:2.5%;" size="small"
                                 v-model="resultData.answer[item.id][ak]" placeholder="请填写答案"></el-input>
                       <span style="color:rgb(88, 215, 136);margin-left:30px;"
                             v-for="(vv, kk) in resultData.answer[item.id]"
@@ -133,10 +143,12 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==158 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">简答题</span>
-            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor" v-html="item.stem"></p>
+            <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
+            <span style="color:#6a8dfb;">简答题</span>
+            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+               v-html="item.stem"></p>
             <div>
-              <el-input readonly style="width:95.5%;margin-left:2%;" size="small"
+              <el-input readonly style="width:97%;margin-left:2.5%;" size="small"
                         v-model="resultData && resultData.answer && resultData.answer[item.id]"
                         type="textarea" placeholder="请填写答案"></el-input>
             </div>
@@ -272,7 +284,7 @@
       .questionDiv {
         width: 98%;
         margin-left: 2%;
-        min-height: 154px;
+        min-height: 100px;
         padding-top: 16px;
         border-top: 1px #eee solid;
       }

@@ -4,8 +4,8 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入关键字" v-model="keyword" size="mini" clearable @keyup.enter.native="getLejiaTableData()">
-              <el-button slot="append" icon="el-icon-search" @click="getLejiaTableData()"></el-button>
+            <el-input placeholder="请输入关键字" v-model="keyword" size="mini" clearable @keyup.enter.native="search">
+              <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
             </el-input>
           </el-form-item>
 
@@ -107,8 +107,6 @@
         tableData: [],
         pitch: '',
         info:'',
-        if_shows: '',
-        moduleId: '',
         moduleType: 'newVersionUpdate',
         collectStatus: ' ',
         collectLoading: false,
@@ -127,6 +125,10 @@
       this.form.page = this.currentPage;
     },
     methods: {
+      search(){
+        this.form.page = 1;
+        this.getLejiaTableData();
+      },
       getLejiaTableData() {
         this.collectLoading = true;
         this.collectStatus = ' ';
@@ -154,10 +156,8 @@
       },
       // 重置
       resetting() {
-        this.isHigh = false;
-        this.form.dict_id = '';
         this.form.keywords = '';
-        this.getLejiaTableData();
+        this.search();
       },
       // 文章发布
       publicArticle() {
@@ -173,7 +173,6 @@
         this.form.page = val;
         this.$store.dispatch('lejiaPage', val);
         this.getLejiaTableData();
-
       },
 
       // 右键
@@ -260,19 +259,12 @@
 
     },
     watch: {
-      moduleId(val) {
-        if (!val) {
-          this.form.dict_id = 361;
-        } else {
-          this.form.dict_id = val;
-        }
-      },
       keyword(val){
         this.form.keywords = val;
         if( val == ""){
            this.getLejiaTableData();
         }
-       
+
       }
     },
     computed: {

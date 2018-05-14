@@ -15,7 +15,10 @@
             <div class="import_questions" style="border: 1px solid #58d788;box-shadow: 0 0 3px 1px #58d788;">
               <div class="import_left"><span style="float:left; font-size:14px;">总时长</span><i
                 style="float:right; color:#58d788;font-size:20px;" class="iconfont icon-shijian1"></i></div>
-              <div><span style="font-size:70px; color:#58d788">{{ paperData.duration }}</span>分钟</div>
+              <div><span style="font-size:70px; color:#58d788;margin-left: 30px;">{{ paperData.duration }}</span>分钟
+                <span style="float: right;margin-right: 30px;margin-top: 30px;">倒计时
+                  <br/><span style="color:#58d788;">{{timeString}}</span></span>
+              </div>
             </div>
           </el-col>
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
@@ -37,14 +40,17 @@
       <div class="main">
         <div v-for="(v, k) in questionData" v-if="k==153 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">单选题</span>
-            <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor" v-html="item.stem"></p>
+            <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
+            <span style="color:#6a8dfb;">单选题</span>
+            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+               v-html="item.stem"></p>
             <el-form>
-              <el-form-item >
-                <el-radio-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;">
+              <el-form-item>
+                <el-radio-group v-model="answerData[item.id]" style="width:97%;margin-left:2.5%;">
                   <el-row :gutter="20">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
-                      <el-radio :label="index" style="white-space: initial;line-height:24px;">{{index}}：{{val}}</el-radio>
+                      <el-radio :label="index" style="white-space: initial;line-height:24px;">{{index}}：{{val}}
+                      </el-radio>
                     </el-col>
                   </el-row>
                 </el-radio-group>
@@ -54,20 +60,26 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="(k==154 || k==155) && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span v-if="k==154">{{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">多选题</span></span>
-            <span v-if="k==155">{{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">不定向选择题</span></span>
-            <p style="margin-left:30px;line-height:30px;width:96%" class="ql-editor" v-html="item.stem"></p>
+            <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
+            <span style="color:#6a8dfb;">
+              <span v-if="k==154">多选题</span>
+              <span v-if="k==155">不定向选择题</span>
+            </span>
+            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+               v-html="item.stem"></p>
             <el-form>
               <el-form-item>
-                <el-checkbox-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;" v-if="k==154">
+                <el-checkbox-group v-model="answerData[item.id]" style="width:97%;margin-left:2.5%;" v-if="k==154">
                   <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
-                    <el-checkbox :label="index" style="white-space: initial;line-height:24px;">{{index}}:{{item.choice[index]}}
+                    <el-checkbox :label="index" style="white-space: initial;line-height:24px;">
+                      {{index}}:{{item.choice[index]}}
                     </el-checkbox>
                   </el-col>
                 </el-checkbox-group>
-                <el-checkbox-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;" v-if="k==155">
+                <el-checkbox-group v-model="answerData[item.id]" style="width:97%;margin-left:2.5%;" v-if="k==155">
                   <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
-                    <el-checkbox :label="index" style="white-space: initial;line-height:24px;">{{index}}:{{item.choice[index]}}
+                    <el-checkbox :label="index" style="white-space: initial;line-height:24px;">
+                      {{index}}:{{item.choice[index]}}
                     </el-checkbox>
                   </el-col>
                 </el-checkbox-group>
@@ -76,12 +88,14 @@
           </div>
         </div>
         <div v-for="(v,k) in questionData" v-if="k==156 && questionData[k].length>0">
-          <div class="questionDiv"  v-for="(item, key) in questionData[k]">
-            {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">判断题</span>
-            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor" v-html="item.stem"></p>
+          <div class="questionDiv" v-for="(item, key) in questionData[k]">
+            <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
+            <span style="color:#6a8dfb;">判断题</span>
+            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+               v-html="item.stem"></p>
             <el-form>
               <el-form-item>
-                <el-radio-group v-model="answerData[item.id]" style="width:98%;margin-left:2%;">
+                <el-radio-group v-model="answerData[item.id]" style="width:97%;margin-left:2.5%;">
                   <el-col :span="12" :key="index" v-for="(val,index) in item.choice">
                     <el-radio :label="index" style="line-height:24px;">{{index}}:{{val}}</el-radio>
                   </el-col>
@@ -92,12 +106,14 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==157 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">填空题</span>
-            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor" v-html="item.stem"></p>
+            <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
+            <span style="color:#6a8dfb;">填空题</span>
+            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+               v-html="item.stem"></p>
             <el-form>
-              <el-form-item>
+              <el-form-item style="width:97%;margin-left:2.5%;">
                 <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak">
-                  <el-input style="width:95.5%;margin-left:2%;" size="small" v-model="answerData[item.id][ak]"
+                  <el-input style="width:97%;" size="small" v-model="answerData[item.id][ak]"
                             placeholder="请填写答案"></el-input>
                 </el-col>
               </el-form-item>
@@ -106,11 +122,13 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==158 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">简单题</span>
-            <p style="margin-left:30px;line-height:20px;width:96%" class="ql-editor" v-html="item.stem"></p>
+            <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
+            <span style="color:#6a8dfb;">简答题</span>
+            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+               v-html="item.stem"></p>
             <el-form>
               <el-form-item>
-                <el-input style="width:95.5%;margin-left:2%;" v-model="answerData[item.id]"
+                <el-input style="width:97%;margin-left:2.5%;" v-model="answerData[item.id]"
                           type="textarea" placeholder="请填写答案"></el-input>
               </el-form-item>
             </el-form>
@@ -192,14 +210,20 @@
         submitDisabled: false,
         confirmArrival: [],
         answers: {},
+        countDown: '',
+        timeString: '',
+        timeClear: '',
+        timeOut: '',
       };
     },
     activated() {
+      this.timeClear = '';
+      this.timeOut = '';
       this.getQueryData();
       this.getPaperData();
       this.confirmArrival = localStorage.getItem('confirmArrival');  //check_in签到状态考试id数组
       this.clockSubmit();
-      setTimeout(() => {
+      this.timeOut = setTimeout(() => {
         this.clockSubmit();
       }, 1000 * 60);
     },
@@ -209,9 +233,41 @@
         handler(val, oldVal) {
           localStorage.setItem('answers_' + this.examId, JSON.stringify(val));
         }
+      },
+      countDown(num) {
+        if (num >= 0) {
+          this.clock(num);
+        } else {
+          this.timeClear = '';
+        }
       }
     },
     methods: {
+      clock(n) {
+        let val = Number(n);
+        let h = Number(Math.floor(val / 3600));
+        let m = 0, s = 0;
+        if ((val - h * 3600) >= 0) {
+          m = Number(Math.floor((val - h * 3600) / 60));
+          if ((val - h * 3600 - m * 60) >= 0) {
+            s = Number(Math.floor(val - h * 3600 - m * 60));
+          }
+        }
+        if (h < 10) {
+          h = '0' + h;
+        }
+        if (m < 10) {
+          m = '0' + m;
+        }
+        if (s < 10) {
+          s = '0' + s;
+        }
+        this.timeString = h + ':' + m + ':' + s;
+        val--;
+        this.timeClear = setTimeout(() => {
+          this.clock(val);
+        }, 1000);
+      },
       combinaData() {
         if (localStorage.getItem('answers_' + this.examId) && localStorage.getItem('answers_' + this.examId) != 'null') {
           this.answerData = JSON.parse(localStorage.getItem('answers_' + this.examId));
@@ -329,6 +385,10 @@
             if (res.data.code === '30000') {
               this.onSubmit();
               // alert('强制提交。。。')
+            } else {
+              let time = res.data.msg.split(',');
+              this.countDown = time[1] - time[0];
+
             }
           });
         }
@@ -393,7 +453,7 @@
       .questionDiv {
         width: 98%;
         margin-left: 2%;
-        min-height: 154px;
+        min-height: 100px;
         padding-top: 16px;
         border-top: 1px #eee solid;
       }

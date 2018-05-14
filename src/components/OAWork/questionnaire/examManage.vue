@@ -30,22 +30,6 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">试卷类型</div>
-                </el-col>
-                <el-col :span="16" class="el_col_option">
-                  <el-form-item>
-                    <el-select v-model="params.category" clearable placeholder="请选择">
-                      <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
-                        {{item.dictionary_name}}
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-col>
-            <el-col :span="12">
-              <el-row>
-                <el-col :span="8">
                   <div class="el_col_label">考试状态</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
@@ -93,15 +77,6 @@
               <template slot-scope="scope">
                 <span v-if="scope.row.paper && scope.row.paper.name">{{scope.row.paper && scope.row.paper.name}}</span>
                 <span v-if="!(scope.row.paper && scope.row.paper.name)">暂无</span>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="paper.category"
-              label="试卷类型">
-              <template slot-scope="scope">
-                <span
-                  v-if="scope.row.paper && scope.row.paper.category">{{scope.row.paper && scope.row.paper.category}}</span>
-                <span v-if="!(scope.row.paper && scope.row.paper.category)">暂无</span>
               </template>
             </el-table-column>
             <el-table-column
@@ -160,6 +135,12 @@
                 <span v-if="!scope.row.status">暂无</span>
               </template>
             </el-table-column>
+            <el-table-column
+              label="操作">
+              <template slot-scope="scope">
+                <span @click="seeNaireResult(scope.row.id)" style="cursor: pointer;color: #6a8dfb;">查看统计结果</span>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
         <div class="block pages" style="float: right;">
@@ -196,7 +177,7 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="22">
-                  <el-form-item label="开考时间" required>
+                  <el-form-item label="开始时间" required>
                     <el-date-picker v-model="formExam.start_time" type="datetime" placeholder="请选择"
                                     value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
                   </el-form-item>
@@ -316,7 +297,6 @@
           page: 1,
           limit: 12,
           search: '',
-          category: '',  //试卷类型
           status: '',   //考试状态
         },
         //考试状态
@@ -325,7 +305,6 @@
           {id: 2, name: '已开始'},
           {id: 3, name: '已结束'},
         ],
-        examType: [],
         examDialog: false,  //新建考试模态框
         //新增问卷调查
         formExam: {
@@ -379,7 +358,6 @@
     },
     mounted() {
       this.getExamData();
-      this.getDictionary();
       this.getPaperData();
     },
     watch: {
@@ -392,7 +370,6 @@
           } else {
             this.examTitle = '新建调查';
           }
-
         }
       },
       examineeDialog(val){
@@ -400,9 +377,11 @@
           this.examineesData = [];
         }
       }
-
     },
     methods: {
+      seeNaireResult(id){
+        this.$router.push({path: '/lookNaire', query:{id: id}});
+      },
       getPaperData(){
         this.$http.get(globalConfig.server + 'exam/paper?qtn=1', {params: this.params}).then((res) => {
           this.tableLoading = false;
@@ -551,12 +530,6 @@
           }
         });
       },
-      getDictionary() {
-        //试卷类型
-        this.dictionary(613).then((res) => {
-          this.examType = res.data;
-        });
-      },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
@@ -583,11 +556,11 @@
             headIcon: "el-icon-view",
             label: "查看/添加调查对象"
           },
-          {
-            clickIndex: "answer",
-            headIcon: "el-icon-view",
-            label: "问卷作答"
-          }
+          // {
+          //   clickIndex: "answer",
+          //   headIcon: "el-icon-view",
+          //   label: "问卷作答"
+          // }
         ];
         let e = event || window.event; //support firefox contextmenu
         this.show = false;
@@ -617,7 +590,7 @@
               cancelButtonText: "取消",
               type: "warning"
             }).then(() => {
-              this.$http.post(globalConfig.server + 'exam/delete/' + this.examId).then((res) => {
+              this.$http.post(globalConfig.server + 'questionnaire/delete/' + this.examId).then((res) => {
                 if (res.data.code === "30010") {
                   this.$notify.success({
                     title: '成功',

@@ -1091,7 +1091,6 @@
       },
       closeAddressDialog(val) {
         this.addressDialog = false;
-        console.log(val);
         if (val) {
           this.params.search = val.address;
         }

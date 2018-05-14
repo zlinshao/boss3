@@ -5,8 +5,8 @@
         <el-form :inline="true" size="mini">
           <el-form-item>
             <el-input placeholder="考试场次" v-model="params.search" size="mini" clearable
-                      @keyup.enter.native="getExamData()">
-              <el-button slot="append" icon="el-icon-search" size="mini" @click="getExamData()"></el-button>
+                      @keyup.enter.native="search">
+              <el-button slot="append" icon="el-icon-search" size="mini" @click="search"></el-button>
             </el-input>
           </el-form-item>
           <el-form-item>
@@ -60,7 +60,7 @@
             </el-col>
           </el-row>
           <div class="btnOperate">
-            <el-button size="mini" type="primary" @click="getExamData">搜索</el-button>
+            <el-button size="mini" type="primary" @click="search">搜索</el-button>
             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
             <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
           </div>
@@ -391,6 +391,10 @@
       },
     },
     methods: {
+      search(){
+        this.params.page = 1;
+        this.getExamData();
+      },
       // 高级
       highGrade() {
         this.isHigh = !this.isHigh;
