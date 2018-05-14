@@ -185,7 +185,7 @@
                     </el-row>
                     <el-row>
                       <el-col :span="8">
-                        <el-form-item label="证件类型" required="">
+                        <el-form-item label="证件类型">
                           <el-select :clearable="!isDoc || isAll" :disabled="isDoc && !isAll" v-model="id_typeArray[item-1]" placeholder="请选择装修类型" value="">
                             <el-option v-for="item in id_type_dic" :label="item.dictionary_name" :value="item.id"
                                        :key="item.id"></el-option>
@@ -193,7 +193,7 @@
                         </el-form-item>
                       </el-col>
                       <el-col :span="8">
-                        <el-form-item label="证件号码" required>
+                        <el-form-item label="证件号码">
                           <el-input :disabled="isDoc && !isAll" placeholder="请输入内容" v-model="id_numberArray[item-1]"></el-input>
                         </el-form-item>
                       </el-col>
@@ -502,7 +502,7 @@
 
                   <el-row>
                     <el-col :span="6">
-                      <el-form-item label="资料补齐时间" required="">
+                      <el-form-item label="资料补齐时间">
                         <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期" v-model="params.data_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
@@ -554,11 +554,11 @@
           <el-tab-pane label="合同照片" name="fourth">
             <div class="scroll_bar">
               <el-form label-width="100px">
-                <el-form-item label="证件照片" required="">
+                <el-form-item label="证件照片">
                   <UpLoad :ID="'editHouse_id_card'" :isClear="isClear" :onlyShow="isDoc && !isAll"
                           :editImage="identity_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
-                <el-form-item label="银行卡照片" required="">
+                <el-form-item label="银行卡照片">
                   <UpLoad :ID="'editHouse_bank_card'" :isClear="isClear" :onlyShow="isDoc && !isAll"
                           :editImage="bank_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>

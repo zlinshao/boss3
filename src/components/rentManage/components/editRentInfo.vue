@@ -95,7 +95,7 @@
                   <el-form size="mini" :model="params" label-width="100px">
                     <el-row>
                       <el-col :span="8">
-                        <el-form-item label="姓名" required>
+                        <el-form-item label="姓名">
                           <el-input disabled="" placeholder="请输入内容" v-model="nameArray[item-1]"
                                     :disabled="(!isPc&&item == 1 || isDoc)&& !isAll"></el-input>
                         </el-form-item>
@@ -109,7 +109,7 @@
                         </el-form-item>
                       </el-col>
                       <el-col :span="8">
-                        <el-form-item label="联系电话" required>
+                        <el-form-item label="联系电话">
                           <el-input disabled placeholder="请输入内容" v-model="phoneArray[item-1]"
                                     :disabled="(!isPc&&item == 1 || isDoc) && !isAll"></el-input>
                         </el-form-item>
@@ -117,7 +117,7 @@
                     </el-row>
                     <el-row>
                       <el-col :span="8">
-                        <el-form-item label="证件类型" required="">
+                        <el-form-item label="证件类型">
                           <el-select :clearable="!isDoc || isAll" :disabled="isDoc && !isAll" v-model="id_typeArray[item-1]"
                                      placeholder="请选择装修类型" value="">
                             <el-option v-for="item in id_type_dic" :label="item.dictionary_name" :value="item.id"
@@ -126,7 +126,7 @@
                         </el-form-item>
                       </el-col>
                       <el-col :span="8">
-                        <el-form-item label="证件号码" required>
+                        <el-form-item label="证件号码">
                           <el-input :disabled="isDoc && !isAll" placeholder="请输入内容" v-model="id_numberArray[item-1]"></el-input>
                         </el-form-item>
                       </el-col>
@@ -378,7 +378,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="收据编号" required>
+                      <el-form-item label="收据编号">
                         <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" v-model="params.receipt"></el-input>
                       </el-form-item>
                     </el-col>
@@ -435,11 +435,11 @@
           <el-tab-pane label="合同照片" name="fourth">
             <div class="scroll_bar">
               <el-form label-width="100px">
-                <el-form-item label="证件照片" required="">
+                <el-form-item label="证件照片">
                   <UpLoad :ID="'editRent_id_card'" :isClear="isClear" :onlyShow="isDoc && !isAll"
                           :editImage="identity_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
-                <el-form-item label="合同照片" required="">
+                <el-form-item label="合同照片">
                   <UpLoad :ID="'editRent_contract_card'" :isClear="isClear" :onlyShow="isDoc && !isAll"
                           :editImage="photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
@@ -458,7 +458,7 @@
                   <UpLoad :ID="'editRent_hand_over_card'" :isClear="isClear" :editImage="checkin_photo"
                           @getImg="getImg"></UpLoad>
                 </el-form-item>
-                <el-form-item label="截图凭证" required="">
+                <el-form-item label="截图凭证">
                   <UpLoad :ID="'editRent_certificate_photo'" :onlyShow="(!isPc || isDoc) && !isAll"
                           :isClear="isClear" :editImage="certificate_photo" @getImg="getImg"></UpLoad>
                 </el-form-item>
