@@ -409,7 +409,7 @@
       editQues(val) {
         this.$router.push({
           path: '/myselfNaire',
-          query: {paper_id: this.testPaperId, quesId: val.id, type: 'edit'}
+          query: {paper_id: this.testPaperId,category:val.category, quesId: val.id, type: 'edit'}
         });
       },
       batchDelete() {
