@@ -190,7 +190,7 @@
       .questionDiv {
         width: 98%;
         margin-left: 2%;
-        min-height: 154px;
+        min-height: 100px;
         padding-top: 16px;
         border-top: 1px #eee solid;
       }
