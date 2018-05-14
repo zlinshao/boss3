@@ -94,7 +94,7 @@
               </el-col>
             </el-row>
             <div class="btnOperate">
-              <el-button size="mini" type="primary" @click="getIncompleteRecordData()">搜索</el-button>
+              <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
               <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
             </div>
@@ -279,7 +279,7 @@
     },
     mounted() {
       this.getDefaultData();
-      this.getIncompleteRecordData();
+      this.search();
     },
     activated() {
       this.getDefaultData();
@@ -291,11 +291,12 @@
           if (!val) {
             this.params.contract_id = '';
           }
-          this.getIncompleteRecordData();
+          this.search();
         }
       },
     },
     methods: {
+
       emptySearch() {
         this.params.contract_id = '';
         this.params.q = '';
@@ -334,7 +335,6 @@
           if (!res.data) {
             return;
           }
-          console.log(res);
           let url = window.URL.createObjectURL(new Blob([res.data]));
           let link = document.createElement('a');
           link.style.display = 'a';
@@ -374,6 +374,10 @@
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
         this.params.page = val;
+        this.getIncompleteRecordData();
+      },
+      search() {
+        this.params.page = 1;
         this.getIncompleteRecordData();
       },
       highGrade() {
