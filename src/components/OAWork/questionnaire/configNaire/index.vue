@@ -37,7 +37,7 @@
                   </el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="6 " style="margin-top:20px;float:right;">
+              <el-col :span="4" style="margin-top:20px;float:right;min-width: 300px;">
                 <el-form-item label="题目类型">
                   <el-select size="small" v-model="params.category" clearable>
                     <el-option v-for="item in questionTypeCategory" :key="item.id" :label="item.dictionary_name"
@@ -409,7 +409,7 @@
       editQues(val) {
         this.$router.push({
           path: '/myselfNaire',
-          query: {paper_id: this.testPaperId, quesId: val.id, type: 'edit'}
+          query: {paper_id: this.testPaperId,category:val.category, quesId: val.id, type: 'edit'}
         });
       },
       batchDelete() {
