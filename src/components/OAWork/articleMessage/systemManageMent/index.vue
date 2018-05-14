@@ -243,8 +243,8 @@
       },
       // 重置
       resetting() {
-        this.form.dict_id = '';
         this.moduleId = '';
+        this.form.dict_id = 380;
         this.form.status = '';
         this.form.keywords = '';
         this.search();

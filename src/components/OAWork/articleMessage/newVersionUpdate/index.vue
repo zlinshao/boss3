@@ -107,8 +107,6 @@
         tableData: [],
         pitch: '',
         info:'',
-        if_shows: '',
-        moduleId: '',
         moduleType: 'newVersionUpdate',
         collectStatus: ' ',
         collectLoading: false,
@@ -158,7 +156,6 @@
       },
       // 重置
       resetting() {
-        this.form.dict_id = '';
         this.form.keywords = '';
         this.search();
       },
@@ -262,13 +259,6 @@
 
     },
     watch: {
-      moduleId(val) {
-        if (!val) {
-          this.form.dict_id = 361;
-        } else {
-          this.form.dict_id = val;
-        }
-      },
       keyword(val){
         this.form.keywords = val;
         if( val == ""){

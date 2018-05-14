@@ -187,6 +187,20 @@
     created() {
       this.form.pages = this.currentPage;
     },
+    watch: {
+      moduleId(val) {
+        if (!val) {
+          this.form.dict_id = 361;
+        } else {
+          this.form.dict_id = val;
+        }
+      },
+    },
+    computed: {
+      currentPage() {
+        return this.$store.state.article.lejia_page;
+      }
+    },
     methods: {
       search(){
         this.form.pages = 1;
@@ -228,8 +242,8 @@
       },
       // 重置
       resetting() {
-        this.form.dict_id = '';
         this.moduleId = '';
+        this.form.dict_id = 361;
         this.form.status = '';
         this.form.keywords = '';
         this.search();
@@ -445,20 +459,7 @@
         });
       },
     },
-    watch: {
-      moduleId(val) {
-        if (!val) {
-          this.form.dict_id = 361;
-        } else {
-          this.form.dict_id = val;
-        }
-      },
-    },
-    computed: {
-      currentPage() {
-        return this.$store.state.article.lejia_page;
-      }
-    },
+
 
   }
 </script>
