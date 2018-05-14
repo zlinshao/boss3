@@ -431,7 +431,7 @@
   .el-input-group__append {
     padding: 0 1px !important;
   }
-  .el-input__inner{
+  .el-input__inner {
     padding: 0 2px;
   }
 }
@@ -504,35 +504,39 @@
   }
 }
 
-
-.el-submenu.is-disabled .el-menu-item, .el-submenu.is-disabled .el-submenu__title{
+.el-submenu.is-disabled .el-menu-item, .el-submenu.is-disabled .el-submenu__title {
   cursor: pointer !important;
 }
 
 .el-notification {
   z-index: 999999 !important;
 }
-.el-tabs{
+
+.el-tabs {
   width: 100% !important;
-  .el-tabs__content{
+  .el-tabs__content {
     //width: 100% !important;
   }
 }
 
 //el-menu style
-ul.el-menu.el-menu--inline{
-  background-color:#405597 !important;
+ul.el-menu.el-menu--inline {
+  background-color: #405597 !important;
 }
-.el-submenu li.el-menu-item{
-  background-color:#405597 !important;
+
+.el-submenu li.el-menu-item {
+  background-color: #405597 !important;
 }
-.is-opened{
-  background-color:#405597 !important;
+
+.is-opened {
+  background-color: #405597 !important;
 }
-.is-opened .el-submenu__title{
-  background-color:#405597 !important;
-  border-bottom:0.5px #2e3e6e solid !important;
+
+.is-opened .el-submenu__title {
+  background-color: #405597 !important;
+  border-bottom: 0.5px #2e3e6e solid !important;
 }
+
 //.is-opened .iconfont{
 //  color:rgb(255, 208, 75) !important;
 //}
@@ -541,41 +545,47 @@ ul.el-menu.el-menu--inline{
 //}
 
 .el-submenu__icon-arrow {
-  color:#a6b5ec !important
+  color: #a6b5ec !important
 }
-.is-opened .el-menu--inline .is-active span{
+
+.is-opened .el-menu--inline .is-active span {
   color: rgb(255, 208, 75) !important;
 }
-.el-menu--inline span{
-  color:#aec1fc
+
+.el-menu--inline span {
+  color: #aec1fc
 }
-.el-menu--collapse .iconfont:hover,.el-menu--collapse .el-icons-fa-money:hover{
+
+.el-menu--collapse .iconfont:hover, .el-menu--collapse .el-icons-fa-money:hover {
   color: rgb(255, 208, 75) !important;
 }
-.el-menu--popup{
-  padding:0 !important;
+
+.el-menu--popup {
+  padding: 0 !important;
 }
+
 #rentingDetail {
-  .el-badge__content.is-fixed{
+  .el-badge__content.is-fixed {
     top: 5px !important;
   }
 }
-#rentVacation{
+
+#rentVacation {
   .el-input.is-disabled .el-input__inner {
     color: #666 !important;
     cursor: default !important;
   }
-  .el-textarea.is-disabled .el-textarea__inner{
+  .el-textarea.is-disabled .el-textarea__inner {
     color: #666 !important;
     cursor: default !important;
   }
 }
 
-.el-table__expanded-cell{
+.el-table__expanded-cell {
   padding: 5px 20px !important;
 }
 
-.info_label{
+.info_label {
   display: inline-block;
   background: #aaa;
   border-radius: 4px;
@@ -585,7 +595,8 @@ ul.el-menu.el-menu--inline{
   text-align: center;
   color: #FFFFFF;
 }
-.yellow_label{
+
+.yellow_label {
   display: inline-block;
   background: #FFCC00;
   border-radius: 4px;
@@ -595,7 +606,8 @@ ul.el-menu.el-menu--inline{
   text-align: center;
   color: #FFFFFF;
 }
-.orange_label{
+
+.orange_label {
   display: inline-block;
   background: #FF9900;
   border-radius: 4px;
@@ -605,7 +617,8 @@ ul.el-menu.el-menu--inline{
   text-align: center;
   color: #FFFFFF;
 }
-.red_label{
+
+.red_label {
   display: inline-block;
   background: #FF3900;
   border-radius: 4px;
@@ -615,7 +628,8 @@ ul.el-menu.el-menu--inline{
   text-align: center;
   color: #FFFFFF;
 }
-.success_label{
+
+.success_label {
   display: inline-block;
   background: #67c23a;
   border-radius: 4px;
@@ -625,9 +639,17 @@ ul.el-menu.el-menu--inline{
   text-align: center;
   color: #FFFFFF;
 }
+
 #configExam .questionDiv .el-checkbox span.el-checkbox__label {
   display: none;
 }
-#lookNaire .questionDiv .el-progress--text-inside .el-progress-bar{
+
+.blueColor {
+  .el-form-item__label, div {
+    color: #409EFF !important;
+  }
+}
+
+#lookNaire .questionDiv .el-progress--text-inside .el-progress-bar {
   padding: 8px 0;
 }
