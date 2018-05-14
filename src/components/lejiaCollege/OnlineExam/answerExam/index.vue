@@ -224,6 +224,7 @@
       this.confirmArrival = localStorage.getItem('confirmArrival');  //check_in签到状态考试id数组
       this.clockSubmit();
       this.timeOut = setTimeout(() => {
+        this.timeClear = '';
         this.clockSubmit();
       }, 1000 * 60);
     },
@@ -235,10 +236,9 @@
         }
       },
       countDown(num) {
+        this.timeClear = '';
         if (num >= 0) {
           this.clock(num);
-        } else {
-          this.timeClear = '';
         }
       }
     },
@@ -384,11 +384,9 @@
           this.$http.get(globalConfig.server + 'exam/poll/' + this.examId).then((res) => {
             if (res.data.code === '30000') {
               this.onSubmit();
-              // alert('强制提交。。。')
             } else {
               let time = res.data.msg.split(',');
               this.countDown = time[1] - time[0];
-
             }
           });
         }
@@ -401,7 +399,9 @@
   .ql-editor {
     min-height: initial !important;
   }
-
+  .el-form-item {
+    margin-bottom: 10px !important;
+  }
   .confirm_btn {
     width: 100px;
     height: 35px;
