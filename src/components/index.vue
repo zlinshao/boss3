@@ -453,7 +453,7 @@
         questionNaireData: [], //当前登陆人还有多少问卷未填写
         tableStatus: ' ',
         tableLoading: false,
-        quesNaireDialog: true,
+        quesNaireDialog: false,
       };
     },
     computed: {
