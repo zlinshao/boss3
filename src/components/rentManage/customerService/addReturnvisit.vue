@@ -410,7 +410,7 @@
         if (!val) {
           this.$emit('close');
         } else {
-          
+          this.initial();
         }
       },
       ToActiveName(val) {
@@ -425,7 +425,7 @@
         this.form.address = val.address;
         this.form.contract_type = val.type;
         this.form.contract_id = val.contract_id;
-        this.initial();
+        
         if(this.activeName == 'first'){
         this.$http.get(globalConfig.server + 'lease/collect/' + val.contract_id).then((res) => {
           if (res.data.code === '61010') {
@@ -602,6 +602,11 @@
         }
       },
       initial() {
+          this.agency_price_origin = "",            //中介费
+          this.lagency_price_now = "",               //现中介费
+          this.agency_name = "",                    //中介名
+          this.agency_user_name = "",               //中介人
+          this.agency_phone = "",                   //手机号
           this.form.agency ="";        //中介名称
           this.form.agency_price ="";   //中介费用
           this.form.agency_person="";  //中介人
