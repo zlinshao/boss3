@@ -108,9 +108,10 @@
       getToken() {
         this.$http.get(globalConfig.server_user + 'files').then((res) => {
           this.token = res.data.data;
-          this.$set(this.uploader.settings,'uptoken',this.token)
+          this.$set(this.uploader.settings,'uptoken',this.token);
         })
       },
+
       getTokenMessage() {
         this.$http.get(globalConfig.server_user + 'files').then((res) => {
           this.token = res.data.data;
@@ -123,8 +124,7 @@
           runtimes: 'html5,flash,html4',      // 上传模式，依次退化
           browse_button: _this.ID,       //上传按钮的ID
           uptoken: _this.token,                   // uptoken是上传凭证，由其他程序生成
-
-          get_new_uptoken: true,             // 设置上传文件的时候是否每次都重新获取新的uptoken
+          get_new_uptoken: false,             // 设置上传文件的时候是否每次都重新获取新的uptoken
           unique_names: true,                 // 默认false，key为文件
           domain: globalConfig.domain,  // bucket域名，下载资源时用到，必需
 
