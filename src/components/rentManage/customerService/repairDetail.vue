@@ -231,6 +231,45 @@
             </el-col>
           </el-row>
           <el-row>
+            <el-col :span="10">
+              <el-form-item label="中介费">
+                <div class="content">{{agency_price_origin}}</div>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="10">
+              <el-form-item label="现中介费">
+                <div class="content">{{agency_price_now}}</div>
+              </el-form-item>
+            </el-col>
+            <el-col :span="2">
+            </el-col>  
+            <el-col :span="10" style="margin-left:8.33333%">
+              <el-form-item label="中介名">
+                <div class="content">{{agency_name}}</div>
+              </el-form-item>
+            </el-col>
+            <el-col :span="2">
+            </el-col>  
+          </el-row>
+          <el-row>
+            <el-col :span="10">
+              <el-form-item label="中介人">
+                <div class="content">{{agency_user_name}}</div>
+              </el-form-item>
+            </el-col>
+            <el-col :span="2">
+            </el-col>  
+            <el-col :span="10" style="margin-left:8.33333%">
+              <el-form-item label="手机号">
+                <div class="content">{{agency_phone}}</div>
+              </el-form-item>
+            </el-col>
+            <el-col :span="2">
+            </el-col>  
+          </el-row>
+          <el-row>
             <el-col :span="22">
               <el-form-item label="合同照片" style="max-height:160px;" class="scroll_bar">
                 <img v-if="album!=[]" style="width:120px; height:80px;border-radius:5px; margin: 0 8px;" data-magnify :key="val"
@@ -271,6 +310,11 @@ export default {
       feedBackInfo: [],
       audited_fields: [],
       album: [],
+      agency_price_origin:"",            //中介费
+      agency_price_now:"",               //现中介费
+      agency_name:"",                    //中介名
+      agency_user_name:"",               //中介人
+      agency_phone:"",                   //手机号
       audited_fields: {
         address: "",
         contract_month: "",
@@ -383,6 +427,11 @@ export default {
         })
         .then(res => {
           if (res.data.code === "1212200") {
+            this.agency_price_origin = res.data.data.agency_price_origin;
+            this.agency_price_now = res.data.data.agency_price_now;
+            this.agency_name = res.data.data.agency_name;
+            this.agency_user_name = res.data.data.agency_user_name;
+            this.agency_phone = res.data.data.agency_phone;
             this.repairDetail = res.data.data;
             this.audited_fields.address = res.data.data.audited_fields.address == "1" ? true : false;
             this.audited_fields.contract_month = res.data.data.audited_fields.contract_month == "1" ? true : false;
