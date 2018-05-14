@@ -250,7 +250,7 @@ export default new Router({
         {path: '/individual', component: Individual, name: '个人门户'},
         {path: '/infodetails', component: Infodetails, name: '详情', selfLoading: true},
         {path: '/dailyRecord', component: DailyRecord, name: '日志管理'},
-        {path: '/sthToDo', component: SthToDo, name: '待办事项'},
+        {path: '/sthToDo', component: SthToDo, name: '报备管理'},
         {path: '/integraldetail', component: Integraldetail, name: '积分明细'},
         {path: '/pictureManage', component: PictureManage, name: '相册管理'},
         {path: '/createAlbum', component: CreateAlbum, name: "创建相册",},
@@ -308,7 +308,7 @@ export default new Router({
           name: ' 合同管理 ',
           icon: "iconfont icon-hetong1"
         },
-        {path: '/examineAndApprove', component: ExamineAndApprove, name: ' 待办事项 ', icon: "iconfont icon-daiban"},
+        {path: '/examineAndApprove', component: ExamineAndApprove, name: ' 报备管理 ', icon: "iconfont icon-daiban"},
         // {path: '/examineAndApprove', component: ExamineAndApprove, name:  ' 审批 ', icon:"el-icon-edit-outline"},
         {path: '/sthToDoDetail_2', component: SthToDoDetail_2, name: ' 喜报 ', icon: "iconfont icon-xibaoguanli"},
         {path: '/integralManage', component: IntegralManage, name: ' 积分管理 ', icon: "iconfont icon-jifen"},
