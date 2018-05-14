@@ -254,54 +254,47 @@
                   <div class="content">{{contractInfo.contract_number}}</div>
                 </el-form-item>
               </el-col>
+
+            </el-row>
+            <el-row>
               <el-col :span="8">
                 <el-form-item label="签约时长(月)">
                   <div class="content">{{contractInfo.month}}</div>
                 </el-form-item>
               </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="合同签约时间">
-                  <div class="content">{{contractInfo.sign_date}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
+
+              <el-col :span="8" class="blueColor">
                 <el-form-item label="合同开始时间">
                   <div class="content">{{contractInfo.begin_date}}</div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="8" class="blueColor">
                 <el-form-item label="合同结束时间">
                   <div class="content">{{contractInfo.end_date}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
+
             <el-row>
-              <el-col :span="8">
-                <el-form-item label="合同上传时间">
-                  <div class="content">{{contractInfo.contract_create_time}}</div>
-                </el-form-item>
-              </el-col>
               <el-col :span="8">
                 <el-form-item label="空置时长(天)">
                   <div class="content">{{contractInfo.vacancy}}</div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="8" class="blueColor">
                 <el-form-item label="空置开始时间">
                   <div class="content">{{contractInfo.begin_date}}</div>
                 </el-form-item>
               </el-col>
-
-            </el-row>
-
-            <el-row>
-               <el-col :span="8">
+              <el-col :span="8" class="blueColor">
                 <el-form-item label="空置结束时间">
                   <div class="content">{{contractInfo.vacancy_end_date}}</div>
                 </el-form-item>
               </el-col>
+            </el-row>
+
+            <el-row>
+
               <el-col :span="8">
                 <el-form-item label="空置期安置方式">
                   <div class="content">{{matchDictionary(contractInfo.vacancy_way)}}</div>
@@ -315,21 +308,16 @@
                   </div>
                 </el-form-item>
               </el-col>
-
-            </el-row>
-
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="是否中介">
-                  <div class="content" v-if="contractInfo.is_agency">中介</div>
-                  <div class="content" v-else="">个人</div>
-                </el-form-item>
-              </el-col>
               <el-col :span="8">
                 <el-form-item label="押金(元)">
                   <div class="content">{{contractInfo.deposit}}</div>
                 </el-form-item>
               </el-col>
+            </el-row>
+
+            <el-row>
+
+
               <el-col :span="8">
                 <el-form-item label="月单价(元)">
                   <div class="content">
@@ -339,9 +327,6 @@
                   </div>
                 </el-form-item>
               </el-col>
-
-            </el-row>
-            <el-row>
               <el-col :span="8">
                 <el-form-item label="付款方式">
                   <div class="content">
@@ -351,8 +336,15 @@
                   </div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="8" class="blueColor">
+                <el-form-item label="合同上传时间">
+                  <div class="content">{{contractInfo.contract_create_time}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
 
+              <el-col :span="8" class="blueColor">
                 <el-form-item label="第一次打房租时间">
                   <div class="content">{{contractInfo.pay_first_date}}</div>
                 </el-form-item>
@@ -362,7 +354,11 @@
                   <div class="content">{{contractInfo.pay_second_date}}</div>
                 </el-form-item>
               </el-col>
-
+              <el-col :span="8" class="blueColor">
+                <el-form-item label="合同签约时间">
+                  <div class="content">{{contractInfo.sign_date}}</div>
+                </el-form-item>
+              </el-col>
             </el-row>
 
             <el-row>
@@ -403,14 +399,10 @@
             </el-row>
 
             <el-row>
-              <!--<el-col :span="8">-->
-              <!--<el-form-item label="个人/中介">-->
-              <!--<div class="content">{{contractInfo.from}}</div>-->
-              <!--</el-form-item>-->
-              <!--</el-col>-->
-              <el-col :span="8">
-                <el-form-item label="资料补齐时间">
-                  <div class="content">{{contractInfo.data_date}}</div>
+              <el-col :span="8" class="blueColor">
+                <el-form-item label="是否中介">
+                  <div class="content" v-if="contractInfo.is_agency">中介</div>
+                  <div class="content" v-else="">个人</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -432,12 +424,22 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="水表底数(度)">
-                  <div class="content">{{contractInfo.water}}</div>
+                <el-form-item label="物业及公摊费用(元)">
+                  <div class="content">{{contractInfo.public_fee}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8" class="blueColor">
+                <el-form-item label="资料补齐时间">
+                  <div class="content">{{contractInfo.data_date}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
+              <el-col :span="8">
+                <el-form-item label="水表底数(度)">
+                  <div class="content">{{contractInfo.water}}</div>
+                </el-form-item>
+              </el-col>
               <el-col :span="8">
                 <el-form-item label="电表底数(度)">
                   <div class="content">
@@ -451,11 +453,7 @@
                   <div class="content">{{contractInfo.gas}}</div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="物业及公摊费用(元)">
-                  <div class="content">{{contractInfo.public_fee}}</div>
-                </el-form-item>
-              </el-col>
+
             </el-row>
 
             <el-row>
@@ -1505,26 +1503,7 @@
     .el-button--mini {
       min-width: 80px;
     }
-    /*.el-button--primary {*/
-    /*background-color: #6a8dfb;*/
-    /*border-color: #6a8dfb;*/
-    /*photo-shadow: 0 2px 8px 0 #6a8dfb;*/
-    /*}*/
-    /*.el-button--danger {*/
-    /*background-color: #fb4694;*/
-    /*border-color: #fb4694;*/
-    /*photo-shadow: 0 2px 8px 0 #fb4694;*/
-    /*}*/
-    /*.el-button--warning {*/
-    /*background-color: #fdca41;*/
-    /*border-color: #fdca41;*/
-    /*photo-shadow: 0 2px 8px 0 #fdca41;*/
-    /*}*/
-    /*.el-button--success {*/
-    /*background-color: #58d788;*/
-    /*border-color: #58d788;*/
-    /*photo-shadow: 0 2px 8px 0 #58d788;*/
-    /*}*/
+
     @media screen and (min-width: 1280px) {
       .top {
         padding: 0 200px;
@@ -1576,6 +1555,7 @@
           font-size: 12px;
           color: #727479;
         }
+
         .image {
           min-height: 90px;
           img {

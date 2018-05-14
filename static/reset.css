@@ -413,4 +413,7 @@ ul.el-menu.el-menu--inline {
 #configExam .questionDiv .el-checkbox span.el-checkbox__label {
   display: none; }
 
+.blueColor .el-form-item__label, .blueColor div {
+  color: #409EFF !important; }
+
 /*# sourceMappingURL=reset.css.map */
