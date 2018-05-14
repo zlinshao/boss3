@@ -64,16 +64,17 @@
           </span>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===153">
-          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>&nbsp;&nbsp;&nbsp;{{key+1}}.<span
-          style="color:#6a8dfb; margin-left:15px;">单选题</span>
+          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
+          <span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
+          <span style="color:#6a8dfb;">单选题</span>
           <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width:97%;margin-left:3%;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
+          <p style="width:96%;margin-left:3.5%;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
           <el-form>
-            <el-form-item style="width:97%;margin-left:3%;">
+            <el-form-item style="width:96%;margin-left:3.5%;">
               <el-row :gutter="20" >
                 <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                   <span v-if="item.answer == index"><el-radio
@@ -87,18 +88,20 @@
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===154 || item.category===155">
-          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>&nbsp;&nbsp;&nbsp;{{key+1}}.<span
-          style="color:#6a8dfb; margin-left:15px;"><span v-if="item.category===154">多选题</span><span
-          v-if="item.category===155">不定向选择题</span></span>
+          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
+          <span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
+          <span style="color:#6a8dfb;">
+            <span v-if="item.category===154">多选题</span>
+            <span v-if="item.category===155">不定向选择题</span>
+          </span>
           <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width:97%;margin-left:3%;line-height:30px;padding-left:0;" class="ql-editor"
-             v-html="item.stem"></p>
+          <p style="width:96%;margin-left:3.5%;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
           <el-form>
-            <el-form-item style="width:97%;margin-left:3%;">
+            <el-form-item style="width:96%;margin-left:3.5%;">
               <el-row :gutter="20">
                 <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                   <span v-if=" item.answer.indexOf(index)>-1 "><el-radio
@@ -111,17 +114,17 @@
           </el-form>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===156">
-          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>&nbsp;&nbsp;&nbsp;
-          {{key+1}}.<span
-          style="color:#6a8dfb; margin-left:15px;">判断题</span>
+          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
+          <span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
+          <span style="color:#6a8dfb;">判断题</span>
           <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width:97%;margin-left:3%;line-height:20px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
+          <p style="width:96%;margin-left:3.5%;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
           <el-form>
-            <el-form-item style="width:97%;margin-left:3%;">
+            <el-form-item style="width:96%;margin-left:3.5%;">
               <el-row :gutter="20">
                 <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height: 24px;">
                   <span v-if="item.answer == index"><el-radio style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
@@ -134,18 +137,20 @@
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===157 || item.category===158">
-          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>&nbsp;&nbsp;&nbsp;
-          {{key+1}}.<span
-          style="color:#6a8dfb; margin-left:15px;"><span v-if="item.category===157">填空题</span><span
-          v-if="item.category===158">简答题</span></span>
+          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
+          <span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
+          <span style="color:#6a8dfb;">
+            <span v-if="item.category===157">填空题</span>
+            <span v-if="item.category===158">简答题</span>
+          </span>
           <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width:97%;margin-left:3%;line-height:20px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
+          <p style="width:96%;margin-left:3.5%;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
           <el-form>
-            <el-form-item style="width:97%;margin-left:3%;">
+            <el-form-item style="width:96%;margin-left:3.5%;">
               <el-row :gutter="20">
                 <el-col :span="6" :key="index" v-for="(val,index) in item.answer" v-if="item.answer.length>0"
                         style="line-height: 24px;">

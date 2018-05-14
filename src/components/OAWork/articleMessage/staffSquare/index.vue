@@ -5,8 +5,8 @@
         <el-form :inline="true" size="mini">
           <el-form-item>
             <el-input placeholder="请输入标题" v-model="form.keywords" size="mini" clearable
-                      @keyup.enter.native="getStaffTableData()">
-              <el-button slot="append" icon="el-icon-search" @click="getStaffTableData()"></el-button>
+                      @keyup.enter.native="search">
+              <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
             </el-input>
           </el-form-item>
           <el-form-item>
@@ -57,7 +57,7 @@
             </el-col>
           </el-row>
           <div class="btnOperate">
-            <el-button size="mini" type="primary" @click="getStaffTableData()">搜索</el-button>
+            <el-button size="mini" type="primary" @click="search">搜索</el-button>
             <el-button size="mini" type="primary" @click="resetting">重置</el-button>
             <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
           </div>
@@ -157,7 +157,7 @@
           status: [],
         },
         form: {
-          list: 12,
+          list: 6,
           dict_id: 137,
           status: '',
           keywords: '',
@@ -202,6 +202,10 @@
       }
     },
     methods: {
+      search(){
+        this.form.pages = 1;
+        this.getStaffTableData();
+      },
       getDict() {
         this.$http.get(this.urls + 'setting/dictionary/137').then((res) => {
           this.dict.region = res.data.data;
@@ -238,11 +242,11 @@
       },
       // 重置
       resetting() {
-        this.isHigh = false;
         this.form.dict_id = '';
+        this.moduleId = '';
         this.form.status = '';
         this.form.keywords = '';
-        this.getStaffTableData();
+        this.search();
       },
       // 文章发布
       publicArticle() {
