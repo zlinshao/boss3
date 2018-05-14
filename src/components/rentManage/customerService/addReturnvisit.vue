@@ -95,10 +95,10 @@
             </el-col>
             <el-col :span="2" style="float: right;" v-if="index == 1">
               <i @click="addPriceLen" class="el-icon-circle-plus-outline addicon"></i>
-            </el-col>
+            </el-col>  
             <el-col :span="2" style="float: right;" v-if="index != 1">
               <i @click="romovePriceLen(index-1)" class="el-icon-remove-outline addicon"></i>
-            </el-col>
+            </el-col>               
             <el-col :span="6" style="float: right;">
                 <el-input size="mini" v-model="form.unit_price[1][index-1]" placeholder="请输入价格" ></el-input>
             </el-col>
@@ -122,10 +122,10 @@
             </el-col>
             <el-col :span="2" style="float: right;" v-if="index == 1">
               <i @click="addPayLen" class="el-icon-circle-plus-outline addicon"></i>
-            </el-col>
+            </el-col>  
             <el-col :span="2" style="float: right;" v-if="index != 1">
               <i @click="romovePayLen(index-1)" class="el-icon-remove-outline addicon"></i>
-            </el-col>
+            </el-col>               
             <el-col :span="6" style="float: right;" v-if=" activeName =='first'">
                 <el-select size="mini" v-model="form.pay_type[1][index-1]" placeholder="收房付款方式" clearable>
                   <el-option v-for="item in payTypeInfo" :label="item.dictionary_name" :key="item.id"
@@ -163,10 +163,10 @@
             </el-col>
             <el-col :span="2" style="float: right;" v-if="index == 1">
               <i @click="addPayTypeLen" class="el-icon-circle-plus-outline addicon"></i>
-            </el-col>
+            </el-col>  
             <el-col :span="2" style="float: right;" v-if="index != 1">
               <i @click="romovePayTypeLen(index-1)" class="el-icon-remove-outline addicon"></i>
-            </el-col>
+            </el-col>               
             <el-col :span="10" style="float: right;">
               <el-form-item label="金额">
                 <el-input size="mini" v-model="form.pay_method[1][index-1]" placeholder="请输入价格" ></el-input>
@@ -211,10 +211,10 @@
             </el-col>
             <el-col :span="2" style="float: right;" v-if="index == 1">
               <i @click="addPayUseLen" class="el-icon-circle-plus-outline addicon"></i>
-            </el-col>
+            </el-col>  
             <el-col :span="2" style="float: right;" v-if="index != 1">
               <i @click="romovePayUseLen(index-1)" class="el-icon-remove-outline addicon"></i>
-            </el-col>
+            </el-col>   
           </el-row>
           <el-row>
             <el-col :span="24">
@@ -241,6 +241,37 @@
             <el-col :span="24">
               <el-form-item label="备注">
                 <el-input v-model="form.remark"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="中介费" >
+                <el-input v-model="agency_price_origin " readonly ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="现中介费" >
+                <el-input v-model="agency_price_now" readonly ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="中介名" >
+                <el-input v-model="agency_name" readonly ></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="中介人" >
+                <el-input v-model="agency_user_name" readonly ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="中介人" >
+                <el-input v-model="agency_phone" readonly ></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -277,8 +308,13 @@
         organizeType: '',
         addReturnVisitInfo:[],
         validateFlag:true,
+        agency_price_origin:"",            //中介费
+        agency_price_now:"",               //现中介费
+        agency_name:"",                    //中介名
+        agency_user_name:"",               //中介人
+        agency_phone:"",                   //手机号
         form: {
-          contract_create_time:"",  //创建时间
+          contract_create_time:"",  //创建时间 
           huifang:"",        //回访人
           address:"",        //房屋地址
           contract_type:"",  //合同类型
@@ -317,7 +353,7 @@
           ],      //支付方式
           star:null,           //星级
           remark_clause:"",  //备注条款
-
+          
         },
         contractInfo:[],
         pickerOptions2: {
@@ -374,7 +410,7 @@
         if (!val) {
           this.$emit('close');
         } else {
-
+          this.initial();
         }
       },
       ToActiveName(val) {
@@ -389,11 +425,18 @@
         this.form.address = val.address;
         this.form.contract_type = val.type;
         this.form.contract_id = val.contract_id;
-        this.initial();
+        
         if(this.activeName == 'first'){
         this.$http.get(globalConfig.server + 'lease/collect/' + val.contract_id).then((res) => {
           if (res.data.code === '61010') {
             this.contractInfo = res.data.data;
+            if(res.data.data.agency_info){
+              this.agency_price_origin = res.data.data.agency_info.agency_price_origin;
+              this.agency_price_now = res.data.data.agency_info.agency_price_now;
+              this.agency_name = res.data.data.agency_info.agency_name;
+              this.agency_user_name = res.data.data.agency_info.agency_user_name;
+              this.agency_phone = res.data.data.agency_info.agency_phone;
+            }
           }
         })
         }
@@ -401,8 +444,15 @@
         this.$http.get(globalConfig.server + 'lease/rent/' + val.contract_id).then((res) => {
           if (res.data.code === '61110') {
             this.contractInfo = res.data.data;
+            if(res.data.data.agency_info){
+              this.agency_price_origin = res.data.data.agency_info.agency_price_origin;
+              this.agency_price_now = res.data.data.agency_info.agency_price_now;
+              this.agency_name = res.data.data.agency_info.agency_name;
+              this.agency_user_name = res.data.data.agency_info.agency_user_name;
+              this.agency_phone = res.data.data.agency_info.agency_phone;
+            }
           }
-        })
+        })          
       }
       }
     },
@@ -432,7 +482,7 @@
           this.form.module = 2;
         }
         this.validate();
-        if(this.validateFlag == true){
+        if(this.validateFlag == true){        
         this.$http.post(globalConfig.server + 'contract/feedback', this.form).then((res) => {
           if (res.data.code === '1212200') {
             this.$notify.success({
@@ -452,106 +502,111 @@
         }
       },
       validate(){
-        if((this.form.contract_month =="" || this.form.contract_day =="") && this.validateFlag == true){
+        if((this.form.contract_month =="" && this.form.contract_day =="") && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "合同周期不能为空"
-            });
+            });          
         }
         if((this.form.originate =="" ) && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "来源不能为空"
-            });
+            });          
         }
         if(this.form.agency =="" && this.form.originate === 623  && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "中介名称不能为空"
-            });
+            });          
         }
         if(this.form.agency_price =="" && this.form.originate === 623  && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "中介费用不能为空"
-            });
+            });          
         }
         if(this.form.agency_person =="" && this.form.originate === 623  && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "中介人不能为空"
-            });
+            });          
         }
         if(this.form.agency_tel  =="" && this.form.originate === 623  && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "中介电话不能为空"
-            });
+            });          
         }
         if((this.form.unit_price[0].length== 0 || this.form.unit_price[1].length ==0) && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "月单价不能为空"
-            });
+            });          
         }
         if((this.form.pay_type[0].length == 0 || this.form.pay_type[1].length == 0 || this.form.pay_type[2].length == 0 && this.form.module =='2') && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "付款方式不能为空"
-            });
+            });          
         }
         if( this.form.has_extra ==""  && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "其他费用不能为空"
-            });
+            });          
         }
         if( (this.form.pay_use[0].length ==0 || this.form.pay_use[1].length== 0) && this.form.has_extra =="1"  && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "其他费用明细不能为空"
-            });
+            });          
         }
-        if((this.form.guarantee_month =="" || this.form.guarantee_day =="") && this.validateFlag == true){
+        if((this.form.guarantee_month =="" && this.form.guarantee_day =="") && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "保修期不能为空"
-            });
+            });          
         }
         if( !this.form.star  && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "业务员态度不能为空"
-            });
+            });          
         }
         if( this.form.has_pay == "" && this.form.module =='2'  && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "已付金额不能为空"
-            });
+            });          
         }
         if((this.form.pay_method[0].length == 0 || this.form.pay_method[1].length == 0) && this.form.module =='2' && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "支付方式不能为空"
-            });
+            });          
         }
       },
       initial() {
+          this.agency_price_origin = "",            //中介费
+          this.lagency_price_now = "",               //现中介费
+          this.agency_name = "",                    //中介名
+          this.agency_user_name = "",               //中介人
+          this.agency_phone = "",                   //手机号
           this.form.agency ="";        //中介名称
           this.form.agency_price ="";   //中介费用
           this.form.agency_person="";  //中介人
@@ -627,8 +682,8 @@
         }
         else{
         this.form.pay_type[0].splice(index, 1);
-        this.form.pay_type[1].splice(index, 1);
-        this.form.pay_type[2].splice(index, 1);
+        this.form.pay_type[1].splice(index, 1);          
+        this.form.pay_type[2].splice(index, 1);          
 
         }
 
@@ -684,7 +739,7 @@
         @include flex;
         align-items: center;
         justify-content: flex-end;
-      }
+      }     
     }
   .input{
     input{
