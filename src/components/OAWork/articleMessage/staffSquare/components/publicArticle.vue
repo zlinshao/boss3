@@ -14,14 +14,19 @@
                      :key="index"></el-option>
         </el-select>
       </el-form-item>
-
+      <el-form-item label="版本类型" required="" v-else>
+        <el-select v-model="form.type" clearable placeholder="请选择类别">
+          <el-option v-for="(key,index) in versionType" :label="key.value" :value="key.id"
+                     :key="index"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="内容" required="">
         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
                     v-model="form && form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
 
       </el-form-item>
 
-      <el-form-item label="封面图片" v-if="moduleType !='newVersionUpdate'">
+      <el-form-item label="封面图片" >
         <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
 
@@ -89,10 +94,21 @@
           region: [],
           status: [],
         },
+        versionType:[
+          {
+            id:1,
+            value:"大版本"
+          },
+          {
+            id:2,
+            value:"小版本"
+          },
+        ],
         form: {
           name: '',
           region: '',
           htmlForEditor: '',
+          type:'',
         },
         previewShow: true,
         tabIndex: '',
@@ -175,12 +191,25 @@
       },
       newVersionDetail(id) {
         if (id) {
+          let pic = this.info.album;
+          let arr = {};
+          this.cover_id = [];
+          for (let key in pic) {
+            this.cover_id.push(key);
+            for (let i = 0; i < pic[key].length; i++) {
+              arr[key] = pic[key][i].uri;
+            }
+          }
+          this.cover_pic = arr;
+          console.log(this.cover_pic)
           this.form.name = this.info.version
           this.form.htmlForEditor = this.info.content;
+          this.form.type = this.info.type
         }
         else {
           this.form.name = ""
           this.form.htmlForEditor = ""
+          this.form.type= 2
         }
       },
       getDict() {
@@ -264,6 +293,8 @@
           type(this.urls + 'setting/update/' + this.pitch, {
             version: this.form.name,
             content: this.form.htmlForEditor,
+            image_pic: this.cover_id,
+            type: this.form.type
           }).then((res) => {
             if (res.data.code === '50050') {
               this.goBack();
@@ -278,6 +309,8 @@
           type(this.urls + 'setting/update', {
             version: this.form.name,
             content: this.form.htmlForEditor,
+            image_pic: this.cover_id,
+            type: this.form.type
           }).then((res) => {
             if (res.data.code === '50030') {
               this.goBack();
