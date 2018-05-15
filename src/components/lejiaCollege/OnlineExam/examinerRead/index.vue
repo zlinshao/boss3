@@ -283,10 +283,10 @@
             this.rentStatus = "暂无数据";
             this.tableNumber = 0;
             this.tableData = [];
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            });
+            // this.$notify.warning({
+            //   title: '警告',
+            //   message: res.data.msg
+            // });
           }
         });
       },

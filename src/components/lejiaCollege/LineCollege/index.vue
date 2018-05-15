@@ -251,7 +251,10 @@
       this.department = departNameArray.join(',');
     },
     activated() {
+      this.myData();
       this.confirmArrival = localStorage.getItem('confirmArrival');
+
+      // localStorage.removeItem("answers_" + this.examId);
     },
     watch: {
       "form.category": {

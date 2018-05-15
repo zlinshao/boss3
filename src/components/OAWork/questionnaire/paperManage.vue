@@ -142,6 +142,9 @@
     mounted() {
       this.getTestPaperData();
     },
+    activated(){
+      this.getTestPaperData();
+    },
     watch: {
       paperDialog(val) {
         if (val) {

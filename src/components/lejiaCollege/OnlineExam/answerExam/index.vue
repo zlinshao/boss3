@@ -16,7 +16,7 @@
               <div class="import_left"><span style="float:left; font-size:14px;">总时长</span><i
                 style="float:right; color:#58d788;font-size:20px;" class="iconfont icon-shijian1"></i></div>
               <div><span style="font-size:70px; color:#58d788;" :class="{'timeStringClass':timeString !=''}">{{ paperData.duration }}</span>分钟
-                <span style="float: right;margin-right: 30px;margin-top: 30px;" v-if="timeString !='' ">倒计时
+                <span style="float: right;margin-right: 30px;margin-top: 33px;" v-if="timeString !='' ">倒计时
                   <br/><span style="color:#58d788;">{{timeString}}</span></span>
               </div>
             </div>
@@ -42,11 +42,11 @@
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
             <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
             <span style="color:#6a8dfb;">单选题</span>
-            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+            <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
                v-html="item.stem"></p>
             <el-form>
               <el-form-item>
-                <el-radio-group v-model="answerData[item.id]" style="width:97%;margin-left:2.5%;">
+                <el-radio-group v-model="answerData[item.id]" style="width:96%;margin-left:44px;">
                   <el-row :gutter="20">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
                       <el-radio :label="index" style="white-space: initial;line-height:24px;">{{index}}：{{val}}
@@ -65,18 +65,18 @@
               <span v-if="k==154">多选题</span>
               <span v-if="k==155">不定向选择题</span>
             </span>
-            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+            <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
                v-html="item.stem"></p>
             <el-form>
               <el-form-item>
-                <el-checkbox-group v-model="answerData[item.id]" style="width:97%;margin-left:2.5%;" v-if="k==154">
+                <el-checkbox-group v-model="answerData[item.id]" style="width:96%;margin-left:44px;" v-if="k==154">
                   <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
                     <el-checkbox :label="index" style="white-space: initial;line-height:24px;">
                       {{index}}:{{item.choice[index]}}
                     </el-checkbox>
                   </el-col>
                 </el-checkbox-group>
-                <el-checkbox-group v-model="answerData[item.id]" style="width:97%;margin-left:2.5%;" v-if="k==155">
+                <el-checkbox-group v-model="answerData[item.id]" style="width:96%;margin-left:44px;" v-if="k==155">
                   <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
                     <el-checkbox :label="index" style="white-space: initial;line-height:24px;">
                       {{index}}:{{item.choice[index]}}
@@ -91,11 +91,11 @@
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
             <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
             <span style="color:#6a8dfb;">判断题</span>
-            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+            <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
                v-html="item.stem"></p>
             <el-form>
               <el-form-item>
-                <el-radio-group v-model="answerData[item.id]" style="width:97%;margin-left:2.5%;">
+                <el-radio-group v-model="answerData[item.id]" style="width:96%;margin-left:44px;">
                   <el-col :span="12" :key="index" v-for="(val,index) in item.choice">
                     <el-radio :label="index" style="line-height:24px;">{{index}}:{{val}}</el-radio>
                   </el-col>
@@ -108,10 +108,10 @@
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
             <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
             <span style="color:#6a8dfb;">填空题</span>
-            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+            <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
                v-html="item.stem"></p>
             <el-form>
-              <el-form-item style="width:97%;margin-left:2.5%;">
+              <el-form-item style="width:96%;margin-left:44px;">
                 <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak">
                   <el-input style="width:97%;" size="small" v-model="answerData[item.id][ak]"
                             placeholder="请填写答案"></el-input>
@@ -124,11 +124,11 @@
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
             <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
             <span style="color:#6a8dfb;">简答题</span>
-            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+            <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
                v-html="item.stem"></p>
             <el-form>
               <el-form-item>
-                <el-input style="width:97%;margin-left:2.5%;" v-model="answerData[item.id]"
+                <el-input style="width:96%;margin-left:44px;" v-model="answerData[item.id]"
                           type="textarea" placeholder="请填写答案"></el-input>
               </el-form-item>
             </el-form>
@@ -215,14 +215,14 @@
       };
     },
     activated() {
-      this.timeClear = '';
-      this.timeOut = '';
+      clearTimeout(this.timeOut);
+      clearTimeout(this.timeClear);
       this.getQueryData();
       this.getPaperData();
       this.confirmArrival = localStorage.getItem('confirmArrival');  //check_in签到状态考试id数组
       this.clockSubmit();
       this.timeOut = setTimeout(() => {
-        this.timeClear = '';
+        clearTimeout(this.timeClear);
         this.clockSubmit();
       }, 1000 * 60);
     },
