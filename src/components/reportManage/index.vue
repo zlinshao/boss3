@@ -28,7 +28,7 @@
               style="width: 100%">
 
               <el-table-column
-                label="标题">
+                label="报备类型">
                 <template slot-scope="scope">
                   <span v-if="scope.row.title">{{scope.row.title}}</span>
                   <span v-else="">/</span>
@@ -36,9 +36,16 @@
               </el-table-column>
 
               <el-table-column
-                label="创建时间">
+                label="地址">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.created_at">{{scope.row.created_at}}</span>
+                  <span v-if="scope.row.flow&&scope.row.flow.content">{{scope.row.flow.content.address}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="审批状态">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.flow&&scope.row.flow.place">{{scope.row.flow.place.display_name}}</span>
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
@@ -52,7 +59,16 @@
               <el-table-column
                 label="部门">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.user">{{scope.row.user.org.name}}</span>
+                  <span v-if="scope.row.user">
+                    <span v-for="item in scope.row.user.org">{{item.name}}&nbsp;</span>
+                  </span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="报备时间">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.created_at">{{scope.row.created_at}}</span>
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
@@ -75,15 +91,15 @@
       </div>
     </div>
 
-
+    <ReportDetail :module="reportDetailDialog" :ids="reportId" @close="closeModal"></ReportDetail>
   </div>
 </template>
 
 <script>
   import RightMenu from '../common/rightMenu.vue'
-
+  import ReportDetail from '../OAWork/examineAndApprove/components/reportDetail'
   export default {
-    components: {RightMenu},
+    components: {RightMenu,ReportDetail},
     data () {
       return {
         rightMenuX: 0,
@@ -101,6 +117,8 @@
         totalNumber:0,
         emptyContent: ' ',
         tableLoading: false,
+        reportDetailDialog : false,
+        reportId:'',
       }
     },
     mounted(){
@@ -169,9 +187,12 @@
       },
 
       dblClickTable(row, event){
-
+        this.reportDetailDialog = true;
+        this.reportId = row.id;
       },
-
+      closeModal(){
+        this.reportDetailDialog = false;
+      },
     }
   }
 </script>
