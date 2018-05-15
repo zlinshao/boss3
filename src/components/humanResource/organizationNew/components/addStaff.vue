@@ -1,7 +1,7 @@
 <template>
   <div id="addRentRepair">
     <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="addStaffDialogVisible" width="60%">
-      <div>
+      {{postArray}}<div>
         <el-form size="mini" onsubmit="return false;" :model="params" label-width="120px" style="padding: 0 20px;">
           <el-tabs v-model="activeName">
             <el-tab-pane label="基本信息" name="first">
@@ -339,7 +339,7 @@
         if (!val) {
           this.$emit('close');
           this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
-            localStorage.setItem('personal', JSON.stringify(res.data.data));           
+            localStorage.setItem('personal', JSON.stringify(res.data.data));
           });
         }
         if (val) {
@@ -358,8 +358,7 @@
           this.getStaffInfo();
         }
       },
-      editPositionIds(val){
-        this.postArray=[];
+      editPositionIds(val) {
         for (var i = 0; i < this.editPositionIds.length; i++) {
           this.getPositions(this.editPositionIds[i]);
         }
@@ -511,17 +510,16 @@
                 let arr = {};
                 arr.id = item.positions.id;
                 arr.name = item.positions.name;
-                if ($.inArray(item.positions.id, this.currentPosition) === -1) {
-                  // this.positionArray.push(arr);
+                if (this.currentPosition.indexOf(item.positions.id) < 0) {
+                  this.positionArray.push(arr);
                   this.currentPosition.push(item.positions.id);
                 }
-
                 //岗位
                 let data = {};
                 data.id = item.position_id;
                 data.name = item.display_name;
-                if ($.inArray(item.positions.id, this.params.position_id) === -1) {
-                  // this.postArray.push(data);
+                if (this.params.position_id.indexOf(item.position_id) < 0) {
+                  this.postArray.push(data);
                   this.params.position_id.push(item.position_id);
                 }
               });
@@ -529,8 +527,10 @@
               this.positionDisabled = false;
             }
             //列出该部门下的所有职位
-            if(this.params.department_id.length>0){
+            if (this.params.department_id.length > 0) {
               this.editPositionIds = [];
+              // this.positionArray = [];
+              // this.postArray = [];
               for (var i = 0; i < this.params.department_id.length; i++) {
                 this.getPosition(this.params.department_id[i]);
               }
@@ -551,8 +551,10 @@
               let position = {};
               position.id = item.id;
               position.name = item.name;
-              this.positionArray.push(position);
-              this.editPositionIds.push(item.id);
+              if (this.editPositionIds.indexOf(item.id) < 0 && this.currentPosition.indexOf(item.id)<0) {
+                this.positionArray.push(position);
+                this.editPositionIds.push(item.id);
+              }
             });
           }
         });
@@ -566,7 +568,7 @@
               let data = {};
               data.id = item.id;
               data.name = item.name;
-              if($.inArray(item.id, this.postArrayIds) === -1){
+              if (this.postArrayIds.indexOf(item.id) < 0 && this.params.position_id.indexOf(item.id)<0) {
                 this.postArray.push(data);
                 this.postArrayIds.push(item.id); //用来判断数组里有没有重复的数据
               }
@@ -638,6 +640,7 @@
         if (this.type === 'depart') {
           this.params.department_id = [];
           this.postArrayIds = [];
+          this.editPositionIds = [];
           let departNameArray = [];
           if (val.length > 0) {
             val.forEach((item) => {
