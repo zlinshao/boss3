@@ -27,13 +27,13 @@
                 </div>
               </el-form-item>
             </el-col>
-            <el-col :span="12">
-              <el-form-item label="上月溢出业绩:">
-                <div class="content">
-                  <span></span>
-                </div>
-              </el-form-item>
-            </el-col>
+            <!--<el-col :span="12">-->
+              <!--<el-form-item label="上月溢出业绩:">-->
+                <!--<div class="content">-->
+                  <!--<span></span>-->
+                <!--</div>-->
+              <!--</el-form-item>-->
+            <!--</el-col>-->
           </el-row>
           <el-row>
             <el-col :span="12">

@@ -89,7 +89,7 @@
           <el-form>
             <el-form-item style="width:96%;margin-left:44px;" v-if="item.category===157">
               <el-col v-for="value in item.answer" :key="value" :span="12">
-                <el-input size="small"style="width:97%;"  readOnly placeholder="请填写答案"></el-input>
+                <el-input size="small" style="width:97%;"  readOnly placeholder="请填写答案"></el-input>
               </el-col>
             </el-form-item>
             <el-form-item style="width:96%;margin-left:44px;" v-if="item.category===158">

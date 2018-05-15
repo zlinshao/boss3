@@ -108,7 +108,7 @@
       <div class="bottom">
         <el-button @click="onSubmit"
                    style="width:360px;margin-top:34px; height:32px; line-height:0px; background-color:rgb(106, 141, 251); border-color:rgb(106, 141, 251);"
-                   type="primary" :disabled="submitDisabled">提交
+                   type="primary">提交
         </el-button>
       </div>
     </div>
@@ -151,7 +151,6 @@
         examId: '',  //当前答题的考试id
         questionData: {},  //题目的内容
         answerData: {},  //答题的内容
-        submitDisabled: false,
         answers: {},
       };
     },
@@ -248,7 +247,6 @@
             this.pointScore = res.data.data.score;
             this.resultId = res.data.data.id;
             this.submitDialog = true;
-            this.submitDisabled = true;
             localStorage.removeItem("answers_" + this.examId);
           } else {
             this.$notify.warning({
