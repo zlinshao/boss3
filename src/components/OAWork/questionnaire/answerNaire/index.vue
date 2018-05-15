@@ -26,11 +26,11 @@
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
             <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
             <span style="color:#6a8dfb;">单选题</span>
-            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+            <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
                v-html="item.stem"></p>
             <el-form>
               <el-form-item>
-                <el-radio-group v-model="answerData[item.id]" style="width:97%;margin-left:2.5%;">
+                <el-radio-group v-model="answerData[item.id]" style="width:96%;margin-left:44px;">
                   <el-row :gutter="20">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
                       <el-radio :label="index" style="white-space: initial;line-height:24px;">{{index}}：{{val}}
@@ -52,7 +52,7 @@
               <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
               <span style="color:#6a8dfb;">不定向选择题</span>
             </span>
-            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+            <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
                v-html="item.stem"></p>
             <el-form>
               <el-form-item>
@@ -63,7 +63,7 @@
                     </el-checkbox>
                   </el-col>
                 </el-checkbox-group>
-                <el-checkbox-group v-model="answerData[item.id]" style="width:97%;margin-left:2.5%;" v-if="k==155">
+                <el-checkbox-group v-model="answerData[item.id]" style="width:96%;margin-left:44px;" v-if="k==155">
                   <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
                     <el-checkbox :label="index" style="white-space: initial;line-height:24px;">
                       {{index}}:{{item.choice[index]}}
@@ -78,13 +78,13 @@
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
             <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
             <span style="color:#6a8dfb;">判断题</span>
-            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+            <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
                v-html="item.stem"></p>
             <el-form>
               <el-form-item>
-                <el-radio-group v-model="answerData[item.id]" style="width:97%;margin-left:2.5%;">
+                <el-radio-group v-model="answerData[item.id]" style="width:96%;margin-left:44px;">
                   <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
-                    <el-radio :label="index" style="line-height:24px;">{{index}}:{{val}}</el-radio>
+                    <el-radio :label="index" style="line-height:24px;white-space: initial;">{{index}}:{{val}}</el-radio>
                   </el-col>
                 </el-radio-group>
               </el-form-item>
@@ -94,11 +94,11 @@
         <div v-for="(v,k) in questionData" v-if="k==158 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
             {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">简单题</span>
-            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+            <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
                v-html="item.stem"></p>
             <el-form>
               <el-form-item>
-                <el-input style="width:97%;margin-left:2.5%;" v-model="answerData[item.id]"
+                <el-input style="width:96%;margin-left:44px;" v-model="answerData[item.id]"
                           type="textarea" placeholder="请填写答案"></el-input>
               </el-form-item>
             </el-form>
@@ -108,7 +108,7 @@
       <div class="bottom">
         <el-button @click="onSubmit"
                    style="width:360px;margin-top:34px; height:32px; line-height:0px; background-color:rgb(106, 141, 251); border-color:rgb(106, 141, 251);"
-                   type="primary" :disabled="submitDisabled">提交
+                   type="primary">提交
         </el-button>
       </div>
     </div>
@@ -151,7 +151,6 @@
         examId: '',  //当前答题的考试id
         questionData: {},  //题目的内容
         answerData: {},  //答题的内容
-        submitDisabled: false,
         answers: {},
       };
     },
@@ -248,7 +247,6 @@
             this.pointScore = res.data.data.score;
             this.resultId = res.data.data.id;
             this.submitDialog = true;
-            this.submitDisabled = true;
             localStorage.removeItem("answers_" + this.examId);
           } else {
             this.$notify.warning({

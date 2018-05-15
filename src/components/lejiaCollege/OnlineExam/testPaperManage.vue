@@ -62,7 +62,6 @@
             element-loading-text="拼命加载中"
             element-loading-spinner="el-icon-loading"
             element-loading-background="rgba(255, 255, 255, 0)"
-            @row-dblclick="dblClickTable"
             @row-contextmenu='openContextMenu'
             style="width: 100%">
             <el-table-column
@@ -206,6 +205,9 @@
       this.getTestPaperData();
       this.getDictionary();
     },
+    activated() {
+      this.getTestPaperData();
+    },
     watch: {
       paperTypeDialog(val) {
         if (val) {
@@ -231,8 +233,6 @@
       resetting() {
         this.params.category = '';
         this.getTestPaperData();
-      },
-      dblClickTable() {
       },
       paperTypeBtn() {
         if (!this.paperTypeForm.category) {

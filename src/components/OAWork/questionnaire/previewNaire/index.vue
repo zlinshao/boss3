@@ -2,26 +2,20 @@
   <div>
     <div id="previewNaire">
       <div class="tool">
-        <el-row style="width:100%;margin-top:16px;">
-          <el-col :span="5" style="margin-left:2%; margin-right:2%">
-            <div class="import_questions" style="text-align:left;color:#464748;">
-              <div class="qdiv" style="margin-top: 25px;">试卷名称： <span style="color:#6a8dfb;font-size: 18px;">{{testPaperData.name}}</span>
-              </div>
-              <div class="qdiv" style="margin-top: 10px;">总题数： <span style="color:#6a8dfb;font-size: 18px;">{{testPaperData.count}}</span>
-                题
-              </div>
-            </div>
-          </el-col>
-        </el-row>
+        <img width="100%" height="142px" src="../../../../assets/images/preview.png"/>
+        <div>
+          <span>{{testPaperData.name}}</span>
+          <span style="margin-left: 30px;">{{testPaperData.count}}<span style="font-size: 14px;"> 题</span></span>
+        </div>
       </div>
       <div class="main">
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===153">
           <span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
           <span style="color:#6a8dfb;">单选题</span>
-          <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+          <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
              v-html="item.stem"></p>
           <el-form>
-            <el-form-item style="width:97%;margin-left:2.5%;">
+            <el-form-item style="width:96%;margin-left:44px;">
               <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                 {{index}}：{{val}}
               </el-col>
@@ -34,10 +28,10 @@
           <span style="color:#6a8dfb;">
           <span v-if="item.category===154">多选题</span>
           <span v-if="item.category===155">不定向选择题</span></span>
-          <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+          <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
              v-html="item.stem"></p>
           <el-form>
-            <el-form-item style="width:97%;margin-left:2.5%;">
+            <el-form-item style="width:96%;margin-left:44px;">
               <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                 {{index}}：{{val}}
               </el-col>
@@ -47,10 +41,10 @@
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===156">
           <span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
           <span style="color:#6a8dfb;">判断题</span>
-          <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+          <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
              v-html="item.stem"></p>
           <el-form>
-            <el-form-item style="width:97%;margin-left:2.5%;">
+            <el-form-item style="width:96%;margin-left:44px;">
               <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                 {{index}}：{{val}}
               </el-col>
@@ -61,11 +55,11 @@
              v-if="item.category===158">
           <span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
           <span style="color:#6a8dfb;"><span v-if="item.category===158">简答题</span></span>
-          <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+          <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
              v-html="item.stem"></p>
           <el-form>
             <el-form-item v-if="item.category===158">
-              <el-input style="width:97%;margin-left:2.5%;" readOnly type="textarea" placeholder="请填写答案"></el-input>
+              <el-input style="width:96%;margin-left:44px;" readOnly type="textarea" placeholder="请填写答案"></el-input>
             </el-form-item>
           </el-form>
         </div>
@@ -121,36 +115,21 @@
   .ql-editor {
     min-height: initial !important;
   }
-
+  .el-form-item {
+    margin-bottom: 12px !important;
+  }
   #previewNaire {
     .tool {
-      height: 160px;
-      border-radius: 5px;
-      border: 1px #eee solid;
-      border-bottom: none;
-      padding: 0;
-      .import_questions {
-        border: 1px solid #6a8dfb;
-        -webkit-box-shadow: 0 0 3px 1px #6a8dfb;
-        box-shadow: 0 0 3px 1px #6a8dfb;
-        text-align: center;
-        align-items: center;
-        justify-content: center;
-        height: 124px;
-        border-radius: 5px;
-        .qdiv {
-          font-size: 14px;
-          height: 30px;
-          line-height: 30px;
-          margin-left: 20px;
-          overflow: hidden;
-        }
-        .import_left {
-          width: 90%;
-          height: 36px;
-          line-height: 36px;
-          margin: 0 auto;
-        }
+      position: relative;
+      div {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        height: 142px;
+        line-height: 142px;
+        font-size: 24px;
+        text-indent: 2%;
+        color: #fff;
       }
     }
     .main {

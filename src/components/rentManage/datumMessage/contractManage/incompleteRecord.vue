@@ -310,6 +310,11 @@
         </div>
       </div>
     </div>
+    <div id="exportModal">
+      <el-dialog :close-on-click-modal="false" :show-close="false" :visible.sync="exportDialog" title="导出数据" width="30%" top="35vh">
+          <div style="text-align: center;font-size: 15px!important;">正在导出，请稍后...</div>
+      </el-dialog>
+    </div>
     <Organization :organizationDialog="organizationDialog" :type="type" @close="closeOrganization"
                   @selectMember="selectMember"></Organization>
     <AddressSearch :addressDialog="addressDialog" @close="closeAddressDialog" :isRent="is_rent"></AddressSearch>
@@ -377,6 +382,7 @@
         tableData: [],
         type: '',
         addressDialog: false,
+        exportDialog: false,
       }
     },
     mounted() {
@@ -446,10 +452,17 @@
         }
       },
       exportData() {
-        this.$http.get(globalConfig.server + 'lease/note/index?limit=12&is_rent=' + this.is_rent + '&output=1', {responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
+        this.exportDialog = true;
+        this.params.output = 1;
+        this.$http.get(globalConfig.server + 'lease/note/index?is_rent=' + this.is_rent,
+          {
+            params: this.params,
+            responseType: 'arraybuffer',
+          }).then((res) => { // 处理返回的文件流
           if (!res.data) {
             return;
           }
+          this.exportDialog = false;
           let url = window.URL.createObjectURL(new Blob([res.data]));
           let link = document.createElement('a');
           link.style.display = 'a';
