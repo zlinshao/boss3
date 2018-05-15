@@ -19,7 +19,7 @@
           <el-button type="success" size="mini"
                      style="margin-right:10px; background-color:#58d788; border-color:#58d788;"
                      @click="editPaper">
-            <i class="el-icon-edit"></i>&nbsp;修改试卷
+            <i class="el-icon-edit"></i>&nbsp;修改问卷
           </el-button>
         </div>
       </div>
@@ -66,9 +66,9 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width:96%;margin-left:3.5%;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
+          <p style="width:94%;margin-left:62px;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
           <el-form>
-            <el-form-item style="width:96%;margin-left:3.5%;">
+            <el-form-item style="width:94%;margin-left:62px;">
               <el-row :gutter="20">
                 <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                   <span>{{index}}：{{val}}</span>
@@ -87,9 +87,9 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width:96%;margin-left:3.5%;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
+          <p style="width:94%;margin-left:62px;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
           <el-form>
-            <el-form-item style="width:96%;margin-left:3.5%;">
+            <el-form-item style="width:94%;margin-left:62px;">
               <el-row :gutter="20">
                 <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                   <span >{{index}}：{{val}}</span>
@@ -106,9 +106,9 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width:96%;margin-left:3.5%;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
+          <p style="width:94%;margin-left:62px;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
           <el-form>
-            <el-form-item style="width:96%;margin-left:3.5%;">
+            <el-form-item style="width:94%;margin-left:62px;">
               <el-row :gutter="20">
                 <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height: 24px;">
                   <span>{{index}}：{{val}}</span>
@@ -125,15 +125,15 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width:96%;margin-left:3.5%;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
+          <p style="width:94%;margin-left:60px;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
         </div>
       </div>
     </div>
     <div id="paperTypeDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="paperTypeDialog" title="编辑试卷" width="30%">
+      <el-dialog :close-on-click-modal="false" :visible.sync="paperTypeDialog" title="编辑问卷" width="30%">
         <el-form :model="paperTypeForm" onsubmit="return false;" label-width="100px">
           <el-row>
-            <el-form-item label="试卷名称" required>
+            <el-form-item label="问卷名称" required>
               <el-input v-model="paperTypeForm.name" size="mini" placeholder="请输入名称" clearable></el-input>
             </el-form-item>
           </el-row>
@@ -202,7 +202,7 @@
         tableLoading: false,
         associatedExamData: [],
         selectExamIds: [],
-        paperTypeDialog: false,  //编辑试卷 选择类型模态框
+        paperTypeDialog: false,  //编辑问卷 选择类型模态框
         paperTypeForm: {
           name: '',
           is_questionnaire: 1,
@@ -268,7 +268,7 @@
         });
       },
       synchroTestPaper() {
-        //同步试卷最新数据到考试的接口
+        //同步问卷最新数据到考试的接口
         this.$http.post(globalConfig.server + 'exam/paper/sync/' + this.testPaperId, {ids: this.selectExamIds}).then((res) => {
           if (res.data.code === '36000') {
             this.associatedExamDialog = false;
@@ -301,7 +301,7 @@
         this.dictionary(152).then((res) => {
           this.questionTypeCategory = res.data;
         });
-        //试卷类型
+        //问卷类型
         this.dictionary(613).then((res) => {
           this.examType = res.data;
         });
@@ -449,7 +449,9 @@
   .ql-editor {
     min-height: initial !important;
   }
-
+  .el-form-item {
+    margin-bottom: 12px !important;
+  }
   #configExam {
     .tool {
       height: 78px;

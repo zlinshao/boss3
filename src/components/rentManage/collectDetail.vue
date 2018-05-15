@@ -21,6 +21,7 @@
 
         <h3>
           {{contractInfo.community_name}}  {{contractInfo.building}}-{{contractInfo.unit}}-{{contractInfo.doorplate}}
+          <span v-if="contractInfo.contract_number">（合同编号 : {{contractInfo.contract_number}}）</span>
         </h3>
         <h3>
 
@@ -411,12 +412,46 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="违约金(元)">
-                  <div class="content">{{contractInfo.penalty}}</div>
+                <el-form-item label="报备中介费">
+                  <div class="content">
+                    <span v-if="contractInfo.agency_info">
+                       {{contractInfo.agency_info.agency_price_now}}
+                    </span>
+                  </div>
                 </el-form-item>
               </el-col>
-
             </el-row>
+
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="中介名称">
+                  <div class="content">
+                    <span v-if="contractInfo.agency_info">
+                       {{contractInfo.agency_info.agency_name}}
+                    </span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="中介电话">
+                  <div class="content">
+                    <span v-if="contractInfo.agency_info">
+                       {{contractInfo.agency_info.agency_phone}}
+                    </span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="中介人">
+                  <div class="content">
+                    <span v-if="contractInfo.agency_info">
+                       {{contractInfo.agency_info.agency_user_name}}
+                    </span>
+                  </div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
             <el-row>
               <el-col :span="8">
                 <el-form-item label="物业费付款方">
@@ -428,9 +463,9 @@
                   <div class="content">{{contractInfo.public_fee}}</div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8" class="blueColor">
-                <el-form-item label="资料补齐时间">
-                  <div class="content">{{contractInfo.data_date}}</div>
+              <el-col :span="8">
+                <el-form-item label="违约金(元)">
+                  <div class="content">{{contractInfo.penalty}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -465,6 +500,11 @@
               <el-col :span="8">
                 <el-form-item label="所属部门">
                   <div class="content">{{contractInfo.department_name}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8" class="blueColor">
+                <el-form-item label="资料补齐时间">
+                  <div class="content">{{contractInfo.data_date}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -769,6 +809,13 @@
 
         <div class="returnVisitInfo">
           <el-form size="small" label-width="180px">
+            <el-row v-if="reBackData.length<1">
+              <el-col :span="8">
+                <el-form-item label="">
+                  暂无回访信息
+                </el-form-item>
+              </el-col>
+            </el-row>
             <el-row v-for="item in reBackData" :key="item.id">
               <el-col :span="8">
                 <el-form-item label="回访时间">

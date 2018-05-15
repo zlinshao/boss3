@@ -5,10 +5,9 @@
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input placeholder="标题/内容关键字" v-model="form.search" @keyup.enter.native="myData" size="mini"
+              <el-input placeholder="考试名称" v-model="form.search" @keyup.enter.native="search" size="mini"
                         clearable>
-                <el-button slot="append" icon="el-icon-search" @click="myData"></el-button>
-                <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -22,16 +21,19 @@
               <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>
             <el-row class="el_row_border">
+
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">选择类型</div>
+                    <div class="el_col_label">试卷类型</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="form.type" clearable placeholder="请选择类型">
-                        <el-option v-for="(key,index) in forms" :label="key.name" :value="key.id"
-                                   :key="index"></el-option>
+                      <el-select v-model="form.category" size="mini" placeholder="请选择" clearable>
+                        <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name"
+                                   :value="item.id">
+                          {{item.dictionary_name}}
+                        </el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -40,16 +42,32 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
+                    <div class="el_col_label">选择试卷</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="form.paper_id" clearable placeholder="请选择试卷">
+                        <el-option v-for="(key,index) in useTestPapers" :label="key.name" :value="key.id"
+                                   :key="index"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
                     <div class="el_col_label">时间</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-date-picker
                       size="mini"
-                      v-model="value4"
-                      type="datetimerange"
-                      :picker-options="pickerOptions2"
+                      v-model="form.time"
+                      type="daterange"
+                      :picker-options="pickerOptions"
                       value-format="yyyy-MM-dd"
-                      format="yyyy-MM-dd"
                       range-separator="至"
                       start-placeholder="开始日期"
                       end-placeholder="结束日期"
@@ -59,38 +77,8 @@
                 </el-row>
               </el-col>
             </el-row>
-            <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">选择试卷</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select v-model="form.type" clearable placeholder="请选择试卷">
-                        <el-option v-for="(key,index) in forms" :label="key.name" :value="key.id"
-                                   :key="index"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">部门搜索</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-input readonly="" v-model="this.departname" @click.native="openOrganizationModal()"
-                                placeholder="点击选择"></el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
             <div class="btnOperate">
-              <el-button size="mini" type="primary" @click="myData">搜索</el-button>
+              <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
               <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
             </div>
@@ -107,7 +95,6 @@
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
               element-loading-background="rgba(255, 255, 255, 0)"
-              @row-dblclick="dblClickTable"
               style="width: 100%">
               <el-table-column
                 prop="start_time"
@@ -115,7 +102,7 @@
               </el-table-column>
               <el-table-column
                 prop="name"
-                label="试卷名称">
+                label="考试名称">
               </el-table-column>
               <el-table-column
                 prop="question_count"
@@ -130,8 +117,12 @@
                 label="总时长">
               </el-table-column>
               <el-table-column
+                prop="paper.name"
+                label="试卷名称">
+              </el-table-column>
+              <el-table-column
                 prop="paper.category"
-                label="类型">
+                label="试卷类型">
               </el-table-column>
               <el-table-column
                 prop="examinees_count"
@@ -164,17 +155,13 @@
 
       </div>
     </div>
-    <Organization :organizationDialog="organizationDialog" :length="len" :type="depart" @close="closeOrganization"
-                  @selectMember="coloseaa"></Organization>
   </div>
 </template>
 
 <script>
-  import Organization from "../../../common/organization.vue";
 
   export default {
     name: "index",
-    components: {Organization},
     data() {
       return {
         tableData: [],
@@ -182,11 +169,11 @@
         form: {
           page: 1,
           limit: 10,
-          type: "",
-          search: "",
-          department_id: ""
+          search: '', //考试名称模糊搜索
+          category: '', //试卷类型
+          time: [], //考试时间
+          paper_id: '',
         },
-        departname: "",
         forms: [
           {id: "1", name: "表彰"},
           {id: "2", name: "批评"},
@@ -197,9 +184,7 @@
         rentStatus: " ",
         rentLoading: false,
         organizationDialog: false,
-        rentStatus: " ",
-        rentLoading: false,
-        pickerOptions2: {
+        pickerOptions: {
           shortcuts: [
             {
               text: "最近一周",
@@ -230,24 +215,67 @@
             }
           ]
         },
-        value4: "",
-        len: 0,
-        depart: ""
+        examType: [],
+        useTestPapers: [],
       };
     },
     activated() {
       this.myData();
     },
-    watch: {},
+    mounted() {
+      this.getDictionary();
+      this.getTestPapers();
+    },
+    watch: {
+      "form.category": {
+        deep: true,
+        handler(val, oldVal) {
+          if (val) {
+            this.$http.get(globalConfig.server + 'exam/paper/search?category=' + val).then((res) => {
+              if (res.data.code === '36000') {
+                this.useTestPapers = res.data.data;
+              } else {
+                this.useTestPapers = [];
+              }
+            });
+          } else {
+            this.getTestPapers();
+          }
+        }
+      },
+    },
     methods: {
+      search() {
+        this.form.page = 1;
+        this.myData();
+      },
       lookExam(id) {
         this.$router.push({path: "/examinerReadEach", query: {id: id}});
+      },
+      getDictionary() {
+        //试卷类型
+        this.dictionary(613).then((res) => {
+          this.examType = res.data;
+        });
+      },
+      getTestPapers() {
+        this.$http.get(globalConfig.server + 'exam/paper?page=1&limit=100').then((res) => {
+          if (res.data.code === '36000') {
+            this.useTestPapers = res.data.data.data;
+          } else {
+            this.useTestPapers = [];
+          }
+        });
       },
       myData() {
         this.rentStatus = " ";
         this.rentLoading = true;
-        this.$http.get(globalConfig.server + "exam?status=3").then((res) => {
+        if (!this.form.time) {
+          this.form.time = [];
+        }
+        this.$http.get(globalConfig.server + "exam?status=3",{params: this.form}).then((res) => {
           this.rentLoading = false;
+          this.isHigh = false;
           if (res.data.code == "30000") {
             this.tableData = res.data.data.data;
             this.tableNumber = res.data.data.count;
@@ -255,28 +283,12 @@
             this.rentStatus = "暂无数据";
             this.tableNumber = 0;
             this.tableData = [];
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            });
+            // this.$notify.warning({
+            //   title: '警告',
+            //   message: res.data.msg
+            // });
           }
         });
-      },
-      openOrganizationModal() {
-        this.organizationDialog = true;
-        this.len = 1;
-        this.depart = "depart";
-      },
-      closeOrganization() {
-        this.organizationDialog = false;
-        this.len = 0;
-        this.depart = "";
-      },
-      coloseaa(val) {
-        this.departname = val[0].name;
-        this.form.department_id = val[0].id;
-        this.len = 0;
-        this.depart = "";
       },
       // 高级
       highGrade() {
@@ -284,18 +296,15 @@
       },
       // 重置
       resetting() {
-        this.isHigh = false;
         this.form = {
           page: 1,
           limit: 12,
-          type: "",
-          search: ""
+          category: '',
+          search: '',
+          time: [],
+          paper_id: '',
         };
       },
-
-      dblClickTable() {
-      },
-
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },

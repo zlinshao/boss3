@@ -4,8 +4,7 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="考试场次" v-model="params.search" size="mini" clearable
-                      @keyup.enter.native="getExamData()">
+            <el-input placeholder="标题" v-model="params.search" size="mini" clearable @keyup.enter.native="getExamData()">
               <el-button slot="append" icon="el-icon-search" size="mini" @click="getExamData()"></el-button>
             </el-input>
           </el-form-item>
@@ -30,7 +29,7 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">考试状态</div>
+                  <div class="el_col_label">调查状态</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
@@ -73,7 +72,7 @@
             </el-table-column>
             <el-table-column
               prop="paper.name"
-              label="试卷名称">
+              label="问卷名称">
               <template slot-scope="scope">
                 <span v-if="scope.row.paper && scope.row.paper.name">{{scope.row.paper && scope.row.paper.name}}</span>
                 <span v-if="!(scope.row.paper && scope.row.paper.name)">暂无</span>
@@ -127,7 +126,7 @@
             </el-table-column>
             <el-table-column
               prop="status"
-              label="问卷状态">
+              label="调查状态">
               <template slot-scope="scope">
                 <el-button v-if="scope.row.status === 1" type="primary" size="mini">未开始</el-button>
                 <el-button v-if="scope.row.status === 2" type="warning" size="mini">已开始</el-button>
@@ -168,8 +167,8 @@
                   </el-form-item>
                 </el-col>
                 <el-col :span="22">
-                  <el-form-item label="使用试卷" required>
-                    <el-select v-model="formExam.paper_id" size="mini" placeholder="请选择试卷" clearable>
+                  <el-form-item label="使用问卷" required>
+                    <el-select v-model="formExam.paper_id" size="mini" placeholder="请选择问卷" clearable>
                       <el-option v-for="item in useTestPapers" :key="item.id" :label="item.name" :value="item.id">
                         {{item.name}}
                       </el-option>
@@ -311,7 +310,7 @@
           name: '',    //考试名称
           start_time: '',  //时间周期
           duration: '',  //有效期
-          paper_id: '',    //试卷id
+          paper_id: '',    //问卷id
           examinees: [],
         },
         examiness_name: [],
@@ -364,6 +363,7 @@
       examDialog(val) {
         if (val) {
           this.initial();
+          this.getPaperData();
           if (this.examId) {
             this.examTitle = '编辑调查';
             this.getExamDetail();
@@ -544,12 +544,12 @@
           {
             clickIndex: "editExam",
             headIcon: "el-icon-edit",
-            label: "编辑问卷"
+            label: "编辑调查"
           },
           {
             clickIndex: "deleteExam",
             headIcon: "el-icon-delete",
-            label: "删除问卷"
+            label: "删除调查"
           },
           {
             clickIndex: "manageExaminee",
@@ -559,7 +559,7 @@
           // {
           //   clickIndex: "answer",
           //   headIcon: "el-icon-view",
-          //   label: "问卷作答"
+          //   label: "调查作答"
           // }
         ];
         let e = event || window.event; //support firefox contextmenu
@@ -649,7 +649,7 @@
           name: '',    //考试名称
           start_time: '',  //时间周期
           duration: '',  //有效期
-          paper_id: '',    //试卷id
+          paper_id: '',    //问卷id
           examinees: '',
         };
         this.selectExaminees = '';

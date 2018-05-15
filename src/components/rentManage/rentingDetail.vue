@@ -19,7 +19,9 @@
     <div class="container">
       <div class="top">
         <h3>
-          {{contractInfo.community_name}}  {{contractInfo.building}}-{{contractInfo.unit}}-{{contractInfo.doorplate}}</h3>
+          {{contractInfo.community_name}}  {{contractInfo.building}}-{{contractInfo.unit}}-{{contractInfo.doorplate}}
+          <span v-if="contractInfo.contract_number">（合同编号 : {{contractInfo.contract_number}}）</span>
+        </h3>
         <h3>
           <div style="display: inline-block"  v-if="contractInfo.operation &&
               !Array.isArray(contractInfo.operation)&& contractInfo.operation.visit">
@@ -310,12 +312,61 @@
                   </div>
                 </el-form-item>
               </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="8" class="blueColor">
+                <el-form-item label="是否中介">
+                  <div class="content" v-if="contractInfo.is_agency">中介</div>
+                  <div class="content" v-else="">个人</div>
+                </el-form-item>
+              </el-col>
               <el-col :span="8">
-                <el-form-item label="中介费">
+                <el-form-item label="中介费(元)">
                   <div class="content">{{contractInfo.agency}}</div>
                 </el-form-item>
               </el-col>
+              <el-col :span="8">
+                <el-form-item label="报备中介费">
+                  <div class="content">
+                    <span v-if="contractInfo.agency_info">
+                       {{contractInfo.agency_info.agency_price_now}}
+                    </span>
+                  </div>
+                </el-form-item>
+              </el-col>
             </el-row>
+
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="中介名称">
+                  <div class="content">
+                    <span v-if="contractInfo.agency_info">
+                       {{contractInfo.agency_info.agency_name}}
+                    </span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="中介电话">
+                  <div class="content">
+                    <span v-if="contractInfo.agency_info">
+                       {{contractInfo.agency_info.agency_phone}}
+                    </span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="中介人">
+                  <div class="content">
+                    <span v-if="contractInfo.agency_info">
+                       {{contractInfo.agency_info.agency_user_name}}
+                    </span>
+                  </div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
             <el-row>
               <el-col :span="8">
                 <el-form-item label="违约金">
@@ -603,7 +654,14 @@
 
         <div class="returnVisitInfo">
           <el-form size="small" label-width="180px">
-            <el-row v-for="item in reBackData" :key="item.id">
+            <el-row v-if="reBackData.length<1">
+              <el-col :span="8">
+                <el-form-item label="">
+                  暂无回访信息
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row  v-if="reBackData.length>0" v-for="item in reBackData" :key="item.id">
               <el-col :span="8">
                 <el-form-item label="回访时间">
                   <div class="content">{{item.create_time}}</div>

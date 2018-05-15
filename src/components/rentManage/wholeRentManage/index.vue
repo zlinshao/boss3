@@ -502,20 +502,20 @@
               <el-table-column
                 label="审核状态">
                 <template slot-scope="scope">
-                      <span v-if="scope.row.doc_status&&scope.row.doc_status.name">
-                        <span v-if="scope.row.doc_status.id==1">
-                          <span class="info_label">{{scope.row.doc_status.name}}</span>
-                        </span>
-                        <span v-if="scope.row.doc_status.id==2">
-                          <span class="yellow_label">{{scope.row.doc_status.name}}</span>
-                        </span>
-                        <span v-if="scope.row.doc_status.id==3">
-                          <span class="orange_label">{{scope.row.doc_status.name}}</span>
-                        </span>
-                        <span v-if="scope.row.doc_status.id==4">
-                          <span class="success_label">{{scope.row.doc_status.name}}</span>
-                        </span>
-                      </span>
+                  <span v-if="scope.row.doc_status&&scope.row.doc_status.name">
+                    <span v-if="scope.row.doc_status.id==1">
+                      <span class="info_label">{{scope.row.doc_status.name}}</span>
+                    </span>
+                    <span v-if="scope.row.doc_status.id==2">
+                      <span class="yellow_label">{{scope.row.doc_status.name}}</span>
+                    </span>
+                    <span v-if="scope.row.doc_status.id==3">
+                      <span class="orange_label">{{scope.row.doc_status.name}}</span>
+                    </span>
+                    <span v-if="scope.row.doc_status.id==4">
+                      <span class="success_label">{{scope.row.doc_status.name}}</span>
+                    </span>
+                  </span>
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
