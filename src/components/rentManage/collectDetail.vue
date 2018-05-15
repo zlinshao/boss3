@@ -414,7 +414,7 @@
               <el-col :span="8">
                 <el-form-item label="报备中介费">
                   <div class="content">
-                    <span v-if="contractInfo.agency&&contractInfo.agency.agency_info">
+                    <span v-if="contractInfo.agency_info">
                        {{contractInfo.agency_info.agency_price_now}}
                     </span>
                   </div>
@@ -426,18 +426,17 @@
               <el-col :span="8">
                 <el-form-item label="中介名称">
                   <div class="content">
-                    <span v-if="contractInfo.agency&&contractInfo.agency.agency_info">
-                      {{contractInfo.agency_info.agency_name}}
+                    <span v-if="contractInfo.agency_info">
+                       {{contractInfo.agency_info.agency_name}}
                     </span>
-
                   </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="中介电话">
                   <div class="content">
-                    <span v-if="contractInfo.agency&&contractInfo.agency.agency_info">
-                      {{contractInfo.agency_info.agency_phone}}
+                    <span v-if="contractInfo.agency_info">
+                       {{contractInfo.agency_info.agency_phone}}
                     </span>
                   </div>
                 </el-form-item>
@@ -445,8 +444,8 @@
               <el-col :span="8">
                 <el-form-item label="中介人">
                   <div class="content">
-                    <span v-if="contractInfo.agency&&contractInfo.agency.agency_info">
-                      {{contractInfo.agency_info.agency_user_name}}
+                    <span v-if="contractInfo.agency_info">
+                       {{contractInfo.agency_info.agency_user_name}}
                     </span>
                   </div>
                 </el-form-item>
