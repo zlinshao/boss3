@@ -1,7 +1,7 @@
 <template>
   <div id="addRentRepair">
     <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="addStaffDialogVisible" width="60%">
-      {{postArray}}<div>
+      <div>
         <el-form size="mini" onsubmit="return false;" :model="params" label-width="120px" style="padding: 0 20px;">
           <el-tabs v-model="activeName">
             <el-tab-pane label="基本信息" name="first">
