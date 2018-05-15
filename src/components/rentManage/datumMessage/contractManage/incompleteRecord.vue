@@ -453,10 +453,11 @@
       },
       exportData() {
         this.exportDialog = true;
-        this.$http.get(globalConfig.server + 'lease/note/index?is_rent=' + this.is_rent + '&output=1',
+        this.params.output = 1;
+        this.$http.get(globalConfig.server + 'lease/note/index?is_rent=' + this.is_rent,
           {
+            params: this.params,
             responseType: 'arraybuffer',
-            params: this.params
           }).then((res) => { // 处理返回的文件流
           if (!res.data) {
             return;
