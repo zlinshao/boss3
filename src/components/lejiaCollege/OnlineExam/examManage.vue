@@ -483,10 +483,10 @@
             this.tableData = [];
             this.totalNum = 0;
             this.tableStatus = "暂无数据";
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            });
+            // this.$notify.warning({
+            //   title: '警告',
+            //   message: res.data.msg
+            // });
           }
         });
       },
