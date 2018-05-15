@@ -243,7 +243,9 @@
   .ql-editor {
     min-height: initial !important;
   }
-
+  .el-form-item {
+    margin-bottom: 12px !important;
+  }
   #lookExam {
     .tool {
       height: 160px;

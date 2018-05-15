@@ -594,7 +594,7 @@
       this.getUnreadTermly();
       this.getUnReadMessage();
       //调查问卷
-      // this.getQuesNaireData();
+      this.getQuesNaireData();
     },
     activated() {
       //初始化个人信息
@@ -619,7 +619,7 @@
     methods: {
       answerNaire(id) {
         this.quesNaireDialog = false;
-        setTimeout(()=>{
+        setTimeout(() => {
           this.$router.push({path: '/answerNaire', query: {id: id}});
         }, 0);
       },
@@ -627,7 +627,9 @@
         this.$http.get(globalConfig.server + 'questionnaire/daily_check').then((res) => {
           if (res.data.code === '30000') {
             this.questionNaireData = res.data.data;
-            this.quesNaireDialog = true;
+            if (res.data.data.length > 0) {
+              this.quesNaireDialog = true;
+            }
           } else {
             this.questionNaireData = [];
             this.quesNaireDialog = false;

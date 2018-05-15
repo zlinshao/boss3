@@ -15,8 +15,8 @@
             <div class="import_questions" style="border: 1px solid #58d788;box-shadow: 0 0 3px 1px #58d788;">
               <div class="import_left"><span style="float:left; font-size:14px;">总时长</span><i
                 style="float:right; color:#58d788;font-size:20px;" class="iconfont icon-shijian1"></i></div>
-              <div><span style="font-size:70px; color:#58d788;margin-left: 30px;">{{ paperData.duration }}</span>分钟
-                <span style="float: right;margin-right: 30px;margin-top: 30px;">倒计时
+              <div><span style="font-size:70px; color:#58d788;" :class="{'timeStringClass':timeString !=''}">{{ paperData.duration }}</span>分钟
+                <span style="float: right;margin-right: 30px;margin-top: 30px;" v-if="timeString !='' ">倒计时
                   <br/><span style="color:#58d788;">{{timeString}}</span></span>
               </div>
             </div>
@@ -184,7 +184,6 @@
         </div>
       </el-dialog>
     </div>
-
   </div>
 
 </template>
@@ -396,11 +395,14 @@
 </script>
 
 <style lang="scss" scoped>
+  .timeStringClass {
+    margin-left: 30px;
+  }
   .ql-editor {
     min-height: initial !important;
   }
   .el-form-item {
-    margin-bottom: 10px !important;
+    margin-bottom: 12px !important;
   }
   .confirm_btn {
     width: 100px;

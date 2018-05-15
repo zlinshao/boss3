@@ -3,23 +3,27 @@
     <div id="lookNaire">
       <div class="tool">
         <img width="100%" height="142px" src="../../../../assets/images/preview.png"/>
-        <span>{{quesNaireData.name}}</span>
+        <div>
+          <span>{{quesNaireData.name}}</span>
+          <span style="margin-left: 30px;">{{quesNaireData.question_count}}<span
+            style="font-size: 14px;"> 题</span></span>
+        </div>
       </div>
       <div class="main">
-        <div class="questionDiv" v-for="(v,k) in quesNaireData.question_set" v-if="k==158 && category==158">
-          <div v-for="(item,key) in v">
-            {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">
-            <span v-if="k==158 && category==158">简答题</span>
-          </span>
-            <p style="line-height:30px;width:98%;margin-left:2%;" v-html="item.stem"></p>
-            <el-row style="width:98%;margin-left:2%;" v-if="k==158 && category==158">
+        <div v-for="(v,k) in quesNaireData.question_set" v-if="k==158 && category==158">
+          <div class="questionDiv" v-for="(item,key) in v">
+            <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
+            <span style="color:#6a8dfb;"><span v-if="k==158 && category==158">简答题</span></span>
+            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+               v-html="item.stem"></p>
+            <el-row style="width:97%;margin-left:2.5%;" v-if="k==158 && category==158">
               <el-row :key="kk" v-for="(vv,kk) in statisticData[item.id] && statisticData[item.id].answer">
                 <span>{{kk}}</span><br/>
                 <el-progress style="width:30%;display: inline-block;" :text-inside="true" :stroke-width="18"
                              :percentage="Math.round(vv*100/statisticData[item.id].count)"></el-progress>
                 {{vv}}
               </el-row>
-              <el-row style="color: #fb4699;padding: 8px 0;" v-if="!(statisticData[item.id] && statisticData[item.id].answer)">暂无统计数据......</el-row>
+              <el-row style="color: #fb4699;padding: 8px 0;font-size: 14px;" v-if="!(statisticData[item.id] && statisticData[item.id].answer)">暂无统计数据......</el-row>
             </el-row>
           </div>
         </div>
@@ -96,7 +100,7 @@
   #lookNaire {
     .tool {
       position: relative;
-      span {
+      div {
         position: absolute;
         left: 0px;
         top: 0px;
@@ -116,8 +120,8 @@
       .questionDiv {
         width: 98%;
         margin-left: 2%;
-        margin-bottom: 20px;
-        min-height: 154px;
+        margin-bottom: 12px;
+        min-height: 100px;
         padding-top: 16px;
         border-top: 1px #eee solid;
         .allAnswer {

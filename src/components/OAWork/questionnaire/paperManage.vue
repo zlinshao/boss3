@@ -11,7 +11,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" size="mini" @click="paperDialog = true">
-              <i class="iconfont icon-xinjianshijuan" style="font-size: 14px;"></i>&nbsp;新建试卷
+              <i class="iconfont icon-xinjianshijuan" style="font-size: 14px;"></i>&nbsp;新建问卷
             </el-button>
           </el-form-item>
         </el-form>
@@ -31,7 +31,7 @@
             style="width: 100%">
             <el-table-column
               prop="name"
-              label="试卷名称">
+              label="问卷名称">
               <template slot-scope="scope">
                 <span v-if="scope.row.name">{{scope.row.name}}</span>
                 <span v-if="!scope.row.name">暂无</span>
@@ -60,10 +60,10 @@
       </div>
     </div>
     <div id="paperDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="paperDialog" title="新建试卷" width="30%">
+      <el-dialog :close-on-click-modal="false" :visible.sync="paperDialog" title="新建问卷" width="30%">
         <el-form :model="paperForm" onsubmit="return false;" label-width="100px">
           <el-row>
-            <el-form-item label="试卷名称" required>
+            <el-form-item label="问卷名称" required>
               <el-input v-model="paperForm.name" size="mini" placeholder="请输入名称" clearable></el-input>
             </el-form-item>
           </el-row>
@@ -75,7 +75,7 @@
       </el-dialog>
     </div>
     <div id="testPaperDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="新建试卷" width="38%"
+      <el-dialog :close-on-click-modal="false" :visible.sync="testPaperDialog" title="新建问卷" width="38%"
                  style="margin-top:18vh">
         <el-row :gutter="30" style="margin-bottom:26px;">
           <el-col :span="12">
@@ -126,16 +126,16 @@
           search: '',
           category: '',
         },
-        testPaperDialog: false, //新建试卷录入题目方式模态框
-        paperDialog: false,  //新建试卷模态框
+        testPaperDialog: false, //新建问卷录入题目方式模态框
+        paperDialog: false,  //新建问卷模态框
 
         examinees_name: '',//新建考试报名考生
-        // 新建试卷 类型和名称
+        // 新建问卷 类型和名称
         paperForm: {
           name: '',
           is_questionnaire: 1,
         },
-        paperId: '', //新增成功后的试卷id, 用于自己录入的时候使用
+        paperId: '', //新增成功后的问卷id, 用于自己录入的时候使用
         testPaperId: '',
       };
     },
@@ -168,7 +168,7 @@
         if (!this.paperForm.name) {
           this.$notify.warning({
             title: '警告',
-            message: '试卷名称不能为空'
+            message: '问卷名称不能为空'
           });
           return;
         }
@@ -187,7 +187,7 @@
       //自己录入
       myselfQuestion() {
         this.testPaperDialog = false;
-        //创建试卷
+        //创建问卷
         this.$http.post(globalConfig.server + 'exam/paper', this.paperForm).then((res) => {
           if (res.data.code === '36010') {
             this.paperId = res.data.data;
@@ -238,17 +238,17 @@
           {
             clickIndex: "editTestPaper",
             headIcon: "el-icon-edit",
-            label: "编辑试卷"
+            label: "编辑问卷"
           },
           {
             clickIndex: "deleteTestPaper",
             headIcon: "el-icon-delete",
-            label: "删除试卷"
+            label: "删除问卷"
           },
           {
             clickIndex: "previewTestPaper",
             headIcon: "el-icons-fa-mail-reply",
-            label: "预览试卷"
+            label: "预览问卷"
           }
         ];
         let e = event || window.event; //support firefox contextmenu
@@ -329,7 +329,7 @@
         this.organizationDialog = false;
       },
       initial() {
-        // 新建调查试卷
+        // 新建调查问卷
         this.paperForm = {
           name: '',
           is_questionnaire: 1,
