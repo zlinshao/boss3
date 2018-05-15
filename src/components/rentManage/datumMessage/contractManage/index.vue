@@ -396,6 +396,20 @@
                     </template>
                   </el-table-column>
                   <el-table-column
+                    label="合同状态">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.status">{{scope.row.status}}</span>
+                      <span v-if="!scope.row.status">暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="合同性质">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.type">{{scope.row.type}}</span>
+                      <span v-if="!scope.row.type">暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
                     label="审核状态">
                     <template slot-scope="scope">
                       <span v-if="scope.row.doc_status&&scope.row.doc_status.name">
@@ -549,6 +563,20 @@
                       <span
                         v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
                       <span v-else="">/</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="合同状态">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.status">{{scope.row.status}}</span>
+                      <span v-if="!scope.row.status">暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="合同性质">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.type">{{scope.row.type}}</span>
+                      <span v-if="!scope.row.type">暂无</span>
                     </template>
                   </el-table-column>
                   <el-table-column
