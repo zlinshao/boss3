@@ -14,9 +14,9 @@
           <div class="questionDiv" v-for="(item,key) in v">
             <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
             <span style="color:#6a8dfb;"><span v-if="k==158 && category==158">简答题</span></span>
-            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+            <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
                v-html="item.stem"></p>
-            <el-row style="width:97%;margin-left:2.5%;" v-if="k==158 && category==158">
+            <el-row style="width:96%;margin-left:44px;" v-if="k==158 && category==158">
               <el-row :key="kk" v-for="(vv,kk) in statisticData[item.id] && statisticData[item.id].answer">
                 <span>{{kk}}</span><br/>
                 <el-progress style="width:30%;display: inline-block;" :text-inside="true" :stroke-width="18"

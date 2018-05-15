@@ -205,6 +205,9 @@
       this.getTestPaperData();
       this.getDictionary();
     },
+    activated() {
+      this.getTestPaperData();
+    },
     watch: {
       paperTypeDialog(val) {
         if (val) {

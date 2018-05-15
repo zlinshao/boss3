@@ -19,9 +19,9 @@
               <span v-if="k==155">不定向选择题</span>
               <span v-if="k==156">判断题</span>
             </span>
-            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+            <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
                v-html="item.stem"></p>
-            <el-row :key="index" v-for="(val,index) in item.choice" style="width:97%;margin-left:2.5%;">
+            <el-row :key="index" v-for="(val,index) in item.choice" style="width:96%;margin-left:44px;">
               <span>{{index}}：{{val}}</span><br/>
               <el-row :key="kk" v-for="(vv,kk) in statisticData[item.id] && statisticData[item.id].answer"
                       v-if="kk==index">
@@ -40,7 +40,7 @@
           <div class="questionDiv" v-for="(item,key) in v">
             <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
             <span style="color:#6a8dfb;"><span v-if="k==158">简答题</span></span>
-            <p style="width:97%;margin-left:2.5%;line-height:30px;padding-left:0;" class="ql-editor"
+            <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
                v-html="item.stem"></p>
             <span @click="openAll(item.id, k)"
                   style="color:rgb(106, 141, 251);cursor: pointer;width:97%;margin-left:2.5%;">查看全部回答</span>

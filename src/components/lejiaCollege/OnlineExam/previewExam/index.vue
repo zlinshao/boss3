@@ -10,13 +10,6 @@
               <div class="qdiv">试卷类型：<span style="color:#6a8dfb">{{testPaperData.category}}</span></div>
             </div>
           </el-col>
-          <!--<el-col :span="5" style="margin-left:2%; margin-right:2%">-->
-          <!--<div class="import_questions" style="border: 1px solid #58d788;box-shadow: 0 0 3px 1px #58d788;">-->
-          <!--<div class="import_left"><span style="float:left; font-size:14px;">总时长</span><i-->
-          <!--style="float:right; color:#58d788;font-size:20px;" class="iconfont icon-shijian1"></i></div>-->
-          <!--<div><span style="font-size:70px; color:#58d788">60</span>分钟</div>-->
-          <!--</div>-->
-          <!--</el-col>-->
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="border: 1px solid #fdca41;box-shadow: 0 0 3px 1px #fdca41;">
               <div class="import_left"><span style="float:left; font-size:14px;">总题数</span><i

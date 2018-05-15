@@ -66,9 +66,9 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width:96%;margin-left:3.5%;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
+          <p style="width:94%;margin-left:62px;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
           <el-form>
-            <el-form-item style="width:96%;margin-left:3.5%;">
+            <el-form-item style="width:94%;margin-left:62px;">
               <el-row :gutter="20">
                 <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                   <span>{{index}}：{{val}}</span>
@@ -87,9 +87,9 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width:96%;margin-left:3.5%;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
+          <p style="width:94%;margin-left:62px;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
           <el-form>
-            <el-form-item style="width:96%;margin-left:3.5%;">
+            <el-form-item style="width:94%;margin-left:62px;">
               <el-row :gutter="20">
                 <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                   <span >{{index}}：{{val}}</span>
@@ -106,9 +106,9 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width:96%;margin-left:3.5%;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
+          <p style="width:94%;margin-left:62px;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
           <el-form>
-            <el-form-item style="width:96%;margin-left:3.5%;">
+            <el-form-item style="width:94%;margin-left:62px;">
               <el-row :gutter="20">
                 <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height: 24px;">
                   <span>{{index}}：{{val}}</span>
@@ -125,7 +125,7 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width:96%;margin-left:3.5%;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
+          <p style="width:94%;margin-left:60px;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
         </div>
       </div>
     </div>
