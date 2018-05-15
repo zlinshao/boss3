@@ -15,8 +15,8 @@
             <div class="import_questions" style="border: 1px solid #58d788;box-shadow: 0 0 3px 1px #58d788;">
               <div class="import_left"><span style="float:left; font-size:14px;">总时长</span><i
                 style="float:right; color:#58d788;font-size:20px;" class="iconfont icon-shijian1"></i></div>
-              <div><span style="font-size:70px; color:#58d788;margin-left: 30px;">{{ paperData.duration }}</span>分钟
-                <span style="float: right;margin-right: 30px;margin-top: 30px;">倒计时
+              <div><span style="font-size:70px; color:#58d788;" :class="{'timeStringClass':timeString !=''}">{{ paperData.duration }}</span>分钟
+                <span style="float: right;margin-right: 30px;margin-top: 30px;" v-if="timeString !='' ">倒计时
                   <br/><span style="color:#58d788;">{{timeString}}</span></span>
               </div>
             </div>
@@ -184,7 +184,6 @@
         </div>
       </el-dialog>
     </div>
-
   </div>
 
 </template>
@@ -224,6 +223,7 @@
       this.confirmArrival = localStorage.getItem('confirmArrival');  //check_in签到状态考试id数组
       this.clockSubmit();
       this.timeOut = setTimeout(() => {
+        this.timeClear = '';
         this.clockSubmit();
       }, 1000 * 60);
     },
@@ -235,10 +235,9 @@
         }
       },
       countDown(num) {
+        this.timeClear = '';
         if (num >= 0) {
           this.clock(num);
-        } else {
-          this.timeClear = '';
         }
       }
     },
@@ -384,11 +383,9 @@
           this.$http.get(globalConfig.server + 'exam/poll/' + this.examId).then((res) => {
             if (res.data.code === '30000') {
               this.onSubmit();
-              // alert('强制提交。。。')
             } else {
               let time = res.data.msg.split(',');
               this.countDown = time[1] - time[0];
-
             }
           });
         }
@@ -398,10 +395,15 @@
 </script>
 
 <style lang="scss" scoped>
+  .timeStringClass {
+    margin-left: 30px;
+  }
   .ql-editor {
     min-height: initial !important;
   }
-
+  .el-form-item {
+    margin-bottom: 12px !important;
+  }
   .confirm_btn {
     width: 100px;
     height: 35px;
