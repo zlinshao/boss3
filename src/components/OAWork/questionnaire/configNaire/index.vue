@@ -19,7 +19,7 @@
           <el-button type="success" size="mini"
                      style="margin-right:10px; background-color:#58d788; border-color:#58d788;"
                      @click="editPaper">
-            <i class="el-icon-edit"></i>&nbsp;修改试卷
+            <i class="el-icon-edit"></i>&nbsp;修改问卷
           </el-button>
         </div>
       </div>
@@ -130,10 +130,10 @@
       </div>
     </div>
     <div id="paperTypeDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="paperTypeDialog" title="编辑试卷" width="30%">
+      <el-dialog :close-on-click-modal="false" :visible.sync="paperTypeDialog" title="编辑问卷" width="30%">
         <el-form :model="paperTypeForm" onsubmit="return false;" label-width="100px">
           <el-row>
-            <el-form-item label="试卷名称" required>
+            <el-form-item label="问卷名称" required>
               <el-input v-model="paperTypeForm.name" size="mini" placeholder="请输入名称" clearable></el-input>
             </el-form-item>
           </el-row>
@@ -202,7 +202,7 @@
         tableLoading: false,
         associatedExamData: [],
         selectExamIds: [],
-        paperTypeDialog: false,  //编辑试卷 选择类型模态框
+        paperTypeDialog: false,  //编辑问卷 选择类型模态框
         paperTypeForm: {
           name: '',
           is_questionnaire: 1,
@@ -268,7 +268,7 @@
         });
       },
       synchroTestPaper() {
-        //同步试卷最新数据到考试的接口
+        //同步问卷最新数据到考试的接口
         this.$http.post(globalConfig.server + 'exam/paper/sync/' + this.testPaperId, {ids: this.selectExamIds}).then((res) => {
           if (res.data.code === '36000') {
             this.associatedExamDialog = false;
@@ -301,7 +301,7 @@
         this.dictionary(152).then((res) => {
           this.questionTypeCategory = res.data;
         });
-        //试卷类型
+        //问卷类型
         this.dictionary(613).then((res) => {
           this.examType = res.data;
         });
