@@ -1,22 +1,6 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="wholeRentContainer">
-      <!--
-       <div class="tool">
-        <div class="tool_left">
-          <el-button type="success" size="mini" @click="openModalDialog('instructionDialog')">
-            <i class="el-icon-tickets"></i>&nbsp;功能说明
-          </el-button>
-          <el-button type="info" size="mini" @click="openModalDialog('backUpDialog')">
-            <i class="el-icon-tickets"></i>&nbsp;查看备份
-          </el-button>
-        </div>
-        <div class="tool_right"  @click="openModalDialog('settingDialog')">
-          <div><i class="el-icon-setting"></i>&nbsp;设置</div>
-        </div>
-      </div>
-      -->
-
       <div class="highRanking" style="margin-top: 10px">
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
@@ -502,20 +486,20 @@
               <el-table-column
                 label="审核状态">
                 <template slot-scope="scope">
-                      <span v-if="scope.row.doc_status&&scope.row.doc_status.name">
-                        <span v-if="scope.row.doc_status.id==1">
-                          <span class="info_label">{{scope.row.doc_status.name}}</span>
-                        </span>
-                        <span v-if="scope.row.doc_status.id==2">
-                          <span class="yellow_label">{{scope.row.doc_status.name}}</span>
-                        </span>
-                        <span v-if="scope.row.doc_status.id==3">
-                          <span class="orange_label">{{scope.row.doc_status.name}}</span>
-                        </span>
-                        <span v-if="scope.row.doc_status.id==4">
-                          <span class="success_label">{{scope.row.doc_status.name}}</span>
-                        </span>
-                      </span>
+                  <span v-if="scope.row.doc_status&&scope.row.doc_status.name">
+                    <span v-if="scope.row.doc_status.id==1">
+                      <span class="info_label">{{scope.row.doc_status.name}}</span>
+                    </span>
+                    <span v-if="scope.row.doc_status.id==2">
+                      <span class="yellow_label">{{scope.row.doc_status.name}}</span>
+                    </span>
+                    <span v-if="scope.row.doc_status.id==3">
+                      <span class="orange_label">{{scope.row.doc_status.name}}</span>
+                    </span>
+                    <span v-if="scope.row.doc_status.id==4">
+                      <span class="success_label">{{scope.row.doc_status.name}}</span>
+                    </span>
+                  </span>
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
@@ -922,6 +906,7 @@
         } else {
           this.rentingData = [];
           this.rentTotalNum = 0;
+          this.rentContractId = '',
           this.rentStatus = '暂未出租';
         }
       }
@@ -1101,6 +1086,7 @@
           } else {
             this.rentingData = [];
             this.rentTotalNum = 0;
+            this.rentContractId = '';
             this.rentStatus = '暂未出租';
           }
         })

@@ -2,7 +2,7 @@
   <div id="publicArticle">
     <div class="title" v-show="previewShow">文章发布</div>
     <el-form v-show="previewShow" label-width="100px">
-      <el-form-item label="标题" v-if="moduleType !='newVersionUpdate'">
+      <el-form-item label="标题" required v-if="moduleType !='newVersionUpdate'">
         <el-input v-model="form.name" placeholder="请输入标题"></el-input>
       </el-form-item>
       <el-form-item label="版本" v-else>
@@ -14,14 +14,19 @@
                      :key="index"></el-option>
         </el-select>
       </el-form-item>
-
+      <el-form-item label="版本类型" required="" v-else>
+        <el-select v-model="form.type" clearable placeholder="请选择类别">
+          <el-option v-for="(key,index) in versionType" :label="key.value" :value="key.id"
+                     :key="index"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="内容" required="">
         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
                     v-model="form && form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
 
       </el-form-item>
 
-      <el-form-item label="封面图片" v-if="moduleType !='newVersionUpdate'">
+      <el-form-item label="封面图片" >
         <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
 
@@ -89,10 +94,21 @@
           region: [],
           status: [],
         },
+        versionType:[
+          {
+            id:1,
+            value:"大版本"
+          },
+          {
+            id:2,
+            value:"小版本"
+          },
+        ],
         form: {
           name: '',
           region: '',
           htmlForEditor: '',
+          type:'',
         },
         previewShow: true,
         tabIndex: '',
@@ -111,10 +127,7 @@
     },
     methods: {
       getParams() {
-        if (!this.$route.query.ids) {
-          this.form.name = '';
-          this.form.region = '';
-          this.form.htmlForEditor = '';
+        if (!this.$route.query.moduleType) {
           this.cover_pic = '';
           if (this.$route.query.moduleType) {
             this.$store.dispatch('moduleType', this.$route.query.moduleType);
@@ -123,13 +136,17 @@
             path: "/publicArticle",
             query: {
               ids: this.$store.state.article.article_id,
-              moduleType: this.$store.state.article.module_type
+              moduleType: this.$store.state.article.module_type,
             }
           });
         }
         let query = this.$route.query;
         this.moduleType = query.moduleType;
-
+        if(query.from === 'publicArticleBtn'){
+          this.form.name = '';
+          this.form.region = '';
+          this.form.htmlForEditor = '';
+        }
         this.getDict();
         this.pitch = '';
         if (query.ids !== undefined) {
@@ -175,12 +192,25 @@
       },
       newVersionDetail(id) {
         if (id) {
+          let pic = this.info.album;
+          let arr = {};
+          this.cover_id = [];
+          for (let key in pic) {
+            this.cover_id.push(key);
+            for (let i = 0; i < pic[key].length; i++) {
+              arr[key] = pic[key][i].uri;
+            }
+          }
+          this.cover_pic = arr;
+          console.log(this.cover_pic)
           this.form.name = this.info.version
           this.form.htmlForEditor = this.info.content;
+          this.form.type = this.info.type
         }
         else {
           this.form.name = ""
           this.form.htmlForEditor = ""
+          this.form.type= 2
         }
       },
       getDict() {
@@ -264,6 +294,8 @@
           type(this.urls + 'setting/update/' + this.pitch, {
             version: this.form.name,
             content: this.form.htmlForEditor,
+            image_pic: this.cover_id,
+            type: this.form.type
           }).then((res) => {
             if (res.data.code === '50050') {
               this.goBack();
@@ -278,6 +310,8 @@
           type(this.urls + 'setting/update', {
             version: this.form.name,
             content: this.form.htmlForEditor,
+            image_pic: this.cover_id,
+            type: this.form.type
           }).then((res) => {
             if (res.data.code === '50030') {
               this.goBack();
@@ -296,6 +330,10 @@
         this.form.region = '';
         this.form.htmlForEditor = '';
         this.isClear = true;
+        let view = {};
+        view.name = ' 文章发布 ';
+        view.path = '/publicArticle';
+        this.$store.dispatch('delVisitedViews', view);
         setTimeout(() => {
           this.$router.push({path: '/articleMessage', query: {refresh: 'refresh'}})
         }, 0);

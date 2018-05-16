@@ -351,7 +351,7 @@
         });
       },
       getLogNum() {
-        this.$http.get(globalConfig.server + 'oa/daily_tmp/index?style=count&self=1&limit=500').then((res) => {
+        this.$http.get(globalConfig.server + 'oa/daily_tmp/index?page=1&style=count&self=&limit=500').then((res) => {
           if (res.data.code === '80000') {
             this.logNum = res.data.data.count;
           }

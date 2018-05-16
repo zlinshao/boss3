@@ -804,7 +804,7 @@
         <el-button size="small" type="primary" @click="staffDetail = false">确 定</el-button>
       </span>
     </el-dialog>
-    <el-dialog :close-on-click-modal="false" title="离职日期" :visible.sync="notOnJobDialog" width="30%">
+    <el-dialog :close-on-click-modal="false" title="离职日期" :visible.sync="selectLeaveDateDialog" width="30%">
       <div>
         <el-form size="mini" onsubmit="return false;" :model="form" label-width="100px" style="padding: 0 20px;">
           <el-form-item label="离职日期" required>
@@ -815,8 +815,25 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="notOnJobDialog=false">取 消</el-button>
-        <el-button size="small" type="primary" @click="notOnJob">确 定</el-button>
+        <el-button size="small" @click="selectLeaveDateDialog=false">取 消</el-button>
+        <el-button size="small" type="primary" @click="leaveDateConfirm">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog :close-on-click-modal="false" title="复职等级" :visible.sync="selectLevelDialog" width="30%">
+      <div>
+        <el-form size="mini" onsubmit="return false;" :model="levelForm" label-width="100px" style="padding: 0 20px;">
+          <el-form-item label="等级" required>
+            <el-select v-model="levelForm.level" clearable>
+              <el-option v-for="item in branchBankCategory" :value="item.id" :key="item.id"
+                         :label="item.dictionary_name">{{item.dictionary_name}}
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="small" @click="selectLevelDialog=false">取 消</el-button>
+        <el-button size="small" type="primary" @click="levelConfirm">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -868,8 +885,12 @@
     },
     data() {
       return {
-        notOnJobDialog: false,
-        form: {dismiss_time: ''},
+        selectLeaveDateDialog: false,  //选择离职日期弹框
+        selectLevelDialog: false,  //选择等级弹框
+        form: {dismiss_time: ''}, //离职日期
+        levelForm: {level: ''},  //等级
+        reinstatedStaffId: '',
+        branchBankCategory: [],
         currentStaffId: '',
         isHigh: false,
         powerData: [],
@@ -987,14 +1008,7 @@
       this.activeName = 'first';
       this.getDefaultData();
       this.getEntryMaterials();
-    },
-    activated() {
-      // this.initExpand();
-      // document.getElementById('staffManage').style.minHeight = window.innerHeight - 160 + 'px';
-      // this.getDepart();
-      // this.activeName = 'first';
-      // this.getDefaultData();
-      // this.getEntryMaterials();
+      this.getBranchBank();
     },
     watch: {
       department_id(val) {
@@ -1053,6 +1067,16 @@
             this.entryMaterialsCategory = res.data.data;
           } else {
             this.entryMaterialsCategory = [];
+          }
+        });
+      },
+      //等级
+      getBranchBank() {
+        this.$http.get(globalConfig.server + 'setting/dictionary/234').then((res) => {
+          if (res.data.code === '30010') {
+            this.branchBankCategory = res.data.data;
+          } else {
+            this.branchBankCategory = [];
           }
         });
       },
@@ -1317,7 +1341,7 @@
         this.contextParams(event);
       },
       //离职日期
-      notOnJob() {
+      leaveDateConfirm() {
         this.$confirm('员工在职状态将会改变, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -1333,8 +1357,35 @@
                 message: res.data.msg
               });
               this.getStaffData();
-              this.notOnJobDialog = false;
+              this.selectLeaveDateDialog = false;
               this.currentStaffId = '';
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              })
+            }
+          });
+        }).catch(() => {
+
+        });
+      },
+      //选择复职等级
+      levelConfirm(){
+        this.$confirm('员工在职状态将会改变, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.put(globalConfig.server + 'manager/staff/dismiss/' + this.reinstatedStaffId, {type: 'is_on_job',level: this.levelForm.level}).then((res) => {
+            if (res.data.code === '10040') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.getStaffData();
+              this.selectLevelDialog = false;
+              this.reinstatedStaffId = '';
             } else {
               this.$notify.warning({
                 title: '警告',
@@ -1388,34 +1439,15 @@
 
           });
         } else if (val.clickIndex === 'not_on_job') {
-          this.$confirm('员工在职状态将会改变, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            this.$http.put(globalConfig.server + 'manager/staff/dismiss/' + val.id, {type: 'is_on_job'}).then((res) => {
-              if (res.data.code === '10040') {
-                this.$notify.success({
-                  title: '成功',
-                  message: res.data.msg
-                });
-                this.getStaffData();
-              } else {
-                this.$notify.warning({
-                  title: '警告',
-                  message: res.data.msg
-                })
-              }
-            });
-          }).catch(() => {
+          this.selectLevelDialog = true;
+          this.reinstatedStaffId= val.id;
+          this.levelForm.level = '';
 
-          });
         } else if (val.clickIndex === 'on_job') {
-          this.notOnJobDialog = true;
+          this.selectLeaveDateDialog = true;
           this.currentStaffId = val.id;
           this.form.dismiss_time = '';
         }
-
         if (val.clickIndex === 'power') {
           this.powerModule = true;
           this.powerData = val.data;
