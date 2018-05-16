@@ -272,7 +272,9 @@
   .ql-editor {
     min-height: initial !important;
   }
-
+  .el-form-item {
+    margin-bottom: 12px !important;
+  }
   .confirm_btn {
     width: 100px;
     height: 35px;
