@@ -111,10 +111,7 @@
     },
     methods: {
       getParams() {
-        if (!this.$route.query.ids) {
-          this.form.name = '';
-          this.form.region = '';
-          this.form.htmlForEditor = '';
+        if (!this.$route.query.moduleType) {
           this.cover_pic = '';
           if (this.$route.query.moduleType) {
             this.$store.dispatch('moduleType', this.$route.query.moduleType);
@@ -123,13 +120,17 @@
             path: "/publicArticle",
             query: {
               ids: this.$store.state.article.article_id,
-              moduleType: this.$store.state.article.module_type
+              moduleType: this.$store.state.article.module_type,
             }
           });
         }
         let query = this.$route.query;
         this.moduleType = query.moduleType;
-
+        if(query.from === 'publicArticleBtn'){
+          this.form.name = '';
+          this.form.region = '';
+          this.form.htmlForEditor = '';
+        }
         this.getDict();
         this.pitch = '';
         if (query.ids !== undefined) {
