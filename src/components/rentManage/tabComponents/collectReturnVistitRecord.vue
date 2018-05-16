@@ -7,6 +7,7 @@
         element-loading-text="拼命加载中"
         element-loading-spinner="el-icon-loading"
         element-loading-background="rgba(0, 0, 0, 0)"
+        @row-dblclick="dblClickTable"
         style="width: 100%">
               <el-table-column
                 label="创建时间">
@@ -88,12 +89,16 @@
           :total="totalNumber">
         </el-pagination>
       </div>
+    <RepairDetail :repairDetailDialog="repairDetailDialog" :ToActiveName="typeTo" :repairId="repairId" :photopic="photopic" :wholeForm="wholeForm"
+                  @close="closeModal"></RepairDetail>
     </div>
 </template>
 
 <script>
+import RepairDetail from "../customerService/repairDetail";
     export default {
       name: 'hello',
+      components: { RepairDetail },
       props:['collectContractId','activeName','tabStatusChange'],
       data () {
         return {
@@ -106,9 +111,13 @@
           },
           isRequestData:false,
           totalNumber:0,
-
+          wholeForm:false,
           emptyContent : '暂无数据',
           tableLoading : false,
+          repairDetailDialog: false,
+          repairId: "",
+          photopic:[],
+          typeTo:'',
         }
       },
       watch:{
@@ -122,6 +131,8 @@
         },
         activeName(val){
           if(val=== 'CollectReturnVisitRecordTab' && this.collectContractId){
+            this.typeTo = ' first';
+            this.wholeForm = true;
             this.getData();
             this.isRequestData = true;
           }
@@ -153,6 +164,18 @@
           this.params.page = val;
           this.getData();
         } ,
+        dblClickTable(row, event) {
+          this.repairId = row.id;
+          this.photopic = row.album;
+          this.repairDetailDialog = true;
+        },
+        closeModal(val) {
+          this.repairId = "";
+          this.photopic = [];
+          this.repairDetailDialog = false;
+          this.wholeForm = false;
+        },
+
       }
     }
 </script>

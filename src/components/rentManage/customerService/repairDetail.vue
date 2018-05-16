@@ -22,10 +22,10 @@
                 <div class="content">{{repairDetail.address}}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="2">
+            <el-col :span="2" v-if="!wholeFlag">
               <el-checkbox v-model="audited_fields.address" :disabled="audited_fieldsxx.address" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col>  
-            <el-col :span="10">
+            <el-col :span="10" :class="{'wholeStyle':wholeFlag}">
               <el-form-item label="合同类型" >
                 <div class="content">{{repairDetail.contract_type}}</div>
               </el-form-item>
@@ -42,15 +42,15 @@
                 <span style="float:left;">天</span>
               </el-form-item>
             </el-col>
-            <el-col :span="2">
+            <el-col :span="2" v-if="!wholeFlag">
               <el-checkbox v-model="audited_fields.contract_month" :disabled="audited_fieldsxx.contract_month" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col>  
-            <el-col :span="10">
+            <el-col :span="10" :class="{'wholeStyle':wholeFlag}">
               <el-form-item label="来源">
                 <div class="content">{{repairDetail.originate_name}}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="2">
+            <el-col :span="2" v-if="!wholeFlag">
               <el-checkbox v-model="audited_fields.originate_name" :disabled="audited_fieldsxx.originate_name" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col>  
           </el-row>
@@ -60,15 +60,15 @@
                 <div class="content">{{repairDetail.agency}}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="2" >
+            <el-col :span="2" v-if="!wholeFlag">
               <el-checkbox v-model="audited_fields.agency" :disabled="audited_fieldsxx.agency" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col> 
-            <el-col :span="10">
-              <el-form-item label="中间价格">
+            <el-col :span="10" :class="{'wholeStyle':wholeFlag}">
+              <el-form-item label="中介价格">
                 <div class="content">{{repairDetail.agency_price}}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="2" >
+            <el-col :span="2" v-if="!wholeFlag">
               <el-checkbox v-model="audited_fields.agency_price" :disabled="audited_fieldsxx.agency_price" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col> 
           </el-row>
@@ -78,15 +78,15 @@
                 <div class="content">{{repairDetail.agency_person}}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="2" >
+            <el-col :span="2" v-if="!wholeFlag">
               <el-checkbox v-model="audited_fields.agency_person" :disabled="audited_fieldsxx.agency_person" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col> 
-            <el-col :span="10">
-              <el-form-item label="中间电话">
+            <el-col :span="10" :class="{'wholeStyle':wholeFlag}">
+              <el-form-item label="中介电话">
                 <div class="content">{{repairDetail.agency_tel}}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="2" >
+            <el-col :span="2" v-if="!wholeFlag">
               <el-checkbox v-model="audited_fields.agency_tel" :disabled="audited_fieldsxx.agency_tel" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col> 
           </el-row>
@@ -102,7 +102,7 @@
                 <div class="content">{{repairDetail.unit_price[1][index-1]}}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="2">
+            <el-col :span="2" v-if="!wholeFlag">
               <el-checkbox v-model="audited_fields.unit_price[index-1]" :disabled="audited_fieldsxx.unit_price[index-1]" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col>      
           </el-row>
@@ -127,7 +127,7 @@
                   <div class="content" style="width:40px;float:left">{{repairDetail.pay_type[2][index-1]}}</div>
                 </el-form-item>
             </el-col>
-            <el-col :span="2" >
+            <el-col :span="2" v-if="!wholeFlag">
               <el-checkbox v-model="audited_fields.pay_type[index-1]" :disabled="audited_fieldsxx.pay_type[index-1]" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col>   
           </el-row>
@@ -137,7 +137,7 @@
                 <div class="content">{{repairDetail.has_pay}}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="2" >
+            <el-col :span="2" v-if="!wholeFlag">
               <el-checkbox v-model="audited_fields.has_pay" :disabled="audited_fieldsxx.has_pay" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col>   
           </el-row>
@@ -155,7 +155,7 @@
                 <div class="content">{{repairDetail.pay_method[1][index-1]}}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="2" >
+            <el-col :span="2" v-if="!wholeFlag">
               <el-checkbox v-model="audited_fields.pay_method[index-1]" :disabled="audited_fieldsxx.pay_method[index-1]" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col>               
           </el-row>
@@ -165,10 +165,10 @@
                 <div class="content">{{repairDetail.has_extra}}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="2" >
+            <el-col :span="2" v-if="!wholeFlag">
               <el-checkbox v-model="audited_fields.has_extra" :disabled="audited_fieldsxx.has_extra" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col>   
-            <el-col :span="10" >
+            <el-col :span="10" :class="{'wholeStyle':wholeFlag}">
               <el-form-item label="保修期">
                 <div class="content" style="width:25%;float:left;">{{repairDetail.guarantee_month}}</div>
                 <span style="float:left;">月</span>
@@ -176,7 +176,7 @@
                 <span style="float:left;">天</span>
               </el-form-item>
             </el-col>
-            <el-col :span="2" >
+            <el-col :span="2" v-if="!wholeFlag">
               <el-checkbox v-model="audited_fields.guarantee_month" :disabled="audited_fieldsxx.guarantee_month" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col>   
           </el-row>
@@ -192,7 +192,7 @@
                 <div class="content">{{repairDetail.pay_use[1][index-1]}}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="2" >
+            <el-col :span="2" v-if="!wholeFlag">
               <el-checkbox v-model="audited_fields.pay_use[index-1]" :disabled="audited_fieldsxx.pay_use[index-1]" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col>  
           </el-row>
@@ -202,13 +202,13 @@
                 <div class="content">{{repairDetail.remark_clause}}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="2" >
+            <el-col :span="2" v-if="!wholeFlag">
               <el-checkbox v-model="audited_fields.remark_clause" :disabled="audited_fieldsxx.remark_clause" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col>  
           </el-row>
           <el-row>
             <el-col :span="22">
-              <el-form-item label="业务员态度" required="">
+              <el-form-item label="业务员态度" >
                 <el-rate v-model="repairDetail.star" disabled></el-rate>
               </el-form-item>
             </el-col>
@@ -219,7 +219,7 @@
                 <div class="content">{{repairDetail.sale_remark}}</div>
               </el-form-item>
             </el-col>
-            <el-col :span="2" >
+            <el-col :span="2" v-if="!wholeFlag">
               <el-checkbox v-model="audited_fields.sale_remark" :disabled="audited_fieldsxx.sale_remark" style="margin-left: 20px;line-height: 28px;"></el-checkbox>
             </el-col>  
           </el-row>
@@ -230,14 +230,14 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
+          <el-row v-if="!wholeFlag">
             <el-col :span="10">
               <el-form-item label="中介费">
                 <div class="content">{{agency_price_origin}}</div>
               </el-form-item>
             </el-col>
           </el-row>
-          <el-row>
+          <el-row v-if="!wholeFlag">
             <el-col :span="10">
               <el-form-item label="现中介费">
                 <div class="content">{{agency_price_now}}</div>
@@ -253,7 +253,7 @@
             <el-col :span="2">
             </el-col>  
           </el-row>
-          <el-row>
+          <el-row v-if="!wholeFlag">
             <el-col :span="10">
               <el-form-item label="中介人">
                 <div class="content">{{agency_user_name}}</div>
@@ -269,7 +269,7 @@
             <el-col :span="2">
             </el-col>  
           </el-row>
-          <el-row>
+          <el-row v-if="!wholeFlag">
             <el-col :span="22">
               <el-form-item label="合同照片" style="max-height:160px;" class="scroll_bar">
                 <img v-if="album!=[]" style="width:120px; height:80px;border-radius:5px; margin: 0 8px;" data-magnify :key="val"
@@ -290,7 +290,7 @@
 <script>
 export default {
   name: "repair-detail",
-  props: ["repairDetailDialog", "ToActiveName", "repairId", "photopic"],
+  props: ["repairDetailDialog", "ToActiveName", "repairId", "photopic","wholeForm","wholeFormR"],
   components: {},
   data() {
     return {
@@ -301,14 +301,13 @@ export default {
       },
       payTypeInfo: [],
       activeName: "",
+      wholeFlag:false,
       abc: 3,
       repairIdTo: "",
       priceLen: 0,
       payForLen: 0,
       payTypeLen: 0,
       payUseLen: 0,
-      feedBackInfo: [],
-      audited_fields: [],
       album: [],
       agency_price_origin:"",            //中介费
       agency_price_now:"",               //现中介费
@@ -352,13 +351,22 @@ export default {
     };
   },
   watch: {
+    wholeForm(val){
+      console.log(val)
+        this.wholeFlag = val;
+    },
+    wholeFormR(val){
+      console.log(val)
+        this.wholeFlag = val;
+    },
     repairDetailDialog(val) {
       this.repairDetailDialogVisible = val;
     },
     repairDetailDialogVisible(val) {
       if (!val) {
         this.$emit("close");
-      } else {
+        this.wholeFlag = false;
+      } else {   
         (this.audited_fields = {
           address: "",
           contract_month: "",
@@ -417,7 +425,7 @@ export default {
   mounted() {},
   methods: {
     getDetail() {
-      this.dictionary(629).then(res => {
+      this.dictionary(443).then(res => {
         //支付方式
         this.payTypeInfo = res.data;
       });
@@ -546,6 +554,9 @@ export default {
   @mixin flex {
     display: flex;
     display: -webkit-flex;
+  }
+  .wholeStyle{
+    margin-left:8.333333%;
   }
   .content {
     padding: 0 10px;
