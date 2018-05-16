@@ -956,7 +956,7 @@
         this.params.pay_way = [];
         for (let i = 0; i < this.payWayChangeAmount; i++) {
           payWayItem = {};
-          payWayItem.pay_way_bet = this.pay_way_bet[0] ? this.pay_way_bet[0] : '';
+          payWayItem.pay_way_bet = this.pay_way_bet[0] ? this.pay_way_bet[0] : 0;
           payWayItem.pay_way = this.payWayArray[i] ? this.payWayArray[i] : '';
           payWayItem.period = this.payPeriodArray[i] ? this.payPeriodArray[i] : '';
           this.params.pay_way.push(payWayItem);
