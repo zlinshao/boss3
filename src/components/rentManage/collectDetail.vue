@@ -408,16 +408,16 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="原中介费(元)">
-                  <div class="content">{{contractInfo.agency}}</div>
+                  <div class="content">
+                    <span v-if="contractInfo.agency_info">
+                       {{contractInfo.agency_info.agency_price}}
+                    </span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="现中介费(元)">
-                  <div class="content">
-                    <span v-if="contractInfo.agency_info">
-                       {{contractInfo.agency_info.agency_price_now}}
-                    </span>
-                  </div>
+                  <div class="content">{{contractInfo.agency}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
