@@ -411,7 +411,7 @@
           page: 1,
           limit: 12,
           // keyword: '',
-          time: '',  //时间搜索
+          time: [],  //时间搜索
           status: '',  //完成状态
           source: '',  //来源
           type: '',  //报销类型
@@ -495,7 +495,7 @@
           this.form.time = [];
         }
         this.form.module = 1;
-        this.$http.get(globalConfig.server + 'customer/reimbursement?limit=12', {params: this.form}).then((res) => {
+        this.$http.get(globalConfig.server + 'customer/reimbursement', {params: this.form}).then((res) => {
           this.isHigh = false;
           this.collectLoading = false;
           if (res.data.code === '30000') {
@@ -520,7 +520,7 @@
           this.form.time = [];
         }
         this.form.module = 2;
-        this.$http.get(globalConfig.server + 'customer/reimbursement?limit=12', {params: this.form}).then((res) => {
+        this.$http.get(globalConfig.server + 'customer/reimbursement', {params: this.form}).then((res) => {
           this.isHigh = false;
           this.rentLoading = false;
           if (res.data.code === '30000') {
@@ -593,7 +593,7 @@
       },
       // 重置
       resetting() {
-        this.form.time = '';
+        this.form.time = [];
         this.form.status = '';
         this.form.source = '';
         this.form.type = '';
