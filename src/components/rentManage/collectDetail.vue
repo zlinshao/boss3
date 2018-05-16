@@ -1133,7 +1133,8 @@
         },
         //回访相关
         form: {
-            contract_id : ''
+            contract_id : '',
+            module:1
         },        
         priceLen: 0,
         payForLen: 0,
