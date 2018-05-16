@@ -485,6 +485,7 @@
         }
       },
       search() {
+        this.form.page = 1;
         if (this.activeName === 'first') {
           this.getCollectTableData();
         } else {
@@ -508,7 +509,11 @@
       handleCurrentChange(val) {
         this.form.page = val;
         console.log(`当前页: ${val}`);
-        this.search();
+        if (this.activeName === 'first') {
+          this.getCollectTableData();
+        } else {
+          this.getRentTableData();
+        }
       },
       dblClickTable(row, event) {
         this.repairId = row.id;

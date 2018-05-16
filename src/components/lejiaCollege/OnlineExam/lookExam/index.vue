@@ -246,6 +246,9 @@
   .el-form-item {
     margin-bottom: 12px !important;
   }
+  .el-form-item .el-col span, .el-form-item .el-col span label{
+    line-height: 24px;
+  }
   #lookExam {
     .tool {
       height: 160px;

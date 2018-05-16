@@ -19,7 +19,7 @@
     <div class="container">
       <div class="top">
         <h3>
-          {{contractInfo.community_name}}  {{contractInfo.building}}-{{contractInfo.unit}}-{{contractInfo.doorplate}}
+          {{contractInfo.community_name}}  {{contractInfo.doorplate_cn}}
           <span v-if="contractInfo.contract_number">（合同编号 : {{contractInfo.contract_number}}）</span>
         </h3>
         <h3>
@@ -322,17 +322,17 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="中介费(元)">
-                  <div class="content">{{contractInfo.agency}}</div>
+                <el-form-item label="原中介费(元)">
+                  <div class="content">
+                    <span v-if="contractInfo.agency_info">
+                       {{contractInfo.agency_info.agency_price}}
+                    </span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="报备中介费">
-                  <div class="content">
-                    <span v-if="contractInfo.agency_info">
-                       {{contractInfo.agency_info.agency_price_now}}
-                    </span>
-                  </div>
+                <el-form-item label="现中介费(元)">
+                  <div class="content">{{contractInfo.agency}}</div>
                 </el-form-item>
               </el-col>
             </el-row>

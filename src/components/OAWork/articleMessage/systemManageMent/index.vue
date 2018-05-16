@@ -252,7 +252,7 @@
       // 文章发布
       publicArticle() {
         this.$store.dispatch('deleteArticleId');
-        this.$router.push({path: '/publicArticle', query: {moduleType: this.moduleType}});
+        this.$router.push({path: '/publicArticle', query: {moduleType: this.moduleType, from: 'publicArticleBtn'}});
         this.$store.dispatch('moduleType', this.moduleType);
       },
       handleSizeChange(val) {

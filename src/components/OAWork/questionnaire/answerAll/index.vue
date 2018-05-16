@@ -97,6 +97,9 @@
 </script>
 
 <style lang="scss" scoped>
+  .ql-editor {
+    min-height: initial !important;
+  }
   #lookNaire {
     .tool {
       position: relative;

@@ -477,8 +477,7 @@
       handleClick() {
         if (this.activeName == "first") {
           this.collectDatafunc();
-        }
-        else if (this.activeName == "second") {
+        }else if (this.activeName == "second") {
           this.rentDatafunc();
         }
       },
