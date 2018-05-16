@@ -9,7 +9,7 @@
           <el-button type="success" size="mini"
                      style="margin-right:10px; background-color:#58d788; border-color:#58d788;"
                      @click="associatedExam">
-            <i class="iconfont icon-jinrukaoshi" style="font-size: 14px;"></i>&nbsp;关联的问卷
+            <i class="iconfont icon-jinrukaoshi" style="font-size: 14px;"></i>&nbsp;关联的调查
           </el-button>
           <el-button type="success" size="mini"
                      style="margin-right:10px; background-color:#58d788; border-color:#58d788;"
@@ -66,7 +66,8 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width:94%;margin-left:62px;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
+          <p style="width:94%;margin-left:62px;line-height:30px;padding-left:0;" class="ql-editor"
+             v-html="item.stem"></p>
           <el-form>
             <el-form-item style="width:94%;margin-left:62px;">
               <el-row :gutter="20">
@@ -82,17 +83,18 @@
           <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
           <span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
           <span style="color:#6a8dfb;"><span v-if="item.category===154">多选题</span><span
-          v-if="item.category===155">不定向选择题</span></span>
+            v-if="item.category===155">不定向选择题</span></span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width:94%;margin-left:62px;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
+          <p style="width:94%;margin-left:62px;line-height:30px;padding-left:0;" class="ql-editor"
+             v-html="item.stem"></p>
           <el-form>
             <el-form-item style="width:94%;margin-left:62px;">
               <el-row :gutter="20">
                 <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
-                  <span >{{index}}：{{val}}</span>
+                  <span>{{index}}：{{val}}</span>
                 </el-col>
               </el-row>
             </el-form-item>
@@ -106,7 +108,8 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width:94%;margin-left:62px;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
+          <p style="width:94%;margin-left:62px;line-height:30px;padding-left:0;" class="ql-editor"
+             v-html="item.stem"></p>
           <el-form>
             <el-form-item style="width:94%;margin-left:62px;">
               <el-row :gutter="20">
@@ -119,13 +122,15 @@
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===158">
-          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox><span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
+          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
+          <span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
           <span style="color:#6a8dfb;">简答题</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width:94%;margin-left:60px;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
+          <p style="width:94%;margin-left:60px;line-height:30px;padding-left:0;" class="ql-editor"
+             v-html="item.stem"></p>
         </div>
       </div>
     </div>
@@ -145,7 +150,7 @@
       </el-dialog>
     </div>
     <div id="associatedExamDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="associatedExamDialog" title="关联的问卷" width="45%">
+      <el-dialog :close-on-click-modal="false" :visible.sync="associatedExamDialog" title="关联的调查" width="45%">
         <div style="margin-top: 20px;">
           <el-table
             :data="associatedExamData"
@@ -165,7 +170,7 @@
             </el-table-column>
             <el-table-column
               prop="name"
-              label="考试名称">
+              label="调查标题">
             </el-table-column>
             <el-table-column
               prop="start_time"
@@ -175,7 +180,7 @@
         </div>
         <div slot="footer" class="dialog-footer" style="text-align: center;">
           <el-button size="small" @click="associatedExamDialog=false">取消</el-button>
-          <el-button size="small" type="primary" @click="synchroTestPaper">同步到考试</el-button>
+          <el-button size="small" type="primary" @click="synchroTestPaper">同步到调查</el-button>
         </div>
       </el-dialog>
     </div>
@@ -257,7 +262,7 @@
       getAssociatedExam() {
         this.tableStatus = ' ';
         this.tableLoading = true;
-        this.$http.get(globalConfig.server + 'exam/paper/exams/' + this.testPaperId).then((res) => {
+        this.$http.get(globalConfig.server + 'exam/paper/exams/' + this.testPaperId + '?qtn=1').then((res) => {
           this.tableLoading = false;
           if (res.data.code === '36000') {
             this.associatedExamData = res.data.data;
@@ -269,7 +274,10 @@
       },
       synchroTestPaper() {
         //同步问卷最新数据到考试的接口
-        this.$http.post(globalConfig.server + 'exam/paper/sync/' + this.testPaperId, {ids: this.selectExamIds}).then((res) => {
+        this.$http.post(globalConfig.server + 'exam/paper/sync/' + this.testPaperId, {
+          ids: this.selectExamIds,
+          qtn: 1
+        }).then((res) => {
           if (res.data.code === '36000') {
             this.associatedExamDialog = false;
             this.$notify.success({
@@ -409,7 +417,7 @@
       editQues(val) {
         this.$router.push({
           path: '/myselfNaire',
-          query: {paper_id: this.testPaperId,category:val.category, quesId: val.id, type: 'edit'}
+          query: {paper_id: this.testPaperId, category: val.category, quesId: val.id, type: 'edit'}
         });
       },
       batchDelete() {
@@ -449,9 +457,11 @@
   .ql-editor {
     min-height: initial !important;
   }
+
   .el-form-item {
     margin-bottom: 12px !important;
   }
+
   #configExam {
     .tool {
       height: 78px;

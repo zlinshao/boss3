@@ -162,14 +162,14 @@
       'answerData': {
         deep: true,
         handler(val, oldVal) {
-          localStorage.setItem('answers_' + this.examId, JSON.stringify(val));
+          localStorage.setItem('answerNaires_' + this.examId, JSON.stringify(val));
         }
       }
     },
     methods: {
       combinaData() {
-        if (localStorage.getItem('answers_' + this.examId) && localStorage.getItem('answers_' + this.examId) != 'null') {
-          this.answerData = JSON.parse(localStorage.getItem('answers_' + this.examId));
+        if (localStorage.getItem('answerNaires_' + this.examId) && localStorage.getItem('answerNaires_' + this.examId) != 'null') {
+          this.answerData = JSON.parse(localStorage.getItem('answerNaires_' + this.examId));
         } else {
           if (this.questionData[153] && this.questionData[153].length > 0) {
             this.questionData[153].forEach((item) => {
@@ -247,7 +247,7 @@
             this.pointScore = res.data.data.score;
             this.resultId = res.data.data.id;
             this.submitDialog = true;
-            localStorage.removeItem("answers_" + this.examId);
+            localStorage.removeItem("answerNaires_" + this.examId);
           } else {
             this.$notify.warning({
               title: '警告',

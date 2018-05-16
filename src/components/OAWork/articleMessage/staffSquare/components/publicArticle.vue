@@ -2,7 +2,7 @@
   <div id="publicArticle">
     <div class="title" v-show="previewShow">文章发布</div>
     <el-form v-show="previewShow" label-width="100px">
-      <el-form-item label="标题" v-if="moduleType !='newVersionUpdate'">
+      <el-form-item label="标题" required v-if="moduleType !='newVersionUpdate'">
         <el-input v-model="form.name" placeholder="请输入标题"></el-input>
       </el-form-item>
       <el-form-item label="版本" v-else>
@@ -297,6 +297,10 @@
         this.form.region = '';
         this.form.htmlForEditor = '';
         this.isClear = true;
+        let view = {};
+        view.name = ' 文章发布 ';
+        view.path = '/publicArticle';
+        this.$store.dispatch('delVisitedViews', view);
         setTimeout(() => {
           this.$router.push({path: '/articleMessage', query: {refresh: 'refresh'}})
         }, 0);
