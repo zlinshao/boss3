@@ -148,7 +148,7 @@
       // 详情
       openDetail(row) {
         this.$store.dispatch('newversion',row);
-        this.$router.push({path: '/Infodetails', query: {moduleType: this.moduleType}});
+        this.$router.push({path: '/Infodetails', query: {moduleType: this.moduleType, from: 'publicArticleBtn'}});
       },
       // 高级
       highGrade() {
