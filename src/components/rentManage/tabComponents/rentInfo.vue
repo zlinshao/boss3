@@ -78,11 +78,11 @@
     watch: {
       rentContractId(val) {
         this.isRequestData = false;
-        if (this.activeName === 'RentInfoTab') {
+        if (this.rentContractId && this.activeName === 'RentInfoTab') {
           this.getData();
           this.isRequestData = true;
         }else {
-          this.collectData = [];
+          this.rentData = [];
         }
       },
       activeName(val) {

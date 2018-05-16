@@ -1,22 +1,6 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="wholeRentContainer">
-      <!--
-       <div class="tool">
-        <div class="tool_left">
-          <el-button type="success" size="mini" @click="openModalDialog('instructionDialog')">
-            <i class="el-icon-tickets"></i>&nbsp;功能说明
-          </el-button>
-          <el-button type="info" size="mini" @click="openModalDialog('backUpDialog')">
-            <i class="el-icon-tickets"></i>&nbsp;查看备份
-          </el-button>
-        </div>
-        <div class="tool_right"  @click="openModalDialog('settingDialog')">
-          <div><i class="el-icon-setting"></i>&nbsp;设置</div>
-        </div>
-      </div>
-      -->
-
       <div class="highRanking" style="margin-top: 10px">
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
@@ -922,6 +906,7 @@
         } else {
           this.rentingData = [];
           this.rentTotalNum = 0;
+          this.rentContractId = '',
           this.rentStatus = '暂未出租';
         }
       }
@@ -1101,6 +1086,7 @@
           } else {
             this.rentingData = [];
             this.rentTotalNum = 0;
+            this.rentContractId = '';
             this.rentStatus = '暂未出租';
           }
         })
