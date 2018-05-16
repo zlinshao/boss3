@@ -738,8 +738,8 @@
                 <el-form-item label="支付方式" >
                   <div class="content">
                     <span v-for="index in payTypeLen" :key="index+111" v-if="index>0">
-                    <div class="content" v-for="item in payTypeInfo" :key="item.id" v-if="repairDetail.pay_method[0][index-1] == item.id">
-                      {{item.dictionary_name}},{{repairDetail.pay_method[1][index-1]}}</div>              
+                    <span v-for="item in payTypeInfo" :key="item.id" v-if="repairDetail.pay_method[0][index-1] == item.id">
+                      {{item.dictionary_name}},{{repairDetail.pay_method[1][index-1]}}</span>              
                       <span v-show="index<payTypeLen-1">;</span>
                     </span>
                   </div>
