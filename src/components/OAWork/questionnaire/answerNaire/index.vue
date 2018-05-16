@@ -93,7 +93,7 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==158 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">简单题</span>
+            {{item.number}}.<span style="color:#6a8dfb; margin-left:20px;">简答题</span>
             <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
                v-html="item.stem"></p>
             <el-form>
