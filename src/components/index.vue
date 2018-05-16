@@ -382,10 +382,13 @@
     <NoticeTitleView :noticeTitleDialog="noticeTitleDialog" @close="closeModal"></NoticeTitleView>
     <YanFirstView :yanFirstDialog="yanFirstDialog" :yanFirstInfo="yanFirstInfo" @close="closeyanModal"></YanFirstView>
     <YanSecondView :yanSecondDialog="yanSecondDialog" @close="closeModal"></YanSecondView>
+    <ReadingView :ReadingDialog="ReadingDialog" @close="readcloseModal"></ReadingView>
   </div>
 </template>
 
 <script>
+  import ReadingView from './common/reading.vue'  //导读
+
   import TagsView from "./common/tagsView.vue";
   import screenFull from "screenfull";
   import MessageDetail from "./common/messageDetail.vue";
@@ -411,7 +414,8 @@
       InstitutionView,
       NoticeTitleView,
       YanFirstView,
-      YanSecondView
+      YanSecondView,
+      ReadingView
     },
     data() {
       return {
@@ -435,6 +439,7 @@
 
         setLockPwdDialog: false,
         instructionDialog: false, //功能说明
+        ReadingDialog:false,  //导读
         dictionary2: [], //二级密码所需模块
         chinese: [],
         unlockSecondPWDialog: false,
@@ -567,6 +572,7 @@
     },
     mounted() {
       //初始化个人信息
+      //this.ReadingDialog = true;
       this.personal = JSON.parse(localStorage.personal);
       //鼠标滑动监听
       let _this = this;
@@ -619,7 +625,7 @@
     methods: {
       answerNaire(id) {
         this.quesNaireDialog = false;
-        setTimeout(() => {
+        setTimeout(()=>{
           this.$router.push({path: '/answerNaire', query: {id: id}});
         }, 0);
       },
@@ -777,6 +783,9 @@
       closeModalSecond() {
         this.unlockSecondPWDialog = false;
         this.badgeDialog = false;
+      },
+      readcloseModal(){
+        this.ReadingDialog = false;
       },
       //二级密码回调
       unlockFlag(val) {
