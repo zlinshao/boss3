@@ -2,7 +2,7 @@
   <div id="publicArticle">
     <div class="title" v-show="previewShow">文章发布</div>
     <el-form v-show="previewShow" label-width="100px">
-      <el-form-item label="标题" v-if="moduleType !='newVersionUpdate'">
+      <el-form-item label="标题" required v-if="moduleType !='newVersionUpdate'">
         <el-input v-model="form.name" placeholder="请输入标题"></el-input>
       </el-form-item>
       <el-form-item label="版本" v-else>
@@ -127,10 +127,7 @@
     },
     methods: {
       getParams() {
-        if (!this.$route.query.ids) {
-          this.form.name = '';
-          this.form.region = '';
-          this.form.htmlForEditor = '';
+        if (!this.$route.query.moduleType) {
           this.cover_pic = '';
           if (this.$route.query.moduleType) {
             this.$store.dispatch('moduleType', this.$route.query.moduleType);
@@ -139,13 +136,17 @@
             path: "/publicArticle",
             query: {
               ids: this.$store.state.article.article_id,
-              moduleType: this.$store.state.article.module_type
+              moduleType: this.$store.state.article.module_type,
             }
           });
         }
         let query = this.$route.query;
         this.moduleType = query.moduleType;
-
+        if(query.from === 'publicArticleBtn'){
+          this.form.name = '';
+          this.form.region = '';
+          this.form.htmlForEditor = '';
+        }
         this.getDict();
         this.pitch = '';
         if (query.ids !== undefined) {
@@ -329,6 +330,10 @@
         this.form.region = '';
         this.form.htmlForEditor = '';
         this.isClear = true;
+        let view = {};
+        view.name = ' 文章发布 ';
+        view.path = '/publicArticle';
+        this.$store.dispatch('delVisitedViews', view);
         setTimeout(() => {
           this.$router.push({path: '/articleMessage', query: {refresh: 'refresh'}})
         }, 0);

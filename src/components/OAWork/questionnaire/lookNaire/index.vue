@@ -43,7 +43,7 @@
             <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
                v-html="item.stem"></p>
             <span @click="openAll(item.id, k)"
-                  style="color:rgb(106, 141, 251);cursor: pointer;width:97%;margin-left:2.5%;">查看全部回答</span>
+                  style="width:96%;margin-left:44px;color:rgb(106, 141, 251);cursor: pointer;">查看全部回答</span>
 
 
           </div>
@@ -113,6 +113,9 @@
 </script>
 
 <style lang="scss" scoped>
+  .ql-editor {
+    min-height: initial !important;
+  }
   #lookNaire {
     .tool {
       position: relative;
