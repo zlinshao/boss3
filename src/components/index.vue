@@ -600,7 +600,7 @@
       this.getUnreadTermly();
       this.getUnReadMessage();
       //调查问卷
-      // this.getQuesNaireData();
+      this.getQuesNaireData();
     },
     activated() {
       //初始化个人信息
