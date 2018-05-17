@@ -18,7 +18,6 @@
             </el-form-item>
           </el-form>
         </div>
-
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
           <el-form :inline="true" onsubmit="return false" :model="formInline" size="mini" label-width="100px">
             <div class="filterTitle">
@@ -619,145 +618,6 @@
       </div>
 
       <div>
-        <el-dialog :close-on-click-modal="false"
-                   title="新建维修"
-                   :visible.sync="maintenanceDialog"
-                   width="40%">
-          <el-form size="mini" label-width="100px">
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="合同编号">
-                  <el-input v-model="input" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="报修人姓名">
-                  <el-input v-model="input" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="联系电话">
-                  <el-input v-model="input" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="报修人性别">
-                  <el-radio v-model="radio" label="1">先生</el-radio>
-                  <el-radio v-model="radio" label="2">女士</el-radio>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="房屋地址">
-                  <el-input v-model="input" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="约定维修时间">
-                  <el-date-picker
-                    v-model="value1"
-                    type="datetime"
-                    placeholder="选择日期时间"
-                    size="mini">
-                  </el-date-picker>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="维修内容">
-                  <el-input v-model="input" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="维修师傅">
-                  <el-input v-model="input" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="维修结果">
-                  <el-input v-model="input" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="维修金额">
-                  <el-input v-model="input" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="维修状态">
-                  <el-select v-model="value" placeholder="请选择" size="mini">
-                    <el-option
-                      v-for="item in options"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="认责人">
-                  <el-select v-model="value" placeholder="请选择" size="mini">
-                    <el-option
-                      v-for="item in options"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="备注">
-                  <el-input v-model="input" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="操作人">
-                  <el-input v-model="input" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="签约人">
-                  <el-input v-model="input" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="负责人">
-                  <el-input v-model="input" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="所属部门">
-                  <el-input v-model="input" placeholder="请输入内容"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-
-          <div slot="footer" class="dialog-footer">
-            <el-button size="small" @click="maintenanceDialog = false">取&nbsp;消</el-button>
-            <el-button size="small" type="primary" @click="maintenanceDialog = false">确&nbsp;定</el-button>
-          </div>
-
-        </el-dialog>
-      </div>
-      <div>
         <el-dialog :close-on-click-modal="false" title="合同备忘" :visible.sync="memoDialog" width="50%">
           <div>
             <el-table
@@ -813,32 +673,57 @@
         </el-dialog>
       </div>
       <div>
-        <el-dialog :close-on-click-modal="false" title="回访记录" :visible.sync="viewVisitRecordDialog" width="50%">
+        <el-dialog :close-on-click-modal="false" title="修改记录" :visible.sync="leaseHistoryDialog" width="50%">
           <div>
             <el-table
-              :data="visitTableData"
-              :empty-text='visitStatus'
-              v-loading="visitLoading"
+              :data="leaseHistoryTableData"
+              :empty-text='incompleteStatus'
+              v-loading="incompleteLoading"
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
               element-loading-background="rgba(255, 255, 255, 0)"
               style="width: 100%">
               <el-table-column
-                prop="content"
-                label="回访内容">
-              </el-table-column>
-              <el-table-column
-                prop="simple_staff.real_name"
-                label="回访人">
-              </el-table-column>
-              <el-table-column
                 prop="create_time"
-                label="回访时间">
+                label="创建时间">
+              </el-table-column>
+              <el-table-column
+                prop="contract_number"
+                label="合同编号">
+              </el-table-column>
+              <el-table-column
+                prop="house_name"
+                label="房屋地址">
+              </el-table-column>
+              <el-table-column
+                prop="update_time"
+                label="资料补齐时间">
+              </el-table-column>
+              <el-table-column
+                prop="content"
+                label="备忘内容">
+              </el-table-column>
+              <el-table-column
+                prop="receivers"
+                label="接收人">
+              </el-table-column>
+              <el-table-column
+                prop="sender"
+                label="发送人">
+              </el-table-column>
+              <el-table-column
+                prop="is_send"
+                label="操作类型">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.is_send===0">保存</span>
+                  <span v-if="scope.row.is_send===1">发送</span>
+                  <span v-if="scope.row.is_send===null">暂无</span>
+                </template>
               </el-table-column>
             </el-table>
           </div>
           <div slot="footer" class="dialog-footer">
-            <el-button size="small" type="primary" @click="viewVisitRecordDialog = false">确&nbsp;定</el-button>
+            <el-button size="small" type="primary" @click="leaseHistoryDialog = false">确&nbsp;定</el-button>
           </div>
         </el-dialog>
       </div>
@@ -848,9 +733,6 @@
                @clickOperateMore="clickEvent"></RightMenu>
     <Organization :organizationDialog="organizationDialog" :type="type" :length="length"
                   @close="closeOrganization" @selectMember="selectMember"></Organization>
-    <visit-record :visitRecordDialog="visitRecordDialog" :contractId="contractOperateId"
-                  :category="contractModule" @close="closeModal"></visit-record>
-
     <!--编辑租客-->
     <EditRentInfo :editRentInfoDialog="editRentInfoDialog" :collectHouseId="collectHouseId"
                   :rentContractId="contractOperateId" @close="closeModal"></EditRentInfo>
@@ -858,8 +740,9 @@
     <EditHouseResources :editHouseResourcesDialog="editHouseResourcesDialog"
                         :collectContractId="contractOperateId" @close="closeModal"></EditHouseResources>
     <!-- 回访 -->
-    <AddReturnvisit :addReturnvisitDialog="addReturnvisitDialog" :ToActiveName="ToActiveName" :addReturnInfo="addReturnInfo"
-                      @close="closeModal"></AddReturnvisit>
+    <AddReturnvisit :addReturnvisitDialog="addReturnvisitDialog" :ToActiveName="ToActiveName"
+                    :addReturnInfo="addReturnInfo"
+                    @close="closeModal"></AddReturnvisit>
 
   </div>
 </template>
@@ -867,14 +750,13 @@
 <script>
   import RightMenu from '../../../common/rightMenu.vue';
   import Organization from '../../../common/organization.vue';
-  import VisitRecord from '../../components/visitRecord.vue'    //添加回访
   import EditRentInfo from '../../components/editRentInfo'
   import EditHouseResources from '../../components/editHouseResources'
   import AddReturnvisit from "../../../../components/rentManage/customerService/addReturnvisit.vue";   //添加回访
 
   export default {
     name: 'hello',
-    components: {RightMenu, Organization, VisitRecord , EditRentInfo , EditHouseResources,AddReturnvisit},
+    components: {RightMenu, Organization, EditRentInfo, EditHouseResources, AddReturnvisit},
     data() {
       return {
         rightMenuX: 0,
@@ -973,28 +855,10 @@
         type: '',
         length: '',
         currentPage: 1,
-        options: [
-          {
-            value: '选项1',
-            label: '黄金糕'
-          }, {
-            value: '选项2',
-            label: '双皮奶'
-          }, {
-            value: '选项3',
-            label: '蚵仔煎'
-          }, {
-            value: '选项4',
-            label: '龙须面'
-          }, {
-            value: '选项5',
-            label: '北京烤鸭'
-          }],
         //模态框
         organizationDialog: false,
         activeName: 'first',
         isHigh: false,
-        maintenanceDialog: false,     //维修模态框
         input: '',
         radio: '1',
         value: '',
@@ -1007,22 +871,18 @@
         incompleteLoading: false,
         is_rent: 0,
         selectContractId: '',
-        visitRecordDialog: false,
         contractModule: '',
         contractOperateId: '',
-        viewVisitRecordDialog: false,
 
-        editHouseResourcesDialog : false,
-        editRentInfoDialog : false,
-        collectHouseId : '',
-
-        visitTableData: [],
-        visitStatus: ' ',
-        visitLoading: false,
+        editHouseResourcesDialog: false,
+        editRentInfoDialog: false,
+        collectHouseId: '',
 
         collectNumberArray: [],
         checkContractData: [],
-        addReturnvisitDialog:false,
+        addReturnvisitDialog: false,
+        leaseHistoryDialog: false,
+        leaseHistoryTableData: [],
       }
     },
     mounted() {
@@ -1056,36 +916,47 @@
           this.is_rent = 1;
         }
       },
-      visitRecordDialog(val) {
-        if (!val) {
-          this.contractOperateId = '';
-          this.contractModule = '';
-        }
-      },
-      viewVisitRecordDialog(val) {
+      leaseHistoryDialog(val) {
         if (val) {
-          this.visitLoading = true;
-          this.visitStatus = ' ';
-          this.visitTableData = [];
-          this.$http.get(globalConfig.server + 'contract/feedback?limit=100&category=' + this.contractModule + '&contract_id=' + this.contractOperateId).then((res) => {
-            this.visitLoading = false;
-            if (res.data.code === '20000') {
-              this.visitTableData = res.data.data.data;
-            } else {
-              this.visitTableData = [];
-              this.visitStatus = '暂无数据';
-            }
-          });
-        } else {
-          this.contractOperateId = '';
-          this.contractModule = '';
+          this.incompleteStatus = " ";
+          this.incompleteLoading = true;
+          if (this.activeName === 'first') {
+            this.$http.get(globalConfig.server + 'lease/collect/history?limit=100&page=1&contract_id=' + this.selectContractId).then((res) => {
+              this.incompleteLoading = false;
+              if (res.data.code === '61010') {
+                this.leaseHistoryTableData = res.data.data;
+                if (res.data.data.length < 1) {
+                  this.incompleteStatus = "暂无数据";
+                  this.leaseHistoryTableData = [];
+                  this.totalNum = 0;
+                }
+              } else {
+                this.incompleteStatus = "暂无数据";
+                this.leaseHistoryTableData = [];
+              }
+            });
+          } else {
+            this.$http.get(globalConfig.server + 'lease/rent/history?limit=100&page=1&contract_id=' + this.selectContractId).then((res) => {
+              this.incompleteLoading = false;
+              if (res.data.code === '61110') {
+                this.leaseHistoryTableData = res.data.data;
+                if (res.data.data.length < 1) {
+                  this.incompleteStatus = "暂无数据";
+                  this.leaseHistoryTableData = [];
+                  this.totalNum = 0;
+                }
+              } else {
+                this.incompleteStatus = "暂无数据";
+                this.leaseHistoryTableData = [];
+              }
+            });
+          }
+
         }
       }
     },
     methods: {
       closeModal(val) {
-        this.visitRecordDialog = false;
-        this.viewVisitRecordDialog = false;
         this.editRentInfoDialog = false;
         this.editHouseResourcesDialog = false;
         this.addReturnvisitDialog = false;
@@ -1237,59 +1108,48 @@
         this.collectHouseId = row.house_id;   //收房id
         this.contractOperateId = row.contract_id;   //通用合同ID
         this.addReturnInfo = row;
-        if(this.is_rent){
+        if (this.is_rent) {
           this.ToActiveName = "second";
           this.lists = [
-            // {
-            //   clickIndex: 'visit', headIcon: 'el-icons-fa-eye', tailIcon: 'el-icon-arrow-right', label: '回访记录',
-            //   children: [
-            //     {clickIndex: 'viewVisit', headIcon: 'el-icons-fa-eye', label: '查看回访记录'},
-            //     {clickIndex: 'addVisit', headIcon: 'el-icons-fa-plus', label: '添加回访记录'},
-            //   ]
-            // },
-            // {clickIndex: 'maintenanceDialog', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
-            {clickIndex: 'editRentInfoDialog',headIcon: 'el-icon-edit', label: '修改租客信息',disabled:row.doc_status.id>3},
-
+            {
+              clickIndex: 'editRentInfoDialog',
+              headIcon: 'el-icon-edit',
+              label: '修改租客信息',
+              disabled: row.doc_status.id > 3
+            },
             {clickIndex: 'lookMemorandum', headIcon: 'el-icons-fa-eye', label: '查看合同备忘', contract_id: row.contract_id},
-            {clickIndex: 'addReturnvisitDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '增加回访记录', contract_id: row.contract_id},
+            {clickIndex: 'addReturnvisitDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '增加回访记录'},
+            {
+              clickIndex: 'lookLeaseHistory',
+              headIcon: 'el-icons-fa-eye',
+              label: '查看合同修改记录',
+              contract_id: row.contract_id
+            },
           ];
-        }else {
+        } else {
           this.ToActiveName = "first";
           this.lists = [
-            // {
-            //   clickIndex: 'visit', headIcon: 'el-icons-fa-eye', tailIcon: 'el-icon-arrow-right', label: '回访记录',
-            //   children: [
-            //     {clickIndex: 'viewVisit', headIcon: 'el-icons-fa-eye', label: '查看回访记录'},
-            //     {clickIndex: 'addVisit', headIcon: 'el-icons-fa-plus', label: '添加回访记录'},
-            //   ]
-            // },
-            // {clickIndex: 'maintenanceDialog', headIcon: 'el-icons-fa-briefcase', label: '创建维修单',},
             {
               clickIndex: 'editHouseResourcesDialog',
               headIcon: 'el-icons-fa-home',
               label: '修改房源',
               disabled: row.doc_status.id > 3
             },
-
             {clickIndex: 'lookMemorandum', headIcon: 'el-icons-fa-eye', label: '查看合同备忘', contract_id: row.contract_id},
-            {clickIndex: 'addReturnvisitDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '增加回访记录', contract_id: row.contract_id},
+            {clickIndex: 'addReturnvisitDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '增加回访记录'},
+            {
+              clickIndex: 'lookLeaseHistory',
+              headIcon: 'el-icons-fa-eye',
+              label: '查看合同修改记录',
+              contract_id: row.contract_id
+            },
           ];
         }
-
         this.contextMenuParam(event);
       },
       //右键回调事件
       clickEvent(val) {
         switch (val.clickIndex) {
-          case 'maintenanceDialog':
-            this.maintenanceDialog = true;
-            break;
-          case 'viewVisit':
-            this.viewVisitRecordDialog = true;
-            break;
-          case 'addVisit':
-            this.visitRecordDialog = true;
-            break;
           case 'lookMemorandum':
             this.memoDialog = true;
             this.selectContractId = val.contract_id;
@@ -1302,6 +1162,10 @@
             break;
           case 'addReturnvisitDialog':   //回访记录
             this.addReturnvisitDialog = true;
+            break;
+          case 'lookLeaseHistory':
+            this.leaseHistoryDialog = true;
+            this.selectContractId = val.contract_id;
             break;
         }
       },

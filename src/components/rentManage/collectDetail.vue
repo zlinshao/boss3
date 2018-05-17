@@ -1554,12 +1554,7 @@
             } else {
               this.repairDetail.has_extra = "否";
             }
-          } else {
-            this.$notify.warning({
-              title: "警告",
-              message: res.data.msg
-            });
-          }
+          } 
         });        
       },
       getImgId(data){

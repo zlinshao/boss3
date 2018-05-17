@@ -1,5 +1,103 @@
 <template>
   <div  @click="show=false" @contextmenu="closeMenu">
+
+    <div class="highRanking" style=" position: absolute; top: 122px; right: 20px;">
+      <div class="highSearch">
+        <el-form :inline="true" size="mini">
+          <el-form-item>
+            <el-input v-model="params.search" onsubmit="return false" placeholder="搜索" @keydown.enter.native="search">
+              <el-button slot="append" type="primary" @click="search" icon="el-icon-search"></el-button>
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button v-show="selectFlag>1" type="primary" @click="createNewTask">创建任务</el-button>
+          </el-form-item>
+
+        </el-form>
+      </div>
+    </div>
+    <div class="highRanking">
+      <div class="filter high_grade" :class="isHigh? 'highHide':''" style=" margin-top: -40px;">
+        <el-form :inline="true" size="mini" label-width="100px">
+          <div class="filterTitle">
+            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+          </div>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">员工</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input readonly="" placeholder="点击选择" v-model="staff_name" @focus="openOrganizationModal('staff')"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">部门</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input readonly="" placeholder="点击选择" v-model="depart_name" @focus="openOrganizationModal('depart')"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+          </el-row>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">选择时间范围</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-date-picker
+                      v-model="dateRange"
+                      type="daterange"
+                      value-format="yyyy-MM-dd"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期">
+                    </el-date-picker>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+
+            <!-- <el-col :span="12" v-if="selectFlag==4">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">资料</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-select v-model="params.proof" placeholder="请选择" clearable="" @change="search" value="">
+                      <el-option label="资料齐全" value="7"></el-option>
+                      <el-option label="交接单" value="1"></el-option>
+                      <el-option label="收据" value="2"></el-option>
+                      <el-option label="钥匙" value="4"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col> -->
+          </el-row>
+          <div class="btnOperate">
+            <el-button size="mini" type="primary" @click="search()">搜索</el-button>
+            <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+            <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+          </div>
+        </el-form>
+      </div>
+    </div>
     <div class="tool">
       <div class="tool_left">
         <el-button size="mini" @click="selectStatus(1)" :class="selectFlag==1? 'selectButton':''">
@@ -18,19 +116,6 @@
           <i class="el-icons-fa-mail-forward"></i>&nbsp;丢失
         </el-button>
       </div>
-    </div>
-    <div class="filter" style="position: absolute; top: 112px; right: 20px;">
-      <el-form :inline="true" onsubmit="return false" size="mini" class="demo-form-inline" style="display: flex;justify-content:flex-end ">
-        <el-form-item>
-          <el-input v-model="params.search" placeholder="编号" @keydown.enter.native="search">
-            <el-button slot="append" type="primary" @click="search" icon="el-icon-search"></el-button>
-          </el-input>
-        </el-form-item>
-
-        <el-form-item>
-          <el-button v-show="selectFlag>1" type="primary" @click="createNewTask">创建任务</el-button>
-        </el-form-item>
-      </el-form>
     </div>
 
     <div class="main">
@@ -212,7 +297,8 @@
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
 
-    <Organization :organizationDialog="organizationDialog" @close="closeModalCallback"></Organization>
+    <Organization :organizationDialog="organizationDialog" length="length" :type="type"
+                   @close="closeModalCallback" @selectMember="selectMember" ></Organization>
 
     <Contact :contractDialog="contractDialog" :applyEditId_detail="applyEditId_detail" @close="closeModalCallback"></Contact>
     <ContactCancel :contractCancelDialog="contractCancelDialog" :cancelEditId_detail="cancelEditId_detail" @close="closeModalCallback"></ContactCancel>
@@ -273,8 +359,11 @@
         totalNumbers:0,
         params:{
           page:1,
-          search:'',
-          proof:'',
+          search:"",
+          start:"",
+          end:"",
+          department_id:"",
+          staff_id:"",
         },
 
         //***********************//
@@ -316,6 +405,12 @@
 
         emptyContent : ' ',
         tableLoading : false,
+        isHigh :false,
+        staff_name : '',
+        depart_name : '',
+        length : '',
+        type : '',
+        dateRange:[],
       }
     },
     watch:{
@@ -333,6 +428,10 @@
           this.getLossList();
         }
       },
+      dateRange(val){
+        this.params.start = val[0]?val[0]:'';
+        this.params.end = val[1]? val[1]:'';
+      }
     },
     mounted(){
       this.getTotalList();
@@ -357,8 +456,20 @@
           this.getLossList();
         }
       },
-
+      highGrade(){
+        this.isHigh = !this.isHigh;
+      },
+      resetting(){
+        this.params.department_id = '';
+        this.dateRange = [];
+        this.params.start = '';
+        this.params.end = '';
+        this.params.staff_id = '';
+        this.staff_name = '';
+        this.depart_name = '';
+      },
       search(){
+        this.isHigh = false;
         this.params.page = 1;
         if(this.selectFlag ===2){
           this.getApplyList();
@@ -374,6 +485,21 @@
       },
       selectStatus(flag){
         this.selectFlag = flag;
+      },
+
+      openOrganizationModal(val){
+        this.length = 1;
+        this.type = val;
+        this.organizationDialog = true
+      },
+      selectMember(val){
+        if(this.type=='staff'){
+          this.staff_name = val[0].name;
+          this.params.staff_id = val[0].id;
+        }else {
+          this.depart_name = val[0].name;
+          this.params.department_id = val[0].id;
+        }
       },
 
       //************************右键操作项*****************************
@@ -395,7 +521,7 @@
 //          {clickIndex: 'dispatchApply', headIcon: 'el-icon-menu', label: '分配',},
           {clickIndex: 'editApply', headIcon: 'el-icon-edit', label: '修改',},
 //          {clickIndex: 'addRemarkApply', headIcon: 'el-icon-edit-outline', label: '添加备注',},
-          // {clickIndex: 'deleteApply', headIcon: 'el-icon-delete', label: '删除',},
+           {clickIndex: 'deleteApply', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },
@@ -470,11 +596,6 @@
           }
       },
 
-
-
-      openOrganizationModal(){
-        this.organizationDialog = true
-      },
       //显示收据详情
       showContractDetail(row,event){
         if(this.selectFlag ===2){
@@ -499,9 +620,7 @@
         this.createTaskDialog = true;
       },
 
-
       //****************************汇总***************************//
-
 
       getTotalList(){
         this.tableLoading = true;
@@ -595,8 +714,8 @@
       },
 
       deleteApplyContract(){
-        this.$http.post(globalConfig.server+'contract/apply/delete/'+this.applyEditId).then((res) => {
-          if(res.data.code === '20010'){
+        this.$http.post(globalConfig.server+'receipt/apply/delete/'+this.applyEditId).then((res) => {
+          if(res.data.code === '21010'){
             this.search();
           }else {
             this.$notify.warning({

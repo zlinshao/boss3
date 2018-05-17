@@ -15,6 +15,9 @@
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="syncStatusDialog = true;">同步</el-button>
+            </el-form-item>
             <!--<el-form-item>-->
             <!--<el-button type="primary" size="mini" @click="exportData">导出</el-button>-->
             <!--</el-form-item>-->
@@ -373,6 +376,43 @@
         </div>
       </div>
     </div>
+    <div>
+      <el-dialog :close-on-click-modal="false" title="审核报销" :visible.sync="examineStatusDialog" width="30%">
+        <el-form size="small" label-width="100px">
+          <el-row>
+            <el-col :span="20">
+              <el-form-item label="报销状态" required>
+                <el-select clearable v-model="examineStatus" placeholder="选择类型" value="">
+                  <el-option v-for="item in examineStatusCategory" :label="item.dictionary_name" :value="item.id"
+                             :key="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+        <el-button size="small" @click="examineStatusDialog = false">取 消</el-button>
+        <el-button size="small" type="primary" @click="examineConfirm">确 定</el-button>
+      </span>
+      </el-dialog>
+    </div>
+    <div>
+      <el-dialog :close-on-click-modal="false" title="同步数据" :visible.sync="syncStatusDialog" width="30%">
+        <el-form size="small" label-width="100px">
+          <el-row>
+            <el-col :span="20">
+              <el-form-item label="同步误差" required>
+                <el-input size="mini" placeholder="请输入" v-model="devn"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+        <el-button size="small" @click="syncStatusDialog = false">取 消</el-button>
+        <el-button size="small" type="primary" @click="syncConfirm">确 定</el-button>
+      </span>
+      </el-dialog>
+    </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
     <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize"
@@ -442,6 +482,11 @@
         module: 1,
         addressDialog: false,
         isRent: 0,
+        examineStatusDialog: false,
+        examineStatus: '',
+        examineStatusCategory: [],
+        devn: '', // 同步误差值
+        syncStatusDialog: false,
       }
     },
     mounted() {
@@ -449,15 +494,58 @@
       this.getDictionary();
     },
     watch: {
-      address(val){
-        if(!val){
+      address(val) {
+        if (!val) {
           this.form.contract_id = '';
         }
         this.search();
-      }
+      },
+      examineStatusDialog(val) {
+        if (!val) {
+          this.examineStatus = '';
+          this.reimbursementId = '';
+        }
+      },
+      syncStatusDialog(val) {
+        if (!val) {
+          this.devn = '';
+        }
+      },
     },
     methods: {
-      emptySearch(){
+      syncConfirm() {
+        this.$http.get(globalConfig.server + 'customer/reimbursement/sync', {params: {devn: this.devn}}).then((res) => {
+          if (res.data.code === '30060') {
+            this.syncStatusDialog = false;
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
+      examineConfirm() {
+        this.$http.put(globalConfig.server + 'customer/reimbursement_result/status/' + this.reimbursementId, {status: this.examineStatus}).then((res) => {
+          if (res.data.code === '40010') {
+            this.examineStatusDialog = false;
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
+      emptySearch() {
         this.form.contract_id = '';
         this.address = '';
       },
@@ -485,6 +573,12 @@
         this.$http.get(globalConfig.server + 'setting/dictionary/642').then((res) => {
           if (res.data.code === "30010") {
             this.finishedStatusCategory = res.data.data;   //完成状态
+            let finish_status = res.data.data;
+            finish_status.forEach((item) => {
+              if (item.id === 663 || item.id === 664) {
+                this.examineStatusCategory.push(item);
+              }
+            });
           }
         });
       },
@@ -623,12 +717,14 @@
           this.lists = [
             {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',},
             {clickIndex: 'edit_reimbursement_result', headIcon: 'el-icon-edit', label: '编辑报销结果',},
+            {clickIndex: 'examine_reimbursement', headIcon: 'el-icon-edit', label: '审核报销',},
             // {clickIndex: 'delete_reimbursement', headIcon: 'el-icon-delete', label: '删除报销单',},
           ];
         } else {
           this.lists = [
             {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',},
             {clickIndex: 'add_reimbursement_result', headIcon: 'iconfont icon-zengjia1', label: '新增报销结果',},
+            {clickIndex: 'examine_reimbursement', headIcon: 'el-icon-edit', label: '审核报销',},
             // {clickIndex: 'delete_reimbursement', headIcon: 'el-icon-delete', label: '删除报销单',},
           ];
         }
@@ -650,6 +746,9 @@
           case 'add_reimbursement_result':
             this.reimResultDialog = true;
             this.resultType = 'add';
+            break;
+          case 'examine_reimbursement':
+            this.examineStatusDialog = true;
             break;
         }
       },
