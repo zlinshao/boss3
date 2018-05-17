@@ -1058,10 +1058,10 @@
       },
       dblClickHistoryTable(row, event){
         if (this.activeName === 'first') {
-          const {href} = this.$router.resolve({path: '/historyCollectDetail', query: {content: JSON.stringify(row.content), id: row.id}});
+          const {href} = this.$router.resolve({path: '/historyCollectDetail', query: {id: row.id}});
           window.open(href, '_blank', 'width=1920,height=1080');
         } else if (this.activeName === 'second') {
-          const {href} = this.$router.resolve({path: '/historyRentingDetail', query: {content: JSON.stringify(row.content), id: row.id}});
+          const {href} = this.$router.resolve({path: '/historyRentingDetail', query: {id: row.id}});
           window.open(href, '_blank', 'width=1920,height=1080');
         }
       },
