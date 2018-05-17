@@ -16,7 +16,7 @@
             <el-button v-show="selectFlag>1" type="primary" @click="createNewTask">创建任务</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button v-show="selectFlag==2 || selectFlag==4" type="primary" @click="exportContract">导出</el-button>
+            <el-button v-show="selectFlag!=1" type="primary" @click="exportContract">导出</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -826,8 +826,22 @@
             }
             this.$exportData(res.data)
           })
-        }else {
+        }else if(this.selectFlag ===3){
+          this.$http.get(globalConfig.server+'contract/invalidate/export', {responseType: 'arraybuffer',params:this.params}).then((res) => {
+            if (!res.data) {
+              return;
+            }
+            this.$exportData(res.data)
+          })
+        }else if(this.selectFlag ===4){
           this.$http.get(globalConfig.server+'contract/export/handin', {responseType: 'arraybuffer',params:this.params}).then((res) => {
+            if (!res.data) {
+              return;
+            }
+            this.$exportData(res.data)
+          })
+        }else if(this.selectFlag ===5){
+          this.$http.get(globalConfig.server+'contract/loss/export', {responseType: 'arraybuffer',params:this.params}).then((res) => {
             if (!res.data) {
               return;
             }
