@@ -531,12 +531,13 @@
       },
       examineConfirm() {
         this.$http.put(globalConfig.server + 'customer/reimbursement_result/status/' + this.reimbursementId, {status: this.examineStatus}).then((res) => {
-          if (res.data.code === '40010') {
+          if (res.data.code === '40050') {
             this.examineStatusDialog = false;
             this.$notify.success({
               title: '成功',
               message: res.data.msg
             });
+            this.search();
           } else {
             this.$notify.warning({
               title: '警告',

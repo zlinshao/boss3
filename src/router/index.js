@@ -147,6 +147,9 @@ import PersonalSalary from '../components/meritPay/personalSalary/index'
 
 import CollectDetail from '../components/rentManage/collectDetail.vue'
 import RentingDetail from '../components/rentManage/rentingDetail.vue'
+//合同修改历史快照
+import HistoryCollectDetail from '../components/rentManage/datumMessage/contractManage/historyCollectDetail.vue'
+ import HistoryRentingDetail from '../components/rentManage/datumMessage/contractManage/historyRentingDetail.vue'
 
 import MessageCenter from '../components/messageCenter/index.vue'                         //消息中心
 import SthToDoDetail from '../components/OAWork/sthToDo/components/detail_1.vue'          //喜报详情
@@ -218,6 +221,18 @@ export default new Router({
     {
       path: '/collectDetail',
       component: CollectDetail,
+      name: '',
+      hidden: true
+    },
+    {
+      path: '/historyCollectDetail',
+      component: HistoryCollectDetail,
+      name: '',
+      hidden: true
+    },
+    {
+      path: '/historyRentingDetail',
+      component: HistoryRentingDetail,
       name: '',
       hidden: true
     },
