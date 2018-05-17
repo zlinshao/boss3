@@ -892,26 +892,38 @@
         if (val) {
           this.incompleteStatus = " ";
           this.incompleteLoading = true;
-          let header = '';
           if (this.activeName === 'first') {
-            header = this.$http.get(globalConfig.server + 'lease/collect/history?limit=100&page=1&contract_id=' + this.selectContractId);
-          } else {
-            header = this.$http.get(globalConfig.server + 'lease/rent/history?limit=100&page=1&contract_id=' + this.selectContractId);
-          }
-          header.then((res) => {
-            this.incompleteLoading = false;
-            if (res.data.code === '61010') {
-              this.leaseHistoryTableData = res.data.data;
-              if (res.data.data.length < 1) {
+            this.$http.get(globalConfig.server + 'lease/collect/history?limit=100&page=1&contract_id=' + this.selectContractId).then((res) => {
+              this.incompleteLoading = false;
+              if (res.data.code === '61010') {
+                this.leaseHistoryTableData = res.data.data;
+                if (res.data.data.length < 1) {
+                  this.incompleteStatus = "暂无数据";
+                  this.leaseHistoryTableData = [];
+                  this.totalNum = 0;
+                }
+              } else {
                 this.incompleteStatus = "暂无数据";
                 this.leaseHistoryTableData = [];
-                this.totalNum = 0;
               }
-            } else {
-              this.incompleteStatus = "暂无数据";
-              this.leaseHistoryTableData = [];
-            }
-          });
+            });
+          } else {
+            this.$http.get(globalConfig.server + 'lease/rent/history?limit=100&page=1&contract_id=' + this.selectContractId).then((res) => {
+              this.incompleteLoading = false;
+              if (res.data.code === '61110') {
+                this.leaseHistoryTableData = res.data.data;
+                if (res.data.data.length < 1) {
+                  this.incompleteStatus = "暂无数据";
+                  this.leaseHistoryTableData = [];
+                  this.totalNum = 0;
+                }
+              } else {
+                this.incompleteStatus = "暂无数据";
+                this.leaseHistoryTableData = [];
+              }
+            });
+          }
+
         }
       }
     },

@@ -503,7 +503,6 @@
       examineStatusDialog(val) {
         if (!val) {
           this.examineStatus = '';
-        }else{
           this.reimbursementId = '';
         }
       },
