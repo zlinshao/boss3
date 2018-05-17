@@ -222,26 +222,37 @@
         });
       },
       onSubmit() {
-        this.$http.post(globalConfig.server + 'exam/result', {
-          exam_id: this.examId,
-          answer: this.answerData,
-          is_questionnaire: true
-        }).then((res) => {
-          if (res.data.code === '36010') {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
-            this.pointScore = res.data.data.score;
-            this.resultId = res.data.data.id;
-            this.submitDialog = true;
-            localStorage.removeItem("answerNaires_" + this.examId);
-          } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            });
-          }
+        this.$confirm('确认提交问卷吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(globalConfig.server + 'exam/result', {
+            exam_id: this.examId,
+            answer: this.answerData,
+            is_questionnaire: true
+          }).then((res) => {
+            if (res.data.code === '36010') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.pointScore = res.data.data.score;
+              this.resultId = res.data.data.id;
+              this.submitDialog = true;
+              localStorage.removeItem("answerNaires_" + this.examId);
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消提交'
+          });
         });
       },
       closeAnswer() {
