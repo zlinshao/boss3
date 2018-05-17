@@ -164,7 +164,7 @@
                   fr.onload = function () {
                     // 文件添加进队列后，处理相关的事情
                     $('#pickfiles' + _this.ID).prepend(`
-                    <div class="imgItem" id="${file.id}" data-magnify="" data-src="${fr.result}">
+                    <div class="imgItem" id="${file.id}">
                       <div style=" position: relative;">
                         <img src="${fr.result}">
                         <div class="progress"><p style="color: #fff !important;"></p></div>
