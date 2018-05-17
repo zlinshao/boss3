@@ -2,24 +2,12 @@
   <div>
     <div id="answerExam">
       <div class="tool">
-        <el-row style="width:100%;margin-top:16px;">
-          <el-col :span="5" style="margin-left:2%; margin-right:2%">
-            <div class="import_questions" style="text-align:left;color:#464748;">
-              <div class="qdiv" style="margin-top: 25px;">试卷名称： <span style="color:#6a8dfb;font-size: 18px;">{{paperData.name}}</span>
-              </div>
-              <div class="qdiv" style="margin-top: 10px;">总题数： <span style="color:#6a8dfb;font-size: 18px;">{{paperData.question_count}}</span>
-                题
-              </div>
-            </div>
-          </el-col>
-          <!--<el-col :span="5" style="margin-left:2%; margin-right:2%">-->
-          <!--<div class="import_questions" style="border: 1px solid #fdca41;box-shadow: 0 0 3px 1px #fdca41;">-->
-          <!--<div class="import_left"><span style="float:left; font-size:14px;">总题数</span><i-->
-          <!--style="float:right; color:#fdca41;font-size:20px;" class="iconfont icon-shujutu"></i></div>-->
-          <!--<div><span style="font-size:70px; color:#fdca41">{{paperData.question_count}}</span>题</div>-->
-          <!--</div>-->
-          <!--</el-col>-->
-        </el-row>
+        <img width="100%" height="142px" src="../../../../assets/images/preview.png"/>
+        <div>
+          <span>{{paperData.name}}</span>
+          <span style="margin-left: 30px;">{{paperData.question_count}}<span
+            style="font-size: 14px;"> 题</span></span>
+        </div>
       </div>
       <div class="main">
         <div v-for="(v, k) in questionData" v-if="k==153 && questionData[k].length>0">
@@ -56,7 +44,7 @@
                v-html="item.stem"></p>
             <el-form>
               <el-form-item>
-                <el-checkbox-group v-model="answerData[item.id]" style="width:97%;margin-left:2.5%;" v-if="k==154">
+                <el-checkbox-group v-model="answerData[item.id]" style="width:96%;margin-left:44px;" v-if="k==154">
                   <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
                     <el-checkbox :label="index" style="white-space: initial;line-height:24px;">
                       {{index}}:{{item.choice[index]}}
@@ -272,9 +260,11 @@
   .ql-editor {
     min-height: initial !important;
   }
+
   .el-form-item {
     margin-bottom: 12px !important;
   }
+
   .confirm_btn {
     width: 100px;
     height: 35px;
@@ -288,33 +278,39 @@
   #answerExam {
     position: relative;
     .tool {
-      height: 160px;
+      position: relative;
+      div {
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        height: 142px;
+        line-height: 142px;
+        font-size: 24px;
+        text-indent: 2%;
+        color: #fff;
+      }
+    }
+    .import_questions {
+      border: 1px solid #6a8dfb;
+      -webkit-box-shadow: 0 0 3px 1px #6a8dfb;
+      box-shadow: 0 0 3px 1px #6a8dfb;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+      height: 124px;
       border-radius: 5px;
-      border: 1px #eee solid;
-      border-bottom: none;
-      padding: 0;
-      .import_questions {
-        border: 1px solid #6a8dfb;
-        -webkit-box-shadow: 0 0 3px 1px #6a8dfb;
-        box-shadow: 0 0 3px 1px #6a8dfb;
-        text-align: center;
-        align-items: center;
-        justify-content: center;
-        height: 124px;
-        border-radius: 5px;
-        .qdiv {
-          font-size: 14px;
-          height: 30px;
-          line-height: 30px;
-          margin-left: 20px;
-          overflow: hidden;
-        }
-        .import_left {
-          width: 90%;
-          height: 36px;
-          line-height: 36px;
-          margin: 0 auto;
-        }
+      .qdiv {
+        font-size: 14px;
+        height: 30px;
+        line-height: 30px;
+        margin-left: 20px;
+        overflow: hidden;
+      }
+      .import_left {
+        width: 90%;
+        height: 36px;
+        line-height: 36px;
+        margin: 0 auto;
       }
     }
     .main {

@@ -20,13 +20,20 @@
                      :key="index"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="内容" required="">
+
+      <el-form-item label="内容" required="" v-if="moduleType !='newVersionUpdate'">
         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
                     v-model="form && form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
-
+      </el-form-item>
+      <el-form-item label="内容" required="" v-else-if="!(form.type == 1) && moduleType =='newVersionUpdate'">
+        <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
+                    v-model="form && form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
       </el-form-item>
 
-      <el-form-item label="封面图片" >
+      <el-form-item label="封面图片" v-if="moduleType !='newVersionUpdate'">
+        <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
+      </el-form-item>
+      <el-form-item label="新手导读" required="" v-else-if="!(form.type == 2) && moduleType =='newVersionUpdate'" >
         <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
 

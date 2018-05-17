@@ -2,7 +2,10 @@
   <div>
     <el-dialog :close-on-click-modal="false" width="0" z-index="3000" style="margin-top:20vh" :visible.sync="ReadingDialogVisible">
     <div class="badgeup" >
-      <div class="backdiv backdivo"></div>
+      <div class="backdiv" v-for="(item,index) in album" v-if="album.length>0 && index==imgLen" :key="item.id"  @click="imgLenON">
+        <img :src="item.uri" />
+
+      </div>
     </div>
     </el-dialog>
   </div>
@@ -11,11 +14,14 @@
 <script>
 export default {
   name: "hello",
-  props: ["ReadingDialog"],
+  props: ["ReadingDialog","yanFirstInfo"],
   components: {},
   data() {
     return {
       ReadingDialogVisible: false,
+      imgLen: 0,
+      album:[],
+      albumLen:0,
     };
   },
   mounted() {},
@@ -27,9 +33,20 @@ export default {
       if (!val) {
         this.$emit("close");
       }
+    },
+    yanFirstInfo(val){
+      this.album = val.album.image_pic;
+      this.albumLen = val.album.image_pic.length;
     }
   },
-  methods: {}
+  methods: {
+    imgLenON(){
+      this.imgLen++;
+      if(this.imgLen>=this.albumLen){
+        this.ReadingDialogVisible = false;
+      }
+    },
+  }
 };
 </script>
 
@@ -42,21 +59,23 @@ export default {
   transform: translate(-50%, -50%);
   z-index: 999;
   display: block;
-  width: 445px;
-  height: 446px;
-  margin-left: -30px;
+  width: 100%;
+  height: 100%;
 }
 .backdiv {
   position: absolute;
   left: 0px;
   top: 0px;
-  width: 445px;
-  height: 446px;
+  width: 100%;
+  height: 100%;
+  img{
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
 }
 
-.backdivo {
-  background: url("../../assets/images/badgeo.png");
-}
+
 
 
 </style>

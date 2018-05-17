@@ -50,8 +50,8 @@
               </div>
             <el-row>
               <el-checkbox-group v-model="params.candidate">
-                <el-col :span="6" v-for="(val,key) in isSelectCollect" :key="key">
-                  <el-checkbox :label="key" name="type">{{val}}</el-checkbox>
+                <el-col :span="6" v-for="val in detailInfo" :key="val.id">
+                  <el-checkbox :label="val.id" name="type">{{val.value}}</el-checkbox>
                 </el-col>
               </el-checkbox-group>
             </el-row>
@@ -131,6 +131,7 @@
         editImage:{},
         isSelectCollect: [],
         isSelectRent: [],
+        detailInfo:[],
         //作废
         contractCancelCollect:[],
         contractCancelRent:[],
@@ -169,9 +170,9 @@
         })
       },
 
-
       //获取详情
       getApplyDetail(){
+        let that = this;
         this.$http.get(globalConfig.server+'receipt/handin/'+this.handInEditId).then((res) => {
           if(res.data.code === '21000'){
             let arr = res.data.data;
@@ -188,10 +189,23 @@
                 this.editImage = picObject;
                 this.isSelectCollect = arr.receipt_numbers;
                 this.params.candidate = [];
+                this.detailInfo = [];
+                for(let x in this.isSelectCollect){
+                  this.detailInfo.push({id:x,value:this.isSelectCollect[x]})
+                }
+                this.$http.get(globalConfig.server+'receipt/available/'+ this.params.staff_id).then((res) => {
+                  if(res.data.code === '21000'){
+                    for(let item in res.data.data){
+                      that.detailInfo.push({id:res.data.data[item].id,value:res.data.data[item].full_text});
+                    }
 
+                  }
+                });
+  
                 for(let key in this.isSelectCollect){
                   this.params.candidate.push(key)
                 }
+
             // this.params.contract_type = arr.contract_type;
 
               this.params.department_id = arr.department_id;

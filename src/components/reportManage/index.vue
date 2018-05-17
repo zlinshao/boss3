@@ -52,14 +52,14 @@
               <el-table-column
                 label="报备人">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.user">{{scope.row.user.name}}</span>
+                  <span v-if="scope.row.flow.user">{{scope.row.flow.user.name}}</span>
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
               <el-table-column
                 label="部门">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.user">
+                  <span v-if="scope.row.flow.user">
                     <span v-for="item in scope.row.user.org">{{item.name}}&nbsp;</span>
                   </span>
                   <span v-else="">/</span>
@@ -188,7 +188,7 @@
 
       dblClickTable(row, event){
         this.reportDetailDialog = true;
-        this.reportId = row.id;
+        this.reportId = row.flow.id;
       },
       closeModal(){
         this.reportDetailDialog = false;

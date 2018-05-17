@@ -182,7 +182,6 @@
 
             'BeforeUpload': function (up, file) {
               // 每个文件上传前，处理相关的事情
-
               up.setOption('multipart_params', {
                 token: _this.token,               // 上传凭证
               });

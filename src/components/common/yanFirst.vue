@@ -4,7 +4,12 @@
     <div class="badgeup" >
       <span class="span1">版本更新 - {{versionInfo.version}}</span>
       <div class="msg">
-        <img src="../../assets/images/head.jpg" />
+            <span v-if="versionInfo.avatar !== '' && versionInfo.avatar !== null">
+              <img :src="versionInfo.avatar">
+            </span>
+            <span v-else>
+              <img src="../../assets/images/head.jpg" />
+            </span>
         <span v-if="versionInfo.staffs && versionInfo.staffs.real_name" style="float:left; line-height:40px;">{{versionInfo.staffs.real_name}}</span>
         <span style="float:right;margin-right:20px;">{{versionInfo.create_time}}</span>
       </div>
