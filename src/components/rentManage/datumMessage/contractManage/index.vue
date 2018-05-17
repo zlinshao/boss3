@@ -261,7 +261,6 @@
                   element-loading-text="拼命加载中"
                   element-loading-spinner="el-icon-loading"
                   element-loading-background="rgba(255, 255, 255, 0)"
-                  @row-click="clickTable"
                   @row-dblclick="dblClickTable"
                   @row-contextmenu='houseMenu'
                   style="width: 100%">
@@ -426,7 +425,6 @@
                   element-loading-text="拼命加载中"
                   element-loading-spinner="el-icon-loading"
                   element-loading-background="rgba(255, 255, 255, 0)"
-                  @row-click="clickTable"
                   @row-dblclick="dblClickTable"
                   @row-contextmenu='houseMenu'
                   style="width: 100%">
@@ -654,42 +652,41 @@
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
               element-loading-background="rgba(255, 255, 255, 0)"
+              @row-dblclick="dblClickHistoryTable"
               style="width: 100%">
               <el-table-column
                 prop="create_time"
-                label="创建时间">
+                label="修改时间">
               </el-table-column>
               <el-table-column
-                prop="contract_number"
-                label="合同编号">
+                prop="sname"
+                label="修改人">
               </el-table-column>
               <el-table-column
-                prop="house_name"
-                label="房屋地址">
+                prop="other.cate"
+                label="合同类型">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.other && scope.row.other.cate==='rent' ">租</span>
+                  <span v-if="scope.row.other && scope.row.other.cate==='collect' ">收</span>
+                  <span v-if="!(scope.row.other && scope.row.other.cate)">暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="update_time"
-                label="资料补齐时间">
+                prop="other.from"
+                label="操作端">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.other && scope.row.other.from==='PC' ">电脑</span>
+                  <span v-if="scope.row.other && scope.row.other.from==='mobile' ">手机</span>
+                  <span v-if="!(scope.row.other && scope.row.other.from)">暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop="content"
-                label="备忘内容">
-              </el-table-column>
-              <el-table-column
-                prop="receivers"
-                label="接收人">
-              </el-table-column>
-              <el-table-column
-                prop="sender"
-                label="发送人">
-              </el-table-column>
-              <el-table-column
-                prop="is_send"
+                prop="other.operation"
                 label="操作类型">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.is_send===0">保存</span>
-                  <span v-if="scope.row.is_send===1">发送</span>
-                  <span v-if="scope.row.is_send===null">暂无</span>
+                  <span v-if="scope.row.other && scope.row.other.operation==='add' ">新增</span>
+                  <span v-if="scope.row.other && scope.row.other.operation==='update' ">修改</span>
+                  <span v-if="!(scope.row.other && scope.row.other.operation)">暂无</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -1059,8 +1056,14 @@
           this.rentDatafunc();
         }
       },
-      clickTable(row, event, column) {
-        // console.log(row, event, column)
+      dblClickHistoryTable(row, event){
+        if (this.activeName === 'first') {
+          const {href} = this.$router.resolve({path: '/historyCollectDetail', query: {content: JSON.stringify(row.content), id: row.id}});
+          window.open(href, '_blank', 'width=1920,height=1080');
+        } else if (this.activeName === 'second') {
+          const {href} = this.$router.resolve({path: '/historyRentingDetail', query: {content: JSON.stringify(row.content), id: row.id}});
+          window.open(href, '_blank', 'width=1920,height=1080');
+        }
       },
       dblClickTable(row, event) {  //双击详情
         if (this.activeName === 'first') {
@@ -1072,6 +1075,7 @@
         }
 
       },
+
       //房屋右键
       houseMenu(row, event) {
         this.contractModule = !this.is_rent ? 1 : 2;
