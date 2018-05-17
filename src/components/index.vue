@@ -382,7 +382,7 @@
     <NoticeTitleView :noticeTitleDialog="noticeTitleDialog" @close="closeModal"></NoticeTitleView>
     <YanFirstView :yanFirstDialog="yanFirstDialog" :yanFirstInfo="yanFirstInfo" @close="closeyanModal"></YanFirstView>
     <YanSecondView :yanSecondDialog="yanSecondDialog" @close="closeModal"></YanSecondView>
-    <ReadingView :ReadingDialog="ReadingDialog" @close="readcloseModal"></ReadingView>
+    <ReadingView :ReadingDialog="ReadingDialog" :yanFirstInfo="yanFirstInfo" @close="readcloseModal"></ReadingView>
   </div>
 </template>
 
@@ -521,7 +521,13 @@
             .then(res => {
               if (res.data.code === "50040") {
                 this.yanFirstInfo = res.data.data;
-                this.yanFirstDialog = true;
+                if(res.data.data.type == 2){
+                  this.yanFirstDialog = true;
+                }
+                else if( res.data.data.type == 1 ){
+                  this.ReadingDialog = true;
+                }
+                
               }
             });
           //制度弹窗
@@ -565,14 +571,19 @@
         .then(res => {
           if (res.data.code === "50040") {
             this.yanFirstInfo = res.data.data;
-            this.yanFirstDialog = true;
+                if(res.data.data.type == 2){
+                  this.yanFirstDialog = true;
+                }
+                else if( res.data.data.type == 1 ){
+                  this.ReadingDialog = true;
+                }
           }
         });
 
     },
     mounted() {
       //初始化个人信息
-      //this.ReadingDialog = true;
+      
       this.personal = JSON.parse(localStorage.personal);
       //鼠标滑动监听
       let _this = this;
