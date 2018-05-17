@@ -22,7 +22,9 @@
                 <span>{{personal.name}}<span v-for="(key,index) in personal.org"
                                              v-if="index === 0">-{{key.name}}</span></span>
               </div>
-              <div class="auditStatus" v-if="placeFalse" @click="approvePersonal"><i class="iconfont icon-yanqi--"></i>&nbsp;{{place.display_name}}
+              <div class="auditStatus" v-if="placeFalse" @click="approvePersonal"><i class="iconfont icon-shenpi1"></i>&nbsp;{{place.display_name}}
+              </div>
+              <div class="auditStatus deal" v-if="placeFalse"><i class="iconfont icon-yanqi--"></i>&nbsp;{{deal}}
               </div>
               <div class="statuss"
                    :class="{'statusSuccess':place.status === 'published', 'statusFail':place.status === 'rejected', 'cancelled':place.status === 'cancelled'}"></div>
@@ -194,7 +196,7 @@
           comment: '',
           album: [],
         },
-
+        deal: '',
         role_name: [],
         showContent: false,
       }
@@ -240,6 +242,7 @@
           if (res.data.status === 'success' && res.data.data.length !== 0) {
             this.show_content = JSON.parse(res.data.data.process.content.show_content_compress);
             this.operation = res.data.data.operation;
+            this.deal = res.data.data.deal;
 
             let pro = res.data.data.process;
             this.personal = pro.user;
@@ -432,6 +435,9 @@
         margin-left: 30px;
         font-size: 16px;
         cursor: pointer;
+      }
+      .deal {
+        color: #949494;
       }
       .statuss {
         margin-left: 30px;
