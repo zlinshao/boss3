@@ -2,7 +2,7 @@
   <div>
     <el-dialog :close-on-click-modal="false" width="0" z-index="3000" style="margin-top:20vh" :visible.sync="ReadingDialogVisible">
     <div class="badgeup" >
-      <div class="backdiv" v-for="(item,index) in album" v-if="album !=[] && index==imgLen" :key="item.id"  @click="imgLenON">
+      <div class="backdiv" v-for="(item,index) in album" v-if="album.length>0 && index==imgLen" :key="item.id"  @click="imgLenON">
         <img :src="item.uri" />
 
       </div>

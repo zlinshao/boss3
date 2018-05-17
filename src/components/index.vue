@@ -524,7 +524,7 @@
                 if(res.data.data.type == 2){
                   this.yanFirstDialog = true;
                 }
-                else if( res.data.data.type == 1 ){
+                else if( res.data.data.type == 1 && res.data.data.album.image_pic.length >0){
                   this.ReadingDialog = true;
                 }
                 
@@ -574,7 +574,7 @@
                 if(res.data.data.type == 2){
                   this.yanFirstDialog = true;
                 }
-                else if( res.data.data.type == 1 ){
+                else if( res.data.data.type == 1 && res.data.data.album.image_pic.length >0 ){
                   this.ReadingDialog = true;
                 }
           }
