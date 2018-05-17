@@ -33,7 +33,7 @@
       <el-form-item label="封面图片" v-if="moduleType !='newVersionUpdate'">
         <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
-      <el-form-item label="封面图片" required="" v-else-if="!(form.type == 2) && moduleType =='newVersionUpdate'" >
+      <el-form-item label="新手导读" required="" v-else-if="!(form.type == 2) && moduleType =='newVersionUpdate'" >
         <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
 
