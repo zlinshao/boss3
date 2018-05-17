@@ -252,7 +252,7 @@ export default new Router({
         {path: '/individual', component: Individual, name: '个人门户'},
         {path: '/infodetails', component: Infodetails, name: '详情', selfLoading: true},
         {path: '/dailyRecord', component: DailyRecord, name: '日志管理'},
-        {path: '/sthToDo', component: SthToDo, name: '报备管理'},
+        // {path: '/sthToDo', component: SthToDo, name: '报备管理'},
         {path: '/integraldetail', component: Integraldetail, name: '积分明细'},
         {path: '/pictureManage', component: PictureManage, name: '相册管理'},
         {path: '/createAlbum', component: CreateAlbum, name: "创建相册",},
@@ -477,7 +477,7 @@ export default new Router({
 
         {path: '/articleMessage', component: ArticleMessage, name: '文章管理'},
 
-        {path: '/examineAndApprove', component: ExamineAndApprove, name: '报备管理'},
+        {path: '/examineAndApprove', component: ExamineAndApprove, name: '报备管理 '},
 
         // {path: '/communication', component: Communication, name: '通讯管理',},
         // {path: '/programme', component: Programme, name: '日程管理',},
