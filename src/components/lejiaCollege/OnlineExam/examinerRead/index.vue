@@ -146,7 +146,7 @@
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="form.page"
-              :page-size="2"
+              :page-size="form.limit"
               layout="total, prev, pager, next, jumper"
               :total="tableNum">
             </el-pagination>
@@ -174,12 +174,6 @@
           time: [], //考试时间
           paper_id: '',
         },
-        forms: [
-          {id: "1", name: "表彰"},
-          {id: "2", name: "批评"},
-          {id: "3", name: "通知"}
-          // { id: "4", name: "研发" }
-        ],
         isHigh: false, //高级搜索
         rentStatus: " ",
         rentLoading: false,
@@ -278,10 +272,10 @@
           this.isHigh = false;
           if (res.data.code == "30000") {
             this.tableData = res.data.data.data;
-            this.tableNumber = res.data.data.count;
+            this.tableNum = res.data.data.count;
           } else {
             this.rentStatus = "暂无数据";
-            this.tableNumber = 0;
+            this.tableNum = 0;
             this.tableData = [];
             // this.$notify.warning({
             //   title: '警告',
