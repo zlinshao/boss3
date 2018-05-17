@@ -402,7 +402,7 @@
           <el-row>
             <el-col :span="20">
               <el-form-item label="同步误差" required>
-                <el-input size="mini" placeholder="请输入"  v-model="devn"></el-input>
+                <el-input size="mini" placeholder="请输入" v-model="devn"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -503,6 +503,8 @@
       examineStatusDialog(val) {
         if (!val) {
           this.examineStatus = '';
+        }else{
+          this.reimbursementId = '';
         }
       },
       syncStatusDialog(val) {
@@ -512,9 +514,9 @@
       },
     },
     methods: {
-      syncConfirm(){
-        this.$http.get(globalConfig.server+ 'customer/reimbursement/sync',{params:{devn: this.devn}}).then((res)=>{
-          if(res.data.code === '30060'){
+      syncConfirm() {
+        this.$http.get(globalConfig.server + 'customer/reimbursement/sync', {params: {devn: this.devn}}).then((res) => {
+          if (res.data.code === '30060') {
             this.syncStatusDialog = false;
             this.$notify.success({
               title: '成功',
@@ -529,7 +531,7 @@
         });
       },
       examineConfirm() {
-        this.$http.put(globalConfig.server + 'customer/reimbursement_result/status/2', {status: this.examineStatus}).then((res) => {
+        this.$http.put(globalConfig.server + 'customer/reimbursement_result/status/' + this.reimbursementId, {status: this.examineStatus}).then((res) => {
           if (res.data.code === '40010') {
             this.examineStatusDialog = false;
             this.$notify.success({

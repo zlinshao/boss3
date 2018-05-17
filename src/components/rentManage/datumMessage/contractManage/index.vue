@@ -672,6 +672,61 @@
           </div>
         </el-dialog>
       </div>
+      <div>
+        <el-dialog :close-on-click-modal="false" title="修改记录" :visible.sync="leaseHistoryDialog" width="50%">
+          <div>
+            <el-table
+              :data="leaseHistoryTableData"
+              :empty-text='incompleteStatus'
+              v-loading="incompleteLoading"
+              element-loading-text="拼命加载中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(255, 255, 255, 0)"
+              style="width: 100%">
+              <el-table-column
+                prop="create_time"
+                label="创建时间">
+              </el-table-column>
+              <el-table-column
+                prop="contract_number"
+                label="合同编号">
+              </el-table-column>
+              <el-table-column
+                prop="house_name"
+                label="房屋地址">
+              </el-table-column>
+              <el-table-column
+                prop="update_time"
+                label="资料补齐时间">
+              </el-table-column>
+              <el-table-column
+                prop="content"
+                label="备忘内容">
+              </el-table-column>
+              <el-table-column
+                prop="receivers"
+                label="接收人">
+              </el-table-column>
+              <el-table-column
+                prop="sender"
+                label="发送人">
+              </el-table-column>
+              <el-table-column
+                prop="is_send"
+                label="操作类型">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.is_send===0">保存</span>
+                  <span v-if="scope.row.is_send===1">发送</span>
+                  <span v-if="scope.row.is_send===null">暂无</span>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
+          <div slot="footer" class="dialog-footer">
+            <el-button size="small" type="primary" @click="leaseHistoryDialog = false">确&nbsp;定</el-button>
+          </div>
+        </el-dialog>
+      </div>
 
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
@@ -685,8 +740,9 @@
     <EditHouseResources :editHouseResourcesDialog="editHouseResourcesDialog"
                         :collectContractId="contractOperateId" @close="closeModal"></EditHouseResources>
     <!-- 回访 -->
-    <AddReturnvisit :addReturnvisitDialog="addReturnvisitDialog" :ToActiveName="ToActiveName" :addReturnInfo="addReturnInfo"
-                      @close="closeModal"></AddReturnvisit>
+    <AddReturnvisit :addReturnvisitDialog="addReturnvisitDialog" :ToActiveName="ToActiveName"
+                    :addReturnInfo="addReturnInfo"
+                    @close="closeModal"></AddReturnvisit>
 
   </div>
 </template>
@@ -700,7 +756,7 @@
 
   export default {
     name: 'hello',
-    components: {RightMenu, Organization , EditRentInfo , EditHouseResources,AddReturnvisit},
+    components: {RightMenu, Organization, EditRentInfo, EditHouseResources, AddReturnvisit},
     data() {
       return {
         rightMenuX: 0,
@@ -818,13 +874,15 @@
         contractModule: '',
         contractOperateId: '',
 
-        editHouseResourcesDialog : false,
-        editRentInfoDialog : false,
-        collectHouseId : '',
+        editHouseResourcesDialog: false,
+        editRentInfoDialog: false,
+        collectHouseId: '',
 
         collectNumberArray: [],
         checkContractData: [],
-        addReturnvisitDialog:false,
+        addReturnvisitDialog: false,
+        leaseHistoryDialog: false,
+        leaseHistoryTableData: [],
       }
     },
     mounted() {
@@ -858,6 +916,32 @@
           this.is_rent = 1;
         }
       },
+      leaseHistoryDialog(val) {
+        if (val) {
+          this.incompleteStatus = " ";
+          this.incompleteLoading = true;
+          let header = '';
+          if (this.activeName === 'first') {
+            header = this.$http.get(globalConfig.server + 'lease/collect/history?limit=100&page=1&contract_id=' + this.selectContractId);
+          } else {
+            header = this.$http.get(globalConfig.server + 'lease/rent/history?limit=100&page=1&contract_id=' + this.selectContractId);
+          }
+          header.then((res) => {
+            this.incompleteLoading = false;
+            if (res.data.code === '61010') {
+              this.leaseHistoryTableData = res.data.data;
+              if (res.data.data.length < 1) {
+                this.incompleteStatus = "暂无数据";
+                this.leaseHistoryTableData = [];
+                this.totalNum = 0;
+              }
+            } else {
+              this.incompleteStatus = "暂无数据";
+              this.leaseHistoryTableData = [];
+            }
+          });
+        }
+      }
     },
     methods: {
       closeModal(val) {
@@ -1012,20 +1096,41 @@
         this.collectHouseId = row.house_id;   //收房id
         this.contractOperateId = row.contract_id;   //通用合同ID
         this.addReturnInfo = row;
-        if(this.is_rent){
+        if (this.is_rent) {
           this.ToActiveName = "second";
           this.lists = [
-            {clickIndex: 'editRentInfoDialog',headIcon: 'el-icon-edit', label: '修改租客信息',disabled:row.doc_status.id>3},
+            {
+              clickIndex: 'editRentInfoDialog',
+              headIcon: 'el-icon-edit',
+              label: '修改租客信息',
+              disabled: row.doc_status.id > 3
+            },
             {clickIndex: 'lookMemorandum', headIcon: 'el-icons-fa-eye', label: '查看合同备忘', contract_id: row.contract_id},
-            {clickIndex: 'addReturnvisitDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '增加回访记录', contract_id: row.contract_id},
-            {clickIndex: 'lookMemorandum', headIcon: 'el-icons-fa-eye', label: '查看合同备忘', contract_id: row.contract_id},
+            {clickIndex: 'addReturnvisitDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '增加回访记录'},
+            {
+              clickIndex: 'lookLeaseHistory',
+              headIcon: 'el-icons-fa-eye',
+              label: '查看合同修改记录',
+              contract_id: row.contract_id
+            },
           ];
-        }else {
+        } else {
           this.ToActiveName = "first";
           this.lists = [
-            {clickIndex: 'editHouseResourcesDialog', headIcon: 'el-icons-fa-home', label: '修改房源', disabled: row.doc_status.id > 3},
+            {
+              clickIndex: 'editHouseResourcesDialog',
+              headIcon: 'el-icons-fa-home',
+              label: '修改房源',
+              disabled: row.doc_status.id > 3
+            },
             {clickIndex: 'lookMemorandum', headIcon: 'el-icons-fa-eye', label: '查看合同备忘', contract_id: row.contract_id},
-            {clickIndex: 'addReturnvisitDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '增加回访记录', contract_id: row.contract_id},
+            {clickIndex: 'addReturnvisitDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '增加回访记录'},
+            {
+              clickIndex: 'lookLeaseHistory',
+              headIcon: 'el-icons-fa-eye',
+              label: '查看合同修改记录',
+              contract_id: row.contract_id
+            },
           ];
         }
         this.contextMenuParam(event);
@@ -1045,6 +1150,10 @@
             break;
           case 'addReturnvisitDialog':   //回访记录
             this.addReturnvisitDialog = true;
+            break;
+          case 'lookLeaseHistory':
+            this.leaseHistoryDialog = true;
+            this.selectContractId = val.contract_id;
             break;
         }
       },
