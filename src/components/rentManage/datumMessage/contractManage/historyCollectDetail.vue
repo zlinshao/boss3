@@ -849,7 +849,7 @@
           is_send: null,
         },
         receiverNames: '',
-        loadingStatus: false,
+        loadingStatus: true,
         reBackData: [],
         approveParams: {
           is_rent: 0,
@@ -901,12 +901,8 @@
 
     },
     mounted() {
-      console.log(JSON.parse(this.$route.query.content));
-      this.contractInfo = JSON.parse(this.$route.query.content);
-      this.customersInfo = JSON.parse(this.$route.query.content).customers;
       this.initData();
-
-      // this.getContractDetail();
+      this.getContractDetail();
       this.getReBackDetail();
       this.houseId = document.getElementById('houseId').offsetTop - 201;
       this.ownerId = document.getElementById('ownerId').offsetTop - 201;
@@ -1224,12 +1220,12 @@
         this.type = '';
       },
       getContractDetail() {
-        this.$http.get(globalConfig.server + 'lease/collect/' + this.contract_id).then((res) => {
+        this.$http.get(globalConfig.server + 'lease/collect/history/' + this.contract_id).then((res) => {
           this.loadingStatus = false;
           if (res.data.code === '61010') {
 
-            this.contractInfo = res.data.data;
-            this.customersInfo = res.data.data.customers;
+            this.contractInfo = res.data.data.content;
+            this.customersInfo = res.data.data.content.customers;
 
             this.albumObject.photo = this.getImgId(this.contractInfo.photo);
             this.albumObject.identity_photo = this.getImgId(this.contractInfo.identity_photo);
