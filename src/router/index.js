@@ -504,7 +504,7 @@ export default new Router({
         // {path: '/contractClaim', component: ContractClaim, name: '合同认领',},
         {path: '/pagerData', component: PagerData, name: '纸质资料'},
         // {path: '/knowledge', component: Knowledge, name: '知识管理',},
-        // {path: '/questionnaire', component: Questionnaire, name: "问卷调查"},
+        {path: '/questionnaire', component: Questionnaire, name: "问卷调查"},
 
       ]
     },

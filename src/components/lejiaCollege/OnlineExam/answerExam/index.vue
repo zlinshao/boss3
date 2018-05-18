@@ -114,7 +114,7 @@
               <el-form-item style="width:96%;margin-left:44px;">
                 <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak">
                   <el-input style="width:97%;" size="small" v-model="answerData[item.id][ak]"
-                            placeholder="请填写答案"></el-input>
+                             :placeholder="`请填写第 ${ak+1} 处答案`"></el-input>
                 </el-col>
               </el-form-item>
             </el-form>
@@ -343,10 +343,10 @@
             answer: this.answerData
           }).then((res) => {
             if (res.data.code === '36010') {
-              this.$notify.success({
-                title: '成功',
-                message: res.data.msg
-              });
+              // this.$notify.success({
+              //   title: '成功',
+              //   message: res.data.msg
+              // });
               this.pointScore = res.data.data.score;
               this.resultId = res.data.data.id;
               if (this.questionData[158] && this.questionData[158].length > 0) {
@@ -370,6 +370,32 @@
         });
 
       },
+      onForceSubmit(){
+        this.$http.post(globalConfig.server + 'exam/result', {
+          exam_id: this.examId,
+          answer: this.answerData
+        }).then((res) => {
+          if (res.data.code === '36010') {
+            // this.$notify.success({
+            //   title: '成功',
+            //   message: res.data.msg
+            // });
+            this.pointScore = res.data.data.score;
+            this.resultId = res.data.data.id;
+            if (this.questionData[158] && this.questionData[158].length > 0) {
+              this.submitDialog = true;
+            } else {
+              this.pointDialog = true;
+            }
+            localStorage.removeItem("answers_" + this.examId);
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
       closeAnswer() {
         this.submitDialog = false;
         let view = {};
@@ -392,7 +418,7 @@
         if (this.examId) {
           this.$http.get(globalConfig.server + 'exam/poll/' + this.examId).then((res) => {
             if (res.data.code === '30000') {
-              this.onSubmit();
+              this.onForceSubmit();
             } else {
               let time = res.data.msg.split(',');
               this.countDown = time[1] - time[0];
