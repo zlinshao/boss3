@@ -2,22 +2,22 @@
   <div>
     <div id="previewExam">
       <div class="tool">
-        <el-row style="width:90%;margin-top:16px;margin-left: 15%;">
-          <el-col :span="5" style="margin-left:2%; margin-right:2%;min-width: 250px;">
+        <el-row :gutter="80" style="width:90%;margin-top:16px;margin-left: 5%;">
+          <el-col :span="7" style="margin-left:2%; margin-right:2%;">
             <div class="import_questions" style="text-align:left;color:#464748;">
               <div class="qdiv" style="margin-top:28px;">试卷名称：<span style="color:#6a8dfb">{{testPaperData.name}}</span>
               </div>
               <div class="qdiv">试卷类型：<span style="color:#6a8dfb">{{testPaperData.category}}</span></div>
             </div>
           </el-col>
-          <el-col :span="5" style="margin-left:2%; margin-right:2%">
+          <el-col :span="7" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="border: 1px solid #fdca41;box-shadow: 0 0 3px 1px #fdca41;">
               <div class="import_left"><span style="float:left; font-size:14px;">总题数</span><i
                 style="float:right; color:#fdca41;font-size:20px;" class="iconfont icon-shujutu"></i></div>
               <div><span style="font-size:70px; color:#fdca41">{{testPaperData.count}}</span>题</div>
             </div>
           </el-col>
-          <el-col :span="5" style="margin-left:2%; margin-right:2%">
+          <el-col :span="7" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="border: 1px solid #fb4699;box-shadow: 0 0 3px 1px #fb4699;">
               <div class="import_left"><span style="float:left; font-size:14px;">总分值</span><i
                 style="float:right; color:#fb4699;font-size:20px;" class="iconfont icon-chengjiguanli"></i></div>
@@ -81,8 +81,8 @@
              v-html="item.stem"></p>
           <el-form>
             <el-form-item style="width:96%;margin-left:44px;" v-if="item.category===157">
-              <el-col v-for="value in item.answer" :key="value" :span="12">
-                <el-input size="small" style="width:97%;"  readOnly placeholder="请填写答案"></el-input>
+              <el-col v-for="(value, kk) in item.answer" :key="value" :span="12">
+                <el-input size="small" style="width:97%;"  readOnly :placeholder="`请填写第 ${kk+1} 处答案`"></el-input>
               </el-col>
             </el-form-item>
             <el-form-item style="width:96%;margin-left:44px;" v-if="item.category===158">

@@ -2,22 +2,22 @@
   <div>
     <div id="shortAnExam">
       <div class="tool">
-        <el-row style="width:90%;margin-top:16px;margin-left: 15%;">
-          <el-col :span="5" style="margin-left:2%; margin-right:2%">
+        <el-row :gutter="80" style="width:90%;margin-top:16px;margin-left: 5%;">
+          <el-col :span="7" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="text-align:left;color:#464748;">
               <div class="qdiv" style="margin-top:28px;">试卷名称：<span style="color:#6a8dfb">{{examData.name}}</span></div>
               <div class="qdiv">试卷类型：<span style="color:#6a8dfb">{{examData.paper && examData.paper.category}}</span>
               </div>
             </div>
           </el-col>
-          <el-col :span="5" style="margin-left:2%; margin-right:2%">
+          <el-col :span="7" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="border: 1px solid #58d788;box-shadow: 0 0 3px 1px #58d788;">
               <div class="import_left"><span style="float:left; font-size:14px;">总时长</span><i
                 style="float:right; color:#58d788;font-size:20px;" class="iconfont icon-shijian1"></i></div>
               <div><span style="font-size:70px; color:#58d788">{{examData.duration}}</span>分钟</div>
             </div>
           </el-col>
-          <el-col :span="5" style="margin-left:2%; margin-right:2%">
+          <el-col :span="7" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="border: 1px solid #fdca41;box-shadow: 0 0 3px 1px #fdca41;">
               <div class="import_left"><span style="float:left; font-size:14px;">总题数</span><i
                 style="float:right; color:#fdca41;font-size:20px;" class="iconfont icon-shujutu"></i></div>
@@ -34,14 +34,14 @@
             <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
                v-html="item.stem"></p>
             <div style="width:96%;margin-left:44px;"
-                 v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
+                 v-if="answerData && answerData[item.id] && resultData && resultData.answer ">
               <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
               <el-form>
                 <el-form-item >
                   <el-row :gutter="20">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice"
                             style="line-height:24px;">
-                      <span v-if="index == answerData[item.id]"><el-radio>{{index}}：{{val}}</el-radio></span>
+                      <span v-if="index == resultData.answer[item.id]"><el-radio>{{index}}：{{val}}</el-radio></span>
                       <span v-else>{{index}}：{{val}}</span>
                       <span style="color:rgb(88, 215, 136);margin-left:50px;"
                             v-if="resultData.answer[item.id] == answerData[item.id] && resultData.answer[item.id]==index">正确</span>
@@ -64,13 +64,13 @@
             <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
                v-html="item.stem"></p>
             <div style="width:96%;margin-left:44px;"
-                 v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
+                 v-if="answerData && answerData[item.id] && resultData && resultData.answer ">
               <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
               <el-form>
                 <el-form-item>
                   <el-row :gutter="20">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
-                      <span v-if="answerData[item.id].indexOf(index)>-1"><el-radio>{{index}}：{{val}}</el-radio></span>
+                      <span v-if="resultData.answer[item.id].indexOf(index)>-1"><el-radio>{{index}}：{{val}}</el-radio></span>
                       <span v-else>{{index}}：{{val}}</span>
                       <span style="color:rgb(88, 215, 136);margin-left:50px;" v-for="ans in resultData.answer[item.id]"
                             v-if="answerData[item.id].indexOf(ans)>-1 && ans==index">正确</span>
@@ -90,13 +90,13 @@
             <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
                v-html="item.stem"></p>
             <div style="width:96%;margin-left:44px;"
-                 v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
+                 v-if="answerData && answerData[item.id] && resultData && resultData.answer">
               <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
               <el-form>
                 <el-form-item>
                   <el-row :gutter="20">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
-                      <span v-if="index == answerData[item.id]"><el-radio>{{index}}：{{val}}</el-radio></span>
+                      <span v-if="index == resultData.answer[item.id]"><el-radio>{{index}}：{{val}}</el-radio></span>
                       <span v-else>{{index}}：{{val}}</span>
                       <span style="color:rgb(88, 215, 136);margin-left:50px;"
                             v-if="resultData.answer[item.id] == answerData[item.id] && resultData.answer[item.id]==index">正确</span>
@@ -116,7 +116,7 @@
             <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
                v-html="item.stem"></p>
             <div style="width:96%;margin-left:44px;"
-                 v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
+                 v-if="answerData && answerData[item.id] && resultData && resultData.answer">
               <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
               <el-form>
                 <el-form-item style="margin-top: 10px;">
