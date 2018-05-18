@@ -30,6 +30,7 @@
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===153">
           <span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
           <span style="color:#6a8dfb;">单选题</span>
+          <span class="ques_score">({{item.score}}分)</span>
           <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
              v-html="item.stem"></p>
           <el-form>
@@ -47,6 +48,7 @@
             <span v-if="item.category===154">多选题</span>
             <span v-if="item.category===155">不定向选择题</span>
           </span>
+          <span class="ques_score">({{item.score}}分)</span>
           <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
              v-html="item.stem"></p>
           <el-form>
@@ -60,6 +62,7 @@
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===156">
           <span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
           <span style="color:#6a8dfb;">判断题</span>
+          <span class="ques_score">({{item.score}}分)</span>
           <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
              v-html="item.stem"></p>
           <el-form>
@@ -77,6 +80,7 @@
             <span v-if="item.category===157">填空题</span>
             <span v-if="item.category===158">简答题</span>
           </span>
+          <span class="ques_score">({{item.score}}分)</span>
           <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
              v-html="item.stem"></p>
           <el-form>
@@ -188,6 +192,11 @@
         min-height: 100px;
         padding-top: 16px;
         border-top: 1px #eee solid;
+        .ques_score {
+          font-size: 14px;
+          color: #fc83b6;
+          margin-left: 20px;
+        }
       }
     }
   }
