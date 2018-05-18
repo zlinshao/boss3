@@ -1,7 +1,8 @@
 <template>
   <div>
     <div id="lineCollege">
-      <div class="highRanking">
+      <div v-if="activeName=='first'" class="highRanking"
+           style=" position: absolute; top: 122px; right: 20px;z-index: 99;">
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
@@ -15,6 +16,8 @@
             </el-form-item>
           </el-form>
         </div>
+      </div>
+      <div v-if="activeName=='first'" class="highRanking">
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
           <el-form :inline="true" onsubmit="return false" :model="form" size="mini" label-width="100px">
             <div class="filterTitle">
@@ -104,54 +107,103 @@
       <div class="main">
         <div class="myHouse">
           <div class="blueTable">
-            <el-table
-              :data="tableData"
-              :empty-text='rentStatus'
-              v-loading="rentLoading"
-              element-loading-text="拼命加载中"
-              element-loading-spinner="el-icon-loading"
-              element-loading-background="rgba(255, 255, 255, 0)"
-              style="width: 100%">
-              <el-table-column
-                prop="start_time"
-                label="考试时间">
-              </el-table-column>
-              <el-table-column
-                prop="name"
-                label="考试名称">
-              </el-table-column>
-              <el-table-column
-                prop="paper.category"
-                label="试卷类型">
-              </el-table-column>
-              <el-table-column
-                label="姓名">
-                <template slot-scope="scope">
-                  <span>{{personal && personal.name}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                label="所在部门">
-                <template slot-scope="scope">
-                  <span>{{department}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="score"
-                label="得分">
-              </el-table-column>
-              <el-table-column
-                label="操作">
-                <template slot-scope="scope">
-                  <el-button size="mini" type="primary" v-if="scope.row.result_id == 0"
-                             @click="answerExam(scope.row.id)">立即答题
-                  </el-button>
-                  <el-button size="mini" type="info" v-if="scope.row.result_id !== 0" @click="lookExam(scope.row)">
-                    查看试卷
-                  </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
+            <el-tabs v-model="activeName" @tab-click="handleClick">
+              <el-tab-pane label="我的考试" name="first">
+                <el-table
+                  :data="tableData"
+                  :empty-text='rentStatus'
+                  v-loading="rentLoading"
+                  element-loading-text="拼命加载中"
+                  element-loading-spinner="el-icon-loading"
+                  element-loading-background="rgba(255, 255, 255, 0)"
+                  style="width: 100%">
+                  <el-table-column
+                    prop="start_time"
+                    label="考试时间">
+                  </el-table-column>
+                  <el-table-column
+                    prop="name"
+                    label="考试名称">
+                  </el-table-column>
+                  <el-table-column
+                    prop="paper.category"
+                    label="试卷类型">
+                  </el-table-column>
+                  <el-table-column
+                    label="姓名">
+                    <template slot-scope="scope">
+                      <span>{{personal && personal.name}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="所在部门">
+                    <template slot-scope="scope">
+                      <span>{{department}}</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    prop="score"
+                    label="得分">
+                  </el-table-column>
+                  <el-table-column
+                    label="操作">
+                    <template slot-scope="scope">
+                      <el-button size="mini" type="primary" v-if="scope.row.result_id == 0"
+                                 @click="answerExam(scope.row.id)">立即答题
+                      </el-button>
+                      <el-button size="mini" type="info" v-if="scope.row.result_id !== 0" @click="lookExam(scope.row)">
+                        查看试卷
+                      </el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </el-tab-pane>
+              <el-tab-pane label="我的调查" name="second">
+                <el-table
+                  :data="questionNaireData"
+                  :empty-text='tableStatus'
+                  v-loading="tableLoading"
+                  element-loading-text="拼命加载中"
+                  element-loading-spinner="el-icon-loading"
+                  element-loading-background="rgba(255, 255, 255, 0)"
+                  style="width: 100%">
+                  <el-table-column
+                    prop="name"
+                    label="标题">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.name">{{scope.row.name}}</span>
+                      <span v-else>暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    prop="start_time"
+                    label="开始时间">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.start_time">{{scope.row.start_time}}</span>
+                      <span v-else>暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    prop="end_time"
+                    label="结束时间">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.end_time">{{scope.row.end_time}}</span>
+                      <span v-else>暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="操作">
+                    <template slot-scope="scope">
+                      <el-button v-if="scope.row.available && !scope.row.result_id" type="primary" size="mini"
+                                 @click="answerNaire(scope.row.id)">点击作答
+                      </el-button>
+                      <span v-if="scope.row.result_id" type="primary" size="mini"
+                            style="cursor: pointer;color: #6a8dfb;">已完成</span>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </el-tab-pane>
+            </el-tabs>
           </div>
           <div class="block pages">
             <el-pagination
@@ -234,6 +286,10 @@
         confirmArrival: [],
         examType: [],
         useTestPapers: [],
+        activeName: 'first',
+        questionNaireData: [],
+        tableStatus: ' ',
+        tableLoading: false,
       };
     },
     mounted() {
@@ -275,7 +331,7 @@
       },
     },
     methods: {
-      search(){
+      search() {
         this.form.page = 1;
         this.myData();
       },
@@ -332,6 +388,35 @@
 
         });
       },
+      getQuesNaireData() {
+        this.tableStatus = " ";
+        this.tableLoading = true;
+        this.$http.get(globalConfig.server + 'questionnaire/my').then((res) => {
+          this.tableLoading = false;
+          if (res.data.code === '30000') {
+            this.questionNaireData = res.data.data.data;
+            this.tableNumber = res.data.data.count;
+            if (res.data.data.data.length < 1) {
+              this.tableStatus = "暂无数据";
+              this.questionNaireData = [];
+              this.tableNumber = 0;
+            }
+          } else {
+            this.tableStatus = "暂无数据";
+            this.questionNaireData = [];
+            this.tableNumber = 0;
+          }
+        });
+      },
+      handleClick(tab, event) {
+        if (this.activeName == "first") {
+          this.form.page = 1;
+          this.myData();
+        } else if (this.activeName == "second") {
+          this.form.page = 1;
+          this.getQuesNaireData();
+        }
+      },
       openOrganizationModal() {
         this.organizationDialog = true;
         this.depart = "depart";
@@ -374,7 +459,11 @@
       handleCurrentChange(val) {
         console.log(`当前页： ${val}`);
         this.form.page = val;
-        this.myData();
+        if (this.activeName == "first") {
+          this.myData();
+        } else if (this.activeName == "second") {
+          this.getQuesNaireData();
+        }
       }
     }
   };

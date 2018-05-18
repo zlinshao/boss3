@@ -332,13 +332,14 @@
             :data="questionNaireData"
             :empty-text='tableStatus'
             v-loading="tableLoading"
+            max-height="400"
             element-loading-text="拼命加载中"
             element-loading-spinner="el-icon-loading"
             element-loading-background="rgba(255, 255, 255, 0)"
             style="width: 100%">
             <el-table-column
               prop="name"
-              label="问卷名称">
+              label="标题">
               <template slot-scope="scope">
                 <span v-if="scope.row.name">{{scope.row.name}}</span>
                 <span v-else>暂无</span>

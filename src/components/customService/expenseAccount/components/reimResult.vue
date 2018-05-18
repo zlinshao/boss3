@@ -2,7 +2,7 @@
   <div id="reimResult">
     <el-dialog :close-on-click-modal="false" :title="resultTitle" :visible.sync="reimResultDialogVisible"
                width="50%">
-      <div>
+      <div class="scroll_bar">
         <el-form size="mini" :model="form" label-width="80px">
           <div class="title">水费</div>
           <div class="describe_border">
