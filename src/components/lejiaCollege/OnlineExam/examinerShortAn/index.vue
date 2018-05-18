@@ -173,7 +173,7 @@
         <!--</el-button>-->
         <el-button
           style="width:360px;margin-top:34px; height:32px; line-height:0px; background-color:rgb(106, 141, 251); border-color:rgb(106, 141, 251);"
-          type="primary" @click="confirmAdd">提交
+          type="primary" @click="confirmAdd">确认打分
         </el-button>
       </div>
     </div>
@@ -242,7 +242,6 @@
             this.questionData = {};
           }
         });
-
         this.$http.get(globalConfig.server + 'exam/result/' + this.resultId).then((res) => {
           if (res.data.code === '36000') {
             this.resultData = res.data.data;
@@ -253,24 +252,36 @@
         });
       },
       confirmAdd() {
-        this.$http.post(globalConfig.server + 'exam/result/mark/' + this.resultId, {correct: this.correct}).then((res) => {
-          if (res.data.code === '36010') {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
-            let view = {};
-            view.name = ' 简答批阅 ';
-            view.path = '/examinerShortAn';
-            this.$store.dispatch('delVisitedViews', view);
-            this.$router.push({path: '/examinerReadEach', query: {id: this.examId}});
-          } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            });
-          }
+        this.$confirm('确认打分吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(globalConfig.server + 'exam/result/mark/' + this.resultId, {correct: this.correct}).then((res) => {
+            if (res.data.code === '36010') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              let view = {};
+              view.name = ' 简答批阅 ';
+              view.path = '/examinerShortAn';
+              this.$store.dispatch('delVisitedViews', view);
+              this.$router.push({path: '/examinerReadEach', query: {id: this.examId}});
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消打分'
+          });
         });
+
       },
     }
   };
