@@ -64,17 +64,22 @@
           </span>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===153">
-          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
-          <span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
-          <span style="color:#6a8dfb;">单选题</span>
-          <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width: 94%;margin-left: 60px;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
+          <span class="category_score" >(单选题 {{item.score}} 分)</span>
+          <el-row>
+            <el-col :span="1" style="min-width: 65px;margin-top: -2px;">
+              <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
+              <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
+            </el-col>
+            <el-col :span="15">
+              <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
+            </el-col>
+          </el-row>
           <el-form>
-            <el-form-item style="width: 94%;margin-left: 60px;">
+            <el-form-item style="width: 94%;margin-left: 70px;margin-top: 10px;">
               <el-row :gutter="20" >
                 <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                   <span v-if="item.answer == index"><el-radio
@@ -88,20 +93,22 @@
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===154 || item.category===155">
-          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
-          <span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
-          <span style="color:#6a8dfb;">
-            <span v-if="item.category===154">多选题</span>
-            <span v-if="item.category===155">不定向选择题</span>
-          </span>
-          <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width: 94%;margin-left: 60px;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
+          <span class="category_score" >(<span v-if="item.category===154">多选题</span><span v-if="item.category===155">不定向选择题</span> {{item.score}} 分)</span>
+          <el-row>
+            <el-col :span="1" style="min-width: 65px;margin-top: -2px;">
+              <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
+              <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
+            </el-col>
+            <el-col :span="15">
+              <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
+            </el-col>
+          </el-row>
           <el-form>
-            <el-form-item style="width: 94%;margin-left: 60px;">
+            <el-form-item style="width: 94%;margin-left: 70px;margin-top: 10px;">
               <el-row :gutter="20">
                 <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                   <span v-if=" item.answer.indexOf(index)>-1 "><el-radio
@@ -114,17 +121,22 @@
           </el-form>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===156">
-          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
-          <span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
-          <span style="color:#6a8dfb;">判断题</span>
-          <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width: 94%;margin-left: 60px;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
+          <span class="category_score" >(判断题 {{item.score}} 分)</span>
+          <el-row>
+            <el-col :span="1" style="min-width: 65px;margin-top: -2px;">
+              <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
+              <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
+            </el-col>
+            <el-col :span="15">
+              <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
+            </el-col>
+          </el-row>
           <el-form>
-            <el-form-item style="width: 94%;margin-left: 60px;">
+            <el-form-item style="width: 94%;margin-left: 70px;margin-top: 10px;">
               <el-row :gutter="20">
                 <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height: 24px;">
                   <span v-if="item.answer == index"><el-radio style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
@@ -137,20 +149,22 @@
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===157 || item.category===158">
-          <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
-          <span style="margin-left: 10px;width: 30px;display: inline-block;">{{key+1}}.</span>
-          <span style="color:#6a8dfb;">
-            <span v-if="item.category===157">填空题</span>
-            <span v-if="item.category===158">简答题</span>
-          </span>
-          <span class="ques_score">({{item.score}}分)</span>
           <span class="remove" @click="deleteQues(item.id)">移除</span>
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <p style="width: 94%;margin-left: 60px;line-height:30px;padding-left:0;" class="ql-editor" v-html="item.stem"></p>
+          <span class="category_score" >(<span v-if="item.category===157">填空题</span><span v-if="item.category===158">简答题</span> {{item.score}} 分)</span>
+          <el-row>
+            <el-col :span="1" style="min-width: 65px;margin-top: -2px;">
+              <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
+              <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
+            </el-col>
+            <el-col :span="15">
+              <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
+            </el-col>
+          </el-row>
           <el-form>
-            <el-form-item style="width: 94%;margin-left: 60px;">
+            <el-form-item style="width: 94%;margin-left: 70px;margin-top: 10px;">
               <el-row :gutter="20">
                 <el-col :span="6" :key="index" v-for="(val,index) in item.answer" v-if="item.answer.length>0"
                         style="line-height: 24px;">
@@ -529,9 +543,11 @@
 <style lang="scss" scoped>
   .ql-editor {
     min-height: initial !important;
+    padding: 0px;
+    margin: 0px;
   }
   .el-form-item{
-    margin-bottom: 12px !important;
+    margin-bottom: 15px !important;
   }
   #configExam {
     .tool {
@@ -556,13 +572,15 @@
       .questionDiv {
         width: 98%;
         margin-left: 2%;
-        min-height: 100px;
+        min-height: 90px;
         padding-top: 16px;
         border-top: 1px #eee solid;
-        .ques_score {
+        .category_score {
+          color: #c0c4cc;
           font-size: 14px;
-          color: #fc83b6;
-          margin-left: 20px;
+          float: right;
+          margin-right: 10px;
+          padding: 3px 8px;
         }
         .remove {
           float: right;
