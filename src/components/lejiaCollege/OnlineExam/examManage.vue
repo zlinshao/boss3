@@ -405,19 +405,30 @@
     },
     methods: {
       deleteExaminess() {
-        this.$http.post(globalConfig.server + '/exam/banish/' + this.examId, {examinees: this.examinees}).then((res) => {
-          if (res.data.code === '30010') {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
-            this.getExamDetail();
-          } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            });
-          }
+        this.$confirm('确认移除该考生吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(globalConfig.server + '/exam/banish/' + this.examId, {examinees: this.examinees}).then((res) => {
+            if (res.data.code === '30010') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.getExamDetail();
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }).catch(() => {
+          this.$notify.info({
+            title: '提示',
+            message: '已取消移除'
+          });
         });
       },
       search() {
@@ -625,8 +636,8 @@
                 }
               });
             }).catch(() => {
-              this.$message({
-                type: "info",
+              this.$notify.info({
+                title: "提示",
                 message: "已取消删除"
               });
             });

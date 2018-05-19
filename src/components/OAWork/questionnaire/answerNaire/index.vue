@@ -249,9 +249,9 @@
             }
           });
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消提交'
+          this.$notify.info({
+            title: "提示",
+            message: "已取消提交"
           });
         });
       },
