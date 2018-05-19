@@ -390,19 +390,30 @@
     },
     methods: {
       deleteExaminess() {
-        this.$http.post(globalConfig.server + 'questionnaire/banish/' + this.examId, {examinees: this.examinees}).then((res) => {
-          if (res.data.code === '30010') {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
-            this.getExamDetail();
-          } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            });
-          }
+        this.$confirm('确认移除该调查对象吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(globalConfig.server + 'questionnaire/banish/' + this.examId, {examinees: this.examinees}).then((res) => {
+            if (res.data.code === '30010') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.getExamDetail();
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }).catch(() => {
+          this.$notify.info({
+            title: '提示',
+            message: '已取消移除'
+          });
         });
       },
       seeNaireResult(id) {
@@ -500,7 +511,7 @@
 
               if (detail.examinees.length > 0) {
                 this.examineesPageData = detail.examinees[0];
-              }else{
+              } else {
                 this.examineesPageData = [];
               }
             }
@@ -634,8 +645,8 @@
                 }
               });
             }).catch(() => {
-              this.$message({
-                type: "info",
+              this.$notify.info({
+                title: "提示",
                 message: "已取消删除"
               });
             });
