@@ -307,9 +307,12 @@
       this.department = departNameArray.join(',');
     },
     activated() {
-      this.myData();
+      if(this.activeName === 'first'){
+        this.myData();
+      }else{
+        this.getQuesNaireData();
+      }
       this.confirmArrival = localStorage.getItem('confirmArrival');
-
       // localStorage.removeItem("answers_" + this.examId);
     },
     watch: {
@@ -331,6 +334,11 @@
       },
     },
     methods: {
+      answerNaire(id) {
+        setTimeout(() => {
+          this.$router.push({path: '/answerNaire', query: {id: id}});
+        }, 0);
+      },
       search() {
         this.form.page = 1;
         this.myData();

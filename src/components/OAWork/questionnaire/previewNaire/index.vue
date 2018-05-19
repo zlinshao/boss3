@@ -10,7 +10,7 @@
       </div>
       <div class="main">
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===153">
-          <span class="category_score" >(单选题 {{item.score}} 分)</span>
+          <span class="category_score" >(单选题)</span>
           <el-row>
             <el-col :span="1" style="width: 50px;margin-top: -2px;">
               <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
@@ -29,7 +29,7 @@
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===154 || item.category===155">
-          <span class="category_score" >(<span v-if="item.category===154">多选题</span><span v-if="item.category===155">不定向选择题</span> {{item.score}} 分)</span>
+          <span class="category_score" >(<span v-if="item.category===154">多选题</span><span v-if="item.category===155">不定向选择题</span>)</span>
           <el-row>
             <el-col :span="1" style="width: 50px;margin-top: -2px;">
               <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
@@ -47,7 +47,7 @@
           </el-form>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===156">
-          <span class="category_score" >(判断题 {{item.score}} 分)</span>
+          <span class="category_score" >(判断题)</span>
           <el-row>
             <el-col :span="1" style="width: 50px;margin-top: -2px;">
               <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
@@ -66,7 +66,7 @@
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===158">
-          <span class="category_score" >(简答题 {{item.score}} 分)</span>
+          <span class="category_score" >(简答题)</span>
           <el-row>
             <el-col :span="1" style="width: 50px;margin-top: -2px;">
               <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
