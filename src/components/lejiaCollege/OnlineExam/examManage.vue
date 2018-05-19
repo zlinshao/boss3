@@ -1,5 +1,5 @@
 <template>
-  <div @click="show=false" @contextmenu="closeMenu">
+  <div id="quesNaireManage" @click="show=false" @contextmenu="closeMenu">
     <div class="highRanking" style=" position: absolute; top: 120px; right: 20px;">
       <div class="highSearch">
         <el-form :inline="true" size="mini">
@@ -256,6 +256,11 @@
             element-loading-spinner="el-icon-loading"
             element-loading-background="rgba(255, 255, 255, 0)"
             style="width: 100%">
+            <el-table-column width="65">
+              <template slot-scope="scope">
+                <el-checkbox :label="scope.row.pivot.examinee_id" v-model="examinees"></el-checkbox>
+              </template>
+            </el-table-column>
             <el-table-column
               prop="real_name"
               label="考生姓名">
@@ -274,6 +279,9 @@
             </el-table-column>
           </el-table>
         </div>
+        <span slot="footer" class="dialog-footer">
+            <el-button size="small" type="primary" @click="deleteExaminess">删除</el-button>
+          </span>
       </el-dialog>
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
@@ -337,6 +345,7 @@
         examineesData: [],
         selectExaminees: '',
         selectExamineeIds: [],
+        examinees: [],
       };
     },
     mounted() {
@@ -350,7 +359,7 @@
           if (this.examId) {
             this.examTitle = '编辑考试';
             this.getExamDetail();
-          }else{
+          } else {
             this.examTitle = '新建考试';
           }
         }
@@ -388,9 +397,30 @@
           }
         }
       },
+      examineeDialog(val) {
+        if (val) {
+          this.examinees = [];
+        }
+      },
     },
     methods: {
-      search(){
+      deleteExaminess() {
+        this.$http.post(globalConfig.server + '/exam/banish/' + this.examId, {examinees: this.examinees}).then((res) => {
+          if (res.data.code === '30010') {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.getExamDetail();
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
+      search() {
         this.params.page = 1;
         this.getExamData();
       },
@@ -420,20 +450,20 @@
         this.selectExaminees = names.join(',');
         this.organizeType = '';
       },
-      emptyExaminees(){
+      emptyExaminees() {
         this.selectExaminees = '';
         this.selectExamineeIds = [];
       },
-      addExaminees(){
-        this.$http.post(globalConfig.server+ 'exam/batch_enroll/'+ this.examId,{examinees: this.selectExamineeIds}).then((res)=>{
-          if(res.data.code === '30010'){
+      addExaminees() {
+        this.$http.post(globalConfig.server + 'exam/batch_enroll/' + this.examId, {examinees: this.selectExamineeIds}).then((res) => {
+          if (res.data.code === '30010') {
             this.$notify.success({
               title: '成功',
               message: res.data.msg
             });
             this.getExamDetail();
             this.emptyExaminees();
-          }else{
+          } else {
             this.$notify.warning({
               title: '警告',
               message: res.data.msg
@@ -669,5 +699,6 @@
       display: block;
       margin-top: 20px;
     }
+
   }
 </style>
