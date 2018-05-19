@@ -69,12 +69,12 @@
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
           <span class="category_score" >(单选题 {{item.score}} 分)</span>
-          <el-row>
+          <el-row style="width: 78%;">
             <el-col :span="1" style="min-width: 65px;margin-top: -2px;">
               <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
               <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
             </el-col>
-            <el-col :span="15">
+            <el-col :span="18">
               <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
             </el-col>
           </el-row>
@@ -98,12 +98,12 @@
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
           <span class="category_score" >(<span v-if="item.category===154">多选题</span><span v-if="item.category===155">不定向选择题</span> {{item.score}} 分)</span>
-          <el-row>
+          <el-row style="width: 78%;">
             <el-col :span="1" style="min-width: 65px;margin-top: -2px;">
               <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
               <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
             </el-col>
-            <el-col :span="15">
+            <el-col :span="18">
               <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
             </el-col>
           </el-row>
@@ -126,12 +126,12 @@
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
           <span class="category_score" >(判断题 {{item.score}} 分)</span>
-          <el-row>
+          <el-row style="width: 78%;">
             <el-col :span="1" style="min-width: 65px;margin-top: -2px;">
               <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
               <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
             </el-col>
-            <el-col :span="15">
+            <el-col :span="18">
               <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
             </el-col>
           </el-row>
@@ -154,12 +154,12 @@
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
           <span class="category_score" >(<span v-if="item.category===157">填空题</span><span v-if="item.category===158">简答题</span> {{item.score}} 分)</span>
-          <el-row>
+          <el-row style="width: 78%;">
             <el-col :span="1" style="min-width: 65px;margin-top: -2px;">
               <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
               <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
             </el-col>
-            <el-col :span="15">
+            <el-col :span="18">
               <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
             </el-col>
           </el-row>
@@ -567,7 +567,6 @@
     }
     .main {
       border: 1px #eee solid;
-      border-bottom: none;
       font-size: 16px;
       .questionDiv {
         width: 98%;

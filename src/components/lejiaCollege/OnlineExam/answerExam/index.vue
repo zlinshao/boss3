@@ -510,7 +510,6 @@
     }
     .main {
       border: 1px #eee solid;
-      border-bottom: none;
       border-top: none;
       min-height: 500px;
       font-size: 16px;

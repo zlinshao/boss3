@@ -59,15 +59,15 @@
                   <p>相 册<span>&nbsp;{{albumNum}}</span></p>
                 </div>
               </div>
-              <div class="a" style="cursor:Default" @click="goLineCollege">
+              <div class="a" style="cursor:Default">
                 <div class="aLeft">
                   <i class="iconfont icon-qita1"></i>
                 </div>
                 <div class="aRight">
-                  <!--<p>WATING</p>-->
-                  <!--<p>敬请期待<span>...</span></p>-->
-                  <p>EXAMINE</p>
-                  <p>考试和调查</p>
+                  <p>WATING</p>
+                  <p>敬请期待<span>...</span></p>
+                  <!--<p>EXAMINE</p>-->
+                  <!--<p>考试和调查</p>-->
                 </div>
               </div>
             </div>
@@ -328,9 +328,9 @@
       }
     },
     methods: {
-      goLineCollege() {
-        this.$router.push({path: '/LineCollege'});
-      },
+      // goLineCollege() {
+      //   this.$router.push({path: '/LineCollege'});
+      // },
       routerLink(val, type) {
         this.$router.push({path: val, query: {type: type}})
       },

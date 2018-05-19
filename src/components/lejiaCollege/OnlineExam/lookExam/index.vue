@@ -173,7 +173,7 @@
             <el-form>
               <el-form-item style="width: 96%;margin-left: 50px;margin-top: 10px;">
                 <div>
-                  <el-input readonly size="small"
+                  <el-input readonly size="small"  style="width: 98%;"
                             v-model="resultData && resultData.answer && resultData.answer[item.id]"
                             type="textarea" placeholder="请填写答案"></el-input>
                 </div>
@@ -317,7 +317,6 @@
     }
     .main {
       border: 1px #eee solid;
-      border-bottom: none;
       border-top: none;
       min-height: 500px;
       font-size: 16px;
