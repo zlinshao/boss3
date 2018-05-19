@@ -49,7 +49,10 @@
               <el-form-item style="width: 96%;margin-left: 50px;">
                 <div
                   v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
-                  <el-row style="line-height: 30px;color:#fc83b6;">正确答案： {{answerData[item.id]}}</el-row>
+                  <div style="line-height: 30px;font-size: 15px;">
+                    <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
+                    <span style="color:#409EFF;margin-left: 10px;" v-if="resultData.objective_detail">本题得分： {{resultData.objective_detail[item.id]}}</span>
+                  </div>
                   <el-row :gutter="20" style="margin-top: 10px;">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                       <span v-if="index == resultData.answer[item.id]"><el-radio style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
@@ -80,7 +83,10 @@
               <el-form-item style="width: 96%;margin-left: 50px;">
                 <div
                   v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
-                  <el-row style="line-height: 30px;color:#fc83b6;">正确答案： {{answerData[item.id]}}</el-row>
+                  <div style="line-height: 30px;font-size: 15px;">
+                    <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
+                    <span style="color:#409EFF;margin-left: 10px;" v-if="resultData.objective_detail">本题得分： {{resultData.objective_detail[item.id]}}</span>
+                  </div>
                   <el-row :gutter="20" style="margin-top: 10px;">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                       <span v-if="resultData.answer[item.id].indexOf(index)>-1"><el-radio style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
@@ -110,7 +116,10 @@
             <el-form>
               <el-form-item style="width: 96%;margin-left: 50px;">
                 <div v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
-                  <el-row style="line-height: 30px;color:#fc83b6;margin-top: 10px;">正确答案： {{answerData[item.id]}}</el-row>
+                  <div style="line-height: 30px;font-size: 15px;">
+                    <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
+                    <span style="color:#409EFF;margin-left: 10px;" v-if="resultData.objective_detail">本题得分： {{resultData.objective_detail[item.id]}}</span>
+                  </div>
                   <el-row style="margin-top: 10px;">
                     <el-col :span="12" :key="index" v-for="(val,index) in item.choice"
                             style="line-height:24px;">
@@ -142,7 +151,10 @@
               <el-form-item style="width: 96%;margin-left: 50px;">
                 <div
                   v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
-                  <el-row style="line-height: 30px;color:#fc83b6">正确答案： {{answerData[item.id]}}</el-row>
+                  <div style="line-height: 30px;font-size: 15px;">
+                    <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
+                    <span style="color:#409EFF;margin-left: 10px;" v-if="resultData.objective_detail">本题得分： {{resultData.objective_detail[item.id]}}</span>
+                  </div>
                   <el-row :gutter="20" style="margin-top: 10px;">
                     <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak" style="line-height: 24px;">
                       <el-input readOnly style="width:97%;" size="small"
@@ -170,6 +182,9 @@
                 <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
               </el-col>
             </el-row>
+            <div style="line-height: 30px;font-size: 15px;">
+              <span style="color:#409EFF;margin-left: 50px;" v-if="resultData.subjective_detail">本题得分： {{resultData.subjective_detail[item.id]}}</span>
+            </div>
             <el-form>
               <el-form-item style="width: 96%;margin-left: 50px;margin-top: 10px;">
                 <div>
