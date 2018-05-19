@@ -18,6 +18,10 @@
             <el-form-item>
               <el-button type="primary" size="mini" @click="syncStatusDialog = true;">同步</el-button>
             </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="search">
+                <i class="el-icon-refresh"></i>刷新</el-button>
+            </el-form-item>
             <!--<el-form-item>-->
             <!--<el-button type="primary" size="mini" @click="exportData">导出</el-button>-->
             <!--</el-form-item>-->
@@ -718,15 +722,15 @@
         if (row.results && row.results.id) {
           this.lists = [
             {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',},
-            {clickIndex: 'edit_reimbursement_result', headIcon: 'el-icon-edit', label: '编辑报销结果',},
-            {clickIndex: 'examine_reimbursement', headIcon: 'el-icon-edit', label: '审核报销',},
+            {clickIndex: 'edit_reimbursement_result', headIcon: 'iconfont icon-bianjibaoxiaojieguo', label: '编辑报销结果',},
+            {clickIndex: 'examine_reimbursement', headIcon: 'iconfont icon-shenhebaoxiao', label: '审核报销',},
             // {clickIndex: 'delete_reimbursement', headIcon: 'el-icon-delete', label: '删除报销单',},
           ];
         } else {
           this.lists = [
             {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',},
             {clickIndex: 'add_reimbursement_result', headIcon: 'iconfont icon-zengjia1', label: '新增报销结果',},
-            {clickIndex: 'examine_reimbursement', headIcon: 'el-icon-edit', label: '审核报销',},
+            {clickIndex: 'examine_reimbursement', headIcon: 'iconfont icon-shenhebaoxiao', label: '审核报销',},
             // {clickIndex: 'delete_reimbursement', headIcon: 'el-icon-delete', label: '删除报销单',},
           ];
         }
