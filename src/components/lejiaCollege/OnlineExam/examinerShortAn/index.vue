@@ -38,11 +38,14 @@
                 <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
               </el-col>
             </el-row>
-            <div style="width:96%;margin-left:50px;margin-top: 10px;"
+            <div style="width:96%;margin-left:50px;"
                  v-if="answerData && answerData[item.id] && resultData && resultData.answer ">
-              <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
-              <el-form>
-                <el-form-item >
+              <div style="line-height: 30px;font-size: 15px;">
+                <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
+                <span style="color:#409EFF;margin-left: 10px;" v-if="resultData.objective_detail">本题得分： {{resultData.objective_detail[item.id]}}</span>
+              </div>
+               <el-form>
+                <el-form-item style="margin-top: 10px;">
                   <el-row :gutter="20">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice"
                             style="line-height:24px;">
@@ -70,11 +73,14 @@
                 <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
               </el-col>
             </el-row>
-            <div style="width:96%;margin-left:50px;margin-top: 10px;"
+            <div style="width:96%;margin-left:50px;"
                  v-if="answerData && answerData[item.id] && resultData && resultData.answer ">
-              <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
+              <div style="line-height: 30px;font-size: 15px;">
+                <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
+                <span style="color:#409EFF;margin-left: 10px;" v-if="resultData.objective_detail">本题得分： {{resultData.objective_detail[item.id]}}</span>
+              </div>
               <el-form>
-                <el-form-item>
+                <el-form-item style="margin-top: 10px;">
                   <el-row :gutter="20">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                       <span v-if="resultData.answer[item.id].indexOf(index)>-1"><el-radio>{{index}}：{{val}}</el-radio></span>
@@ -101,11 +107,14 @@
                 <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
               </el-col>
             </el-row>
-            <div style="width:96%;margin-left:50px;margin-top: 10px;"
+            <div style="width:96%;margin-left:50px;"
                  v-if="answerData && answerData[item.id] && resultData && resultData.answer">
-              <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
+              <div style="line-height: 30px;font-size: 15px;">
+                <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
+                <span style="color:#409EFF;margin-left: 10px;" v-if="resultData.objective_detail">本题得分： {{resultData.objective_detail[item.id]}}</span>
+              </div>
               <el-form>
-                <el-form-item>
+                <el-form-item style="margin-top: 10px;">
                   <el-row :gutter="20">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                       <span v-if="index == resultData.answer[item.id]"><el-radio>{{index}}：{{val}}</el-radio></span>
@@ -132,19 +141,22 @@
                 <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
               </el-col>
             </el-row>
-            <div style="width:96%;margin-left:50px;margin-top: 10px;"
+            <div style="width:96%;margin-left:50px;"
                  v-if="answerData && answerData[item.id] && resultData && resultData.answer">
-              <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
+              <div style="line-height: 30px;font-size: 15px;">
+                <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
+                <span style="color:#409EFF;margin-left: 10px;" v-if="resultData.objective_detail">本题得分： {{resultData.objective_detail[item.id]}}</span>
+              </div>
               <el-form>
                 <el-form-item style="margin-top: 10px;">
                   <el-row :gutter="20">
                     <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak" style="line-height: 24px;">
                       <el-input readOnly size="small" style="width:97%;"
                                 v-model="resultData.answer[item.id][ak]" :placeholder="`第 ${ak+1} 处答案`"></el-input>
-                      <span style="color:rgb(88, 215, 136);margin-left:30px;"
+                      <span style="color:rgb(88, 215, 136);margin-left:17px;"
                             v-for="(vv, kk) in resultData.answer[item.id]"
                             v-if="answerData[item.id].indexOf(vv)>-1 && kk==ak ">正确</span>
-                      <span style="color:#fc83b6;margin-left:30px;" v-for="(vv, kk) in resultData.answer[item.id]"
+                      <span style="color:#fc83b6;margin-left:17px;" v-for="(vv, kk) in resultData.answer[item.id]"
                             v-if="answerData[item.id].indexOf(vv)<0 && kk==ak">错误</span>
                     </el-col>
                   </el-row>
@@ -164,7 +176,7 @@
                 <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
               </el-col>
             </el-row>
-            <div style="width:96%;margin-left:50px;margin-top: 10px;">
+            <div style="width:96%;margin-left:50px;">
               <div class="eachAN scroll_bar" v-if="resultData && resultData.answer && resultData.answer[item.id]">{{resultData.answer[item.id]}}</div>
               <div class="eachSore">
                 <el-form>
@@ -268,8 +280,10 @@
           if (res.data.code === '36000') {
             this.resultData = res.data.data;
             this.objective_score = this.totalScore = res.data.data.score;
+            this.correct = res.data.data.subjective_detail;
           } else {
             this.resultData = {};
+            this.correct = {};
           }
         });
       },
