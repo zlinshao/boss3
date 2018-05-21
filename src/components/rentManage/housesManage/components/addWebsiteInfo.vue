@@ -391,7 +391,6 @@
           })
         }
       },
-
       getImg(val){
         if(val[0] === 'cover_photo'){
           this.params.cover_photo = val[1];
