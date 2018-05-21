@@ -179,6 +179,7 @@ import VisitRecord from '../components/rentManage/components/visitRecord.vue';  
 import IncompleteRecord from '../components/rentManage/datumMessage/contractManage/incompleteRecord.vue'; //合同不齐记录
 
 import ReportManage from '../components/reportManage/index.vue'
+import BeforeExam from '../components/lejiaCollege/OnlineExam/beforeExam.vue'  //开考之前
 
 Vue.use(Router);
 
@@ -296,6 +297,7 @@ export default new Router({
         {path: '/lookNaire', component: LookNaire, name: "调查统计"},
         {path: '/answerAll', component: AnswerAll, name: "所有回答"},
         {path: '/answerNaire', component: AnswerNaire, name: "问卷作答"},
+        {path: '/beforeExam', component: BeforeExam, name: "即将开考"},
 
 
       ]
