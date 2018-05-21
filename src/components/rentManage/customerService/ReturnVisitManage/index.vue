@@ -124,7 +124,7 @@
               style="width: 100%">
               <el-table-column type="expand" v-if="form.tag==2">
                 <template slot-scope="props" >
-                  <el-table :data="props.row.son" :show-header="false" >
+                  <el-table :data="props.row.son" :show-header="false" @row-dblclick="dblClickTable">
                     <el-table-column>
                       <template slot-scope="scope">
                         <span>&nbsp;&nbsp;&nbsp;</span>
@@ -287,7 +287,7 @@
               style="width: 100%">
               <el-table-column type="expand" v-if="form.tag==2">
                 <template slot-scope="props" >
-                  <el-table :data="props.row.son" :show-header="false" >
+                  <el-table :data="props.row.son" :show-header="false" @row-dblclick="dblClickTable">
                     <el-table-column>
                       <template slot-scope="scope">
                         <span>&nbsp;&nbsp;&nbsp;</span>
