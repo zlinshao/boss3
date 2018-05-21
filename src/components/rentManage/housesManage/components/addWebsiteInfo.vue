@@ -194,7 +194,7 @@
           </el-form>
         </div>
 
-        <div class="title">房屋照片 （最多只可选取和上传5张）</div>
+        <div class="title">房屋照片</div>
         <div class="form_border">
           <el-form size="small" label-width="80px">
             <el-form-item label="选取照片">
@@ -319,12 +319,6 @@
 
       totalPic(val){
         this.params.photo_v3 = val;
-        if(val.length>5){
-          this.$notify.warning({
-            title: '警告',
-            message:'您选取照片和上传照片已经超过5张，请删除多余照片！',
-          })
-        }
       }
     },
     computed :{
