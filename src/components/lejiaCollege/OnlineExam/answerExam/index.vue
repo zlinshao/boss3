@@ -197,7 +197,7 @@
         <el-row :gutter="30" style="margin-bottom:15px;">
           <el-col :span="24">
             <div class="submit_points">
-              <span>提交成功！</span><br/>主考官将尽快批示，您的成绩可在“乐伽大学－我的考试”中查看，我们也会以信息的方式通知您！
+              <span>提交成功！</span><br/>主考官将尽快批示，您的成绩可在“乐伽大学－我的考试”中查看，我们也会以消息的方式通知您！
             </div>
           </el-col>
         </el-row>

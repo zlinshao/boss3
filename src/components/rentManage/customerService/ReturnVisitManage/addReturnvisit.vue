@@ -719,6 +719,7 @@
 
           this.contractInfo = [],
           this.follow_name = '';
+        this.form.is_connect = '';
       },
       closeOrganization() {
         this.organizeType = '';
