@@ -9,7 +9,7 @@
           <p style="margin-left: 25px;">考试时间：2018-05-03 14：50：00</p>
 
         </div>
-        <p class="view_history">查看历史考试>></p>
+        <p class="view_history" @click="goHistory('exam')">查看历史考试>></p>
       </div>
       <div v-show="showType==='second'">
         <div class="title">开考倒计时</div>
@@ -19,19 +19,27 @@
           <p style="margin-left: 25px;">考试时间：2018-05-03 14：50：00</p>
           <p style="margin-left: -80px;">试卷时长：60分钟</p>
         </div>
-        <p class="view_history">查看历史考试>></p>
+        <p class="view_history" @click="goHistory('exam')">查看历史考试>></p>
       </div>
       <div v-show="showType==='third'">
-        <div class="title">您已超过规定开考时间</div>
+        <div class="title" style="font-size: 50px;">您已超过规定开考时间</div>
         <div class="count_down">无法参加考试</div>
         <div class="content">
           <p>如有疑问，请联系主考官</p>
         </div>
-        <p class="view_history">查看历史考试>></p>
+        <p class="view_history" @click="goHistory('exam')">查看历史考试>></p>
+      </div>
+      <div v-show="showType==='fourth'">
+        <div class="title">您目前没有问卷</div>
+
+        <p class="view_history" @click="goHistory('naire')">查看历史问卷>></p>
       </div>
     </div>
+    <el-button @click="showType='first'">first</el-button>
+    <el-button @click="showType='second'">second</el-button>
+    <el-button @click="showType='third'">third</el-button>
+    <el-button @click="showType='fourth'">fourth</el-button>
   </div>
-
 
 </template>
 
@@ -47,7 +55,15 @@
         showType: 'third',
       };
     },
-    methods: {}
+    methods: {
+      goHistory(val){
+        if(val==='exam'){
+          this.$router.push({path: '/LineCollege'});
+        }else{
+          this.$router.push({path: '/LineCollege'});
+        }
+      }
+    }
   };
 </script>
 
@@ -61,7 +77,7 @@
       padding-top: 150px;
       font-size: 60px;
     }
-    .count_down{
+    .count_down {
       padding-top: 20px;
       font-size: 50px;
       margin-bottom: -100px;
@@ -79,6 +95,7 @@
       }
     }
     .view_history {
+      cursor: pointer;
       margin-top: 200px;
       color: #39b1ff;
     }
