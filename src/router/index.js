@@ -14,7 +14,7 @@ import JointRentManage from '../components/rentManage/jointRentManage/index.vue'
 
 //客服中心
 import ExpenseAccount from '../components/customService/expenseAccount/index.vue'   //报销
-import CustomerService from '../components/rentManage/customerService/index.vue'                //回访
+import CustomerService from '../components/rentManage/customerService/ReturnVisitManage/index.vue'                //回访
 
 // import ContractManage from '../components/rentManage/datumMessage/contractManage/index1.vue'
 // import ClientManage from '../components/rentManage/datumMessage/clientManage/index1.vue'

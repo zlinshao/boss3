@@ -288,21 +288,21 @@
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
-    <RepairDetail :repairDetailDialog="repairDetailDialog" :ToActiveName="activeName" :repairId="repairId" :photopic="photopic"
-                  @close="closeModal"></RepairDetail>
+    <ReturnVisitDetail :repairDetailDialog="repairDetailDialog" :ToActiveName="activeName" :repairId="repairId" :photopic="photopic"
+                  @close="closeModal"></ReturnVisitDetail>
     <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeModal"
                   @selectMember="selectMember"></organization>
   </div>
 </template>
 
 <script>
-import RightMenu from "../../common/rightMenu.vue";
-import RepairDetail from "./repairDetail";
-import Organization from "../../common/organization.vue";
+import RightMenu from "../../../common/rightMenu.vue";
+import ReturnVisitDetail from "./ReturnVisitDetail.vue";
+import Organization from "../../../common/organization.vue";
 
 export default {
-  name: "repair-manage",
-  components: { RightMenu, RepairDetail, Organization },
+  name: "return-visit",
+  components: { RightMenu, ReturnVisitDetail, Organization },
   data() {
     return {
       rightMenuX: 0,
@@ -414,7 +414,7 @@ export default {
             this.totalNum = 0;
             this.rentStatus = "暂无数据";
           }
-        });     
+        });
     },
     // 员工筛选
     chooseStaff() {
@@ -461,12 +461,12 @@ export default {
       this.form.page =1;
       if (this.activeName === "first") {
         this.form.module = 1;
-        this.getCollectTableData();  
+        this.getCollectTableData();
       } else {
         this.form.module = 2;
         this.getRentTableData();
       }
-      
+
     },
     // 高级
     highGrade() {
@@ -494,7 +494,7 @@ export default {
       console.log(`当前页: ${val}`);
       if (this.activeName === "first") {
         this.form.module = 1;
-        this.getCollectTableData();  
+        this.getCollectTableData();
       } else {
         this.form.module = 2;
         this.getRentTableData();
@@ -540,7 +540,7 @@ export default {
               } else if (this.activeName == "second") {
                 this.form.module =2;
               }
-              this.getCollectTableData();  
+              this.getCollectTableData();
               this.$notify.success({
                 title: "成功",
                 message: res.data.msg
@@ -589,7 +589,7 @@ export default {
         operator_id: this.form.operator_id,
         originate: this.form.originate,
         audit: this.form.audit,
-        module : this.form.module 
+        module : this.form.module
       };
       this.$http
         .get(globalConfig.server + "contract/feedback/can_export", { params: exportForm })

@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import RepairDetail from "../customerService/repairDetail";
+import RepairDetail from "../customerService/ReturnVisitManage/ReturnVisitDetail";
     export default {
       name: 'hello',
       components: { RepairDetail },

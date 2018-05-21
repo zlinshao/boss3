@@ -95,10 +95,10 @@
             </el-col>
             <el-col :span="2" style="float: right;" v-if="index == 1">
               <i @click="addPriceLen" class="el-icon-circle-plus-outline addicon"></i>
-            </el-col>  
+            </el-col>
             <el-col :span="2" style="float: right;" v-if="index != 1">
               <i @click="romovePriceLen(index-1)" class="el-icon-remove-outline addicon"></i>
-            </el-col>               
+            </el-col>
             <el-col :span="6" style="float: right;">
                 <el-input size="mini" v-model="form.unit_price[1][index-1]" placeholder="请输入价格" ></el-input>
             </el-col>
@@ -122,10 +122,10 @@
             </el-col>
             <el-col :span="2" style="float: right;" v-if="index == 1">
               <i @click="addPayLen" class="el-icon-circle-plus-outline addicon"></i>
-            </el-col>  
+            </el-col>
             <el-col :span="2" style="float: right;" v-if="index != 1">
               <i @click="romovePayLen(index-1)" class="el-icon-remove-outline addicon"></i>
-            </el-col>               
+            </el-col>
             <el-col :span="6" style="float: right;" v-if=" activeName =='first'">
                 <el-select size="mini" v-model="form.pay_type[1][index-1]" placeholder="收房付款方式" clearable>
                   <el-option v-for="item in payTypeInfo" :label="item.dictionary_name" :key="item.id"
@@ -163,10 +163,10 @@
             </el-col>
             <el-col :span="2" style="float: right;" v-if="index == 1">
               <i @click="addPayTypeLen" class="el-icon-circle-plus-outline addicon"></i>
-            </el-col>  
+            </el-col>
             <el-col :span="2" style="float: right;" v-if="index != 1">
               <i @click="romovePayTypeLen(index-1)" class="el-icon-remove-outline addicon"></i>
-            </el-col>               
+            </el-col>
             <el-col :span="10" style="float: right;">
               <el-form-item label="金额">
                 <el-input size="mini" v-model="form.pay_method[1][index-1]" placeholder="请输入价格" ></el-input>
@@ -211,10 +211,10 @@
             </el-col>
             <el-col :span="2" style="float: right;" v-if="index == 1">
               <i @click="addPayUseLen" class="el-icon-circle-plus-outline addicon"></i>
-            </el-col>  
+            </el-col>
             <el-col :span="2" style="float: right;" v-if="index != 1">
               <i @click="romovePayUseLen(index-1)" class="el-icon-remove-outline addicon"></i>
-            </el-col>   
+            </el-col>
           </el-row>
           <el-row>
             <el-col :span="24">
@@ -296,7 +296,7 @@
 </template>
 
 <script>
-  import Organization from '../../common/organization';
+  import Organization from '../../../common/organization';
 
   export default {
     props: ['addReturnvisitDialog', 'ToActiveName','addReturnInfo'],
@@ -314,7 +314,7 @@
         agency_user_name:"",               //中介人
         agency_phone:"",                   //手机号
         form: {
-          contract_create_time:"",  //创建时间 
+          contract_create_time:"",  //创建时间
           huifang:"",        //回访人
           address:"",        //房屋地址
           contract_type:"",  //合同类型
@@ -353,7 +353,7 @@
           ],      //支付方式
           star:null,           //星级
           remark_clause:"",  //备注条款
-          
+
         },
         contractInfo:[],
         pickerOptions2: {
@@ -425,7 +425,7 @@
         this.form.address = val.address;
         this.form.contract_type = val.type;
         this.form.contract_id = val.contract_id;
-        
+
         if(this.activeName == 'first'){
         this.$http.get(globalConfig.server + 'lease/collect/' + val.contract_id).then((res) => {
           if (res.data.code === '61010') {
@@ -452,7 +452,7 @@
               this.agency_phone = res.data.data.agency_info.agency_phone;
             }
           }
-        })          
+        })
       }
       }
     },
@@ -482,7 +482,7 @@
           this.form.module = 2;
         }
         this.validate();
-        if(this.validateFlag == true){        
+        if(this.validateFlag == true){
         this.$http.post(globalConfig.server + 'contract/feedback', this.form).then((res) => {
           if (res.data.code === '1212200') {
             this.$notify.success({
@@ -507,98 +507,98 @@
             this.$notify.warning({
               title: '警告',
               message: "合同周期不能为空"
-            });          
+            });
         }
         if((this.form.originate =="" ) && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "来源不能为空"
-            });          
+            });
         }
         if(this.form.agency =="" && this.form.originate === 623  && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "中介名称不能为空"
-            });          
+            });
         }
         if(this.form.agency_price =="" && this.form.originate === 623  && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "中介费用不能为空"
-            });          
+            });
         }
         if(this.form.agency_person =="" && this.form.originate === 623  && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "中介人不能为空"
-            });          
+            });
         }
         if(this.form.agency_tel  =="" && this.form.originate === 623  && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "中介电话不能为空"
-            });          
+            });
         }
         if((this.form.unit_price[0].length== 0 || this.form.unit_price[1].length ==0) && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "月单价不能为空"
-            });          
+            });
         }
         if((this.form.pay_type[0].length == 0 || this.form.pay_type[1].length == 0 || this.form.pay_type[2].length == 0 && this.form.module =='2') && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "付款方式不能为空"
-            });          
+            });
         }
         if( this.form.has_extra ==""  && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "其他费用不能为空"
-            });          
+            });
         }
         if( (this.form.pay_use[0].length ==0 || this.form.pay_use[1].length== 0) && this.form.has_extra =="1"  && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "其他费用明细不能为空"
-            });          
+            });
         }
         if((this.form.guarantee_month =="" && this.form.guarantee_day =="") && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "保修期不能为空"
-            });          
+            });
         }
         if( !this.form.star  && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "业务员态度不能为空"
-            });          
+            });
         }
         if( this.form.has_pay == "" && this.form.module =='2'  && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "已付金额不能为空"
-            });          
+            });
         }
         if((this.form.pay_method[0].length == 0 || this.form.pay_method[1].length == 0) && this.form.module =='2' && this.validateFlag == true){
             this.validateFlag =false;
             this.$notify.warning({
               title: '警告',
               message: "支付方式不能为空"
-            });          
+            });
         }
       },
       initial() {
@@ -682,8 +682,8 @@
         }
         else{
         this.form.pay_type[0].splice(index, 1);
-        this.form.pay_type[1].splice(index, 1);          
-        this.form.pay_type[2].splice(index, 1);          
+        this.form.pay_type[1].splice(index, 1);
+        this.form.pay_type[2].splice(index, 1);
 
         }
 
@@ -739,7 +739,7 @@
         @include flex;
         align-items: center;
         justify-content: flex-end;
-      }     
+      }
     }
   .input{
     input{
