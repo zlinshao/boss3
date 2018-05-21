@@ -215,7 +215,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="addWebInfoDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
+        <el-button size="small" type="primary" @click="confirmAdd" :disabled="isUp">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -284,6 +284,7 @@
         province : '',
         city : '',
         area : '',
+        isUp : false,
       };
     },
     mounted(){
@@ -456,19 +457,23 @@
             if(this.albumData.length>0){
               this.albumData.forEach((item) => {
                 item.album.album_file.forEach((img)=>{
-                  imgItem = {};
-                  imgItem['id'] = img.id;
-                  imgItem['uri'] = img.uri;
-                  this.imgArray.push(imgItem);
+                  if(img.info.mime.indexOf('image')>-1){
+                    imgItem = {};
+                    imgItem['id'] = img.id;
+                    imgItem['uri'] = img.uri;
+                    this.imgArray.push(imgItem);
+                  }
                 })
               })
             }
             if(this.detailData.house_goods&&this.detailData.house_goods.photo.length>0){
               this.detailData.house_goods.photo.forEach((img)=>{
-                imgItem = {};
-                imgItem['id'] = img.id;
-                imgItem['uri'] = img.uri;
-                this.imgArray.push(imgItem);
+                if(img.info.mime.indexOf('image')>-1){
+                  imgItem = {};
+                  imgItem['id'] = img.id;
+                  imgItem['uri'] = img.uri;
+                  this.imgArray.push(imgItem);
+                }
               })
             }
           } else {
@@ -490,12 +495,14 @@
         return dictionary_name;
       },
       confirmAdd(){
+        this.isUp = true;
         this.$http.post(globalConfig.server+'web/house/save',this.params).then((res)=>{
+          this.isUp = false;
           if(res.data.code === '90010'){
             this.$notify.success({
               title: "成功",
               message: res.data.msg,
-            })
+            });
             this.addWebInfoDialogVisible = false;
           }else {
             this.$notify.warning({
@@ -537,6 +544,7 @@
         this.province  = '';
         this.city  = '';
         this.area  = '';
+        this.isUp = false;
       },
     }
   }
