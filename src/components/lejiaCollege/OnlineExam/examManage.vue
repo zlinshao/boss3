@@ -346,11 +346,15 @@
         selectExaminees: '',
         selectExamineeIds: [],
         examinees: [],
+        examiness_name: [],
       };
     },
     mounted() {
       this.getExamData();
       this.getDictionary();
+    },
+    activated(){
+      this.getExamData();
     },
     watch: {
       examDialog(val) {
@@ -399,6 +403,7 @@
       },
       examineeDialog(val) {
         if (val) {
+          this.emptyExaminees();
           this.examinees = [];
         }
       },
@@ -448,22 +453,38 @@
       //打开选人组件
       openOrganize() {
         this.organizationDialog = true;
-        this.organizeType = 'staff';
+        // this.organizeType = 'staff';
       },
       selectMember(val) {
+        this.examiness_name = [];
         this.selectExaminees = '';
         this.selectExamineeIds = [];
-        let names = [];
         val.forEach((item) => {
-          this.selectExamineeIds.push(item.id);
-          names.push(item.name);
+          if (typeof item.avatar != 'undefined') {
+            //选的是人
+            this.selectExamineeIds.push(item.id);
+            this.examiness_name.push(item.name);
+          } else {
+            //选的部门
+            this.$http.get(globalConfig.server + 'manager/staff?is_recursion=1&page=1&limit=500&org_id=' + item.id).then((res) => {
+              if (res.data.code === '10000') {
+                let data = res.data.data.data;
+                data.forEach((value) => {
+                  this.selectExamineeIds.push(value.id);
+                  this.examiness_name.push(value.name);
+                  this.selectExaminees = '';
+                  this.selectExaminees = this.examiness_name.join(',');
+                });
+              }
+            });
+          }
         });
-        this.selectExaminees = names.join(',');
-        this.organizeType = '';
+        this.selectExaminees = this.examiness_name.join(',');
       },
       emptyExaminees() {
         this.selectExaminees = '';
         this.selectExamineeIds = [];
+        this.examiness_name = [];
       },
       addExaminees() {
         this.$http.post(globalConfig.server + 'exam/batch_enroll/' + this.examId, {examinees: this.selectExamineeIds}).then((res) => {
@@ -586,11 +607,6 @@
             headIcon: "el-icon-view",
             label: "查看/添加考生"
           },
-          // {
-          //   clickIndex: "informExaminee",
-          //   headIcon: "el-icons-fa-mail-reply",
-          //   label: "通知考生"
-          // }
         ];
         let e = event || window.event; //support firefox contextmenu
         this.show = false;
@@ -646,12 +662,6 @@
             this.examineeDialog = true;
             this.getExamDetail();
             break;
-
-          case 'informExaminee':
-
-            break;
-
-
         }
       },
       //关闭右键菜单
