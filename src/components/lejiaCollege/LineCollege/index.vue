@@ -144,6 +144,10 @@
                   <el-table-column
                     prop="score"
                     label="得分">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.score">{{scope.row.score}}</span>
+                      <span v-else>暂无</span>
+                    </template>
                   </el-table-column>
                   <el-table-column
                     label="操作">
