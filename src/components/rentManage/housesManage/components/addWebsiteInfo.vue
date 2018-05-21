@@ -119,8 +119,10 @@
               <el-col :span="6">
                 <el-form-item label="房屋特色" required>
                   <el-select clearable v-model="params.house_feature" placeholder="请选择房屋特色" value="">
-                    <el-option v-for="item in house_feature_dic" :label="item.dictionary_name" :value="item.id"
-                               :key="item.id"></el-option>
+                    <el-option label="无" value=""></el-option>
+                    <el-option label="近地铁" value="1"></el-option>
+                    <el-option label="独卫" value="2"></el-option>
+                    <el-option label="独立阳台" value="3"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -336,10 +338,10 @@
           this.property_type_dic = res.data;
           this.isDictionary = true
         });
-        this.dictionary(425, 1).then((res) => {
-          this.house_feature_dic = res.data;
-          this.isDictionary = true
-        });
+        // this.dictionary(425, 1).then((res) => {
+        //   this.house_feature_dic = res.data;
+        //   this.isDictionary = true
+        // });
         this.dictionary(404, 1).then((res) => {
           this.decorate_dic = res.data;
           this.isDictionary = true
@@ -415,7 +417,7 @@
             this.params.area =  this.detailData.area.replace(/[^(0-9).]+/,'');
             this.params.decorate = this.detailData.decorate;
             this.params.direction = this.detailData.direction && this.detailData.direction.id;
-            this.params.house_feature = this.detailData.house_feature;
+
             this.params.price = this.detailData.price.replace(/[^(0-9).]+/,'');
 
             if(this.detailData.house_goods){
