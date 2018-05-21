@@ -5,8 +5,8 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input v-model="params.search" onsubmit="return false" placeholder="搜索" @keydown.enter.native="search">
-              <el-button slot="append" type="primary" @click="search" icon="el-icon-search"></el-button>
+            <el-input v-model="params.search" onsubmit="return false" placeholder="搜索" clearable @keydown.enter.native="search">
+              <el-button slot="append" @click="search" icon="el-icon-search"></el-button>
             </el-input>
           </el-form-item>
           <el-form-item>
