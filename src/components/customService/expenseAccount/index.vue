@@ -20,7 +20,8 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="search">
-                <i class="el-icon-refresh"></i>刷新</el-button>
+                <i class="el-icon-refresh"></i>刷新
+              </el-button>
             </el-form-item>
             <!--<el-form-item>-->
             <!--<el-button type="primary" size="mini" @click="exportData">导出</el-button>-->
@@ -496,6 +497,9 @@
     mounted() {
       this.getCollectTableData();
       this.getDictionary();
+    },
+    activated() {
+     this.search();
     },
     watch: {
       address(val) {
