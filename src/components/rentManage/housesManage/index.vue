@@ -322,6 +322,9 @@
     <HouseDetail :houseDetailDialog="houseDetailDialog" :all_dic="all_dic" :isOnlyPic="isOnlyPic"
                  :houseDetail="houseDetail" :houseId="houseId" @close="closeModal"></HouseDetail>
 
+    <AddWebInfo :addWebInfoDialog="addWebInfoDialog"  :all_dic="all_dic" :houseId="houseId"
+                :houseDetail="houseDetail" @close="closeModal"></AddWebInfo>
+
   </div>
 </template>
 
@@ -341,11 +344,13 @@
   import AddEarlyWarning from './components/addEarlyWarning.vue'
   import AddDecorate from './components/addDecorateRecord.vue'
   import HouseDetail from './components/houseDetail.vue'
+
+  import AddWebInfo from './components/addWebsiteInfo'
   export default {
     name: 'hello',
     components: {
       RightMenu, Organization, FollowRecordTab, DecorateRecordTab, EarlyWarning, EditHouseInfo, HouseDetail,
-      AddFollow, UpLoadPic, AddEarlyWarning, AddDecorate, CollectContractTab, RentContractTab,ReportRecord
+      AddFollow, UpLoadPic, AddEarlyWarning, AddDecorate, CollectContractTab, RentContractTab,ReportRecord,AddWebInfo
     },
     data () {
       return {
@@ -379,6 +384,7 @@
         addEarlyWarningDialog: false,
         addDecorateDialog: false,
         houseDetailDialog: false,
+        addWebInfoDialog: false,
 
         isHigh: false,
         activeName: 'first',
@@ -589,6 +595,7 @@
             label: '添加预警状态',
             disabled: row.status
           },
+          {clickIndex: 'addWebInfoDialog', headIcon: 'el-icon-plus', label: '官网推送',},
         ];
         this.contextMenuParam(event);
       },
@@ -612,6 +619,9 @@
           case 'addDecorateDialog' :
             this.addDecorateDialog = true;
             break;
+          case 'addWebInfoDialog' :
+            this.addWebInfoDialog = true;
+            break;
         }
       },
       closeModal(val){
@@ -622,6 +632,7 @@
         this.addEarlyWarningDialog = false;
         this.addDecorateDialog = false;
         this.houseDetailDialog = false;
+        this.addWebInfoDialog = false;
         if (val === 'success') {
           this.getData();
         } else if (val === 'success_tab_first') {
