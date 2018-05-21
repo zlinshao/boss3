@@ -123,8 +123,83 @@
               @row-contextmenu='houseMenu'
               style="width: 100%">
               <el-table-column type="expand" v-if="form.tag==2">
-                <template slot-scope="props">
-                  {{props.row.contract_id}}
+                <template slot-scope="props" >
+                  <el-table :data="props.row.son" :show-header="false" >
+                    <el-table-column>
+                      <template slot-scope="scope">
+                        <span>&nbsp;&nbsp;&nbsp;</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column>
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
+                        <span v-if="!scope.row.create_time">暂无</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="回访人">
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.operator">{{scope.row.operator}}</span>
+                        <span v-if="!scope.row.operator">暂无</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="合同编号">
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.contract_number">{{scope.row.contract_number}}</span>
+                        <span v-if="!scope.row.contract_number">暂无</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="房屋地址">
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.address">{{scope.row.address}}</span>
+                        <span v-if="!scope.row.address">暂无</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="合同类型">
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.contract_type">{{scope.row.contract_type}}</span>
+                        <span v-if="!scope.row.contract_type">暂无</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="合同周期">
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.contract_cycle">{{scope.row.contract_cycle}}</span>
+                        <span v-if="!scope.row.contract_cycle">暂无</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="信息来源">
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.originate">{{scope.row.originate}}</span>
+                        <span v-if="!scope.row.originate">暂无</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="保修期">
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.guarantee">{{scope.row.guarantee}}</span>
+                        <span v-if="!scope.row.guarantee">暂无</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="开单人">
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.drawer">{{scope.row.drawer}}</span>
+                        <span v-if="!scope.row.drawer">暂无</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="部门">
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.department">{{scope.row.department}}</span>
+                        <span v-if="!scope.row.department">暂无</span>
+                      </template>
+                    </el-table-column>
+                  </el-table>
                 </template>
               </el-table-column>
               <el-table-column
@@ -211,8 +286,83 @@
               @row-contextmenu='houseMenu'
               style="width: 100%">
               <el-table-column type="expand" v-if="form.tag==2">
-                <template slot-scope="props">
-                  {{props.row.contract_id}}
+                <template slot-scope="props" >
+                  <el-table :data="props.row.son" :show-header="false" >
+                    <el-table-column>
+                      <template slot-scope="scope">
+                        <span>&nbsp;&nbsp;&nbsp;</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column>
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
+                        <span v-if="!scope.row.create_time">暂无</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="回访人">
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.operator">{{scope.row.operator}}</span>
+                        <span v-if="!scope.row.operator">暂无</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="合同编号">
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.contract_number">{{scope.row.contract_number}}</span>
+                        <span v-if="!scope.row.contract_number">暂无</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="房屋地址">
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.address">{{scope.row.address}}</span>
+                        <span v-if="!scope.row.address">暂无</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="合同类型">
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.contract_type">{{scope.row.contract_type}}</span>
+                        <span v-if="!scope.row.contract_type">暂无</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="合同周期">
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.contract_cycle">{{scope.row.contract_cycle}}</span>
+                        <span v-if="!scope.row.contract_cycle">暂无</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="信息来源">
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.originate">{{scope.row.originate}}</span>
+                        <span v-if="!scope.row.originate">暂无</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="保修期">
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.guarantee">{{scope.row.guarantee}}</span>
+                        <span v-if="!scope.row.guarantee">暂无</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="开单人">
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.drawer">{{scope.row.drawer}}</span>
+                        <span v-if="!scope.row.drawer">暂无</span>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="部门">
+                      <template slot-scope="scope">
+                        <span v-if="scope.row.department">{{scope.row.department}}</span>
+                        <span v-if="!scope.row.department">暂无</span>
+                      </template>
+                    </el-table-column>
+                  </el-table>
                 </template>
               </el-table-column>
               <el-table-column

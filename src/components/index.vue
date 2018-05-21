@@ -251,6 +251,29 @@
                     </div>
                   </el-col>
                 </el-row>
+                <el-row>
+                  <el-col :span="10" class="checkUp">
+                    <div class="navigationLeft">
+                      <el-dropdown-item @click.native="routers('beforeExam')" style="padding: 0">
+                        <div class="msgCenter">
+                          <i class="el-icon-tickets"></i>
+                          <div class="msgTitle">我的考试</div>
+                        </div>
+                      </el-dropdown-item>
+                    </div>
+                  </el-col>
+
+                  <el-col :span="10" class="checkUp" :offset="4">
+                    <div class="navigationLeft">
+                      <el-dropdown-item @click.native="routers('beforeExam')" style="padding: 0">
+                        <div class="msgCenter">
+                          <i class="el-icon-document" style="color: #58D788;"></i>
+                          <div class="msgTitle">问卷调查</div>
+                        </div>
+                      </el-dropdown-item>
+                    </div>
+                  </el-col>
+                </el-row>
               </div>
               <el-dropdown-item class="detrusion" @click.native="routers('/login')">
                 <div>
@@ -528,7 +551,7 @@
                 else if( res.data.data.type == 1 && res.data.data.album.image_pic.length >0){
                   this.ReadingDialog = true;
                 }
-                
+
               }
             });
           //制度弹窗
@@ -584,7 +607,7 @@
     },
     mounted() {
       //初始化个人信息
-      
+
       this.personal = JSON.parse(localStorage.personal);
       //鼠标滑动监听
       let _this = this;
