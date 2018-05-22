@@ -956,9 +956,9 @@
             let dataList = [];
             for (let i = 0; i < data.length; i++) {
               let user = {};
-              user.created_at = data[i].created_at;
-              user.finish_at = data[i].finish_at !== null ? data[i].finish_at : '/';
               if (val.type === 3) {
+                user.created_at = data[i].created_at;
+                user.finish_at = data[i].finish_at !== null ? data[i].finish_at : '/';
                 if (data[i].content.house) {
                   user.house_name = data[i].content.house.name;
                 } else {
@@ -981,6 +981,8 @@
               if (val.type === 1 || val.type === 2 || val.type === 4) {
                 user.bulletin = data[i].title;
                 if (data[i].flow) {
+                  user.created_at = data[i].flow.created_at;
+                  user.finish_at = data[i].flow.finish_at !== null ? data[i].finish_at : '/';
                   if (user.house_name = data[i].flow.content.house) {
                     user.house_name = data[i].flow.content.house.name;
                   } else {

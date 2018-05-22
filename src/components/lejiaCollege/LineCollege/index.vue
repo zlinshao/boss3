@@ -106,8 +106,8 @@
           <div class="blueTable">
             <el-table
               :data="tableData"
-              :empty-text='rentStatus'
-              v-loading="rentLoading"
+              :empty-text='tableStatus'
+              v-loading="tableLoading"
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
               element-loading-background="rgba(255, 255, 255, 0)"
@@ -139,16 +139,22 @@
               <el-table-column
                 prop="score"
                 label="得分">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.score">{{scope.row.score}}</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="操作">
                 <template slot-scope="scope">
-                  <el-button size="mini" type="primary" v-if="scope.row.result_id == 0"
+                  <el-button size="mini" type="primary" v-if="scope.row.result_id == 0 && scope.row.available"
                              @click="answerExam(scope.row.id)">立即答题
                   </el-button>
-                  <el-button size="mini" type="info" v-if="scope.row.result_id !== 0" @click="lookExam(scope.row)">
+                  <el-button size="mini" type="info" v-if="scope.row.result_id !== 0 " @click="lookExam(scope.row)">
                     查看试卷
                   </el-button>
+                  <span style="cursor: pointer;color: #6a8dfb;"
+                        v-if="!scope.row.available && !scope.row.result_id">已结束</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -192,11 +198,7 @@
         },
         depart_name: '',
         isHigh: false, //高级搜索
-        rentStatus: ' ',
-        rentLoading: false,
         organizationDialog: false,
-        rentStatus: ' ',
-        rentLoading: false,
         pickerOptions: {
           shortcuts: [
             {
@@ -234,6 +236,9 @@
         confirmArrival: [],
         examType: [],
         useTestPapers: [],
+        questionNaireData: [],
+        tableStatus: ' ',
+        tableLoading: false,
       };
     },
     mounted() {
@@ -253,7 +258,6 @@
     activated() {
       this.myData();
       this.confirmArrival = localStorage.getItem('confirmArrival');
-
       // localStorage.removeItem("answers_" + this.examId);
     },
     watch: {
@@ -275,7 +279,7 @@
       },
     },
     methods: {
-      search(){
+      search() {
         this.form.page = 1;
         this.myData();
       },
@@ -301,6 +305,12 @@
               arr.push(id);
               localStorage.setItem('confirmArrival', arr);  //保存已到场的考试id
               this.$router.push({path: '/answerExam', query: {id: id}});
+            } else if (res.data.code === '30003') {
+              //迟到
+              this.$router.push({path: '/beforeExam', query: {id: id, type: 'third'}});
+            }else if (res.data.code === '30004') {
+              //未开始
+              this.$router.push({path: '/beforeExam', query: {id: id, type: 'first'}});
             } else {
               this.$notify.warning({
                 title: '警告',
@@ -309,32 +319,34 @@
             }
           });
         }
-
-
       },
       myData() {
-        this.rentStatus = " ";
-        this.rentLoading = true;
+        this.tableStatus = ' ';
+        this.tableLoading = true;
         if (!this.form.time) {
           this.form.time = [];
         }
         this.$http.get(globalConfig.server + "exam/exam/my?enrolled=1", {params: this.form}).then((res) => {
-          this.rentLoading = false;
+          this.tableLoading = false;
           this.isHigh = false;
           if (res.data.code == '30000') {
             this.tableData = res.data.data.data;
             this.tableNumber = res.data.data.count;
           } else {
             this.tableData = [];
-            this.rentStatus = '暂无数据';
+            this.tableStatus = '暂无数据';
             this.tableNumber = 0;
           }
 
         });
       },
+      handleClick(tab, event) {
+        this.form.page = 1;
+        this.myData();
+      },
       openOrganizationModal() {
         this.organizationDialog = true;
-        this.depart = "depart";
+        this.depart = 'depart';
       },
       emptyDepart() {
         this.depart_name = '';

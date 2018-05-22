@@ -2,22 +2,22 @@
   <div>
     <div id="shortAnExam">
       <div class="tool">
-        <el-row style="width:90%;margin-top:16px;margin-left: 15%;">
-          <el-col :span="5" style="margin-left:2%; margin-right:2%">
+        <el-row :gutter="80" style="width:90%;margin-top:16px;margin-left: 5%;">
+          <el-col :span="7" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="text-align:left;color:#464748;">
               <div class="qdiv" style="margin-top:28px;">试卷名称：<span style="color:#6a8dfb">{{examData.name}}</span></div>
               <div class="qdiv">试卷类型：<span style="color:#6a8dfb">{{examData.paper && examData.paper.category}}</span>
               </div>
             </div>
           </el-col>
-          <el-col :span="5" style="margin-left:2%; margin-right:2%">
+          <el-col :span="7" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="border: 1px solid #58d788;box-shadow: 0 0 3px 1px #58d788;">
               <div class="import_left"><span style="float:left; font-size:14px;">总时长</span><i
                 style="float:right; color:#58d788;font-size:20px;" class="iconfont icon-shijian1"></i></div>
               <div><span style="font-size:70px; color:#58d788">{{examData.duration}}</span>分钟</div>
             </div>
           </el-col>
-          <el-col :span="5" style="margin-left:2%; margin-right:2%">
+          <el-col :span="7" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="border: 1px solid #fdca41;box-shadow: 0 0 3px 1px #fdca41;">
               <div class="import_left"><span style="float:left; font-size:14px;">总题数</span><i
                 style="float:right; color:#fdca41;font-size:20px;" class="iconfont icon-shujutu"></i></div>
@@ -29,19 +29,27 @@
       <div class="main">
         <div v-for="(v, k) in questionData" v-if="k==153 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
-            <span style="color:#6a8dfb;">单选题</span>
-            <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
-               v-html="item.stem"></p>
-            <div style="width:96%;margin-left:44px;"
-                 v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
-              <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
-              <el-form>
-                <el-form-item >
+            <span class="category_score" >(单选题 {{item.score}} 分)</span>
+            <el-row>
+              <el-col :span="1" style="width: 50px;margin-top: -2px;">
+                <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
+              </el-col>
+              <el-col :span="15">
+                <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
+              </el-col>
+            </el-row>
+            <div style="width:96%;margin-left:50px;"
+                 v-if="answerData && answerData[item.id] && resultData && resultData.answer ">
+              <div style="line-height: 30px;font-size: 15px;">
+                <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
+                <span style="color:#409EFF;margin-left: 10px;" v-if="resultData.objective_detail">本题得分： {{resultData.objective_detail[item.id]}}</span>
+              </div>
+               <el-form>
+                <el-form-item style="margin-top: 10px;">
                   <el-row :gutter="20">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice"
                             style="line-height:24px;">
-                      <span v-if="index == answerData[item.id]"><el-radio>{{index}}：{{val}}</el-radio></span>
+                      <span v-if="index == resultData.answer[item.id]"><el-radio>{{index}}：{{val}}</el-radio></span>
                       <span v-else>{{index}}：{{val}}</span>
                       <span style="color:rgb(88, 215, 136);margin-left:50px;"
                             v-if="resultData.answer[item.id] == answerData[item.id] && resultData.answer[item.id]==index">正确</span>
@@ -56,21 +64,26 @@
         </div>
         <div v-for="(v, k) in questionData" v-if="(k==154 || k==155) && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
-            <span style="color:#6a8dfb;">
-              <span v-if="k==154">多选题</span>
-              <span v-if="k==155">不定向选择题</span>
-            </span>
-            <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
-               v-html="item.stem"></p>
-            <div style="width:96%;margin-left:44px;"
-                 v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
-              <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
+            <span class="category_score" >(<span v-if="k==154">多选题</span><span v-if="k==155">不定向选择题</span> {{item.score}} 分)</span>
+            <el-row>
+              <el-col :span="1" style="width: 50px;margin-top: -2px;">
+                <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
+              </el-col>
+              <el-col :span="15">
+                <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
+              </el-col>
+            </el-row>
+            <div style="width:96%;margin-left:50px;"
+                 v-if="answerData && answerData[item.id] && resultData && resultData.answer ">
+              <div style="line-height: 30px;font-size: 15px;">
+                <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
+                <span style="color:#409EFF;margin-left: 10px;" v-if="resultData.objective_detail">本题得分： {{resultData.objective_detail[item.id]}}</span>
+              </div>
               <el-form>
-                <el-form-item>
+                <el-form-item style="margin-top: 10px;">
                   <el-row :gutter="20">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
-                      <span v-if="answerData[item.id].indexOf(index)>-1"><el-radio>{{index}}：{{val}}</el-radio></span>
+                      <span v-if="resultData.answer[item.id].indexOf(index)>-1"><el-radio>{{index}}：{{val}}</el-radio></span>
                       <span v-else>{{index}}：{{val}}</span>
                       <span style="color:rgb(88, 215, 136);margin-left:50px;" v-for="ans in resultData.answer[item.id]"
                             v-if="answerData[item.id].indexOf(ans)>-1 && ans==index">正确</span>
@@ -85,18 +98,26 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==156 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
-            <span style="color:#6a8dfb;">判断题</span>
-            <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
-               v-html="item.stem"></p>
-            <div style="width:96%;margin-left:44px;"
-                 v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
-              <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
+            <span class="category_score" >(判断题 {{item.score}} 分)</span>
+            <el-row>
+              <el-col :span="1" style="width: 50px;margin-top: -2px;">
+                <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
+              </el-col>
+              <el-col :span="15">
+                <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
+              </el-col>
+            </el-row>
+            <div style="width:96%;margin-left:50px;"
+                 v-if="answerData && answerData[item.id] && resultData && resultData.answer">
+              <div style="line-height: 30px;font-size: 15px;">
+                <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
+                <span style="color:#409EFF;margin-left: 10px;" v-if="resultData.objective_detail">本题得分： {{resultData.objective_detail[item.id]}}</span>
+              </div>
               <el-form>
-                <el-form-item>
+                <el-form-item style="margin-top: 10px;">
                   <el-row :gutter="20">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
-                      <span v-if="index == answerData[item.id]"><el-radio>{{index}}：{{val}}</el-radio></span>
+                      <span v-if="index == resultData.answer[item.id]"><el-radio>{{index}}：{{val}}</el-radio></span>
                       <span v-else>{{index}}：{{val}}</span>
                       <span style="color:rgb(88, 215, 136);margin-left:50px;"
                             v-if="resultData.answer[item.id] == answerData[item.id] && resultData.answer[item.id]==index">正确</span>
@@ -111,23 +132,31 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==157 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
-            <span style="color:#6a8dfb;">填空题</span>
-            <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
-               v-html="item.stem"></p>
-            <div style="width:96%;margin-left:44px;"
-                 v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
-              <el-row style="line-height: 30px;">正确答案： {{answerData[item.id]}}</el-row>
+            <span class="category_score" >(填空题 {{item.score}} 分)</span>
+            <el-row>
+              <el-col :span="1" style="width: 50px;margin-top: -2px;">
+                <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
+              </el-col>
+              <el-col :span="15">
+                <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
+              </el-col>
+            </el-row>
+            <div style="width:96%;margin-left:50px;"
+                 v-if="answerData && answerData[item.id] && resultData && resultData.answer">
+              <div style="line-height: 30px;font-size: 15px;">
+                <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
+                <span style="color:#409EFF;margin-left: 10px;" v-if="resultData.objective_detail">本题得分： {{resultData.objective_detail[item.id]}}</span>
+              </div>
               <el-form>
                 <el-form-item style="margin-top: 10px;">
                   <el-row :gutter="20">
                     <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak" style="line-height: 24px;">
                       <el-input readOnly size="small" style="width:97%;"
-                                v-model="resultData.answer[item.id][ak]" placeholder="请填写答案"></el-input>
-                      <span style="color:rgb(88, 215, 136);margin-left:30px;"
+                                v-model="resultData.answer[item.id][ak]" :placeholder="`第 ${ak+1} 处答案`"></el-input>
+                      <span style="color:rgb(88, 215, 136);margin-left:17px;"
                             v-for="(vv, kk) in resultData.answer[item.id]"
                             v-if="answerData[item.id].indexOf(vv)>-1 && kk==ak ">正确</span>
-                      <span style="color:#fc83b6;margin-left:30px;" v-for="(vv, kk) in resultData.answer[item.id]"
+                      <span style="color:#fc83b6;margin-left:17px;" v-for="(vv, kk) in resultData.answer[item.id]"
                             v-if="answerData[item.id].indexOf(vv)<0 && kk==ak">错误</span>
                     </el-col>
                   </el-row>
@@ -138,12 +167,17 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==158 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
-            <span style="color:#6a8dfb;">简答题</span>
-            <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
-               v-html="item.stem"></p>
-            <div style="width:96%;margin-left:44px;">
-              <div class="eachAN scroll_bar">{{item.answer}}</div>
+            <span class="category_score" >(简答题 {{item.score}} 分)</span>
+            <el-row>
+              <el-col :span="1" style="width: 50px;margin-top: -2px;">
+                <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
+              </el-col>
+              <el-col :span="15">
+                <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
+              </el-col>
+            </el-row>
+            <div style="width:96%;margin-left:50px;">
+              <div class="eachAN scroll_bar" v-if="resultData && resultData.answer && resultData.answer[item.id]">{{resultData.answer[item.id]}}</div>
               <div class="eachSore">
                 <el-form>
                   <el-form-item>
@@ -246,8 +280,10 @@
           if (res.data.code === '36000') {
             this.resultData = res.data.data;
             this.objective_score = this.totalScore = res.data.data.score;
+            this.correct = res.data.data.subjective_detail;
           } else {
             this.resultData = {};
+            this.correct = {};
           }
         });
       },
@@ -276,9 +312,9 @@
             }
           });
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消打分'
+          this.$notify.info({
+            title: "提示",
+            message: "已取消打分"
           });
         });
 
@@ -290,9 +326,11 @@
 <style lang="scss" scoped>
   .ql-editor {
     min-height: initial !important;
+    padding: 0px;
+    margin: 0px;
   }
   .el-form-item {
-    margin-bottom: 12px !important;
+    margin-bottom: 15px !important;
   }
   #shortAnExam {
     .tool {
@@ -327,22 +365,27 @@
     }
     .main {
       border: 1px #eee solid;
-      border-bottom: none;
       border-top: none;
       min-height: 500px;
       font-size: 16px;
       .questionDiv {
         width: 98%;
         margin-left: 2%;
-        min-height: 154px;
+        min-height: 90px;
         padding-top: 16px;
         border-top: 1px #eee solid;
+        .category_score {
+          color: #c0c4cc;
+          font-size: 14px;
+          float: right;
+          margin-right: 10px;
+          padding: 3px 8px;
+        }
         .eachAN {
           width: 94.5%;
           margin-right: 2%;
           border: 1px #eee solid;
           height: 160px;
-          color: #6a8dfb;
           border-bottom: none;
           padding: 8px 8px;
         }
