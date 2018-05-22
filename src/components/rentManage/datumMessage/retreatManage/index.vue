@@ -48,7 +48,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select clearable  v-model="params.status" placeholder="室" value="">
+                      <el-select clearable  v-model="params.status" placeholder="请选择退房状态" value="">
                         <el-option label="退租中" value="1"></el-option>
                         <el-option label="已退租" value="2"></el-option>
                       </el-select>
