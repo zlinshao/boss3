@@ -28,10 +28,8 @@
             <div class="import_questions" style="border: 1px solid #fb4699;box-shadow: 0 0 3px 1px #fb4699;">
               <div class="import_left"><span style="float:left; font-size:14px;">考试成绩</span><i
                 style="float:right; color:#fb4699;font-size:20px;" class="iconfont icon-chengjiguanli"></i></div>
-              <div>
-                <span style="font-size:70px; color:#fb4699">{{resultData.score}}</span>分
-                <span style="">(总分：{{examData.score}})</span>
-              </div>
+              <div><span style="font-size:70px; color:#fb4699">{{resultData.score}}</span>分</div>
+              <span style="position: absolute;top: 85px;right: 55px;">(总分：{{examData.score}}分)</span>
             </div>
           </el-col>
         </el-row>
@@ -39,7 +37,7 @@
       <div class="main">
         <div v-for="(v, k) in questionData" v-if="k==153 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span class="category_score" >(单选题 {{item.score}} 分)</span>
+            <span class="category_score">(单选题 {{item.score}} 分)</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -73,7 +71,7 @@
         </div>
         <div v-for="(v, k) in questionData" v-if="(k==154 || k==155) && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span class="category_score" >(<span v-if="k==154">多选题</span><span v-if="k==155">不定向选择题</span> {{item.score}} 分)</span>
+            <span class="category_score">(<span v-if="k==154">多选题</span><span v-if="k==155">不定向选择题</span> {{item.score}} 分)</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -107,7 +105,7 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==156 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span class="category_score" >(判断题 {{item.score}} 分)</span>
+            <span class="category_score">(判断题 {{item.score}} 分)</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -118,7 +116,8 @@
             </el-row>
             <el-form>
               <el-form-item style="width: 96%;margin-left: 50px;">
-                <div v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
+                <div
+                  v-if="answerData && answerData[item.id] && resultData && resultData.answer && resultData.answer[item.id]">
                   <div style="line-height: 30px;font-size: 15px;">
                     <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
                     <span style="color:#409EFF;margin-left: 10px;" v-if="resultData.objective_detail">本题得分： {{resultData.objective_detail[item.id]}}</span>
@@ -141,7 +140,7 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==157 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span class="category_score" >(填空题 {{item.score}} 分)</span>
+            <span class="category_score">(填空题 {{item.score}} 分)</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -176,7 +175,7 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==158 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span class="category_score" >(简答题 {{item.score}} 分)</span>
+            <span class="category_score">(简答题 {{item.score}} 分)</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -191,7 +190,7 @@
             <el-form>
               <el-form-item style="width: 96%;margin-left: 50px;margin-top: 10px;">
                 <div>
-                  <el-input readonly size="small"  style="width: 98%;"
+                  <el-input readonly size="small" style="width: 98%;"
                             v-model="resultData && resultData.answer && resultData.answer[item.id]"
                             type="textarea" placeholder="请填写答案"></el-input>
                 </div>

@@ -29,27 +29,18 @@
         </div>
         <p class="view_history" @click="goHistory('exam')">查看历史考试>></p>
       </div>
-      <div v-show="showType==='fourth'">
-        <div class="title">您目前没有问卷</div>
 
-        <p class="view_history" @click="goHistory('naire')">查看历史问卷>></p>
-      </div>
     </div>
     <el-button @click="showType='first'">first</el-button>
     <el-button @click="showType='second'">second</el-button>
     <el-button @click="showType='third'">third</el-button>
-    <el-button @click="showType='fourth'">fourth</el-button>
   </div>
 
 </template>
 
 <script>
-  import TestPaperManage from "./testPaperManage.vue";
-  import ExamManage from "./examManage.vue";
-
   export default {
-    name: "index",
-    components: {TestPaperManage, ExamManage},
+    name: "before-exam",
     data() {
       return {
         showType: 'third',
@@ -71,24 +62,35 @@
   .container {
     color: #999;
     width: 100%;
-    min-height: 500px;
+    min-height: 800px;
     text-align: center;
+    position: relative;
     .title {
-      padding-top: 150px;
       font-size: 60px;
+      position: absolute;
+      margin: 0 auto;
+      top: 130px;
+      left: 0;
+      width: 100%;
+      filter: alpha(opacity=30);
+      -ms-filter: "alpha(opacity=30)";
     }
     .count_down {
-      padding-top: 20px;
       font-size: 50px;
-      margin-bottom: -100px;
+      position: absolute;
+      margin: 0 auto;
+      top: 210px;
+      left: 0;
+      width: 100%;
     }
     .content {
       color: #393939;
-      margin-top: 180px;
+      margin-top: 330px;
       background-color: #dfe6fb;
       border-radius: 8px;
       display: inline-block;
       padding: 20px 100px;
+      position: relative;
       .content_title {
         margin-top: 10px;
         margin-left: -110px;
@@ -98,6 +100,10 @@
       cursor: pointer;
       margin-top: 200px;
       color: #39b1ff;
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      margin: 0 auto;
     }
 
   }
