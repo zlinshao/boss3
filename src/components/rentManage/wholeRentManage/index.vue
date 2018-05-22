@@ -684,7 +684,7 @@
   import ReturnVisit from '../components/returnVisit.vue'   //查看回访
   import TopForm from '../components/topFormSet.vue'                                //表头列表
   import Setting from './components/setting.vue'
-  import AddReturnvisit from "../../../components/rentManage/customerService/addReturnvisit.vue";   //添加回访
+  import AddReturnvisit from "../customerService/ReturnVisitManage/addReturnvisit.vue";   //添加回访
   import AddCollectReimbursement from "../components/addCollectReimbursement.vue";  //添加房屋报销单
   import AddRentReimbursement from "../components/addRentReimbursement.vue";        //添加租客报销单
 

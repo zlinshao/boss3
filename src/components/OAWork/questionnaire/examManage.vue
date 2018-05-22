@@ -4,7 +4,8 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="标题" v-model="params.search" size="mini" clearable @keyup.enter.native="getExamData()">
+            <el-input placeholder="标题" v-model="params.search" size="mini" clearable
+                      @keyup.enter.native="getExamData()">
               <el-button slot="append" icon="el-icon-search" size="mini" @click="getExamData()"></el-button>
             </el-input>
           </el-form-item>
@@ -189,13 +190,13 @@
                   </el-form-item>
                 </el-col>
                 <!--<el-col :span="20">-->
-                  <!--<el-form-item label="调查对象">-->
-                    <!--<el-input v-model="selectExaminees" @focus="openOrganize" size="mini" placeholder="请选择调查对象">-->
-                      <!--<template slot="append">-->
-                        <!--<div style="cursor: pointer;" @click="emptyExaminees">清空</div>-->
-                      <!--</template>-->
-                    <!--</el-input>-->
-                  <!--</el-form-item>-->
+                <!--<el-form-item label="调查对象">-->
+                <!--<el-input v-model="selectExaminees" @focus="openOrganize" size="mini" placeholder="请选择调查对象">-->
+                <!--<template slot="append">-->
+                <!--<div style="cursor: pointer;" @click="emptyExaminees">清空</div>-->
+                <!--</template>-->
+                <!--</el-input>-->
+                <!--</el-form-item>-->
                 <!--</el-col>-->
               </el-row>
             </el-form>
@@ -232,6 +233,11 @@
             element-loading-spinner="el-icon-loading"
             element-loading-background="rgba(255, 255, 255, 0)"
             style="width: 100%">
+            <el-table-column width="65">
+              <template slot-scope="scope">
+                <el-checkbox :label="scope.row.pivot.examinee_id" v-model="examinees"></el-checkbox>
+              </template>
+            </el-table-column>
             <el-table-column
               prop="real_name"
               label="考生姓名">
@@ -260,6 +266,9 @@
             </el-pagination>
           </div>
         </div>
+        <span slot="footer" class="dialog-footer">
+            <el-button size="small" type="primary" @click="deleteExaminess">删除</el-button>
+          </span>
       </el-dialog>
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
@@ -320,7 +329,7 @@
         examId: '', //考试场次的id
         useTestPapers: [],
         examineesData: [],
-        examineesPageData:[],
+        examineesPageData: [],
 
         pickerOptions: {
           shortcuts: [
@@ -353,6 +362,7 @@
             }
           ]
         },
+        examinees: [],
       };
     },
     mounted() {
@@ -372,17 +382,44 @@
           }
         }
       },
-      examineeDialog(val){
-        if(!val) {
+      examineeDialog(val) {
+        if (!val) {
           this.examineesData = [];
         }
       }
     },
     methods: {
-      seeNaireResult(id){
-        this.$router.push({path: '/lookNaire', query:{id: id}});
+      deleteExaminess() {
+        this.$confirm('确认移除该调查对象吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(globalConfig.server + 'questionnaire/banish/' + this.examId, {examinees: this.examinees}).then((res) => {
+            if (res.data.code === '30010') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.getExamDetail();
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }).catch(() => {
+          this.$notify.info({
+            title: '提示',
+            message: '已取消移除'
+          });
+        });
       },
-      getPaperData(){
+      seeNaireResult(id) {
+        this.$router.push({path: '/lookNaire', query: {id: id}});
+      },
+      getPaperData() {
         this.$http.get(globalConfig.server + 'exam/paper?qtn=1', {params: this.params}).then((res) => {
           this.tableLoading = false;
           this.isHigh = false;
@@ -472,8 +509,10 @@
               this.examineesData = detail.examinees;
               this.examineesCount = detail.examinees_count;
 
-              if(detail.examinees.length>0){
+              if (detail.examinees.length > 0) {
                 this.examineesPageData = detail.examinees[0];
+              } else {
+                this.examineesPageData = [];
               }
             }
           } else {
@@ -535,7 +574,7 @@
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
-        this.examineesPageData = this.examineesData[val-1];
+        this.examineesPageData = this.examineesData[val - 1];
       },
       //右键菜单
       openContextMenu(row, event) {
@@ -606,8 +645,8 @@
                 }
               });
             }).catch(() => {
-              this.$message({
-                type: "info",
+              this.$notify.info({
+                title: "提示",
                 message: "已取消删除"
               });
             });
@@ -617,7 +656,7 @@
             this.getExamDetail();
             break;
           case 'answer':
-            this.$router.push({path: 'answerNaire', query:{id: this.examId}});
+            this.$router.push({path: 'answerNaire', query: {id: this.examId}});
             break;
         }
       },
@@ -661,6 +700,8 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+
+
   #examDialog {
     .vt_align {
       vertical-align: middle;

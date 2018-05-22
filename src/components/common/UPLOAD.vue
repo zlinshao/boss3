@@ -163,8 +163,9 @@
 
                   fr.onload = function () {
                     // 文件添加进队列后，处理相关的事情
+                    console.log(file.id)
                     $('#pickfiles' + _this.ID).prepend(`
-                    <div class="imgItem" id="${file.id}" data-magnify="" data-src="${fr.result}">
+                    <div class="imgItem" id="${file.id}">
                       <div style=" position: relative;">
                         <img src="${fr.result}">
                         <div class="progress"><p style="color: #fff !important;"></p></div>
@@ -184,6 +185,7 @@
               // 每个文件上传前，处理相关的事情
               up.setOption('multipart_params', {
                 token: _this.token,               // 上传凭证
+                'key': file.name,
               });
             },
             'UploadProgress': function (up, file) {
@@ -200,7 +202,6 @@
 
             },
             'FileUploaded': function (up, file, info) {
-
               let domain = up.getOption('domain');
               let url = JSON.parse(info);
               let sourceLink = domain + "/" + url.key;
@@ -217,8 +218,9 @@
                   _this.imgId.push(res.data.data.id);
                   let object = {};
                   object.id = res.data.data.id;
-                  object.name = res.data.data.name;
+                  object.name = file.id;
                   _this.imgArray.push(object);
+
                   _this.$emit('getImg', [_this.ID, _this.imgId, _this.isUploading]);
                   document.getElementById(file.id).getElementsByTagName('p')[0].innerHTML = '<span class="el-icon-success"></span>';
                 }

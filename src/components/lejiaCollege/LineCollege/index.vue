@@ -106,8 +106,8 @@
           <div class="blueTable">
             <el-table
               :data="tableData"
-              :empty-text='rentStatus'
-              v-loading="rentLoading"
+              :empty-text='tableStatus'
+              v-loading="tableLoading"
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
               element-loading-background="rgba(255, 255, 255, 0)"
@@ -139,6 +139,10 @@
               <el-table-column
                 prop="score"
                 label="得分">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.score">{{scope.row.score}}</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="操作">
@@ -192,11 +196,7 @@
         },
         depart_name: '',
         isHigh: false, //高级搜索
-        rentStatus: ' ',
-        rentLoading: false,
         organizationDialog: false,
-        rentStatus: ' ',
-        rentLoading: false,
         pickerOptions: {
           shortcuts: [
             {
@@ -234,6 +234,9 @@
         confirmArrival: [],
         examType: [],
         useTestPapers: [],
+        questionNaireData: [],
+        tableStatus: ' ',
+        tableLoading: false,
       };
     },
     mounted() {
@@ -253,7 +256,6 @@
     activated() {
       this.myData();
       this.confirmArrival = localStorage.getItem('confirmArrival');
-
       // localStorage.removeItem("answers_" + this.examId);
     },
     watch: {
@@ -275,7 +277,7 @@
       },
     },
     methods: {
-      search(){
+      search() {
         this.form.page = 1;
         this.myData();
       },
@@ -309,32 +311,34 @@
             }
           });
         }
-
-
       },
       myData() {
-        this.rentStatus = " ";
-        this.rentLoading = true;
+        this.tableStatus = ' ';
+        this.tableLoading = true;
         if (!this.form.time) {
           this.form.time = [];
         }
         this.$http.get(globalConfig.server + "exam/exam/my?enrolled=1", {params: this.form}).then((res) => {
-          this.rentLoading = false;
+          this.tableLoading = false;
           this.isHigh = false;
           if (res.data.code == '30000') {
             this.tableData = res.data.data.data;
             this.tableNumber = res.data.data.count;
           } else {
             this.tableData = [];
-            this.rentStatus = '暂无数据';
+            this.tableStatus = '暂无数据';
             this.tableNumber = 0;
           }
 
         });
       },
+      handleClick(tab, event) {
+        this.form.page = 1;
+        this.myData();
+      },
       openOrganizationModal() {
         this.organizationDialog = true;
-        this.depart = "depart";
+        this.depart = 'depart';
       },
       emptyDepart() {
         this.depart_name = '';

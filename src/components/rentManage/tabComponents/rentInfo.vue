@@ -10,7 +10,7 @@
       style="width: 100%">
       <el-table-column
         prop="name"
-        label="房东姓名">
+        label="租客姓名">
         <template slot-scope="scope">
           <span v-if="scope.row.name">{{scope.row.name}}</span>
           <span v-if="!scope.row.name">暂无</span>

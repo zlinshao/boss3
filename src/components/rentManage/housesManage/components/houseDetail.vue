@@ -282,7 +282,7 @@
                   <el-form-item label="是否每个房间有衣柜">
                     <div class="content">
                     <span v-if="detailData.house_goods">
-                      <span v-if="detailData.house_goods.wardrobe_remark">是</span>
+                      <span v-if="detailData.house_goods.wardrobe">是</span>
                       <span v-else="">否</span>
                     </span>
                     </div>
