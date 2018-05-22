@@ -107,7 +107,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="小区别名">
+                <el-form-item label="产权地址">
                   <div class="content">{{contractInfo.community_nickname}}</div>
                 </el-form-item>
               </el-col>
@@ -155,12 +155,7 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="楼层">
-                  <div class="content">{{contractInfo.floor}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="楼层数">
-                  <div class="content">{{contractInfo.floors}}</div>
+                  <div class="content">{{contractInfo.floor}}/{{contractInfo.floors}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -186,13 +181,13 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="房屋特色">
-                  <div class="content">{{matchDictionary(contractInfo.house_feature)}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
+            <!--<el-row>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="房屋特色">-->
+                  <!--<div class="content">{{matchDictionary(contractInfo.house_feature)}}</div>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
           </el-form>
         </div>
 
@@ -253,6 +248,18 @@
               <el-col :span="8">
                 <el-form-item label="合同编号">
                   <div class="content">{{contractInfo.contract_number}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="合同性质">
+                  <div class="content">
+                    <span v-if="contractInfo.type==1">新租</span>
+                    <span v-else-if="contractInfo.type==2">转租</span>
+                    <span v-else-if="contractInfo.type==3">续租</span>
+                    <span v-else-if="contractInfo.type==4">未收先租</span>
+                    <span v-else-if="contractInfo.type==5">调租</span>
+                    <span v-else="">/</span>
+                  </div>
                 </el-form-item>
               </el-col>
 
@@ -828,7 +835,7 @@
               <el-col :span="8">
                 <el-form-item label="合同周期">
                   <div class="content">{{repairDetail.contract_month}}月{{repairDetail.contract_day}}天
-                  </div>                  
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -868,7 +875,7 @@
                       {{repairDetail.unit_price[1][index-1]}}元
                        <span v-show="index<priceLen-1">;</span>
                     </span>
-                  </div>   
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -877,7 +884,7 @@
                     <span v-for="index in payForLen" :key="index+55" v-if="index>0">
                       {{repairDetail.pay_type[0][index-1][0]}}-{{repairDetail.pay_type[0][index-1][1]}},
                       <span v-for="item in payTypeInfo" :key="item.id" v-if="repairDetail.pay_type[1][index-1] == item.id">
-                        {{item.dictionary_name}}</span>                     
+                        {{item.dictionary_name}}</span>
                       <span v-show="index<payForLen-1">;</span>
                     </span>
                   </div>
@@ -1135,7 +1142,7 @@
         form: {
             contract_id : '',
             module:1
-        },        
+        },
         priceLen: 0,
         payForLen: 0,
         payTypeLen: 0,
@@ -1554,8 +1561,8 @@
             } else {
               this.repairDetail.has_extra = "否";
             }
-          } 
-        });        
+          }
+        });
       },
       getImgId(data){
         let arr = [];

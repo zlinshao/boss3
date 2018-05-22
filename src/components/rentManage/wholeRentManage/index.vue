@@ -367,9 +367,6 @@
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
-
-
-
               <el-table-column
                 label="房屋地址">
                 <template slot-scope="scope">
