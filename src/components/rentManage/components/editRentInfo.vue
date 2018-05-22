@@ -1123,7 +1123,7 @@
         this.params.receipt = [];
         for (let i = 0; i < this.receiptChangeAmount; i++) {
           receiptItem = {};
-          receiptItem.ciyt = this.cityArray[i] ? this.cityArray[i] : '';
+          receiptItem.city = this.cityArray[i] ? this.cityArray[i] : '';
           receiptItem.date = this.yearArray[i] ? this.yearArray[i] : '';
           receiptItem.num = this.receiptArray[i] ? this.receiptArray[i] : '';
           this.params.receipt.push(receiptItem);
