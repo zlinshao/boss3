@@ -234,18 +234,24 @@
     <div id="examineeDialog">
       <el-dialog :close-on-click-modal="false" :visible.sync="examineeDialog" title="考生信息" width="45%">
         <div>
-          <el-row :gutter="10">
-            <el-col :span="22">
-              <el-input size="mini" placeholder="请选择考生" v-model="selectExaminees" readOnly @focus="openOrganize">
-                <!--<template slot="append">-->
-                  <!--<div style="cursor: pointer;" @click="emptyExaminees">清空</div>-->
-                <!--</template>-->
-              </el-input>
-            </el-col>
-            <!--<el-col :span="6">-->
-              <!--<el-button type="primary" size="mini" @click="addExaminees">新增</el-button>-->
-            <!--</el-col>-->
-          </el-row>
+          <!--<el-row :gutter="10">-->
+          <!--<el-col :span="4">-->
+          <!--&lt;!&ndash;<el-input size="mini" placeholder="请选择考生" v-model="selectExaminees" readOnly @focus="openOrganize">&ndash;&gt;-->
+          <!--&lt;!&ndash;<template slot="append">&ndash;&gt;-->
+          <!--&lt;!&ndash;<div style="cursor: pointer;" @click="emptyExaminees">清空</div>&ndash;&gt;-->
+          <!--&lt;!&ndash;</template>&ndash;&gt;-->
+          <!--&lt;!&ndash;</el-input>&ndash;&gt;-->
+          <!--<el-col :span="6"  style="margin-left: 30px;">-->
+          <!--<el-button type="primary" size="mini" @click="deleteExaminess" plain>删除</el-button>-->
+          <!--</el-col>-->
+          <!--</el-col>-->
+          <!--<el-col :span="6" style="float: right;">-->
+          <!--<el-button type="primary" size="mini" @click="openOrganize">新增</el-button>-->
+          <!--</el-col>-->
+          <!--</el-row>-->
+          <el-button type="primary" size="mini" @click="openOrganize"
+                     style="float: right;margin-bottom: 10px;margin-right: 10px;">新增
+          </el-button>
         </div>
         <div style="margin-top: 20px;">
           <el-table
@@ -281,7 +287,8 @@
         </div>
         <span slot="footer" class="dialog-footer">
             <el-button size="small" type="primary" @click="deleteExaminess">删除</el-button>
-          </span>
+            <el-button size="small" type="primary" style="float: left;">确认并发送消息</el-button>
+        </span>
       </el-dialog>
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
@@ -353,7 +360,7 @@
       this.getExamData();
       this.getDictionary();
     },
-    activated(){
+    activated() {
       this.getExamData();
     },
     watch: {

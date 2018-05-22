@@ -189,15 +189,7 @@
                     </el-input>
                   </el-form-item>
                 </el-col>
-                <!--<el-col :span="20">-->
-                <!--<el-form-item label="调查对象">-->
-                <!--<el-input v-model="selectExaminees" @focus="openOrganize" size="mini" placeholder="请选择调查对象">-->
-                <!--<template slot="append">-->
-                <!--<div style="cursor: pointer;" @click="emptyExaminees">清空</div>-->
-                <!--</template>-->
-                <!--</el-input>-->
-                <!--</el-form-item>-->
-                <!--</el-col>-->
+
               </el-row>
             </el-form>
           </div>
@@ -211,18 +203,19 @@
     <div id="examineeDialog">
       <el-dialog :close-on-click-modal="false" :visible.sync="examineeDialog" title="调查对象" width="45%">
         <div>
-          <el-row :gutter="10">
-            <el-col :span="22">
-              <el-input size="mini" placeholder="请选择调查对象" v-model="selectExaminees" readOnly @focus="openOrganize">
-                <!--<template slot="append">-->
-                  <!--<div style="cursor: pointer;" @click="emptyExaminees">清空</div>-->
-                <!--</template>-->
-              </el-input>
-            </el-col>
-            <!--<el-col :span="6">-->
-              <!--<el-button type="primary" size="mini" @click="addExaminees">新增</el-button>-->
+          <!--<el-row :gutter="10">-->
+            <!--<el-col :span="22">-->
+              <!--<el-input size="mini" placeholder="请选择调查对象" v-model="selectExaminees" readOnly @focus="openOrganize">-->
+                <!--&lt;!&ndash;<template slot="append">&ndash;&gt;-->
+                  <!--&lt;!&ndash;<div style="cursor: pointer;" @click="emptyExaminees">清空</div>&ndash;&gt;-->
+                <!--&lt;!&ndash;</template>&ndash;&gt;-->
+              <!--</el-input>-->
             <!--</el-col>-->
-          </el-row>
+            <!--<el-col :span="6" style="float: right;">-->
+              <!--<el-button type="primary" size="mini" @click="openOrganize">新增</el-button>-->
+            <!--</el-col>-->
+          <!--</el-row>-->
+          <el-button type="primary" size="mini" @click="openOrganize" style="float: right;margin-bottom: 10px;margin-right: 10px;">新增</el-button>
         </div>
         <div style="margin-top: 20px;">
           <el-table
@@ -268,7 +261,8 @@
         </div>
         <span slot="footer" class="dialog-footer">
             <el-button size="small" type="primary" @click="deleteExaminess">删除</el-button>
-          </span>
+            <el-button size="small" type="primary" style="float: left;">确认并发送消息</el-button>
+        </span>
       </el-dialog>
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
