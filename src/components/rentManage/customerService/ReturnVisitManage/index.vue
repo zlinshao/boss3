@@ -122,14 +122,10 @@
               @expand-change="expandChange"
               @row-contextmenu='houseMenu'
               style="width: 100%">
-              <el-table-column type="expand" v-if="form.tag==2">
-                <template slot-scope="props" >
-                  <el-table :data="props.row.son" :show-header="false" @row-dblclick="dblClickTable">
-                    <el-table-column>
-                      <template slot-scope="scope">
-                        <span>&nbsp;&nbsp;&nbsp;</span>
-                      </template>
-                    </el-table-column>
+              <el-table-column type="expand" v-if="form.tag==2 ">
+                <template slot-scope="props">
+                  <el-table :data="props.row.son" :show-header="false" @row-dblclick="dblClickTable" style="width: 101%;max-width: 101%;">
+                    <el-table-column width="30"></el-table-column>
                     <el-table-column>
                       <template slot-scope="scope">
                         <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
@@ -287,12 +283,8 @@
               style="width: 100%">
               <el-table-column type="expand" v-if="form.tag==2">
                 <template slot-scope="props" >
-                  <el-table :data="props.row.son" :show-header="false" @row-dblclick="dblClickTable">
-                    <el-table-column>
-                      <template slot-scope="scope">
-                        <span>&nbsp;&nbsp;&nbsp;</span>
-                      </template>
-                    </el-table-column>
+                  <el-table :data="props.row.son" :show-header="false" @row-dblclick="dblClickTable" style="width: 101%;max-width: 101%;">
+                    <el-table-column width="30"></el-table-column>
                     <el-table-column>
                       <template slot-scope="scope">
                         <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
