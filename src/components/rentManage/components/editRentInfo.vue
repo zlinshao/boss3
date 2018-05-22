@@ -325,12 +325,14 @@
                             </el-select>
                           </el-form-item>
                         </el-col>
+
                         <el-col :span="6">
                           <el-form-item label="年份" required="">
                             <el-input placeholder="请输入内容" v-model="yearArray[item-1]"
                                       :disabled="(!isPc || isDoc) && !isAll"></el-input>
                           </el-form-item>
                         </el-col>
+
                         <el-col :span="6">
                           <el-form-item label="编号" required>
                             <el-input placeholder="请输入内容" v-model="receiptArray[item-1]"
