@@ -26,7 +26,7 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-form-item label="产权地址">
+                    <el-form-item label="小区别名">
                       <div class="content">
                         <span v-if="houseInfo.community">{{houseInfo.community.nickname}}</span>
                       </div>
@@ -317,26 +317,9 @@
                     <div v-for="item in receiptChangeAmount">
                       <el-row>
                         <el-col :span="6">
-                          <el-form-item label="城市" required="">
-                            <el-select clearable placeholder="城市" v-model="cityArray[item-1]" value=""
-                                       :disabled="(!isPc || isDoc) && !isAll">
-                              <el-option v-for="item in city_dic" :label="item.dictionary_name"
-                                         :value="item.dictionary_name" :key="item.id"></el-option>
-                            </el-select>
-                          </el-form-item>
-                        </el-col>
-
-                        <el-col :span="6">
-                          <el-form-item label="年份" required="">
-                            <el-input placeholder="请输入内容" v-model="yearArray[item-1]"
-                                      :disabled="(!isPc || isDoc) && !isAll"></el-input>
-                          </el-form-item>
-                        </el-col>
-
-                        <el-col :span="6">
-                          <el-form-item label="编号" required>
-                            <el-input placeholder="请输入内容" v-model="receiptArray[item-1]"
-                                      :disabled="(!isPc || isDoc) && !isAll"></el-input>
+                          <el-form-item label="收据编号" required>
+                            <el-input placeholder="请输入内容" :disabled="(!isPc || isDoc) && !isAll"
+                                      v-model="params.receipt[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
 
@@ -348,8 +331,7 @@
                       </el-row>
                     </div>
                     <div style="text-align: center">
-                      <el-button type="text" @click="addReceiptChange"
-                                 :disabled="(!isPc || isDoc) && !isAll">
+                      <el-button type="text" @click="addReceiptChange" :disabled="(!isPc || isDoc) && !isAll">
                         <i class="el-icon-circle-plus"></i>添加收据编号
                       </el-button>
                     </div>
@@ -420,11 +402,7 @@
                         <el-input placeholder="请输入内容" v-model="params.manage_fee"></el-input>
                       </el-form-item>
                     </el-col>
-                    <!--<el-col :span="6">-->
-                      <!--<el-form-item label="收据编号">-->
-                        <!--<el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" v-model="params.receipt"></el-input>-->
-                      <!--</el-form-item>-->
-                    <!--</el-col>-->
+
                     <el-col :span="6">
                       <el-form-item label="尾款补齐时间" required="">
                         <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
@@ -631,7 +609,6 @@
         house_feature_dic: [],   //房屋特色
         decorate_dic: [],        //装修
         id_type_dic: [],         //证件类型
-        city_dic: [],
         contract_type_dic: [],
         vacancy_way_dic: [],
         pay_way_dic: [],
@@ -651,12 +628,9 @@
         moneyTableChangeAmount: 1,
         moneyWayArray: [],
         moneySepArray: [],
-
-        receiptChangeAmount: 1,
-        cityArray: [],
-        yearArray: [],
-        receiptArray: [],
-
+        receiptChangeAmount : 1,
+        py: '',
+        year: '',
         //照片修改
         identity_photo: {},
         photo: {},
@@ -685,6 +659,7 @@
           this.$emit('close');
           this.clearData();
         } else {
+          this.getCurrentCity();
           this.getHouseInfo();
           this.getDetail();
           this.isClear = true;
@@ -709,10 +684,10 @@
     },
     methods: {
       getCurrentCity(){
-        this.yearArray[0] = new Date().getFullYear();
         this.$http.get(globalConfig.server + 'setting/others/ip_address').then((res) => {
-          if (res.data.code === '1000120') {
-            this.cityArray[0] = res.data.data.data[2] + '市';
+          if(res.data.code === '1000120'){
+            this.py = res.data.data.py;
+            this.year = res.data.data.year;
           }
         });
       },
@@ -733,10 +708,7 @@
           this.id_type_dic = res.data;
           this.isDictionary = true
         });
-        this.dictionary(306, 1).then((res) => {
-          this.city_dic = res.data;
-          this.isDictionary = true
-        });
+
         this.dictionary(430, 1).then((res) => {
           this.contract_type_dic = res.data;
           this.isDictionary = true
@@ -835,22 +807,19 @@
               this.moneyWayArray.push(item.money_way);
               this.moneySepArray.push(item.money_sep);
             });
+
+            //--------------------------------------------------//
+            this.params.retainage_date = data.retainage_date;
+
             if(Array.isArray(data.receipt)){
               this.receiptChangeAmount = data.receipt.length;
-              this.cityArray = [];
-              this.yearArray = [];
-              this.receiptArray = [];
-              data.receipt.forEach((item,index) => {
-                this.cityArray.push(item.raw.city);
-                this.yearArray.push(item.raw.date);
-                this.receiptArray.push(item.raw.num);
+
+              data.receipt.forEach((item) => {
+                this.params.receipt.push(item);
               });
             }else {
               this.receiptArray[0] = data.receipt;
             }
-
-            //--------------------------------------------------//
-            this.params.retainage_date = data.retainage_date;
 
             this.params.agency = data.agency;
             this.params.penalty = data.penalty;
@@ -1019,17 +988,14 @@
         this.moneySepArray.splice(item, 1);
         this.moneyTableChangeAmount--;
       },
-
       addReceiptChange(){
         this.receiptChangeAmount++;
+        this.params.receipt[this.receiptChangeAmount-1] = this.py+this.year;
       },
       deleteReceiptChange(item){
         this.receiptChangeAmount--;
-        this.cityArray.splice(item, 1);
-        this.yearArray.splice(item, 1);
-        this.receiptArray.splice(item, 1);
+        this.params.receipt.splice(item, 1);
       },
-
       //计算空置期结束时间
       computedEndDate(){
         this.$http.get(globalConfig.server+'lease/helper/rentdates?begin_date='+this.params.begin_date+'&month='
@@ -1118,17 +1084,6 @@
           this.params.money_table.push(moneyTableItem);
         }
 
-        //数据编号
-        let receiptItem = {};
-        this.params.receipt = [];
-        for (let i = 0; i < this.receiptChangeAmount; i++) {
-          receiptItem = {};
-          receiptItem.ciyt = this.cityArray[i] ? this.cityArray[i] : '';
-          receiptItem.date = this.yearArray[i] ? this.yearArray[i] : '';
-          receiptItem.num = this.receiptArray[i] ? this.receiptArray[i] : '';
-          this.params.receipt.push(receiptItem);
-        }
-
         if (!this.isUpPic) {
           this.$http.put(globalConfig.server + 'lease/rent/'+this.rentContractId, this.params).then((res) => {
             if (res.data.code === '61110') {
@@ -1176,7 +1131,7 @@
           money_sum: '',              //收款总金额
           money_table: [],            //金额+付款方式
           retainage_date: '',         //尾款补齐时间
-          receipt: [],                 //收据编号
+          receipt : [],
           agency: '',                  // 中介费
           penalty: '',                 // 赔偿金
           property: '',                // 物业费
@@ -1231,10 +1186,6 @@
         this.moneyTableChangeAmount = 1;
         this.moneyWayArray = [];
         this.moneySepArray = [];
-        this.receiptChangeAmount = 1;
-        this.cityArray = [];
-        this.yearArray = [];
-        this.receiptArray = [];
 
         this.identity_photo = {};
         this.photo = {};
@@ -1251,7 +1202,6 @@
         this.isPc = false;
         this.isDoc = false;
         this.isAll = false;
-        this.houseInfo = {};
       }
     }
   };
