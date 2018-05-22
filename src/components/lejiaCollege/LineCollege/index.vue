@@ -140,8 +140,9 @@
                 prop="score"
                 label="得分">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.score">{{scope.row.score}}</span>
-                  <span v-else>暂无</span>
+                  <span v-if="scope.row.score && scope.row.waiting.length===0">{{scope.row.score}}</span>
+                  <span v-else-if="scope.row.score && scope.row.waiting.length>0">批改中</span>
+                  <span v-else>—</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -308,7 +309,7 @@
             } else if (res.data.code === '30003') {
               //迟到
               this.$router.push({path: '/beforeExam', query: {id: id, type: 'third'}});
-            }else if (res.data.code === '30004') {
+            } else if (res.data.code === '30004') {
               //未开始
               this.$router.push({path: '/beforeExam', query: {id: id, type: 'first'}});
             } else {
