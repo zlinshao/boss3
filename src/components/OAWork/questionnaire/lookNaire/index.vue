@@ -12,16 +12,21 @@
       <div class="main">
         <div v-for="(v,k) in quesNaireData.question_set" v-if="k!=157 && k!=158">
           <div class="questionDiv" v-for="(item,key) in v">
-            <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
-            <span style="color:#6a8dfb;">
+            <span class="category_score">(
               <span v-if="k==153">单选题</span>
               <span v-if="k==154">多选题</span>
               <span v-if="k==155">不定向选择题</span>
               <span v-if="k==156">判断题</span>
-            </span>
-            <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
-               v-html="item.stem"></p>
-            <el-row :key="index" v-for="(val,index) in item.choice" style="width:96%;margin-left:44px;">
+              )</span>
+            <el-row>
+              <el-col :span="1" style="width: 50px;margin-top: -2px;">
+                <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
+              </el-col>
+              <el-col :span="15">
+                <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
+              </el-col>
+            </el-row>
+            <el-row :key="index" v-for="(val,index) in item.choice" style="width:96%;margin-left:50px;">
               <span>{{index}}：{{val}}</span><br/>
               <el-row :key="kk" v-for="(vv,kk) in statisticData[item.id] && statisticData[item.id].answer"
                       v-if="kk==index">
@@ -38,13 +43,17 @@
         </div>
         <div v-for="(v,k) in quesNaireData.question_set" v-if="k==158">
           <div class="questionDiv" v-for="(item,key) in v">
-            <span style="margin-left: 10px;width: 30px;display: inline-block;">{{item.number}}.</span>
-            <span style="color:#6a8dfb;"><span v-if="k==158">简答题</span></span>
-            <p style="width:96%;margin-left:44px;line-height:30px;padding-left:0;" class="ql-editor"
-               v-html="item.stem"></p>
+            <span class="category_score">(<span v-if="k==158">简答题</span>)</span>
+            <el-row>
+              <el-col :span="1" style="width: 50px;margin-top: -2px;">
+                <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
+              </el-col>
+              <el-col :span="15">
+                <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
+              </el-col>
+            </el-row>
             <span @click="openAll(item.id, k)"
-                  style="width:96%;margin-left:44px;color:rgb(106, 141, 251);cursor: pointer;">查看全部回答</span>
-
+                  style="width:96%;margin-left:50px;color:rgb(106, 141, 251);cursor: pointer;">查看全部回答</span>
 
           </div>
         </div>
@@ -115,6 +124,8 @@
 <style lang="scss" scoped>
   .ql-editor {
     min-height: initial !important;
+    padding: 0px;
+    margin: 0px;
   }
   #lookNaire {
     .tool {
@@ -140,9 +151,16 @@
         width: 98%;
         margin-left: 2%;
         margin-bottom: 12px;
-        min-height: 100px;
+        min-height: 90px;
         padding-top: 16px;
         border-top: 1px #eee solid;
+        .category_score {
+          color: #c0c4cc;
+          font-size: 14px;
+          float: right;
+          margin-right: 10px;
+          padding: 3px 8px;
+        }
       }
     }
   }

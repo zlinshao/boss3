@@ -5,14 +5,14 @@
         <el-form size="mini" label-width="120px">
           <el-row>
             <el-col :span="12">
-              <el-form-item label="姓名:">
+              <el-form-item label="姓名">
                 <div class="content">
                   <span>{{personal.name}}</span>
                 </div>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="片区:">
+              <el-form-item label="片区">
                 <div class="content">
                   <span>{{department}}</span>
                 </div>
@@ -21,19 +21,19 @@
           </el-row>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="入职时间:">
+              <el-form-item label="入职时间">
                 <div class="content">
                   <span>{{personal.detail && personal.detail.enroll}}</span>
                 </div>
               </el-form-item>
             </el-col>
-            <!--<el-col :span="12">-->
-              <!--<el-form-item label="上月溢出业绩:">-->
-                <!--<div class="content">-->
-                  <!--<span></span>-->
-                <!--</div>-->
-              <!--</el-form-item>-->
-            <!--</el-col>-->
+            <el-col :span="12">
+              <el-form-item label="上月溢出业绩">
+                <div class="content">
+                  <span>暂无数据</span>
+                </div>
+              </el-form-item>
+            </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">

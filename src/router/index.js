@@ -14,7 +14,7 @@ import JointRentManage from '../components/rentManage/jointRentManage/index.vue'
 
 //客服中心
 import ExpenseAccount from '../components/customService/expenseAccount/index.vue'   //报销
-import CustomerService from '../components/rentManage/customerService/index.vue'                //回访
+import CustomerService from '../components/rentManage/customerService/ReturnVisitManage/index.vue'                //回访
 
 // import ContractManage from '../components/rentManage/datumMessage/contractManage/index1.vue'
 // import ClientManage from '../components/rentManage/datumMessage/clientManage/index1.vue'
@@ -179,6 +179,9 @@ import VisitRecord from '../components/rentManage/components/visitRecord.vue';  
 import IncompleteRecord from '../components/rentManage/datumMessage/contractManage/incompleteRecord.vue'; //合同不齐记录
 
 import ReportManage from '../components/reportManage/index.vue'
+import BeforeExam from '../components/lejiaCollege/OnlineExam/beforeExam.vue'  //开考之前
+import BeforeNaire from '../components/lejiaCollege/OnlineExam/beforeNaire.vue'  //开考之前
+import MyNaire from '../components/OAWork/questionnaire/myNaire/myNaire.vue'  //我的调查列表
 
 Vue.use(Router);
 
@@ -296,6 +299,9 @@ export default new Router({
         {path: '/lookNaire', component: LookNaire, name: "调查统计"},
         {path: '/answerAll', component: AnswerAll, name: "所有回答"},
         {path: '/answerNaire', component: AnswerNaire, name: "问卷作答"},
+        {path: '/beforeExam', component: BeforeExam, name: "即将开考"},
+        {path: '/beforeNaire', component: BeforeNaire, name: "即将开始"},
+        {path: '/myNaire', component: MyNaire, name: "我的调查"},
 
 
       ]

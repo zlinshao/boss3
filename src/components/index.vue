@@ -251,6 +251,33 @@
                     </div>
                   </el-col>
                 </el-row>
+                <el-row>
+                  <el-col :span="10" class="checkUp">
+                    <div class="navigationLeft">
+                      <el-dropdown-item @click.native="goBefore('beforeExam')" style="padding: 0">
+                        <div class="msgCenter" style="display: -webkit-box;">
+                          <i class="el-icon-tickets"></i>
+                          <div class="msgTitle">
+                            <span>我的考试</span>
+                            <span v-if="examData && examData.id" class="circle_red"></span></div>
+                        </div>
+                      </el-dropdown-item>
+                    </div>
+                  </el-col>
+                  <!--<el-col :span="10" class="checkUp" :offset="4">-->
+                    <!--<div class="navigationLeft">-->
+                      <!--<el-dropdown-item @click.native="goBefore('beforeNaire')" style="padding: 0">-->
+                        <!--<div class="msgCenter" style="display: -webkit-box;">-->
+                          <!--<i class="el-icon-document" style="color: #58D788;"></i>-->
+                          <!--<div class="msgTitle">-->
+                            <!--<span>问卷调查</span>-->
+                            <!--<span v-if="questionnaireData && questionnaireData.id" class="circle_red"></span>-->
+                          <!--</div>-->
+                        <!--</div>-->
+                      <!--</el-dropdown-item>-->
+                    <!--</div>-->
+                  <!--</el-col>-->
+                </el-row>
               </div>
               <el-dropdown-item class="detrusion" @click.native="routers('/login')">
                 <div>
@@ -332,13 +359,14 @@
             :data="questionNaireData"
             :empty-text='tableStatus'
             v-loading="tableLoading"
+            max-height="400"
             element-loading-text="拼命加载中"
             element-loading-spinner="el-icon-loading"
             element-loading-background="rgba(255, 255, 255, 0)"
             style="width: 100%">
             <el-table-column
               prop="name"
-              label="问卷名称">
+              label="标题">
               <template slot-scope="scope">
                 <span v-if="scope.row.name">{{scope.row.name}}</span>
                 <span v-else>暂无</span>
@@ -439,7 +467,7 @@
 
         setLockPwdDialog: false,
         instructionDialog: false, //功能说明
-        ReadingDialog:false,  //导读
+        ReadingDialog: false,  //导读
         dictionary2: [], //二级密码所需模块
         chinese: [],
         unlockSecondPWDialog: false,
@@ -459,6 +487,8 @@
         tableStatus: ' ',
         tableLoading: false,
         quesNaireDialog: false,
+        examData: {},
+        questionnaireData: {},
       };
     },
     computed: {
@@ -521,13 +551,13 @@
             .then(res => {
               if (res.data.code === "50040") {
                 this.yanFirstInfo = res.data.data;
-                if(res.data.data.type == 2){
+                if (res.data.data.type == 2) {
                   this.yanFirstDialog = true;
                 }
-                else if( res.data.data.type == 1 && res.data.data.album.image_pic.length >0){
+                else if (res.data.data.type == 1 && res.data.data.album.image_pic.length > 0) {
                   this.ReadingDialog = true;
                 }
-                
+
               }
             });
           //制度弹窗
@@ -571,34 +601,30 @@
         .then(res => {
           if (res.data.code === "50040") {
             this.yanFirstInfo = res.data.data;
-                if(res.data.data.type == 2){
-                  this.yanFirstDialog = true;
-                }
-                else if( res.data.data.type == 1 && res.data.data.album.image_pic.length >0 ){
-                  this.ReadingDialog = true;
-                }
+            if (res.data.data.type == 2) {
+              this.yanFirstDialog = true;
+            }
+            else if (res.data.data.type == 1 && res.data.data.album.image_pic.length > 0) {
+              this.ReadingDialog = true;
+            }
           }
         });
 
     },
     mounted() {
       //初始化个人信息
-      
       this.personal = JSON.parse(localStorage.personal);
       //鼠标滑动监听
       let _this = this;
       $(document).mousemove(function () {
         _this.clickScreen();
       });
-
-      this.$http
-        .get(globalConfig.server + "oa/portal/last")
-        .then(res => {
-          if (res.data.code === "800110") {
-            this.institutionMore = res.data.data;
-            this.institutionDialog = true;
-          }
-        });
+      this.$http.get(globalConfig.server + "oa/portal/last").then(res => {
+        if (res.data.code === "800110") {
+          this.institutionMore = res.data.data;
+          this.institutionDialog = true;
+        }
+      });
       //根据个人信息进行操作事项
       this.initData();
       //多页面锁屏
@@ -612,9 +638,15 @@
       this.getUnReadMessage();
       //调查问卷
       // this.getQuesNaireData();
+      //个人门户下的考试和调查5分钟轮询一次
+      this.getExamNaireRedCircle();
+      setTimeout(() => {
+        this.getExamNaireRedCircle();
+      }, 60 * 1000);
     },
     activated() {
       //初始化个人信息
+      this.confirmArrival = localStorage.getItem('confirmArrival');
       this.personal = JSON.parse(localStorage.personal);
       //鼠标滑动监听
       let _this = this;
@@ -634,9 +666,37 @@
       this.getUnreadTermly();
     },
     methods: {
+      goBefore(val) {
+        this.getExamNaireRedCircle();
+        if (val === 'beforeExam') {
+          if (this.examData.available) {
+            // this.$router.push({path: '/answerExam', query: {id: this.examData.id}});
+            if (this.confirmArrival && this.confirmArrival.length > 0 && this.confirmArrival.indexOf(this.examData.id) > -1) {
+              this.$router.push({path: '/answerExam', query: {id: this.examData.id}});
+            } else {
+              this.$http.post(globalConfig.server + 'exam/check_in/' + this.examData.id).then((res) => {
+                if (res.data.code === '30000') {
+                  let arr = [];
+                  arr.push(this.examData.id);
+                  localStorage.setItem('confirmArrival', arr);  //保存已到场的考试id
+                  this.$router.push({path: '/answerExam', query: {id: this.examData.id}});
+                }
+              });
+            }
+          } else {
+            this.$router.push({path: '/beforeExam', query: {id: this.examData.id}});
+          }
+        } else {
+          if (this.questionnaireData.available) {
+            this.$router.push({path: '/answerNaire', query: {id: this.questionnaireData.id}});
+          } else {
+            this.$router.push({path: '/beforeNaire', query: {id: this.examData.id}});
+          }
+        }
+      },
       answerNaire(id) {
         this.quesNaireDialog = false;
-        setTimeout(()=>{
+        setTimeout(() => {
           this.$router.push({path: '/answerNaire', query: {id: id}});
         }, 0);
       },
@@ -650,6 +710,18 @@
           } else {
             this.questionNaireData = [];
             this.quesNaireDialog = false;
+          }
+        });
+      },
+      getExamNaireRedCircle() {
+        this.$http.get(globalConfig.server + 'exam/active').then((res) => {
+          if (res.data.code === '30000') {
+            this.examData = res.data.data;
+          }
+        });
+        this.$http.get(globalConfig.server + 'questionnaire/active').then((res) => {
+          if (res.data.code === '30000') {
+            this.questionnaireData = res.data.data;
           }
         });
       },
@@ -795,7 +867,7 @@
         this.unlockSecondPWDialog = false;
         this.badgeDialog = false;
       },
-      readcloseModal(){
+      readcloseModal() {
         this.ReadingDialog = false;
       },
       //二级密码回调
@@ -943,6 +1015,14 @@
 </script>
 
 <style lang="scss" scoped="">
+  .circle_red {
+    width: 5px;
+    height: 5px;
+    background: red;
+    display: inline-block;
+    border-radius: 50%;
+  }
+
   @mixin border_radius($n) {
     -webkit-border-radius: $n;
     -moz-border-radius: $n;

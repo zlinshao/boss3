@@ -749,7 +749,7 @@
   import Organization from '../../../common/organization.vue';
   import EditRentInfo from '../../components/editRentInfo'
   import EditHouseResources from '../../components/editHouseResources'
-  import AddReturnvisit from "../../../../components/rentManage/customerService/addReturnvisit.vue";   //添加回访
+  import AddReturnvisit from "../../customerService/ReturnVisitManage/addReturnvisit.vue";   //添加回访
 
   export default {
     name: 'hello',

@@ -1,5 +1,5 @@
 <template>
-  <div @click="show=false" @contextmenu="closeMenu">
+  <div id="quesNaireManage" @click="show=false" @contextmenu="closeMenu">
     <div class="highRanking" style=" position: absolute; top: 120px; right: 20px;">
       <div class="highSearch">
         <el-form :inline="true" size="mini">
@@ -234,18 +234,24 @@
     <div id="examineeDialog">
       <el-dialog :close-on-click-modal="false" :visible.sync="examineeDialog" title="考生信息" width="45%">
         <div>
-          <el-row :gutter="10">
-            <el-col :span="18">
-              <el-input size="mini" placeholder="请选择考生" v-model="selectExaminees" readOnly @focus="openOrganize">
-                <template slot="append">
-                  <div style="cursor: pointer;" @click="emptyExaminees">清空</div>
-                </template>
-              </el-input>
-            </el-col>
-            <el-col :span="6">
-              <el-button type="primary" size="mini" @click="addExaminees">新增</el-button>
-            </el-col>
-          </el-row>
+          <!--<el-row :gutter="10">-->
+          <!--<el-col :span="4">-->
+          <!--&lt;!&ndash;<el-input size="mini" placeholder="请选择考生" v-model="selectExaminees" readOnly @focus="openOrganize">&ndash;&gt;-->
+          <!--&lt;!&ndash;<template slot="append">&ndash;&gt;-->
+          <!--&lt;!&ndash;<div style="cursor: pointer;" @click="emptyExaminees">清空</div>&ndash;&gt;-->
+          <!--&lt;!&ndash;</template>&ndash;&gt;-->
+          <!--&lt;!&ndash;</el-input>&ndash;&gt;-->
+          <!--<el-col :span="6"  style="margin-left: 30px;">-->
+          <!--<el-button type="primary" size="mini" @click="deleteExaminess" plain>删除</el-button>-->
+          <!--</el-col>-->
+          <!--</el-col>-->
+          <!--<el-col :span="6" style="float: right;">-->
+          <!--<el-button type="primary" size="mini" @click="openOrganize">新增</el-button>-->
+          <!--</el-col>-->
+          <!--</el-row>-->
+          <el-button type="primary" size="mini" @click="openOrganize"
+                     style="float: right;margin-bottom: 10px;margin-right: 10px;">新增
+          </el-button>
         </div>
         <div style="margin-top: 20px;">
           <el-table
@@ -256,6 +262,11 @@
             element-loading-spinner="el-icon-loading"
             element-loading-background="rgba(255, 255, 255, 0)"
             style="width: 100%">
+            <el-table-column width="65">
+              <template slot-scope="scope">
+                <el-checkbox :label="scope.row.pivot.examinee_id" v-model="examinees"></el-checkbox>
+              </template>
+            </el-table-column>
             <el-table-column
               prop="real_name"
               label="考生姓名">
@@ -274,6 +285,10 @@
             </el-table-column>
           </el-table>
         </div>
+        <span slot="footer" class="dialog-footer">
+            <el-button size="small" type="primary" @click="deleteExaminess">删除</el-button>
+            <el-button size="small" type="primary" style="float: left;" @click="confirmSend">确认并发送消息</el-button>
+        </span>
       </el-dialog>
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
@@ -337,11 +352,16 @@
         examineesData: [],
         selectExaminees: '',
         selectExamineeIds: [],
+        examinees: [],
+        examiness_name: [],
       };
     },
     mounted() {
       this.getExamData();
       this.getDictionary();
+    },
+    activated() {
+      this.getExamData();
     },
     watch: {
       examDialog(val) {
@@ -350,7 +370,7 @@
           if (this.examId) {
             this.examTitle = '编辑考试';
             this.getExamDetail();
-          }else{
+          } else {
             this.examTitle = '新建考试';
           }
         }
@@ -388,9 +408,68 @@
           }
         }
       },
+      examineeDialog(val) {
+        if (val) {
+          this.emptyExaminees();
+          this.examinees = [];
+        }
+      },
     },
     methods: {
-      search(){
+      confirmSend() {
+        this.$confirm('确认发送吗?确认后，该试卷的所有信息，包括试题、场次、考生设置，均不可再修改！系统会已消息形式通知考生', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(globalConfig.server + 'exam/lock/' + this.examId).then((res) => {
+            if (res.data.code === '30000') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          }).catch(() => {
+            this.$notify.info({
+              title: '提示',
+              message: '已取消发送'
+            });
+          });
+        });
+      },
+      deleteExaminess() {
+        this.$confirm('确认移除该考生吗?如确认，删除后系统会已消息形式通知考生', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(globalConfig.server + '/exam/banish/' + this.examId, {examinees: this.examinees}).then((res) => {
+            if (res.data.code === '30010') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.getExamDetail();
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }).catch(() => {
+          this.$notify.info({
+            title: '提示',
+            message: '已取消移除'
+          });
+        });
+      },
+      search() {
         this.params.page = 1;
         this.getExamData();
       },
@@ -407,33 +486,50 @@
       //打开选人组件
       openOrganize() {
         this.organizationDialog = true;
-        this.organizeType = 'staff';
+        // this.organizeType = 'staff';
       },
       selectMember(val) {
+        this.examiness_name = [];
         this.selectExaminees = '';
         this.selectExamineeIds = [];
-        let names = [];
         val.forEach((item) => {
-          this.selectExamineeIds.push(item.id);
-          names.push(item.name);
+          if (typeof item.avatar != 'undefined') {
+            //选的是人
+            this.selectExamineeIds.push(item.id);
+            this.examiness_name.push(item.name);
+          } else {
+            //选的部门
+            this.$http.get(globalConfig.server + 'manager/staff?is_recursion=1&page=1&limit=500&org_id=' + item.id).then((res) => {
+              if (res.data.code === '10000') {
+                let data = res.data.data.data;
+                data.forEach((value) => {
+                  this.selectExamineeIds.push(value.id);
+                  this.examiness_name.push(value.name);
+                  this.selectExaminees = '';
+                  this.selectExaminees = this.examiness_name.join(',');
+                });
+              }
+            });
+          }
         });
-        this.selectExaminees = names.join(',');
-        this.organizeType = '';
+        this.selectExaminees = this.examiness_name.join(',');
+        this.addExaminees();
       },
-      emptyExaminees(){
+      emptyExaminees() {
         this.selectExaminees = '';
         this.selectExamineeIds = [];
+        this.examiness_name = [];
       },
-      addExaminees(){
-        this.$http.post(globalConfig.server+ 'exam/batch_enroll/'+ this.examId,{examinees: this.selectExamineeIds}).then((res)=>{
-          if(res.data.code === '30010'){
+      addExaminees() {
+        this.$http.post(globalConfig.server + 'exam/batch_enroll/' + this.examId, {examinees: this.selectExamineeIds}).then((res) => {
+          if (res.data.code === '30010') {
             this.$notify.success({
               title: '成功',
               message: res.data.msg
             });
             this.getExamDetail();
             this.emptyExaminees();
-          }else{
+          } else {
             this.$notify.warning({
               title: '警告',
               message: res.data.msg
@@ -545,11 +641,6 @@
             headIcon: "el-icon-view",
             label: "查看/添加考生"
           },
-          // {
-          //   clickIndex: "informExaminee",
-          //   headIcon: "el-icons-fa-mail-reply",
-          //   label: "通知考生"
-          // }
         ];
         let e = event || window.event; //support firefox contextmenu
         this.show = false;
@@ -595,8 +686,8 @@
                 }
               });
             }).catch(() => {
-              this.$message({
-                type: "info",
+              this.$notify.info({
+                title: "提示",
                 message: "已取消删除"
               });
             });
@@ -605,12 +696,6 @@
             this.examineeDialog = true;
             this.getExamDetail();
             break;
-
-          case 'informExaminee':
-
-            break;
-
-
         }
       },
       //关闭右键菜单
@@ -648,7 +733,8 @@
         };
 
       },
-    },
+    }
+    ,
 
   }
 </script>
@@ -669,5 +755,6 @@
       display: block;
       margin-top: 20px;
     }
+
   }
 </style>
