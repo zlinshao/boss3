@@ -812,13 +812,14 @@
             this.params.retainage_date = data.retainage_date;
 
             if(Array.isArray(data.receipt)){
-              this.receiptChangeAmount = data.receipt.length;
+              this.receiptChangeAmount = data.receipt.length ? data.receipt.length : 1;
 
               data.receipt.forEach((item) => {
                 this.params.receipt.push(item);
               });
             }else {
               this.receiptArray[0] = data.receipt;
+              this.receiptChangeAmount = 1;
             }
 
             this.params.agency = data.agency;
