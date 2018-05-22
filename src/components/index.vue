@@ -254,24 +254,24 @@
                 <el-row>
                   <el-col :span="10" class="checkUp">
                     <div class="navigationLeft">
-                      <el-dropdown-item @click.native="routers('beforeExam')" style="padding: 0">
+                      <el-dropdown-item @click.native="goBefore('beforeExam')" style="padding: 0">
                         <div class="msgCenter" style="display: -webkit-box;">
                           <i class="el-icon-tickets"></i>
                           <div class="msgTitle">
                             <span>我的考试</span>
-                            <span v-if="examId" class="circle_red"></span></div>
+                            <span v-if="examData && examData.id" class="circle_red"></span></div>
                         </div>
                       </el-dropdown-item>
                     </div>
                   </el-col>
                   <el-col :span="10" class="checkUp" :offset="4">
                     <div class="navigationLeft">
-                      <el-dropdown-item @click.native="routers('beforeNaire')" style="padding: 0">
+                      <el-dropdown-item @click.native="goBefore('beforeNaire')" style="padding: 0">
                         <div class="msgCenter" style="display: -webkit-box;">
                           <i class="el-icon-document" style="color: #58D788;"></i>
                           <div class="msgTitle">
                             <span>问卷调查</span>
-                            <span v-if="questionnaireId" class="circle_red"></span>
+                            <span v-if="questionnaireData && questionnaireData.id" class="circle_red"></span>
                           </div>
                         </div>
                       </el-dropdown-item>
@@ -487,8 +487,8 @@
         tableStatus: ' ',
         tableLoading: false,
         quesNaireDialog: false,
-        examId: '',
-        questionnaireId: '',
+        examData: {},
+        questionnaireData: {},
       };
     },
     computed: {
@@ -642,7 +642,7 @@
       this.getExamNaireRedCircle();
       setTimeout(() => {
         this.getExamNaireRedCircle();
-      }, 5 * 1000 * 60);
+      }, 60 * 1000);
     },
     activated() {
       //初始化个人信息
@@ -665,6 +665,22 @@
       this.getUnreadTermly();
     },
     methods: {
+      goBefore(val){
+        this.getExamNaireRedCircle();
+        if(val==='beforeExam'){
+          if(this.examData.available){
+            this.$router.push({path: '/answerExam', query: {id: this.examData.id}});
+          }else{
+            this.$router.push({path: '/beforeExam'});
+          }
+        }else{
+          if(this.questionnaireData.available){
+            this.$router.push({path: '/answerNaire', query: {id: this.questionnaireData.id}});
+          }else{
+            this.$router.push({path: '/beforeNaire'});
+          }
+        }
+      },
       answerNaire(id) {
         this.quesNaireDialog = false;
         setTimeout(() => {
@@ -687,12 +703,12 @@
       getExamNaireRedCircle() {
         this.$http.get(globalConfig.server + 'exam/active').then((res) => {
           if (res.data.code === '30000') {
-            this.examId = res.data.data && res.data.data.id;
+            this.examData = res.data.data;
           }
         });
         this.$http.get(globalConfig.server + 'questionnaire/active').then((res) => {
           if (res.data.code === '30000') {
-            this.questionnaireId = res.data.data && res.data.data.id;
+            this.questionnaireData = res.data.data;
           }
         });
       },
