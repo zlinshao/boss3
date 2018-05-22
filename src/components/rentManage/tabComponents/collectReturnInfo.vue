@@ -10,45 +10,67 @@
       @row-contextmenu='houseMenu'
       @row-dblclick = 'dblClickTable'
       style="width: 100%">
+
+      <el-table-column
+        label="合同编号">
+        <template slot-scope="scope">
+                    <span v-if="scope.row.contract_id && scope.row.contract_id.constructor === Object">
+                      {{scope.row.contract_id.contract_number}}
+                    </span>
+          <span v-else="">/</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="房屋地址">
+        <template slot-scope="scope">
+                    <span v-if="scope.row.contract_id && scope.row.contract_id.constructor === Object
+                          &&scope.row.contract_id.house">
+                      {{scope.row.contract_id.house.name}}
+                    </span>
+          <span v-else="">/</span>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="check_time"
         label="退房时间">
       </el-table-column>
       <el-table-column
         prop="check_types"
-        label="退房状态">
+        label="退房性质">
       </el-table-column>
-
-
-      <!--<el-table-column-->
-        <!--prop="pay_type"-->
-        <!--label="结算详情">-->
-      <!--</el-table-column>-->
       <el-table-column
         label="总费用">
         <template slot-scope="scope">
-          <span v-if="scope.row.details">{{scope.row.details.total_fees}}</span>
+                    <span v-if="scope.row.details && scope.row.details.total_fees">
+                      {{scope.row.details.total_fees}}
+                    </span>
           <span v-else="">/</span>
         </template>
       </el-table-column>
       <el-table-column
         label="应退费用">
         <template slot-scope="scope">
-          <span v-if="scope.row.details">{{scope.row.details.should_be_returned_fees}}</span>
+                    <span v-if="scope.row.details&&scope.row.details.should_be_returned_fees">
+                      {{scope.row.details.should_be_returned_fees}}
+                    </span>
           <span v-else="">/</span>
         </template>
       </el-table-column>
       <el-table-column
         label="能源费用">
         <template slot-scope="scope">
-          <span v-if="scope.row.details">{{scope.row.details.deduct_energy_fees}}</span>
+                    <span v-if="scope.row.details&&scope.row.details.deduct_energy_fees">
+                      {{scope.row.details.deduct_energy_fees}}
+                    </span>
           <span v-else="">/</span>
         </template>
       </el-table-column>
       <el-table-column
         label="其他费用">
         <template slot-scope="scope">
-          <span v-if="scope.row.details">{{scope.row.details.others_fees}}</span>
+                    <span v-if="scope.row.details&&scope.row.details.others_fees">
+                      {{scope.row.details.others_fees}}
+                    </span>
           <span v-else="">/</span>
         </template>
       </el-table-column>
@@ -68,12 +90,13 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="结算状态">
+        label="退租状态">
         <template slot-scope="scope">
-          <span v-if="scope.row.status == 2">已结算</span>
-          <el-button size="mini" type="primary" v-else="" @click="check_out(scope.row.id)">未结算</el-button>
+          <span v-if="scope.row.status == 2">已退租</span>
+          <el-button size="mini" type="primary" v-else="" @click="check_out(scope.row.id)">退租中</el-button>
         </template>
       </el-table-column>
+
     </el-table>
 
     <div class="pagination">
