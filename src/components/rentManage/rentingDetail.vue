@@ -105,7 +105,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="小区别名">
+                <el-form-item label="产权地址">
                   <div class="content">{{contractInfo.community_nickname}}</div>
                 </el-form-item>
               </el-col>
@@ -153,27 +153,23 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="楼层">
-                  <div class="content">{{contractInfo.floor}}</div>
+                  <div class="content">{{contractInfo.floor}}/{{contractInfo.floors}}</div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
-                <el-form-item label="楼层数">
-                  <div class="content">{{contractInfo.floors}}</div>
-                </el-form-item>
-              </el-col>
+
               <el-col :span="8">
                 <el-form-item label="房屋类型">
                   <div class="content">{{matchDictionary(contractInfo.property_type)}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="房屋特色">
-                  <div class="content">{{matchDictionary(contractInfo.house_feature)}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
+            <!--<el-row>-->
+              <!--<el-col :span="8">-->
+                <!--<el-form-item label="房屋特色">-->
+                  <!--<div class="content">{{matchDictionary(contractInfo.house_feature)}}</div>-->
+                <!--</el-form-item>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
           </el-form>
         </div>
 
@@ -236,12 +232,24 @@
                   <div class="content">{{contractInfo.contract_number}}</div>
                 </el-form-item>
               </el-col>
+              <el-col :span="8">
+                <el-form-item label="合同性质">
+                  <div class="content">
+                    <span v-if="contractInfo.type==1">新租</span>
+                    <span v-else-if="contractInfo.type==2">转租</span>
+                    <span v-else-if="contractInfo.type==3">续租</span>
+                    <span v-else-if="contractInfo.type==4">未收先租</span>
+                    <span v-else-if="contractInfo.type==5">调租</span>
+                    <span v-else="">/</span>
+                  </div>
+                </el-form-item>
+              </el-col>
             </el-row>
 
             <el-row>
               <el-col :span="8">
-                <el-form-item label="签约时长(月)">
-                  <div class="content">{{contractInfo.month}}</div>
+                <el-form-item label="签约时长">
+                  <div class="content">{{contractInfo.month}}月{{contractInfo.day}}天</div>
                 </el-form-item>
               </el-col>
 
@@ -673,7 +681,7 @@
               <el-col :span="8">
                 <el-form-item label="合同周期">
                   <div class="content">{{repairDetail.contract_month}}月{{repairDetail.contract_day}}天
-                  </div>                  
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -713,7 +721,7 @@
                       {{repairDetail.unit_price[1][index-1]}}元
                        <span v-show="index<priceLen-1">;</span>
                     </span>
-                  </div>   
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -721,7 +729,7 @@
                   <div class="content">
                     <span v-for="index in payForLen" :key="index+55" v-if="index>0">
                       {{repairDetail.pay_type[0][index-1][0]}}-{{repairDetail.pay_type[0][index-1][1]}},
-                      押{{repairDetail.pay_type[1][index-1]}}付{{repairDetail.pay_type[2][index-1]}}                 
+                      押{{repairDetail.pay_type[1][index-1]}}付{{repairDetail.pay_type[2][index-1]}}
                       <span v-show="index<payForLen-1">;</span>
                     </span>
                   </div>
@@ -739,13 +747,13 @@
                   <div class="content">
                     <span v-for="index in payTypeLen" :key="index+111" v-if="index>0">
                     <span v-for="item in payTypeInfo" :key="item.id" v-if="repairDetail.pay_method[0][index-1] == item.id">
-                      {{item.dictionary_name}},{{repairDetail.pay_method[1][index-1]}}</span>              
+                      {{item.dictionary_name}},{{repairDetail.pay_method[1][index-1]}}</span>
                       <span v-show="index<payTypeLen-1">;</span>
                     </span>
                   </div>
                 </el-form-item>
               </el-col>
-            </el-row> 
+            </el-row>
             <el-row>
               <el-col :span="8">
                 <el-form-item label="是否收取其他费用" >
@@ -955,7 +963,7 @@
         form: {
             contract_id : '',
             module:2
-        },        
+        },
         priceLen: 0,
         payForLen: 0,
         payTypeLen: 0,
@@ -1306,8 +1314,8 @@
             } else {
               this.repairDetail.has_extra = "否";
             }
-          } 
-        });        
+          }
+        });
       },
       getImgId(data){
         let arr = [];

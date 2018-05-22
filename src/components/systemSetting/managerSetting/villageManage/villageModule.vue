@@ -53,8 +53,8 @@
             </el-col>
           </el-row>
 
-          <el-form-item label="小区别名">
-            <el-input v-model="form.otherName" placeholder="请输入小区别名"></el-input>
+          <el-form-item label="产权地址">
+            <el-input v-model="form.otherName" placeholder="请输入产权地址"></el-input>
           </el-form-item>
 
           <!--<el-col :span="4">-->
@@ -155,7 +155,7 @@
           region: '',                   //小区位置
           villageName: '',              //小区名称
           villageAddress: '',           //小区地址
-          otherName: '',                //小区别名
+          otherName: '',                //产权地址
           built_year: '',               //建筑年限
           houseType: '',                //房屋类型
           allBuilding: '',              //总栋数
@@ -335,7 +335,7 @@
         this.form.region = '';                   //小区位置
         this.form.villageName = '';              //小区名称
         this.form.villageAddress = '';           //小区地址
-        this.form.otherName = '';                //小区别名
+        this.form.otherName = '';                //产权地址
         this.form.built_year = '';               //建筑年限
         this.form.houseType = '';                //房屋类型
         this.form.allBuilding = '';              //总栋数

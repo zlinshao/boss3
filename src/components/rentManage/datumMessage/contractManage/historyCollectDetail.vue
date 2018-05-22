@@ -106,7 +106,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="小区别名">
+                <el-form-item label="产权地址">
                   <div class="content">{{contractInfo.community_nickname}}</div>
                 </el-form-item>
               </el-col>
