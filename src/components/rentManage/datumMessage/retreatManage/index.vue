@@ -11,9 +11,9 @@
                 </template>
               </el-input>
             </el-form-item>
-            <!--<el-form-item>-->
-              <!--<el-button type="primary" size="mini" @click="highGrade">高级</el-button>-->
-            <!--</el-form-item>-->
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+            </el-form-item>
           </el-form>
         </div>
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
@@ -25,20 +25,34 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">跟进状态</div>
+                    <div class="el_col_label">退租时间</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
-
+                    <el-form-item>
+                      <el-date-picker
+                        v-model="params.check_time"
+                        type="daterange"
+                        value-format="yyyy-MM-dd"
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期">
+                      </el-date-picker>
+                    </el-form-item>
                   </el-col>
                 </el-row>
               </el-col>
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">跟进人</div>
+                    <div class="el_col_label">退房状态</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
-
+                    <el-form-item>
+                      <el-select clearable  v-model="params.status" placeholder="室" value="">
+                        <el-option label="退租中" value="1"></el-option>
+                        <el-option label="已退租" value="2"></el-option>
+                      </el-select>
+                    </el-form-item>
                   </el-col>
                 </el-row>
               </el-col>
@@ -68,12 +82,31 @@
                 @row-contextmenu='houseMenu'
                 style="width: 100%">
                 <el-table-column
+                  label="合同编号">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.contract_id && scope.row.contract_id.constructor === Object">
+                      {{scope.row.contract_id.contract_number}}
+                    </span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="房屋地址">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.contract_id && scope.row.contract_id.constructor === Object
+                          &&scope.row.contract_id.house">
+                      {{scope.row.contract_id.house.name}}
+                    </span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
                   prop="check_time"
                   label="退房时间">
                 </el-table-column>
                 <el-table-column
                   prop="check_types"
-                  label="退房状态">
+                  label="退房性质">
                 </el-table-column>
                 <el-table-column
                   label="总费用">
@@ -127,10 +160,10 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  label="结算状态">
+                  label="退租状态">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.status == 2">已结算</span>
-                    <el-button size="mini" type="primary" v-else="" @click="check_out(scope.row.id)">未结算</el-button>
+                    <span v-if="scope.row.status == 2">已退租</span>
+                    <el-button size="mini" type="primary" v-else="" @click="check_out(scope.row.id)">退租中</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -148,12 +181,31 @@
                 @row-contextmenu='houseMenu'
                 style="width: 100%">
                 <el-table-column
+                  label="合同编号">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.contract_id && scope.row.contract_id.constructor === Object">
+                      {{scope.row.contract_id.contract_number}}
+                    </span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="房屋地址">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.contract_id && scope.row.contract_id.constructor === Object
+                          &&scope.row.contract_id.house">
+                      {{scope.row.contract_id.house.name}}
+                    </span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
                   prop="check_time"
                   label="退房时间">
                 </el-table-column>
                 <el-table-column
                   prop="check_types"
-                  label="退房状态">
+                  label="退房性质">
                 </el-table-column>
                 <el-table-column
                   label="总费用">
@@ -207,10 +259,10 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  label="结算状态">
+                  label="退租状态">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.status == 2">已结算</span>
-                    <el-button size="mini" type="primary" v-else="" @click="check_out(scope.row.id)">未结算</el-button>
+                    <span v-if="scope.row.status == 2">已退租</span>
+                    <el-button size="mini" type="primary" v-else="" @click="check_out(scope.row.id)">退租中</el-button>
                   </template>
                 </el-table-column>
               </el-table>
@@ -264,6 +316,8 @@
           limit: 12,
           module : 1,
           contract_id: '',
+          check_time : [],
+          status : '',
         },
 
         tableData: [],
@@ -342,11 +396,13 @@
         this.isHigh = !this.isHigh;
       },
       search() {
+        this.isHigh = false;
         this.params.pages = 1;
         this.getData();
       },
       resetting() {
-
+        this.params.check_time = [];
+        this.params.status = '';
       },
       openAddressDialog() {
         this.addressDialog = true;
