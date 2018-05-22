@@ -312,7 +312,7 @@
                     </div>
                   </div>
 
-                  <div class="title">收据编号{{cityArray}}</div>
+                  <div class="title">收据编号</div>
                   <div class="form_border">
                     <div v-for="item in receiptChangeAmount">
                       <el-row>
