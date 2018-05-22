@@ -44,7 +44,7 @@
         countDown: 0,
         timeString: '09:59:59',
         timeClear: '',
-
+        examDataTime: '',
       };
     },
     activated() {
@@ -52,20 +52,27 @@
       this.confirmArrival = localStorage.getItem('confirmArrival');
       this.getQueryData();
       clearTimeout(this.timeClear);
+      clearTimeout(this.examDataTime);
     },
     watch: {
       examId(val) {
         if (val) {
           this.getExamData();
-          setTimeout(() => {
-            this.getExamData();
-          }, 60 * 1000);
         }
       },
       countDown(num) {
         clearTimeout(this.timeClear);
         if (num >= 0) {
           this.clock(num / 1000);
+        }
+      },
+      showType(val) {
+        if(val==='third'){
+          clearTimeout(this.examDataTime);
+        }else{
+          this.examDataTime = setTimeout(() => {
+            this.getExamData();
+          }, 60 * 1000);
         }
       }
     },
@@ -95,10 +102,12 @@
           if (res.data.code === '30000') {
             this.examData = res.data.data;
             if ((new Date(this.examData.start_time).getTime() - (new Date().getTime())) > 10 * 60 * 1000) {
-              this.showType = 'first';
+                this.showType = 'first';
             } else {
-              this.showType = 'second';
-              this.countDown = new Date(res.data.data.start_time).getTime() - (new Date().getTime());
+              if(this.showType!='third'){
+                this.showType = 'second';
+                this.countDown = new Date(res.data.data.start_time).getTime() - (new Date().getTime());
+              }
             }
           }
         });
