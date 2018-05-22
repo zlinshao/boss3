@@ -322,6 +322,44 @@
                     </div>
                   </div>
 
+                  <div class="title">收据编号</div>
+                  <div class="form_border">
+                    <div v-for="item in receiptChangeAmount">
+                      <el-row>
+                        <el-col :span="6">
+                          <el-form-item label="城市" required="">
+                            <el-select clearable placeholder="城市" v-model="cityArray[item-1]" value="">
+                              <el-option v-for="item in city_dic" :label="item.dictionary_name"
+                                         :value="item.dictionary_name" :key="item.id"></el-option>
+                            </el-select>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                          <el-form-item label="年份" required="">
+                            <el-input placeholder="请输入内容" v-model="yearArray[item-1]"></el-input>
+                          </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                          <el-form-item label="编号" required>
+                            <el-input placeholder="请输入内容" v-model="receiptArray[item-1]"></el-input>
+                          </el-form-item>
+                        </el-col>
+
+                        <el-col :span="6" v-if="item>1">
+                          <div class="deleteNumber">
+                            <span @click="deleteReceiptChange(item-1)">删除</span>
+                          </div>
+                        </el-col>
+                      </el-row>
+                    </div>
+                    <div style="text-align: center">
+                      <el-button type="text" @click="addReceiptChange">
+                        <i class="el-icon-circle-plus"></i>添加收据编号
+                      </el-button>
+                    </div>
+                  </div>
+
+
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="中介费">
@@ -548,7 +586,7 @@
           money_table: [],            //金额+付款方式
 
           retainage_date: '',         //尾款补齐时间
-          receipt: '',                 //收据编号
+          receipt: [],                 //收据编号
           agency: '',                  // 中介费
           penalty: '',                 // 赔偿金
           property: '',                // 物业费
@@ -596,6 +634,7 @@
         house_feature_dic: [],   //房屋特色
         decorate_dic: [],        //装修
         id_type_dic: [],         //证件类型
+        city_dic: [],
         contract_type_dic: [],
         vacancy_way_dic: [],
         pay_way_dic: [],
@@ -618,6 +657,10 @@
         moneyWayArray: [],
         moneySepArray: [],
 
+        receiptChangeAmount: 1,
+        cityArray: [],
+        yearArray: [],
+        receiptArray: [],
         //照片修改
         identity_photo: {},
         photo: {},
@@ -650,6 +693,7 @@
           this.clearData();
         } else {
           this.getDetail();
+          this.getCurrentCity();
           this.isClear = true;
           if (!this.isDictionary) {
             this.getDictionary();
@@ -671,6 +715,14 @@
       },
     },
     methods: {
+      getCurrentCity(){
+        this.yearArray[0] = new Date().getFullYear();
+        this.$http.get(globalConfig.server + 'setting/others/ip_address').then((res) => {
+          if (res.data.code === '1000120') {
+            this.cityArray[0] = res.data.data.data[2] + '市';
+          }
+        });
+      },
       getDictionary(){
         this.dictionary(409, 1).then((res) => {
           this.id_type_dic = res.data;
@@ -683,6 +735,10 @@
         });
         this.dictionary(437, 1).then((res) => {
           this.vacancy_way_dic = res.data;
+          this.isDictionary = true
+        });
+        this.dictionary(306, 1).then((res) => {
+          this.city_dic = res.data;
           this.isDictionary = true
         });
         this.dictionary(443, 1).then((res) => {
@@ -883,7 +939,15 @@
         this.moneySepArray.splice(item, 1);
         this.moneyTableChangeAmount--;
       },
-
+      addReceiptChange(){
+        this.receiptChangeAmount++;
+      },
+      deleteReceiptChange(item){
+        this.receiptChangeAmount--;
+        this.cityArray.splice(item, 1);
+        this.yearArray.splice(item, 1);
+        this.receiptArray.splice(item, 1);
+      },
       //计算空置期结束时间
       computedEndDate(){
         this.params.day = this.params.day?this.params.day:0;
@@ -971,7 +1035,16 @@
           moneyTableItem.money_sep = this.moneySepArray[i] ? this.moneySepArray[i] : '';
           this.params.money_table.push(moneyTableItem);
         }
-
+        //数据编号
+        let receiptItem = {};
+        this.params.receipt = [];
+        for (let i = 0; i < this.receiptChangeAmount; i++) {
+          receiptItem = {};
+          receiptItem.city = this.cityArray[i] ? this.cityArray[i] : '';
+          receiptItem.date = this.yearArray[i] ? this.yearArray[i] : '';
+          receiptItem.num = this.receiptArray[i] ? this.receiptArray[i] : '';
+          this.params.receipt.push(receiptItem);
+        }
         if (!this.isUpPic) {
           this.$http.post(globalConfig.server + 'lease/rent', this.params).then((res) => {
             if (res.data.code === '61110') {
@@ -1020,7 +1093,7 @@
           money_sum: '',              //收款总金额
           money_table: [],            //金额+付款方式
           retainage_date: '',         //尾款补齐时间
-
+          receipt : [],
           agency: '',                  // 中介费
           penalty: '',                 // 赔偿金
           property: '',                // 物业费
@@ -1071,6 +1144,10 @@
         this.payWayArray = [];
         this.pay_way_bet = [];
         this.payPeriodArray = [];
+        this.receiptChangeAmount = 1;
+        this.cityArray = [];
+        this.yearArray = [];
+        this.receiptArray = [];
 
         this.identity_photo = {};
         this.photo = {};

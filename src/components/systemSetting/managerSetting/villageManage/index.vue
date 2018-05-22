@@ -160,7 +160,7 @@
       </el-table-column>
       <el-table-column
         prop="village_alias"
-        label="小区别名">
+        label="产权地址">
       </el-table-column>
       <el-table-column
         prop="house_types"
