@@ -44,23 +44,28 @@
         countDown: 0,
         timeString: '09:59:59',
         timeClear: '',
+
       };
     },
     activated() {
       this.examId = '';
-      this.getExamNaireRedCircle();
+      this.confirmArrival = localStorage.getItem('confirmArrival');
+      this.getQueryData();
       clearTimeout(this.timeClear);
     },
     watch: {
       examId(val) {
-        if(val){
+        if (val) {
           this.getExamData();
+          setTimeout(() => {
+            this.getExamData();
+          }, 60 * 1000);
         }
       },
       countDown(num) {
         clearTimeout(this.timeClear);
         if (num >= 0) {
-          this.clock(num/1000);
+          this.clock(num / 1000);
         }
       }
     },
@@ -68,30 +73,51 @@
       goHistory(val) {
         this.$router.push({path: '/LineCollege'});
       },
-      getExamNaireRedCircle() {
-        this.$http.get(globalConfig.server + 'exam/active').then((res) => {
-          if (res.data.code === '30000') {
-            this.examId = res.data.data && res.data.data.id;
-          }
-        });
+      getQueryData() {
+        if (!this.$route.query.id) {
+          this.examId = this.$store.state.onlineExam.before_exam.id;
+          this.showType = this.$store.state.onlineExam.before_exam.type;
+          this.$router.push({
+            path: '/beforeExam',
+            query: {
+              id: this.$store.state.onlineExam.before_exam.id,
+              type: this.$store.state.onlineExam.before_exam.type
+            }
+          });
+        } else {
+          this.$store.dispatch('beforeExam', this.$route.query);
+          this.examId = this.$route.query.id;
+          this.showType = this.$route.query.type;
+        }
       },
       getExamData() {
-        this.$http.get(globalConfig.server+ 'exam/'+this.examId).then((res)=>{
-          if(res.data.code === '30000') {
+        this.$http.get(globalConfig.server + 'exam/' + this.examId).then((res) => {
+          if (res.data.code === '30000') {
             this.examData = res.data.data;
-            // if((new Date(this.examData.start_time).getTime() - (new Date().getTime())) > 10*60*1000){
-            //   this.showType = 'first';
-            // }else{
+            if ((new Date(this.examData.start_time).getTime() - (new Date().getTime())) > 10 * 60 * 1000) {
+              this.showType = 'first';
+            } else {
               this.showType = 'second';
               this.countDown = new Date(res.data.data.start_time).getTime() - (new Date().getTime());
-            // }
+            }
           }
         });
       },
       clock(n) {
         let val = Number(n);
-        if(val<0){
-          this.$router.push({path: '/answerExam', query: {id: this.examData.id}});
+        if (val < 0) {
+          if (this.confirmArrival && this.confirmArrival.length > 0 && this.confirmArrival.indexOf(this.examData.id) > -1) {
+            this.$router.push({path: '/answerExam', query: {id: this.examData.id}});
+          } else {
+            this.$http.post(globalConfig.server + 'exam/check_in/' + this.examData.id).then((res) => {
+              if (res.data.code === '30000') {
+                let arr = [];
+                arr.push(this.examData.id);
+                localStorage.setItem('confirmArrival', arr);  //保存已到场的考试id
+                this.$router.push({path: '/answerExam', query: {id: this.examData.id}});
+              }
+            });
+          }
           return;
         }
         let h = Number(Math.floor(val / 3600));

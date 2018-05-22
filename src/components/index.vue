@@ -646,6 +646,7 @@
     },
     activated() {
       //初始化个人信息
+      this.confirmArrival = localStorage.getItem('confirmArrival');
       this.personal = JSON.parse(localStorage.personal);
       //鼠标滑动监听
       let _this = this;
@@ -665,19 +666,31 @@
       this.getUnreadTermly();
     },
     methods: {
-      goBefore(val){
+      goBefore(val) {
         this.getExamNaireRedCircle();
-        if(val==='beforeExam'){
-          if(this.examData.available){
-            this.$router.push({path: '/answerExam', query: {id: this.examData.id}});
-          }else{
-            this.$router.push({path: '/beforeExam'});
+        if (val === 'beforeExam') {
+          if (this.examData.available) {
+            // this.$router.push({path: '/answerExam', query: {id: this.examData.id}});
+            if (this.confirmArrival && this.confirmArrival.length > 0 && this.confirmArrival.indexOf(this.examData.id) > -1) {
+              this.$router.push({path: '/answerExam', query: {id: this.examData.id}});
+            } else {
+              this.$http.post(globalConfig.server + 'exam/check_in/' + this.examData.id).then((res) => {
+                if (res.data.code === '30000') {
+                  let arr = [];
+                  arr.push(this.examData.id);
+                  localStorage.setItem('confirmArrival', arr);  //保存已到场的考试id
+                  this.$router.push({path: '/answerExam', query: {id: this.examData.id}});
+                }
+              });
+            }
+          } else {
+            this.$router.push({path: '/beforeExam', query: {id: this.examData.id}});
           }
-        }else{
-          if(this.questionnaireData.available){
+        } else {
+          if (this.questionnaireData.available) {
             this.$router.push({path: '/answerNaire', query: {id: this.questionnaireData.id}});
-          }else{
-            this.$router.push({path: '/beforeNaire'});
+          } else {
+            this.$router.push({path: '/beforeNaire', query: {id: this.examData.id}});
           }
         }
       },

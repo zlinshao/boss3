@@ -153,7 +153,8 @@
                   <el-button size="mini" type="info" v-if="scope.row.result_id !== 0 " @click="lookExam(scope.row)">
                     查看试卷
                   </el-button>
-                  <span style="cursor: pointer;color: #6a8dfb;" v-if="!scope.row.available && !scope.row.result_id">已结束</span>
+                  <span style="cursor: pointer;color: #6a8dfb;"
+                        v-if="!scope.row.available && !scope.row.result_id">已结束</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -304,6 +305,12 @@
               arr.push(id);
               localStorage.setItem('confirmArrival', arr);  //保存已到场的考试id
               this.$router.push({path: '/answerExam', query: {id: id}});
+            } else if (res.data.code === '30003') {
+              //迟到
+              this.$router.push({path: '/beforeExam', query: {id: id, type: 'third'}});
+            }else if (res.data.code === '30004') {
+              //未开始
+              this.$router.push({path: '/beforeExam', query: {id: id, type: 'first'}});
             } else {
               this.$notify.warning({
                 title: '警告',
