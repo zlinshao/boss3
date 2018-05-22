@@ -266,8 +266,8 @@
             </el-row>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="签约时长(月)">
-                  <div class="content">{{contractInfo.month}}</div>
+                <el-form-item label="签约时长">
+                  <div class="content">{{contractInfo.month}}月{{contractInfo.day}}天</div>
                 </el-form-item>
               </el-col>
 
