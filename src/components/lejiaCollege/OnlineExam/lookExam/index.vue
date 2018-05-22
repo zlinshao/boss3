@@ -28,7 +28,10 @@
             <div class="import_questions" style="border: 1px solid #fb4699;box-shadow: 0 0 3px 1px #fb4699;">
               <div class="import_left"><span style="float:left; font-size:14px;">考试成绩</span><i
                 style="float:right; color:#fb4699;font-size:20px;" class="iconfont icon-chengjiguanli"></i></div>
-              <div><span style="font-size:70px; color:#fb4699">{{resultData.score}}</span>分</div>
+              <div>
+                <span style="font-size:70px; color:#fb4699">{{resultData.score}}</span>分
+                <span style="">(总分：{{examData.score}})</span>
+              </div>
             </div>
           </el-col>
         </el-row>
