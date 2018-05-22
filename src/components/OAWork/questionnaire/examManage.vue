@@ -261,7 +261,6 @@
         </div>
         <span slot="footer" class="dialog-footer">
             <el-button size="small" type="primary" @click="deleteExaminess">删除</el-button>
-            <el-button size="small" type="primary" style="float: left;">确认并发送消息</el-button>
         </span>
       </el-dialog>
     </div>

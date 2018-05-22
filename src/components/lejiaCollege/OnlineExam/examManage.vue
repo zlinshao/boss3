@@ -287,7 +287,7 @@
         </div>
         <span slot="footer" class="dialog-footer">
             <el-button size="small" type="primary" @click="deleteExaminess">删除</el-button>
-            <el-button size="small" type="primary" style="float: left;">确认并发送消息</el-button>
+            <el-button size="small" type="primary" style="float: left;" @click="confirmSend">确认并发送消息</el-button>
         </span>
       </el-dialog>
     </div>
@@ -416,8 +416,34 @@
       },
     },
     methods: {
+      confirmSend() {
+        this.$confirm('确认发送吗?确认后，该试卷的所有信息，包括试题、场次、考生设置，均不可再修改！系统会已消息形式通知考生', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.post(globalConfig.server + 'exam/lock/' + this.examId).then((res) => {
+            if (res.data.code === '30000') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          }).catch(() => {
+            this.$notify.info({
+              title: '提示',
+              message: '已取消发送'
+            });
+          });
+        });
+      },
       deleteExaminess() {
-        this.$confirm('确认移除该考生吗?', '提示', {
+        this.$confirm('确认移除该考生吗?如确认，删除后系统会已消息形式通知考生', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -707,7 +733,8 @@
         };
 
       },
-    },
+    }
+    ,
 
   }
 </script>
