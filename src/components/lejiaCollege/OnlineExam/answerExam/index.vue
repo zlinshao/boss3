@@ -16,7 +16,7 @@
               <div class="import_left"><span style="float:left; font-size:14px;">总时长</span><i
                 style="float:right; color:#58d788;font-size:20px;" class="iconfont icon-shijian1"></i></div>
               <div><span style="font-size:70px; color:#58d788;" :class="{'timeStringClass':timeString !=''}">{{ paperData.duration }}</span>分钟
-                <span style="float: right;margin-right: 30px;margin-top: 33px;" v-if="timeString !='' ">倒计时
+                <span style="float: right;margin-right: 15px;margin-top: 33px;" v-if="timeString !='' ">倒计时
                   <br/><span style="color:#58d788;">{{timeString}}</span></span>
               </div>
             </div>
@@ -41,7 +41,7 @@
       <div class="main">
         <div v-for="(v, k) in questionData" v-if="k==153 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span class="category_score" >(单选题 {{item.score}} 分)</span>
+            <span class="category_score">(单选题 {{item.score}} 分)</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -66,7 +66,7 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="(k==154 || k==155) && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span class="category_score" >(<span v-if="k==154">多选题</span><span v-if="k==155">不定向选择题</span> {{item.score}} 分)</span>
+            <span class="category_score">(<span v-if="k==154">多选题</span><span v-if="k==155">不定向选择题</span> {{item.score}} 分)</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -77,14 +77,16 @@
             </el-row>
             <el-form>
               <el-form-item>
-                <el-checkbox-group v-model="answerData[item.id]" style="width:96%;margin-left:50px;margin-top: 10px;" v-if="k==154">
+                <el-checkbox-group v-model="answerData[item.id]" style="width:96%;margin-left:50px;margin-top: 10px;"
+                                   v-if="k==154">
                   <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
                     <el-checkbox :label="index" style="white-space: initial;line-height:24px;">
                       {{index}}:{{item.choice[index]}}
                     </el-checkbox>
                   </el-col>
                 </el-checkbox-group>
-                <el-checkbox-group v-model="answerData[item.id]" style="width:96%;margin-left:50px;margin-top: 10px;" v-if="k==155">
+                <el-checkbox-group v-model="answerData[item.id]" style="width:96%;margin-left:50px;margin-top: 10px;"
+                                   v-if="k==155">
                   <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
                     <el-checkbox :label="index" style="white-space: initial;line-height:24px;">
                       {{index}}:{{item.choice[index]}}
@@ -97,7 +99,7 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==156 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span class="category_score" >(判断题 {{item.score}} 分)</span>
+            <span class="category_score">(判断题 {{item.score}} 分)</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -119,7 +121,7 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==157 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span class="category_score" >(填空题 {{item.score}} 分)</span>
+            <span class="category_score">(填空题 {{item.score}} 分)</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -132,7 +134,7 @@
               <el-form-item style="width:96%;margin-left:50px;margin-top: 10px;">
                 <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak">
                   <el-input style="width:97%;" size="small" v-model="answerData[item.id][ak]"
-                             :placeholder="`请填写第 ${ak+1} 处答案`"></el-input>
+                            :placeholder="`请填写第 ${ak+1} 处答案`"></el-input>
                 </el-col>
               </el-form-item>
             </el-form>
@@ -140,7 +142,7 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==158 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span class="category_score" >(简答题 {{item.score}} 分)</span>
+            <span class="category_score">(简答题 {{item.score}} 分)</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -181,8 +183,13 @@
               </span>
               </div>
             </div>
+            <div style="text-align: center;">
+          <span v-show="showForceWords"
+                style="display: inline-block;color: #999;margin-top: 10px;">考试时间已到，系统已为您自动提交！</span>
+            </div>
           </el-col>
         </el-row>
+
         <div class="importbo">
           <el-button
             style="width:130px; height:32px; line-height:0px;margin-top:10px;background-color:rgb(106, 141, 251); border-color:rgb(106, 141, 251)"
@@ -198,10 +205,14 @@
         <el-row :gutter="30" style="margin-bottom:15px;">
           <el-col :span="24">
             <div class="submit_points">
-              <span>提交成功！</span><br/>主考官将尽快批示，您的成绩可在“乐伽大学－我的考试”中查看，我们也会以消息的方式通知您！
+              <span>提交成功！</span><br/>主考官将尽快批阅，您的成绩可在“乐伽大学－我的考试”中查看，我们也会以消息的方式通知您！
             </div>
           </el-col>
         </el-row>
+        <div style="text-align: center;">
+          <span v-show="showForceWords"
+                style="display: inline-block;color: #999;">考试时间已到，系统已为您自动提交！</span>
+        </div>
         <div style="text-align: center;">
           <el-button class="confirm_btn" type="primary" @click="closeAnswer">确定</el-button>
         </div>
@@ -235,6 +246,7 @@
         timeString: '',
         timeClear: '',
         timeOut: '',
+        showForceWords: false,  //强制提交文字
       };
     },
     activated() {
@@ -365,25 +377,7 @@
             exam_id: this.examId,
             answer: this.answerData
           }).then((res) => {
-            if (res.data.code === '36010') {
-              // this.$notify.success({
-              //   title: '成功',
-              //   message: res.data.msg
-              // });
-              this.pointScore = res.data.data.score;
-              this.resultId = res.data.data.id;
-              if (this.questionData[158] && this.questionData[158].length > 0) {
-                this.submitDialog = true;
-              } else {
-                this.pointDialog = true;
-              }
-              localStorage.removeItem("answers_" + this.examId);
-            } else {
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.msg
-              });
-            }
+            this.onForceSubmit();
           });
         }).catch(() => {
           this.$notify.info({
@@ -391,18 +385,17 @@
             message: '已取消提交'
           });
         });
-
       },
-      onForceSubmit(){
+      onForceSubmit(val) {
+        if (val === 'force') {
+          this.showForceWords = true;
+        }
         this.$http.post(globalConfig.server + 'exam/result', {
           exam_id: this.examId,
           answer: this.answerData
         }).then((res) => {
           if (res.data.code === '36010') {
-            // this.$notify.success({
-            //   title: '成功',
-            //   message: res.data.msg
-            // });
+
             this.pointScore = res.data.data.score;
             this.resultId = res.data.data.id;
             if (this.questionData[158] && this.questionData[158].length > 0) {
@@ -441,7 +434,7 @@
         if (this.examId) {
           this.$http.get(globalConfig.server + 'exam/poll/' + this.examId).then((res) => {
             if (res.data.code === '30000') {
-              this.onForceSubmit();
+              this.onForceSubmit('force');
             } else {
               let time = res.data.msg.split(',');
               this.countDown = time[1] - time[0];
@@ -467,6 +460,7 @@
   .el-form-item {
     margin-bottom: 15px !important;
   }
+
   .confirm_btn {
     width: 100px;
     height: 35px;

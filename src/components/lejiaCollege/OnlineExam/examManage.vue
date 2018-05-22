@@ -235,16 +235,16 @@
       <el-dialog :close-on-click-modal="false" :visible.sync="examineeDialog" title="考生信息" width="45%">
         <div>
           <el-row :gutter="10">
-            <el-col :span="18">
+            <el-col :span="22">
               <el-input size="mini" placeholder="请选择考生" v-model="selectExaminees" readOnly @focus="openOrganize">
-                <template slot="append">
-                  <div style="cursor: pointer;" @click="emptyExaminees">清空</div>
-                </template>
+                <!--<template slot="append">-->
+                  <!--<div style="cursor: pointer;" @click="emptyExaminees">清空</div>-->
+                <!--</template>-->
               </el-input>
             </el-col>
-            <el-col :span="6">
-              <el-button type="primary" size="mini" @click="addExaminees">新增</el-button>
-            </el-col>
+            <!--<el-col :span="6">-->
+              <!--<el-button type="primary" size="mini" @click="addExaminees">新增</el-button>-->
+            <!--</el-col>-->
           </el-row>
         </div>
         <div style="margin-top: 20px;">
@@ -480,6 +480,7 @@
           }
         });
         this.selectExaminees = this.examiness_name.join(',');
+        this.addExaminees();
       },
       emptyExaminees() {
         this.selectExaminees = '';

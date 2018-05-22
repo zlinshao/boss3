@@ -147,12 +147,13 @@
               <el-table-column
                 label="操作">
                 <template slot-scope="scope">
-                  <el-button size="mini" type="primary" v-if="scope.row.result_id == 0"
+                  <el-button size="mini" type="primary" v-if="scope.row.result_id == 0 && scope.row.available"
                              @click="answerExam(scope.row.id)">立即答题
                   </el-button>
-                  <el-button size="mini" type="info" v-if="scope.row.result_id !== 0" @click="lookExam(scope.row)">
+                  <el-button size="mini" type="info" v-if="scope.row.result_id !== 0 " @click="lookExam(scope.row)">
                     查看试卷
                   </el-button>
+                  <span style="cursor: pointer;color: #6a8dfb;" v-if="!scope.row.available && !scope.row.result_id">已结束</span>
                 </template>
               </el-table-column>
             </el-table>
