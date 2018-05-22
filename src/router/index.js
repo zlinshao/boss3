@@ -180,6 +180,8 @@ import IncompleteRecord from '../components/rentManage/datumMessage/contractMana
 
 import ReportManage from '../components/reportManage/index.vue'
 import BeforeExam from '../components/lejiaCollege/OnlineExam/beforeExam.vue'  //开考之前
+import BeforeNaire from '../components/lejiaCollege/OnlineExam/beforeNaire.vue'  //开考之前
+import MyNaire from '../components/OAWork/questionnaire/myNaire/myNaire.vue'  //我的调查列表
 
 Vue.use(Router);
 
@@ -298,6 +300,8 @@ export default new Router({
         {path: '/answerAll', component: AnswerAll, name: "所有回答"},
         {path: '/answerNaire', component: AnswerNaire, name: "问卷作答"},
         {path: '/beforeExam', component: BeforeExam, name: "即将开考"},
+        {path: '/beforeNaire', component: BeforeNaire, name: "即将开始"},
+        {path: '/myNaire', component: MyNaire, name: "我的调查"},
 
 
       ]

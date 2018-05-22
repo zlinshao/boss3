@@ -30,9 +30,10 @@
           </el-col>
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="border: 1px solid #fb4699;box-shadow: 0 0 3px 1px #fb4699;">
-              <div class="import_left"><span style="float:left; font-size:14px;">总分值</span><i
+              <div class="import_left"><span style="float:left; font-size:14px;">考试成绩</span><i
                 style="float:right; color:#fb4699;font-size:20px;" class="iconfont icon-chengjiguanli"></i></div>
-              <div><span style="font-size:70px; color:#fb4699">{{paperData.score}}</span>分</div>
+              <div><span style="font-size:70px; color:#fb4699">0</span>分</div>
+              <div style="position: absolute;top: 85px;right: 55px;">(总分：{{paperData.score}}分)</div>
             </div>
           </el-col>
         </el-row>

@@ -255,20 +255,24 @@
                   <el-col :span="10" class="checkUp">
                     <div class="navigationLeft">
                       <el-dropdown-item @click.native="routers('beforeExam')" style="padding: 0">
-                        <div class="msgCenter">
+                        <div class="msgCenter" style="display: -webkit-box;">
                           <i class="el-icon-tickets"></i>
-                          <div class="msgTitle">我的考试</div>
+                          <div class="msgTitle">
+                            <span>我的考试</span>
+                            <span v-if="examId" class="circle_red"></span></div>
                         </div>
                       </el-dropdown-item>
                     </div>
                   </el-col>
-
                   <el-col :span="10" class="checkUp" :offset="4">
                     <div class="navigationLeft">
-                      <el-dropdown-item @click.native="routers('beforeExam')" style="padding: 0">
-                        <div class="msgCenter">
+                      <el-dropdown-item @click.native="routers('beforeNaire')" style="padding: 0">
+                        <div class="msgCenter" style="display: -webkit-box;">
                           <i class="el-icon-document" style="color: #58D788;"></i>
-                          <div class="msgTitle">问卷调查</div>
+                          <div class="msgTitle">
+                            <span>问卷调查</span>
+                            <span v-if="questionnaireId" class="circle_red"></span>
+                          </div>
                         </div>
                       </el-dropdown-item>
                     </div>
@@ -463,7 +467,7 @@
 
         setLockPwdDialog: false,
         instructionDialog: false, //功能说明
-        ReadingDialog:false,  //导读
+        ReadingDialog: false,  //导读
         dictionary2: [], //二级密码所需模块
         chinese: [],
         unlockSecondPWDialog: false,
@@ -483,6 +487,8 @@
         tableStatus: ' ',
         tableLoading: false,
         quesNaireDialog: false,
+        examId: '',
+        questionnaireId: '',
       };
     },
     computed: {
@@ -545,10 +551,10 @@
             .then(res => {
               if (res.data.code === "50040") {
                 this.yanFirstInfo = res.data.data;
-                if(res.data.data.type == 2){
+                if (res.data.data.type == 2) {
                   this.yanFirstDialog = true;
                 }
-                else if( res.data.data.type == 1 && res.data.data.album.image_pic.length >0){
+                else if (res.data.data.type == 1 && res.data.data.album.image_pic.length > 0) {
                   this.ReadingDialog = true;
                 }
 
@@ -595,34 +601,30 @@
         .then(res => {
           if (res.data.code === "50040") {
             this.yanFirstInfo = res.data.data;
-                if(res.data.data.type == 2){
-                  this.yanFirstDialog = true;
-                }
-                else if( res.data.data.type == 1 && res.data.data.album.image_pic.length >0 ){
-                  this.ReadingDialog = true;
-                }
+            if (res.data.data.type == 2) {
+              this.yanFirstDialog = true;
+            }
+            else if (res.data.data.type == 1 && res.data.data.album.image_pic.length > 0) {
+              this.ReadingDialog = true;
+            }
           }
         });
 
     },
     mounted() {
       //初始化个人信息
-
       this.personal = JSON.parse(localStorage.personal);
       //鼠标滑动监听
       let _this = this;
       $(document).mousemove(function () {
         _this.clickScreen();
       });
-
-      this.$http
-        .get(globalConfig.server + "oa/portal/last")
-        .then(res => {
-          if (res.data.code === "800110") {
-            this.institutionMore = res.data.data;
-            this.institutionDialog = true;
-          }
-        });
+      this.$http.get(globalConfig.server + "oa/portal/last").then(res => {
+        if (res.data.code === "800110") {
+          this.institutionMore = res.data.data;
+          this.institutionDialog = true;
+        }
+      });
       //根据个人信息进行操作事项
       this.initData();
       //多页面锁屏
@@ -636,6 +638,11 @@
       this.getUnReadMessage();
       //调查问卷
       this.getQuesNaireData();
+      //个人门户下的考试和调查5分钟轮询一次
+      this.getExamNaireRedCircle();
+      setTimeout(() => {
+        this.getExamNaireRedCircle();
+      }, 5 * 1000 * 60);
     },
     activated() {
       //初始化个人信息
@@ -660,7 +667,7 @@
     methods: {
       answerNaire(id) {
         this.quesNaireDialog = false;
-        setTimeout(()=>{
+        setTimeout(() => {
           this.$router.push({path: '/answerNaire', query: {id: id}});
         }, 0);
       },
@@ -674,6 +681,18 @@
           } else {
             this.questionNaireData = [];
             this.quesNaireDialog = false;
+          }
+        });
+      },
+      getExamNaireRedCircle() {
+        this.$http.get(globalConfig.server + 'exam/active').then((res) => {
+          if (res.data.code === '30000') {
+            this.examId = res.data.data && res.data.data.id;
+          }
+        });
+        this.$http.get(globalConfig.server + 'questionnaire/active').then((res) => {
+          if (res.data.code === '30000') {
+            this.questionnaireId = res.data.data && res.data.data.id;
           }
         });
       },
@@ -819,7 +838,7 @@
         this.unlockSecondPWDialog = false;
         this.badgeDialog = false;
       },
-      readcloseModal(){
+      readcloseModal() {
         this.ReadingDialog = false;
       },
       //二级密码回调
@@ -967,6 +986,14 @@
 </script>
 
 <style lang="scss" scoped="">
+  .circle_red {
+    width: 5px;
+    height: 5px;
+    background: red;
+    display: inline-block;
+    border-radius: 50%;
+  }
+
   @mixin border_radius($n) {
     -webkit-border-radius: $n;
     -moz-border-radius: $n;
