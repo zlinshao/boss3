@@ -390,6 +390,7 @@
       },
 
       dblClickTable(row, event) {
+        this.operateId = row.id;
         this.vacationDetail = true;
       },
       highGrade() {
