@@ -371,10 +371,13 @@
                     </template>
                   </el-table-column>
                   <el-table-column
-                    label="回访状态">
+                    label="回访状态"
+                    width="180">
                     <template slot-scope="scope">
-                      <span
-                        v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
+                  <span v-if="scope.row.visit_status&&scope.row.visit_status.name">
+                    {{scope.row.visit_status.name}}
+                    <span v-if="collectFeedback[scope.row.contract_id]">({{collectFeedback[scope.row.contract_id]}}条)</span>
+                  </span>
                       <span v-else="">/</span>
                     </template>
                   </el-table-column>
@@ -514,10 +517,13 @@
                     </template>
                   </el-table-column>
                   <el-table-column
-                    label="回访状态">
+                    label="回访状态"
+                    width="180">
                     <template slot-scope="scope">
-                      <span
-                        v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
+                  <span v-if="scope.row.visit_status&&scope.row.visit_status.name">
+                    {{scope.row.visit_status.name}}
+                   <span v-if="rentFeedback[scope.row.contract_id]">({{rentFeedback[scope.row.contract_id]}}条)</span>
+                  </span>
                       <span v-else="">/</span>
                     </template>
                   </el-table-column>
@@ -826,6 +832,9 @@
         addReturnvisitDialog: false,
         leaseHistoryDialog: false,
         leaseHistoryTableData: [],
+
+        collectFeedback : {},
+        rentFeedback : {},
       }
     },
     mounted() {
@@ -968,7 +977,12 @@
             this.collectData.forEach((item) => {
               this.collectNumberArray.push(item.contract_number);
             });
+            let collectIdArray = '';
+            this.collectData.forEach((item) => {
+              collectIdArray += item.contract_id+',';
+            });
             this.checkHandIn();
+            this.getReturnNumber(collectIdArray,1);
 
             if (res.data.data.length < 1) {
               this.collectData = [];
@@ -995,7 +1009,22 @@
           }
         })
       },
-
+      getReturnNumber(collectIdArray,type) {
+        this.$http.get(globalConfig.server + 'contract/feedback/num', {
+          params: {
+            contract_ids: collectIdArray,
+            module: type,
+          }
+        }).then((res) => {
+          if (res.data.code === '1212200') {
+            if (type == 1) {
+              this.collectFeedback = res.data.data;
+            } else if (type == 2) {
+              this.rentFeedback = res.data.data;
+            }
+          }
+        })
+      },
       rentDatafunc() {
         this.rentData = [];
         this.rentStatus = " ";
@@ -1005,6 +1034,12 @@
           if (res.data.code === '61110') {
             this.rentData = res.data.data;
             this.totalNumbers = res.data.meta.total;
+
+            let collectIdArray = '';
+            this.rentData.forEach((item) => {
+              collectIdArray += item.contract_id+',';
+            });
+            this.getReturnNumber(collectIdArray,2);
             if (res.data.data.length < 1) {
               this.collectData = [];
               this.rentStatus = '暂无数据';
