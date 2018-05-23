@@ -38,7 +38,7 @@
     name: "before-exam",
     data() {
       return {
-        showType: 'third',
+        showType: 'first',
         examId: '',
         examData: {},
         countDown: 0,
@@ -85,7 +85,7 @@
         this.$router.push({path: '/LineCollege'});
       },
       getQueryData() {
-        if (!this.$route.query.id) {
+        if (!this.$route.query.type) {
           this.examId = this.$store.state.onlineExam.before_exam.id;
           this.showType = this.$store.state.onlineExam.before_exam.type;
           this.$router.push({

@@ -679,12 +679,12 @@
                   let arr = [];
                   arr.push(this.examData.id);
                   localStorage.setItem('confirmArrival', arr);  //保存已到场的考试id
-                  this.$router.push({path: '/answerExam', query: {id: this.examData.id}});
+                  this.$router.push({path: '/answerExam', query: {id: this.examData.id, type: 'first'}});
                 }
               });
             }
           } else {
-            this.$router.push({path: '/beforeExam', query: {id: this.examData.id}});
+            this.$router.push({path: '/beforeExam', query: {id: this.examData.id, type: 'first'}});
           }
         } else {
           if (this.questionnaireData.available) {
