@@ -16,8 +16,8 @@
               <div class="import_left"><span style="float:left; font-size:14px;">总时长</span><i
                 style="float:right; color:#58d788;font-size:20px;" class="iconfont icon-shijian1"></i></div>
               <div><span style="font-size:70px; color:#58d788;" :class="{'timeStringClass':timeString !=''}">{{ paperData.duration }}</span>分钟
-                <span style="float: right;margin-right: 15px;margin-top: 33px;" v-if="timeString !='' ">倒计时
-                  <br/><span style="color:#58d788;">{{timeString}}</span></span>
+                <!--<span style="float: right;margin-right: 15px;margin-top: 33px;" v-if="timeString !='' ">倒计时-->
+                  <!--<br/><span style="color:#58d788;">{{timeString}}</span></span>-->
               </div>
             </div>
           </el-col>
@@ -30,10 +30,10 @@
           </el-col>
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="border: 1px solid #fb4699;box-shadow: 0 0 3px 1px #fb4699;">
-              <div class="import_left"><span style="float:left; font-size:14px;">考试成绩</span><i
+              <div class="import_left"><span style="float:left; font-size:14px;">倒计时</span><i
                 style="float:right; color:#fb4699;font-size:20px;" class="iconfont icon-chengjiguanli"></i></div>
-              <div><span style="font-size:70px; color:#fb4699">0</span>分</div>
-              <div style="position: absolute;top: 85px;right: 55px;">(总分：{{paperData.score}}分)</div>
+              <div><span style="font-size:50px; color:#fb4699">{{timeString}}</span></div>
+              <div style="position: absolute;top: 95px;right: 55px;">(总分：{{paperData.score}}分)</div>
             </div>
           </el-col>
         </el-row>
@@ -243,7 +243,7 @@
         confirmArrival: [],
         answers: {},
         countDown: '',
-        timeString: '',
+        timeString: '00:00:00',
         timeClear: '',
         timeOut: '',
         showForceWords: false,  //强制提交文字
