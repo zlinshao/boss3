@@ -155,6 +155,14 @@
                     查看试卷
                   </el-button>
                   <span style="cursor: pointer;color: #6a8dfb;"
+                        v-if="!scope.row.available && !scope.row.result_id">—</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="状态">
+                <template slot-scope="scope">
+
+                  <span style="cursor: pointer;color: #6a8dfb;"
                         v-if="!scope.row.available && !scope.row.result_id">已结束</span>
                 </template>
               </el-table-column>
