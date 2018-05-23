@@ -58,17 +58,17 @@
               </el-col>
               <el-col :span="8" v-if="params.check_type == 331">
                 <el-form-item label="违约盈利" required>
-                  <el-input disabled placeholder="请输入内容" v-model="params.profit"></el-input>
+                  <el-input disabled v-model="params.profit"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8" v-if="params.check_type == 333 || params.check_type == 582">
                 <el-form-item label="转租费" required>
-                  <el-input placeholder="请输入内容" v-model="params.sublease_fee"></el-input>
+                  <el-input v-model="params.sublease_fee"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="姓名" required>
-                  <el-input disabled placeholder="请输入内容" v-model="params.account_name"></el-input>
+                  <el-input disabled v-model="params.account_name"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -76,17 +76,17 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="退款账号" required>
-                  <el-input disabled placeholder="请输入内容" v-model="params.bank_num"></el-input>
+                  <el-input disabled v-model="params.bank_num"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="开户行" required>
-                  <el-input disabled placeholder="请输入内容" v-model="params.account_bank"></el-input>
+                  <el-input disabled v-model="params.account_bank"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="支行" required>
-                  <el-input disabled placeholder="请输入内容" v-model="params.branch_bank"></el-input>
+                  <el-input disabled v-model="params.branch_bank"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -95,11 +95,11 @@
         <el-row :gutter="20">
           <el-col :span="12">
             <div class="title">退房原因</div>
-            <el-input disabled type="textarea" resize="none" v-model="params.reason" placeholder="请输入内容"></el-input>
+            <el-input disabled type="textarea" resize="none" v-model="params.reason"></el-input>
           </el-col>
           <el-col :span="12">
             <div class="title">维修赔偿详情</div>
-            <el-input disabled type="textarea" resize="none" v-model="params.compensation" placeholder="请输入内容"></el-input>
+            <el-input disabled type="textarea" resize="none" v-model="params.compensation"></el-input>
           </el-col>
         </el-row>
 
@@ -115,40 +115,44 @@
         <div class="form_border">
           <el-form size="mini" label-width="100px">
             <el-row >
-
+              <el-col :span="6">
+                <el-form-item label="退还押金">
+                  <el-input disabled v-model="params.refund_deposit" type="number"></el-input>
+                </el-form-item>
+              </el-col>
               <el-col :span="6">
                 <el-form-item label="剩余房租">
-                  <el-input disabled v-model="params.residual_rent" type="number" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.residual_rent" type="number"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="收视费">
-                  <el-input disabled v-model="params.viewing_fee" type="number" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.viewing_fee" type="number"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="预存物管费">
-                  <el-input disabled v-model="params.property_management_fee" type="number" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.property_management_fee" type="number"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="预存水费">
-                  <el-input disabled v-model="params.water_fee" type="number" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.water_fee" type="number"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="预存电费">
-                  <el-input disabled v-model="params.electricity_fee"  type="number" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_fee"  type="number"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="预存气费">
-                  <el-input disabled v-model="params.gas_fee" type="number" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.gas_fee" type="number"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="应退还">
-                  <el-input disabled :disabled="true" v-model="reimbursementTotal" placeholder="请输入内容"></el-input>
+                  <el-input disabled :disabled="true" v-model="reimbursementTotal"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -165,27 +169,27 @@
               </el-col>
               <el-col :span="4">
                 <el-form-item label="上次底数">
-                  <el-input disabled v-model="params.water_last"  placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.water_last" ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="本次底数">
-                  <el-input disabled v-model="params.water_now" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.water_now"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="单价">
-                  <el-input disabled v-model="params.water_unit_price" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.water_unit_price"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="滞纳金">
-                  <el-input disabled v-model="params.water_late_payment" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.water_late_payment"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="其他">
-                  <el-input disabled v-model="params.water_other" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.water_other"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="2" >
@@ -201,28 +205,28 @@
               </el-col>
               <el-col :span="4">
                 <el-form-item label="上次底数">
-                  <el-input disabled v-model="params.electricity_peak_last" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_peak_last"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="本次底数">
-                  <el-input disabled v-model="params.electricity_peak_now" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_peak_now"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="单价">
-                  <el-input disabled v-model="params.electricity_peak_unit_price" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_peak_unit_price"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="滞纳金">
-                  <el-input disabled v-model="params.electricity_peak_late_payment" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_peak_late_payment"></el-input>
                 </el-form-item>
               </el-col>
 
               <el-col :span="4">
                 <el-form-item label="其他">
-                  <el-input disabled v-model="params.electricity_peak_other" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_peak_other"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="2" >
@@ -239,27 +243,27 @@
               </el-col>
               <el-col :span="4">
                 <el-form-item label="上次底数">
-                  <el-input disabled v-model="params.electricity_valley_last" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_valley_last"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="本次底数">
-                  <el-input disabled v-model="params.electricity_valley_now" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_valley_now"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="单价">
-                  <el-input disabled v-model="params.electricity_valley_unit_price" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_valley_unit_price"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="滞纳金">
-                  <el-input disabled v-model="params.electricity_valley_late_payment" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_valley_late_payment"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="其他">
-                  <el-input disabled v-model="params.electricity_valley_other" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.electricity_valley_other"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="2" >
@@ -275,27 +279,27 @@
               </el-col>
               <el-col :span="4">
                 <el-form-item label="上次底数">
-                  <el-input disabled v-model="params.gas_last" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.gas_last"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="本次底数">
-                  <el-input disabled v-model="params.gas_now" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.gas_now"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="单价">
-                  <el-input disabled v-model="params.gas_unit_price" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.gas_unit_price"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="滞纳金">
-                  <el-input disabled v-model="params.gas_late_payment" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.gas_late_payment"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
                 <el-form-item label="其他">
-                  <el-input disabled v-model="params.gas_other" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.gas_other"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="2" >
@@ -311,33 +315,33 @@
               </el-col>
               <el-col :span="10">
                 <el-form-item label="上次交到">
-                  <el-date-picker type="date" v-model="params.property_management_last" placeholder="选择日期"></el-date-picker>
+                  <el-date-picker type="date" v-model="params.property_management_last" disabled></el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="本次交到">
-                  <el-date-picker type="date" v-model="params.property_management_now" placeholder="选择日期"></el-date-picker>
+                  <el-date-picker type="date" v-model="params.property_management_now" disabled></el-date-picker>
                 </el-form-item>
               </el-col>
 
               <el-col :span="5" :offset="2">
                 <el-form-item label="公摊水费">
-                  <el-input disabled v-model="params.property_management_electricity" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.property_management_electricity"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="5">
                 <el-form-item label="公摊电费">
-                  <el-input disabled v-model="params.property_management_water" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.property_management_water"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="5">
                 <el-form-item label="物业费">
-                  <el-input disabled v-model="params.property_management_total_fees" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.property_management_total_fees"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="5">
                 <el-form-item label="其他">
-                  <el-input disabled v-model="params.property_management_other" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.property_management_other"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="2" >
@@ -355,43 +359,43 @@
             <el-row >
               <el-col :span="6">
                 <el-form-item label="垃圾费">
-                  <el-input disabled v-model="params.trash_fees" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.trash_fees"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="清洁费">
-                  <el-input disabled v-model="params.cleaning_fees" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.cleaning_fees"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="维修赔偿">
-                  <el-input disabled v-model="params.repair_compensation_fees" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.repair_compensation_fees"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="其他费用">
-                  <el-input disabled v-model="params.other_fees" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.other_fees"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="超期房时">
-                  <el-input disabled v-model="params.overtime_rent" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.overtime_rent"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="超期房费">
-                  <el-input disabled v-model="params.TV_fees" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.TV_fees"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="超期网费">
-                  <el-input disabled v-model="params.network_fees" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="params.network_fees"></el-input>
                 </el-form-item>
               </el-col>
 
               <el-col :span="6">
                 <el-form-item label="合计">
-                  <el-input disabled v-model="otherTotal" disabled="" placeholder="请输入内容"></el-input>
+                  <el-input disabled v-model="otherTotal" disabled=""></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
