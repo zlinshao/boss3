@@ -148,7 +148,6 @@
             </el-row>
           </el-form>
         </div>
-
         <div class="title">应扣除源能费</div>
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="80px">
@@ -157,12 +156,12 @@
                 <el-form-item label="水费：" label-width="100px">
                 </el-form-item>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="4">
                 <el-form-item label="上次底数">
                   <el-input v-model="params.water_last"  placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="4">
                 <el-form-item label="本次底数">
                   <el-input v-model="params.water_now" placeholder="请输入内容"></el-input>
                 </el-form-item>
@@ -178,25 +177,27 @@
                 </el-form-item>
               </el-col>
               <el-col :span="4">
-                <el-form-item label="合计">
-                  <el-input v-model="waterTotal" disabled="" placeholder="请输入内容"></el-input>
+                <el-form-item label="其他">
+                  <el-input v-model="params.water_other" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
-              <!--<el-col :span="2" style="text-align: right">-->
-                <!--<el-button size="mini" type="primary">计 算</el-button>-->
-              <!--</el-col>-->
+              <el-col :span="2" >
+                <div class="content">
+                  合计：{{waterTotal}}
+                </div>
+              </el-col>
             </el-row>
             <el-row>
               <el-col :span="2" style="text-align: right">
                 <el-form-item label="电费（峰）：" label-width="100px">
                 </el-form-item>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="4">
                 <el-form-item label="上次底数">
                   <el-input v-model="params.electricity_peak_last" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="4">
                 <el-form-item label="本次底数">
                   <el-input v-model="params.electricity_peak_now" placeholder="请输入内容"></el-input>
                 </el-form-item>
@@ -211,14 +212,17 @@
                   <el-input v-model="params.electricity_peak_late_payment" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
+
               <el-col :span="4">
-                <el-form-item label="合计">
-                  <el-input v-model="elePeakTotal" disabled="" placeholder="请输入内容"></el-input>
+                <el-form-item label="其他">
+                  <el-input v-model="params.electricity_peak_other" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
-              <!--<el-col :span="2" style="text-align: right">-->
-                <!--<el-button size="mini" type="primary">计 算</el-button>-->
-              <!--</el-col>-->
+              <el-col :span="2" >
+                <div class="content">
+                  合计：{{elePeakTotal}}
+                </div>
+              </el-col>
             </el-row>
 
             <el-row>
@@ -226,12 +230,12 @@
                 <el-form-item label="电费（谷）：" label-width="100px">
                 </el-form-item>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="4">
                 <el-form-item label="上次底数">
                   <el-input v-model="params.electricity_valley_last" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="4">
                 <el-form-item label="本次底数">
                   <el-input v-model="params.electricity_valley_now" placeholder="请输入内容"></el-input>
                 </el-form-item>
@@ -247,25 +251,27 @@
                 </el-form-item>
               </el-col>
               <el-col :span="4">
-                <el-form-item label="合计">
-                  <el-input v-model="eleValTotal" disabled="" placeholder="请输入内容"></el-input>
+                <el-form-item label="其他">
+                  <el-input v-model="params.electricity_valley_other" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
-              <!--<el-col :span="2" style="text-align: right">-->
-                <!--<el-button size="mini" type="primary">计 算</el-button>-->
-              <!--</el-col>-->
+              <el-col :span="2" >
+                <div class="content">
+                  合计：{{eleValTotal}}
+                </div>
+              </el-col>
             </el-row>
             <el-row>
               <el-col :span="2" style="text-align: right">
                 <el-form-item label="燃气费：" label-width="100px">
                 </el-form-item>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="4">
                 <el-form-item label="上次底数">
                   <el-input v-model="params.gas_last" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="4">
                 <el-form-item label="本次底数">
                   <el-input v-model="params.gas_now" placeholder="请输入内容"></el-input>
                 </el-form-item>
@@ -281,13 +287,15 @@
                 </el-form-item>
               </el-col>
               <el-col :span="4">
-                <el-form-item label="合计">
-                  <el-input v-model="gasTotal" disabled="" placeholder="请输入内容"></el-input>
+                <el-form-item label="其他">
+                  <el-input v-model="params.gas_other" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
-              <!--<el-col :span="2" style="text-align: right">-->
-                <!--<el-button size="mini" type="primary">计 算</el-button>-->
-              <!--</el-col>-->
+              <el-col :span="2" >
+                <div class="content">
+                  合计：{{gasTotal}}
+                </div>
+              </el-col>
             </el-row>
             <el-row>
               <el-col :span="2" style="text-align: right">
@@ -315,19 +323,21 @@
                   <el-input v-model="params.property_management_water" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="5">
                 <el-form-item label="物业费">
                   <el-input v-model="params.property_management_total_fees" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="4">
-                <el-form-item label="合计">
-                  <el-input v-model="managementTotal" disabled="" placeholder="请输入内容"></el-input>
+              <el-col :span="5">
+                <el-form-item label="其他">
+                  <el-input v-model="params.property_management_other" placeholder="请输入内容"></el-input>
                 </el-form-item>
               </el-col>
-              <!--<el-col :span="2" style="text-align: right">-->
-                <!--<el-button size="mini" type="primary">计 算</el-button>-->
-              <!--</el-col>-->
+              <el-col :span="2" >
+                <div class="content">
+                  合计：{{managementTotal}}
+                </div>
+              </el-col>
             </el-row>
           </el-form>
         </div>
@@ -430,27 +440,32 @@
           water_now : '',
           water_unit_price : '',
           water_late_payment : '',
+          water_other    : '',
 
           electricity_peak_last : '',
           electricity_peak_now : '',
           electricity_peak_unit_price : '',
           electricity_peak_late_payment : '',
+          electricity_peak_other    : '',
 
           electricity_valley_last : '',
           electricity_valley_now : '',
           electricity_valley_unit_price : '',
           electricity_valley_late_payment : '',
+          electricity_valley_other     : '',
 
           gas_last : '',
           gas_now : '',
           gas_unit_price : '',
           gas_late_payment : '',
+          gas_other    : '',
 
           property_management_last : '',
           property_management_now : '',
           property_management_electricity : '',
           property_management_water : '',
           property_management_total_fees : '',
+          property_management_other : '',
 
           liquidated_damages : '',
           trash_fees : '',
@@ -475,28 +490,28 @@
       },
       waterTotal(){
         return (Number(this.params.water_now)-Number(this.params.water_last))*Number(this.params.water_unit_price)
-               +Number(this.params.water_late_payment);
+          +Number(this.params.water_late_payment)+Number(this.params.water_other);
       },
       elePeakTotal(){
         return (Number(this.params.electricity_peak_now)-Number(this.params.electricity_peak_last))*Number(this.params.electricity_peak_unit_price)
-               +Number(this.params.electricity_peak_late_payment);
+          +Number(this.params.electricity_peak_late_payment)+Number(this.params.electricity_peak_other);
       },
       eleValTotal(){
         return (Number(this.params.electricity_valley_now)-Number(this.params.electricity_valley_last))*Number(this.params.electricity_valley_unit_price)
-               +Number(this.params.electricity_valley_late_payment);
+          +Number(this.params.electricity_valley_late_payment)+Number(this.params.electricity_valley_other);
       },
       gasTotal(){
         return (Number(this.params.gas_now)-Number(this.params.gas_last))*Number(this.params.gas_unit_price)
-               +Number(this.params.gas_late_payment);
+          +Number(this.params.gas_late_payment)+Number(this.params.gas_other);
       },
       managementTotal(){
         return Number(this.params.property_management_electricity)+Number(this.params.property_management_water)
-               +Number(this.params.property_management_total_fees);
+          +Number(this.params.property_management_total_fees)+Number(this.params.property_management_other);
       },
       otherTotal(){
-        return Number(this.params.liquidated_damages)+Number(this.params.trash_fees)+Number(this.params.cleaning_fees)
-               +Number(this.params.repair_compensation_fees)+Number(this.params.other_fees)+
-               Number(this.params.overtime_rent)+Number(this.params.TV_fees)+Number(this.params.network_fees);
+        return Number(this.params.trash_fees)+Number(this.params.cleaning_fees)+Number(this.params.repair_compensation_fees)
+          +Number(this.params.other_fees)+Number(this.params.overtime_rent)+
+          Number(this.params.TV_fees)+Number(this.params.network_fees);
       },
       realTotal(){
         return Number(this.reimbursementTotal)-Number(this.waterTotal)-Number(this.elePeakTotal)
@@ -598,27 +613,32 @@
           water_now : '',
           water_unit_price : '',
           water_late_payment : '',
+          water_other    : '',
 
           electricity_peak_last : '',
           electricity_peak_now : '',
           electricity_peak_unit_price : '',
           electricity_peak_late_payment : '',
+          electricity_peak_other    : '',
 
           electricity_valley_last : '',
           electricity_valley_now : '',
           electricity_valley_unit_price : '',
           electricity_valley_late_payment : '',
+          electricity_valley_other     : '',
 
           gas_last : '',
           gas_now : '',
           gas_unit_price : '',
           gas_late_payment : '',
+          gas_other    : '',
 
           property_management_last : '',
           property_management_now : '',
           property_management_electricity : '',
           property_management_water : '',
           property_management_total_fees : '',
+          property_management_other : '',
 
           liquidated_damages : '',
           trash_fees : '',
@@ -676,6 +696,17 @@
           }
         }
       }
+    }
+    .content{
+      padding: 0 5px;
+      min-height: 30px;
+      background: #f5f7fa;
+      border-radius: 4px;
+      font-size: 12px;
+      text-align: center;
+      line-height: 30px;
+      color: #727479;
+      margin-left: 15px;
     }
   }
 

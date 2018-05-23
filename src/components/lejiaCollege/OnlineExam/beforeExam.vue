@@ -3,7 +3,7 @@
     <div class="container">
       <div v-show="showType==='first'">
         <div class="title">您目前没有考试</div>
-        <div class="content">
+        <div class="content" v-show="showExamInfo">
           <div class="content_title">最近一场考试</div>
           <p>场次名称：{{examData.name}}</p>
           <p>考试时间：{{examData.start_time}}</p>
@@ -45,6 +45,7 @@
         timeString: '09:59:59',
         timeClear: '',
         examDataTime: '',
+        showExamInfo: true,
       };
     },
     activated() {
@@ -53,6 +54,9 @@
       this.getQueryData();
       clearTimeout(this.timeClear);
       clearTimeout(this.examDataTime);
+      if (this.examId){
+        this.getExamData();
+      }
     },
     watch: {
       examId(val) {
@@ -67,9 +71,9 @@
         }
       },
       showType(val) {
-        if(val==='third'){
+        if (val === 'third') {
           clearTimeout(this.examDataTime);
-        }else{
+        } else {
           this.examDataTime = setTimeout(() => {
             this.getExamData();
           }, 60 * 1000);
@@ -102,11 +106,18 @@
           if (res.data.code === '30000') {
             this.examData = res.data.data;
             if ((new Date(this.examData.start_time).getTime() - (new Date().getTime())) > 10 * 60 * 1000) {
-                this.showType = 'first';
+              this.showType = 'first';
+              this.showExamInfo = true;
             } else {
-              if(this.showType!='third'){
-                this.showType = 'second';
-                this.countDown = new Date(res.data.data.start_time).getTime() - (new Date().getTime());
+              if (this.showType != 'third') {
+                if ((new Date(this.examData.start_time).getTime() - (new Date().getTime())) <= 10 * 60 * 1000 && (new Date(this.examData.start_time).getTime() - (new Date().getTime())) > 0) {
+                  this.showType = 'second';
+                  this.countDown = new Date(res.data.data.start_time).getTime() - (new Date().getTime());
+                }
+                if ((new Date().getTime()) > (new Date(this.examData.end_time).getTime())) {
+                  this.showType = 'first';
+                  this.showExamInfo = false;
+                }
               }
             }
           }
