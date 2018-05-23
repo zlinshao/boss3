@@ -259,7 +259,7 @@
                           <i class="el-icon-tickets"></i>
                           <div class="msgTitle">
                             <span>我的考试</span>
-                            <span v-if="examData && examData.id" class="circle_red"></span></div>
+                            <span v-if="examData && examData.available" class="circle_red"></span></div>
                         </div>
                       </el-dropdown-item>
                     </div>
@@ -271,7 +271,7 @@
                           <i class="el-icon-document" style="color: #58D788;"></i>
                           <div class="msgTitle">
                             <span>问卷调查</span>
-                            <span v-if="questionnaireData && questionnaireData.id" class="circle_red"></span>
+                            <span v-if="questionnaireData && questionnaireData.available" class="circle_red"></span>
                           </div>
                         </div>
                       </el-dropdown-item>
