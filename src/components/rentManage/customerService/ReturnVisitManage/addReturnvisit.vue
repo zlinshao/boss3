@@ -560,35 +560,53 @@
           this.validate();
         }
         if (this.validateFlag == true) {
-          this.$http.get(globalConfig.server + 'contract/feedback/check', {
-            params: {
-              contract_id: this.form.contract_id,
-              module: this.form.module
-            }
-          }).then((res) => {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
-            this.$http.post(globalConfig.server + 'contract/feedback', this.form).then((res) => {
-              if (res.data.code === '1212200') {
+          if (this.form.is_connect === 1) {
+            this.$confirm('您确认变更该合同回访状态吗?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.$http.get(globalConfig.server + 'contract/feedback/check', {
+                params: {
+                  contract_id: this.form.contract_id,
+                  module: this.form.module
+                }
+              }).then((res) => {
                 this.$notify.success({
                   title: '成功',
                   message: res.data.msg
                 });
-                this.initial();
-                this.$emit('close', 'success');
-                this.addReturnvisitDialogVisible = false;
-              } else {
-                this.$notify.warning({
-                  title: '警告',
-                  message: res.data.msg
-                });
-              }
+                this.confirmAddConnect();
+              });
+            }).catch(() => {
+              this.$notify.info({
+                title: '提示',
+                message: '已取消提交'
+              });
+              this.confirmAddConnect();
             });
-          });
-
+          } else {
+            this.confirmAddConnect();
+          }
         }
+      },
+      confirmAddConnect() {
+        this.$http.post(globalConfig.server + 'contract/feedback', this.form).then((res) => {
+          if (res.data.code === '1212200') {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.initial();
+            this.$emit('close', 'success');
+            this.addReturnvisitDialogVisible = false;
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
       },
       validate() {
         if ((this.form.contract_month == "" && this.form.contract_day == "") && this.validateFlag == true) {
