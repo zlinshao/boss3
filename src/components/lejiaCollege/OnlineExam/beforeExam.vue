@@ -54,6 +54,9 @@
       this.getQueryData();
       clearTimeout(this.timeClear);
       clearTimeout(this.examDataTime);
+      if (this.examId){
+        this.getExamData();
+      }
     },
     watch: {
       examId(val) {
