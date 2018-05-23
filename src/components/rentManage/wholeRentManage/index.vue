@@ -299,6 +299,13 @@
                 </template>
               </el-table-column>
               <el-table-column
+                label="回访条数">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.visit_num && scope.row.visit_num">{{scope.row.visit_num}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+              <el-table-column
                 label="审核状态">
                 <template slot-scope="scope">
                       <span v-if="scope.row.doc_status&&scope.row.doc_status.name">
