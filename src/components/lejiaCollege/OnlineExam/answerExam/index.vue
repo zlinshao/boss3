@@ -373,12 +373,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.post(globalConfig.server + 'exam/result', {
-            exam_id: this.examId,
-            answer: this.answerData
-          }).then((res) => {
-            this.onForceSubmit();
-          });
+          this.onForceSubmit();
         }).catch(() => {
           this.$notify.info({
             title: '提示',

@@ -1,230 +1,455 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
-    <div class="highRanking">
-      <div class="highSearch">
-        <el-form :model="form" :inline="true" size="mini">
-          <el-form-item>
-            <el-input placeholder="请输入内容" v-model="form.keyWords" size="mini" clearable>
-              <el-button slot="append" icon="el-icon-search"></el-button>
-              <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
-            </el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-
-      <div class="filter high_grade" :class="isHigh? 'highHide':''">
-        <el-form :inline="true" onsubmit="return false" :model="form" size="mini" label-width="100px">
-          <div class="filterTitle">
-            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
-          </div>
-          <el-row class="el_row_border">
-            <el-col :span="12">
-              <el-row>
-                <el-col :span="8">
-                  <div class="el_col_label">报销类别</div>
-                </el-col>
-                <el-col :span="16" class="el_col_option">
-                  <el-form-item>
-                    <el-select v-model="form.selects">
-                      <el-option label="ffffff" value="1"></el-option>
-                      <el-option label="dddddd" value="2"></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-col>
-            <el-col :span="12">
-              <el-row>
-                <el-col :span="8">
-                  <div class="el_col_label">日期</div>
-                </el-col>
-                <el-col :span="16" class="el_col_option">
-                  <el-form-item>
-                    <div class="block">
+    <div id="clientContainer">
+      <div class="highRanking">
+        <div class="tabsSearch">
+          <el-form :inline="true" onsubmit="return false" size="mini">
+            <el-form-item>
+              <el-input placeholder="请选择房屋地址" v-model="address" size="mini" readOnly @focus="openAddressDialog">
+                <template slot="append">
+                  <div style="cursor: pointer;" @click="emptySearch">清空</div>
+                </template>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div class="filter high_grade" :class="isHigh? 'highHide':''">
+          <el-form :inline="true" onsubmit="return false" size="mini" label-width="100px">
+            <div class="filterTitle">
+              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+            </div>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">退租时间</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
                       <el-date-picker
-                        v-model="form.dates"
+                        v-model="params.check_time"
                         type="daterange"
-                        align="right"
-                        unlink-panels
+                        value-format="yyyy-MM-dd"
                         range-separator="至"
                         start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        :picker-options="pickerOptions">
+                        end-placeholder="结束日期">
                       </el-date-picker>
-                    </div>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-            </el-col>
-          </el-row>
-          <div class="btnOperate">
-            <el-button size="mini" type="primary">搜索</el-button>
-            <el-button size="mini" type="primary" @click="resetting">重置</el-button>
-            <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">退房状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select clearable  v-model="params.status" placeholder="请选择退房状态" value="">
+                        <el-option label="退租中" value="1"></el-option>
+                        <el-option label="已退租" value="2"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+
+            <div class="btnOperate">
+              <el-button size="mini" type="primary" @click="search">搜索</el-button>
+              <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+              <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+            </div>
+          </el-form>
+        </div>
+      </div>
+      <div class="main">
+        <div>
+          <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="房东退房" name="first">
+              <el-table
+                :data="tableData"
+                :empty-text='emptyStatus'
+                v-loading="isLoading"
+                element-loading-text="拼命加载中"
+                element-loading-spinner="el-icon-loading"
+                element-loading-background="rgba(255, 255, 255, 0)"
+                @row-click="clickTable"
+                @row-dblclick="dblClickTable"
+                @row-contextmenu='houseMenu'
+                style="width: 100%">
+                <el-table-column
+                  label="合同编号">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.contract_id && scope.row.contract_id.constructor === Object">
+                      {{scope.row.contract_id.contract_number}}
+                    </span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="房屋地址">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.contract_id && scope.row.contract_id.constructor === Object
+                          &&scope.row.contract_id.house">
+                      {{scope.row.contract_id.house.name}}
+                    </span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="check_time"
+                  label="退房时间">
+                </el-table-column>
+                <el-table-column
+                  prop="check_types"
+                  label="退房性质">
+                </el-table-column>
+                <el-table-column
+                  label="总费用">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.details && scope.row.details.total_fees">
+                      {{scope.row.details.total_fees}}
+                    </span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="应退费用">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.details&&scope.row.details.should_be_returned_fees">
+                      {{scope.row.details.should_be_returned_fees}}
+                    </span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="能源费用">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.details&&scope.row.details.deduct_energy_fees">
+                      {{scope.row.details.deduct_energy_fees}}
+                    </span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="其他费用">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.details&&scope.row.details.others_fees">
+                      {{scope.row.details.others_fees}}
+                    </span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+
+                <el-table-column
+                  label="结算人">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.creators&&scope.row.creators.name">{{scope.row.creators.name}}</span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="操作人">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.settlers&&scope.row.settlers.name">{{scope.row.settlers.name}}</span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="退租状态">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.status == 2">已退租</span>
+                    <el-button size="mini" type="primary" v-else="" @click="check_out(scope.row.id)">退租中</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="租客退房" name="second">
+              <el-table
+                :data="tableData"
+                :empty-text='emptyStatus'
+                v-loading="isLoading"
+                element-loading-text="拼命加载中"
+                element-loading-spinner="el-icon-loading"
+                element-loading-background="rgba(255, 255, 255, 0)"
+                @row-click="clickTable"
+                @row-dblclick="dblClickTable"
+                @row-contextmenu='houseMenu'
+                style="width: 100%">
+                <el-table-column
+                  label="合同编号">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.contract_id && scope.row.contract_id.constructor === Object">
+                      {{scope.row.contract_id.contract_number}}
+                    </span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="房屋地址">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.contract_id && scope.row.contract_id.constructor === Object
+                          &&scope.row.contract_id.house">
+                      {{scope.row.contract_id.house.name}}
+                    </span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  prop="check_time"
+                  label="退房时间">
+                </el-table-column>
+                <el-table-column
+                  prop="check_types"
+                  label="退房性质">
+                </el-table-column>
+                <el-table-column
+                  label="总费用">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.details && scope.row.details.total_fees">
+                      {{scope.row.details.total_fees}}
+                    </span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="应退费用">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.details&&scope.row.details.should_be_returned_fees">
+                      {{scope.row.details.should_be_returned_fees}}
+                    </span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="能源费用">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.details&&scope.row.details.deduct_energy_fees">
+                      {{scope.row.details.deduct_energy_fees}}
+                    </span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="其他费用">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.details&&scope.row.details.others_fees">
+                      {{scope.row.details.others_fees}}
+                    </span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+
+                <el-table-column
+                  label="结算人">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.creators&&scope.row.creators.name">{{scope.row.creators.name}}</span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="操作人">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.settlers&&scope.row.settlers.name">{{scope.row.settlers.name}}</span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="退租状态">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.status == 2">已退租</span>
+                    <el-button size="mini" type="primary" v-else="" @click="check_out(scope.row.id)">退租中</el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </el-tab-pane>
+          </el-tabs>
+          <div class="tableBottom">
+            <div class="left">
+              <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page="params.pages"
+                :page-sizes="[12, 20, 30, 40]"
+                :page-size="params.limit"
+                layout="total, prev, pager, next, jumper"
+                :total="totalNumber">
+              </el-pagination>
+            </div>
           </div>
-        </el-form>
+        </div>
       </div>
     </div>
-
-    <el-table
-      :data="tableData"
-      width="100%"
-      @row-contextmenu="collectMenu">
-      <el-table-column
-        label="退租时间"
-        prop="contract_id">
-      </el-table-column>
-      <el-table-column
-        label="合同编号"
-        prop="address">
-      </el-table-column>
-      <el-table-column
-        label="房屋地址"
-        prop="name">
-      </el-table-column>
-      <el-table-column
-        label="客户姓名"
-        prop="mobile">
-      </el-table-column>
-      <el-table-column
-        label="联系方式"
-        prop="identity">
-      </el-table-column>
-      <el-table-column
-        label="退租类型"
-        prop="reim_category">
-      </el-table-column>
-      <el-table-column
-        label="结算时间"
-        prop="amount">
-      </el-table-column>
-      <el-table-column
-        label="结算人"
-        prop="account">
-      </el-table-column>
-      <el-table-column
-        label="结算状态"
-        prop="bank">
-      </el-table-column>
-
-    </el-table>
-
-    <div class="block pages">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-size="12"
-        layout="total, prev, pager, next, jumper"
-        :total="totalNumber">
-      </el-pagination>
-    </div>
-
-    <!--右键-->
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
-    <CollectVacation :collectVacationDialog="collectVacationDialog"  @close="closeModal"></CollectVacation>
-    
+
+    <EditCollectVacation :editCollectVacation="editCollectVacation" :vacationId="operateId" @close="closeModal"></EditCollectVacation>
+    <VacationDetail :vacationDetail="vacationDetail" :vacationId="operateId" @close="closeModal"></VacationDetail>
+
+    <AddressSearch :addressDialog="addressDialog" @close="closeAddressDialog" :isRent="isRent"></AddressSearch>
   </div>
 </template>
 
 <script>
-  import CollectVacation from './collectVacation.vue' //房东退房
-  import RightMenu from '../../../common/rightMenu.vue'    //右键
-
+  import RightMenu from '../../../common/rightMenu.vue'
+  import EditCollectVacation from '../../tabComponents/components/editVacation.vue'
+  import VacationDetail from '../../tabComponents/components/vacationDetail.vue'
+  import AddressSearch from '../../../common/addressSearch';
   export default {
-    name: "index",
-    components: {RightMenu, CollectVacation},
+    name: 'hello',
+    components: {RightMenu,EditCollectVacation,VacationDetail,AddressSearch},
     data() {
       return {
         rightMenuX: 0,
         rightMenuY: 0,
         show: false,
         lists: [],
+        /***********/
+        activeName: 'first',
+        totalNumber: 0,
+        params: {
+          pages: 1,
+          limit: 12,
+          module : 1,
+          contract_id: '',
+          check_time : [],
+          status : '',
+        },
 
-        currentPage: 1,
-        collectVacationDialog: false,
-        isHigh: false,
-        form: {
-          page: '',
-          limit: '',
-        },
-        pickerOptions: {
-          shortcuts: [{
-            text: '最近一周',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近一个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-              picker.$emit('pick', [start, end]);
-            }
-          }, {
-            text: '最近三个月',
-            onClick(picker) {
-              const end = new Date();
-              const start = new Date();
-              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-              picker.$emit('pick', [start, end]);
-            }
-          }]
-        },
         tableData: [],
-        params:{
-          limit:12,
-          page:1
-        },
-        pages: 1,
-        totalNumber : 0,
-        isLoading : true,
+        operateId : '',
+
+        isHigh: false,
+        emptyStatus: ' ',
+        isLoading: false,
+        editCollectVacation : false,
+        vacationDetail : false,
+        addressDialog : false,
+        isRent : 0,
+        address : '',
       }
     },
-    mounted() {
-      this.getTableData();
+    created(){
+      this.getData();
     },
-    watch: {},
     methods: {
+      //获取退租列表
+      getData(){
+        this.emptyStatus = ' ';
+        this.isLoading = true;
+        this.tableData = [];
+        this.$http.get(globalConfig.server+'customer/check_out',{params:this.params}).then((res) => {
+          this.isLoading = false;
+          if(res.data.code === '20000'){
+            this.tableData = res.data.data.data;
+            this.totalNumber = res.data.data.count;
+          }else {
+            this.emptyStatus = '暂无数据';
+            this.totalNumber = 0;
+          }
+        })
+      },
+      //切换标签页
+      handleClick() {
+        this.params.module = this.activeName === 'first'?1:2;
+        this.isRent = this.activeName === 'first'?0:1;
+        this.getData();
+      },
+      handleSizeChange(val) {
+      },
+      handleCurrentChange(val) {
+        this.params.pages = val;
+      },
+      clickTable(row, event, column) {
+      },
 
-      getTableData(){
-        this.$http.get(globalConfig.server+'/wechat/reimbursement',{params:this.params}).then((res) => {
-          if(res.data.code === '10010'){
-            this.tableData = res.data.data;
-            this.pages = res.data.pages;
-            this.totalNumber = res.data.number;
-            this.isLoading = false;
+      deleteColumn(){
+        this.$http.get(globalConfig.server+'customer/check_out/delete/'+this.operateId).then((res) => {
+          if(res.data.code === '20040'){
+            this.getData();
+            this.$notify.success({
+              title:'成功',
+              message:res.data.msg
+            })
+          }else {
+            this.$notify.warning({
+              title:'警告',
+              message:res.data.msg
+            })
           }
         })
       },
 
-      // 重置
-      resetting() {
-        this.form.keywords = '';
+      closeModal(){
+        this.editCollectVacation = false;
+        this.vacationDetail = false;
       },
-      // 高级筛选
+
+      dblClickTable(row, event) {
+        this.operateId = row.id;
+        this.vacationDetail = true;
+      },
       highGrade() {
         this.isHigh = !this.isHigh;
       },
-      // 右键
-      collectMenu(row, event) {
+      search() {
+        this.isHigh = false;
+        this.params.pages = 1;
+        this.getData();
+      },
+      resetting() {
+        this.params.check_time = [];
+        this.params.status = '';
+      },
+      openAddressDialog() {
+        this.addressDialog = true;
+      },
+      emptySearch() {
+        this.params.contract_id = '';
+        this.address = '';
+        this.search();
+      },
+      closeAddressDialog(val) {
+        this.addressDialog = false;
+        if (val) {
+          this.address = val.address;
+          this.params.contract_id = val.contract_id;
+          this.search();
+        }
+      },
+      //-------------------房屋右键------------------------------------//
+      houseMenu(row, event) {
+        this.operateId = row.id;
         this.lists = [
-          {clickIndex: 'remark', headIcon: 'el-icon-edit', label: '修改',},
+          {clickIndex: 'edit',headIcon: 'el-icon-edit-outline', label: '修改',},
+          {clickIndex: 'delete',headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },
-      // 右键回调
-      clickEvent(val) {
-        if (val === 'remark') {
-          this.collectVacationDialog = true;
+      //右键回调事件
+      clickEvent(index) {
+        switch (index){
+          case 'edit':
+            this.editCollectVacation = true;
+            break;
+          case 'delete':
+            this.$confirm('此操作将永久删除该条目, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.deleteColumn();
+            }).catch(() => {
+              this.$notify.warning({
+                title:'警告',
+                message:'已取消删除',
+              })
+            });
+            break;
         }
       },
       //关闭右键菜单
@@ -233,7 +458,7 @@
       },
       //右键参数
       contextMenuParam(event) {
-        let e = event || window.event;
+        let e = event || window.event;	//support firefox contextmenu
         this.show = false;
         this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
         this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
@@ -243,22 +468,39 @@
           this.show = true
         })
       },
-      // 备注
-      closeModal() {
-        this.collectVacationDialog = false;
-      },
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        this.currentPage = val;
-        this.params.page = val;
-        this.getTableData();
-      },
-    },
+    }
   }
 </script>
 
-<style lang="scss">
-
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="scss" scoped="">
+  #clientContainer {
+    min-height: 800px;
+    .selectButton {
+      color: #fff;
+      background: #66b1ff;
+    }
+    .main {
+      font-size: 12px;
+      .tableBottom {
+        padding: 8px;
+        display: flex;
+        justify-content: flex-end;
+        .right {
+          display: flex;
+          align-items: center;
+          div {
+            width: 100px;
+            text-align: center;
+            span {
+              color: #fb529f;
+            }
+            &:first-child {
+              border-right: 1px solid #ccc;
+            }
+          }
+        }
+      }
+    }
+  }
 </style>

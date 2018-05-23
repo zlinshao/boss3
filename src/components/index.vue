@@ -264,19 +264,19 @@
                       </el-dropdown-item>
                     </div>
                   </el-col>
-                  <!--<el-col :span="10" class="checkUp" :offset="4">-->
-                    <!--<div class="navigationLeft">-->
-                      <!--<el-dropdown-item @click.native="goBefore('beforeNaire')" style="padding: 0">-->
-                        <!--<div class="msgCenter" style="display: -webkit-box;">-->
-                          <!--<i class="el-icon-document" style="color: #58D788;"></i>-->
-                          <!--<div class="msgTitle">-->
-                            <!--<span>问卷调查</span>-->
-                            <!--<span v-if="questionnaireData && questionnaireData.id" class="circle_red"></span>-->
-                          <!--</div>-->
-                        <!--</div>-->
-                      <!--</el-dropdown-item>-->
-                    <!--</div>-->
-                  <!--</el-col>-->
+                  <el-col :span="10" class="checkUp" :offset="4">
+                    <div class="navigationLeft">
+                      <el-dropdown-item @click.native="goBefore('beforeNaire')" style="padding: 0">
+                        <div class="msgCenter" style="display: -webkit-box;">
+                          <i class="el-icon-document" style="color: #58D788;"></i>
+                          <div class="msgTitle">
+                            <span>问卷调查</span>
+                            <span v-if="questionnaireData && questionnaireData.id" class="circle_red"></span>
+                          </div>
+                        </div>
+                      </el-dropdown-item>
+                    </div>
+                  </el-col>
                 </el-row>
               </div>
               <el-dropdown-item class="detrusion" @click.native="routers('/login')">
@@ -637,7 +637,7 @@
       this.getUnreadTermly();
       this.getUnReadMessage();
       //调查问卷
-      // this.getQuesNaireData();
+      this.getQuesNaireData();
       //个人门户下的考试和调查5分钟轮询一次
       this.getExamNaireRedCircle();
       setTimeout(() => {

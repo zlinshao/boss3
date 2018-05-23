@@ -312,6 +312,31 @@
                     </div>
                   </div>
 
+                  <div class="title">收据编号</div>
+                  <div class="form_border">
+                    <div v-for="item in receiptChangeAmount">
+                      <el-row>
+                        <el-col :span="6">
+                          <el-form-item label="收据编号" required>
+                            <el-input placeholder="请输入内容" :disabled="(!isPc || isDoc) && !isAll"
+                                      v-model="params.receipt[item-1]"></el-input>
+                          </el-form-item>
+                        </el-col>
+
+                        <el-col :span="6" v-if="(isAll || (isPc && !isDoc)) && item>1">
+                          <div class="deleteNumber">
+                            <span @click="deleteReceiptChange(item-1)">删除</span>
+                          </div>
+                        </el-col>
+                      </el-row>
+                    </div>
+                    <div style="text-align: center">
+                      <el-button type="text" @click="addReceiptChange" :disabled="(!isPc || isDoc) && !isAll">
+                        <i class="el-icon-circle-plus"></i>添加收据编号
+                      </el-button>
+                    </div>
+                  </div>
+
                   <el-row>
                     <el-col :span="6">
                       <el-form-item label="中介费">
@@ -377,11 +402,7 @@
                         <el-input placeholder="请输入内容" v-model="params.manage_fee"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
-                      <el-form-item label="收据编号">
-                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" v-model="params.receipt"></el-input>
-                      </el-form-item>
-                    </el-col>
+
                     <el-col :span="6">
                       <el-form-item label="尾款补齐时间" required="">
                         <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
@@ -539,7 +560,7 @@
           money_table: [],            //金额+付款方式
 
           retainage_date: '',         //尾款补齐时间
-          receipt: '',                 //收据编号
+          receipt: [],                 //收据编号
           agency: '',                  // 中介费
           penalty: '',                 // 赔偿金
           property: '',                // 物业费
@@ -607,7 +628,9 @@
         moneyTableChangeAmount: 1,
         moneyWayArray: [],
         moneySepArray: [],
-
+        receiptChangeAmount : 1,
+        py: '',
+        year: '',
         //照片修改
         identity_photo: {},
         photo: {},
@@ -636,6 +659,7 @@
           this.$emit('close');
           this.clearData();
         } else {
+          this.getCurrentCity();
           this.getHouseInfo();
           this.getDetail();
           this.isClear = true;
@@ -659,6 +683,14 @@
       },
     },
     methods: {
+      getCurrentCity(){
+        this.$http.get(globalConfig.server + 'setting/others/ip_address').then((res) => {
+          if(res.data.code === '1000120'){
+            this.py = res.data.data.py;
+            this.year = res.data.data.year;
+          }
+        });
+      },
       getDictionary(){
         this.dictionary(410, 1).then((res) => {
           this.property_type_dic = res.data;
@@ -778,7 +810,18 @@
 
             //--------------------------------------------------//
             this.params.retainage_date = data.retainage_date;
-            this.params.receipt = data.receipt;
+
+            if(Array.isArray(data.receipt)){
+              this.receiptChangeAmount = data.receipt.length ? data.receipt.length : 1;
+
+              data.receipt.forEach((item) => {
+                this.params.receipt.push(item);
+              });
+            }else {
+              this.receiptArray[0] = data.receipt;
+              this.receiptChangeAmount = 1;
+            }
+
             this.params.agency = data.agency;
             this.params.penalty = data.penalty;
             this.params.property = data.property?Number(data.property):'';
@@ -946,7 +989,14 @@
         this.moneySepArray.splice(item, 1);
         this.moneyTableChangeAmount--;
       },
-
+      addReceiptChange(){
+        this.receiptChangeAmount++;
+        this.params.receipt[this.receiptChangeAmount-1] = this.py+this.year;
+      },
+      deleteReceiptChange(item){
+        this.receiptChangeAmount--;
+        this.params.receipt.splice(item, 1);
+      },
       //计算空置期结束时间
       computedEndDate(){
         this.$http.get(globalConfig.server+'lease/helper/rentdates?begin_date='+this.params.begin_date+'&month='
@@ -1082,7 +1132,7 @@
           money_sum: '',              //收款总金额
           money_table: [],            //金额+付款方式
           retainage_date: '',         //尾款补齐时间
-
+          receipt : [],
           agency: '',                  // 中介费
           penalty: '',                 // 赔偿金
           property: '',                // 物业费

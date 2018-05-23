@@ -23,7 +23,7 @@ import RepairManage from '../components/rentManage/repairManage/index.vue'
 import ClientManage from '../components/rentManage/datumMessage/clientManage/index.vue'         //客户管理
 import ContractManage from '../components/rentManage/datumMessage/contractManage/index.vue'     //合同管理
 import WorkOrderManage from '../components/rentManage/datumMessage/workOrderManage/index.vue'   //工单管理
-// import RetreatManage from '../components/rentManage/datumMessage/retreatManage/index1.vue' //退租管理
+import RetreatManage from '../components/rentManage/datumMessage/retreatManage/index.vue' //退租管理
 
 // 财务账本
 // import AccountManage from '../comments/finance/accountManage/index'                      //账户管理
@@ -374,7 +374,6 @@ export default new Router({
         {path: '/clientManage', component: ClientManage, name: '客户管理',},
         {path: '/contractManage', component: ContractManage, name: '合同管理',},
         // {path: '/workOrderManage', component: WorkOrderManage, name: '工单管理',},
-        // {path: '/retreatManage', component: RetreatManage, name: '退租管理',},
         // {
         //   path: '/datumMessage', component: DatumMessage, icon: 'el-icons-fa-money', name: '资料管理',
         //   children: [
@@ -396,6 +395,7 @@ export default new Router({
         {path: '/repairManage', component: RepairManage, name: '维修管理',},
         {path: '/customerService', component: CustomerService, name: '回访管理',},
         {path: '/ExpenseAccount', component: ExpenseAccount, name: '报销管理',},
+        {path: '/retreatManage', component: RetreatManage, name: '退租管理',},
       ]
     },
     //
@@ -510,7 +510,7 @@ export default new Router({
         // {path: '/contractClaim', component: ContractClaim, name: '合同认领',},
         {path: '/pagerData', component: PagerData, name: '纸质资料'},
         // {path: '/knowledge', component: Knowledge, name: '知识管理',},
-        // {path: '/questionnaire', component: Questionnaire, name: "问卷调查"},
+        {path: '/questionnaire', component: Questionnaire, name: "问卷调查"},
 
       ]
     },

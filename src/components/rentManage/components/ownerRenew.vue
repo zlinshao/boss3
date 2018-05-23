@@ -19,7 +19,7 @@
                     </el-form-item>
                   </el-col>
                   <el-col :span="6">
-                    <el-form-item label="小区别名">
+                    <el-form-item label="产权地址">
                       <el-input placeholder="请输入内容" v-model="params.community_nickname"></el-input>
                     </el-form-item>
                   </el-col>

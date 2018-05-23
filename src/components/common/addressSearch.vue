@@ -67,7 +67,7 @@
         params: {
           pages: 1,
           search: '',
-          limit: 500
+          limit: 15
         },
         addressStatus: ' ',
         addressLoading: false,

@@ -289,15 +289,20 @@
                       <span v-if="!scope.row.contract_number">暂无</span>
                     </template>
                   </el-table-column>
-
-                  <!--<el-table-column-->
-                  <!--prop="bulletin_time"-->
-                  <!--label="上传时间">-->
-                  <!--<template slot-scope="scope">-->
-                  <!--<span v-if="scope.row.bulletin_time">{{scope.row.bulletin_time}}</span>-->
-                  <!--<span v-if="!scope.row.bulletin_time">暂无</span>-->
-                  <!--</template>-->
-                  <!--</el-table-column>-->
+                  <el-table-column
+                    label="合同状态">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.status">{{scope.row.status}}</span>
+                      <span v-if="!scope.row.status">暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="合同性质">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.type">{{scope.row.type}}</span>
+                      <span v-if="!scope.row.type">暂无</span>
+                    </template>
+                  </el-table-column>
                   <el-table-column
                     prop="customer_name"
                     label="业主姓名">
@@ -309,18 +314,6 @@
                   <el-table-column
                     prop="address"
                     label="地址">
-                    <!--<template slot-scope="scope">-->
-                    <!--<div v-popover:popover1 style="display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">-->
-                    <!--{{scope.row.address}}-->
-                    <!--<el-popover-->
-                    <!--ref="popover1"-->
-                    <!--placement="top-start"-->
-                    <!--width="200"-->
-                    <!--trigger="hover">-->
-                    <!--{{scope.row.address}}-->
-                    <!--</el-popover>-->
-                    <!--</div>-->
-                    <!--</template>-->
                     <template slot-scope="scope">
                       <span v-if="scope.row.address">{{scope.row.address}}</span>
                       <span v-if="!scope.row.address">暂无</span>
@@ -348,18 +341,18 @@
                     prop="complete_date"
                     label="资料补齐时间">
                     <template slot-scope="scope">
-                      <span v-if="scope.row.complete_date">{{scope.row.complete_date}}</span>
-                      <span v-if="!scope.row.complete_date">暂无</span>
+                      <span v-if="scope.row.data_date">{{scope.row.data_date}}</span>
+                      <span v-if="!scope.row.data_date">暂无</span>
                     </template>
                   </el-table-column>
-                  <!--<el-table-column-->
-                  <!--prop="return_visit"-->
-                  <!--label="回访情况">-->
-                  <!--<template slot-scope="scope">-->
-                  <!--<span v-if="scope.row.return_visit">{{scope.row.return_visit}}</span>-->
-                  <!--<span v-if="!scope.row.return_visit">暂无</span>-->
-                  <!--</template>-->
-                  <!--</el-table-column>-->
+                  <el-table-column
+                    width="80px;"
+                    label="是否备忘">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.note">有</span>
+                      <span v-if="!scope.row.note">/</span>
+                    </template>
+                  </el-table-column>
                   <el-table-column
                     prop="staff_name"
                     width="80px;"
@@ -369,14 +362,6 @@
                       <span v-if="!scope.row.staff_name">暂无</span>
                     </template>
                   </el-table-column>
-                  <!--<el-table-column-->
-                  <!--prop="leader_name"-->
-                  <!--label="负责人">-->
-                  <!--<template slot-scope="scope">-->
-                  <!--<span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>-->
-                  <!--<span v-if="!scope.row.leader_name">暂无</span>-->
-                  <!--</template>-->
-                  <!--</el-table-column>-->
                   <el-table-column
                     prop="department_name"
                     label="部门">
@@ -386,25 +371,14 @@
                     </template>
                   </el-table-column>
                   <el-table-column
-                    label="回访状态">
+                    label="回访状态"
+                    width="180">
                     <template slot-scope="scope">
-                      <span
-                        v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
+                  <span v-if="scope.row.visit_status&&scope.row.visit_status.name">
+                    {{scope.row.visit_status.name}}
+                    <span v-if="collectFeedback[scope.row.contract_id]">({{collectFeedback[scope.row.contract_id]}}条)</span>
+                  </span>
                       <span v-else="">/</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    label="合同状态">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.status">{{scope.row.status}}</span>
-                      <span v-if="!scope.row.status">暂无</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    label="合同性质">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.type">{{scope.row.type}}</span>
-                      <span v-if="!scope.row.type">暂无</span>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -458,15 +432,21 @@
                       <span v-if="!scope.row.contract_number">暂无</span>
                     </template>
                   </el-table-column>
+                  <el-table-column
+                    label="合同状态">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.status">{{scope.row.status}}</span>
+                      <span v-if="!scope.row.status">暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="合同性质">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.type">{{scope.row.type}}</span>
+                      <span v-if="!scope.row.type">暂无</span>
+                    </template>
+                  </el-table-column>
 
-                  <!--<el-table-column-->
-                  <!--prop="bulletin_time"-->
-                  <!--label="上传时间">-->
-                  <!--<template slot-scope="scope">-->
-                  <!--<span v-if="scope.row.bulletin_time">{{scope.row.bulletin_time}}</span>-->
-                  <!--<span v-if="!scope.row.bulletin_time">暂无</span>-->
-                  <!--</template>-->
-                  <!--</el-table-column>-->
                   <el-table-column
                     prop="customer_name"
                     label="租客姓名">
@@ -478,18 +458,7 @@
                   <el-table-column
                     prop="address"
                     label="地址">
-                    <!--<template slot-scope="scope">-->
-                    <!--<div v-popover:popover1 style="display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">-->
-                    <!--{{scope.row.address}}-->
-                    <!--<el-popover-->
-                    <!--ref="popover1"-->
-                    <!--placement="top-start"-->
-                    <!--width="200"-->
-                    <!--trigger="hover">-->
-                    <!--{{scope.row.address}}-->
-                    <!--</el-popover>-->
-                    <!--</div>-->
-                    <!--</template>-->
+
                     <template slot-scope="scope">
                       <span v-if="scope.row.address">{{scope.row.address}}</span>
                       <span v-if="!scope.row.address">暂无</span>
@@ -517,18 +486,18 @@
                     prop="complete_date"
                     label="资料补齐时间">
                     <template slot-scope="scope">
-                      <span v-if="scope.row.complete_date">{{scope.row.complete_date}}</span>
-                      <span v-if="!scope.row.complete_date">暂无</span>
+                      <span v-if="scope.row.data_date">{{scope.row.data_date}}</span>
+                      <span v-if="!scope.row.data_date">暂无</span>
                     </template>
                   </el-table-column>
-                  <!--<el-table-column-->
-                  <!--prop="return_visit"-->
-                  <!--label="回访情况">-->
-                  <!--<template slot-scope="scope">-->
-                  <!--<span v-if="scope.row.return_visit">{{scope.row.return_visit}}</span>-->
-                  <!--<span v-if="!scope.row.return_visit">暂无</span>-->
-                  <!--</template>-->
-                  <!--</el-table-column>-->
+                  <el-table-column
+                    width="80px;"
+                    label="是否备忘">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.note">有</span>
+                      <span v-if="!scope.row.note">/</span>
+                    </template>
+                  </el-table-column>
                   <el-table-column
                     prop="staff_name"
                     width="80px"
@@ -538,14 +507,7 @@
                       <span v-if="!scope.row.staff_name">暂无</span>
                     </template>
                   </el-table-column>
-                  <!--<el-table-column-->
-                  <!--prop="leader_name"-->
-                  <!--label="负责人">-->
-                  <!--<template slot-scope="scope">-->
-                  <!--<span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>-->
-                  <!--<span v-if="!scope.row.leader_name">暂无</span>-->
-                  <!--</template>-->
-                  <!--</el-table-column>-->
+
                   <el-table-column
                     prop="department_name"
                     label="部门">
@@ -555,27 +517,17 @@
                     </template>
                   </el-table-column>
                   <el-table-column
-                    label="回访状态">
+                    label="回访状态"
+                    width="180">
                     <template slot-scope="scope">
-                      <span
-                        v-if="scope.row.visit_status&&scope.row.visit_status.name">{{scope.row.visit_status.name}}</span>
+                  <span v-if="scope.row.visit_status&&scope.row.visit_status.name">
+                    {{scope.row.visit_status.name}}
+                   <span v-if="rentFeedback[scope.row.contract_id]">({{rentFeedback[scope.row.contract_id]}}条)</span>
+                  </span>
                       <span v-else="">/</span>
                     </template>
                   </el-table-column>
-                  <el-table-column
-                    label="合同状态">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.status">{{scope.row.status}}</span>
-                      <span v-if="!scope.row.status">暂无</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    label="合同性质">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.type">{{scope.row.type}}</span>
-                      <span v-if="!scope.row.type">暂无</span>
-                    </template>
-                  </el-table-column>
+
                   <el-table-column
                     label="审核状态">
                     <template slot-scope="scope">
@@ -880,6 +832,9 @@
         addReturnvisitDialog: false,
         leaseHistoryDialog: false,
         leaseHistoryTableData: [],
+
+        collectFeedback : {},
+        rentFeedback : {},
       }
     },
     mounted() {
@@ -1022,7 +977,12 @@
             this.collectData.forEach((item) => {
               this.collectNumberArray.push(item.contract_number);
             });
+            let collectIdArray = '';
+            this.collectData.forEach((item) => {
+              collectIdArray += item.contract_id+',';
+            });
             this.checkHandIn();
+            this.getReturnNumber(collectIdArray,1);
 
             if (res.data.data.length < 1) {
               this.collectData = [];
@@ -1049,7 +1009,22 @@
           }
         })
       },
-
+      getReturnNumber(collectIdArray,type) {
+        this.$http.get(globalConfig.server + 'contract/feedback/num', {
+          params: {
+            contract_ids: collectIdArray,
+            module: type,
+          }
+        }).then((res) => {
+          if (res.data.code === '1212200') {
+            if (type == 1) {
+              this.collectFeedback = res.data.data;
+            } else if (type == 2) {
+              this.rentFeedback = res.data.data;
+            }
+          }
+        })
+      },
       rentDatafunc() {
         this.rentData = [];
         this.rentStatus = " ";
@@ -1059,6 +1034,12 @@
           if (res.data.code === '61110') {
             this.rentData = res.data.data;
             this.totalNumbers = res.data.meta.total;
+
+            let collectIdArray = '';
+            this.rentData.forEach((item) => {
+              collectIdArray += item.contract_id+',';
+            });
+            this.getReturnNumber(collectIdArray,2);
             if (res.data.data.length < 1) {
               this.collectData = [];
               this.rentStatus = '暂无数据';
