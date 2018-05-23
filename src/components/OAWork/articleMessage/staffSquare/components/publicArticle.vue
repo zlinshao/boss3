@@ -5,7 +5,8 @@
       <el-form-item label="标题" required v-if="moduleType !='newVersionUpdate'">
         <el-input v-model="form.name" placeholder="请输入标题"></el-input>
       </el-form-item>
-      <el-form-item label="版本" v-else>
+
+      <el-form-item label="版本" v-if="moduleType =='newVersionUpdate'">
         <el-input v-model="form.name" placeholder="请输入版本号"></el-input>
       </el-form-item>
       <el-form-item label="分类" required="" v-if="moduleType !='newVersionUpdate'">
@@ -16,8 +17,8 @@
       </el-form-item>
       <el-form-item label="版本类型" required="" v-else>
         <el-select v-model="form.type" clearable placeholder="请选择类别">
-          <el-option v-for="(key,index) in versionType" :label="key.value" :value="key.id"
-                     :key="index"></el-option>
+          <el-option v-for="item in versionType" :label="item.dictionary_name" :value="item.id"
+                     :key="item.id"></el-option>
         </el-select>
       </el-form-item>
 
@@ -25,17 +26,29 @@
         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
                     v-model="form && form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
       </el-form-item>
-      <el-form-item label="内容" required="" v-else-if="!(form.type == 1) && moduleType =='newVersionUpdate'">
+      <el-form-item label="内容" required=""
+                    v-else-if="!(form.type == 673 || form.type== 675) && moduleType =='newVersionUpdate'">
         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
                     v-model="form && form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
       </el-form-item>
-
+      <el-form-item label="更新日志" v-if="form.type == 675 && moduleType =='newVersionUpdate'">
+        <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
+                    v-model="form && form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
+      </el-form-item>
+      <el-form-item label="上传文件" required="" v-if="form.type == 675 && moduleType =='newVersionUpdate'">
+        <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
+      </el-form-item>
       <el-form-item label="封面图片" v-if="moduleType !='newVersionUpdate'">
         <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
-      <el-form-item label="新手导读" required="" v-else-if="!(form.type == 2) && moduleType =='newVersionUpdate'" >
+      <el-form-item label="新手导读" required="" v-else-if="form.type == 673 && moduleType =='newVersionUpdate'">
         <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
+      <el-form-item label="是否强制更新" v-if="form.type == 675 && moduleType =='newVersionUpdate'">
+        <el-radio v-model="form.update_install" label="1">是</el-radio>
+        <el-radio v-model="form.update_install" label="2">否</el-radio>
+      </el-form-item>
+
 
       <el-form-item style="text-align: center;" v-if="moduleType !='newVersionUpdate'">
         <el-button size="small" type="default" @click="goBack">取消</el-button>
@@ -101,21 +114,14 @@
           region: [],
           status: [],
         },
-        versionType:[
-          {
-            id:1,
-            value:"大版本"
-          },
-          {
-            id:2,
-            value:"小版本"
-          },
-        ],
+        versionType: [],
         form: {
           name: '',
           region: '',
           htmlForEditor: '',
-          type:'',
+          type: '',
+          content: '',
+          update_install: "1",
         },
         previewShow: true,
         tabIndex: '',
@@ -131,8 +137,16 @@
     },
     mounted() {
       this.getParams();
+      // this.getDictionary();
     },
     methods: {
+      getDictionary() {
+        this.dictionary(672).then((res) => {
+          if (res.data.code === '30010') {
+            this.versionType = res.data.data;
+          }
+        });
+      },
       getParams() {
         if (!this.$route.query.moduleType) {
           this.cover_pic = '';
@@ -149,7 +163,7 @@
         }
         let query = this.$route.query;
         this.moduleType = query.moduleType;
-        if(query.from === 'publicArticleBtn'){
+        if (query.from === 'publicArticleBtn') {
           this.form.name = '';
           this.form.region = '';
           this.form.htmlForEditor = '';
@@ -217,7 +231,7 @@
         else {
           this.form.name = ""
           this.form.htmlForEditor = ""
-          this.form.type= 2
+          this.form.type = 2
         }
       },
       getDict() {
@@ -244,6 +258,12 @@
             this.tabIndex = 'fourth';
             this.$http.get(this.urls + 'setting/dictionary/380').then((res) => {
               this.dict.region = res.data.data;
+            });
+            break;
+          case 'newVersionUpdate':   //版本管理
+            this.tabIndex = 'fifth';
+            this.$http.get(this.urls + 'setting/dictionary/672').then((res) => {
+              this.versionType = res.data.data;
             });
             break;
         }
@@ -302,7 +322,8 @@
             version: this.form.name,
             content: this.form.htmlForEditor,
             image_pic: this.cover_id,
-            type: this.form.type
+            type: this.form.type,
+            update_install: this.form.update_install
           }).then((res) => {
             if (res.data.code === '50050') {
               this.goBack();
@@ -318,7 +339,8 @@
             version: this.form.name,
             content: this.form.htmlForEditor,
             image_pic: this.cover_id,
-            type: this.form.type
+            type: this.form.type,
+            update_install: this.form.update_install
           }).then((res) => {
             if (res.data.code === '50030') {
               this.goBack();
@@ -336,6 +358,7 @@
         this.form.name = '';
         this.form.region = '';
         this.form.htmlForEditor = '';
+        this.form.update_install = "1";
         this.isClear = true;
         let view = {};
         view.name = ' 文章发布 ';
