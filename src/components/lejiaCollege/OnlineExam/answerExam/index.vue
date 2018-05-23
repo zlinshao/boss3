@@ -269,7 +269,7 @@
         }
       },
       countDown(num) {
-        this.timeClear = '';
+        clearTimeout(this.timeClear);
         if (num >= 0) {
           this.clock(num);
         }
@@ -390,7 +390,6 @@
           answer: this.answerData
         }).then((res) => {
           if (res.data.code === '36010') {
-
             this.pointScore = res.data.data.score;
             this.resultId = res.data.data.id;
             if (this.questionData[158] && this.questionData[158].length > 0) {
