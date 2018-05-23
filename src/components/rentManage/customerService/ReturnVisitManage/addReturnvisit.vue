@@ -507,8 +507,10 @@
             let priceDate = val[0];
             for (var i = 0; i < this.priceLen; i++) {
               if (!(priceDate[i + 1] && priceDate[i + 1].length > 0)) {
-                priceDate[i + 1] = [];
-                priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+                if ((i + 1) < this.priceLen) {
+                  priceDate[i + 1] = [];
+                  priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+                }
               }
             }
           }
@@ -519,10 +521,12 @@
         handler(val, oldVal) {
           if (val && val[0] && val[0][0] && val[0][0].length > 0) {
             let priceDate = val[0];
-            for (var i = 0; i < this.priceLen; i++) {
+            for (var i = 0; i < this.payForLen; i++) {
               if (!(priceDate[i + 1] && priceDate[i + 1].length > 0)) {
-                priceDate[i + 1] = [];
-                priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+                if ((i + 1) < this.payForLen) {
+                  priceDate[i + 1] = [];
+                  priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+                }
               }
             }
           }
@@ -556,22 +560,34 @@
           this.validate();
         }
         if (this.validateFlag == true) {
-          this.$http.post(globalConfig.server + 'contract/feedback', this.form).then((res) => {
-            if (res.data.code === '1212200') {
-              this.$notify.success({
-                title: '成功',
-                message: res.data.msg
-              });
-              this.initial();
-              this.$emit('close', 'success');
-              this.addReturnvisitDialogVisible = false;
-            } else {
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.msg
-              });
+          this.$http.get(globalConfig.server + 'contract/feedback/check', {
+            params: {
+              contract_id: this.form.contract_id,
+              module: this.form.module
             }
-          })
+          }).then((res) => {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.$http.post(globalConfig.server + 'contract/feedback', this.form).then((res) => {
+              if (res.data.code === '1212200') {
+                this.$notify.success({
+                  title: '成功',
+                  message: res.data.msg
+                });
+                this.initial();
+                this.$emit('close', 'success');
+                this.addReturnvisitDialogVisible = false;
+              } else {
+                this.$notify.warning({
+                  title: '警告',
+                  message: res.data.msg
+                });
+              }
+            });
+          });
+
         }
       },
       validate() {
