@@ -32,8 +32,9 @@
             width="100px"
             label="版本类型">
             <template slot-scope="scope">
-              <span v-if="scope.row.type ==1">大版本</span>
-              <span v-else>小版本</span>
+              <span v-if="scope.row.type ==673">大版本</span>
+              <span v-else-if="scope.row.type ==674">小版本</span>
+              <span v-else>boss3(app,安卓)</span>
             </template>
           </el-table-column>
           <el-table-column
