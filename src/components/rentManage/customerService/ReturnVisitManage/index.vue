@@ -6,9 +6,9 @@
           <el-form :inline="true" size="mini">
             <el-form-item>
               <el-button class="iconfont icon-zhengchangliebiao" @click="showList('list')" :disabled="form.tag==1"
-                         size="mini" type="primary" plain></el-button>
+                         size="mini" type="primary" plain>列表</el-button>
               <el-button class="iconfont icon-liebiaozhankai" @click="showList('fold')" :disabled="form.tag==2"
-                         size="mini" type="primary" plain></el-button>
+                         size="mini" type="primary" plain>聚合</el-button>
             </el-form-item>
             <el-form-item>
               <el-input placeholder="请输入房屋地址" v-model="form.keywords" size="mini" clearable
@@ -22,7 +22,6 @@
             <el-form-item>
               <el-button type="primary" size="mini" @click="exportData">导出</el-button>
             </el-form-item>
-
           </el-form>
         </div>
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
