@@ -387,6 +387,10 @@
                   <span>{{item.display_name}}&nbsp;&nbsp;  </span>
                 </span>
               </span>
+
+              <span style="float: right;cursor: pointer;user-select: none">
+                <span v-if="albumArray.old_data" @click="searchOldData(albumArray.old_data)">查看报备详情</span>
+              </span>
             </div>
             <div class="describe_border">
               <div v-if="albumArray.album&&albumArray.album.album_file&&albumArray.album.album_file.length>0"
@@ -405,6 +409,222 @@
           </div>
         </div>
       </div>
+
+      <el-dialog
+        width="50%"
+        title="详情"
+        :visible.sync="innerVisible"
+        append-to-body>
+
+        <div class="scroll_bar">
+          <div class="title">房屋物品</div>
+          <div class="describe_border">
+            <el-form size="small" label-width="140px">
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="空调">
+                    <div class="content">
+                      <span v-if="oldData.house_goods">{{oldData.house_goods.air_condition}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="冰箱">
+                    <div class="content">
+                      <span v-if="oldData.house_goods">{{oldData.house_goods.fridge}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="电视">
+                    <div class="content">
+                      <span v-if="oldData.house_goods">{{oldData.house_goods.television}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="燃气灶">
+                    <div class="content">
+                      <span v-if="oldData.house_goods">{{oldData.house_goods.gas_stove}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="油烟机">
+                    <div class="content">
+                      <span v-if="oldData.house_goods">{{oldData.house_goods.hood}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="微波炉">
+                    <div class="content">
+                      <span v-if="oldData.house_goods">{{oldData.house_goods.microwave}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="洗衣机">
+                    <div class="content">
+                      <span v-if="oldData.house_goods">{{oldData.house_goods.wash_machine}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="热水器">
+                    <div class="content">
+                      <span v-if="oldData.house_goods">{{oldData.house_goods.water_heater}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="沙发">
+                    <div class="content">
+                      <span v-if="oldData.house_goods">{{oldData.house_goods.sofa}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="晾衣架">
+                    <div class="content">
+                      <span v-if="oldData.house_goods">{{oldData.house_goods.clothe_rack}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="餐桌">
+                    <div class="content">
+                      <span v-if="oldData.house_goods">{{oldData.house_goods.dining_table}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="椅子">
+                    <div class="content">
+                      <span v-if="oldData.house_goods">{{oldData.house_goods.chair}}</span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="暖气">
+                    <div class="content">
+                    <span v-if="oldData.house_goods">
+                      <span v-if="oldData.house_goods.heater">有</span>
+                      <span v-else="">无</span>
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="天然气">
+                    <div class="content">
+                    <span v-if="oldData.house_goods">
+                      <span v-if="oldData.house_goods.gas">有</span>
+                      <span v-else="">无</span>
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="房屋交接是否干净">
+                    <div class="content">
+                    <span v-if="oldData.house_goods">
+                      <span v-if="oldData.house_goods.is_clean">是</span>
+                      <span v-else="">否</span>
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="是否每个房间有床+床垫">
+                    <div class="content">
+                    <span v-if="oldData.house_goods">
+                      <span v-if="oldData.house_goods.bed">是</span>
+                      <span v-else="">否</span>
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="是否每个房间有衣柜">
+                    <div class="content">
+                    <span v-if="oldData.house_goods">
+                      <span v-if="oldData.house_goods.wardrobe">是</span>
+                      <span v-else="">否</span>
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="是否每个房间有窗帘">
+                    <div class="content">
+                    <span v-if="oldData.house_goods">
+                      <span v-if="oldData.house_goods.curtain">是</span>
+                      <span v-else="">否</span>
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="家电是否齐全">
+                    <div class="content">
+                    <span v-if="oldData.house_goods">
+                      <span v-if="oldData.house_goods.is_fill">是</span>
+                      <span v-else="">否</span>
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="房东是否予以配齐">
+                    <div class="content">
+                    <span v-if="oldData.house_goods">
+                      <span v-if="oldData.house_goods.is_lord_fill">是</span>
+                      <span v-else="">否</span>
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="16">
+                  <el-form-item label="其他家具家电">
+                    <div class="content">
+                    <span v-if="oldData.house_goods">
+                     {{oldData.house_goods.other_furniture}}
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="16">
+                  <el-form-item label="其他问题">
+                    <div class="content">
+                    <span v-if="oldData.house_goods">
+                     {{oldData.house_goods.other_remark}}
+                    </span>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
+        </div>
+      </el-dialog>
+
       <span slot="footer" class="dialog-footer">
         <!--<el-button size="small" @click="houseDetailDialogVisible = false">取 消</el-button>-->
         <!--<el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>-->
@@ -419,6 +639,7 @@
     data() {
       return {
         houseDetailDialogVisible: false,
+        innerVisible:false,
         detailData: {},
         albumData: [],
         allDictionary: [],
@@ -426,6 +647,7 @@
         tableLoading: false,
 
         imgArray:[],
+        oldData : {},
       };
     },
     watch: {
@@ -439,6 +661,11 @@
           this.getData();
           this.detailData = [];
           this.albumData = {};
+        }
+      },
+      innerVisible(val){
+        if(!val){
+          this.oldData = {};
         }
       },
       all_dic(val) {
@@ -498,6 +725,11 @@
           }
         });
         return dictionary_name;
+      },
+
+      searchOldData(data){
+        this.oldData = data;
+        this.innerVisible = true;
       },
     }
   };
