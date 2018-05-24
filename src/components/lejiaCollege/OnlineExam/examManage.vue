@@ -81,7 +81,7 @@
             style="width: 100%">
             <el-table-column
               prop="name"
-              label="考试场次">
+              label="场次名称">
               <template slot-scope="scope">
                 <span v-if="scope.row.name">{{scope.row.name}}</span>
                 <span v-if="!scope.row.name">暂无</span>
@@ -261,11 +261,11 @@
             element-loading-text="拼命加载中"
             element-loading-spinner="el-icon-loading"
             element-loading-background="rgba(255, 255, 255, 0)"
+            @selection-change="handleSelectionChange"
             style="width: 100%">
-            <el-table-column width="65">
-              <template slot-scope="scope">
-                <el-checkbox :label="scope.row.pivot.examinee_id" v-model="examinees"></el-checkbox>
-              </template>
+            <el-table-column
+              type="selection"
+              width="65">
             </el-table-column>
             <el-table-column
               prop="real_name"
@@ -416,6 +416,12 @@
       },
     },
     methods: {
+      handleSelectionChange(val) {
+        this.examinees = [];
+        val.forEach((item) => {
+          this.examinees.push(item.pivot.examinee_id);
+        });
+      },
       confirmSend() {
         this.$confirm('确认发送吗?确认后，该试卷的所有信息，包括试题、场次、考生设置，均不可再修改！系统会已消息形式通知考生', '提示', {
           confirmButtonText: '确定',

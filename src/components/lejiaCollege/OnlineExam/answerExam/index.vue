@@ -5,10 +5,9 @@
         <el-row style="width:100%;margin-top:16px;">
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="text-align:left;color:#464748;">
-              <div class="qdiv" style="margin-top:28px;">试卷名称：<span style="color:#6a8dfb">{{paperData.name}}</span>
-              </div>
-              <div class="qdiv">试卷类型：<span style="color:#6a8dfb">{{paperData.paper && paperData.paper.category}}</span>
-              </div>
+              <div class="qdiv" style="margin-top:15px;">场次名称：<span style="color:#6a8dfb">{{paperData.name}}</span></div>
+              <div class="qdiv">试卷名称：<span style="color:#6a8dfb">{{paperData.paper && paperData.paper.name}}</span></div>
+              <div class="qdiv">试卷类型：<span style="color:#6a8dfb">{{paperData.paper && paperData.paper.category}}</span></div>
             </div>
           </el-col>
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
@@ -133,8 +132,8 @@
             <el-form>
               <el-form-item style="width:96%;margin-left:50px;margin-top: 10px;">
                 <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak">
-                  <el-input style="width:97%;" size="small" v-model="answerData[item.id][ak]"
-                            :placeholder="`请填写第 ${ak+1} 处答案`"></el-input>
+                  <input type="text" style="width: 95%;border: 1px solid #dcdfe6;border-radius: 5px;padding: 10px;font: 400 13.3333px Arial;color: #787a7e;"
+                         size="small" v-model="answerData[item.id][ak]" :placeholder="`请填写第 ${ak+1} 处答案`">
                 </el-col>
               </el-form-item>
             </el-form>
@@ -153,7 +152,7 @@
             </el-row>
             <el-form>
               <el-form-item style="width:96%;margin-left:50px;margin-top: 10px;">
-                <textarea style="width: 97%;border: 1px solid #dcdfe6;border-radius: 5px;padding: 10px;" v-model="answerData[item.id]"
+                <textarea style="width: 97%;border: 1px solid #dcdfe6;border-radius: 5px;padding: 10px;font: 400 13.3333px Arial;color: #787a7e;" v-model="answerData[item.id]"
                          placeholder="请填写答案"></textarea>
               </el-form-item>
             </el-form>
@@ -312,11 +311,7 @@
           }
           if (this.questionData[154] && this.questionData[154].length > 0) {
             this.questionData[154].forEach((item) => {
-              if (this.answers && this.answers[item.id]) {
-                this.$set(this.answerData, item.id, this.answers[item.id]);
-              } else {
-                this.$set(this.answerData, item.id, []);
-              }
+              this.$set(this.answerData, item.id, []);
             });
           }
           if (this.questionData[155] && this.questionData[155].length > 0) {
@@ -444,7 +439,10 @@
   .timeStringClass {
     margin-left: 30px;
   }
-
+  input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    /* WebKit browsers */
+    color: #c0c4cc;
+  }
   .ql-editor {
     min-height: initial !important;
     padding: 0px;
@@ -484,8 +482,8 @@
         border-radius: 5px;
         .qdiv {
           font-size: 14px;
-          height: 35px;
-          line-height: 35px;
+          height: 30px;
+          line-height: 30px;
           margin-left: 20px;
           overflow: hidden;
         }
