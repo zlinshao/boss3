@@ -455,6 +455,31 @@
       this.form.huifang = JSON.parse(localStorage.personal).name;
     },
     watch: {
+      agency_price_origin(val){
+        if(!val){
+          this.agency_price_origin = '暂无';
+        }
+      },
+      agency_price_now(val){
+        if(!val){
+          this.agency_price_now = '暂无';
+        }
+      },
+      agency_name(val){
+        if(!val){
+          this.agency_name = '暂无';
+        }
+      },
+      agency_user_name(val){
+        if(!val){
+          this.agency_user_name = '暂无';
+        }
+      },
+      agency_phone(val){
+        if(!val){
+          this.agency_phone = '暂无';
+        }
+      },
       addReturnvisitDialog(val) {
         this.addReturnvisitDialogVisible = val
       },
