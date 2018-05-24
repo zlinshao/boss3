@@ -153,8 +153,8 @@
             </el-row>
             <el-form>
               <el-form-item style="width:96%;margin-left:50px;margin-top: 10px;">
-                <el-input style="" v-model="answerData[item.id]"
-                          type="textarea" placeholder="请填写答案"></el-input>
+                <input style="width: 98%;border: 1px solid #dcdfe6;border-radius: 5px;padding: 10px;" v-model="answerData[item.id]"
+                          type="textarea" placeholder="请填写答案"></input>
               </el-form-item>
             </el-form>
           </div>
