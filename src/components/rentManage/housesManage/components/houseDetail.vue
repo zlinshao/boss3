@@ -388,8 +388,8 @@
                 </span>
               </span>
 
-              <span style="float: right;cursor: pointer;user-select: none">
-                <span v-if="albumArray.old_data" @click="searchOldData(albumArray.old_data)">查看报备详情</span>
+              <span v-if="albumArray.old_data&&!isOnlyPic" style="float: right;cursor: pointer;user-select: none">
+                <span @click="searchOldData(albumArray.old_data)">查看报备详情</span>
               </span>
             </div>
             <div class="describe_border">
