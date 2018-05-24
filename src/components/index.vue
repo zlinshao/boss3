@@ -259,7 +259,8 @@
                           <i class="el-icon-tickets"></i>
                           <div class="msgTitle">
                             <span>我的考试</span>
-                            <span v-if="examData && examData.available" class="circle_red"></span></div>
+                            <span v-if="examData && examData.available" class="circle_red"></span>
+                          </div>
                         </div>
                       </el-dropdown-item>
                     </div>
@@ -638,15 +639,15 @@
       this.getUnReadMessage();
       //调查问卷
       this.getQuesNaireData();
-      //个人门户下的考试和调查5分钟轮询一次
+      //个人门户下的考试和调查1分钟轮询一次
       this.getExamNaireRedCircle();
       setTimeout(() => {
         this.getExamNaireRedCircle();
       }, 60 * 1000);
     },
     activated() {
-      //初始化个人信息
       this.confirmArrival = localStorage.getItem('confirmArrival');
+      //初始化个人信息
       this.personal = JSON.parse(localStorage.personal);
       //鼠标滑动监听
       let _this = this;

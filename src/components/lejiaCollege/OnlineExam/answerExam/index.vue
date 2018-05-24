@@ -312,11 +312,7 @@
           }
           if (this.questionData[154] && this.questionData[154].length > 0) {
             this.questionData[154].forEach((item) => {
-              if (this.answers && this.answers[item.id]) {
-                this.$set(this.answerData, item.id, this.answers[item.id]);
-              } else {
-                this.$set(this.answerData, item.id, []);
-              }
+              this.$set(this.answerData, item.id, []);
             });
           }
           if (this.questionData[155] && this.questionData[155].length > 0) {
