@@ -102,9 +102,9 @@
               </el-col>
             </el-row>
             <el-form>
-              <el-form-item>
-                <el-input style="width:96%;margin-left:50px;margin-top: 10px;" v-model="answerData[item.id]"
-                          type="textarea" placeholder="请填写答案"></el-input>
+              <el-form-item style="width:96%;margin-left:50px;margin-top: 10px;">
+                <textarea style="width: 97%;border: 1px solid #dcdfe6;border-radius: 5px;padding: 10px;font: 400 13.3333px Arial;color: #787a7e;" v-model="answerData[item.id]"
+                          placeholder="请填写答案"></textarea>
               </el-form-item>
             </el-form>
           </div>
@@ -290,7 +290,10 @@
     padding: 0px;
     margin: 0px;
   }
-
+  input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    /* WebKit browsers */
+    color: #c0c4cc;
+  }
   .el-form-item {
     margin-bottom: 15px !important;
   }
