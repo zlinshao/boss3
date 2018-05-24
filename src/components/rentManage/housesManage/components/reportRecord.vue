@@ -100,14 +100,25 @@
     watch:{
       activeName(val){
         if(val === 'sixth'){
-          this.reGetData();
+          if(this.houseId){
+            this.reGetData();
+          }else {
+            this.emptyContent = '暂无数据';
+            this.totalNumber = 0;
+            this.tableData = [];
+          }
         }
       },
       houseId(val){
         if(val){
-          if(this.activeName  == 'sixth'){
+          if(this.activeName  === 'sixth'){
             this.reGetData();
+
           }
+        }else {
+          this.emptyContent = '暂无数据';
+          this.totalNumber = 0;
+          this.tableData = [];
         }
       },
     },

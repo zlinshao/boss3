@@ -447,12 +447,23 @@
               if (!this.houseId) {
                 this.houseId = res.data.data[0].id;
               }
+              this.collectData = this.tableData[0].lords;
+              if (this.collectData.length > 0) {
+                this.collectId = this.collectData[0].id;
+              }
+              this.rentData = this.tableData[0].renters;
             } else {
               this.tableData = [];
+              this.collectData = [];
+              this.rentData = [];
               this.emptyContent = '暂无数据';
+              this.houseId = '';
             }
           } else {
             this.tableData = [];
+            this.collectData = [];
+            this.rentData = [];
+            this.houseId = '';
             this.totalNumber = 0;
             this.emptyContent = '暂无数据';
           }
