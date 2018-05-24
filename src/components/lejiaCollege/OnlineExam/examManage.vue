@@ -81,7 +81,7 @@
             style="width: 100%">
             <el-table-column
               prop="name"
-              label="考试场次">
+              label="场次名称">
               <template slot-scope="scope">
                 <span v-if="scope.row.name">{{scope.row.name}}</span>
                 <span v-if="!scope.row.name">暂无</span>
