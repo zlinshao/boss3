@@ -154,8 +154,15 @@
                   <el-button size="mini" type="info" v-if="scope.row.result_id !== 0 " @click="lookExam(scope.row)">
                     查看试卷
                   </el-button>
-                  <span style="cursor: pointer;color: #6a8dfb;"
-                        v-if="!scope.row.available && !scope.row.result_id">已结束</span>
+                  <span v-if="!scope.row.available && !scope.row.result_id">—</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="状态">
+                <template slot-scope="scope">
+                  <span style="cursor: pointer;color: #6a8dfb;" v-if="scope.row.available===0">已结束</span>
+                  <span style="cursor: pointer;color: #6a8dfb;" v-if="scope.row.started === 0">未开始</span>
+                  <span style="cursor: pointer;color: #6a8dfb;" v-if="scope.row.in_progress === 1">进行中</span>
                 </template>
               </el-table-column>
             </el-table>

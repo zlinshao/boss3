@@ -16,8 +16,8 @@
               <div class="import_left"><span style="float:left; font-size:14px;">总时长</span><i
                 style="float:right; color:#58d788;font-size:20px;" class="iconfont icon-shijian1"></i></div>
               <div><span style="font-size:70px; color:#58d788;" :class="{'timeStringClass':timeString !=''}">{{ paperData.duration }}</span>分钟
-                <span style="float: right;margin-right: 15px;margin-top: 33px;" v-if="timeString !='' ">倒计时
-                  <br/><span style="color:#58d788;">{{timeString}}</span></span>
+                <!--<span style="float: right;margin-right: 15px;margin-top: 33px;" v-if="timeString !='' ">倒计时-->
+                  <!--<br/><span style="color:#58d788;">{{timeString}}</span></span>-->
               </div>
             </div>
           </el-col>
@@ -30,10 +30,10 @@
           </el-col>
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="border: 1px solid #fb4699;box-shadow: 0 0 3px 1px #fb4699;">
-              <div class="import_left"><span style="float:left; font-size:14px;">考试成绩</span><i
+              <div class="import_left"><span style="float:left; font-size:14px;">倒计时</span><i
                 style="float:right; color:#fb4699;font-size:20px;" class="iconfont icon-chengjiguanli"></i></div>
-              <div><span style="font-size:70px; color:#fb4699">0</span>分</div>
-              <div style="position: absolute;top: 85px;right: 55px;">(总分：{{paperData.score}}分)</div>
+              <div><span style="font-size:50px; color:#fb4699">{{timeString}}</span></div>
+              <div style="position: absolute;top: 95px;right: 55px;">(总分：{{paperData.score}}分)</div>
             </div>
           </el-col>
         </el-row>
@@ -153,8 +153,8 @@
             </el-row>
             <el-form>
               <el-form-item style="width:96%;margin-left:50px;margin-top: 10px;">
-                <el-input style="" v-model="answerData[item.id]"
-                          type="textarea" placeholder="请填写答案"></el-input>
+                <textarea style="width: 97%;border: 1px solid #dcdfe6;border-radius: 5px;padding: 10px;" v-model="answerData[item.id]"
+                         placeholder="请填写答案"></textarea>
               </el-form-item>
             </el-form>
           </div>
@@ -243,7 +243,7 @@
         confirmArrival: [],
         answers: {},
         countDown: '',
-        timeString: '',
+        timeString: '00:00:00',
         timeClear: '',
         timeOut: '',
         showForceWords: false,  //强制提交文字
@@ -269,7 +269,7 @@
         }
       },
       countDown(num) {
-        this.timeClear = '';
+        clearTimeout(this.timeClear);
         if (num >= 0) {
           this.clock(num);
         }
@@ -312,11 +312,7 @@
           }
           if (this.questionData[154] && this.questionData[154].length > 0) {
             this.questionData[154].forEach((item) => {
-              if (this.answers && this.answers[item.id]) {
-                this.$set(this.answerData, item.id, this.answers[item.id]);
-              } else {
-                this.$set(this.answerData, item.id, []);
-              }
+              this.$set(this.answerData, item.id, []);
             });
           }
           if (this.questionData[155] && this.questionData[155].length > 0) {
@@ -390,7 +386,6 @@
           answer: this.answerData
         }).then((res) => {
           if (res.data.code === '36010') {
-
             this.pointScore = res.data.data.score;
             this.resultId = res.data.data.id;
             if (this.questionData[158] && this.questionData[158].length > 0) {

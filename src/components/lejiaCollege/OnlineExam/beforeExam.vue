@@ -8,7 +8,7 @@
           <p>场次名称：{{examData.name}}</p>
           <p>考试时间：{{examData.start_time}}</p>
         </div>
-        <p class="view_history" @click="goHistory('exam')">查看历史考试>></p>
+        <p class="view_history" style="bottom: 50px;" @click="goHistory('exam')">查看历史考试>></p>
       </div>
       <div v-show="showType==='second'">
         <div class="title">开考倒计时</div>
@@ -38,14 +38,14 @@
     name: "before-exam",
     data() {
       return {
-        showType: 'third',
+        showType: 'first',
         examId: '',
         examData: {},
         countDown: 0,
         timeString: '09:59:59',
         timeClear: '',
         examDataTime: '',
-        showExamInfo: true,
+        showExamInfo: false,
       };
     },
     activated() {
@@ -85,7 +85,7 @@
         this.$router.push({path: '/LineCollege'});
       },
       getQueryData() {
-        if (!this.$route.query.id) {
+        if (!this.$route.query.type) {
           this.examId = this.$store.state.onlineExam.before_exam.id;
           this.showType = this.$store.state.onlineExam.before_exam.type;
           this.$router.push({
