@@ -225,11 +225,11 @@
             element-loading-text="拼命加载中"
             element-loading-spinner="el-icon-loading"
             element-loading-background="rgba(255, 255, 255, 0)"
+            @selection-change="handleSelectionChange"
             style="width: 100%">
-            <el-table-column width="65">
-              <template slot-scope="scope">
-                <el-checkbox :label="scope.row.pivot.examinee_id" v-model="examinees"></el-checkbox>
-              </template>
+            <el-table-column
+              type="selection"
+              width="65">
             </el-table-column>
             <el-table-column
               prop="real_name"
@@ -378,10 +378,17 @@
       examineeDialog(val) {
         if (!val) {
           this.examineesData = [];
+          this.examinees = [];
         }
       }
     },
     methods: {
+      handleSelectionChange(val) {
+        this.examinees = [];
+        val.forEach((item) => {
+          this.examinees.push(item.pivot.examinee_id);
+        });
+      },
       deleteExaminess() {
         this.$confirm('确认移除该调查对象吗?', '提示', {
           confirmButtonText: '确定',
