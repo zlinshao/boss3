@@ -6,24 +6,24 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="创建时间">
-                <el-input v-model="form.contract_create_time" readonly></el-input>
+                <el-input v-model="form.contract_create_time" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="回访人">
-                <el-input v-model="form.huifang" readonly></el-input>
+                <el-input v-model="form.huifang" disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span="12">
               <el-form-item label="房屋地址">
-                <el-input v-model="form.address" readonly></el-input>
+                <el-input v-model="form.address" disabled></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="合同类型">
-                <el-input v-model="form.contract_type" readonly></el-input>
+                <el-input v-model="form.contract_type" disabled></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -101,7 +101,8 @@
                     range-separator="至"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
-                    :picker-options="pickerOptions2">
+                    :picker-options="pickerOptions2"
+                    @change="priceChange(index-1)">
                   </el-date-picker>
                 </el-form-item>
                 <el-form-item v-if="index!=1" required>
@@ -115,7 +116,9 @@
                     range-separator="至"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
-                    :picker-options="pickerOptions2">
+                    :picker-options="pickerOptions2"
+                    @change="priceChange(index-1)"
+                  >
                   </el-date-picker>
                 </el-form-item>
               </el-col>
@@ -142,7 +145,8 @@
                     range-separator="至"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
-                    :picker-options="pickerOptions2">
+                    :picker-options="pickerOptions2"
+                    @change="payTypeChange(index-1)">
                   </el-date-picker>
                 </el-form-item>
                 <el-form-item required v-if="index!=1">
@@ -156,7 +160,8 @@
                     range-separator="至"
                     start-placeholder="开始日期"
                     end-placeholder="结束日期"
-                    :picker-options="pickerOptions2">
+                    :picker-options="pickerOptions2"
+                    @change="payTypeChange(index-1)">
                   </el-date-picker>
                 </el-form-item>
               </el-col>
@@ -289,31 +294,31 @@
             <el-row>
               <el-col :span="12">
                 <el-form-item label="中介费">
-                  <el-input v-model="agency_price_origin " readonly></el-input>
+                  <el-input v-model="agency_price_origin " disabled></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
                 <el-form-item label="现中介费">
-                  <el-input v-model="agency_price_now" readonly></el-input>
+                  <el-input v-model="agency_price_now" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="中介名">
-                  <el-input v-model="agency_name" readonly></el-input>
+                  <el-input v-model="agency_name" disabled></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12">
                 <el-form-item label="中介人">
-                  <el-input v-model="agency_user_name" readonly></el-input>
+                  <el-input v-model="agency_user_name" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="中介电话">
-                  <el-input v-model="agency_phone" readonly></el-input>
+                  <el-input v-model="agency_phone" disabled></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -501,40 +506,91 @@
           })
         }
       },
-      'form.unit_price': {
-        deep: true,
-        handler(val, oldVal) {
-          if (val && val[0] && val[0][0] && val[0][0].length > 0) {
-            let priceDate = val[0];
-            for (var i = 0; i < this.priceLen; i++) {
-              if (!(priceDate[i + 1] && priceDate[i + 1].length > 0)) {
-                if ((i + 1) < this.priceLen) {
-                  priceDate[i + 1] = [];
-                  priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
-                }
+      // 'form.unit_price': {
+      //   deep: true,
+      //   handler(val, oldVal) {
+      //     if (val && val[0] && val[0][0] && val[0][0].length > 0) {
+      //       let priceDate = val[0];
+      //       for (var i = 0; i < this.priceLen; i++) {
+      //         // if (!(priceDate[i + 1] && priceDate[i + 1].length > 0)) {
+      //           if ((i + 1) < this.priceLen) {
+      //             priceDate[i + 1] = [];
+      //             priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+      //           }
+      //         // }
+      //       }
+      //     }
+      //   }
+      // },
+      priceLen(val) {
+        let data = this.form.unit_price;
+        if (data && data[0] && data[0][0] && data[0][0].length > 0) {
+          let priceDate = data[0];
+          for (var i = 0; i < val; i++) {
+              if ((i + 1) < val) {
+                priceDate[i + 1] = [];
+                priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
               }
-            }
           }
         }
       },
-      'form.pay_type': {
-        deep: true,
-        handler(val, oldVal) {
-          if (val && val[0] && val[0][0] && val[0][0].length > 0) {
-            let priceDate = val[0];
-            for (var i = 0; i < this.payForLen; i++) {
-              if (!(priceDate[i + 1] && priceDate[i + 1].length > 0)) {
-                if ((i + 1) < this.payForLen) {
-                  priceDate[i + 1] = [];
-                  priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
-                }
+      payForLen(val) {
+        let data = this.form.pay_type;
+        if (data && data[0] && data[0][0] && data[0][0].length > 0) {
+          let priceDate = data[0];
+          for (var i = 0; i < val; i++) {
+              if ((i + 1) < val) {
+                priceDate[i + 1] = [];
+                priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
               }
-            }
           }
         }
       },
+      // 'form.pay_type': {
+      //   deep: true,
+      //   handler(val, oldVal) {
+      //     if (val && val[0] && val[0][0] && val[0][0].length > 0) {
+      //       let priceDate = val[0];
+      //       for (var i = 0; i < this.payForLen; i++) {
+      //         if (!(priceDate[i + 1] && priceDate[i + 1].length > 0)) {
+      //           if ((i + 1) < this.payForLen) {
+      //             priceDate[i + 1] = [];
+      //             priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+      //           }
+      //         }
+      //       }
+      //     }
+      //   }
+      // },
     },
     methods: {
+      payTypeChange(n){
+        let data = this.form.pay_type;
+        if (data && data[0] && data[0][0] && data[0][0].length > 0) {
+          let priceDate = data[0];
+          for (var i = n; i < this.payForLen; i++) {
+            if ((i + 1) < this.payForLen) {
+              priceDate[i + 1] = [];
+              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+              this.$set(this.form.pay_type[0], priceDate );
+            }
+          }
+        }
+      },
+      priceChange(n) {
+        let data = this.form.unit_price;
+        if (data && data[0] && data[0][0] && data[0][0].length > 0) {
+          let priceDate = data[0];
+          for (var i = n; i < this.priceLen; i++) {
+            if ((i + 1) < this.priceLen) {
+              priceDate[i + 1] = [];
+              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+              this.$set(this.form.unit_price[0], priceDate );
+            }
+          }
+        }
+      },
+
       getDictionary() {
         this.dictionary(595).then((res) => {  //维修状态
           this.repairStatusCategory = res.data;
