@@ -153,11 +153,15 @@
         }
       },
       houseId(val){
+        this.followParams.id = val;
         if(val){
-          this.followParams.id = val;
           if(this.activeName === 'first'){
             this.reGetData();
           }
+        }else {
+          this.tableData = [];
+          this.totalNumber = 0;
+          this.emptyContent = '暂无数据';
         }
       },
       changeHouseStatus(val){
