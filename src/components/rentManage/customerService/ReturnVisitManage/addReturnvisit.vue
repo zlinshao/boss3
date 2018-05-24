@@ -767,6 +767,13 @@
             message: "支付方式不能为空"
           });
         }
+        if (this.form.sale_remark == "") {
+          this.validateFlag = false;
+          this.$notify.warning({
+            title: '警告',
+            message: "业务员专业度不能为空"
+          });
+        }
       },
       initial() {
         this.agency_price_origin = "",            //中介费
