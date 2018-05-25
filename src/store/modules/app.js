@@ -7,6 +7,7 @@ const app = {
     menuStatus : false,
     isLoading:false,
     isBasicChange:false,
+    isEditReportManage:false,
   },
   mutations: {
     ADD_VISITED_VIEWS: (state, view) => {
@@ -48,6 +49,9 @@ const app = {
     },
     CHANGE_BASIC_SETTING:(state) => {
       state.isBasicChange = !state.isBasicChange;
+    },
+    TO_EDIT_LIST:(state) => {
+      state.isEditReportManage = !state.isEditReportManage;
     }
   },
   actions: {
@@ -85,6 +89,11 @@ const app = {
     changeBasicSetting({commit}){
       commit('CHANGE_BASIC_SETTING')
     },
+
+    //喜报界面切换状态
+    toEditList({commit}){
+      commit('TO_EDIT_LIST')
+    }
   }
 };
 
