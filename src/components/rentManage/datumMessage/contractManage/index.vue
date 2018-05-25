@@ -362,6 +362,14 @@
                       <span v-if="!scope.row.staff_name">暂无</span>
                     </template>
                   </el-table-column>
+
+                  <el-table-column
+                    label="负责人">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>
+                      <span v-else="">/</span>
+                    </template>
+                  </el-table-column>
                   <el-table-column
                     prop="department_name"
                     label="部门">
@@ -372,7 +380,7 @@
                   </el-table-column>
                   <el-table-column
                     label="回访状态"
-                    width="180">
+                    width="150">
                     <template slot-scope="scope">
                   <span v-if="scope.row.visit_status&&scope.row.visit_status.name">
                     {{scope.row.visit_status.name}}
@@ -382,7 +390,8 @@
                     </template>
                   </el-table-column>
                   <el-table-column
-                    label="审核状态">
+                    label="审核状态"
+                    width="150">
                     <template slot-scope="scope">
                       <span v-if="scope.row.doc_status&&scope.row.doc_status.name">
                         <span v-if="scope.row.doc_status.id==1">
@@ -507,7 +516,13 @@
                       <span v-if="!scope.row.staff_name">暂无</span>
                     </template>
                   </el-table-column>
-
+                  <el-table-column
+                    label="负责人">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>
+                      <span v-else="">/</span>
+                    </template>
+                  </el-table-column>
                   <el-table-column
                     prop="department_name"
                     label="部门">
@@ -516,9 +531,10 @@
                       <span v-if="!scope.row.department_name">暂无</span>
                     </template>
                   </el-table-column>
+
                   <el-table-column
                     label="回访状态"
-                    width="180">
+                    width="150">
                     <template slot-scope="scope">
                   <span v-if="scope.row.visit_status&&scope.row.visit_status.name">
                     {{scope.row.visit_status.name}}
@@ -529,7 +545,8 @@
                   </el-table-column>
 
                   <el-table-column
-                    label="审核状态">
+                    label="审核状态"
+                    width="150">
                     <template slot-scope="scope">
                       <span v-if="scope.row.doc_status&&scope.row.doc_status.name">
                         <span v-if="scope.row.doc_status.id==1">
@@ -964,7 +981,6 @@
         this.search();
       },
       collectDatafunc() {
-        this.collectData = [];
         this.rentStatus = " ";
         this.rentLoading = true;
         this.$http.get(globalConfig.server + 'lease/collect', {params: this.params}).then((res) => {
@@ -1026,7 +1042,6 @@
         })
       },
       rentDatafunc() {
-        this.rentData = [];
         this.rentStatus = " ";
         this.rentLoading = true;
         this.$http.get(globalConfig.server + 'lease/rent', {params: this.params}).then((res) => {
@@ -1110,6 +1125,7 @@
               label: '查看合同修改记录',
               contract_id: row.contract_id
             },
+            {clickIndex: 'deleteRent', headIcon: 'el-icon-delete', label: '删除',},
           ];
         } else {
           this.ToActiveName = "first";
@@ -1128,6 +1144,7 @@
               label: '查看合同修改记录',
               contract_id: row.contract_id
             },
+            {clickIndex: 'deleteCollect', headIcon: 'el-icon-delete', label: '删除',},
           ];
         }
         this.contextMenuParam(event);
@@ -1152,7 +1169,71 @@
             this.leaseHistoryDialog = true;
             this.selectContractId = val.contract_id;
             break;
+          case 'deleteRent':
+            this.$confirm('此操作将永久删除该条目, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.deleteColumn('rent');
+            }).catch(() => {
+              this.$notify.warning({
+                title:'警告',
+                message:'已取消删除',
+              })
+            });
+            break;
+          case 'deleteCollect':
+            this.$confirm('此操作将永久删除该条目, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.deleteColumn('collect');
+            }).catch(() => {
+              this.$notify.warning({
+                title:'警告',
+                message:'已取消删除',
+              })
+            });
+            break;
         }
+      },
+
+      //删除合同
+      deleteColumn(type){
+        if(type === 'collect'){
+          this.$http.put(globalConfig.server+'lease/collect/delete/'+this.contractOperateId).then((res) => {
+            if(res.data.code === '61010'){
+              this.$notify.success({
+                title:'成功',
+                message:res.data.msg,
+              });
+              this.collectDatafunc();
+            }else {
+              this.$notify.warning({
+                title:'警告',
+                message:res.data.msg,
+              })
+            }
+          })
+        }else {
+          this.$http.put(globalConfig.server+'lease/rent/delete/'+this.contractOperateId).then((res) => {
+            if(res.data.code === '61110'){
+              this.$notify.success({
+                title:'成功',
+                message:res.data.msg,
+              });
+              this.rentDatafunc();
+            }else {
+              this.$notify.warning({
+                title:'警告',
+                message:res.data.msg,
+              })
+            }
+          })
+        }
+
       },
       //关闭右键菜单
       closeMenu() {

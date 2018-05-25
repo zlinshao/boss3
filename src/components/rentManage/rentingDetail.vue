@@ -422,10 +422,17 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
+                <el-form-item label="负责人">
+                  <div class="content">{{contractInfo.leader_name}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
                 <el-form-item label="所属部门">
                   <div class="content">{{contractInfo.department_name}}</div>
                 </el-form-item>
               </el-col>
+            </el-row>
+            <el-row>
               <el-col :span="8" class="blueColor">
                 <el-form-item label="资料补齐时间">
                   <div class="content">{{contractInfo.data_date}}</div>
