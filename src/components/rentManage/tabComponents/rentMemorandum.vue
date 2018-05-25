@@ -81,6 +81,14 @@
           </template>
         </el-table-column>
         <el-table-column
+          prop="leader"
+          label="负责人">
+          <template slot-scope="scope">
+            <span v-if="scope.row.leader">{{scope.row.leader}}</span>
+            <span v-if="!scope.row.leader">暂无</span>
+          </template>
+        </el-table-column>
+        <el-table-column
           prop="is_send"
           label="操作类型">
           <template slot-scope="scope">
