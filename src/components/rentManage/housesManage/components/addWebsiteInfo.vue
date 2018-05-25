@@ -1,7 +1,11 @@
 <template>
   <div id="addWebInfo">
     <el-dialog :close-on-click-modal="false" title="新增官网房源" :visible.sync="addWebInfoDialogVisible" width="60%">
-      <div class="scroll_bar">
+      <div class="scroll_bar"
+           v-loading="isLoading"
+           element-loading-text="拼命加载中"
+           element-loading-spinner="el-icon-loading"
+           element-loading-background="rgba(255, 255, 255, .7)">
         <div class="title">基本信息</div>
         <div class="form_border">
           <el-form size="small" label-width="80px">
@@ -70,26 +74,23 @@
             <el-row>
               <el-col :span="6">
                 <el-form-item label="省" required>
-                  <el-select v-model="province" clearable @change="choose('city',province)">
-                    <el-option v-for="(item,index) in provinceList" :label="item.province_name"
-                               :value="item.province_id" :key="index"></el-option>
-                  </el-select>
+                  <div class="content">
+                    <span v-if="detailData.community">{{detailData.community.province.province_name}}</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="市" required>
-                  <el-select v-model="city" clearable  @change="choose('area',city)">
-                    <el-option v-for="(item,index) in cityList" :label="item.city_name" :value="item.city_id"
-                               :key="index"></el-option>
-                  </el-select>
+                  <div class="content">
+                    <span v-if="detailData.community">{{detailData.community.city.city_name}}</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="区/县" required>
-                  <el-select v-model="area" clearable @change="choose('region',area)">
-                    <el-option v-for="(item,index) in areaList" :label="item.area_name" :value="item.area_id"
-                               :key="index"></el-option>
-                  </el-select>
+                  <div class="content">
+                    <span v-if="detailData.community">{{detailData.community.area.area_name}}</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
@@ -277,20 +278,14 @@
           12: '天然气',
         },
 
-        provinceList : [],
-        cityList : [],
-        areaList : [],
         regionList : [],
-        province : '',
-        city : '',
-        area : '',
+
         isUp : false,
+        isLoading : false,
       };
     },
     mounted(){
-      this.$http.get(globalConfig.server + 'setting/others/province').then((res) => {
-        this.provinceList = res.data.data;
-      });
+
     },
     watch:{
       addWebInfoDialog(val){
@@ -342,49 +337,13 @@
           this.isDictionary = true
         });
       },
-
-      choose(val, id) {
-        if (val === 'city') {
-          this.city = '';
-          this.area = '';
-          this.params.region = '';
-          this.chooseList(val, id);
-        }else if (val === 'area') {
-          this.area = '';
-          this.params.region = '';
-          this.chooseList(val, id);
-        }else if (val === 'region') {
-          this.params.region = '';
-          this.chooseList(val, id);
-        }
-      },
-
-      chooseList(val, id) {
-        if (val === 'city') {
-          this.cityList = [];
-          this.areaList = [];
-          this.regionList = [];
-          this.$http.get(globalConfig.server + 'setting/others/city?city_parent=' + id).then((res) => {
-            if (res.data.code === '100050') {
-              this.cityList = res.data.data;
-            }
-          })
-        } else if (val === 'area') {
-          this.areaList = [];
-          this.regionList = [];
-          this.$http.get(globalConfig.server + 'setting/others/area?area_parent=' + id).then((res) => {
-            if (res.data.code === '100060') {
-              this.areaList = res.data.data;
-            }
-          })
-        } else if (val === 'region') {
-          this.regionList = [];
-          this.$http.get(globalConfig.server + 'setting/others/region?region_parent=' + id).then((res) => {
-            if (res.data.code === '100070') {
-              this.regionList = res.data.data;
-            }
-          })
-        }
+      chooseList(id) {
+        this.regionList = [];
+        this.$http.get(globalConfig.server + 'setting/others/region?region_parent=' + id).then((res) => {
+          if (res.data.code === '100070') {
+            this.regionList = res.data.data;
+          }
+        })
       },
       getImg(val){
         if(val[0] === 'cover_photo'){
@@ -394,7 +353,9 @@
         }
       },
       getData() {
+        this.isLoading = true;
         this.$http.get(globalConfig.server + 'house/album/' + this.houseId).then((res) => {
+          this.isLoading = false;
           if (res.data.code === '30070') {
             this.detailData = res.data.data.detail;
             this.albumData = res.data.data.album;
@@ -405,9 +366,12 @@
                 }else {
                   this.params.house_type.push('');
                 }
-
               });
             }
+
+            //获取区域列表
+            this.chooseList(this.detailData.community.area.area_id)
+
             this.params.area =  this.detailData.area.replace(/[^(0-9).]+/,'');
             this.params.decorate = this.detailData.decorate;
             this.params.direction = this.detailData.direction && this.detailData.direction.id;
@@ -453,12 +417,17 @@
             }
 
             this.imgArray = [];
-            let imgItem = {};
             if(this.albumData.length>0){
               this.albumData.forEach((item) => {
                 item.album.album_file.forEach((img)=>{
-                  if(img.info.mime.indexOf('image')>-1){
-                    imgItem = {};
+                  let isExist = false;
+                  this.imgArray.forEach((x) => {
+                    if(x.id === img.id){
+                      isExist = true;
+                    }
+                  });
+                  if(!isExist){
+                    let imgItem = {};
                     imgItem['id'] = img.id;
                     imgItem['uri'] = img.uri;
                     this.imgArray.push(imgItem);
@@ -468,8 +437,14 @@
             }
             if(this.detailData.house_goods&&this.detailData.house_goods.photo.length>0){
               this.detailData.house_goods.photo.forEach((img)=>{
-                if(img.info.mime.indexOf('image')>-1){
-                  imgItem = {};
+                let isExist = false;
+                this.imgArray.forEach((x) => {
+                  if(x.id === img.id){
+                    isExist = true;
+                  }
+                });
+                if(!isExist){
+                  let imgItem = {};
                   imgItem['id'] = img.id;
                   imgItem['uri'] = img.uri;
                   this.imgArray.push(imgItem);
@@ -496,6 +471,7 @@
       },
       confirmAdd(){
         this.isUp = true;
+        this.params.region = this.params.region || '0';
         this.$http.post(globalConfig.server+'web/house/save',this.params).then((res)=>{
           this.isUp = false;
           if(res.data.code === '90010'){
@@ -538,12 +514,8 @@
         this.imgArray  = [];
         this.selectPic  = [];
         this.newUpPic  = [];
-        this.cityList  = [];
-        this.areaList  = [];
         this.regionList  = [];
-        this.province  = '';
-        this.city  = '';
-        this.area  = '';
+
         this.isUp = false;
       },
     }
