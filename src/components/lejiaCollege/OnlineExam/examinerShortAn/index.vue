@@ -52,9 +52,9 @@
                       <span v-if="index == resultData.answer && resultData.answer[item.id]"><el-radio>{{index}}：{{val}}</el-radio></span>
                       <span v-else>{{index}}：{{val}}</span>
                       <span style="color:rgb(88, 215, 136);margin-left:50px;"
-                            v-if="resultData.answer && resultData.answer[item.id] == answerData[item.id] && resultData.answer && resultData.answer[item.id]==index">正确</span>
+                            v-if="(resultData.answer && resultData.answer[item.id]) == answerData[item.id] && (resultData.answer && resultData.answer[item.id])==index">正确</span>
                       <span style="color:#fc83b6;margin-left:50px;"
-                            v-if="resultData.answer && resultData.answer[item.id] != answerData[item.id] && resultData.answer && resultData.answer[item.id]==index">错误</span>
+                            v-if="(resultData.answer && resultData.answer[item.id]) != answerData[item.id] && (resultData.answer && resultData.answer[item.id])==index">错误</span>
                     </el-col>
                   </el-row>
                 </el-form-item>
@@ -83,13 +83,13 @@
                 <el-form-item style="margin-top: 10px;">
                   <el-row :gutter="20">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
-                      <span v-if="resultData.answer && resultData.answer[item.id].indexOf(index)>-1"><el-radio>{{index}}：{{val}}</el-radio></span>
+                      <span v-if="resultData.answer && resultData.answer[item.id] && resultData.answer[item.id].indexOf(index)>-1"><el-radio>{{index}}：{{val}}</el-radio></span>
                       <span v-else>{{index}}：{{val}}</span>
                       <span style="color:rgb(88, 215, 136);margin-left:50px;"
                             v-for="ans in  resultData.answer && resultData.answer[item.id]"
-                            v-if="resultData.answer &&  answerData[item.id].indexOf(ans)>-1 && ans==index">正确</span>
+                            v-if="answerData[item.id].indexOf(ans)>-1 && ans==index">正确</span>
                       <span style="color:#fc83b6;margin-left:50px;" v-for="ans in resultData.answer[item.id]"
-                            v-if="resultData.answer && answerData[item.id].indexOf(ans)<0 && ans==index">错误</span>
+                            v-if="answerData[item.id].indexOf(ans)<0 && ans==index">错误</span>
                     </el-col>
                   </el-row>
                 </el-form-item>
@@ -121,9 +121,9 @@
                       <span v-if="index == resultData.answer && resultData.answer[item.id]"><el-radio>{{index}}：{{val}}</el-radio></span>
                       <span v-else>{{index}}：{{val}}</span>
                       <span style="color:rgb(88, 215, 136);margin-left:50px;"
-                            v-if="resultData.answer && resultData.answer[item.id] == answerData[item.id] && resultData.answer && resultData.answer[item.id]==index">正确</span>
+                            v-if="(resultData.answer && resultData.answer[item.id]) == answerData[item.id] && (resultData.answer && resultData.answer[item.id])==index">正确</span>
                       <span style="color:#fc83b6;margin-left:50px;"
-                            v-if="resultData.answer && resultData.answer[item.id] != answerData[item.id] && resultData.answer && resultData.answer[item.id]==index">错误</span>
+                            v-if="(resultData.answer && resultData.answer[item.id]) != answerData[item.id] && (resultData.answer && resultData.answer[item.id])==index">错误</span>
                     </el-col>
                   </el-row>
                 </el-form-item>

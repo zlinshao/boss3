@@ -10,9 +10,9 @@
         </div>
       </div>
       <div class="main">
-        <div v-for="(v,k) in quesNaireData.question_set" v-if="k==158 && category==158">
-          <div class="questionDiv" v-for="(item,key) in v">
-            <span class="category_score">(<span v-if="k==158 && category==158">简答题</span>)</span>
+        <div v-for="(v,k) in quesNaireData.question_set" v-if="k==158 ">
+          <div class="questionDiv" v-for="(item,key) in v" v-if="quesId && (item.id == quesId)">
+            <span class="category_score">(<span v-if="k==158">简答题</span>)</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -21,14 +21,13 @@
                 <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
               </el-col>
             </el-row>
-            <el-row style="width:96%;margin-left:50px;" v-if="k==158 && category==158">
-              <el-row :key="kk" v-for="(vv,kk) in statisticData[item.id] && statisticData[item.id].answer">
-                <span>{{kk}}</span><br/>
-                <el-progress style="width:30%;display: inline-block;" :text-inside="true" :stroke-width="18"
-                             :percentage="Math.round(vv*100/statisticData[item.id].count)"></el-progress>
-                {{vv}}
+            <el-row style="width:96%;margin-left:50px;" v-if="k==158">
+              <el-row :key="kk" v-for="(vv,kk) in statisticData[item.id]">
+                <div style="line-height: 25px;margin-top: 10px;">{{kk+1}}. {{vv}}</div>
               </el-row>
-              <el-row style="color: #fb4699;padding: 8px 0;font-size: 14px;" v-if="!(statisticData[item.id] && statisticData[item.id].answer)">暂无统计数据......</el-row>
+              <el-row style="color: #fb4699;padding: 8px 0;font-size: 14px;"
+                      v-if="!(statisticData[item.id] && statisticData[item.id].length>0)">暂无统计数据......
+              </el-row>
             </el-row>
           </div>
         </div>
@@ -107,6 +106,7 @@
     padding: 0px;
     margin: 0px;
   }
+
   #lookNaire {
     .tool {
       position: relative;
