@@ -56,12 +56,12 @@
                   </div>
                   <el-row :gutter="20" style="margin-top: 10px;">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
-                      <span v-if="index == resultData.answer && resultData.answer[item.id]"><el-radio style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
+                      <span v-if="index == (resultData.answer && resultData.answer[item.id])"><el-radio style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
                       <span v-else>{{index}}：{{val}}</span>
                       <span style="color:rgb(88, 215, 136);margin-left:50px;"
-                            v-if="resultData.answer &&resultData.answer[item.id] == answerData[item.id] && resultData.answer && resultData.answer[item.id]==index">正确</span>
+                            v-if="(resultData.answer && resultData.answer[item.id]) == answerData[item.id] && (resultData.answer && resultData.answer[item.id])==index">正确</span>
                       <span style="color:#fc83b6;margin-left:50px;"
-                            v-if="resultData.answer &&resultData.answer[item.id] != answerData[item.id] && resultData.answer && resultData.answer[item.id]==index">错误</span>
+                            v-if="(resultData.answer && resultData.answer[item.id]) != answerData[item.id] && (resultData.answer && resultData.answer[item.id])==index">错误</span>
                     </el-col>
                   </el-row>
                 </div>
@@ -90,11 +90,11 @@
                   </div>
                   <el-row :gutter="20" style="margin-top: 10px;">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
-                      <span v-if="resultData.answer && resultData.answer[item.id].indexOf(index)>-1"><el-radio style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
+                      <span v-if="resultData.answer && resultData.answer[item.id] && resultData.answer[item.id].indexOf(index)>-1"><el-radio style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
                       <span v-else>{{index}}：{{val}}</span>
-                      <span style="color:rgb(88, 215, 136);margin-left:50px;" v-for="ans in resultData.answer && resultData.answer[item.id]"
+                      <span style="color:rgb(88, 215, 136);margin-left:50px;" v-for="ans in (resultData.answer && resultData.answer[item.id])"
                             v-if="answerData[item.id].indexOf(ans)>-1 && ans==index">正确</span>
-                      <span style="color:#fc83b6;margin-left:50px;" v-for="ans in resultData.answer && resultData.answer[item.id]"
+                      <span style="color:#fc83b6;margin-left:50px;" v-for="ans in (resultData.answer && resultData.answer[item.id])"
                             v-if="answerData[item.id].indexOf(ans)<0 && ans==index">错误</span>
                     </el-col>
                   </el-row>
@@ -125,12 +125,12 @@
                   <el-row style="margin-top: 10px;">
                     <el-col :span="12" :key="index" v-for="(val,index) in item.choice"
                             style="line-height:24px;">
-                      <span v-if="index == resultData.answer && resultData.answer[item.id]"><el-radio style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
+                      <span v-if="index == (resultData.answer && resultData.answer[item.id])"><el-radio style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
                       <span v-else>{{index}}：{{val}}</span>
                       <span style="color:rgb(88, 215, 136);margin-left:50px;"
-                            v-if="resultData.answer && resultData.answer[item.id] == answerData[item.id] && resultData.answer && resultData.answer[item.id]==index">正确</span>
+                            v-if="(resultData.answer && resultData.answer[item.id]) == answerData[item.id] && (resultData.answer && resultData.answer[item.id])==index">正确</span>
                       <span style="color:#fc83b6;margin-left:50px;"
-                            v-if="resultData.answer && resultData.answer[item.id] != answerData[item.id] && resultData.answer && resultData.answer[item.id]==index">错误</span>
+                            v-if="(resultData.answer && resultData.answer[item.id]) != answerData[item.id] && (resultData.answer && resultData.answer[item.id])==index">错误</span>
                     </el-col>
                   </el-row>
                 </div>
@@ -162,9 +162,9 @@
                       <el-input readOnly style="width:97%;" size="small"
                                 v-model="resultData.answer && resultData.answer[item.id][ak]" :placeholder="`第 ${ak+1} 处答案`"></el-input>
                       <span style="color:rgb(88, 215, 136);margin-left:16px;"
-                            v-for="(vv, kk) in resultData.answer && resultData.answer[item.id]"
+                            v-for="(vv, kk) in (resultData.answer && resultData.answer[item.id])"
                             v-if="answerData[item.id].indexOf(vv)>-1 && kk==ak ">正确</span>
-                      <span style="color:#fc83b6;margin-left:16px;" v-for="(vv, kk) in resultData.answer && resultData.answer[item.id]"
+                      <span style="color:#fc83b6;margin-left:16px;" v-for="(vv, kk) in (resultData.answer && resultData.answer[item.id])"
                             v-if="answerData[item.id].indexOf(vv)<0 && kk==ak">错误</span>
                     </el-col>
                   </el-row>
