@@ -516,7 +516,13 @@
                       <span v-if="!scope.row.staff_name">暂无</span>
                     </template>
                   </el-table-column>
-
+                  <el-table-column
+                    label="负责人">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>
+                      <span v-else="">/</span>
+                    </template>
+                  </el-table-column>
                   <el-table-column
                     prop="department_name"
                     label="部门">
@@ -525,13 +531,7 @@
                       <span v-if="!scope.row.department_name">暂无</span>
                     </template>
                   </el-table-column>
-                  <el-table-column
-                    label="负责人">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>
-                      <span v-else="">/</span>
-                    </template>
-                  </el-table-column>
+
                   <el-table-column
                     label="回访状态"
                     width="150">

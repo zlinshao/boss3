@@ -277,13 +277,7 @@
                 <!--prop="agency"-->
                 <!--label="中介费">-->
               <!--</el-table-column>-->
-              <el-table-column
-                label="所属部门">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.department_name">{{scope.row.department_name}}</span>
-                  <span v-else="">/</span>
-                </template>
-              </el-table-column>
+
               <el-table-column
                 label="签约人">
                 <template slot-scope="scope">
@@ -295,6 +289,13 @@
                 label="负责人">
                 <template slot-scope="scope">
                   <span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="所属部门">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.department_name">{{scope.row.department_name}}</span>
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
@@ -471,13 +472,7 @@
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
-              <el-table-column
-                label="所属部门">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.department_name">{{scope.row.department_name}}</span>
-                  <span v-else="">/</span>
-                </template>
-              </el-table-column>
+
               <el-table-column
                 label="签约人">
                 <template slot-scope="scope">
@@ -489,6 +484,13 @@
                 label="负责人">
                 <template slot-scope="scope">
                   <span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                label="所属部门">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.department_name">{{scope.row.department_name}}</span>
                   <span v-else="">/</span>
                 </template>
               </el-table-column>

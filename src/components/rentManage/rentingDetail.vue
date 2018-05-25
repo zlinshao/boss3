@@ -422,13 +422,13 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="所属部门">
-                  <div class="content">{{contractInfo.department_name}}</div>
+                <el-form-item label="负责人">
+                  <div class="content">{{contractInfo.leader_name}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="负责人">
-                  <div class="content">{{contractInfo.leader_name}}</div>
+                <el-form-item label="所属部门">
+                  <div class="content">{{contractInfo.department_name}}</div>
                 </el-form-item>
               </el-col>
             </el-row>

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <ReportManage></ReportManage>
-    <!--<EditReportManage v-if="isEditReportManage"></EditReportManage>-->
+    <ReportManage v-if="isEditReportManage"></ReportManage>
+    <EditReportManage v-if="isEditReportManage"></EditReportManage>
 
   </div>
 </template>
