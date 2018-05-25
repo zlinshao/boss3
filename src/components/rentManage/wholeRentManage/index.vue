@@ -292,8 +292,15 @@
                 </template>
               </el-table-column>
               <el-table-column
+                label="负责人">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+              <el-table-column
                 label="回访状态"
-                width="180">
+                width="150">
                 <template slot-scope="scope">
                   <span v-if="scope.row.visit_status&&scope.row.visit_status.name">
                     {{scope.row.visit_status.name}}
@@ -303,7 +310,8 @@
                 </template>
               </el-table-column>
               <el-table-column
-                label="审核状态">
+                label="审核状态"
+                width="150">
                 <template slot-scope="scope">
                       <span v-if="scope.row.doc_status&&scope.row.doc_status.name">
                         <span v-if="scope.row.doc_status.id==1">
@@ -478,8 +486,15 @@
                 </template>
               </el-table-column>
               <el-table-column
+                label="负责人">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>
+                  <span v-else="">/</span>
+                </template>
+              </el-table-column>
+              <el-table-column
                 label="回访状态"
-                width="180">
+                width="150">
                 <template slot-scope="scope">
                   <span v-if="scope.row.visit_status&&scope.row.visit_status.name">
                     {{scope.row.visit_status.name}}
@@ -489,7 +504,8 @@
                 </template>
               </el-table-column>
               <el-table-column
-                label="审核状态">
+                label="审核状态"
+                width="150">
                 <template slot-scope="scope">
                   <span v-if="scope.row.doc_status&&scope.row.doc_status.name">
                     <span v-if="scope.row.doc_status.id==1">
@@ -1065,6 +1081,7 @@
 //          {clickIndex: 'sendMessageDialog', headIcon: 'el-icons-fa-envelope-o', label: '发送短信',},
           {clickIndex: 'addReturnvisitDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加回访记录',},
           {clickIndex: 'addCollectReimbursementDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加报销单',},
+          {clickIndex: 'deleteCollect', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },
@@ -1154,6 +1171,7 @@
           {clickIndex: 'addFollowUpDialog', headIcon: 'el-icons-fa-plus', label: '添加工单',},
           {clickIndex: 'addReturnvisitDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加回访记录',},
           {clickIndex: 'addRentReimbursementDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '添加报销单',},
+          {clickIndex: 'deleteRent', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },
@@ -1310,6 +1328,34 @@
           case 'addRentReimbursementDialog':
             this.addRentReimbursementDialog = true;
             break;
+          case 'deleteRent':
+            this.$confirm('此操作将永久删除该条目, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.deleteColumn('rent');
+            }).catch(() => {
+              this.$notify.warning({
+                title:'警告',
+                message:'已取消删除',
+              })
+            });
+            break;
+          case 'deleteCollect':
+            this.$confirm('此操作将永久删除该条目, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.deleteColumn('collect');
+            }).catch(() => {
+              this.$notify.warning({
+                title:'警告',
+                message:'已取消删除',
+              })
+            });
+            break;
         }
 
       },
@@ -1330,6 +1376,42 @@
           });
         });
       },
+      //删除合同
+      deleteColumn(type){
+        if(type === 'collect'){
+          this.$http.put(globalConfig.server+'lease/collect/delete/'+this.collectContractId).then((res) => {
+            if(res.data.code === '61010'){
+              this.$notify.success({
+                title:'成功',
+                message:res.data.msg,
+              });
+              this.getCollectData();
+            }else {
+              this.$notify.warning({
+                title:'警告',
+                message:res.data.msg,
+              })
+            }
+          })
+        }else {
+          this.$http.put(globalConfig.server+'lease/rent/delete/'+this.rentContractId).then((res) => {
+            if(res.data.code === '61110'){
+              this.$notify.success({
+                title:'成功',
+                message:res.data.msg,
+              });
+              this.getRentData();
+            }else {
+              this.$notify.warning({
+                title:'警告',
+                message:res.data.msg,
+              })
+            }
+          })
+        }
+
+      },
+
       closeModal(val) {
         this.tabStatusChange = '';
         this.instructionDialog = false;
