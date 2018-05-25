@@ -2,17 +2,57 @@
   <div @click="show=false">
     <div id="houseContainer">
 
-      <div class="filter" style="text-align: right">
-        <el-form :inline="true" size="mini" onsubmit="return false">
-          <el-form-item>
-            <el-input placeholder="请输入内容" @keyup.enter.native="search" v-model="formInline.q" size="mini" clearable>
-              <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
-            </el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="changelist">返回到报备列表</el-button>
-          </el-form-item>
-        </el-form>
+      <div class="highRanking" style="margin-top: 10px">
+        <div class="highSearch">
+          <el-form :inline="true" onsubmit="return false" size="mini">
+            <el-form-item>
+              <el-input placeholder="请输入内容" @keyup.enter.native="search" v-model="formInline.q" size="mini" clearable>
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="changelist">返回到报备列表</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+        <!--高級搜索-->
+        <div class="filter high_grade" :class="isHigh? 'highHide':''">
+          <el-form :inline="true" onsubmit="return false" size="mini" label-width="100px">
+            <div class="filterTitle">
+              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+            </div>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">合同开始时间范围</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">合同结束时间范围</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <div class="btnOperate">
+              <el-button size="mini" type="primary" @click="search">搜索</el-button>
+              <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+              <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+            </div>
+          </el-form>
+        </div>
       </div>
 
       <div class="main">
@@ -138,6 +178,8 @@
         tableLoading: false,
         reportDetailDialog : false,
         reportId:'',
+
+        isHigh: false,
       }
     },
     mounted(){
@@ -181,6 +223,7 @@
         })
       },
       search(){
+        this.isHigh = false;
         this.formInline.page = 1;
         this.getData();
       },
@@ -215,6 +258,15 @@
 
       changelist(){
         this.$store.dispatch('toEditList')
+      },
+
+
+      //高级搜索
+      highGrade() {
+        this.isHigh = !this.isHigh;
+      },
+      resetting() {
+
       },
     }
   }
