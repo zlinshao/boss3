@@ -1,7 +1,7 @@
 <template>
   <div id="addFollowUp">
     <el-dialog :close-on-click-modal="false" title="回访详情" :visible.sync="repairDetailDialogVisible" width="50%">
-      <div style="padding: 10px 20px;">
+      <div style="padding: 10px 20px;" class="scroll_bar">
         <el-form size="mini" :model="form" label-width="86px">
           <el-row>
             <el-col :span="10">
@@ -299,7 +299,7 @@
             </el-row>
             <el-row v-if="!wholeFlag">
               <el-col :span="22">
-                <el-form-item label="合同照片" style="max-height:160px;" class="scroll_bar">
+                <el-form-item label="合同照片" style="max-height:160px;">
                   <img v-if="album!=[]" style="width:120px; height:80px;border-radius:5px; margin: 0 8px;" data-magnify
                        v-for="val in album" :data-src="val" :src="val" :key="val">
                 </el-form-item>

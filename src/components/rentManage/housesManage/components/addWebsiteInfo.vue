@@ -1,7 +1,11 @@
 <template>
   <div id="addWebInfo">
     <el-dialog :close-on-click-modal="false" title="新增官网房源" :visible.sync="addWebInfoDialogVisible" width="60%">
-      <div class="scroll_bar">
+      <div class="scroll_bar"
+           v-loading="isLoading"
+           element-loading-text="拼命加载中"
+           element-loading-spinner="el-icon-loading"
+           element-loading-background="rgba(255, 255, 255, .7)">
         <div class="title">基本信息</div>
         <div class="form_border">
           <el-form size="small" label-width="80px">
@@ -285,6 +289,7 @@
         city : '',
         area : '',
         isUp : false,
+        isLoading : false,
       };
     },
     mounted(){
@@ -394,7 +399,9 @@
         }
       },
       getData() {
+        this.isLoading = true;
         this.$http.get(globalConfig.server + 'house/album/' + this.houseId).then((res) => {
+          this.isLoading = false;
           if (res.data.code === '30070') {
             this.detailData = res.data.data.detail;
             this.albumData = res.data.data.album;
@@ -452,29 +459,11 @@
               }
             }
 
-            this.imgArray = [];
-            let imgItem = {};
             if(this.albumData.length>0){
-              this.albumData.forEach((item) => {
-                item.album.album_file.forEach((img)=>{
-                  if(img.info.mime.indexOf('image')>-1){
-                    imgItem = {};
-                    imgItem['id'] = img.id;
-                    imgItem['uri'] = img.uri;
-                    this.imgArray.push(imgItem);
-                  }
-                })
-              })
+              this.getAllImg(this.albumData);
             }
             if(this.detailData.house_goods&&this.detailData.house_goods.photo.length>0){
-              this.detailData.house_goods.photo.forEach((img)=>{
-                if(img.info.mime.indexOf('image')>-1){
-                  imgItem = {};
-                  imgItem['id'] = img.id;
-                  imgItem['uri'] = img.uri;
-                  this.imgArray.push(imgItem);
-                }
-              })
+              this.getAllImg(this.detailData.house_goods.photo);
             }
           } else {
             this.$notify.warning({
@@ -484,7 +473,27 @@
           }
         })
       },
-
+      getAllImg(imgData){
+        this.imgArray = [];
+        imgData.forEach((item) => {
+          item.album.album_file.forEach((img)=>{
+            if(img.info.mime.indexOf('image')>-1){
+              let isExist = false;
+              this.imgArray.forEach((x) => {
+                if(x.id === img.id){
+                  isExist = true;
+                }
+              });
+              if(!isExist){
+                let imgItem = {};
+                imgItem['id'] = img.id;
+                imgItem['uri'] = img.uri;
+                this.imgArray.push(imgItem);
+              }
+            }
+          })
+        })
+      },
       matchDictionary(id) {
         let dictionary_name = null;
         this.all_dic.map((item) => {
