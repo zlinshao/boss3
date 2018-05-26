@@ -668,10 +668,8 @@
     },
     methods: {
       goBefore(val) {
-        this.getExamNaireRedCircle();
         if (val === 'beforeExam') {
           if (this.examData.available) {
-            // this.$router.push({path: '/answerExam', query: {id: this.examData.id}});
             if (this.confirmArrival && this.confirmArrival.length > 0 && this.confirmArrival.indexOf(this.examData.id) > -1) {
               this.$router.push({path: '/answerExam', query: {id: this.examData.id}});
             } else {
@@ -718,11 +716,15 @@
         this.$http.get(globalConfig.server + 'exam/active').then((res) => {
           if (res.data.code === '30000') {
             this.examData = res.data.data;
+          } else {
+            this.examData = {};
           }
         });
         this.$http.get(globalConfig.server + 'questionnaire/active').then((res) => {
           if (res.data.code === '30000') {
             this.questionnaireData = res.data.data;
+          } else {
+            this.questionnaireData = {};
           }
         });
       },
