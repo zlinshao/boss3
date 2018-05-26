@@ -374,8 +374,8 @@
                     prop="department_name"
                     label="部门">
                     <template slot-scope="scope">
-                      <span v-if="scope.row.department_name">{{scope.row.department_name}}</span>
-                      <span v-if="!scope.row.department_name">暂无</span>
+                      <span v-if="scope.row.department && scope.row.department.name">{{scope.row.department.name}}</span>
+                      <span v-else>暂无</span>
                     </template>
                   </el-table-column>
                   <el-table-column
@@ -521,8 +521,8 @@
                     prop="department_name"
                     label="部门">
                     <template slot-scope="scope">
-                      <span v-if="scope.row.department_name">{{scope.row.department_name}}</span>
-                      <span v-if="!scope.row.department_name">暂无</span>
+                      <span v-if="scope.row.department && scope.row.department.name">{{scope.row.department.name}}</span>
+                      <span v-else>暂无</span>
                     </template>
                   </el-table-column>
                   <el-table-column
