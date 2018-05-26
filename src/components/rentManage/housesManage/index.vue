@@ -515,7 +515,6 @@
       openOrganizationModal(val){
         this.organizationDialog = true;
         this.organizationType = val;
-        this.type = 'depart';
         this.length = 1;
       },
 
@@ -527,7 +526,7 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.dispatchHouse(val[0].id)
+            this.dispatchHouse(val)
           }).catch(() => {
             this.$notify.success({
               title: '消息',
@@ -540,10 +539,15 @@
         }
       },
       //分配房屋
-      dispatchHouse(departId){
+      dispatchHouse(itemParams){
         let object = {};
         let update = {};
-        let org = {org_id: departId};
+        let org = {};
+        if(itemParams[0].hasOwnProperty('avatar')){
+           org = {org_id: itemParams[0].org[0].id,user_id:itemParams[0].id};
+        }else {
+           org = {org_id: itemParams[0].id};
+        }
         this.operateArray.forEach((item) => {
           object[item] = org;
         });
