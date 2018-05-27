@@ -455,7 +455,7 @@
           type: 'warning'
         }).then(() => {
           this.$http.post(globalConfig.server + '/exam/banish/' + this.examId, {examinees: this.examinees}).then((res) => {
-            if (res.data.code === '30010') {
+            if (res.data.code === '30000') {
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
