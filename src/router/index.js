@@ -371,7 +371,7 @@ export default new Router({
         {path: '/wholeRentManage', component: WholeRentManage, name: '整租管理',},
         // {path: '/jointRentManage', component: JointRentManage, name: '合租管理',},
         // {path: '/datumMessage', component: DatumMessage, name: '资料管理',},
-        {path: '/clientManage', component: ClientManage, name: '客户管理',},
+        // {path: '/clientManage', component: ClientManage, name: '客户管理',},
         {path: '/contractManage', component: ContractManage, name: '合同管理',},
         // {path: '/workOrderManage', component: WorkOrderManage, name: '工单管理',},
         // {

@@ -580,7 +580,7 @@
     }
   };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   #addFollowUp {
     @mixin flex {
       display: flex;
