@@ -1444,6 +1444,7 @@
           } else {
             this.$notify.warning({
               title: '警告',
+              duration : 1000,
               message: res.data.msg
             });
           }
@@ -1469,12 +1470,14 @@
           if (res.data.code === '60510') {
             this.$notify.success({
               title: '成功',
+              duration : 1000,
               message: res.data.msg
             });
             this.isPanel = false;
           } else {
             this.$notify.warning({
               title: '警告',
+              duration : 1000,
               message: res.data.msg
             });
           }
@@ -1526,6 +1529,7 @@
           }else {
               this.$notify.warning({
                 title:'警告',
+                duration : 1000,
                 message:res.data.msg
               })
           }
@@ -1664,12 +1668,14 @@
             if (res.data.code === '60610') {
               this.$notify.success({
                 title: '成功',
+                duration : 1000,
                 message: res.data.msg,
               });
               this.getContractDetail();
             } else {
               this.$notify.warning({
                 title: '警告',
+                duration : 1000,
                 message: res.data.msg,
               });
             }
@@ -1677,6 +1683,7 @@
         }).catch(() => {
           this.$notify.info({
             title: '消息',
+            duration : 1000,
             message: '已取消操作',
           })
         });
