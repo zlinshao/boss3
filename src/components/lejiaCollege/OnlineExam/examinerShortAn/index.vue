@@ -247,6 +247,7 @@
         handler(val, oldVal) {
           this.totalScore = this.objective_score;
           for (var i in val) {
+            console.log(val[i])
             this.totalScore += Number(val[i]);
           }
         }
@@ -289,7 +290,7 @@
             if (!this.correct) {
               this.correct = {};
               res.data.data.waiting.forEach((item) => {
-                this.correct[item] = '';
+                this.$set(this.correct, item, '');
               });
             }
           } else {
