@@ -928,14 +928,13 @@
 
     watch: {
       collectHouseId(val) {
-        if (val) {
-          this.rentParams.page = 1;
-          this.getRentData();
-        } else {
-          this.rentingData = [];
-          this.rentTotalNum = 0;
-          this.rentContractId = '',
+        this.rentParams.page = 1;
+        this.rentingData = [];
+        this.rentTotalNum = 0;
+        this.rentContractId = '';
           this.rentStatus = '暂未出租';
+        if (val) {
+          this.getRentData();
         }
       }
     },
