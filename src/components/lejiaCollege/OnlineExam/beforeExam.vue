@@ -74,7 +74,9 @@
           clearTimeout(this.examDataTime);
         } else {
           this.examDataTime = setTimeout(() => {
-            this.getExamData();
+            if (this.examId) {
+              this.getExamData();
+            }
           }, 60 * 1000);
         }
       }
