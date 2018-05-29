@@ -210,7 +210,7 @@
         </el-col>
       </el-row>
     </div>
-    {{showDetail}}
+
     <div class="subField footer">
       <el-row v-for="(key,index) in showDetail" :key="index">
         <el-col :span="11" class="subFieldCol">
@@ -433,8 +433,28 @@
           this.showDetail[max].contact = key.contact;
           if (type === 'leftCollect') {
             this.showDetail[max].leftCcId = key.id;
+            if (this.leftListCollect.indexOf(key.id) < 0) {
+              for (let i = 0; i < this.showDetail.length; i++) {
+                if(this.showDetail[i].leftCcId === key.id) {
+                  this.showDetail[i].moneyAddress = '';
+                  this.showDetail[i].customer_name = '';
+                  this.showDetail[i].contact = '';
+                  this.showDetail[i].leftCcId = '';
+                }
+              }
+            }
           } else {
             this.showDetail[max].leftRcId = key.id;
+            if (this.leftListRent.indexOf(key.id) < 0) {
+              for (let i = 0; i < this.showDetail.length; i++) {
+                if(this.showDetail[i].leftRcId === key.id) {
+                  this.showDetail[i].moneyAddress = '';
+                  this.showDetail[i].customer_name = '';
+                  this.showDetail[i].contact = '';
+                  this.showDetail[i].leftRcId = '';
+                }
+              }
+            }
           }
         } else {
           this.showDetail[max].ContractAddress = key.detailed_address;
@@ -442,18 +462,30 @@
           this.showDetail[max].mobile = key.mobile;
           if (type === 'rightCollect') {
             this.showDetail[max].rightCcId = key.id;
+            if (this.rightListCollect.indexOf(key.id) < 0) {
+              for (let i = 0; i < this.showDetail.length; i++) {
+                if(this.showDetail[i].rightCcId === key.id) {
+                  this.showDetail[i].ContractAddress = '';
+                  this.showDetail[i].name = '';
+                  this.showDetail[i].mobile = '';
+                  this.showDetail[i].rightCcId = '';
+                }
+              }
+            }
           } else {
             this.showDetail[max].rightRcId = key.id;
+            if (this.rightListRent.indexOf(key.id) < 0) {
+              for (let i = 0; i < this.showDetail.length; i++) {
+                if(this.showDetail[i].rightRcId === key.id) {
+                  this.showDetail[i].ContractAddress = '';
+                  this.showDetail[i].name = '';
+                  this.showDetail[i].mobile = '';
+                  this.showDetail[i].rightRcId = '';
+                }
+              }
+            }
           }
         }
-        // for (let i = 0; i < this.showDetail.length; i++) {
-        //   console.log(this.showDetail[i].leftCcId);
-        //   console.log(this.showDetail[i].leftRcId);
-        //   console.log(this.showDetail[i].rightCcId);
-        //   console.log(this.showDetail[i].rightRcId);
-        // }
-        // console.log(this.leftListCollect);
-        // console.log(key.id);
       },
       // 房屋合并
       houseOn(val) {
