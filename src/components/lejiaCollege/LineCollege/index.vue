@@ -265,8 +265,7 @@
     },
     activated() {
       this.myData();
-      this.confirmArrival = localStorage.getItem('confirmArrival');
-      // localStorage.removeItem("answers_" + this.examId);
+      this.confirmArrival = JSON.parse(localStorage.getItem('confirmArrival'));
     },
     watch: {
       "form.category": {
@@ -309,16 +308,21 @@
         } else {
           this.$http.post(globalConfig.server + 'exam/check_in/' + id).then((res) => {
             if (res.data.code === '30000') {
-              let arr = [];
-              arr.push(id);
-              localStorage.setItem('confirmArrival', arr);  //保存已到场的考试id
+              let examIds;
+              if (this.confirmArrival === null) {
+                examIds = [];
+              } else {
+                examIds = this.confirmArrival;
+              }
+              examIds.push(this.examData.id);
+              localStorage.setItem('confirmArrival', JSON.stringify(examIds));  //保存已到场的考试id
               this.$router.push({path: '/answerExam', query: {id: id}});
             } else if (res.data.code === '30003') {
               //迟到
-              this.$router.push({path: '/beforeExam', query: {id: id, type: 'third'}});
+              this.$router.push({path: '/beforeExam', query: {address: 'exam', id: id, type: 'third'}});
             } else if (res.data.code === '30004') {
               //未开始
-              this.$router.push({path: '/beforeExam', query: {id: id, type: 'first'}});
+              this.$router.push({path: '/beforeExam', query: {address: 'exam', id: id, type: 'first'}});
             } else {
               this.$notify.warning({
                 title: '警告',
@@ -340,6 +344,14 @@
           if (res.data.code == '30000') {
             this.tableData = res.data.data.data;
             this.tableNumber = res.data.data.count;
+            this.tableData.forEach((item) => {
+              if (item.available === 0) {
+                localStorage.removeItem("answers_" + item.id);
+                let examIds = JSON.parse(localStorage.getItem('confirmArrival'));
+                examIds.splice(examIds.indexOf(item.id) ,1);
+                localStorage.setItem('confirmArrival', JSON.stringify(examIds));  //保存已到场的考试id
+              }
+            });
           } else {
             this.tableData = [];
             this.tableStatus = '暂无数据';

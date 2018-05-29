@@ -286,7 +286,7 @@ export default new Router({
         {path: '/myselfQuestions', component: MyselfQuestions, name: "自己录入"},
         {path: '/previewExam', component: PreviewExam, name: "预览试卷"},
         {path: '/answerExam', component: AnswerExam, name: "考生答题"},
-        {path: '/LineCollege', component: LineCollege, name: '我的考试', icon: "iconfont icon-zaixiankaoshi"},
+        {path: '/LineCollege', component: LineCollege, name: '考试列表', icon: "iconfont icon-zaixiankaoshi"},
         {path: '/lookExam', component: LookExam, name: "查看试卷"},
         {path: '/examinerRead', component: ExaminerRead, name: "阅卷管理"},
         {path: '/examinerReadEach', component: ExaminerReadEach, name: "试卷批阅"},
@@ -301,9 +301,9 @@ export default new Router({
         {path: '/lookNaire', component: LookNaire, name: "调查统计"},
         {path: '/answerAll', component: AnswerAll, name: "所有回答"},
         {path: '/answerNaire', component: AnswerNaire, name: "问卷作答"},
-        {path: '/beforeExam', component: BeforeExam, name: "即将开考"},
-        {path: '/beforeNaire', component: BeforeNaire, name: "即将开始"},
-        {path: '/myNaire', component: MyNaire, name: "我的调查"},
+        {path: '/beforeExam', component: BeforeExam, name: "我的考试"},
+        {path: '/beforeNaire', component: BeforeNaire, name: "我的问卷"},
+        {path: '/myNaire', component: MyNaire, name: "问卷列表"},
 
 
       ]

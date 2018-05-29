@@ -119,13 +119,12 @@
               <div class="title">报销结果</div>
             </div>
             <div v-if="reimDetail.results">
-              <el-form size="small" label-width="100px" style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;">
+              <el-form size="small" label-width="100px" style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;"  v-if="reimDetail.results.water_fee.time && reimDetail.results.water_fee.time.length>0">
                 <el-row>
                   <el-col :span="12">
                     <el-form-item label="水费">
                       <div class="content">
-                        <span v-if="reimDetail.results.water_fee.time && reimDetail.results.water_fee.time.length>0">{{reimDetail.results.water_fee.time[0]}}——{{reimDetail.results.water_fee.time[1]}}</span>
-                        <span v-else>暂无</span>
+                        <span>{{reimDetail.results.water_fee.time[0]}}——{{reimDetail.results.water_fee.time[1]}}</span>
                       </div>
                     </el-form-item>
                   </el-col>
@@ -214,14 +213,13 @@
                   </el-col>
                 </el-row>
               </el-form>
-              <el-form size="small" label-width="100px" style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;">
+              <el-form size="small" label-width="100px" style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;"
+                       v-if="reimDetail.results.electricity_fee.time && reimDetail.results.electricity_fee.time.length>0">
                 <el-row>
                   <el-col :span="12">
                     <el-form-item label="电费">
                       <div class="content">
-                        <span
-                          v-if="reimDetail.results.electricity_fee.time && reimDetail.results.electricity_fee.time.length>0">{{reimDetail.results.electricity_fee.time[0]}}——{{reimDetail.results.electricity_fee.time[1]}}</span>
-                        <span v-else>暂无</span>
+                        <span>{{reimDetail.results.electricity_fee.time[0]}}——{{reimDetail.results.electricity_fee.time[1]}}</span>
                       </div>
                     </el-form-item>
                   </el-col>
@@ -358,13 +356,12 @@
                   </el-col>
                 </el-row>
               </el-form>
-              <el-form size="small" label-width="100px" style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;">
+              <el-form size="small" label-width="100px" style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;" v-if="reimDetail.results.gas_fee.time && reimDetail.results.gas_fee.time.length>0">
                 <el-row>
                   <el-col :span="12">
                     <el-form-item label="燃气费">
                       <div class="content">
-                        <span v-if="reimDetail.results.gas_fee.time && reimDetail.results.gas_fee.time.length>0">{{reimDetail.results.gas_fee.time[0]}}——{{reimDetail.results.gas_fee.time[1]}}</span>
-                        <span v-else>暂无</span>
+                        <span >{{reimDetail.results.gas_fee.time[0]}}——{{reimDetail.results.gas_fee.time[1]}}</span>
                       </div>
                     </el-form-item>
                   </el-col>
@@ -453,14 +450,13 @@
                   </el-col>
                 </el-row>
               </el-form>
-              <el-form size="small" label-width="100px" style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;">
+              <el-form size="small" label-width="100px" style="margin-bottom: 15px;border-bottom: 1px solid #eef3fc;"
+                       v-if="reimDetail.results.property_management_fee.time && reimDetail.results.property_management_fee.time.length>0">
                 <el-row>
                   <el-col :span="12">
                     <el-form-item label="物管费">
                       <div class="content">
-                        <span
-                          v-if="reimDetail.results.property_management_fee.time && reimDetail.results.property_management_fee.time.length>0">{{reimDetail.results.property_management_fee.time[0]}}——{{reimDetail.results.property_management_fee.time[1]}}</span>
-                        <span v-else>暂无</span>
+                        <span>{{reimDetail.results.property_management_fee.time[0]}}——{{reimDetail.results.property_management_fee.time[1]}}</span>
                       </div>
                     </el-form-item>
                   </el-col>

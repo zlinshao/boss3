@@ -1,9 +1,12 @@
 <template>
   <div>
     <div class="container">
-      <div>
-        <div class="title" style="top: 230px;">您目前没有问卷</div>
-        <p class="view_history" @click="goHistory('naire')">查看历史问卷>></p>
+      <div class="content">
+        <div class="content_img"><img src="../../../assets/images/examination/waiting.png"></div>
+        <div class="content_right">
+          <div class="title">您目前没有问卷</div>
+          <el-button class="view_history" @click="goHistory">查看历史问卷</el-button>
+        </div>
       </div>
     </div>
 
@@ -20,10 +23,8 @@
       };
     },
     methods: {
-      goHistory(val){
-        if (val === 'naire'){
-          this.$router.push({path: '/MyNaire'});
-        }
+      goHistory(val) {
+        this.$router.push({path: '/MyNaire'});
       }
     }
   };
@@ -31,50 +32,39 @@
 
 <style lang="scss" scoped>
   .container {
-    color: #999;
     width: 100%;
     min-height: 800px;
-    text-align: center;
     position: relative;
-    .title {
-      font-size: 60px;
-      position: absolute;
-      margin: 0 auto;
-      top: 130px;
-      left: 0;
-      width: 100%;
-      filter: alpha(opacity=30);
-      -ms-filter: "alpha(opacity=30)";
-    }
-    .count_down {
-      font-size: 50px;
-      position: absolute;
-      margin: 0 auto;
-      top: 210px;
-      left: 0;
-      width: 100%;
-    }
+    box-shadow: 0px 0px 3px 1px #dfe6fb;
     .content {
-      color: #393939;
-      margin-top: 330px;
-      background-color: #dfe6fb;
-      border-radius: 8px;
       display: inline-block;
-      padding: 20px 100px;
-      position: relative;
-      .content_title {
-        margin-top: 10px;
-        margin-left: -110px;
-      }
-    }
-    .view_history {
-      cursor: pointer;
-      margin-top: 200px;
-      color: #39b1ff;
       position: absolute;
-      bottom: 60px;
-      width: 100%;
-      margin: 0 auto;
+      top: 28%;
+      width: 70%;
+      left: 30%;
+      /*background-color: #dfe6fb;*/
+      .content_img {
+        float: left;
+      }
+      .content_right {
+        padding-left: 300px;
+        .title {
+          font-size: 35px;
+          margin: 0 auto;
+          left: 0;
+          width: 100%;
+          filter: alpha(opacity=30);
+          -ms-filter: "alpha(opacity=30)";
+          color: #6a8dfbbf;
+        }
+        .view_history {
+          cursor: pointer;
+          position: absolute;
+          background: #6a8dfb;
+          color: #fff;
+          bottom: 10px;
+        }
+      }
     }
 
   }

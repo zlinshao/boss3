@@ -380,6 +380,8 @@
         if (val === 'force') {
           this.showForceWords = true;
         }
+        clearTimeout(this.timeOut);
+        clearTimeout(this.timeClear);
         this.$http.post(globalConfig.server + 'exam/result', {
           exam_id: this.examId,
           answer: this.answerData
@@ -392,7 +394,11 @@
             } else {
               this.pointDialog = true;
             }
+
             localStorage.removeItem("answers_" + this.examId);
+            let examIds = JSON.parse(this.confirmArrival);
+            examIds.splice(examIds.indexOf(this.examId) ,1);
+            localStorage.setItem('confirmArrival', JSON.stringify(examIds));  //保存已到场的考试id
           } else {
             this.$notify.warning({
               title: '警告',
