@@ -43,7 +43,7 @@
                 <div class="flexDiv" v-for="(key,index) in formListFc">
                   <el-checkbox-group v-model="leftListCollect" @change="contractOn('leftCollect', key)">
                     <el-checkbox :label="key.id"
-                                 :disabled="leftListCollect.indexOf(key.id) < 0 && checkMax === leftNumber"></el-checkbox>
+                                 :disabled="(leftListCollect.indexOf(key.id) < 0 && checkMax === leftNumber) || leftListCollect.indexOf(key.id) > -1 "></el-checkbox>
                   </el-checkbox-group>
                   <div class="blocks">
                     <div>
@@ -81,7 +81,7 @@
                 <div class="flexDiv" v-for="(key,index) in formListFr">
                   <el-checkbox-group v-model="leftListRent" @change="contractOn('leftRent', key)">
                     <el-checkbox :label="key.id"
-                                 :disabled="leftListRent.indexOf(key.id) < 0 && checkMax === leftNumber">
+                                 :disabled="(leftListRent.indexOf(key.id) < 0 && checkMax === leftNumber) || leftListRent.indexOf(key.id) > -1 ">
 
                     </el-checkbox>
                   </el-checkbox-group>
@@ -132,7 +132,7 @@
                   <el-checkbox-group :max="formListFc.length" v-model="rightListCollect"
                                      @change="contractOn('rightCollect', key)">
                     <el-checkbox :label="key.id"
-                                 :disabled="rightListCollect.indexOf(key.id) < 0 && (checkMax === rightNumber || types === 'leftRent')"></el-checkbox>
+                                 :disabled="(rightListCollect.indexOf(key.id) < 0 && (checkMax === rightNumber || types === 'leftRent')) || rightListCollect.indexOf(key.id) > -1"></el-checkbox>
                   </el-checkbox-group>
                   <div class="blocks">
                     <div>
@@ -145,7 +145,8 @@
                     </div>
                     <div>
                       <p>联系方式</p>
-                      <p class="cursorColor" @click="search(key.mobile)" v-if="Array.isArray(key.mobile)">{{key.mobile[0]}}</p>
+                      <p class="cursorColor" @click="search(key.mobile)" v-if="Array.isArray(key.mobile)">
+                        {{key.mobile[0]}}</p>
                       <p class="cursorColor" @click="search(key.mobile)" v-else>{{key.mobile}}</p>
                     </div>
                     <div>
@@ -173,7 +174,7 @@
                   <el-checkbox-group :max="formListFr.length" v-model="rightListRent"
                                      @change="contractOn('rightRent', key)">
                     <el-checkbox :label="key.id"
-                                 :disabled="rightListRent.indexOf(key.id) < 0 && (checkMax === rightNumber || types === 'leftCollect')"></el-checkbox>
+                                 :disabled="(rightListRent.indexOf(key.id) < 0 && (checkMax === rightNumber || types === 'leftCollect')) || rightListRent.indexOf(key.id) > -1"></el-checkbox>
                   </el-checkbox-group>
                   <div class="blocks">
                     <div>
@@ -186,7 +187,8 @@
                     </div>
                     <div>
                       <p>联系方式</p>
-                      <p class="cursorColor" @click="search(key.mobile)" v-if="Array.isArray(key.mobile)">{{key.mobile[0]}}</p>
+                      <p class="cursorColor" @click="search(key.mobile)" v-if="Array.isArray(key.mobile)">
+                        {{key.mobile[0]}}</p>
                       <p class="cursorColor" @click="search(key.mobile)" v-else>{{key.mobile}}</p>
                     </div>
                     <div>
@@ -315,13 +317,16 @@
           fa_id: '',
           co_id: '',
         },
-        indexNum: 0,
       }
     },
     mounted() {
       this.details();
     },
-    watch: {},
+    watch: {
+      showDetail(val) {
+        console.log(val);
+      }
+    },
     computed: {
       leftNumber() {
         return this.leftListCollect.length + this.leftListRent.length;
@@ -374,7 +379,6 @@
           }
           if (this.checkMax < len) {
             this.checkMax++;
-            this.indexNum++;
             this.showDetail.push({
               type: '',
               moneyAddress: '',
@@ -392,40 +396,37 @@
         } else {
           if (this.checkMax > 1) {
             let fcc = this.leftListCollect;     //左收
-            let chc = this.leftListRent;        //左租
-            let frc = this.rightListCollect;    //右收
+            let frc = this.leftListRent;        //左租
+            let chc = this.rightListCollect;    //右收
             let rhc = this.rightListRent;       //右租
-            let detail = this.showDetail;
-            if (detail[index].type === 'leftCollect' || detail[index].type === 'rightCollect') {
-              for (let i = 0; i < detail.length; i++) {
-                for (let j = 0; j < fcc.length; j++) {
-                  if (fcc[j] === detail[i].leftCcId) {
-                    this.leftListCollect.splice(j, 1);
-                  }
+            let detail = this.showDetail[index];
+
+            if (detail.type === 'leftCollect' || detail.type === 'rightCollect') {
+              for (let j = 0; j < fcc.length; j++) {
+                if (fcc[j] === detail.leftCcId) {
+                  this.leftListCollect.splice(j, 1);
                 }
-                for (let j = 0; j < frc.length; j++) {
-                  if (frc[j] === detail[i].rightCcId) {
-                    this.rightListCollect.splice(j, 1);
-                  }
+              }
+              for (let j = 0; j < chc.length; j++) {
+                if (chc[j] === detail.rightCcId) {
+                  this.rightListCollect.splice(j, 1);
                 }
               }
             } else {
-              for (let i = 0; i < detail.length; i++) {
-                for (let j = 0; j < fcc.length; j++) {
-                  if (chc[j] === detail[i].leftRcId) {
-                    this.leftListRent.splice(j, 1);
-                  }
+              for (let j = 0; j < frc.length; j++) {
+                if (frc[j] === detail.leftRcId) {
+                  this.leftListRent.splice(j, 1);
                 }
-                for (let j = 0; j < frc.length; j++) {
-                  if (rhc[j] === detail[i].rightRcId) {
-                    this.rightListRent.splice(j, 1);
-                  }
+              }
+              for (let j = 0; j < rhc.length; j++) {
+                if (rhc[j] === detail.rightRcId) {
+                  this.rightListRent.splice(j, 1);
                 }
               }
             }
-            this.checkMax--;
-            this.indexNum--;
+
             this.showDetail.splice(index, 1);
+            this.checkMax--;
           } else {
             this.form.contract = [];
             this.types = '';
@@ -436,61 +437,62 @@
       },
       // 合同ID
       contractOn(type, key) {
-        let max = this.indexNum;
+        let max = this.checkMax - 1;
         this.showDetail[max].type = type;
-        if (type === 'leftCollect' || type === 'leftRent') {
-          if (type === 'leftCollect') {
-            this.types = type;
-            if (this.leftListCollect.indexOf(key.id) < 0) {
-              for (let i = 0; i < this.showDetail.length; i++) {
-                if (this.showDetail[i].leftCcId === key.id) {
-                  this.indexNum = i;
-                  this.close_(type, i);
-                }
-              }
-              this.types = '';
-            } else {
-              this.assignment(max, key, type);
-            }
-          } else {
-            this.types = type;
-            if (this.leftListRent.indexOf(key.id) < 0) {
-              for (let i = 0; i < this.showDetail.length; i++) {
-                if (this.showDetail[i].leftRcId === key.id) {
-                  this.indexNum = i;
-                  this.close_(type, i);
-                }
-              }
-              this.types = '';
-            } else {
-              this.assignment(max, key, type);
-            }
-          }
-        } else {
-          if (type === 'rightCollect') {
-            if (this.rightListCollect.indexOf(key.id) < 0) {
-              for (let i = 0; i < this.showDetail.length; i++) {
-                if (this.showDetail[i].rightCcId === key.id) {
-                  this.indexNum = i;
-                  this.close_(type, i);
-                }
-              }
-            } else {
-              this.assignment(max, key, type);
-            }
-          } else {
-            if (this.rightListRent.indexOf(key.id) < 0) {
-              for (let i = 0; i < this.showDetail.length; i++) {
-                if (this.showDetail[i].rightRcId === key.id) {
-                  this.indexNum = i;
-                  this.close_(type, i);
-                }
-              }
-            } else {
-              this.assignment(max, key, type);
-            }
-          }
-        }
+        this.assignment(max, key, type);
+        this.types = type;
+        // if (type === 'leftCollect' || type === 'leftRent') {
+        //   this.types = type;
+        //   if (type === 'leftCollect') {
+        //     if (this.leftListCollect.indexOf(key.id) < 0) {
+        //       for (let i = 0; i < this.showDetail.length; i++) {
+        //         if (this.showDetail[i].leftCcId === key.id) {
+        //           this.indexNum = i;
+        //           this.close_(type, i);
+        //         }
+        //       }
+        //       this.types = '';
+        //     } else {
+        //       this.assignment(max, key, type);
+        //     }
+        //   } else {
+        //     if (this.leftListRent.indexOf(key.id) < 0) {
+        //       for (let i = 0; i < this.showDetail.length; i++) {
+        //         if (this.showDetail[i].leftRcId === key.id) {
+        //           this.indexNum = i;
+        //           this.close_(type, i);
+        //         }
+        //       }
+        //       this.types = '';
+        //     } else {
+        //       this.assignment(max, key, type);
+        //     }
+        //   }
+        // } else {
+        //   if (type === 'rightCollect') {
+        //     if (this.rightListCollect.indexOf(key.id) < 0) {
+        //       for (let i = 0; i < this.showDetail.length; i++) {
+        //         if (this.showDetail[i].rightCcId === key.id) {
+        //           this.indexNum = i;
+        //           this.close_(type, i);
+        //         }
+        //       }
+        //     } else {
+        //       this.assignment(max, key, type);
+        //     }
+        //   } else {
+        //     if (this.rightListRent.indexOf(key.id) < 0) {
+        //       for (let i = 0; i < this.showDetail.length; i++) {
+        //         if (this.showDetail[i].rightRcId === key.id) {
+        //           this.indexNum = i;
+        //           this.close_(type, i);
+        //         }
+        //       }
+        //     } else {
+        //       this.assignment(max, key, type);
+        //     }
+        //   }
+        // }
       },
       // 赋值
       assignment(max, key, type) {
@@ -577,7 +579,6 @@
             this.contractHouse = [];
             break;
           case'other':
-            this.indexNum = 0;
             this.checkMax = 1;
             this.types = '';
             break;
