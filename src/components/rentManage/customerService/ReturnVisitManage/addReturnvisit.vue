@@ -488,6 +488,33 @@
           this.$emit('close');
         } else {
           this.initial();
+          if (this.activeName == 'first') {
+            this.$http.get(globalConfig.server + 'lease/collect/' + this.form.contract_id).then((res) => {
+              if (res.data.code === '61010') {
+                this.contractInfo = res.data.data;
+                this.agency_price_now = res.data.data.agency;
+                if (res.data.data.agency_info) {
+                  this.agency_price_origin = res.data.data.agency_info.agency_price;
+                  this.agency_name = res.data.data.agency_info.agency_name;
+                  this.agency_user_name = res.data.data.agency_info.agency_user_name;
+                  this.agency_phone = res.data.data.agency_info.agency_phone;
+                }
+              }
+            });
+          }else {
+            this.$http.get(globalConfig.server + 'lease/rent/' + this.form.contract_id).then((res) => {
+              if (res.data.code === '61110') {
+                this.contractInfo = res.data.data;
+                this.agency_price_now = res.data.data.agency;
+                if (res.data.data.agency_info) {
+                  this.agency_price_origin = res.data.data.agency_info.agency_price;
+                  this.agency_name = res.data.data.agency_info.agency_name;
+                  this.agency_user_name = res.data.data.agency_info.agency_user_name;
+                  this.agency_phone = res.data.data.agency_info.agency_phone;
+                }
+              }
+            });
+          }
         }
       },
       ToActiveName(val) {
@@ -501,34 +528,7 @@
         this.form.address = val.address;
         this.form.contract_type = val.type;
         this.form.contract_id = val.contract_id;
-        if (this.activeName == 'first') {
-          this.$http.get(globalConfig.server + 'lease/collect/' + val.contract_id).then((res) => {
-            if (res.data.code === '61010') {
-              this.contractInfo = res.data.data;
-              this.agency_price_now = res.data.data.agency;
-              if (res.data.data.agency_info) {
-                this.agency_price_origin = res.data.data.agency_info.agency_price;
-                this.agency_name = res.data.data.agency_info.agency_name;
-                this.agency_user_name = res.data.data.agency_info.agency_user_name;
-                this.agency_phone = res.data.data.agency_info.agency_phone;
-              }
-            }
-          })
-        }
-        else {
-          this.$http.get(globalConfig.server + 'lease/rent/' + val.contract_id).then((res) => {
-            if (res.data.code === '61110') {
-              this.contractInfo = res.data.data;
-              this.agency_price_now = res.data.data.agency;
-              if (res.data.data.agency_info) {
-                this.agency_price_origin = res.data.data.agency_info.agency_price;
-                this.agency_name = res.data.data.agency_info.agency_name;
-                this.agency_user_name = res.data.data.agency_info.agency_user_name;
-                this.agency_phone = res.data.data.agency_info.agency_phone;
-              }
-            }
-          })
-        }
+
       },
       priceLen(val) {
         let data = this.form.unit_price;

@@ -249,9 +249,7 @@
           <!--<el-button type="primary" size="mini" @click="openOrganize">新增</el-button>-->
           <!--</el-col>-->
           <!--</el-row>-->
-          <el-button type="primary" size="mini" @click="openOrganize"
-                     style="float: right;margin-bottom: 10px;margin-right: 10px;">新增
-          </el-button>
+
         </div>
         <div style="margin-top: 20px;">
           <el-table
@@ -276,6 +274,21 @@
               </template>
             </el-table-column>
             <el-table-column
+              prop=""
+              label="职位">
+              <template slot-scope="scope">
+                <span v-if="scope.row.position">{{scope.row.position}}</span>
+                <span v-else>暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="部门">
+              <template slot-scope="scope">
+                <span v-if="scope.row.org_name">{{scope.row.org_name}}</span>
+                <span v-else>暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
               prop="pivot.enroll_time"
               label="报名时间">
               <template slot-scope="scope">
@@ -283,11 +296,19 @@
                 <span v-if="!(scope.row.pivot && scope.row.pivot.enroll_time)">暂无</span>
               </template>
             </el-table-column>
+            <el-table-column
+              label="状态">
+              <template slot-scope="scope">
+                <span v-if="scope.row.pivot && scope.row.pivot.named_status">{{scope.row.pivot && scope.row.pivot.named_status}}</span>
+                <span v-else>暂无</span>
+              </template>
+            </el-table-column>
           </el-table>
         </div>
         <span slot="footer" class="dialog-footer">
-            <el-button size="small" type="primary" @click="deleteExaminess">删除</el-button>
-            <el-button size="small" type="primary" style="float: left;" @click="confirmSend">确认并发送消息</el-button>
+           <el-button type="primary" size="mini" style="float: left;" @click="openOrganize">新增</el-button>
+            <el-button size="mini" type="primary" style="float: left;" @click="deleteExaminess">删除</el-button>
+            <el-button size="small" type="primary" @click="confirmSend">确认并发送消息</el-button>
         </span>
       </el-dialog>
     </div>
