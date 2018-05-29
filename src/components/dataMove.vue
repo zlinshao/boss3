@@ -337,6 +337,10 @@
     },
     methods: {
       details() {
+        this.close_('other');
+        this.close_('ids');
+        this.close_('search');
+        this.close_('resetting');
         this.form = {house_id: '', contract: []};
         this.$http.get(this.urls + 'financial/migration').then((res) => {
           if (res.data.code === '30000') {
@@ -355,18 +359,21 @@
         let listRight = [];
         for (let i = 0; i < data.length; i++) {
           if (data[i].leftCcId !== '' && data[i].rightCcId !== '') {
-            listLeft.push(this.contractListChc[i]);
+            for (let j = 0; j < this.contractListChc.length; j++) {
+              if (data[i].rightCcId === this.contractListChc[j].id) {
+                listLeft.push(this.contractListChc[j]);
+              }
+            }
           }
           if (data[i].leftRcId !== '' && data[i].rightRcId !== '') {
-            listRight.push(this.contractListRhc[i]);
+            for (let j = 0; j < this.contractListRhc.length; j++) {
+              if (data[i].rightRcId === this.contractListRhc[j].id) {
+                listRight.push(this.contractListRhc[j]);
+              }
+            }
           }
         }
-        console.log(listLeft);
-        console.log(listRight);
         this.params.keywords = val;
-        // this.close_('other');
-        // this.close_('ids');
-        // this.close_('resetting');
         this.$http.get(this.urls + 'financial/migration/search?q=' + val).then((res) => {
           if (res.data.code === '30000') {
             this.contractListChc = res.data.data.chc;   //合同数据收
@@ -375,6 +382,7 @@
             if (listLeft.length > 0) {
               for (let i = 0; i < listLeft.length; i++) {
                 if (this.contractListChc.length > 0) {
+                  console.log(this.contractListChc);
                   for (let j = 0; j < this.contractListChc.length; j++) {
                     if (listLeft[i].id !== this.contractListChc[j].id) {
                       this.contractListChc.push(listLeft[i]);
@@ -387,7 +395,6 @@
             }
             if (listRight.length > 0) {
               for (let i = 0; i < listRight.length; i++) {
-                console.log(this.contractListRhc.length);
                 if (this.contractListRhc.length > 0) {
                   for (let j = 0; j < this.contractListRhc.length; j++) {
                     if (listRight[i].id !== this.contractListRhc[j].id) {
