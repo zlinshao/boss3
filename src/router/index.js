@@ -133,11 +133,11 @@ import ManagerSetting from '../components/systemSetting/managerSetting/index.vue
 
 
 //喜报管理
-import CollectBulletin from '../components/bulletin/collectBulletin/index.vue'            //收房喜报
-import RentBulletin from '../components/bulletin/rentBulletin/index.vue'                  //租房喜报
-import FinalBalance from '../components/bulletin/finalBalance/index.vue'                  //尾款报备
-import SpecialBalance from '../components/bulletin/specialBalance/index.vue'              //特殊情况报备
-import Auditing from '../components/bulletin/auditing/index.vue'                          //审核
+// import CollectBulletin from '../components/bulletin/collectBulletin/index.vue'            //收房喜报
+// import RentBulletin from '../components/bulletin/rentBulletin/index.vue'                  //租房喜报
+// import FinalBalance from '../components/bulletin/finalBalance/index.vue'                  //尾款报备
+// import SpecialBalance from '../components/bulletin/specialBalance/index.vue'              //特殊情况报备
+// import Auditing from '../components/bulletin/auditing/index.vue'                          //审核
 
 
 // 业绩工资
@@ -182,6 +182,8 @@ import ReportManage from '../components/reportManage/index.vue'
 import BeforeExam from '../components/lejiaCollege/OnlineExam/beforeExam.vue'  //开考之前
 import BeforeNaire from '../components/lejiaCollege/OnlineExam/beforeNaire.vue'  //开考之前
 import MyNaire from '../components/OAWork/questionnaire/myNaire/myNaire.vue'  //我的调查列表
+
+import DataMove from '../components/dataMove.vue'
 
 Vue.use(Router);
 
@@ -239,7 +241,15 @@ export default new Router({
       name: '',
       hidden: true
     },
-
+    {
+      path: '/',
+      component: Index,
+      hidden: true,
+      name: '',
+      children: [
+        {path: '/dataMove', component: DataMove, name: '数据迁移', icon: 'iconfont icon-daoru'},
+      ]
+    },
     {
       path: '/',
       component: Index,
