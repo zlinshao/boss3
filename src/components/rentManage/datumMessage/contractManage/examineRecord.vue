@@ -89,15 +89,18 @@
                 <div style="color: #6a8dfb" >
                   <span style="margin-right: 10px">总通过数量 :
                     <span v-if="tableMeta.approval_sum">{{tableMeta.approval_sum}}</span>
-                    <span v-else><i class="el-icon-loading"></i></span>
+                    <span v-if="isLoading"><i class="el-icon-loading"></i></span>
+                     <span v-if="!isLoading&&!tableMeta.approval_sum">0</span>
                   </span>
                   <span style="margin-right: 10px">总查看数量 :
                     <span v-if="tableMeta.review_sum">{{tableMeta.review_sum}}</span>
-                    <span v-else><i class="el-icon-loading"></i></span>
+                    <span v-if="isLoading"><i class="el-icon-loading"></i></span>
+                    <span v-if="!isLoading&&!tableMeta.review_sum">0</span>
                   </span>
                   <span style="margin-right: 10px">总通过率 :
                     <span v-if="tableMeta.approval_sum_ratio">{{tableMeta.approval_sum_ratio}}</span>
-                    <span v-else><i class="el-icon-loading"></i></span>
+                    <span v-if="isLoading"><i class="el-icon-loading"></i></span>
+                    <span v-if="!isLoading&&!tableMeta.approval_sum_ratio">0</span>
                   </span>
                 </div>
                 <el-form :inline="true" onsubmit="return false" size="mini">
@@ -169,15 +172,18 @@
                 <div style="color: #6a8dfb" >
                   <span style="margin-right: 10px">总通过数量 :
                     <span v-if="tableMeta.approval_sum">{{tableMeta.approval_sum}}</span>
-                    <span v-else><i class="el-icon-loading"></i></span>
+                    <span v-if="isLoading"><i class="el-icon-loading"></i></span>
+                     <span v-if="!isLoading&&!tableMeta.approval_sum">0</span>
                   </span>
                   <span style="margin-right: 10px">总查看数量 :
                     <span v-if="tableMeta.review_sum">{{tableMeta.review_sum}}</span>
-                    <span v-else><i class="el-icon-loading"></i></span>
+                    <span v-if="isLoading"><i class="el-icon-loading"></i></span>
+                    <span v-if="!isLoading&&!tableMeta.review_sum">0</span>
                   </span>
                   <span style="margin-right: 10px">总通过率 :
                     <span v-if="tableMeta.approval_sum_ratio">{{tableMeta.approval_sum_ratio}}</span>
-                    <span v-else><i class="el-icon-loading"></i></span>
+                    <span v-if="isLoading"><i class="el-icon-loading"></i></span>
+                    <span v-if="!isLoading&&!tableMeta.approval_sum_ratio">0</span>
                   </span>
                 </div>
                 <el-form :inline="true" onsubmit="return false" size="mini">
