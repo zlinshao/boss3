@@ -183,6 +183,9 @@
                     <span v-if="scope.row.house_res.is_fill">齐全</span>
                     <span v-else>不齐全</span>
                   </div>
+                  <div v-else>
+                    /
+                  </div>
                 </template>
               </el-table-column>
 

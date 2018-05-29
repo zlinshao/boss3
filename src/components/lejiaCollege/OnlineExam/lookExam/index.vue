@@ -258,27 +258,27 @@
         this.$http.get(globalConfig.server + 'exam/result/' + this.resultId).then((res) => {
           if (res.data.code === '36000') {
             this.resultData = res.data.data;
-            this.objective_score = this.totalScore = res.data.data.score;
+            // this.objective_score = this.totalScore = res.data.data.score;
           } else {
             this.resultData = {};
           }
         });
       },
-      getExamData() {
-        this.$http.get(globalConfig.server + 'exam/result/my/' + this.examId).then((res) => {
-          if (res.data.code === '30000') {
-            this.examData = res.data.data;
-            this.questionData = res.data.data.question_set;
-          } else {
-            this.examData = [];
-            this.questionData = [];
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            })
-          }
-        });
-      },
+      // getExamData() {
+      //   this.$http.get(globalConfig.server + 'exam/result/my/' + this.examId).then((res) => {
+      //     if (res.data.code === '30000') {
+      //       this.examData = res.data.data;
+      //       this.questionData = res.data.data.question_set;
+      //     } else {
+      //       this.examData = [];
+      //       this.questionData = [];
+      //       this.$notify.warning({
+      //         title: '警告',
+      //         message: res.data.msg
+      //       })
+      //     }
+      //   });
+      // },
     }
   };
 </script>

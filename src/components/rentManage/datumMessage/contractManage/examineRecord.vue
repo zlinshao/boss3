@@ -1,35 +1,35 @@
 <template>
   <div>
     <div class="main">
-      <div class="highRanking" style=" position: absolute; top: 122px; right: 20px;z-index: 99;">
-        <div class="highSearch">
-          <el-form :inline="true" onsubmit="return false" size="mini">
+      <!--<div class="highRanking" style=" position: absolute; top: 122px; right: 20px;z-index: 99;">-->
+        <!--<div class="highSearch">-->
+          <!--<el-form :inline="true" onsubmit="return false" size="mini">-->
 
-            <el-form-item label="审批时间范围">
-              <el-date-picker
-                v-model="params.date_range"
-                type="daterange"
-                unlink-panels
-                @change="search"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                value-format="yyyy-MM-dd">
-              </el-date-picker>
-            </el-form-item>
-
-            <el-form-item label="员工">
-              <el-input v-model="staff_name" @focus="selectStaff()" readonly placeholder="请选择员工">
-                <el-button style="cursor: pointer;" slot="append" @click="emptyStaff()">清空</el-button>
-              </el-input>
-            </el-form-item>
-
-            <!--<el-form-item>-->
-            <!--<el-button type="primary" size="mini" @click="highGrade">高级</el-button>-->
+            <!--<el-form-item label="审批时间范围">-->
+              <!--<el-date-picker-->
+                <!--v-model="params.date_range"-->
+                <!--type="daterange"-->
+                <!--unlink-panels-->
+                <!--@change="search"-->
+                <!--range-separator="至"-->
+                <!--start-placeholder="开始日期"-->
+                <!--end-placeholder="结束日期"-->
+                <!--value-format="yyyy-MM-dd">-->
+              <!--</el-date-picker>-->
             <!--</el-form-item>-->
-          </el-form>
-        </div>
-      </div>
+
+            <!--<el-form-item label="员工">-->
+              <!--<el-input v-model="staff_name" @focus="selectStaff()" readonly placeholder="请选择员工">-->
+                <!--<el-button style="cursor: pointer;" slot="append" @click="emptyStaff()">清空</el-button>-->
+              <!--</el-input>-->
+            <!--</el-form-item>-->
+
+            <!--&lt;!&ndash;<el-form-item>&ndash;&gt;-->
+            <!--&lt;!&ndash;<el-button type="primary" size="mini" @click="highGrade">高级</el-button>&ndash;&gt;-->
+            <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
+          <!--</el-form>-->
+        <!--</div>-->
+      <!--</div>-->
       <!--<div class="highRanking">-->
         <!--<div class="filter high_grade" :class="isHigh? 'highHide':''">-->
           <!--<el-form :inline="true" onsubmit="return false" :model="params" size="mini" label-width="100px">-->
@@ -85,6 +85,43 @@
         <div>
           <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="收房审批报表" name="first">
+              <div style="display: flex;justify-content: space-between">
+                <div style="color: #6a8dfb" >
+                  <span style="margin-right: 10px">总通过数量 :
+                    <span v-if="tableMeta.approval_sum">{{tableMeta.approval_sum}}</span>
+                    <span v-else><i class="el-icon-loading"></i></span>
+                  </span>
+                  <span style="margin-right: 10px">总查看数量 :
+                    <span v-if="tableMeta.review_sum">{{tableMeta.review_sum}}</span>
+                    <span v-else><i class="el-icon-loading"></i></span>
+                  </span>
+                  <span style="margin-right: 10px">总通过率 :
+                    <span v-if="tableMeta.approval_sum_ratio">{{tableMeta.approval_sum_ratio}}</span>
+                    <span v-else><i class="el-icon-loading"></i></span>
+                  </span>
+                </div>
+                <el-form :inline="true" onsubmit="return false" size="mini">
+                  <el-form-item label="审批时间范围">
+                    <el-date-picker
+                      v-model="params.date_range"
+                      type="daterange"
+                      unlink-panels
+                      @change="search"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期"
+                      value-format="yyyy-MM-dd">
+                    </el-date-picker>
+                  </el-form-item>
+
+                  <el-form-item label="员工">
+                    <el-input v-model="staff_name" @focus="selectStaff()" readonly placeholder="请选择员工">
+                      <el-button style="cursor: pointer;" slot="append" @click="emptyStaff()">清空</el-button>
+                    </el-input>
+                  </el-form-item>
+                </el-form>
+              </div>
+
               <div class="myTable">
                 <el-table
                   :data="tableData"
@@ -96,21 +133,21 @@
                   style="width: 100%">
 
                   <el-table-column
-                    label="总审批数量">
+                    label="通过数量">
                     <template slot-scope="scope">
                       <span v-if="scope.row.approval_num">{{scope.row.approval_num}}</span>
                       <span v-else>0</span>
                     </template>
                   </el-table-column>
                   <el-table-column
-                    label="总查看数量">
+                    label="查看数量">
                     <template slot-scope="scope">
                       <span v-if="scope.row.review_num">{{scope.row.review_num}}</span>
                       <span v-else>0</span>
                     </template>
                   </el-table-column>
                   <el-table-column
-                    label="总审批比率">
+                    label="通过率">
                     <template slot-scope="scope">
                       <span v-if="scope.row.approval_ratio">{{scope.row.approval_ratio }}</span>
                       <span v-else>0</span>
@@ -128,6 +165,42 @@
               </div>
             </el-tab-pane>
             <el-tab-pane label="租房审批报表" name="second">
+              <div style="display: flex;justify-content: space-between">
+                <div style="color: #6a8dfb" >
+                  <span style="margin-right: 10px">总通过数量 :
+                    <span v-if="tableMeta.approval_sum">{{tableMeta.approval_sum}}</span>
+                    <span v-else><i class="el-icon-loading"></i></span>
+                  </span>
+                  <span style="margin-right: 10px">总查看数量 :
+                    <span v-if="tableMeta.review_sum">{{tableMeta.review_sum}}</span>
+                    <span v-else><i class="el-icon-loading"></i></span>
+                  </span>
+                  <span style="margin-right: 10px">总通过率 :
+                    <span v-if="tableMeta.approval_sum_ratio">{{tableMeta.approval_sum_ratio}}</span>
+                    <span v-else><i class="el-icon-loading"></i></span>
+                  </span>
+                </div>
+                <el-form :inline="true" onsubmit="return false" size="mini">
+                  <el-form-item label="审批时间范围">
+                    <el-date-picker
+                      v-model="params.date_range"
+                      type="daterange"
+                      unlink-panels
+                      @change="search"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期"
+                      value-format="yyyy-MM-dd">
+                    </el-date-picker>
+                  </el-form-item>
+
+                  <el-form-item label="员工">
+                    <el-input v-model="staff_name" @focus="selectStaff()" readonly placeholder="请选择员工">
+                      <el-button style="cursor: pointer;" slot="append" @click="emptyStaff()">清空</el-button>
+                    </el-input>
+                  </el-form-item>
+                </el-form>
+              </div>
               <div class="myTable">
                 <el-table
                   :data="tableData"
@@ -138,21 +211,21 @@
                   element-loading-background="rgba(255, 255, 255, 0)"
                   style="width: 100%">
                   <el-table-column
-                    label="总审批数量">
+                    label="通过数量">
                     <template slot-scope="scope">
-                      <span v-if="scope.row.approval_num">{{scope.row.approval_num }}</span>
+                      <span v-if="scope.row.approval_num">{{scope.row.approval_num}}</span>
                       <span v-else>0</span>
                     </template>
                   </el-table-column>
                   <el-table-column
-                    label="总查看数量">
+                    label="查看数量">
                     <template slot-scope="scope">
                       <span v-if="scope.row.review_num">{{scope.row.review_num}}</span>
                       <span v-else>0</span>
                     </template>
                   </el-table-column>
                   <el-table-column
-                    label="总审批比率">
+                    label="通过率">
                     <template slot-scope="scope">
                       <span v-if="scope.row.approval_ratio">{{scope.row.approval_ratio }}</span>
                       <span v-else>0</span>
@@ -214,6 +287,7 @@
         emptyStatus: ' ',
         isLoading: false,
         tableData: [],
+        tableMeta: {},
 
       }
     },
@@ -231,6 +305,7 @@
       // tabs标签页
       handleClick(tab, event) {
         this.tableData = [];
+        this.tableMeta = {};
         this.params.isRent = this.activeName === 'first' ? 0 : 1;
         this.getData();
       },
@@ -251,14 +326,17 @@
           if (res.data.code === '40010') {
             if(res.data.data.length > 0){
               this.tableData = res.data.data;
+              this.tableMeta = res.data.meta;
               this.totalNum = res.data.meta.num;
             }else {
               this.tableData = [];
+              this.tableMeta = {};
               this.totalNum = 0;
               this.emptyStatus = "暂无数据";
             }
           } else {
             this.tableData = [];
+            this.tableMeta = {};
             this.totalNum = 0;
             this.emptyStatus = "暂无数据";
           }
