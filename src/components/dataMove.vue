@@ -575,8 +575,6 @@
             break;
           case 'finish':
             this.form = {house_id: '', contract: []};
-            this.formHouse = {type: 'house', fa_id: '', co_id: ''};
-
             break;
           case'other':
             this.checkMax = 1;
@@ -631,6 +629,7 @@
             if (res.data.code === '30010') {
               if (num === 1) {
                 this.formList.combined = true;
+                this.formHouse = {type: 'house', fa_id: '', co_id: ''};
               } else {
                 this.details();
               }
