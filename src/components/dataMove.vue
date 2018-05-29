@@ -218,7 +218,7 @@
     </div>
 
     <div class="subField footer">
-      <el-row v-for="(key,index) in showDetail" :key="index">
+      <el-row v-for="(key,index) in showDetail" :key="index" class="foot">
         <el-col :span="11" class="subFieldCol">
           <div>
             <div class="blocks bottom0">
@@ -828,6 +828,9 @@
       @include flex;
       align-items: center;
       flex-wrap: wrap;
+      .foot + .foot {
+        border-top: 1px solid #DDDDDD;
+      }
       .el-row {
         width: 100%;
         @include flex;
