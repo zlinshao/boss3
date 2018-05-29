@@ -514,38 +514,38 @@
       };
     },
     watch: {
-      waterAccComLength(val) {
-        let data = this.form.water_data;
-        for (var i = 0; i < val; i++) {
-          if ((i + 1) < val) {
-            data[i + 1].time[0] = data[i + 1].time[1] = data[i].time[1];
-          }
-        }
-      },
-      elecAccComLength(val){
-        let data = this.form.electricity_fee;
-        for (var i = 0; i < val; i++) {
-          if ((i + 1) < val) {
-            data[i + 1].time[0] = data[i + 1].time[1] = data[i].time[1];
-          }
-        }
-      },
-      gasAccComLength(val){
-        let data = this.form.gas_fee;
-        for (var i = 0; i < val; i++) {
-          if ((i + 1) < val) {
-            data[i + 1].time[0] = data[i + 1].time[1] = data[i].time[1];
-          }
-        }
-      },
-      propAccComLength(val){
-        let data = this.form.property_management_fee;
-        for (var i = 0; i < val; i++) {
-          if ((i + 1) < val) {
-            data[i + 1].time[0] = data[i + 1].time[1] = data[i].time[1];
-          }
-        }
-      },
+      // waterAccComLength(val) {
+      //   let data = this.form.water_data;
+      //   for (var i = 0; i < val; i++) {
+      //     if ((i + 1) < val) {
+      //       data[i + 1].time[0] = data[i + 1].time[1] = data[i].time[1];
+      //     }
+      //   }
+      // },
+      // elecAccComLength(val){
+      //   let data = this.form.electricity_fee;
+      //   for (var i = 0; i < val; i++) {
+      //     if ((i + 1) < val) {
+      //       data[i + 1].time[0] = data[i + 1].time[1] = data[i].time[1];
+      //     }
+      //   }
+      // },
+      // gasAccComLength(val){
+      //   let data = this.form.gas_fee;
+      //   for (var i = 0; i < val; i++) {
+      //     if ((i + 1) < val) {
+      //       data[i + 1].time[0] = data[i + 1].time[1] = data[i].time[1];
+      //     }
+      //   }
+      // },
+      // propAccComLength(val){
+      //   let data = this.form.property_management_fee;
+      //   for (var i = 0; i < val; i++) {
+      //     if ((i + 1) < val) {
+      //       data[i + 1].time[0] = data[i + 1].time[1] = data[i].time[1];
+      //     }
+      //   }
+      // },
       reimResultDialog(val) {
         this.reimResultDialogVisible = val;
       },
@@ -640,45 +640,45 @@
     },
     methods: {
       timeChange(k,n) {
-        switch(k){
-          case 'water':
-            let data = this.form.water_data;
-            for (let i = n; i < this.waterAccComLength; i++) {
-              if ((i + 1) < this.waterAccComLength) {
-                data[i + 1].time[0] = data[i + 1].time[1] = this.form.water_data[i].time[1];
-                console.log(data);
-                this.$set(this.form.water_data, data);
-              }
-            }
-            break;
-          case 'elec':
-            let data1 = this.form.electricity_data;
-            for (let i = n; i < this.elecAccComLength; i++) {
-              if ((i + 1) < this.elecAccComLength) {
-                data1[i + 1].time[0] = data1[i + 1].time[1] = this.form.electricity_data[i].time[1];
-                this.$set(this.form.electricity_data, data1);
-              }
-            }
-            break;
-          case 'gas':
-            let data2 = this.form.gas_data;
-            for (let i = n; i < this.gasAccComLength; i++) {
-              if ((i + 1) < this.gasAccComLength) {
-                data2[i + 1].time[0] = data2[i + 1].time[1] = this.form.gas_data[i].time[1];
-                this.$set(this.form.gas_data, data2);
-              }
-            }
-            break;
-          case 'prop':
-            let data3 = this.form.property_management_data;
-            for (let i = n; i < this.propAccComLength; i++) {
-              if ((i + 1) < this.propAccComLength) {
-                data3[i + 1].time[0] = data3[i + 1].time[1] = this.form.property_management_data[i].time[1];
-                this.$set(this.form.property_management_data, data3);
-              }
-            }
-            break;
-        }
+        // switch(k){
+        //   case 'water':
+        //     let data = this.form.water_data;
+        //     for (let i = n; i < this.waterAccComLength; i++) {
+        //       if ((i + 1) < this.waterAccComLength) {
+        //         data[i + 1].time[0] = data[i + 1].time[1] = this.form.water_data[i].time[1];
+        //         console.log(data);
+        //         this.form.water_data = data ;
+        //       }
+        //     }
+        //     break;
+        //   case 'elec':
+        //     let data1 = this.form.electricity_data;
+        //     for (let i = n; i < this.elecAccComLength; i++) {
+        //       if ((i + 1) < this.elecAccComLength) {
+        //         data1[i + 1].time[0] = data1[i + 1].time[1] = this.form.electricity_data[i].time[1];
+        //         this.$set(this.form.electricity_data, data1);
+        //       }
+        //     }
+        //     break;
+        //   case 'gas':
+        //     let data2 = this.form.gas_data;
+        //     for (let i = n; i < this.gasAccComLength; i++) {
+        //       if ((i + 1) < this.gasAccComLength) {
+        //         data2[i + 1].time[0] = data2[i + 1].time[1] = this.form.gas_data[i].time[1];
+        //         this.$set(this.form.gas_data, data2);
+        //       }
+        //     }
+        //     break;
+        //   case 'prop':
+        //     let data3 = this.form.property_management_data;
+        //     for (let i = n; i < this.propAccComLength; i++) {
+        //       if ((i + 1) < this.propAccComLength) {
+        //         data3[i + 1].time[0] = data3[i + 1].time[1] = this.form.property_management_data[i].time[1];
+        //         this.$set(this.form.property_management_data, data3);
+        //       }
+        //     }
+        //     break;
+        // }
 
       },
       showAccCom(val) {
