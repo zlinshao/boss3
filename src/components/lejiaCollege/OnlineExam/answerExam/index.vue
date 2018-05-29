@@ -380,6 +380,8 @@
         if (val === 'force') {
           this.showForceWords = true;
         }
+        clearTimeout(this.timeOut);
+        clearTimeout(this.timeClear);
         this.$http.post(globalConfig.server + 'exam/result', {
           exam_id: this.examId,
           answer: this.answerData
@@ -392,7 +394,7 @@
             } else {
               this.pointDialog = true;
             }
-            clearTimeout(this.timeOut);
+
             localStorage.removeItem("answers_" + this.examId);
             let examIds = JSON.parse(this.confirmArrival);
             examIds.splice(examIds.indexOf(this.examId) ,1);

@@ -501,14 +501,13 @@
         this.form.address = val.address;
         this.form.contract_type = val.type;
         this.form.contract_id = val.contract_id;
-
         if (this.activeName == 'first') {
           this.$http.get(globalConfig.server + 'lease/collect/' + val.contract_id).then((res) => {
             if (res.data.code === '61010') {
               this.contractInfo = res.data.data;
+              this.agency_price_now = res.data.data.agency;
               if (res.data.data.agency_info) {
-                this.agency_price_origin = res.data.data.agency_info.agency_price_origin;
-                this.agency_price_now = res.data.data.agency_info.agency_price_now;
+                this.agency_price_origin = res.data.data.agency_info.agency_price;
                 this.agency_name = res.data.data.agency_info.agency_name;
                 this.agency_user_name = res.data.data.agency_info.agency_user_name;
                 this.agency_phone = res.data.data.agency_info.agency_phone;
@@ -520,9 +519,9 @@
           this.$http.get(globalConfig.server + 'lease/rent/' + val.contract_id).then((res) => {
             if (res.data.code === '61110') {
               this.contractInfo = res.data.data;
+              this.agency_price_now = res.data.data.agency;
               if (res.data.data.agency_info) {
-                this.agency_price_origin = res.data.data.agency_info.agency_price_origin;
-                this.agency_price_now = res.data.data.agency_info.agency_price_now;
+                this.agency_price_origin = res.data.data.agency_info.agency_price;
                 this.agency_name = res.data.data.agency_info.agency_name;
                 this.agency_user_name = res.data.data.agency_info.agency_user_name;
                 this.agency_phone = res.data.data.agency_info.agency_phone;
@@ -531,22 +530,6 @@
           })
         }
       },
-      // 'form.unit_price': {
-      //   deep: true,
-      //   handler(val, oldVal) {
-      //     if (val && val[0] && val[0][0] && val[0][0].length > 0) {
-      //       let priceDate = val[0];
-      //       for (var i = 0; i < this.priceLen; i++) {
-      //         // if (!(priceDate[i + 1] && priceDate[i + 1].length > 0)) {
-      //           if ((i + 1) < this.priceLen) {
-      //             priceDate[i + 1] = [];
-      //             priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
-      //           }
-      //         // }
-      //       }
-      //     }
-      //   }
-      // },
       priceLen(val) {
         let data = this.form.unit_price;
         if (data && data[0] && data[0][0] && data[0][0].length > 0) {
@@ -571,22 +554,6 @@
           }
         }
       },
-      // 'form.pay_type': {
-      //   deep: true,
-      //   handler(val, oldVal) {
-      //     if (val && val[0] && val[0][0] && val[0][0].length > 0) {
-      //       let priceDate = val[0];
-      //       for (var i = 0; i < this.payForLen; i++) {
-      //         if (!(priceDate[i + 1] && priceDate[i + 1].length > 0)) {
-      //           if ((i + 1) < this.payForLen) {
-      //             priceDate[i + 1] = [];
-      //             priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
-      //           }
-      //         }
-      //       }
-      //     }
-      //   }
-      // },
     },
     methods: {
       payTypeChange(n){
