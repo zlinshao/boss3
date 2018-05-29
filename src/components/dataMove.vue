@@ -603,16 +603,39 @@
             }
           }
         }
+        let con = this.form.contract;
+        if (con.length > 1) {
+          for (let i = 0; i < con.length; i++) {
+            for (let j = i + 1; j < con.length; j++) {
+              if (con[i].fcc_id) {
+                if (con[i].fcc_id === con[j].fcc_id) {
+                  this.form.contract.splice(i, 1);
+                }
+              }
+              if (con[i].fcr_id) {
+                if (con[i].fcr_id === con[j].fcr_id) {
+                  this.form.contract.splice(i, 1);
+                }
+              }
+            }
+          }
+        }
+        console.log(this.form.contract);
         this.open('', 2);
+      },
+      weight(array) {
+        return Array.from(new Set(array));
       },
       open(val, num) {
         let con, address, list;
+        let allNum = this.formListFc.length + this.formListFr.length;
+        let remNum = this.form.contract.length;
         if (num === 1) {
-          con = '此操作将合并房屋，不可逆转操作, 是否继续?';
+          con = '此操作将合并房屋，不可逆转, 是否继续?';
           address = this.urls + 'financial/migration/combine';
           list = this.formHouse;
         } else {
-          con = '此操作将合并合同，不可逆转操作, 是否继续?';
+          con = '此页共有(' + allNum + ')条财务数据,' + '您当前选中了(' + remNum + ')条,是否继续?';
           address = this.urls + 'financial/migration/commit';
           list = this.form;
         }
