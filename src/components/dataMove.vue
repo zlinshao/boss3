@@ -350,15 +350,55 @@
         });
       },
       search(val) {
+        let data = this.showDetail;
+        let listLeft = [];
+        let listRight = [];
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].leftCcId !== '' && data[i].rightCcId !== '') {
+            listLeft.push(this.contractListChc[i]);
+          }
+          if (data[i].leftRcId !== '' && data[i].rightRcId !== '') {
+            listRight.push(this.contractListRhc[i]);
+          }
+        }
+        console.log(listLeft);
+        console.log(listRight);
         this.params.keywords = val;
-        this.close_('other');
-        this.close_('ids');
-        this.close_('resetting');
+        // this.close_('other');
+        // this.close_('ids');
+        // this.close_('resetting');
         this.$http.get(this.urls + 'financial/migration/search?q=' + val).then((res) => {
           if (res.data.code === '30000') {
-            this.contractListChc = res.data.data.chc;
-            this.contractListRhc = res.data.data.rhc;
-            this.contractHouse = res.data.data.houses;
+            this.contractListChc = res.data.data.chc;   //合同数据收
+            this.contractListRhc = res.data.data.rhc;   //合同数据租
+            this.contractHouse = res.data.data.houses;  //头部房屋信息
+            if (listLeft.length > 0) {
+              for (let i = 0; i < listLeft.length; i++) {
+                if (this.contractListChc.length > 0) {
+                  for (let j = 0; j < this.contractListChc.length; j++) {
+                    if (listLeft[i].id !== this.contractListChc[j].id) {
+                      this.contractListChc.push(listLeft[i]);
+                    }
+                  }
+                } else {
+                  this.contractListChc.push(listLeft[i]);
+                }
+              }
+            }
+            if (listRight.length > 0) {
+              for (let i = 0; i < listRight.length; i++) {
+                console.log(this.contractListRhc.length);
+                if (this.contractListRhc.length > 0) {
+                  for (let j = 0; j < this.contractListRhc.length; j++) {
+                    if (listRight[i].id !== this.contractListRhc[j].id) {
+                      this.contractListRhc.push(listRight[i]);
+                    }
+                  }
+                } else {
+                  this.contractListRhc.push(listRight[i]);
+                }
+              }
+            }
           } else {
             this.close_('search');
           }
@@ -569,9 +609,9 @@
             this.rightListRent = [];
             break;
           case 'search':
-            this.contractListChc = [];
-            this.contractListRhc = [];
-            this.contractHouse = [];
+            this.contractListChc = [];  //合同数据收
+            this.contractListRhc = [];  //合同数据租
+            this.contractHouse = [];    //头部房屋信息
             break;
           case'other':
             this.checkMax = 1;
@@ -584,44 +624,64 @@
         this.open(val, 1);
       },
       // 合同合并
-      moveSure() {
-        let data = this.showDetail;
-        for (let i = 0; i < data.length; i++) {
-          let listF = {};
-          let listC = {};
-          if (data[i].type === 'leftCollect' || data[i].type === 'rightCollect') {
-            if (data[i].leftCcId !== '' && data[i].rightCcId !== '') {
-              listF.fcc_id = data[i].leftCcId;
-              listF.chc_id = data[i].rightCcId;
-              this.form.contract.push(listF);
-            }
-          } else {
-            if (data[i].leftRcId !== '' && data[i].rightRcId !== '') {
-              listC.fcr_id = data[i].leftRcId;
-              listC.rhc_id = data[i].rightRcId;
-              this.form.contract.push(listC);
+      moveSure(val) {
+        if (val === 'b') {
+          this.$confirm('此操作将忽略此房屋，是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$http.post(this.urls + 'financial/migration/bypass', {
+              house_id: this.form.house_id
+            }).then((res) => {
+              if (res.data.code === '30000') {
+                this.details();
+                this.$notify.success({
+                  title: '成功',
+                  message: '操作成功！',
+                })
+              }
+            });
+          }).catch(() => {
+          });
+        } else {
+          let data = this.showDetail;
+          for (let i = 0; i < data.length; i++) {
+            let listF = {};
+            let listC = {};
+            if (data[i].type === 'leftCollect' || data[i].type === 'rightCollect') {
+              if (data[i].leftCcId !== '' && data[i].rightCcId !== '') {
+                listF.fcc_id = data[i].leftCcId;
+                listF.chc_id = data[i].rightCcId;
+                this.form.contract.push(listF);
+              }
+            } else {
+              if (data[i].leftRcId !== '' && data[i].rightRcId !== '') {
+                listC.fcr_id = data[i].leftRcId;
+                listC.rhc_id = data[i].rightRcId;
+                this.form.contract.push(listC);
+              }
             }
           }
-        }
-        let con = this.form.contract;
-        if (con.length > 1) {
-          for (let i = 0; i < con.length; i++) {
-            for (let j = i + 1; j < con.length; j++) {
-              if (con[i].fcc_id) {
-                if (con[i].fcc_id === con[j].fcc_id) {
-                  this.form.contract.splice(i, 1);
+          let con = this.form.contract;
+          if (con.length > 1) {
+            for (let i = 0; i < con.length; i++) {
+              for (let j = i + 1; j < con.length; j++) {
+                if (con[i].fcc_id) {
+                  if (con[i].fcc_id === con[j].fcc_id) {
+                    this.form.contract.splice(i, 1);
+                  }
                 }
-              }
-              if (con[i].fcr_id) {
-                if (con[i].fcr_id === con[j].fcr_id) {
-                  this.form.contract.splice(i, 1);
+                if (con[i].fcr_id) {
+                  if (con[i].fcr_id === con[j].fcr_id) {
+                    this.form.contract.splice(i, 1);
+                  }
                 }
               }
             }
           }
+          this.open('', 2);
         }
-        console.log(this.form.contract);
-        this.open('', 2);
       },
       weight(array) {
         return Array.from(new Set(array));
