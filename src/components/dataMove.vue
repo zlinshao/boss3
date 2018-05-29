@@ -323,9 +323,9 @@
       this.details();
     },
     watch: {
-      showDetail(val) {
-        console.log(val);
-      }
+      // showDetail(val) {
+      //   console.log(val);
+      // }
     },
     computed: {
       leftNumber() {
@@ -493,58 +493,6 @@
         this.showDetail[max].type = type;
         this.assignment(max, key, type);
         this.types = type;
-        // if (type === 'leftCollect' || type === 'leftRent') {
-        //   this.types = type;
-        //   if (type === 'leftCollect') {
-        //     if (this.leftListCollect.indexOf(key.id) < 0) {
-        //       for (let i = 0; i < this.showDetail.length; i++) {
-        //         if (this.showDetail[i].leftCcId === key.id) {
-        //           this.indexNum = i;
-        //           this.close_(type, i);
-        //         }
-        //       }
-        //       this.types = '';
-        //     } else {
-        //       this.assignment(max, key, type);
-        //     }
-        //   } else {
-        //     if (this.leftListRent.indexOf(key.id) < 0) {
-        //       for (let i = 0; i < this.showDetail.length; i++) {
-        //         if (this.showDetail[i].leftRcId === key.id) {
-        //           this.indexNum = i;
-        //           this.close_(type, i);
-        //         }
-        //       }
-        //       this.types = '';
-        //     } else {
-        //       this.assignment(max, key, type);
-        //     }
-        //   }
-        // } else {
-        //   if (type === 'rightCollect') {
-        //     if (this.rightListCollect.indexOf(key.id) < 0) {
-        //       for (let i = 0; i < this.showDetail.length; i++) {
-        //         if (this.showDetail[i].rightCcId === key.id) {
-        //           this.indexNum = i;
-        //           this.close_(type, i);
-        //         }
-        //       }
-        //     } else {
-        //       this.assignment(max, key, type);
-        //     }
-        //   } else {
-        //     if (this.rightListRent.indexOf(key.id) < 0) {
-        //       for (let i = 0; i < this.showDetail.length; i++) {
-        //         if (this.showDetail[i].rightRcId === key.id) {
-        //           this.indexNum = i;
-        //           this.close_(type, i);
-        //         }
-        //       }
-        //     } else {
-        //       this.assignment(max, key, type);
-        //     }
-        //   }
-        // }
       },
       // 赋值
       assignment(max, key, type) {
