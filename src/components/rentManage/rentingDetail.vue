@@ -874,13 +874,16 @@
       <div class="operatePanel" style="position: fixed;bottom: 120px;right: 80px;z-index: 10000;" v-if="isModal"
            @click="isModal = false">
         <div class="buttonItem" @click="isPanel = true" title="添加备忘">
-          <i style="font-size: 24px;color: #FFFFFF;line-height: 38px" class="iconfont icon-bianji--"></i>
+          <i style="font-size: 20px;color: #FFFFFF;line-height: 38px" class="iconfont icon-bianji--"></i>
         </div>
         <div class="buttonItem" @click="memoDialog = true" title="备忘记录">
-          <i style="font-size: 24px;color: #FFFFFF;line-height: 38px" class="el-icon-document"></i>
+          <i style="font-size: 20px;color: #FFFFFF;line-height: 38px" class="el-icon-document"></i>
         </div>
         <div class="buttonItem" @click="approvalHistoryDialog = true" title="审批历史详情">
-          <i style="font-size: 24px;color: #FFFFFF;line-height: 38px" class="el-icon-edit"></i>
+          <i style="font-size: 20px;color: #FFFFFF;line-height: 38px" class="el-icon-edit"></i>
+        </div>
+        <div class="buttonItem" @click="isModal = false">
+          <i style="font-size: 20px;color: #FFFFFF;line-height: 38px" class="el-icon-minus"></i>
         </div>
       </div>
     </transition>

@@ -10,9 +10,17 @@
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(255, 255, 255, 0)"
           style="width: 100%">
+          <el-table-column
+            prop="create_time"
+            label="审批时间">
+          </el-table-column>
 
           <el-table-column
-            label="操作历史">
+            prop="sname"
+            label="审批人">
+          </el-table-column>
+          <el-table-column
+            label="操作">
             <template slot-scope="scope">
               <span v-if="scope.row.historiable_operation === 'to_contract_review'">提交合同审核员审核</span>
               <span v-if="scope.row.historiable_operation === 'to_contract_approved'">合同资料无误，同意</span>
@@ -24,14 +32,17 @@
           </el-table-column>
 
           <el-table-column
-            prop="create_time"
-            label="审批时间">
+            label="状态变更">
+            <template slot-scope="scope">
+              合同状态由
+              <apan style="color: #6a8dfb">{{doc_status[scope.row.other.doc_status.before]}}</apan>
+              变更为
+              <span style="color: #6a8dfb">{{doc_status[scope.row.other.doc_status.after]}}</span>
+            </template>
           </el-table-column>
 
-          <el-table-column
-            prop="sname"
-            label="审批人">
-          </el-table-column>
+
+
         </el-table>
       </div>
       <div slot="footer" class="dialog-footer">
@@ -55,6 +66,12 @@
           contract_id : this.contractId,
           page : 1,
           limit:12,
+        },
+        doc_status : {
+          draft :'等待提交',
+          wait_contract_review :'合同资料审核中',
+          wait_house_review :'房屋资料审核中',
+          pulished :'已通过',
         }
       }
     },
