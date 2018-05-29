@@ -89,13 +89,7 @@
                 </el-col>
               </el-row>
               <el-row>
-                <el-col :span="8">
-                  <el-form-item label="房屋特色">
-                    <div class="content">
-                      <span v-if="detailData.house_feature">{{matchDictionary(detailData.house_feature)}}</span>
-                    </div>
-                  </el-form-item>
-                </el-col>
+                
                 <el-col :span="8">
                   <el-form-item label="建议价格">
                     <div class="content">

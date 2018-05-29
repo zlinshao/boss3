@@ -20,12 +20,12 @@
       <div class="top">
 
         <h3>
-          {{contractInfo.community_name}}  {{contractInfo.doorplate_str}}
+          {{contractInfo.community_name}} {{contractInfo.doorplate_str}}
           <span v-if="contractInfo.contract_number">（合同编号 : {{contractInfo.contract_number}}）</span>
         </h3>
         <h3>
 
-          <div style="display: inline-block"  v-if="contractInfo.operation &&
+          <div style="display: inline-block" v-if="contractInfo.operation &&
               !Array.isArray(contractInfo.operation)&& contractInfo.operation.visit">
             <el-dropdown>
               <el-button type="success" size="mini">
@@ -35,7 +35,7 @@
                 <i class="el-icon-arrow-down el-icon--right"></i>
               </el-button>
               <el-dropdown-menu slot="dropdown">
-                <div >
+                <div>
                   <el-dropdown-item
                     v-for="item in contractInfo.operation.visit" :key="item"
                     @click.native="confirmPress(item)">
@@ -53,8 +53,8 @@
             </el-button>
           </div>
 
-          <div  v-if="contractInfo.operation &&!Array.isArray(contractInfo.operation)&& contractInfo.operation.doc"
-                style="display: inline-block">
+          <div v-if="contractInfo.operation &&!Array.isArray(contractInfo.operation)&& contractInfo.operation.doc"
+               style="display: inline-block">
             <el-dropdown>
               <el-button type="primary" size="mini">
               <span v-if="contractInfo.doc_status">
@@ -182,11 +182,11 @@
               </el-col>
             </el-row>
             <!--<el-row>-->
-              <!--<el-col :span="8">-->
-                <!--<el-form-item label="房屋特色">-->
-                  <!--<div class="content">{{matchDictionary(contractInfo.house_feature)}}</div>-->
-                <!--</el-form-item>-->
-              <!--</el-col>-->
+            <!--<el-col :span="8">-->
+            <!--<el-form-item label="房屋特色">-->
+            <!--<div class="content">{{matchDictionary(contractInfo.house_feature)}}</div>-->
+            <!--</el-form-item>-->
+            <!--</el-col>-->
             <!--</el-row>-->
           </el-form>
         </div>
@@ -339,7 +339,8 @@
                 <el-form-item label="付款方式">
                   <div class="content">
                     <span v-for="(item,index) in contractInfo.pay_way">
-                      {{matchDictionary(item.pay_way)}}，{{item.period}}个月 <span v-show="index<contractInfo.pay_way-1">;</span>
+                      {{matchDictionary(item.pay_way)}}，{{item.period}}个月 <span
+                      v-show="index<contractInfo.pay_way-1">;</span>
                     </span>
                   </div>
                 </el-form-item>
@@ -824,177 +825,178 @@
 
         <div class="returnVisitInfo">
           <el-form size="small" label-width="180px">
-            <div  v-if="repairDetail.length<1">
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="">
-                  暂无回访信息
-                </el-form-item>
-              </el-col>
-            </el-row>
+            <div v-if="repairDetail.length<1">
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="">
+                    暂无回访信息
+                  </el-form-item>
+                </el-col>
+              </el-row>
             </div>
             <div v-else>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="创建时间" >
-                  <div class="content">{{repairDetail.create_time}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="合同周期">
-                  <div class="content">{{repairDetail.contract_month}}月{{repairDetail.contract_day}}天
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="来源">
-                  <div class="content">{{repairDetail.originate_name}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row v-if="repairDetail.originate === 623">
-              <el-col :span="8">
-                <el-form-item label="中介名称">
-                  <div class="content">{{repairDetail.agency}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="中介价格">
-                  <div class="content">{{repairDetail.agency_price}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="中介人">
-                  <div class="content">{{repairDetail.agency_person}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8" v-if="repairDetail.originate === 623">
-                <el-form-item label="中介电话" >
-                  <div class="content">{{repairDetail.agency_tel}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="月单价" >
-                  <div class="content">
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="创建时间">
+                    <div class="content">{{repairDetail.create_time}}</div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="合同周期">
+                    <div class="content">{{repairDetail.contract_month}}月{{repairDetail.contract_day}}天
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="来源">
+                    <div class="content">{{repairDetail.originate_name}}</div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row v-if="repairDetail.originate === 623">
+                <el-col :span="8">
+                  <el-form-item label="中介名称">
+                    <div class="content">{{repairDetail.agency}}</div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="中介价格">
+                    <div class="content">{{repairDetail.agency_price}}</div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="中介人">
+                    <div class="content">{{repairDetail.agency_person}}</div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8" v-if="repairDetail.originate === 623">
+                  <el-form-item label="中介电话">
+                    <div class="content">{{repairDetail.agency_tel}}</div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="月单价">
+                    <div class="content">
                     <span v-for="index in priceLen" :key="index" v-if="index>0">
                       {{repairDetail.unit_price[0][index-1][0]}}-{{repairDetail.unit_price[0][index-1][1]}},
                       {{repairDetail.unit_price[1][index-1]}}元
                        <span v-show="index<priceLen-1">;</span>
                     </span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="付款方式">
-                  <div class="content">
+                    </div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="付款方式">
+                    <div class="content">
                     <span v-for="index in payForLen" :key="index+55" v-if="index>0">
                       {{repairDetail.pay_type[0][index-1][0]}}-{{repairDetail.pay_type[0][index-1][1]}},
-                      <span v-for="item in payTypeInfo" :key="item.id" v-if="repairDetail.pay_type[1][index-1] == item.id">
+                      <span v-for="item in payTypeInfo" :key="item.id"
+                            v-if="repairDetail.pay_type[1][index-1] == item.id">
                         {{item.dictionary_name}}</span>
                       <span v-show="index<payForLen-1">;</span>
                     </span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <!-- <el-row>
-              <el-col :span="8">
-                <el-form-item label="已付金额" >
-                  <div class="content">{{repairDetail.create_time}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="支付方式" >
-                  <div class="content">{{repairDetail.operator}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="金额">
-                  <div class="content">{{item.simple_staff.real_name}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row> -->
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="是否收取其他费用" >
-                  <div class="content">{{repairDetail.has_extra}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="保修期" >
-                  <div class="content">{{repairDetail.guarantee_month}}月{{repairDetail.guarantee_day}}天</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8" v-if="repairDetail.has_extra == '是' " >
-                <el-form-item label="费用名称">
-                  <div class="content">
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <!-- <el-row>
+                <el-col :span="8">
+                  <el-form-item label="已付金额" >
+                    <div class="content">{{repairDetail.create_time}}</div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="支付方式" >
+                    <div class="content">{{repairDetail.operator}}</div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="金额">
+                    <div class="content">{{item.simple_staff.real_name}}</div>
+                  </el-form-item>
+                </el-col>
+              </el-row> -->
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="是否收取其他费用">
+                    <div class="content">{{repairDetail.has_extra}}</div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="保修期">
+                    <div class="content">{{repairDetail.guarantee_month}}月{{repairDetail.guarantee_day}}天</div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8" v-if="repairDetail.has_extra == '是' ">
+                  <el-form-item label="费用名称">
+                    <div class="content">
                     <span v-for="index in payUseLen" :key="index+999" v-if="index>0">
                      {{repairDetail.pay_use[0][index-1]}},{{repairDetail.pay_use[1][index-1]}}
                        <span v-show="index<payUseLen-1">;</span>
                     </span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="备注条款" >
-                  <div class="content">{{repairDetail.remark_clause}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="业务员态度">
-                  <el-rate v-model="repairDetail.star" disabled></el-rate>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="业务员专业度" >
-                  <div class="content">{{repairDetail.sale_remark}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="备注" >
-                  <div class="content">{{repairDetail.remark}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="中介费">
-                  <div class="content">{{agency_price_origin}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="现中介费" >
-                  <div class="content">{{agency_price_now}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="中介名" >
-                  <div class="content">{{agency_name}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="中介人">
-                  <div class="content">{{agency_user_name}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="手机号" >
-                  <div class="content">{{agency_phone}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
+                    </div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label="备注条款">
+                    <div class="content">{{repairDetail.remark_clause}}</div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label="业务员态度">
+                    <el-rate v-model="repairDetail.star" disabled></el-rate>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label="业务员专业度">
+                    <div class="content">{{repairDetail.sale_remark}}</div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label="备注">
+                    <div class="content">{{repairDetail.remark}}</div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="中介费">
+                    <div class="content">{{agency_price_origin}}</div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="现中介费">
+                    <div class="content">{{agency_price_now}}</div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="中介名">
+                    <div class="content">{{agency_name}}</div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="8">
+                  <el-form-item label="中介人">
+                    <div class="content">{{agency_user_name}}</div>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="手机号">
+                    <div class="content">{{agency_phone}}</div>
+                  </el-form-item>
+                </el-col>
+              </el-row>
 
             </div>
           </el-form>
@@ -1021,10 +1023,28 @@
       </div>
     </div>
 
-    <div class="operatePanel" style="position: fixed;bottom: 120px;right: 80px;" @click="isPanel = !isPanel">
-      <!--<i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="el-icon-circle-plus"></i>-->
-      <i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="iconfont icon-bianji--"></i>
+    <div class="operatePanel" style="position: fixed;bottom: 120px;right: 80px;" v-if="!isModal"
+         @click="isModal = true">
+      <i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="el-icon-circle-plus"></i>
     </div>
+    <transition name="el-zoom-in-bottom">
+      <div class="operatePanel" style="position: fixed;bottom: 120px;right: 80px;z-index: 10000;" v-if="isModal"
+           @click="isModal = false">
+        <div class="buttonItem" @click="isPanel = true" title="添加备忘">
+          <i style="font-size: 24px;color: #FFFFFF;line-height: 38px" class="iconfont icon-bianji--"></i>
+        </div>
+        <div class="buttonItem" @click="memoDialog = true" title="备忘记录">
+          <i style="font-size: 24px;color: #FFFFFF;line-height: 38px" class="el-icon-document"></i>
+        </div>
+        <div class="buttonItem" @click="approvalHistoryDialog = true" title="审批历史详情">
+          <i style="font-size: 24px;color: #FFFFFF;line-height: 38px" class="el-icon-edit"></i>
+        </div>
+      </div>
+    </transition>
+    <div style="position: fixed;width: 100%;height: 100%;top:0;right:0;left:0;bottom:0;
+                z-index: 9999;background: rgba(255,255,255,.3)" @click="isModal = false" v-if="isModal"></div>
+
+
     <div class="panelContent" id="panelContent" :class="{'div_fade': isPanel}">
       <div class="panel_header">
         <div style="color: #6a8dfb;font-size: 16px">
@@ -1065,21 +1085,30 @@
       </div>
 
     </div>
+
     <Organization :organizationDialog="organizationDialog" :type="type" @close="closeOrganization"
                   @selectMember="selectMember"></Organization>
+    <MemorandumRecord :memoDialog="memoDialog" is_rent="0" :selectContractId="contract_id" @close="closeOrganization"></MemorandumRecord>
+    <ApprovalHistory :approvalHistory="approvalHistoryDialog" is_rent="0" :contractId="contract_id" @close="closeOrganization"></ApprovalHistory>
   </div>
 </template>
 
 <script>
 
   import Organization from '../common/organization.vue';
+  import MemorandumRecord from './components/memorandumRecord'
+  import ApprovalHistory from './components/approvalHistory'
+
   export default {
-    components: {Organization},
+    components: {Organization,MemorandumRecord,ApprovalHistory},
     data() {
       return {
         steps: 0,
         sizeForm: {},
         isPanel: false,
+        isModal: false,
+        memoDialog: false,
+        approvalHistoryDialog: false,
         houseInfo: [],
         customersInfo: [],
         contractInfo: [],
@@ -1148,8 +1177,8 @@
         },
         //回访相关
         form: {
-            contract_id : '',
-            module:1
+          contract_id: '',
+          module: 1
         },
         priceLen: 0,
         payForLen: 0,
@@ -1158,14 +1187,14 @@
         album: [],
         payTypeInfo: [],
         repairDetail: [],
-        agency_price_origin:"",            //中介费
-        agency_price_now:"",               //现中介费
-        agency_name:"",                    //中介名
-        agency_user_name:"",               //中介人
-        agency_phone:"",                   //手机号
+        agency_price_origin: "",            //中介费
+        agency_price_now: "",               //现中介费
+        agency_name: "",                    //中介名
+        agency_user_name: "",               //中介人
+        agency_phone: "",                   //手机号
       }
     },
-    beforeCreate(){
+    beforeCreate() {
 
     },
     created() {
@@ -1210,7 +1239,7 @@
     },
     methods: {
       //图片拖拽
-      dragInit(){
+      dragInit() {
         let photo = document.getElementById('photo');
         let identity_photo = document.getElementById('identity_photo');
         let bank_photo = document.getElementById('bank_photo');
@@ -1315,7 +1344,7 @@
 
       },
 
-      changeChild(boxid, lis){
+      changeChild(boxid, lis) {
         for (let i = 0; i < lis.length; i++) {
           if (lis[i].flag) { //如果flag为真，则添加一个li至box里
             boxid.appendChild(lis[i]);
@@ -1323,13 +1352,13 @@
         }
       },
 
-      allowDrop(e){
+      allowDrop(e) {
         e.preventDefault();
       },
-      currentPicId(key){
+      currentPicId(key) {
         this.dragPicId = key;
       },
-      dragEnd(id){
+      dragEnd(id) {
         this.albumObject.photo = this.albumObject.photo.filter((x) => {
           return x != this.dragPicId
         });
@@ -1437,14 +1466,14 @@
         this.sortPic()
       },
 
-      sortPic(){
+      sortPic() {
         this.$http.put(globalConfig.server + 'lease/collect/move/' + this.contract_id, {album: this.albumObject}).then((res) => {
           if (res.data.code === '61090') {
 
           } else {
             this.$notify.warning({
               title: '警告',
-              duration : 1000,
+              duration: 1000,
               message: res.data.msg
             });
           }
@@ -1462,22 +1491,24 @@
       },
       closeOrganization() {
         this.organizationDialog = false;
+        this.memoDialog = false;
+        this.approvalHistoryDialog = false;
       },
       //发送/保存备忘
-      noteSave(val){
+      noteSave(val) {
         this.params.is_send = val;
         this.$http.post(globalConfig.server + 'lease/note/save', this.params).then((res) => {
           if (res.data.code === '60510') {
             this.$notify.success({
               title: '成功',
-              duration : 1000,
+              duration: 1000,
               message: res.data.msg
             });
             this.isPanel = false;
           } else {
             this.$notify.warning({
               title: '警告',
-              duration : 1000,
+              duration: 1000,
               message: res.data.msg
             });
           }
@@ -1521,62 +1552,62 @@
             this.albumObject.checkout_photo = this.getImgId(this.contractInfo.checkout_photo);
             this.albumObject.checkout_settle_photo = this.getImgId(this.contractInfo.checkout_settle_photo);
 
-            if(this.contractInfo.doc_status.id<4){
+            if (this.contractInfo.doc_status.id < 4) {
               setTimeout(() => {
                 this.dragInit();
               }, 1000)
             }
-          }else {
-              this.$notify.warning({
-                title:'警告',
-                duration : 1000,
-                message:res.data.msg
-              })
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              duration: 1000,
+              message: res.data.msg
+            })
           }
         })
 
       },
-      getFeedBack(){
+      getFeedBack() {
         this.form.contract_id = this.contract_id;
-      this.dictionary(443).then(res => {
-        //支付方式
-        this.payTypeInfo = res.data;
-      });
-      this.$http
-        .get(globalConfig.server + 'contract/feedback/one?', {
-          params: this.form
-        })
-        .then(res => {
-          if (res.data.code === "1212200") {
-            this.album = res.data.data[0].album;
-            this.agency_price_origin = res.data.data[0].agency_price_origin;
-            this.agency_price_now = res.data.data[0].agency_price_now;
-            this.agency_name = res.data.data[0].agency_name;
-            this.agency_user_name = res.data.data[0].agency_user_name;
-            this.agency_phone = res.data.data[0].agency_phone;
-            this.repairDetail = res.data.data[0];
-
-            if (res.data.data[0].unit_price != "") {
-              this.priceLen = res.data.data[0].unit_price[0].length;
-            }
-            if (res.data.data[0].pay_type != "") {
-              this.payForLen = res.data.data[0].pay_type[0].length;
-            }
-            if (res.data.data[0].pay_method != "") {
-              this.payTypeLen = res.data.data[0].pay_method[0].length;
-            }
-            if (res.data.data[0].pay_use && res.data.data[0].pay_use != "") {
-              this.payUseLen = res.data.data[0].pay_use[0].length;
-            }
-            if (this.repairDetail.has_extra == 1) {
-              this.repairDetail.has_extra = "是";
-            } else {
-              this.repairDetail.has_extra = "否";
-            }
-          }
+        this.dictionary(443).then(res => {
+          //支付方式
+          this.payTypeInfo = res.data;
         });
+        this.$http
+          .get(globalConfig.server + 'contract/feedback/one?', {
+            params: this.form
+          })
+          .then(res => {
+            if (res.data.code === "1212200") {
+              this.album = res.data.data[0].album;
+              this.agency_price_origin = res.data.data[0].agency_price_origin;
+              this.agency_price_now = res.data.data[0].agency_price_now;
+              this.agency_name = res.data.data[0].agency_name;
+              this.agency_user_name = res.data.data[0].agency_user_name;
+              this.agency_phone = res.data.data[0].agency_phone;
+              this.repairDetail = res.data.data[0];
+
+              if (res.data.data[0].unit_price != "") {
+                this.priceLen = res.data.data[0].unit_price[0].length;
+              }
+              if (res.data.data[0].pay_type != "") {
+                this.payForLen = res.data.data[0].pay_type[0].length;
+              }
+              if (res.data.data[0].pay_method != "") {
+                this.payTypeLen = res.data.data[0].pay_method[0].length;
+              }
+              if (res.data.data[0].pay_use && res.data.data[0].pay_use != "") {
+                this.payUseLen = res.data.data[0].pay_use[0].length;
+              }
+              if (this.repairDetail.has_extra == 1) {
+                this.repairDetail.has_extra = "是";
+              } else {
+                this.repairDetail.has_extra = "否";
+              }
+            }
+          });
       },
-      getImgId(data){
+      getImgId(data) {
         let arr = [];
         for (let key in data) {
           arr.push(key);
@@ -1584,7 +1615,7 @@
         return arr;
       },
 
-      getReBackDetail(){
+      getReBackDetail() {
         this.$http.get(globalConfig.server + 'contract/feedback?contract_id=' + this.contract_id + '&category=1').then((res) => {
           if (res.data.code === '20000') {
             this.reBackData = res.data.data.data;
@@ -1657,7 +1688,7 @@
       getText(e) {
         console.log(e.target.innerText)
       },
-      confirmPress(val){
+      confirmPress(val) {
         this.approveParams.operation = val;
         this.$confirm('您确认操作吗, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -1668,14 +1699,14 @@
             if (res.data.code === '60610') {
               this.$notify.success({
                 title: '成功',
-                duration : 1000,
+                duration: 1000,
                 message: res.data.msg,
               });
               this.getContractDetail();
             } else {
               this.$notify.warning({
                 title: '警告',
-                duration : 1000,
+                duration: 1000,
                 message: res.data.msg,
               });
             }
@@ -1683,7 +1714,7 @@
         }).catch(() => {
           this.$notify.info({
             title: '消息',
-            duration : 1000,
+            duration: 1000,
             message: '已取消操作',
           })
         });
@@ -1843,6 +1874,16 @@
           }
         }
       }
+    }
+    .buttonItem {
+      width: 38px;
+      height: 38px;
+      margin-top: 15px;
+      background: #6a8dfb;
+      opacity: 0.8;
+      border-radius: 50%;
+      cursor: pointer;
+      text-align: center;
     }
   }
 </style>

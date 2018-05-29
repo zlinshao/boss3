@@ -13,8 +13,11 @@
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
-            <el-form-item style="float: right">
-              <el-button type="success" @click="viewIncompleteRecord">查看补齐记录</el-button>
+            <el-form-item>
+              <el-button type="primary" @click="viewIncompleteRecord">查看补齐记录</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="viewExamineRecord">查看审批报表</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -966,6 +969,10 @@
       //查看补齐记录，跳转页面
       viewIncompleteRecord() {
         this.$router.push({path: '/incompleteRecord', query: {active: this.activeName}});
+      },
+      //查看审批报表，跳转页面
+      viewExamineRecord() {
+        this.$router.push({path: '/examineRecord', query: {active: this.activeName}});
       },
       search() {
         if (this.activeName == "first") {

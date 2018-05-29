@@ -865,10 +865,28 @@
       </div>
     </div>
 
-    <div class="operatePanel" style="position: fixed;bottom: 120px;right: 80px;" @click="isPanel = !isPanel">
-      <!--<i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="el-icon-circle-plus"></i>-->
-      <i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="iconfont icon-bianji--"></i>
+
+    <div class="operatePanel" style="position: fixed;bottom: 120px;right: 80px;" v-if="!isModal"
+         @click="isModal = true">
+      <i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="el-icon-circle-plus"></i>
     </div>
+    <transition name="el-zoom-in-bottom">
+      <div class="operatePanel" style="position: fixed;bottom: 120px;right: 80px;z-index: 10000;" v-if="isModal"
+           @click="isModal = false">
+        <div class="buttonItem" @click="isPanel = true" title="添加备忘">
+          <i style="font-size: 24px;color: #FFFFFF;line-height: 38px" class="iconfont icon-bianji--"></i>
+        </div>
+        <div class="buttonItem" @click="memoDialog = true" title="备忘记录">
+          <i style="font-size: 24px;color: #FFFFFF;line-height: 38px" class="el-icon-document"></i>
+        </div>
+        <div class="buttonItem" @click="approvalHistoryDialog = true" title="审批历史详情">
+          <i style="font-size: 24px;color: #FFFFFF;line-height: 38px" class="el-icon-edit"></i>
+        </div>
+      </div>
+    </transition>
+    <div style="position: fixed;width: 100%;height: 100%;top:0;right:0;left:0;bottom:0;
+                z-index: 9999;background: rgba(255,255,255,.3)" @click="isModal = false" v-if="isModal"></div>
+
     <div class="panelContent" id="panelContent" :class="{'div_fade': isPanel}">
       <div class="panel_header">
         <div style="color: #6a8dfb;font-size: 16px">
@@ -910,18 +928,28 @@
     </div>
     <Organization :organizationDialog="organizationDialog" :type="type" @close="closeOrganization"
                   @selectMember="selectMember"></Organization>
+
+    <MemorandumRecord :memoDialog="memoDialog" is_rent="1" :selectContractId="contract_id" @close="closeOrganization"></MemorandumRecord>
+    <ApprovalHistory :approvalHistory="approvalHistoryDialog" is_rent="1" :contractId="contract_id" @close="closeOrganization"></ApprovalHistory>
+
   </div>
 </template>
 
 <script>
   import Organization from '../common/organization.vue';
+  import MemorandumRecord from './components/memorandumRecord'
+  import ApprovalHistory from './components/approvalHistory'
+
   export default {
-    components: {Organization},
+    components: {Organization,MemorandumRecord,ApprovalHistory},
     data() {
       return {
         steps: 0,
         sizeForm: {},
         isPanel: false,
+        isModal: false,
+        memoDialog: false,
+        approvalHistoryDialog: false,
         customersInfo: [],
         contractInfo: [],
         financeInfo: [],
@@ -1221,6 +1249,8 @@
       },
       closeOrganization() {
         this.organizationDialog = false;
+        this.memoDialog = false;
+        this.approvalHistoryDialog = false;
       },
       //发送/保存备忘
       noteSave(val){
@@ -1608,6 +1638,17 @@
           }
         }
       }
+    }
+
+    .buttonItem {
+      width: 38px;
+      height: 38px;
+      margin-top: 15px;
+      background: #6a8dfb;
+      opacity: 0.8;
+      border-radius: 50%;
+      cursor: pointer;
+      text-align: center;
     }
   }
 </style>

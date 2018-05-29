@@ -164,13 +164,7 @@
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
-              <el-table-column
-                label="房屋特色">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.house_feature">{{matchDictionary(scope.row.house_feature)}}</span>
-                  <span v-else="">/</span>
-                </template>
-              </el-table-column>
+
               <el-table-column
                 label="建议价格">
                 <template slot-scope="scope">
@@ -178,6 +172,20 @@
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
+
+              <el-table-column
+                label="房屋情况">
+                <template slot-scope="scope">
+                  <div v-if="scope.row.house_res">
+                    <span v-if="scope.row.house_res.is_clean">干净</span>
+                    <span v-else>不干净</span>
+                    /
+                    <span v-if="scope.row.house_res.is_fill">齐全</span>
+                    <span v-else>不齐全</span>
+                  </div>
+                </template>
+              </el-table-column>
+
               <el-table-column
                 label="房屋状态">
                 <template slot-scope="scope">
@@ -720,6 +728,13 @@
       height: 30px;
       line-height: 30px;
       text-align: center;
+      border-radius: 4px;
+      color: #ffffff;
+    }
+    .label_inline{
+      display: inline-block;
+      margin-right: 5px;
+      padding: 5px;
       border-radius: 4px;
       color: #ffffff;
     }
