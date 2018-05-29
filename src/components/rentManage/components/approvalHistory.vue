@@ -71,7 +71,7 @@
           draft :'等待提交',
           wait_contract_review :'合同资料审核中',
           wait_house_review :'房屋资料审核中',
-          pulished :'已通过',
+          published :'已通过',
         }
       }
     },
