@@ -55,7 +55,7 @@
           width: 100%;
           filter: alpha(opacity=30);
           -ms-filter: "alpha(opacity=30)";
-          color: #6a8dfbbf;
+          color: #6a8dfb;
         }
         .view_history {
           cursor: pointer;
