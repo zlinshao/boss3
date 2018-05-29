@@ -345,27 +345,22 @@
             this.formListFc = res.data.data.fcc;
             this.formListFr = res.data.data.fcr;
             this.search(res.data.data.detailed_address);
-            this.close_('other');
-            this.close_('ids');
-            this.close_('resetting');
           }
         });
       },
       search(val) {
         this.params.keywords = val;
+        this.close_('finish');
+        this.close_('other');
+        this.close_('ids');
+        this.close_('resetting');
         this.$http.get(this.urls + 'financial/migration/search?q=' + val).then((res) => {
           if (res.data.code === '30000') {
             this.contractListChc = res.data.data.chc;
             this.contractListRhc = res.data.data.rhc;
             this.contractHouse = res.data.data.houses;
-            this.close_('other');
-            this.close_('ids');
-            this.close_('resetting');
           } else {
             this.close_('search');
-            this.close_('other');
-            this.close_('ids');
-            this.close_('resetting');
           }
         })
       },
@@ -577,6 +572,11 @@
             this.contractListChc = [];
             this.contractListRhc = [];
             this.contractHouse = [];
+            break;
+          case 'finish':
+            this.form = {house_id: '', contract: []};
+            this.formHouse = {type: 'house', fa_id: '', co_id: ''};
+
             break;
           case'other':
             this.checkMax = 1;
