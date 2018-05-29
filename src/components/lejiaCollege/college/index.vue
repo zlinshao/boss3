@@ -4,14 +4,22 @@
       <img src="../../../assets/images/university/1-乐伽大学.png">
 
       <div class="navigation">
-      <div class="navigation_left" @mouseover="showKey('achievement')" @click="clickKey('achievement')" @mouseout="outHide('achievement') ">
-      <img src="../../../assets/images/university/勋章.svg" v-if="achievementImgShow" style="width:40px;"/>
-      <div v-if="!achievementImgShow">我的考试</div>
-      </div>
-      <div class="navigation_right" @mouseover="showKey('sign')" @click="clickKey('sign')" @mouseout="outHide('sign') ">
-      <img src="../../../assets/images/university/在线报名.svg" v-if="signImgShow" style="width:32px;position: absolute;right: 26px;"/>
-      <div v-if="!signImgShow">在线报名</div>
-      </div>
+        <!--<div class="navigation_left" @mouseover="showKey('achievement')" @click="clickKey('achievement')" @mouseout="outHide('achievement') ">-->
+        <!--<img src="../../../assets/images/university/勋章.svg" v-if="achievementImgShow" style="width:40px;"/>-->
+        <!--<div v-if="!achievementImgShow">我的考试</div>-->
+        <!--</div>-->
+        <div class="navigation_left" @click="clickKey('achievement')">
+          <div>我的<br/>考试</div>
+        </div>
+        <!--<div class="navigation_right" @mouseover="showKey('sign')" @click="clickKey('sign')"-->
+             <!--@mouseout="outHide('sign') ">-->
+          <!--<img src="../../../assets/images/university/在线报名.svg" v-if="signImgShow"-->
+               <!--style="width:32px;position: absolute;right: 26px;"/>-->
+          <!--<div v-if="!signImgShow">在线报名</div>-->
+        <!--</div>-->
+        <div class="navigation_right" @click="clickKey('sign')">
+          <div>在线<br/>报名</div>
+        </div>
       </div>
     </div>
     <!--课程状态-->
@@ -155,16 +163,17 @@
 
       </div>
     </div>
-  <StarffAdd :starffAddFlag="starffAddFlag" @close="closeModal"></StarffAdd>
+    <StarffAdd :starffAddFlag="starffAddFlag" @close="closeModal"></StarffAdd>
   </div>
 
 </template>
 
 <script>
-import StarffAdd from "./StarffAdd.vue";
+  import StarffAdd from "./StarffAdd.vue";
+
   export default {
     name: "index",
-    components:{StarffAdd},
+    components: {StarffAdd},
     data() {
       return {
         isLeftShow: false,
@@ -177,7 +186,7 @@ import StarffAdd from "./StarffAdd.vue";
         isTopShow: false,
         achievementImgShow: true,
         signImgShow: true,
-        starffAddFlag:false,
+        starffAddFlag: false,
       }
     },
     methods: {
@@ -191,10 +200,10 @@ import StarffAdd from "./StarffAdd.vue";
       closeModal() {
         this.starffAddFlag = false;
       },
-      clickKey(val){
-        if(val == 'achievement'){
+      clickKey(val) {
+        if (val == 'achievement') {
           this.$router.push({path: '/LineCollege'});
-        }else{
+        } else {
           this.starffAddFlag = true;
         }
       },
