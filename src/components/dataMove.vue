@@ -658,10 +658,14 @@
                 message: res.data.msg,
               })
             } else {
-              this.$notify.warning({
-                title: '警告',
-                message: res.data.msg,
-              })
+              if (res.data.code === '30011') {
+                this.details();
+              } else {
+                this.$notify.warning({
+                  title: '警告',
+                  message: res.data.msg,
+                })
+              }
             }
           });
         }).catch(() => {
