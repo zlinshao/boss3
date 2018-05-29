@@ -177,6 +177,7 @@ import ImproveImgInfo from '../components/pictureManage/improveImage.vue'       
 import PictureDetail from '../components/pictureManage/pictureDetail.vue';               //相册详情
 import VisitRecord from '../components/rentManage/components/visitRecord.vue';               //回访记录
 import IncompleteRecord from '../components/rentManage/datumMessage/contractManage/incompleteRecord.vue'; //合同不齐记录
+import ExamineRecord from '../components/rentManage/datumMessage/contractManage/examineRecord'        //合同审批报表
 
 import ReportManage from '../components/reportManage/index.vue'
 import BeforeExam from '../components/lejiaCollege/OnlineExam/beforeExam.vue'  //开考之前
@@ -279,6 +280,7 @@ export default new Router({
         {path: '/pictureDetail', component: PictureDetail, name: "相册详情",},
         {path: '/visitRecord', component: VisitRecord, name: "回访记录"},
         {path: '/incompleteRecord', component: IncompleteRecord, name: "合同补齐记录"},
+        {path: '/examineRecord', component: ExamineRecord, name: "合同审批报表"},
         {path: '/configExam', component: ConfigExam, name: "管理试卷"},
         {path: '/batchQuestions', component: BatchQuestions, name: "批量导入试题"},
         {path: '/myselfQuestions', component: MyselfQuestions, name: "自己录入"},
@@ -371,7 +373,7 @@ export default new Router({
         {path: '/wholeRentManage', component: WholeRentManage, name: '整租管理',},
         // {path: '/jointRentManage', component: JointRentManage, name: '合租管理',},
         // {path: '/datumMessage', component: DatumMessage, name: '资料管理',},
-        {path: '/clientManage', component: ClientManage, name: '客户管理',},
+        // {path: '/clientManage', component: ClientManage, name: '客户管理',},
         {path: '/contractManage', component: ContractManage, name: '合同管理',},
         // {path: '/workOrderManage', component: WorkOrderManage, name: '工单管理',},
         // {

@@ -907,7 +907,7 @@
     },
   };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   #addCollectRepair {
     @mixin flex {
       display: flex;
