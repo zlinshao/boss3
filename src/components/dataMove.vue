@@ -658,7 +658,7 @@
                 message: res.data.msg,
               })
             } else {
-              if (res.data.code === '30011') {
+              if (num === 2 && res.data.code === '30011') {
                 this.details();
               } else {
                 this.$notify.warning({
