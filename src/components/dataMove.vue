@@ -367,8 +367,12 @@
       addRemoveCol(val, index) {
         if (val === 1) {
           let len = this.formListFc.length + this.formListFr.length;
-          let num = this.leftNumber + this.rightNumber;
-          if (this.checkMax < len && num && num % 2 === 0) {
+          for (let i = 0; i < this.showDetail.length; i++) {
+            if (this.showDetail[i].moneyAddress === '' || this.showDetail[i].ContractAddress === '') {
+              return;
+            }
+          }
+          if (this.checkMax < len) {
             this.checkMax++;
             this.indexNum++;
             this.showDetail.push({
