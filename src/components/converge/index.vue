@@ -392,7 +392,7 @@
             问答中心
           </div>
           <el-row class="answer_center">
-            <img src="../../assets/images/answerCenter.png" @click="goAnswerCenter">
+            <img src="../../assets/images/answerCenter.png" @click="goAnswerCenter" style="height: 100%;">
           </el-row>
         </el-col>
       </el-row>
@@ -704,7 +704,7 @@
 
     img {
       width: 100%;
-      height: 100%;
+      /*height: 100%;*/
       cursor: pointer;
     }
     p {
