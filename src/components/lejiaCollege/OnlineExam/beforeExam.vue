@@ -215,7 +215,8 @@
           width: 100%;
           filter: alpha(opacity=30);
           -ms-filter: "alpha(opacity=30)";
-          color: #6a8dfbbf;
+          color: rgba(106, 141, 251, 0.75);
+
         }
         .count_down {
           margin-left: 20px;
