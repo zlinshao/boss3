@@ -408,6 +408,16 @@
             }
           } else {
             this.close_('search');
+            if (listLeft.length > 0) {
+              for (let i = 0; i < listLeft.length; i++) {
+                this.contractListChc.push(listLeft[i]);
+              }
+            }
+            if (listRight.length > 0) {
+              for (let i = 0; i < listRight.length; i++) {
+                this.contractListRhc.push(listRight[i]);
+              }
+            }
           }
         })
       },
