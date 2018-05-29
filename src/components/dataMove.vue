@@ -39,7 +39,7 @@
               <div class="title">财务数据</div>
               <div class="marginTop scroll_bar">
 
-                <div class="houseType">收房{{leftListCollect}}</div>
+                <div class="houseType">收房</div>
                 <div class="flexDiv" v-for="(key,index) in formListFc">
                   <el-checkbox-group v-model="leftListCollect" @change="contractOn('leftCollect', key)">
                     <el-checkbox :label="key.id"
@@ -61,7 +61,7 @@
                     </div>
                     <div>
                       <p>合同性质</p>
-                      <p>新收</p>
+                      <p>{{key.named_type}}</p>
                     </div>
                     <div>
                       <p>月单价</p>
@@ -77,7 +77,7 @@
                   暂无相关数据...
                 </div>
 
-                <div class="houseType rent">租房{{leftListRent}}</div>
+                <div class="houseType rent">租房</div>
                 <div class="flexDiv" v-for="(key,index) in formListFr">
                   <el-checkbox-group v-model="leftListRent" @change="contractOn('leftRent', key)">
                     <el-checkbox :label="key.id"
@@ -127,7 +127,7 @@
               <div class="title">合同数据</div>
               <div class="marginTop scroll_bar">
 
-                <div class="houseType">收房{{rightListCollect}}</div>
+                <div class="houseType">收房</div>
                 <div class="flexDiv" v-for="(key,index) in contractListChc">
                   <el-checkbox-group :max="formListFc.length" v-model="rightListCollect"
                                      @change="contractOn('rightCollect', key)">
@@ -137,20 +137,20 @@
                   <div class="blocks">
                     <div>
                       <p>房屋地址</p>
-                      <p>{{key.detailed_address}}</p>
+                      <p class="cursorColor" @click="search(key.detailed_address)">{{key.detailed_address}}</p>
                     </div>
                     <div>
                       <p>客户姓名</p>
-                      <p>{{key.name}}</p>
+                      <p class="cursorColor" @click="search(key.name)">{{key.name}}</p>
                     </div>
                     <div>
                       <p>联系方式</p>
-                      <p v-if="Array.isArray(key.mobile)">{{key.mobile[0]}}</p>
-                      <p v-else>{{key.mobile}}</p>
+                      <p class="cursorColor" @click="search(key.mobile)" v-if="Array.isArray(key.mobile)">{{key.mobile[0]}}</p>
+                      <p class="cursorColor" @click="search(key.mobile)" v-else>{{key.mobile}}</p>
                     </div>
                     <div>
                       <p>合同性质</p>
-                      <p>新收</p>
+                      <p>收房</p>
                     </div>
                     <div>
                       <p>月单价</p>
@@ -168,7 +168,7 @@
                   暂无相关数据...
                 </div>
 
-                <div class="houseType rent">租房{{rightListRent}}</div>
+                <div class="houseType rent">租房</div>
                 <div class="flexDiv" v-for="(key,index) in contractListRhc">
                   <el-checkbox-group :max="formListFr.length" v-model="rightListRent"
                                      @change="contractOn('rightRent', key)">
@@ -178,29 +178,29 @@
                   <div class="blocks">
                     <div>
                       <p>房屋地址</p>
-                      <p>{{key.detailed_address}}</p>
+                      <p class="cursorColor" @click="search(key.detailed_address)">{{key.detailed_address}}</p>
                     </div>
                     <div>
                       <p>客户姓名</p>
-                      <p>{{key.name}}</p>
+                      <p class="cursorColor" @click="search(key.name)">{{key.name}}</p>
                     </div>
                     <div>
                       <p>联系方式</p>
-                      <p v-if="Array.isArray(key.mobile)">{{key.mobile[0]}}</p>
-                      <p v-else>{{key.mobile}}</p>
+                      <p class="cursorColor" @click="search(key.mobile)" v-if="Array.isArray(key.mobile)">{{key.mobile[0]}}</p>
+                      <p class="cursorColor" @click="search(key.mobile)" v-else>{{key.mobile}}</p>
                     </div>
                     <div>
                       <p>合同性质</p>
-                      <p>新收</p>
+                      <p>租房</p>
                     </div>
                     <div>
                       <p>月单价</p>
-                      <p v-if="key.checkin !== null">押1付{{key.checkin.pay[0]}}</p>
+                      <p v-if="key.checkin !== null">{{key.checkin.price[0]}}</p>
                       <p v-else>——</p>
                     </div>
                     <div>
                       <p>付款方式</p>
-                      <p v-if="key.checkin !== null">押1付{{key.checkin.price[0]}}</p>
+                      <p v-if="key.checkin !== null">押1付{{key.checkin.pay[0]}}</p>
                       <p v-else>——</p>
                     </div>
                   </div>
@@ -427,6 +427,7 @@
             this.indexNum--;
             this.showDetail.splice(index, 1);
           } else {
+            this.form.contract = [];
             this.types = '';
             this.close_('ids');
             this.close_('resetting');
@@ -574,7 +575,6 @@
             this.contractListChc = [];
             this.contractListRhc = [];
             this.contractHouse = [];
-            this.formList.combined = true;
             break;
           case'other':
             this.indexNum = 0;
