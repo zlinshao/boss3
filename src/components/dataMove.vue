@@ -101,7 +101,7 @@
                     </div>
                     <div>
                       <p>合同性质</p>
-                      <p>新收</p>
+                      <p>{{key.named_type}}</p>
                     </div>
                     <div>
                       <p>月单价</p>
