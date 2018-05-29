@@ -925,8 +925,8 @@
         </el-form>
       </div>
       <div style="text-align: center;clear: both;">
-        <el-button size="mini" type="primary" @click="noteSave(1)">发 送</el-button>&nbsp;&nbsp;&nbsp;
-        <el-button size="mini" type="primary" @click="noteSave(0)">保 存</el-button>
+        <el-button size="mini" :disabled="!canSendStatus" type="primary" @click="noteSave(1)">发 送</el-button>&nbsp;&nbsp;&nbsp;
+        <el-button size="mini" :disabled="!canSendStatus" type="primary" @click="noteSave(0)">保 存</el-button>
       </div>
     </div>
     <Organization :organizationDialog="organizationDialog" :type="type" @close="closeOrganization"
@@ -976,6 +976,9 @@
           is_rent: 1,
           is_send: null,
         },
+        history_content : '',   //历史备忘
+        canSendStatus : false,
+
         receiverNames: '',
         loadingStatus: true,
         reBackData: [],
@@ -1035,9 +1038,12 @@
       // 自动获取上一条备忘
       isPanel(val) {
         if (val) {
+          this.history_content = '';
+          this.params.content = '';
           this.$http.get(globalConfig.server + 'lease/note?is_rent=1&contract_id=' + this.contract_id).then((res) => {
             if (res.data.code === '60510') {
               if (res.data.data) {
+                this.history_content = res.data.data.content;
                 this.params.content = res.data.data.content;
                 if (res.data.data.receiver_id) {
                   this.params.receiver_id = [];
@@ -1052,6 +1058,12 @@
               }
             }
           })
+        }
+      },
+      'params.content':{
+        deep:true,
+        handler(val,oldVal){
+          this.canSendStatus = val !== this.history_content;
         }
       }
     },
