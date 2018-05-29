@@ -594,15 +594,18 @@
         for (let i = 0; i < data.length; i++) {
           let listF = {};
           let listC = {};
-          if (data[i].leftCcId !== '' && data[i].rightCcId !== '') {
-            listF.fcc_id = data[i].leftCcId;
-            listF.chc_id = data[i].rightCcId;
-            this.form.contract.push(listF);
-          }
-          if (data[i].leftRcId !== '' && data[i].rightRcId !== '') {
-            listC.fcr_id = data[i].leftRcId;
-            listC.rhc_id = data[i].rightRcId;
-            this.form.contract.push(listC);
+          if (data[i].type === 'leftCollect' || data[i].type === 'rightCollect') {
+            if (data[i].leftCcId !== '' && data[i].rightCcId !== '') {
+              listF.fcc_id = data[i].leftCcId;
+              listF.chc_id = data[i].rightCcId;
+              this.form.contract.push(listF);
+            }
+          } else {
+            if (data[i].leftRcId !== '' && data[i].rightRcId !== '') {
+              listC.fcr_id = data[i].leftRcId;
+              listC.rhc_id = data[i].rightRcId;
+              this.form.contract.push(listC);
+            }
           }
         }
         this.open('', 2);
