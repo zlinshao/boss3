@@ -392,7 +392,11 @@
             } else {
               this.pointDialog = true;
             }
+            clearTimeout(this.timeOut);
             localStorage.removeItem("answers_" + this.examId);
+            let examIds = JSON.parse(this.confirmArrival);
+            examIds.splice(examIds.indexOf(this.examId) ,1);
+            localStorage.setItem('confirmArrival', JSON.stringify(examIds));  //保存已到场的考试id
           } else {
             this.$notify.warning({
               title: '警告',
