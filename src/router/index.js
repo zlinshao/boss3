@@ -247,7 +247,8 @@ export default new Router({
       hidden: true,
       name: '',
       children: [
-        {path: '/main', component: Main, name: '公司门户', icon: 'iconfont icon-shouyemenhu'},
+        // {path: '/main', component: Main, name: '公司门户', icon: 'iconfont icon-shouyemenhu'},
+        {path: '/main', component: Converge, name: '员工广场', icon: "iconfont icon-shouyemenhu"},
       ]
     },
 
