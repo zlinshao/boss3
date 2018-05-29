@@ -1037,7 +1037,7 @@
           <i style="font-size: 20px;color: #FFFFFF;line-height: 38px" class="el-icon-document"></i>
         </div>
         <div class="buttonItem" @click="approvalHistoryDialog = true" title="审批历史详情">
-          <i style="font-size: 20px;color: #FFFFFF;line-height: 38px" class="el-icon-edit"></i>
+          <i style="font-size: 20px;color: #FFFFFF;line-height: 38px" class="iconfont icon-chakanlishixiangqing"></i>
         </div>
         <div class="buttonItem" @click="isModal = false">
           <i style="font-size: 20px;color: #FFFFFF;line-height: 38px" class="el-icon-minus"></i>
