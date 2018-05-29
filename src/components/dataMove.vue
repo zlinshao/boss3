@@ -337,6 +337,7 @@
     },
     methods: {
       details() {
+        this.form = {house_id: '', contract: []};
         this.$http.get(this.urls + 'financial/migration').then((res) => {
           if (res.data.code === '30000') {
             this.formList = res.data.data;
@@ -350,7 +351,6 @@
       },
       search(val) {
         this.params.keywords = val;
-        this.close_('finish');
         this.close_('other');
         this.close_('ids');
         this.close_('resetting');
@@ -572,9 +572,6 @@
             this.contractListChc = [];
             this.contractListRhc = [];
             this.contractHouse = [];
-            break;
-          case 'finish':
-            this.form = {house_id: '', contract: []};
             break;
           case'other':
             this.checkMax = 1;
