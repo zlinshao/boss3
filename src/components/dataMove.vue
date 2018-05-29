@@ -26,7 +26,7 @@
         </el-form-item>
       </el-form>
     </div>
-    <div class="houses" v-if="formList.combined">
+    <div class="houses" v-if="!formList.combined">
       <el-button type="text" v-for="(key,index) in contractHouse" :key="index" @click="houseOn(key.id)">
         {{key.address}}
       </el-button>
@@ -132,7 +132,7 @@
                   <el-checkbox-group :max="formListFc.length" v-model="rightListCollect"
                                      @change="contractOn('rightCollect', key)">
                     <el-checkbox :label="key.id"
-                                 :disabled="(rightListCollect.indexOf(key.id) < 0 && checkMax === rightNumber) || showDetail[checkMax - 1].type === 'leftRent'"></el-checkbox>
+                                 :disabled="rightListCollect.indexOf(key.id) < 0 && (checkMax === rightNumber || types === 'leftRent')"></el-checkbox>
                   </el-checkbox-group>
                   <div class="blocks">
                     <div>
@@ -154,11 +154,13 @@
                     </div>
                     <div>
                       <p>月单价</p>
-                      <p>{{key.checkin.price[0]}}</p>
+                      <p v-if="key.checkin !== null">{{key.checkin.price[0]}}</p>
+                      <p v-else>——</p>
                     </div>
                     <div>
                       <p>付款方式</p>
-                      <p>押1付{{key.checkin.pay_type[0]}}</p>
+                      <p v-if="key.checkin !== null">押1付{{key.checkin.pay_type[0]}}</p>
+                      <p v-else>——</p>
                     </div>
                   </div>
                 </div>
@@ -171,7 +173,7 @@
                   <el-checkbox-group :max="formListFr.length" v-model="rightListRent"
                                      @change="contractOn('rightRent', key)">
                     <el-checkbox :label="key.id"
-                                 :disabled="(rightListRent.indexOf(key.id) < 0 && checkMax === rightNumber) || showDetail[checkMax - 1].type === 'leftCollect'"></el-checkbox>
+                                 :disabled="rightListRent.indexOf(key.id) < 0 && (checkMax === rightNumber || types === 'leftCollect')"></el-checkbox>
                   </el-checkbox-group>
                   <div class="blocks">
                     <div>
@@ -193,11 +195,13 @@
                     </div>
                     <div>
                       <p>月单价</p>
-                      <p>押1付{{key.checkin.pay[0]}}</p>
+                      <p v-if="key.checkin !== null">押1付{{key.checkin.pay[0]}}</p>
+                      <p v-else>——</p>
                     </div>
                     <div>
                       <p>付款方式</p>
-                      <p>押1付{{key.checkin.price[0]}}</p>
+                      <p v-if="key.checkin !== null">押1付{{key.checkin.price[0]}}</p>
+                      <p v-else>——</p>
                     </div>
                   </div>
                 </div>
@@ -311,10 +315,11 @@
           fa_id: '',
           co_id: '',
         },
+        indexNum: 0,
       }
     },
     mounted() {
-      this.detail();
+      this.details();
     },
     watch: {},
     computed: {
@@ -326,7 +331,7 @@
       }
     },
     methods: {
-      detail() {
+      details() {
         this.$http.get(this.urls + 'financial/migration').then((res) => {
           if (res.data.code === '30000') {
             this.formList = res.data.data;
@@ -335,6 +340,9 @@
             this.formListFc = res.data.data.fcc;
             this.formListFr = res.data.data.fcr;
             this.search(res.data.data.detailed_address);
+            this.close_('other');
+            this.close_('ids');
+            this.close_('resetting');
           }
         });
       },
@@ -345,25 +353,38 @@
             this.contractListChc = res.data.data.chc;
             this.contractListRhc = res.data.data.rhc;
             this.contractHouse = res.data.data.houses;
+            this.close_('other');
+            this.close_('ids');
+            this.close_('resetting');
+          } else {
+            this.close_('search');
+            this.close_('other');
+            this.close_('ids');
+            this.close_('resetting');
           }
         })
       },
       addRemoveCol(val, index) {
         if (val === 1) {
-          this.checkMax++;
-          this.showDetail.push({
-            type: '',
-            moneyAddress: '',
-            customer_name: '',
-            contact: '',
-            leftCcId: '',
-            leftRcId: '',
-            ContractAddress: '',
-            name: '',
-            mobile: '',
-            rightCcId: '',
-            rightRcId: '',
-          });
+          let len = this.formListFc.length + this.formListFr.length;
+          let num = this.leftNumber + this.rightNumber;
+          if (this.checkMax < len && num && num % 2 === 0) {
+            this.checkMax++;
+            this.indexNum++;
+            this.showDetail.push({
+              type: '',
+              moneyAddress: '',
+              customer_name: '',
+              contact: '',
+              leftCcId: '',
+              leftRcId: '',
+              ContractAddress: '',
+              name: '',
+              mobile: '',
+              rightCcId: '',
+              rightRcId: '',
+            });
+          }
         } else {
           if (this.checkMax > 1) {
             let fcc = this.leftListCollect;     //左收
@@ -399,97 +420,168 @@
               }
             }
             this.checkMax--;
+            this.indexNum--;
             this.showDetail.splice(index, 1);
           } else {
-            this.leftListCollect = [];
-            this.leftListRent = [];
-            this.rightListCollect = [];
-            this.rightListRent = [];
-            this.showDetail = [
-              {
-                type: '',
-                moneyAddress: '',
-                customer_name: '',
-                contact: '',
-                leftCcId: '',
-                leftRcId: '',
-                ContractAddress: '',
-                name: '',
-                mobile: '',
-                rightCcId: '',
-                rightRcId: '',
-              }
-            ];
+            this.types = '';
+            this.close_('ids');
+            this.close_('resetting');
           }
         }
       },
       // 合同ID
       contractOn(type, key) {
-        let max = this.checkMax - 1;
+        let max = this.indexNum;
         this.showDetail[max].type = type;
         if (type === 'leftCollect' || type === 'leftRent') {
-          this.showDetail[max].moneyAddress = this.formList.detailed_address;
-          this.showDetail[max].customer_name = key.customer_name;
-          this.showDetail[max].contact = key.contact;
           if (type === 'leftCollect') {
-            this.showDetail[max].leftCcId = key.id;
+            this.types = type;
             if (this.leftListCollect.indexOf(key.id) < 0) {
               for (let i = 0; i < this.showDetail.length; i++) {
-                if(this.showDetail[i].leftCcId === key.id) {
-                  this.showDetail[i].moneyAddress = '';
-                  this.showDetail[i].customer_name = '';
-                  this.showDetail[i].contact = '';
-                  this.showDetail[i].leftCcId = '';
+                if (this.showDetail[i].leftCcId === key.id) {
+                  this.indexNum = i;
+                  this.close_(type, i);
                 }
               }
+              this.types = '';
+            } else {
+              this.assignment(max, key, type);
             }
           } else {
-            this.showDetail[max].leftRcId = key.id;
+            this.types = type;
             if (this.leftListRent.indexOf(key.id) < 0) {
               for (let i = 0; i < this.showDetail.length; i++) {
-                if(this.showDetail[i].leftRcId === key.id) {
-                  this.showDetail[i].moneyAddress = '';
-                  this.showDetail[i].customer_name = '';
-                  this.showDetail[i].contact = '';
-                  this.showDetail[i].leftRcId = '';
+                if (this.showDetail[i].leftRcId === key.id) {
+                  this.indexNum = i;
+                  this.close_(type, i);
                 }
               }
+              this.types = '';
+            } else {
+              this.assignment(max, key, type);
             }
           }
         } else {
-          this.showDetail[max].ContractAddress = key.detailed_address;
-          this.showDetail[max].name = key.name;
-          this.showDetail[max].mobile = key.mobile;
           if (type === 'rightCollect') {
-            this.showDetail[max].rightCcId = key.id;
             if (this.rightListCollect.indexOf(key.id) < 0) {
               for (let i = 0; i < this.showDetail.length; i++) {
-                if(this.showDetail[i].rightCcId === key.id) {
-                  this.showDetail[i].ContractAddress = '';
-                  this.showDetail[i].name = '';
-                  this.showDetail[i].mobile = '';
-                  this.showDetail[i].rightCcId = '';
+                if (this.showDetail[i].rightCcId === key.id) {
+                  this.indexNum = i;
+                  this.close_(type, i);
                 }
               }
+            } else {
+              this.assignment(max, key, type);
             }
           } else {
-            this.showDetail[max].rightRcId = key.id;
             if (this.rightListRent.indexOf(key.id) < 0) {
               for (let i = 0; i < this.showDetail.length; i++) {
-                if(this.showDetail[i].rightRcId === key.id) {
-                  this.showDetail[i].ContractAddress = '';
-                  this.showDetail[i].name = '';
-                  this.showDetail[i].mobile = '';
-                  this.showDetail[i].rightRcId = '';
+                if (this.showDetail[i].rightRcId === key.id) {
+                  this.indexNum = i;
+                  this.close_(type, i);
                 }
               }
+            } else {
+              this.assignment(max, key, type);
             }
           }
         }
       },
+      // 赋值
+      assignment(max, key, type) {
+        switch (type) {
+          case 'leftCollect':
+            this.showDetail[max].moneyAddress = this.formList.detailed_address;
+            this.showDetail[max].customer_name = key.customer_name;
+            this.showDetail[max].contact = key.contact;
+            this.showDetail[max].leftCcId = key.id;
+            break;
+          case 'leftRent':
+            this.showDetail[max].moneyAddress = this.formList.detailed_address;
+            this.showDetail[max].customer_name = key.customer_name;
+            this.showDetail[max].contact = key.contact;
+            this.showDetail[max].leftRcId = key.id;
+            break;
+          case 'rightCollect':
+            this.showDetail[max].ContractAddress = key.detailed_address;
+            this.showDetail[max].name = key.name;
+            this.showDetail[max].mobile = key.mobile;
+            this.showDetail[max].rightCcId = key.id;
+            break;
+          case 'rightRent':
+            this.showDetail[max].ContractAddress = key.detailed_address;
+            this.showDetail[max].name = key.name;
+            this.showDetail[max].mobile = key.mobile;
+            this.showDetail[max].rightRcId = key.id;
+            break;
+        }
+
+      },
+      // 清除
+      close_(val, i) {
+        switch (val) {
+          case 'leftCollect':
+            this.showDetail[i].moneyAddress = '';
+            this.showDetail[i].customer_name = '';
+            this.showDetail[i].contact = '';
+            this.showDetail[i].leftCcId = '';
+            break;
+          case 'leftRent':
+            this.showDetail[i].moneyAddress = '';
+            this.showDetail[i].customer_name = '';
+            this.showDetail[i].contact = '';
+            this.showDetail[i].leftRcId = '';
+            break;
+          case 'rightCollect':
+            this.showDetail[i].ContractAddress = '';
+            this.showDetail[i].name = '';
+            this.showDetail[i].mobile = '';
+            this.showDetail[i].rightCcId = '';
+            break;
+          case 'rightRent':
+            this.showDetail[i].ContractAddress = '';
+            this.showDetail[i].name = '';
+            this.showDetail[i].mobile = '';
+            this.showDetail[i].rightRcId = '';
+            break;
+          case 'resetting':
+            this.showDetail = [{
+              type: '',
+              moneyAddress: '',
+              customer_name: '',
+              contact: '',
+              leftCcId: '',
+              leftRcId: '',
+
+              ContractAddress: '',
+              name: '',
+              mobile: '',
+              rightCcId: '',
+              rightRcId: '',
+            }];
+            break;
+          case 'ids':
+            this.leftListCollect = [];
+            this.leftListRent = [];
+            this.rightListCollect = [];
+            this.rightListRent = [];
+            break;
+          case 'search':
+            this.contractListChc = [];
+            this.contractListRhc = [];
+            this.contractHouse = [];
+            this.formList.combined = true;
+            break;
+          case'other':
+            this.indexNum = 0;
+            this.checkMax = 1;
+            this.types = '';
+            break;
+        }
+      },
       // 房屋合并
       houseOn(val) {
-        this.open(val);
+        this.open(val, 1);
       },
       // 合同合并
       moveSure() {
@@ -508,22 +600,32 @@
             this.form.contract.push(listC);
           }
         }
-        this.$http.post(this.urls + 'financial/migration/commit', this.form).then((res) => {
-
-        })
+        this.open('', 2);
       },
-      close_() {
-        this.params.keywords = '';
-      },
-      open(val) {
-        this.$confirm('此操作将合并房屋，不可逆转操错, 是否继续?', '提示', {
+      open(val, num) {
+        let con, address, list;
+        if (num === 1) {
+          con = '此操作将合并房屋，不可逆转操作, 是否继续?';
+          address = this.urls + 'financial/migration/combine';
+          list = this.formHouse;
+        } else {
+          con = '此操作将合并合同，不可逆转操作, 是否继续?';
+          address = this.urls + 'financial/migration/commit';
+          list = this.form;
+        }
+        this.$confirm(con, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           this.formHouse.co_id = val;
-          this.$http.post(this.urls + 'financial/migration/combine', this.formHouse).then((res) => {
-            if (res.data.code === '30000') {
+          this.$http.post(address, list).then((res) => {
+            if (res.data.code === '30010') {
+              if (num === 1) {
+                this.formList.combined = true;
+              } else {
+                this.details();
+              }
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg,
@@ -536,7 +638,6 @@
             }
           });
         }).catch(() => {
-
         });
       }
     },
@@ -623,6 +724,7 @@
           flex-wrap: wrap;
           padding: 6px 0;
           margin-bottom: 10px;
+          border-bottom: 1px solid #DDDDDD;
           .cursorColor {
             cursor: pointer;
             color: #409EFF;
@@ -649,6 +751,7 @@
         }
         .bottom0 {
           margin: 0;
+          border-bottom: 0;
         }
         .addRemove {
           height: 52px;
