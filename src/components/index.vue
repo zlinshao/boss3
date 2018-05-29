@@ -162,7 +162,7 @@
             </span>
 
           </div>
-          <el-dropdown trigger="click">
+          <el-dropdown trigger="click" @visible-change="downChange">
               <span class="el-dropdown-link" v-if="personal !== undefined">
                 {{personal.name}}<i class="el-icon-arrow-down el-icon--right" style="margin-left: 25px"></i>
               </span>
@@ -258,7 +258,7 @@
                         <div class="msgCenter" style="display: -webkit-box;">
                           <i class="el-icon-tickets"></i>
                           <div class="msgTitle">
-                            <span>我的考试</span>
+                            <span>在线考试</span>
                             <span v-if="examData && examData.available" class="circle_red"></span>
                           </div>
                         </div>
@@ -539,7 +539,6 @@
         }
       },
       badge_Flag(val) {
-        console.log(val)
         //个人连续登录时长勋章
         let badge = false;
         this.$store.dispatch('badgeFlag', badge);
@@ -646,7 +645,7 @@
       }, 60 * 1000);
     },
     activated() {
-      this.confirmArrival = localStorage.getItem('confirmArrival');
+      this.confirmArrival = JSON.parse(localStorage.getItem('confirmArrival'));
       //初始化个人信息
       this.personal = JSON.parse(localStorage.personal);
       //鼠标滑动监听
@@ -667,7 +666,11 @@
       this.getUnreadTermly();
     },
     methods: {
+      downChange() {
+        this.getExamNaireRedCircle();
+      },
       goBefore(val) {
+        this.confirmArrival = JSON.parse(localStorage.getItem('confirmArrival'));
         if (val === 'beforeExam') {
           if (this.examData.available) {
             if (this.confirmArrival && this.confirmArrival.length > 0 && this.confirmArrival.indexOf(this.examData.id) > -1) {
@@ -675,15 +678,25 @@
             } else {
               this.$http.post(globalConfig.server + 'exam/check_in/' + this.examData.id).then((res) => {
                 if (res.data.code === '30000') {
-                  let arr = [];
-                  arr.push(this.examData.id);
-                  localStorage.setItem('confirmArrival', arr);  //保存已到场的考试id
-                  this.$router.push({path: '/answerExam', query: {id: this.examData.id, type: 'first'}});
+                  let examIds;
+                  if (this.confirmArrival === null) {
+                    examIds = [];
+                  }else {
+                    examIds = this.confirmArrival;
+                  }
+                  examIds.push(this.examData.id);
+                  localStorage.setItem('confirmArrival', JSON.stringify(examIds));  //保存已到场的考试id
+                  this.$router.push({path: '/answerExam', query: { id: this.examData.id}});
                 }
               });
             }
           } else {
-            this.$router.push({path: '/beforeExam', query: {id: this.examData.id, type: 'first'}});
+            if(this.examData.id) {
+              this.$router.push({path: '/beforeExam', query: {address: 'exam', id: this.examData.id}});
+            }else{
+              this.$router.push({path: '/beforeExam', query: {address: 'exam', id: 0, type: 'first'}});
+            }
+
           }
         } else {
           if (this.questionnaireData.available) {
@@ -705,6 +718,9 @@
             this.questionNaireData = res.data.data;
             if (res.data.data.length > 0) {
               this.quesNaireDialog = true;
+            } else {
+              this.questionNaireData = [];
+              this.quesNaireDialog = false;
             }
           } else {
             this.questionNaireData = [];
@@ -717,14 +733,14 @@
           if (res.data.code === '30000') {
             this.examData = res.data.data;
           } else {
-            this.examData = {};
+            this.examData = [];
           }
         });
         this.$http.get(globalConfig.server + 'questionnaire/active').then((res) => {
           if (res.data.code === '30000') {
             this.questionnaireData = res.data.data;
           } else {
-            this.questionnaireData = {};
+            this.questionnaireData = [];
           }
         });
       },
