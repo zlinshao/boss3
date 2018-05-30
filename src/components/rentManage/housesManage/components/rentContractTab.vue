@@ -49,8 +49,8 @@
             width="300"
             trigger="click">
             <el-table :data="scope.row.pay_way">
-              <el-table-column width="100" property="pay_way" label="押"></el-table-column>
-              <el-table-column width="100" property="pay_way_bet" label="付"></el-table-column>
+              <el-table-column width="100" property="pay_way_bet" label="押"></el-table-column>
+              <el-table-column width="100" property="pay_way" label="付"></el-table-column>
               <el-table-column width="100" property="period" label="变化周期(月)"></el-table-column>
             </el-table>
           </el-popover>
