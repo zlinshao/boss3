@@ -10,11 +10,13 @@
                 <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="changelist">返回到报备列表</el-button>
-            </el-form-item>
+
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+            </el-form-item>
+
+            <el-form-item>
+              <el-button type="primary" @click="changelist">返回到报备列表</el-button>
             </el-form-item>
           </el-form>
         </div>
