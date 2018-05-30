@@ -465,7 +465,7 @@
             }
           } else {
             //选的部门
-            this.$http.get(globalConfig.server + 'manager/staff?is_recursion=1&page=1&limit=500&org_id=' + item.id).then((res) => {
+            this.$http.get(globalConfig.server + 'manager/staff?is_recursion=1&is_dimission=0&page=1&limit=500&org_id=' + item.id).then((res) => {
               if (res.data.code === '10000') {
                 let data = res.data.data.data;
                 data.forEach((value) => {
