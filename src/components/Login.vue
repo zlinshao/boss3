@@ -180,6 +180,7 @@
             }
             if (this.loadingNum === 0) {
               this.loadingNum = 60;
+              clearInterval(interval);
               this.loading = false;
             }
           }, 1000)
