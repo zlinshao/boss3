@@ -13,6 +13,9 @@
       <el-tab-pane label="业绩包管理" name="fourth">
         <PackageManagement></PackageManagement>
       </el-tab-pane>
+      <!--<el-tab-pane label="问答回复管理" name="fifth">-->
+        <!--<ReplierManage></ReplierManage>-->
+      <!--</el-tab-pane>-->
     </el-tabs>
   </div>
 </template>
@@ -23,9 +26,11 @@
   import IntegralManagement from './integralManagement/index.vue';
   import ContractManagement from './contractManagement/index.vue';
   import PackageManagement from './packageManagement/index.vue';
+  import ReplierManage from './replierManage/index.vue';
+
   export default {
     name: "index",
-    components: {IntegralManagement,ContractManagement,FunctionDescription,PackageManagement},
+    components: {IntegralManagement, ContractManagement, FunctionDescription, PackageManagement, ReplierManage},
     data() {
       return {
         activeName: 'first'

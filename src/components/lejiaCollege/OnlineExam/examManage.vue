@@ -272,14 +272,14 @@
                 <span v-if="!scope.row.real_name">暂无</span>
               </template>
             </el-table-column>
-            <el-table-column
-              prop=""
-              label="职位">
-              <template slot-scope="scope">
-                <span v-if="scope.row.position">{{scope.row.position}}</span>
-                <span v-else>暂无</span>
-              </template>
-            </el-table-column>
+            <!--<el-table-column-->
+              <!--prop=""-->
+              <!--label="职位">-->
+              <!--<template slot-scope="scope">-->
+                <!--<span v-if="scope.row.position">{{scope.row.position}}</span>-->
+                <!--<span v-else>暂无</span>-->
+              <!--</template>-->
+            <!--</el-table-column>-->
             <el-table-column
               label="部门">
               <template slot-scope="scope">
@@ -295,13 +295,13 @@
                 <span v-if="!(scope.row.pivot && scope.row.pivot.enroll_time)">暂无</span>
               </template>
             </el-table-column>
-            <el-table-column
-              label="状态">
-              <template slot-scope="scope">
-                <span v-if="scope.row.pivot && scope.row.pivot.named_status">{{scope.row.pivot && scope.row.pivot.named_status}}</span>
-                <span v-else>暂无</span>
-              </template>
-            </el-table-column>
+            <!--<el-table-column-->
+              <!--label="状态">-->
+              <!--<template slot-scope="scope">-->
+                <!--<span v-if="scope.row.pivot && scope.row.pivot.named_status">{{scope.row.pivot && scope.row.pivot.named_status}}</span>-->
+                <!--<span v-else>暂无</span>-->
+              <!--</template>-->
+            <!--</el-table-column>-->
           </el-table>
         </div>
         <span slot="footer" class="dialog-footer">
