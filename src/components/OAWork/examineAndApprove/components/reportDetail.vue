@@ -343,7 +343,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   #reportDetail {
     @mixin border_($n) {
       -webkit-border-radius: $n;
