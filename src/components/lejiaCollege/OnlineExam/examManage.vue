@@ -231,11 +231,7 @@
         </div>
       </el-dialog>
     </div>
-    <div id="examineeDialog"
-         v-loading="loading"
-         element-loading-text="正在处理中"
-         element-loading-spinner="el-icon-loading"
-         element-loading-background="rgba(0, 0, 0, 0.3)">
+    <div id="examineeDialog">
       <el-dialog :close-on-click-modal="false" :visible.sync="examineeDialog" title="考生信息" width="45%">
         <div>
           <!--<el-row :gutter="10">-->
@@ -255,7 +251,11 @@
           <!--</el-row>-->
 
         </div>
-        <div style="margin-top: 20px;">
+        <div  v-loading="loading"
+              element-loading-text="正在处理中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(0, 0, 0, 0.3)"
+              style="margin-top: 20px;">
           <el-table
             :data="examineesData"
             @selection-change="handleSelectionChange"
@@ -522,7 +522,7 @@
         let length = 0;
         val.forEach((item) => {
           this.loading = true;
-          if (typeof item.avatar != 'undefined') {
+          if (item.hasOwnProperty('avatar')) {
             //选的是人
             this.selectExamineeIds.push(item.id);
             this.examiness_name.push(item.name);
@@ -532,7 +532,7 @@
             }
           } else {
             //选的部门
-            this.$http.get(globalConfig.server + 'manager/staff?is_recursion=1&is_dimission=0&page=1&limit=500&org_id=' + item.id).then((res) => {
+            this.$http.get(globalConfig.server + 'manager/staff?is_recursion=1&page=1&limit=500&org_id=' + item.id).then((res) => {
               if (res.data.code === '10000') {
                 let data = res.data.data.data;
                 data.forEach((value) => {

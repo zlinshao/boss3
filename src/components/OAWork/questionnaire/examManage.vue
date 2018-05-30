@@ -200,12 +200,12 @@
         </div>
       </el-dialog>
     </div>
-    <div id="examineeDialog"
-         v-loading="loading"
-         element-loading-text="正在处理中"
-         element-loading-spinner="el-icon-loading"
-         element-loading-background="rgba(0, 0, 0, 0.3)">
-      <el-dialog :close-on-click-modal="false" :visible.sync="examineeDialog" title="调查对象" width="45%">
+    <div id="examineeDialog"  >
+      <el-dialog :close-on-click-modal="false"
+                 :visible.sync="examineeDialog"
+                 title="调查对象"
+                 width="45%"
+                 >
         <div>
           <!--<el-row :gutter="10">-->
             <!--<el-col :span="22">-->
@@ -221,10 +221,13 @@
           <!--</el-row>-->
           <el-button type="primary" size="mini" @click="openOrganize" style="float: right;margin-bottom: 10px;margin-right: 10px;">新增</el-button>
         </div>
-        <div style="margin-top: 20px;">
+        <div style="margin-top: 20px;"
+             v-loading="loading"
+             element-loading-text="正在处理中"
+             element-loading-spinner="el-icon-loading"
+             element-loading-background="rgba(0, 0, 0, 0.3)">
           <el-table
             :data="examineesPageData"
-
             @selection-change="handleSelectionChange"
             style="width: 100%">
             <el-table-column
@@ -280,6 +283,7 @@
     name: 'exam-manage',
     data() {
       return {
+        loading: false,
         activeName: 'first',
         organizationDialog: false,
         organizeType: '',
@@ -356,7 +360,6 @@
           ]
         },
         examinees: [],
-        loading: false,
       };
     },
     mounted() {
@@ -465,7 +468,7 @@
             }
           } else {
             //选的部门
-            this.$http.get(globalConfig.server + 'manager/staff?is_recursion=1&is_dimission=0&page=1&limit=500&org_id=' + item.id).then((res) => {
+            this.$http.get(globalConfig.server + 'manager/staff?is_recursion=1&page=1&limit=500&org_id=' + item.id).then((res) => {
               if (res.data.code === '10000') {
                 let data = res.data.data.data;
                 data.forEach((value) => {
