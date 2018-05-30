@@ -3,7 +3,8 @@
     <div class="filter clearFix">
       <div style="font-size: 22px;margin-left: 20px;">
         {{formList.detailed_address}}<br>
-        <el-form :inline="true" size="mini" onsubmit="return false" label-width="100px" class="moneySearch" style="width: 100%;">
+        <el-form :inline="true" size="mini" onsubmit="return false" label-width="100px" class="moneySearch"
+                 style="width: 100%;">
           <el-form-item label="财务地址搜索区">
             <el-input placeholder="请输入房屋地址" v-model="searchCon" size="mini" clearable
                       @keyup.native.enter="details(searchCon)">
@@ -767,6 +768,7 @@
                 this.formList.combined = true;
                 this.formHouse = {type: 'house', fa_id: '', co_id: ''};
               } else {
+                this.searchCon = '';
                 this.details();
               }
               this.$notify.success({
