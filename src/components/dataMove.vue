@@ -431,6 +431,10 @@
             this.formListFr = res.data.data.fcr;
             this.search(res.data.data.detailed_address);
           } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            })
             this.formList = {};
             this.forms.house_id = '';
             this.formHouse.fa_id = '';
