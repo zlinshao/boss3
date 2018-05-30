@@ -402,7 +402,7 @@
         this.$http.post(this.urls + 'financial/migration/combine', this.formHouse).then((res) => {
           if (res.data.code === '30010') {
             this.formHouse = {type: 'house', fa_id: '', co_id: ''};
-            this.dialogVisible = true;
+            this.formList.combined = true;
             this.$notify.success({
               title: '成功',
               message: res.data.msg,
