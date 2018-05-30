@@ -49,12 +49,12 @@
             width="300"
             trigger="click">
             <el-table :data="scope.row.pay_way">
-              <el-table-column width="100" property="pay_way" label="押"></el-table-column>
-              <el-table-column width="100" property="pay_way_bet" label="付"></el-table-column>
+              <el-table-column width="100" property="pay_way_bet" label="押"></el-table-column>
+              <el-table-column width="100" property="pay_way" label="付"></el-table-column>
               <el-table-column width="100" property="period" label="变化周期(月)"></el-table-column>
             </el-table>
           </el-popover>
-          押 {{scope.row.pay_way[0].pay_way}} 付 {{scope.row.pay_way[0].pay_way_bet}}&nbsp;
+          押 {{scope.row.pay_way[0].pay_way_bet}} 付 {{scope.row.pay_way[0].pay_way}}&nbsp;
           <el-button size="mini" type="text" v-show="scope.row.pay_way.length>1" v-popover:payWayRent>变化</el-button>
         </template>
       </el-table-column>

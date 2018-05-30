@@ -200,8 +200,12 @@
         </div>
       </el-dialog>
     </div>
-    <div id="examineeDialog">
-      <el-dialog :close-on-click-modal="false" :visible.sync="examineeDialog" title="调查对象" width="45%">
+    <div id="examineeDialog"  >
+      <el-dialog :close-on-click-modal="false"
+                 :visible.sync="examineeDialog"
+                 title="调查对象"
+                 width="45%"
+                 >
         <div>
           <!--<el-row :gutter="10">-->
             <!--<el-col :span="22">-->
@@ -217,14 +221,13 @@
           <!--</el-row>-->
           <el-button type="primary" size="mini" @click="openOrganize" style="float: right;margin-bottom: 10px;margin-right: 10px;">新增</el-button>
         </div>
-        <div style="margin-top: 20px;">
+        <div style="margin-top: 20px;"
+             v-loading="loading"
+             element-loading-text="正在处理中"
+             element-loading-spinner="el-icon-loading"
+             element-loading-background="rgba(0, 0, 0, 0.3)">
           <el-table
             :data="examineesPageData"
-            :empty-text='tableStatus'
-            v-loading="tableLoading"
-            element-loading-text="拼命加载中"
-            element-loading-spinner="el-icon-loading"
-            element-loading-background="rgba(255, 255, 255, 0)"
             @selection-change="handleSelectionChange"
             style="width: 100%">
             <el-table-column
@@ -280,6 +283,7 @@
     name: 'exam-manage',
     data() {
       return {
+        loading: false,
         activeName: 'first',
         organizationDialog: false,
         organizeType: '',
@@ -451,11 +455,17 @@
         this.formExam.examinees = [];
         this.examiness_name = [];
         this.selectExaminees = '';
+        let length = 0;
         val.forEach((item) => {
-          if (typeof item.avatar != 'undefined') {
+          this.loading = true;
+          if (item.hasOwnProperty('avatar')) {
             //选的是人
             this.formExam.examinees.push(item.id);
             this.examiness_name.push(item.name);
+            length ++ ;
+            if(val.length === length){
+              this.addExaminees();
+            }
           } else {
             //选的部门
             this.$http.get(globalConfig.server + 'manager/staff?is_recursion=1&page=1&limit=500&org_id=' + item.id).then((res) => {
@@ -467,20 +477,35 @@
                   this.selectExaminees = '';
                   this.selectExaminees = this.examiness_name.join(',');
                 });
+                length ++;
+                if(val.length === length){
+                  this.addExaminees();
+                }
+              }else {
+                length ++;
+                if(val.length === length){
+                  this.addExaminees();
+                }
+              }
+            }).catch((err)=>{
+              length ++;
+              if(val.length === length){
+                this.addExaminees('error');
               }
             })
           }
         });
         this.selectExaminees = this.examiness_name.join(',');
-        this.addExaminees();
+
       },
       emptyExaminees() {
         this.selectExaminees = '';
         this.examiness_name = '';
         this.formExam.examinees = [];
       },
-      addExaminees() {
+      addExaminees(error) {
         this.$http.post(globalConfig.server + 'questionnaire/batch_enroll/' + this.examId, {examinees: this.formExam.examinees}).then((res) => {
+          this.loading = false;
           if (res.data.code === '30010') {
             this.$notify.success({
               title: '成功',

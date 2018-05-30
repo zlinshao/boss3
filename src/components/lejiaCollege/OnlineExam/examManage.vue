@@ -251,14 +251,13 @@
           <!--</el-row>-->
 
         </div>
-        <div style="margin-top: 20px;">
+        <div  v-loading="loading"
+              element-loading-text="正在处理中"
+              element-loading-spinner="el-icon-loading"
+              element-loading-background="rgba(0, 0, 0, 0.3)"
+              style="margin-top: 20px;">
           <el-table
             :data="examineesData"
-            :empty-text='tableStatus'
-            v-loading="tableLoading"
-            element-loading-text="拼命加载中"
-            element-loading-spinner="el-icon-loading"
-            element-loading-background="rgba(255, 255, 255, 0)"
             @selection-change="handleSelectionChange"
             style="width: 100%">
             <el-table-column
@@ -273,14 +272,14 @@
                 <span v-if="!scope.row.real_name">暂无</span>
               </template>
             </el-table-column>
-            <el-table-column
-              prop=""
-              label="职位">
-              <template slot-scope="scope">
-                <span v-if="scope.row.position">{{scope.row.position}}</span>
-                <span v-else>暂无</span>
-              </template>
-            </el-table-column>
+            <!--<el-table-column-->
+              <!--prop=""-->
+              <!--label="职位">-->
+              <!--<template slot-scope="scope">-->
+                <!--<span v-if="scope.row.position">{{scope.row.position}}</span>-->
+                <!--<span v-else>暂无</span>-->
+              <!--</template>-->
+            <!--</el-table-column>-->
             <el-table-column
               label="部门">
               <template slot-scope="scope">
@@ -296,13 +295,13 @@
                 <span v-if="!(scope.row.pivot && scope.row.pivot.enroll_time)">暂无</span>
               </template>
             </el-table-column>
-            <el-table-column
-              label="状态">
-              <template slot-scope="scope">
-                <span v-if="scope.row.pivot && scope.row.pivot.named_status">{{scope.row.pivot && scope.row.pivot.named_status}}</span>
-                <span v-else>暂无</span>
-              </template>
-            </el-table-column>
+            <!--<el-table-column-->
+              <!--label="状态">-->
+              <!--<template slot-scope="scope">-->
+                <!--<span v-if="scope.row.pivot && scope.row.pivot.named_status">{{scope.row.pivot && scope.row.pivot.named_status}}</span>-->
+                <!--<span v-else>暂无</span>-->
+              <!--</template>-->
+            <!--</el-table-column>-->
           </el-table>
         </div>
         <span slot="footer" class="dialog-footer">
@@ -375,6 +374,7 @@
         selectExamineeIds: [],
         examinees: [],
         examiness_name: [],
+        loading: false,
       };
     },
     mounted() {
@@ -519,11 +519,17 @@
         this.examiness_name = [];
         this.selectExaminees = '';
         this.selectExamineeIds = [];
+        let length = 0;
         val.forEach((item) => {
-          if (typeof item.avatar != 'undefined') {
+          this.loading = true;
+          if (item.hasOwnProperty('avatar')) {
             //选的是人
             this.selectExamineeIds.push(item.id);
             this.examiness_name.push(item.name);
+            length ++ ;
+            if(val.length === length){
+              this.addExaminees();
+            }
           } else {
             //选的部门
             this.$http.get(globalConfig.server + 'manager/staff?is_recursion=1&page=1&limit=500&org_id=' + item.id).then((res) => {
@@ -535,12 +541,25 @@
                   this.selectExaminees = '';
                   this.selectExaminees = this.examiness_name.join(',');
                 });
+                length ++;
+                if(val.length === length){
+                  this.addExaminees();
+                }
+              }else {
+                length ++;
+                if(val.length === length){
+                  this.addExaminees();
+                }
+              }
+            }).catch((err)=>{
+              length ++;
+              if(val.length === length){
+                this.addExaminees('error');
               }
             });
           }
         });
         this.selectExaminees = this.examiness_name.join(',');
-        this.addExaminees();
       },
       emptyExaminees() {
         this.selectExaminees = '';
@@ -549,6 +568,7 @@
       },
       addExaminees() {
         this.$http.post(globalConfig.server + 'exam/batch_enroll/' + this.examId, {examinees: this.selectExamineeIds}).then((res) => {
+          this.loading = false;
           if (res.data.code === '30010') {
             this.$notify.success({
               title: '成功',

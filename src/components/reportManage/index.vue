@@ -1,6 +1,7 @@
 <template>
   <div>
-    <ReportManage></ReportManage>
+    <ReportManage v-if="!isEditReportManage"></ReportManage>
+    <EditReportManage v-if="isEditReportManage"></EditReportManage>
 
   </div>
 </template>
@@ -22,3 +23,4 @@
 <style lang="scss" scoped="">
 
 </style>
+
