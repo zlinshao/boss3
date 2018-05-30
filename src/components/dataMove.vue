@@ -1,30 +1,41 @@
 <template>
   <div id="dataMove">
     <div class="filter clearFix">
-      <div style="float: left; font-size: 22px;margin-left: 20px;">
-        {{formList.detailed_address}}
+      <div style="font-size: 22px;margin-left: 20px;">
+        {{formList.detailed_address}}<br>
+        <el-form :inline="true" size="mini" onsubmit="return false" label-width="100px" class="moneySearch"
+                 style="width: 100%;">
+          <el-form-item label="财务地址搜索区">
+            <el-input placeholder="请输入房屋地址" v-model="searchCon" size="mini" clearable
+                      @keyup.native.enter="details(searchCon)">
+              <el-button slot="append" icon="el-icon-search" @click.native="details(searchCon)"></el-button>
+            </el-input>
+          </el-form-item>
+
+          <div style="float: right;">
+            <el-form-item>
+              <el-input placeholder="请输入房屋地址" v-model="params.keywords" size="mini" clearable
+                        @keyup.native.enter="search(params.keywords)">
+                <el-button slot="append" icon="el-icon-search" @click.native="search(params.keywords)"></el-button>
+              </el-input>
+            </el-form-item>
+
+            <el-form-item>
+              <el-dropdown trigger="click" @command="moveSure">
+                <el-button type="primary">
+                  迁移状态<i class="el-icon-arrow-down el-icon--right"></i>
+                </el-button>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="a">迁移</el-dropdown-item>
+                  <el-dropdown-item command="b">暂不处理</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </el-form-item>
+          </div>
+
+        </el-form>
       </div>
-      <el-form :model="params" :inline="true" size="mini" onsubmit="return false" label-width="66px">
 
-        <el-form-item>
-          <el-input placeholder="请输入房屋地址" v-model="params.keywords" size="mini" clearable
-                    @keyup.native.enter="search(params.keywords)">
-            <el-button slot="append" icon="el-icon-search" @click.native="search(params.keywords)"></el-button>
-          </el-input>
-        </el-form-item>
-
-        <el-form-item>
-          <el-dropdown trigger="click" @command="moveSure">
-            <el-button type="primary">
-              迁移状态<i class="el-icon-arrow-down el-icon--right"></i>
-            </el-button>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="a">迁移</el-dropdown-item>
-              <el-dropdown-item command="b">暂不处理</el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
-        </el-form-item>
-      </el-form>
     </div>
     <div class="houses" v-if="!formList.combined">
       <el-button type="text" v-for="(key,index) in contractHouse" :key="index" @click="houseOn(key.id)">
@@ -265,6 +276,35 @@
         </el-col>
       </el-row>
     </div>
+
+    <el-dialog title="门牌号补全" :visible.sync="dialogVisible" width="30%" :close-on-click-modal="false">
+      <el-form :model="forms" :inline="true" size="mini" label-width="108px">
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="栋" style="display: flex;display: -webkit-flex;">
+              <el-input v-model="forms.building"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="单元" style="display: flex;display: -webkit-flex;">
+              <el-input v-model="forms.unit"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="门牌号" style="display: flex;display: -webkit-flex;">
+              <el-input v-model="forms.house_number"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div style="text-align: center;color: red;">以上为建议数据，可手动修改，请确认无误后，再进行提交！</div>
+      <span slot="footer" class="dialog-footer">
+    <el-button size="small" @click="dialogVisible = false">取 消</el-button>
+    <el-button size="small" type="primary" @click="houseNum">提 交</el-button>
+  </span>
+    </el-dialog>
+
+
   </div>
 </template>
 
@@ -274,6 +314,8 @@
     data() {
       return {
         urls: globalConfig.server,
+        dialogVisible: false,
+
         types: '',
         checkMax: 1,
 
@@ -308,6 +350,7 @@
         params: {
           keywords: '',
         },
+        searchCon: '',          //草屋房屋地址
         form: {
           house_id: '',
           contract: [],
@@ -317,15 +360,16 @@
           fa_id: '',
           co_id: '',
         },
+        forms: {
+          house_id: '',
+          building: '',         //栋
+          unit: '',             //单元
+          house_number: '',     //门牌号
+        },
       }
     },
     mounted() {
-      this.details();
-    },
-    watch: {
-      // showDetail(val) {
-      //   console.log(val);
-      // }
+      this.details('');
     },
     computed: {
       leftNumber() {
@@ -336,20 +380,69 @@
       }
     },
     methods: {
-      details() {
+      // 确认门牌号
+      houseNum() {
+        this.$http.post(this.urls + 'financial/migration/fill', this.forms).then((res) => {
+          if (res.data.code === '30000') {
+            this.forms.building = '';
+            this.forms.unit = '';
+            this.forms.house_number = '';
+            this.dialogVisible = false;
+            this.houseMerge();
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            })
+          }
+        })
+      },
+      // 合并房屋
+      houseMerge() {
+        this.$http.post(this.urls + 'financial/migration/combine', this.formHouse).then((res) => {
+          if (res.data.code === '30010') {
+            this.formHouse = {type: 'house', fa_id: '', co_id: ''};
+            this.formList.combined = true;
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg,
+            })
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            })
+          }
+        })
+      },
+
+      details(val) {
         this.close_('other');
         this.close_('ids');
         this.close_('search');
         this.close_('resetting');
         this.form = {house_id: '', contract: []};
-        this.$http.get(this.urls + 'financial/migration').then((res) => {
+        this.$http.get(this.urls + 'financial/migration?search=' + val).then((res) => {
           if (res.data.code === '30000') {
+            let id = res.data.data.id;
             this.formList = res.data.data;
-            this.form.house_id = res.data.data.id;
-            this.formHouse.fa_id = res.data.data.id;
+            this.form.house_id = id;
+            this.forms.house_id = id;
+            this.formHouse.fa_id = id;
             this.formListFc = res.data.data.fcc;
             this.formListFr = res.data.data.fcr;
             this.search(res.data.data.detailed_address);
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
+            this.formList = {};
+            this.params.keywords = '';
+            this.forms.house_id = '';
+            this.formHouse.fa_id = '';
+            this.formListFc = [];
+            this.formListFr = [];
           }
         });
       },
@@ -676,7 +769,8 @@
                 this.formList.combined = true;
                 this.formHouse = {type: 'house', fa_id: '', co_id: ''};
               } else {
-                this.details();
+                this.searchCon = '';
+                this.details('');
               }
               this.$notify.success({
                 title: '成功',
@@ -685,6 +779,26 @@
             } else {
               if (num === 2 && res.data.code === '30011') {
                 this.details();
+              } else {
+                this.$notify.warning({
+                  title: '警告',
+                  message: res.data.msg,
+                })
+              }
+              if (num === 1 && res.data.code === '30002') {
+                this.$http.get(this.urls + 'financial/migration/suggest?house_id=' + this.forms.house_id).then((res) => {
+                  this.dialogVisible = true;
+                  if (res.data.code === '30000') {
+                    this.forms.building = res.data.data[0];
+                    this.forms.unit = res.data.data[1];
+                    this.forms.house_number = res.data.data[2];
+                  } else {
+                    this.$notify.warning({
+                      title: '警告',
+                      message: res.data.msg,
+                    })
+                  }
+                })
               } else {
                 this.$notify.warning({
                   title: '警告',
@@ -710,6 +824,13 @@
       -webkit-border-radius: $n;
       -moz-border-radius: $n;
       border-radius: $n;
+    }
+    .moneySearch {
+      margin-top: 12px;
+      label {
+        color: #000DFF;
+        text-align: left;
+      }
     }
     .clearFix:after {
       content: '';
