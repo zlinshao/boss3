@@ -434,8 +434,9 @@
             this.$notify.warning({
               title: '警告',
               message: res.data.msg,
-            })
+            });
             this.formList = {};
+            this.params.keywords = '';
             this.forms.house_id = '';
             this.formHouse.fa_id = '';
             this.formListFc = [];
