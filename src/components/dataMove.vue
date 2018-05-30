@@ -770,7 +770,7 @@
                 this.formHouse = {type: 'house', fa_id: '', co_id: ''};
               } else {
                 this.searchCon = '';
-                this.details();
+                this.details('');
               }
               this.$notify.success({
                 title: '成功',
