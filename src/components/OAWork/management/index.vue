@@ -22,9 +22,9 @@
       <el-tab-pane label="公告管理" name="seven">
         <notice></notice>
       </el-tab-pane>
-      <el-tab-pane label="问答中心" name="eight">
-        <MessageCenter></MessageCenter>
-      </el-tab-pane>
+      <!--<el-tab-pane label="问答中心" name="eight">-->
+        <!--<MessageCenter></MessageCenter>-->
+      <!--</el-tab-pane>-->
     </el-tabs>
   </div>
 </template>
