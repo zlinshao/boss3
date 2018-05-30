@@ -231,7 +231,11 @@
         </div>
       </el-dialog>
     </div>
-    <div id="examineeDialog">
+    <div id="examineeDialog"
+         v-loading="loading"
+         element-loading-text="正在处理中"
+         element-loading-spinner="el-icon-loading"
+         element-loading-background="rgba(0, 0, 0, 0.3)">
       <el-dialog :close-on-click-modal="false" :visible.sync="examineeDialog" title="考生信息" width="45%">
         <div>
           <!--<el-row :gutter="10">-->
@@ -254,11 +258,6 @@
         <div style="margin-top: 20px;">
           <el-table
             :data="examineesData"
-            :empty-text='tableStatus'
-            v-loading="tableLoading"
-            element-loading-text="拼命加载中"
-            element-loading-spinner="el-icon-loading"
-            element-loading-background="rgba(255, 255, 255, 0)"
             @selection-change="handleSelectionChange"
             style="width: 100%">
             <el-table-column
@@ -375,6 +374,7 @@
         selectExamineeIds: [],
         examinees: [],
         examiness_name: [],
+        loading: false,
       };
     },
     mounted() {
@@ -519,11 +519,17 @@
         this.examiness_name = [];
         this.selectExaminees = '';
         this.selectExamineeIds = [];
+        let length = 0;
         val.forEach((item) => {
+          this.loading = true;
           if (typeof item.avatar != 'undefined') {
             //选的是人
             this.selectExamineeIds.push(item.id);
             this.examiness_name.push(item.name);
+            length ++ ;
+            if(val.length === length){
+              this.addExaminees();
+            }
           } else {
             //选的部门
             this.$http.get(globalConfig.server + 'manager/staff?is_recursion=1&page=1&limit=500&org_id=' + item.id).then((res) => {
@@ -535,12 +541,25 @@
                   this.selectExaminees = '';
                   this.selectExaminees = this.examiness_name.join(',');
                 });
+                length ++;
+                if(val.length === length){
+                  this.addExaminees();
+                }
+              }else {
+                length ++;
+                if(val.length === length){
+                  this.addExaminees();
+                }
+              }
+            }).catch((err)=>{
+              length ++;
+              if(val.length === length){
+                this.addExaminees('error');
               }
             });
           }
         });
         this.selectExaminees = this.examiness_name.join(',');
-        this.addExaminees();
       },
       emptyExaminees() {
         this.selectExaminees = '';
@@ -549,6 +568,7 @@
       },
       addExaminees() {
         this.$http.post(globalConfig.server + 'exam/batch_enroll/' + this.examId, {examinees: this.selectExamineeIds}).then((res) => {
+          this.loading = false;
           if (res.data.code === '30010') {
             this.$notify.success({
               title: '成功',
