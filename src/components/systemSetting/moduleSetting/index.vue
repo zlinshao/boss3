@@ -13,9 +13,9 @@
       <el-tab-pane label="业绩包管理" name="fourth">
         <PackageManagement></PackageManagement>
       </el-tab-pane>
-      <!--<el-tab-pane label="问答回复管理" name="fifth">-->
-        <!--<ReplierManage></ReplierManage>-->
-      <!--</el-tab-pane>-->
+      <el-tab-pane label="问答回复管理" name="fifth">
+        <ReplierManage></ReplierManage>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
