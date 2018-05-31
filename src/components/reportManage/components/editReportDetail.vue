@@ -1,6 +1,7 @@
 <template>
   <div id="reportDetail">
-    <el-dialog :close-on-click-modal="false" title="报备详情" :visible.sync="reportVisible" width="70%" class="reportDialog">
+    <el-dialog :close-on-click-modal="false" title="报备详情" :visible.sync="reportVisible" width="70%"
+               class="reportDialog">
       <div
         style="width: 90%;"
         v-loading="fullLoading"
@@ -62,7 +63,18 @@
           <el-col :span="6" style="padding-left: 6px;">
             <div>
               <div class="commentTop">
-                修改详情&nbsp;
+                <el-dropdown  @command="handleCommand">
+                  <span class="el-dropdown-link">
+                    <div style="font-size: 16px;font-weight: normal;color: #606266;cursor: pointer">
+                      {{defaultItem}}<i class="el-icon-arrow-down el-icon--right"></i>
+                    </div>
+                  </span>
+                  <el-dropdown-menu slot="dropdown" trigger="click">
+                    <el-dropdown-item command="修改报备"> 修改报备 </el-dropdown-item>
+                    <el-dropdown-item command="相关信息"> 相关信息 </el-dropdown-item>
+                    <el-dropdown-item command="评论信息"> 评论信息 </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
               </div>
               <div class="scroll_bar">
 
@@ -112,6 +124,8 @@
         deal: '',
         role_name: [],
         showContent: false,
+
+        defaultItem: '修改报备',
       }
     },
 
@@ -206,11 +220,16 @@
         this.form.comment = '';
         this.form.album = [];
       },
+
+      //-------------------------相关报备信息-----------------------------//
+      handleCommand(command){
+        this.defaultItem = command;
+      },
     },
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   #reportDetail {
     @mixin border_($n) {
       -webkit-border-radius: $n;
@@ -360,7 +379,8 @@
       color: #101010;
       font-size: 16px;
       height: 80px;
-      line-height: 80px;
+      box-sizing: border-box;
+      padding-top: 30px;
       border-bottom: 1px solid #eeeeee;
     }
     .commentContent {
