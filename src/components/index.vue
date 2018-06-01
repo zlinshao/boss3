@@ -295,7 +295,7 @@
       <el-container>
         <div class="aside scroll_bar" id="isCollapse">
           <el-menu :default-active="$route.path" class="el-menu-vertical-demo" unique-opened
-                   :defaultOpeneds=defaultArray :collapse="isCollapse" router
+                   :defaultOpeneds=defaultArray :collapse="isCollapse" router show-timeout="0"
                    background-color="#6a8dfb" text-color="#fff" active-text-color="#ffd04b">
             <template v-for="(item,index) in $router.options.routes">
               <!--一级菜单-->
@@ -1481,7 +1481,6 @@
           padding: 10px 20px;
           margin-left: 210px;
           overflow-x: hidden;
-          @include transition;
         }
         .mainHide {
           margin-top: 0 !important;

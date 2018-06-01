@@ -5,7 +5,7 @@
       <div class="filter" style="text-align: right">
         <el-form :inline="true" size="mini" onsubmit="return false">
           <el-form-item>
-            <el-input placeholder="请输入内容" @keyup.enter.native="search" v-model="formInline.q" size="mini" clearable>
+            <el-input placeholder="请输入房屋地址" @keyup.enter.native="search" v-model="formInline.q" size="mini" clearable>
               <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
             </el-input>
           </el-form-item>
@@ -45,7 +45,7 @@
                 </template>
               </el-table-column>
               <el-table-column
-                label="地址">
+                label="房屋地址">
                 <template slot-scope="scope">
                   <span v-if="scope.row.flow&&scope.row.flow.content">{{scope.row.flow.content.address}}</span>
                   <span v-else="">/</span>
@@ -93,14 +93,13 @@
         </div>
       </div>
     </div>
-
-    <ReportDetail :module="reportDetailDialog" :ids="reportId" @close="closeModal"></ReportDetail>
+    <ReportDetail :module="reportDetailDialog" :reportId="reportId" @close="closeModal"></ReportDetail>
   </div>
 </template>
 
 <script>
   import RightMenu from '../../common/rightMenu.vue'
-  import ReportDetail from '../../OAWork/examineAndApprove/components/reportDetail'
+  import ReportDetail from './editReportDetail'
   export default {
     components: {RightMenu,ReportDetail},
     data () {

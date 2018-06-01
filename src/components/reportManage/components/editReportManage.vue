@@ -6,7 +6,7 @@
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input placeholder="请输入内容" @keyup.enter.native="search" v-model="formInline.q" size="mini" clearable>
+              <el-input placeholder="请输入房屋地址" @keyup.enter.native="search" v-model="formInline.q" size="mini" clearable>
                 <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
               </el-input>
             </el-form-item>
@@ -152,7 +152,7 @@
       </div>
     </div>
 
-    <ReportDetail :module="reportDetailDialog" :ids="reportId" @close="closeModal"></ReportDetail>
+    <ReportDetail :module="reportDetailDialog" :reportId="reportId" @close="closeModal"></ReportDetail>
   </div>
 </template>
 
