@@ -176,7 +176,7 @@
                           </div>
 
                           <div v-else>
-                            <div v-if="!Array.isArray(value)">
+                            <div v-if="typeof value === 'string'">
                               <div v-if="key === '房屋类型'">
                                 <div class="title">{{key}} : </div>
                                 <div class="reportChange">{{value.name}}</div>
@@ -186,7 +186,7 @@
                                 <div class="reportChange">{{value}}</div>
                               </div>
                             </div>
-                            <div v-if="Array.isArray(value)">
+                            <div v-else>
                               <div v-if="key === '定金和收款方式' || key === '补交定金和收款方式'" >
                                 <div class="title">{{key}} : </div>
                                 <div class="reportChange">
@@ -200,15 +200,15 @@
                                 <div class="title">{{key}} : </div>
                                 <div class="reportChange">
                                   由
-                                  <span v-for="item in value['由']">
-                                    <span style="margin-right: 20px;color: #409EFF">{{item.msg}}</span>
+                                  <div v-for="item in value['由']">
+                                    <span style="margin-right: 4px;color: #409EFF">{{item.msg}}</span>
                                     <span>{{item.period}}</span>
-                                  </span>
+                                  </div>
                                   变成
-                                  <span v-for="item in value['变成']">
-                                    <span style="margin-right: 20px;color: #409EFF">{{item.msg}}</span>
+                                  <div v-for="item in value['变成']">
+                                    <span style="margin-right: 4px;color: #409EFF">{{item.msg}}</span>
                                     <span>{{item.period}}</span>
-                                  </span>
+                                  </div>
                                 </div>
                               </div>
                             </div>
