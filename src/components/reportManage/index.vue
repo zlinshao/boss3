@@ -2,7 +2,6 @@
   <div>
     <ReportManage v-if="!isEditReportManage"></ReportManage>
     <EditReportManage v-if="isEditReportManage"></EditReportManage>
-
   </div>
 </template>
 

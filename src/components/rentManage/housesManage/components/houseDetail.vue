@@ -89,7 +89,7 @@
                 </el-col>
               </el-row>
               <el-row>
-                
+
                 <el-col :span="8">
                   <el-form-item label="建议价格">
                     <div class="content">
