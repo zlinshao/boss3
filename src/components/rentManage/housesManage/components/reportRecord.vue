@@ -84,7 +84,7 @@
         tableData:[],
         reprotParams:{
           per_page_number:3,
-          page:2,
+          page:1,
         },
         totalNumber:0,
         emptyContent: '暂无数据',
