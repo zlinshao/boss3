@@ -779,7 +779,8 @@
               })
             } else {
               if (num === 2 && res.data.code === '30011') {
-                this.details();
+                this.searchCon = '';
+                this.details('');
               } else {
                 this.$notify.warning({
                   title: '警告',
