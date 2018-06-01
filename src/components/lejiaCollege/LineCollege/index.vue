@@ -314,7 +314,7 @@
               } else {
                 examIds = this.confirmArrival;
               }
-              examIds.push(this.examData.id);
+              examIds.push(id);
               localStorage.setItem('confirmArrival', JSON.stringify(examIds));  //保存已到场的考试id
               this.$router.push({path: '/answerExam', query: {id: id}});
             } else if (res.data.code === '30003') {
