@@ -167,11 +167,13 @@
                             <div class="title">{{key}} : </div>
                             <div  class="reportChange">
                               由
-                              <img class="changImg" v-for="img in value['由']"  :src="img.uri"
+                              <img v-if="value['由']&&value['由'].length>0" class="changImg" v-for="img in value['由']"  :src="img.uri"
                                    data-magnify="" data-caption="图片查看器" :data-src="img.uri" alt="">
+                              <span v-else>无</span>
                               变成
-                              <img class="changImg" v-for="pic in value['变成']" :src="pic.uri"
+                              <img v-if="value['变成']&&value['变成'].length>0" class="changImg" v-for="pic in value['变成']" :src="pic.uri"
                                    data-magnify="" data-caption="图片查看器" :data-src="pic.uri" alt="">
+                              <span v-else>无</span>
                             </div>
                           </div>
 
@@ -191,24 +193,28 @@
                                 <div class="title">{{key}} : </div>
                                 <div class="reportChange">
                                   由
-                                  <span v-for="item in value['由']">{{item}}</span>
+                                  <span v-if="value['由']&&value['由'].length>0" v-for="item in value['由']">{{item}}</span>
+                                  <span v-else>无</span>
                                   变成
-                                  <span v-for="item in value['变成']">{{item}}</span>
+                                  <span v-if="value['变成']&&value['变成'].length>0" v-for="item in value['变成']">{{item}}</span>
+                                  <span v-else>无</span>
                                 </div>
                               </div>
                               <div v-else>
                                 <div class="title">{{key}} : </div>
                                 <div class="reportChange">
                                   由
-                                  <div v-for="item in value['由']">
+                                  <div v-if="value['由']&&value['由'].length>0" v-for="item in value['由']">
                                     <span style="margin-right: 4px;color: #409EFF">{{item.msg}}</span>
                                     <span>{{item.period}}</span>
                                   </div>
+                                  <div v-else>无</div>
                                   变成
-                                  <div v-for="item in value['变成']">
+                                  <div v-if="value['变成']&&value['变成'].length>0" v-for="item in value['变成']">
                                     <span style="margin-right: 4px;color: #409EFF">{{item.msg}}</span>
                                     <span>{{item.period}}</span>
                                   </div>
+                                  <div v-else>无</div>
                                 </div>
                               </div>
                             </div>
