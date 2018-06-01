@@ -57,8 +57,8 @@
                 label="修改字段" width="400">
                 <template slot-scope="scope" >
                   <span v-if="scope.row.diff&&Object.keys(scope.row.diff).length>0">
-                    <span v-for="(value,key) in scope.row.diff">
-                      {{key}},
+                    <span v-for="(value,key,index ) in scope.row.diff">
+                      {{key}} <span v-if="index < Object.keys(scope.row.diff).length-1">,</span>
                     </span>
                   </span>
                   <span v-else="">/</span>
