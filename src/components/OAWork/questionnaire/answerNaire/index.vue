@@ -120,7 +120,7 @@
 
     <div id="submitDialog">
       <el-dialog :close-on-click-modal="false" :show-close="false" :visible.sync="submitDialog" style="margin-top:20vh"
-                 title="本次试题提交"
+                 title="本次问卷提交"
                  width="35%">
         <el-row :gutter="30" style="margin-bottom:15px;">
           <el-col :span="24">
