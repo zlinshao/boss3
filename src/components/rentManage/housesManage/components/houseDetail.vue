@@ -341,7 +341,9 @@
           </div>
         </div>
         <div class="title">房屋影像</div>
+        <!--<el-button @click="downLoad">sss</el-button>-->
         <div class="describe_border">
+
           <div v-if="detailData.house_goods&&detailData.house_goods.photo">
             <div class="title">
               {{detailData.create_time}}
