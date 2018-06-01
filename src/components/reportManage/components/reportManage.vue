@@ -9,9 +9,9 @@
               <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
             </el-input>
           </el-form-item>
-          <!--<el-form-item>-->
-            <!--<el-button type="primary" @click="changelist">查看报备修改记录</el-button>-->
-          <!--</el-form-item>-->
+          <el-form-item>
+            <el-button type="primary" @click="changelist">查看报备修改记录</el-button>
+          </el-form-item>
         </el-form>
       </div>
 
