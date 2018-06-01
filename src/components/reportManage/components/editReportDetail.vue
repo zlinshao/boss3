@@ -83,6 +83,7 @@
                      element-loading-text="拼命加载中"
                      element-loading-spinner="el-icon-loading"
                      element-loading-background="rgba(255, 255, 255, 0)">
+                  <div v-if="!isLoading && reportAboutData.length === 0" style="text-align: center;font-size: 16px;margin-top: 12px;">暂无相关信息</div>
                   <div v-for="item in reportAboutData" @click="contrast(item)" class="reportItem">
                     <div>
                       <span class="itemLabel">报备类型 : </span>
@@ -140,10 +141,13 @@
                   </div>
                 </div>
                 <!--报备修改记录-->
-                <div v-if="defaultItem === '报备修改'" style="min-height: 300px" v-loading="changeLoading">
-                  <div v-if="editReportData.length < 1" style="text-align: center;font-size: 16px;margin-top: 12px;">暂无报备修改记录</div>
+                <div v-if="defaultItem === '报备修改'" style="min-height: 300px" v-loading="changeLoading"
+                     element-loading-text="拼命加载中"
+                     element-loading-spinner="el-icon-loading"
+                     element-loading-background="rgba(255, 255, 255, 0)">
+                  <div v-if="!changeLoading && editReportData.length < 1" style="text-align: center;font-size: 16px;margin-top: 12px;">暂无报备修改记录</div>
                   <div v-if="editReportData.length > 0">
-                    <div v-for="(item,index) in editReportData"  class="reportItem" style="margin-bottom: 12px;">
+                    <div v-for="(item,index) in editReportData" :class="{currentChange:changeId == item.id}" class="reportItem" style="margin-bottom: 12px;">
                       <div class="commentContent">
                         <div class="commentA">
                           <span class="headSculpture">
@@ -158,7 +162,6 @@
                         </div>
                       </div>
                       <div class="diffContent">
-
                         <div v-for="(value,key) in item.diff">
                           <div v-if="printScreen.indexOf(key) > -1">
                             <div class="title">{{key}} : </div>
@@ -280,7 +283,7 @@
 
   export default {
     name: "report-detail",
-    props: ['module', 'reportId'],
+    props: ['module', 'reportId','changeId'],
     components: {UpLoad, ContrastReport},
     data() {
       return {
@@ -773,6 +776,13 @@
         text-align: right;
         color: #6a8dfb;
         margin-right: 10px;
+      }
+    }
+    .currentChange{
+      background-color: #fbf0f3;
+      border-left: 5px solid #fb4589;
+      .itemLabel {
+        color: #fb4589;
       }
     }
     .changImg{

@@ -115,7 +115,7 @@
       </div>
     </div>
 
-    <ReportDetail :module="reportDetailDialog" :reportId="reportId" @close="closeModal"></ReportDetail>
+    <ReportDetail :module="reportDetailDialog" :reportId="reportId" :changeId="changeId" @close="closeModal"></ReportDetail>
 
     <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
                   @selectMember="selectMember" @close="closeModal"></Organization>
@@ -151,7 +151,7 @@
         length:'',
         type:'',
         reportId:'',
-
+        changeId : '',
         isHigh: false,
       }
     },
@@ -202,6 +202,7 @@
       dblClickTable(row, event){
         this.reportDetailDialog = true;
         this.reportId = row.processable_id;
+        this.changeId = row.id;
       },
       selectStaff(){
         this.length = 1;
