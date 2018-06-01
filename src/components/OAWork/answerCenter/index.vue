@@ -17,7 +17,7 @@
           </el-form>
         </div>
       </div>
-      <div class="comment_box" v-for="item in questions" :key="item.id">
+      <div class="comment_box" v-for="(item,index) in questions" :key="item.id">
         <div class="anstitle">{{item.title}}</div>
         <div class="publishComment">
           <div class="portraito">
@@ -39,7 +39,7 @@
         </div>
         <div class="question">{{item.description}}</div>
         <el-button type="primary" style="margin: 10px 0 20px 10px;" @click="write(item.id)" size="small">写回答</el-button>
-        <div class="publishComment" v-show="item.id == answarid">
+        <div class="publishComment" v-show="item.id == answerId">
           <div class="portrait">
             <img :src="landholder.avatar" v-if="landholder && landholder.avatar">
             <img src="../../../assets/images/head.png" v-else>
@@ -55,10 +55,9 @@
             </div>
           </div>
         </div>
-
-        <el-form size="small" v-show="item.id == answarid">
+        <el-form size="small" v-show="item.id == answerId">
           <el-form-item>
-            <el-input type="textarea" :rows="3" v-model="content" placeholder="请输入答案内容"></el-input>
+            <el-input type="textarea" :rows="3" v-model="content" placeholder="请输入回答内容"></el-input>
           </el-form-item>
           <el-form-item>
             <div class="submitButt">
@@ -69,7 +68,7 @@
 
         <div style="height:50px; color:#83a0fc; line-height:50px; margin:0 10px;">
           <span style="float:left;">{{item.answers_count}}条回答</span>
-          <span @click="lookAll(item.id)"
+          <span @click="lookAll(item.id, index)"
                 style="cursor: pointer;float:right; margin-right:6px;">全部显示</span>
         </div>
         <div>
@@ -87,9 +86,9 @@
                   <span v-if="item.first_answer.staff.role.length>0" v-for="v in item.first_answer.staff.role">&nbsp;{{v.display_name}}&nbsp;</span>
                   <span>{{item.first_answer.create_time}}</span>
                 </div>
-                <div @click="openpy(item.first_answer.id)" style="cursor: pointer;">
+                <div @click="openComment(item.first_answer.id)" style="cursor: pointer;">
                   <i class="iconfont icon-xinxi"></i>
-                  <span class="infopy">评论（{{item.first_answer && item.first_answer.comments && item.first_answer.comments.length}}）</span>
+                  <span class="infopy">评论（{{item.first_answer && item.first_answer.comments_count}}）</span>
                 </div>
               </div>
               <div class="commentContent">
@@ -97,82 +96,105 @@
               </div>
             </div>
           </div>
-          <div class="commentOn" v-for="value in answerDetail"
-               v-if="answerDetail.length> 0 && (value.id !== item.first_answer.id)">
-            <div class="portrait">
-              <img :src="value.staff.avatar" v-if="value.staff.avatar">
-              <img src="../../../assets/images/head.png" v-else>
-            </div>
-            <div class="comments">
-              <div class="staff_name">
-                <div>
-                  <span>{{value.staff.name}}</span>&nbsp;&nbsp;
-                  <span class="staffBefore" v-if="value.staff.org.length>0" v-for="v in value.staff.org">&nbsp;{{v.name}}&nbsp;</span>—
-                  <span v-if="value.staff.role.length>0"
-                        v-for="v in value.staff.role">&nbsp;{{v.display_name}}&nbsp;</span>
-                  <span>{{value.create_time}}</span>
+          <div v-show="commentList">
+            <el-form size="small" style="margin-left: 4%;width: 94%;">
+              <el-form-item>
+                <el-input type="textarea" :rows="3" v-model="commentContent" placeholder="请输入评论内容"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <div class="submitButt">
+                  <el-button type="success" size="small" @click="addChatReply(item.first_answer.id)">评论</el-button>
                 </div>
-                <div @click="openpy(value.id)" style="cursor: pointer;">
-                  <i class="iconfont icon-xinxi"></i>
-                  <span class="infopy">评论（{{value.comments_count}}）</span>
+              </el-form-item>
+            </el-form>
+            <div v-for="comment in commentDetail" :key="comment.id" v-if="item.first_answer.id===commentId">
+              <div class="commentOn" style="width:94%;margin-left:4%;">
+                <div class="portrait">
+                  <img :src="comment.staff.avatar" v-if="comment && comment.staff && comment.staff.avatar">
+                  <img src="../../../assets/images/head.png" v-else>
                 </div>
-              </div>
-              <div class="commentContent">
-                {{value.content}}
+                <div class="comments">
+                  <div class="staff_name">
+                    <div>
+                      <span>{{comment.staff.name}}</span>&nbsp;&nbsp;
+                      <span class="staffBefore" v-if="comment.staff.org.length>0" v-for="v in comment.staff.org">&nbsp;{{v.name}}&nbsp;</span>—
+                      <span v-if="comment.staff.role.length>0"
+                            v-for="v in comment.staff.role">&nbsp;{{v.display_name}}&nbsp;</span>
+                      <span>{{comment.create_time}}</span>
+                    </div>
+                  </div>
+                  <div class="commentContent">
+                    {{comment.content}}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div style="height:50px; color:#83a0fc; line-height:50px; margin:0 10px;">
-            <span @click="answerDetail=[]" style="cursor: pointer;float:right; margin-right:6px;">收起</span>
+
+          <div v-for="(value,index) in answerDetail"
+               v-if="answerDetail.length> 0 ">
+            <div class="commentOn">
+              <div class="portrait">
+                <img :src="value.staff.avatar" v-if="value.staff.avatar">
+                <img src="../../../assets/images/head.png" v-else>
+              </div>
+              <div class="comments">
+                <div class="staff_name">
+                  <div>
+                    <span>{{value.staff.name}}</span>&nbsp;&nbsp;
+                    <span class="staffBefore" v-if="value.staff.org.length>0" v-for="v in value.staff.org">&nbsp;{{v.name}}&nbsp;</span>—
+                    <span v-if="value.staff.role.length>0"
+                          v-for="v in value.staff.role">&nbsp;{{v.display_name}}&nbsp;</span>
+                    <span>{{value.create_time}}</span>
+                  </div>
+                  <div @click="openComment2(value.id, index)" style="cursor: pointer;">
+                    <i class="iconfont icon-xinxi"></i>
+                    <span class="infopy">评论（{{value.comments_count}}）</span>
+                  </div>
+                </div>
+                <div class="commentContent">
+                  {{value.content}}
+                </div>
+              </div>
+            </div>
+            <div v-show="commentList2">
+              <el-form size="small" style="margin-left: 4%;width: 94%;" v-if="value.id==commentId">
+                <el-form-item>
+                  <el-input type="textarea" :rows="3" v-model="commentContent" placeholder="请输入评论内容"></el-input>
+                </el-form-item>
+                <el-form-item>
+                  <div class="submitButt">
+                    <el-button type="success" size="small" @click="addChatReply(value.id)">评论</el-button>
+                  </div>
+                </el-form-item>
+              </el-form>
+              <div v-for="(comment,kk) in commentDetail" :key="comment.id" v-if="value.id==commentId">
+                <div class="commentOn" style="width:94%;margin-left:4%;">
+                  <div class="portrait">
+                    <img :src="comment.staff.avatar" v-if="comment && comment.staff && comment.staff.avatar">
+                    <img src="../../../assets/images/head.png" v-else>
+                  </div>
+                  <div class="comments">
+                    <div class="staff_name">
+                      <div>
+                        <span>{{comment.staff.name}}</span>&nbsp;&nbsp;
+                        <span class="staffBefore" v-if="comment.staff.org.length>0" v-for="v in comment.staff.org">&nbsp;{{v.name}}&nbsp;</span>—
+                        <span v-if="comment.staff.role.length>0"
+                              v-for="v in comment.staff.role">&nbsp;{{v.display_name}}&nbsp;</span>
+                        <span>{{comment.create_time}}</span>
+                      </div>
+                    </div>
+                    <div class="commentContent">
+                      {{comment.content}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-
-          <!--<div v-for="keyx in key.comments" :key="keyx.id" v-show="pinglunId == key.id">-->
-          <!--<div class="commentOn" style="width:94%;margin-left:4%;">-->
-          <!--<div class="portrait">-->
-          <!--<img :src="keyx.avatar" v-if="keyx && keyx.avatar">-->
-          <!--<img src="../../../assets/images/head.png" v-else>-->
-          <!--</div>-->
-          <!--<div class="comments">-->
-          <!--<div class="staff_name">-->
-          <!--<div>-->
-          <!--<span>{{keyx.staff}}</span>&nbsp;&nbsp;-->
-          <!--<span class="staffBefore">{{keyx.role}}</span>&nbsp;&nbsp;-->
-          <!--<span>{{keyx.create_time}}</span>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--<div class="commentContent">-->
-          <!--{{keyx.content}}-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--</div>-->
-
-          <!--</div>-->
-          <!--<div class="publishComment" v-show="pinglunId == key.id" style="width:92%;margin-left:8%;">-->
-          <!--<div class="portrait">-->
-          <!--<img :src="landholder.avatar" v-if="landholder && landholder.avatar">-->
-          <!--<img src="../../../assets/images/head.png" v-else>-->
-          <!--</div>-->
-          <!--<div class="comments">-->
-          <!--<div class="staff_name">-->
-          <!--<div>-->
-          <!--<span>{{landholder && landholder.name}}</span>&nbsp;&nbsp;-->
-          <!--<span v-for="key in landholder && landholder.role" :key="key.display_name">-->
-          <!--<span>{{key && key.display_name}}</span>-->
-          <!--</span>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--<el-form size="small" style="width:92%;margin-left:8%;" v-show="pinglunId == key.id">-->
-          <!--<el-form-item>-->
-          <!--<el-input type="textarea" :rows="2" v-model="addContent" placeholder="请输入评论内容"></el-input>-->
-          <!--</el-form-item>-->
-          <!--<el-form-item>-->
-          <!--<div class="submitButt">-->
-          <!--<el-button type="success" size="small" @click="addChatReply(item.id,key.id)">发表</el-button>-->
-          <!--</div>-->
-          <!--</el-form-item>-->
-          <!--</el-form>-->
+          <div style="height:50px; color:#83a0fc; line-height:50px; margin:0 50px;">
+            <span @click="answerDetail=[];myData(1)" style="cursor: pointer;float:right; margin-right:6px;">收起</span>
+          </div>
         </div>
       </div>
       <div class="block pages" v-if="paging > 14">
@@ -200,7 +222,7 @@
     <div id="faleDialog">
       <el-dialog :close-on-click-modal="false" :visible.sync="faleDialog" style="margin-top: 4vh;" title="我要提问"
                  width="38%">
-        <span style="color:#409EFF;font-size:14px;">写下你的问题{{form}}</span>
+        <span style="color:#409EFF;font-size:14px;">写下你的问题</span>
         <div style="margin:5px 0;">描述精确的问题更易得到解答</div>
         <el-input v-model="form.title" placeholder="问题标题"></el-input>
         <span style="color:#409EFF;font-size:14px; margin: 10px 0 5px 0; display:block;">问题类型</span>
@@ -231,13 +253,8 @@
     data() {
       return {
         urls: globalConfig.server,
-        isShow: false,
-        islook: false,
-        pinglun: false,
-        showlen: 1,
         addContent: '',
         commentOn: [],
-        showlen: 1,
         currentPage: 1,
         faleDialog: false,
         paging: 0,
@@ -255,11 +272,15 @@
         anonymous: 'false',
         loading: false, //点赞
         landholder: {}, //个人信息
-        answarid: '', // 问题编号ID
+        answerId: '', // 问题编号ID
         content: '', //回答内容
-        pinglunId: '', //评论编号ID
+        commentId: '', //评论编号ID
         messageCenterCategory: [],
         answerDetail: [],
+        commentDetail: [],
+        commentContent: '',
+        commentList: false,
+        commentList2: false,
       };
     },
     mounted() {
@@ -287,12 +308,13 @@
       },
       //写回答
       write(id) {
-        this.isShow = !this.isShow;
-        this.answarid = id;
+        this.answerId = id;
       },
       //显示所有回答
-      lookAll(id) {
-        this.pinglun = !this.pinglun;
+      lookAll(id, num) {
+        if (num >= 0) {
+          this.questions[num].first_answer = {};
+        }
         this.$http.get(globalConfig.server + 'qa/front/answer?question_id=' + id).then((res) => {
           if (res.data.code === '70310') {
             this.answerDetail = res.data.data;
@@ -303,13 +325,37 @@
       },
 
       //显示所有评论
-      openpy(id) {
-        this.islook = !this.islook;
-        this.$http.get(globalConfig.server + 'qa/front/comment?answer_id=' + id).then((res) => {
-          if(res.data.code ==='70510') {
+      openComment(id) {
+        if (this.commentList === false) {
+          this.commentId = id;
+          this.commentList = true;
+          this.$http.get(globalConfig.server + 'qa/front/comment?answer_id=' + id).then((res) => {
+            if (res.data.code === '70410') {
+              this.commentDetail = res.data.data;
+            } else {
+              this.commentDetail = [];
+            }
+          });
+        } else {
+          this.commentList = false;
+        }
 
-          }
-        });
+      },//显示所有评论
+      openComment2(id) {
+        if (this.commentList2 === false) {
+          this.commentId = id;
+          this.commentList2 = true;
+          this.$http.get(globalConfig.server + 'qa/front/comment?answer_id=' + id).then((res) => {
+            if (res.data.code === '70410') {
+              this.commentDetail = res.data.data;
+            } else {
+              this.commentDetail = [];
+            }
+          });
+        } else {
+          this.commentList2 = false;
+        }
+
       },
       search(val) {
         this.myData(val);
@@ -319,7 +365,7 @@
       },
       myData(val) {
         this.page = val;
-        this.loading = true;
+        // this.loading = true;
         this.$http.get(this.urls + "qa/front/question", {
           params: {
             page: this.page,
@@ -327,7 +373,7 @@
             keywords: this.keywords
           }
         }).then(res => {
-          this.loading = false;
+          // this.loading = false;
           if (res.data.code === "70210") {
             this.questions = res.data.data;
             this.paging = res.data.meta.num;
@@ -366,12 +412,15 @@
         this.$http.post(this.urls + "qa/front/answer", {question_id: id, content: this.content}).then(res => {
           if (res.data.code === "70310") {
             this.myData(1);
+            setTimeout(()=>{
+              this.lookAll(id,0);
+            },1);
             this.$notify({
               title: "成功",
               message: res.data.msg,
               type: "success"
             });
-            this.answarid = '';
+            this.answerId = '';
             this.content = '';
           } else {
             this.$notify({
@@ -384,20 +433,26 @@
       },
 
       //评论
-      addChatReply(itemId, keyId) {
+      addChatReply(id) {
         this.$http.post(this.urls + "qa/front/comment", {
-          answer_id: itemId,
-          content: this.addContent,
-          parent_id: keyId
+          answer_id: id,
+          content: this.commentContent,
         }).then(res => {
-          if (res.data.code === "199200") {
+          if (res.data.code === "70410") {
             this.myData(1);
             this.$notify({
               title: "成功",
               message: res.data.msg,
               type: "success"
             });
-            this.addContent = '';
+            this.commentContent = '';
+            this.$http.get(globalConfig.server + 'qa/front/comment?answer_id=' + id).then((res) => {
+              if (res.data.code === '70410') {
+                this.commentDetail = res.data.data;
+              } else {
+                this.commentDetail = [];
+              }
+            });
           } else {
             this.$notify({
               title: "警告",
