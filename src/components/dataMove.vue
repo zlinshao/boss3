@@ -466,7 +466,11 @@
             }
           }
         }
-        this.params.keywords = val;
+        if (Array.isArray(val)) {
+          this.params.keywords = val[0];
+        } else {
+          this.params.keywords = val;
+        }
         this.$http.get(this.urls + 'financial/migration/search?q=' + val).then((res) => {
           if (res.data.code === '30000') {
             this.contractListChc = res.data.data.chc;   //合同数据收
