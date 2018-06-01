@@ -126,6 +126,15 @@
                   <span v-for="v in scope.row.replier_org" v-else>{{v.name}}&nbsp;&nbsp;&nbsp;</span>
                 </template>
               </el-table-column>
+              <el-table-column
+                label="状态">
+                <template slot-scope="scope">
+                  <el-tag type="success" v-if="scope.row.is_open">公开</el-tag>
+                  <el-tag type="warning" v-if="scope.row.is_open==false">非公开</el-tag>
+                  <el-tag type="warning" v-if="scope.row.is_drop">下架</el-tag>
+                  <el-tag type="success" v-if="scope.row.is_drop==false">上架</el-tag>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
           <div class="tableBottom">
@@ -191,15 +200,18 @@
     <Organization :organizationDialog="organizationDialog" :type="organizeType" @close="closeOrganization"
                   @selectMember="selectMember"></Organization>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-               @clickOperate="clickEvent"></RightMenu>
+               @clickOperateMore="clickEvent"></RightMenu>
+    <MessageCenterDetail :messageCenterDetailDialog="messageCenterDetailDialog" :messageCenterId="messageCenterId"
+                         @close="closeModal"></MessageCenterDetail>
   </div>
 </template>
 <script>
   import RightMenu from '../../../common/rightMenu.vue';    //右键
   import Organization from "../../../common/organization.vue";
+  import MessageCenterDetail from './messageCenterDetail.vue';  //详情
 
   export default {
-    components: {Organization, RightMenu},
+    components: {Organization, RightMenu, MessageCenterDetail},
     data() {
       return {
         rightMenuX: 0,
@@ -233,6 +245,7 @@
         totalReplierNum: 0,
         distributeIds: [],
         messageCenterId: '',
+        messageCenterDetailDialog: false,
       };
     },
     mounted() {
@@ -417,13 +430,35 @@
       //右键菜单
       openContextMenu(row, event) {
         this.messageCenterId = row.id;
-        this.lists = [
-          {
-            clickIndex: "deleteMessageCenter",
-            headIcon: "el-icon-delete",
-            label: "删除"
-          },
-        ];
+        if (row.is_open && !row.is_drop) {
+          //公开 上架
+          this.lists = [
+            { clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除" },
+            { clickIndex: "setOpen", headIcon: "el-icon-delete", label: "非公开", openStatus: 'close' },
+            { clickIndex: "setDrop", headIcon: "el-icon-delete", label: "下架", dropStatus: 'drop' },
+          ];
+        } else if (row.is_open && row.is_drop) {
+          //公开 下架
+          this.lists = [
+            { clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除" },
+            { clickIndex: "setOpen", headIcon: "el-icon-delete", label: "非公开", openStatus: 'close' },
+            { clickIndex: "setDrop", headIcon: "el-icon-delete", label: "上架", dropStatus: 'undrop' },
+          ];
+        } else if (!row.is_open && row.is_drop) {
+          //非公开 下架
+          this.lists = [
+            { clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除" },
+            { clickIndex: "setOpen", headIcon: "el-icon-delete", label: "公开", openStatus: 'open' },
+            { clickIndex: "setDrop", headIcon: "el-icon-delete", label: "上架", dropStatus: 'undrop' },
+          ];
+        } else if (!row.is_open && !row.is_drop) {
+          //非公开 上架
+          this.lists = [
+            { clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除" },
+            { clickIndex: "setOpen", headIcon: "el-icon-delete", label: "公开", openStatus: 'open' },
+            { clickIndex: "setDrop", headIcon: "el-icon-delete", label: "下架", dropStatus: 'drop'},
+          ];
+        }
         let e = event || window.event; //support firefox contextmenu
         this.show = false;
         this.rightMenuX =
@@ -441,12 +476,37 @@
         });
       },
       //右键回调事件
-      clickEvent(index) {
-        switch (index) {
+      clickEvent(val) {
+        switch (val.clickIndex) {
           case 'deleteMessageCenter':
             this.deleteMessageCenter();
             break;
+          case 'setOpen':
+            var openStatus = val.openStatus;
+            this.setOpenDropSatus(openStatus);
+            break;
+          case 'setDrop':
+            var dropStatus = val.dropStatus;
+            this.setOpenDropSatus(dropStatus);
+            break;
         }
+      },
+      setOpenDropSatus(val){
+        this.$http.put(globalConfig.server + 'qa/back/change_status/'+this.messageCenterId, { operation: val }).then((res)=>{
+          if(res.data.code === '70110') {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.getTableData();
+          }else{
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+
+        });
       },
       deleteMessageCenter() {
         this.$confirm("删除后不可恢复, 是否继续?", "提示", {
@@ -475,9 +535,14 @@
           });
         });
       },
-      dblClickTable(row,event){
-
-      }
+      dblClickTable(row, event) {
+        this.messageCenterId = row.id;
+        this.messageCenterDetailDialog = true;
+      },
+      closeModal(val) {
+        this.messageCenterId = '';
+        this.messageCenterDetailDialog = false;
+      },
     },
   };
 </script>
