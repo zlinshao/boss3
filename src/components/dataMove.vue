@@ -693,7 +693,8 @@
               house_id: this.form.house_id
             }).then((res) => {
               if (res.data.code === '30000') {
-                this.details();
+                this.searchCon = '';
+                this.details('');
                 this.$notify.success({
                   title: '成功',
                   message: '操作成功！',
