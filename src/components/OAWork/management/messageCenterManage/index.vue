@@ -1,20 +1,20 @@
 <template>
-  <div>
+  <div @click="show=false" @contextmenu="closeMenu">
     <div>
       <div class="highRanking" style=" position: absolute; top: 120px; right: 20px;">
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
+            <!--<el-form-item>-->
+            <!--<el-input placeholder="标题/内容关键字" v-model="form.search" @keyup.enter.native="search" size="mini"-->
+            <!--clearable>-->
+            <!--<el-button slot="append" icon="el-icon-search" @click="search"></el-button>-->
+            <!--</el-input>-->
+            <!--</el-form-item>-->
+            <!--<el-form-item>-->
+            <!--<el-button type="primary" size="mini" @click="highGrade">高级</el-button>-->
+            <!--</el-form-item>-->
             <el-form-item>
-              <el-input placeholder="标题/内容关键字" v-model="form.search" @keyup.enter.native="search" size="mini"
-                        clearable>
-                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
-              </el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" size="mini" @click="openOrganizationModal('staff')">分发问答</el-button>
+              <el-button type="primary" size="mini" @click="replierManageDialog=true;">分发问答</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -64,38 +64,67 @@
               element-loading-spinner="el-icon-loading"
               element-loading-background="rgba(255, 255, 255, 0)"
               @selection-change="handleSelectionChange"
+              @row-contextmenu='openContextMenu'
+              @row-dblclick="dblClickTable"
               style="width: 100%">
               <el-table-column
                 type="selection"
                 width="65">
               </el-table-column>
               <el-table-column
-                prop="title"
-                label="标题">
-              </el-table-column>
-              <el-table-column
                 prop="create_time"
                 label="创建时间">
               </el-table-column>
               <el-table-column
-                prop="asker"
+                prop="title"
+                label="标题">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.title">{{scope.row.title}}</span>
+                  <span v-else>暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="type.value"
+                label="问题类型">
+              </el-table-column>
+              <el-table-column
+                prop="asker.name"
                 label="提问者">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.is_anonymous">匿名</span>
+                  <span v-else>{{scope.row.asker && scope.row.asker.name}}</span>
+                </template>
               </el-table-column>
               <el-table-column
                 prop="description"
                 label="描述">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.description">{{scope.row.description}}</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop=""
                 label="职位">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.is_anonymous">匿名</span>
+                  <span v-else-if="scope.row.asker.role.length<1">暂无</span>
+                  <span v-for="v in scope.row.asker.role" v-else>{{v.display_name}}&nbsp;&nbsp;&nbsp;</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop=""
                 label="部门">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.is_anonymous">匿名</span>
+                  <span v-else-if="scope.row.asker.org.length<1">暂无</span>
+                  <span v-for="v in scope.row.asker.org" v-else>{{v.name}}&nbsp;&nbsp;&nbsp;</span>
+                </template>
               </el-table-column>
               <el-table-column
-                prop=""
-                label="所属部门">
+                label="被分配部门">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.replier_org.length<1">暂无</span>
+                  <span v-for="v in scope.row.replier_org" v-else>{{v.name}}&nbsp;&nbsp;&nbsp;</span>
+                </template>
               </el-table-column>
             </el-table>
           </div>
@@ -114,23 +143,75 @@
         </div>
       </div>
     </div>
+    <div id="replierManageDialog">
+      <el-dialog :close-on-click-modal="false" :visible.sync="replierManageDialog" title="回复信息" width="45%">
+        <div style="margin-top: 20px;">
+          <el-table
+            :data="tableReplierData"
+            @selection-change="handleSelectionReplierChange"
+            style="width: 100%">
+            <el-table-column
+              type="selection"
+              width="65">
+            </el-table-column>
+            <el-table-column
+              label="部门">
+              <template slot-scope="scope">
+                <span v-if="scope.row.department.name">{{scope.row.department.name}}</span>
+                <span v-else>暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="replier"
+              label="回复人">
+              <template slot-scope="scope">
+                <span v-for="v in scope.row.replier">{{v.name}}&nbsp;&nbsp;&nbsp;</span>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        <div class="tableBottom">
+          <div class="left">
+            <el-pagination
+              @size-change="handleSizeReplierChange"
+              @current-change="handleCurrentReplierChange"
+              :current-page="formReplier.page"
+              :page-size="formReplier.limit"
+              layout="total, prev, pager, next, jumper"
+              :total="totalReplierNum">
+            </el-pagination>
+          </div>
+        </div>
+        <span slot="footer" class="dialog-footer">
+           <el-button size="mini" @click="replierManageDialog = false">取消</el-button>
+           <el-button type="primary" size="mini" @click="distribute">确定</el-button>
+        </span>
+      </el-dialog>
+    </div>
     <Organization :organizationDialog="organizationDialog" :type="organizeType" @close="closeOrganization"
                   @selectMember="selectMember"></Organization>
+    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+               @clickOperate="clickEvent"></RightMenu>
   </div>
 </template>
 <script>
+  import RightMenu from '../../../common/rightMenu.vue';    //右键
   import Organization from "../../../common/organization.vue";
 
   export default {
-    components: {Organization},
+    components: {Organization, RightMenu},
     data() {
       return {
+        rightMenuX: 0,
+        rightMenuY: 0,
+        show: false,
+        lists: [],
         tableData: [],
         form: {
           page: 1,
           limit: 12,
-          search: '',
-          department_id: '',
+          // search: '',
+          // department_id: '',
         },
         totalNum: 0,
         isHigh: false,
@@ -141,10 +222,34 @@
         organizeType: '',
         askAnswerIds: [],  //问答编号
         userIds: '',
+        formReplier: {
+          page: 1,
+          limit: 12,
+        },
+        replierManageDialog: false,
+        tableReplierData: [],
+        tableReplierStatus: ' ',
+        tableReplierLoading: false,
+        totalReplierNum: 0,
+        distributeIds: [],
+        messageCenterId: '',
       };
     },
     mounted() {
       this.getTableData();
+      this.getReplierManageData();
+    },
+    activated() {
+      this.getTableData();
+      this.getReplierManageData();
+    },
+    watch: {
+      replierManageDialog(val) {
+        if (!val) {
+          this.askAnswerIds = [];
+          this.distributeIds = [];
+        }
+      },
     },
     methods: {
       handleSelectionChange(val) {
@@ -153,29 +258,89 @@
           this.askAnswerIds.push(item.id);
         });
       },
+      handleSelectionReplierChange(val) {
+        this.distributeIds = [];
+        val.forEach((item) => {
+          this.distributeIds.push(item.id);
+        });
+      },
       search() {
         this.form.page = 1;
         this.getTableData();
       },
+      getReplierManageData() {
+        this.tableReplierStatus = ' ';
+        this.tableReplierLoading = true;
+        this.$http.get(globalConfig.server + 'qa/replier_manage', {params: this.formReplier}).then((res) => {
+          this.tableReplierLoading = false;
+          if (res.data.code === '70010') {
+            this.tableReplierData = res.data.data;
+            this.totalReplierNum = res.data.meta.num;  //记录总条数
+            if (res.data.data.length < 1) {
+              this.tableReplierStatus = '暂无数据';
+              this.totalReplierNum = 0;
+              this.tableReplierData = [];
+            }
+          } else {
+            this.tableReplierStatus = '暂无数据';
+            this.totalReplierNum = 0;
+            this.tableReplierData = [];
+          }
+        });
+      },
       getTableData() {
         this.tableStatus = ' ';
         this.tableLoading = true;
-        this.$http.get(globalConfig.server + 'ans/ask', {params: this.form}).then((res) => {
+        this.$http.get(globalConfig.server + 'qa/back', {params: this.form}).then((res) => {
           this.tableLoading = false;
-          if (res.data.code === '199200') {
+          if (res.data.code === '70110') {
             this.tableData = res.data.data;
-            this.tableNum = res.data.count;  //记录总条数
+            this.totalNum = res.data.meta.num;  //记录总条数
+            if (res.data.data.length < 1) {
+              this.tableStatus = '暂无数据';
+              this.totalNum = 0;
+              this.tableData = [];
+            }
           } else {
             this.tableStatus = '暂无数据';
-            this.tableNum = 0;
+            this.totalNum = 0;
+            this.tableData = [];
           }
         });
       },
       //分发部门
       distribute() {
-        this.$http.post(globalConfig.server + 'ans/send',{id: this.askAnswerIds, uids: this.userIds}).then((res) => {
+        this.$confirm('确认分配吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
 
+          this.$http.put(globalConfig.server + 'qa/back/distribute', {
+            id: this.askAnswerIds,
+            replier_org_id: this.distributeIds
+          }).then((res) => {
+            if (res.data.code === '70110') {
+              this.replierManageDialog = false;
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.getTableData();
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }).catch(() => {
+          this.$notify.info({
+            title: '提示',
+            message: '已取消分配'
+          });
         });
+
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
@@ -185,11 +350,19 @@
         this.form.page = val;
         this.getTableData();
       },
+      handleSizeReplierChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentReplierChange(val) {
+        console.log(`当前页: ${val}`);
+        this.formReplier.page = val;
+        this.getReplierManageData();
+      },
       openOrganizationModal(val) {
         this.organizationDialog = true;
-        if(val === 'staff'){
+        if (val === 'staff') {
           this.organizeType = 'staff';
-        }else{
+        } else {
           this.organizeType = 'depart';
         }
       },
@@ -198,10 +371,10 @@
         this.organizeType = '';
       },
       selectMember(val) {
-        if(this.organizeType === 'staff'){
+        if (this.organizeType === 'staff') {
           this.userIds = val[0].id;
           this.distribute();
-        }else{
+        } else {
           this.departname = val[0].name;
           this.form.department_id = val[0].id;
         }
@@ -225,6 +398,86 @@
         };
         this.departname = '';
       },
+      //关闭右键菜单
+      closeMenu() {
+        this.show = false;
+      },
+      //右键参数
+      contextMenuParam(event) {
+        let e = event || window.event;
+        this.show = false;
+        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true
+        })
+      },
+      //右键菜单
+      openContextMenu(row, event) {
+        this.messageCenterId = row.id;
+        this.lists = [
+          {
+            clickIndex: "deleteMessageCenter",
+            headIcon: "el-icon-delete",
+            label: "删除"
+          },
+        ];
+        let e = event || window.event; //support firefox contextmenu
+        this.show = false;
+        this.rightMenuX =
+          e.clientX +
+          document.documentElement.scrollLeft -
+          document.documentElement.clientLeft;
+        this.rightMenuY =
+          e.clientY +
+          document.documentElement.scrollTop -
+          document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true;
+        });
+      },
+      //右键回调事件
+      clickEvent(index) {
+        switch (index) {
+          case 'deleteMessageCenter':
+            this.deleteMessageCenter();
+            break;
+        }
+      },
+      deleteMessageCenter() {
+        this.$confirm("删除后不可恢复, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          this.$http.put(globalConfig.server + 'qa/back/delete/' + this.messageCenterId).then((res) => {
+            if (res.data.code === "70110") {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.search();
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }).catch(() => {
+          this.$notify.info({
+            title: "提示",
+            message: "已取消删除"
+          });
+        });
+      },
+      dblClickTable(row,event){
+
+      }
     },
   };
 </script>

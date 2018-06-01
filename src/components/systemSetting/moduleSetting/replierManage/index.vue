@@ -10,9 +10,9 @@
             <!--<el-button slot="append" icon="el-icon-search" @click="search"></el-button>-->
             <!--</el-input>-->
             <!--</el-form-item>-->
-            <el-form-item>
-              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
-            </el-form-item>
+            <!--<el-form-item>-->
+              <!--<el-button type="primary" size="mini" @click="highGrade">高级</el-button>-->
+            <!--</el-form-item>-->
             <el-form-item>
               <el-button type="primary" size="mini" @click="openReplierDialog">
                 <i class="el-icon-plus"></i>新增
@@ -310,6 +310,7 @@
       selectMember(val) {
         if (this.organizeType === 'staff') {
           let names = [];
+          this.replierForm.replier_id = [];
           val.forEach((item) => {
             this.replierForm.replier_id.push(item.id);
             names.push(item.name);
@@ -382,10 +383,12 @@
             if (res.data.data.length < 1) {
               this.tableStatus = '暂无数据';
               this.totalNum = 0;
+              this.tableData = [];
             }
           } else {
             this.tableStatus = '暂无数据';
             this.totalNum = 0;
+            this.tableData = [];
           }
         });
       },
