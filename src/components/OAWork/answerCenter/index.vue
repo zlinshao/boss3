@@ -5,8 +5,8 @@
         <div class="highSearch">
           <el-form :model="form" :inline="true" size="small">
             <el-form-item>
-              <el-input v-model="form.search" placeholder="搜索问题" clearable>
-                <el-button @click="searchx()" slot="append" icon="el-icon-search"></el-button>
+              <el-input v-model="form.search" placeholder="搜索问题" @keyup.enter.native="searchx" clearable>
+                <el-button @click="searchx" slot="append" icon="el-icon-search" ></el-button>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -21,16 +21,21 @@
         <div class="anstitle">{{item.title}}</div>
         <div class="publishComment">
           <div class="portraito">
-            <img :src="item.asker.avatar" v-if="item && item.asker && item.asker.avatar">
+            <img :src="item.asker.avatar" v-if="item && item.asker && item.asker.avatar && !item.is_anonymous">
             <img src="../../../assets/images/head.png" v-else>
           </div>
           <div class="comments">
             <div class="staff_name">
               <div>
-                <span style="color:#83a0fc">{{item && item.asker && item.asker.name}}</span>&nbsp;&nbsp;
-                <span>
-                  <span v-if="item && item.asker && item.asker.org.length>0" v-for="v in item.asker.org">&nbsp;{{v.name}}&nbsp;</span>—
+                <span v-if="!item.is_anonymous" style="color:#83a0fc">{{item && item.asker && item.asker.name}}</span>&nbsp;&nbsp;
+                <span v-if="item.is_anonymous">匿名</span>
+                <span v-if="!item.is_anonymous">
+                  <span v-if="item && item.asker && item.asker.org.length>0" v-for="v in item.asker.org">&nbsp;{{v.name}}&nbsp;</span>
+                  —
                   <span v-if="item && item.asker && item.asker.role.length>0" v-for="v in item.asker.role">&nbsp;{{v.display_name}}&nbsp;</span>
+                  <span>{{item.create_time}}</span>
+                </span>
+                <span v-if="item.is_anonymous">
                   <span>{{item.create_time}}</span>
                 </span>
               </div>
@@ -38,7 +43,10 @@
           </div>
         </div>
         <div class="question">{{item.description}}</div>
-        <el-button type="primary" style="margin: 10px 0 20px 10px;" @click="write(item.id)" size="small">写回答</el-button>
+        <el-button type="primary" style="margin: 10px 0 20px 10px;" @click="write(item.id)" size="small">写回答
+          <i class="el-icon-arrow-down" v-if="!answerId"></i>
+          <i class="el-icon-arrow-up" v-if="answerId"></i>
+        </el-button>
         <div class="publishComment" v-show="item.id == answerId">
           <div class="portrait">
             <img :src="landholder.avatar" v-if="landholder && landholder.avatar">
@@ -68,10 +76,10 @@
 
         <div style="height:50px; color:#83a0fc; line-height:50px; margin:0 10px;">
           <span style="float:left;">{{item.answers_count}}条回答</span>
-          <span @click="lookAll(item.id, index)" v-if="item.answers_count>1"
+          <span @click="lookAll(item.id)" v-if="item.answers_count>1"
                 style="cursor: pointer;float:right; margin-right:6px;">全部显示</span>
         </div>
-        <div>
+        <div style="background: #f4f6fc;border-radius: 8px;">
           <div class="commentOn" v-if="item && item.first_answer && item.first_answer.staff && item.first_answer">
             <div class="portrait">
               <img :src="item.first_answer.staff.avatar" v-if="item.first_answer.staff.avatar">
@@ -131,7 +139,7 @@
             </div>
           </div>
           <div v-for="(value,index) in answerDetail"
-               v-if="answerDetail.length> 0 && answerIdShow==item.id">
+               v-if="answerDetail.length> 0 && answerIdShow==item.id && index!=0">
             <div class="commentOn">
               <div class="portrait">
                 <img :src="value.staff.avatar" v-if="value.staff.avatar">
@@ -310,26 +318,34 @@
       },
       //写回答
       write(id) {
+        if(id === this.answerId){
+          this.answerId = '';
+          return;
+        }
         this.answerId = id;
       },
       //显示所有回答
-      lookAll(id, num) {
+      lookAll(id) {
         this.answerIdShow = id;
         // if (num >= 0) {
         //   this.questions[num].first_answer = {};
         // }
 
-        for (var i = 0; i < this.questions.length; i++) {
-          if (this.questions[i].id === id) {
-            this.questions[i].first_answer = {};
-            console.log(JSON.stringify(this.questions[i].first_answer));
-          }
-        }
+        // for (var i = 0; i < this.questions.length; i++) {
+        //   if (this.questions[i].id === id) {
+        //     this.questions[i].first_answer = {};
+        //   }
+        // }
         this.$http.get(globalConfig.server + 'qa/front/answer?question_id=' + id).then((res) => {
           if (res.data.code === '70310') {
             this.answerDetail = res.data.data;
           } else {
             this.answerDetail = [];
+            this.$notify({
+              title: "警告",
+              message: res.data.msg,
+              type: "warning"
+            });
           }
         });
       },
@@ -344,6 +360,11 @@
               this.commentDetail = res.data.data;
             } else {
               this.commentDetail = [];
+              this.$notify({
+                title: "警告",
+                message: res.data.msg,
+                type: "warning"
+              });
             }
           });
         } else {
@@ -360,6 +381,11 @@
               this.commentDetail = res.data.data;
             } else {
               this.commentDetail = [];
+              this.$notify({
+                title: "警告",
+                message: res.data.msg,
+                type: "warning"
+              });
             }
           });
         } else {
@@ -385,6 +411,11 @@
           } else {
             this.questions = [];
             this.paging = 0;
+            this.$notify({
+              title: "警告",
+              message: res.data.msg,
+              type: "warning"
+            });
           }
         });
       },
@@ -418,7 +449,7 @@
           if (res.data.code === "70310") {
             this.myData(1);
             // setTimeout(() => {
-            //   this.lookAll(id, 0);
+            //   this.lookAll(id);
             // }, 1);
             this.$notify({
               title: "成功",
@@ -658,11 +689,13 @@
     overflow: hidden;
 
     .comment_box {
-      background: #f4f6fc;
-      border: 1px #eee solid;
+      /*background: #f4f6fc;*/
+      /*border: 1px #eee solid;*/
       border-radius: 5px;
       margin-bottom: 15px;
+      margin: 15px;
       padding: 10px;
+      box-shadow: 0px 0px 5px 0px #6a8dfbbd;
       .submitButt {
         text-align: right;
       }
@@ -719,7 +752,7 @@
       }
       .commentOn {
         padding: 15px;
-        width: 97%;
+        width: 95%;
         margin-left: 2%;
         border-top: 1px solid #eeeeee;
         @include flex;
