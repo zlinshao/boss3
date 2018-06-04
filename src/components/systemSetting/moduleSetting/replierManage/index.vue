@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div  @click="show=false" @contextmenu="closeMenu">
     <div>
       <div class="highRanking" style=" position: absolute; top: 120px; right: 20px;">
         <div class="highSearch">
