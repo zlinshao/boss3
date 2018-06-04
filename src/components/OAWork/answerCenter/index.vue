@@ -5,7 +5,7 @@
         <div class="highSearch">
           <el-form :model="form" :inline="true" size="small">
             <el-form-item>
-              <el-input v-model="keywords" placeholder="搜索问题" clearable>
+              <el-input v-model="form.search" placeholder="搜索问题" clearable>
                 <el-button @click="searchx()" slot="append" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
@@ -68,7 +68,7 @@
 
         <div style="height:50px; color:#83a0fc; line-height:50px; margin:0 10px;">
           <span style="float:left;">{{item.answers_count}}条回答</span>
-          <span @click="lookAll(item.id, index)"
+          <span @click="lookAll(item.id, index)" v-if="item.answers_count>1"
                 style="cursor: pointer;float:right; margin-right:6px;">全部显示</span>
         </div>
         <div>
@@ -96,7 +96,7 @@
               </div>
             </div>
           </div>
-          <div v-show="commentList">
+          <div v-show="commentList" v-if="item.first_answer.id===commentId">
             <el-form size="small" style="margin-left: 4%;width: 94%;">
               <el-form-item>
                 <el-input type="textarea" :rows="3" v-model="commentContent" placeholder="请输入评论内容"></el-input>
@@ -130,9 +130,8 @@
               </div>
             </div>
           </div>
-
           <div v-for="(value,index) in answerDetail"
-               v-if="answerDetail.length> 0 ">
+               v-if="answerDetail.length> 0 && answerIdShow==item.id">
             <div class="commentOn">
               <div class="portrait">
                 <img :src="value.staff.avatar" v-if="value.staff.avatar">
@@ -192,8 +191,9 @@
               </div>
             </div>
           </div>
-          <div style="height:50px; color:#83a0fc; line-height:50px; margin:0 50px;">
-            <span @click="answerDetail=[];myData(1)" style="cursor: pointer;float:right; margin-right:6px;">收起</span>
+          <div style="height:50px; color:#83a0fc; line-height:50px; margin:30px 10px;">
+            <span @click="answerDetail=[];myData(1);" v-if="answerIdShow"
+                  style="cursor: pointer;float:right; margin-right:6px;">收起</span>
           </div>
         </div>
       </div>
@@ -260,8 +260,8 @@
         paging: 0,
         questions: [],
         page: 1,
-        keywords: '',
         form: {
+          search: '',
           title: '',
           description: '',
           is_anonymous: false,
@@ -281,6 +281,7 @@
         commentContent: '',
         commentList: false,
         commentList2: false,
+        answerIdShow: '',
       };
     },
     mounted() {
@@ -289,10 +290,11 @@
       this.landholder = JSON.parse(localStorage.personal);
     },
     watch: {
-      keywords(val) {
-        console.log(val)
-        if (val == '') {
-          this.myData(1);
+      'form.search': {
+        handler(val, OldVal) {
+          if (!val) {
+            this.myData(1);
+          }
         }
       }
     },
@@ -312,8 +314,16 @@
       },
       //显示所有回答
       lookAll(id, num) {
-        if (num >= 0) {
-          this.questions[num].first_answer = {};
+        this.answerIdShow = id;
+        // if (num >= 0) {
+        //   this.questions[num].first_answer = {};
+        // }
+
+        for (var i = 0; i < this.questions.length; i++) {
+          if (this.questions[i].id === id) {
+            this.questions[i].first_answer = {};
+            console.log(JSON.stringify(this.questions[i].first_answer));
+          }
         }
         this.$http.get(globalConfig.server + 'qa/front/answer?question_id=' + id).then((res) => {
           if (res.data.code === '70310') {
@@ -364,15 +374,10 @@
         this.myData(1);
       },
       myData(val) {
+        this.answerIdShow = '';
         this.page = val;
         // this.loading = true;
-        this.$http.get(this.urls + "qa/front/question", {
-          params: {
-            page: this.page,
-            limit: 15,
-            keywords: this.keywords
-          }
-        }).then(res => {
+        this.$http.get(this.urls + "qa/front/question", {params: this.form}).then(res => {
           // this.loading = false;
           if (res.data.code === "70210") {
             this.questions = res.data.data;
@@ -412,9 +417,9 @@
         this.$http.post(this.urls + "qa/front/answer", {question_id: id, content: this.content}).then(res => {
           if (res.data.code === "70310") {
             this.myData(1);
-            setTimeout(()=>{
-              this.lookAll(id,0);
-            },1);
+            // setTimeout(() => {
+            //   this.lookAll(id, 0);
+            // }, 1);
             this.$notify({
               title: "成功",
               message: res.data.msg,
