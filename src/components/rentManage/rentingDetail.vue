@@ -865,10 +865,31 @@
       </div>
     </div>
 
-    <div class="operatePanel" style="position: fixed;bottom: 120px;right: 80px;" @click="isPanel = !isPanel">
-      <!--<i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="el-icon-circle-plus"></i>-->
-      <i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="iconfont icon-bianji--"></i>
+
+    <div class="operatePanel" style="position: fixed;bottom: 120px;right: 80px;" v-if="!isModal"
+         @click="isModal = true">
+      <i style="color: #6a8dfb;font-size: 40px;opacity: .8;cursor: pointer" class="el-icon-circle-plus"></i>
     </div>
+    <transition name="el-zoom-in-bottom">
+      <div class="operatePanel" style="position: fixed;bottom: 120px;right: 80px;z-index: 10000;" v-if="isModal"
+           @click="isModal = false">
+        <div class="buttonItem" @click="isPanel = true" title="添加备忘">
+          <i style="font-size: 20px;color: #FFFFFF;line-height: 38px" class="iconfont icon-bianji--"></i>
+        </div>
+        <div class="buttonItem" @click="memoDialog = true" title="备忘记录">
+          <i style="font-size: 20px;color: #FFFFFF;line-height: 38px" class="el-icon-document"></i>
+        </div>
+        <div class="buttonItem" @click="approvalHistoryDialog = true" title="审批历史详情">
+          <i style="font-size: 20px;color: #FFFFFF;line-height: 38px" class="iconfont icon-chakanlishixiangqing"></i>
+        </div>
+        <div class="buttonItem" @click="isModal = false">
+          <i style="font-size: 20px;color: #FFFFFF;line-height: 38px" class="el-icon-minus"></i>
+        </div>
+      </div>
+    </transition>
+    <div style="position: fixed;width: 100%;height: 100%;top:0;right:0;left:0;bottom:0;
+                z-index: 9999;background: rgba(255,255,255,.3)" @click="isModal = false" v-if="isModal"></div>
+
     <div class="panelContent" id="panelContent" :class="{'div_fade': isPanel}">
       <div class="panel_header">
         <div style="color: #6a8dfb;font-size: 16px">
@@ -904,24 +925,34 @@
         </el-form>
       </div>
       <div style="text-align: center;clear: both;">
-        <el-button size="mini" type="primary" @click="noteSave(1)">发 送</el-button>&nbsp;&nbsp;&nbsp;
-        <el-button size="mini" type="primary" @click="noteSave(0)">保 存</el-button>
+        <el-button size="mini" :disabled="!canSendStatus" type="primary" @click="noteSave(1)">发 送</el-button>&nbsp;&nbsp;&nbsp;
+        <el-button size="mini" :disabled="!canSendStatus" type="primary" @click="noteSave(0)">保 存</el-button>
       </div>
     </div>
     <Organization :organizationDialog="organizationDialog" :type="type" @close="closeOrganization"
                   @selectMember="selectMember"></Organization>
+
+    <MemorandumRecord :memoDialog="memoDialog" is_rent="1" :selectContractId="contract_id" @close="closeOrganization"></MemorandumRecord>
+    <ApprovalHistory :approvalHistory="approvalHistoryDialog" is_rent="1" :contractId="contract_id" @close="closeOrganization"></ApprovalHistory>
+
   </div>
 </template>
 
 <script>
   import Organization from '../common/organization.vue';
+  import MemorandumRecord from './components/memorandumRecord'
+  import ApprovalHistory from './components/approvalHistory'
+
   export default {
-    components: {Organization},
+    components: {Organization,MemorandumRecord,ApprovalHistory},
     data() {
       return {
         steps: 0,
         sizeForm: {},
         isPanel: false,
+        isModal: false,
+        memoDialog: false,
+        approvalHistoryDialog: false,
         customersInfo: [],
         contractInfo: [],
         financeInfo: [],
@@ -945,6 +976,9 @@
           is_rent: 1,
           is_send: null,
         },
+        history_content : '',   //历史备忘
+        canSendStatus : false,
+
         receiverNames: '',
         loadingStatus: true,
         reBackData: [],
@@ -1004,9 +1038,12 @@
       // 自动获取上一条备忘
       isPanel(val) {
         if (val) {
+          this.history_content = '';
+          this.params.content = '';
           this.$http.get(globalConfig.server + 'lease/note?is_rent=1&contract_id=' + this.contract_id).then((res) => {
             if (res.data.code === '60510') {
               if (res.data.data) {
+                this.history_content = res.data.data.content;
                 this.params.content = res.data.data.content;
                 if (res.data.data.receiver_id) {
                   this.params.receiver_id = [];
@@ -1021,6 +1058,12 @@
               }
             }
           })
+        }
+      },
+      'params.content':{
+        deep:true,
+        handler(val,oldVal){
+          this.canSendStatus = val !== this.history_content;
         }
       }
     },
@@ -1203,6 +1246,7 @@
           } else {
             this.$notify.warning({
               title: '警告',
+              duration : 1000,
               message: res.data.msg
             });
           }
@@ -1220,6 +1264,8 @@
       },
       closeOrganization() {
         this.organizationDialog = false;
+        this.memoDialog = false;
+        this.approvalHistoryDialog = false;
       },
       //发送/保存备忘
       noteSave(val){
@@ -1228,12 +1274,14 @@
           if (res.data.code === '60510') {
             this.$notify.success({
               title: '成功',
+              duration : 1000,
               message: res.data.msg
             });
             this.isPanel = false;
           } else {
             this.$notify.warning({
               title: '警告',
+              duration : 1000,
               message: res.data.msg
             });
           }
@@ -1279,6 +1327,7 @@
           }else {
             this.$notify.warning({
               title:'警告',
+              duration : 1000,
               message:res.data.msg
             })
           }
@@ -1415,12 +1464,14 @@
             if (res.data.code === '60610') {
               this.$notify.success({
                 title: '成功',
+                duration : 1000,
                 message: res.data.msg,
               });
               this.getContractDetail();
             } else {
               this.$notify.warning({
                 title: '警告',
+                duration : 1000,
                 message: res.data.msg,
               });
             }
@@ -1428,6 +1479,7 @@
         }).catch(() => {
           this.$notify.info({
             title: '消息',
+            duration : 1000,
             message: '已取消操作',
           })
         });
@@ -1601,6 +1653,17 @@
           }
         }
       }
+    }
+
+    .buttonItem {
+      width: 38px;
+      height: 38px;
+      margin-top: 15px;
+      background: #6a8dfb;
+      opacity: 0.8;
+      border-radius: 50%;
+      cursor: pointer;
+      text-align: center;
     }
   }
 </style>

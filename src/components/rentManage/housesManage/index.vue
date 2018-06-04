@@ -164,13 +164,7 @@
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
-              <el-table-column
-                label="房屋特色">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.house_feature">{{matchDictionary(scope.row.house_feature)}}</span>
-                  <span v-else="">/</span>
-                </template>
-              </el-table-column>
+
               <el-table-column
                 label="建议价格">
                 <template slot-scope="scope">
@@ -178,6 +172,23 @@
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
+
+              <el-table-column
+                label="房屋情况">
+                <template slot-scope="scope">
+                  <div v-if="scope.row.house_res">
+                    <span v-if="scope.row.house_res.is_clean">干净</span>
+                    <span v-else>不干净</span>
+                    /
+                    <span v-if="scope.row.house_res.is_fill">齐全</span>
+                    <span v-else>不齐全</span>
+                  </div>
+                  <div v-else>
+                    /
+                  </div>
+                </template>
+              </el-table-column>
+
               <el-table-column
                 label="房屋状态">
                 <template slot-scope="scope">
@@ -515,7 +526,6 @@
       openOrganizationModal(val){
         this.organizationDialog = true;
         this.organizationType = val;
-        this.type = 'depart';
         this.length = 1;
       },
 
@@ -527,7 +537,7 @@
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            this.dispatchHouse(val[0].id)
+            this.dispatchHouse(val)
           }).catch(() => {
             this.$notify.success({
               title: '消息',
@@ -540,10 +550,15 @@
         }
       },
       //分配房屋
-      dispatchHouse(departId){
+      dispatchHouse(itemParams){
         let object = {};
         let update = {};
-        let org = {org_id: departId};
+        let org = {};
+        if(itemParams[0].hasOwnProperty('avatar')){
+           org = {org_id: itemParams[0].org[0].id,user_id:itemParams[0].id};
+        }else {
+           org = {org_id: itemParams[0].id};
+        }
         this.operateArray.forEach((item) => {
           object[item] = org;
         });
@@ -716,6 +731,13 @@
       height: 30px;
       line-height: 30px;
       text-align: center;
+      border-radius: 4px;
+      color: #ffffff;
+    }
+    .label_inline{
+      display: inline-block;
+      margin-right: 5px;
+      padding: 5px;
       border-radius: 4px;
       color: #ffffff;
     }

@@ -19,13 +19,13 @@
             </el-col>
           </el-row>
           <el-row>
-            <el-col :span="12">
-              <el-form-item label="房屋特色">
-                <el-select clearable placeholder="请选择房屋特色" v-model="formInline.house_feature" value="">
-                  <el-option v-for="item in house_feature_dic" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
+            <!--<el-col :span="12">-->
+              <!--<el-form-item label="房屋特色">-->
+                <!--<el-select clearable placeholder="请选择房屋特色" v-model="formInline.house_feature" value="">-->
+                  <!--<el-option v-for="item in house_feature_dic" :label="item.dictionary_name" :value="item.id" :key="item.id"></el-option>-->
+                <!--</el-select>-->
+              <!--</el-form-item>-->
+            <!--</el-col>-->
             <el-col :span="12">
               <el-form-item label="建议价格">
                 <el-input placeholder="请输入内容" v-model="formInline.suggest_price"></el-input>

@@ -133,11 +133,11 @@ import ManagerSetting from '../components/systemSetting/managerSetting/index.vue
 
 
 //喜报管理
-import CollectBulletin from '../components/bulletin/collectBulletin/index.vue'            //收房喜报
-import RentBulletin from '../components/bulletin/rentBulletin/index.vue'                  //租房喜报
-import FinalBalance from '../components/bulletin/finalBalance/index.vue'                  //尾款报备
-import SpecialBalance from '../components/bulletin/specialBalance/index.vue'              //特殊情况报备
-import Auditing from '../components/bulletin/auditing/index.vue'                          //审核
+// import CollectBulletin from '../components/bulletin/collectBulletin/index.vue'            //收房喜报
+// import RentBulletin from '../components/bulletin/rentBulletin/index.vue'                  //租房喜报
+// import FinalBalance from '../components/bulletin/finalBalance/index.vue'                  //尾款报备
+// import SpecialBalance from '../components/bulletin/specialBalance/index.vue'              //特殊情况报备
+// import Auditing from '../components/bulletin/auditing/index.vue'                          //审核
 
 
 // 业绩工资
@@ -177,11 +177,14 @@ import ImproveImgInfo from '../components/pictureManage/improveImage.vue'       
 import PictureDetail from '../components/pictureManage/pictureDetail.vue';               //相册详情
 import VisitRecord from '../components/rentManage/components/visitRecord.vue';               //回访记录
 import IncompleteRecord from '../components/rentManage/datumMessage/contractManage/incompleteRecord.vue'; //合同不齐记录
+import ExamineRecord from '../components/rentManage/datumMessage/contractManage/examineRecord'        //合同审批报表
 
 import ReportManage from '../components/reportManage/index.vue'
 import BeforeExam from '../components/lejiaCollege/OnlineExam/beforeExam.vue'  //开考之前
 import BeforeNaire from '../components/lejiaCollege/OnlineExam/beforeNaire.vue'  //开考之前
 import MyNaire from '../components/OAWork/questionnaire/myNaire/myNaire.vue'  //我的调查列表
+
+import DataMove from '../components/dataMove.vue'
 
 Vue.use(Router);
 
@@ -239,14 +242,23 @@ export default new Router({
       name: '',
       hidden: true
     },
-
     {
       path: '/',
       component: Index,
       hidden: true,
       name: '',
       children: [
-        {path: '/main', component: Main, name: '公司门户', icon: 'iconfont icon-shouyemenhu'},
+        {path: '/dataMove', component: DataMove, name: '数据迁移', icon: 'iconfont icon-daoru'},
+      ]
+    },
+    {
+      path: '/',
+      component: Index,
+      hidden: true,
+      name: '',
+      children: [
+        // {path: '/main', component: Main, name: '公司门户', icon: 'iconfont icon-shouyemenhu'},
+        {path: '/main', component: Converge, name: '员工广场', icon: "iconfont icon-shouyemenhu"},
       ]
     },
 
@@ -279,6 +291,7 @@ export default new Router({
         {path: '/pictureDetail', component: PictureDetail, name: "相册详情",},
         {path: '/visitRecord', component: VisitRecord, name: "回访记录"},
         {path: '/incompleteRecord', component: IncompleteRecord, name: "合同补齐记录"},
+        {path: '/examineRecord', component: ExamineRecord, name: "合同审批报表"},
         {path: '/configExam', component: ConfigExam, name: "管理试卷"},
         {path: '/batchQuestions', component: BatchQuestions, name: "批量导入试题"},
         {path: '/myselfQuestions', component: MyselfQuestions, name: "自己录入"},
@@ -371,7 +384,7 @@ export default new Router({
         {path: '/wholeRentManage', component: WholeRentManage, name: '整租管理',},
         // {path: '/jointRentManage', component: JointRentManage, name: '合租管理',},
         // {path: '/datumMessage', component: DatumMessage, name: '资料管理',},
-        {path: '/clientManage', component: ClientManage, name: '客户管理',},
+        // {path: '/clientManage', component: ClientManage, name: '客户管理',},
         {path: '/contractManage', component: ContractManage, name: '合同管理',},
         // {path: '/workOrderManage', component: WorkOrderManage, name: '工单管理',},
         // {

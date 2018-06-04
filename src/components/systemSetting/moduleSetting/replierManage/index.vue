@@ -1,5 +1,5 @@
 <template>
-  <div @click="show=false" @contextmenu="closeMenu">
+  <div>
     <div>
       <div class="highRanking" style=" position: absolute; top: 120px; right: 20px;">
         <div class="highSearch">
@@ -10,9 +10,9 @@
             <!--<el-button slot="append" icon="el-icon-search" @click="search"></el-button>-->
             <!--</el-input>-->
             <!--</el-form-item>-->
-            <!--<el-form-item>-->
-              <!--<el-button type="primary" size="mini" @click="highGrade">高级</el-button>-->
-            <!--</el-form-item>-->
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+            </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="openReplierDialog">
                 <i class="el-icon-plus"></i>新增

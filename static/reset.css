@@ -419,4 +419,8 @@ ul.el-menu.el-menu--inline {
 #lookNaire .questionDiv .el-progress--text-inside .el-progress-bar {
   padding: 8px 0; }
 
+#contrastDialog .el-dialog__wrapper .el-dialog .el-dialog__body .scroll_bar {
+  height: 580px !important;
+  max-height: 580px !important; }
+
 /*# sourceMappingURL=reset.css.map */

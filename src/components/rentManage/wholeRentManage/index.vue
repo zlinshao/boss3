@@ -295,7 +295,7 @@
               <el-table-column
                 label="所属部门">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.department_name">{{scope.row.department_name}}</span>
+                  <span v-if="scope.row.department && scope.row.department.name">{{scope.row.department.name}}</span>
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
@@ -490,7 +490,7 @@
               <el-table-column
                 label="所属部门">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.department_name">{{scope.row.department_name}}</span>
+                  <span v-if="scope.row.department && scope.row.department.name">{{scope.row.department.name}}</span>
                   <span v-else="">/</span>
                 </template>
               </el-table-column>
@@ -928,14 +928,13 @@
 
     watch: {
       collectHouseId(val) {
-        if (val) {
-          this.rentParams.page = 1;
-          this.getRentData();
-        } else {
-          this.rentingData = [];
-          this.rentTotalNum = 0;
-          this.rentContractId = '',
+        this.rentParams.page = 1;
+        this.rentingData = [];
+        this.rentTotalNum = 0;
+        this.rentContractId = '';
           this.rentStatus = '暂未出租';
+        if (val) {
+          this.getRentData();
         }
       }
     },
