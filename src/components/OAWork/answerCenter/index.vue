@@ -80,7 +80,7 @@
                 style="cursor: pointer;float:right; margin-right:6px;">全部显示</span>
 
           <div style="height:50px; color:#83a0fc; line-height:50px; margin:0px 10px;"
-               v-if="answerIdShow==item.id && answerDetail.length>1">
+               v-if="answerDetail.length>1">
             <span @click="answerDetail=[]"
                   style="cursor: pointer;float:right; margin-right:6px;">收起</span>
           </div>

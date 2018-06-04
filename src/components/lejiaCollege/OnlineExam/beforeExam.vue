@@ -61,7 +61,7 @@
     },
     activated() {
       this.examId = '';
-      this.confirmArrival = JSON.parse(localStorage.getItem('confirmArrival'));
+      this.confirmArrival = JSON.parse(localStorage.getItem('confirmArrivals'));
       this.getQueryData();
       clearTimeout(this.timeClear);
       clearTimeout(this.examDataTime);
@@ -144,7 +144,7 @@
               examIds = this.confirmArrival;
             }
             examIds.push(this.examData.id);
-            localStorage.setItem('confirmArrival', JSON.stringify(examIds));  //保存已到场的考试id
+            localStorage.setItem('confirmArrivals', JSON.stringify(examIds));  //保存已到场的考试id
             this.$router.push({path: '/answerExam', query: {id: id}});
           } else if (res.data.code === '30003') {
             this.showType = 'third';

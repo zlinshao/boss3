@@ -253,7 +253,7 @@
       clearTimeout(this.timeClear);
       this.getQueryData();
       this.getPaperData();
-      this.confirmArrival = localStorage.getItem('confirmArrival');  //check_in签到状态考试id数组
+      this.confirmArrival = localStorage.getItem('confirmArrivals');  //check_in签到状态考试id数组
       this.clockSubmit();
       this.timeOut = setTimeout(() => {
         clearTimeout(this.timeClear);
@@ -398,7 +398,7 @@
             localStorage.removeItem("answers_" + this.examId);
             let examIds = JSON.parse(this.confirmArrival);
             examIds.splice(examIds.indexOf(this.examId) ,1);
-            localStorage.setItem('confirmArrival', JSON.stringify(examIds));  //保存已到场的考试id
+            localStorage.setItem('confirmArrivals', JSON.stringify(examIds));  //保存已到场的考试id
           } else {
             this.$notify.warning({
               title: '警告',
