@@ -70,12 +70,12 @@
 
       </div>
     </el-dialog>
-    <ReportDetail :module="reportDetailDialog" :ids="reportId" @close="closeModal"></ReportDetail>
+    <ReportDetail :module="reportDetailDialog" :reportId="reportId" @close="closeModal"></ReportDetail>
   </div>
 </template>
 
 <script>
-  import ReportDetail from '../../../OAWork/examineAndApprove/components/reportDetail'
+  import ReportDetail from '../../../reportManage/components/editReportDetail'
   export default {
     props:['houseId','activeName','all_dic',],
     components:{ReportDetail},

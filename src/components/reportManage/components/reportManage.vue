@@ -63,7 +63,7 @@
                 label="部门">
                 <template slot-scope="scope">
                   <span v-if="scope.row.flow.user">
-                    <span v-for="item in scope.row.user.org">{{item.name}}&nbsp;</span>
+                    <span v-for="item in scope.row.flow.user.org">{{item.name}}&nbsp;</span>
                   </span>
                   <span v-else="">/</span>
                 </template>

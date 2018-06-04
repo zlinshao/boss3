@@ -749,13 +749,13 @@
                                    @close='closeFrame'></MiscellaneousExpensesOfficial>
 
     <!--报备详情-->
-    <ReportDetail :module="reportModule" :ids="reportID" @close="closeFrame"></ReportDetail>
+    <ReportDetail :module="reportModule" :reportId="reportID" @close="closeFrame"></ReportDetail>
   </div>
 </template>
 
 <script>
 
-  import ReportDetail from './components/reportDetail.vue'          //报备详情
+  import ReportDetail from '../../reportManage/components/editReportDetail'          //报备详情
 
   import Frames from './comments/frames.vue'
   import Lisu from './comments/lisu.vue'

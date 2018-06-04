@@ -55,11 +55,11 @@
                 <div v-for="(val,key) in aboutReportData" @click="signSP(key,$event)">
                   <div v-if="printScreen.indexOf(key) === -1">
                     <el-form-item v-if="!Array.isArray(val)" :label="key+' : '">
-                      <div class="special" :class="{theSameBack:theSamePoint===key}" v-if="key !== '房屋类型'">{{val}}</div>
-                      <div class="special" :class="{theSameBack:theSamePoint===key}" v-if="key === '房屋类型'">{{val.name}}</div>
+                      <div class="special" :class="{theSameBack_:theSamePoint===key}" v-if="key !== '房屋类型'">{{val}}</div>
+                      <div class="special" :class="{theSameBack_:theSamePoint===key}" v-if="key === '房屋类型'">{{val.name}}</div>
                     </el-form-item>
                     <el-form-item v-if="Array.isArray(val)" :label="key+' : '">
-                      <div class="special" :class="{theSameBack:theSamePoint===key}">
+                      <div class="special" :class="{theSameBack_:theSamePoint===key}">
                         <span v-if="key === '定金和收款方式' || key === '补交定金和收款方式'" v-for="item in val">{{item}}</span>
                         <span v-else>
                         <span style="margin-right: 20px;color: #409EFF">{{item.msg}}</span>
@@ -70,7 +70,7 @@
                   </div>
                   <div v-else>
                     <el-form-item :label="key+' : '">
-                      <div class="imgs special" :class="{theSameBack:theSamePoint===key}">
+                      <div class="imgs special" :class="{theSameBack_:theSamePoint===key}">
                       <span v-for="img in val">
                         <img data-magnify="" data-caption="图片查看器" :data-src="img.uri" :src="img.uri" v-if="!img.is_video">
                         <video :src="img.uri" controls v-if="img.is_video" width="140px" height="80px"></video>
@@ -177,8 +177,14 @@
   }
 
   .theSameBack{
-    border:1px solid #fb4699;
+    background:#6a8dfb;
     box-sizing: border-box;
+    color: #FFFFFF;
+  }
+  .theSameBack_{
+    background:#fb4699;
+    box-sizing: border-box;
+    color: #FFFFFF;
   }
   .self_title{
     &:before{
