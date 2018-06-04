@@ -76,8 +76,14 @@
 
         <div style="height:50px; color:#83a0fc; line-height:50px; margin:0 10px;">
           <span style="float:left;">{{item.answers_count}}条回答</span>
-          <span @click="lookAll(item.id)" v-if="item.answers_count>1"
+          <span @click="lookAll(item.id)" v-if="item.answers_count>1 && answerDetail.length<1"
                 style="cursor: pointer;float:right; margin-right:6px;">全部显示</span>
+
+          <div style="height:50px; color:#83a0fc; line-height:50px; margin:0px 10px;"
+               v-if="answerIdShow==item.id && answerDetail.length>1">
+            <span @click="answerDetail=[]"
+                  style="cursor: pointer;float:right; margin-right:6px;">收起</span>
+          </div>
         </div>
         <div style="background: #f4f6fc;border-radius: 8px;">
           <div class="commentOn" v-if="item && item.first_answer && item.first_answer.staff && item.first_answer">
@@ -199,10 +205,10 @@
               </div>
             </div>
           </div>
-          <div style="height:50px; color:#83a0fc; line-height:50px; margin:30px 10px;" v-if="answerIdShow">
-            <span @click="answerDetail=[];myData(1);"
-                  style="cursor: pointer;float:right; margin-right:6px;">收起</span>
-          </div>
+          <!--<div style="height:50px; color:#83a0fc; line-height:50px; margin:30px 10px;" v-if="answerIdShow">-->
+          <!--<span @click="answerDetail=[];myData(1);"-->
+          <!--style="cursor: pointer;float:right; margin-right:6px;">收起</span>-->
+          <!--</div>-->
         </div>
       </div>
       <div style="height: 750px;" class="no_data" v-if="questions.length<1">
@@ -257,7 +263,7 @@
         </div>
         <div style="border-top:1px #eee solid">
           <el-button @click="confirmAdd" type="primary"
-                     style="margin-top:30px;margin-left:40%;width:126px; height:32px;background-color:#6a8dfb; border-color:#6a8dfb; line-height:0px;">
+                     style="margin-top:30px;margin-left:40%;width:126px; height:32px;background-color:#6a8dfb; border-color:#6a8dfb; line-height:0px;" :disabled="disabledBtn">
             提交问题
           </el-button>
         </div>
@@ -297,6 +303,7 @@
         commentList: false,
         commentList2: false,
         answerIdShow: '',
+        disabledBtn: false,
       };
     },
     mounted() {
@@ -311,7 +318,15 @@
             this.myData(1);
           }
         }
-      }
+      },
+      faleDialog(val) {
+        if (!val) {
+          this.form.title = '';
+          this.form.description = '';
+          this.form.type = '';
+          this.form.is_anonymous = false;
+        }
+      },
     },
     methods: {
       getDictionary() {
@@ -334,10 +349,6 @@
       //显示所有回答
       lookAll(id) {
         this.answerIdShow = id;
-        // if (num >= 0) {
-        //   this.questions[num].first_answer = {};
-        // }
-
         // for (var i = 0; i < this.questions.length; i++) {
         //   if (this.questions[i].id === id) {
         //     this.questions[i].first_answer = {};
@@ -407,7 +418,7 @@
         this.myData(1);
       },
       myData(val) {
-        this.answerIdShow = '';
+        // this.answerIdShow = '';
         this.form.page = val;
         this.loading = true;
         this.$http.get(this.urls + "qa/front/question", {params: this.form}).then(res => {
@@ -415,6 +426,9 @@
           if (res.data.code === "70210") {
             this.questions = res.data.data;
             this.paging = res.data.meta.num;
+            if(this.answerIdShow){
+              this.lookAll(this.answerIdShow);
+            }
           } else {
             this.questions = [];
             this.paging = 0;
@@ -428,6 +442,7 @@
       },
       //提问
       confirmAdd() {
+        this.disabledBtn = true;
         this.$http.post(this.urls + "qa/front/question", this.form).then(res => {
           if (res.data.code === "70210") {
             this.faleDialog = false;
@@ -440,8 +455,10 @@
               message: res.data.msg,
               type: "success"
             });
+            this.disabledBtn = false;
             this.myData(1);
           } else {
+            this.disabledBtn = false;
             this.$notify({
               title: "警告",
               message: res.data.msg,
@@ -455,9 +472,7 @@
         this.$http.post(this.urls + "qa/front/answer", {question_id: id, content: this.content}).then(res => {
           if (res.data.code === "70310") {
             this.myData(1);
-            // setTimeout(() => {
-            //   this.lookAll(id);
-            // }, 1);
+            this.lookAll(id);
             this.$notify({
               title: "成功",
               message: res.data.msg,
@@ -483,6 +498,7 @@
         }).then(res => {
           if (res.data.code === "70410") {
             this.myData(1);
+            // this.openComment(id);
             this.$notify({
               title: "成功",
               message: res.data.msg,
@@ -521,7 +537,14 @@
   .no_data {
     background-image: url('../../../assets/images/404_images/bg_square.png');
   }
-
+  .el-button--primary.is-disabled,
+  .el-button--primary.is-disabled:active,
+  .el-button--primary.is-disabled:focus,
+  .el-button--primary.is-disabled:hover {
+    color: #fff !important;
+    background-color: #8faafc !important;
+    border-color: #8faafc !important;
+  }
   .loader {
     box-sizing: border-box;
     display: flex;

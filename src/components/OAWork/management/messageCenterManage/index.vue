@@ -156,6 +156,7 @@
       <el-dialog :close-on-click-modal="false" :visible.sync="replierManageDialog" title="回复信息" width="45%">
         <div style="margin-top: 20px;">
           <el-table
+            ref="multipleTable"
             :data="tableReplierData"
             @selection-change="handleSelectionReplierChange"
             style="width: 100%">
@@ -261,6 +262,7 @@
         if (!val) {
           this.askAnswerIds = [];
           this.distributeIds = [];
+          this.$refs.multipleTable.clearSelection();
         }
       },
     },
@@ -433,30 +435,30 @@
         if (row.is_open && !row.is_drop) {
           //公开 上架
           this.lists = [
-            { clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除" },
-            { clickIndex: "setOpen", headIcon: "el-icon-delete", label: "非公开", openStatus: 'close' },
-            { clickIndex: "setDrop", headIcon: "el-icon-delete", label: "下架", dropStatus: 'drop' },
+            {clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除"},
+            {clickIndex: "setOpen", headIcon: "el-icon-delete", label: "非公开", openStatus: 'close'},
+            {clickIndex: "setDrop", headIcon: "el-icon-delete", label: "下架", dropStatus: 'drop'},
           ];
         } else if (row.is_open && row.is_drop) {
           //公开 下架
           this.lists = [
-            { clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除" },
-            { clickIndex: "setOpen", headIcon: "el-icon-delete", label: "非公开", openStatus: 'close' },
-            { clickIndex: "setDrop", headIcon: "el-icon-delete", label: "上架", dropStatus: 'undrop' },
+            {clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除"},
+            {clickIndex: "setOpen", headIcon: "el-icon-delete", label: "非公开", openStatus: 'close'},
+            {clickIndex: "setDrop", headIcon: "el-icon-delete", label: "上架", dropStatus: 'undrop'},
           ];
         } else if (!row.is_open && row.is_drop) {
           //非公开 下架
           this.lists = [
-            { clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除" },
-            { clickIndex: "setOpen", headIcon: "el-icon-delete", label: "公开", openStatus: 'open' },
-            { clickIndex: "setDrop", headIcon: "el-icon-delete", label: "上架", dropStatus: 'undrop' },
+            {clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除"},
+            {clickIndex: "setOpen", headIcon: "el-icon-delete", label: "公开", openStatus: 'open'},
+            {clickIndex: "setDrop", headIcon: "el-icon-delete", label: "上架", dropStatus: 'undrop'},
           ];
         } else if (!row.is_open && !row.is_drop) {
           //非公开 上架
           this.lists = [
-            { clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除" },
-            { clickIndex: "setOpen", headIcon: "el-icon-delete", label: "公开", openStatus: 'open' },
-            { clickIndex: "setDrop", headIcon: "el-icon-delete", label: "下架", dropStatus: 'drop'},
+            {clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除"},
+            {clickIndex: "setOpen", headIcon: "el-icon-delete", label: "公开", openStatus: 'open'},
+            {clickIndex: "setDrop", headIcon: "el-icon-delete", label: "下架", dropStatus: 'drop'},
           ];
         }
         let e = event || window.event; //support firefox contextmenu
@@ -491,20 +493,20 @@
             break;
         }
       },
-      setOpenDropSatus(val){
+      setOpenDropSatus(val) {
         this.$confirm('确认进行此操作吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.put(globalConfig.server + 'qa/back/change_status/'+this.messageCenterId, { operation: val }).then((res)=>{
-            if(res.data.code === '70110') {
+          this.$http.put(globalConfig.server + 'qa/back/change_status/' + this.messageCenterId, {operation: val}).then((res) => {
+            if (res.data.code === '70110') {
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
               });
               this.getTableData();
-            }else{
+            } else {
               this.$notify.warning({
                 title: '警告',
                 message: res.data.msg

@@ -274,6 +274,7 @@
                     title: '成功',
                     message: res.data.msg
                   });
+                  this.replierId = '';
                   this.search();
                 } else {
                   this.$notify.warning({
