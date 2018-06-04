@@ -15,10 +15,10 @@
             <span class="category_score">(<span v-if="k==158">简答题</span>)</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
-                <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
+                <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;color: #101010;">{{item.number}}.</p>
               </el-col>
               <el-col :span="15">
-                <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
+                <p style="line-height:30px;color: #101010;" class="ql-editor" v-html="item.stem"></p>
               </el-col>
             </el-row>
             <el-row style="width:96%;margin-left:50px;" v-if="k==158">

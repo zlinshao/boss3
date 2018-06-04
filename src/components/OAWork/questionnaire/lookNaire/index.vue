@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="lookNaire">
+    <div id="lookNaire" v-if="!message">
       <div class="tool">
         <img width="100%" height="142px" src="../../../../assets/images/preview.png"/>
         <div>
@@ -20,14 +20,14 @@
               )</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
-                <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
+                <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;color: #101010;">{{item.number}}.</p>
               </el-col>
               <el-col :span="15">
-                <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
+                <p style="line-height:30px;color: #101010;" class="ql-editor" v-html="item.stem"></p>
               </el-col>
             </el-row>
             <el-row :key="index" v-for="(val,index) in item.choice" style="width:96%;margin-left:50px;">
-              <span>{{index}}：{{val}}</span><br/>
+              <span style="color: #6c6c6c;line-height: 30px;">{{index}}：{{val}}</span><br/>
               <el-row :key="kk" v-for="(vv,kk) in statisticData[item.id] && statisticData[item.id].answer"
                       v-if="kk==index">
                 <el-progress style="width:30%;display: inline-block;" :text-inside="true" :stroke-width="18"
@@ -46,16 +46,25 @@
             <span class="category_score">(<span v-if="k==158">简答题</span>)</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
-                <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
+                <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;color: #101010;">{{item.number}}.</p>
               </el-col>
               <el-col :span="15">
-                <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
+                <p style="line-height:30px;color: #101010;" class="ql-editor" v-html="item.stem"></p>
               </el-col>
             </el-row>
             <span @click="openAll(item.id, k)"
                   style="width:96%;margin-left:50px;color:rgb(106, 141, 251);cursor: pointer;">查看全部回答</span>
 
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="container" v-if="message">
+      <div class="content">
+        <div class="content_img"><img src="../../../../assets/images/examination/no_power.png"></div>
+        <div class="content_right" style="padding-left: 260px;">
+          <div class="title"><img src="../../../../assets/images/sorry.png"></div>
+          <div class="count_down" style="margin-left: 0px;">抱歉，您暂无权限访问该页面~~</div>
         </div>
       </div>
     </div>
@@ -72,6 +81,7 @@
         quesNaireId: '',
         statisticData: [],
         quesNaireData: {},
+        message: false,
       };
     },
     activated() {
@@ -101,6 +111,7 @@
             this.quesNaireData = res.data.data;
           } else {
             this.quesNaireData = {};
+            this.message = true;
           }
         });
       },
@@ -110,6 +121,7 @@
             this.statisticData = res.data.data;
           } else {
             this.statisticData = [];
+            this.message = true;
             // this.$notify.warning({
             //   title: '警告',
             //   message: res.data.msg
@@ -163,5 +175,42 @@
         }
       }
     }
+  }
+  .container {
+    width: 100%;
+    min-height: 800px;
+    position: relative;
+    box-shadow: 0px 0px 3px 1px #dfe6fb;
+    .content {
+      display: inline-block;
+      position: absolute;
+      top: 28%;
+      width: 70%;
+      left: 30%;
+      /*background-color: #dfe6fb;*/
+      .content_img {
+        float: left;
+      }
+      .content_right {
+        margin-top: 90px;
+        padding-left: 300px;
+        .title {
+          font-size: 35px;
+          margin: 0 auto;
+          left: 0;
+          width: 100%;
+          filter: alpha(opacity=30);
+          -ms-filter: "alpha(opacity=30)";
+          color: rgba(106, 141, 251, 0.75);
+        }
+        .count_down {
+          margin-left: 20px;
+          margin-top: 20px;
+          font-size: 18px;
+          color: #6a8dfb;
+        }
+      }
+    }
+
   }
 </style>
