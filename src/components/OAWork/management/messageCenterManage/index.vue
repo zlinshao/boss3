@@ -492,21 +492,33 @@
         }
       },
       setOpenDropSatus(val){
-        this.$http.put(globalConfig.server + 'qa/back/change_status/'+this.messageCenterId, { operation: val }).then((res)=>{
-          if(res.data.code === '70110') {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
-            this.getTableData();
-          }else{
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            });
-          }
+        this.$confirm('确认进行此操作吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.put(globalConfig.server + 'qa/back/change_status/'+this.messageCenterId, { operation: val }).then((res)=>{
+            if(res.data.code === '70110') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.getTableData();
+            }else{
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
 
+          });
+        }).catch(() => {
+          this.$notify.info({
+            title: '提示',
+            message: '已取消操作'
+          });
         });
+
       },
       deleteMessageCenter() {
         this.$confirm("删除后不可恢复, 是否继续?", "提示", {
