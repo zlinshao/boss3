@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="newsDetail">
+    <div id="answerCenter">
       <div class="highRanking">
         <div class="highSearch">
           <el-form :model="form" :inline="true" size="small">
@@ -722,7 +722,7 @@
     display: block;
   }
 
-  #newsDetail {
+  #answerCenter {
     @mixin flex {
       display: -webkit-flex;
       display: flex;
