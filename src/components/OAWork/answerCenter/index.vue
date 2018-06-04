@@ -75,12 +75,11 @@
         </el-form>
         <div style="height:50px; color:#83a0fc; line-height:50px; margin:0 10px;">
           <span style="float:left;">{{item.answers_count}}条回答</span>
-          <span @click="lookAll(item.id)" v-if="item.answers_count>1 && !disabledIds[item.id]" class="all_show"
-                :class="{'btn_disabled': disabledIds[item.id] }">全部显示</span>
+          <span @click="lookAll(item.id)" v-if="item.answers_count>1 && !disabledIds[item.id]" class="all_show">全部显示</span>
 
           <div class="fold" style="height:25px; color:#83a0fc; line-height:25px; margin:0px 10px;"
                v-if="item.answers_count>1 && disabledIds[item.id]">
-            <span @click="answerDetail=[];disabledIds[item.id]=false"  :class="{'btn_disabled': !disabledIds[item.id] }">收起</span>
+            <span @click="answerDetail=[];disabledIds[item.id]=false">收起</span>
           </div>
         </div>
         <div style="background: #f4f6fc;border-radius: 8px;">
@@ -303,7 +302,7 @@
         commentList2: false,
         answerIdShow: '',
         disabledBtn: false,
-        disabledIds: {},
+        disabledIds: {},  //全部显示 和收起的显示
       };
     },
     mounted() {
@@ -431,8 +430,9 @@
             this.questions = res.data.data;
             if (res.data.data.length > 0) {
               res.data.data.forEach((item) => {
-                this.$set(this.disabledIds,item.id, false);
-                console.log(this.disabledIds);
+                if(this.disabledIds[item.id] == null || this.disabledIds[item.id] == undefined){
+                  this.$set(this.disabledIds, item.id, false);
+                }
               });
             }
             this.paging = res.data.meta.num;
