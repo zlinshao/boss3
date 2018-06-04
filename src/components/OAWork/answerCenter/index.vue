@@ -75,11 +75,12 @@
         </el-form>
         <div style="height:50px; color:#83a0fc; line-height:50px; margin:0 10px;">
           <span style="float:left;">{{item.answers_count}}条回答</span>
-          <span @click="lookAll(item.id)" v-if="item.answers_count>1 && !disabledIds[item.id]" class="all_show">全部显示</span>
+          <span @click="lookAll(item.id)" v-if="item.answers_count>1 && !disabledIds[item.id]"
+                class="all_show">全部显示</span>
 
           <div class="fold" style="height:25px; color:#83a0fc; line-height:25px; margin:0px 10px;"
                v-if="item.answers_count>1 && disabledIds[item.id]">
-            <span @click="answerDetail=[];disabledIds[item.id]=false">收起</span>
+            <span @click="foldAnswer(item.id)">收起</span>
           </div>
         </div>
         <div style="background: #f4f6fc;border-radius: 8px;">
@@ -331,6 +332,10 @@
       },
     },
     methods: {
+      foldAnswer(id) {
+        this.answerDetail = [];
+        this.disabledIds[id] = false;
+      },
       getDictionary() {
         this.dictionary(678).then((res) => {
           this.messageCenterCategory = res.data;
@@ -352,11 +357,11 @@
       lookAll(id) {
         this.disabledIds[id] = true;
         this.answerIdShow = id;
-        // for (var i = 0; i < this.questions.length; i++) {
-        //   if (this.questions[i].id === id) {
-        //     this.questions[i].first_answer = {};
-        //   }
-        // }
+        for(var v in this.disabledIds) {
+          if(v!=id){
+            this.disabledIds[v] = false;
+          }
+        }
         this.$http.get(globalConfig.server + 'qa/front/answer?question_id=' + id).then((res) => {
           if (res.data.code === '70310') {
             this.answerDetail = res.data.data;
@@ -430,7 +435,7 @@
             this.questions = res.data.data;
             if (res.data.data.length > 0) {
               res.data.data.forEach((item) => {
-                if(this.disabledIds[item.id] == null || this.disabledIds[item.id] == undefined){
+                if (this.disabledIds[item.id] == null || this.disabledIds[item.id] == undefined) {
                   this.$set(this.disabledIds, item.id, false);
                 }
               });
