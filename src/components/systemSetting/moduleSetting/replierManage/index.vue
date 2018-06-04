@@ -367,6 +367,11 @@
               message: res.data.msg
             });
             this.getTableData();
+          }else{
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
           }
         });
       },

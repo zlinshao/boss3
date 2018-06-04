@@ -6,7 +6,7 @@
           <el-form :model="form" :inline="true" size="small">
             <el-form-item>
               <el-input v-model="form.search" placeholder="搜索问题" @keyup.enter.native="searchx" clearable>
-                <el-button @click="searchx" slot="append" icon="el-icon-search" ></el-button>
+                <el-button @click="searchx" slot="append" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
             <el-form-item>
@@ -199,8 +199,8 @@
               </div>
             </div>
           </div>
-          <div style="height:50px; color:#83a0fc; line-height:50px; margin:30px 10px;">
-            <span @click="answerDetail=[];myData(1);" v-if="answerIdShow"
+          <div style="height:50px; color:#83a0fc; line-height:50px; margin:30px 10px;" v-if="answerIdShow">
+            <span @click="answerDetail=[];myData(1);"
                   style="cursor: pointer;float:right; margin-right:6px;">收起</span>
           </div>
         </div>
@@ -217,9 +217,9 @@
       <div class="block pages" v-if="paging > 4">
         <el-pagination
           @size-change="handleSizeChange"
-          @current-change="search"
-          :current-page="currentPage"
-          :page-size="15"
+          @current-change="handleCurrentChange"
+          :current-page="form.page"
+          :page-size="form.limit"
           layout="total, prev, pager, next, jumper"
           :total="paging">
         </el-pagination>
@@ -239,16 +239,18 @@
     <div id="faleDialog">
       <el-dialog :close-on-click-modal="false" :visible.sync="faleDialog" style="margin-top: 4vh;" title="我要提问"
                  width="38%">
-        <span style="color:#409EFF;font-size:14px;">写下你的问题</span>
+        <span style="color:#409EFF;font-size:14px;"><span style="color: red;">* </span>写下你的问题</span>
         <div style="margin:5px 0;">描述精确的问题更易得到解答</div>
         <el-input v-model="form.title" placeholder="问题标题"></el-input>
-        <span style="color:#409EFF;font-size:14px; margin: 10px 0 5px 0; display:block;">问题类型</span>
+        <span style="color:#409EFF;font-size:14px; margin: 10px 0 5px 0; display:block;"><span
+          style="color: red;">* </span>问题类型</span>
         <el-select v-model="form.type" placeholder="请选择" clearable>
           <el-option v-for="item in messageCenterCategory" :key="item.id" :label="item.dictionary_name"
                      :value="item.id">{{item.dictionary_name}}
           </el-option>
         </el-select>
-        <span style="color:#409EFF;font-size:14px; margin: 10px 0 5px 0; display:block;">问题描述</span>
+        <span style="color:#409EFF;font-size:14px; margin: 10px 0 5px 0; display:block;"><span
+          style="color: red;">* </span>问题描述</span>
         <el-input v-model="form.description" type="textarea" placeholder="问题背景、条件等信息"></el-input>
         <div style="margin:10px 0;">
           <el-checkbox v-model="form.is_anonymous">匿名问题</el-checkbox>&nbsp;
@@ -270,13 +272,9 @@
     data() {
       return {
         urls: globalConfig.server,
-        addContent: '',
-        commentOn: [],
-        currentPage: 1,
         faleDialog: false,
         paging: 0,
         questions: [],
-        page: 1,
         form: {
           search: '',
           title: '',
@@ -284,7 +282,7 @@
           is_anonymous: false,
           type: '',
           limit: 4,
-          pages: 1
+          page: 1
         },
         anonymous: 'false',
         loading: false, //点赞
@@ -327,7 +325,7 @@
       },
       //写回答
       write(id) {
-        if(id === this.answerId){
+        if (id === this.answerId) {
           this.answerId = '';
           return;
         }
@@ -410,7 +408,7 @@
       },
       myData(val) {
         this.answerIdShow = '';
-        this.page = val;
+        this.form.page = val;
         this.loading = true;
         this.$http.get(this.urls + "qa/front/question", {params: this.form}).then(res => {
           this.loading = false;
@@ -509,16 +507,20 @@
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
-      }
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.form.page = val;
+        this.myData(val);
+      },
     }
   };
 </script>
 
 <style lang="scss">
-  .no_data{
+  .no_data {
     background-image: url('../../../assets/images/404_images/bg_square.png');
   }
-
 
   .loader {
     box-sizing: border-box;
