@@ -137,7 +137,6 @@
 <script>
   import RightMenu from '../../../common/rightMenu.vue';    //右键
   import Organization from '../../../common/organization.vue';  //组织架构
-
   export default {
     components: {Organization, RightMenu},
     data() {

@@ -376,9 +376,9 @@
       myData(val) {
         this.answerIdShow = '';
         this.page = val;
-        // this.loading = true;
+        this.loading = true;
         this.$http.get(this.urls + "qa/front/question", {params: this.form}).then(res => {
-          // this.loading = false;
+          this.loading = false;
           if (res.data.code === "70210") {
             this.questions = res.data.data;
             this.paging = res.data.meta.num;
