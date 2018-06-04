@@ -73,16 +73,14 @@
             </div>
           </el-form-item>
         </el-form>
-
         <div style="height:50px; color:#83a0fc; line-height:50px; margin:0 10px;">
           <span style="float:left;">{{item.answers_count}}条回答</span>
-          <span @click="lookAll(item.id)" v-if="item.answers_count>1 && answerDetail.length<1"
-                style="cursor: pointer;float:right; margin-right:6px;">全部显示</span>
+          <span @click="lookAll(item.id)" v-if="item.answers_count>1 && !disabledIds[item.id]" class="all_show"
+                :class="{'btn_disabled': disabledIds[item.id] }">全部显示</span>
 
-          <div style="height:50px; color:#83a0fc; line-height:50px; margin:0px 10px;"
-               v-if="answerDetail.length>1">
-            <span @click="answerDetail=[]"
-                  style="cursor: pointer;float:right; margin-right:6px;">收起</span>
+          <div class="fold" style="height:25px; color:#83a0fc; line-height:25px; margin:0px 10px;"
+               v-if="item.answers_count>1 && disabledIds[item.id]">
+            <span @click="answerDetail=[];disabledIds[item.id]=false"  :class="{'btn_disabled': !disabledIds[item.id] }">收起</span>
           </div>
         </div>
         <div style="background: #f4f6fc;border-radius: 8px;">
@@ -263,7 +261,8 @@
         </div>
         <div style="border-top:1px #eee solid">
           <el-button @click="confirmAdd" type="primary"
-                     style="margin-top:30px;margin-left:40%;width:126px; height:32px;background-color:#6a8dfb; border-color:#6a8dfb; line-height:0px;" :disabled="disabledBtn">
+                     style="margin-top:30px;margin-left:40%;width:126px; height:32px;background-color:#6a8dfb; border-color:#6a8dfb; line-height:0px;"
+                     :disabled="disabledBtn">
             提交问题
           </el-button>
         </div>
@@ -304,12 +303,16 @@
         commentList2: false,
         answerIdShow: '',
         disabledBtn: false,
+        disabledIds: {},
       };
     },
     mounted() {
-      this.myData(1);
       this.getDictionary();
       this.landholder = JSON.parse(localStorage.personal);
+    },
+    activated() {
+      this.myData(1);
+
     },
     watch: {
       'form.search': {
@@ -348,6 +351,7 @@
       },
       //显示所有回答
       lookAll(id) {
+        this.disabledIds[id] = true;
         this.answerIdShow = id;
         // for (var i = 0; i < this.questions.length; i++) {
         //   if (this.questions[i].id === id) {
@@ -425,8 +429,14 @@
           this.loading = false;
           if (res.data.code === "70210") {
             this.questions = res.data.data;
+            if (res.data.data.length > 0) {
+              res.data.data.forEach((item) => {
+                this.$set(this.disabledIds,item.id, false);
+                console.log(this.disabledIds);
+              });
+            }
             this.paging = res.data.meta.num;
-            if(this.answerIdShow){
+            if (this.answerIdShow) {
               this.lookAll(this.answerIdShow);
             }
           } else {
@@ -534,9 +544,27 @@
 </script>
 
 <style lang="scss">
+  .fold, .all_show {
+    float: right;
+    margin-right: 6px;
+    cursor: pointer;
+    border: 1px solid #dcdfe6;
+    padding: 1px 8px;
+    border-radius: 5px;
+    box-shadow: 0 0 3px 1px #eee;
+    height: 25px;
+    line-height: 25px;
+  }
+
+  .btn_disabled {
+    background: #eee;
+    cursor: no-drop;
+  }
+
   .no_data {
     background-image: url('../../../assets/images/404_images/bg_square.png');
   }
+
   .el-button--primary.is-disabled,
   .el-button--primary.is-disabled:active,
   .el-button--primary.is-disabled:focus,
@@ -545,6 +573,7 @@
     background-color: #8faafc !important;
     border-color: #8faafc !important;
   }
+
   .loader {
     box-sizing: border-box;
     display: flex;
