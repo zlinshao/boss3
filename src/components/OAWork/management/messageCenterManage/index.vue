@@ -4,15 +4,15 @@
       <div class="highRanking" style=" position: absolute; top: 120px; right: 20px;">
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
-            <!--<el-form-item>-->
-            <!--<el-input placeholder="标题/内容关键字" v-model="form.search" @keyup.enter.native="search" size="mini"-->
-            <!--clearable>-->
-            <!--<el-button slot="append" icon="el-icon-search" @click="search"></el-button>-->
-            <!--</el-input>-->
-            <!--</el-form-item>-->
-            <!--<el-form-item>-->
-            <!--<el-button type="primary" size="mini" @click="highGrade">高级</el-button>-->
-            <!--</el-form-item>-->
+            <el-form-item>
+              <el-input placeholder="标题" v-model="form.search" @keyup.enter.native="search" size="mini"
+                        clearable>
+                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+              </el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+            </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="replierManageDialog=true;">分发问答</el-button>
             </el-form-item>
@@ -29,7 +29,23 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">部门搜索</div>
+                    <div class="el_col_label">问题类型</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="form.type" placeholder="请选择" clearable>
+                        <el-option v-for="item in messageCenterCategory" :key="item.id" :label="item.dictionary_name"
+                                   :value="item.id">{{item.dictionary_name}}
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">被分配部门</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
@@ -223,8 +239,9 @@
         form: {
           page: 1,
           limit: 12,
-          // search: '',
-          // department_id: '',
+          search: '',
+          department_id: '',
+          type: '',
         },
         totalNum: 0,
         isHigh: false,
@@ -247,9 +264,11 @@
         distributeIds: [],
         messageCenterId: '',
         messageCenterDetailDialog: false,
+        messageCenterCategory: [],
       };
     },
     mounted() {
+      this.getDictionary();
       this.getTableData();
       this.getReplierManageData();
     },
@@ -267,6 +286,11 @@
       },
     },
     methods: {
+      getDictionary() {
+        this.dictionary(678).then((res) => {
+          this.messageCenterCategory = res.data;
+        });
+      },
       handleSelectionChange(val) {
         this.askAnswerIds = [];
         val.forEach((item) => {
@@ -409,6 +433,7 @@
           page: 1,
           limit: 12,
           search: '',
+          type: '',
           department_id: '',
         };
         this.departname = '';
