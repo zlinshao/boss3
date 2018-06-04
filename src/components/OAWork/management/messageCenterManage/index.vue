@@ -332,6 +332,7 @@
         this.tableLoading = true;
         this.$http.get(globalConfig.server + 'qa/back', {params: this.form}).then((res) => {
           this.tableLoading = false;
+          this.isHigh = false;
           if (res.data.code === '70110') {
             this.tableData = res.data.data;
             this.totalNum = res.data.meta.num;  //记录总条数
