@@ -139,7 +139,7 @@
             </div>
           </div>
           <div v-for="(value,index) in answerDetail"
-               v-if="answerDetail.length> 0 && answerIdShow==item.id">
+               v-if="answerDetail.length> 0 && answerIdShow==item.id && index!=0">
             <div class="commentOn">
               <div class="portrait">
                 <img :src="value.staff.avatar" v-if="value.staff.avatar">
@@ -331,17 +331,21 @@
         //   this.questions[num].first_answer = {};
         // }
 
-        for (var i = 0; i < this.questions.length; i++) {
-          if (this.questions[i].id === id) {
-            this.questions[i].first_answer = {};
-            console.log(JSON.stringify(this.questions[i].first_answer));
-          }
-        }
+        // for (var i = 0; i < this.questions.length; i++) {
+        //   if (this.questions[i].id === id) {
+        //     this.questions[i].first_answer = {};
+        //   }
+        // }
         this.$http.get(globalConfig.server + 'qa/front/answer?question_id=' + id).then((res) => {
           if (res.data.code === '70310') {
             this.answerDetail = res.data.data;
           } else {
             this.answerDetail = [];
+            this.$notify({
+              title: "警告",
+              message: res.data.msg,
+              type: "warning"
+            });
           }
         });
       },
@@ -356,6 +360,11 @@
               this.commentDetail = res.data.data;
             } else {
               this.commentDetail = [];
+              this.$notify({
+                title: "警告",
+                message: res.data.msg,
+                type: "warning"
+              });
             }
           });
         } else {
@@ -372,6 +381,11 @@
               this.commentDetail = res.data.data;
             } else {
               this.commentDetail = [];
+              this.$notify({
+                title: "警告",
+                message: res.data.msg,
+                type: "warning"
+              });
             }
           });
         } else {
@@ -397,6 +411,11 @@
           } else {
             this.questions = [];
             this.paging = 0;
+            this.$notify({
+              title: "警告",
+              message: res.data.msg,
+              type: "warning"
+            });
           }
         });
       },

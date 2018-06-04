@@ -45,7 +45,6 @@
                   </el-col>
                 </el-row>
               </el-col>
-
             </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
@@ -137,6 +136,7 @@
 <script>
   import RightMenu from '../../../common/rightMenu.vue';    //右键
   import Organization from '../../../common/organization.vue';  //组织架构
+
   export default {
     components: {Organization, RightMenu},
     data() {
