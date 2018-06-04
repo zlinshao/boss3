@@ -205,7 +205,16 @@
           </div>
         </div>
       </div>
-      <div class="block pages" v-if="paging > 14">
+      <div style="height: 750px;" class="no_data" v-if="questions.length<1">
+        <div style="position: absolute;top: 45%;left: 38%;">
+          <img src="../../../assets/images/noData.png" style="float: left;"/>
+          <div style="float: left;margin-left: 30px;margin-top: 50px;">
+            <img src="../../../assets/images/sorry.png">
+            <div style="color: #6a8dfb;position: relative;margin-top: 20px;margin-left: 10px;">抱歉，暂无数据~~</div>
+          </div>
+        </div>
+      </div>
+      <div class="block pages" v-if="paging > 4">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="search"
@@ -506,6 +515,11 @@
 </script>
 
 <style lang="scss">
+  .no_data{
+    background-image: url('../../../assets/images/404_images/bg_square.png');
+  }
+
+
   .loader {
     box-sizing: border-box;
     display: flex;
