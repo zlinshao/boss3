@@ -249,8 +249,8 @@
         <span style="color:#409EFF;font-size:14px; margin: 10px 0 5px 0; display:block;"><span
           style="color: red;">* </span>问题类型</span>
         <el-select v-model="form.type" placeholder="请选择" clearable>
-          <el-option v-for="item in messageCenterCategory" :key="item.id" :label="item.dictionary_name"
-                     :value="item.id">{{item.dictionary_name}}
+          <el-option v-for="item in messageCenterCategory" :key="item.id" :label="item.name"
+                     :value="item.id">{{item.name}}
           </el-option>
         </el-select>
         <span style="color:#409EFF;font-size:14px; margin: 10px 0 5px 0; display:block;"><span
@@ -307,12 +307,11 @@
       };
     },
     mounted() {
-      this.getDictionary();
       this.landholder = JSON.parse(localStorage.personal);
     },
     activated() {
       this.myData(1);
-
+      this.getDictionary();
     },
     watch: {
       'form.search': {
@@ -337,9 +336,14 @@
         this.disabledIds[id] = false;
       },
       getDictionary() {
-        this.dictionary(678).then((res) => {
-          this.messageCenterCategory = res.data;
+        this.$http.get(globalConfig.server + 'qa/question_type?do_not_paginate=true').then((res) => {
+          if (res.data.code === '70410') {
+            this.messageCenterCategory = res.data.data;
+          }
         });
+        // this.dictionary(678).then((res) => {
+        //   this.messageCenterCategory = res.data;
+        // });
       },
       //我要提问
       openFlag() {

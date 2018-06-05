@@ -14,7 +14,14 @@
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="mini" @click="replierManageDialog=true;">分发问答</el-button>
+              <el-button type="primary" size="mini" @click="replierManageDialog=true;">
+                <i class="iconfont icon-baomingzhong-" style="font-size: 14px;"></i> 分发问答
+              </el-button>
+            </el-form-item>
+            <el-form-item style="margin-right: 20px;">
+              <el-button type="primary" size="mini" @click="questionTypeDialog=true;">
+                <i class="el-icon-setting" style="font-size: 15px;"></i> 问题类型
+              </el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -34,8 +41,8 @@
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
                       <el-select v-model="form.type" placeholder="请选择" clearable>
-                        <el-option v-for="item in messageCenterCategory" :key="item.id" :label="item.dictionary_name"
-                                   :value="item.id">{{item.dictionary_name}}
+                        <el-option v-for="item in questionTypeData" :key="item.id" :label="item.name"
+                                   :value="item.id">{{item.name}}
                         </el-option>
                       </el-select>
                     </el-form-item>
@@ -214,6 +221,78 @@
         </span>
       </el-dialog>
     </div>
+    <div id="questionTypeDialog">
+      <el-dialog :close-on-click-modal="false" :visible.sync="questionTypeDialog" title="问题类型" width="45%">
+        <el-button type="primary" size="mini" @click="questionTypeManageDialog=true;"
+                   style="float: right;margin-bottom: 10px;margin-right: 10px;">
+          新增
+        </el-button>
+        <div style="margin-top: 20px;">
+          <el-table
+            :data="questionTypeData"
+            style="width: 100%">
+            <el-table-column
+              prop="replier"
+              label="创建时间">
+              <template slot-scope="scope">
+                <span v-if="scope.row.create_time">{{scope.row.create_time}}</span>
+                <span v-else>暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="类型名称">
+              <template slot-scope="scope">
+                <span v-if="scope.row.name">{{scope.row.name}}</span>
+                <span v-else>暂无</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="操作">
+              <template slot-scope="scope">
+                <span @click="editQuestionType(scope.row.id)"><i class="el-icon-edit"
+                                                                 style="color: #409EFF;font-size: 16px;cursor: pointer;"></i></span>
+                <span @click="deleteQuestionType(scope.row.id)" style="margin-left: 15px"><i class="el-icon-delete"
+                                                                                             style="color: #409EFF;font-size: 16px;cursor: pointer;"></i></span>
+              </template>
+            </el-table-column>
+
+          </el-table>
+        </div>
+        <div class="tableBottom">
+          <div class="left">
+            <el-pagination
+              @size-change="handleSizeQuesTypeChange"
+              @current-change="handleCurrentQuesTypeChange"
+              :current-page="quesTypeForm.page"
+              :page-size="quesTypeForm.limit"
+              layout="total, prev, pager, next, jumper"
+              :total="totalQuesTypeFormNum">
+            </el-pagination>
+          </div>
+        </div>
+
+      </el-dialog>
+    </div>
+    <div id="questionTypeManageDialog">
+      <el-dialog :close-on-click-modal="false" :visible.sync="questionTypeManageDialog" :title="quesTypeTitle"
+                 width="35%">
+        <div style="margin-top: 20px;">
+          <el-form size="mini" onsubmit="return false;" :model="quesTypeForm" label-width="100px">
+            <el-row>
+              <el-col :span="22">
+                <el-form-item label="类型名称" required>
+                  <el-input v-model="quesTypeForm.name" placeholder="请输入类型名称" clearable></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button size="mini" @click="questionTypeManageDialog = false">取消</el-button>
+          <el-button type="primary" size="mini" @click="quesTypeAdd">确定</el-button>
+        </span>
+      </el-dialog>
+    </div>
     <Organization :organizationDialog="organizationDialog" :type="organizeType" @close="closeOrganization"
                   @selectMember="selectMember"></Organization>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
@@ -264,17 +343,25 @@
         distributeIds: [],
         messageCenterId: '',
         messageCenterDetailDialog: false,
-        messageCenterCategory: [],
+
+        questionTypeDialog: false,
+        questionTypeData: [],
+        questionTypeManageDialog: false,
+        quesTypeForm: {
+          name: '',
+          page: 1,
+          limit: 12,
+        },
+        questionTypeId: '',
+        quesTypeTitle: '新增问题类型',
+        totalQuesTypeFormNum: 0,
       };
     },
-    mounted() {
-      this.getDictionary();
-      this.getTableData();
-      this.getReplierManageData();
-    },
     activated() {
+      this.getQuestionTypeData();
       this.getTableData();
       this.getReplierManageData();
+
     },
     watch: {
       replierManageDialog(val) {
@@ -284,11 +371,93 @@
           this.$refs.multipleTable.clearSelection();
         }
       },
+      questionTypeManageDialog(val) {
+        if (!val) {
+          this.quesTypeTitle = '新增问题类型';
+          this.questionTypeId = '';
+          this.quesTypeForm.name = '';
+        } else {
+          if (this.questionTypeId) {
+            this.$http.get(globalConfig.server + 'qa/question_type/' + this.questionTypeId).then((res) => {
+              if(res.data.code === '70410'){
+                this.quesTypeForm.name = res.data.data.name;
+              }else{
+                this.$notify.warning({
+                  title: '警告',
+                  message: res.data.msg
+                });
+              }
+            });
+          }
+        }
+      },
     },
     methods: {
-      getDictionary() {
-        this.dictionary(678).then((res) => {
-          this.messageCenterCategory = res.data;
+      quesTypeAdd() {
+        let header;
+        if (this.questionTypeId) {
+          header = this.$http.put(globalConfig.server + 'qa/question_type/' + this.questionTypeId, this.quesTypeForm);
+        } else {
+          header = this.$http.post(globalConfig.server + 'qa/question_type', this.quesTypeForm);
+        }
+        header.then((res) => {
+          if (res.data.code === '70410') {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.questionTypeManageDialog = false;
+            this.getQuestionTypeData();
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
+      editQuestionType(id) {
+        this.questionTypeId = id;
+        this.quesTypeTitle = '编辑问题类型';
+        this.questionTypeManageDialog = true;
+      },
+      deleteQuestionType(id) {
+        this.$confirm("删除后不可恢复, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          this.$http.put(globalConfig.server + 'qa/question_type/delete/' + id).then((res) => {
+            if (res.data.code === "70410") {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.getQuestionTypeData();
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }).catch(() => {
+          this.$notify.info({
+            title: "提示",
+            message: "已取消删除"
+          });
+        });
+      },
+
+      getQuestionTypeData() {
+        this.$http.get(globalConfig.server + 'qa/question_type', {params: this.quesTypeForm}).then((res) => {
+          if (res.data.code === '70410') {
+            this.questionTypeData = res.data.data;
+            this.totalQuesTypeFormNum = res.data.meta.num;
+          }else{
+            this.questionTypeData = [];
+            this.totalQuesTypeFormNum = 0;
+          }
         });
       },
       handleSelectionChange(val) {
@@ -397,6 +566,14 @@
         console.log(`当前页: ${val}`);
         this.formReplier.page = val;
         this.getReplierManageData();
+      },
+      handleSizeQuesTypeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentQuesTypeChange(val) {
+        console.log(`当前页: ${val}`);
+        this.quesTypeForm.page = val;
+        this.getQuestionTypeData();
       },
       openOrganizationModal(val) {
         this.organizationDialog = true;
