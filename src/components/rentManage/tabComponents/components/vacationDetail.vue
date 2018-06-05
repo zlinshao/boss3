@@ -439,7 +439,7 @@
               </el-col>
               <el-col :span="12" v-if="subjectList2.length>0">
                 <el-form-item>
-                  <el-select v-model="passParams.subject" placeholder="请选择科目">
+                  <el-select v-model="subjectId2" placeholder="请选择科目">
                     <el-option v-for="item in subjectList2" :label="item.title" :key="item.id" :value="item.id"></el-option>
                   </el-select>
                 </el-form-item>
@@ -540,6 +540,7 @@
           network_fees : '',
         },
         subjectId : '',
+        subjectId2 : '',
         passParams:{
           type : '',
           subject : '',
@@ -845,7 +846,7 @@
 
       getSubject(){
         this.subjectList2 = [];
-        this.passParams.subject = '';
+        this.subjectId2 = '';
         this.$http.get(globalConfig.server+'customer/check_out/subject?id='+this.subjectId).then((res)=>{
           if(res.data.code === '20080'){
             this.subjectList2 = res.data.data;
@@ -854,13 +855,14 @@
       },
 
       confirmPass(){
-        this.passParams.subject = this.passParams.subject?this.passParams.subject:this.subjectId;
+        this.passParams.subject = this.subjectId2?this.subjectId2:this.subjectId;
         this.$http.put(globalConfig.server+'customer/check_out/status/'+this.vacationId,this.passParams).then((res)=>{
           if(res.data.code == '20060'){
             this.vacationDetailVisible = false;
             this.passedDialog = false;
             this.$emit('close','success');
             this.subjectId = '';
+            this.subjectId2 = '';
             this.passParams = {
               type : '',
               subject : '',
