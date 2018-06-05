@@ -398,7 +398,8 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="rentVacationDialogVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
+        <el-button size="small" type="primary" @click="confirmAdd(0)">草 稿</el-button>
+        <el-button size="small" type="primary" @click="confirmAdd(1)">发 布</el-button>
       </span>
     </el-dialog>
   </div>
@@ -413,6 +414,7 @@
       return {
         rentVacationDialogVisible:false,
         params: {
+          status_type : '',
           contract_id : '',
           module : '2',
           check_time : '',
@@ -567,7 +569,8 @@
           }
         })
       },
-      confirmAdd(){
+      confirmAdd(flag){
+        this.params.status_type = flag?'audited':'';
         this.$http.post(globalConfig.server+'customer/check_out',this.params).then((res) => {
           if(res.data.code === '20010'){
             this.$notify.success({
@@ -588,6 +591,7 @@
         this.params = {
           contract_id : this.rentContractId,
           module : '2',
+          status_type : '',
           check_time : '',
           check_type : '',
           profit : '',

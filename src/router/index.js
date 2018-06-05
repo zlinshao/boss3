@@ -186,6 +186,8 @@ import MyNaire from '../components/OAWork/questionnaire/myNaire/myNaire.vue'  //
 
 import DataMove from '../components/dataMove.vue'
 
+import BatchEnter from '../components/batchEnter/index'
+
 Vue.use(Router);
 
 export default new Router({
@@ -315,6 +317,7 @@ export default new Router({
         {path: '/beforeExam', component: BeforeExam, name: "我的考试"},
         {path: '/beforeNaire', component: BeforeNaire, name: "我的问卷"},
         {path: '/myNaire', component: MyNaire, name: "问卷列表"},
+        {path: '/batchEnter', component: BatchEnter, name: "批量入账"},
 
 
       ]
