@@ -52,7 +52,7 @@
                         <el-option label="草稿" value="0"></el-option>
                         <el-option label="待审核" value="1"></el-option>
                         <el-option label="已驳回" value="2"></el-option>
-                        <el-option label="待结算" value="3"></el-option>
+                        <el-option label="待结清" value="3"></el-option>
                         <el-option label="已完成" value="4"></el-option>
                       </el-select>
                     </el-form-item>
@@ -175,7 +175,7 @@
                       <span class="orange_label">已驳回</span>
                     </span>
                     <span v-if="scope.row.status==3">
-                      <span class="yellow_label">待结算</span>
+                      <span class="yellow_label">待结清</span>
                     </span>
                     <span v-if="scope.row.status==4">
                       <span class="success_label">已完成</span>
@@ -287,7 +287,7 @@
                       <span class="orange_label">已驳回</span>
                     </span>
                     <span v-if="scope.row.status==3">
-                      <span class="yellow_label">待结算</span>
+                      <span class="yellow_label">待结清</span>
                     </span>
                     <span v-if="scope.row.status==4">
                       <span class="success_label">已完成</span>
@@ -471,7 +471,7 @@
             clickIndex: 'edit',
             headIcon: 'el-icon-edit-outline',
             label: '修改',
-            'disabled': row.status != 0 || row.status != 2
+            'disabled': row.status != 0 && row.status != 2
           },
           {clickIndex: 'upload', headIcon: 'el-icon-upload', label: '上传截图凭证','disabled':row.status<3},
           {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
