@@ -316,7 +316,7 @@
               <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="params.pages"
+                :current-page="params.page"
                 :page-sizes="[12, 20, 30, 40]"
                 :page-size="params.limit"
                 layout="total, prev, pager, next, jumper"
@@ -360,7 +360,7 @@
         activeName: 'first',
         totalNumber: 0,
         params: {
-          pages: 1,
+          page: 1,
           limit: 12,
           module: 1,
           contract_id: '',
@@ -412,7 +412,8 @@
       handleSizeChange(val) {
       },
       handleCurrentChange(val) {
-        this.params.pages = val;
+        this.params.page = val;
+        this.getData();
       },
       clickTable(row, event, column) {
       },
@@ -453,7 +454,7 @@
       },
       search() {
         this.isHigh = false;
-        this.params.pages = 1;
+        this.params.page = 1;
         this.getData();
       },
       resetting() {
