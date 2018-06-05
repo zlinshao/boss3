@@ -401,16 +401,58 @@
             </el-row>
           </el-form>
         </div>
-
-
         <div class="title">实际退还</div>
         <div class="describe_border">
           实际退还：{{realTotal}}
         </div>
       </div>
+
+      <el-dialog
+        width="30%"
+        title="款项"
+        :visible.sync="passedDialog"
+        append-to-body>
+        <div>
+          <el-form size="mini" onsubmit="return false" label-width="80px">
+            <el-form-item label="款项类型" required>
+              <el-select v-model="passParams.type" clearable="" placeholder="请选择款项类型" value="">
+                <el-option label="应收款项" value="1"></el-option>
+                <el-option label="应付款项" value="2"></el-option>
+              </el-select>
+            </el-form-item>
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="科目" required>
+                  <el-select v-model="subjectId" placeholder="请选择科目" @change="getSubject">
+                    <el-option v-for="item in subjectList" :label="item.title" :key="item.id" :value="item.id"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12" v-if="subjectList2.length>0">
+                <el-form-item>
+                  <el-select v-model="passParams.subject" placeholder="请选择科目">
+                    <el-option v-for="item in subjectList2" :label="item.title" :key="item.id" :value="item.id"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-form-item label="结算金额" required>
+              <el-input v-model="passParams.amount"></el-input>
+            </el-form-item>
+
+            <!--<el-form-item label="款项凭证">-->
+              <!--<UpLoad :ID="'fundVoucher'" :editImage="editImage" :isClear="isClear" @getImg="getImg"></UpLoad>-->
+            <!--</el-form-item>-->
+          </el-form>
+        </div>
+        <span slot="footer" class="dialog-footer">
+        <el-button size="small" type="primary" @click="confirmPass">确 定</el-button>
+      </span>
+      </el-dialog>
+
       <span slot="footer" class="dialog-footer">
-        <!--<el-button size="small" @click="vacationDetailVisible = false">取 消</el-button>-->
-        <!--<el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>-->
+        <el-button v-if="params.status_type == 1" size="small" type="warning" @click="reject">驳 回</el-button>
+        <el-button v-if="params.status_type == 1" size="small" type="primary" @click="passed">通 过</el-button>
       </span>
     </el-dialog>
   </div>
@@ -427,7 +469,7 @@
         params: {
           contract_id : '',
           module : '',
-
+          status_type : '',
           check_time : '',
           check_type : '',
           profit:'',
@@ -488,12 +530,21 @@
           TV_fees : '',
           network_fees : '',
         },
+        subjectId : '',
+        passParams:{
+          type : '',
+          subject : '',
+          amount : '',
+        },
         isClear : false,
         isDictionary:false,
         dictionary:[],
         contractInfo :{},
         editImage : {},
         isLoading : false,
+        passedDialog : false,
+        subjectList : [],
+        subjectList2 : [],
       };
     },
     computed:{
@@ -564,7 +615,7 @@
       },
       //上传图片
       getImg(val){
-        this.params.image_pic = val[1];
+        this.passParams.payment_pic = val[1];
       },
       //获取退房详情
       getData(){
@@ -579,6 +630,7 @@
 
             this.params.check_time = data.check_time;
             this.params.check_type = data.check_type;
+            this.params.status_type = data.status;
 
             this.params.profit = data.extend_field && data.extend_field.profit? data.extend_field.profit : 0;
             this.params.sublease_fee = data.extend_field && data.extend_field.sublease_fee ? data.extend_field.sublease_fee : 0;
@@ -638,6 +690,8 @@
             this.params.TV_fees = data.details.TV_fees || 0;
             this.params.network_fees = data.details.network_fees || 0;
 
+            this.passParams.amount = data.details.total_fees;
+
             let picObject = {};
             this.editImage = {};
             this.params.image_pic = [];
@@ -672,7 +726,7 @@
         this.params = {
           contract_id : '',
           module : '',
-
+          status_type : '',
           check_time : '',
           check_type : '',
           profit:'',
@@ -734,6 +788,84 @@
           network_fees : '',
         };
         this.isClear = false;
+      },
+
+      reject(){
+        this.$confirm('您确定要撤回吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.put(globalConfig.server+'customer/check_out/reject/'+this.vacationId).then((res)=>{
+            if(res.data.code === '20070'){
+              this.$notify.success({
+                title:'成功！',
+                message:res.data.msg,
+              });
+              this.vacationDetailVisible = false;
+              this.$emit('close','success');
+            }else {
+              this.$notify.warning({
+                title:'警告！',
+                message:res.data.msg,
+              })
+            }
+          })
+        }).catch(() => {
+
+        });
+      },
+      passed(){
+        this.$confirm('您确定要通过审核吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.passedDialog = true;
+          this.$http.get(globalConfig.server+'customer/check_out/subject').then((res)=>{
+            if(res.data.code === '20080'){
+              this.subjectList = res.data.data;
+            }
+          })
+        }).catch(() => {
+
+        });
+      },
+
+      getSubject(){
+        this.subjectList2 = [];
+        this.passParams.subject = '';
+        this.$http.get(globalConfig.server+'customer/check_out/subject?id='+this.subjectId).then((res)=>{
+          if(res.data.code === '20080'){
+            this.subjectList2 = res.data.data;
+          }
+        })
+      },
+
+      confirmPass(){
+        this.passParams.subject = this.passParams.subject?this.passParams.subject:this.subjectId;
+        this.$http.put(globalConfig.server+'customer/check_out/status/'+this.vacationId,this.passParams).then((res)=>{
+          if(res.data.code == '20060'){
+            this.vacationDetailVisible = false;
+            this.passedDialog = false;
+            this.$emit('close','success');
+            this.subjectId = '';
+            this.passParams = {
+              type : '',
+              subject : '',
+              amount : '',
+            };
+            this.$notify.success({
+              title:'成功！',
+              message:res.data.msg,
+            });
+          }else {
+            this.$notify.warning({
+              title:'警告！',
+              message:res.data.msg,
+            })
+          }
+        })
       },
     }
   };

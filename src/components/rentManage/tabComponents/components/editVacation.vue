@@ -411,7 +411,8 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="editCollectVacationVisible = false">取 消</el-button>
-        <el-button size="small" type="primary" @click="confirmAdd">确 定</el-button>
+         <el-button size="small" type="primary" @click="confirmAdd(0)">草 稿</el-button>
+        <el-button size="small" type="primary" @click="confirmAdd(1)">发 布</el-button>
       </span>
     </el-dialog>
   </div>
@@ -428,7 +429,7 @@
         params: {
           contract_id : '',
           module : '',
-
+          status_type : '',
           check_time : '',
           check_type : '',
           profit:'',
@@ -680,7 +681,8 @@
         }
       },
 
-      confirmAdd(){
+      confirmAdd(flag){
+        this.params.status_type = flag?'audited':'';
         this.$http.put(globalConfig.server+'customer/check_out/'+this.vacationId,this.params).then((res) => {
           if(res.data.code === '20030'){
             this.$notify.success({
@@ -701,7 +703,7 @@
         this.params = {
           contract_id : '',
           module : '',
-
+          status_type : '',
           check_time : '',
           check_type : '',
           profit:'',
