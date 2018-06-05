@@ -149,16 +149,23 @@
                 </el-table-column>
 
                 <el-table-column
-                  label="结算人">
+                  label="创建人">
                   <template slot-scope="scope">
                     <span v-if="scope.row.creators&&scope.row.creators.name">{{scope.row.creators.name}}</span>
                     <span v-else="">/</span>
                   </template>
                 </el-table-column>
                 <el-table-column
-                  label="操作人">
+                  label="结算人">
                   <template slot-scope="scope">
                     <span v-if="scope.row.settlers&&scope.row.settlers.name">{{scope.row.settlers.name}}</span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  label="审核人">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.auditors&&scope.row.auditors.name">{{scope.row.auditors.name}}</span>
                     <span v-else="">/</span>
                   </template>
                 </el-table-column>
@@ -261,23 +268,30 @@
                 </el-table-column>
 
                 <el-table-column
-                  label="结算人">
+                  label="创建人">
                   <template slot-scope="scope">
                     <span v-if="scope.row.creators&&scope.row.creators.name">{{scope.row.creators.name}}</span>
                     <span v-else="">/</span>
                   </template>
                 </el-table-column>
                 <el-table-column
-                  label="操作人">
+                  label="结算人">
                   <template slot-scope="scope">
                     <span v-if="scope.row.settlers&&scope.row.settlers.name">{{scope.row.settlers.name}}</span>
                     <span v-else="">/</span>
                   </template>
                 </el-table-column>
                 <el-table-column
+                  label="审核人">
+                  <template slot-scope="scope">
+                    <span v-if="scope.row.auditors&&scope.row.auditors.name">{{scope.row.auditors.name}}</span>
+                    <span v-else="">/</span>
+                  </template>
+                </el-table-column>
+                <el-table-column
                   label="退租状态">
                   <template slot-scope="scope">
-                   <span v-if="scope.row.status==0">
+                    <span v-if="scope.row.status==0">
                       <span class="info_label">草稿</span>
                     </span>
                     <span v-if="scope.row.status==1">

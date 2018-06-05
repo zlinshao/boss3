@@ -75,24 +75,44 @@
         </el-table-column>
 
         <el-table-column
-          label="结算人">
+          label="创建人">
           <template slot-scope="scope">
             <span v-if="scope.row.creators&&scope.row.creators.name">{{scope.row.creators.name}}</span>
             <span v-else="">/</span>
           </template>
         </el-table-column>
         <el-table-column
-          label="操作人">
+          label="结算人">
           <template slot-scope="scope">
             <span v-if="scope.row.settlers&&scope.row.settlers.name">{{scope.row.settlers.name}}</span>
             <span v-else="">/</span>
           </template>
         </el-table-column>
         <el-table-column
+          label="审核人">
+          <template slot-scope="scope">
+            <span v-if="scope.row.auditors&&scope.row.auditors.name">{{scope.row.auditors.name}}</span>
+            <span v-else="">/</span>
+          </template>
+        </el-table-column>
+        <el-table-column
           label="退租状态">
           <template slot-scope="scope">
-            <span v-if="scope.row.status == 2">已退租</span>
-            <el-button size="mini" type="primary" v-else="" @click="check_out(scope.row.id)">退租中</el-button>
+                    <span v-if="scope.row.status==0">
+                      <span class="info_label">草稿</span>
+                    </span>
+            <span v-if="scope.row.status==1">
+                      <span class="red_label">待审核</span>
+                    </span>
+            <span v-if="scope.row.status==2">
+                      <span class="orange_label">已驳回</span>
+                    </span>
+            <span v-if="scope.row.status==3">
+                      <span class="yellow_label">待结清</span>
+                    </span>
+            <span v-if="scope.row.status==4">
+                      <span class="success_label">已完成</span>
+                    </span>
           </template>
         </el-table-column>
       </el-table>
@@ -271,5 +291,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-
+  .info_label, .orange_label,.red_label, .success_label,.yellow_label{
+    min-width: 70px;
+  }
 </style>
