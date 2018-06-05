@@ -48,9 +48,12 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select clearable  v-model="params.status" placeholder="请选择退房状态" value="">
-                        <el-option label="退租中" value="1"></el-option>
-                        <el-option label="已退租" value="2"></el-option>
+                      <el-select clearable v-model="params.status" placeholder="请选择退房状态" value="">
+                        <el-option label="草稿" value="0"></el-option>
+                        <el-option label="待审核" value="1"></el-option>
+                        <el-option label="已驳回" value="2"></el-option>
+                        <el-option label="待结算" value="3"></el-option>
+                        <el-option label="已完成" value="4"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -162,8 +165,21 @@
                 <el-table-column
                   label="退租状态">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.status == 2">已退租</span>
-                    <el-button size="mini" type="primary" v-else="" @click="check_out(scope.row.id)">退租中</el-button>
+                    <span v-if="scope.row.status==0">
+                      <span class="info_label">草稿</span>
+                    </span>
+                    <span v-if="scope.row.status==1">
+                      <span class="red_label">待审核</span>
+                    </span>
+                    <span v-if="scope.row.status==2">
+                      <span class="orange_label">已驳回</span>
+                    </span>
+                    <span v-if="scope.row.status==3">
+                      <span class="yellow_label">待结算</span>
+                    </span>
+                    <span v-if="scope.row.status==4">
+                      <span class="success_label">已完成</span>
+                    </span>
                   </template>
                 </el-table-column>
               </el-table>
@@ -261,8 +277,21 @@
                 <el-table-column
                   label="退租状态">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.status == 2">已退租</span>
-                    <el-button size="mini" type="primary" v-else="" @click="check_out(scope.row.id)">退租中</el-button>
+                   <span v-if="scope.row.status==0">
+                      <span class="info_label">草稿</span>
+                    </span>
+                    <span v-if="scope.row.status==1">
+                      <span class="red_label">待审核</span>
+                    </span>
+                    <span v-if="scope.row.status==2">
+                      <span class="orange_label">已驳回</span>
+                    </span>
+                    <span v-if="scope.row.status==3">
+                      <span class="yellow_label">待结算</span>
+                    </span>
+                    <span v-if="scope.row.status==4">
+                      <span class="success_label">已完成</span>
+                    </span>
                   </template>
                 </el-table-column>
               </el-table>
@@ -287,10 +316,13 @@
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperate="clickEvent"></RightMenu>
 
-    <EditCollectVacation :editCollectVacation="editCollectVacation" :vacationId="operateId" @close="closeModal"></EditCollectVacation>
+    <EditCollectVacation :editCollectVacation="editCollectVacation" :vacationId="operateId"
+                         @close="closeModal"></EditCollectVacation>
     <VacationDetail :vacationDetail="vacationDetail" :vacationId="operateId" @close="closeModal"></VacationDetail>
 
     <AddressSearch :addressDialog="addressDialog" @close="closeAddressDialog" :isRent="isRent"></AddressSearch>
+
+    <UploadPic :upLoadDialog="upLoadDialog" :status="status" :vacationId="operateId" @close="closeModal"></UploadPic>
   </div>
 </template>
 
@@ -299,9 +331,11 @@
   import EditCollectVacation from '../../tabComponents/components/editVacation.vue'
   import VacationDetail from '../../tabComponents/components/vacationDetail.vue'
   import AddressSearch from '../../../common/addressSearch';
+  import UploadPic from './components/upScreenshot'
+
   export default {
     name: 'hello',
-    components: {RightMenu,EditCollectVacation,VacationDetail,AddressSearch},
+    components: {RightMenu, EditCollectVacation, VacationDetail, AddressSearch,UploadPic},
     data() {
       return {
         rightMenuX: 0,
@@ -314,40 +348,42 @@
         params: {
           pages: 1,
           limit: 12,
-          module : 1,
+          module: 1,
           contract_id: '',
-          check_time : [],
-          status : '',
+          check_time: [],
+          status: '',
         },
 
         tableData: [],
-        operateId : '',
+        operateId: '',
 
         isHigh: false,
         emptyStatus: ' ',
         isLoading: false,
-        editCollectVacation : false,
-        vacationDetail : false,
-        addressDialog : false,
-        isRent : 0,
-        address : '',
+        editCollectVacation: false,
+        vacationDetail: false,
+        addressDialog: false,
+        upLoadDialog: false,
+        isRent: 0,
+        address: '',
+        status: '',
       }
     },
-    created(){
+    created() {
       this.getData();
     },
     methods: {
       //获取退租列表
-      getData(){
+      getData() {
         this.emptyStatus = ' ';
         this.isLoading = true;
         this.tableData = [];
-        this.$http.get(globalConfig.server+'customer/check_out',{params:this.params}).then((res) => {
+        this.$http.get(globalConfig.server + 'customer/check_out', {params: this.params}).then((res) => {
           this.isLoading = false;
-          if(res.data.code === '20000'){
+          if (res.data.code === '20000') {
             this.tableData = res.data.data.data;
             this.totalNumber = res.data.data.count;
-          }else {
+          } else {
             this.emptyStatus = '暂无数据';
             this.totalNumber = 0;
           }
@@ -355,8 +391,8 @@
       },
       //切换标签页
       handleClick() {
-        this.params.module = this.activeName === 'first'?1:2;
-        this.isRent = this.activeName === 'first'?0:1;
+        this.params.module = this.activeName === 'first' ? 1 : 2;
+        this.isRent = this.activeName === 'first' ? 0 : 1;
         this.getData();
       },
       handleSizeChange(val) {
@@ -367,26 +403,31 @@
       clickTable(row, event, column) {
       },
 
-      deleteColumn(){
-        this.$http.get(globalConfig.server+'customer/check_out/delete/'+this.operateId).then((res) => {
-          if(res.data.code === '20040'){
+      deleteColumn() {
+        this.$http.get(globalConfig.server + 'customer/check_out/delete/' + this.operateId).then((res) => {
+          if (res.data.code === '20040') {
             this.getData();
             this.$notify.success({
-              title:'成功',
-              message:res.data.msg
+              title: '成功',
+              message: res.data.msg
             })
-          }else {
+          } else {
             this.$notify.warning({
-              title:'警告',
-              message:res.data.msg
+              title: '警告',
+              message: res.data.msg
             })
           }
         })
       },
 
-      closeModal(){
+      closeModal(val) {
         this.editCollectVacation = false;
+        this.upLoadDialog = false;
         this.vacationDetail = false;
+        if(val === 'success'){
+          this.isRent = this.activeName === 'first' ? 0 : 1;
+          this.getData();
+        }
       },
 
       dblClickTable(row, event) {
@@ -424,17 +465,27 @@
       //-------------------房屋右键------------------------------------//
       houseMenu(row, event) {
         this.operateId = row.id;
+        this.status = row.status;
         this.lists = [
-          {clickIndex: 'edit',headIcon: 'el-icon-edit-outline', label: '修改',},
-          {clickIndex: 'delete',headIcon: 'el-icon-delete', label: '删除',},
+          {
+            clickIndex: 'edit',
+            headIcon: 'el-icon-edit-outline',
+            label: '修改',
+            'disabled': row.status != 0 || row.status != 2
+          },
+          {clickIndex: 'upload', headIcon: 'el-icon-upload', label: '上传截图凭证','disabled':row.status<3},
+          {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },
       //右键回调事件
       clickEvent(index) {
-        switch (index){
+        switch (index) {
           case 'edit':
             this.editCollectVacation = true;
+            break;
+          case 'upload':
+            this.upLoadDialog = true;
             break;
           case 'delete':
             this.$confirm('此操作将永久删除该条目, 是否继续?', '提示', {
@@ -445,8 +496,8 @@
               this.deleteColumn();
             }).catch(() => {
               this.$notify.warning({
-                title:'警告',
-                message:'已取消删除',
+                title: '警告',
+                message: '已取消删除',
               })
             });
             break;
@@ -502,5 +553,9 @@
         }
       }
     }
+    .info_label, .orange_label,.red_label, .success_label,.yellow_label{
+      min-width: 70px;
+    }
+
   }
 </style>
