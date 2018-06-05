@@ -409,7 +409,7 @@
 
         <div class="title">款项凭证</div>
         <div class="describe_border">
-          <div class="editImg" v-if="vacationData.payment_pic.length>0">
+          <div class="editImg" v-if="vacationData.payment_pic&&vacationData.payment_pic.length>0">
             <img v-for="img in vacationData.payment_pic" :src="img.uri" alt="" data-magnify="" :data-src="img.uri"
                  style="width: 120px;  height: 120px; border-radius:6px;margin: 0 15px 15px 0">
           </div>
