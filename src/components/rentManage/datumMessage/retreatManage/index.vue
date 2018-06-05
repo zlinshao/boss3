@@ -471,7 +471,7 @@
             clickIndex: 'edit',
             headIcon: 'el-icon-edit-outline',
             label: '修改',
-            'disabled': row.status != 0 || row.status != 2
+            'disabled': row.status != 0 && row.status != 2
           },
           {clickIndex: 'upload', headIcon: 'el-icon-upload', label: '上传截图凭证','disabled':row.status<3},
           {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
