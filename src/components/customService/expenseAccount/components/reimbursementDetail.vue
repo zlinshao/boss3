@@ -301,7 +301,7 @@
                   <el-col :span="4">
                     <el-form-item label="合计">
                       <div class="content">
-                        <span v-if="item.total">{{item.total}}</span>
+                        <span v-if="item.peak_total">{{item.peak_total}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
@@ -349,7 +349,7 @@
                   <el-col :span="4">
                     <el-form-item label="合计">
                       <div class="content">
-                        <span v-if="item.total">{{item.total}}</span>
+                        <span v-if="item.valley_total">{{item.valley_total}}</span>
                         <span v-else>暂无</span>
                       </div>
                     </el-form-item>
