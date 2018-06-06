@@ -340,14 +340,7 @@
                       <span v-if="!scope.row.end_date">暂无</span>
                     </template>
                   </el-table-column>
-                  <el-table-column
-                    prop="complete_date"
-                    label="资料补齐时间">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.data_date">{{scope.row.data_date}}</span>
-                      <span v-if="!scope.row.data_date">暂无</span>
-                    </template>
-                  </el-table-column>
+
                   <el-table-column
                     width="80px;"
                     label="是否备忘">
@@ -494,14 +487,14 @@
                       <span v-if="!scope.row.end_date">暂无</span>
                     </template>
                   </el-table-column>
-                  <el-table-column
-                    prop="complete_date"
-                    label="资料补齐时间">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.data_date">{{scope.row.data_date}}</span>
-                      <span v-if="!scope.row.data_date">暂无</span>
-                    </template>
-                  </el-table-column>
+                  <!--<el-table-column-->
+                    <!--prop="complete_date"-->
+                    <!--label="资料补齐时间">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.data_date">{{scope.row.data_date}}</span>-->
+                      <!--<span v-if="!scope.row.data_date">暂无</span>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
                   <el-table-column
                     width="80px;"
                     label="是否备忘">
@@ -1276,10 +1269,10 @@
       },
       // tabs标签页
       handleClick(tab, event) {
+        this.params.page = 1;
         if (this.activeName == "first") {
           this.collectDatafunc();
-        }
-        else if (this.activeName == "second") {
+        } else if (this.activeName == "second") {
           this.rentDatafunc();
         }
       },
