@@ -775,10 +775,10 @@
       margin-bottom: 15px;
       margin: 15px;
       padding: 10px;
-      box-shadow: 0px 0px 5px 0px #6a8dfbbd;
-      -webkit-box-shadow: 0px 0px 5px 0px #6a8dfbbd;
-      -ms-box-shadow: 0px 0px 5px 0px #6a8dfbbd;
-      -moz-box-shadow: 0px 0px 5px 0px #6a8dfbbd;
+      box-shadow: 0px 0px 5px 0px rgba(106,141,251,0.74);
+      -webkit-box-shadow: 0px 0px 5px 0px rgba(106,141,251,0.74);
+      -ms-box-shadow: 0px 0px 5px 0px rgba(106,141,251,0.74);
+      -moz-box-shadow: 0px 0px 5px 0px rgba(106,141,251,0.74);
       .submitButt {
         text-align: right;
       }
