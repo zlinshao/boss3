@@ -55,14 +55,15 @@
           if(res.data.code == '80000'){
             this.$notify.success({
               title:'成功',
-              msg:res.data.msg,
-            })
+              message:res.data.msg,
+            });
             this.importDialogVisible = false;
             this.$emit('close','success');
           }else {
+            alert(2)
             this.$notify.warning({
               title:'警告',
-              msg:res.data.msg,
+              message:res.data.msg,
             })
           }
         })
