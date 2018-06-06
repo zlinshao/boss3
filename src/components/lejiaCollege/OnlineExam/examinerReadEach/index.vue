@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="show=false" @contextmenu="closeMenu">
     <div id="onlineExam">
       <div class="highRanking">
         <div class="highSearch">
@@ -13,6 +13,9 @@
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="mini" @click="sendPerformance">发送成绩</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -40,6 +43,38 @@
                 </el-row>
               </el-col>
             </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">考生成绩</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-input v-model="form.score[0]"  placeholder=""></el-input>—
+                      <el-input v-model="form.score[1]"  placeholder=""></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">考生状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <!--<el-select v-model="form.status" size="mini" placeholder="请选择" clearable>-->
+                        <!--<el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name"-->
+                                   <!--:value="item.id">-->
+                          <!--{{item.dictionary_name}}-->
+                        <!--</el-option>-->
+                      <!--</el-select>-->
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
@@ -52,13 +87,20 @@
         <div class="myHouse">
           <div class="blueTable">
             <el-table
+              ref="multipleTable"
               :data="tableData"
               :empty-text='rentStatus'
               v-loading="rentLoading"
               element-loading-text="拼命加载中"
               element-loading-spinner="el-icon-loading"
               element-loading-background="rgba(255, 255, 255, 0)"
+              @row-contextmenu='openContextMenu'
+              @selection-change="handleSelectionChange"
               style="width: 100%">
+              <el-table-column
+                type="selection"
+                width="65">
+              </el-table-column>
               <el-table-column
                 prop="start_time"
                 label="考试时间">
@@ -100,7 +142,7 @@
                 <template slot-scope="scope">
                   <span
                     v-if="scope.row.result_id == 0 || (scope.row.result_info && scope.row.result_info.waiting && scope.row.result_info.waiting.length == 0)"
-                    style="cursor: pointer;color: #6a8dfb;" @click="lookExam(scope.row)">已完成,点击查看</span>
+                    style="cursor: pointer;color: #6a8dfb;" @click="correctExam(scope.row)">已完成,点击查看</span>
                   <span v-else @click="correctExam(scope.row)" style="cursor: pointer;color: #6a8dfb;">点击阅卷</span>
                 </template>
               </el-table-column>
@@ -119,26 +161,72 @@
         </div>
       </div>
     </div>
-    <Organization :organizationDialog="organizationDialog"  :type="organizeType" @close="closeOrganization"
+    <div>
+      <el-dialog :close-on-click-modal="false" :visible.sync="editExamineeScoreDialog" title="修改考生成绩"
+                 width="45%">
+        <div style="margin-top: 20px;">
+          <el-form size="mini" onsubmit="return false;" :model="examineeScoreForm" label-width="100px">
+            <el-row>
+              <el-col :span="22">
+                <el-form-item label="主观题总分">
+                  <el-input v-model="examineeScoreForm.subjective" placeholder="请输入主观题总分" clearable></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="22">
+                <el-form-item label="客观题总分">
+                  <el-input v-model="examineeScoreForm.objective" placeholder="请输入客观题总分" clearable></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="22">
+                <el-form-item label="上传附件">
+                  <Upload :ID="'attachment'" @getImg="photo_success" :editImage="attachment"
+                          :isClear="isClear"></Upload>
+                </el-form-item>
+              </el-col>
+              <el-col :span="22">
+                <el-form-item label="备注">
+                  <el-input type="textarea" v-model="examineeScoreForm.remark" placeholder="请输入备注" clearable></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <el-button size="mini" @click="editExamineeScoreDialog = false">取消</el-button>
+          <el-button type="primary" size="mini" @click="confirmAddScore">确定</el-button>
+        </span>
+      </el-dialog>
+    </div>
+    <Organization :organizationDialog="organizationDialog" :type="organizeType" @close="closeOrganization"
                   @selectMember="selectMember"></Organization>
+    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+               @clickOperate="clickEvent"></RightMenu>
   </div>
 </template>
 
 <script>
   import Organization from "../../../common/organization.vue";
+  import RightMenu from '../../../common/rightMenu.vue'    //右键
+  import Upload from '../../../common/UPLOAD.vue';
 
   export default {
     name: "examiner-read-each",
-    components: {Organization},
+    components: {Organization, RightMenu, Upload},
     data() {
       return {
+        rightMenuX: 0,
+        rightMenuY: 0,
+        show: false,
+        lists: [],
         tableData: [],
         tableNumber: 0,
         examId: '',
         form: {
           page: 1,
           limit: 12,
-          department_id: ''
+          department_id: '',
+          score: [],
+          status: '',
         },
         departname: '',
         isHigh: false, //高级搜索
@@ -146,55 +234,106 @@
         organizationDialog: false,
         rentStatus: ' ',
         rentLoading: false,
-        pickerOptions: {
-          shortcuts: [
-            {
-              text: "最近一周",
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                picker.$emit("pick", [start, end]);
-              }
-            },
-            {
-              text: "最近一个月",
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                picker.$emit("pick", [start, end]);
-              }
-            },
-            {
-              text: "最近三个月",
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                picker.$emit("pick", [start, end]);
-              }
-            }
-          ]
+        resultIds: [],
+        editExamineeScoreDialog: false,
+        //修改考生成绩
+        examineeScoreForm: {
+          subjective: '', //主观题分数
+          objective: '',  //客观题分数
+          attachment: '',
+          remark: '',
         },
+        attachment: '',
+        isClear: false,
+        resultId: '',
       };
     },
     activated() {
       this.getQueryData();
       this.myData();
     },
-    watch: {},
+    watch: {
+      editExamineeScoreDialog(val) {
+        if (!val) {
+          this.examineeScoreForm = {
+            subjective: '', //主观题分数
+            objective: '',  //客观题分数
+            attachment: '',
+            remark: '',
+          };
+          this.isClear = true;
+        } else {
+          this.isClear = false;
+          this.$http.get(globalConfig.server + 'exam/result/' + this.resultId).then((res) => {
+            if (res.data.code === '36000') {
+              this.examineeScoreForm.subjective = res.data.data.subjective_score;
+              this.examineeScoreForm.objective = res.data.data.objective_score;
+              this.examineeScoreForm.remark = res.data.data.remark;
+              //todo attachment附件
+            }
+          });
+        }
+      },
+    },
     methods: {
-      search(){
+      confirmAddScore() {
+        this.$http.put(globalConfig.server + 'exam/result/' + this.resultId, this.examineeScoreForm).then((res) => {
+          if (res.data.code === '36010') {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.editExamineeScoreDialog = false;
+            this.myData();
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
+      // 上传成功
+      photo_success(val) {
+        this.examineeScoreForm.attachment = val[1][0];
+      },
+      sendPerformance() {
+        this.$http.post(globalConfig.server + 'exam/result/submit', {
+          ids: this.resultIds,
+          exam_id: this.examId
+        }).then((res) => {
+          if (res.data.code === '36010') {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.$refs.multipleTable.clearSelection();
+            this.resultIds = [];
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
+
+      handleSelectionChange(val) {
+        this.resultIds = [];
+        val.forEach((item) => {
+          this.resultIds.push(item.result_id);
+        });
+      },
+      search() {
         this.form.page = 1;
         this.myData();
       },
       correctExam(val) {
         this.$router.push({path: "/examinerShortAn", query: {result_id: val.result_id, exam_id: val.exam_id}});
       },
-      lookExam(val) {
-        this.$router.push({path: '/lookExam', query: {result_id: val.result_id, exam_id: val.exam_id, from: 'manage'}});
-      },
+      // lookExam(val) {
+      //   this.$router.push({path: '/lookExam', query: {result_id: val.result_id, exam_id: val.exam_id, from: 'manage'}});
+      // },
       getQueryData() {
         if (!this.$route.query.id) {
           this.examId = this.$store.state.onlineExam.examiner_read_id;
@@ -257,7 +396,59 @@
       handleCurrentChange(val) {
         this.form.page = val;
         this.myData();
-      }
+      },
+      //右键菜单
+      openContextMenu(row, event) {
+        this.resultId = row.result_id;
+        this.lists = [
+          {
+            clickIndex: "editExamineeScore",
+            headIcon: "el-icon-edit",
+            label: "修改考生成绩"
+          },
+
+        ];
+        let e = event || window.event; //support firefox contextmenu
+        this.show = false;
+        this.rightMenuX =
+          e.clientX +
+          document.documentElement.scrollLeft -
+          document.documentElement.clientLeft;
+        this.rightMenuY =
+          e.clientY +
+          document.documentElement.scrollTop -
+          document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true;
+        });
+      },
+      //右键回调事件
+      clickEvent(index) {
+        switch (index) {
+          case 'editExamineeScore':
+            this.editExamineeScoreDialog = true;
+            break;
+
+        }
+      },
+      //关闭右键菜单
+      closeMenu() {
+        this.show = false;
+      },
+      //右键参数
+      contextMenuParam(event) {
+        let e = event || window.event;
+        this.show = false;
+        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true;
+        })
+      },
     }
   };
 </script>

@@ -640,28 +640,28 @@
           this.lists = [
             {clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除"},
             {clickIndex: "setOpen", headIcon: "el-icon-delete", label: "非公开", openStatus: 'close'},
-            {clickIndex: "setDrop", headIcon: "el-icon-delete", label: "下架", dropStatus: 'drop'},
+            {clickIndex: "setDrop", headIcon: "iconfont icon-xiajia--", label: "下架", dropStatus: 'drop'},
           ];
         } else if (row.is_open && row.is_drop) {
           //公开 下架
           this.lists = [
             {clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除"},
             {clickIndex: "setOpen", headIcon: "el-icon-delete", label: "非公开", openStatus: 'close'},
-            {clickIndex: "setDrop", headIcon: "el-icon-delete", label: "上架", dropStatus: 'undrop'},
+            {clickIndex: "setDrop", headIcon: "iconfont icon-shangjia--", label: "上架", dropStatus: 'undrop'},
           ];
         } else if (!row.is_open && row.is_drop) {
           //非公开 下架
           this.lists = [
             {clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除"},
             {clickIndex: "setOpen", headIcon: "el-icon-delete", label: "公开", openStatus: 'open'},
-            {clickIndex: "setDrop", headIcon: "el-icon-delete", label: "上架", dropStatus: 'undrop'},
+            {clickIndex: "setDrop", headIcon: "iconfont icon-shangjia--", label: "上架", dropStatus: 'undrop'},
           ];
         } else if (!row.is_open && !row.is_drop) {
           //非公开 上架
           this.lists = [
             {clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除"},
             {clickIndex: "setOpen", headIcon: "el-icon-delete", label: "公开", openStatus: 'open'},
-            {clickIndex: "setDrop", headIcon: "el-icon-delete", label: "下架", dropStatus: 'drop'},
+            {clickIndex: "setDrop", headIcon: "iconfont icon-xiajia--", label: "下架", dropStatus: 'drop'},
           ];
         }
         let e = event || window.event; //support firefox contextmenu
