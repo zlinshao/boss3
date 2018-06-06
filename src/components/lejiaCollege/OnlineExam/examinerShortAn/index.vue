@@ -380,7 +380,7 @@
     .main {
       border: 1px #eee solid;
       border-top: none;
-      min-height: 500px;
+      /*min-height: 500px;*/
       font-size: 16px;
       .questionDiv {
         width: 98%;
