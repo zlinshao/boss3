@@ -96,7 +96,7 @@
 
         <div class="title">上传照片</div>
         <div class="describe_border">
-          <UpLoad :ID="'rentingVacationId'" :isClear="isClear" @getImg="getImg"></UpLoad>
+          <UpLoad :ID="'rentingVacationId'" :editImage="editImage" :isClear="isClear" @getImg="getImg"></UpLoad>
         </div>
 
 
@@ -482,6 +482,7 @@
         isDictionary:false,
         dictionary:[],
         rentInfo:{},
+        editImage:{},
       };
     },
     computed:{
@@ -531,6 +532,7 @@
           this.clearData();
         }else {
           this.isClear = false;
+          this.getCheckOutData();
           if(!this.isDictionary){
             this.getDictionary();
           }
@@ -566,6 +568,24 @@
         this.$http.get(globalConfig.server+'manager/staff/info?bank_num='+this.params.bank_num).then((res) => {
           if(res.data.code === '10050'){
             this.params.account_bank = res.data.data.bankname;
+          }
+        })
+      },
+      getCheckOutData(){
+        this.$http.get(globalConfig.server+'customer/check_out/data',{params:{id:this.rentContractId,module:2}}).then((res)=>{
+          if(res.data.code === '20090'){
+            let data = res.data.data.old_data;
+            this.params.check_time = data.checkout_date;
+            this.params.check_type = data.check_type;
+            let editImage = {};
+            this.editImage = {};
+            if(data.checkout_photo && data.checkout_photo.pic_addresses.length>0){
+              this.params.image_pic = data.checkout_photo.pic_ids;
+              data.checkout_photo.pic_addresses.forEach((item)=>{
+                editImage[item.id] = item.uri;
+              });
+              this.editImage = editImage;
+            }
           }
         })
       },

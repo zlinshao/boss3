@@ -108,6 +108,9 @@
       getToken() {
         this.$http.get(globalConfig.server_user + 'files').then((res) => {
           this.token = res.data.data;
+          if(!this.uploader){
+            this.uploaderReady();
+          }
         })
       },
 
