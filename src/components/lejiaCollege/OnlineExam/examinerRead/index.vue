@@ -139,6 +139,12 @@
                   <span @click="lookExam(scope.row.id)" style="cursor: pointer;color: #6a8dfb;">点击查看</span>
                 </template>
               </el-table-column>
+              <!--<el-table-column-->
+                <!--label="操作">-->
+                <!--<template slot-scope="scope">-->
+                  <!--<el-button type="primary" size="mini" @click="">导出成绩</el-button>-->
+                <!--</template>-->
+              <!--</el-table-column>-->
             </el-table>
           </div>
           <div class="block pages">

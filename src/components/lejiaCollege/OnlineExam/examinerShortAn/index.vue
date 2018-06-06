@@ -277,6 +277,7 @@
             this.examData = res.data.data;
             this.questionData = res.data.data.question_set;
             this.answerData = res.data.data.reference_set;
+
           } else {
             this.examData = {};
             this.questionData = {};
@@ -285,7 +286,7 @@
         this.$http.get(globalConfig.server + 'exam/result/' + this.resultId).then((res) => {
           if (res.data.code === '36000') {
             this.resultData = res.data.data;
-            this.objective_score = this.totalScore = res.data.data.score;
+            this.objective_score = this.totalScore = res.data.data.objective_score;
             this.correct = res.data.data.subjective_detail;
             if (!this.correct) {
               this.correct = {};
@@ -380,7 +381,7 @@
     .main {
       border: 1px #eee solid;
       border-top: none;
-      min-height: 500px;
+      /*min-height: 500px;*/
       font-size: 16px;
       .questionDiv {
         width: 98%;

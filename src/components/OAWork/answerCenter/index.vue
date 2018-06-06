@@ -31,7 +31,7 @@
                 <span v-if="item.is_anonymous">匿名</span>
                 <span v-if="!item.is_anonymous">
                   <span v-if="item && item.asker && item.asker.org.length>0" v-for="v in item.asker.org">&nbsp;{{v.name}}&nbsp;</span>
-                  —
+                  -
                   <span v-if="item && item.asker && item.asker.role.length>0" v-for="v in item.asker.role">&nbsp;{{v.display_name}}&nbsp;</span>
                   <span>{{item.create_time}}</span>
                 </span>
@@ -94,7 +94,7 @@
                 <div>
                   <span>{{item.first_answer.staff.name}}</span>&nbsp;&nbsp;
                   <span class="staffBefore" v-if="item.first_answer.staff.org.length>0"
-                        v-for="v in item.first_answer.staff.org">&nbsp;{{v.name}}&nbsp;</span>—
+                        v-for="v in item.first_answer.staff.org">&nbsp;{{v.name}}&nbsp;</span>-
                   <span v-if="item.first_answer.staff.role.length>0" v-for="v in item.first_answer.staff.role">&nbsp;{{v.display_name}}&nbsp;</span>
                   <span>{{item.first_answer.create_time}}</span>
                 </div>
@@ -129,7 +129,7 @@
                   <div class="staff_name">
                     <div>
                       <span>{{comment.staff.name}}</span>&nbsp;&nbsp;
-                      <span class="staffBefore" v-if="comment.staff.org.length>0" v-for="v in comment.staff.org">&nbsp;{{v.name}}&nbsp;</span>—
+                      <span class="staffBefore" v-if="comment.staff.org.length>0" v-for="v in comment.staff.org">&nbsp;{{v.name}}&nbsp;</span>-
                       <span v-if="comment.staff.role.length>0"
                             v-for="v in comment.staff.role">&nbsp;{{v.display_name}}&nbsp;</span>
                       <span>{{comment.create_time}}</span>
@@ -153,7 +153,7 @@
                 <div class="staff_name">
                   <div>
                     <span>{{value.staff.name}}</span>&nbsp;&nbsp;
-                    <span class="staffBefore" v-if="value.staff.org.length>0" v-for="v in value.staff.org">&nbsp;{{v.name}}&nbsp;</span>—
+                    <span class="staffBefore" v-if="value.staff.org.length>0" v-for="v in value.staff.org">&nbsp;{{v.name}}&nbsp;</span>-
                     <span v-if="value.staff.role.length>0"
                           v-for="v in value.staff.role">&nbsp;{{v.display_name}}&nbsp;</span>
                     <span>{{value.create_time}}</span>
@@ -189,7 +189,7 @@
                     <div class="staff_name">
                       <div>
                         <span>{{comment.staff.name}}</span>&nbsp;&nbsp;
-                        <span class="staffBefore" v-if="comment.staff.org.length>0" v-for="v in comment.staff.org">&nbsp;{{v.name}}&nbsp;</span>—
+                        <span class="staffBefore" v-if="comment.staff.org.length>0" v-for="v in comment.staff.org">&nbsp;{{v.name}}&nbsp;</span>-
                         <span v-if="comment.staff.role.length>0"
                               v-for="v in comment.staff.role">&nbsp;{{v.display_name}}&nbsp;</span>
                         <span>{{comment.create_time}}</span>
@@ -561,6 +561,9 @@
     padding: 1px 8px;
     border-radius: 5px;
     box-shadow: 0 0 3px 1px #eee;
+    -webkit-box-shadow: 0 0 3px 1px #eee;
+    -ms-box-shadow: 0 0 3px 1px #eee;
+    -moz-box-shadow: 0 0 3px 1px #eee;
     height: 25px;
     line-height: 25px;
   }
@@ -770,7 +773,10 @@
       margin-bottom: 15px;
       margin: 15px;
       padding: 10px;
-      box-shadow: 0px 0px 5px 0px #6a8dfbbd;
+      box-shadow: 0px 0px 5px 0px rgba(106,141,251,0.74);
+      -webkit-box-shadow: 0px 0px 5px 0px rgba(106,141,251,0.74);
+      -ms-box-shadow: 0px 0px 5px 0px rgba(106,141,251,0.74);
+      -moz-box-shadow: 0px 0px 5px 0px rgba(106,141,251,0.74);
       .submitButt {
         text-align: right;
       }
