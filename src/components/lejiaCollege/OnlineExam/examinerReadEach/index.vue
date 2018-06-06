@@ -51,7 +51,7 @@
                     <el-form-item>
                       <el-input v-model="form.score[0]" placeholder="起" style="width: 100px;"></el-input>
                       —
-                      <el-input v-model="form.score[1]" placeholder="始" style="width: 100px;"></el-input>
+                      <el-input v-model="form.score[1]" placeholder="止" style="width: 100px;"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -171,7 +171,7 @@
                   <span v-if="scope.row.result_info && scope.row.result_info.attachment"
                         @click="downLoad(scope.row)">
                     <img src="../../../../assets/images/file.svg"
-                         style="width: 25px;border-radius: 5px;cursor: pointer;"></span>
+                         style="width: 20px;cursor: pointer;"></span>
                   <span v-else>—</span>
                 </template>
               </el-table-column>
@@ -211,6 +211,7 @@
                   <Upload :ID="'attachment'" @getImg="photo_success" :editImage="attachment"
                           :isClear="isClear"></Upload>
                 </el-form-item>
+                <div style="color: #ff4545;color: #ef5252;margin-left: 100px;margin-bottom: 10px;margin-top: -10px;">温馨提示：附件和图片只支持一个</div>
               </el-col>
               <el-col :span="22">
                 <el-form-item label="备注">
