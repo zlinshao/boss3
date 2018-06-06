@@ -639,28 +639,28 @@
           //公开 上架
           this.lists = [
             {clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除"},
-            {clickIndex: "setOpen", headIcon: "el-icon-delete", label: "非公开", openStatus: 'close'},
+            {clickIndex: "setOpen", headIcon: "iconfont icon-feigongkai", label: "非公开", openStatus: 'close'},
             {clickIndex: "setDrop", headIcon: "iconfont icon-xiajia--", label: "下架", dropStatus: 'drop'},
           ];
         } else if (row.is_open && row.is_drop) {
           //公开 下架
           this.lists = [
             {clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除"},
-            {clickIndex: "setOpen", headIcon: "el-icon-delete", label: "非公开", openStatus: 'close'},
+            {clickIndex: "setOpen", headIcon: "iconfont icon-feigongkai", label: "非公开", openStatus: 'close'},
             {clickIndex: "setDrop", headIcon: "iconfont icon-shangjia--", label: "上架", dropStatus: 'undrop'},
           ];
         } else if (!row.is_open && row.is_drop) {
           //非公开 下架
           this.lists = [
             {clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除"},
-            {clickIndex: "setOpen", headIcon: "el-icon-delete", label: "公开", openStatus: 'open'},
+            {clickIndex: "setOpen", headIcon: "iconfont icon-gongkai", label: "公开", openStatus: 'open'},
             {clickIndex: "setDrop", headIcon: "iconfont icon-shangjia--", label: "上架", dropStatus: 'undrop'},
           ];
         } else if (!row.is_open && !row.is_drop) {
           //非公开 上架
           this.lists = [
             {clickIndex: "deleteMessageCenter", headIcon: "el-icon-delete", label: "删除"},
-            {clickIndex: "setOpen", headIcon: "el-icon-delete", label: "公开", openStatus: 'open'},
+            {clickIndex: "setOpen", headIcon: "iconfont icon-gongkai", label: "公开", openStatus: 'open'},
             {clickIndex: "setDrop", headIcon: "iconfont icon-xiajia--", label: "下架", dropStatus: 'drop'},
           ];
         }

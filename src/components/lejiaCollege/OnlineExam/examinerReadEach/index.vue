@@ -4,13 +4,13 @@
       <div class="highRanking">
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
-            <el-form-item>
-              <el-input placeholder="请输入" v-model="form.search" @keyup.enter.native="search" size="mini"
-                        clearable>
-                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
-                <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
-              </el-input>
-            </el-form-item>
+            <!--<el-form-item>-->
+              <!--<el-input placeholder="请输入" v-model="form.search" @keyup.enter.native="search" size="mini"-->
+                        <!--clearable>-->
+                <!--<el-button slot="append" icon="el-icon-search" @click="search"></el-button>-->
+                <!--&lt;!&ndash;<el-button slot="append" icon="el-icons-fa-bars"></el-button>&ndash;&gt;-->
+              <!--</el-input>-->
+            <!--</el-form-item>-->
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
@@ -22,7 +22,7 @@
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
           <el-form :inline="true" onsubmit="return false" :model="form" size="mini" label-width="100px">
             <div class="filterTitle">
-              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索{{form}}
             </div>
             <el-row class="el_row_border">
               <el-col :span="12">
@@ -42,8 +42,6 @@
                   </el-col>
                 </el-row>
               </el-col>
-            </el-row>
-            <el-row class="el_row_border">
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
@@ -51,12 +49,16 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input v-model="form.score[0]"  placeholder=""></el-input>—
-                      <el-input v-model="form.score[1]"  placeholder=""></el-input>
+                      <el-input v-model="form.score[0]" placeholder="起" style="width: 100px;"></el-input>
+                      —
+                      <el-input v-model="form.score[1]" placeholder="始" style="width: 100px;"></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
               </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
@@ -64,12 +66,29 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <!--<el-select v-model="form.status" size="mini" placeholder="请选择" clearable>-->
-                        <!--<el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name"-->
-                                   <!--:value="item.id">-->
-                          <!--{{item.dictionary_name}}-->
-                        <!--</el-option>-->
-                      <!--</el-select>-->
+                      <el-select v-model="form.status" size="mini" placeholder="请选择" clearable>
+                        <el-option v-for="item in examineeStatusCategory" :key="item.id" :label="item.name"
+                                   :value="item.id">
+                          {{item.name}}
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">阅卷状态</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="form.read_status" size="mini" placeholder="请选择" clearable>
+                        <el-option v-for="item in readStatusCategory" :key="item.id" :label="item.name"
+                                   :value="item.id">
+                          {{item.name}}
+                        </el-option>
+                      </el-select>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -226,8 +245,29 @@
           limit: 12,
           department_id: '',
           score: [],
-          status: '',
+          status: '',  //考生状态
+          read_status: '', //阅卷状态
         },
+        examineeStatusCategory: [
+          {
+            id: 0,
+            name: '缺考'
+          },
+          {
+            id: 1,
+            name: '完成考试'
+          },
+        ],
+        readStatusCategory: [
+          {
+            id: 0,
+            name: '未完成'
+          },
+          {
+            id: 1,
+            name: '已完成'
+          },
+        ],
         departname: '',
         isHigh: false, //高级搜索
         organizeType: '',
@@ -385,8 +425,10 @@
         this.form = {
           page: 1,
           limit: 12,
-          search: '',
-          department_id: ''
+          department_id: '',
+          score: [],
+          status: '',  //考生状态
+          read_status: '', //阅卷状态
         };
         this.departname = '';
       },
@@ -430,7 +472,6 @@
           case 'editExamineeScore':
             this.editExamineeScoreDialog = true;
             break;
-
         }
       },
       //关闭右键菜单
