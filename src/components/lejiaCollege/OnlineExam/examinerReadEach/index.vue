@@ -5,11 +5,11 @@
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <!--<el-form-item>-->
-              <!--<el-input placeholder="请输入" v-model="form.search" @keyup.enter.native="search" size="mini"-->
-                        <!--clearable>-->
-                <!--<el-button slot="append" icon="el-icon-search" @click="search"></el-button>-->
-                <!--&lt;!&ndash;<el-button slot="append" icon="el-icons-fa-bars"></el-button>&ndash;&gt;-->
-              <!--</el-input>-->
+            <!--<el-input placeholder="请输入" v-model="form.search" @keyup.enter.native="search" size="mini"-->
+            <!--clearable>-->
+            <!--<el-button slot="append" icon="el-icon-search" @click="search"></el-button>-->
+            <!--&lt;!&ndash;<el-button slot="append" icon="el-icons-fa-bars"></el-button>&ndash;&gt;-->
+            <!--</el-input>-->
             <!--</el-form-item>-->
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
@@ -22,7 +22,7 @@
         <div class="filter high_grade" :class="isHigh? 'highHide':''">
           <el-form :inline="true" onsubmit="return false" :model="form" size="mini" label-width="100px">
             <div class="filterTitle">
-              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索{{form}}
+              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>
             <el-row class="el_row_border">
               <el-col :span="12">
@@ -165,6 +165,14 @@
                   <span v-else @click="correctExam(scope.row)" style="cursor: pointer;color: #6a8dfb;">点击阅卷</span>
                 </template>
               </el-table-column>
+              <el-table-column
+                label="附件">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.attachment" @click="downLoad(scope.row.attachment)">
+                    <img src="../../../../assets/images/file.svg" style="width: 25px;border-radius: 5px;cursor: pointer;"></span>
+                  <span v-else>—</span>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
           <div class="block pages">
@@ -283,7 +291,7 @@
           attachment: '',
           remark: '',
         },
-        attachment: '',
+        attachment: {},
         isClear: false,
         resultId: '',
       };
@@ -310,12 +318,19 @@
               this.examineeScoreForm.objective = res.data.data.objective_score;
               this.examineeScoreForm.remark = res.data.data.remark;
               //todo attachment附件
+              this.examineeScoreForm.attachment = res.data.data.attachment;
+              this.attachment[res.data.data.attachment] = res.data.data.attachment_url;
+              console.log(this.attachment);
             }
           });
         }
       },
     },
     methods: {
+      downLoad(val) {
+        console.log(val);
+        window.open(val.uri);
+      },
       confirmAddScore() {
         this.$http.put(globalConfig.server + 'exam/result/' + this.resultId, this.examineeScoreForm).then((res) => {
           if (res.data.code === '36010') {

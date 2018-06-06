@@ -236,18 +236,18 @@
         <div style="position: absolute;right: 10px;z-index: 1;">
           <el-form :inline="true" v-if="activeName==='first'">
             <el-form-item label="考生来源">
-              <el-select v-model="formExam.category" size="mini" placeholder="请选择" clearable>
-                <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
-                  {{item.dictionary_name}}
+              <el-select v-model="examineesForm.source" size="mini" placeholder="请选择" clearable>
+                <el-option v-for="item in sourceCategory" :key="item.id" :label="item.name" :value="item.id">
+                  {{item.name}}
                 </el-option>
               </el-select>
             </el-form-item>
           </el-form>
           <el-form :inline="true" v-if="activeName==='second'">
             <el-form-item label="考生状态">
-              <el-select v-model="formExam.category" size="mini" placeholder="请选择" clearable>
-                <el-option v-for="item in examType" :key="item.id" :label="item.dictionary_name" :value="item.id">
-                  {{item.dictionary_name}}
+              <el-select v-model="examineesForm.status" size="mini" placeholder="请选择" clearable>
+                <el-option v-for="item in statusCategory" :key="item.id" :label="item.name" :value="item.id">
+                  {{item.name}}
                 </el-option>
               </el-select>
             </el-form-item>
@@ -440,6 +440,30 @@
         examinees: [],
         examiness_name: [],
         loading: false,
+        sourceCategory: [
+          {
+            id: 1,
+            name: '邀请考试'
+          },
+          {
+            id: 2,
+            name: '自主报名'
+          }
+        ],
+        statusCategory: [
+          {
+            id: 1,
+            name: '已同意'
+          },
+          {
+            id: 2,
+            name: '已拒绝'
+          }
+        ],
+        examineesForm: {
+          source: '',
+          status: ''
+        },
       };
     },
     mounted() {
