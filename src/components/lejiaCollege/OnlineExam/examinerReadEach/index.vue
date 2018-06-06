@@ -319,6 +319,7 @@
               this.examineeScoreForm.subjective = res.data.data.subjective_score;
               this.examineeScoreForm.objective = res.data.data.objective_score;
               this.examineeScoreForm.remark = res.data.data.remark;
+              this.examineeScoreForm.attachment = res.data.data.attachment;
               this.attachment = res.data.data.link;
             }
           });
