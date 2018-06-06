@@ -233,139 +233,192 @@
     </div>
     <div id="examineeDialog">
       <el-dialog :close-on-click-modal="false" :visible.sync="examineeDialog" title="考生信息" width="45%">
-        <div style="position: absolute;right: 10px;z-index: 1;">
-          <el-form :inline="true" v-if="activeName==='first'">
-            <el-form-item label="考生来源">
-              <el-select v-model="examineesForm.source" size="mini" placeholder="请选择" clearable>
-                <el-option v-for="item in sourceCategory" :key="item.id" :label="item.name" :value="item.id">
-                  {{item.name}}
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-form>
-          <el-form :inline="true" v-if="activeName==='second'">
-            <el-form-item label="考生状态">
-              <el-select v-model="examineesForm.status" size="mini" placeholder="请选择" clearable>
-                <el-option v-for="item in statusCategory" :key="item.id" :label="item.name" :value="item.id">
-                  {{item.name}}
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-form>
-        </div>
+        <!--<div style="position: absolute;right: 10px;z-index: 1;">-->
+          <!--<el-form :inline="true" v-if="activeName==='first'">-->
+            <!--<el-form-item label="考生来源">-->
+              <!--<el-select v-model="examineesForm.source" size="mini" placeholder="请选择" clearable>-->
+                <!--<el-option v-for="item in sourceCategory" :key="item.id" :label="item.name" :value="item.id">-->
+                  <!--{{item.name}}-->
+                <!--</el-option>-->
+              <!--</el-select>-->
+            <!--</el-form-item>-->
+          <!--</el-form>-->
+          <!--<el-form :inline="true" v-if="activeName==='second'">-->
+            <!--<el-form-item label="考生状态">-->
+              <!--<el-select v-model="examineesForm.status" size="mini" placeholder="请选择" clearable>-->
+                <!--<el-option v-for="item in statusCategory" :key="item.id" :label="item.name" :value="item.id">-->
+                  <!--{{item.name}}-->
+                <!--</el-option>-->
+              <!--</el-select>-->
+            <!--</el-form-item>-->
+          <!--</el-form>-->
+        <!--</div>-->
         <div>
-          <el-tabs v-model="activeName">
-            <el-tab-pane label="本次考生" name="first">
-              <div v-loading="loading"
-                   element-loading-text="正在处理中"
-                   element-loading-spinner="el-icon-loading"
-                   element-loading-background="rgba(0, 0, 0, 0.3)"
-                   style="margin-top: 20px;">
-                <el-table
-                  :data="examineesData"
-                  @selection-change="handleSelectionChange"
-                  style="width: 100%">
-                  <el-table-column
-                    type="selection"
-                    width="65">
-                  </el-table-column>
-                  <el-table-column
-                    prop="real_name"
-                    label="考生姓名">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.real_name">{{scope.row.real_name}}</span>
-                      <span v-if="!scope.row.real_name">暂无</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    prop=""
-                    label="职位">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.position">{{scope.row.position}}</span>
-                      <span v-else>暂无</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    label="部门">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.org_name">{{scope.row.org_name}}</span>
-                      <span v-else>暂无</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    prop="pivot.enroll_time"
-                    label="报名时间">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.pivot && scope.row.pivot.enroll_time">{{scope.row.pivot && scope.row.pivot.enroll_time}}</span>
-                      <span v-if="!(scope.row.pivot && scope.row.pivot.enroll_time)">暂无</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    label="状态">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.pivot && scope.row.pivot.named_status">{{scope.row.pivot && scope.row.pivot.named_status}}</span>
-                      <span v-else>暂无</span>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="报名考生" name="second">
-              <div v-loading="loading"
-                   element-loading-text="正在处理中"
-                   element-loading-spinner="el-icon-loading"
-                   element-loading-background="rgba(0, 0, 0, 0.3)"
-                   style="margin-top: 20px;">
-                <el-table
-                  :data="examineesData"
-                  @selection-change="handleSelectionChange"
-                  style="width: 100%">
-                  <el-table-column
-                    type="selection"
-                    width="65">
-                  </el-table-column>
-                  <el-table-column
-                    prop="real_name"
-                    label="考生姓名">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.real_name">{{scope.row.real_name}}</span>
-                      <span v-if="!scope.row.real_name">暂无</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    prop=""
-                    label="职位">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.position">{{scope.row.position}}</span>
-                      <span v-else>暂无</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    label="部门">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.org_name">{{scope.row.org_name}}</span>
-                      <span v-else>暂无</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    prop="pivot.enroll_time"
-                    label="报名时间">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.pivot && scope.row.pivot.enroll_time">{{scope.row.pivot && scope.row.pivot.enroll_time}}</span>
-                      <span v-if="!(scope.row.pivot && scope.row.pivot.enroll_time)">暂无</span>
-                    </template>
-                  </el-table-column>
-                  <el-table-column
-                    label="状态">
-                    <template slot-scope="scope">
-                      <span v-if="scope.row.pivot && scope.row.pivot.named_status">{{scope.row.pivot && scope.row.pivot.named_status}}</span>
-                      <span v-else>暂无</span>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </div>
-            </el-tab-pane>
-          </el-tabs>
+          <!--<el-tabs v-model="activeName">-->
+            <!--<el-tab-pane label="本次考生" name="first">-->
+              <!--<div v-loading="loading"-->
+                   <!--element-loading-text="正在处理中"-->
+                   <!--element-loading-spinner="el-icon-loading"-->
+                   <!--element-loading-background="rgba(0, 0, 0, 0.3)"-->
+                   <!--style="margin-top: 20px;">-->
+                <!--<el-table-->
+                  <!--:data="examineesData"-->
+                  <!--@selection-change="handleSelectionChange"-->
+                  <!--style="width: 100%">-->
+                  <!--<el-table-column-->
+                    <!--type="selection"-->
+                    <!--width="65">-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--prop="real_name"-->
+                    <!--label="考生姓名">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.real_name">{{scope.row.real_name}}</span>-->
+                      <!--<span v-if="!scope.row.real_name">暂无</span>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--prop=""-->
+                    <!--label="职位">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.position">{{scope.row.position}}</span>-->
+                      <!--<span v-else>暂无</span>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--label="部门">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.org_name">{{scope.row.org_name}}</span>-->
+                      <!--<span v-else>暂无</span>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--prop="pivot.enroll_time"-->
+                    <!--label="报名时间">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.pivot && scope.row.pivot.enroll_time">{{scope.row.pivot && scope.row.pivot.enroll_time}}</span>-->
+                      <!--<span v-if="!(scope.row.pivot && scope.row.pivot.enroll_time)">暂无</span>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--label="状态">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.pivot && scope.row.pivot.named_status">{{scope.row.pivot && scope.row.pivot.named_status}}</span>-->
+                      <!--<span v-else>暂无</span>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
+                <!--</el-table>-->
+              <!--</div>-->
+            <!--</el-tab-pane>-->
+            <!--<el-tab-pane label="报名考生" name="second">-->
+              <!--<div v-loading="loading"-->
+                   <!--element-loading-text="正在处理中"-->
+                   <!--element-loading-spinner="el-icon-loading"-->
+                   <!--element-loading-background="rgba(0, 0, 0, 0.3)"-->
+                   <!--style="margin-top: 20px;">-->
+                <!--<el-table-->
+                  <!--:data="examineesData"-->
+                  <!--@selection-change="handleSelectionChange"-->
+                  <!--style="width: 100%">-->
+                  <!--<el-table-column-->
+                    <!--type="selection"-->
+                    <!--width="65">-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--prop="real_name"-->
+                    <!--label="考生姓名">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.real_name">{{scope.row.real_name}}</span>-->
+                      <!--<span v-if="!scope.row.real_name">暂无</span>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--prop=""-->
+                    <!--label="职位">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.position">{{scope.row.position}}</span>-->
+                      <!--<span v-else>暂无</span>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--label="部门">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.org_name">{{scope.row.org_name}}</span>-->
+                      <!--<span v-else>暂无</span>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--prop="pivot.enroll_time"-->
+                    <!--label="报名时间">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.pivot && scope.row.pivot.enroll_time">{{scope.row.pivot && scope.row.pivot.enroll_time}}</span>-->
+                      <!--<span v-if="!(scope.row.pivot && scope.row.pivot.enroll_time)">暂无</span>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                    <!--label="状态">-->
+                    <!--<template slot-scope="scope">-->
+                      <!--<span v-if="scope.row.pivot && scope.row.pivot.named_status">{{scope.row.pivot && scope.row.pivot.named_status}}</span>-->
+                      <!--<span v-else>暂无</span>-->
+                    <!--</template>-->
+                  <!--</el-table-column>-->
+                <!--</el-table>-->
+              <!--</div>-->
+            <!--</el-tab-pane>-->
+          <!--</el-tabs>-->
+          <div v-loading="loading"
+               element-loading-text="正在处理中"
+               element-loading-spinner="el-icon-loading"
+               element-loading-background="rgba(0, 0, 0, 0.3)"
+               style="margin-top: 20px;">
+            <el-table
+              :data="examineesData"
+              @selection-change="handleSelectionChange"
+              style="width: 100%">
+              <el-table-column
+                type="selection"
+                width="65">
+              </el-table-column>
+              <el-table-column
+                prop="real_name"
+                label="考生姓名">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.real_name">{{scope.row.real_name}}</span>
+                  <span v-if="!scope.row.real_name">暂无</span>
+                </template>
+              </el-table-column>
+              <!--<el-table-column-->
+                <!--prop=""-->
+                <!--label="职位">-->
+                <!--<template slot-scope="scope">-->
+                  <!--<span v-if="scope.row.position">{{scope.row.position}}</span>-->
+                  <!--<span v-else>暂无</span>-->
+                <!--</template>-->
+              <!--</el-table-column>-->
+              <el-table-column
+                label="部门">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.org_name">{{scope.row.org_name}}</span>
+                  <span v-else>暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="pivot.enroll_time"
+                label="报名时间">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.pivot && scope.row.pivot.enroll_time">{{scope.row.pivot && scope.row.pivot.enroll_time}}</span>
+                  <span v-if="!(scope.row.pivot && scope.row.pivot.enroll_time)">暂无</span>
+                </template>
+              </el-table-column>
+              <!--<el-table-column-->
+                <!--label="状态">-->
+                <!--<template slot-scope="scope">-->
+                  <!--<span v-if="scope.row.pivot && scope.row.pivot.named_status">{{scope.row.pivot && scope.row.pivot.named_status}}</span>-->
+                  <!--<span v-else>暂无</span>-->
+                <!--</template>-->
+              <!--</el-table-column>-->
+            </el-table>
+          </div>
         </div>
         <span slot="footer" class="dialog-footer">
            <el-button type="primary" size="mini" style="float: left;" @click="openOrganize" v-if="activeName==='first'">新增</el-button>
