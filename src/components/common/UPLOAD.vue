@@ -237,6 +237,7 @@
 
 //              console.log(errTip);
             'Error': function (up, err, errTip) {
+              console.log(err)
              _this.$notify.warning({
                title:'警告',
                message:errTip,
