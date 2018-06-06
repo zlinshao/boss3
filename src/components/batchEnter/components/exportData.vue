@@ -5,7 +5,7 @@
         <el-form size="small" onsubmit="return false" label-width="80px">
 
           <el-form-item label="账户类型">
-            <el-select v-model="params.cate" @change="getData" placeholder="请选择账户类型">
+            <el-select v-model="params.cate" @change="getData('')" placeholder="请选择账户类型">
               <el-option label="银行卡" value="1"></el-option>
               <el-option label="支付宝" value="2"></el-option>
               <el-option label="微信" value="3"></el-option>
