@@ -236,7 +236,11 @@
             },
 
 //              console.log(errTip);
-              'Error': function (up, err, errTip) {
+            'Error': function (up, err, errTip) {
+             _this.$notify.warning({
+               title:'警告',
+               message:errTip,
+             })
             },
             'UploadComplete': function (uploader,files) {
               //队列文件处理完毕后，处理相关的事情
