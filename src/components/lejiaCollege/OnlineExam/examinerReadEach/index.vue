@@ -168,8 +168,10 @@
               <el-table-column
                 label="附件">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.attachment" @click="downLoad(scope.row.attachment)">
-                    <img src="../../../../assets/images/file.svg" style="width: 25px;border-radius: 5px;cursor: pointer;"></span>
+                  <span v-if="scope.row.result_info && scope.row.result_info.attachment"
+                        @click="downLoad(scope.row)">
+                    <img src="../../../../assets/images/file.svg"
+                         style="width: 25px;border-radius: 5px;cursor: pointer;"></span>
                   <span v-else>—</span>
                 </template>
               </el-table-column>
@@ -317,10 +319,7 @@
               this.examineeScoreForm.subjective = res.data.data.subjective_score;
               this.examineeScoreForm.objective = res.data.data.objective_score;
               this.examineeScoreForm.remark = res.data.data.remark;
-              //todo attachment附件
-              this.examineeScoreForm.attachment = res.data.data.attachment;
-              this.attachment[res.data.data.attachment] = res.data.data.attachment_url;
-              console.log(this.attachment);
+              this.attachment = res.data.data.link;
             }
           });
         }
@@ -328,8 +327,12 @@
     },
     methods: {
       downLoad(val) {
-        console.log(val);
-        window.open(val.uri);
+        this.$http.get(globalConfig.server + 'exam/result/' + val.result_id).then((res) => {
+          if (res.data.code === '36000') {
+            window.open(res.data.data.link[val.result_info.attachment]);
+          }
+        });
+
       },
       confirmAddScore() {
         this.$http.put(globalConfig.server + 'exam/result/' + this.resultId, this.examineeScoreForm).then((res) => {
@@ -353,24 +356,36 @@
         this.examineeScoreForm.attachment = val[1][0];
       },
       sendPerformance() {
-        this.$http.post(globalConfig.server + 'exam/result/submit', {
-          ids: this.resultIds,
-          exam_id: this.examId
-        }).then((res) => {
-          if (res.data.code === '36010') {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
-            this.$refs.multipleTable.clearSelection();
-            this.resultIds = [];
-          } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            });
-          }
+        this.$confirm("您确认发送成绩吗?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          this.$http.post(globalConfig.server + 'exam/result/submit', {
+            ids: this.resultIds,
+            exam_id: this.examId
+          }).then((res) => {
+            if (res.data.code === '36010') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.$refs.multipleTable.clearSelection();
+              this.resultIds = [];
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              });
+            }
+          });
+        }).catch(() => {
+          this.$notify.info({
+            title: "提示",
+            message: "已取消发送"
+          });
         });
+
       },
 
       handleSelectionChange(val) {
