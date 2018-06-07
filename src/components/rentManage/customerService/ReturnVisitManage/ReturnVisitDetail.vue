@@ -268,7 +268,7 @@
               <el-col :span="10">
                 <el-form-item label="中介费">
                   <div class="content">
-                    <span v-if="agency_price_origin">{{agency_price_origin}}</span>
+                    <span v-if="agency_price">{{agency_price}}</span>
                     <span v-else>暂无</span>
                   </div>
                 </el-form-item>
@@ -360,7 +360,7 @@
         payTypeLen: 0,
         payUseLen: 0,
         album: [],
-        agency_price_origin: "",            //中介费
+        agency_price: "",            //中介费
         agency_price_now: "",               //现中介费
         agency_name: "",                    //中介名
         agency_user_name: "",               //中介人
@@ -487,7 +487,7 @@
           })
           .then(res => {
             if (res.data.code === "1212200") {
-              this.agency_price_origin = res.data.data.agency_price_origin;
+              this.agency_price = res.data.data.agency_price;
               this.agency_price_now = res.data.data.agency_price_now;
               this.agency_name = res.data.data.agency_name;
               this.agency_user_name = res.data.data.agency_user_name;
