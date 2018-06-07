@@ -3,6 +3,8 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+
+const WebpackMd5Hash = require('webpack-md5-hash');
 // 添加代码
 const webpack = require("webpack")
 
@@ -20,6 +22,7 @@ module.exports = {
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
+    chunkFilename: "[chunkhash].[id].chunk.js",
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
@@ -37,6 +40,7 @@ module.exports = {
 
   // 添加代码
   plugins: [
+    new WebpackMd5Hash(),
     new webpack.ProvidePlugin({
       $: "jquery",
       jQuery: "jquery",

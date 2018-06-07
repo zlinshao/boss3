@@ -38,7 +38,7 @@
             <!--</el-table-column>-->
             <el-table-column
               width="500"
-              label="导入账户/金额">
+              label="账户及余额">
               <template slot-scope="scope">
                 <ul>
                   <li v-for="(val,key) in scope.row.account_snapshot">
