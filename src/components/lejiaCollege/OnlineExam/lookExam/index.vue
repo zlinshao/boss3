@@ -49,7 +49,7 @@
             <el-form>
               <el-form-item style="width: 96%;margin-left: 50px;">
                 <div
-                  v-if="answerData && answerData[item.id] && resultData">
+                  v-if="answerData && resultData">
                   <div style="line-height: 30px;font-size: 15px;">
                     <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
                     <span style="color:#409EFF;margin-left: 10px;" >本题得分： <span v-if="resultData.objective_detail">{{resultData.objective_detail[item.id]}}</span><span v-else>暂无</span></span>
@@ -83,7 +83,7 @@
             <el-form>
               <el-form-item style="width: 96%;margin-left: 50px;">
                 <div
-                  v-if="answerData && answerData[item.id] && resultData">
+                  v-if="answerData && resultData">
                   <div style="line-height: 30px;font-size: 15px;">
                     <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
                     <span style="color:#409EFF;margin-left: 10px;" >本题得分： <span v-if="resultData.objective_detail">{{resultData.objective_detail[item.id]}}</span><span v-else>暂无</span></span>
@@ -93,9 +93,9 @@
                       <span v-if="resultData.answer && resultData.answer[item.id] && resultData.answer[item.id].indexOf(index)>-1"><el-radio style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
                       <span v-else>{{index}}：{{val}}</span>
                       <span style="color:rgb(88, 215, 136);margin-left:50px;" v-for="ans in (resultData.answer && resultData.answer[item.id])"
-                            v-if="answerData[item.id].indexOf(ans)>-1 && ans==index">正确</span>
+                            v-if="(answerData[item.id] && answerData[item.id]).indexOf(ans)>-1 && ans==index">正确</span>
                       <span style="color:#fc83b6;margin-left:50px;" v-for="ans in (resultData.answer && resultData.answer[item.id])"
-                            v-if="answerData[item.id].indexOf(ans)<0 && ans==index">错误</span>
+                            v-if="(answerData[item.id] && answerData[item.id]).indexOf(ans)<0 && ans==index">错误</span>
                     </el-col>
                   </el-row>
                 </div>
@@ -117,7 +117,7 @@
             <el-form>
               <el-form-item style="width: 96%;margin-left: 50px;">
                 <div
-                  v-if="answerData && answerData[item.id] && resultData">
+                  v-if="answerData && resultData">
                   <div style="line-height: 30px;font-size: 15px;">
                     <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
                     <span style="color:#409EFF;margin-left: 10px;" >本题得分： <span v-if="resultData.objective_detail">{{resultData.objective_detail[item.id]}}</span><span v-else>暂无</span></span>
@@ -152,7 +152,7 @@
             <el-form>
               <el-form-item style="width: 96%;margin-left: 50px;">
                 <div
-                  v-if="answerData && answerData[item.id] && resultData">
+                  v-if="answerData && resultData">
                   <div style="line-height: 30px;font-size: 15px;">
                     <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
                     <span style="color:#409EFF;margin-left: 10px;" >本题得分： <span v-if="resultData.objective_detail">{{resultData.objective_detail[item.id]}}</span><span v-else>暂无</span></span>
@@ -254,7 +254,10 @@
             this.questionData = {};
           }
         });
-
+        if(!this.resultId){
+          this.resultData = {};
+          return;
+        }
         this.$http.get(globalConfig.server + 'exam/result/' + this.resultId).then((res) => {
           if (res.data.code === '36000') {
             this.resultData = res.data.data;
