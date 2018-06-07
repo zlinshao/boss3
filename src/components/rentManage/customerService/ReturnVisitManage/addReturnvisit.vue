@@ -358,11 +358,11 @@
         organizeType: '',
         addReturnVisitInfo: [],
         validateFlag: true,
-        agency_price_origin: "",            //中介费
-        agency_price_now: "",               //现中介费
-        agency_name: "",                    //中介名
-        agency_user_name: "",               //中介人
-        agency_phone: "",                   //手机号
+        agency_price_origin: '暂无',            //中介费
+        agency_price_now: '暂无',               //现中介费
+        agency_name: '暂无',                    //中介名
+        agency_user_name: '暂无',               //中介人
+        agency_phone: '暂无',                   //手机号
         form: {
           contract_create_time: "",  //创建时间
           huifang: "",        //回访人
