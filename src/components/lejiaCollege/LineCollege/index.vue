@@ -265,7 +265,7 @@
     },
     activated() {
       this.myData();
-      this.confirmArrival = JSON.parse(localStorage.getItem('confirmArrival'));
+      this.confirmArrival = JSON.parse(localStorage.getItem('confirmArrivals'));
     },
     watch: {
       "form.category": {
@@ -315,7 +315,7 @@
                 examIds = this.confirmArrival;
               }
               examIds.push(id);
-              localStorage.setItem('confirmArrival', JSON.stringify(examIds));  //保存已到场的考试id
+              localStorage.setItem('confirmArrivals', JSON.stringify(examIds));  //保存已到场的考试id
               this.$router.push({path: '/answerExam', query: {id: id}});
             } else if (res.data.code === '30003') {
               //迟到
@@ -344,14 +344,16 @@
           if (res.data.code == '30000') {
             this.tableData = res.data.data.data;
             this.tableNumber = res.data.data.count;
-            this.tableData.forEach((item) => {
-              if (item.available === 0) {
-                localStorage.removeItem("answers_" + item.id);
-                let examIds = JSON.parse(localStorage.getItem('confirmArrival'));
-                examIds.splice(examIds.indexOf(item.id) ,1);
-                localStorage.setItem('confirmArrival', JSON.stringify(examIds));  //保存已到场的考试id
-              }
-            });
+            // this.tableData.forEach((item) => {
+            //   if (item.available === 0) {
+            //     localStorage.removeItem("answers_" + item.id);
+            //     let examIds = JSON.parse(localStorage.getItem('confirmArrivals'));
+            //     if (examIds && examIds.length > 0) {
+            //       examIds.splice(examIds.indexOf(item.id), 1);
+            //       localStorage.setItem('confirmArrivals', JSON.stringify(examIds));
+            //     }
+            //   }
+            // });
           } else {
             this.tableData = [];
             this.tableStatus = '暂无数据';
