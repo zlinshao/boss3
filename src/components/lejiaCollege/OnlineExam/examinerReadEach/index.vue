@@ -211,7 +211,7 @@
                   <Upload :ID="'attachment'" @getImg="photo_success" :editImage="attachment"
                           :isClear="isClear"></Upload>
                 </el-form-item>
-                <div style="color: #ff4545;color: #ef5252;margin-left: 100px;margin-bottom: 10px;margin-top: -10px;">温馨提示：附件和图片只支持一个</div>
+                <div style="color: #ef5252;margin-left: 100px;margin-bottom: 10px;margin-top: -10px;">温馨提示：附件和图片只支持一个</div>
               </el-col>
               <el-col :span="22">
                 <el-form-item label="备注">
