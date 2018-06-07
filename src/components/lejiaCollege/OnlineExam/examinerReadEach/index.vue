@@ -211,7 +211,7 @@
                   <Upload :ID="'attachment'" @getImg="photo_success" :editImage="attachment"
                           :isClear="isClear"></Upload>
                 </el-form-item>
-                <div style="color: #ff4545;color: #ef5252;margin-left: 100px;margin-bottom: 10px;margin-top: -10px;">温馨提示：附件和图片只支持一个</div>
+                <div style="color: #ef5252;margin-left: 100px;margin-bottom: 10px;margin-top: -10px;">温馨提示：附件和图片只支持一个</div>
               </el-col>
               <el-col :span="22">
                 <el-form-item label="备注">
@@ -293,6 +293,8 @@
           objective: '',  //客观题分数
           attachment: '',
           remark: '',
+          exam_id: '',
+          examinee_id: '',
         },
         attachment: {},
         isClear: false,
@@ -474,6 +476,8 @@
       //右键菜单
       openContextMenu(row, event) {
         this.resultId = row.result_id;
+        this.examineeScoreForm.exam_id = row.exam_id;
+        this.examineeScoreForm.examinee_id = row.examinee_id;
         this.lists = [
           {
             clickIndex: "editExamineeScore",

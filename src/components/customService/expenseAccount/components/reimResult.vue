@@ -2,7 +2,123 @@
   <div id="reimResult">
     <el-dialog :close-on-click-modal="false" :title="resultTitle" :visible.sync="reimResultDialogVisible"
                width="50%">
+
       <div class="scroll_bar">
+        <div class="title">报销单详情</div>
+        <div class="describe_border">
+          <el-form size="small" label-width="100px">
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="创建时间">
+                  <div class="content" v-if="reimDetail.create_time">{{reimDetail.create_time}}</div>
+                  <div class="content" v-else>暂无</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="创建人">
+                  <div class="content">
+                    <span v-if="reimDetail.staffs && reimDetail.staffs.real_name">{{reimDetail.staffs.real_name}}</span>
+                    <span v-else>暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="报销单编号">
+                  <div class="content">
+                    <span v-if="reimDetail.reimbursement_number">{{reimDetail.reimbursement_number}}</span>
+                    <span v-else>暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="房屋地址">
+                  <div class="content"
+                       v-if="reimDetail.contract_id && reimDetail.contract_id.house && reimDetail.contract_id.house.name">
+                    {{reimDetail.contract_id.house.name}}
+                  </div>
+                  <div class="content" v-else>暂无</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="报销类型">
+                  <div class="content" v-if="reimDetail.types">{{reimDetail.types}}</div>
+                  <div class="content" v-else>暂无</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="来源">
+                  <div class="content" v-if="reimDetail.sources">{{reimDetail.sources}}</div>
+                  <div class="content" v-else>暂无</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="报销金额">
+                  <div class="content">
+                    <span v-if="reimDetail.amount">{{reimDetail.amount}}</span>
+                    <span v-else>暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="开户行">
+                  <div class="content">
+                    <span v-if="reimDetail.account_bank">{{reimDetail.account_bank}}</span>
+                    <span v-else>暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="支行">
+                  <div class="content">
+                    <span v-if="reimDetail.branch_bank">{{reimDetail.branch_bank}}</span>
+                    <span v-else>暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="开户人">
+                  <div class="content">
+                    <span v-if="reimDetail.account_name">{{reimDetail.account_name}}</span>
+                    <span v-else>暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="银行卡号">
+                  <div class="content">
+                    <span v-if="reimDetail.bank_num">{{reimDetail.bank_num}}</span>
+                    <span v-else>暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24" v-if="reimDetail.album">
+                <el-form-item label="截图">
+                  <img v-if="reimDetail.album.image_pic!=[]" data-magnify
+                       v-for="(val,key) in reimDetail.album.image_pic" :data-src="val.uri" :src="val.uri"
+                       alt="">
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24">
+                <el-form-item label="备注">
+                  <div class="content">
+                    <span v-if="reimDetail.remark">{{reimDetail.remark}}</span>
+                    <span v-else>暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </div>
         <el-form size="mini" :model="form" label-width="80px">
           <div class="title">水费</div>
           <div class="describe_border">
@@ -454,6 +570,7 @@
     components: {Organization, Upload},
     data() {
       return {
+        reimDetail: {},
         reimResultDialogVisible: false,
         organizationDialog: false,
         organizeType: '',
@@ -553,7 +670,9 @@
         if (!val) {
           this.$emit('close');
           this.initial();
+          this.reimDetail = {};
         } else {
+          this.getDetail();
           if (this.type == 'add') {
             this.resultTitle = '新增报销结果';
           } else if (this.type == 'edit') {
@@ -639,6 +758,19 @@
       this.getDictionary();
     },
     methods: {
+      getDetail() {
+        this.$http.get(globalConfig.server + 'customer/reimbursement/' + this.reimbursementId).then((res) => { //
+          if (res.data.code === "30020") {
+            this.reimDetail = res.data.data;
+          } else {
+            this.reimDetail = {};
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
+          }
+        });
+      },
       timeChange(k,n) {
         // switch(k){
         //   case 'water':
@@ -1040,6 +1172,20 @@
   };
 </script>
 <style lang="scss" scoped="">
+  .content {
+    padding: 0 10px;
+    min-height: 32px;
+    background: #eef3fc;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #727479;
+  }
+  img {
+    width: 80px;
+    height: 80px;
+    border-radius: 6px;
+    margin: 0 10px 10px 0;
+  }
   .add_com {
     color: #409eff;
     font-size: 18px;
