@@ -268,7 +268,7 @@
               <el-col :span="10">
                 <el-form-item label="中介费">
                   <div class="content">
-                    <span v-if="agency_price">{{agency_price}}</span>
+                    <span v-if="agency_price!=''">{{agency_price}}</span>
                     <span v-else>暂无</span>
                   </div>
                 </el-form-item>
@@ -278,7 +278,7 @@
               <el-col :span="10">
                 <el-form-item label="现中介费">
                   <div class="content">
-                    <span v-if="agency_price_now">{{agency_price_now}}</span>
+                    <span v-if="agency_price_now!=''">{{agency_price_now}}</span>
                     <span v-else>暂无</span>
                   </div>
                 </el-form-item>
@@ -481,13 +481,9 @@
           //支付方式
           this.payTypeInfo = res.data;
         });
-        this.$http
-          .get(globalConfig.server + "contract/feedback/info", {
-            params: this.form
-          })
-          .then(res => {
+        this.$http.get(globalConfig.server + "contract/feedback/info", { params: this.form}).then(res => {
             if (res.data.code === "1212200") {
-              this.agency_price = res.data.data.agency_price;
+              this.agency_price = res.data.data.agency.agency_price;
               this.agency_price_now = res.data.data.agency_price_now;
               this.agency_name = res.data.data.agency_name;
               this.agency_user_name = res.data.data.agency_user_name;
