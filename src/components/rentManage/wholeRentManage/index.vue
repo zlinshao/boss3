@@ -14,7 +14,7 @@
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
             <el-button type="primary" size="mini" @click="openModalDialog('addHouseResourcesDialog')">
-              <i class="el-icon-document"></i>&nbsp;登记房源
+              <i class="el-icon-document"></i>&nbsp;登 记 房 源
             </el-button>
             <!--<el-form-item>-->
               <!--<el-button type="success">导出房源</el-button>-->
