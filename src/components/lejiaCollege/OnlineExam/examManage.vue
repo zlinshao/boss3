@@ -595,6 +595,7 @@
                   title: '成功',
                   message: res.data.msg
                 });
+                this.getExaminees();
               } else {
                 this.$notify.warning({
                   title: '警告',
