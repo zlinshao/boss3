@@ -400,7 +400,7 @@
         </div>
         <span slot="footer" class="dialog-footer clearfix" >
            <el-button type="primary" size="mini" style="float: left;" @click="openOrganize" v-if="activeName==='first'">新增</el-button>
-            <el-button size="mini" type="primary" style="float: left;" @click="deleteExaminess">删除</el-button>
+            <el-button size="mini" type="primary" style="float: left;" @click="deleteExaminess" v-if="activeName==='first'">删除</el-button>
             <!--<el-button size="small" type="primary" @click="confirmSend" v-if="activeName==='first'">确认并发送消息</el-button>-->
           <el-button size="small" type="primary" @click="approved(1)" v-if="activeName==='second'">同意</el-button>
           <el-button size="small" type="primary" @click="approved(2)" v-if="activeName==='second'">拒绝</el-button>
@@ -595,6 +595,7 @@
                   title: '成功',
                   message: res.data.msg
                 });
+                this.getExaminees();
               } else {
                 this.$notify.warning({
                   title: '警告',
@@ -650,7 +651,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.post(globalConfig.server + '/exam/banish/' + this.examId, {examinees: this.examinees}).then((res) => {
+          this.$http.post(globalConfig.server + 'exam/banish/' + this.examId, {examinees: this.examinees}).then((res) => {
             if (res.data.code === '30000') {
               this.$notify.success({
                 title: '成功',

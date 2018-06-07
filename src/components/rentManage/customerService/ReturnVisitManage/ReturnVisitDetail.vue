@@ -193,9 +193,9 @@
               <el-col :span="10" :class="{'wholeStyle':wholeFlag}">
                 <el-form-item label="保修期">
                   <div class="content" style="width:25%;float:left;">{{repairDetail.guarantee_month}}</div>
-                  <span style="float:left;">月</span>
+                  <span style="float:left;"> 月 </span>
                   <div class="content" style="width:25%;float:left;">{{repairDetail.guarantee_day}}</div>
-                  <span style="float:left;">天</span>
+                  <span style="float:left;"> 天 </span>
                 </el-form-item>
               </el-col>
               <el-col :span="2" v-if="!wholeFlag">
@@ -241,7 +241,10 @@
             <el-row>
               <el-col :span="22">
                 <el-form-item label="业务员专业度" class="detailTitle2">
-                  <div class="content">{{repairDetail.sale_remark}}</div>
+                  <div class="content">
+                    <span v-if="repairDetail && repairDetail.sale_remark">{{repairDetail.sale_remark}}</span>
+                    <span v-else>暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="2" v-if="!wholeFlag">
@@ -253,7 +256,10 @@
           <el-row>
             <el-col :span="22">
               <el-form-item label="备注">
-                <div class="content">{{repairDetail.remark}}</div>
+                <div class="content">
+                  <span v-if="repairDetail && repairDetail.remark">{{repairDetail.remark}}</span>
+                  <span v-else>暂无</span>
+                </div>
               </el-form-item>
             </el-col>
           </el-row>
@@ -261,21 +267,30 @@
             <el-row v-if="!wholeFlag">
               <el-col :span="10">
                 <el-form-item label="中介费">
-                  <div class="content">{{agency_price_origin}}</div>
+                  <div class="content">
+                    <span v-if="agency_price!=''">{{agency_price}}</span>
+                    <span v-else>暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row v-if="!wholeFlag">
               <el-col :span="10">
                 <el-form-item label="现中介费">
-                  <div class="content">{{agency_price_now}}</div>
+                  <div class="content">
+                    <span v-if="agency_price_now!=''">{{agency_price_now}}</span>
+                    <span v-else>暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="2">
               </el-col>
               <el-col :span="10" style="margin-left:8.33333%">
                 <el-form-item label="中介名">
-                  <div class="content">{{agency_name}}</div>
+                  <div class="content">
+                    <span v-if="agency_name">{{agency_name}}</span>
+                    <span v-else>暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="2">
@@ -284,14 +299,20 @@
             <el-row v-if="!wholeFlag">
               <el-col :span="10">
                 <el-form-item label="中介人">
-                  <div class="content">{{agency_user_name}}</div>
+                  <div class="content">
+                    <span v-if="agency_user_name">{{agency_user_name}}</span>
+                    <span v-else>暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="2">
               </el-col>
               <el-col :span="10" style="margin-left:8.33333%">
                 <el-form-item label="手机号">
-                  <div class="content">{{agency_phone}}</div>
+                  <div class="content">
+                    <span v-if="agency_phone">{{agency_phone}}</span>
+                    <span v-else>暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="2">
@@ -339,7 +360,7 @@
         payTypeLen: 0,
         payUseLen: 0,
         album: [],
-        agency_price_origin: "",            //中介费
+        agency_price: "",            //中介费
         agency_price_now: "",               //现中介费
         agency_name: "",                    //中介名
         agency_user_name: "",               //中介人
@@ -460,13 +481,9 @@
           //支付方式
           this.payTypeInfo = res.data;
         });
-        this.$http
-          .get(globalConfig.server + "contract/feedback/info", {
-            params: this.form
-          })
-          .then(res => {
+        this.$http.get(globalConfig.server + "contract/feedback/info", { params: this.form}).then(res => {
             if (res.data.code === "1212200") {
-              this.agency_price_origin = res.data.data.agency_price_origin;
+              this.agency_price = res.data.data.agency.agency_price;
               this.agency_price_now = res.data.data.agency_price_now;
               this.agency_name = res.data.data.agency_name;
               this.agency_user_name = res.data.data.agency_user_name;

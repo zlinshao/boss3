@@ -62,7 +62,7 @@
             </el-col>
             <el-col :span="24">
               <el-form-item label="上传照片">
-                <UPLOAD :ID="'firstEdit'" :isClear="isClear" :editImage="editImage" @getImg="getImgData"></UPLOAD>
+                <UPLOAD :ID="'workerOrder'" :isClear="isClear" :editImage="editImage" @getImg="getImgData"></UPLOAD>
               </el-form-item>
             </el-col>
           </el-row>
