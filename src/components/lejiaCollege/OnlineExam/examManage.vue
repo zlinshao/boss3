@@ -226,7 +226,7 @@
           </div>
           <span slot="footer" class="dialog-footer">
             <el-button size="small" @click="examDialog = false;examId = '';">取消</el-button>
-            <el-button size="small" type="primary" @click="saveExam">保存</el-button>
+            <el-button size="small" type="primary" @click="saveExam" :disabled="examDisabled">保存</el-button>
           </span>
         </div>
       </el-dialog>
@@ -506,6 +506,7 @@
         totalExamineesNum: 0,
         tableExamineesStatus: ' ',
         tableExamineesLoading: false,
+        examDisabled: false,
       };
     },
     mounted() {
@@ -530,6 +531,7 @@
       },
       examDialog(val) {
         if (val) {
+          this.examDisabled = false;
           this.initial();
           if (this.examId) {
             this.examTitle = '编辑考试';
@@ -804,6 +806,7 @@
       },
       //保存/新增试卷
       saveExam() {
+        this.examDisabled = true;
         let header = '';
         if (this.examId) {
           header = this.$http.put(globalConfig.server + 'exam/' + this.examId, this.formExam);
@@ -819,8 +822,8 @@
               message: res.data.msg
             });
             this.getExamData();
-
           } else {
+            this.examDisabled = false;
             this.$notify.warning({
               title: '警告',
               message: res.data.msg
