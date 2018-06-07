@@ -358,11 +358,11 @@
         organizeType: '',
         addReturnVisitInfo: [],
         validateFlag: true,
-        agency_price_origin: "",            //中介费
-        agency_price_now: "",               //现中介费
-        agency_name: "",                    //中介名
-        agency_user_name: "",               //中介人
-        agency_phone: "",                   //手机号
+        agency_price_origin: '暂无',            //中介费
+        agency_price_now: '暂无',               //现中介费
+        agency_name: '暂无',                    //中介名
+        agency_user_name: '暂无',               //中介人
+        agency_phone: '暂无',                   //手机号
         form: {
           contract_create_time: "",  //创建时间
           huifang: "",        //回访人
@@ -455,28 +455,28 @@
       this.form.huifang = JSON.parse(localStorage.personal).name;
     },
     watch: {
-      agency_price_origin(val){
-        if(!val){
+      agency_price_origin(val) {
+        if (val == '' || val == null) {
           this.agency_price_origin = '暂无';
         }
       },
-      agency_price_now(val){
-        if(!val){
+      agency_price_now(val) {
+        if (val == '' || val == null) {
           this.agency_price_now = '暂无';
         }
       },
-      agency_name(val){
-        if(!val){
+      agency_name(val) {
+        if (!val) {
           this.agency_name = '暂无';
         }
       },
-      agency_user_name(val){
-        if(!val){
+      agency_user_name(val) {
+        if (!val) {
           this.agency_user_name = '暂无';
         }
       },
-      agency_phone(val){
-        if(!val){
+      agency_phone(val) {
+        if (!val) {
           this.agency_phone = '暂无';
         }
       },
@@ -501,7 +501,7 @@
                 }
               }
             });
-          }else {
+          } else {
             this.$http.get(globalConfig.server + 'lease/rent/' + this.form.contract_id).then((res) => {
               if (res.data.code === '61110') {
                 this.contractInfo = res.data.data;
@@ -535,10 +535,10 @@
         if (data && data[0] && data[0][0] && data[0][0].length > 0) {
           let priceDate = data[0];
           for (var i = 0; i < val; i++) {
-              if ((i + 1) < val) {
-                priceDate[i + 1] = [];
-                priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
-              }
+            if ((i + 1) < val) {
+              priceDate[i + 1] = [];
+              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+            }
           }
         }
       },
@@ -547,16 +547,16 @@
         if (data && data[0] && data[0][0] && data[0][0].length > 0) {
           let priceDate = data[0];
           for (var i = 0; i < val; i++) {
-              if ((i + 1) < val) {
-                priceDate[i + 1] = [];
-                priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
-              }
+            if ((i + 1) < val) {
+              priceDate[i + 1] = [];
+              priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
+            }
           }
         }
       },
     },
     methods: {
-      payTypeChange(n){
+      payTypeChange(n) {
         let data = this.form.pay_type;
         if (data && data[0] && data[0][0] && data[0][0].length > 0) {
           let priceDate = data[0];
@@ -564,7 +564,7 @@
             if ((i + 1) < this.payForLen) {
               priceDate[i + 1] = [];
               priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
-              this.$set(this.form.pay_type[0], priceDate );
+              this.$set(this.form.pay_type[0], priceDate);
             }
           }
         }
@@ -577,7 +577,7 @@
             if ((i + 1) < this.priceLen) {
               priceDate[i + 1] = [];
               priceDate[i + 1][0] = priceDate[i + 1][1] = priceDate[i][1];
-              this.$set(this.form.unit_price[0], priceDate );
+              this.$set(this.form.unit_price[0], priceDate);
             }
           }
         }

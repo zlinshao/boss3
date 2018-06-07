@@ -226,206 +226,184 @@
           </div>
           <span slot="footer" class="dialog-footer">
             <el-button size="small" @click="examDialog = false;examId = '';">取消</el-button>
-            <el-button size="small" type="primary" @click="saveExam">保存</el-button>
+            <el-button size="small" type="primary" @click="saveExam" :disabled="examDisabled">保存</el-button>
           </span>
         </div>
       </el-dialog>
     </div>
     <div id="examineeDialog">
       <el-dialog :close-on-click-modal="false" :visible.sync="examineeDialog" title="考生信息" width="45%">
-        <!--<div style="position: absolute;right: 10px;z-index: 1;">-->
-          <!--<el-form :inline="true" v-if="activeName==='first'">-->
-            <!--<el-form-item label="考生来源">-->
-              <!--<el-select v-model="examineesForm.source" size="mini" placeholder="请选择" clearable>-->
-                <!--<el-option v-for="item in sourceCategory" :key="item.id" :label="item.name" :value="item.id">-->
-                  <!--{{item.name}}-->
-                <!--</el-option>-->
-              <!--</el-select>-->
-            <!--</el-form-item>-->
-          <!--</el-form>-->
-          <!--<el-form :inline="true" v-if="activeName==='second'">-->
-            <!--<el-form-item label="考生状态">-->
-              <!--<el-select v-model="examineesForm.status" size="mini" placeholder="请选择" clearable>-->
-                <!--<el-option v-for="item in statusCategory" :key="item.id" :label="item.name" :value="item.id">-->
-                  <!--{{item.name}}-->
-                <!--</el-option>-->
-              <!--</el-select>-->
-            <!--</el-form-item>-->
-          <!--</el-form>-->
-        <!--</div>-->
-        <div>
-          <!--<el-tabs v-model="activeName">-->
-            <!--<el-tab-pane label="本次考生" name="first">-->
-              <!--<div v-loading="loading"-->
-                   <!--element-loading-text="正在处理中"-->
-                   <!--element-loading-spinner="el-icon-loading"-->
-                   <!--element-loading-background="rgba(0, 0, 0, 0.3)"-->
-                   <!--style="margin-top: 20px;">-->
-                <!--<el-table-->
-                  <!--:data="examineesData"-->
-                  <!--@selection-change="handleSelectionChange"-->
-                  <!--style="width: 100%">-->
-                  <!--<el-table-column-->
-                    <!--type="selection"-->
-                    <!--width="65">-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                    <!--prop="real_name"-->
-                    <!--label="考生姓名">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.real_name">{{scope.row.real_name}}</span>-->
-                      <!--<span v-if="!scope.row.real_name">暂无</span>-->
-                    <!--</template>-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                    <!--prop=""-->
-                    <!--label="职位">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.position">{{scope.row.position}}</span>-->
-                      <!--<span v-else>暂无</span>-->
-                    <!--</template>-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                    <!--label="部门">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.org_name">{{scope.row.org_name}}</span>-->
-                      <!--<span v-else>暂无</span>-->
-                    <!--</template>-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                    <!--prop="pivot.enroll_time"-->
-                    <!--label="报名时间">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.pivot && scope.row.pivot.enroll_time">{{scope.row.pivot && scope.row.pivot.enroll_time}}</span>-->
-                      <!--<span v-if="!(scope.row.pivot && scope.row.pivot.enroll_time)">暂无</span>-->
-                    <!--</template>-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                    <!--label="状态">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.pivot && scope.row.pivot.named_status">{{scope.row.pivot && scope.row.pivot.named_status}}</span>-->
-                      <!--<span v-else>暂无</span>-->
-                    <!--</template>-->
-                  <!--</el-table-column>-->
-                <!--</el-table>-->
-              <!--</div>-->
-            <!--</el-tab-pane>-->
-            <!--<el-tab-pane label="报名考生" name="second">-->
-              <!--<div v-loading="loading"-->
-                   <!--element-loading-text="正在处理中"-->
-                   <!--element-loading-spinner="el-icon-loading"-->
-                   <!--element-loading-background="rgba(0, 0, 0, 0.3)"-->
-                   <!--style="margin-top: 20px;">-->
-                <!--<el-table-->
-                  <!--:data="examineesData"-->
-                  <!--@selection-change="handleSelectionChange"-->
-                  <!--style="width: 100%">-->
-                  <!--<el-table-column-->
-                    <!--type="selection"-->
-                    <!--width="65">-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                    <!--prop="real_name"-->
-                    <!--label="考生姓名">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.real_name">{{scope.row.real_name}}</span>-->
-                      <!--<span v-if="!scope.row.real_name">暂无</span>-->
-                    <!--</template>-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                    <!--prop=""-->
-                    <!--label="职位">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.position">{{scope.row.position}}</span>-->
-                      <!--<span v-else>暂无</span>-->
-                    <!--</template>-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                    <!--label="部门">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.org_name">{{scope.row.org_name}}</span>-->
-                      <!--<span v-else>暂无</span>-->
-                    <!--</template>-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                    <!--prop="pivot.enroll_time"-->
-                    <!--label="报名时间">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.pivot && scope.row.pivot.enroll_time">{{scope.row.pivot && scope.row.pivot.enroll_time}}</span>-->
-                      <!--<span v-if="!(scope.row.pivot && scope.row.pivot.enroll_time)">暂无</span>-->
-                    <!--</template>-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                    <!--label="状态">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.pivot && scope.row.pivot.named_status">{{scope.row.pivot && scope.row.pivot.named_status}}</span>-->
-                      <!--<span v-else>暂无</span>-->
-                    <!--</template>-->
-                  <!--</el-table-column>-->
-                <!--</el-table>-->
-              <!--</div>-->
-            <!--</el-tab-pane>-->
-          <!--</el-tabs>-->
-          <div v-loading="loading"
-               element-loading-text="正在处理中"
-               element-loading-spinner="el-icon-loading"
-               element-loading-background="rgba(0, 0, 0, 0.3)"
-               style="margin-top: 20px;">
-            <el-table
-              :data="examineesData"
-              @selection-change="handleSelectionChange"
-              style="width: 100%">
-              <el-table-column
-                type="selection"
-                width="65">
-              </el-table-column>
-              <el-table-column
-                prop="real_name"
-                label="考生姓名">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.real_name">{{scope.row.real_name}}</span>
-                  <span v-if="!scope.row.real_name">暂无</span>
-                </template>
-              </el-table-column>
-              <!--<el-table-column-->
-                <!--prop=""-->
-                <!--label="职位">-->
-                <!--<template slot-scope="scope">-->
-                  <!--<span v-if="scope.row.position">{{scope.row.position}}</span>-->
-                  <!--<span v-else>暂无</span>-->
-                <!--</template>-->
-              <!--</el-table-column>-->
-              <el-table-column
-                label="部门">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.org_name">{{scope.row.org_name}}</span>
-                  <span v-else>暂无</span>
-                </template>
-              </el-table-column>
-              <el-table-column
-                prop="pivot.enroll_time"
-                label="报名时间">
-                <template slot-scope="scope">
-                  <span v-if="scope.row.pivot && scope.row.pivot.enroll_time">{{scope.row.pivot && scope.row.pivot.enroll_time}}</span>
-                  <span v-if="!(scope.row.pivot && scope.row.pivot.enroll_time)">暂无</span>
-                </template>
-              </el-table-column>
-              <!--<el-table-column-->
-                <!--label="状态">-->
-                <!--<template slot-scope="scope">-->
-                  <!--<span v-if="scope.row.pivot && scope.row.pivot.named_status">{{scope.row.pivot && scope.row.pivot.named_status}}</span>-->
-                  <!--<span v-else>暂无</span>-->
-                <!--</template>-->
-              <!--</el-table-column>-->
-            </el-table>
-          </div>
+        <div style="position: absolute;right: 10px;z-index: 1;">
+          <el-form :inline="true" v-if="activeName==='first'">
+            <el-form-item label="考生来源">
+              <el-select v-model="examineesForm.from" size="mini" placeholder="请选择" clearable>
+                <el-option v-for="item in sourceCategory" :key="item.id" :label="item.name" :value="item.id">
+                  {{item.name}}
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+          <el-form :inline="true" v-if="activeName==='second'">
+            <el-form-item label="考生状态">
+              <el-select v-model="examineesForm.approved" size="mini" placeholder="请选择" clearable>
+                <el-option v-for="item in statusCategory" :key="item.id" :label="item.name" :value="item.id">
+                  {{item.name}}
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
         </div>
-        <span slot="footer" class="dialog-footer">
+        <div>
+          <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="本次考生" name="first">
+              <div style="margin-top: 20px;">
+                <el-table
+                  :data="examineesData"
+                  :empty-text='tableExamineesStatus'
+                  v-loading="tableExamineesLoading"
+                  element-loading-text="拼命加载中"
+                  element-loading-spinner="el-icon-loading"
+                  element-loading-background="rgba(255, 255, 255, 0)"
+                  @selection-change="handleSelectionChange"
+                  style="width: 100%">
+                  <el-table-column
+                    type="selection"
+                    width="65">
+                  </el-table-column>
+                  <el-table-column
+                    prop="real_name"
+                    label="考生姓名">
+                    <template slot-scope="scope">
+                      <span
+                        v-if="scope.row.staff_info && scope.row.staff_info.name">{{scope.row.staff_info.name}}</span>
+                      <span v-else>暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="职位">
+                    <template slot-scope="scope">
+                      <span
+                        v-if="scope.row.staff_info && scope.row.staff_info.role && scope.row.staff_info.role.length>0">
+                        <span v-for="item in scope.row.staff_info.role">&nbsp;{{item.display_name}}&nbsp;</span></span>
+                      <span v-else>暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="部门">
+                    <template slot-scope="scope">
+                      <span
+                        v-if="scope.row.staff_info && scope.row.staff_info.org && scope.row.staff_info.org.length>0">
+                        <span v-for="item in scope.row.staff_info.org">&nbsp;{{item.name}}&nbsp;</span></span>
+                      <span v-else>暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="报名时间">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.enroll_time">{{scope.row.enroll_time}}</span>
+                      <span v-else>暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="状态">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.named_enroll_type">
+                        <span v-if="scope.row.named_enroll_type=='指定'">邀请考试</span>
+                        <span v-if="scope.row.named_enroll_type=='自选'">自主报名</span>
+                      </span>
+                      <span v-else>暂无</span>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
+              <div class="block pages" style="float: right;">
+                <el-pagination
+                  @size-change="handleSizeExamineesChange"
+                  @current-change="handleCurrentExamineesChange"
+                  :current-page="examineesForm.page"
+                  :page-size="examineesForm.limit"
+                  layout="total, prev, pager, next, jumper"
+                  :total="totalExamineesNum">
+                </el-pagination>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="报名考生" name="second">
+              <div style="margin-top: 20px;">
+                <el-table
+                  :data="examineesData"
+                  :empty-text='tableExamineesStatus'
+                  v-loading="tableExamineesLoading"
+                  element-loading-text="拼命加载中"
+                  element-loading-spinner="el-icon-loading"
+                  element-loading-background="rgba(255, 255, 255, 0)"
+                  @selection-change="handleSelectionChange"
+                  style="width: 100%">
+                  <el-table-column
+                    type="selection"
+                    width="65">
+                  </el-table-column>
+                  <el-table-column
+                    prop="real_name"
+                    label="考生姓名">
+                    <template slot-scope="scope">
+                      <span
+                        v-if="scope.row.staff_info && scope.row.staff_info.name">{{scope.row.staff_info.name}}</span>
+                      <span v-else>暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="职位">
+                    <template slot-scope="scope">
+                      <span
+                        v-if="scope.row.staff_info && scope.row.staff_info.role && scope.row.staff_info.role.length>0">
+                        <span v-for="item in scope.row.staff_info.role">&nbsp;{{item.display_name}}&nbsp;</span></span>
+                      <span v-else>暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="部门">
+                    <template slot-scope="scope">
+                      <span
+                        v-if="scope.row.staff_info && scope.row.staff_info.org && scope.row.staff_info.org.length>0">
+                        <span v-for="item in scope.row.staff_info.org">&nbsp;{{item.name}}&nbsp;</span></span>
+                      <span v-else>暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="报名时间">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.enroll_time">{{scope.row.enroll_time}}</span>
+                      <span v-else>暂无</span>
+                    </template>
+                  </el-table-column>
+                  <el-table-column
+                    label="状态">
+                    <template slot-scope="scope">
+                      <span v-if="scope.row.named_enroll_status">{{scope.row.named_enroll_status}}</span>
+                      <span v-else>暂无</span>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
+              <div class="block pages" style="float: right;">
+                <el-pagination
+                  @size-change="handleSizeExamineesChange"
+                  @current-change="handleCurrentExamineesChange"
+                  :current-page="examineesForm.page"
+                  :page-size="examineesForm.limit"
+                  layout="total, prev, pager, next, jumper"
+                  :total="totalExamineesNum">
+                </el-pagination>
+              </div>
+            </el-tab-pane>
+          </el-tabs>
+        </div>
+        <span slot="footer" class="dialog-footer clearfix" >
            <el-button type="primary" size="mini" style="float: left;" @click="openOrganize" v-if="activeName==='first'">新增</el-button>
-            <el-button size="mini" type="primary" style="float: left;" @click="deleteExaminess">删除</el-button>
-            <el-button size="small" type="primary" @click="confirmSend" v-if="activeName==='first'">确认并发送消息</el-button>
-          <el-button size="small" type="primary" @click="confirmSend" v-if="activeName==='second'">同意</el-button>
-          <el-button size="small" type="primary" @click="confirmSend" v-if="activeName==='second'">拒绝</el-button>
+            <el-button size="mini" type="primary" style="float: left;" @click="deleteExaminess" v-if="activeName==='first'">删除</el-button>
+            <!--<el-button size="small" type="primary" @click="confirmSend" v-if="activeName==='first'">确认并发送消息</el-button>-->
+          <el-button size="small" type="primary" @click="approved(1)" v-if="activeName==='second'">同意</el-button>
+          <el-button size="small" type="primary" @click="approved(2)" v-if="activeName==='second'">拒绝</el-button>
         </span>
       </el-dialog>
     </div>
@@ -493,30 +471,42 @@
         examinees: [],
         examiness_name: [],
         loading: false,
+        //考生来源
         sourceCategory: [
           {
-            id: 1,
+            id: 179,
             name: '邀请考试'
           },
           {
-            id: 2,
+            id: 180,
             name: '自主报名'
           }
         ],
+        //考生状态
         statusCategory: [
           {
             id: 1,
-            name: '已同意'
+            name: '审批中'
           },
           {
             id: 2,
+            name: '已同意'
+          },
+          {
+            id: 3,
             name: '已拒绝'
           }
         ],
         examineesForm: {
-          source: '',
-          status: ''
+          page: 1,
+          limit: 12,
+          from: '',  //考生来源
+          approved: 2  //是否已同意
         },
+        totalExamineesNum: 0,
+        tableExamineesStatus: ' ',
+        tableExamineesLoading: false,
+        examDisabled: false,
       };
     },
     mounted() {
@@ -527,8 +517,21 @@
       this.getExamData();
     },
     watch: {
+      'examineesForm.from': {
+        deep: true,
+        handler(val, oldVal) {
+          this.getExaminees();
+        }
+      },
+      'examineesForm.approved': {
+        deep: true,
+        handler(val, oldVal) {
+          this.getExaminees();
+        }
+      },
       examDialog(val) {
         if (val) {
+          this.examDisabled = false;
           this.initial();
           if (this.examId) {
             this.examTitle = '编辑考试';
@@ -579,10 +582,41 @@
       },
     },
     methods: {
+      approved(val) {
+        if (val === 1) {
+          this.$confirm('您确认同意此考生参加本场考试？如确认，系统会已消息形式通知考生', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$http.post(globalConfig.server + 'exam/lock/' + this.examId, {examinees: this.examinees}).then((res) => {
+              if (res.data.code === '30000') {
+                this.$notify.success({
+                  title: '成功',
+                  message: res.data.msg
+                });
+                this.getExaminees();
+              } else {
+                this.$notify.warning({
+                  title: '警告',
+                  message: res.data.msg
+                });
+              }
+            }).catch(() => {
+              this.$notify.info({
+                title: '提示',
+                message: '已取消发送'
+              });
+            });
+          });
+        } else {
+          this.deleteExaminess();
+        }
+      },
       handleSelectionChange(val) {
         this.examinees = [];
         val.forEach((item) => {
-          this.examinees.push(item.pivot.examinee_id);
+          this.examinees.push(item.examinee_id);
         });
       },
       confirmSend() {
@@ -612,18 +646,18 @@
         });
       },
       deleteExaminess() {
-        this.$confirm('确认移除该考生吗?如确认，删除后系统会已消息形式通知考生', '提示', {
+        this.$confirm('您是否确认删除该考生?如确认，删除后系统会已消息形式通知考生', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.post(globalConfig.server + '/exam/banish/' + this.examId, {examinees: this.examinees}).then((res) => {
+          this.$http.post(globalConfig.server + 'exam/banish/' + this.examId, {examinees: this.examinees}).then((res) => {
             if (res.data.code === '30000') {
               this.$notify.success({
                 title: '成功',
                 message: res.data.msg
               });
-              this.getExamDetail();
+              this.getExaminees();
             } else {
               this.$notify.warning({
                 title: '警告',
@@ -716,7 +750,7 @@
               title: '成功',
               message: res.data.msg
             });
-            this.getExamDetail();
+            this.getExaminees();
             this.emptyExaminees();
           } else {
             this.$notify.warning({
@@ -739,8 +773,8 @@
               this.formExam.category = detail.paper && detail.paper.category_id;
               this.formExam.late_tolerance = detail.late_tolerance;
               this.formExam.paper_id = detail.paper && detail.paper.id;
-              //考生信息
-              this.examineesData = detail.examinees;
+              // 考生信息
+              // this.examineesData = detail.examinees;
             }
           } else {
             this.$notify.warning({
@@ -773,6 +807,7 @@
       },
       //保存/新增试卷
       saveExam() {
+        this.examDisabled = true;
         let header = '';
         if (this.examId) {
           header = this.$http.put(globalConfig.server + 'exam/' + this.examId, this.formExam);
@@ -788,8 +823,8 @@
               message: res.data.msg
             });
             this.getExamData();
-
           } else {
+            this.examDisabled = false;
             this.$notify.warning({
               title: '警告',
               message: res.data.msg
@@ -810,6 +845,14 @@
         console.log(`当前页: ${val}`);
         this.params.page = val;
         this.getExamData();
+      },
+      handleSizeExamineesChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentExamineesChange(val) {
+        console.log(`当前页: ${val}`);
+        this.examineesForm.page = val;
+        this.getExaminees();
       },
       //右键菜单
       openContextMenu(row, event) {
@@ -883,9 +926,44 @@
             break;
           case 'manageExaminee':
             this.examineeDialog = true;
-            this.getExamDetail();
+            this.getExaminees();
             break;
         }
+      },
+      getExaminees() {
+        this.tableExamineesStatus = " ";
+        this.tableExamineesLoading = true;
+        this.examineesForm.exam_id = this.examId;
+        this.$http.get(globalConfig.server + 'exam/examinees', {params: this.examineesForm}).then((res) => {
+          this.tableExamineesLoading = false;
+          if (res.data.code === '30000') {
+            this.examineesData = res.data.data.data;
+            this.totalExamineesNum = res.data.data.count;
+            if (res.data.data.data.length < 1) {
+              this.examineesData = [];
+              this.totalExamineesNum = 0;
+              this.tableExamineesStatus = "暂无数据";
+            }
+          } else {
+            this.examineesData = [];
+            this.totalExamineesNum = 0;
+            this.tableExamineesStatus = "暂无数据";
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        });
+      },
+      handleClick() {
+        if (this.activeName === 'first') {
+          this.examineesForm.from = '';
+          this.examineesForm.approved = 2;
+        } else {
+          this.examineesForm.approved = '';
+          this.examineesForm.from = 180;
+        }
+        this.getExaminees();
       },
       //关闭右键菜单
       closeMenu() {
@@ -928,6 +1006,15 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+  .clearfix:before,
+  .clearfix:after {
+    display: table;
+    content: "";
+  }
+
+  .clearfix:after {
+    clear: both
+  }
   #examDialog {
     .vt_align {
       vertical-align: middle;

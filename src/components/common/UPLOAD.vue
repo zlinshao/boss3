@@ -24,7 +24,7 @@
 
   export default {
     name: 'hello',
-    props: ['ID', 'editImage', 'isClear', 'onlyShow'],
+    props: ['ID', 'editImage', 'isClear', 'onlyShow','noMulti'],
     data() {
       return {
         imgArray: [],
@@ -124,11 +124,12 @@
         let _this = this;
         _this.uploader = Qiniu.uploader({
           runtimes: 'html5,flash,html4',      // 上传模式，依次退化
-          browse_button: _this.ID,       //上传按钮的ID
+          browse_button: _this.ID,            //上传按钮的ID
           uptoken: _this.token,               // uptoken是上传凭证，由其他程序生成
-          get_new_uptoken: true,             // 设置上传文件的时候是否每次都重新获取新的uptoken
+          get_new_uptoken: true,              // 设置上传文件的时候是否每次都重新获取新的uptoken
           unique_names: true,                 // 默认false，key为文件
           domain: globalConfig.domain,        // bucket域名，下载资源时用到，必需
+          // multi_selection: _this.noMulti,
 
 //          pictureContainer: 'pictureContainer',             // 上传区域DOM ID，默认是browser_button的父元素
           max_file_size: '100mb',             // 最大文件体积限制
