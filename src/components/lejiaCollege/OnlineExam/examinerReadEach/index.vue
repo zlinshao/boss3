@@ -293,6 +293,8 @@
           objective: '',  //客观题分数
           attachment: '',
           remark: '',
+          exam_id: '',
+          examinee_id: '',
         },
         attachment: {},
         isClear: false,
@@ -474,6 +476,8 @@
       //右键菜单
       openContextMenu(row, event) {
         this.resultId = row.result_id;
+        this.examineeScoreForm.exam_id = row.exam_id;
+        this.examineeScoreForm.examinee_id = row.examinee_id;
         this.lists = [
           {
             clickIndex: "editExamineeScore",

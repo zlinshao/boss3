@@ -179,7 +179,7 @@
                 <p style="line-height:30px;" class="ql-editor" v-html="item.stem"></p>
               </el-col>
             </el-row>
-            <div style="width:96%;margin-left:50px;">
+            <div style="width:96%;margin-left:50px;min-height: 100px;">
               <div class="eachAN scroll_bar" v-if="resultData && resultData.answer && resultData.answer[item.id]">
                 {{resultData.answer[item.id]}}
               </div>
@@ -192,7 +192,7 @@
                           style=" font-size:14px; color:rgb(251, 70, 153);display:block; line-height:40px;">本题得分</span>
                       </el-col>
                       <el-col :span="2" style="min-width: 110px;">
-                        <el-input v-if="correct && correct[item.id]" v-model="correct[item.id]" placeholder="请填入分值">分</el-input>
+                        <el-input v-model="correct[item.id]" placeholder="请填入分值">分</el-input>
                       </el-col>
                     </el-row>
                   </el-form-item>
