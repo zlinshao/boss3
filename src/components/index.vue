@@ -45,7 +45,7 @@
           <el-dropdown>
             <el-badge v-if="messageTotal>0" :max="99" :value="messageTotal" class="item">
               <i class="el-icons-fa-comment-o"></i>
-              消 息ffffffff
+              消 息
             </el-badge>
             <el-badge v-else class="item">
               <i class="el-icons-fa-comment-o"></i>
