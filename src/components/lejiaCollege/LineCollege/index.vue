@@ -140,8 +140,8 @@
                 prop="score"
                 label="得分">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.score && scope.row.waiting.length===0">{{scope.row.score}}</span>
-                  <span v-else-if="scope.row.score && scope.row.waiting.length>0">批改中</span>
+                  <span v-if="scope.row.score!=null && scope.row.waiting.length===0">{{scope.row.score}}</span>
+                  <span v-else-if="scope.row.score!=null && scope.row.waiting.length>0">批改中</span>
                   <span v-else>—</span>
                 </template>
               </el-table-column>
