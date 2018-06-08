@@ -52,7 +52,11 @@
                   v-if="answerData && resultData">
                   <div style="line-height: 30px;font-size: 15px;">
                     <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
-                    <span style="color:#409EFF;margin-left: 10px;" >本题得分： <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]">{{resultData.objective_detail[item.id]}}</span><span v-else>暂无</span></span>
+                    <span style="color:#409EFF;margin-left: 10px;" >本题得分：
+                       <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> 本题得分： {{resultData.objective_detail[item.id]}}</span>
+                       <span v-else-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> 本题得分： {{resultData.subjective_detail[item.id]}}</span>
+                       <span v-else>暂无</span>
+                    </span>
                   </div>
                   <el-row :gutter="20" style="margin-top: 10px;">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
@@ -86,7 +90,11 @@
                   v-if="answerData && resultData">
                   <div style="line-height: 30px;font-size: 15px;">
                     <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
-                    <span style="color:#409EFF;margin-left: 10px;" >本题得分： <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]">{{resultData.objective_detail[item.id]}}</span><span v-else>暂无</span></span>
+                    <span style="color:#409EFF;margin-left: 10px;" >本题得分：
+                      <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> 本题得分： {{resultData.objective_detail[item.id]}}</span>
+                      <span v-else-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> 本题得分： {{resultData.subjective_detail[item.id]}}</span>
+                      <span v-else>暂无</span>
+                    </span>
                   </div>
                   <el-row :gutter="20" style="margin-top: 10px;">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
@@ -120,7 +128,11 @@
                   v-if="answerData && resultData">
                   <div style="line-height: 30px;font-size: 15px;">
                     <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
-                    <span style="color:#409EFF;margin-left: 10px;" >本题得分： <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]">{{resultData.objective_detail[item.id]}}</span><span v-else>暂无</span></span>
+                    <span style="color:#409EFF;margin-left: 10px;" >本题得分：
+                      <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> 本题得分： {{resultData.objective_detail[item.id]}}</span>
+                      <span v-else-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> 本题得分： {{resultData.subjective_detail[item.id]}}</span>
+                      <span v-else>暂无</span>
+                    </span>
                   </div>
                   <el-row style="margin-top: 10px;">
                     <el-col :span="12" :key="index" v-for="(val,index) in item.choice"
@@ -186,9 +198,10 @@
             </el-row>
             <div style="line-height: 30px;font-size: 15px;">
               <span style="color:#409EFF;margin-left: 50px;" >
-                本题得分：
-                <span v-if="resultData.subjective_detail && resultData.subjective_detail[item.id]">{{resultData.subjective_detail[item.id]}}</span>
-                <span v-else>暂无</span></span>
+                <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> 本题得分： {{resultData.objective_detail[item.id]}}</span>
+                <span v-else-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> 本题得分： {{resultData.subjective_detail[item.id]}}</span>
+                <span v-else>暂无</span>
+              </span>
             </div>
             <el-form>
               <el-form-item style="width: 96%;margin-left: 50px;margin-top: 10px;">
@@ -223,7 +236,6 @@
     },
     activated() {
       this.getQueryData();
-      // this.getExamData();
       this.myData();
     },
     watch: {},
@@ -260,27 +272,17 @@
         this.$http.get(globalConfig.server + 'exam/result/' + this.resultId).then((res) => {
           if (res.data.code === '36000') {
             this.resultData = res.data.data;
-            // this.objective_score = this.totalScore = res.data.data.score;
+            for (var i in res.data.data.objective_detail) {
+              res.data.data.objective_detail[i] = res.data.data.objective_detail[i].toString();
+            }
+            for (var i in res.data.data.subjective_detail) {
+              res.data.data.subjective_detail[i] = res.data.data.subjective_detail[i].toString();
+            }
           } else {
             this.resultData = {};
           }
         });
       },
-      // getExamData() {
-      //   this.$http.get(globalConfig.server + 'exam/result/my/' + this.examId).then((res) => {
-      //     if (res.data.code === '30000') {
-      //       this.examData = res.data.data;
-      //       this.questionData = res.data.data.question_set;
-      //     } else {
-      //       this.examData = [];
-      //       this.questionData = [];
-      //       this.$notify.warning({
-      //         title: '警告',
-      //         message: res.data.msg
-      //       })
-      //     }
-      //   });
-      // },
     }
   };
 </script>
