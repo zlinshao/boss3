@@ -149,7 +149,6 @@
       },
       getParams() {
         if (!this.$route.query.moduleType) {
-          this.cover_pic = '';
           if (this.$route.query.moduleType) {
             this.$store.dispatch('moduleType', this.$route.query.moduleType);
           }
@@ -167,6 +166,10 @@
           this.form.name = '';
           this.form.region = '';
           this.form.htmlForEditor = '';
+          this.form.type = '';
+          this.cover_id = [];
+          this.cover_pic = {};
+          this.form.update_install = "1";
         }
         this.getDict();
         this.pitch = '';
@@ -174,11 +177,7 @@
           if (this.moduleType != 'newVersionUpdate') {
             this.publicDetail(query.ids);
             this.pitch = query.ids;
-          }
-          else {
-            if (this.$store.state.article.new_version) {
-              this.info = this.$store.state.article.new_version;
-            }
+          } else {
             this.newVersionDetail(query.ids);
             this.pitch = query.ids;
           }
@@ -212,27 +211,31 @@
         })
       },
       newVersionDetail(id) {
-        if (id) {
-          let pic = this.info.album;
-          let arr = {};
-          this.cover_id = [];
-          for (let key in pic) {
-            this.cover_id.push(key);
-            for (let i = 0; i < pic[key].length; i++) {
-              arr[key] = pic[key][i].uri;
-            }
+        this.$http.get(this.urls + 'setting/update/read?id=' + id).then((res) => {
+          if (res.data.code === '50040') {
+            let pic = res.data.data.album.image_pic;
+            let arr = {};
+            this.cover_id = [];
+            pic.forEach((item) => {
+              this.cover_id.push(item.id);
+              arr[item.id] = item.uri;
+            });
+            this.cover_pic = arr;
+            console.log(this.cover_id);
+            console.log(this.cover_pic);
+            this.form.name = res.data.data.version;
+            this.form.type = res.data.data.type;
+            this.form.htmlForEditor = res.data.data.content;
+            this.form.update_install = res.data.data.update_install;
+          } else {
+            this.cover_id = [];
+            this.cover_pic = {};
+            this.form.name = '';
+            this.form.type = '';
+            this.form.htmlForEditor = '';
+            this.form.update_install = '1';
           }
-          this.cover_pic = arr;
-          console.log(this.cover_pic)
-          this.form.name = this.info.version
-          this.form.htmlForEditor = this.info.content;
-          this.form.type = this.info.type
-        }
-        else {
-          this.form.name = ""
-          this.form.htmlForEditor = ""
-          this.form.type = 2
-        }
+        });
       },
       getDict() {
         switch (this.moduleType) {
