@@ -22,11 +22,10 @@
                           <el-radio :label="index">
                             <el-input size="small" v-model="options[index]" placeholder="请输入选项内容"></el-input>
                             <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="singleSub(index)"></i>
-                            <span style="color:rgb(88, 215, 136);" v-if="index == optionsSelect">正确</span>
+                            <span style="color:rgb(88, 215, 136);" v-if="index === optionsSelect">正确{{index}}---{{optionsSelect}}</span>
                           </el-radio>
                         </el-col>
                       </el-row>
-
                     </el-radio-group>
                   </el-form-item>
                   <div class="midadd">

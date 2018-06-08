@@ -43,7 +43,7 @@
           <el-table-column
             label="内容">
             <template slot-scope="scope">
-              <div style="height:41px;display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+              <div>
                 <span class="mpn" v-if="scope.row.content" v-html="scope.row.content"></span>
                 <span class="mpn" v-else>暂无</span>
               </div>
