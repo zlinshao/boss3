@@ -77,7 +77,7 @@
       },
       countDown(num) {
         clearTimeout(this.timeClear);
-        this.clock((num / 1000) + 3);
+        this.clock((num / 1000)+3);
       },
     },
     methods: {
@@ -148,7 +148,7 @@
             this.$router.push({path: '/answerExam', query: {id: id}});
           } else if (res.data.code === '30003') {
             this.showType = 'third';
-          } else if (res.data.data === '30004') {
+          } else if (res.data.code === '30004') {
             this.getExamData();
           }
         });
