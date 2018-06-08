@@ -5,7 +5,6 @@
       <el-form-item label="标题" required v-if="moduleType !='newVersionUpdate'">
         <el-input v-model="form.name" placeholder="请输入标题"></el-input>
       </el-form-item>
-
       <el-form-item label="版本" v-if="moduleType =='newVersionUpdate'">
         <el-input v-model="form.name" placeholder="请输入版本号"></el-input>
       </el-form-item>
@@ -21,7 +20,6 @@
                      :key="item.id"></el-option>
         </el-select>
       </el-form-item>
-
       <el-form-item label="内容" required="" v-if="moduleType !='newVersionUpdate'">
         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
                     v-model="form && form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
@@ -31,18 +29,18 @@
         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
                     v-model="form && form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
       </el-form-item>
-      <el-form-item label="更新日志" v-show="form.type == 675 && moduleType =='newVersionUpdate'">
+      <el-form-item label="更新日志" v-if="form.type == 675 && moduleType =='newVersionUpdate'">
         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
                     v-model="form && form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
       </el-form-item>
       <el-form-item label="上传文件" required="" v-show="form.type == 675 && moduleType =='newVersionUpdate'">
-        <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
+        <Dropzone :ID="'cover1'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
       <el-form-item label="封面图片" v-show="moduleType !='newVersionUpdate'">
-        <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
+        <Dropzone :ID="'cover2'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
       <el-form-item label="新手导读" required="" v-show="form.type == 673 && moduleType =='newVersionUpdate'">
-        <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
+        <Dropzone :ID="'cover3'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
       <el-form-item label="是否强制更新" v-show="form.type == 675 && moduleType =='newVersionUpdate'">
         <el-radio v-model="form.update_install" label="1">是</el-radio>

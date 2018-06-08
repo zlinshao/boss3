@@ -43,7 +43,10 @@
                  v-if="answerData && resultData">
               <div style="line-height: 30px;font-size: 15px;">
                 <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
-                <span style="color:#409EFF;margin-left: 10px;" v-if="resultData.objective_detail">本题得分： {{resultData.objective_detail[item.id]}}</span>
+                <span style="color:#409EFF;margin-left: 10px;">
+                  <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> 本题得分： {{resultData.objective_detail[item.id]}}</span>
+                  <span v-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> 本题得分： {{resultData.subjective_detail[item.id]}}</span>
+                </span>
               </div>
               <el-form>
                 <el-form-item style="margin-top: 10px;">
@@ -60,7 +63,8 @@
                   </el-row>
                 </el-form-item>
               </el-form>
-              <div class="eachSore" style="border: none;padding-left: 0px;" v-if="resultData.waiting && resultData.waiting.indexOf(item.id)>-1">
+              <div class="eachSore" style="border: none;padding-left: 0px;"
+                   v-if="resultData.waiting && resultData.waiting.indexOf(item.id)>-1">
                 <el-form>
                   <el-form-item>
                     <el-row>
@@ -93,8 +97,10 @@
                  v-if="answerData && resultData ">
               <div style="line-height: 30px;font-size: 15px;">
                 <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
-                <span style="color:#409EFF;margin-left: 10px;"
-                      v-if="resultData.objective_detail && resultData.objective_detail[item.id]">本题得分： {{resultData.objective_detail[item.id]}}</span>
+                <span style="color:#409EFF;margin-left: 10px;">
+                  <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> 本题得分： {{resultData.objective_detail[item.id]}}</span>
+                  <span v-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> 本题得分： {{resultData.subjective_detail[item.id]}}</span>
+                </span>
               </div>
               <el-form>
                 <el-form-item style="margin-top: 10px;">
@@ -113,7 +119,8 @@
                   </el-row>
                 </el-form-item>
               </el-form>
-              <div class="eachSore" style="border: none;padding-left: 0px;" v-if="resultData.waiting && resultData.waiting.indexOf(item.id)>-1">
+              <div class="eachSore" style="border: none;padding-left: 0px;"
+                   v-if="resultData.waiting && resultData.waiting.indexOf(item.id)>-1">
                 <el-form>
                   <el-form-item>
                     <el-row>
@@ -146,8 +153,10 @@
                  v-if="answerData && resultData">
               <div style="line-height: 30px;font-size: 15px;">
                 <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
-                <span style="color:#409EFF;margin-left: 10px;"
-                      v-if="resultData.objective_detail && resultData.objective_detail[item.id]">本题得分： {{resultData.objective_detail[item.id]}}</span>
+                <span style="color:#409EFF;margin-left: 10px;">
+                  <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> 本题得分： {{resultData.objective_detail[item.id]}}</span>
+                  <span v-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> 本题得分： {{resultData.subjective_detail[item.id]}}</span>
+                </span>
               </div>
               <el-form>
                 <el-form-item style="margin-top: 10px;">
@@ -163,7 +172,8 @@
                   </el-row>
                 </el-form-item>
               </el-form>
-              <div class="eachSore" style="border: none;padding-left: 0px;" v-if="resultData.waiting && resultData.waiting.indexOf(item.id)>-1">
+              <div class="eachSore" style="border: none;padding-left: 0px;"
+                   v-if="resultData.waiting && resultData.waiting.indexOf(item.id)>-1">
                 <el-form>
                   <el-form-item>
                     <el-row>
@@ -196,8 +206,10 @@
                  v-if="answerData && resultData">
               <div style="line-height: 30px;font-size: 15px;">
                 <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
-                <span style="color:#409EFF;margin-left: 10px;"
-                      v-if="resultData.objective_detail && resultData.objective_detail[item.id]">本题得分： {{resultData.objective_detail[item.id]}}</span>
+                <span style="color:#409EFF;margin-left: 10px;">
+                  <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> 本题得分： {{resultData.objective_detail[item.id]}}</span>
+                  <span v-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> 本题得分： {{resultData.subjective_detail[item.id]}}</span>
+                </span>
               </div>
               <el-form>
                 <el-form-item style="margin-top: 10px;">
@@ -216,7 +228,8 @@
                   </el-row>
                 </el-form-item>
               </el-form>
-              <div class="eachSore" style="border: none;padding-left: 0px;" v-if="resultData.waiting && resultData.waiting.indexOf(item.id)>-1">
+              <div class="eachSore" style="border: none;padding-left: 0px;"
+                   v-if="resultData.waiting && resultData.waiting.indexOf(item.id)>-1">
                 <el-form>
                   <el-form-item>
                     <el-row>
@@ -351,6 +364,12 @@
         this.$http.get(globalConfig.server + 'exam/result/' + this.resultId).then((res) => {
           if (res.data.code === '36000') {
             this.resultData = res.data.data;
+            for (var i in res.data.data.objective_detail) {
+              res.data.data.objective_detail[i] = res.data.data.objective_detail[i].toString();
+            }
+            for (var i in res.data.data.subjective_detail) {
+              res.data.data.subjective_detail[i] = res.data.data.subjective_detail[i].toString();
+            }
             this.objective_score = this.totalScore = res.data.data.objective_score;
             this.correct = res.data.data.subjective_detail;
             if (!this.correct) {
