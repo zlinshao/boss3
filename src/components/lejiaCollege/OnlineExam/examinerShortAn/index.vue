@@ -45,7 +45,8 @@
                 <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
                 <span style="color:#409EFF;margin-left: 10px;">
                   <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> 本题得分： {{resultData.objective_detail[item.id]}}</span>
-                  <span v-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> 本题得分： {{resultData.subjective_detail[item.id]}}</span>
+                  <span v-else-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> 本题得分： {{resultData.subjective_detail[item.id]}}</span>
+                  <span v-else> 本题得分： 暂无</span>
                 </span>
               </div>
               <el-form>
@@ -99,7 +100,8 @@
                 <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
                 <span style="color:#409EFF;margin-left: 10px;">
                   <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> 本题得分： {{resultData.objective_detail[item.id]}}</span>
-                  <span v-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> 本题得分： {{resultData.subjective_detail[item.id]}}</span>
+                  <span v-else-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> 本题得分： {{resultData.subjective_detail[item.id]}}</span>
+                  <span v-else> 本题得分： 暂无</span>
                 </span>
               </div>
               <el-form>
@@ -155,7 +157,8 @@
                 <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
                 <span style="color:#409EFF;margin-left: 10px;">
                   <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> 本题得分： {{resultData.objective_detail[item.id]}}</span>
-                  <span v-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> 本题得分： {{resultData.subjective_detail[item.id]}}</span>
+                  <span v-else-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> 本题得分： {{resultData.subjective_detail[item.id]}}</span>
+                  <span v-else> 本题得分： 暂无</span>
                 </span>
               </div>
               <el-form>
@@ -208,7 +211,8 @@
                 <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
                 <span style="color:#409EFF;margin-left: 10px;">
                   <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> 本题得分： {{resultData.objective_detail[item.id]}}</span>
-                  <span v-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> 本题得分： {{resultData.subjective_detail[item.id]}}</span>
+                  <span v-else-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> 本题得分： {{resultData.subjective_detail[item.id]}}</span>
+                  <span v-else> 本题得分： 暂无</span>
                 </span>
               </div>
               <el-form>
