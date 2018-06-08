@@ -28,8 +28,6 @@
               </div>
               <div class="scroll_bar">
                 <el-row>
-
-
                   <el-col :span="12" v-for="(key,index) in show_content" :key="index"
                           v-if="printScreen.indexOf(index) === -1">
                     <el-form-item v-if="!Array.isArray(key)" :label="index" class="detailTitle">
@@ -56,7 +54,6 @@
                       </div>
                     </el-form-item>
                   </el-col>
-
 
                 </el-row>
               </div>
