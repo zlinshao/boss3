@@ -44,8 +44,8 @@
             label="内容">
             <template slot-scope="scope">
               <div>
-                <span class="mpn" v-if="scope.row.content" v-html="scope.row.content"></span>
-                <span class="mpn" v-else>暂无</span>
+                <div class="mpn" v-if="scope.row.content" v-html="scope.row.content"></div>
+                <div class="mpn" v-else>暂无</div>
               </div>
             </template>
           </el-table-column>
@@ -297,7 +297,7 @@
   }
 
   .mpn p {
-    line-height: 0px;
+    line-height: 15px;
   }
 
 </style>
