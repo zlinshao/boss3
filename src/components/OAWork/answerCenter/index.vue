@@ -769,8 +769,6 @@
     overflow: hidden;
 
     .comment_box {
-      /*background: #f4f6fc;*/
-      /*border: 1px #eee solid;*/
       border-radius: 5px;
       margin-bottom: 15px;
       margin: 15px;
