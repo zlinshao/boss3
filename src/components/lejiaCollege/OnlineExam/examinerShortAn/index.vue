@@ -382,6 +382,8 @@
                 this.$set(this.correct, item, '');
               });
             }
+          }else{
+            this.resultData = {};
           }
         });
       },
