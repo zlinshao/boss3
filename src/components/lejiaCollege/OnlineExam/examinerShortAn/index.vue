@@ -7,7 +7,8 @@
             <div class="import_questions" style="text-align:left;color:#464748;">
               <div class="qdiv" style="margin-top:15px;">场次名称：<span style="color:#6a8dfb">{{examData.name}}</span></div>
               <div class="qdiv">试卷名称：<span style="color:#6a8dfb">{{examData.paper && examData.paper.name}}</span></div>
-              <div class="qdiv">试卷类型：<span style="color:#6a8dfb">{{examData.paper && examData.paper.category}}</span></div>
+              <div class="qdiv">试卷类型：<span style="color:#6a8dfb">{{examData.paper && examData.paper.category}}</span>
+              </div>
             </div>
           </el-col>
           <el-col :span="7" style="margin-left:2%; margin-right:2%">
@@ -59,6 +60,21 @@
                   </el-row>
                 </el-form-item>
               </el-form>
+              <div class="eachSore" style="border: none;padding-left: 0px;" v-if="resultData.waiting && resultData.waiting.indexOf(item.id)>-1">
+                <el-form>
+                  <el-form-item>
+                    <el-row>
+                      <el-col :span="1" style="min-width: 70px;">
+                        <span
+                          style=" font-size:14px; color:rgb(251, 70, 153);display:block; line-height:40px;">本题得分</span>
+                      </el-col>
+                      <el-col :span="2" style="min-width: 110px;">
+                        <el-input v-model="correct[item.id]" placeholder="请填入分值">分</el-input>
+                      </el-col>
+                    </el-row>
+                  </el-form-item>
+                </el-form>
+              </div>
             </div>
           </div>
         </div>
@@ -76,24 +92,42 @@
             <div style="width:96%;margin-left:50px;"
                  v-if="answerData && resultData ">
               <div style="line-height: 30px;font-size: 15px;">
-                <span style="color:#fc83b6;margin-right: 10px;" >正确答案： {{answerData[item.id]}}</span> |
-                <span style="color:#409EFF;margin-left: 10px;" v-if="resultData.objective_detail && resultData.objective_detail[item.id]">本题得分： {{resultData.objective_detail[item.id]}}</span>
+                <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
+                <span style="color:#409EFF;margin-left: 10px;"
+                      v-if="resultData.objective_detail && resultData.objective_detail[item.id]">本题得分： {{resultData.objective_detail[item.id]}}</span>
               </div>
               <el-form>
                 <el-form-item style="margin-top: 10px;">
                   <el-row :gutter="20">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
-                      <span v-if="resultData.answer && resultData.answer[item.id] && resultData.answer[item.id].indexOf(index)>-1"><el-radio>{{index}}：{{val}}</el-radio></span>
+                      <span
+                        v-if="resultData.answer && resultData.answer[item.id] && resultData.answer[item.id].indexOf(index)>-1"><el-radio>{{index}}：{{val}}</el-radio></span>
                       <span v-else>{{index}}：{{val}}</span>
                       <span style="color:rgb(88, 215, 136);margin-left:50px;"
                             v-for="ans in (resultData && resultData.answer && resultData.answer[item.id])"
                             v-if="answerData && answerData[item.id] && answerData[item.id].indexOf(ans)>-1 && ans==index">正确</span>
-                      <span style="color:#fc83b6;margin-left:50px;" v-for="ans in (resultData && resultData.answer && resultData.answer[item.id])"
+                      <span style="color:#fc83b6;margin-left:50px;"
+                            v-for="ans in (resultData && resultData.answer && resultData.answer[item.id])"
                             v-if="answerData && answerData[item.id] && answerData[item.id].indexOf(ans)<0 && ans==index">错误</span>
                     </el-col>
                   </el-row>
                 </el-form-item>
               </el-form>
+              <div class="eachSore" style="border: none;padding-left: 0px;" v-if="resultData.waiting && resultData.waiting.indexOf(item.id)>-1">
+                <el-form>
+                  <el-form-item>
+                    <el-row>
+                      <el-col :span="1" style="min-width: 70px;">
+                        <span
+                          style=" font-size:14px; color:rgb(251, 70, 153);display:block; line-height:40px;">本题得分</span>
+                      </el-col>
+                      <el-col :span="2" style="min-width: 110px;">
+                        <el-input v-model="correct[item.id]" placeholder="请填入分值">分</el-input>
+                      </el-col>
+                    </el-row>
+                  </el-form-item>
+                </el-form>
+              </div>
             </div>
           </div>
         </div>
@@ -112,7 +146,8 @@
                  v-if="answerData && resultData">
               <div style="line-height: 30px;font-size: 15px;">
                 <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
-                <span style="color:#409EFF;margin-left: 10px;" v-if="resultData.objective_detail && resultData.objective_detail[item.id]">本题得分： {{resultData.objective_detail[item.id]}}</span>
+                <span style="color:#409EFF;margin-left: 10px;"
+                      v-if="resultData.objective_detail && resultData.objective_detail[item.id]">本题得分： {{resultData.objective_detail[item.id]}}</span>
               </div>
               <el-form>
                 <el-form-item style="margin-top: 10px;">
@@ -128,6 +163,21 @@
                   </el-row>
                 </el-form-item>
               </el-form>
+              <div class="eachSore" style="border: none;padding-left: 0px;" v-if="resultData.waiting && resultData.waiting.indexOf(item.id)>-1">
+                <el-form>
+                  <el-form-item>
+                    <el-row>
+                      <el-col :span="1" style="min-width: 70px;">
+                        <span
+                          style=" font-size:14px; color:rgb(251, 70, 153);display:block; line-height:40px;">本题得分</span>
+                      </el-col>
+                      <el-col :span="2" style="min-width: 110px;">
+                        <el-input v-model="correct[item.id]" placeholder="请填入分值">分</el-input>
+                      </el-col>
+                    </el-row>
+                  </el-form-item>
+                </el-form>
+              </div>
             </div>
           </div>
         </div>
@@ -146,7 +196,8 @@
                  v-if="answerData && resultData">
               <div style="line-height: 30px;font-size: 15px;">
                 <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
-                <span style="color:#409EFF;margin-left: 10px;" v-if="resultData.objective_detail && resultData.objective_detail[item.id]">本题得分： {{resultData.objective_detail[item.id]}}</span>
+                <span style="color:#409EFF;margin-left: 10px;"
+                      v-if="resultData.objective_detail && resultData.objective_detail[item.id]">本题得分： {{resultData.objective_detail[item.id]}}</span>
               </div>
               <el-form>
                 <el-form-item style="margin-top: 10px;">
@@ -165,6 +216,21 @@
                   </el-row>
                 </el-form-item>
               </el-form>
+              <div class="eachSore" style="border: none;padding-left: 0px;" v-if="resultData.waiting && resultData.waiting.indexOf(item.id)>-1">
+                <el-form>
+                  <el-form-item>
+                    <el-row>
+                      <el-col :span="1" style="min-width: 70px;">
+                        <span
+                          style=" font-size:14px; color:rgb(251, 70, 153);display:block; line-height:40px;">本题得分</span>
+                      </el-col>
+                      <el-col :span="2" style="min-width: 110px;">
+                        <el-input v-model="correct[item.id]" placeholder="请填入分值">分</el-input>
+                      </el-col>
+                    </el-row>
+                  </el-form-item>
+                </el-form>
+              </div>
             </div>
           </div>
         </div>
@@ -247,7 +313,6 @@
         handler(val, oldVal) {
           this.totalScore = this.objective_score;
           for (var i in val) {
-            console.log(val[i])
             this.totalScore += Number(val[i]);
           }
         }
@@ -294,9 +359,6 @@
                 this.$set(this.correct, item, '');
               });
             }
-          } else {
-            this.resultData = {};
-            this.correct = {};
           }
         });
       },
