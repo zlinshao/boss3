@@ -18,11 +18,11 @@
                     <el-radio-group v-model="optionsSelect" style="width:98%;margin-left:2%;">
                       <el-row :gutter="20">
                         <el-col :span="12" :key="val" v-for="(val,index) in singlen"
-                                style="line-height:50px;height:50px;padding-top:14px;">
+                                style="padding-top:14px;">
                           <el-radio :label="index">
-                            <el-input size="small" v-model="options[index]" placeholder="请输入选项内容"></el-input>
+                            <textarea size="small" class="textarea" v-model="options[index]" placeholder="请输入选项内容"></textarea>
                             <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="singleSub(index)"></i>
-                            <span style="color:rgb(88, 215, 136);" v-if="index === optionsSelect">正确{{index}}---{{optionsSelect}}</span>
+                            <span style="color:rgb(88, 215, 136);" v-if="index === optionsSelect">正确</span>
                           </el-radio>
                         </el-col>
                       </el-row>
@@ -59,9 +59,9 @@
                   <el-form-item style="border:1px #eee solid;padding-bottom: 20px;border-radius: 5px;">
                     <el-checkbox-group v-model="multiOptionsSelect" style="width:98%;margin-left:2%;">
                       <el-col :span="12" :key="val" v-for="(val,index) in boxlen"
-                              style="line-height:50px;height:50px;padding-top:14px;">
+                              style="padding-top:14px;">
                         <el-checkbox :label="index">
-                          <el-input size="small" placeholder="请输入选项内容" v-model="multiOptions[index]"></el-input>
+                          <textarea class="textarea" size="small" placeholder="请输入选项内容" v-model="multiOptions[index]"></textarea>
                           <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="multiSub(index)"></i>
                           <span style="color:rgb(88, 215, 136);" v-if="multiOptionsSelect.indexOf(index)>-1">正确</span>
                         </el-checkbox>
@@ -99,9 +99,9 @@
                   <el-form-item style="border:1px #eee solid;padding-bottom: 20px;border-radius: 5px;">
                     <el-checkbox-group v-model="multiOptionsSelect" style="width:98%;margin-left:2%;">
                       <el-col :span="12" :key="val" v-for="(val,index) in boxlen"
-                              style="line-height:50px;height:50px;padding-top:14px;">
+                              style="padding-top:14px;">
                         <el-checkbox :label="index">
-                          <el-input size="small" placeholder="请输入选项内容" v-model="multiOptions[index]"></el-input>
+                          <textarea class="textarea" size="small" placeholder="请输入选项内容" v-model="multiOptions[index]"></textarea>
                           <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="multiSub(index)"></i>
                           <span style="color:rgb(88, 215, 136);" v-if="multiOptionsSelect.indexOf(index)>-1">正确</span>
                         </el-checkbox>
@@ -139,10 +139,10 @@
                   <el-form-item style="border:1px #eee solid;padding-bottom: 20px;border-radius: 5px;">
                     <el-radio-group v-model="judgeOptionsSelect" style="width:98%;margin-left:2%;">
                       <el-col :span="12" :key="val" v-for="(val,index) in 2"
-                              style="line-height:50px;height:50px;padding-top:14px;">
+                              style="padding-top:14px;">
                         <el-radio :label="index">
-                          <el-input size="small" v-model="judgeOptions[index]" placeholder="请输入选项内容"></el-input>
-                          <span style="color:rgb(88, 215, 136);" v-if="index == judgeOptionsSelect">正确</span>
+                          <textarea class="textarea" size="small" v-model="judgeOptions[index]" placeholder="请输入选项内容"></textarea>
+                          <span style="color:rgb(88, 215, 136);" v-if="index === judgeOptionsSelect">正确</span>
                         </el-radio>
                       </el-col>
                     </el-radio-group>
@@ -176,8 +176,8 @@
                     <el-row :gutter="20">
                       <el-col :span="8" v-for="(val,index) in spacelen" :key="index">
                         <span>第{{index+1}}处答案</span>
-                        <el-input style="width:70%" size="small" placeholder="请输入选项内容"
-                                  v-model="blankForm.answer[index]"></el-input>
+                        <textarea class="textarea" style="width:70%" size="small" placeholder="请输入选项内容"
+                                  v-model="blankForm.answer[index]"></textarea>
                         <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="blankSub(index)"></i>
                       </el-col>
                     </el-row>
@@ -743,6 +743,19 @@
 
 <style lang="scss" scoped>
   #onlineExam {
+    .textarea{
+      width: 97%;
+      border: 1px solid #dcdfe6;
+      border-radius: 5px;
+      padding: 10px;
+      font: 400 13.3333px Arial;
+      color: #787a7e;
+      vertical-align: middle;
+    }
+    input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+      /* WebKit browsers */
+      color: #c0c4cc;
+    }
     .qutitle {
       width: 80%;
       margin: 0 auto;
