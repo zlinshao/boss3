@@ -133,6 +133,7 @@
         this.organizationVisible = val;
         this.currentDepartId = 1;
         this.getDepartment(1);
+        this.getHighDepart()
       },
       organizationVisible(val){
         if(!val){
@@ -228,17 +229,19 @@
           })
         }
       },
+      getHighDepart(){
+        this.$http.get(globalConfig.server_user+'organizations/1').then((res) => {
+          if(res.data.status === 'success'){
+            this.highestDepart = res.data.data.name;
+          }
+        });
+      },
       getDepartment(id){
           //获取顶级部门名称
         this.currentPage_depart = 1;
         this.currentPage_user = 1;
         this.departmentList = [];
         this.departmentStaff = [];
-        this.$http.get(globalConfig.server_user+'organizations/1').then((res) => {
-          if(res.data.status === 'success'){
-            this.highestDepart = res.data.data.name;
-          }
-        });
         this.$http.get(globalConfig.server_user+'organizations?parent_id='+id+'&per_page_number=50').then((res) => {
           if(res.data.status === 'success'){
             this.departmentList = res.data.data;
