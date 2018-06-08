@@ -49,10 +49,14 @@
             <el-form>
               <el-form-item style="width: 96%;margin-left: 50px;">
                 <div
-                  v-if="answerData && answerData[item.id] && resultData">
+                  v-if="answerData && resultData">
                   <div style="line-height: 30px;font-size: 15px;">
                     <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
-                    <span style="color:#409EFF;margin-left: 10px;" >本题得分： <span v-if="resultData.objective_detail">{{resultData.objective_detail[item.id]}}</span><span v-else>暂无</span></span>
+                    <span style="color:#409EFF;margin-left: 10px;" >本题得分：
+                       <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> {{resultData.objective_detail[item.id]}}</span>
+                       <span v-else-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> {{resultData.subjective_detail[item.id]}}</span>
+                       <span v-else> 暂无</span>
+                    </span>
                   </div>
                   <el-row :gutter="20" style="margin-top: 10px;">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
@@ -83,19 +87,23 @@
             <el-form>
               <el-form-item style="width: 96%;margin-left: 50px;">
                 <div
-                  v-if="answerData && answerData[item.id] && resultData">
+                  v-if="answerData && resultData">
                   <div style="line-height: 30px;font-size: 15px;">
                     <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
-                    <span style="color:#409EFF;margin-left: 10px;" >本题得分： <span v-if="resultData.objective_detail">{{resultData.objective_detail[item.id]}}</span><span v-else>暂无</span></span>
+                    <span style="color:#409EFF;margin-left: 10px;" >本题得分：
+                      <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> {{resultData.objective_detail[item.id]}}</span>
+                      <span v-else-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> {{resultData.subjective_detail[item.id]}}</span>
+                      <span v-else> 暂无</span>
+                    </span>
                   </div>
                   <el-row :gutter="20" style="margin-top: 10px;">
                     <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                       <span v-if="resultData.answer && resultData.answer[item.id] && resultData.answer[item.id].indexOf(index)>-1"><el-radio style="white-space: initial;">{{index}}：{{val}}</el-radio></span>
                       <span v-else>{{index}}：{{val}}</span>
                       <span style="color:rgb(88, 215, 136);margin-left:50px;" v-for="ans in (resultData.answer && resultData.answer[item.id])"
-                            v-if="answerData[item.id].indexOf(ans)>-1 && ans==index">正确</span>
+                            v-if="answerData[item.id] && answerData[item.id].indexOf(ans)>-1 && ans==index">正确</span>
                       <span style="color:#fc83b6;margin-left:50px;" v-for="ans in (resultData.answer && resultData.answer[item.id])"
-                            v-if="answerData[item.id].indexOf(ans)<0 && ans==index">错误</span>
+                            v-if="answerData[item.id] && answerData[item.id].indexOf(ans)<0 && ans==index">错误</span>
                     </el-col>
                   </el-row>
                 </div>
@@ -117,10 +125,14 @@
             <el-form>
               <el-form-item style="width: 96%;margin-left: 50px;">
                 <div
-                  v-if="answerData && answerData[item.id] && resultData">
+                  v-if="answerData && resultData">
                   <div style="line-height: 30px;font-size: 15px;">
                     <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
-                    <span style="color:#409EFF;margin-left: 10px;" >本题得分： <span v-if="resultData.objective_detail">{{resultData.objective_detail[item.id]}}</span><span v-else>暂无</span></span>
+                    <span style="color:#409EFF;margin-left: 10px;" >本题得分：
+                      <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> {{resultData.objective_detail[item.id]}}</span>
+                      <span v-else-if="resultData.subjective_detail && resultData.subjective_detail[item.id]">  {{resultData.subjective_detail[item.id]}}</span>
+                      <span v-else> 暂无</span>
+                    </span>
                   </div>
                   <el-row style="margin-top: 10px;">
                     <el-col :span="12" :key="index" v-for="(val,index) in item.choice"
@@ -152,10 +164,14 @@
             <el-form>
               <el-form-item style="width: 96%;margin-left: 50px;">
                 <div
-                  v-if="answerData && answerData[item.id] && resultData">
+                  v-if="answerData && resultData">
                   <div style="line-height: 30px;font-size: 15px;">
                     <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
-                    <span style="color:#409EFF;margin-left: 10px;" >本题得分： <span v-if="resultData.objective_detail">{{resultData.objective_detail[item.id]}}</span><span v-else>暂无</span></span>
+                    <span style="color:#409EFF;margin-left: 10px;" >本题得分：
+                      <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> {{resultData.objective_detail[item.id]}}</span>
+                      <span v-else-if="resultData.subjective_detail && resultData.subjective_detail[item.id]">  {{resultData.subjective_detail[item.id]}}</span>
+                      <span v-else> 暂无</span>
+                    </span>
                   </div>
                   <el-row :gutter="20" style="margin-top: 10px;">
                     <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak" style="line-height: 24px;">
@@ -163,9 +179,9 @@
                                 v-model="resultData.answer && resultData.answer[item.id][ak]" :placeholder="`第 ${ak+1} 处答案`"></el-input>
                       <span style="color:rgb(88, 215, 136);margin-left:16px;"
                             v-for="(vv, kk) in (resultData.answer && resultData.answer[item.id])"
-                            v-if="answerData[item.id].indexOf(vv)>-1 && kk==ak ">正确</span>
+                            v-if="answerData[item.id] && answerData[item.id].indexOf(vv)>-1 && kk==ak ">正确</span>
                       <span style="color:#fc83b6;margin-left:16px;" v-for="(vv, kk) in (resultData.answer && resultData.answer[item.id])"
-                            v-if="answerData[item.id].indexOf(vv)<0 && kk==ak">错误</span>
+                            v-if="answerData[item.id] && answerData[item.id].indexOf(vv)<0 && kk==ak">错误</span>
                     </el-col>
                   </el-row>
                 </div>
@@ -185,7 +201,11 @@
               </el-col>
             </el-row>
             <div style="line-height: 30px;font-size: 15px;">
-              <span style="color:#409EFF;margin-left: 50px;" >本题得分： <span v-if="resultData.subjective_detail">{{resultData.subjective_detail[item.id]}}</span><span v-else>暂无</span></span>
+              <span style="color:#409EFF;margin-left: 50px;" >
+                <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> 本题得分： {{resultData.objective_detail[item.id]}}</span>
+                <span v-else-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> 本题得分： {{resultData.subjective_detail[item.id]}}</span>
+                <span v-else> 本题得分： 暂无</span>
+              </span>
             </div>
             <el-form>
               <el-form-item style="width: 96%;margin-left: 50px;margin-top: 10px;">
@@ -220,7 +240,6 @@
     },
     activated() {
       this.getQueryData();
-      // this.getExamData();
       this.myData();
     },
     watch: {},
@@ -254,31 +273,20 @@
             this.questionData = {};
           }
         });
-
         this.$http.get(globalConfig.server + 'exam/result/' + this.resultId).then((res) => {
           if (res.data.code === '36000') {
             this.resultData = res.data.data;
-            // this.objective_score = this.totalScore = res.data.data.score;
+            for (var i in res.data.data.objective_detail) {
+              res.data.data.objective_detail[i] = res.data.data.objective_detail[i].toString();
+            }
+            for (var i in res.data.data.subjective_detail) {
+              res.data.data.subjective_detail[i] = res.data.data.subjective_detail[i].toString();
+            }
           } else {
             this.resultData = {};
           }
         });
       },
-      // getExamData() {
-      //   this.$http.get(globalConfig.server + 'exam/result/my/' + this.examId).then((res) => {
-      //     if (res.data.code === '30000') {
-      //       this.examData = res.data.data;
-      //       this.questionData = res.data.data.question_set;
-      //     } else {
-      //       this.examData = [];
-      //       this.questionData = [];
-      //       this.$notify.warning({
-      //         title: '警告',
-      //         message: res.data.msg
-      //       })
-      //     }
-      //   });
-      // },
     }
   };
 </script>

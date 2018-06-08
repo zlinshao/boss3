@@ -5,9 +5,12 @@
         <el-row style="width:100%;margin-top:16px;">
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
             <div class="import_questions" style="text-align:left;color:#464748;">
-              <div class="qdiv" style="margin-top:15px;">场次名称：<span style="color:#6a8dfb">{{paperData.name}}</span></div>
-              <div class="qdiv">试卷名称：<span style="color:#6a8dfb">{{paperData.paper && paperData.paper.name}}</span></div>
-              <div class="qdiv">试卷类型：<span style="color:#6a8dfb">{{paperData.paper && paperData.paper.category}}</span></div>
+              <div class="qdiv" style="margin-top:15px;">场次名称：<span style="color:#6a8dfb">{{paperData.name}}</span>
+              </div>
+              <div class="qdiv">试卷名称：<span style="color:#6a8dfb">{{paperData.paper && paperData.paper.name}}</span>
+              </div>
+              <div class="qdiv">试卷类型：<span style="color:#6a8dfb">{{paperData.paper && paperData.paper.category}}</span>
+              </div>
             </div>
           </el-col>
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
@@ -16,7 +19,7 @@
                 style="float:right; color:#58d788;font-size:20px;" class="iconfont icon-shijian1"></i></div>
               <div><span style="font-size:70px; color:#58d788;" :class="{'timeStringClass':timeString !=''}">{{ paperData.duration }}</span>分钟
                 <!--<span style="float: right;margin-right: 15px;margin-top: 33px;" v-if="timeString !='' ">倒计时-->
-                  <!--<br/><span style="color:#58d788;">{{timeString}}</span></span>-->
+                <!--<br/><span style="color:#58d788;">{{timeString}}</span></span>-->
               </div>
             </div>
           </el-col>
@@ -132,7 +135,8 @@
             <el-form>
               <el-form-item style="width:96%;margin-left:50px;margin-top: 10px;">
                 <el-col :span="12" v-for="(value,ak) in item.answer_count" :key="ak">
-                  <input type="text" style="width: 95%;border: 1px solid #dcdfe6;border-radius: 5px;padding: 10px;font: 400 13.3333px Arial;color: #787a7e;"
+                  <input type="text"
+                         style="width: 95%;border: 1px solid #dcdfe6;border-radius: 5px;padding: 10px;font: 400 13.3333px Arial;color: #787a7e;"
                          size="small" v-model="answerData[item.id][ak]" :placeholder="`请填写第 ${ak+1} 处答案`">
                 </el-col>
               </el-form-item>
@@ -152,8 +156,10 @@
             </el-row>
             <el-form>
               <el-form-item style="width:96%;margin-left:50px;margin-top: 10px;">
-                <textarea style="width: 97%;border: 1px solid #dcdfe6;border-radius: 5px;padding: 10px;font: 400 13.3333px Arial;color: #787a7e;" v-model="answerData[item.id]"
-                         placeholder="请填写答案"></textarea>
+                <textarea
+                  style="width: 97%;border: 1px solid #dcdfe6;border-radius: 5px;padding: 10px;font: 400 13.3333px Arial;color: #787a7e;"
+                  v-model="answerData[item.id]"
+                  placeholder="请填写答案"></textarea>
               </el-form-item>
             </el-form>
           </div>
@@ -269,14 +275,16 @@
       },
       countDown(num) {
         clearTimeout(this.timeClear);
-        if (num >= 0) {
-          this.clock(num);
-        }
+        this.clock(num + 3);
       }
     },
     methods: {
       clock(n) {
         let val = Number(n);
+        if (val <= 0) {
+          this.onForceSubmit('force');
+          return;
+        }
         let h = Number(Math.floor(val / 3600));
         let m = 0, s = 0;
         if ((val - h * 3600) >= 0) {
@@ -397,7 +405,7 @@
 
             localStorage.removeItem("answers_" + this.examId);
             let examIds = JSON.parse(this.confirmArrival);
-            examIds.splice(examIds.indexOf(this.examId) ,1);
+            examIds.splice(examIds.indexOf(this.examId), 1);
             localStorage.setItem('confirmArrivals', JSON.stringify(examIds));  //保存已到场的考试id
           } else {
             this.$notify.warning({
@@ -445,10 +453,12 @@
   .timeStringClass {
     margin-left: 30px;
   }
+
   input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
     /* WebKit browsers */
     color: #c0c4cc;
   }
+
   .ql-editor {
     min-height: initial !important;
     padding: 0px;

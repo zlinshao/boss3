@@ -195,32 +195,13 @@
           </div>
           <span slot="footer" class="dialog-footer">
             <el-button size="small" @click="examDialog = false;examId = '';">取消</el-button>
-            <el-button size="small" type="primary" @click="saveExam">保存</el-button>
+            <el-button size="small" type="primary" @click="saveExam" :disabled="btnDisabled">保存</el-button>
           </span>
         </div>
       </el-dialog>
     </div>
-    <div id="examineeDialog"  >
-      <el-dialog :close-on-click-modal="false"
-                 :visible.sync="examineeDialog"
-                 title="调查对象"
-                 width="45%"
-                 >
-        <div>
-          <!--<el-row :gutter="10">-->
-            <!--<el-col :span="22">-->
-              <!--<el-input size="mini" placeholder="请选择调查对象" v-model="selectExaminees" readOnly @focus="openOrganize">-->
-                <!--&lt;!&ndash;<template slot="append">&ndash;&gt;-->
-                  <!--&lt;!&ndash;<div style="cursor: pointer;" @click="emptyExaminees">清空</div>&ndash;&gt;-->
-                <!--&lt;!&ndash;</template>&ndash;&gt;-->
-              <!--</el-input>-->
-            <!--</el-col>-->
-            <!--<el-col :span="6" style="float: right;">-->
-              <!--<el-button type="primary" size="mini" @click="openOrganize">新增</el-button>-->
-            <!--</el-col>-->
-          <!--</el-row>-->
-          <el-button type="primary" size="mini" @click="openOrganize" style="float: right;margin-bottom: 10px;margin-right: 10px;">新增</el-button>
-        </div>
+    <div id="examineeDialog">
+      <el-dialog :close-on-click-modal="false" :visible.sync="examineeDialog" title="调查对象" width="45%">
         <div style="margin-top: 20px;"
              v-loading="loading"
              element-loading-text="正在处理中"
@@ -263,7 +244,8 @@
           </div>
         </div>
         <span slot="footer" class="dialog-footer">
-            <el-button size="small" type="primary" @click="deleteExaminess">删除</el-button>
+          <el-button type="primary" size="mini" @click="openOrganize" style="float: left;">新增</el-button>
+          <el-button size="small" type="primary" @click="deleteExaminess">删除</el-button>
         </span>
       </el-dialog>
     </div>
@@ -327,39 +309,8 @@
         useTestPapers: [],
         examineesData: [],
         examineesPageData: [],
-
-        pickerOptions: {
-          shortcuts: [
-            {
-              text: "最近一周",
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                picker.$emit("pick", [start, end]);
-              }
-            },
-            {
-              text: "最近一个月",
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                picker.$emit("pick", [start, end]);
-              }
-            },
-            {
-              text: "最近三个月",
-              onClick(picker) {
-                const end = new Date();
-                const start = new Date();
-                start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                picker.$emit("pick", [start, end]);
-              }
-            }
-          ]
-        },
         examinees: [],
+        btnDisabled: false,
       };
     },
     mounted() {
@@ -369,6 +320,7 @@
     watch: {
       examDialog(val) {
         if (val) {
+          this.btnDisabled = false;
           this.initial();
           this.getPaperData();
           if (this.examId) {
@@ -462,8 +414,8 @@
             //选的是人
             this.formExam.examinees.push(item.id);
             this.examiness_name.push(item.name);
-            length ++ ;
-            if(val.length === length){
+            length++;
+            if (val.length === length) {
               this.addExaminees();
             }
           } else {
@@ -477,19 +429,19 @@
                   this.selectExaminees = '';
                   this.selectExaminees = this.examiness_name.join(',');
                 });
-                length ++;
-                if(val.length === length){
+                length++;
+                if (val.length === length) {
                   this.addExaminees();
                 }
-              }else {
-                length ++;
-                if(val.length === length){
+              } else {
+                length++;
+                if (val.length === length) {
                   this.addExaminees();
                 }
               }
-            }).catch((err)=>{
-              length ++;
-              if(val.length === length){
+            }).catch((err) => {
+              length++;
+              if (val.length === length) {
                 this.addExaminees('error');
               }
             })
@@ -572,6 +524,7 @@
       },
       //保存/新增考试
       saveExam() {
+        this.btnDisabled = true;
         let header = '';
         if (this.examId) {
           header = this.$http.put(globalConfig.server + 'questionnaire/' + this.examId, this.formExam);
@@ -588,6 +541,7 @@
             });
             this.getExamData();
           } else {
+            this.btnDisabled = false;
             this.$notify.warning({
               title: '警告',
               message: res.data.msg

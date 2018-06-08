@@ -5,7 +5,6 @@
       <el-form-item label="标题" required v-if="moduleType !='newVersionUpdate'">
         <el-input v-model="form.name" placeholder="请输入标题"></el-input>
       </el-form-item>
-
       <el-form-item label="版本" v-if="moduleType =='newVersionUpdate'">
         <el-input v-model="form.name" placeholder="请输入版本号"></el-input>
       </el-form-item>
@@ -21,7 +20,6 @@
                      :key="item.id"></el-option>
         </el-select>
       </el-form-item>
-
       <el-form-item label="内容" required="" v-if="moduleType !='newVersionUpdate'">
         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
                     v-model="form && form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
@@ -35,16 +33,16 @@
         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
                     v-model="form && form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
       </el-form-item>
-      <el-form-item label="上传文件" required="" v-if="form.type == 675 && moduleType =='newVersionUpdate'">
-        <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
+      <el-form-item label="上传文件" required="" v-show="form.type == 675 && moduleType =='newVersionUpdate'">
+        <Dropzone :ID="'cover1'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
-      <el-form-item label="封面图片" v-if="moduleType !='newVersionUpdate'">
-        <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
+      <el-form-item label="封面图片" v-show="moduleType !='newVersionUpdate'">
+        <Dropzone :ID="'cover2'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
-      <el-form-item label="新手导读" required="" v-else-if="form.type == 673 && moduleType =='newVersionUpdate'">
-        <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
+      <el-form-item label="新手导读" required="" v-show="form.type == 673 && moduleType =='newVersionUpdate'">
+        <Dropzone :ID="'cover3'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
-      <el-form-item label="是否强制更新" v-if="form.type == 675 && moduleType =='newVersionUpdate'">
+      <el-form-item label="是否强制更新" v-show="form.type == 675 && moduleType =='newVersionUpdate'">
         <el-radio v-model="form.update_install" label="1">是</el-radio>
         <el-radio v-model="form.update_install" label="2">否</el-radio>
       </el-form-item>
@@ -149,7 +147,6 @@
       },
       getParams() {
         if (!this.$route.query.moduleType) {
-          this.cover_pic = '';
           if (this.$route.query.moduleType) {
             this.$store.dispatch('moduleType', this.$route.query.moduleType);
           }
@@ -167,6 +164,10 @@
           this.form.name = '';
           this.form.region = '';
           this.form.htmlForEditor = '';
+          this.form.type = '';
+          this.cover_id = [];
+          this.cover_pic = {};
+          this.form.update_install = "1";
         }
         this.getDict();
         this.pitch = '';
@@ -174,11 +175,7 @@
           if (this.moduleType != 'newVersionUpdate') {
             this.publicDetail(query.ids);
             this.pitch = query.ids;
-          }
-          else {
-            if (this.$store.state.article.new_version) {
-              this.info = this.$store.state.article.new_version;
-            }
+          } else {
             this.newVersionDetail(query.ids);
             this.pitch = query.ids;
           }
@@ -212,27 +209,31 @@
         })
       },
       newVersionDetail(id) {
-        if (id) {
-          let pic = this.info.album;
-          let arr = {};
-          this.cover_id = [];
-          for (let key in pic) {
-            this.cover_id.push(key);
-            for (let i = 0; i < pic[key].length; i++) {
-              arr[key] = pic[key][i].uri;
-            }
+        this.$http.get(this.urls + 'setting/update/read?id=' + id).then((res) => {
+          if (res.data.code === '50040') {
+            let pic = res.data.data.album.image_pic;
+            let arr = {};
+            this.cover_id = [];
+            this.cover_pic = {};
+            pic.forEach((item) => {
+              this.cover_id.push(item.id);
+              arr[item.id] = item.uri;
+            });
+            this.cover_pic = arr;
+            console.log(this.cover_pic);
+            this.form.name = res.data.data.version;
+            this.form.type = res.data.data.type;
+            this.form.htmlForEditor = res.data.data.content;
+            this.form.update_install = res.data.data.update_install;
+          } else {
+            this.cover_id = [];
+            this.cover_pic = {};
+            this.form.name = '';
+            this.form.type = '';
+            this.form.htmlForEditor = '';
+            this.form.update_install = '1';
           }
-          this.cover_pic = arr;
-          console.log(this.cover_pic)
-          this.form.name = this.info.version
-          this.form.htmlForEditor = this.info.content;
-          this.form.type = this.info.type
-        }
-        else {
-          this.form.name = ""
-          this.form.htmlForEditor = ""
-          this.form.type = 2
-        }
+        });
       },
       getDict() {
         switch (this.moduleType) {

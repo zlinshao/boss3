@@ -77,7 +77,7 @@
       },
       countDown(num) {
         clearTimeout(this.timeClear);
-        this.clock((num / 1000) + 2);
+        this.clock((num / 1000)+3);
       },
     },
     methods: {
@@ -140,7 +140,7 @@
             let examIds;
             if (this.confirmArrival === null) {
               examIds = [];
-            }else {
+            } else {
               examIds = this.confirmArrival;
             }
             examIds.push(this.examData.id);
@@ -148,6 +148,8 @@
             this.$router.push({path: '/answerExam', query: {id: id}});
           } else if (res.data.code === '30003') {
             this.showType = 'third';
+          } else if (res.data.code === '30004') {
+            this.getExamData();
           }
         });
       },

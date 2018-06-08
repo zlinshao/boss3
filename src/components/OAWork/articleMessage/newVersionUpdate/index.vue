@@ -29,7 +29,6 @@
           @cell-dblclick='openDetail'
           style="width: 100%">
           <el-table-column
-            width="100px"
             label="版本类型">
             <template slot-scope="scope">
               <span v-if="scope.row.type ==673">大版本</span>
@@ -39,20 +38,19 @@
           </el-table-column>
           <el-table-column
             prop="version"
-            width="300px"
             label="版本">
           </el-table-column>
           <el-table-column
             label="内容">
             <template slot-scope="scope">
-            <div  style=" height:41px;display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-            <span class="mpn" v-html="scope.row.content"></span>
-            </div>
+              <div>
+                <div class="mpn" v-if="scope.row.content" v-html="scope.row.content"></div>
+                <div class="mpn" v-else>暂无</div>
+              </div>
             </template>
           </el-table-column>
           <el-table-column
             prop="staffs.name"
-            width="300px"
             label="发布人">
             <template slot-scope="scope">
               <span v-if="scope.row.staffs && scope.row.staffs.real_name">{{scope.row.staffs && scope.row.staffs.real_name}}</span>
@@ -61,7 +59,6 @@
           </el-table-column>
           <el-table-column
             prop="create_time"
-            width="300px"
             label="创建时间">
           </el-table-column>
         </el-table>
@@ -109,13 +106,13 @@
         form: {
           limit: 12,
           page: 1,
-          keywords:"",
+          keywords: "",
         },
-        keyword:"",
+        keyword: "",
         totalNum: 0,
         tableData: [],
         pitch: '',
-        info:'',
+        info: '',
         moduleType: 'newVersionUpdate',
         collectStatus: ' ',
         collectLoading: false,
@@ -134,14 +131,14 @@
       this.form.page = this.currentPage;
     },
     methods: {
-      search(){
+      search() {
         this.form.page = 1;
         this.getLejiaTableData();
       },
       getLejiaTableData() {
         this.collectLoading = true;
         this.collectStatus = ' ';
-        this.$http.get(this.urls + 'setting/update/',{params: this.form}).then((res) => {
+        this.$http.get(this.urls + 'setting/update/', {params: this.form}).then((res) => {
           this.isHigh = false;
           this.collectLoading = false;
           if (res.data.code === '50020') {
@@ -156,7 +153,7 @@
       },
       // 详情
       openDetail(row) {
-        this.$store.dispatch('newversion',row);
+        this.$store.dispatch('newversion', row);
         this.$router.push({path: '/Infodetails', query: {moduleType: this.moduleType, from: 'publicArticleBtn'}});
       },
       // 高级
@@ -171,7 +168,7 @@
       // 文章发布
       publicArticle() {
         this.$store.dispatch('deleteArticleId');
-        this.$router.push({path: '/publicArticle', query: {moduleType: this.moduleType}});
+        this.$router.push({path: '/publicArticle', query: {moduleType: this.moduleType, from: 'publicArticleBtn'}});
         this.$store.dispatch('moduleType', this.moduleType);
       },
       handleSizeChange(val) {
@@ -188,10 +185,10 @@
       openContextMenu(row, event) {
         this.pitch = row.id;
         this.info = row;
-          this.lists = [
-            {clickIndex: 'revise', headIcon: 'iconfont icon-bianji--', label: '编辑'},
-            {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除'},
-          ];
+        this.lists = [
+          {clickIndex: 'revise', headIcon: 'iconfont icon-bianji--', label: '编辑'},
+          {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除'},
+        ];
 
         this.contextMenuParam(event);
       },
@@ -201,7 +198,7 @@
           case 'revise':
             this.$router.push({path: '/publicArticle', query: {ids: this.pitch, moduleType: this.moduleType}});
             this.$store.dispatch('moduleType', this.moduleType);
-            this.$store.dispatch('newversion',this.info);
+            this.$store.dispatch('newversion', this.info);
             break;
           case 'delete':
             this.deleteInfo(this.pitch);
@@ -249,7 +246,6 @@
       },
 
 
-
       // 提示信息
       prompt(val, info) {
         if (val === 1) {
@@ -268,10 +264,10 @@
 
     },
     watch: {
-      keyword(val){
+      keyword(val) {
         this.form.keywords = val;
-        if( val == ""){
-           this.getLejiaTableData();
+        if (val == "") {
+          this.getLejiaTableData();
         }
 
       }
@@ -299,8 +295,9 @@
     cursor: inherit;
     min-width: 68px;
   }
-  .mpn p{
-    line-height: 0px;
+
+  .mpn p {
+    line-height: 15px;
   }
 
 </style>
