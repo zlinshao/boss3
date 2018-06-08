@@ -31,20 +31,20 @@
         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
                     v-model="form && form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
       </el-form-item>
-      <el-form-item label="更新日志" v-if="form.type == 675 && moduleType =='newVersionUpdate'">
+      <el-form-item label="更新日志" v-show="form.type == 675 && moduleType =='newVersionUpdate'">
         <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
                     v-model="form && form.htmlForEditor" :disabled="editorDisabled"></vue-editor>
       </el-form-item>
-      <el-form-item label="上传文件" required="" v-if="form.type == 675 && moduleType =='newVersionUpdate'">
+      <el-form-item label="上传文件" required="" v-show="form.type == 675 && moduleType =='newVersionUpdate'">
         <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
-      <el-form-item label="封面图片" v-if="moduleType !='newVersionUpdate'">
+      <el-form-item label="封面图片" v-show="moduleType !='newVersionUpdate'">
         <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
-      <el-form-item label="新手导读" required="" v-else-if="form.type == 673 && moduleType =='newVersionUpdate'">
+      <el-form-item label="新手导读" required="" v-show="form.type == 673 && moduleType =='newVersionUpdate'">
         <Dropzone :ID="'cover'" @getImg="photo_success" :editImage="cover_pic" :isClear="isClear"></Dropzone>
       </el-form-item>
-      <el-form-item label="是否强制更新" v-if="form.type == 675 && moduleType =='newVersionUpdate'">
+      <el-form-item label="是否强制更新" v-show="form.type == 675 && moduleType =='newVersionUpdate'">
         <el-radio v-model="form.update_install" label="1">是</el-radio>
         <el-radio v-model="form.update_install" label="2">否</el-radio>
       </el-form-item>
@@ -216,12 +216,12 @@
             let pic = res.data.data.album.image_pic;
             let arr = {};
             this.cover_id = [];
+            this.cover_pic = {};
             pic.forEach((item) => {
               this.cover_id.push(item.id);
               arr[item.id] = item.uri;
             });
             this.cover_pic = arr;
-            console.log(this.cover_id);
             console.log(this.cover_pic);
             this.form.name = res.data.data.version;
             this.form.type = res.data.data.type;
