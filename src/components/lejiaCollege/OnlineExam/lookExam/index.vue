@@ -51,7 +51,10 @@
                 <div
                   v-if="answerData && resultData">
                   <div style="line-height: 30px;font-size: 15px;">
-                    <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
+                    <span style="color:#fc83b6;margin-right: 10px;">正确答案：
+                      <span v-if="answerData[item.id]">{{answerData[item.id]}}</span>
+                      <span v-else>暂无</span>
+                    </span> |
                     <span style="color:#409EFF;margin-left: 10px;" >本题得分：
                        <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> {{resultData.objective_detail[item.id]}}</span>
                        <span v-else-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> {{resultData.subjective_detail[item.id]}}</span>
@@ -89,7 +92,10 @@
                 <div
                   v-if="answerData && resultData">
                   <div style="line-height: 30px;font-size: 15px;">
-                    <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
+                    <span style="color:#fc83b6;margin-right: 10px;">正确答案：
+                       <span v-if="answerData[item.id]">{{answerData[item.id]}}</span>
+                       <span v-else>暂无</span>
+                    </span> |
                     <span style="color:#409EFF;margin-left: 10px;" >本题得分：
                       <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> {{resultData.objective_detail[item.id]}}</span>
                       <span v-else-if="resultData.subjective_detail && resultData.subjective_detail[item.id]"> {{resultData.subjective_detail[item.id]}}</span>
@@ -127,7 +133,10 @@
                 <div
                   v-if="answerData && resultData">
                   <div style="line-height: 30px;font-size: 15px;">
-                    <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
+                    <span style="color:#fc83b6;margin-right: 10px;">正确答案：
+                       <span v-if="answerData[item.id]">{{answerData[item.id]}}</span>
+                       <span v-else>暂无</span>
+                    </span> |
                     <span style="color:#409EFF;margin-left: 10px;" >本题得分：
                       <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> {{resultData.objective_detail[item.id]}}</span>
                       <span v-else-if="resultData.subjective_detail && resultData.subjective_detail[item.id]">  {{resultData.subjective_detail[item.id]}}</span>
@@ -166,7 +175,10 @@
                 <div
                   v-if="answerData && resultData">
                   <div style="line-height: 30px;font-size: 15px;">
-                    <span style="color:#fc83b6;margin-right: 10px;">正确答案： {{answerData[item.id]}}</span> |
+                    <span style="color:#fc83b6;margin-right: 10px;">正确答案：
+                       <span v-if="answerData[item.id]">{{answerData[item.id]}}</span>
+                       <span v-else>暂无</span>
+                    </span> |
                     <span style="color:#409EFF;margin-left: 10px;" >本题得分：
                       <span v-if="resultData.objective_detail && resultData.objective_detail[item.id]"> {{resultData.objective_detail[item.id]}}</span>
                       <span v-else-if="resultData.subjective_detail && resultData.subjective_detail[item.id]">  {{resultData.subjective_detail[item.id]}}</span>
