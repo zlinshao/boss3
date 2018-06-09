@@ -30,9 +30,9 @@
                 <span v-if="!item.is_anonymous" style="color:#83a0fc">{{item && item.asker && item.asker.name}}</span>&nbsp;&nbsp;
                 <span v-if="item.is_anonymous">匿名</span>
                 <span v-if="!item.is_anonymous">
-                  <span v-if="item && item.asker && item.asker.org.length>0" v-for="v in item.asker.org">&nbsp;{{v.name}}&nbsp;</span>
+                  <span v-if="item && item.asker && item.asker.org.length>0" v-for="v in item.asker.org" style="margin-right: 0;">&nbsp;{{v.name}}&nbsp;</span>
                   -
-                  <span v-if="item && item.asker && item.asker.role.length>0" v-for="v in item.asker.role">&nbsp;{{v.display_name}}&nbsp;</span>
+                  <span v-if="item && item.asker && item.asker.role.length>0" v-for="v in item.asker.role">{{v.display_name}}&nbsp;</span>
                   <span>{{item.create_time}}</span>
                 </span>
                 <span v-if="item.is_anonymous">
@@ -94,7 +94,8 @@
                 <div>
                   <span>{{item.first_answer.staff.name}}</span>&nbsp;&nbsp;
                   <span class="staffBefore" v-if="item.first_answer.staff.org.length>0"
-                        v-for="v in item.first_answer.staff.org">&nbsp;{{v.name}}&nbsp;</span>-
+                        v-for="v in item.first_answer.staff.org" style="margin-right: 0;">&nbsp;{{v.name}}&nbsp;</span>
+                  -
                   <span v-if="item.first_answer.staff.role.length>0" v-for="v in item.first_answer.staff.role">&nbsp;{{v.display_name}}&nbsp;</span>
                   <span>{{item.first_answer.create_time}}</span>
                 </div>
@@ -129,7 +130,8 @@
                   <div class="staff_name">
                     <div>
                       <span>{{comment.staff.name}}</span>&nbsp;&nbsp;
-                      <span class="staffBefore" v-if="comment.staff.org.length>0" v-for="v in comment.staff.org">&nbsp;{{v.name}}&nbsp;</span>-
+                      <span class="staffBefore" style="margin-right: 0;" v-if="comment.staff.org.length>0" v-for="v in comment.staff.org">&nbsp;{{v.name}}&nbsp;</span>
+                      -
                       <span v-if="comment.staff.role.length>0"
                             v-for="v in comment.staff.role">&nbsp;{{v.display_name}}&nbsp;</span>
                       <span>{{comment.create_time}}</span>
