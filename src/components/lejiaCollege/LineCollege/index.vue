@@ -75,23 +75,23 @@
                   </el-col>
                 </el-row>
               </el-col>
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">部门搜索</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-input readonly v-model="depart_name" @focus="openOrganizationModal"
-                                placeholder="请选择部门">
-                        <template slot="append">
-                          <div style="cursor: pointer;" @click="emptyDepart">清空</div>
-                        </template>
-                      </el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
+              <!--<el-col :span="12">-->
+                <!--<el-row>-->
+                  <!--<el-col :span="8">-->
+                    <!--<div class="el_col_label">部门搜索</div>-->
+                  <!--</el-col>-->
+                  <!--<el-col :span="16" class="el_col_option">-->
+                    <!--<el-form-item>-->
+                      <!--<el-input readonly v-model="depart_name" @focus="openOrganizationModal"-->
+                                <!--placeholder="请选择部门">-->
+                        <!--<template slot="append">-->
+                          <!--<div style="cursor: pointer;" @click="emptyDepart">清空</div>-->
+                        <!--</template>-->
+                      <!--</el-input>-->
+                    <!--</el-form-item>-->
+                  <!--</el-col>-->
+                <!--</el-row>-->
+              <!--</el-col>-->
             </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>

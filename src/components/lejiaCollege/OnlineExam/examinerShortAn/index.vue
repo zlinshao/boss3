@@ -394,8 +394,10 @@
                 this.$set(this.correct, item, '');
               });
             }
-          }else{
+          } else {
+            this.correct = {};
             this.resultData = {};
+            this.objective_score = this.totalScore = 0;
           }
         });
       },
