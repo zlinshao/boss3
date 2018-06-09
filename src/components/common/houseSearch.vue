@@ -13,7 +13,12 @@
           </el-form>
         </div>
         <div class="tableList scroll_bar">
-          <el-table :data="tableData" @row-click="rowClick" style="width: 100%">
+          <el-table :data="tableData" @row-click="rowClick" style="width: 100%"
+                    :empty-text='tableStatus'
+                    v-loading="tableLoading"
+                    element-loading-text="拼命加载中"
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-background="rgba(255, 255, 255, 0)">
             <el-table-column width="65">
               <template slot-scope="scope">
                 <el-radio v-model="radio" :label="scope.row.id">
@@ -68,6 +73,8 @@
           is_nrcy : 0,
           is_lord : 1,
         },
+        tableStatus: '暂无数据',
+        tableLoading: false,
       }
     },
 
@@ -86,15 +93,20 @@
     },
     methods:{
       search(){ //关键词 搜索
+        this.tableStatus = " ";
+        this.tableLoading = true;
         this.$http.get(globalConfig.server_user + 'houses', {params: this.params}).then((res) => {
+          this.tableLoading = false;
           if (res.data.status === 'success') {
             if (res.data.data.length > 0) {
               this.tableData = res.data.data;
             } else {
               this.tableData = [];
+              this.tableStatus = "暂无数据";
             }
           } else {
             this.tableData = [];
+            this.tableStatus = "暂无数据";
           }
         })
       },

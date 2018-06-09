@@ -661,6 +661,9 @@
     <!--编辑租客-->
     <EditRentInfo :editRentInfoDialog="editRentInfoDialog" :rentContractId="rentContractId" :collectHouseId="collectHouseId"
                   :collectContractId="collectContractId" @close="closeModal"></EditRentInfo>
+    <EditAddress :editAddressDialog="editAddressDialog" :rentContractId="rentContractId" :collectHouseId="collectHouseId"
+                 :houseAddress="houseAddress" @close="closeModal"></EditAddress>
+
     <!--租客退房-->
     <RentVacation :rentVacationDialog="rentVacationDialog" :rentContractId="rentContractId"
                   :rentContractInfo="rentContractInfo" @close="closeModal"></RentVacation>
@@ -710,6 +713,7 @@
   import AddReturnvisit from "../customerService/ReturnVisitManage/addReturnvisit.vue";   //添加回访
   import AddCollectReimbursement from "../components/addCollectReimbursement.vue";  //添加房屋报销单
   import AddRentReimbursement from "../components/addRentReimbursement.vue";        //添加租客报销单
+  import EditAddress from '../components/editAddress'
 
   //--------------------------tabs content-----------------------------------------------------------------//
   import GoodsChangeTab from '../tabComponents/goodsChange.vue'
@@ -768,6 +772,7 @@
       AddReturnvisit,
       AddCollectReimbursement,
       AddRentReimbursement,
+      EditAddress,
 
       //-------tabs------//
       GoodsChangeTab,
@@ -823,6 +828,7 @@
         rentRenewDialog: false,          //租客续约
         addRentInfoDialog: false,      //登记租客信息
         editRentInfoDialog: false,      //修改租客信息
+        editAddressDialog: false,      //修改租客地址
         sendMessageDialog: false,      //发送短信
         addHouseResourcesDialog: false,  //登记房源
         editHouseResourcesDialog: false,  //修改房源
@@ -897,6 +903,7 @@
         rentContractInfo: {},
         contractModule: '',
         contractOperateId: '',
+        houseAddress: '',
 
         activeName: 'OwnerInfoTab',    //tab name
         pay_way_dic: [],
@@ -1158,10 +1165,13 @@
         this.addReturnInfo = row;
         this.rentContractId = row.contract_id;
         this.contractOperateId = row.contract_id;   //通用合同ID
+        this.collectHouseId = row.house_id;
+        this.houseAddress = row.address;
         this.contractModule = 2;
         this.rentContract = row;
         this.lists = [
           {clickIndex: 'editRentInfoDialog',headIcon: 'el-icon-edit', label: '修改租客信息',disabled:row.doc_status.id>3},
+          {clickIndex: 'editAddressDialog',headIcon: 'el-icon-edit', label: '修改租房地址'},
           {clickIndex: 'rentVacationDialog',headIcon: 'el-icons-fa-reply', label: '租客退房',},
           {clickIndex: 'subleaseDialog', headIcon: 'el-icons-fa-refresh', label: '房屋转租',},
           {clickIndex: 'rentRenewDialog', headIcon: 'el-icon-share', label: '租客续约',},
@@ -1295,6 +1305,9 @@
             break;
           case 'editRentInfoDialog':     //修改租客信息
             this.editRentInfoDialog = true;
+            break;
+          case 'editAddressDialog':     //修改租客信息
+            this.editAddressDialog = true;
             break;
           case 'sendMessageDialog':     //登记租客信息
             this.sendMessageDialog = true;
@@ -1434,6 +1447,7 @@
         this.rentRenewDialog = false;
         this.addRentInfoDialog = false;
         this.editRentInfoDialog = false;
+        this.editAddressDialog = false;
         this.sendMessageDialog = false;
         this.addHouseResourcesDialog = false;
         this.editHouseResourcesDialog = false;
