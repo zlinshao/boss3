@@ -68,7 +68,7 @@
                       <span style="color:rgb(88, 215, 136);margin-left:50px;"
                             v-if="(resultData.answer && resultData.answer[item.id]) == answerData[item.id] && (resultData.answer && resultData.answer[item.id])==index">正确</span>
                       <span style="color:#fc83b6;margin-left:50px;"
-                            v-if="(resultData.answer && resultData.answer[item.id]) != answerData[item.id] && (resultData.answer && resultData.answer[item.id])==index">错误</span>
+                            v-if="(resultData.answer && resultData.answer[item.id]) != answerData[item.id] && answerData[item.id] && (resultData.answer && resultData.answer[item.id])==index">错误</span>
                     </el-col>
                   </el-row>
                 </div>
@@ -109,7 +109,7 @@
                       <span style="color:rgb(88, 215, 136);margin-left:50px;" v-for="ans in (resultData.answer && resultData.answer[item.id])"
                             v-if="answerData[item.id] && answerData[item.id].indexOf(ans)>-1 && ans==index">正确</span>
                       <span style="color:#fc83b6;margin-left:50px;" v-for="ans in (resultData.answer && resultData.answer[item.id])"
-                            v-if="answerData[item.id] && answerData[item.id].indexOf(ans)<0 && ans==index">错误</span>
+                            v-if="answerData[item.id] && answerData[item.id].length>0 && answerData[item.id].indexOf(ans)<0 && ans==index">错误</span>
                     </el-col>
                   </el-row>
                 </div>
