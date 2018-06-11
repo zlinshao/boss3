@@ -139,12 +139,12 @@
                   <span @click="lookExam(scope.row.id)" style="cursor: pointer;color: #6a8dfb;">点击查看</span>
                 </template>
               </el-table-column>
-              <!--<el-table-column-->
-                <!--label="操作">-->
-                <!--<template slot-scope="scope">-->
-                  <!--<el-button type="primary" size="mini" @click="">导出成绩</el-button>-->
-                <!--</template>-->
-              <!--</el-table-column>-->
+              <el-table-column
+                label="操作">
+                <template slot-scope="scope">
+                  <el-button type="primary" size="mini" @click="exportAchieve(scope.row.id)">导出成绩</el-button>
+                </template>
+              </el-table-column>
             </el-table>
           </div>
           <div class="block pages">
@@ -245,6 +245,21 @@
       },
     },
     methods: {
+      exportAchieve(id) {
+        this.$http.get(globalConfig.server + 'exam/result/export?exam_id=' + id, {responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
+          if (!res.data) {
+            return;
+          }
+          console.log(res);
+          let url = window.URL.createObjectURL(new Blob([res.data]));
+          let link = document.createElement('a');
+          link.style.display = 'a';
+          link.href = url;
+          link.setAttribute('download', 'excel.xls');
+          document.body.appendChild(link);
+          link.click();
+        });
+      },
       search() {
         this.form.page = 1;
         this.myData();
@@ -273,7 +288,7 @@
         if (!this.form.time) {
           this.form.time = [];
         }
-        this.$http.get(globalConfig.server + "exam?status=3",{params: this.form}).then((res) => {
+        this.$http.get(globalConfig.server + "exam?status=3", {params: this.form}).then((res) => {
           this.rentLoading = false;
           this.isHigh = false;
           if (res.data.code == "30000") {
