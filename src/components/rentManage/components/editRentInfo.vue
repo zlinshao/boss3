@@ -96,8 +96,7 @@
                     <el-row>
                       <el-col :span="8">
                         <el-form-item label="姓名">
-                          <el-input disabled="" placeholder="请输入内容" v-model="nameArray[item-1]"
-                                    :disabled="(!isPc&&item == 1 || isDoc)&& !isAll"></el-input>
+                          <el-input placeholder="请输入内容" v-model="nameArray[item-1]"></el-input>
                         </el-form-item>
                       </el-col>
                       <el-col :span="8">
@@ -110,8 +109,7 @@
                       </el-col>
                       <el-col :span="8">
                         <el-form-item label="联系电话">
-                          <el-input disabled placeholder="请输入内容" v-model="phoneArray[item-1]"
-                                    :disabled="(!isPc&&item == 1 || isDoc) && !isAll"></el-input>
+                          <el-input placeholder="请输入内容" v-model="phoneArray[item-1]"></el-input>
                         </el-form-item>
                       </el-col>
                     </el-row>

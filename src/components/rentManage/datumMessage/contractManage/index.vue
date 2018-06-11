@@ -706,6 +706,9 @@
                     :addReturnInfo="addReturnInfo"
                     @close="closeModal"></AddReturnvisit>
 
+    <EditAddress :editAddressDialog="editAddressDialog" :rentContractId="contractOperateId" :collectHouseId="collectHouseId"
+                 :houseAddress="houseAddress" @close="closeModal"></EditAddress>
+
   </div>
 </template>
 
@@ -715,10 +718,10 @@
   import EditRentInfo from '../../components/editRentInfo'
   import EditHouseResources from '../../components/editHouseResources'
   import AddReturnvisit from "../../customerService/ReturnVisitManage/addReturnvisit.vue";   //添加回访
-
+  import EditAddress from '../../components/editAddress'
   export default {
     name: 'hello',
-    components: {RightMenu, Organization, EditRentInfo, EditHouseResources, AddReturnvisit},
+    components: {RightMenu, Organization, EditRentInfo, EditHouseResources, AddReturnvisit,EditAddress},
     data() {
       return {
         rightMenuX: 0,
@@ -835,9 +838,11 @@
         selectContractId: '',
         contractModule: '',
         contractOperateId: '',
+        houseAddress: '',
 
         editHouseResourcesDialog: false,
         editRentInfoDialog: false,
+        editAddressDialog: false,
         collectHouseId: '',
 
         collectNumberArray: [],
@@ -923,6 +928,7 @@
     methods: {
       closeModal(val) {
         this.editRentInfoDialog = false;
+        this.editAddressDialog = false;
         this.editHouseResourcesDialog = false;
         this.addReturnvisitDialog = false;
 
@@ -1104,7 +1110,7 @@
       houseMenu(row, event) {
         this.contractModule = !this.is_rent ? 1 : 2;
         this.collectContractId = row.contract_id;   //收房id
-
+        this.houseAddress = row.address;
         this.collectHouseId = row.house_id;   //收房id
         this.contractOperateId = row.contract_id;   //通用合同ID
         this.addReturnInfo = row;
@@ -1117,6 +1123,7 @@
               label: '修改租客信息',
               disabled: row.doc_status.id > 3
             },
+            {clickIndex: 'editAddressDialog',headIcon: 'el-icon-edit', label: '修改租房地址'},
             {clickIndex: 'lookMemorandum', headIcon: 'el-icons-fa-eye', label: '查看合同备忘', contract_id: row.contract_id},
             {clickIndex: 'addReturnvisitDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '增加回访记录'},
             {
@@ -1158,6 +1165,9 @@
             break;
           case 'editRentInfoDialog':         //修改租客信息
             this.editRentInfoDialog = true;
+            break;
+          case 'editAddressDialog':         //修改租客信息
+            this.editAddressDialog = true;
             break;
           case 'editHouseResourcesDialog':   //修改房源信息
             this.editHouseResourcesDialog = true;

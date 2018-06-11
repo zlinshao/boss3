@@ -403,214 +403,43 @@
       </div>
 
       <el-dialog
-        width="50%"
+        width="60%"
         title="详情"
         :visible.sync="innerVisible"
         append-to-body>
-
         <div class="scroll_bar">
-          <div class="title">房屋物品</div>
+          <div class="title">报备详情</div>
           <div class="describe_border">
             <el-form size="small" label-width="140px">
+
               <el-row>
-                <el-col :span="8">
-                  <el-form-item label="空调">
-                    <div class="content">
-                      <span v-if="oldData.house_goods">{{oldData.house_goods.air_condition}}</span>
+                <el-col :span="12" v-for="(key,index) in oldData" :key="index"
+                        v-if="printScreen.indexOf(index) === -1">
+                  <el-form-item v-if="!Array.isArray(key)" :label="index" class="detailTitle">
+                    <div class="special" v-if="index !== '房屋类型'">{{key}}</div>
+                    <div class="special" v-if="index === '房屋类型'">{{key.name}}</div>
+                  </el-form-item>
+                  <el-form-item v-if="Array.isArray(key)" :label="index">
+                    <div class="special">
+                      <span v-if="index === '定金和收款方式' || index === '补交定金和收款方式'" v-for="item in key">{{item}}</span>
+                      <span v-else>
+                        <span style="margin-right: 20px;color: #409EFF">{{item.msg}}</span>
+                        <span>{{item.period}}</span>
+                      </span>
                     </div>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                  <el-form-item label="冰箱">
-                    <div class="content">
-                      <span v-if="oldData.house_goods">{{oldData.house_goods.fridge}}</span>
+                <el-col :span="24" v-else>
+                  <el-form-item :label="index">
+                    <div class="special imgs">
+                      <span v-for="(p,index) in key">
+                        <img data-magnify="" data-caption="图片查看器" :data-src="p.uri" :src="p.uri" v-if="!p.is_video">
+                        <video :src="p.uri" controls v-if="p.is_video" width="120px" height="80px"></video>
+                      </span>
                     </div>
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                  <el-form-item label="电视">
-                    <div class="content">
-                      <span v-if="oldData.house_goods">{{oldData.house_goods.television}}</span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="8">
-                  <el-form-item label="燃气灶">
-                    <div class="content">
-                      <span v-if="oldData.house_goods">{{oldData.house_goods.gas_stove}}</span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="油烟机">
-                    <div class="content">
-                      <span v-if="oldData.house_goods">{{oldData.house_goods.hood}}</span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="微波炉">
-                    <div class="content">
-                      <span v-if="oldData.house_goods">{{oldData.house_goods.microwave}}</span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="8">
-                  <el-form-item label="洗衣机">
-                    <div class="content">
-                      <span v-if="oldData.house_goods">{{oldData.house_goods.wash_machine}}</span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="热水器">
-                    <div class="content">
-                      <span v-if="oldData.house_goods">{{oldData.house_goods.water_heater}}</span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="沙发">
-                    <div class="content">
-                      <span v-if="oldData.house_goods">{{oldData.house_goods.sofa}}</span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="8">
-                  <el-form-item label="晾衣架">
-                    <div class="content">
-                      <span v-if="oldData.house_goods">{{oldData.house_goods.clothe_rack}}</span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="餐桌">
-                    <div class="content">
-                      <span v-if="oldData.house_goods">{{oldData.house_goods.dining_table}}</span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="椅子">
-                    <div class="content">
-                      <span v-if="oldData.house_goods">{{oldData.house_goods.chair}}</span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="8">
-                  <el-form-item label="暖气">
-                    <div class="content">
-                    <span v-if="oldData.house_goods">
-                      <span v-if="oldData.house_goods.heater">有</span>
-                      <span v-else="">无</span>
-                    </span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="天然气">
-                    <div class="content">
-                    <span v-if="oldData.house_goods">
-                      <span v-if="oldData.house_goods.gas">有</span>
-                      <span v-else="">无</span>
-                    </span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="房屋交接是否干净">
-                    <div class="content">
-                    <span v-if="oldData.house_goods">
-                      <span v-if="oldData.house_goods.is_clean">是</span>
-                      <span v-else="">否</span>
-                    </span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="8">
-                  <el-form-item label="是否每个房间有床+床垫">
-                    <div class="content">
-                    <span v-if="oldData.house_goods">
-                      <span v-if="oldData.house_goods.bed">是</span>
-                      <span v-else="">否</span>
-                    </span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="是否每个房间有衣柜">
-                    <div class="content">
-                    <span v-if="oldData.house_goods">
-                      <span v-if="oldData.house_goods.wardrobe">是</span>
-                      <span v-else="">否</span>
-                    </span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="是否每个房间有窗帘">
-                    <div class="content">
-                    <span v-if="oldData.house_goods">
-                      <span v-if="oldData.house_goods.curtain">是</span>
-                      <span v-else="">否</span>
-                    </span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="8">
-                  <el-form-item label="家电是否齐全">
-                    <div class="content">
-                    <span v-if="oldData.house_goods">
-                      <span v-if="oldData.house_goods.is_fill">是</span>
-                      <span v-else="">否</span>
-                    </span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="房东是否予以配齐">
-                    <div class="content">
-                    <span v-if="oldData.house_goods">
-                      <span v-if="oldData.house_goods.is_lord_fill">是</span>
-                      <span v-else="">否</span>
-                    </span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="16">
-                  <el-form-item label="其他家具家电">
-                    <div class="content">
-                    <span v-if="oldData.house_goods">
-                     {{oldData.house_goods.other_furniture}}
-                    </span>
-                    </div>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span="16">
-                  <el-form-item label="其他问题">
-                    <div class="content">
-                    <span v-if="oldData.house_goods">
-                     {{oldData.house_goods.other_remark}}
-                    </span>
-                    </div>
-                  </el-form-item>
-                </el-col>
+
               </el-row>
             </el-form>
           </div>
@@ -640,6 +469,8 @@
 
         imgArray:[],
         oldData : {},
+        printScreen: ['款项结清截图', '特殊情况领导截图', '特殊情况截图', '特殊情况同意截图', '领导报备截图', '凭证截图', '合同照片', '截图', '领导同意截图', '房屋影像', '房屋照片', '退租交接单'],
+
       };
     },
     watch: {
@@ -727,6 +558,11 @@
   };
 </script>
 <style lang="scss" scoped="">
+  @mixin border_($n) {
+    -webkit-border-radius: $n;
+    -moz-border-radius: $n;
+    border-radius: $n;
+  }
   img {
     width: 120px;
     height: 120px;
@@ -738,7 +574,21 @@
     background: #000;
     margin: 10px;
   }
-
+  .special {
+    min-height: 32px;
+    padding: 0 20px;
+    background-color: #eef3fc;
+    @include border_(6px);
+    img {
+      width: 120px;
+      height: 80px;
+      margin: 10px 0 0 10px;
+      @include border_(6px);
+    }
+  }
+  .special.imgs {
+    padding: 0;
+  }
   .content {
     padding: 0 10px;
     min-height: 32px;
