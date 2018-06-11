@@ -167,11 +167,11 @@
               </el-table-column>
               <el-table-column
                 label="附件">
-                <template slot-scope="scope">
+                <template slot-scope="scope" style="height: 22px;line-height: 22px;">
                   <span v-if="scope.row.result_info && scope.row.result_info.attachment"
                         @click="downLoad(scope.row)">
                     <img src="../../../../assets/images/file.svg"
-                         style="width: 20px;cursor: pointer;"></span>
+                         style="width: 18px;cursor: pointer;"></span>
                   <span v-else>—</span>
                 </template>
               </el-table-column>
