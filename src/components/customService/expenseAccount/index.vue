@@ -418,6 +418,23 @@
       </span>
       </el-dialog>
     </div>
+    <div>
+      <el-dialog :close-on-click-modal="false" title="上传付款凭证" :visible.sync="uploadPayDialog" width="50%">
+        <el-form size="small" label-width="100px">
+          <el-row>
+            <el-col :span="20">
+              <el-form-item label="上传付款凭证" required>
+                <Upload :ID="'upload_pay'" @getImg="getImage" :isClear="isClear"></Upload>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+        <el-button size="small" @click="uploadPayDialog = false">取 消</el-button>
+        <el-button size="small" type="primary" @click="uploadPayConfirm">确 定</el-button>
+      </span>
+      </el-dialog>
+    </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
     <organization :organizationDialog="organizeVisible" :type="organizeType" @close="closeOrganize"
@@ -441,10 +458,11 @@
   import EditReimbursement from './components/editReimbursement';
   import ReimResult from './components/reimResult';
   import AddressSearch from '../../common/addressSearch';
+  import Upload from '../../common/UPLOAD.vue';
 
   export default {
     name: 'reim-manage',
-    components: {RightMenu, Organization, ReimbursementDetail, EditReimbursement, ReimResult, AddressSearch},
+    components: {RightMenu, Organization, ReimbursementDetail, EditReimbursement, ReimResult, AddressSearch, Upload},
     data() {
       return {
         rightMenuX: 0,
@@ -492,6 +510,10 @@
         examineStatusCategory: [],
         devn: '', // 同步误差值
         syncStatusDialog: false,
+        uploadPayDialog: false,  //付款凭证
+        isClear: false,
+        payment_pic: [],
+        uploadStatus: false,
       }
     },
     mounted() {
@@ -499,7 +521,7 @@
       this.getDictionary();
     },
     activated() {
-     this.search();
+      this.search();
     },
     watch: {
       address(val) {
@@ -519,8 +541,45 @@
           this.devn = '';
         }
       },
+      uploadPayDialog(val) {
+        if (val) {
+          this.isClear = false;
+        } else {
+          this.isClear = true;
+        }
+      },
     },
     methods: {
+      uploadPayConfirm() {
+        if (this.uploadStatus) {
+          this.$notify.warning({
+            title: '警告',
+            message: '图片正在上传中，请稍后'
+          });
+          return;
+        }
+        this.$http.put(globalConfig.server + 'customer/reimbursement/paypic/' + this.reimbursementId, {payment_pic: this.payment_pic}).then((res) => {
+          if (res.data.code === '30070') {
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg
+            });
+            this.uploadPayDialog = false;
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
+          }
+        })
+      },
+      getImage(val) {
+        this.payment_pic = []; //选择的图片数组ids
+        val[1].forEach((item) => {
+          this.payment_pic.push(item);
+        });
+        this.uploadStatus = val[2];
+      },
       syncConfirm() {
         this.$http.get(globalConfig.server + 'customer/reimbursement/sync', {params: {devn: this.devn}}).then((res) => {
           if (res.data.code === '30060') {
@@ -728,6 +787,7 @@
             {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',},
             {clickIndex: 'edit_reimbursement_result', headIcon: 'iconfont icon-bianjibaoxiaojieguo', label: '编辑报销结果',},
             {clickIndex: 'examine_reimbursement', headIcon: 'iconfont icon-shenhebaoxiao', label: '审核报销',},
+            {clickIndex: 'upload_pay', headIcon: 'el-icon-plus', label: '上传付款凭证',},
             // {clickIndex: 'delete_reimbursement', headIcon: 'el-icon-delete', label: '删除报销单',},
           ];
         } else {
@@ -735,6 +795,7 @@
             {clickIndex: 'edit_reimbursement', headIcon: 'el-icon-edit', label: '编辑报销单',},
             {clickIndex: 'add_reimbursement_result', headIcon: 'iconfont icon-zengjia1', label: '新增报销结果',},
             {clickIndex: 'examine_reimbursement', headIcon: 'iconfont icon-shenhebaoxiao', label: '审核报销',},
+            {clickIndex: 'upload_pay', headIcon: 'el-icon-plus', label: '上传付款凭证',},
             // {clickIndex: 'delete_reimbursement', headIcon: 'el-icon-delete', label: '删除报销单',},
           ];
         }
@@ -759,6 +820,9 @@
             break;
           case 'examine_reimbursement':
             this.examineStatusDialog = true;
+            break;
+          case 'upload_pay':
+            this.uploadPayDialog = true;
             break;
         }
       },

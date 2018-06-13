@@ -62,7 +62,7 @@
             <el-row v-if="repairDetail.originate === 623">
               <el-col :span="10">
                 <el-form-item label="中介名称">
-                  <div class="content">{{repairDetail.agency}}</div>
+                  <div class="content">{{repairDetail.agency_name}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="2" v-if="!wholeFlag">
@@ -483,7 +483,7 @@
         });
         this.$http.get(globalConfig.server + "contract/feedback/info", { params: this.form}).then(res => {
             if (res.data.code === "1212200") {
-              this.agency_price = res.data.data.agency.agency_price;
+              this.agency_price = res.data.data.agency && res.data.data.agency.agency_price;
               this.agency_price_now = res.data.data.agency_price_now;
               this.agency_name = res.data.data.agency_name;
               this.agency_user_name = res.data.data.agency_user_name;

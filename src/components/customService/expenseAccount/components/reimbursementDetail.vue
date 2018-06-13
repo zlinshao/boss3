@@ -602,6 +602,20 @@
             <div class="content" v-else="" style="text-align: center;line-height: 30px">
               暂无数据
             </div>
+            <div class="follow_result">
+              <div class="title">付款凭证</div>
+            </div>
+            <el-form size="small" label-width="100px">
+              <el-row>
+                <el-col :span="24" v-if="reimDetail.payment_pic">
+                  <el-form-item label="付款凭证">
+                    <img v-if="reimDetail.payment_pic.length>0" data-magnify
+                         v-for="(val,key) in reimDetail.payment_pic" :data-src="val.uri" :src="val.uri"
+                         alt="">
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
           </el-form>
         </div>
       </div>
