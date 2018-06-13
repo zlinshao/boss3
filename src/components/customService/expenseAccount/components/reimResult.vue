@@ -2,7 +2,6 @@
   <div id="reimResult">
     <el-dialog :close-on-click-modal="false" :title="resultTitle" :visible.sync="reimResultDialogVisible"
                width="50%">
-
       <div class="scroll_bar">
         <div class="title">报销单详情</div>
         <div class="describe_border">
@@ -145,7 +144,7 @@
             </el-row>
             <div v-if="waterAccCom" v-for="(item,key) in waterAccComLength" :key="key">
               <el-row :gutter="20">
-                <el-col :span="8">
+                <el-col :span="9">
                   <el-form-item label="水费">
                     <el-date-picker type="daterange" v-model="form.water_data[key].time"
                                     range-separator="至"
@@ -155,7 +154,7 @@
                                     @change="timeChange('water',key)"></el-date-picker>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="5">
                   <el-form-item label="认责人">
                     <el-select v-model="form.water_data[key].accuser" placeholder="请选择认责归属" clearable>
                       <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id"
@@ -237,7 +236,7 @@
             </el-row>
             <div v-if="elecAccCom" v-for="(item,key) in elecAccComLength" :key="key">
               <el-row :gutter="20">
-                <el-col :span="8">
+                <el-col :span="9">
                   <el-form-item label="电费">
                     <el-date-picker type="daterange" v-model="form.electricity_data[key].time"
                                     range-separator="至"
@@ -247,7 +246,7 @@
                                     @change="timeChange('elec',key)"></el-date-picker>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="5">
                   <el-form-item label="认责人">
                     <el-select v-model="form.electricity_data[key].accuser" placeholder="请选择认责归属" clearable>
                       <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id"
@@ -362,7 +361,7 @@
             </el-row>
             <div v-if="gasAccCom" v-for="(item,key) in gasAccComLength" :key="key">
               <el-row :gutter="20">
-                <el-col :span="8">
+                <el-col :span="9">
                   <el-form-item label="燃气费">
                     <el-date-picker type="daterange" v-model="form.gas_data[key].time"
                                     range-separator="至"
@@ -372,7 +371,7 @@
                                     @change="timeChange('gas',key)"></el-date-picker>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="5">
                   <el-form-item label="认责人">
                     <el-select v-model="form.gas_data[key].accuser" placeholder="请选择认责归属" clearable>
                       <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id"
@@ -454,7 +453,7 @@
             </el-row>
             <div v-if="propAccCom" v-for="(item,key) in propAccComLength" :key="key">
               <el-row :gutter="20">
-                <el-col :span="8">
+                <el-col :span="9">
                   <el-form-item label="物管费">
                     <el-date-picker type="daterange" v-model="form.property_management_data[key].time"
                                     range-separator="至"
@@ -464,7 +463,7 @@
                                     @change="timeChange('prop',key)"></el-date-picker>
                   </el-form-item>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="5">
                   <el-form-item label="认责人">
                     <el-select v-model="form.property_management_data[key].accuser" placeholder="请选择认责归属" clearable>
                       <el-option v-for="item in responsiblePersonCategory" :label="item.dictionary_name" :key="item.id"
@@ -631,38 +630,66 @@
       };
     },
     watch: {
-      // waterAccComLength(val) {
-      //   let data = this.form.water_data;
-      //   for (var i = 0; i < val; i++) {
-      //     if ((i + 1) < val) {
-      //       data[i + 1].time[0] = data[i + 1].time[1] = data[i].time[1];
-      //     }
-      //   }
-      // },
-      // elecAccComLength(val){
-      //   let data = this.form.electricity_fee;
-      //   for (var i = 0; i < val; i++) {
-      //     if ((i + 1) < val) {
-      //       data[i + 1].time[0] = data[i + 1].time[1] = data[i].time[1];
-      //     }
-      //   }
-      // },
-      // gasAccComLength(val){
-      //   let data = this.form.gas_fee;
-      //   for (var i = 0; i < val; i++) {
-      //     if ((i + 1) < val) {
-      //       data[i + 1].time[0] = data[i + 1].time[1] = data[i].time[1];
-      //     }
-      //   }
-      // },
-      // propAccComLength(val){
-      //   let data = this.form.property_management_fee;
-      //   for (var i = 0; i < val; i++) {
-      //     if ((i + 1) < val) {
-      //       data[i + 1].time[0] = data[i + 1].time[1] = data[i].time[1];
-      //     }
-      //   }
-      // },
+      waterAccComLength(val, oldVal) {
+        if (val < oldVal || val - 2 < 0) {
+          return;
+        }
+        let data = this.form.water_data;
+        for (var i = val - 2; i < val; i++) {
+          if ((i + 1) < val) {
+            data[i + 1].time = [];
+            if (data[i].time && data[i].time.length > 0) {
+              data[i + 1].time[0] = data[i + 1].time[1] = data[i].time[1];
+              this.form.water_data = data;
+            }
+          }
+        }
+      },
+      elecAccComLength(val, oldVal) {
+        if (val < oldVal || val - 2 < 0) {
+          return;
+        }
+        let data = this.form.electricity_data;
+        for (var i = val - 2; i < val; i++) {
+          if ((i + 1) < val) {
+            data[i + 1].time = [];
+            if (data[i].time && data[i].time.length > 0) {
+              data[i + 1].time[0] = data[i + 1].time[1] = data[i].time[1];
+              this.form.electricity_data = data;
+            }
+          }
+        }
+      },
+      gasAccComLength(val, oldVal) {
+        if (val < oldVal || val - 2 < 0) {
+          return;
+        }
+        let data = this.form.gas_data;
+        for (var i = val - 2; i < val; i++) {
+          if ((i + 1) < val) {
+            data[i + 1].time = [];
+            if (data[i].time && data[i].time.length > 0) {
+              data[i + 1].time[0] = data[i + 1].time[1] = data[i].time[1];
+              this.form.gas_data = data;
+            }
+          }
+        }
+      },
+      propAccComLength(val, oldVal) {
+        if (val < oldVal || val - 2 < 0) {
+          return;
+        }
+        let data = this.form.property_management_data;
+        for (var i = val - 2; i < val; i++) {
+          if ((i + 1) < val) {
+            data[i + 1].time = [];
+            if (data[i].time && data[i].time.length > 0) {
+              data[i + 1].time[0] = data[i + 1].time[1] = data[i].time[1];
+              this.form.property_management_data = data;
+            }
+          }
+        }
+      },
       reimResultDialog(val) {
         this.reimResultDialogVisible = val;
       },
@@ -697,6 +724,9 @@
               let late_payment = Number(val[i].late_payment);
               let other = Number(val[i].other);
               val[i].total = (now - last) * unit_price + late_payment + other;
+              if (!val[i].time) {
+                val[i].time = [];
+              }
             }
           }
         }
@@ -712,13 +742,15 @@
               let late_payment = Number(val[i].peak_late_payment);
               let other = Number(val[i].peak_other);
               val[i].peak_total = (now - last) * unit_price + late_payment + other;
-
               let valley_now = Number(val[i].valley_now);
               let valley_last = Number(val[i].valley_last);
               let valley_unit_price = Number(val[i].valley_unit_price);
               let valley_late_payment = Number(val[i].valley_late_payment);
               let valley_other = Number(val[i].valley_other);
               val[i].valley_total = (valley_now - valley_last) * valley_unit_price + valley_late_payment + valley_other;
+              if (!val[i].time) {
+                val[i].time = [];
+              }
             }
           }
         }
@@ -734,6 +766,9 @@
               let late_payment = Number(val[i].late_payment);
               let other = Number(val[i].other);
               val[i].total = (now - last) * unit_price + late_payment + other;
+              if (!val[i].time) {
+                val[i].time = [];
+              }
             }
           }
         }
@@ -748,6 +783,9 @@
               let fees = Number(val[i].fees);
               let other = Number(val[i].other);
               val[i].total = water + electricity + fees + other;
+              if (!val[i].time) {
+                val[i].time = [];
+              }
             }
           }
         }
@@ -771,51 +809,62 @@
           }
         });
       },
-      timeChange(k,n) {
-        // switch(k){
-        //   case 'water':
-        //     let data = this.form.water_data;
-        //     for (let i = n; i < this.waterAccComLength; i++) {
-        //       if ((i + 1) < this.waterAccComLength) {
-        //         data[i + 1].time[0] = data[i + 1].time[1] = this.form.water_data[i].time[1];
-        //         console.log(data);
-        //         this.form.water_data = data ;
-        //       }
-        //     }
-        //     break;
-        //   case 'elec':
-        //     let data1 = this.form.electricity_data;
-        //     for (let i = n; i < this.elecAccComLength; i++) {
-        //       if ((i + 1) < this.elecAccComLength) {
-        //         data1[i + 1].time[0] = data1[i + 1].time[1] = this.form.electricity_data[i].time[1];
-        //         this.$set(this.form.electricity_data, data1);
-        //       }
-        //     }
-        //     break;
-        //   case 'gas':
-        //     let data2 = this.form.gas_data;
-        //     for (let i = n; i < this.gasAccComLength; i++) {
-        //       if ((i + 1) < this.gasAccComLength) {
-        //         data2[i + 1].time[0] = data2[i + 1].time[1] = this.form.gas_data[i].time[1];
-        //         this.$set(this.form.gas_data, data2);
-        //       }
-        //     }
-        //     break;
-        //   case 'prop':
-        //     let data3 = this.form.property_management_data;
-        //     for (let i = n; i < this.propAccComLength; i++) {
-        //       if ((i + 1) < this.propAccComLength) {
-        //         data3[i + 1].time[0] = data3[i + 1].time[1] = this.form.property_management_data[i].time[1];
-        //         this.$set(this.form.property_management_data, data3);
-        //       }
-        //     }
-        //     break;
-        // }
+      timeChange(k, n) {
+        switch (k) {
+          case 'water':
+            let data = this.form.water_data;
+            for (let i = n; i < this.waterAccComLength; i++) {
+              if ((i + 1) < this.waterAccComLength) {
+                data[i + 1].time = [];
+                if (data[i].time && data[i].time.length > 0) {
+                  data[i + 1].time[0] = data[i + 1].time[1] = data[i].time[1];
+                  this.form.water_data = data;
+                }
+              }
+            }
+            break;
+          case 'elec':
+            let data1 = this.form.electricity_data;
+            for (let i = n; i < this.elecAccComLength; i++) {
+              if ((i + 1) < this.elecAccComLength) {
+                data1[i + 1].time = [];
+                if (data1[i].time && data1[i].time.length > 0) {
+                  data1[i + 1].time[0] = data1[i + 1].time[1] = data1[i].time[1];
+                  this.form.electricity_data = data1;
+                }
+              }
+            }
+            break;
+          case 'gas':
+            let data2 = this.form.gas_data;
+            for (let i = n; i < this.gasAccComLength; i++) {
+              if ((i + 1) < this.gasAccComLength) {
+                data2[i + 1].time = [];
+                if (data2[i].time && data2[i].time.length > 0) {
+                  data2[i + 1].time[0] = data2[i + 1].time[1] = data2[i].time[1];
+                  this.form.gas_data = data2;
+                }
+              }
+            }
+            break;
+          case 'prop':
+            let data3 = this.form.property_management_data;
+            for (let i = n; i < this.propAccComLength; i++) {
+              if ((i + 1) < this.propAccComLength) {
+                data3[i + 1].time = [];
+                if (data3[i].time && data3[i].time.length > 0) {
+                  data3[i + 1].time[0] = data3[i + 1].time[1] = data3[i].time[1];
+                  this.form.property_management_data = data3;
+                }
+              }
+            }
+            break;
+        }
 
       },
       showAccCom(val) {
         let data = {
-          time: [],
+          // time: [],
           accuser: '',  //认责人下拉框
           accuser_id: '',  // 认责人id
           accuser_id_name: '',   //认责人姓名
@@ -832,13 +881,14 @@
             this.waterAccComLength = 1;
             this.form.water_data = [];
             this.form.water_data.push(data);
+            this.$set(this.form.water_data[0], 'time', []);
             break;
           case 'electricity':
             this.elecAccCom = true;
             this.elecAccComLength = 1;
             this.form.electricity_data = [];
             let elecData = {
-              time: [],
+              // time: [],
               accuser: '',
               accuser_id: '',  // 认责人id
               accuser_id_name: '',   //认责人姓名
@@ -856,12 +906,14 @@
               valley_total: '',
             };
             this.form.electricity_data.push(elecData);
+            this.$set(this.form.electricity_data[0], 'time', []);
             break;
           case 'gas':
             this.gasAccCom = true;
             this.gasAccComLength = 1;
             this.form.gas_data = [];
             this.form.gas_data.push(data);
+            this.$set(this.form.gas_data[0], 'time', []);
             break;
           case 'prop':
             this.propAccCom = true;
@@ -881,13 +933,14 @@
               total: '',
             };
             this.form.property_management_data.push(propData);
+            this.$set(this.form.property_management_data[0], 'time', []);
             break;
         }
 
       },
       addAccCom(val) {
         let data = {
-          time: [],
+          // time: [],
           accuser: '',  //认责人下拉框
           accuser_id: '',  // 认责人id
           accuser_id_name: '',   //认责人姓名
@@ -902,11 +955,12 @@
           case 'water':
             this.waterAccComLength++;
             this.form.water_data.push(data);
+            this.$set(this.form.water_data[this.waterAccComLength - 1], 'time', []);
             break;
           case 'electricity':
             this.elecAccComLength++;
             let elecData = {
-              time: [],
+              // time: [],
               accuser: '',
               accuser_id: '',  // 认责人id
               accuser_id_name: '',   //认责人姓名
@@ -924,15 +978,17 @@
               valley_total: '',
             };
             this.form.electricity_data.push(elecData);
+            this.$set(this.form.electricity_data[this.elecAccComLength - 1], 'time', []);
             break;
           case 'gas':
             this.gasAccComLength++;
             this.form.gas_data.push(data);
+            this.$set(this.form.gas_data[this.gasAccComLength - 1], 'time', []);
             break;
           case 'prop':
             this.propAccComLength++;
             let propData = {
-              time: [],
+              // time: [],
               accuser: '',
               accuser_id: '',  // 认责人id
               accuser_id_name: '',   //认责人姓名
@@ -945,6 +1001,7 @@
               total: '',
             };
             this.form.property_management_data.push(propData);
+            this.$set(this.form.property_management_data[this.propAccComLength - 1], 'time', []);
             break;
         }
       },
@@ -1180,12 +1237,14 @@
     font-size: 12px;
     color: #727479;
   }
+
   img {
     width: 80px;
     height: 80px;
     border-radius: 6px;
     margin: 0 10px 10px 0;
   }
+
   .add_com {
     color: #409eff;
     font-size: 18px;

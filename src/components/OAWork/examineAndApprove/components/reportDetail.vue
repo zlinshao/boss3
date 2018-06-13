@@ -135,6 +135,20 @@
           </el-form-item>
         </el-form>
       </div>
+      <div style="display: flex;display: -webkit-flex;" v-if="marking === 1">
+        <div class="switchScore">
+          <span>家电是否齐全</span>
+          <el-switch
+            v-model="is_electric_status">
+          </el-switch>
+        </div>
+        <div class="switchScore">
+          <span>房屋是否干净</span>
+          <el-switch
+            v-model="is_clean_status">
+          </el-switch>
+        </div>
+      </div>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="commentVisible = false">关&nbsp;闭</el-button>
         <el-button size="small" type="primary" @click="manager">确定</el-button>
@@ -172,6 +186,7 @@
     components: {UpLoad},
     data() {
       return {
+        urls: globalConfig.server,
         address: globalConfig.server_user,
         fullLoading: false,
         reportVisible: false,
@@ -184,6 +199,7 @@
 
         personal: {},
         place: {},
+        processies: {},
         placeStatus: ['published', 'rejected', 'cancelled'],
         processId: '',
         currentPage: 1,
@@ -199,10 +215,24 @@
         deal: '',
         role_name: [],
         showContent: false,
+
+        marking: '',
+        is_electric_status: true,         //家电是否齐全
+        is_clean_status: true,            //卫生是否干净
+        forms: {
+          is_electric_appliance: 1,         //家电是否齐全
+          is_clean: 1,                      //是否干净
+        }
       }
     },
 
     watch: {
+      is_electric_status(val) {
+        this.form.is_electric_appliance = val ? 1 : 0;
+      },
+      is_clean_status(val) {
+        this.form.is_clean = val ? 1 : 0;
+      },
       checkTv(val) {
         this.videoSrc = val;
       },
@@ -245,6 +275,7 @@
             this.deal = res.data.data.deal;
 
             let pro = res.data.data.process;
+            this.processies = res.data.data.process;
             this.personal = pro.user;
             this.place = pro.place;
             this.placeFalse = this.placeStatus.indexOf(pro.place.status) === -1 ? true : false;
@@ -282,6 +313,11 @@
         this.picStatus = !val[2];
       },
       commentOn(val) {
+        if (this.processies.content.quality_up && this.place.name === 'appraiser-officer_review' && val.indexOf('approved') > -1) {
+          this.marking = 1;
+        } else {
+          this.marking = 2;
+        }
         this.form.operation = val;
         this.commentVisible = true;
       },
@@ -300,6 +336,23 @@
           }
         }
       },
+      // 评分
+      mark() {
+        this.$http.put(this.urls + 'bulletin/helper/score/' + this.ids, this.forms).then((res) => {
+          if (res.data.code === '51110') {
+            this.marking = false;
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg,
+            })
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            })
+          }
+        });
+      },
       sureComment(val) {
         if (this.picStatus) {
           this.$http.put(this.address + 'process/' + this.processId, this.form).then((res) => {
@@ -310,10 +363,14 @@
               } else {
                 this.process(this.processId);
               }
-              this.$notify.success({
-                title: '成功',
-                message: res.data.message,
-              })
+              if (this.marking) {
+                this.mark();
+              } else {
+                this.$notify.success({
+                  title: '成功',
+                  message: res.data.message,
+                })
+              }
             } else {
               this.$notify.warning({
                 title: '警告',
@@ -406,6 +463,12 @@
     .reportDialog {
       .el-dialog {
         margin-top: 8vh !important;
+      }
+    }
+    .switchScore {
+      margin-right: 60px;
+      span {
+        margin-right: 12px;
       }
     }
     /*报备状态*/

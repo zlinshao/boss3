@@ -337,17 +337,14 @@
       },
       addStaffDialogVisible(val) {
         if (!val) {
+          this.initial(); //关闭弹框时清除
           this.$emit('close');
           this.$http.get(globalConfig.server + "special/special/loginInfo").then((res) => {
             localStorage.setItem('personal', JSON.stringify(res.data.data));
           });
-        }
-        if (val) {
-          if (!this.editId) {
-            this.initial(); //新增时候清除
-          }
+        } else {
           this.editPositionIds = [];
-          this.getDictionaries(); //新增或者修改打开弹框时候才请求字典
+          // this.getDictionaries(); //新增或者修改打开弹框时候才请求字典
         }
       },
       isEdit(val) {
@@ -363,6 +360,9 @@
           this.getPositions(this.editPositionIds[i]);
         }
       }
+    },
+    mounted(){
+      this.getDictionaries();
     },
     methods: {
       getDictionaries() {
@@ -551,7 +551,7 @@
               let position = {};
               position.id = item.id;
               position.name = item.name;
-              if (this.editPositionIds.indexOf(item.id) < 0 && this.currentPosition.indexOf(item.id)<0) {
+              if (this.editPositionIds.indexOf(item.id) < 0 && this.currentPosition.indexOf(item.id) < 0) {
                 this.positionArray.push(position);
                 this.editPositionIds.push(item.id);
               }
@@ -568,7 +568,7 @@
               let data = {};
               data.id = item.id;
               data.name = item.name;
-              if (this.postArrayIds.indexOf(item.id) < 0 && this.params.position_id.indexOf(item.id)<0) {
+              if (this.postArrayIds.indexOf(item.id) < 0 && this.params.position_id.indexOf(item.id) < 0) {
                 this.postArray.push(data);
                 this.postArrayIds.push(item.id); //用来判断数组里有没有重复的数据
               }

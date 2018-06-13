@@ -122,7 +122,7 @@
                             v-if="answerData && answerData[item.id] && answerData[item.id].indexOf(ans)>-1 && ans==index">正确</span>
                       <span style="color:#fc83b6;margin-left:50px;"
                             v-for="ans in (resultData && resultData.answer && resultData.answer[item.id])"
-                            v-if="answerData && answerData[item.id] && answerData[item.id].indexOf(ans)<0 && ans==index">错误</span>
+                            v-if="answerData && answerData[item.id] && answerData[item.id].length>0 && answerData[item.id].indexOf(ans)<0 && ans==index">错误</span>
                     </el-col>
                   </el-row>
                 </el-form-item>
@@ -394,7 +394,7 @@
                 this.$set(this.correct, item, '');
               });
             }
-          }else{
+          } else {
             this.correct = {};
             this.resultData = {};
             this.objective_score = this.totalScore = 0;
