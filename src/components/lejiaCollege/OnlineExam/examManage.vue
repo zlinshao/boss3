@@ -316,7 +316,7 @@
                   </el-table-column>
                 </el-table>
               </div>
-              <div class="block pages" style="float: right;">
+              <div class="block pages" style="float: right;margin-right: 40px;">
                 <el-pagination
                   @size-change="handleSizeExamineesChange"
                   @current-change="handleCurrentExamineesChange"
@@ -385,7 +385,7 @@
                   </el-table-column>
                 </el-table>
               </div>
-              <div class="block pages" style="float: right;">
+              <div class="block pages" style="float: right;margin-right: 40px;">
                 <el-pagination
                   @size-change="handleSizeExamineesChange"
                   @current-change="handleCurrentExamineesChange"
