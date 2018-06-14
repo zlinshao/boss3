@@ -420,7 +420,7 @@
           });
         } else {
           this.tabDisabled = [false, false, false, false, false, false];
-          this.initial();
+          // this.initial();
         }
       },
       editQuesCategory(val) {
@@ -550,24 +550,24 @@
           data.paper_id = this.$store.state.onlineExam.myself_test_paper.paper_id;
           data.quesId = this.quesId = this.$store.state.onlineExam.myself_test_paper.quesId;
           data.category = this.editQuesCategory = this.$store.state.onlineExam.myself_test_paper.category;
-          data.type = this.editQuesCategory = this.$store.state.onlineExam.myself_test_paper.type;
+          // data.type = this.editQuesCategory = this.$store.state.onlineExam.myself_test_paper.type;
           this.singleForm.paper_id = data.paper_id;
           this.multiForm.paper_id = data.paper_id;
           this.judgeForm.paper_id = data.paper_id;
           this.blankForm.paper_id = data.paper_id;
           this.answerForm.paper_id = data.paper_id;
 
-          if (data.type === 'add') {
-            this.quesId = '';
-            this.editQuesCategory = '';
-            for (var i = 0; i < this.tabDisabled.length; i++) {
-              this.tabDisabled[i] = false;
-            }
-            this.initial();
-          } else if (data.type === 'edit') {
-            this.quesId = data.quesId;
-            this.editQuesCategory = data.category;
-          }
+          // if (data.type === 'add') {
+          //   this.quesId = '';
+          //   this.editQuesCategory = '';
+          //   for (var i = 0; i < this.tabDisabled.length; i++) {
+          //     this.tabDisabled[i] = false;
+          //   }
+          //   this.initial();
+          // } else if (data.type === 'edit') {
+          //   this.quesId = data.quesId;
+          //   this.editQuesCategory = data.category;
+          // }
           this.$router.push({path: '/myselfQuestions', query: data});
         } else {
           let query = this.$route.query;
