@@ -86,7 +86,9 @@
               albumData.forEach((item) => {
                 item.album.album_file.forEach((img)=>{
                   if(img.info && img.info.mime && img.info.mime.indexOf('image')>-1){
-                    this.imgArray.push(img.uri);
+                    if(this.imgArray.indexOf(img.uri)<0){
+                      this.imgArray.push(img.uri);
+                    }
                   }
                 })
               })
