@@ -1,7 +1,6 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
     <div id="clientContainer">
-
       <div class="highRanking">
         <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
@@ -11,7 +10,7 @@
               </el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+              <el-button type="primary" @click="highGrade">高级</el-button>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="viewIncompleteRecord">查看补齐记录</el-button>
@@ -185,7 +184,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="params.status" size="mini">
+                      <el-select v-model="params.status" clearable >
                         <el-option key="1" label="未签约" value="1">未签约</el-option>
                         <el-option key="2" label="已签约" value="2">已签约</el-option>
                         <el-option key="3" label="快到期（60天内）" value="3">快到期（60天内）</el-option>
@@ -204,7 +203,7 @@
                     <div class="el_col_label">是否上传合同</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
-                    <el-select v-model="params.un_upload" size="mini">
+                    <el-select v-model="params.un_upload" clearable>
                       <el-option key="0" label="否" value="0">否</el-option>
                       <el-option key="1" label="是" value="1">是</el-option>
                     </el-select>
@@ -245,9 +244,9 @@
               </el-col>
             </el-row>
             <div class="btnOperate">
-              <el-button size="mini" type="primary" @click="highSearch()">搜索</el-button>
-              <el-button size="mini" type="primary" @click="resetting">重置</el-button>
-              <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+              <el-button type="primary" @click="highSearch()">搜索</el-button>
+              <el-button type="primary" @click="resetting">重置</el-button>
+              <el-button type="primary" @click="highGrade">取消</el-button>
             </div>
           </el-form>
         </div>
@@ -274,8 +273,6 @@
                   </span>
                     </template>
                   </el-table-column>
-
-
                   <el-table-column
                     width="136px"
                     label="合同上传时间">
@@ -487,14 +484,6 @@
                       <span v-if="!scope.row.end_date">暂无</span>
                     </template>
                   </el-table-column>
-                  <!--<el-table-column-->
-                    <!--prop="complete_date"-->
-                    <!--label="资料补齐时间">-->
-                    <!--<template slot-scope="scope">-->
-                      <!--<span v-if="scope.row.data_date">{{scope.row.data_date}}</span>-->
-                      <!--<span v-if="!scope.row.data_date">暂无</span>-->
-                    <!--</template>-->
-                  <!--</el-table-column>-->
                   <el-table-column
                     width="80px;"
                     label="是否备忘">
@@ -580,6 +569,7 @@
         </div>
       </div>
 
+      <!--模态框-->
       <div>
         <el-dialog :close-on-click-modal="false" title="合同备忘" :visible.sync="memoDialog" width="50%">
           <div>
@@ -635,6 +625,7 @@
           </div>
         </el-dialog>
       </div>
+
       <div>
         <el-dialog :close-on-click-modal="false" title="修改记录" :visible.sync="leaseHistoryDialog" width="50%">
           <div>
@@ -1294,7 +1285,7 @@
         this.department = '';
         this.params = {
           page: 1,
-          limit: '',
+          limit: 12,
           q: '',      //模糊搜索
           publish_time: [],     //发布时间
           lord_start_time: [],  //收房合同开始时间
