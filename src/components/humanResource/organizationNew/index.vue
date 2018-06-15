@@ -1044,7 +1044,7 @@
           this.isGetOnlyPosition = true;
         }
       },
-      'params.is_dimission':{
+      'params.is_dimission': {
         deep: true,
         handler(val, oldVal) {
 
@@ -1166,14 +1166,25 @@
         this.departManageName = data.leader && data.leader.name;
       },
       nodeExpand(data, node, store) {
-        // if(this.defaultExpandKeys.indexOf(data.id)<0){
-        //   this.defaultExpandKeys.push(data.id)
-        // }
+        //展开
+        if (this.defaultExpandKeys.indexOf(data.id) < 0) {
+          this.defaultExpandKeys.push(data.id);
+        }
       },
       nodeCollapse(data, node, store) {
-        this.defaultExpandKeys.filter((x) => {
-          return x !== data.id;
+        //收起
+        this.defaultExpandKeys.splice(this.defaultExpandKeys.indexOf(data.id), 1);
+        data.children.forEach((item) => {
+          this.defaultExpandKeys.splice(this.defaultExpandKeys.indexOf(item.id), 1);
+          if (item.children) {
+            item.children.forEach((value) => {
+              this.defaultExpandKeys.splice(this.defaultExpandKeys.indexOf(value.id), 1);
+            })
+          }
         })
+        // this.defaultExpandKeys.filter((x) => {
+        //   return x !== data.id;
+        // });
       },
       handleSet(s, d, n) { //设置负责人
         this.organizationDialog = true;
@@ -1371,13 +1382,16 @@
         });
       },
       //选择复职等级
-      levelConfirm(){
+      levelConfirm() {
         this.$confirm('员工在职状态将会改变, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.put(globalConfig.server + 'manager/staff/dismiss/' + this.reinstatedStaffId, {type: 'is_on_job',level: this.levelForm.level}).then((res) => {
+          this.$http.put(globalConfig.server + 'manager/staff/dismiss/' + this.reinstatedStaffId, {
+            type: 'is_on_job',
+            level: this.levelForm.level
+          }).then((res) => {
             if (res.data.code === '10040') {
               this.$notify.success({
                 title: '成功',
@@ -1440,7 +1454,7 @@
           });
         } else if (val.clickIndex === 'not_on_job') {
           this.selectLevelDialog = true;
-          this.reinstatedStaffId= val.id;
+          this.reinstatedStaffId = val.id;
           this.levelForm.level = '';
 
         } else if (val.clickIndex === 'on_job') {
