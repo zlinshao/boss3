@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div id="answerCenter">
+  <div id="answerCenter">
+    <div >
       <div class="highRanking">
         <div class="highSearch">
           <el-form :model="form" :inline="true" size="small">
@@ -329,6 +329,7 @@
           this.form.description = '';
           this.form.type = '';
           this.form.is_anonymous = false;
+          this.disabledBtn = false;
         }
       },
     },
@@ -579,14 +580,6 @@
     background-image: url('../../../assets/images/404_images/bg_square.png');
   }
 
-  .el-button--primary.is-disabled,
-  .el-button--primary.is-disabled:active,
-  .el-button--primary.is-disabled:focus,
-  .el-button--primary.is-disabled:hover {
-    color: #fff !important;
-    background-color: #8faafc !important;
-    border-color: #8faafc !important;
-  }
 
   .loader {
     box-sizing: border-box;
@@ -855,6 +848,15 @@
     }
     .highRanking {
       margin-top: 10px;
+    }
+
+    .el-button--primary.is-disabled,
+    .el-button--primary.is-disabled:active,
+    .el-button--primary.is-disabled:focus,
+    .el-button--primary.is-disabled:hover {
+      color: #fff !important;
+      background-color: #8faafc !important;
+      border-color: #8faafc !important;
     }
   }
 </style>

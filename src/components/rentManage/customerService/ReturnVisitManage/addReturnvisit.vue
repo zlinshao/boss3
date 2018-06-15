@@ -593,7 +593,7 @@
         this.dictionary(443).then((res) => {  //收房付款方式
           this.payTypeInfo = res.data;
         });
-        this.dictionary(508).then((res) => {  //支付方式
+        this.dictionary(629).then((res) => {  //支付方式
           this.payTypeCategory = res.data;
         });
         this.dictionary(306, 1).then((res) => { //城市

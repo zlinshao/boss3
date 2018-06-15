@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div id="answerExam">
+  <div id="answerExam">
+    <div >
       <div class="tool">
         <el-row style="width:100%;margin-top:16px;">
           <el-col :span="5" style="margin-left:2%; margin-right:2%">
@@ -450,36 +450,37 @@
 </script>
 
 <style lang="scss" scoped>
-  .timeStringClass {
-    margin-left: 30px;
-  }
-
-  input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
-    /* WebKit browsers */
-    color: #c0c4cc;
-  }
-
-  .ql-editor {
-    min-height: initial !important;
-    padding: 0px;
-    margin: 0px;
-  }
-
-  .el-form-item {
-    margin-bottom: 15px !important;
-  }
-
-  .confirm_btn {
-    width: 100px;
-    height: 35px;
-    line-height: 0px;
-    text-align: center;
-    margin-top: 10px;
-    background-color: #fb4699;
-    border-color: #fb4699;
-  }
 
   #answerExam {
+    .timeStringClass {
+      margin-left: 30px;
+    }
+
+    input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+      /* WebKit browsers */
+      color: #c0c4cc;
+    }
+
+    .ql-editor {
+      min-height: initial !important;
+      padding: 0px;
+      margin: 0px;
+    }
+
+    .el-form-item {
+      margin-bottom: 15px !important;
+    }
+
+    .confirm_btn {
+      width: 100px;
+      height: 35px;
+      line-height: 0px;
+      text-align: center;
+      margin-top: 10px;
+      background-color: #fb4699;
+      border-color: #fb4699;
+    }
+
     position: relative;
     .tool {
       height: 160px;
@@ -536,76 +537,77 @@
       height: 100px;
       text-align: center;
     }
-  }
 
-  #pointDialog {
-    .import_points {
-      border: 1px solid #fb4699;
-      -webkit-box-shadow: 0 0 3px 1px #fb4699;
-      box-shadow: 0 0 3px 1px #fb4699;
-      text-align: center;
-      align-items: center;
-      justify-content: center;
-      height: 200px;
-      border-radius: 5px;
-      .importbody {
-        margin-left: 30%;
-        margin-top: 30px;
-        img {
-          width: 105px;
-          height: 130px;
-        }
-        .importright {
-          width: 180px;
-          height: 130px;
-          margin-top: 10px;
-          float: left;
-          margin-left: 60px;
-          font-size: 16px;
-          text-align: left;
-          color: #6a8dfb;
-          span {
-            font-size: 50px;
-            color: #fb4699;
-            font-family: "PingFangSC-Light PingFangSC-Ultralight";
+    #pointDialog {
+      .import_points {
+        border: 1px solid #fb4699;
+        -webkit-box-shadow: 0 0 3px 1px #fb4699;
+        box-shadow: 0 0 3px 1px #fb4699;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        height: 200px;
+        border-radius: 5px;
+        .importbody {
+          margin-left: 30%;
+          margin-top: 30px;
+          img {
+            width: 105px;
+            height: 130px;
+          }
+          .importright {
+            width: 180px;
+            height: 130px;
+            margin-top: 10px;
+            float: left;
+            margin-left: 60px;
+            font-size: 16px;
+            text-align: left;
+            color: #6a8dfb;
+            span {
+              font-size: 50px;
+              color: #fb4699;
+              font-family: "PingFangSC-Light PingFangSC-Ultralight";
+            }
           }
         }
       }
-    }
-    .importbo {
-      width: 100%;
-      height: 40px;
-      text-align: center;
-      border-top: 1px #eee solid;
-      margin-top: 16px;
-    }
-  }
-
-  #submitDialog {
-    .submit_points {
-      border: 1px solid #fb4699;
-      -webkit-box-shadow: 0 0 3px 1px #fb4699;
-      box-shadow: 0 0 3px 1px #fb4699;
-      text-align: center;
-      align-items: center;
-      justify-content: center;
-      height: 190px;
-      border-radius: 5px;
-      span {
-        color: #fb4699;
-        font-size: 40px;
-        margin-top: 54px;
-        display: block;
+      .importbo {
+        width: 100%;
+        height: 40px;
+        text-align: center;
+        border-top: 1px #eee solid;
+        margin-top: 16px;
       }
     }
+
+    #submitDialog {
+      .submit_points {
+        border: 1px solid #fb4699;
+        -webkit-box-shadow: 0 0 3px 1px #fb4699;
+        box-shadow: 0 0 3px 1px #fb4699;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        height: 190px;
+        border-radius: 5px;
+        span {
+          color: #fb4699;
+          font-size: 40px;
+          margin-top: 54px;
+          display: block;
+        }
+      }
+    }
+
+    .el-button--primary.is-disabled,
+    .el-button--primary.is-disabled:active,
+    .el-button--primary.is-disabled:focus,
+    .el-button--primary.is-disabled:hover {
+      color: #fff !important;
+      background-color: #8faafc !important;
+      border-color: #8faafc !important;
+    }
   }
 
-  .el-button--primary.is-disabled,
-  .el-button--primary.is-disabled:active,
-  .el-button--primary.is-disabled:focus,
-  .el-button--primary.is-disabled:hover {
-    color: #fff !important;
-    background-color: #8faafc !important;
-    border-color: #8faafc !important;
-  }
 </style>

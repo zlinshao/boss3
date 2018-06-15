@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div id="onlineExam">
+  <div id="onlineExam">
+    <div>
       <div class="qutitle">
         <div class="title1">题型</div>
         <el-tabs type="border-card" v-model="activeName">
@@ -18,15 +18,13 @@
                     <el-radio-group v-model="optionsSelect" style="width:98%;margin-left:2%;">
                       <el-row :gutter="20">
                         <el-col :span="12" :key="val" v-for="(val,index) in singlen"
-                                style="line-height:50px;height:50px;padding-top:14px;">
-                          <el-radio :label="index">
-                            <el-input size="small" v-model="options[index]" placeholder="请输入选项内容"></el-input>
+                                style="padding-top:14px;">
+                          <el-radio :label="index" >
+                            <textarea size="small" class="textarea" v-model="options[index]" placeholder="请输入选项内容"></textarea>
                             <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="singleSub(index)"></i>
-                            <!--<span style="color:rgb(88, 215, 136);" v-if="index == optionsSelect">正确</span>-->
                           </el-radio>
                         </el-col>
                       </el-row>
-
                     </el-radio-group>
                   </el-form-item>
                   <div class="midadd">
@@ -36,7 +34,6 @@
               </div>
             </el-form>
           </el-tab-pane>
-
           <el-tab-pane name="second" label="多选题" :disabled="tabDisabled[1]">
             <el-form :model="multiForm" onsubmit="return false;">
               <div class="qubody">
@@ -50,9 +47,9 @@
                   <el-form-item style="border:1px #eee solid;padding-bottom: 20px;border-radius: 5px;">
                     <el-checkbox-group v-model="multiOptionsSelect" style="width:98%;margin-left:2%;">
                       <el-col :span="12" :key="val" v-for="(val,index) in boxlen"
-                              style="line-height:50px;height:50px;padding-top:14px;">
+                              style="padding-top:14px;">
                         <el-checkbox :label="index">
-                          <el-input size="small" placeholder="请输入选项内容" v-model="multiOptions[index]"></el-input>
+                          <textarea class="textarea" size="small" placeholder="请输入选项内容" v-model="multiOptions[index]"></textarea>
                           <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="multiSub(index)"></i>
                           <!--<span style="color:rgb(88, 215, 136);" v-if="multiOptionsSelect.indexOf(index)>-1">正确</span>-->
                         </el-checkbox>
@@ -66,7 +63,6 @@
               </div>
             </el-form>
           </el-tab-pane>
-
           <el-tab-pane name="third" label="不定向选择" :disabled="tabDisabled[2]">
             <el-form :model="multiForm" onsubmit="return false;">
               <div class="qubody">
@@ -80,9 +76,9 @@
                   <el-form-item style="border:1px #eee solid;padding-bottom: 20px;border-radius: 5px;">
                     <el-checkbox-group v-model="multiOptionsSelect" style="width:98%;margin-left:2%;">
                       <el-col :span="12" :key="val" v-for="(val,index) in boxlen"
-                              style="line-height:50px;height:50px;padding-top:14px;">
+                              style="padding-top:14px;">
                         <el-checkbox :label="index">
-                          <el-input size="small" placeholder="请输入选项内容" v-model="multiOptions[index]"></el-input>
+                          <textarea class="textarea" size="small" placeholder="请输入选项内容" v-model="multiOptions[index]"></textarea>
                           <i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="multiSub(index)"></i>
                           <!--<span style="color:rgb(88, 215, 136);" v-if="multiOptionsSelect.indexOf(index)>-1">正确</span>-->
                         </el-checkbox>
@@ -96,7 +92,6 @@
               </div>
             </el-form>
           </el-tab-pane>
-
           <el-tab-pane name="fourth" label="判断题" :disabled="tabDisabled[3]">
             <el-form :model="judgeForm" onsubmit="return false;">
               <div class="qubody">
@@ -110,9 +105,9 @@
                   <el-form-item style="border:1px #eee solid;padding-bottom: 20px;border-radius: 5px;">
                     <el-radio-group v-model="judgeOptionsSelect" style="width:98%;margin-left:2%;">
                       <el-col :span="12" :key="val" v-for="(val,index) in 2"
-                              style="line-height:50px;height:50px;padding-top:14px;">
+                              style="padding-top:14px;">
                         <el-radio :label="index">
-                          <el-input size="small" v-model="judgeOptions[index]" placeholder="请输入选项内容"></el-input>
+                          <textarea class="textarea" size="small" v-model="judgeOptions[index]" placeholder="请输入选项内容"></textarea>
                           <!--<span style="color:rgb(88, 215, 136);" v-if="index == judgeOptionsSelect">正确</span>-->
                         </el-radio>
                       </el-col>
@@ -122,38 +117,6 @@
               </div>
             </el-form>
           </el-tab-pane>
-          <!--<el-tab-pane name="five" label="填空题" :disabled="tabDisabled[4]">-->
-            <!--<el-form :model="blankForm" onsubmit="return false;">-->
-              <!--<div class="qubody">-->
-                <!--<div class="topbody">-->
-                  <!--<div class="title"><span style="color: #ff0000d4;">*</span> 题干</div>-->
-                  <!--<vue-editor id="completionEditor" v-model="blankForm.stem" useCustomImageHandler-->
-                              <!--@imageAdded="handleImageAdded"></vue-editor>-->
-                <!--</div>-->
-                <!--<div class="midbody">-->
-                  <!--<div class="title">填空信息</div>-->
-                  <!--<el-form-item style="border:1px #eee solid; padding: 15px;border-radius: 5px;">-->
-                    <!--<el-row :gutter="20">-->
-                      <!--<el-col :span="8" v-for="(val,index) in spacelen" :key="index">-->
-                        <!--<span>第{{index+1}}处答案</span>-->
-                        <!--<el-input style="width:70%" size="small" placeholder="请输入选项内容"-->
-                                  <!--v-model="blankForm.answer[index]"></el-input>-->
-                        <!--<i class="el-icon-close" style="color: #c0c4cc;" @click.stop.prevent="blankSub(index)"></i>-->
-                      <!--</el-col>-->
-                    <!--</el-row>-->
-
-                  <!--</el-form-item>-->
-                  <!--&lt;!&ndash;<span&ndash;&gt;-->
-                    <!--&lt;!&ndash;style="margin-left: 20%; color:rgb(252, 131, 182); margin-top:20px; margin-bottom:20px;display:block;">&ndash;&gt;-->
-                      <!--&lt;!&ndash;说明：考生填写答案须跟上方答案完全相同，才能得分。录入答案时，请不要加多余的空格等干扰字符&ndash;&gt;-->
-                    <!--&lt;!&ndash;</span>&ndash;&gt;-->
-                  <!--<div class="midadd">-->
-                    <!--<span @click="blankAdd">+&nbsp;&nbsp;添加选项</span>-->
-                  <!--</div>-->
-                <!--</div>-->
-              <!--</div>-->
-            <!--</el-form>-->
-          <!--</el-tab-pane>-->
           <el-tab-pane name="six" label="问答题" :disabled="tabDisabled[5]">
             <el-form :model="answerForm" onsubmit="return false;">
               <div class="qubody">
@@ -348,7 +311,7 @@
           });
         } else {
           this.tabDisabled = [false, false, false, false, false, false];
-          this.initial();
+          // this.initial();
         }
       },
       editQuesCategory(val) {
@@ -478,24 +441,24 @@
           data.paper_id = this.$store.state.quesNaire.naire_myself_paper.paper_id;
           data.quesId = this.quesId = this.$store.state.quesNaire.naire_myself_paper.quesId;
           data.category = this.editQuesCategory = this.$store.state.quesNaire.naire_myself_paper.category;
-          data.type = this.editQuesCategory = this.$store.state.quesNaire.naire_myself_paper.type;
+          // data.type = this.editQuesCategory = this.$store.state.quesNaire.naire_myself_paper.type;
           this.singleForm.paper_id = data.paper_id;
           this.multiForm.paper_id = data.paper_id;
           this.judgeForm.paper_id = data.paper_id;
           this.blankForm.paper_id = data.paper_id;
           this.answerForm.paper_id = data.paper_id;
 
-          if (data.type === 'add') {
-            this.quesId = '';
-            this.editQuesCategory = '';
-            for (var i = 0; i < this.tabDisabled.length; i++) {
-              this.tabDisabled[i] = false;
-            }
-            this.initial();
-          } else if (data.type === 'edit') {
-            this.quesId = data.quesId;
-            this.editQuesCategory = data.category;
-          }
+          // if (data.type === 'add') {
+          //   this.quesId = '';
+          //   this.editQuesCategory = '';
+          //   for (var i = 0; i < this.tabDisabled.length; i++) {
+          //     this.tabDisabled[i] = false;
+          //   }
+          //   this.initial();
+          // } else if (data.type === 'edit') {
+          //   this.quesId = data.quesId;
+          //   this.editQuesCategory = data.category;
+          // }
           this.$router.push({path: '/myselfNaire', query: data});
         } else {
           let query = this.$route.query;
@@ -665,6 +628,19 @@
 
 <style lang="scss" scoped>
   #onlineExam {
+    .textarea{
+      width: 97%;
+      border: 1px solid #dcdfe6;
+      border-radius: 5px;
+      padding: 10px;
+      font: 400 13.3333px Arial;
+      color: #787a7e;
+      vertical-align: middle;
+    }
+    input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+      /* WebKit browsers */
+      color: #c0c4cc;
+    }
     .qutitle {
       width: 80%;
       margin: 0 auto;
@@ -748,14 +724,15 @@
         border-color: rgb(106, 141, 251);
       }
     }
+
+    .el-button--primary.is-disabled,
+    .el-button--primary.is-disabled:active,
+    .el-button--primary.is-disabled:focus,
+    .el-button--primary.is-disabled:hover {
+      color: #fff !important;
+      background-color: #8faafc !important;
+      border-color: #8faafc !important;
+    }
   }
 
-  .el-button--primary.is-disabled,
-  .el-button--primary.is-disabled:active,
-  .el-button--primary.is-disabled:focus,
-  .el-button--primary.is-disabled:hover {
-    color: #fff !important;
-    background-color: #8faafc !important;
-    border-color: #8faafc !important;
-  }
 </style>

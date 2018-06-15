@@ -360,7 +360,7 @@
         payTypeLen: 0,
         payUseLen: 0,
         album: [],
-        agency_price: "",            //中介费
+        agency_price: "暂无",            //中介费
         agency_price_now: "",               //现中介费
         agency_name: "",                    //中介名
         agency_user_name: "",               //中介人
@@ -477,7 +477,7 @@
     },
     methods: {
       getDetail() {
-        this.dictionary(443).then(res => {
+        this.dictionary(629).then(res => {
           //支付方式
           this.payTypeInfo = res.data;
         });

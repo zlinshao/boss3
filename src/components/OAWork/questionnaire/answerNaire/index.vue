@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div id="answerExam">
+  <div id="answerExam">
+    <div >
       <div class="tool">
         <img width="100%" height="142px" src="../../../../assets/images/preview.png"/>
         <div>
@@ -136,7 +136,6 @@
     </div>
 
   </div>
-
 </template>
 
 <script>
@@ -285,30 +284,29 @@
 </script>
 
 <style lang="scss" scoped>
-  .ql-editor {
-    min-height: initial !important;
-    padding: 0px;
-    margin: 0px;
-  }
-  input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
-    /* WebKit browsers */
-    color: #c0c4cc;
-  }
-  .el-form-item {
-    margin-bottom: 15px !important;
-  }
-
-  .confirm_btn {
-    width: 100px;
-    height: 35px;
-    line-height: 0px;
-    text-align: center;
-    margin-top: 10px;
-    background-color: #fb4699;
-    border-color: #fb4699;
-  }
-
   #answerExam {
+    .ql-editor {
+      min-height: initial !important;
+      padding: 0px;
+      margin: 0px;
+    }
+    input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+      /* WebKit browsers */
+      color: #c0c4cc;
+    }
+    .el-form-item {
+      margin-bottom: 15px !important;
+    }
+
+    .confirm_btn {
+      width: 100px;
+      height: 35px;
+      line-height: 0px;
+      text-align: center;
+      margin-top: 10px;
+      background-color: #fb4699;
+      border-color: #fb4699;
+    }
     position: relative;
     .tool {
       position: relative;
@@ -349,33 +347,33 @@
       height: 100px;
       text-align: center;
     }
-  }
-
-  #submitDialog {
-    .submit_points {
-      border: 1px solid #fb4699;
-      -webkit-box-shadow: 0 0 3px 1px #fb4699;
-      box-shadow: 0 0 3px 1px #fb4699;
-      text-align: center;
-      align-items: center;
-      justify-content: center;
-      height: 160px;
-      border-radius: 5px;
-      span {
-        color: #fb4699;
-        font-size: 40px;
-        margin-top: 54px;
-        display: block;
+    #submitDialog {
+      .submit_points {
+        border: 1px solid #fb4699;
+        -webkit-box-shadow: 0 0 3px 1px #fb4699;
+        box-shadow: 0 0 3px 1px #fb4699;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        height: 160px;
+        border-radius: 5px;
+        span {
+          color: #fb4699;
+          font-size: 40px;
+          margin-top: 54px;
+          display: block;
+        }
       }
+    }
+
+    .el-button--primary.is-disabled,
+    .el-button--primary.is-disabled:active,
+    .el-button--primary.is-disabled:focus,
+    .el-button--primary.is-disabled:hover {
+      color: #fff !important;
+      background-color: #8faafc !important;
+      border-color: #8faafc !important;
     }
   }
 
-  .el-button--primary.is-disabled,
-  .el-button--primary.is-disabled:active,
-  .el-button--primary.is-disabled:focus,
-  .el-button--primary.is-disabled:hover {
-    color: #fff !important;
-    background-color: #8faafc !important;
-    border-color: #8faafc !important;
-  }
 </style>

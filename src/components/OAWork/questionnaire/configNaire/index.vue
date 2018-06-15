@@ -57,6 +57,7 @@
           <span style="font-size:14px; float:right; margin-right:20px; ">共&nbsp;
             <span style="color:#fc83b6;" v-if="testPaperData && testPaperData.questions">{{testPaperData.questions.length}}</span>&nbsp;项查询结果
           </span>
+          <span style="float: right;margin-right: 20px;color: #83a0fc;font-size: 13px;">温馨提示：同一题型的题目才能上下移动哦 ~</span>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===153">
           <span class="remove" @click="deleteQues(item.id)">移除</span>
