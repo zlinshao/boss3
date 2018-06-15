@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div id="onlineExam">
+  <div id="onlineExam">
+    <div>
       <div class="qutitle">
         <div class="title1">题型</div>
         <el-tabs type="border-card" v-model="activeName">
@@ -724,14 +724,15 @@
         border-color: rgb(106, 141, 251);
       }
     }
+
+    .el-button--primary.is-disabled,
+    .el-button--primary.is-disabled:active,
+    .el-button--primary.is-disabled:focus,
+    .el-button--primary.is-disabled:hover {
+      color: #fff !important;
+      background-color: #8faafc !important;
+      border-color: #8faafc !important;
+    }
   }
 
-  .el-button--primary.is-disabled,
-  .el-button--primary.is-disabled:active,
-  .el-button--primary.is-disabled:focus,
-  .el-button--primary.is-disabled:hover {
-    color: #fff !important;
-    background-color: #8faafc !important;
-    border-color: #8faafc !important;
-  }
 </style>
