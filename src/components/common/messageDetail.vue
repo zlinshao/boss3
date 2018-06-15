@@ -13,7 +13,7 @@
         <div class="messageBody">
           <div class="bodyTitle">
             <div style="font-weight: bold" v-if="messageInfo.content">{{messageInfo.content.title}}</div>
-            <div>2018-03-15&nbsp;&nbsp;10:00:00</div>
+            <div>{{messageInfo.created_at}}</div>
           </div>
 
           <div class="messageDescribe">
