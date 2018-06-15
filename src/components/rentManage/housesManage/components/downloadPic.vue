@@ -85,7 +85,7 @@
             if(albumData.length>0){
               albumData.forEach((item) => {
                 item.album.album_file.forEach((img)=>{
-                  if(img.info&&img.info.mime.indexOf('image')>-1){
+                  if(img.info&&img.info.mime&&img.info.mime.indexOf('image')>-1){
                     this.imgArray.push(img.uri);
                   }
                 })

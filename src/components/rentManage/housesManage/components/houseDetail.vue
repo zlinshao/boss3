@@ -344,23 +344,23 @@
         <!--<el-button @click="downLoad">sss</el-button>-->
         <div class="describe_border">
 
-          <div v-if="detailData.house_goods&&detailData.house_goods.photo">
-            <div class="title">
-              {{detailData.create_time}}
-            </div>
-            <div class="describe_border">
-              <div v-if="detailData.house_goods&&detailData.house_goods.photo"
-                   v-for="item in detailData.house_goods.photo" style="display: inline-block">
-                <img v-if="item.info.mime&&item.info.mime.indexOf('image')>-1"
-                     :src="item.uri" data-magnify="" :data-src="item.uri" alt="">
-                <img v-if="!item.info.mime" :src="item.uri" data-magnify="" :data-src="item.uri">
-                <video v-if="item.info.mime&&item.info.mime.indexOf('video')>-1"
-                       class="video-js" controls preload="auto" width="200" height="120" data-setup="{}">
-                  <source :src="item.uri" type="video/mp4">
-                </video>
-              </div>
-            </div>
-          </div>
+          <!--<div v-if="detailData.house_goods&&detailData.house_goods.photo">-->
+            <!--<div class="title">-->
+              <!--{{detailData.create_time}}-->
+            <!--</div>-->
+            <!--<div class="describe_border">-->
+              <!--<div v-if="detailData.house_goods&&detailData.house_goods.photo"-->
+                   <!--v-for="item in detailData.house_goods.photo" style="display: inline-block">-->
+                <!--<img v-if="item.info.mime&&item.info.mime.indexOf('image')>-1"-->
+                     <!--:src="item.uri" data-magnify="" :data-src="item.uri" alt="">-->
+                <!--<img v-if="!item.info.mime" :src="item.uri" data-magnify="" :data-src="item.uri">-->
+                <!--<video v-if="item.info.mime&&item.info.mime.indexOf('video')>-1"-->
+                       <!--class="video-js" controls preload="auto" width="200" height="120" data-setup="{}">-->
+                  <!--<source :src="item.uri" type="video/mp4">-->
+                <!--</video>-->
+              <!--</div>-->
+            <!--</div>-->
+          <!--</div>-->
 
           <div v-if="albumData&&albumData.length>0" v-for="albumArray in albumData">
             <div class="title">
