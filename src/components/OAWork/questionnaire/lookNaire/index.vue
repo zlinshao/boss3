@@ -20,7 +20,8 @@
               )</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
-                <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;color: #101010;">{{item.number}}.</p>
+                <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;color: #101010;">
+                  {{item.number}}.</p>
               </el-col>
               <el-col :span="15">
                 <p style="line-height:30px;color: #101010;" class="ql-editor" v-html="item.stem"></p>
@@ -46,7 +47,8 @@
             <span class="category_score">(<span v-if="k==158">简答题</span>)</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
-                <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;color: #101010;">{{item.number}}.</p>
+                <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;color: #101010;">
+                  {{item.number}}.</p>
               </el-col>
               <el-col :span="15">
                 <p style="line-height:30px;color: #101010;" class="ql-editor" v-html="item.stem"></p>
@@ -59,7 +61,7 @@
         </div>
       </div>
     </div>
-    <div class="container" v-if="message">
+    <div class="container" v-if="message=='no_power'">
       <div class="content">
         <div class="content_img"><img src="../../../../assets/images/examination/no_power.png"></div>
         <div class="content_right" style="padding-left: 260px;">
@@ -68,6 +70,7 @@
         </div>
       </div>
     </div>
+
   </div>
 
 </template>
@@ -81,7 +84,7 @@
         quesNaireId: '',
         statisticData: [],
         quesNaireData: {},
-        message: false,
+        message: '',
       };
     },
     activated() {
@@ -109,9 +112,17 @@
         this.$http.get(globalConfig.server + 'questionnaire/' + this.quesNaireId).then((res) => {
           if (res.data.code === '30000') {
             this.quesNaireData = res.data.data;
+            this.message = '';
+          } else if (res.data.code === '30044') {
+            this.quesNaireData = {};
+            this.message = 'no_power';
           } else {
             this.quesNaireData = {};
-            this.message = true;
+            this.message = res.data.msg;
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            })
           }
         });
       },
@@ -121,11 +132,7 @@
             this.statisticData = res.data.data;
           } else {
             this.statisticData = [];
-            this.message = true;
-            // this.$notify.warning({
-            //   title: '警告',
-            //   message: res.data.msg
-            // })
+
           }
         });
       },
@@ -139,6 +146,7 @@
     padding: 0px;
     margin: 0px;
   }
+
   #lookNaire {
     .tool {
       position: relative;
@@ -176,6 +184,7 @@
       }
     }
   }
+
   .container {
     width: 100%;
     min-height: 800px;

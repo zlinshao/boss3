@@ -31,6 +31,13 @@
                      :expand-on-click-node="false"
                      :render-content="renderContent"
             >
+              <!--@node-drag-start="handleDragStart"-->
+              <!--@node-drag-enter="handleDragEnter"-->
+              <!--@node-drag-leave="handleDragLeave"-->
+              <!--@node-drag-over="handleDragOver"-->
+              <!--@node-drag-end="handleDragEnd"-->
+              <!--@node-drop="handleDrop"-->
+              <!--draggable-->
             </el-tree>
           </div>
         </div>
@@ -42,7 +49,7 @@
               class="iconfont icon-fuzeren"></i> {{departManageName}} )</span></div>
             <!--<div @click="sortDepartment">-->
             <!--<el-button size="mini">部门排序</el-button>-->
-            <!--&lt;!&ndash;<el-button v-if="isDepartment" style="color: #ffffff" type="text">取消排序</el-button>&ndash;&gt;-->
+            <!--<el-button v-if="isDepartment" style="color: #ffffff" type="text">取消排序</el-button>-->
             <!--</div>-->
           </div>
 
@@ -1052,6 +1059,30 @@
       }
     },
     methods: {
+      // allowDrop(draggingNode, dropNode) {
+      //   // console.log(draggingNode, dropNode)
+      // },
+      // allowDrag(draggingNode) {
+      //   // console.log(draggingNode)
+      // },
+      // handleDragStart(node, ev) {
+      //   console.log('drag start', node);
+      // },
+      // handleDragEnter(draggingNode, dropNode, ev) {
+      //   console.log('tree drag enter: ', dropNode.label);
+      // },
+      // handleDragLeave(draggingNode, dropNode, ev) {
+      //   console.log('tree drag leave: ', dropNode.label);
+      // },
+      // handleDragOver(draggingNode, dropNode, ev) {
+      //   console.log('tree drag over: ', dropNode.label);
+      // },
+      // handleDragEnd(draggingNode, dropNode, dropType, ev) {
+      //   console.log('tree drag end: ', dropNode && dropNode, dropType);
+      // },
+      // handleDrop(draggingNode, dropNode, dropType, ev) {
+      //   console.log('tree drop: ', dropNode.label, dropType);
+      // },
       highGrade() {
         this.isHigh = !this.isHigh;
       },
