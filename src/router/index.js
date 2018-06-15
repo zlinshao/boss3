@@ -149,8 +149,8 @@ import PersonalSalary from '../components/meritPay/personalSalary/index'
 import CollectDetail from '../components/rentManage/collectDetail.vue'
 import RentingDetail from '../components/rentManage/rentingDetail.vue'
 //合同修改历史快照
-import HistoryCollectDetail from '../components/rentManage/datumMessage/contractManage/historyCollectDetail.vue'
- import HistoryRentingDetail from '../components/rentManage/datumMessage/contractManage/historyRentingDetail.vue'
+import HistoryCollectDetail from '../components/rentManage/datumMessage/contractManage/components/historyCollectDetail.vue'
+ import HistoryRentingDetail from '../components/rentManage/datumMessage/contractManage/components/historyRentingDetail.vue'
 
 import MessageCenter from '../components/messageCenter/index.vue'                         //消息中心
 import SthToDoDetail from '../components/OAWork/sthToDo/components/detail_1.vue'          //喜报详情
@@ -177,8 +177,8 @@ import ChoosePictures from '../components/pictureManage/selectPictures.vue'     
 import ImproveImgInfo from '../components/pictureManage/improveImage.vue'                //完善照片信息
 import PictureDetail from '../components/pictureManage/pictureDetail.vue';               //相册详情
 import VisitRecord from '../components/rentManage/components/visitRecord.vue';               //回访记录
-import IncompleteRecord from '../components/rentManage/datumMessage/contractManage/incompleteRecord.vue'; //合同不齐记录
-import ExamineRecord from '../components/rentManage/datumMessage/contractManage/examineRecord'        //合同审批报表
+import IncompleteRecord from '../components/rentManage/datumMessage/contractManage/components/incompleteRecord.vue'; //合同不齐记录
+import ExamineRecord from '../components/rentManage/datumMessage/contractManage/components/examineRecord'        //合同审批报表
 
 import ReportManage from '../components/reportManage/index.vue'
 import BeforeExam from '../components/lejiaCollege/OnlineExam/beforeExam.vue'  //开考之前

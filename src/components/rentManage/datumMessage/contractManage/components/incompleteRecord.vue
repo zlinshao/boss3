@@ -338,8 +338,8 @@
 </template>
 
 <script>
-  import Organization from '../../../common/organization.vue';
-  import AddressSearch from '../../../common/addressSearch';
+  import Organization from '../../../../common/organization.vue';
+  import AddressSearch from '../../../../common/addressSearch';
 
   export default {
     name: "incomplete-record",
