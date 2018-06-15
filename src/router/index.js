@@ -56,6 +56,7 @@ import WechatMessage from '../components/wechatMessage/index.vue'               
 // import Achievement from '../comments/humanResource/achievement/index1.vue'
 import IntegralManage from '../components/humanResource/integralManage/index.vue'
 import OrganizationNew from '../components/humanResource/organizationNew/index.vue'       // add by cj 组织架构
+import PersonalRecords from '../components/humanResource/personalRecords/index'
 
 
 //OA办公
@@ -463,7 +464,7 @@ export default new Router({
     //     {path: '/complain', component: Complain, name: '微信投诉',},
     //     {path: '/lookHouse', component: LookHouse, name: '预约看房',},
     //     {path: '/league', component: League, name: '房东加盟',},
-    //     {path: '/feedback', component: Feedback, name: '意见反馈',},
+    //     {path: '/feedback', component: Feedback, name: '意见 反馈',},
     //   ]
     // },
 
@@ -477,6 +478,7 @@ export default new Router({
         // {path: '/organization', component: Organization, name: '组织架构',},
         {path: '/OrganizationNew', component: OrganizationNew, name: '组织架构',},
         {path: '/integralManage', component: IntegralManage, name: '积分管理',},
+        // {path: '/personalRecords', component: PersonalRecords, name: '人事报表',},
         // {path: '/achievement', component: Achievement, name: '业绩工资',},
       ]
     },
