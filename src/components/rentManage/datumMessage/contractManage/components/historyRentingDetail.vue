@@ -8,7 +8,7 @@
     <div class="stepLine">
       <el-steps direction="vertical" :active="steps" style="cursor: pointer">
         <el-step title="房源信息" @click.native="changeStep(0)"></el-step>
-        <el-step title="业主信息" @click.native="changeStep(1)"></el-step>
+        <el-step title="租客信息" @click.native="changeStep(1)"></el-step>
         <el-step title="合同信息" @click.native="changeStep(2)"></el-step>
         <!--<el-step title="财务信息" @click.native="changeStep(3)"></el-step>-->
         <el-step title="回访记录" @click.native="changeStep(4)"></el-step>
@@ -18,12 +18,9 @@
 
     <div class="container">
       <div class="top">
-
         <h3>
-          {{contractInfo.community_name}}  {{contractInfo.building}}-{{contractInfo.unit}}-{{contractInfo.doorplate}}
-        </h3>
+          {{contractInfo.community_name}}  {{contractInfo.building}}-{{contractInfo.unit}}-{{contractInfo.doorplate}}</h3>
         <h3>
-
           <div style="display: inline-block"  v-if="contractInfo.operation &&
               !Array.isArray(contractInfo.operation)&& contractInfo.operation.visit">
             <el-dropdown>
@@ -88,11 +85,11 @@
       </div>
       <div id="mainContent" class="main scroll_bar">
 
-        <div id="houseId" style="border-bottom: 1px solid #ccc;margin: 10px 0 50px 150px;">
+        <div id="houseId" style="zborder-bottom: 1px solid #ccc;margin: 10px 0 50px 150px;">
           <div class="title">房屋信息</div>
         </div>
 
-        <div class="houseInfo">
+        <div class="contractInfo">
           <el-form size="small" label-width="180px">
             <el-row>
               <el-col :span="8">
@@ -170,23 +167,6 @@
             </el-row>
             <el-row>
               <el-col :span="8">
-                <el-form-item label="水卡卡号">
-                  <div class="content">{{contractInfo.water_card_number}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="电卡卡号">
-                  <div class="content">{{contractInfo.electricity_card_number}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="燃气卡卡号">
-                  <div class="content">{{contractInfo.gas_card_number}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
                 <el-form-item label="房屋特色">
                   <div class="content">{{matchDictionary(contractInfo.house_feature)}}</div>
                 </el-form-item>
@@ -196,16 +176,16 @@
         </div>
 
         <div id="ownerId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
-          <div class="title">业主信息</div>
+          <div class="title">租客信息</div>
         </div>
 
         <div class="ownerInfo">
           <el-form size="small" label-width="180px">
             <div v-for="(item,index) in customersInfo">
-              <div class="title" style="margin-left: 150px" v-if="index>0">附属房东信息（{{index}}）</div>
+              <div class="title" style="margin-left: 150px" v-if="index>0">附属租客信息（{{index}}）</div>
               <el-row>
                 <el-col :span="8">
-                  <el-form-item label="房东姓名">
+                  <el-form-item label="租客姓名">
                     <div class="content">{{item.name}}</div>
                   </el-form-item>
                 </el-col>
@@ -254,8 +234,8 @@
                   <div class="content">{{contractInfo.contract_number}}</div>
                 </el-form-item>
               </el-col>
-
             </el-row>
+
             <el-row>
               <el-col :span="8">
                 <el-form-item label="签约时长(月)">
@@ -277,48 +257,24 @@
 
             <el-row>
               <el-col :span="8">
-                <el-form-item label="空置时长(天)">
-                  <div class="content">{{contractInfo.vacancy}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8" class="blueColor">
-                <el-form-item label="空置开始时间">
-                  <div class="content">{{contractInfo.begin_date}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8" class="blueColor">
-                <el-form-item label="空置结束时间">
-                  <div class="content">{{contractInfo.vacancy_end_date}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-
-            <el-row>
-
-              <el-col :span="8">
-                <el-form-item label="空置期安置方式">
-                  <div class="content">{{matchDictionary(contractInfo.vacancy_way)}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="保修期(月)">
-                  <div class="content">
-                    <span v-if="contractInfo.warranty_month">{{contractInfo.warranty_month}}月</span>
-                    <span v-if="contractInfo.warranty_day">{{contractInfo.warranty_day}}天</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
                 <el-form-item label="押金(元)">
                   <div class="content">{{contractInfo.deposit}}</div>
                 </el-form-item>
               </el-col>
+              <el-col :span="8" class="blueColor">
+                <el-form-item label="合同上传时间">
+                  <div class="content">{{contractInfo.contract_create_time}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8" class="blueColor">
+                <el-form-item label="合同签约时间">
+                  <div class="content">{{contractInfo.sign_date}}</div>
+                </el-form-item>
+              </el-col>
             </el-row>
 
             <el-row>
-
-
-              <el-col :span="8">
+              <el-col :span="8" class="blueColor">
                 <el-form-item label="月单价(元)">
                   <div class="content">
                     <span v-for="(item,index) in contractInfo.price">
@@ -331,93 +287,42 @@
                 <el-form-item label="付款方式">
                   <div class="content">
                     <span v-for="(item,index) in contractInfo.pay_way">
-                      {{matchDictionary(item.pay_way)}}，{{item.period}}个月 <span v-show="index<contractInfo.pay_way-1">;</span>
+                      押 {{item.pay_way_bet}} 付 {{item.pay_way}}，{{item.period}}个月<span
+                      v-show="index<contractInfo.pay_way-1">;</span>
                     </span>
                   </div>
                 </el-form-item>
               </el-col>
-              <el-col :span="8" class="blueColor">
-                <el-form-item label="合同上传时间">
-                  <div class="content">{{contractInfo.contract_create_time}}</div>
-                </el-form-item>
-              </el-col>
             </el-row>
             <el-row>
-
-              <el-col :span="8" class="blueColor">
-                <el-form-item label="第一次打房租时间">
-                  <div class="content">{{contractInfo.pay_first_date}}</div>
+              <el-col :span="8">
+                <el-form-item label="总收入金额">
+                  <div class="content">{{contractInfo.money_sum}}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="第二次打房租时间">
-                  <div class="content">{{contractInfo.pay_second_date}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8" class="blueColor">
-                <el-form-item label="合同签约时间">
-                  <div class="content">{{contractInfo.sign_date}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="收款人姓名">
-                  <div class="content">{{contractInfo.account_name}}</div>
+                <el-form-item label="金额（支付方式）">
+                  <div class="content">
+                     <span v-for="(item,index) in contractInfo.money_table">
+                      {{item.money_sep}}元，{{matchDictionary(item.money_way)}} <span
+                       v-show="index<contractInfo.money_table-1">;</span>
+                    </span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="收款人与房东关系">
-                  <div class="content">{{contractInfo.relationship}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="支付方式">
-                  <div class="content">{{matchDictionary(contractInfo.purchase_way)}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="账号">
-                  <div class="content">{{contractInfo.account}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="开户行">
-                  <div class="content">{{contractInfo.bank}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="支行">
-                  <div class="content">{{contractInfo.subbranch}}</div>
-                </el-form-item>
-              </el-col>
-
-            </el-row>
-
-            <el-row>
-              <el-col :span="8" class="blueColor">
-                <el-form-item label="是否中介">
-                  <div class="content" v-if="contractInfo.is_agency">中介</div>
-                  <div class="content" v-else="">个人</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="中介费(元)">
+                <el-form-item label="中介费">
                   <div class="content">{{contractInfo.agency}}</div>
                 </el-form-item>
               </el-col>
+            </el-row>
+            <el-row>
               <el-col :span="8">
-                <el-form-item label="违约金(元)">
+                <el-form-item label="违约金">
                   <div class="content">{{contractInfo.penalty}}</div>
                 </el-form-item>
               </el-col>
 
-            </el-row>
-            <el-row>
               <el-col :span="8">
                 <el-form-item label="物业费付款方">
                   <div class="content">{{matchDictionary(contractInfo.property_payer)}}</div>
@@ -426,11 +331,6 @@
               <el-col :span="8">
                 <el-form-item label="物业及公摊费用(元)">
                   <div class="content">{{contractInfo.public_fee}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8" class="blueColor">
-                <el-form-item label="资料补齐时间">
-                  <div class="content">{{contractInfo.data_date}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -453,8 +353,8 @@
                   <div class="content">{{contractInfo.gas}}</div>
                 </el-form-item>
               </el-col>
-
             </el-row>
+
 
             <el-row>
               <el-col :span="8">
@@ -465,6 +365,11 @@
               <el-col :span="8">
                 <el-form-item label="所属部门">
                   <div class="content">{{contractInfo.department_name}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8" class="blueColor">
+                <el-form-item label="资料补齐时间">
+                  <div class="content">{{contractInfo.data_date}}</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -493,7 +398,7 @@
             </el-row>
             <el-row>
               <el-col :span="24">
-                <el-form-item label="其他照片">
+                <el-form-item label="证件照片">
                   <div>
                     <el-tabs type="border-card">
                       <el-tab-pane>
@@ -505,18 +410,6 @@
                           <span v-if="albumObject.identity_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.identity_photo" @drag="currentPicId(key)"
                                :src="value" data-magnify="" :data-src="value">
-                        </div>
-                      </el-tab-pane>
-                      <el-tab-pane>
-                          <span slot="label">
-                            <el-badge is-dot class="item" v-if="albumObject.bank_photo.length<1">银行卡照片</el-badge>
-                            <span v-else="">银行卡照片</span>
-                          </span>
-
-                        <div class="image" id="bank_photo" @dragover='allowDrop($event)'>
-                          <span v-if="albumObject.bank_photo.length<1">暂无照片</span>
-                          <img v-for="(value,key) in contractInfo.bank_photo" :src="value"
-                               data-magnify="" :data-src="value" @drag="currentPicId(key)">
                         </div>
                       </el-tab-pane>
                       <el-tab-pane>
@@ -557,54 +450,6 @@
 
                       <el-tab-pane>
                         <span slot="label">
-                          <el-badge is-dot class="item" v-if="albumObject.property_photo.length<1">房产证照片</el-badge>
-                          <span v-else="">房产证照片</span>
-                        </span>
-                        <div class="image" @dragover='allowDrop($event)' id="property_photo">
-                          <span v-if="albumObject.property_photo.length<1">暂无照片</span>
-                          <img v-for="(value,key) in contractInfo.property_photo" :src="value"
-                               data-magnify="" :data-src="value" @drag="currentPicId(key)">
-                        </div>
-                      </el-tab-pane>
-                      <el-tab-pane>
-                        <span slot="label">
-                          <el-badge is-dot class="item" v-if="albumObject.water_card_photo.length<1">水卡照片</el-badge>
-                          <span v-else="">水卡照片</span>
-                        </span>
-                        <div class="image" @dragover='allowDrop($event)' id="water_card_photo">
-                          <span v-if="albumObject.water_card_photo.length<1">暂无照片</span>
-                          <img v-for="(value,key) in contractInfo.water_card_photo" :src="value"
-                               data-magnify="" :data-src="value" @drag="currentPicId(key)">
-                        </div>
-                      </el-tab-pane>
-                      <el-tab-pane>
-                        <span slot="label">
-                          <el-badge is-dot class="item"
-                                    v-if="albumObject.electricity_card_photo.length<1">电卡照片</el-badge>
-                          <span v-else="">电卡照片</span>
-                        </span>
-                        <div class="image" @dragover='allowDrop($event)' id="electricity_card_photo">
-                          <span v-if="albumObject.electricity_card_photo.length<1">暂无照片</span>
-                          <img v-for="(value,key) in contractInfo.electricity_card_photo" :src="value"
-                               data-magnify="" :data-src="value" @drag="currentPicId(key)">
-                        </div>
-                      </el-tab-pane>
-
-                      <el-tab-pane>
-                        <span slot="label">
-                          <el-badge is-dot class="item" v-if="albumObject.gas_card_photo.length<1">燃气卡照片</el-badge>
-                          <span v-else="">燃气卡照片</span>
-                        </span>
-                        <div class="image" @dragover='allowDrop($event)' id="gas_card_photo">
-                          <span v-if="albumObject.gas_card_photo.length<1">暂无照片</span>
-                          <img v-for="(value,key) in contractInfo.gas_card_photo" :src="value"
-                               data-magnify="" :data-src="value" @drag="currentPicId(key)">
-                        </div>
-                      </el-tab-pane>
-
-
-                      <el-tab-pane>
-                        <span slot="label">
                           <el-badge is-dot class="item" v-if="albumObject.checkin_photo.length<1">交接单</el-badge>
                           <span v-else="">交接单</span>
                         </span>
@@ -617,12 +462,12 @@
 
                       <el-tab-pane>
                         <span slot="label">
-                          <el-badge is-dot class="item" v-if="albumObject.auth_photo.length<1">委托书</el-badge>
-                          <span v-else="">委托书</span>
+                          <el-badge is-dot class="item" v-if="albumObject.certificate_photo.length<1">截图凭证</el-badge>
+                          <span v-else="">截图凭证</span>
                         </span>
-                        <div class="image" @dragover='allowDrop($event)' id="auth_photo">
-                          <span v-if="albumObject.auth_photo.length<1">暂无照片</span>
-                          <img v-for="(value,key) in contractInfo.auth_photo" :src="value"
+                        <div class="image" @dragover='allowDrop($event)' id="certificate_photo">
+                          <span v-if="albumObject.certificate_photo.length<1">暂无照片</span>
+                          <img v-for="(value,key) in contractInfo.certificate_photo" :src="value"
                                data-magnify="" :data-src="value" @drag="currentPicId(key)">
                         </div>
                       </el-tab-pane>
@@ -637,18 +482,7 @@
                                data-magnify="" :data-src="value" @drag="currentPicId(key)">
                         </div>
                       </el-tab-pane>
-                      <el-tab-pane>
 
-                        <span slot="label">
-                          <el-badge is-dot class="item" v-if="albumObject.promise.length<1">承诺书照片</el-badge>
-                          <span v-else="">承诺书照片</span>
-                        </span>
-                        <div class="image" @dragover='allowDrop($event)' id="promise">
-                          <span v-if="albumObject.promise.length<1">暂无照片</span>
-                          <img v-for="(value,key) in contractInfo.promise" :src="value"
-                               data-magnify="" :data-src="value" @drag="currentPicId(key)">
-                        </div>
-                      </el-tab-pane>
                       <el-tab-pane>
                         <span slot="label">
                           <el-badge is-dot class="item" v-if="albumObject.other_photo.length<1">补充照片</el-badge>
@@ -696,73 +530,73 @@
           </el-form>
         </div>
         <!--
-        <div id="financeId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
-          <div class="title">财务信息</div>
-        </div>
+                <div id="financeId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
+                  <div class="title">财务信息</div>
+                </div>
 
-        <div class="financialInfo">
-          <el-form size="small" label-width="180px">
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="房租期数">
-                  <div class="content">{{financeInfo.term_rent}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="已结算期数">
-                  <div class="content">{{financeInfo.term_received}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="剩余期数">
-                  <div class="content">{{financeInfo.term_left}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="上次付款时间">
-                  <div class="content">{{financeInfo.last_money_date}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="下次付款时间">
-                  <div class="content">{{financeInfo.next_money_date}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="实付金额">
-                  <div class="content">{{financeInfo.amount_actual}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="8">
-                <el-form-item label="剩余金额">
-                  <div class="content">{{financeInfo.amount_left}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="应付金额">
-                  <div class="content">{{financeInfo.amount_should}}</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="8">
-                <el-form-item label="下次应付时间">
-                  <div class="content">{{financeInfo.next_should_money_date}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
-                <el-form-item label="备注">
-                  <div class="content">{{financeInfo.remark}}</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </div>
--->
+                <div class="financialInfo">
+                  <el-form size="small" label-width="180px">
+                    <el-row>
+                      <el-col :span="8">
+                        <el-form-item label="房租期数">
+                          <div class="content">{{financeInfo.term_rent}}</div>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="8">
+                        <el-form-item label="已结算期数">
+                          <div class="content">{{financeInfo.term_received}}</div>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="8">
+                        <el-form-item label="剩余期数">
+                          <div class="content">{{financeInfo.term_left}}</div>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span="8">
+                        <el-form-item label="上次付款时间">
+                          <div class="content">{{financeInfo.last_money_date}}</div>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="8">
+                        <el-form-item label="下次付款时间">
+                          <div class="content">{{financeInfo.next_money_date}}</div>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="8">
+                        <el-form-item label="实付金额">
+                          <div class="content">{{financeInfo.amount_actual}}</div>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span="8">
+                        <el-form-item label="剩余金额">
+                          <div class="content">{{financeInfo.amount_left}}</div>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="8">
+                        <el-form-item label="应付金额">
+                          <div class="content">{{financeInfo.amount_should}}</div>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="8">
+                        <el-form-item label="下次应付时间">
+                          <div class="content">{{financeInfo.next_should_money_date}}</div>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                    <el-row>
+                      <el-col :span="24">
+                        <el-form-item label="备注">
+                          <div class="content">{{financeInfo.remark}}</div>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                  </el-form>
+                </div>
+    -->
         <div id="returnId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
           <div class="title">回访信息</div>
         </div>
@@ -805,8 +639,7 @@
                       </el-col>
                     </el-row>
                   </el-form>
-                </div>
-                -->
+                </div>-->
       </div>
     </div>
 
@@ -816,8 +649,7 @@
 </template>
 
 <script>
-
-  import Organization from '../../../common/organization.vue';
+  import Organization from '../../../../common/organization.vue';
   export default {
     components: {Organization},
     data() {
@@ -825,7 +657,6 @@
         steps: 0,
         sizeForm: {},
         isPanel: false,
-        houseInfo: [],
         customersInfo: [],
         contractInfo: [],
         financeInfo: [],
@@ -837,7 +668,8 @@
         financeId: '',
         returnId: '',
         historyId: '',
-        all_dic: [],   //房屋类型
+        all_dic: [],
+
         organizationDialog: false,
         type: '',
         contract_id: this.$route.query.id, //合同Id
@@ -845,77 +677,51 @@
           contract_id: this.$route.query.id,
           content: '',
           receiver_id: [],
-          is_rent: 0,
+          is_rent: 1,
           is_send: null,
         },
         receiverNames: '',
-        loadingStatus: true,
+        loadingStatus: false,
         reBackData: [],
         approveParams: {
-          is_rent: 0,
+          is_rent: 1,
           operation: '',
         },
-        dragPicId: '',
 
         albumObject: {
           photo: [],
           identity_photo: [],
-          bank_photo: [],
           water_photo: [],
           electricity_photo: [],
           gas_photo: [],
-          property_photo: [],
-          water_card_photo: [],
-          electricity_card_photo: [],
-          gas_card_photo: [],
           checkin_photo: [],
-          auth_photo: [],
+          certificate_photo: [],
           deposit_photo: [],
-          promise: [],
           other_photo: [],
           checkout_photo: [],
           checkout_settle_photo: [],
         },
-
-        operation: {
-          doc: [
-            "to_contract_review",
-            "to_contract_approved",
-            "to_cancelled",
-            "to_contract_rejected",
-            "to_house_approved",
-            "to_house_rejected"
-          ],
-          visit: [
-            "to_customer_service_review",
-            "to_customer_service_publish"
-          ]
-        }
       }
     },
-    beforeCreate(){
-
-    },
-    created() {
+    created(){
       this.getDictionary();
-
     },
-    mounted() {
+    mounted(){
       this.initData();
       this.getContractDetail();
       this.getReBackDetail();
       this.houseId = document.getElementById('houseId').offsetTop - 201;
       this.ownerId = document.getElementById('ownerId').offsetTop - 201;
       this.contractId = document.getElementById('contractId').offsetTop - 201;
-//      this.financeId = document.getElementById('financeId').offsetTop - 201;
+//      this.financeId = document.getElementById('financeId').offsetTop -201;
       this.returnId = document.getElementById('returnId').offsetTop - 201;
-//      this.historyId = document.getElementById('historyId').offsetTop - 201;
+//      this.historyId = document.getElementById('historyId').offsetTop -201;
     },
     watch: {
       // 自动获取上一条备忘
       isPanel(val) {
         if (val) {
-          this.$http.get(globalConfig.server + 'lease/note?is_rent=0&contract_id=' + this.contract_id).then((res) => {
+          this.$http.get(globalConfig.server + 'lease/note?is_rent=1&contract_id=' + this.contract_id).then((res) => {
             if (res.data.code === '60510') {
               if (res.data.data) {
                 this.params.content = res.data.data.content;
@@ -940,18 +746,12 @@
       dragInit(){
         let photo = document.getElementById('photo');
         let identity_photo = document.getElementById('identity_photo');
-        let bank_photo = document.getElementById('bank_photo');
         let water_photo = document.getElementById('water_photo');
         let electricity_photo = document.getElementById('electricity_photo');
         let gas_photo = document.getElementById('gas_photo');
-        let property_photo = document.getElementById('property_photo');
-        let water_card_photo = document.getElementById('water_card_photo');
-        let electricity_card_photo = document.getElementById('electricity_card_photo');
-        let gas_card_photo = document.getElementById('gas_card_photo');
         let checkin_photo = document.getElementById('checkin_photo');
-        let auth_photo = document.getElementById('auth_photo');
+        let certificate_photo = document.getElementById('certificate_photo');
         let deposit_photo = document.getElementById('deposit_photo');
-        let promise = document.getElementById('promise');
         let other_photo = document.getElementById('other_photo');
         let checkout_photo = document.getElementById('checkout_photo');
         let checkout_settle_photo = document.getElementById('checkout_settle_photo');
@@ -969,6 +769,7 @@
           }
         }
         let _this = this;
+
         photo.ondrop = function (e) {
           _this.changeChild(photo, lis);
           _this.dragEnd('photo');
@@ -977,10 +778,6 @@
         identity_photo.ondrop = function (e) {
           _this.changeChild(identity_photo, lis);
           _this.dragEnd('identity_photo');
-        };
-        bank_photo.ondrop = function (e) {
-          _this.changeChild(bank_photo, lis);
-          _this.dragEnd('bank_photo');
         };
         water_photo.ondrop = function (e) {
           _this.changeChild(water_photo, lis);
@@ -994,37 +791,18 @@
           _this.changeChild(gas_photo, lis);
           _this.dragEnd('gas_photo');
         };
-        property_photo.ondrop = function (e) {
-          _this.changeChild(property_photo, lis);
-          _this.dragEnd('property_photo');
-        };
-        water_card_photo.ondrop = function (e) {
-          _this.changeChild(water_card_photo, lis);
-          _this.dragEnd('water_card_photo');
-        };
-        electricity_card_photo.ondrop = function (e) {
-          _this.changeChild(electricity_card_photo, lis);
-          _this.dragEnd('electricity_card_photo');
-        };
-        gas_card_photo.ondrop = function (e) {
-          _this.changeChild(gas_card_photo, lis);
-          _this.dragEnd('gas_card_photo');
-        };
         checkin_photo.ondrop = function (e) {
           _this.changeChild(checkin_photo, lis);
           _this.dragEnd('checkin_photo');
         };
-        auth_photo.ondrop = function (e) {
-          _this.changeChild(auth_photo, lis);
-          _this.dragEnd('auth_photo');
+        certificate_photo.ondrop = function (e) {
+          _this.changeChild(certificate_photo, lis);
+          _this.dragEnd('certificate_photo');
         };
+
         deposit_photo.ondrop = function (e) {
           _this.changeChild(deposit_photo, lis);
           _this.dragEnd('deposit_photo');
-        };
-        promise.ondrop = function (e) {
-          _this.changeChild(promise, lis);
-          _this.dragEnd('promise');
         };
         other_photo.ondrop = function (e) {
           _this.changeChild(other_photo, lis);
@@ -1063,9 +841,6 @@
         this.albumObject.identity_photo = this.albumObject.identity_photo.filter((x) => {
           return x != this.dragPicId
         });
-        this.albumObject.bank_photo = this.albumObject.bank_photo.filter((x) => {
-          return x != this.dragPicId
-        });
         this.albumObject.water_photo = this.albumObject.water_photo.filter((x) => {
           return x != this.dragPicId
         });
@@ -1075,30 +850,18 @@
         this.albumObject.gas_photo = this.albumObject.gas_photo.filter((x) => {
           return x != this.dragPicId
         });
-        this.albumObject.property_photo = this.albumObject.property_photo.filter((x) => {
-          return x != this.dragPicId
-        });
-        this.albumObject.water_card_photo = this.albumObject.water_card_photo.filter((x) => {
-          return x != this.dragPicId
-        });
-        this.albumObject.electricity_card_photo = this.albumObject.electricity_card_photo.filter((x) => {
-          return x != this.dragPicId
-        });
-        this.albumObject.gas_card_photo = this.albumObject.gas_card_photo.filter((x) => {
-          return x != this.dragPicId
-        });
+
         this.albumObject.checkin_photo = this.albumObject.checkin_photo.filter((x) => {
           return x != this.dragPicId
         });
-        this.albumObject.auth_photo = this.albumObject.auth_photo.filter((x) => {
+        this.albumObject.certificate_photo = this.albumObject.certificate_photo.filter((x) => {
           return x != this.dragPicId
         });
+
         this.albumObject.deposit_photo = this.albumObject.deposit_photo.filter((x) => {
           return x != this.dragPicId
         });
-        this.albumObject.promise = this.albumObject.promise.filter((x) => {
-          return x != this.dragPicId
-        });
+
         this.albumObject.other_photo = this.albumObject.other_photo.filter((x) => {
           return x != this.dragPicId
         });
@@ -1127,29 +890,15 @@
           case 'gas_photo':
             this.albumObject.gas_photo.push(this.dragPicId);
             break;
-          case 'property_photo':
-            this.albumObject.property_photo.push(this.dragPicId);
-            break;
-          case 'water_card_photo':
-            this.albumObject.water_card_photo.push(this.dragPicId);
-            break;
-          case 'electricity_card_photo':
-            this.albumObject.electricity_card_photo.push(this.dragPicId);
-            break;
-          case 'gas_card_photo':
-            this.albumObject.gas_card_photo.push(this.dragPicId);
-            break;
+
           case 'checkin_photo':
             this.albumObject.checkin_photo.push(this.dragPicId);
             break;
-          case 'auth_photo':
-            this.albumObject.auth_photo.push(this.dragPicId);
+          case 'certificate_photo':
+            this.albumObject.certificate_photo.push(this.dragPicId);
             break;
           case 'deposit_photo':
             this.albumObject.deposit_photo.push(this.dragPicId);
-            break;
-          case 'promise':
-            this.albumObject.promise.push(this.dragPicId);
             break;
           case 'other_photo':
             this.albumObject.other_photo.push(this.dragPicId);
@@ -1176,7 +925,7 @@
           }
         });
       },
-
+      //********************************************
 
       selectPeople() {
         this.organizationDialog = true;
@@ -1219,28 +968,21 @@
         this.receiverNames = name.join(',');
         this.type = '';
       },
-      getContractDetail() {
-        this.$http.get(globalConfig.server + 'lease/collect/history/' + this.contract_id).then((res) => {
+      getContractDetail(){
+        this.$http.get(globalConfig.server + 'lease/rent/history/' + this.$route.query.id).then((res) => {
           this.loadingStatus = false;
-          if (res.data.code === '61010') {
-
+          if (res.data.code === '61110') {
             this.contractInfo = res.data.data.content;
             this.customersInfo = res.data.data.content.customers;
 
             this.albumObject.photo = this.getImgId(this.contractInfo.photo);
             this.albumObject.identity_photo = this.getImgId(this.contractInfo.identity_photo);
-            this.albumObject.bank_photo = this.getImgId(this.contractInfo.bank_photo);
             this.albumObject.water_photo = this.getImgId(this.contractInfo.water_photo);
             this.albumObject.electricity_photo = this.getImgId(this.contractInfo.electricity_photo);
             this.albumObject.gas_photo = this.getImgId(this.contractInfo.gas_photo);
-            this.albumObject.property_photo = this.getImgId(this.contractInfo.property_photo);
-            this.albumObject.water_card_photo = this.getImgId(this.contractInfo.water_card_photo);
-            this.albumObject.electricity_card_photo = this.getImgId(this.contractInfo.electricity_card_photo);
-            this.albumObject.gas_card_photo = this.getImgId(this.contractInfo.gas_card_photo);
             this.albumObject.checkin_photo = this.getImgId(this.contractInfo.checkin_photo);
-            this.albumObject.auth_photo = this.getImgId(this.contractInfo.auth_photo);
+            this.albumObject.certificate_photo = this.getImgId(this.contractInfo.certificate_photo);
             this.albumObject.deposit_photo = this.getImgId(this.contractInfo.deposit_photo);
-            this.albumObject.promise = this.getImgId(this.contractInfo.promise);
             this.albumObject.other_photo = this.getImgId(this.contractInfo.other_photo);
             this.albumObject.checkout_photo = this.getImgId(this.contractInfo.checkout_photo);
             this.albumObject.checkout_settle_photo = this.getImgId(this.contractInfo.checkout_settle_photo);
@@ -1251,13 +993,12 @@
               }, 1000)
             }
           }else {
-              this.$notify.warning({
-                title:'警告',
-                message:res.data.msg
-              })
+            this.$notify.warning({
+              title:'警告',
+              message:res.data.msg
+            })
           }
         })
-
       },
       getImgId(data){
         let arr = [];
@@ -1268,7 +1009,7 @@
       },
 
       getReBackDetail(){
-        this.$http.get(globalConfig.server + 'contract/feedback?contract_id=' + this.contract_id + '&category=1').then((res) => {
+        this.$http.get(globalConfig.server + 'contract/feedback?contract_id=' + this.contract_id + '&category=2').then((res) => {
           if (res.data.code === '20000') {
             this.reBackData = res.data.data.data;
           } else {
@@ -1276,13 +1017,13 @@
           }
         })
       },
-      getDictionary() {
+      getDictionary(){
         this.$http.get(globalConfig.server + 'setting/dictionary/all').then((res) => {
           this.all_dic = res.data.data;
         })
       },
 
-      matchDictionary(id) {
+      matchDictionary(id){
         let dictionary_name = null;
         this.all_dic.map((item) => {
           if (item.id == id) {
@@ -1291,8 +1032,7 @@
         });
         return dictionary_name;
       },
-
-      initData() {
+      initData(){
         document.getElementById('mainContent').addEventListener('scroll', () => {
           let scroll_top = document.getElementById('mainContent').scrollTop;
           if (scroll_top >= this.ownerId && scroll_top < this.contractId) {
@@ -1314,7 +1054,7 @@
           document.getElementById('mainContent').style.height = window.innerHeight - 240 + 'px';
         }
       },
-      changeStep(step) {
+      changeStep(step){
         this.steps = step;
         switch (step) {
           case 0:
@@ -1337,7 +1077,7 @@
             break;
         }
       },
-      getText(e) {
+      getText(e){
         console.log(e.target.innerText)
       },
       confirmPress(val){
@@ -1374,7 +1114,7 @@
 
 <style scoped lang="scss">
   i.iconfont.icon-bianji--:hover {
-    photo-shadow: 0 1px 14px 1px #909399;
+    box-shadow: 0 1px 14px 1px #909399;
     border-radius: 6px;
     transition: all .5s;
     &:hover {
@@ -1390,9 +1130,6 @@
     height: 100%;
     overflow: hidden;
     background: #ffffff;
-    .el-badge__content.is-fixed {
-      top: 5px !important;
-    }
     .title {
       color: #409EFF;
       margin: 18px 0 10px 0;
@@ -1414,10 +1151,9 @@
       bottom: 100px;
       right: -550px;
       border: 1px solid rgba(64, 158, 255, .12);
-      /*photo-shadow: 0 2px 4px 0 rgba(64, 158, 255, .12), 0 0 6px 0 rgba(64, 158, 255, .04);*/
-      /*photo-shadow: 0 4px 15px 0 #9093999c, 0 0 18px 0 #909399;*/
-      photo-shadow: 0 0px 9px 0 #909399;
+      /*box-shadow: 0 2px 4px 0 rgba(64,158,255,.12), 0 0 6px 0 rgba(64,158,255,.04);*/
       padding: 0 10px;
+      box-shadow: 0 0px 9px 0 #909399;
       -webkit-transition: all 0.3s linear;
       -moz-transition: all 0.3s linear;
       -ms-transition: all 0.3s linear;
@@ -1428,7 +1164,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        photo-sizing: border-photo;
+        box-sizing: border-box;
         border-bottom: 1px solid #E1E1E1;
       }
 
@@ -1459,7 +1195,26 @@
     .el-button--mini {
       min-width: 80px;
     }
-
+    /*.el-button--primary {*/
+    /*background-color: #6a8dfb;*/
+    /*border-color: #6a8dfb;*/
+    /*box-shadow: 0 2px 8px 0 #6a8dfb;*/
+    /*}*/
+    /*.el-button--danger {*/
+    /*background-color: #fb4694;*/
+    /*border-color: #fb4694;*/
+    /*box-shadow: 0 2px 8px 0 #fb4694;*/
+    /*}*/
+    /*.el-button--warning {*/
+    /*background-color: #fdca41;*/
+    /*border-color: #fdca41;*/
+    /*box-shadow: 0 2px 8px 0 #fdca41;*/
+    /*}*/
+    /*.el-button--success {*/
+    /*background-color: #58d788;*/
+    /*border-color: #58d788;*/
+    /*box-shadow: 0 2px 8px 0 #58d788;*/
+    /*}*/
     @media screen and (min-width: 1280px) {
       .top {
         padding: 0 200px;
@@ -1511,7 +1266,6 @@
           font-size: 12px;
           color: #727479;
         }
-
         .image {
           min-height: 90px;
           img {
@@ -1519,7 +1273,7 @@
             height: 80px;
             border-radius: 4px;
             margin-right: 10px;
-            transition: all .5s;
+
           }
         }
       }
