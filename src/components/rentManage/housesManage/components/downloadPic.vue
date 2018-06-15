@@ -11,7 +11,7 @@
         <div style="margin: 15px 0;"></div>
 
         <el-checkbox-group v-model="downloadArray" @change="handleCheckedCitiesChange">
-          <el-checkbox v-for="img in imgArray" :label="img" :key="img">
+          <el-checkbox v-for="(img,index) in imgArray" :label="img" :key="index">
             <img :src="img" alt="" data-magnify="" :data-src="img">
           </el-checkbox>
         </el-checkbox-group>
@@ -85,7 +85,7 @@
             if(albumData.length>0){
               albumData.forEach((item) => {
                 item.album.album_file.forEach((img)=>{
-                  if(img.info&&img.info.mime&&img.info.mime.indexOf('image')>-1){
+                  if(img.info && img.info.mime && img.info.mime.indexOf('image')>-1){
                     this.imgArray.push(img.uri);
                   }
                 })
