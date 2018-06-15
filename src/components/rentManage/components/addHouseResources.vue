@@ -292,7 +292,7 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="空置结束时间" required="">
-                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期" disabled=""
+                        <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
                                         v-model="params.vacancy_end_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
@@ -300,14 +300,14 @@
                     <el-col :span="6">
                       <el-form-item label="合同开始时间" required="">
                         <el-date-picker value-format="yyyy-MM-dd"
-                                        type="date" placeholder="选择日期" disabled=""
+                                        type="date" placeholder="选择日期"
                                         v-model="params.begin_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="合同结束时间" required="">
                         <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
-                                        v-model="params.end_date" disabled=""></el-date-picker>
+                                        v-model="params.end_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
 
