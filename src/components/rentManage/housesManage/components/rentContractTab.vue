@@ -20,10 +20,10 @@
 
       <el-table-column
         prop="mortgage_price"
-        label="收房押金">
+        label="租房押金">
       </el-table-column>
       <el-table-column
-        label="收房价格">
+        label="租房价格">
         <template slot-scope="scope">
           <el-popover
             ref="popover4"

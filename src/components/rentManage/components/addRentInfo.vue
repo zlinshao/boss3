@@ -180,7 +180,7 @@
                     <el-col :span="6">
                       <el-form-item label="合同结束时间" required="">
                         <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
-                                        disabled="" v-model="params.end_date"></el-date-picker>
+                                        v-model="params.end_date"></el-date-picker>
                       </el-form-item>
                     </el-col>
                   </el-row>
