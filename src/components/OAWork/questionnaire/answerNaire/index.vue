@@ -1,6 +1,6 @@
 <template>
-  <div id="answerExam">
-    <div >
+  <div id="answerNaire">
+    <div>
       <div class="tool">
         <img width="100%" height="142px" src="../../../../assets/images/preview.png"/>
         <div>
@@ -12,7 +12,7 @@
       <div class="main">
         <div v-for="(v, k) in questionData" v-if="k==153 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span class="category_score">(单选题)</span>
+            <span class="category_score">({{questionType[k]}})</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -37,7 +37,7 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="(k==154 || k==155) && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span class="category_score">(<span v-if="k==154">多选题</span><span v-if="k==155">不定向选择题</span>)</span>
+            <span class="category_score">({{questionType[k]}})</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -48,21 +48,14 @@
             </el-row>
             <el-form>
               <el-form-item>
-                <el-checkbox-group v-model="answerData[item.id]" style="width: 96%;margin-left: 50px;margin-top: 10px;"
-                                   v-if="k==154">
-                  <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
-                    <el-checkbox :label="index" style="white-space: initial;line-height:24px;">
-                      {{index}}:{{item.choice[index]}}
-                    </el-checkbox>
-                  </el-col>
-                </el-checkbox-group>
-                <el-checkbox-group v-model="answerData[item.id]" style="width: 96%;margin-left: 50px;margin-top: 10px;"
-                                   v-if="k==155">
-                  <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
-                    <el-checkbox :label="index" style="white-space: initial;line-height:24px;">
-                      {{index}}:{{item.choice[index]}}
-                    </el-checkbox>
-                  </el-col>
+                <el-checkbox-group v-model="answerData[item.id]" style="width: 96%;margin-left: 50px;margin-top: 10px;">
+                  <el-row :gutter="20">
+                    <el-col :span="6" :key="index" v-for="(val,index) in item.choice">
+                      <el-checkbox :label="index" style="white-space: initial;line-height:24px;">
+                        {{index}}:{{item.choice[index]}}
+                      </el-checkbox>
+                    </el-col>
+                  </el-row>
                 </el-checkbox-group>
               </el-form-item>
             </el-form>
@@ -70,7 +63,7 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==156 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span class="category_score">(判断题)</span>
+            <span class="category_score">({{questionType[k]}})</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -92,7 +85,7 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==158 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span class="category_score">(简答题)</span>
+            <span class="category_score">({{questionType[k]}})</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -103,8 +96,10 @@
             </el-row>
             <el-form>
               <el-form-item style="width:96%;margin-left:50px;margin-top: 10px;">
-                <textarea style="width: 97%;border: 1px solid #dcdfe6;border-radius: 5px;padding: 10px;font: 400 13.3333px Arial;color: #787a7e;" v-model="answerData[item.id]"
-                          placeholder="请填写答案"></textarea>
+                <textarea
+                  style="width: 97%;border: 1px solid #dcdfe6;border-radius: 5px;padding: 10px;font: 400 13.3333px Arial;color: #787a7e;"
+                  v-model="answerData[item.id]"
+                  placeholder="请填写答案"></textarea>
               </el-form-item>
             </el-form>
           </div>
@@ -156,7 +151,17 @@
         questionData: {},  //题目的内容
         answerData: {},  //答题的内容
         answers: {},
+        questionType: {},
       };
+    },
+    mounted() {
+      this.dictionary(152, 1).then((res) => {
+        let sub = {};
+        for (let i = 0; i < res.data.length; i++) {
+          sub[res.data[i].id] = res.data[i].dictionary_name;
+        }
+        this.questionType = sub;
+      });
     },
     activated() {
       this.getQueryData();
@@ -284,7 +289,7 @@
 </script>
 
 <style lang="scss" scoped>
-  #answerExam {
+  #answerNaire {
     .ql-editor {
       min-height: initial !important;
       padding: 0px;

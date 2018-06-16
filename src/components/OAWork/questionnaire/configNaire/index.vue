@@ -64,7 +64,7 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <span class="category_score" >(单选题)</span>
+          <span class="category_score">({{questionType[item.category]}})</span>
           <el-row style="width: 78%;">
             <el-col :span="1" style="width: 65px;margin-top: -2px;">
               <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
@@ -75,7 +75,7 @@
             </el-col>
           </el-row>
           <el-form>
-            <el-form-item style="width: 96%;margin-left: 65px;margin-top: 10px;">
+            <el-form-item style="width: 95%;margin-left: 65px;margin-top: 10px;">
               <el-row :gutter="20">
                 <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                   <span>{{index}}：{{val}}</span>
@@ -90,7 +90,7 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <span class="category_score" >(<span v-if="item.category===154">多选题</span><span v-if="item.category===155">不定向选择题</span>)</span>
+          <span class="category_score">({{questionType[item.category]}})</span>
           <el-row style="width: 78%;">
             <el-col :span="1" style="width: 65px;margin-top: -2px;">
               <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
@@ -101,7 +101,7 @@
             </el-col>
           </el-row>
           <el-form>
-            <el-form-item style="width: 96%;margin-left: 65px;margin-top: 10px;">
+            <el-form-item style="width: 95%;margin-left: 65px;margin-top: 10px;">
               <el-row :gutter="20">
                 <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
                   <span>{{index}}：{{val}}</span>
@@ -115,7 +115,7 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <span class="category_score" >(判断题)</span>
+          <span class="category_score">({{questionType[item.category]}})</span>
           <el-row style="width: 78%;">
             <el-col :span="1" style="width: 65px;margin-top: -2px;">
               <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
@@ -126,7 +126,7 @@
             </el-col>
           </el-row>
           <el-form>
-            <el-form-item style="width: 96%;margin-left: 65px;margin-top: 10px;">
+            <el-form-item style="width: 95%;margin-left: 65px;margin-top: 10px;">
               <el-row :gutter="20">
                 <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height: 24px;">
                   <span>{{index}}：{{val}}</span>
@@ -141,7 +141,7 @@
           <span class="edit_question" @click="editQues(item)">编辑</span>
           <span class="move_down" @click="moveDown(item.id)" v-if="testPaperData.questions.length>1">下移</span>
           <span class="move_up" @click="moveUp(item.id)" v-if="testPaperData.questions.length>1">上移</span>
-          <span class="category_score" >(简答题)</span>
+          <span class="category_score">({{questionType[item.category]}})</span>
           <el-row style="width: 78%;">
             <el-col :span="1" style="width: 65px;margin-top: -2px;">
               <el-checkbox :label="item.id" v-model="formbox" @change="handleCheckedChange"></el-checkbox>
@@ -233,6 +233,7 @@
           is_questionnaire: 1,
         },
         examType: [],
+        questionType: {},
       };
     },
     mounted() {
@@ -328,6 +329,11 @@
         //题目类型
         this.dictionary(152).then((res) => {
           this.questionTypeCategory = res.data;
+          let sub = {};
+          for (let i = 0; i < res.data.length; i++) {
+            sub[res.data[i].id] = res.data[i].dictionary_name;
+          }
+          this.questionType = sub;
         });
         //问卷类型
         this.dictionary(613).then((res) => {
@@ -479,9 +485,11 @@
     padding: 0px;
     margin: 0px;
   }
+
   .el-form-item {
     margin-bottom: 15px !important;
   }
+
   #configExam {
     .tool {
       height: 78px;

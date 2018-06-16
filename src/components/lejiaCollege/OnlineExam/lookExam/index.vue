@@ -37,7 +37,7 @@
       <div class="main" v-if="resultData">
         <div v-for="(v, k) in questionData" v-if="k==153 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span class="category_score">(单选题 {{item.score}} 分)</span>
+            <span class="category_score">({{questionType[k]}} {{item.score}} 分)</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -78,7 +78,7 @@
         </div>
         <div v-for="(v, k) in questionData" v-if="(k==154 || k==155) && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span class="category_score">(<span v-if="k==154">多选题</span><span v-if="k==155">不定向选择题</span> {{item.score}} 分)</span>
+            <span class="category_score">({{questionType[k]}} {{item.score}} 分)</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -119,7 +119,7 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==156 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span class="category_score">(判断题 {{item.score}} 分)</span>
+            <span class="category_score">({{questionType[k]}} {{item.score}} 分)</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -161,7 +161,7 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==157 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span class="category_score">(填空题 {{item.score}} 分)</span>
+            <span class="category_score">({{questionType[k]}} {{item.score}} 分)</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -203,7 +203,7 @@
         </div>
         <div v-for="(v,k) in questionData" v-if="k==158 && questionData[k].length>0">
           <div class="questionDiv" v-for="(item, key) in questionData[k]">
-            <span class="category_score">(简答题 {{item.score}} 分)</span>
+            <span class="category_score">({{questionType[k]}} {{item.score}} 分)</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{item.number}}.</p>
@@ -248,7 +248,17 @@
         questionData: {},
         resultData: {},
         answerData: {},
+        questionType: {},
       };
+    },
+    mounted(){
+      this.dictionary(152, 1).then((res) => {
+        let sub = {};
+        for (let i = 0; i < res.data.length; i++) {
+          sub[res.data[i].id] = res.data[i].dictionary_name;
+        }
+        this.questionType = sub;
+      });
     },
     activated() {
       this.getQueryData();
