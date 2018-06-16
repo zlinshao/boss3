@@ -217,7 +217,7 @@
             </el-table-column>
             <el-table-column
               prop="real_name"
-              label="考生姓名">
+              label="调查对象姓名">
               <template slot-scope="scope">
                 <span v-if="scope.row.real_name">{{scope.row.real_name}}</span>
                 <span v-if="!scope.row.real_name">暂无</span>
