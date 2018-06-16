@@ -29,13 +29,9 @@
                      :default-expanded-keys="defaultExpandKeys"
                      :props="defaultProps"
                      :expand-on-click-node="false"
-                     :render-content="renderContent"
             >
+              <!--:render-content="renderContent"-->
               <!--@node-drag-start="handleDragStart"-->
-              <!--@node-drag-enter="handleDragEnter"-->
-              <!--@node-drag-leave="handleDragLeave"-->
-              <!--@node-drag-over="handleDragOver"-->
-              <!--@node-drag-end="handleDragEnd"-->
               <!--@node-drop="handleDrop"-->
               <!--draggable-->
             </el-tree>
@@ -1060,29 +1056,21 @@
     },
     methods: {
       // allowDrop(draggingNode, dropNode) {
-      //   // console.log(draggingNode, dropNode)
+      //   console.log(draggingNode, dropNode)
       // },
       // allowDrag(draggingNode) {
-      //   // console.log(draggingNode)
+      //   console.log(draggingNode)
       // },
       // handleDragStart(node, ev) {
       //   console.log('drag start', node);
       // },
-      // handleDragEnter(draggingNode, dropNode, ev) {
-      //   console.log('tree drag enter: ', dropNode.label);
-      // },
-      // handleDragLeave(draggingNode, dropNode, ev) {
-      //   console.log('tree drag leave: ', dropNode.label);
-      // },
-      // handleDragOver(draggingNode, dropNode, ev) {
-      //   console.log('tree drag over: ', dropNode.label);
+      // handleDrop(draggingNode, dropNode, dropType, ev) {
+      //   console.log('tree drop: ', dropNode, dropType);
       // },
       // handleDragEnd(draggingNode, dropNode, dropType, ev) {
-      //   console.log('tree drag end: ', dropNode && dropNode, dropType);
+      //   console.log('tree drag end: ', dropNode, dropType);
       // },
-      // handleDrop(draggingNode, dropNode, dropType, ev) {
-      //   console.log('tree drop: ', dropNode.label, dropType);
-      // },
+
       highGrade() {
         this.isHigh = !this.isHigh;
       },
