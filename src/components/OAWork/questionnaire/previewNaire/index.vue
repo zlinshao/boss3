@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div id="previewNaire">
+  <div id="previewNaire">
+    <div>
       <div class="tool">
         <img width="100%" height="142px" src="../../../../assets/images/preview.png"/>
         <div>
@@ -10,7 +10,7 @@
       </div>
       <div class="main">
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===153">
-          <span class="category_score" >(单选题)</span>
+          <span class="category_score">({{questionType[item.category]}})</span>
           <el-row>
             <el-col :span="1" style="width: 50px;margin-top: -2px;">
               <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
@@ -21,15 +21,17 @@
           </el-row>
           <el-form>
             <el-form-item style="width: 96%;margin-left: 50px;margin-top: 10px;">
-              <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
-                {{index}}：{{val}}
-              </el-col>
+              <el-row :gutter="20">
+                <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
+                  {{index}}：{{val}}
+                </el-col>
+              </el-row>
             </el-form-item>
           </el-form>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===154 || item.category===155">
-          <span class="category_score" >(<span v-if="item.category===154">多选题</span><span v-if="item.category===155">不定向选择题</span>)</span>
+          <span class="category_score">({{questionType[item.category]}})</span>
           <el-row>
             <el-col :span="1" style="width: 50px;margin-top: -2px;">
               <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
@@ -40,14 +42,16 @@
           </el-row>
           <el-form>
             <el-form-item style="width: 96%;margin-left: 50px;margin-top: 10px;">
-              <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
-                {{index}}：{{val}}
-              </el-col>
+              <el-row :gutter="20">
+                <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
+                  {{index}}：{{val}}
+                </el-col>
+              </el-row>
             </el-form-item>
           </el-form>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===156">
-          <span class="category_score" >(判断题)</span>
+          <span class="category_score">({{questionType[item.category]}})</span>
           <el-row>
             <el-col :span="1" style="width: 50px;margin-top: -2px;">
               <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
@@ -58,15 +62,17 @@
           </el-row>
           <el-form>
             <el-form-item style="width: 96%;margin-left: 50px;margin-top: 10px;">
-              <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
-                {{index}}：{{val}}
-              </el-col>
+              <el-row :gutter="20">
+                <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
+                  {{index}}：{{val}}
+                </el-col>
+              </el-row>
             </el-form-item>
           </el-form>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===158">
-          <span class="category_score" >(简答题)</span>
+          <span class="category_score">({{questionType[item.category]}})</span>
           <el-row>
             <el-col :span="1" style="width: 50px;margin-top: -2px;">
               <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
@@ -94,7 +100,17 @@
       return {
         testPaperId: '',
         testPaperData: {},
+        questionType: {},
       };
+    },
+    mounted() {
+      this.dictionary(152, 1).then((res) => {
+        let sub = {};
+        for (let i = 0; i < res.data.length; i++) {
+          sub[res.data[i].id] = res.data[i].dictionary_name;
+        }
+        this.questionType = sub;
+      });
     },
     activated() {
       this.getQueryData();
@@ -130,15 +146,15 @@
 </script>
 
 <style lang="scss" scoped>
-  .ql-editor {
-    min-height: initial !important;
-    padding: 0px;
-    margin: 0px;
-  }
-  .el-form-item {
-    margin-bottom: 15px !important;
-  }
   #previewNaire {
+    .ql-editor {
+      min-height: initial !important;
+      padding: 0px;
+      margin: 0px;
+    }
+    .el-form-item {
+      margin-bottom: 15px !important;
+    }
     .tool {
       position: relative;
       div {

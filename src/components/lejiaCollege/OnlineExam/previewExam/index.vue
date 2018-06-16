@@ -28,7 +28,7 @@
       </div>
       <div class="main">
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===153">
-          <span class="category_score" >(单选题 {{item.score}} 分)</span>
+          <span class="category_score">({{questionType[item.category]}} {{item.score}} 分)</span>
           <el-row>
             <el-col :span="1" style="width: 50px;margin-top: -2px;">
               <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
@@ -39,15 +39,17 @@
           </el-row>
           <el-form>
             <el-form-item style="width: 96%;margin-left: 50px;margin-top: 10px;">
-              <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
-                {{index}}：{{val}}
-              </el-col>
+              <el-row :gutter="20">
+                <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
+                  {{index}}：{{val}}
+                </el-col>
+              </el-row>
             </el-form-item>
           </el-form>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===154 || item.category===155">
-          <span class="category_score" >(<span v-if="item.category===154">多选题</span><span v-if="item.category===155">不定向选择题</span> {{item.score}} 分)</span>
+          <span class="category_score">({{questionType[item.category]}} {{item.score}} 分)</span>
           <el-row>
             <el-col :span="1" style="width: 50px;margin-top: -2px;">
               <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
@@ -58,14 +60,16 @@
           </el-row>
           <el-form>
             <el-form-item style="width: 96%;margin-left: 50px;margin-top: 10px;">
-              <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
-                {{index}}：{{val}}
-              </el-col>
+              <el-row :gutter="20">
+                <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
+                  {{index}}：{{val}}
+                </el-col>
+              </el-row>
             </el-form-item>
           </el-form>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions" v-if="item.category===156">
-          <span class="category_score" >(判断题 {{item.score}} 分)</span>
+          <span class="category_score">({{questionType[item.category]}} {{item.score}} 分)</span>
           <el-row>
             <el-col :span="1" style="width: 50px;margin-top: -2px;">
               <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
@@ -76,15 +80,17 @@
           </el-row>
           <el-form>
             <el-form-item style="width: 96%;margin-left: 50px;margin-top: 10px;">
-              <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
-                {{index}}：{{val}}
-              </el-col>
+              <el-row :gutter="20">
+                <el-col :span="6" :key="index" v-for="(val,index) in item.choice" style="line-height:24px;">
+                  {{index}}：{{val}}
+                </el-col>
+              </el-row>
             </el-form-item>
           </el-form>
         </div>
         <div class="questionDiv" v-for="(item,key) in testPaperData.questions"
              v-if="item.category===157 || item.category===158">
-          <span class="category_score" >(<span v-if="item.category===157">填空题</span><span v-if="item.category===158">简答题</span> {{item.score}} 分)</span>
+          <span class="category_score">({{questionType[item.category]}} {{item.score}} 分)</span>
           <el-row>
             <el-col :span="1" style="width: 50px;margin-top: -2px;">
               <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;">{{key+1}}.</p>
@@ -96,7 +102,7 @@
           <el-form>
             <el-form-item style="width: 96%;margin-left: 50px;margin-top: 10px;" v-if="item.category===157">
               <el-col v-for="(value, kk) in item.answer" :key="value" :span="12">
-                <el-input size="small" style="width:97%;"  readOnly :placeholder="`请填写第 ${kk+1} 处答案`"></el-input>
+                <el-input size="small" style="width:97%;" readOnly :placeholder="`请填写第 ${kk+1} 处答案`"></el-input>
               </el-col>
             </el-form-item>
             <el-form-item style="width: 95%;margin-left: 50px;margin-top: 10px;" v-if="item.category===158">
@@ -117,7 +123,17 @@
       return {
         testPaperId: '',
         testPaperData: {},
+        questionType: {},
       };
+    },
+    mounted() {
+      this.dictionary(152, 1).then((res) => {
+        let sub = {};
+        for (let i = 0; i < res.data.length; i++) {
+          sub[res.data[i].id] = res.data[i].dictionary_name;
+        }
+        this.questionType = sub;
+      });
     },
     activated() {
       this.getQueryData();
@@ -158,9 +174,11 @@
     padding: 0px;
     margin: 0px;
   }
+
   .el-form-item {
     margin-bottom: 15px;
   }
+
   #previewExam {
     .tool {
       height: 160px;
