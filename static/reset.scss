@@ -653,7 +653,8 @@ ul.el-menu.el-menu--inline {
 #lookNaire .questionDiv .el-progress--text-inside .el-progress-bar {
   padding: 8px 0;
 }
-#contrastDialog{
+
+#contrastDialog {
   .el-dialog__wrapper {
     .el-dialog {
       .el-dialog__body {
@@ -664,4 +665,9 @@ ul.el-menu.el-menu--inline {
       }
     }
   }
+}
+
+#answerNaire .el-checkbox .el-checkbox__label,
+#answerExam .el-checkbox .el-checkbox__label{
+  display: initial;
 }

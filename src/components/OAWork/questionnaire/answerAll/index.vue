@@ -12,7 +12,7 @@
       <div class="main">
         <div v-for="(v,k) in quesNaireData.question_set" v-if="k==158 ">
           <div class="questionDiv" v-for="(item,key) in v" v-if="quesId && (item.id == quesId)">
-            <span class="category_score">(<span v-if="k==158">简答题</span>)</span>
+            <span class="category_score">({{questionType[k]}})</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;color: #101010;">{{item.number}}.</p>
@@ -49,11 +49,18 @@
         quesNaireData: {},
         quesId: '',  //这道题目的id
         category: '',   //这道题目的题型
+        questionType: {},
       };
-
     },
-
-    watch: {},
+    mounted(){
+      this.dictionary(152, 1).then((res) => {
+        let sub = {};
+        for (let i = 0; i < res.data.length; i++) {
+          sub[res.data[i].id] = res.data[i].dictionary_name;
+        }
+        this.questionType = sub;
+      });
+    },
     activated() {
       this.getQueryData();
       this.getStatisticData();
