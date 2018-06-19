@@ -341,26 +341,24 @@
           </div>
         </div>
         <div class="title">房屋影像</div>
-        <!--<el-button @click="downLoad">sss</el-button>-->
         <div class="describe_border">
 
-          <!--<div v-if="detailData.house_goods&&detailData.house_goods.photo">-->
-            <!--<div class="title">-->
-              <!--{{detailData.create_time}}-->
-            <!--</div>-->
-            <!--<div class="describe_border">-->
-              <!--<div v-if="detailData.house_goods&&detailData.house_goods.photo"-->
-                   <!--v-for="item in detailData.house_goods.photo" style="display: inline-block">-->
-                <!--<img v-if="item.info.mime&&item.info.mime.indexOf('image')>-1"-->
-                     <!--:src="item.uri" data-magnify="" :data-src="item.uri" alt="">-->
-                <!--<img v-if="!item.info.mime" :src="item.uri" data-magnify="" :data-src="item.uri">-->
-                <!--<video v-if="item.info.mime&&item.info.mime.indexOf('video')>-1"-->
-                       <!--class="video-js" controls preload="auto" width="200" height="120" data-setup="{}">-->
-                  <!--<source :src="item.uri" type="video/mp4">-->
-                <!--</video>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
+          <div v-if="reportAlbum.length>0">
+            <div class="title">
+              {{detailData.create_time}}
+            </div>
+            <div class="describe_border">
+              <div v-for="item in reportAlbum" style="display: inline-block">
+                <img v-if="item.info.mime&&item.info.mime.indexOf('image')>-1"
+                     :src="item.uri" data-magnify="" :data-src="item.uri" alt="">
+                <img v-if="!item.info.mime" :src="item.uri" data-magnify="" :data-src="item.uri">
+                <video v-if="item.info.mime&&item.info.mime.indexOf('video')>-1"
+                       class="video-js" controls preload="auto" width="200" height="120" data-setup="{}">
+                  <source :src="item.uri" type="video/mp4">
+                </video>
+              </div>
+            </div>
+          </div>
 
           <div v-if="albumData&&albumData.length>0" v-for="albumArray in albumData">
             <div class="title">
@@ -463,11 +461,11 @@
         innerVisible:false,
         detailData: {},
         albumData: [],
+        reportAlbum: [],
         allDictionary: [],
         listInfo: {},
         tableLoading: false,
 
-        imgArray:[],
         oldData : {},
         printScreen: ['款项结清截图', '特殊情况领导截图', '特殊情况截图', '特殊情况同意截图', '领导报备截图', '凭证截图', '合同照片', '截图', '领导同意截图', '房屋影像', '房屋照片', '退租交接单'],
 
@@ -482,8 +480,9 @@
           this.$emit('close');
         } else {
           this.getData();
-          this.detailData = [];
-          this.albumData = {};
+          this.detailData = {};
+          this.albumData = [];
+          this.reportAlbum = [];
         }
       },
       innerVisible(val){
@@ -499,19 +498,7 @@
       }
     },
     methods: {
-      downLoad() {
-        this.imgArray.map( (img) => {
-          fetch(img).then(res => {res.blob().then(blob => {
-            let a = document.createElement('a');
-            let url = window.URL.createObjectURL(blob);
-            let filename = '';
-            a.href = url;
-            a.download = filename;
-            a.click();
-            window.URL.revokeObjectURL(url);
-          })})
-        })
-      },
+
       getData() {
         this.tableLoading = true;
         this.$http.get(globalConfig.server + 'house/album/' + this.houseId).then((res) => {
@@ -519,17 +506,21 @@
           if (res.data.code === '30070') {
             this.detailData = res.data.data.detail;
             this.albumData = res.data.data.album;
-            this.imgArray = [];
+            let photo = this.detailData.photo;
+            let imgArray = [];
+
             if(this.albumData.length>0){
               this.albumData.forEach((item) => {
                 item.album.album_file.forEach((img)=>{
-                  this.imgArray.push(img.uri);
+                  imgArray.push(img.id);
                 })
               })
             }
-            if(this.detailData.house_goods&&this.detailData.house_goods.photo.length>0){
-              this.detailData.house_goods.photo.forEach((img)=>{
-                this.imgArray.push(img.uri);
+            if(photo && Array.isArray(photo) && photo.length>0){
+              photo.forEach((item)=>{
+                if(imgArray.indexOf(item.id)<0){
+                  this.reportAlbum = photo;
+                }
               })
             }
           } else {
