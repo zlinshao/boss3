@@ -1097,7 +1097,7 @@
                 <el-form-item label="合同照片">
                   <div class="image" id="photo" @dragover='allowDrop($event)'>
                     <img v-for="(value,key) in contractInfo.photo" :src="value"
-                         data-magnify="" :data-src="value" @click="enlargeImg">
+                         data-magnify="" :data-src="value" data-align="right">
                   </div>
                 </el-form-item>
                 <el-form-item label="证件照片">
@@ -1106,61 +1106,61 @@
                     <div class="image" id="identity_photo" @dragover='allowDrop($event)'>
                       <span v-if="albumObject.identity_photo.length<1">暂无照片</span>
                       <img v-for="(value,key) in contractInfo.identity_photo"
-                           :src="value" data-magnify="" :data-src="value" @click="enlargeImg">
+                           :src="value" data-magnify="" :data-src="value" data-align="right">
                     </div>
                     <div class="title">水表照片</div>
                     <div class="image" @dragover='allowDrop($event)' id="water_photo">
                       <span v-if="albumObject.water_photo.length<1">暂无照片</span>
                       <img v-for="(value,key) in contractInfo.water_photo" :src="value"
-                           data-magnify="" :data-src="value" @click="enlargeImg">
+                           data-magnify="" :data-src="value" data-align="right">
                     </div>
                     <div class="title">电表照片</div>
                     <div class="image" @dragover='allowDrop($event)' id="electricity_photo">
                       <span v-if="albumObject.electricity_photo.length<1">暂无照片</span>
                       <img v-for="(value,key) in contractInfo.electricity_photo" :src="value"
-                           data-magnify="" :data-src="value" @click="enlargeImg">
+                           data-magnify="" :data-src="value" data-align="right">
                     </div>
                     <div class="title">燃气表照片</div>
                     <div class="image" @dragover='allowDrop($event)' id="gas_photo">
                       <span v-if="albumObject.gas_photo.length<1">暂无照片</span>
                       <img v-for="(value,key) in contractInfo.gas_photo" :src="value"
-                           data-magnify="" :data-src="value" @click="enlargeImg">
+                           data-magnify="" :data-src="value" data-align="right">
                     </div>
                     <div class="title">交接单</div>
                     <div class="image" @dragover='allowDrop($event)' id="checkin_photo">
                       <span v-if="albumObject.checkin_photo.length<1">暂无照片</span>
                       <img v-for="(value,key) in contractInfo.checkin_photo" :src="value"
-                           data-magnify="" :data-src="value" @click="enlargeImg">
+                           data-magnify="" :data-src="value" data-align="right">
                     </div>
                     <div class="title">截图凭证</div>
                     <div class="image" @dragover='allowDrop($event)' id="certificate_photo">
                       <span v-if="albumObject.certificate_photo.length<1">暂无照片</span>
                       <img v-for="(value,key) in contractInfo.certificate_photo" :src="value"
-                           data-magnify="" :data-src="value" @click="enlargeImg">
+                           data-magnify="" :data-src="value" data-align="right">
                     </div>
                     <div class="title">押金收条</div>
                     <div class="image" @dragover='allowDrop($event)' id="deposit_photo">
                       <span v-if="albumObject.deposit_photo.length<1">暂无照片</span>
                       <img v-for="(value,key) in contractInfo.deposit_photo" :src="value"
-                           data-magnify="" :data-src="value" @click="enlargeImg">
+                           data-magnify="" :data-src="value" data-align="right">
                     </div>
                     <div class="title">补充照片</div>
                     <div class="image" @dragover='allowDrop($event)' id="other_photo">
                       <span v-if="albumObject.other_photo.length<1">暂无照片</span>
                       <img v-for="(value,key) in contractInfo.other_photo" :src="value"
-                           data-magnify="" :data-src="value" @click="enlargeImg">
+                           data-magnify="" :data-src="value" data-align="right">
                     </div>
                     <div class="title">退租交接单</div>
                     <div class="image" @dragover='allowDrop($event)' id="checkout_photo">
                       <span v-if="albumObject.checkout_photo.length<1">暂无照片</span>
                       <img v-for="(value,key) in contractInfo.checkout_photo"
-                           :src="value" data-magnify="" :data-src="value" @click="enlargeImg">
+                           :src="value" data-magnify="" :data-src="value" data-align="right">
                     </div>
                     <div class="title">退租结算单</div>
                     <div class="image" @dragover='allowDrop($event)' id="checkout_settle_photo">
                       <span v-if="albumObject.checkout_settle_photo.length<1">暂无照片</span>
                       <img v-for="(value,key) in contractInfo.checkout_settle_photo" :src="value"
-                           data-magnify="" :data-src="value" @click="enlargeImg">
+                           data-magnify="" :data-src="value" data-align="right">
                     </div>
                   </div>
                 </el-form-item>
@@ -1467,18 +1467,6 @@
       }
     },
     methods: {
-      enlargeImg() {
-        setTimeout(() => {
-          if ($('.magnify-modal') && $('.magnify-modal').length) {
-            $('.magnify-modal').css({
-              'left': 'initial',
-              'right': '30px',
-              'top': '150px'
-            });
-          }
-        }, 500);
-
-      },
       //切换模式 精简-普通
       switchSimple() {
         this.simple = !this.simple;
@@ -1503,12 +1491,11 @@
             this.changeStep(this.steps);
           }, 500);
         } else {
-          if ($('.magnify-modal') && $('.magnify-modal').length) {
-            $('.el-icon-close').click();
-          }
           this.initData();
         }
-
+        if ($('.magnify-modal') && $('.magnify-modal').length) {
+          $('.el-icon-close').click();
+        }
       },
       getMemorandum() {
         this.history_content = '';

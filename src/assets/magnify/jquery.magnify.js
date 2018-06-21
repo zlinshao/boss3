@@ -197,7 +197,8 @@ Magnify.prototype = {
       this.getImgGroup(jqEl.not('[data-group]'), imgSrc);
 
     }
-
+    var imgAlign = $(el).attr('data-align');
+    this.imgAlign = imgAlign;
     this.open();
 
     this.loadImg(imgSrc);
@@ -382,10 +383,24 @@ Magnify.prototype = {
     } else {
 
       // Make the modal in windows center
-      modal.css({
-        left: (winWidth - modalWidth) / 2 + scrollLeft + 'px',
-        top: (winHeight - modalHeight) / 2 + scrollTop + 'px'
-      });
+      // modal.css({
+      //   left: (winWidth - modalWidth) / 2 + scrollLeft + 'px',
+      //   top: (winHeight - modalHeight) / 2 + scrollTop + 'px'
+      // });
+
+      if(this.imgAlign=='right'){
+        modal.css({
+          'z-index': 1,
+          left: 'initial',
+          top: '180px',
+          right: '30px',
+        });
+      }else{
+        modal.css({
+          left: (winWidth - modalWidth) / 2 + scrollLeft + 'px',
+          top: (winHeight - modalHeight) / 2 + scrollTop + 'px'
+        });
+      }
 
     }
 
@@ -437,7 +452,7 @@ Magnify.prototype = {
     if(isJump === 'jump'){
        modalCSSObj = {
         width: minWidth + 'px',
-        height: minHeight + 'px', 
+        height: minHeight + 'px',
       };
     }else {
        modalCSSObj = {
@@ -446,6 +461,16 @@ Magnify.prototype = {
         left: (winWidth - minWidth) / 2 + scrollLeft + 'px',
         top: (winHeight - minHeight) / 2 + scrollTop + 'px'
       };
+      if(this.imgAlign=='right'){
+        modalCSSObj = {
+          width: minWidth + 'px',
+          height: minHeight + 'px',
+          left: 'initial',
+          top: '180px',
+          right: '30px',
+          'z-index': 1
+        };
+      }
     }
 
 

@@ -1099,7 +1099,7 @@
               <div class="title">业主信息</div>
             </div>
             <div class="ownerInfo">
-              <el-form size="small" label-width="180px" style="margin-left: 100px;">
+              <el-form size="small" label-width="180px" label-position="right" style="margin-left: 100px;">
                 <div v-for="(item,index) in customersInfo">
                   <div class="title" style="margin-left: 120px" v-if="index>0">附属房东信息（{{index}}）</div>
 
@@ -1130,7 +1130,7 @@
               <div class="title">合同信息</div>
             </div>
             <div class="contractInfo">
-              <el-form size="small" label-width="180px" style="margin-left: 100px;">
+              <el-form size="small" label-width="180px" label-position="right" style="margin-left: 100px;">
                 <el-form-item label="订单性质">
                   <div class="content" v-if="contractInfo.contract_type == 1">公司单</div>
                   <div class="content" v-else="">非公司单</div>
@@ -1302,7 +1302,7 @@
                 </el-form-item>
                 <el-form-item label="合同照片">
                   <div class="image">
-                    <img v-for="(value,key) in contractInfo.photo" :src="value" @click="enlargeImg" data-magnify=""
+                    <img v-for="(value,key) in contractInfo.photo" :src="value" data-magnify="" data-align="right"
                          :data-src="value">
                   </div>
                 </el-form-item>
@@ -1313,98 +1313,98 @@
                         <div class="title">证件照片</div>
                         <div class="image">
                           <span v-if="albumObject.identity_photo.length<1">暂无照片</span>
-                          <img v-for="(value,key) in contractInfo.identity_photo" @click="enlargeImg"
+                          <img v-for="(value,key) in contractInfo.identity_photo" data-align="right"
                                :src="value" data-magnify="" :data-src="value">
                         </div>
                         <div class="title">银行卡照片</div>
                         <div class="image" id="bank_photo" @dragover='allowDrop($event)'>
                           <span v-if="albumObject.bank_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.bank_photo" :src="value"
-                               @click="enlargeImg" data-magnify="" :data-src="value">
+                               data-align="right" data-magnify="" :data-src="value">
                         </div>
                         <div class="title">水表照片</div>
                         <div class="image" @dragover='allowDrop($event)' id="water_photo">
                           <span v-if="albumObject.water_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.water_photo" :src="value"
-                               @click="enlargeImg" data-magnify="" :data-src="value">
+                               data-align="right" data-magnify="" :data-src="value">
                         </div>
                         <div class="title">电表照片</div>
                         <div class="image" @dragover='allowDrop($event)' id="electricity_photo">
                           <span v-if="albumObject.electricity_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.electricity_photo" :src="value"
-                               @click="enlargeImg" data-magnify="" :data-src="value">
+                               data-align="right" data-magnify="" :data-src="value">
                         </div>
                         <div class="title">燃气表照片</div>
                         <div class="image" @dragover='allowDrop($event)' id="gas_photo">
                           <span v-if="albumObject.gas_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.gas_photo" :src="value"
-                               @click="enlargeImg" data-magnify="" :data-src="value">
+                               data-align="right" data-magnify="" :data-src="value">
                         </div>
                         <div class="title">房产证照片</div>
                         <div class="image" @dragover='allowDrop($event)' id="property_photo">
                           <span v-if="albumObject.property_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.property_photo" :src="value"
-                               @click="enlargeImg" data-magnify="" :data-src="value">
+                               data-align="right" data-magnify="" :data-src="value">
                         </div>
                         <div class="title">水卡照片</div>
                         <div class="image" @dragover='allowDrop($event)' id="water_card_photo">
                           <span v-if="albumObject.water_card_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.water_card_photo" :src="value"
-                               @click="enlargeImg" data-magnify="" :data-src="value">
+                               data-align="right" data-magnify="" :data-src="value">
                         </div>
                         <div class="title">电卡照片</div>
                         <div class="image" @dragover='allowDrop($event)' id="electricity_card_photo">
                           <span v-if="albumObject.electricity_card_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.electricity_card_photo" :src="value"
-                               @click="enlargeImg" data-magnify="" :data-src="value">
+                               data-align="right" data-magnify="" :data-src="value">
                         </div>
                         <div class="title">燃气卡照片</div>
                         <div class="image" @dragover='allowDrop($event)' id="gas_card_photo">
                           <span v-if="albumObject.gas_card_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.gas_card_photo" :src="value"
-                               @click="enlargeImg" data-magnify="" :data-src="value">
+                               data-align="right" data-magnify="" :data-src="value">
                         </div>
                         <div class="title">交接单</div>
                         <div class="image" @dragover='allowDrop($event)' id="checkin_photo">
                           <span v-if="albumObject.checkin_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.checkin_photo" :src="value"
-                               @click="enlargeImg" data-magnify="" :data-src="value">
+                               data-align="right" data-magnify="" :data-src="value">
                         </div>
                         <div class="title">委托书</div>
                         <div class="image" @dragover='allowDrop($event)' id="auth_photo">
                           <span v-if="albumObject.auth_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.auth_photo" :src="value"
-                               @click="enlargeImg" data-magnify="" :data-src="value">
+                               data-align="right" data-magnify="" :data-src="value">
                         </div>
                         <div class="title">押金收条</div>
                         <div class="image" @dragover='allowDrop($event)' id="deposit_photo">
                           <span v-if="albumObject.deposit_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.deposit_photo" :src="value"
-                               @click="enlargeImg" data-magnify="" :data-src="value">
+                               data-align="right" data-magnify="" :data-src="value">
                         </div>
                         <div class="title">承诺书照片</div>
                         <div class="image" @dragover='allowDrop($event)' id="promise">
                           <span v-if="albumObject.promise.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.promise" :src="value"
-                               @click="enlargeImg" data-magnify="" :data-src="value">
+                               data-align="right" data-magnify="" :data-src="value">
                         </div>
                         <div class="title">补充照片</div>
                         <div class="image" @dragover='allowDrop($event)' id="other_photo">
                           <span v-if="albumObject.other_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.other_photo" :src="value"
-                               @click="enlargeImg" data-magnify="" :data-src="value">
+                               data-align="right" data-magnify="" :data-src="value">
                         </div>
                         <div class="title">退租交接单</div>
                         <div class="image" @dragover='allowDrop($event)' id="checkout_photo">
                           <span v-if="albumObject.checkout_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.checkout_photo"
-                               @click="enlargeImg" :src="value" data-magnify="" :data-src="value">
+                               data-align="right" :src="value" data-magnify="" :data-src="value">
                         </div>
                         <div class="title">退租结算单</div>
                         <div class="image" @dragover='allowDrop($event)' id="checkout_settle_photo">
                           <span v-if="albumObject.checkout_settle_photo.length<1">暂无照片</span>
                           <img v-for="(value,key) in contractInfo.checkout_settle_photo" :src="value"
-                               @click="enlargeImg" data-magnify="" :data-src="value">
+                               data-align="right" data-magnify="" :data-src="value">
                         </div>
                       </div>
                     </el-form-item>
@@ -1417,72 +1417,46 @@
               <div class="title">回访信息</div>
             </div>
             <div class="returnVisitInfo">
-              <el-form size="small" label-width="180px">
+              <el-form size="small" label-width="180px" label-position="right" style="margin-left: 100px;">
                 <div v-if="repairDetail.length<1">
-                  <el-row>
-                    <el-col :span="8">
-                      <el-form-item label="">
-                        暂无回访信息
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
+                  <el-form-item label="">
+                    暂无回访信息
+                  </el-form-item>
                 </div>
                 <div v-else>
-                  <el-row>
-                    <el-col :span="8">
-                      <el-form-item label="创建时间">
-                        <div class="content">{{repairDetail.create_time}}</div>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item label="合同周期">
-                        <div class="content">{{repairDetail.contract_month}}月{{repairDetail.contract_day}}天
-                        </div>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item label="来源">
-                        <div class="content">{{repairDetail.originate_name}}</div>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                  <el-row v-if="repairDetail.originate === 623">
-                    <el-col :span="8">
-                      <el-form-item label="中介名称">
-                        <div class="content">{{repairDetail.agency}}</div>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item label="中介价格">
-                        <div class="content">{{repairDetail.agency_price}}</div>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item label="中介人">
-                        <div class="content">{{repairDetail.agency_person}}</div>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                  <el-row>
-                    <el-col :span="8" v-if="repairDetail.originate === 623">
-                      <el-form-item label="中介电话">
-                        <div class="content">{{repairDetail.agency_tel}}</div>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item label="月单价">
-                        <div class="content">
+                  <el-form-item label="创建时间">
+                    <div class="content">{{repairDetail.create_time}}</div>
+                  </el-form-item>
+                  <el-form-item label="合同周期">
+                    <div class="content">{{repairDetail.contract_month}}月{{repairDetail.contract_day}}天
+                    </div>
+                  </el-form-item>
+                  <el-form-item label="来源">
+                    <div class="content">{{repairDetail.originate_name}}</div>
+                  </el-form-item>
+                  <el-form-item label="中介名称" v-if="repairDetail.originate === 623">
+                    <div class="content">{{repairDetail.agency}}</div>
+                  </el-form-item>
+                  <el-form-item label="中介价格" v-if="repairDetail.originate === 623">
+                    <div class="content">{{repairDetail.agency_price}}</div>
+                  </el-form-item>
+                  <el-form-item label="中介人" v-if="repairDetail.originate === 623">
+                    <div class="content">{{repairDetail.agency_person}}</div>
+                  </el-form-item>
+                  <el-form-item label="中介电话" v-if="repairDetail.originate === 623">
+                    <div class="content">{{repairDetail.agency_tel}}</div>
+                  </el-form-item>
+                  <el-form-item label="月单价">
+                    <div class="content">
                     <span v-for="index in priceLen" :key="index" v-if="index>0">
                       {{repairDetail.unit_price[0][index-1][0]}}-{{repairDetail.unit_price[0][index-1][1]}},
                       {{repairDetail.unit_price[1][index-1]}}元
                        <span v-show="index<priceLen-1">;</span>
                     </span>
-                        </div>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item label="付款方式">
-                        <div class="content">
+                    </div>
+                  </el-form-item>
+                  <el-form-item label="付款方式">
+                    <div class="content">
                     <span v-for="index in payForLen" :key="index+55" v-if="index>0">
                       {{repairDetail.pay_type[0][index-1][0]}}-{{repairDetail.pay_type[0][index-1][1]}},
                       <span v-for="item in payTypeInfo" :key="item.id"
@@ -1490,10 +1464,8 @@
                         {{item.dictionary_name}}</span>
                       <span v-show="index<payForLen-1">;</span>
                     </span>
-                        </div>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
+                    </div>
+                  </el-form-item>
                   <!-- <el-row>
                     <el-col :span="8">
                       <el-form-item label="已付金额" >
@@ -1511,86 +1483,47 @@
                       </el-form-item>
                     </el-col>
                   </el-row> -->
-                  <el-row>
-                    <el-col :span="8">
-                      <el-form-item label="是否收取其他费用">
-                        <div class="content">{{repairDetail.has_extra}}</div>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item label="保修期">
-                        <div class="content">{{repairDetail.guarantee_month}}月{{repairDetail.guarantee_day}}天</div>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8" v-if="repairDetail.has_extra == '是' ">
-                      <el-form-item label="费用名称">
-                        <div class="content">
+                  <el-form-item label="是否收取其他费用">
+                    <div class="content">{{repairDetail.has_extra}}</div>
+                  </el-form-item>
+                  <el-form-item label="保修期">
+                    <div class="content">{{repairDetail.guarantee_month}}月{{repairDetail.guarantee_day}}天</div>
+                  </el-form-item>
+                  <el-form-item label="费用名称" v-if="repairDetail.has_extra == '是' ">
+                    <div class="content">
                     <span v-for="index in payUseLen" :key="index+999" v-if="index>0">
                      {{repairDetail.pay_use[0][index-1]}},{{repairDetail.pay_use[1][index-1]}}
                        <span v-show="index<payUseLen-1">;</span>
                     </span>
-                        </div>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                  <el-row>
-                    <el-col :span="24">
-                      <el-form-item label="备注条款">
-                        <div class="content">{{repairDetail.remark_clause}}</div>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                  <el-row>
-                    <el-col :span="24">
-                      <el-form-item label="业务员态度">
-                        <el-rate v-model="repairDetail.star" disabled></el-rate>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                  <el-row>
-                    <el-col :span="24">
-                      <el-form-item label="业务员专业度">
-                        <div class="content">{{repairDetail.sale_remark}}</div>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                  <el-row>
-                    <el-col :span="24">
-                      <el-form-item label="备注">
-                        <div class="content">{{repairDetail.remark}}</div>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                  <el-row>
-                    <el-col :span="8">
-                      <el-form-item label="中介费">
-                        <div class="content">{{agency_price_origin}}</div>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item label="现中介费">
-                        <div class="content">{{agency_price_now}}</div>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item label="中介名">
-                        <div class="content">{{agency_name}}</div>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-                  <el-row>
-                    <el-col :span="8">
-                      <el-form-item label="中介人">
-                        <div class="content">{{agency_user_name}}</div>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item label="手机号">
-                        <div class="content">{{agency_phone}}</div>
-                      </el-form-item>
-                    </el-col>
-                  </el-row>
-
+                    </div>
+                  </el-form-item>
+                  <el-form-item label="备注条款">
+                    <div class="content">{{repairDetail.remark_clause}}</div>
+                  </el-form-item>
+                  <el-form-item label="业务员态度">
+                    <el-rate v-model="repairDetail.star" disabled></el-rate>
+                  </el-form-item>
+                  <el-form-item label="业务员专业度">
+                    <div class="content">{{repairDetail.sale_remark}}</div>
+                  </el-form-item>
+                  <el-form-item label="备注">
+                    <div class="content">{{repairDetail.remark}}</div>
+                  </el-form-item>
+                  <el-form-item label="中介费">
+                    <div class="content">{{agency_price_origin}}</div>
+                  </el-form-item>
+                  <el-form-item label="现中介费">
+                    <div class="content">{{agency_price_now}}</div>
+                  </el-form-item>
+                  <el-form-item label="中介名">
+                    <div class="content">{{agency_name}}</div>
+                  </el-form-item>
+                  <el-form-item label="中介人">
+                    <div class="content">{{agency_user_name}}</div>
+                  </el-form-item>
+                  <el-form-item label="手机号">
+                    <div class="content">{{agency_phone}}</div>
+                  </el-form-item>
                 </div>
               </el-form>
             </div>
@@ -1815,18 +1748,6 @@
       }
     },
     methods: {
-      enlargeImg() {
-        setTimeout(() => {
-          if ($('.magnify-modal') && $('.magnify-modal').length) {
-            $('.magnify-modal').css({
-              'left': 'initial',
-              'right': '30px',
-              'top': '150px'
-            });
-          }
-        }, 500);
-
-      },
       switchSimple() {
         this.simple = !this.simple;
         if (this.simple) {
@@ -1849,14 +1770,12 @@
             });
             // this.changeStep(this.steps);
           }, 500)
-
         } else {
-          if ($('.magnify-modal') && $('.magnify-modal').length) {
-            $('.el-icon-close').click();
-          }
           this.initData();
         }
-
+        if ($('.magnify-modal') && $('.magnify-modal').length) {
+          $('.el-icon-close').click();
+        }
       },
       //获取历史备忘记录
       getMemorandum() {
