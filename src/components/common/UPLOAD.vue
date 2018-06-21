@@ -4,7 +4,7 @@
       <div class="editImg" v-if="Object.keys(editImg).length>0">
         <div class="imgItem" style="position: relative" v-for="(val,key) in editImg">
           <div style="width: 120px;  height: 120px; border-radius:6px;background: #f0f0f0">
-            <img :src="val" alt="">
+            <img :src="val" alt="" data-magnify="" :data-src="val">
           </div>
           <div class="remove el-icon-circle-close" @click="deleteImage(key)" v-if="!onlyShow"></div>
         </div>
@@ -167,7 +167,6 @@
 
                   fr.onload = function () {
                     // 文件添加进队列后，处理相关的事情
-                    console.log(file.id)
                     $('#pickfiles' + _this.ID).prepend(`
                     <div class="imgItem" id="${file.id}">
                       <div style=" position: relative;">

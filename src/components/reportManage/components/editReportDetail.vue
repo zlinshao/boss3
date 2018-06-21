@@ -2,7 +2,7 @@
   <div id="reportDetail">
     <el-dialog :close-on-click-modal="false" title="报备详情" :visible.sync="reportVisible" width="70%"
                class="reportDialog">
-      <div style="min-height: 600px" v-loading="fullLoading"
+      <div style="min-height: 550px" v-loading="fullLoading"
            element-loading-text="拼命加载中"
            element-loading-spinner="el-icon-loading"
            element-loading-background="rgba(255, 255, 255, 0)">
@@ -68,9 +68,9 @@
                     </div>
                   </span>
                   <el-dropdown-menu slot="dropdown" trigger="click">
-                    <el-dropdown-item command="报备修改"> 报备修改 </el-dropdown-item>
-                    <el-dropdown-item command="相关信息"> 相关信息 </el-dropdown-item>
                     <el-dropdown-item command="评论信息"> 评论信息 </el-dropdown-item>
+                    <el-dropdown-item command="相关信息"> 相关信息 </el-dropdown-item>
+                    <el-dropdown-item command="报备修改"> 报备修改 </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </div>
@@ -227,12 +227,14 @@
           <div v-if="!fullLoading && JSON.stringify(show_content) === '{}'" style="text-align: center">无相关记录</div>
         </el-form>
       </div>
-
       <div slot="footer" class="dialog-footer" >
         <el-button v-if="!fullLoading && defaultItem === '评论信息'" size="small" type="primary"
                    v-for="(value,key) in operation" :key="key" @click="commentOn(key)">
           {{value}}
         </el-button>
+        <!--<el-button size="small" type="primary" v-if="bulletin_array.indexOf(reportDetailData.bulletin_name)>-1" @click="openModal">&ndash;&gt;-->
+        <!--修 改-->
+        <!--</el-button>-->
       </div>
     </el-dialog>
 
@@ -277,27 +279,36 @@
 
     <ContrastReport :contrastDialog="contrastDialog" :selfReport="selfReport"
                     :aboutReportId="aboutReportId" @close="closeModal"></ContrastReport>
+
+    <RentReport :rentReport="rentReport" :reportDetailData="reportDetailData" :processableId="processable_id" @close="closeModal"></RentReport>
   </div>
 </template>
 
 <script>
   import UpLoad from '../../common/UPLOAD.vue'
   import ContrastReport from './contrastReport'
+  //报备修改
+  import RentReport from '../reportRevise/rentReport'
 
   export default {
     name: "report-detail",
     props: ['module', 'reportId','changeId'],
-    components: {UpLoad, ContrastReport},
+    components: {UpLoad, ContrastReport,RentReport},
     data() {
       return {
         address: globalConfig.server_user,
         fullLoading: false,
         reportVisible: false,
+        rentReport : false,
         show_content: {},
+        reportDetailData : {},
+        processable_id : '',
         operation: {},
         commentList: [],
         paging: 0,
-        printScreen: ['款项结清截图', '特殊情况领导截图', '特殊情况截图', '特殊情况同意截图', '领导报备截图', '凭证截图', '合同照片', '截图', '领导同意截图', '房屋影像', '房屋照片', '退租交接单'],
+        printScreen: ['款项结清截图', '特殊情况领导截图', '特殊情况截图', '特殊情况同意截图', '领导报备截图',
+                      '凭证截图', '合同照片', '截图', '领导同意截图', '房屋影像', '房屋照片', '退租交接单'],
+        bulletin_array :['收房报备','租房报备','续收报备','续租报备','公司转租报备','调房报备','房屋质量报备','已知未收先租报备','未收先祖确定'],
         videoSrc: '',
 
         personal: {},
@@ -317,7 +328,7 @@
         role_name: [],
         showContent: false,
 
-        defaultItem: '报备修改',
+        defaultItem: '评论信息',
         houseId: '', //房屋id
         reportAboutData: [],
         contrastDialog: false,
@@ -365,6 +376,8 @@
           this.fullLoading = false;
           if (res.data.status === 'success' && res.data.data.length !== 0) {
             this.show_content = JSON.parse(res.data.data.process.content.show_content_compress);
+            this.reportDetailData = res.data.data.process.content;
+            this.processable_id = res.data.data.process.processable_id;
             this.operation = res.data.data.operation;
             this.deal = res.data.data.deal;
             let pro = res.data.data.process;
@@ -484,16 +497,12 @@
         this.aboutReportId = item.id;
         this.selfReport = this.show_content;
       },
-      //关闭模态框
-      closeModal() {
-        this.aboutReportId = '';
-        this.contrastDialog = false;
-      },
+
       clearData() {
         this.reportAboutData = [];
         this.editReportData = [];
         this.show_content = {};
-        this.defaultItem = '报备修改';
+        this.defaultItem = '评论信息';
       },
 
       // 获取相关修改记录
@@ -507,6 +516,21 @@
             this.editReportData = [];
           }
         })
+      },
+      //修改报备
+      openModal(){
+        switch (this.reportDetailData.bulletin_name){
+          case '租房报备':
+            this.rentReport = true;
+            break;
+        }
+      },
+
+      //关闭模态框
+      closeModal() {
+        this.aboutReportId = '';
+        this.contrastDialog = false;
+        this.rentReport = false;
       },
     },
   }
@@ -755,7 +779,7 @@
       padding: 0;
     }
     .scroll_bar {
-      max-height: 450px;
+      max-height: 464px;
       padding-right: 10px;
       overflow-x: auto;
       .form_border {

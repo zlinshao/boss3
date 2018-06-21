@@ -866,7 +866,6 @@
       closeAddressModal(val){
         this.houseDialog = false;
         if(val){
-          console.log(val)
           this.houseAddress = val;
           this.params.house_id_rent = val.id;
         }
