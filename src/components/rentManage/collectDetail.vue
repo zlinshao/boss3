@@ -1094,7 +1094,6 @@
                 <!--</el-form-item>-->
               </el-form>
             </div>
-
             <div id="ownerId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
               <div class="title">业主信息</div>
             </div>
@@ -1125,7 +1124,6 @@
                 </div>
               </el-form>
             </div>
-
             <div id="contractId" style="border-bottom: 1px solid #ccc;margin: 50px 0 50px 150px;">
               <div class="title">合同信息</div>
             </div>
@@ -1753,10 +1751,10 @@
         if (this.simple) {
           setTimeout(() => {
             document.getElementById('simple').addEventListener('scroll', () => {
-              this.houseId = document.getElementById('houseId').offsetTop - 100;
+              this.houseId = document.getElementById('houseId').offsetTop - 60;
               this.ownerId = document.getElementById('ownerId').offsetTop - 200;
               this.contractId = document.getElementById('contractId').offsetTop - 200;
-              this.returnId = document.getElementById('returnId').offsetTop - 200;
+              this.returnId = document.getElementById('returnId').offsetTop;
               let scroll_top = document.getElementById('simple').scrollTop;
               if (scroll_top >= this.houseId && scroll_top < this.ownerId) {
                 this.steps = 1;
@@ -2205,10 +2203,10 @@
       initData() {
         if (!this.simple) {
           document.getElementById('mainContent').addEventListener('scroll', () => {
-            this.houseId = document.getElementById('houseId').offsetTop - 150;
+            this.houseId = document.getElementById('houseId').offsetTop;
             this.ownerId = document.getElementById('ownerId').offsetTop - 200;
             this.contractId = document.getElementById('contractId').offsetTop - 200;
-            this.returnId = document.getElementById('returnId').offsetTop - 300;
+            this.returnId = document.getElementById('returnId').offsetTop - 200;
             let scroll_top = document.getElementById('mainContent').scrollTop;
             if (scroll_top >= this.houseId && scroll_top < this.ownerId) {
               this.steps = 1;
@@ -2236,23 +2234,23 @@
         switch (step) {
           case 0:
             if (!this.simple) {
-              document.getElementById('mainContent').scrollTop = this.houseId;
+              document.getElementById('mainContent').scrollTop = 0;
             } else {
-              document.getElementById('simple').scrollTop = this.houseId;
+              document.getElementById('simple').scrollTop = 0;
             }
             break;
           case 1:
             if (!this.simple) {
-              document.getElementById('mainContent').scrollTop = this.ownerId;
+              document.getElementById('mainContent').scrollTop = this.ownerId - 200;
             } else {
-              document.getElementById('simple').scrollTop = this.ownerId;
+              document.getElementById('simple').scrollTop = this.ownerId - 200;
             }
             break;
           case 2:
             if (!this.simple) {
-              document.getElementById('mainContent').scrollTop = this.contractId;
+              document.getElementById('mainContent').scrollTop = this.contractId - 200;
             } else {
-              document.getElementById('simple').scrollTop = this.contractId;
+              document.getElementById('simple').scrollTop = this.contractId - 200;
             }
             break;
           case 3:
@@ -2260,9 +2258,9 @@
             break;
           case 4:
             if (!this.simple) {
-              document.getElementById('mainContent').scrollTop = this.returnId;
+              document.getElementById('mainContent').scrollTop = this.returnId - 200;
             } else {
-              document.getElementById('simple').scrollTop = this.returnId;
+              document.getElementById('simple').scrollTop = this.returnId - 200;
             }
             break;
           case 5:
@@ -2379,7 +2377,7 @@
         position: fixed;
         top: 150px;
         left: 10%;
-        z-index: 1000
+        z-index: 1
       }
     }
     @media screen and (max-width: 1279px) {
@@ -2388,7 +2386,7 @@
         position: fixed;
         top: 150px;
         left: 1%;
-        z-index: 1000
+        z-index: 1
       }
     }
 

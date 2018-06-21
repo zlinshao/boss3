@@ -1473,7 +1473,7 @@
         if (this.simple) {
           setTimeout(() => {
             document.getElementById('simple').addEventListener('scroll', () => {
-              this.houseId = document.getElementById('houseId').offsetTop - 150;
+              this.houseId = document.getElementById('houseId').offsetTop;
               this.ownerId = document.getElementById('ownerId').offsetTop - 200;
               this.contractId = document.getElementById('contractId').offsetTop - 200;
               this.returnId = document.getElementById('returnId').offsetTop - 200;
@@ -1860,7 +1860,7 @@
       initData() {
         if (!this.simple) {
           document.getElementById('mainContent').addEventListener('scroll', () => {
-            this.houseId = document.getElementById('houseId').offsetTop - 100;
+            this.houseId = document.getElementById('houseId').offsetTop;
             this.ownerId = document.getElementById('ownerId').offsetTop - 200;
             this.contractId = document.getElementById('contractId').offsetTop - 200;
             this.returnId = document.getElementById('returnId').offsetTop - 200;
@@ -1890,23 +1890,23 @@
         switch (step) {
           case 0:
             if (!this.simple) {
-              document.getElementById('mainContent').scrollTop = this.houseId;
+              document.getElementById('mainContent').scrollTop = 0;
             } else {
-              document.getElementById('simple').scrollTop = this.houseId;
+              document.getElementById('simple').scrollTop = 0;
             }
             break;
           case 1:
             if (!this.simple) {
-              document.getElementById('mainContent').scrollTop = this.ownerId;
+              document.getElementById('mainContent').scrollTop = this.ownerId - 200;
             } else {
-              document.getElementById('simple').scrollTop = this.ownerId;
+              document.getElementById('simple').scrollTop = this.ownerId - 100;
             }
             break;
           case 2:
             if (!this.simple) {
-              document.getElementById('mainContent').scrollTop = this.contractId;
+              document.getElementById('mainContent').scrollTop = this.contractId - 200;
             } else {
-              document.getElementById('simple').scrollTop = this.contractId;
+              document.getElementById('simple').scrollTop = this.contractId - 100;
             }
             break;
           case 3:
@@ -1914,7 +1914,7 @@
             break;
           case 4:
             if (!this.simple) {
-              document.getElementById('mainContent').scrollTop = this.returnId;
+              document.getElementById('mainContent').scrollTop = this.returnId - 200;
             } else {
               document.getElementById('simple').scrollTop = this.returnId;
             }
@@ -2029,7 +2029,7 @@
         position: fixed;
         top: 150px;
         left: 10%;
-        z-index: 1000
+        z-index: 1
       }
     }
     @media screen and (max-width: 1279px) {
@@ -2038,7 +2038,7 @@
         position: fixed;
         top: 150px;
         left: 1%;
-        z-index: 1000
+        z-index: 1
       }
     }
 
