@@ -595,7 +595,7 @@
             this.params.check_time = data.check_time;
             this.params.check_type = data.check_type;
             this.params.profit = data.extend_field && data.extend_field.profit? data.extend_field.profit : 0;
-            this.params.sublease_fee = data.extend_field && data.extend_field.sublease_fee ? data.extend_field.sublease_fee : 0;
+            this.params.sublease_fee = data.details && data.details.sublease_fee ? data.details.sublease_fee : 0;
             this.params.bank_num = data.bank_num;
             this.params.account_bank = data.account_bank;
             this.params.branch_bank = data.branch_bank;

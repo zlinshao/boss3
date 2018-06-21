@@ -12,12 +12,7 @@
       <div class="main">
         <div v-for="(v,k) in quesNaireData.question_set" v-if="k!=157 && k!=158">
           <div class="questionDiv" v-for="(item,key) in v">
-            <span class="category_score">(
-              <span v-if="k==153">单选题</span>
-              <span v-if="k==154">多选题</span>
-              <span v-if="k==155">不定向选择题</span>
-              <span v-if="k==156">判断题</span>
-              )</span>
+            <span class="category_score">({{questionType[k]}})</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;color: #101010;">
@@ -44,7 +39,7 @@
         </div>
         <div v-for="(v,k) in quesNaireData.question_set" v-if="k==158">
           <div class="questionDiv" v-for="(item,key) in v">
-            <span class="category_score">(<span v-if="k==158">简答题</span>)</span>
+            <span class="category_score">({{questionType[k]}})</span>
             <el-row>
               <el-col :span="1" style="width: 50px;margin-top: -2px;">
                 <p style="margin-left: 10px;width: 30px;display: inline-block;margin-top: 8px;color: #101010;">
@@ -85,7 +80,17 @@
         statisticData: [],
         quesNaireData: {},
         message: '',
+        questionType: {},
       };
+    },
+    mounted(){
+      this.dictionary(152, 1).then((res) => {
+        let sub = {};
+        for (let i = 0; i < res.data.length; i++) {
+          sub[res.data[i].id] = res.data[i].dictionary_name;
+        }
+        this.questionType = sub;
+      });
     },
     activated() {
       this.getQueryData();

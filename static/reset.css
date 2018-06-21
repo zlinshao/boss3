@@ -423,4 +423,8 @@ ul.el-menu.el-menu--inline {
   height: 580px !important;
   max-height: 580px !important; }
 
+#answerNaire .el-checkbox .el-checkbox__label,
+#answerExam .el-checkbox .el-checkbox__label {
+  display: initial; }
+
 /*# sourceMappingURL=reset.css.map */

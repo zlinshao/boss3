@@ -63,7 +63,7 @@
               </el-col>
               <el-col :span="8" v-if="params.check_type == 333 || params.check_type == 582">
                 <el-form-item label="转租费" required>
-                  <el-input v-model="params.sublease_fee"></el-input>
+                  <el-input v-model="params.sublease_fee" disabled></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -645,7 +645,7 @@
             this.params.status_type = data.status;
 
             this.params.profit = data.extend_field && data.extend_field.profit? data.extend_field.profit : 0;
-            this.params.sublease_fee = data.extend_field && data.extend_field.sublease_fee ? data.extend_field.sublease_fee : 0;
+            this.params.sublease_fee = data.details && data.details.sublease_fee ? data.details.sublease_fee : 0;
 
             this.params.bank_num = data.bank_num;
             this.params.account_bank = data.account_bank;
