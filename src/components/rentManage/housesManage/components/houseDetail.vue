@@ -506,7 +506,7 @@
           if (res.data.code === '30070') {
             this.detailData = res.data.data.detail;
             this.albumData = res.data.data.album;
-            let photo = this.detailData.photo;
+            let photo = this.detailData.house_goods.photo;
             let imgArray = [];
 
             if(this.albumData.length>0){
