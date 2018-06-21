@@ -29,8 +29,8 @@
                      :default-expanded-keys="defaultExpandKeys"
                      :props="defaultProps"
                      :expand-on-click-node="false"
+                     :render-content="renderContent"
             >
-              <!--:render-content="renderContent"-->
               <!--@node-drag-start="handleDragStart"-->
               <!--@node-drop="handleDrop"-->
               <!--draggable-->
