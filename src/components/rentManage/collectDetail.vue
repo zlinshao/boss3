@@ -1847,10 +1847,13 @@
                 this.steps = 0;
               }
             });
-            this.changeStep(this.steps);
+            // this.changeStep(this.steps);
           }, 500)
 
         } else {
+          if ($('.magnify-modal') && $('.magnify-modal').length) {
+            $('.el-icon-close').click();
+          }
           this.initData();
         }
 
@@ -2282,25 +2285,26 @@
 
       initData() {
         if (!this.simple) {
-          this.houseId = document.getElementById('houseId').offsetTop - 100;
-          this.ownerId = document.getElementById('ownerId').offsetTop - 200;
-          this.contractId = document.getElementById('contractId').offsetTop - 200;
-          this.returnId = document.getElementById('returnId').offsetTop - 200;
           document.getElementById('mainContent').addEventListener('scroll', () => {
+            this.houseId = document.getElementById('houseId').offsetTop - 150;
+            this.ownerId = document.getElementById('ownerId').offsetTop - 200;
+            this.contractId = document.getElementById('contractId').offsetTop - 200;
+            this.returnId = document.getElementById('returnId').offsetTop - 300;
             let scroll_top = document.getElementById('mainContent').scrollTop;
             if (scroll_top >= this.houseId && scroll_top < this.ownerId) {
               this.steps = 1;
             } else if (scroll_top >= this.ownerId && scroll_top < this.contractId) {
               this.steps = 2;
-            } else if (scroll_top >= this.financeId && scroll_top < this.returnId - 201) {
+            } else if (scroll_top >= this.financeId && scroll_top < this.returnId) {
               // this.steps = 3;
-            } else if (scroll_top >= this.contractId - 201 && scroll_top < this.returnId - 201) {
+            } else if (scroll_top >= this.contractId && scroll_top < this.returnId) {
               this.steps = 4;
-            } else if (scroll_top > this.historyId - 201) {
+            } else if (scroll_top > this.historyId) {
               // this.steps = 5;
             } else if (scroll_top < this.houseId) {
               this.steps = 0;
             }
+            // this.changeStep(this.steps);
           });
         }
         document.getElementById('mainContent').style.height = window.innerHeight - 240 + 'px';
