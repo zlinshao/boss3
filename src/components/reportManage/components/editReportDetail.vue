@@ -232,9 +232,9 @@
                    v-for="(value,key) in operation" :key="key" @click="commentOn(key)">
           {{value}}
         </el-button>
-        <!--<el-button size="small" type="primary" v-if="bulletin_array.indexOf(reportDetailData.bulletin_name)>-1" @click="openModal">-->
-          <!--修 改-->
-        <!--</el-button>-->
+        <!----><el-button size="small" type="primary" v-if="bulletin_array.indexOf(reportDetailData.bulletin_name)>-1" @click="openModal">-->
+        <!--修 改-->
+        <!--</el-button>
       </div>
     </el-dialog>
 
