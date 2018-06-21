@@ -485,7 +485,7 @@
     }
 
     width: 100vw;
-    height: 100%;
+    height: 100vw;
     /*background: linear-gradient(to bottom right,#d6d6f7, #d6ebed 40%, #f4f3f6 65%);*/
     background: url("../assets/images/背景.png") no-repeat;
     background-size: 100% 100%;
