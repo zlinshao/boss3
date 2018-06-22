@@ -258,7 +258,7 @@
             {clickIndex: "sendnotice", headIcon: "el-icons-fa-check-circle-o", label: "发布"}
           ];
           this.contextMenuParam(event);
-        } else{ //if (row.draft == "已发布")
+        } else { //if (row.draft == "已发布")
           this.lists = [
             {clickIndex: "delete", headIcon: "el-icons-fa-trash-o", label: "删除"},
           ];
@@ -271,8 +271,9 @@
         this.form.page = val;
         this.rentStatus = " ";
         this.rentLoading = true;
-        this.$http.get(this.urls + "announcement", {params: this.form}).then(res => {
+        this.$http.get(this.urls + "announcement?brief=1", {params: this.form}).then(res => {
           this.rentLoading = false;
+          this.isHigh = false;
           if (res.data.code === "80010") {
             this.tableData = res.data.data;
             this.nowPage = val;
@@ -287,8 +288,6 @@
                 this.tableData[j].draft = "已发布";
               } else if (res.data.data[j].draft == "1") {
                 this.tableData[j].draft = "草稿";
-                this.tableData[j].read_count = 0;
-                this.tableData[j].read_uncount = 0;
               }
               if (res.data.data[j].unstage == 1) {
                 this.tableData[j].draft = "已撤回";
@@ -296,6 +295,11 @@
               if (!res.data.data[j].real_name) {
                 this.tableData[j].real_name = "未知人员";
               }
+            }
+            if (res.data.data && res.data.data.length < 1) {
+              this.tableData = [];
+              this.total = 0;
+              this.rentStatus = '暂无数据';
             }
           } else {
             this.total = 0;
@@ -333,8 +337,8 @@
                 });
                 this.myData(this.form.page);
               } else {
-                this.$notify.error({
-                  title: "错误",
+                this.$notify.warning({
+                  title: "警告",
                   message: "操作失败"
                 });
               }
@@ -357,38 +361,40 @@
       },
       //发布接口
       letsend() {
-        if (this.rightrow.type == "表彰") {
-          this.rightrow.type = 1;
-        }
-        if (this.rightrow.type == "批评") {
-          this.rightrow.type = 2;
-        }
-        if (this.rightrow.type == "通知") {
-          this.rightrow.type = 3;
-        }
-        this.$http.post(this.urls + "announcement", {
-          title: this.rightrow.title,
-          type: this.rightrow.type,
-          content: this.rightrow.content,
-          id: this.rightrow.id,
-          draft: 0,
-          department_id: this.rightrow.department_id,
-        }).then(res => {
-          if (res.data.code == "99910") {
-            this.$notify({
-              title: "成功",
-              message: "操作成功",
-              type: "success"
-            });
-            this.myData(1);
-          } else {
-            this.$notify.error({
-              title: "错误",
-              message: "操作失败"
-            });
-          }
+        this.$confirm("确定要发布该公告吗？", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning"
+        }).then(() => {
+          this.$http.post(this.urls + "announcement", {
+            brief: 1,
+            title: this.rightrow.title,
+            type: this.rightrow.type,
+            content: this.rightrow.content,
+            id: this.rightrow.id,
+            draft: 0,
+            department_id: this.rightrow.department_id,
+          }).then(res => {
+            if (res.data.code == "99910") {
+              this.$notify.success({
+                title: "成功",
+                message: "操作成功",
+              });
+              this.myData(1);
+            } else {
+              this.$notify.warning({
+                title: "警告",
+                message: "操作失败"
+              });
+            }
+          });
+        }).catch(() => {
+          this.$message.info({
+            type: '提示',
+            message: '已取消发布'
+          });
         });
-      },
+      }
     },
     mounted() {
       this.myData(1);
