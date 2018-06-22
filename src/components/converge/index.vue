@@ -54,6 +54,31 @@
       </el-row>
     </div>
     <div class="convergeMain">
+      <!--部门公告-->
+      <!--<el-row style="display: -webkit-flex;display: flex;">-->
+        <!--<el-col :span="24" class="lejiaNews">-->
+          <!--<div class="title color1 a1">-->
+            <!--公告-->
+          <!--</div>-->
+          <!--<el-row class="elPadding" style="padding: 0;height: initial;">-->
+            <!--<div style="background: #e8eefe;padding: 10px 20px;color: #a2a5ac;">-->
+              <!--<span>全部公告</span>-->
+              <!--<span style="float: right;">查看全部>></span>-->
+            <!--</div>-->
+            <!--<div style="margin: 10px 20px;">-->
+              <!--<span style="border: 1px solid rgb(106, 141, 251, 0.7);-->
+              <!--color: rgb(106, 141, 251);-->
+              <!--padding: 4px 10px;-->
+              <!--line-height: 35px;-->
+              <!--border-radius: 5px;-->
+              <!--box-shadow: 0px 0px 3px 0px rgba(106, 141, 251, 0.74);">通知</span>-->
+              <!--<span>愤怒的可是国家的宏观街道很干净的发货国家的发货给党和国家的发货国家的发货国家的发还记得法国海军</span>-->
+              <!--<span>— 研发部</span>-->
+              <!--<span>2018-06-01 10:00:00</span>-->
+            <!--</div>-->
+          <!--</el-row>-->
+        <!--</el-col>-->
+      <!--</el-row>-->
       <!--乐伽新闻-->
       <el-row style="display: -webkit-flex;display: flex;">
         <el-col :span="16" class="lejiaNews">
@@ -153,7 +178,7 @@
           </div>
         </el-col>
       </el-row>
-
+      <!--客户纪实-->
       <el-row style="display: -webkit-flex;display: flex;">
         <el-col :span="16" style="margin-right: 10px;">
           <el-row style="display: -webkit-flex;display: flex;">
@@ -293,7 +318,7 @@
           </div>
         </el-col>
       </el-row>
-
+      <!--人物志-->
       <el-row :gutter="10" style="display: -webkit-flex;display: flex;">
         <el-col :span="16">
           <!--人物志-->

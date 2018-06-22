@@ -23,7 +23,7 @@
           <el-row>
             <el-col :span="20">
               <el-form-item label="对象">
-                <el-input v-model="form.obj" readonly @click.native="openOrganizationModal"
+                <el-input v-model="form.obj" readonly @focus="openOrganizationModal"
                           placeholder="请点击选择" size="small">
                   <template slot="append">
                     <div style="cursor: pointer;" @click="form.obj=''">清空</div>
@@ -70,7 +70,9 @@
           title: "",
           type: "",
           obj: "",
+          draft: '',
           departmentInfo: [],
+          staffInfo: [],
         },
         forms: [
           {id: 1, name: "表彰"},
@@ -85,6 +87,11 @@
       },
       increaseGoodsDialogVisible(val) {
         if (!val) {
+          this.secondfalg = true;
+          this.form.id = "";
+          this.form.obj = "";
+          this.form.draft = "";
+          this.form.departmentInfo = [];
           this.$emit("close");
           this.$emit("threeflag", this.threeflag);
         } else {
@@ -92,7 +99,9 @@
       },
       rowneedx(val) {
         console.log(val);
-        if (val.content) {
+        this.firstflag = true;
+        if (val.title) {
+          this.form.id = val.id;
           this.form.type = val.type;
           this.form.title = val.title;
           for (let i = 0; i < val.department_id.length; i++) {
@@ -102,47 +111,46 @@
           this.form.type = "";
           this.form.title = "";
           this.form.obj = "";
+          this.firstflag = true;
         }
       }
     },
     methods: {
       //保存
       savex() {
+        this.twoflag = true;
         this.midfunc();
       },
       //发布
       sendx() {
+        this.twoflag = false;
         this.midfunc();
       },
       midfunc() {
-        if (this.form.type == "表彰") {
-          this.form.type = 1;
+        if (this.twoflag) {
+          this.form.draft = "1";
+        } else {
+          this.form.draft = "0";
         }
-        if (this.form.type == "批评") {
-          this.form.type = 2;
-        }
-        if (this.form.type == "通知") {
-          this.form.type = 3;
-        }
-        if (this.form.type == "研发") {
-          this.form.type = 4;
-        }
-        this.$http.post(this.urls + "announcement", {
+        this.$http.post(this.urls + "announcement/brief", {
+          brief: 1,
           title: this.form.title,
           type: this.form.type,
           id: this.form.id,
+          draft: this.form.draft,
           department_id: this.form.departmentInfo,
+          receiver_id: this.form.staffInfo,
         }).then(res => {
           if (res.data.code == "99910") {
-            this.$notify({
+            this.$notify.success({
               title: "成功",
               message: "操作成功",
-              type: "success"
             });
             this.increaseGoodsDialogVisible = false;
             this.$emit("threeflag", this.threeflag);
+            this.firstflag = true;
           } else {
-            this.$notify.error({
+            this.$notify.warning({
               title: "错误",
               message: res.data.msg
             });
@@ -161,9 +169,21 @@
       selectMember(val) {
         this.form.obj = "";
         this.form.departmentInfo = val;
+
         for (let i = 0; i < val.length; i++) {
           this.form.obj += val[i].name + ";";
         }
+        // this.form.departmentInfo = [];
+        // this.form.staffInfo = [];
+        // val.forEach((item) => {
+        //   if (item.hasOwnProperty('avatar')) {
+        //     //选的是人
+        //     this.form.staffInfo.push(item);
+        //   } else {
+        //     //选的部门
+        //     this.form.departmentInfo.push(item);
+        //   }
+        // });
       },
     },
 
