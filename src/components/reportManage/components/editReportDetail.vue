@@ -30,7 +30,7 @@
                 <el-row>
                   <el-col :span="12" v-for="(key,index) in show_content" :key="index"
                           v-if="printScreen.indexOf(index) === -1">
-                    <el-form-item v-if="!Array.isArray(key)" :label="index" class="detailTitle">
+                    <el-form-item v-if="!Array.isArray(key) && key.constructor !== Object" :label="index" class="detailTitle">
                       <div class="special" v-if="index !== '房屋类型'">{{key}}</div>
                       <div class="special" v-if="index === '房屋类型'">{{key.name}}</div>
                     </el-form-item>
@@ -38,10 +38,13 @@
                       <div class="special">
                         <span v-if="index === '定金和收款方式' || index === '补交定金和收款方式'" v-for="item in key">{{item}}</span>
                         <span v-else>
-                        <span style="margin-right: 20px;color: #409EFF">{{item.msg}}</span>
-                        <span>{{item.period}}</span>
-                      </span>
+                          <span style="margin-right: 20px;color: #409EFF">{{item.msg}}</span>
+                          <span>{{item.period}}</span>
+                        </span>
                       </div>
+                    </el-form-item>
+                    <el-form-item v-if="key.constructor === Object" :label="index" class="detailTitle">
+                      <div class="special">{{key.number}}</div>
                     </el-form-item>
                   </el-col>
                   <el-col :span="24" v-else>
@@ -280,7 +283,12 @@
     <ContrastReport :contrastDialog="contrastDialog" :selfReport="selfReport"
                     :aboutReportId="aboutReportId" @close="closeModal"></ContrastReport>
 
-    <RentReport :rentReport="rentReport" :reportDetailData="reportDetailData" :processableId="processable_id" @close="closeModal"></RentReport>
+    <CollectReport :collectReport="collectReport" :reportDetailData="reportDetailData"
+                   :processableId="processable_id" @close="closeModal"></CollectReport>
+    <RentReport :rentReport="rentReport" :reportDetailData="reportDetailData"
+                :processableId="processable_id" @close="closeModal"></RentReport>
+    <HouseReport :houseReport="houseReport" :reportDetailData="reportDetailData"
+                :processableId="processable_id" @close="closeModal"></HouseReport>
   </div>
 </template>
 
@@ -289,17 +297,21 @@
   import ContrastReport from './contrastReport'
   //报备修改
   import RentReport from '../reportRevise/rentReport'
+  import CollectReport from '../reportRevise/collectReport'
+  import HouseReport from '../reportRevise/houseReport'
 
   export default {
     name: "report-detail",
     props: ['module', 'reportId','changeId'],
-    components: {UpLoad, ContrastReport,RentReport},
+    components: {UpLoad, ContrastReport,RentReport,CollectReport,HouseReport},
     data() {
       return {
         address: globalConfig.server_user,
         fullLoading: false,
         reportVisible: false,
         rentReport : false,
+        collectReport : false,
+        houseReport : false,
         show_content: {},
         reportDetailData : {},
         processable_id : '',
@@ -353,7 +365,6 @@
           this.getReportEditInfo();
         }
       },
-
       commentVisible(val) {
         if (!val) {
           this.close_();
@@ -523,6 +534,12 @@
           case '租房报备':
             this.rentReport = true;
             break;
+          case '收房报备':
+            this.collectReport = true;
+            break;
+          case '房屋质量报备':
+            this.houseReport = true;
+            break;
         }
       },
 
@@ -531,6 +548,8 @@
         this.aboutReportId = '';
         this.contrastDialog = false;
         this.rentReport = false;
+        this.collectReport = false;
+        this.houseReport = false;
       },
     },
   }
