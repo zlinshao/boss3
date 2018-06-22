@@ -67,7 +67,6 @@
             this.importDialogVisible = false;
             this.$emit('close', 'success');
           } else {
-            alert(2)
             this.$notify.warning({
               title: '警告',
               message: res.data.msg,
