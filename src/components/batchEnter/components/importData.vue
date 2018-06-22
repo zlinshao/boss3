@@ -19,51 +19,58 @@
 
 <script>
   import UpLoad from '../../common/UPLOAD'
+
   export default {
-    props:['importDialog'],
-    components:{UpLoad},
+    props: ['importDialog', 'activeName'],
+    components: {UpLoad},
     data() {
       return {
-        importDialogVisible:false,
-        params:{
-          doc_id:'',
+        importDialogVisible: false,
+        params: {
+          doc_id: '',
         },
-        isClear : false,
+        isClear: false,
       };
     },
-    watch:{
-      importDialog(val){
+    watch: {
+      importDialog(val) {
         this.importDialogVisible = val
       },
-      importDialogVisible(val){
-        if(!val){
+      importDialogVisible(val) {
+        if (!val) {
           this.$emit('close');
           this.isClear = true;
           this.params.doc_id = '';
 
-        }else {
+        } else {
           this.isClear = false;
         }
       }
     },
-    methods:{
-      getImg(val){
+    methods: {
+      getImg(val) {
         this.params.doc_id = val[1][0];
       },
-      confirmAdd(){
-        this.$http.post(globalConfig.server+'financial/payable/transfer',this.params).then((res)=>{
-          if(res.data.code == '80000'){
+      confirmAdd() {
+        let header;
+        if (this.activeName === 'first') {
+          header = this.$http.post(globalConfig.server + 'financial/receivable/transfer', this.params);
+        } else {
+          header = this.$http.post(globalConfig.server + 'financial/payable/transfer', this.params);
+        }
+        header.then((res) => {
+          if (res.data.code == '80000') {
             this.$notify.success({
-              title:'成功',
-              message:res.data.msg,
+              title: '成功',
+              message: res.data.msg,
             });
             this.importDialogVisible = false;
-            this.$emit('close','success');
-          }else {
+            this.$emit('close', 'success');
+          } else {
             alert(2)
             this.$notify.warning({
-              title:'警告',
-              message:res.data.msg,
+              title: '警告',
+              message: res.data.msg,
             })
           }
         })
@@ -75,6 +82,7 @@
   .el-select .el-input {
     width: 130px;
   }
+
   .input-with-select .el-input-group__prepend {
     background-color: #fff;
   }
