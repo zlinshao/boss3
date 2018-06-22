@@ -453,7 +453,6 @@ export default {
       if (this.rightrow.type == "研发") {
         this.rightrow.type = 4;
       }
-      console.log(this.rightrow)
       this.$http
         .post(this.urls + "announcement", {
           title: this.rightrow.title,
@@ -482,7 +481,7 @@ export default {
         });
     },
     clickTable(row, event, column) {
-      console.log(row, event, column);
+      // console.log(row, event, column);
     }
   },
   mounted() {

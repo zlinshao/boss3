@@ -133,15 +133,19 @@
 
       confirmAdd() {
         let header;
+        let subject_id = this.params.subject_id;
+        if (subject_id && subject_id.length < 1) {
+          subject_id = this.subject_id;
+        }
         if (this.activeName === 'first') {
           header = this.$http.get(globalConfig.server + 'financial/receivable/transfer', {
             responseType: 'arraybuffer',
-            params: {account: this.account, date: this.params.date, subject_id: this.params.subject_id}
+            params: {account: this.account, date: this.params.date, subject_id: subject_id}
           });
         } else {
           header = this.$http.get(globalConfig.server + 'financial/payable/transfer', {
             responseType: 'arraybuffer',
-            params: {account: this.account, date: this.params.date, subject_id: this.params.subject_id}
+            params: {account: this.account, date: this.params.date, subject_id: subject_id}
           });
         }
 
