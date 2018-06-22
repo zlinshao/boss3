@@ -162,6 +162,8 @@
     watch: {
       activeName(val) {
         if (val) {
+          this.params.operator_id = '';
+          this.staff_name = '';
           this.myData();
         }
       }

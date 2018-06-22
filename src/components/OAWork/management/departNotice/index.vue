@@ -5,7 +5,7 @@
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
             <el-form-item>
-              <el-input placeholder="标题/内容关键字" v-model="form.search" @keyup.enter.native="myData(1)" size="mini"
+              <el-input placeholder="公告内容" v-model="form.search" @keyup.enter.native="myData(1)" size="mini"
                         clearable>
                 <el-button slot="append" icon="el-icon-search" @click="myData(1)"></el-button>
                 <!--<el-button slot="append" icon="el-icons-fa-bars"></el-button>-->
@@ -65,7 +65,7 @@
               @row-contextmenu='noticeMenu'
               style="width: 100%">
               <el-table-column
-                label="公告主题">
+                label="类型">
                 <template slot-scope="scope">
                   <span v-if="scope.row.type === 1">表彰</span>
                   <span v-if="scope.row.type === 2">批评</span>
@@ -83,7 +83,7 @@
               </el-table-column>
               <el-table-column
                 width="500px"
-                label="标题">
+                label="公告内容">
                 <template slot-scope="scope">
                   <div v-popover:popover1
                        style="display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
@@ -122,8 +122,6 @@
                   <el-button class="btnStatus" v-if="scope.row.draft === '已发布'" type="primary" size="mini">已发布
                   </el-button>
                   <el-button class="btnStatus" v-if="scope.row.draft === '草稿'" type="info" size="mini">草稿</el-button>
-                  <el-button class="btnStatus" v-if="scope.row.draft === '已撤回'" type="warning" size="mini">已撤回
-                  </el-button>
                 </template>
               </el-table-column>
             </el-table>
@@ -260,15 +258,11 @@
             {clickIndex: "sendnotice", headIcon: "el-icons-fa-check-circle-o", label: "发布"}
           ];
           this.contextMenuParam(event);
-        }
-        else if (row.draft == "已发布") {
+        } else{ //if (row.draft == "已发布")
           this.lists = [
-            {clickIndex: "reset", headIcon: "el-icons-fa-trash-o", label: "撤回"}
+            {clickIndex: "delete", headIcon: "el-icons-fa-trash-o", label: "删除"},
           ];
           this.contextMenuParam(event);
-        }
-        else {
-          this.lists = [];
         }
 
       },
@@ -277,37 +271,37 @@
         this.form.page = val;
         this.rentStatus = " ";
         this.rentLoading = true;
-        this.$http.get(this.urls + "announcement", { params: this.form }).then(res => {
-            this.rentLoading = false;
-            if (res.data.code === "80010") {
-              this.tableData = res.data.data;
-              this.nowPage = val;
-              this.total = res.data.num;
+        this.$http.get(this.urls + "announcement", {params: this.form}).then(res => {
+          this.rentLoading = false;
+          if (res.data.code === "80010") {
+            this.tableData = res.data.data;
+            this.nowPage = val;
+            this.total = res.data.num;
 
-              for (let j = 0; j < res.data.data.length; j++) {
-                this.tableData[j].department_name = "";
-                for (let m = 0; m < res.data.data[j].department_id.length; m++) {
-                  this.tableData[j].department_name += res.data.data[j].department_id[m].name + ";";
-                }
-                if (res.data.data[j].draft == "0") {
-                  this.tableData[j].draft = "已发布";
-                } else if (res.data.data[j].draft == "1") {
-                  this.tableData[j].draft = "草稿";
-                  this.tableData[j].read_count = 0;
-                  this.tableData[j].read_uncount = 0;
-                }
-                if (res.data.data[j].unstage == 1) {
-                  this.tableData[j].draft = "已撤回";
-                }
-                if (!res.data.data[j].real_name) {
-                  this.tableData[j].real_name = "未知人员";
-                }
+            for (let j = 0; j < res.data.data.length; j++) {
+              this.tableData[j].department_name = "";
+              for (let m = 0; m < res.data.data[j].department_id.length; m++) {
+                this.tableData[j].department_name += res.data.data[j].department_id[m].name + ";";
               }
-            } else {
-              this.total = 0;
-              this.rentStatus = '暂无数据';
+              if (res.data.data[j].draft == "0") {
+                this.tableData[j].draft = "已发布";
+              } else if (res.data.data[j].draft == "1") {
+                this.tableData[j].draft = "草稿";
+                this.tableData[j].read_count = 0;
+                this.tableData[j].read_uncount = 0;
+              }
+              if (res.data.data[j].unstage == 1) {
+                this.tableData[j].draft = "已撤回";
+              }
+              if (!res.data.data[j].real_name) {
+                this.tableData[j].real_name = "未知人员";
+              }
             }
-          });
+          } else {
+            this.total = 0;
+            this.rentStatus = '暂无数据';
+          }
+        });
       },
       openModalDialog(index) {
         //右键编辑
@@ -330,22 +324,22 @@
             cancelButtonText: "取消",
             type: "warning"
           }).then(() => {
-              this.$http.put(this.urls + "announcement/" + this.rightrow.id).then(res => {
-                  if (res.data.code == "80010") {
-                    this.$notify({
-                      title: "成功",
-                      message: "操作成功",
-                      type: "success"
-                    });
-                    this.myData(this.form.page);
-                  } else {
-                    this.$notify.error({
-                      title: "错误",
-                      message: "操作失败"
-                    });
-                  }
+            this.$http.put(this.urls + "announcement/" + this.rightrow.id).then(res => {
+              if (res.data.code == "80010") {
+                this.$notify({
+                  title: "成功",
+                  message: "操作成功",
+                  type: "success"
                 });
-            })
+                this.myData(this.form.page);
+              } else {
+                this.$notify.error({
+                  title: "错误",
+                  message: "操作失败"
+                });
+              }
+            });
+          })
 
         }
         //右键发布
@@ -359,30 +353,6 @@
           } else {
             this.letsend();
           }
-        }
-        //撤回
-        if (index == "reset") {
-          this.$confirm("确定要撤回该公告吗？", "提示", {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            type: "warning"
-          }).then(() => {
-            this.$http.put(this.urls + "announcement/unstage/" + this.rightrow.id).then(res => {
-              if (res.data.code == "80010") {
-                this.$notify({
-                  title: "成功",
-                  message: "撤回成功",
-                  type: "success"
-                });
-                this.myData(this.form.page);
-              } else {
-                this.$notify.error({
-                  title: "错误",
-                  message: "操作失败"
-                });
-              }
-            });
-          })
         }
       },
       //发布接口
