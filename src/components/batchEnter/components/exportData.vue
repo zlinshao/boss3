@@ -99,6 +99,7 @@
             date: '',
             subject_id: [],
           };
+          this.subject_id = '';
           this.account = [];
           this.tableData = [];
         } else {
