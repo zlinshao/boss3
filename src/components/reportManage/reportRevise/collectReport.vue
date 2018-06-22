@@ -1,6 +1,6 @@
 <template>
   <div id="addHouseResources">
-    <el-dialog :close-on-click-modal="false" title="租房报备" :visible.sync="rentReportVisible" width="70%">
+    <el-dialog :close-on-click-modal="false" title="收房报备" :visible.sync="collectReportVisible" width="70%">
       <div style="min-height: 550px" class="scroll_bar"
            v-loading="fullLoading"
            element-loading-text="拼命加载中"
@@ -10,7 +10,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="房屋地址" required>
-                <el-input placeholder="请选择房屋地址" v-model="params.address" @focus="selectHouse" readonly=""></el-input>
+                <el-input placeholder="请选择房屋地址" v-model="params.house.name" @focus="selectHouse" readonly=""></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -27,7 +27,7 @@
                   </el-input>
                 </el-col>
                 <el-col :span="12">
-                  <el-input placeholder="天数" v-model="params.day">
+                  <el-input placeholder="天数" v-model="params.day" @blur="computedEndDate">
                     <template slot="append">天</template>
                   </el-input>
                 </el-col>
@@ -36,22 +36,57 @@
           </el-row>
           <el-row>
             <el-col :span="8">
-              <el-form-item label="合同开始时间" required="">
-                <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
-                                v-model="params.begin_date"></el-date-picker>
+              <el-form-item label="空置期开始" required="">
+                <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择空置期开始"
+                                v-model="params.begin_date" @blur="computedEndDate"></el-date-picker>
               </el-form-item>
             </el-col>
+            <el-col :span="8">
+              <el-form-item label="空置期(天)" required="">
+                <el-input placeholder="空置期(天)" v-model="params.vacancy" @blur="computedEndDate">
+                  <template slot="append">天</template>
+                </el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="空置期结束" required="">
+                <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择空置期结束"
+                                v-model="params.end_date_vacant"></el-date-picker>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="空置期规则" required="">
+                <el-select clearable v-model="params.vacancy_way" @change="vacancyWay" placeholder="请选择空置期规则" value="">
+                  <el-option v-for="item in vacancy_way_dic" :label="item.dictionary_name" :value="item.id"
+                             :key="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8" v-if="params.vacancy_way == 442">
+              <el-form-item label="其他" required="">
+                <el-input placeholder="请输入内容" v-model="params.vacancy_other"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="8">
               <el-form-item label="合同结束时间" required="">
                 <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
                                 v-model="params.end_date"></el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col :span="8">
-              <el-form-item label="已收金额" required="">
-                <el-input placeholder="已收金额" v-model="params.money_sum">
-                  <template slot="append">元</template>
-                </el-input>
+            <el-col :span="6">
+              <el-form-item label="第一次打房租" required="">
+                <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
+                                v-model="params.pay_first_date"></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="第二次打房租" required="">
+                <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
+                                v-model="params.pay_second_date"></el-date-picker>
               </el-form-item>
             </el-col>
           </el-row>
@@ -90,17 +125,11 @@
             <div v-for="item in payWayChangeAmount">
               <el-row>
                 <el-col :span="6">
-                  <el-form-item label="押" required="">
-                    <el-select clearable v-model="params.pay_way_bet" :disabled="item>1" placeholder="请选择付款方式" value="">
-                      <el-option v-for="item in 3" :value="item-1"
-                                 :key="item-1"></el-option>
+                  <el-form-item label="付款方式" required="">
+                    <el-select clearable v-model="params.pay_way_arr[item-1]" placeholder="请选择付款方式" value="">
+                      <el-option v-for="item in pay_way_dic" :label="item.dictionary_name" :value="item.id"
+                                 :key="item.id"></el-option>
                     </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="6">
-                  <el-form-item label="付" required="">
-                    <el-input placeholder="请输入内容"
-                              v-model="params.pay_way_arr[item-1]"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="6">
@@ -123,68 +152,15 @@
             </div>
           </div>
 
-          <div class="title">金额+支付方式</div>
-          <div class="form_border">
-            <div v-for="item in moneyTableChangeAmount">
-              <el-row>
-                <el-col :span="6">
-                  <el-form-item label="支付方式" required="">
-                    <el-select clearable v-model="params.money_way[item-1]" placeholder="请选择支付方式" value="">
-                      <el-option v-for="item in purchase_way_dic" :label="item.dictionary_name" :value="item.id"
-                                 :key="item.id"></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="6">
-                  <el-form-item label="金额（元）" required="">
-                    <el-input placeholder="请输入内容" v-model="params.money_sep[item-1]"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="6" v-if="item>1">
-                  <div class="deleteNumber">
-                    <span @click="deleteMoneyTableChange(item-1)">删除</span>
-                  </div>
-                </el-col>
-              </el-row>
-            </div>
-            <div style="text-align: center">
-              <el-button type="text" @click="addMoreMoneyTableChange">
-                <i class="el-icon-circle-plus"></i>添加支付方式变化
-              </el-button>
-            </div>
-          </div>
-
           <el-row>
-            <el-col :span="6">
-              <el-form-item label="是否有其他金额" required="">
-                <el-switch v-model="params.is_other_fee" active-value="1" inactive-value="0"></el-switch>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6" v-if="params.is_other_fee == 1">
-              <el-form-item label="费用名称" required="">
-                <el-input placeholder="请输入费用名称" v-model="params.other_fee_name"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6" v-if="params.is_other_fee == 1">
-              <el-form-item label="费用金额" required="">
-                <el-input placeholder="请输入费用金额" v-model="params.other_fee"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="6">
-              <el-form-item label="押金" required="">
-                <el-input placeholder="请输入押金" v-model="params.deposit"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="让总价金额" required="">
-                <el-input placeholder="请输入让总价金额" v-model="params.discount"></el-input>
-              </el-form-item>
-            </el-col>
             <el-col :span="6">
               <el-form-item label="是否公司单" required="">
-                <el-switch v-model="params.is_corp" active-value="1" inactive-value="0"></el-switch>
+                <el-switch v-model="params.is_corp" disabled active-value="1" inactive-value="0"></el-switch>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="合同编号" required="">
+                <el-input placeholder="请输入合同编号" v-model="params.contract_number"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6">
@@ -215,61 +191,86 @@
               </el-form-item>
             </el-col>
           </el-row>
-
           <el-row>
             <el-col :span="6">
-              <el-form-item label="尾款补齐日期" required="">
-                <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
-                                v-model="params.retainage_date"></el-date-picker>
+              <el-form-item label="押金" required>
+                <el-input placeholder="请输入内容" v-model="params.deposit"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="客户姓名" required="">
-                <el-input placeholder="请输入客户姓名" v-model="params.name"></el-input>
+              <el-form-item label="违约金" required="">
+                <el-input placeholder="请输入内容" v-model="params.penalty"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6" class="unitMessage">
+              <el-form-item label="保修期" required="">
+                <el-col :span="12" style="padding-right: 10px">
+                  <el-input placeholder="月数" v-model="params.warranty">
+                    <template slot="append">月</template>
+                  </el-input>
+                </el-col>
+                <el-col :span="12">
+                  <el-input placeholder="天数" v-model="params.warranty_day">
+                    <template slot="append">天</template>
+                  </el-input>
+                </el-col>
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="联系方式" required="">
-                <el-input placeholder="请输入联系方式" v-model="params.phone"></el-input>
+              <el-form-item label="物业费承担方" required="">
+                <el-select clearable v-model="params.property_payer" placeholder="请选择承担方" value="">
+                  <el-option v-for="item in property_payer_dic" :label="item.dictionary_name" :value="item.id"
+                             :key="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="6">
+              <el-form-item label="账号" required="">
+                <el-input placeholder="请输入内容" v-model="params.account"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item label="合同编号" required="">
-                <el-input placeholder="请输入合同编号" v-model="params.contract_number"></el-input>
+              <el-form-item label="开户行">
+                <el-input placeholder="请输入内容" v-model="params.bank"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="支行" required="">
+                <el-input placeholder="请输入内容" v-model="params.subbranch"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="6">
+              <el-form-item label="开户人" required="">
+                <el-input placeholder="请输入内容" v-model="params.account_name"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="开户人与房东关系" required="">
+                <el-input placeholder="请输入内容" v-model="params.relationship"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="房东姓名" required>
+                <el-input placeholder="请输入内容" v-model="params.name"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="房东联系方式" required>
+                <el-input placeholder="请输入内容" v-model="params.phone"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
 
-          <div class="title">收据编号</div>
-          <div class="form_border">
-            <el-row>
-              <el-col :span="12" v-for="item in receiptAmount" :key="item">
-                <el-col :span="12">
-                  <el-form-item label="收据编号" required="">
-                    <el-input placeholder="请输入内容" v-model="params.receipt[item-1]"></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="12" v-if="item>1">
-                  <div class="deleteNumber">
-                    <span @click="deleteReceiptAmount(item-1)">删除</span>
-                  </div>
-                </el-col>
-              </el-col>
-            </el-row>
-            <div style="text-align: center">
-              <el-button type="text" @click="addReceiptAmount">
-                <i class="el-icon-circle-plus"></i>添加收据编号
-              </el-button>
-            </div>
-          </div>
           <el-form-item label="领导同意截图">
-            <UpLoad :ID="'rent_report_leader'" :isClear="isClear" :editImage="screenshot_leader" @getImg="getImg"></UpLoad>
+            <UpLoad :ID="'collect_report_leader'" :isClear="isClear" :editImage="screenshot_leader" @getImg="getImg"></UpLoad>
           </el-form-item>
-          <el-form-item label="凭证截图" required="">
-            <UpLoad :ID="'rent_report_certificate'" :isClear="isClear" :editImage="screenshot" @getImg="getImg"></UpLoad>
-          </el-form-item>
-          <el-form-item label="合同照片">
-            <UpLoad :ID="'rent_report_contract'" :isClear="isClear" :editImage="photo" @getImg="getImg"></UpLoad>
+
+          <el-form-item label="合同照片" required="">
+            <UpLoad :ID="'collect_report_contract'" :isClear="isClear" :editImage="photo" @getImg="getImg"></UpLoad>
           </el-form-item>
 
           <el-row>
@@ -295,109 +296,107 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="rentReportVisible = false">取 消</el-button>
+        <el-button size="small" @click="collectReportVisible = false">取 消</el-button>
         <el-button size="small" type="primary" @click="confirmSubmit">确 定</el-button>
       </span>
     </el-dialog>
     <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
                   @close='closeModal' @selectMember="selectMember"></Organization>
 
-    <CollectSearch :collectDialog="collectDialog" @close='closeModal'></CollectSearch>
+    <HouseSearch :houseDialog="houseDialog" @close='closeModal'></HouseSearch>
   </div>
 </template>
 
 <script>
   import UpLoad from '../../common/UPLOAD.vue'
   import Organization from '../../common/organization.vue'
-  import CollectSearch from '../../common/collectSearch.vue'
+  import HouseSearch from '../../common/houseSearch.vue'
 
   export default {
-    components: {UpLoad, Organization,CollectSearch},
-    props: ['rentReport','reportDetailData','processableId'],
+    components: {UpLoad, Organization,HouseSearch},
+    props: ['collectReport','reportDetailData','processableId'],
     data() {
       return {
-        rentReportVisible: false,
+        collectReportVisible: false,
         isClear: false,
         organizationDialog: false,
-        collectDialog: false,
-        fullLoading : false,
+        houseDialog: false,
         length: '',
         type: '',
         selectType: '',
-        receiptDate : '',
+        fullLoading : false,
 
         params : {
-          address: '',
           id: '',
           processable_id: '',
           type: 1,
           draft: 0,
-          contract_id: '',              //合同id
-          house_id: '',                 //房屋地址id
-          discount: '',                  //让价总金额
-
-          month: '',                    //租房月数
-          day: '',                      //租房天数
-          sign_date: '',                //签约开始日期
-          end_date: '',                 //签约结束日期
-          begin_date: '',               //合同开始日期
-
-          price_arr: [''],              //月单价
-          period_price_arr: [''],       //月单价周期
-
-          pay_way_bet: '',              //付款方式 押
-
-          pay_way_arr: [''],            //付款方式 付
-          period_pay_arr: [''],         //付款方式周期
-
-          money_sum: '',                //总金额
-          money_sep: [''],              //分金额
-          money_way: [''],              //分金额 方式
-
-          is_other_fee: '0',
-          other_fee: '',
-          other_fee_name: '',
-
-          deposit: '',                  //押金
-          is_agency: '1',                //客户来源    0个人1中介
+          house: {
+            id: '',
+            name: '',
+          },
+          sign_date: '',                //签约日期
+          month: '',                    //收房月数
+          day: '',                      //收房天数
+          is_agency: '0',                //是否中介 0不是 1是
           agency_name: '',              //中介名
           agency_price: '',             //中介费
           agency_user_name: '',         //中介人
           agency_phone: '',             //中介手机号
+          begin_date: '',               //空置期开始日期
+          end_date: '',                 //合同结束日期
+          vacancy: '',                  //空置期
+          end_date_vacant: '',          //空置期结束日期
+          pay_first_date: '',           //第一次付款时间
+          pay_second_date: '',          //第二次付款时间
 
+          price_arr: [''],              //月单价
+          period_price_arr: [''],       //月单价周期
+          pay_way_arr: [''],            //付款方式
+          period_pay_arr: [''],         //付款方式周期
+
+          vacancy_way: '',              //空置期安排方式
+          vacancy_other: '',            //空置期安排方式 随便填
+          warranty: '',                 //保修期月
+          warranty_day: '',             //保修期天
           is_corp: '1',                   //是否公司单  0个人1公司
-          contract_number: 'LJZF',      //合同编号
-
-          receipt: [],                //收据编号
+          deposit: '',                  //押金
           property_payer: '',           //物业费付款人
-          retainage_date: '',           //尾款补齐时间
-          name: '',                     //客户姓名
+          name: '',                     //房东姓名
           phone: '',                    //电话号码
+          purchase_way: 509,            //支付方式
+          bank: '',                     //银行名称
+          subbranch: '',                //支行名称
+          account_name: '',             //帐户名称
+          account: '',                  //帐号
+          relationship: '',             //房东与收款人关系
+          penalty: '',                  //违约金
+          contract_number: 'LJSF',      //合同编号
           screenshot_leader: [],        //领导截图 数组
-          screenshot: [],               //领导截图 数组
           photo: [],                    //合同照片 数组
           remark: '',                   //备注
           staff_id: '',                 //开单人id
           department_id: '',            //部门id
-          staff_name: '',               //开单人name
-          department_name: '',          //部门name
+          staff_name: '',                 //开单人name
+          department_name: '',            //部门name
         },
         screenshot_leader : {},
-        screenshot : {},
         photo : {},
 
         priceChangeAmount: 1,
         payWayChangeAmount: 1,
-        moneyTableChangeAmount: 1,
-        receiptAmount:1,
+
         purchase_way_dic: [],
+        vacancy_way_dic: [],
+        pay_way_dic: [],
+        property_payer_dic: [],
       };
     },
     watch: {
-      rentReport(val){
-        this.rentReportVisible = val
+      collectReport(val){
+        this.collectReportVisible = val
       },
-      rentReportVisible(val){
+      collectReportVisible(val){
         if (!val) {
           this.$emit('close');
           this.clearData();
@@ -405,8 +404,7 @@
           this.isClear = true;
           setTimeout( () => {
             this.preloadData();
-          },50);
-
+          },100);
         }
       },
     },
@@ -418,60 +416,71 @@
         this.dictionary(508, 1).then((res) => {
           this.purchase_way_dic = res.data;
         });
+        //安置方式
+        this.dictionary(437, 1).then((res) => {
+          this.vacancy_way_dic = res.data;
+        });
+        this.dictionary(443, 1).then((res) => {
+          this.pay_way_dic = res.data;
+        });
+        this.dictionary(449, 1).then((res) => {
+          this.property_payer_dic = res.data;
+        });
+      },
+      //安置方式
+      vacancyWay(){
+        this.params.vacancy_other = '';
       },
       //预填报备数据
       preloadData(){
         let data = this.reportDetailData;
         console.log(data);
+        this.params.purchase_way = 509;
+
         this.params.processable_id = this.processableId;
         this.params.id = data.id;
-        this.params.contract_id = data.contract_id;
-        this.params.house_id = data.house_id;
+        this.params.house = data.house;
 
-        this.params.address = data.address;
         this.params.month = data.month;
         this.params.day = data.day === '0' ? '' : data.day;
-        this.params.contract_number = data.contract_number === '' ? 'LJZF' : data.contract_number;
+        this.params.contract_number = data.contract_number === '' ? 'LJSF' : data.contract_number;
         this.params.sign_date = data.sign_date;
+
+        //
         this.params.begin_date = data.begin_date;
         this.params.end_date = data.end_date;
+        this.params.vacancy = data.vacancy;
+        this.params.end_date_vacant = data.end_date_vacant;
+
+        this.params.pay_first_date = data.pay_first_date;
+        this.params.pay_second_date = data.pay_second_date;
+
+        this.params.deposit = data.deposit;
+        this.params.vacancy_other = data.vacancy_other;
+        this.params.warranty = data.warranty;
+        this.params.warranty_day = data.warranty_day === '0' ? '' : data.warranty_day;
+        this.params.name = data.name;
+        this.params.phone = data.phone;
+        this.params.bank = data.bank;
+        this.params.subbranch = data.subbranch;
+        this.params.account_name = data.account_name;
+        this.params.account = data.account;
+        this.params.relationship = data.relationship;
+        this.params.penalty = data.penalty;
+        this.params.remark = data.remark;
+
+        if(data.vacancy_way && data.vacancy_way.constructor === Object){
+          this.params.vacancy_way = data.vacancy_way.id;
+        }
+
+        if(data.property_payer && data.property_payer.constructor === Object){
+          this.params.property_payer = data.property_payer.id;
+        }
 
         this.params.price_arr = data.price_arr;
         this.params.period_price_arr = data.period_price_arr;
-
-        this.params.pay_way_bet = data.pay_way_bet;
         this.params.pay_way_arr = data.pay_way_arr;
         this.params.period_pay_arr = data.period_pay_arr;
-
-        this.params.money_sum = data.money_sum;
-        this.params.money_sep = data.money_sep;
-        this.params.money_way = data.money_way;
-
-        this.params.deposit = data.deposit;
-        this.params.discount = data.discount;
-
-        this.params.other_fee_name = data.other_fee_name;
-        this.params.other_fee = data.other_fee;
-
-        this.params.is_agency = String(data.is_agency.id);   //是否中介
-        this.params.agency_name = data.agency_name;
-        this.params.agency_price = data.agency_price;
-        this.params.agency_user_name = data.agency_user_name;
-        this.params.agency_phone = data.agency_phone;
-
-        this.params.is_corp = String(data.is_corp.id);
-        this.params.property = data.property;
-
-        this.params.is_other_fee = String(data.is_other_fee);
-        this.params.property_payer = data.property_payer;
-
-
-        this.params.retainage_date = data.retainage_date;
-        this.params.name = data.name;
-        this.params.phone = data.phone;
-
-        this.screenshot = this.getImgObject(data.screenshot);
-        this.params.screenshot = this.getImgIdArray(data.screenshot);
 
         this.photo = this.getImgObject(data.photo);
         this.params.photo = this.getImgIdArray(data.photo);
@@ -479,22 +488,10 @@
         this.screenshot_leader = this.getImgObject(data.screenshot_leader);
         this.params.screenshot_leader = this.getImgIdArray(data.screenshot_leader);
 
-        this.params.remark = data.remark;
-
         this.params.staff_id = data.staff_id;
         this.params.staff_name = data.staff_name;
         this.params.department_id = data.department_id;
         this.params.department_name = data.department_name;
-
-        if(data.receipt && typeof(data.receipt) === 'string'){
-          this.params.receipt.push(data.receipt)
-        }else if(data.receipt && data.receipt.length>0){
-          data.receipt.forEach((item)=>{
-          this.params.receipt.push(item.number);
-        })
-        }else {
-          this.receiptNum();
-        }
       },
       //详情照片展示
       getImgObject(data){
@@ -524,7 +521,7 @@
 
       //打开房屋选择模态框
       selectHouse(){
-        this.collectDialog = true;
+        this.houseDialog = true;
       },
       //调出选人组件
       openOrganizeModal(val){
@@ -566,26 +563,10 @@
         this.params.period_pay_arr.splice(item, 1);
         this.payWayChangeAmount--;
       },
-      //jine bianhua
-      addMoreMoneyTableChange(){
-        this.moneyTableChangeAmount++;
-      },
-      deleteMoneyTableChange(item){
-        this.params.money_way.splice(item, 1);
-        this.params.money_sep.splice(item, 1);
-        this.moneyTableChangeAmount--;
-      },
-
-      addReceiptAmount(){
-        this.receiptAmount++;
-      },
-      deleteReceiptAmount(item){
-        this.params.receipt.splice(item, 1);
-        this.receiptAmount--;
-      },
 
       //改变收房月数
       changeMonth(){
+        this.computedEndDate();
         this.params.period_price_arr[0] = this.params.month;
         this.params.period_pay_arr[0] = this.params.month;
 
@@ -595,42 +576,41 @@
         this.payWayChangeAmount = 1;
       },
 
+      //计算空置期结束时间
+      computedEndDate(){
+        this.params.day = this.params.day?this.params.day:0;
+        this.$http.get(globalConfig.server+'lease/helper/collectdates?begin_date='+this.params.begin_date+'&month='
+          +this.params.month +'&day='+this.params.day+'&vacancy='+this.params.vacancy ).then((res) =>{
+          if(res.data.code === '69910'){
+            this.params.vacancy_end_date = res.data.data.vac_end_date;
+            this.params.end_date = res.data.data.end_date;
+          }
+        })
+      },
 
       //关闭模态框
       closeModal(val){
-        this.collectDialog = false;
+        this.houseDialog = false;
         this.organizationDialog = false;
         if(val){
-          this.params.address = val.address;
-          this.params.contract_id = val.contract_id;
-          this.params.house_id = val.house_id;
+          this.params.house.id = val.house_id;
+          this.params.house.name = val.house_name;
+          this.params.is_agency = val.is_agency;
         }
       },
 
       getImg(val){
         this.isUpPic = val[2];
-        if (val[0] === 'rent_report_leader') {
+        if (val[0] === 'collect_report_leader') {
           this.params.screenshot_leader = val[1];
-        } else if (val[0] === 'rent_report_certificate') {
-          this.params.screenshot = val[1];
-        } else if (val[0] === 'rent_report_contract') {
+        } else if (val[0] === 'collect_report_contract') {
           this.params.photo = val[1];
         }
       },
-      // 收据编号默认城市
-      receiptNum() {
-        this.params.receipt = [];
-        this.$http.get(globalConfig.server + 'setting/others/ip_address').then((res) => {
-          if (res.data.code === '1000120') {
-            this.receiptDate = res.data.data.py + res.data.data.year;
-            this.params.receipt.push(this.receiptDate);
-          }
-        });
-      },
+
       confirmSubmit(){
-        this.params.contract_number = this.params.contract_number === 'LJZF' ? '' : this.params.contract_number;
-        this.$http.post(globalConfig.server+'bulletin/rent',this.params).then((res)=>{
-          if(res.data.code === '50230'){
+        this.$http.post(globalConfig.server+'bulletin/collect',this.params).then((res)=>{
+          if(res.data.code === '50130'){
 
           }else {
             this.$notify.warning({
@@ -642,75 +622,69 @@
       },
       clearData(){
         this.isClear = false;
-        this.params={
-          address: '',
+        this.params = {
           id: '',
           processable_id: '',
           type: 1,
           draft: 0,
-          contract_id: '',              //合同id
-          house_id: '',                 //房屋地址id
-          discount: '',                  //让价总金额
-
-          month: '',                    //租房月数
-          day: '',                      //租房天数
-          sign_date: '',                //签约开始日期
-          end_date: '',                 //签约结束日期
-          begin_date: '',               //合同开始日期
-
-          price_arr: [''],              //月单价
-          period_price_arr: [''],       //月单价周期
-
-          pay_way_bet: '',              //付款方式 押
-
-          pay_way_arr: [''],            //付款方式 付
-          period_pay_arr: [''],         //付款方式周期
-
-          money_sum: '',                //总金额
-          money_sep: [''],              //分金额
-          money_way: [''],              //分金额 方式
-
-          is_other_fee: '0',
-          other_fee: '',
-          other_fee_name: '',
-
-          deposit: '',                  //押金
-          is_agency: '1',                //客户来源    0个人1中介
+          house: {
+            id: '',
+            name: '',
+          },
+          sign_date: '',                //签约日期
+          month: '',                    //收房月数
+          day: '',                      //收房天数
+          is_agency: '0',                //是否中介 0不是 1是
           agency_name: '',              //中介名
           agency_price: '',             //中介费
           agency_user_name: '',         //中介人
           agency_phone: '',             //中介手机号
+          begin_date: '',               //空置期开始日期
+          end_date: '',                 //合同结束日期
+          vacancy: '',                  //空置期
+          end_date_vacant: '',          //空置期结束日期
+          pay_first_date: '',           //第一次付款时间
+          pay_second_date: '',          //第二次付款时间
 
+          price_arr: [''],              //月单价
+          period_price_arr: [''],       //月单价周期
+          pay_way_arr: [''],            //付款方式
+          period_pay_arr: [''],         //付款方式周期
+
+          vacancy_way: '',              //空置期安排方式
+          vacancy_other: '',            //空置期安排方式 随便填
+          warranty: '',                 //保修期月
+          warranty_day: '',             //保修期天
           is_corp: '1',                   //是否公司单  0个人1公司
-          contract_number: 'LJZF',      //合同编号
-
-          receipt: [],                //收据编号
+          deposit: '',                  //押金
           property_payer: '',           //物业费付款人
-          retainage_date: '',           //尾款补齐时间
-          name: '',                     //客户姓名
+          name: '',                     //房东姓名
           phone: '',                    //电话号码
+          purchase_way: 509,            //支付方式
+          bank: '',                     //银行名称
+          subbranch: '',                //支行名称
+          account_name: '',             //帐户名称
+          account: '',                  //帐号
+          relationship: '',             //房东与收款人关系
+          penalty: '',                  //违约金
+          contract_number: 'LJSF',      //合同编号
           screenshot_leader: [],        //领导截图 数组
-          screenshot: [],               //领导截图 数组
           photo: [],                    //合同照片 数组
           remark: '',                   //备注
           staff_id: '',                 //开单人id
           department_id: '',            //部门id
-          staff_name: '',               //开单人name
-          department_name: '',          //部门name
+          staff_name: '',                 //开单人name
+          department_name: '',            //部门name
         };
         this.screenshot_leader = {};
-        this.screenshot = {};
         this.photo = {};
 
         this.priceChangeAmount = 1;
         this.payWayChangeAmount = 1;
-        this.moneyTableChangeAmount = 1;
-        this.receiptAmount = 1;
 
         this.length = '';
         this.type = '';
         this.selectType = '';
-        this.receiptDate = '';
       },
     },
   };

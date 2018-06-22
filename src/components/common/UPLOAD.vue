@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="pictureContainer">
+    <div :id="'pictureContainer'+ID" class="pictureContainer">
       <div class="editImg" v-if="Object.keys(editImg).length>0">
         <div class="imgItem" style="position: relative" v-for="(val,key) in editImg">
           <div style="width: 120px;  height: 120px; border-radius:6px;background: #f0f0f0">
@@ -69,7 +69,7 @@
       editImage: {
         deep: true,
         handler(val, old) {
-          this.editImg = this.editImage;
+          this.editImg = val;
           this.imgId = [];
           for (let key in val) {
             this.imgId.push(key)
@@ -283,7 +283,7 @@
     }
   }
 
-  #pictureContainer {
+  .pictureContainer {
     display: flex;
     display: -webkit-flex; /* Safari */
     flex-wrap: wrap;
