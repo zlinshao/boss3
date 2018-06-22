@@ -41,7 +41,7 @@
       </span>
     </el-dialog>
     <Organization :organizationDialog="organizationDialog" :type="organizaType" @close="closeOrganization"
-                  @selectMember="coloseaa"></Organization>
+                  @selectMember="selectMember"></Organization>
   </div>
 </template>
 
@@ -73,9 +73,9 @@
           departmentInfo: [],
         },
         forms: [
-          {id: "1", name: "表彰"},
-          {id: "2", name: "批评"},
-          {id: "3", name: "通知"}
+          {id: 1, name: "表彰"},
+          {id: 2, name: "批评"},
+          {id: 3, name: "通知"}
         ],
       };
     },
@@ -91,6 +91,7 @@
         }
       },
       rowneedx(val) {
+        console.log(val);
         if (val.content) {
           this.form.type = val.type;
           this.form.title = val.title;
@@ -157,7 +158,7 @@
       closeOrganization() {
         this.organizationDialog = false;
       },
-      coloseaa(val) {
+      selectMember(val) {
         this.form.obj = "";
         this.form.departmentInfo = val;
         for (let i = 0; i < val.length; i++) {
