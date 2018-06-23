@@ -235,9 +235,10 @@
                    v-for="(value,key) in operation" :key="key" @click="commentOn(key)">
           {{value}}
         </el-button>
-        <!--<el-button size="small" type="primary" v-if="bulletin_array.indexOf(reportDetailData.bulletin_name)>-1" @click="openModal">-->
-        <!--修 改-->
-        <!--</el-button>-->
+        <el-button size="small" type="primary" @click="openModal"
+                   v-if="approvedStatus && routerLinks.indexOf(this.process.processable_type) > -1">
+        修 改
+        </el-button>
       </div>
     </el-dialog>
 
@@ -283,12 +284,12 @@
     <ContrastReport :contrastDialog="contrastDialog" :selfReport="selfReport"
                     :aboutReportId="aboutReportId" @close="closeModal"></ContrastReport>
 
-    <CollectReport :collectReport="collectReport" :reportDetailData="reportDetailData"
+    <CollectReport :collectReport="collectReport" :reportDetailData="reportDetailData" :reportId="reportId"
                    :processableId="processable_id" @close="closeModal"></CollectReport>
-    <RentReport :rentReport="rentReport" :reportDetailData="reportDetailData"
+    <RentReport :rentReport="rentReport" :reportDetailData="reportDetailData" :reportId="reportId"
                 :processableId="processable_id" @close="closeModal"></RentReport>
-    <HouseReport :houseReport="houseReport" :reportDetailData="reportDetailData"
-                :processableId="processable_id" @close="closeModal"></HouseReport>
+    <HouseReport :houseReport="houseReport" :processableId="processable_id"
+                 :reportId="reportId" @close="closeModal"></HouseReport>
   </div>
 </template>
 
@@ -320,9 +321,12 @@
         paging: 0,
         printScreen: ['款项结清截图', '特殊情况领导截图', '特殊情况截图', '特殊情况同意截图', '领导报备截图',
                       '凭证截图', '合同照片', '截图', '领导同意截图', '房屋影像', '房屋照片', '退租交接单'],
-        bulletin_array :['收房报备','租房报备','续收报备','续租报备','公司转租报备','调房报备','房屋质量报备','已知未收先租报备','未收先祖确定'],
-        videoSrc: '',
 
+        routerLinks: ['bulletin_quality', 'bulletin_collect_basic', 'bulletin_collect_continued', 'bulletin_rent_basic',
+          'bulletin_rent_continued', 'bulletin_rent_trans', 'bulletin_rent_RWC', 'bulletin_RWC_confirm', 'bulletin_change',],
+        approvedStatus : false,
+        process : {},
+        videoSrc: '',
         personal: {},
         place: {},
         placeStatus: ['published', 'rejected', 'cancelled'],
@@ -349,6 +353,7 @@
         selfReport: {},
         aboutReportId: '',
         editReportData : [],
+
       }
     },
 
@@ -361,7 +366,7 @@
           this.$emit('close');
           this.clearData();
         } else {
-          this.process();
+          this.getProcess();
           this.getReportEditInfo();
         }
       },
@@ -381,7 +386,7 @@
           this.showContent = true;
         }
       },
-      process() {
+      getProcess() {
         this.fullLoading = true;
         this.$http.get(this.address + 'process/' + this.reportId).then((res) => {
           this.fullLoading = false;
@@ -391,12 +396,22 @@
             this.processable_id = res.data.data.process.processable_id;
             this.operation = res.data.data.operation;
             this.deal = res.data.data.deal;
+            this.process = res.data.data.process;
+
             let pro = res.data.data.process;
             this.houseId = res.data.data.process.house_id;
             this.personal = pro.user;
             this.place = pro.place;
             this.placeFalse = this.placeStatus.indexOf(pro.place.status) === -1;
             this.getReportAboutInfo();
+
+            for (let key in this.operation) {
+              if (key.indexOf('approved') > -1) {
+                this.approvedStatus = true;
+                return;
+              }
+            }
+
           } else {
             this.show_content = {};
             this.operation = {};
@@ -544,12 +559,15 @@
       },
 
       //关闭模态框
-      closeModal() {
+      closeModal(val) {
         this.aboutReportId = '';
         this.contrastDialog = false;
         this.rentReport = false;
         this.collectReport = false;
         this.houseReport = false;
+        if(val==='success'){
+          this.getProcess();
+        }
       },
     },
   }
