@@ -170,6 +170,14 @@
                 <el-input placeholder="请输入费用金额" v-model="params.other_fee"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="6">
+              <el-form-item label="物业费承担方" required="">
+                <el-select clearable v-model="params.property_payer" placeholder="请选择承担方" value="">
+                  <el-option v-for="item in property_payer_dic" :label="item.dictionary_name" :value="item.id"
+                             :key="item.id"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
           </el-row>
           <el-row>
             <el-col :span="6">
@@ -239,7 +247,6 @@
               </el-form-item>
             </el-col>
           </el-row>
-
           <div class="title">收据编号</div>
           <div class="form_border">
             <el-row>
@@ -313,7 +320,7 @@
 
   export default {
     components: {UpLoad, Organization,CollectSearch},
-    props: ['rentReport','reportDetailData','processableId'],
+    props: ['rentReport','reportDetailData','processableId','reportId'],
     data() {
       return {
         rentReportVisible: false,
@@ -391,6 +398,7 @@
         moneyTableChangeAmount: 1,
         receiptAmount:1,
         purchase_way_dic: [],
+        property_payer_dic: [],
       };
     },
     watch: {
@@ -418,12 +426,15 @@
         this.dictionary(508, 1).then((res) => {
           this.purchase_way_dic = res.data;
         });
+        this.dictionary(449, 1).then((res) => {
+          this.property_payer_dic = res.data;
+        });
       },
       //预填报备数据
       preloadData(){
         let data = this.reportDetailData;
         console.log(data);
-        this.params.processable_id = this.processableId;
+        this.params.processable_id = this.reportId;
         this.params.id = data.id;
         this.params.contract_id = data.contract_id;
         this.params.house_id = data.house_id;
@@ -435,6 +446,10 @@
         this.params.sign_date = data.sign_date;
         this.params.begin_date = data.begin_date;
         this.params.end_date = data.end_date;
+
+        this.priceChangeAmount = data.price_arr.length;
+        this.payWayChangeAmount = data.pay_way_arr.length;
+        this.moneyTableChangeAmount = data.money_sep.length;
 
         this.params.price_arr = data.price_arr;
         this.params.period_price_arr = data.period_price_arr;
@@ -463,7 +478,7 @@
         this.params.property = data.property;
 
         this.params.is_other_fee = String(data.is_other_fee);
-        this.params.property_payer = data.property_payer;
+        this.params.property_payer = data.property_payer.id;
 
 
         this.params.retainage_date = data.retainage_date;
@@ -488,10 +503,15 @@
 
         if(data.receipt && typeof(data.receipt) === 'string'){
           this.params.receipt.push(data.receipt)
-        }else if(data.receipt && data.receipt.length>0){
+        }else if(Array.isArray(data.receipt) && data.receipt.length>0){
+          this.receiptAmount = data.receipt.length;
           data.receipt.forEach((item)=>{
-          this.params.receipt.push(item.number);
-        })
+            if(typeof item === 'string'){
+              this.params.receipt.push(item);
+            }else if(item.number){
+              this.params.receipt.push(item.number);
+            }
+          })
         }else {
           this.receiptNum();
         }
@@ -578,6 +598,8 @@
 
       addReceiptAmount(){
         this.receiptAmount++;
+        this.params.receipt.push(this.receiptDate);
+
       },
       deleteReceiptAmount(item){
         this.params.receipt.splice(item, 1);
@@ -631,7 +653,11 @@
         this.params.contract_number = this.params.contract_number === 'LJZF' ? '' : this.params.contract_number;
         this.$http.post(globalConfig.server+'bulletin/rent',this.params).then((res)=>{
           if(res.data.code === '50230'){
-
+            this.$notify.success({
+              title : '成功',
+              message:res.data.msg
+            });
+            this.$emit('close','success')
           }else {
             this.$notify.warning({
               title : '警告',

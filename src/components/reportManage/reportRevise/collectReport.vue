@@ -314,7 +314,7 @@
 
   export default {
     components: {UpLoad, Organization,HouseSearch},
-    props: ['collectReport','reportDetailData','processableId'],
+    props: ['collectReport','reportDetailData','processableId','reportId'],
     data() {
       return {
         collectReportVisible: false,
@@ -437,7 +437,7 @@
         console.log(data);
         this.params.purchase_way = 509;
 
-        this.params.processable_id = this.processableId;
+        this.params.processable_id = this.reportId;
         this.params.id = data.id;
         this.params.house = data.house;
 
@@ -476,6 +476,9 @@
         if(data.property_payer && data.property_payer.constructor === Object){
           this.params.property_payer = data.property_payer.id;
         }
+
+        this.priceChangeAmount = data.price_arr.length;
+        this.payWayChangeAmount = data.pay_way_arr.length;
 
         this.params.price_arr = data.price_arr;
         this.params.period_price_arr = data.period_price_arr;
@@ -611,7 +614,11 @@
       confirmSubmit(){
         this.$http.post(globalConfig.server+'bulletin/collect',this.params).then((res)=>{
           if(res.data.code === '50130'){
-
+            this.$notify.success({
+              title : '成功',
+              message:res.data.msg
+            });
+            this.$emit('close','success')
           }else {
             this.$notify.warning({
               title : '警告',
