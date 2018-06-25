@@ -502,14 +502,19 @@
             }else {
               this.house_name = '';
             }
-            this.params.id = data.id;                     //id
+            this.params.id = data.id || res.data.id;                     //id
             this.params.city_id = data.city_id;                     //城市
             this.params.house_id = data.house_id;                     //城市
             this.params.city_name = data.city_name;                 //城市
             this.params.community = data.community;                 //小区id
             this.community_name = data.community.village_name;    //小区id
             this.params.door_address = data.door_address;
-            this.params.house_type = data.house_type;
+
+            if(data.house_type && Array.isArray(data.house_type)){
+              data.house_type.forEach((item,index)=>{
+                this.params.house_type[index] = String(item)
+              })
+            }
 
             this.params.decorate = data.decorate;
             this.params.area = data.area;                                     //面积

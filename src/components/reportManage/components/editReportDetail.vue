@@ -290,6 +290,18 @@
                 :processableId="processable_id" @close="closeModal"></RentReport>
     <HouseReport :houseReport="houseReport" :processableId="processable_id"
                  :reportId="reportId" @close="closeModal"></HouseReport>
+    <ContinueCollectReport :continueCollectReport="continueCollectReport" :reportDetailData="reportDetailData"
+                           :reportId="reportId" :processableId="processable_id" @close="closeModal"></ContinueCollectReport>
+    <ContinueRentReport :continueRentReport="continueRentReport" :reportDetailData="reportDetailData"
+                           :reportId="reportId" :processableId="processable_id" @close="closeModal"></ContinueRentReport>
+    <TransRentReport :transRentReport="transRentReport" :reportDetailData="reportDetailData"
+                        :reportId="reportId" :processableId="processable_id" @close="closeModal"></TransRentReport>
+    <ChangeRentReport :changeRentReport="changeRentReport" :reportDetailData="reportDetailData"
+                        :reportId="reportId" :processableId="processable_id" @close="closeModal"></ChangeRentReport>
+    <RwcRentReport :rwcRentReport="rwcRentReport" :reportDetailData="reportDetailData"
+                        :reportId="reportId" :processableId="processable_id" @close="closeModal"></RwcRentReport>
+    <RwcConfirmRentReport :rwcConfirmRentReport="rwcConfirmRentReport" :reportDetailData="reportDetailData"
+                        :reportId="reportId" :processableId="processable_id" @close="closeModal"></RwcConfirmRentReport>
   </div>
 </template>
 
@@ -300,11 +312,18 @@
   import RentReport from '../reportRevise/rentReport'
   import CollectReport from '../reportRevise/collectReport'
   import HouseReport from '../reportRevise/houseReport'
+  import ContinueCollectReport from '../reportRevise/continueCollectReport'
+  import ContinueRentReport from '../reportRevise/continueRentReport'
+  import TransRentReport from '../reportRevise/transRentReport'
+  import ChangeRentReport from '../reportRevise/changeRentReport'
+  import RwcRentReport from '../reportRevise/rwcRentReport'
+  import RwcConfirmRentReport from '../reportRevise/rwcConfirmRentReport'
 
   export default {
     name: "report-detail",
     props: ['module', 'reportId','changeId'],
-    components: {UpLoad, ContrastReport,RentReport,CollectReport,HouseReport},
+    components: {UpLoad, ContrastReport,RentReport,CollectReport,HouseReport,ContinueCollectReport,
+                 ContinueRentReport,TransRentReport,ChangeRentReport,RwcRentReport,RwcConfirmRentReport},
     data() {
       return {
         address: globalConfig.server_user,
@@ -313,6 +332,12 @@
         rentReport : false,
         collectReport : false,
         houseReport : false,
+        continueCollectReport : false,
+        continueRentReport : false,
+        transRentReport : false,
+        changeRentReport : false,
+        rwcRentReport : false,
+        rwcConfirmRentReport : false,
         show_content: {},
         reportDetailData : {},
         processable_id : '',
@@ -353,7 +378,7 @@
         selfReport: {},
         aboutReportId: '',
         editReportData : [],
-
+        isEdit : false,
       }
     },
 
@@ -363,7 +388,14 @@
       },
       reportVisible(val) {
         if (!val) {
-          this.$emit('close');
+          if(this.isEdit){
+            this.$emit('close','success');
+          }else {
+            this.$emit('close');
+          }
+          setTimeout(()=>{
+            this.isEdit = false;
+          });
           this.clearData();
         } else {
           this.getProcess();
@@ -545,15 +577,33 @@
       },
       //修改报备
       openModal(){
-        switch (this.reportDetailData.bulletin_name){
-          case '租房报备':
+        switch (this.process.processable_type){
+          case 'bulletin_rent_basic':
             this.rentReport = true;
             break;
-          case '收房报备':
+          case 'bulletin_collect_basic':
             this.collectReport = true;
             break;
-          case '房屋质量报备':
+          case 'bulletin_quality':
             this.houseReport = true;
+            break;
+          case 'bulletin_collect_continued':
+            this.continueCollectReport = true;
+            break;
+          case 'bulletin_rent_continued':
+            this.continueRentReport = true;
+            break;
+          case 'bulletin_rent_trans':
+            this.transRentReport = true;
+            break;
+          case 'bulletin_change':
+            this.changeRentReport = true;
+            break;
+          case 'bulletin_rent_RWC':
+            this.rwcRentReport = true;
+            break;
+          case 'bulletin_RWC_confirm':
+            this.rwcConfirmRentReport = true;
             break;
         }
       },
@@ -565,8 +615,15 @@
         this.rentReport = false;
         this.collectReport = false;
         this.houseReport = false;
+        this.continueCollectReport = false;
+        this.continueRentReport = false;
+        this.transRentReport = false;
+        this.changeRentReport = false;
+        this.rwcRentReport = false;
+        this.rwcConfirmRentReport = false;
         if(val==='success'){
           this.getProcess();
+          this.isEdit = true;
         }
       },
     },
