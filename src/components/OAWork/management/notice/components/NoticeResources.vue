@@ -56,7 +56,7 @@
     </el-dialog>
     <Organization :organizationDialog="organizationDialog" :type="typex" @close="closeOrganization"
                   @selectMember="selectMember"></Organization>
-    <Warning :warningDialog="warningDialog" :lookat="rowneedx" @close="closeWarning"></Warning>
+    <Warning :warningDialog="warningDialog" :lookat="lookat" @close="closeWarning"></Warning>
   </div>
 </template>
 
@@ -115,6 +115,7 @@
         draftDisabled: false,  //草稿按钮
         publishDisabled: false,  //发布按钮
         warningDialog: false,
+        lookat: {},
       };
     },
     watch: {
@@ -135,6 +136,8 @@
         }
       },
       rowneedx(val) {
+        this.$set(this.lookat, 'read_count', val.read_count);
+        this.$set(this.lookat, 'unread_count', val.unread_count);
         this.firstflag = true;
         if (val.content) {
           this.cover_pic = [];
@@ -155,7 +158,6 @@
 
           this.form.id = val.id;
           this.form.attachment = val.attachment;
-
           this.screenshots = val.attachment;
         } else {
           this.form.type = "";
@@ -192,7 +194,6 @@
         } else {
           this.form.draft = "0";
         }
-
         if (this.upStatus === true) {
           this.$notify.warning({
             title: "警告",
@@ -211,10 +212,30 @@
           //     if (res.data.code == "99910") {
           //       this.midId = res.data.data.id;
           //       this.form.id = res.data.data.id;
+          //
           //     }
           //   });
+          this.$set(this.lookat, 'create_time', this.dateFormat());
+          this.$set(this.lookat, 'type', this.form.type);
+          this.$set(this.lookat, 'title', this.form.title);
+          this.$set(this.lookat, 'content', this.form.context);
           this.warningDialog = true;
         }
+      },
+      dateFormat() {
+        let date = new Date();
+        let y = date.getFullYear();
+        let m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        let d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        let h = date.getHours();
+        h = h < 10 ? ('0' + h) : h;
+        let minute = date.getMinutes();
+        minute = minute < 10 ? ('0' + minute) : minute;
+        let second = date.getSeconds();
+        second = second < 10 ? ('0' + second) : second;
+        return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
       },
       //发布
       sendx() {

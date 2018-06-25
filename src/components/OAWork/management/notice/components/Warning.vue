@@ -16,7 +16,7 @@
         </b>
         <b>
           <i class="iconfont icon-yanjingclose"></i>
-          <span>{{lookinfo.read_uncount}}人</span>
+          <span>{{lookinfo.unread_count}}人</span>
         </b>
       </div>
     </div>
