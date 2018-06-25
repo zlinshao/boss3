@@ -209,9 +209,12 @@
         this.type = 'staff';
         this.organizationDialog = true;
       },
-      closeModal(){
+      closeModal(val){
         this.reportDetailDialog = false;
         this.organizationDialog = false;
+        if(val === 'success'){
+          this.getData();
+        }
       },
       selectMember(val){
         this.formInline.staff_id = val[0].id;

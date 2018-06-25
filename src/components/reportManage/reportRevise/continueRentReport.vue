@@ -1,6 +1,6 @@
 <template>
   <div id="addHouseResources">
-    <el-dialog :close-on-click-modal="false" title="租房报备" :visible.sync="rentReportVisible" width="70%">
+    <el-dialog :close-on-click-modal="false" title="续租报备" :visible.sync="continueRentReportVisible" width="70%">
       <div style="min-height: 550px" class="scroll_bar"
            v-loading="fullLoading"
            element-loading-text="拼命加载中"
@@ -195,35 +195,7 @@
                 <el-switch v-model="params.is_corp" active-value="1" inactive-value="0"></el-switch>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
-              <el-form-item label="是否中介" required="">
-                <el-switch v-model="params.is_agency" active-value="1" inactive-value="0"></el-switch>
-              </el-form-item>
-            </el-col>
           </el-row>
-          <el-row v-if="params.is_agency == 1">
-            <el-col :span="6">
-              <el-form-item label="中介名称" required="">
-                <el-input placeholder="请输入中介名称" v-model="params.agency_name"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="中介费" required="">
-                <el-input placeholder="请输入中介费" v-model="params.agency_price"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="中介人" required="">
-                <el-input placeholder="请输入中介人" v-model="params.agency_user_name"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item label="中介人联系方式" required="">
-                <el-input placeholder="请输入中介人联系方式" v-model="params.agency_phone"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-
           <el-row>
             <el-col :span="6">
               <el-form-item label="尾款补齐日期" required="">
@@ -302,31 +274,31 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="rentReportVisible = false">取 消</el-button>
+        <el-button size="small" @click="continueRentReportVisible = false">取 消</el-button>
         <el-button size="small" type="primary" @click="confirmSubmit">确 定</el-button>
       </span>
     </el-dialog>
     <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
                   @close='closeModal' @selectMember="selectMember"></Organization>
 
-    <CollectSearch :collectDialog="collectDialog" @close='closeModal'></CollectSearch>
+    <RentSearch :rentDialog="rentDialog" @close='closeModal'></RentSearch>
   </div>
 </template>
 
 <script>
   import UpLoad from '../../common/UPLOAD.vue'
   import Organization from '../../common/organization.vue'
-  import CollectSearch from '../../common/collectSearch.vue'
+  import RentSearch from '../../common/rentSearch.vue'
 
   export default {
-    components: {UpLoad, Organization,CollectSearch},
-    props: ['rentReport','reportDetailData','processableId','reportId'],
+    components: {UpLoad, Organization,RentSearch},
+    props: ['continueRentReport','reportDetailData','processableId','reportId'],
     data() {
       return {
-        rentReportVisible: false,
+        continueRentReportVisible: false,
         isClear: false,
         organizationDialog: false,
-        collectDialog: false,
+        rentDialog: false,
         fullLoading : false,
         length: '',
         type: '',
@@ -337,7 +309,7 @@
           address: '',
           id: '',
           processable_id: '',
-          type: 1,
+          type: 3,
           draft: 0,
           contract_id: '',              //合同id
           house_id: '',                 //房屋地址id
@@ -366,11 +338,6 @@
           other_fee_name: '',
 
           deposit: '',                  //押金
-          is_agency: '1',                //客户来源    0个人1中介
-          agency_name: '',              //中介名
-          agency_price: '',             //中介费
-          agency_user_name: '',         //中介人
-          agency_phone: '',             //中介手机号
 
           is_corp: '1',                   //是否公司单  0个人1公司
           contract_number: 'LJZF',      //合同编号
@@ -402,10 +369,10 @@
       };
     },
     watch: {
-      rentReport(val){
-        this.rentReportVisible = val
+      continueRentReport(val){
+        this.continueRentReportVisible = val
       },
-      rentReportVisible(val){
+      continueRentReportVisible(val){
         if (!val) {
           this.$emit('close');
           this.clearData();
@@ -467,12 +434,6 @@
 
         this.params.other_fee_name = data.other_fee_name;
         this.params.other_fee = data.other_fee;
-
-        this.params.is_agency = String(data.is_agency.id);   //是否中介
-        this.params.agency_name = data.agency_name;
-        this.params.agency_price = data.agency_price;
-        this.params.agency_user_name = data.agency_user_name;
-        this.params.agency_phone = data.agency_phone;
 
         this.params.is_corp = String(data.is_corp.id);
         this.params.property = data.property;
@@ -544,7 +505,7 @@
 
       //打开房屋选择模态框
       selectHouse(){
-        this.collectDialog = true;
+        this.rentDialog = true;
       },
       //调出选人组件
       openOrganizeModal(val){
@@ -617,6 +578,7 @@
         this.priceChangeAmount = 1;
         this.payWayChangeAmount = 1;
       },
+
       //计算空置期结束时间
       computedEndDate(){
         this.params.day = this.params.day?this.params.day:0;
@@ -633,10 +595,9 @@
           }
         })
       },
-
       //关闭模态框
       closeModal(val){
-        this.collectDialog = false;
+        this.rentDialog = false;
         this.organizationDialog = false;
         if(val){
           this.params.address = val.address;
@@ -688,7 +649,7 @@
           address: '',
           id: '',
           processable_id: '',
-          type: 1,
+          type: 3,
           draft: 0,
           contract_id: '',              //合同id
           house_id: '',                 //房屋地址id
@@ -717,12 +678,6 @@
           other_fee_name: '',
 
           deposit: '',                  //押金
-          is_agency: '1',                //客户来源    0个人1中介
-          agency_name: '',              //中介名
-          agency_price: '',             //中介费
-          agency_user_name: '',         //中介人
-          agency_phone: '',             //中介手机号
-
           is_corp: '1',                   //是否公司单  0个人1公司
           contract_number: 'LJZF',      //合同编号
 
