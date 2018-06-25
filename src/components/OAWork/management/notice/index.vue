@@ -87,7 +87,7 @@
                 width="260px"
                 label="发送对象">
                 <template slot-scope="scope">
-                  <div v-popover:popover1
+                  <div v-if="scope.row.department_name" v-popover:popover1
                        style="display:block;word-break:keep-all;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
                     {{scope.row.department_name}}
                     <el-popover
@@ -98,10 +98,9 @@
                       {{scope.row.department_name}}
                     </el-popover>
                   </div>
+                  <div v-else>暂无</div>
                 </template>
-
               </el-table-column>
-
               <el-table-column
                 width="260px"
                 label="标题">
@@ -118,7 +117,6 @@
                     </el-popover>
                   </div>
                 </template>
-
               </el-table-column>
               <el-table-column
                 label="主要内容">
@@ -310,12 +308,14 @@
         else if (row.draft == "已发布") {
           this.lists = [
             {clickIndex: "look", headIcon: "el-icons-fa-eye", label: "预览"},
-            {clickIndex: "reset", headIcon: "el-icons-fa-trash-o", label: "撤回"}
+            {clickIndex: "reset", headIcon: "el-icons-fa-trash-o", label: "撤回"},
           ];
           this.contextMenuParam(event);
-        }
-        else {
-          this.lists = [];
+        }else {
+          // this.lists = [];
+          this.lists = [
+            {clickIndex: "noticeDialog", headIcon: "el-icons-fa-edit", label: "编辑"},
+          ];
         }
 
       },
@@ -336,6 +336,9 @@
               for (let m = 0; m < res.data.data[j].department_id.length; m++) {
                 this.tableData[j].department_name += res.data.data[j].department_id[m].name + ";";
               }
+              for (let m = 0; m < res.data.data[j].receiver_id.length; m++) {
+                this.tableData[j].department_name += res.data.data[j].receiver_id[m].name + ";";
+              }
               if (res.data.data[j].draft == "0") {
                 this.tableData[j].draft = "已发布";
               } else if (res.data.data[j].draft == "1") {
@@ -350,9 +353,15 @@
                 this.tableData[j].real_name = "未知人员";
               }
             }
+            if( res.data.data.length<1){
+              this.total = 0;
+              this.rentStatus = '暂无数据';
+              this.tableData = [];
+            }
           } else {
             this.total = 0;
             this.rentStatus = '暂无数据';
+            this.tableData = [];
           }
         });
       },

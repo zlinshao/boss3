@@ -32,7 +32,7 @@
             <el-col :span="24">
               <el-form-item label="正文" required>
                 <vue-editor id="editor" useCustomImageHandler @imageAdded="handleImageAdded"
-                            v-model="form.context" :disabled="editorDisabled"></vue-editor>
+                            v-model="form.context"></vue-editor>
               </el-form-item>
             </el-col>
           </el-row>
@@ -55,7 +55,7 @@
       </span>
     </el-dialog>
     <Organization :organizationDialog="organizationDialog" :type="typex" @close="closeOrganization"
-                  @selectMember="coloseaa"></Organization>
+                  @selectMember="selectMember"></Organization>
   </div>
 </template>
 
@@ -109,7 +109,6 @@
           {id: 3, name: "通知"}
         ],
         houselist: [],
-        editorDisabled: false
       };
     },
     watch: {
@@ -132,7 +131,7 @@
         if (val.content) {
           this.cover_pic = [];
           this.$http.get(globalConfig.server + "announcement/" + val.id).then(res => {
-            this.cover_pic = res.data.data.attachment;
+            this.cover_pic = res.data.data && res.data.data.attachment;
           });
           this.form.type = val.type;
           this.form.title = val.title;
@@ -179,26 +178,13 @@
           this.form.draft = "0";
         }
 
-        if (this.form.type == "表彰") {
-          this.form.type = 1;
-        }
-        if (this.form.type == "批评") {
-          this.form.type = 2;
-        }
-        if (this.form.type == "通知") {
-          this.form.type = 3;
-        }
-        if (this.form.type == "研发") {
-          this.form.type = 4;
-        }
         if (this.upStatus === true) {
           this.$notify.warning({
             title: "警告",
             message: "图片正在上传"
           });
         } else {
-          this.$http
-            .post(this.urls + "announcement", {
+          this.$http.post(this.urls + "announcement", {
               title: this.form.title,
               type: this.form.type,
               content: this.form.context,
@@ -206,8 +192,7 @@
               draft: this.form.draft,
               preview: this.form.preview,
               attachment: this.form.attachment
-            })
-            .then(res => {
+            }).then(res => {
               if (res.data.code == "99910") {
                 this.midId = res.data.data.id;
                 this.form.id = res.data.data.id;
@@ -277,7 +262,7 @@
       closeOrganization() {
         this.organizationDialog = false;
       },
-      coloseaa(val) {
+      selectMember(val) {
         this.form.obj = "";
         // this.form.departmentInfo = val;
         for (let i = 0; i < val.length; i++) {
@@ -298,28 +283,26 @@
 
       handleImageAdded(file, Editor, cursorLocation, resetUploader) {
         let formData = new FormData();
-        formData.append("file", file);
-
+        formData.append('file', file);
         let config = {
-          headers: {"Content-Type": "multipart/form-data"}
+          headers: {'Content-Type': 'multipart/form-data'}
         };
         if (file.size > 1024 * 1024 * 2) {
           this.$notify.warning({
-            title: "警告",
-            message: "只能上传jpg/png文件，且不超过2M"
-          });
+            title: '警告',
+            message: '只能上传jpg/png文件，且不超过2M'
+          })
         } else {
-          this.$http.post(globalConfig.server_user + "files", formData, config).then(res => {
-            if (res.data.status === "success") {
-              Editor.insertEmbed(cursorLocation, "image", res.data.data.uri);
+          this.$http.post(globalConfig.server_user + 'files', formData, config).then((res) => {
+            if (res.data.status === 'success') {
+              Editor.insertEmbed(cursorLocation, 'image', res.data.data.uri);
             }
-          });
+          })
         }
-      }
+
+      },
     },
 
-    created: function () {
-    }
   };
 </script>
 <style lang="scss" scoped="">
