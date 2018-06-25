@@ -140,9 +140,13 @@
           this.form.type = val.type;
           this.form.title = val.title;
           this.form.context = val.content;
-
+          this.form.departmentInfo = val.department_id;
+          this.form.staffInfo = val.receiver_id;
           for (let i = 0; i < val.department_id.length; i++) {
             this.form.obj += val.department_id[i].name + ";";
+          }
+          for (let i = 0; i < val.receiver_id.length; i++) {
+            this.form.obj += val.receiver_id[i].name + ";";
           }
 
           this.form.id = val.id;
