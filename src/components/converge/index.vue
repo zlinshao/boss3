@@ -464,7 +464,7 @@
                   <span class="notice_title" @click="lookDetail(value.id)">{{value.title}}</span>
                 </el-col>
                 <el-col :span="5" style="text-align: right;">
-                  <span class="notice_depart" v-if="value.department_name">——{{value.department_name}}</span>
+                  <span class="notice_depart" v-if="value.department_name">— —{{value.department_name}}</span>
                 </el-col>
                 <el-col :span="5" style="text-align: right;">
                   <span class="notice_time" style="margin-right: 0;">{{value.create_time}}</span>
