@@ -309,7 +309,6 @@
           this.lists = [
             {clickIndex: "look", headIcon: "el-icons-fa-eye", label: "预览"},
             {clickIndex: "reset", headIcon: "el-icons-fa-trash-o", label: "撤回"},
-            {clickIndex: "delete", headIcon: "el-icons-fa-trash-o", label: "删除"},
           ];
           this.contextMenuParam(event);
         }else {

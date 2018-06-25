@@ -66,16 +66,17 @@
               <span style="float: right;cursor: pointer;" @click="announcementListDialog=true"
                     v-if="totalNum>8">查看全部>></span>
             </div>
-            <div style="margin: 5px 20px;" v-loading="loading"
+            <div v-loading="loading"
                  element-loading-text="拼命加载中"
                  element-loading-spinner="el-icon-loading"
                  element-loading-background="rgba(255, 255, 255, 0.3)">
               <el-row>
                 <el-col :span="12" v-for="(value,key) in announcementList" :key="value.id"
-                        :class="{'borderBottom': (announcementList.length%2==0 && key!=announcementList.length-1 && key!=announcementList.length-2)||(announcementList.length%2!=0 && key!=announcementList.length-1)}"
-                        class="clearfix" style="padding: 5px 0;">
+                        :class="{'borderBottom': (announcementList.length%2==0 && key!=announcementList.length-1 && key!=announcementList.length-2)||(announcementList.length%2!=0 && key!=announcementList.length-1),
+                        'marginlr':key%2!=0}"
+                        class="clearfix" style="padding: 5px 0;border-right: 1px solid #e5e5e5;margin-left: 20px;margin-right: -20px;">
                   <el-row>
-                    <el-col :span="2">
+                    <el-col :span="1.6">
                       <span v-if="value.type==1" class="type_btn btn_honor">表彰</span>
                       <span v-else-if="value.type==2" class="type_btn btn_criticize">批评</span>
                       <span v-else class="type_btn btn_notice">通知</span>
@@ -84,7 +85,7 @@
                       <span class="notice_title" @click="lookDetail(value.id)">{{value.title}}</span>
                     </el-col>
                     <el-col :span="5">
-                      <span class="notice_depart" v-if="value.department_name">—{{value.department_name}}</span>
+                      <span class="notice_depart" v-if="value.department_name">— —{{value.department_name}}</span>
                     </el-col>
                     <el-col :span="5">
                       <span class="notice_time">{{value.create_time}}</span>
@@ -444,29 +445,30 @@
     </div>
     <el-dialog :close-on-click-modal="false" title="所有公告" :visible.sync="announcementListDialog" width="50%">
       <div>
-        <div style=" margin: 10px;border: 1px solid #dee6fe;border-radius: 5px;padding: 0 10px;">
+        <div style=" margin: 10px;border: 1px solid #dee6fe;border-radius: 5px;padding-right: 0;padding-left: 20px;">
           <el-row v-loading="loading2"
                   element-loading-text="拼命加载中"
                   element-loading-spinner="el-icon-loading"
                   element-loading-background="rgba(255, 255, 255, 0.3)">
             <el-col :span="24" v-for="(value,key) in announcementList" :key="value.id"
-                    class="clearfix" :class="{'borderBottom': key !=announcementList.length-1}" style="padding: 5px 0;">
-                <el-row>
-                    <el-col :span="2">
-                      <span v-if="value.type==1" class="type_btn btn_honor">表彰</span>
-                      <span v-else-if="value.type==2" class="type_btn btn_criticize">批评</span>
-                      <span v-else class="type_btn btn_notice">通知</span>
-                    </el-col>
-                    <el-col :span="12">
-                      <span class="notice_title" @click="lookDetail(value.id)">{{value.title}}</span>
-                    </el-col>
-                    <el-col :span="5">
-                      <span class="notice_depart" v-if="value.department_name">—{{value.department_name}}</span>
-                    </el-col>
-                    <el-col :span="5">
-                      <span class="notice_time">{{value.create_time}}</span>
-                    </el-col>
-                  </el-row>
+                    class="clearfix" :class="{'borderBottom': key !=announcementList.length-1}"
+                    style="padding-top: 10px;">
+              <el-row>
+                <el-col :span="1.6">
+                  <span v-if="value.type==1" class="type_btn btn_honor">表彰</span>
+                  <span v-else-if="value.type==2" class="type_btn btn_criticize">批评</span>
+                  <span v-else class="type_btn btn_notice">通知</span>
+                </el-col>
+                <el-col :span="12">
+                  <span class="notice_title" @click="lookDetail(value.id)">{{value.title}}</span>
+                </el-col>
+                <el-col :span="5">
+                  <span class="notice_depart" v-if="value.department_name">——{{value.department_name}}</span>
+                </el-col>
+                <el-col :span="5">
+                  <span class="notice_time" style="margin-right: 0;">{{value.create_time}}</span>
+                </el-col>
+              </el-row>
             </el-col>
           </el-row>
         </div>
@@ -487,7 +489,8 @@
     </el-dialog>
     <el-dialog :close-on-click-modal="false" title="公告详情" :visible.sync="announcementDetailDialog" width="650px">
       <div>
-        <div class="scroll_bar" style="margin: 10px;border: 1px solid #dee6fe;border-radius: 5px;padding: 0 10px;overflow: auto;">
+        <div class="scroll_bar"
+             style="margin: 10px;border: 1px solid #dee6fe;border-radius: 5px;padding: 0 10px;overflow: auto;">
           <el-row style="margin: 10px;" v-loading="loading3"
                   element-loading-text="拼命加载中"
                   element-loading-spinner="el-icon-loading"
@@ -496,14 +499,8 @@
             <div style="line-height: 28px;margin-top: 10px;color: #78797a;font-size: 14px;"
                  v-html="announcementDetail.content"></div>
             <div style="text-align: right;font-size: 13px;color: #303133;">
-              <span v-if="announcementDetail.receiver_id && announcementDetail.receiver_id.length>0">
-                —
-                <span v-for="item in announcementDetail.receiver_id">
-                    <span v-if="item.org && item.org.length>0"
-                          v-for="val in item.org">{{val.name}}&nbsp;&nbsp;
-                    </span>
-                </span>
-               </span>
+              <span
+                v-if="announcementDetail.creator_department_name">— —{{announcementDetail.creator_department_name}}</span>
               <span style="margin-left: 10px;color: #585859;">{{announcementDetail.create_time}}</span>
             </div>
           </el-row>
@@ -761,6 +758,10 @@
     .borderBottom {
       border-bottom: 1px solid #e5e5e5;
     }
+    .marginlr {
+      margin-left: 40px!important;
+      margin-right: -40px!important;
+    }
     .answer_center {
       height: 355px;
       border: 1px solid #ddd;
@@ -804,9 +805,9 @@
         color: #6a8dfb;
       }
     }
-    .notice_depart{
+    .notice_depart {
       line-height: 35px;
-      color: #585859;
+      color: #999;
       display: inline-block;
       width: 100%;
       white-space: nowrap;
@@ -818,7 +819,7 @@
       display: inline-block;
       margin-right: 20px;
       line-height: 35px;
-      color: #585859;
+      color: #999;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
