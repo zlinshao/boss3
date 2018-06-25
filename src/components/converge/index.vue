@@ -63,12 +63,17 @@
           <el-row class="elPadding" style="padding: 0;height: initial;">
             <div style="background: #e8eefe;padding: 10px 20px;color: #a2a5ac;">
               <span>全部公告</span>
-              <span style="float: right;cursor: pointer;" @click="announcementListDialog=true" v-if="totalNum>8">查看全部>></span>
+              <span style="float: right;cursor: pointer;" @click="announcementListDialog=true"
+                    v-if="totalNum>8">查看全部>></span>
             </div>
-            <div style="margin: 5px 20px;" v-if="announcementList.length>0">
-              <el-row >
+            <div style="margin: 5px 20px;" v-loading="loading"
+                 element-loading-text="拼命加载中"
+                 element-loading-spinner="el-icon-loading"
+                 element-loading-background="rgba(255, 255, 255, 0.3)">
+              <el-row>
                 <el-col :span="12" v-for="(value,key) in announcementList" :key="value.id"
-                        :class="{'borderBottom': key!=6 && key !=7}" class="clearfix" style="padding: 5px 0;">
+                        :class="{'borderBottom': (announcementList.length%2==0 && key!=announcementList.length-1 && key!=announcementList.length-2)||(announcementList.length%2!=0 && key!=announcementList.length-1)}"
+                        class="clearfix" style="padding: 5px 0;">
                   <span v-if="value.type==1" class="type_btn btn_honor">表彰</span>
                   <span v-else-if="value.type==2" class="type_btn btn_criticize">批评</span>
                   <span v-else class="type_btn btn_notice">通知</span>
@@ -86,9 +91,9 @@
                 </el-col>
               </el-row>
             </div>
-            <!--<div v-else>-->
-              <!--<img src="../../assets/images/sorry_no_data.png">-->
-            <!--</div>-->
+            <div v-if="announcementList.length<1">
+              <img src="../../assets/images/sorry_no_data.png">
+            </div>
           </el-row>
         </el-col>
       </el-row>
@@ -438,12 +443,12 @@
     <el-dialog :close-on-click-modal="false" title="所有公告" :visible.sync="announcementListDialog" width="50%">
       <div>
         <div style=" margin: 10px;border: 1px solid #dee6fe;border-radius: 5px;padding: 0 10px;">
-          <el-row v-loading="loading"
+          <el-row v-loading="loading2"
                   element-loading-text="拼命加载中"
                   element-loading-spinner="el-icon-loading"
                   element-loading-background="rgba(255, 255, 255, 0.3)">
             <el-col :span="24" v-for="(value,key) in announcementList" :key="value.id"
-                    class="clearfix" :class="{'borderBottom': key !=7}" style="padding: 5px 0;">
+                    class="clearfix" :class="{'borderBottom': key !=announcementList.length-1}" style="padding: 5px 0;">
               <span v-if="value.type==1" class="type_btn btn_honor">表彰</span>
               <span v-else-if="value.type==2" class="type_btn btn_criticize">批评</span>
               <span v-else class="type_btn btn_notice">通知</span>
@@ -477,13 +482,14 @@
     </el-dialog>
     <el-dialog :close-on-click-modal="false" title="公告详情" :visible.sync="announcementDetailDialog" width="650px">
       <div>
-        <div style="margin: 10px;border: 1px solid #dee6fe;border-radius: 5px;padding: 0 10px;">
-          <el-row style="margin: 10px;"  v-loading="loading2"
+        <div class="scroll_bar" style="margin: 10px;border: 1px solid #dee6fe;border-radius: 5px;padding: 0 10px;overflow: auto;">
+          <el-row style="margin: 10px;" v-loading="loading3"
                   element-loading-text="拼命加载中"
                   element-loading-spinner="el-icon-loading"
                   element-loading-background="rgba(255, 255, 255, 0.3)">
             <div style="color: #474849;line-height: 35px;font-size: 16px;">{{announcementDetail.title}}</div>
-            <div style="line-height: 28px;margin-top: 10px;color: #78797a;font-size: 14px;" v-html="announcementDetail.content"></div>
+            <div style="line-height: 28px;margin-top: 10px;color: #78797a;font-size: 14px;"
+                 v-html="announcementDetail.content"></div>
             <div style="text-align: right;font-size: 13px;color: #303133;">
               <span v-if="announcementDetail.receiver_id && announcementDetail.receiver_id.length>0">
                 —
@@ -526,6 +532,7 @@
 
         announcementList: [],
         announcement: {
+          published: 1,
           page: 1,
           limit: 8,
         },
@@ -533,8 +540,9 @@
         announcementListDialog: false,   //所有公告
         announcementDetailDialog: false,  //公告详情
         announcementDetail: {},
-        loading2: false,
         loading: false,
+        loading2: false,
+        loading3: false,
       }
     },
     activated() {
@@ -581,9 +589,9 @@
     methods: {
       lookDetail(id) {
         this.announcementDetailDialog = true;
-        this.loading2 = true;
+        this.loading3 = true;
         this.$http.get(globalConfig.server + 'announcement/' + id).then((res) => {
-          this.loading2 = false;
+          this.loading3 = false;
           if (res.data.code === '80010') {
             this.announcementDetail = res.data.data;
           } else {
@@ -595,9 +603,9 @@
         });
       },
       getAnnouncementList() {
-        this.loading = true;
+        this.loading2 = this.loading = true;
         this.$http.get(globalConfig.server + "announcement", {params: this.announcement}).then(res => {
-          this.loading = false;
+          this.loading2 = this.loading = false;
           if (res.data.code === "80010") {
             this.announcementList = res.data.data;
             this.totalNum = res.data.num;
