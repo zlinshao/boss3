@@ -3,32 +3,32 @@
   <div >
     <div class="navTop" v-bind:class="{ no1: no1flag, no2: no2flag, no3: no3flag }">
       <div class="top0">
-        <div class="top1" v-bind:class="{ no1tit: no1flag, no2tit: no2flag, no3tit: no3flag }">{{lookinfo.title}}</div>
+        <div class="top1" v-bind:class="{ no1tit: no1flag, no2tit: no2flag, no3tit: no3flag }">{{lookat.title}}</div>
         <div class="top2">
-          <span>{{lookinfo.create_time}}</span>
+          <span>{{lookat.create_time}}</span>
           <span>南京乐伽商业管理有限公司</span>
         </div>
       </div>
       <div class="top3">
         <b>
           <i class="iconfont icon-yanjing"></i>
-          <span>{{lookinfo.read_count}}人</span>
+          <span>{{lookat.read_count}}人</span>
         </b>
         <b>
           <i class="iconfont icon-yanjingclose"></i>
-          <span>{{lookinfo.read_uncount}}人</span>
+          <span>{{lookat.unread_count}}人</span>
         </b>
       </div>
     </div>
     <div class="main scroll_bar" >
       <div class="mainTop">公司各部门：</div>
-      <div class="mainTitle" v-html="lookinfo.content">
+      <div class="mainTitle" v-html="lookat.content">
 
       </div>
       <div class="mainFooter">
         <div>
           <p>南京乐伽商业管理有限公司</p>
-          <p>{{lookinfo.create_time}}</p>
+          <p>{{lookat.create_time}}</p>
         </div>
       </div>
     </div>
@@ -52,7 +52,6 @@ export default {
       no3flag: false
     };
   },
-  mounted() {},
   watch: {
     warningDialog(val) {
       this.warningDialogVisible = val;
@@ -60,24 +59,22 @@ export default {
     warningDialogVisible(val) {
       if (!val) {
         this.$emit("close");
+      }else{
+        if (this.lookat.type == 1) {
+          this.no1flag = true;
+          this.no2flag = false;
+          this.no3flag = false;
+        } else if (this.lookat.type == 3) {
+          this.no1flag = false;
+          this.no2flag = true;
+          this.no3flag = false;
+        } else {
+          this.no1flag = false;
+          this.no2flag = false;
+          this.no3flag = true;
+        }
       }
     },
-    lookat(val) {
-      this.lookinfo = val;
-      if (val.type == "表彰" || val.type == 1) {
-        this.no1flag = true;
-        this.no2flag = false;
-        this.no3flag = false;
-      } else if (val.type == "通知" || val.type == 3) {
-        this.no1flag = false;
-        this.no2flag = true;
-        this.no3flag = false;
-      } else {
-        this.no1flag = false;
-        this.no2flag = false;
-        this.no3flag = true;
-      }
-    }
   },
   methods: {}
 };
