@@ -15,8 +15,8 @@
                     <img :src="personal.avatar" v-if="personal.avatar !== '' && personal.avatar !== null">
                     <img src="../../../assets/images/head.png" v-else>
                   </p>
-                  <span>{{personal.name}}<span v-for="(key,index) in personal.org"
-                                               v-if="index === 0">-{{key.name}}</span></span>
+                  <span>{{personal.name}}<span v-for="(value,index) in personal.org"
+                                               v-if="index === 0">-{{value.name}}</span></span>
                 </div>
                 <div class="auditStatus" v-if="placeFalse" @click="approvePersonal"><i
                   class="iconfont icon-shenpi1"></i>&nbsp;{{place.display_name}}
@@ -28,29 +28,31 @@
               </div>
               <div class="scroll_bar">
                 <el-row>
-                  <el-col :span="12" v-for="(key,index) in show_content" :key="index"
+                  <el-col :span="12" v-for="(value,index) in show_content" :key="index"
                           v-if="printScreen.indexOf(index) === -1">
-                    <el-form-item v-if="!Array.isArray(key) && key.constructor !== Object" :label="index" class="detailTitle">
-                      <div class="special" v-if="index !== '房屋类型'">{{key}}</div>
-                      <div class="special" v-if="index === '房屋类型'">{{key.name}}</div>
+                    <el-form-item v-if="!Array.isArray(value) && value.constructor !== Object" :label="index" class="detailTitle">
+                      <div class="special" v-if="index !== '房屋类型'">{{value}}</div>
+                      <div class="special" v-if="index === '房屋类型'">{{value.name}}</div>
                     </el-form-item>
-                    <el-form-item v-if="Array.isArray(key)" :label="index">
+                    <el-form-item v-if="Array.isArray(value)" :label="index">
                       <div class="special">
-                        <span v-if="index === '定金和收款方式' || index === '补交定金和收款方式'" v-for="item in key">{{item}}</span>
-                        <span v-else>
+                        <div v-if="index === '定金和收款方式' || index === '补交定金和收款方式'" v-for="item in value">{{item}}</div>
+                        <div v-else>
                           <span style="margin-right: 20px;color: #409EFF">{{item.msg}}</span>
                           <span>{{item.period}}</span>
-                        </span>
+                        </div>
                       </div>
                     </el-form-item>
-                    <el-form-item v-if="key.constructor === Object" :label="index" class="detailTitle">
-                      <div class="special">{{key.number}}</div>
+                    <el-form-item v-if="value.constructor === Object" :label="index" class="detailTitle">
+                      <div class="special" v-if="value.name">{{value.name}}</div>
+                      <div class="special" v-if="value.number">{{value.number}}</div>
                     </el-form-item>
+
                   </el-col>
                   <el-col :span="24" v-else>
                     <el-form-item :label="index">
                       <div class="special imgs">
-                      <span v-for="(p,index) in key">
+                      <span v-for="(p,index) in value">
                         <img data-magnify="" data-caption="图片查看器" :data-src="p.uri" :src="p.uri" v-if="!p.is_video">
                         <video :src="p.uri" controls v-if="p.is_video" width="120px" height="80px"></video>
                       </span>
@@ -112,26 +114,26 @@
                   <div v-if="commentList.length === 0" style="text-align: center;font-size: 16px;margin-top: 12px;">暂无评论</div>
 
                   <div v-if="commentList.length !== 0">
-                    <div v-for="(key,index) in commentList"  class="reportItem" style="margin-bottom: 12px;">
+                    <div v-for="(value,index) in commentList"  class="reportItem" style="margin-bottom: 12px;">
                       <div class="commentContent">
                         <div class="commentA">
                             <span class="headSculpture">
-                               <img :src="key.user.avatar" v-if="key.user.avatar !== '' && key.user.avatar !== null">
+                               <img :src="value.user.avatar" v-if="value.user.avatar !== '' && value.user.avatar !== null">
                                <img src="../../../assets/images/head.png" v-else>
                             </span>
-                          {{key.user.name}}
-                          <span v-for="(item,index) in key.user.org" v-if="index === 0">-{{item.name}}</span>
+                          {{value.user.name}}
+                          <span v-for="(item,index) in value.user.org" v-if="index === 0">-{{item.name}}</span>
                         </div>
                         <div class="commentB">
-                          {{key.created_at}}
+                          {{value.created_at}}
                         </div>
                       </div>
                       <div class="commentC">
                           <span>
-                            {{key.body}}
+                            {{value.body}}
                           </span>
                         <div>
-                          <p v-for="(p,index) in key.album">
+                          <p v-for="(p,index) in value.album">
                             <img data-magnify="" data-caption="图片查看器" :data-src="p.uri" :src="p.uri"
                                  v-if="!p.is_video">
                           </p>
