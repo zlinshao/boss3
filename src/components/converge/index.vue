@@ -74,24 +74,26 @@
                 <el-col :span="12" v-for="(value,key) in announcementList" :key="value.id"
                         :class="{'borderBottom': (announcementList.length%2==0 && key!=announcementList.length-1 && key!=announcementList.length-2)||(announcementList.length%2!=0 && key!=announcementList.length-1)}"
                         class="clearfix" style="padding: 5px 0;">
-                  <span v-if="value.type==1" class="type_btn btn_honor">表彰</span>
-                  <span v-else-if="value.type==2" class="type_btn btn_criticize">批评</span>
-                  <span v-else class="type_btn btn_notice">通知</span>
-
-                  <span class="notice_title" @click="lookDetail(value.id)">{{value.title}}</span>
-                  <span v-if="value.receiver_id && value.receiver_id.length>0">—
-                    <span v-for="item in value.receiver_id">
-                        <span v-if="item.org && item.org.length>0"
-                              v-for="val in item.org">{{val.name}}&nbsp;&nbsp;</span>
-                      <!--<span v-else>暂无</span>-->
-                    </span>
-                  </span>
-                  <!--<span v-if="value.receiver_id.length<1">暂无</span>-->
-                  <span class="notice_time">{{value.create_time}}</span>
+                  <el-row>
+                    <el-col :span="2">
+                      <span v-if="value.type==1" class="type_btn btn_honor">表彰</span>
+                      <span v-else-if="value.type==2" class="type_btn btn_criticize">批评</span>
+                      <span v-else class="type_btn btn_notice">通知</span>
+                    </el-col>
+                    <el-col :span="12">
+                      <span class="notice_title" @click="lookDetail(value.id)">{{value.title}}</span>
+                    </el-col>
+                    <el-col :span="5">
+                      <span class="notice_depart" v-if="value.department_name">—{{value.department_name}}</span>
+                    </el-col>
+                    <el-col :span="5">
+                      <span class="notice_time">{{value.create_time}}</span>
+                    </el-col>
+                  </el-row>
                 </el-col>
               </el-row>
             </div>
-            <div v-if="announcementList.length<1">
+            <div v-if="announcementList.length<1 && !loading">
               <img src="../../assets/images/sorry_no_data.png">
             </div>
           </el-row>
@@ -449,19 +451,22 @@
                   element-loading-background="rgba(255, 255, 255, 0.3)">
             <el-col :span="24" v-for="(value,key) in announcementList" :key="value.id"
                     class="clearfix" :class="{'borderBottom': key !=announcementList.length-1}" style="padding: 5px 0;">
-              <span v-if="value.type==1" class="type_btn btn_honor">表彰</span>
-              <span v-else-if="value.type==2" class="type_btn btn_criticize">批评</span>
-              <span v-else class="type_btn btn_notice">通知</span>
-
-              <span class="notice_title" @click="lookDetail(value.id)">{{value.title}}</span>
-              <span v-if="value.receiver_id && value.receiver_id.length>0">—
-                <span v-for="item in value.receiver_id">
-                    <span v-if="item.org && item.org.length>0"
-                          v-for="val in item.org">{{val.name}}&nbsp;&nbsp;</span>
-                </span>
-              </span>
-              <!--<span v-if="value.receiver_id.length<1">暂无</span>-->
-              <span class="notice_time">{{value.create_time}}</span>
+                <el-row>
+                    <el-col :span="2">
+                      <span v-if="value.type==1" class="type_btn btn_honor">表彰</span>
+                      <span v-else-if="value.type==2" class="type_btn btn_criticize">批评</span>
+                      <span v-else class="type_btn btn_notice">通知</span>
+                    </el-col>
+                    <el-col :span="12">
+                      <span class="notice_title" @click="lookDetail(value.id)">{{value.title}}</span>
+                    </el-col>
+                    <el-col :span="5">
+                      <span class="notice_depart" v-if="value.department_name">—{{value.department_name}}</span>
+                    </el-col>
+                    <el-col :span="5">
+                      <span class="notice_time">{{value.create_time}}</span>
+                    </el-col>
+                  </el-row>
             </el-col>
           </el-row>
         </div>
@@ -786,25 +791,37 @@
     }
     .notice_title {
       display: inline-block;
-      width: 50%;
       white-space: nowrap;
       overflow: hidden;
+      width: 100%;
       text-overflow: ellipsis;
       vertical-align: middle;
       margin-left: 10px;
       cursor: pointer;
       color: #303133;
+      line-height: 35px;
       &:hover {
         color: #6a8dfb;
       }
+    }
+    .notice_depart{
+      line-height: 35px;
+      color: #585859;
+      display: inline-block;
+      width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .notice_time {
       float: right;
       display: inline-block;
       margin-right: 20px;
-      height: 30px;
-      line-height: 30px;
+      line-height: 35px;
       color: #585859;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     $color: #409EFF;
     $colorBor: #ddd;
