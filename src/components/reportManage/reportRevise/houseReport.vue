@@ -319,7 +319,7 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <el-form-item label="合同照片" required="">
+          <el-form-item label="房屋影像" required="">
             <UpLoad :ID="'collect_report_contract'" :isClear="isClear" :editImage="photo" @getImg="getImg"></UpLoad>
           </el-form-item>
 
