@@ -115,7 +115,14 @@
         draftDisabled: false,  //草稿按钮
         publishDisabled: false,  //发布按钮
         warningDialog: false,
-        lookat: {},
+        lookat: {
+          read_count: '',
+          unread_count: '',
+          create_time: '',
+          type: '',
+          title: '',
+          content: ''
+        },
       };
     },
     watch: {
@@ -136,8 +143,8 @@
         }
       },
       rowneedx(val) {
-        this.$set(this.lookat, 'read_count', val.read_count);
-        this.$set(this.lookat, 'unread_count', val.unread_count);
+        this.lookat.read_count = val.read_count;
+        this.lookat.unread_count = val.unread_count;
         this.firstflag = true;
         if (val.content) {
           this.cover_pic = [];
@@ -215,10 +222,10 @@
           //
           //     }
           //   });
-          this.$set(this.lookat, 'create_time', this.dateFormat());
-          this.$set(this.lookat, 'type', this.form.type);
-          this.$set(this.lookat, 'title', this.form.title);
-          this.$set(this.lookat, 'content', this.form.context);
+          this.lookat.create_time = this.dateFormat();
+          this.lookat.type = this.form.type;
+          this.lookat.title = this.form.title;
+          this.lookat.content = this.form.context;
           this.warningDialog = true;
         }
       },
