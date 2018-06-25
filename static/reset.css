@@ -427,4 +427,7 @@ ul.el-menu.el-menu--inline {
 #answerExam .el-checkbox .el-checkbox__label {
   display: initial; }
 
+#converge .notice_content img {
+  width: 100%; }
+
 /*# sourceMappingURL=reset.css.map */

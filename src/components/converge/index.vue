@@ -498,7 +498,7 @@
                   element-loading-background="rgba(255, 255, 255, 0.3)">
             <div style="color: #474849;line-height: 35px;font-size: 16px;">{{announcementDetail.title}}</div>
             <div style="line-height: 28px;margin-top: 10px;color: #78797a;font-size: 14px;"
-                 v-html="announcementDetail.content"></div>
+                 v-html="announcementDetail.content" class="notice_content"></div>
             <div style="text-align: right;font-size: 13px;color: #303133;">
               <span
                 v-if="announcementDetail.creator_department_name">— —{{announcementDetail.creator_department_name}}</span>
@@ -750,7 +750,6 @@
 </script>
 
 <style lang="scss" scoped>
-
   #converge {
     .clearfix:before,
     .clearfix:after {
