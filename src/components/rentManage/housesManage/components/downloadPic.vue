@@ -81,6 +81,8 @@
           this.tableLoading = false;
           if (res.data.code === '30070') {
             let albumData = res.data.data.album;
+            let photo = res.data.data.detail.house_goods && res.data.data.detail.house_goods.photo;
+
             this.imgArray = [];
             if(albumData.length>0){
               albumData.forEach((item) => {
@@ -91,6 +93,15 @@
                     }
                   }
                 })
+              })
+            }
+            if(photo.length>0){
+              photo.forEach((item) => {
+                if(item.info && item.info.mime && item.info.mime.indexOf('image')>-1){
+                  if(this.imgArray.indexOf(item.uri)<0){
+                    this.imgArray.push(item.uri);
+                  }
+                }
               })
             }
           } else {

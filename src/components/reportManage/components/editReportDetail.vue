@@ -156,11 +156,9 @@
                              <img :src="item.staffs.avatar" v-if="item.staffs.avatar !== '' && item.staffs.avatar !== null">
                              <img src="../../../assets/images/head.png" v-else>
                           </span>
-                          {{item.staffs.name}}
-                          <span v-for="(item,index) in item.staffs.org" v-if="index === 0">-{{item.name}}</span>
-                        </div>
-                        <div class="commentB">
-                          {{item.create_time}}
+                          <span style="white-space:pre-wrap">{{item.staffs.name}}</span>
+                          <span style="white-space:pre-wrap" v-for="(item,index) in item.staffs.org" v-if="index === 0">-{{item.name}}</span>
+                          <span style="white-space:pre-wrap;text-align: right"> {{item.create_time}}</span>
                         </div>
                       </div>
                       <div class="diffContent">
@@ -791,7 +789,6 @@
       @include flex;
       justify-content: space-between;
       .commentA, .commentB {
-        line-height: 36px;
         height: 36px;
       }
       .commentA {
@@ -813,7 +810,6 @@
         }
       }
       .commentB {
-        min-width: 80px;
         text-align: right;
       }
     }
