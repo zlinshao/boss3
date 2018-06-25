@@ -25,9 +25,6 @@
       <el-tab-pane label="问答中心" name="eight">
         <MessageCenter></MessageCenter>
       </el-tab-pane>
-      <!--<el-tab-pane label="部门公告" name="nine">-->
-        <!--<DepartNotice></DepartNotice>-->
-      <!--</el-tab-pane>-->
     </el-tabs>
   </div>
 </template>
@@ -40,7 +37,6 @@
   // import Counter from './counter/index1.vue';
   import Notice from './notice/index.vue';
   import MessageCenter from './messageCenterManage/index';
-  import DepartNotice from './departNotice/index';
 
 
   export default {
@@ -50,7 +46,6 @@
       Vote,
       Notice,
       MessageCenter,
-      DepartNotice
     },
     data() {
       return {
