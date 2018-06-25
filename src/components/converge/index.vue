@@ -55,30 +55,43 @@
     </div>
     <div class="convergeMain">
       <!--部门公告-->
-      <!--<el-row style="display: -webkit-flex;display: flex;">-->
-        <!--<el-col :span="24" class="lejiaNews">-->
-          <!--<div class="title color1 a1">-->
-            <!--公告-->
-          <!--</div>-->
-          <!--<el-row class="elPadding" style="padding: 0;height: initial;">-->
-            <!--<div style="background: #e8eefe;padding: 10px 20px;color: #a2a5ac;">-->
-              <!--<span>全部公告</span>-->
-              <!--<span style="float: right;">查看全部>></span>-->
+      <el-row style="display: -webkit-flex;display: flex;">
+        <el-col :span="24" class="lejiaNews">
+          <div class="title color1 a1">
+            公告
+          </div>
+          <el-row class="elPadding" style="padding: 0;height: initial;">
+            <div style="background: #e8eefe;padding: 10px 20px;color: #a2a5ac;">
+              <span>全部公告</span>
+              <span style="float: right;cursor: pointer;" @click="announcementListDialog=true" v-if="totalNum>8">查看全部>></span>
+            </div>
+            <div style="margin: 5px 20px;" v-if="announcementList.length>0">
+              <el-row >
+                <el-col :span="12" v-for="(value,key) in announcementList" :key="value.id"
+                        :class="{'borderBottom': key!=6 && key !=7}" class="clearfix" style="padding: 5px 0;">
+                  <span v-if="value.type==1" class="type_btn btn_honor">表彰</span>
+                  <span v-else-if="value.type==2" class="type_btn btn_criticize">批评</span>
+                  <span v-else class="type_btn btn_notice">通知</span>
+
+                  <span class="notice_title" @click="lookDetail(value.id)">{{value.title}}</span>
+                  <span v-if="value.receiver_id && value.receiver_id.length>0">—
+                    <span v-for="item in value.receiver_id">
+                        <span v-if="item.org && item.org.length>0"
+                              v-for="val in item.org">{{val.name}}&nbsp;&nbsp;</span>
+                      <!--<span v-else>暂无</span>-->
+                    </span>
+                  </span>
+                  <!--<span v-if="value.receiver_id.length<1">暂无</span>-->
+                  <span class="notice_time">{{value.create_time}}</span>
+                </el-col>
+              </el-row>
+            </div>
+            <!--<div v-else>-->
+              <!--<img src="../../assets/images/sorry_no_data.png">-->
             <!--</div>-->
-            <!--<div style="margin: 10px 20px;">-->
-              <!--<span style="border: 1px solid rgb(106, 141, 251, 0.7);-->
-              <!--color: rgb(106, 141, 251);-->
-              <!--padding: 4px 10px;-->
-              <!--line-height: 35px;-->
-              <!--border-radius: 5px;-->
-              <!--box-shadow: 0px 0px 3px 0px rgba(106, 141, 251, 0.74);">通知</span>-->
-              <!--<span>愤怒的可是国家的宏观街道很干净的发货国家的发货给党和国家的发货国家的发货国家的发还记得法国海军</span>-->
-              <!--<span>— 研发部</span>-->
-              <!--<span>2018-06-01 10:00:00</span>-->
-            <!--</div>-->
-          <!--</el-row>-->
-        <!--</el-col>-->
-      <!--</el-row>-->
+          </el-row>
+        </el-col>
+      </el-row>
       <!--乐伽新闻-->
       <el-row style="display: -webkit-flex;display: flex;">
         <el-col :span="16" class="lejiaNews">
@@ -422,6 +435,70 @@
         </el-col>
       </el-row>
     </div>
+    <el-dialog :close-on-click-modal="false" title="所有公告" :visible.sync="announcementListDialog" width="50%">
+      <div>
+        <div style=" margin: 10px;border: 1px solid #dee6fe;border-radius: 5px;padding: 0 10px;">
+          <el-row v-loading="loading"
+                  element-loading-text="拼命加载中"
+                  element-loading-spinner="el-icon-loading"
+                  element-loading-background="rgba(255, 255, 255, 0.3)">
+            <el-col :span="24" v-for="(value,key) in announcementList" :key="value.id"
+                    class="clearfix" :class="{'borderBottom': key !=7}" style="padding: 5px 0;">
+              <span v-if="value.type==1" class="type_btn btn_honor">表彰</span>
+              <span v-else-if="value.type==2" class="type_btn btn_criticize">批评</span>
+              <span v-else class="type_btn btn_notice">通知</span>
+
+              <span class="notice_title" @click="lookDetail(value.id)">{{value.title}}</span>
+              <span v-if="value.receiver_id && value.receiver_id.length>0">—
+                <span v-for="item in value.receiver_id">
+                    <span v-if="item.org && item.org.length>0"
+                          v-for="val in item.org">{{val.name}}&nbsp;&nbsp;</span>
+                </span>
+              </span>
+              <!--<span v-if="value.receiver_id.length<1">暂无</span>-->
+              <span class="notice_time">{{value.create_time}}</span>
+            </el-col>
+          </el-row>
+        </div>
+        <div class="tableBottom" style="text-align: center;">
+          <div>
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="announcement.page"
+              :page-size="announcement.limit"
+              layout="total, prev, pager, next, jumper"
+              :total="totalNum">
+            </el-pagination>
+          </div>
+        </div>
+      </div>
+
+    </el-dialog>
+    <el-dialog :close-on-click-modal="false" title="公告详情" :visible.sync="announcementDetailDialog" width="650px">
+      <div>
+        <div style="margin: 10px;border: 1px solid #dee6fe;border-radius: 5px;padding: 0 10px;">
+          <el-row style="margin: 10px;"  v-loading="loading2"
+                  element-loading-text="拼命加载中"
+                  element-loading-spinner="el-icon-loading"
+                  element-loading-background="rgba(255, 255, 255, 0.3)">
+            <div style="color: #474849;line-height: 35px;font-size: 16px;">{{announcementDetail.title}}</div>
+            <div style="line-height: 28px;margin-top: 10px;color: #78797a;font-size: 14px;" v-html="announcementDetail.content"></div>
+            <div style="text-align: right;font-size: 13px;color: #303133;">
+              <span v-if="announcementDetail.receiver_id && announcementDetail.receiver_id.length>0">
+                —
+                <span v-for="item in announcementDetail.receiver_id">
+                    <span v-if="item.org && item.org.length>0"
+                          v-for="val in item.org">{{val.name}}&nbsp;&nbsp;
+                    </span>
+                </span>
+               </span>
+              <span style="margin-left: 10px;color: #585859;">{{announcementDetail.create_time}}</span>
+            </div>
+          </el-row>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -446,13 +523,30 @@
         hostData: {},   // 主轮播
         lessData: {}, // 次标题1
         lowData: {},  // 次标题2
+
+        announcementList: [],
+        announcement: {
+          page: 1,
+          limit: 8,
+        },
+        totalNum: 0,
+        announcementListDialog: false,   //所有公告
+        announcementDetailDialog: false,  //公告详情
+        announcementDetail: {},
+        loading2: false,
+        loading: false,
       }
-    },
-    mounted() {
-      this.addRegion();
     },
     activated() {
       this.addRegion();
+      this.getAnnouncementList();
+    },
+    watch: {
+      announcementDetailDialog(val) {
+        if (!val) {
+          this.announcementDetail = {};
+        }
+      }
     },
     created() {
       if (localStorage.getItem('convergeHostData')) {
@@ -485,6 +579,41 @@
 
     },
     methods: {
+      lookDetail(id) {
+        this.announcementDetailDialog = true;
+        this.loading2 = true;
+        this.$http.get(globalConfig.server + 'announcement/' + id).then((res) => {
+          this.loading2 = false;
+          if (res.data.code === '80010') {
+            this.announcementDetail = res.data.data;
+          } else {
+            this.$notify.warning({
+              title: "警告",
+              message: res.data.msg
+            });
+          }
+        });
+      },
+      getAnnouncementList() {
+        this.loading = true;
+        this.$http.get(globalConfig.server + "announcement", {params: this.announcement}).then(res => {
+          this.loading = false;
+          if (res.data.code === "80010") {
+            this.announcementList = res.data.data;
+            this.totalNum = res.data.num;
+          } else {
+            this.totalNum = 0;
+            this.announcementList = [];
+          }
+        });
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        this.announcement.page = val;
+        this.getAnnouncementList();
+      },
       // 详情
       routerDetail(id) {
         let data = {ids: id, detail: 'converge'};
@@ -605,14 +734,70 @@
   }
 </script>
 
-<style lang="scss">
-  .answer_center {
-    height: 355px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-  }
+<style lang="scss" scoped>
 
   #converge {
+    .clearfix:before,
+    .clearfix:after {
+      display: table;
+      content: "";
+    }
+    .clearfix:after {
+      clear: both
+    }
+    .borderBottom {
+      border-bottom: 1px solid #e5e5e5;
+    }
+    .answer_center {
+      height: 355px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+    }
+
+    .type_btn {
+      background: #fefeff;
+      font-size: 12px;
+      padding: 3px 10px;
+      line-height: 35px;
+      border-radius: 5px;
+    }
+    .btn_notice {
+      color: rgb(106, 141, 251);
+      box-shadow: 0px 0px 3px 0px rgba(106, 141, 251, 0.74);
+      border: 1px solid rgba(106, 141, 251, 0.7);
+    }
+    .btn_honor {
+      color: #58d788;
+      box-shadow: 0px 0px 3px 0px rgba(88, 215, 136, 0.74);
+      border: 1px solid rgba(88, 215, 136, 0.7);
+    }
+    .btn_criticize {
+      color: #fb4699;
+      box-shadow: 0px 0px 3px 0px rgba(251, 70, 153, 0.74);
+      border: 1px solid rgba(251, 70, 153, 0.7);
+    }
+    .notice_title {
+      display: inline-block;
+      width: 50%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      margin-left: 10px;
+      cursor: pointer;
+      color: #303133;
+      &:hover {
+        color: #6a8dfb;
+      }
+    }
+    .notice_time {
+      float: right;
+      display: inline-block;
+      margin-right: 20px;
+      height: 30px;
+      line-height: 30px;
+      color: #585859;
+    }
     $color: #409EFF;
     $colorBor: #ddd;
     @mixin flex {
