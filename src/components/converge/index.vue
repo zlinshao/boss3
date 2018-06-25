@@ -62,7 +62,7 @@
           </div>
           <el-row class="elPadding" style="padding: 0;height: initial;">
             <div style="background: #e8eefe;padding: 10px 20px;color: #a2a5ac;">
-              <span>全部公告</span>
+              <span>最新公告</span>
               <span style="float: right;cursor: pointer;" @click="announcementListDialog=true"
                     v-if="totalNum>8">查看全部>></span>
             </div>
@@ -71,11 +71,12 @@
                  element-loading-spinner="el-icon-loading"
                  element-loading-background="rgba(255, 255, 255, 0.3)">
               <el-row>
-                <el-col :span="12" v-for="(value,key) in announcementList" :key="value.id"
-                        :class="{'borderBottom': (announcementList.length%2==0 && key!=announcementList.length-1 && key!=announcementList.length-2)||(announcementList.length%2!=0 && key!=announcementList.length-1),
+                <el-col :span="12" v-for="(value,key) in announcementListPage1" :key="value.id"
+                        :class="{'borderBottom': (announcementListPage1.length%2==0 && key!=announcementListPage1.length-1 && key!=announcementListPage1.length-2)||(announcementListPage1.length%2!=0 && key!=announcementListPage1.length-1),
                         'marginlr':key%2!=0}"
-                        class="clearfix" style="padding: 5px 0;border-right: 1px solid #e5e5e5;margin-left: 15px;margin-right: -15px;">
-                  <el-row>
+                        class="clearfix"
+                        style="padding: 5px 0;border-right: 1px solid #e5e5e5;margin-left: 15px;margin-right: -15px;">
+                  <el-row :class="{'oddWidth': key%2!=0}">
                     <el-col :span="1.6">
                       <span v-if="value.type==1" class="type_btn btn_honor">表彰</span>
                       <span v-else-if="value.type==2" class="type_btn btn_criticize">批评</span>
@@ -88,13 +89,13 @@
                       <span class="notice_depart" v-if="value.department_name">— —{{value.department_name}}</span>
                     </el-col>
                     <el-col :span="5" class="notice_time">
-                      <span >{{value.create_time}}</span>
+                      <span>{{value.create_time}}</span>
                     </el-col>
                   </el-row>
                 </el-col>
               </el-row>
             </div>
-            <div v-if="announcementList.length<1 && !loading">
+            <div v-if="announcementListPage1.length<1 && !loading">
               <img src="../../assets/images/sorry_no_data.png">
             </div>
           </el-row>
@@ -462,10 +463,10 @@
                 <el-col :span="12">
                   <span class="notice_title" @click="lookDetail(value.id)">{{value.title}}</span>
                 </el-col>
-                <el-col :span="5">
+                <el-col :span="5" style="text-align: right;">
                   <span class="notice_depart" v-if="value.department_name">——{{value.department_name}}</span>
                 </el-col>
-                <el-col :span="5">
+                <el-col :span="5" style="text-align: right;">
                   <span class="notice_time" style="margin-right: 0;">{{value.create_time}}</span>
                 </el-col>
               </el-row>
@@ -532,6 +533,7 @@
         lessData: {}, // 次标题1
         lowData: {},  // 次标题2
 
+        announcementListPage1: [],
         announcementList: [],
         announcement: {
           published: 1,
@@ -609,6 +611,9 @@
         this.$http.get(globalConfig.server + "announcement", {params: this.announcement}).then(res => {
           this.loading2 = this.loading = false;
           if (res.data.code === "80010") {
+            if (this.announcement.page == 1) {
+              this.announcementListPage1 = res.data.data;
+            }
             this.announcementList = res.data.data;
             this.totalNum = res.data.num;
           } else {
@@ -758,9 +763,12 @@
     .borderBottom {
       border-bottom: 1px solid #e5e5e5;
     }
+    .oddWidth {
+      width: 96%;
+    }
     .marginlr {
-      margin-left: 30px!important;
-      margin-right: -30px!important;
+      margin-left: 30px !important;
+      margin-right: -30px !important;
     }
     .answer_center {
       height: 355px;
@@ -821,6 +829,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      text-align: right;
     }
     $color: #409EFF;
     $colorBor: #ddd;
