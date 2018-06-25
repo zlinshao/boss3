@@ -74,7 +74,7 @@
                 <el-col :span="12" v-for="(value,key) in announcementList" :key="value.id"
                         :class="{'borderBottom': (announcementList.length%2==0 && key!=announcementList.length-1 && key!=announcementList.length-2)||(announcementList.length%2!=0 && key!=announcementList.length-1),
                         'marginlr':key%2!=0}"
-                        class="clearfix" style="padding: 5px 0;border-right: 1px solid #e5e5e5;margin-left: 20px;margin-right: -20px;">
+                        class="clearfix" style="padding: 5px 0;border-right: 1px solid #e5e5e5;margin-left: 15px;margin-right: -15px;">
                   <el-row>
                     <el-col :span="1.6">
                       <span v-if="value.type==1" class="type_btn btn_honor">表彰</span>
@@ -87,8 +87,8 @@
                     <el-col :span="5">
                       <span class="notice_depart" v-if="value.department_name">— —{{value.department_name}}</span>
                     </el-col>
-                    <el-col :span="5">
-                      <span class="notice_time">{{value.create_time}}</span>
+                    <el-col :span="5" class="notice_time">
+                      <span >{{value.create_time}}</span>
                     </el-col>
                   </el-row>
                 </el-col>
@@ -759,8 +759,8 @@
       border-bottom: 1px solid #e5e5e5;
     }
     .marginlr {
-      margin-left: 40px!important;
-      margin-right: -40px!important;
+      margin-left: 30px!important;
+      margin-right: -30px!important;
     }
     .answer_center {
       height: 355px;
@@ -815,9 +815,7 @@
       text-overflow: ellipsis;
     }
     .notice_time {
-      float: right;
       display: inline-block;
-      margin-right: 20px;
       line-height: 35px;
       color: #999;
       white-space: nowrap;
