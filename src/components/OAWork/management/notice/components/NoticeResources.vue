@@ -50,8 +50,8 @@
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="increaseGoodsDialogVisible = false">取 消</el-button>
         <el-button size="small" type="primary" @click="look">预览</el-button>
-        <el-button size="small" type="primary" @click="savex">保存</el-button>
-        <el-button size="small" type="primary" @click="sendx">发布</el-button>
+        <el-button size="small" type="primary" @click="savex" :disabled="draftDisabled">保存</el-button>
+        <el-button size="small" type="primary" @click="sendx" :disabled="publishDisabled">发布</el-button>
       </span>
     </el-dialog>
     <Organization :organizationDialog="organizationDialog" :type="typex" @close="closeOrganization"
@@ -109,6 +109,8 @@
           {id: 3, name: "通知"}
         ],
         houselist: [],
+        draftDisabled: false,  //草稿按钮
+        publishDisabled: false,  //发布按钮
       };
     },
     watch: {
@@ -122,6 +124,8 @@
           this.midId = null;
           this.form.id = "";
           this.$emit("threeflag", this.threeflag);
+
+          this.draftDisabled = this.publishDisabled = false;
         } else {
           this.secondfalg = false;
         }
@@ -165,6 +169,7 @@
 
       //保存
       savex() {
+        this.draftDisabled = true;
         this.twoflag = true;
         this.midfunc();
       },
@@ -202,6 +207,7 @@
       },
       //发布
       sendx() {
+        this.publishDisabled = true;
         this.twoflag = false;
         this.midfunc();
       },
