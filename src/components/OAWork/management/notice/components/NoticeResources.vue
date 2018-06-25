@@ -56,6 +56,7 @@
     </el-dialog>
     <Organization :organizationDialog="organizationDialog" :type="typex" @close="closeOrganization"
                   @selectMember="selectMember"></Organization>
+    <Warning :warningDialog="warningDialog" :lookat="rowneedx" @close="closeWarning"></Warning>
   </div>
 </template>
 
@@ -63,13 +64,15 @@
   import Organization from "../../../../common/organization.vue";
   import Upload from "../../../../common/UPLOAD.vue";
   import {VueEditor} from "vue2-editor";
+  import Warning from "./Warning.vue"; //预览页面
 
   export default {
     props: ["noticeDialog", "rowneedx"],
     components: {
       Organization,
       Upload,
-      VueEditor
+      VueEditor,
+      Warning
     },
     data() {
       return {
@@ -111,6 +114,7 @@
         houselist: [],
         draftDisabled: false,  //草稿按钮
         publishDisabled: false,  //发布按钮
+        warningDialog: false,
       };
     },
     watch: {
@@ -170,7 +174,9 @@
         this.upStatus = val[2];
         this.form.attachment = val[1];
       },
-
+      closeWarning() {
+        this.warningDialog = false;
+      },
       //保存
       savex() {
         this.draftDisabled = true;
@@ -193,20 +199,21 @@
             message: "图片正在上传"
           });
         } else {
-          this.$http.post(this.urls + "announcement", {
-              title: this.form.title,
-              type: this.form.type,
-              content: this.form.context,
-              id: this.form.id,
-              draft: this.form.draft,
-              preview: this.form.preview,
-              attachment: this.form.attachment
-            }).then(res => {
-              if (res.data.code == "99910") {
-                this.midId = res.data.data.id;
-                this.form.id = res.data.data.id;
-              }
-            });
+          // this.$http.post(this.urls + "announcement", {
+          //     title: this.form.title,
+          //     type: this.form.type,
+          //     content: this.form.context,
+          //     id: this.form.id,
+          //     draft: this.form.draft,
+          //     preview: this.form.preview,
+          //     attachment: this.form.attachment
+          //   }).then(res => {
+          //     if (res.data.code == "99910") {
+          //       this.midId = res.data.data.id;
+          //       this.form.id = res.data.data.id;
+          //     }
+          //   });
+          this.warningDialog = true;
         }
       },
       //发布
