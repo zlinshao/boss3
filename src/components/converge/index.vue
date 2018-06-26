@@ -492,7 +492,7 @@
       <div>
         <div class="scroll_bar"
              style="margin: 10px;border: 1px solid #dee6fe;border-radius: 5px;padding: 0 10px;overflow: auto;">
-          <el-row style="margin: 10px;" v-loading="loading3"
+          <el-row style="margin: 10px;" class="notice_content" v-loading="loading3"
                   element-loading-text="拼命加载中"
                   element-loading-spinner="el-icon-loading"
                   element-loading-background="rgba(255, 255, 255, 0.3)">
@@ -952,7 +952,7 @@
     p {
       margin: 0 !important;
     }
-    div, span, p {
+    div:not(.notice_content), span, p {
       overflow: hidden;
     }
     h6 {
