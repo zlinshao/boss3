@@ -3,7 +3,9 @@
     <el-dialog :close-on-click-modal="false" title="消息详情" :visible.sync="messageDialogVisible">
       <div class="messageContent scroll_bar">
         <div class="massageHead">
-          <div style="width: 50px;height: 50px;border-radius: 50%;background: #6a8dfb"></div>
+          <div >
+            <img src="../../assets/images/boss.png" style="width: 50px;height: 50px;border-radius: 50%;">
+          </div>
           <div class="head">
             <div>boss小秘书</div>
             <div>{{messageInfo.created_at}}</div>
