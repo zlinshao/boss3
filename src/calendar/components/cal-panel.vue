@@ -116,8 +116,8 @@
           };
           this.events.forEach((event) => {
             if (isEqualDateStr(event.date, tempItem.date)) {
-              if(event.title){    
-                  tempItem.color = '#fc2c96'      
+              if(event.title){
+                  tempItem.color = '#fc2c96'
               }
               tempItem.title = event.title;
               tempItem.title1 = event.title1;
@@ -147,7 +147,7 @@
     methods: {
       nextMonth () {
         this.$EventCalendar.nextMonth();
-        
+
         this.$emit('month-changed', this.curYearMonth)
       },
       preMonth () {
@@ -198,5 +198,5 @@
       font-size: 16px;
     }
   }
-  
+
 </style>
