@@ -231,7 +231,7 @@
         </el-form>
       </div>
       <div slot="footer" class="dialog-footer" >
-        <el-button v-if="!fullLoading && defaultItem === '评论信息'" size="small" type="primary"
+        <el-button v-if="!fullLoading" size="small" type="primary"
                    v-for="(value,key) in operation" :key="key" @click="commentOn(key)">
           {{value}}
         </el-button>
@@ -505,7 +505,7 @@
               if (val === 'to_comment') {
                 this.comments(this.reportId, 1);
               } else {
-                this.process(this.reportId);
+                this.getProcess(this.reportId);
               }
               this.$notify.success({
                 title: '成功',
@@ -623,6 +623,7 @@
         this.rwcConfirmRentReport = false;
         if(val==='success'){
           this.getProcess();
+          this.getReportEditInfo();
           this.isEdit = true;
         }
       },
