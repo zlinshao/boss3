@@ -34,7 +34,7 @@
           </div>
           <div class="itemMain" @dblclick="showMessageDetail(item)">
             <div class="itemMainHead">
-              <img src="../../assets/images/head.jpg" alt="" data-card>
+              <img src="../../assets/images/boss.png" alt="" data-card>
             </div>
             <div class="itemMainContent">
               <div class="personInfo">
