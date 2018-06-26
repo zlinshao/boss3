@@ -420,6 +420,7 @@
       },
       getProcess() {
         this.fullLoading = true;
+        this.approvedStatus = false;
         this.$http.get(this.address + 'process/' + this.reportId).then((res) => {
           this.fullLoading = false;
           if (res.data.status === 'success' && res.data.data.length !== 0) {
