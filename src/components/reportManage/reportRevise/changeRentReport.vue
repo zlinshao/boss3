@@ -376,6 +376,7 @@
         moneyTableChangeAmount: 1,
         receiptAmount: 1,
         purchase_way_dic: [],
+        isUpload : false,
       };
     },
     watch: {
@@ -620,7 +621,7 @@
       },
 
       getImg(val) {
-        this.isUpPic = val[2];
+        this.isUpload = val[2];
         if (val[0] === 'rent_report_leader') {
           this.params.screenshot_leader = val[1];
         } else if (val[0] === 'rent_report_certificate') {
@@ -640,21 +641,28 @@
         });
       },
       confirmSubmit() {
-        this.params.contract_number = this.params.contract_number === 'LJZF' ? '' : this.params.contract_number;
-        this.$http.post(globalConfig.server + 'bulletin/change', this.params).then((res) => {
-          if (res.data.code === '50530') {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
-            this.$emit('close', 'success')
-          } else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg
-            })
-          }
-        })
+        if(!this.isUpload){
+          this.params.contract_number = this.params.contract_number === 'LJZF' ? '' : this.params.contract_number;
+          this.$http.post(globalConfig.server + 'bulletin/change', this.params).then((res) => {
+            if (res.data.code === '50530') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.$emit('close', 'success')
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              })
+            }
+          })
+        }else {
+          this.$notify.warning({
+            title:'警告',
+            message:'图片正在上传',
+          })
+        }
       },
       clearData() {
         this.isClear = false;
@@ -723,6 +731,7 @@
         this.type = '';
         this.selectType = '';
         this.receiptDate = '';
+        this.isUpload = false;
       },
     },
   };
