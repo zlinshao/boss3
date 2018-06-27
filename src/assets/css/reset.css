@@ -119,7 +119,7 @@
 
 @font-face {
   font-family: Impact;
-  src: url(../src/assets/font/impact-2.ttf); }
+  src: url(../font/impact-2.ttf); }
 .__vev_calendar-wrapper .icon {
   color: #6a8dfb !important; }
 .__vev_calendar-wrapper .events-wrapper {
@@ -420,8 +420,8 @@ ul.el-menu.el-menu--inline {
   padding: 8px 0; }
 
 #contrastDialog .el-dialog__wrapper .el-dialog .el-dialog__body .scroll_bar {
-  height: 580px !important;
-  max-height: 580px !important; }
+  height: 581px !important;
+  max-height: 581px !important; }
 
 #answerNaire .el-checkbox .el-checkbox__label,
 #answerExam .el-checkbox .el-checkbox__label {
