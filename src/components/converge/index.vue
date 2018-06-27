@@ -66,10 +66,13 @@
               <span style="float: right;cursor: pointer;" @click="announcementListDialog=true"
                     v-if="totalNum>8">查看全部>></span>
             </div>
-            <div v-loading="loading"
-                 element-loading-text="拼命加载中"
+            <div v-loading="loading" v-if="loading"
                  element-loading-spinner="el-icon-loading"
-                 element-loading-background="rgba(255, 255, 255, 0.3)">
+                 element-loading-background="rgba(255, 255, 255, 0.3)"
+                 style="width: 100%;height: 50px;"
+            >
+            </div>
+            <div v-if="!loading">
               <el-row>
                 <el-col :span="12" v-for="(value,key) in announcementListPage1" :key="value.id"
                         :class="{'borderBottom': (announcementListPage1.length%2==0 && key!=announcementListPage1.length-1 && key!=announcementListPage1.length-2)||(announcementListPage1.length%2!=0 && key!=announcementListPage1.length-1),
@@ -488,7 +491,11 @@
       </div>
 
     </el-dialog>
-    <el-dialog :close-on-click-modal="false" title="公告详情" :visible.sync="announcementDetailDialog" width="650px">
+    <el-dialog id="announcementDetail" :close-on-click-modal="false" title="公告详情"
+               :visible.sync="announcementDetailDialog" width="650px">
+      <!--v-dialogDrag ref="dialog__wrapper"-->
+      <!--<div class="dialog-body">-->
+      <!--<div v-dialogDragWidth="$refs.dialog__wrapper">-->
       <div>
         <div class="scroll_bar"
              style="margin: 10px;border: 1px solid #dee6fe;border-radius: 5px;padding: 0 10px;overflow: auto;">
@@ -507,6 +514,8 @@
           </el-row>
         </div>
       </div>
+      <!--</div>-->
+      <!--</div>-->
     </el-dialog>
   </div>
 </template>
@@ -557,6 +566,7 @@
       announcementDetailDialog(val) {
         if (!val) {
           this.announcementDetail = {};
+          // $('#announcementDetail .el-dialog').width(600);
         }
       }
     },

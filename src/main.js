@@ -30,6 +30,7 @@ import VueLoading from './plugin/loading/loading.js'
 
 import 'vue2-editor/node_modules/quill/dist/quill.bubble.css'
 
+// import './directives.js';  //弹框拖拽
 
 // 地图
 import AMap from 'vue-amap'
