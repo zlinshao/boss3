@@ -456,6 +456,14 @@
         this.params.pay_first_date = data.pay_first_date;
         this.params.pay_second_date = data.pay_second_date;
 
+        this.params.is_agency = String(data.is_agency.id);   //是否中介
+        this.params.agency_name = data.agency_name;
+        this.params.agency_price = data.agency_price;
+        this.params.agency_user_name = data.agency_user_name;
+        this.params.agency_phone = data.agency_phone;
+
+        this.params.is_corp = String(data.is_corp.id);
+
         this.params.deposit = data.deposit;
         this.params.vacancy_other = data.vacancy_other;
         this.params.warranty = data.warranty;
