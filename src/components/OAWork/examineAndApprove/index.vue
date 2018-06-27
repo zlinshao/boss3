@@ -1124,7 +1124,7 @@
             break;
         }
       },
-      closeFrame() {
+      closeFrame(val) {
         this.reportModule = false;
 
         this.frameVisible = false;
@@ -1152,6 +1152,9 @@
         this.repairVisible = false;
         this.miscellaneousExpensesVisible = false;
         this.miscellaneousExpensesOfficialVisible = false;
+        if(val === 'success'){
+          this.myData(this.params, this.params.page);
+        }
 
       }
     }

@@ -192,8 +192,11 @@
         this.reportDetailDialog = true;
         this.reportId = row.flow.id;
       },
-      closeModal(){
+      closeModal(val){
         this.reportDetailDialog = false;
+        if(val === 'success'){
+          this.getData();
+        }
       },
 
       changelist(){

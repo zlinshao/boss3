@@ -1,6 +1,6 @@
 <template>
   <div id="addHouseResources">
-    <el-dialog :close-on-click-modal="false" title="租房报备" :visible.sync="rentReportVisible" width="70%">
+    <el-dialog :close-on-click-modal="false" title="未收先租" :visible.sync="rwcRentReportVisible" width="70%">
       <div style="min-height: 550px" class="scroll_bar"
            v-loading="fullLoading"
            element-loading-text="拼命加载中"
@@ -10,7 +10,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="房屋地址" required>
-                <el-input placeholder="请选择房屋地址" v-model="params.address" @focus="selectHouse" readonly=""></el-input>
+                <el-input placeholder="请输入房屋地址" v-model="params.rent_without_collect_address"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="8">
@@ -302,28 +302,26 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="rentReportVisible = false">取 消</el-button>
+        <el-button size="small" @click="rwcRentReportVisible = false">取 消</el-button>
         <el-button size="small" type="primary" @click="confirmSubmit">确 定</el-button>
       </span>
     </el-dialog>
     <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
                   @close='closeModal' @selectMember="selectMember"></Organization>
 
-    <CollectSearch :collectDialog="collectDialog" @close='closeModal'></CollectSearch>
   </div>
 </template>
 
 <script>
   import UpLoad from '../../common/UPLOAD.vue'
   import Organization from '../../common/organization.vue'
-  import CollectSearch from '../../common/collectSearch.vue'
 
   export default {
-    components: {UpLoad, Organization,CollectSearch},
-    props: ['rentReport','reportDetailData','processableId','reportId'],
+    components: {UpLoad, Organization},
+    props: ['rwcRentReport','reportDetailData','processableId','reportId'],
     data() {
       return {
-        rentReportVisible: false,
+        rwcRentReportVisible: false,
         isClear: false,
         organizationDialog: false,
         collectDialog: false,
@@ -334,13 +332,12 @@
         receiptDate : '',
 
         params : {
-          address: '',
+          rent_without_collect_address: '',
           id: '',
           processable_id: '',
-          type: 1,
+          type: 4,
+          rwc_type: 1,
           draft: 0,
-          contract_id: '',              //合同id
-          house_id: '',                 //房屋地址id
           discount: '',                  //让价总金额
 
           month: '',                    //租房月数
@@ -403,10 +400,10 @@
       };
     },
     watch: {
-      rentReport(val){
-        this.rentReportVisible = val
+      rwcRentReport(val){
+        this.rwcRentReportVisible = val
       },
-      rentReportVisible(val){
+      rwcRentReportVisible(val){
         if (!val) {
           this.$emit('close');
           this.clearData();
@@ -437,10 +434,8 @@
         console.log(data);
         this.params.processable_id = this.reportId;
         this.params.id = data.id;
-        this.params.contract_id = data.contract_id;
-        this.params.house_id = data.house_id;
 
-        this.params.address = data.address;
+        this.params.rent_without_collect_address = data.rent_without_collect_address;
         this.params.month = data.month;
         this.params.day = data.day === '0' ? '' : data.day;
         this.params.contract_number = data.contract_number === '' ? 'LJZF' : data.contract_number;
@@ -543,10 +538,6 @@
         return img;
       },
 
-      //打开房屋选择模态框
-      selectHouse(){
-        this.collectDialog = true;
-      },
       //调出选人组件
       openOrganizeModal(val){
         this.selectType = val;
@@ -637,13 +628,7 @@
 
       //关闭模态框
       closeModal(val){
-        this.collectDialog = false;
         this.organizationDialog = false;
-        if(val){
-          this.params.address = val.address;
-          this.params.contract_id = val.contract_id;
-          this.params.house_id = val.house_id;
-        }
       },
 
       getImg(val){
@@ -693,13 +678,12 @@
       clearData(){
         this.isClear = false;
         this.params={
-          address: '',
+          rent_without_collect_address: '',
           id: '',
           processable_id: '',
-          type: 1,
+          type: 4,
+          rwc_type: 1,
           draft: 0,
-          contract_id: '',              //合同id
-          house_id: '',                 //房屋地址id
           discount: '',                  //让价总金额
 
           month: '',                    //租房月数

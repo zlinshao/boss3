@@ -15,8 +15,8 @@
                     <img :src="personal.avatar" v-if="personal.avatar !== '' && personal.avatar !== null">
                     <img src="../../../assets/images/head.png" v-else>
                   </p>
-                  <span>{{personal.name}}<span v-for="(key,index) in personal.org"
-                                               v-if="index === 0">-{{key.name}}</span></span>
+                  <span>{{personal.name}}<span v-for="(value,index) in personal.org"
+                                               v-if="index === 0">-{{value.name}}</span></span>
                 </div>
                 <div class="auditStatus" v-if="placeFalse" @click="approvePersonal"><i
                   class="iconfont icon-shenpi1"></i>&nbsp;{{place.display_name}}
@@ -28,26 +28,31 @@
               </div>
               <div class="scroll_bar">
                 <el-row>
-                  <el-col :span="12" v-for="(key,index) in show_content" :key="index"
+                  <el-col :span="12" v-for="(value,index) in show_content" :key="index"
                           v-if="printScreen.indexOf(index) === -1">
-                    <el-form-item v-if="!Array.isArray(key)" :label="index" class="detailTitle">
-                      <div class="special" v-if="index !== '房屋类型'">{{key}}</div>
-                      <div class="special" v-if="index === '房屋类型'">{{key.name}}</div>
+                    <el-form-item v-if="!Array.isArray(value) && value.constructor !== Object" :label="index" class="detailTitle">
+                      <div class="special" v-if="index !== '房屋类型'">{{value}}</div>
+                      <div class="special" v-if="index === '房屋类型'">{{value.name}}</div>
                     </el-form-item>
-                    <el-form-item v-if="Array.isArray(key)" :label="index">
+                    <el-form-item v-if="Array.isArray(value)" :label="index">
                       <div class="special">
-                        <span v-if="index === '定金和收款方式' || index === '补交定金和收款方式'" v-for="item in key">{{item}}</span>
-                        <span v-else>
-                        <span style="margin-right: 20px;color: #409EFF">{{item.msg}}</span>
-                        <span>{{item.period}}</span>
-                      </span>
+                        <div v-if="index === '定金和收款方式' || index === '补交定金和收款方式'" v-for="item in value">{{item}}</div>
+                        <div v-else>
+                          <span style="margin-right: 20px;color: #409EFF">{{item.msg}}</span>
+                          <span>{{item.period}}</span>
+                        </div>
                       </div>
                     </el-form-item>
+                    <el-form-item v-if="value.constructor === Object" :label="index" class="detailTitle">
+                      <div class="special" v-if="value.name">{{value.name}}</div>
+                      <div class="special" v-if="value.number">{{value.number}}</div>
+                    </el-form-item>
+
                   </el-col>
                   <el-col :span="24" v-else>
                     <el-form-item :label="index">
                       <div class="special imgs">
-                      <span v-for="(p,index) in key">
+                      <span v-for="(p,index) in value">
                         <img data-magnify="" data-caption="图片查看器" :data-src="p.uri" :src="p.uri" v-if="!p.is_video">
                         <video :src="p.uri" controls v-if="p.is_video" width="120px" height="80px"></video>
                       </span>
@@ -109,26 +114,26 @@
                   <div v-if="commentList.length === 0" style="text-align: center;font-size: 16px;margin-top: 12px;">暂无评论</div>
 
                   <div v-if="commentList.length !== 0">
-                    <div v-for="(key,index) in commentList"  class="reportItem" style="margin-bottom: 12px;">
+                    <div v-for="(value,index) in commentList"  class="reportItem" style="margin-bottom: 12px;">
                       <div class="commentContent">
                         <div class="commentA">
                             <span class="headSculpture">
-                               <img :src="key.user.avatar" v-if="key.user.avatar !== '' && key.user.avatar !== null">
+                               <img :src="value.user.avatar" v-if="value.user.avatar !== '' && value.user.avatar !== null">
                                <img src="../../../assets/images/head.png" v-else>
                             </span>
-                          {{key.user.name}}
-                          <span v-for="(item,index) in key.user.org" v-if="index === 0">-{{item.name}}</span>
+                          {{value.user.name}}
+                          <span v-for="(item,index) in value.user.org" v-if="index === 0">-{{item.name}}</span>
                         </div>
                         <div class="commentB">
-                          {{key.created_at}}
+                          {{value.created_at}}
                         </div>
                       </div>
                       <div class="commentC">
                           <span>
-                            {{key.body}}
+                            {{value.body}}
                           </span>
                         <div>
-                          <p v-for="(p,index) in key.album">
+                          <p v-for="(p,index) in value.album">
                             <img data-magnify="" data-caption="图片查看器" :data-src="p.uri" :src="p.uri"
                                  v-if="!p.is_video">
                           </p>
@@ -151,11 +156,9 @@
                              <img :src="item.staffs.avatar" v-if="item.staffs.avatar !== '' && item.staffs.avatar !== null">
                              <img src="../../../assets/images/head.png" v-else>
                           </span>
-                          {{item.staffs.name}}
-                          <span v-for="(item,index) in item.staffs.org" v-if="index === 0">-{{item.name}}</span>
-                        </div>
-                        <div class="commentB">
-                          {{item.create_time}}
+                          <span style="white-space:pre-wrap">{{item.staffs.name}}</span>
+                          <span style="white-space:pre-wrap" v-for="(item,index) in item.staffs.org" v-if="index === 0">-{{item.name}}</span>
+                          <span style="white-space:pre-wrap;text-align: right"> {{item.create_time}}</span>
                         </div>
                       </div>
                       <div class="diffContent">
@@ -228,13 +231,14 @@
         </el-form>
       </div>
       <div slot="footer" class="dialog-footer" >
-        <el-button v-if="!fullLoading && defaultItem === '评论信息'" size="small" type="primary"
+        <el-button v-if="!fullLoading" size="small" type="primary"
                    v-for="(value,key) in operation" :key="key" @click="commentOn(key)">
           {{value}}
         </el-button>
-        <!--<el-button size="small" type="primary" v-if="bulletin_array.indexOf(reportDetailData.bulletin_name)>-1" @click="openModal">&ndash;&gt;-->
-        <!--修 改-->
-        <!--</el-button>-->
+        <el-button size="small" type="primary" @click="openModal"
+                   v-if="approvedStatus && routerLinks.indexOf(this.process.processable_type) > -1">
+        修 改
+        </el-button>
       </div>
     </el-dialog>
 
@@ -280,7 +284,24 @@
     <ContrastReport :contrastDialog="contrastDialog" :selfReport="selfReport"
                     :aboutReportId="aboutReportId" @close="closeModal"></ContrastReport>
 
-    <RentReport :rentReport="rentReport" :reportDetailData="reportDetailData" :processableId="processable_id" @close="closeModal"></RentReport>
+    <CollectReport :collectReport="collectReport" :reportDetailData="reportDetailData" :reportId="reportId"
+                   :processableId="processable_id" @close="closeModal"></CollectReport>
+    <RentReport :rentReport="rentReport" :reportDetailData="reportDetailData" :reportId="reportId"
+                :processableId="processable_id" @close="closeModal"></RentReport>
+    <HouseReport :houseReport="houseReport" :processableId="processable_id"
+                 :reportId="reportId" @close="closeModal"></HouseReport>
+    <ContinueCollectReport :continueCollectReport="continueCollectReport" :reportDetailData="reportDetailData"
+                           :reportId="reportId" :processableId="processable_id" @close="closeModal"></ContinueCollectReport>
+    <ContinueRentReport :continueRentReport="continueRentReport" :reportDetailData="reportDetailData"
+                           :reportId="reportId" :processableId="processable_id" @close="closeModal"></ContinueRentReport>
+    <TransRentReport :transRentReport="transRentReport" :reportDetailData="reportDetailData"
+                        :reportId="reportId" :processableId="processable_id" @close="closeModal"></TransRentReport>
+    <ChangeRentReport :changeRentReport="changeRentReport" :reportDetailData="reportDetailData"
+                        :reportId="reportId" :processableId="processable_id" @close="closeModal"></ChangeRentReport>
+    <RwcRentReport :rwcRentReport="rwcRentReport" :reportDetailData="reportDetailData"
+                        :reportId="reportId" :processableId="processable_id" @close="closeModal"></RwcRentReport>
+    <RwcConfirmRentReport :rwcConfirmRentReport="rwcConfirmRentReport" :reportDetailData="reportDetailData"
+                        :reportId="reportId" :processableId="processable_id" @close="closeModal"></RwcConfirmRentReport>
   </div>
 </template>
 
@@ -289,17 +310,34 @@
   import ContrastReport from './contrastReport'
   //报备修改
   import RentReport from '../reportRevise/rentReport'
+  import CollectReport from '../reportRevise/collectReport'
+  import HouseReport from '../reportRevise/houseReport'
+  import ContinueCollectReport from '../reportRevise/continueCollectReport'
+  import ContinueRentReport from '../reportRevise/continueRentReport'
+  import TransRentReport from '../reportRevise/transRentReport'
+  import ChangeRentReport from '../reportRevise/changeRentReport'
+  import RwcRentReport from '../reportRevise/rwcRentReport'
+  import RwcConfirmRentReport from '../reportRevise/rwcConfirmRentReport'
 
   export default {
     name: "report-detail",
     props: ['module', 'reportId','changeId'],
-    components: {UpLoad, ContrastReport,RentReport},
+    components: {UpLoad, ContrastReport,RentReport,CollectReport,HouseReport,ContinueCollectReport,
+                 ContinueRentReport,TransRentReport,ChangeRentReport,RwcRentReport,RwcConfirmRentReport},
     data() {
       return {
         address: globalConfig.server_user,
         fullLoading: false,
         reportVisible: false,
         rentReport : false,
+        collectReport : false,
+        houseReport : false,
+        continueCollectReport : false,
+        continueRentReport : false,
+        transRentReport : false,
+        changeRentReport : false,
+        rwcRentReport : false,
+        rwcConfirmRentReport : false,
         show_content: {},
         reportDetailData : {},
         processable_id : '',
@@ -308,9 +346,12 @@
         paging: 0,
         printScreen: ['款项结清截图', '特殊情况领导截图', '特殊情况截图', '特殊情况同意截图', '领导报备截图',
                       '凭证截图', '合同照片', '截图', '领导同意截图', '房屋影像', '房屋照片', '退租交接单'],
-        bulletin_array :['收房报备','租房报备','续收报备','续租报备','公司转租报备','调房报备','房屋质量报备','已知未收先租报备','未收先祖确定'],
-        videoSrc: '',
 
+        routerLinks: ['bulletin_quality', 'bulletin_collect_basic', 'bulletin_collect_continued', 'bulletin_rent_basic',
+          'bulletin_rent_continued', 'bulletin_rent_trans', 'bulletin_rent_RWC', 'bulletin_RWC_confirm', 'bulletin_change',],
+        approvedStatus : false,
+        process : {},
+        videoSrc: '',
         personal: {},
         place: {},
         placeStatus: ['published', 'rejected', 'cancelled'],
@@ -337,6 +378,7 @@
         selfReport: {},
         aboutReportId: '',
         editReportData : [],
+        isEdit : false,
       }
     },
 
@@ -346,14 +388,20 @@
       },
       reportVisible(val) {
         if (!val) {
-          this.$emit('close');
+          if(this.isEdit){
+            this.$emit('close','success');
+          }else {
+            this.$emit('close');
+          }
+          setTimeout(()=>{
+            this.isEdit = false;
+          });
           this.clearData();
         } else {
-          this.process();
+          this.getProcess();
           this.getReportEditInfo();
         }
       },
-
       commentVisible(val) {
         if (!val) {
           this.close_();
@@ -370,8 +418,9 @@
           this.showContent = true;
         }
       },
-      process() {
+      getProcess() {
         this.fullLoading = true;
+        this.approvedStatus = false;
         this.$http.get(this.address + 'process/' + this.reportId).then((res) => {
           this.fullLoading = false;
           if (res.data.status === 'success' && res.data.data.length !== 0) {
@@ -380,12 +429,22 @@
             this.processable_id = res.data.data.process.processable_id;
             this.operation = res.data.data.operation;
             this.deal = res.data.data.deal;
+            this.process = res.data.data.process;
+
             let pro = res.data.data.process;
             this.houseId = res.data.data.process.house_id;
             this.personal = pro.user;
             this.place = pro.place;
             this.placeFalse = this.placeStatus.indexOf(pro.place.status) === -1;
             this.getReportAboutInfo();
+
+            for (let key in this.operation) {
+              if (key.indexOf('approved') > -1) {
+                this.approvedStatus = true;
+                return;
+              }
+            }
+
           } else {
             this.show_content = {};
             this.operation = {};
@@ -447,7 +506,7 @@
               if (val === 'to_comment') {
                 this.comments(this.reportId, 1);
               } else {
-                this.process(this.reportId);
+                this.getProcess(this.reportId);
               }
               this.$notify.success({
                 title: '成功',
@@ -519,18 +578,55 @@
       },
       //修改报备
       openModal(){
-        switch (this.reportDetailData.bulletin_name){
-          case '租房报备':
+        switch (this.process.processable_type){
+          case 'bulletin_rent_basic':
             this.rentReport = true;
+            break;
+          case 'bulletin_collect_basic':
+            this.collectReport = true;
+            break;
+          case 'bulletin_quality':
+            this.houseReport = true;
+            break;
+          case 'bulletin_collect_continued':
+            this.continueCollectReport = true;
+            break;
+          case 'bulletin_rent_continued':
+            this.continueRentReport = true;
+            break;
+          case 'bulletin_rent_trans':
+            this.transRentReport = true;
+            break;
+          case 'bulletin_change':
+            this.changeRentReport = true;
+            break;
+          case 'bulletin_rent_RWC':
+            this.rwcRentReport = true;
+            break;
+          case 'bulletin_RWC_confirm':
+            this.rwcConfirmRentReport = true;
             break;
         }
       },
 
       //关闭模态框
-      closeModal() {
+      closeModal(val) {
         this.aboutReportId = '';
         this.contrastDialog = false;
         this.rentReport = false;
+        this.collectReport = false;
+        this.houseReport = false;
+        this.continueCollectReport = false;
+        this.continueRentReport = false;
+        this.transRentReport = false;
+        this.changeRentReport = false;
+        this.rwcRentReport = false;
+        this.rwcConfirmRentReport = false;
+        if(val==='success'){
+          this.getProcess();
+          this.getReportEditInfo();
+          this.isEdit = true;
+        }
       },
     },
   }
@@ -695,7 +791,6 @@
       @include flex;
       justify-content: space-between;
       .commentA, .commentB {
-        line-height: 36px;
         height: 36px;
       }
       .commentA {
@@ -717,7 +812,6 @@
         }
       }
       .commentB {
-        min-width: 80px;
         text-align: right;
       }
     }

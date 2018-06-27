@@ -1,12 +1,20 @@
 <template>
   <div id="addHouseResources">
-    <el-dialog :close-on-click-modal="false" title="租房报备" :visible.sync="rentReportVisible" width="70%">
+    <el-dialog :close-on-click-modal="false" title="转租报备" :visible.sync="transRentReportVisible" width="70%">
       <div style="min-height: 550px" class="scroll_bar"
            v-loading="fullLoading"
            element-loading-text="拼命加载中"
            element-loading-spinner="el-icon-loading"
            element-loading-background="rgba(255, 255, 255, 0)">
         <el-form size="mini" :model="params" label-width="120px">
+          <el-row>
+            <el-col :span="6">
+              <el-form-item label="转租类型" required="">
+                <el-radio v-model="params.trans_type" label="0">公司</el-radio>
+                <el-radio v-model="params.trans_type" label="1">个人</el-radio>
+              </el-form-item>
+            </el-col>
+          </el-row>
           <el-row>
             <el-col :span="8">
               <el-form-item label="房屋地址" required>
@@ -302,31 +310,31 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="rentReportVisible = false">取 消</el-button>
+        <el-button size="small" @click="transRentReportVisible = false">取 消</el-button>
         <el-button size="small" type="primary" @click="confirmSubmit">确 定</el-button>
       </span>
     </el-dialog>
     <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
                   @close='closeModal' @selectMember="selectMember"></Organization>
 
-    <CollectSearch :collectDialog="collectDialog" @close='closeModal'></CollectSearch>
+    <RentSearch :rentDialog="rentDialog" @close='closeModal'></RentSearch>
   </div>
 </template>
 
 <script>
   import UpLoad from '../../common/UPLOAD.vue'
   import Organization from '../../common/organization.vue'
-  import CollectSearch from '../../common/collectSearch.vue'
+  import RentSearch from '../../common/rentSearch.vue'
 
   export default {
-    components: {UpLoad, Organization,CollectSearch},
-    props: ['rentReport','reportDetailData','processableId','reportId'],
+    components: {UpLoad, Organization,RentSearch},
+    props: ['transRentReport','reportDetailData','processableId','reportId'],
     data() {
       return {
-        rentReportVisible: false,
+        transRentReportVisible: false,
         isClear: false,
         organizationDialog: false,
-        collectDialog: false,
+        rentDialog: false,
         fullLoading : false,
         length: '',
         type: '',
@@ -337,7 +345,8 @@
           address: '',
           id: '',
           processable_id: '',
-          type: 1,
+          type: 2,
+          trans_type: '0',
           draft: 0,
           contract_id: '',              //合同id
           house_id: '',                 //房屋地址id
@@ -403,10 +412,10 @@
       };
     },
     watch: {
-      rentReport(val){
-        this.rentReportVisible = val
+      transRentReport(val){
+        this.transRentReportVisible = val
       },
-      rentReportVisible(val){
+      transRentReportVisible(val){
         if (!val) {
           this.$emit('close');
           this.clearData();
@@ -437,6 +446,7 @@
         console.log(data);
         this.params.processable_id = this.reportId;
         this.params.id = data.id;
+        this.params.trans_type = String(data.trans_type.id);
         this.params.contract_id = data.contract_id;
         this.params.house_id = data.house_id;
 
@@ -545,7 +555,7 @@
 
       //打开房屋选择模态框
       selectHouse(){
-        this.collectDialog = true;
+        this.rentDialog = true;
       },
       //调出选人组件
       openOrganizeModal(val){
@@ -637,7 +647,7 @@
 
       //关闭模态框
       closeModal(val){
-        this.collectDialog = false;
+        this.rentDialog = false;
         this.organizationDialog = false;
         if(val){
           this.params.address = val.address;
@@ -696,7 +706,8 @@
           address: '',
           id: '',
           processable_id: '',
-          type: 1,
+          trans_type: '0',
+          type: 2,
           draft: 0,
           contract_id: '',              //合同id
           house_id: '',                 //房屋地址id
