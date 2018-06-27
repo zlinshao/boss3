@@ -402,7 +402,7 @@ ul.el-menu.el-menu--inline {
 
 .success_label {
   display: inline-block;
-  background: #67c23a;
+  background: #197cc2;
   border-radius: 4px;
   min-width: 110px;
   height: 32px;
@@ -420,8 +420,8 @@ ul.el-menu.el-menu--inline {
   padding: 8px 0; }
 
 #contrastDialog .el-dialog__wrapper .el-dialog .el-dialog__body .scroll_bar {
-  height: 581px !important;
-  max-height: 581px !important; }
+  height: 580px !important;
+  max-height: 580px !important; }
 
 #answerNaire .el-checkbox .el-checkbox__label,
 #answerExam .el-checkbox .el-checkbox__label {
