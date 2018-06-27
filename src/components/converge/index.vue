@@ -607,9 +607,15 @@
         });
       },
       getAnnouncementList() {
-        this.loading2 = this.loading = true;
+        this.loading2 = true;
+        if (this.announcement.page == 1) {
+          this.loading = true;
+        }
         this.$http.get(globalConfig.server + "announcement", {params: this.announcement}).then(res => {
-          this.loading2 = this.loading = false;
+          this.loading2 = false;
+          if (this.announcement.page == 1) {
+            this.loading = false
+          }
           if (res.data.code === "80010") {
             if (this.announcement.page == 1) {
               this.announcementListPage1 = res.data.data;
