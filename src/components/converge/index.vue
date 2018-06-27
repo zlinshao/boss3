@@ -451,7 +451,6 @@
       <div>
         <div style=" margin: 10px;border: 1px solid #dee6fe;border-radius: 5px;padding-right: 0;padding-left: 20px;">
           <el-row v-loading="loading2"
-                  element-loading-text="拼命加载中"
                   element-loading-spinner="el-icon-loading"
                   element-loading-background="rgba(255, 255, 255, 0.3)">
             <el-col :span="24" v-for="(value,key) in announcementList" :key="value.id"
