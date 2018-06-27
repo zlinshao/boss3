@@ -2,7 +2,18 @@
   <div id="university">
     <div class="headPic">
       <img src="../../../assets/images/university/1-乐伽大学.png">
-
+      <!--上方轮播-->
+      <!--<el-row>-->
+        <!--<div>-->
+          <!--<el-carousel height="390px" style="z-index: 0;">-->
+            <!--<el-carousel-item v-for="item in 2" >-->
+              <!--<div style="height: 390px;">-->
+                <!--<img src="../../../assets/images/university/1-乐伽大学.png">-->
+              <!--</div>-->
+            <!--</el-carousel-item>-->
+          <!--</el-carousel>-->
+        <!--</div>-->
+      <!--</el-row>-->
       <div class="navigation">
         <!--<div class="navigation_left" @mouseover="showKey('achievement')" @click="clickKey('achievement')" @mouseout="outHide('achievement') ">-->
         <!--<img src="../../../assets/images/university/勋章.svg" v-if="achievementImgShow" style="width:40px;"/>-->
