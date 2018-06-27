@@ -558,6 +558,7 @@
     },
     activated() {
       this.addRegion();
+      this.announcement.page = 1;
       this.getAnnouncementList();
     },
     watch: {
