@@ -286,7 +286,7 @@
                   <div @click="routerDetail(key.id)" v-for="(key,index) in lifeData.data"
                        v-if="index !== 0 && lifeData.data[0] !== ''">
                     <span v-for="pic in key && key.album && key.album.cover_pic" class="module">
-                        <img v-for="p in pic" :src="p.uri">
+                        <img v-for="p in pic" :src="p.uri" height="100%">
                         <div class="titleShow1">
                           <span>{{key.title}}</span>
                         </div>
@@ -391,12 +391,12 @@
                   <div class="bigPer2 ">
                     <span class="spanImg" @click="routerDetail(key.id)" v-for="(key,index) in figureData.data"
                           v-if="index === 2 || index === 3 && figureData.data[0] !== ''">
-                      <a v-for="pic in key && key.album && key.album.cover_pic" class="module">
+                      <span v-for="pic in key && key.album && key.album.cover_pic" class="module">
                         <img v-for="p in pic" :src="p.uri">
                         <div class="titleShow2">
                           <span>{{key.title}}</span>
                         </div>
-                      </a>
+                      </span>
                     </span>
                   </div>
                 </el-col>
@@ -888,6 +888,7 @@
     }
     .module {
       position: relative;
+      display: inline-block;
       .titleShow {
         width: 100%;
         opacity: 0;
@@ -913,7 +914,7 @@
         width: 100% !important;
         opacity: 0;
         position: absolute;
-        top: -83px;
+        top: 0;
         bottom: 0;
         background: rgba(0, 0, 0, 0.4);
         @include flex;
@@ -925,9 +926,7 @@
         left: 0;
         right: 0;
         color: #fff;
-      }
-      .titleShow2 {
-        top: -88px;
+        height: 97px;
       }
       .titleShow1, .titleShow2 {
         span {
