@@ -147,12 +147,7 @@
         },
       }
     },
-    mounted() {
-      this.getTableData();
-    },
-    activated() {
-      this.getTableData();
-    },
+
     watch: {
       activeName(val) {
         if (val === 'RentReimTab') {
@@ -174,7 +169,7 @@
         }
       },
       tabStatusChange(val) {
-        if (val === 'reimbursement') {
+        if (val === 'reimbursement' && this.rentContractId) {
           this.getTableData();
         }
       }

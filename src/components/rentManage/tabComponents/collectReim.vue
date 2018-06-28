@@ -155,12 +155,7 @@
         reimbursementId: ''
       }
     },
-    mounted() {
-      this.getTableData();
-    },
-    activated() {
-      this.getTableData();
-    },
+
     watch: {
       activeName(val) {
         if (val === 'CollectReimTab') {
@@ -182,7 +177,7 @@
         }
       },
       tabStatusChange(val) {
-        if (val === 'reimbursement') {
+        if (val === 'reimbursement' && this.collectContractId) {
           this.getTableData();
         }
       },
