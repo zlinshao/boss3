@@ -262,11 +262,8 @@
               <el-col :span="8">
                 <el-form-item label="合同性质">
                   <div class="content">
-                    <span v-if="contractInfo.type==1">新租</span>
-                    <span v-else-if="contractInfo.type==2">转租</span>
-                    <span v-else-if="contractInfo.type==3">续租</span>
-                    <span v-else-if="contractInfo.type==4">未收先租</span>
-                    <span v-else-if="contractInfo.type==5">调租</span>
+                    <span v-if="contractInfo.type==1">新收</span>
+                    <span v-else-if="contractInfo.type==2">续收</span>
                     <span v-else="">/</span>
                   </div>
                 </el-form-item>
