@@ -1,9 +1,9 @@
 <template>
   <div id="converge">
     <div class="convergeTop">
-      <el-row>
+      <el-row :gutter="10">
         <el-col :span="16">
-          <div class="topLeft module">
+          <div class="topLeft module" style="width: 100%;">
             <span v-for="(key,index) in hostData.data" v-if="index === 0 && hostData.data[0] !== ''">
               <span v-for="pic in key && key.album && key.album.cover_pic">
                 <img v-for="p in pic" :src="p.uri">
@@ -30,12 +30,12 @@
                 </div>
               </h1>
               <h2>
-                <img src="../../assets/images/yuangong1.png" alt="">
+                <img src="../../assets/images/yuangong1.png" width="100%" height="100%">
               </h2>
             </div>
             <div>
               <h2 class="rightA">
-                <img src="../../assets/images/yuangong2.png" alt="">
+                <img src="../../assets/images/yuangong2.png" width="100%" height="100%">
               </h2>
               <h1 class="rightA module">
                 <span v-for="(key,index) in lowData.data" v-if="index === 0 && lowData.data[0] !== ''">
@@ -960,7 +960,6 @@
 
     img {
       width: 100%;
-      /*height: 100%;*/
       cursor: pointer;
     }
     p {
