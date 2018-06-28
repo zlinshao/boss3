@@ -484,7 +484,7 @@
         })
       },
       getCharts(){
-        this.$http.get(globalConfig.server_user + 'charts').then((res) => {
+        this.$http.get(globalConfig.server_user1 + 'houses/charts').then((res) => {
           if (res.data.status === 'success') {
             this.houseStatus = res.data.data.house;
           }
