@@ -566,7 +566,7 @@
           object[item] = org;
         });
         update.update = object;
-        this.$http.post(globalConfig.server_user + 'houses/batch', {'batch': JSON.stringify(update)}).then((res) => {
+        this.$http.post(globalConfig.server_user1 + 'houses/distribute', {'batch': JSON.stringify(update)}).then((res) => {
           if (res.data.status === 'success') {
             this.$notify.success({
               title: '成功',
