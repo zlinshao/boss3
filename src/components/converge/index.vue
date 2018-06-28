@@ -66,10 +66,13 @@
               <span style="float: right;cursor: pointer;" @click="announcementListDialog=true"
                     v-if="totalNum>8">查看全部>></span>
             </div>
-            <div v-loading="loading"
-                 element-loading-text="拼命加载中"
+            <div v-loading="loading" v-if="loading"
                  element-loading-spinner="el-icon-loading"
-                 element-loading-background="rgba(255, 255, 255, 0.3)">
+                 element-loading-background="rgba(255, 255, 255, 0.3)"
+                 style="width: 100%;height: 50px;"
+            >
+            </div>
+            <div v-if="!loading">
               <el-row>
                 <el-col :span="12" v-for="(value,key) in announcementListPage1" :key="value.id"
                         :class="{'borderBottom': (announcementListPage1.length%2==0 && key!=announcementListPage1.length-1 && key!=announcementListPage1.length-2)||(announcementListPage1.length%2!=0 && key!=announcementListPage1.length-1),
@@ -283,7 +286,7 @@
                   <div @click="routerDetail(key.id)" v-for="(key,index) in lifeData.data"
                        v-if="index !== 0 && lifeData.data[0] !== ''">
                     <span v-for="pic in key && key.album && key.album.cover_pic" class="module">
-                        <img v-for="p in pic" :src="p.uri">
+                        <img v-for="p in pic" :src="p.uri" height="100%">
                         <div class="titleShow1">
                           <span>{{key.title}}</span>
                         </div>
@@ -388,12 +391,12 @@
                   <div class="bigPer2 ">
                     <span class="spanImg" @click="routerDetail(key.id)" v-for="(key,index) in figureData.data"
                           v-if="index === 2 || index === 3 && figureData.data[0] !== ''">
-                      <a v-for="pic in key && key.album && key.album.cover_pic" class="module">
+                      <span v-for="pic in key && key.album && key.album.cover_pic" class="module">
                         <img v-for="p in pic" :src="p.uri">
                         <div class="titleShow2">
                           <span>{{key.title}}</span>
                         </div>
-                      </a>
+                      </span>
                     </span>
                   </div>
                 </el-col>
@@ -448,7 +451,6 @@
       <div>
         <div style=" margin: 10px;border: 1px solid #dee6fe;border-radius: 5px;padding-right: 0;padding-left: 20px;">
           <el-row v-loading="loading2"
-                  element-loading-text="拼命加载中"
                   element-loading-spinner="el-icon-loading"
                   element-loading-background="rgba(255, 255, 255, 0.3)">
             <el-col :span="24" v-for="(value,key) in announcementList" :key="value.id"
@@ -488,12 +490,15 @@
       </div>
 
     </el-dialog>
-    <el-dialog :close-on-click-modal="false" title="公告详情" :visible.sync="announcementDetailDialog" width="650px">
+    <el-dialog id="announcementDetail" :close-on-click-modal="false" title="公告详情"
+               :visible.sync="announcementDetailDialog" width="650px">
+      <!--v-dialogDrag ref="dialog__wrapper"-->
+      <!--<div class="dialog-body">-->
+      <!--<div v-dialogDragWidth="$refs.dialog__wrapper">-->
       <div>
         <div class="scroll_bar"
              style="margin: 10px;border: 1px solid #dee6fe;border-radius: 5px;padding: 0 10px;overflow: auto;">
           <el-row style="margin: 10px;" class="notice_content" v-loading="loading3"
-                  element-loading-text="拼命加载中"
                   element-loading-spinner="el-icon-loading"
                   element-loading-background="rgba(255, 255, 255, 0.3)">
             <div style="color: #474849;line-height: 35px;font-size: 16px;">{{announcementDetail.title}}</div>
@@ -507,6 +512,8 @@
           </el-row>
         </div>
       </div>
+      <!--</div>-->
+      <!--</div>-->
     </el-dialog>
   </div>
 </template>
@@ -551,12 +558,14 @@
     },
     activated() {
       this.addRegion();
+      this.announcement.page = 1;
       this.getAnnouncementList();
     },
     watch: {
       announcementDetailDialog(val) {
         if (!val) {
           this.announcementDetail = {};
+          // $('#announcementDetail .el-dialog').width(600);
         }
       }
     },
@@ -607,9 +616,15 @@
         });
       },
       getAnnouncementList() {
-        this.loading2 = this.loading = true;
+        this.loading2 = true;
+        if (this.announcement.page == 1) {
+          this.loading = true;
+        }
         this.$http.get(globalConfig.server + "announcement", {params: this.announcement}).then(res => {
-          this.loading2 = this.loading = false;
+          this.loading2 = false;
+          if (this.announcement.page == 1) {
+            this.loading = false
+          }
           if (res.data.code === "80010") {
             if (this.announcement.page == 1) {
               this.announcementListPage1 = res.data.data;
@@ -873,6 +888,7 @@
     }
     .module {
       position: relative;
+      display: inline-block;
       .titleShow {
         width: 100%;
         opacity: 0;
@@ -898,7 +914,7 @@
         width: 100% !important;
         opacity: 0;
         position: absolute;
-        top: -83px;
+        top: 0;
         bottom: 0;
         background: rgba(0, 0, 0, 0.4);
         @include flex;
@@ -910,9 +926,7 @@
         left: 0;
         right: 0;
         color: #fff;
-      }
-      .titleShow2 {
-        top: -88px;
+        height: 97px;
       }
       .titleShow1, .titleShow2 {
         span {
