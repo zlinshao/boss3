@@ -452,7 +452,7 @@
       getData(){
         this.emptyContent = ' ';
         this.tableLoading = true;
-        this.$http.get(globalConfig.server_user + 'houses', {params: this.formInline}).then((res) => {
+        this.$http.get(globalConfig.server_user1 + 'houses', {params: this.formInline}).then((res) => {
           this.tableLoading = false;
           if (res.data.status === 'success') {
             this.totalNumber = res.data.meta.total;

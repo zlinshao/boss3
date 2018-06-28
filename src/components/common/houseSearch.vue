@@ -95,7 +95,7 @@
       search(){ //关键词 搜索
         this.tableStatus = " ";
         this.tableLoading = true;
-        this.$http.get(globalConfig.server_user + 'houses', {params: this.params}).then((res) => {
+        this.$http.get(globalConfig.server_user1 + 'houses', {params: this.params}).then((res) => {
           this.tableLoading = false;
           if (res.data.status === 'success') {
             if (res.data.data.length > 0) {
