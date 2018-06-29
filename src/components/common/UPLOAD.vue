@@ -170,8 +170,8 @@
                     $('#pickfiles' + _this.ID).prepend(`
                     <div class="imgItem" id="${file.id}">
                       <div style=" position: relative;">
-                        <img src="${fr.result}">
-                        <div class="progress"><p style="color: #fff !important;"></p></div>
+                        <img src="${fr.result}" data-magnify="" data-src="${fr.result}">
+                        <div class="progress" data-magnify="" data-src="${fr.result}"><p style="color: #fff !important;"></p></div>
                         <div class="remove pic_delete el-icon-circle-close" data-val=${file.id}>
                         </div>
                       </div>
