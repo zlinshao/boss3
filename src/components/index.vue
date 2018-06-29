@@ -74,7 +74,7 @@
               <el-dropdown-item>
                 <el-row v-if="unReadMessageData.length >0" @click.native="showOtherDetail('unread')">
                   <el-col :span="24">
-                    <div style="display:block; margin-top:10px; text-align:center; color:#409EFF">查看全部<span
+                    <div style="display:block; margin:5px 0; text-align:center; color:#409EFF">查看全部<span
                       style="color:#f00">{{messageTotal}}条</span>未读
                     </div>
                   </el-col>
