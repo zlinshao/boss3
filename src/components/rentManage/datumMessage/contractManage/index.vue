@@ -244,9 +244,9 @@
               </el-col>
             </el-row>
             <div class="btnOperate">
-              <el-button type="primary" @click="highSearch()">搜索</el-button>
-              <el-button type="primary" @click="resetting">重置</el-button>
-              <el-button type="primary" @click="highGrade">取消</el-button>
+              <el-button type="primary" size="mini" @click="highSearch()">搜索</el-button>
+              <el-button type="primary" size="mini" @click="resetting">重置</el-button>
+              <el-button type="primary" size="mini" @click="highGrade">取消</el-button>
             </div>
           </el-form>
         </div>
