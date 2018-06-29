@@ -121,19 +121,17 @@
       }
     },
     mounted() {
-
+      this.currentDepartId = 1;
+      this.getDepartment(1);
+      this.getHighDepart()
     },
     watch:{
       dimission(val){
         this.is_dimission = val?1:0;
         this.getDepartment(this.currentDepartId);
-
       },
       organizationDialog(val){
         this.organizationVisible = val;
-        this.currentDepartId = 1;
-        this.getDepartment(1);
-        this.getHighDepart()
       },
       organizationVisible(val){
         if(!val){
