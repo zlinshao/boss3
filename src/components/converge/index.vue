@@ -66,13 +66,10 @@
               <span style="float: right;cursor: pointer;" @click="announcementListDialog=true"
                     v-if="totalNum>8">查看全部>></span>
             </div>
-            <div v-loading="loading" v-if="loading"
+            <div v-loading="loading"
                  element-loading-spinner="el-icon-loading"
                  element-loading-background="rgba(255, 255, 255, 0.3)"
-                 style="width: 100%;height: 50px;"
-            >
-            </div>
-            <div v-if="!loading">
+                 style="min-height: 50px;">
               <el-row>
                 <el-col :span="12" v-for="(value,key) in announcementListPage1" :key="value.id"
                         :class="{'borderBottom': (announcementListPage1.length%2==0 && key!=announcementListPage1.length-1 && key!=announcementListPage1.length-2)||(announcementListPage1.length%2!=0 && key!=announcementListPage1.length-1),
