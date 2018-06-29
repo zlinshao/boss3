@@ -101,7 +101,6 @@
     },
     methods: {
       scroll_bar_move(){
-
         let body_height = document.documentElement.clientHeight;
         let body_scrollTop = $(document).scrollTop();
         let scroll_height = $('#messageCent').height()+120;
@@ -109,10 +108,6 @@
           this.isGetMore = true;
         }
         this.scrollHeight = scroll_height;
-        console.log(body_height)
-        console.log(body_scrollTop)
-        console.log(scroll_height)
-
         if(scroll_height - body_scrollTop - body_height < 50){
           this.getMore();
           this.isGetMore = false;

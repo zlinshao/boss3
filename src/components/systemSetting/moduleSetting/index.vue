@@ -16,9 +16,9 @@
       <el-tab-pane label="问答回复管理" name="fifth">
         <ReplierManage></ReplierManage>
       </el-tab-pane>
-      <el-tab-pane label="目标业绩" name="sixth">
-        <TargetPerformance></TargetPerformance>
-      </el-tab-pane>
+      <!--<el-tab-pane label="目标业绩" name="sixth">-->
+        <!--<TargetPerformance></TargetPerformance>-->
+      <!--</el-tab-pane>-->
     </el-tabs>
   </div>
 </template>
