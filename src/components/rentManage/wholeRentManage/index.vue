@@ -327,6 +327,9 @@
                         <span v-if="scope.row.doc_status.id==4">
                           <span class="success_label">{{scope.row.doc_status.name}}</span>
                         </span>
+                        <span v-if="scope.row.doc_status.id==5">
+                          <span class="info_label">{{scope.row.doc_status.name}}</span>
+                        </span>
                       </span>
                   <span v-else="">/</span>
                 </template>
