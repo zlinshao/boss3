@@ -93,7 +93,7 @@
       let _this = this;
       this.getMessage();
       this.params.unread = this.$route.query.unread;
-      $(document).scroll(function () {
+      $('body').scroll(function () {
         _this.scroll_bar_move();
       })
     },
@@ -101,13 +101,15 @@
     },
     methods: {
       scroll_bar_move(){
+
         let body_height = $('body').height();
-        let body_scrollTop = $(document).scrollTop();
-        let scroll_height = $('#messageCent').height()+100;
+        let body_scrollTop = $('body').scrollTop();
+        let scroll_height = $('#messageCent').height()+120;
         if(this.scrollHeight < scroll_height){
           this.isGetMore = true;
         }
         this.scrollHeight = scroll_height;
+
         if(scroll_height - body_scrollTop - body_height < 50){
           this.getMore();
           this.isGetMore = false;

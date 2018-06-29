@@ -58,6 +58,7 @@
                       <el-select v-model="formInline.status" clearable placeholder="请选择房屋状态" value="">
                         <el-option label="未出租" value="0"></el-option>
                         <el-option label="已出租" value="1"></el-option>
+                        <el-option label="待收房" value="2"></el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
