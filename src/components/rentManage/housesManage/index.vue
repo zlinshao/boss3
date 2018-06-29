@@ -568,7 +568,7 @@
         });
         update.update = object;
         this.$http.post(globalConfig.server_user1 + 'houses/distribute', {'batch': JSON.stringify(update)}).then((res) => {
-          if (res.data.status === 'success') {
+          if (res.data.code === '20010') {
             this.$notify.success({
               title: '成功',
               message: '操作成功',
