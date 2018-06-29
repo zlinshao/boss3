@@ -13,7 +13,8 @@
       <el-table-column
         label="房屋地址">
         <template slot-scope="scope">
-          <span v-if="scope.row.house">{{scope.row.house.name}}</span>
+          <span v-if="scope.row.content.address">{{scope.row.content.address}}</span>
+          <span v-else-if="scope.row.content.house && scope.row.content.house.name">{{scope.row.content.house.name}}</span>
           <span v-else="">/</span>
         </template>
       </el-table-column>
