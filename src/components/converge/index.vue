@@ -1,9 +1,9 @@
 <template>
   <div id="converge">
     <div class="convergeTop">
-      <el-row>
+      <el-row :gutter="10">
         <el-col :span="16">
-          <div class="topLeft module">
+          <div class="topLeft module" style="width: 100%;">
             <span v-for="(key,index) in hostData.data" v-if="index === 0 && hostData.data[0] !== ''">
               <span v-for="pic in key && key.album && key.album.cover_pic">
                 <img v-for="p in pic" :src="p.uri">
@@ -30,12 +30,12 @@
                 </div>
               </h1>
               <h2>
-                <img src="../../assets/images/yuangong1.png" alt="">
+                <img src="../../assets/images/yuangong1.png" width="100%" height="100%">
               </h2>
             </div>
             <div>
               <h2 class="rightA">
-                <img src="../../assets/images/yuangong2.png" alt="">
+                <img src="../../assets/images/yuangong2.png" width="100%" height="100%">
               </h2>
               <h1 class="rightA module">
                 <span v-for="(key,index) in lowData.data" v-if="index === 0 && lowData.data[0] !== ''">
@@ -66,13 +66,10 @@
               <span style="float: right;cursor: pointer;" @click="announcementListDialog=true"
                     v-if="totalNum>8">查看全部>></span>
             </div>
-            <div v-loading="loading" v-if="loading"
+            <div v-loading="loading"
                  element-loading-spinner="el-icon-loading"
                  element-loading-background="rgba(255, 255, 255, 0.3)"
-                 style="width: 100%;height: 50px;"
-            >
-            </div>
-            <div v-if="!loading">
+                 style="min-height: 50px;">
               <el-row>
                 <el-col :span="12" v-for="(value,key) in announcementListPage1" :key="value.id"
                         :class="{'borderBottom': (announcementListPage1.length%2==0 && key!=announcementListPage1.length-1 && key!=announcementListPage1.length-2)||(announcementListPage1.length%2!=0 && key!=announcementListPage1.length-1),
@@ -960,7 +957,6 @@
 
     img {
       width: 100%;
-      /*height: 100%;*/
       cursor: pointer;
     }
     p {
