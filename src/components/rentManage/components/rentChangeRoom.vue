@@ -546,8 +546,8 @@
 
         params: {
           id: '',   //合同id
-          house_id: '',
-          house_id_rent:'',
+          house_id_rent: '',
+          house_id:'',
           type: 5,
           //------------------小区详情--------------------//
           customers: [],               //租客数组
@@ -683,7 +683,7 @@
         this.params.id = val;
       },
       collectHouseId(val){
-        this.params.house_id = val;
+        this.params.house_id_rent = val;
       },
       'params.purchase_way': {
         handler(val, oldVal){
@@ -867,7 +867,7 @@
         this.houseDialog = false;
         if(val){
           this.houseAddress = val;
-          this.params.house_id_rent = val.id;
+          this.params.house_id = val.id;
         }
       },
 
@@ -1040,8 +1040,8 @@
         this.isClear = false;
         this.params = {
           id: this.rentContractId,   //合同id
-          house_id: this.collectHouseId,
-          house_id_rent: '',
+          house_id_rent: this.collectHouseId,
+          house_id: '',
           type: 5,
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
