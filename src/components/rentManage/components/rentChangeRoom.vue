@@ -1123,6 +1123,8 @@
         this.other_photo = {};
         this.checkout_photo = {};
         this.checkout_settle_photo = {};
+
+        this.houseAddress = {};
       }
     }
   };
