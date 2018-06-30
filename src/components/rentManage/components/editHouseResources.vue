@@ -652,7 +652,7 @@
 
         params: {
           is_submit: 0,
-          type : '',
+          type : 1,
           //------------------小区详情--------------------//
           community_id : '',            //小区id
           community_nickname : '',      //小区昵称
@@ -848,7 +848,6 @@
             this.isAll = data.auth_level == "all";
             //房屋信息
 
-            this.params.type = data.type;
             this.params.community_id = data.community_id;
             this.community_name = data.community_name;
             this.community_address = data.community_address;
@@ -1225,7 +1224,7 @@
         this.isClear = false;
         this.params = {
           is_submit: 0,
-          type : '',
+          type : 1,
           //------------------小区详情--------------------//
           community_id : '',            //小区id
           community_nickname : '',      //小区昵称

@@ -626,7 +626,7 @@
         type:'',
 
         params: {
-          type : '',
+          type : 2,
           //------------------小区详情--------------------//
           community_id : '',            //小区id
           community_nickname : '',      //小区昵称
@@ -815,7 +815,6 @@
 
             let data = res.data.data;
             //房屋信息
-            this.params.type = data.type;
             this.params.community_id = data.community_id;
             this.community_name = data.community_name;
             this.community_address = data.community_address;
@@ -1050,7 +1049,7 @@
         }
 
         if(!this.isUpPic){
-          this.$http.put(globalConfig.server+'lease/collect/'+this.collectContractId,this.params).then((res) => {
+          this.$http.post(globalConfig.server+'lease/collect/'+this.collectContractId,this.params).then((res) => {
             if(res.data.code === '61010'){
               this.editHouseResourcesDialogVisible = false;
               this.$emit('close','updateCollect');
@@ -1075,7 +1074,7 @@
       clearData(){
         this.isClear = false;
         this.params = {
-          type : '',
+          type : 2,
           //------------------小区详情--------------------//
           community_id : '',            //小区id
           community_nickname : '',      //小区昵称
