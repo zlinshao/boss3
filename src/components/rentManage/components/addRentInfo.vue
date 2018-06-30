@@ -301,7 +301,7 @@
                     <div v-for="item in receiptChangeAmount">
                       <el-row>
                         <el-col :span="6">
-                          <el-form-item label="收据编号" required>
+                          <el-form-item label="收据编号" >
                             <el-input placeholder="请输入内容" v-model="params.receipt[item-1]"></el-input>
                           </el-form-item>
                         </el-col>
