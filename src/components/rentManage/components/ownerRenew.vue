@@ -1049,7 +1049,7 @@
         }
 
         if(!this.isUpPic){
-          this.$http.post(globalConfig.server+'lease/collect/'+this.collectContractId,this.params).then((res) => {
+          this.$http.put(globalConfig.server+'lease/collect/'+this.collectContractId,this.params).then((res) => {
             if(res.data.code === '61010'){
               this.editHouseResourcesDialogVisible = false;
               this.$emit('close','updateCollect');
