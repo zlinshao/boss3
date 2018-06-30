@@ -420,7 +420,7 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="资料补齐时间"  required="">
+                      <el-form-item label="资料补齐时间">
                         <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
                                         v-model="params.data_date"></el-date-picker>
                       </el-form-item>
