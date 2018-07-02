@@ -8,7 +8,7 @@
            element-loading-background="rgba(255, 255, 255, 0)">
         <el-form size="mini" :model="params" label-width="120px">
           <el-row>
-            <el-col :span="6">
+            <el-col :span="8">
               <el-form-item label="转租类型" required="">
                 <el-radio v-model="params.trans_type" label="0">公司</el-radio>
                 <el-radio v-model="params.trans_type" label="1">个人</el-radio>

@@ -144,7 +144,14 @@
             <div class="scroll_bar">
               <div class="form_border ">
                 <el-form size="mini" :model="params" label-width="100px">
+
                   <el-row>
+                    <el-col :span="6">
+                      <el-form-item label="转租类型" required="">
+                        <el-radio v-model="params.trans_type" label="0">公司</el-radio>
+                        <el-radio v-model="params.trans_type" label="1">个人</el-radio>
+                      </el-form-item>
+                    </el-col>
                     <el-col :span="6">
                       <el-form-item label="是否公司单" required="">
                         <el-switch v-model="params.contract_type" active-value="1" inactive-value="0"></el-switch>
@@ -536,6 +543,7 @@
           //------------------小区详情--------------------//
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
+          trans_type : '0',           //转租类型
           contract_type: '1',           // 订单性质（合同种类）
           contract_number: '',         // 合同编号
           month: '',                   // 租房月数
@@ -1018,6 +1026,7 @@
           type: 2,
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
+          trans_type : '0',           //转租类型
           contract_type: '1',           // 订单性质（合同种类）
           contract_number: '',         // 合同编号
           month: '',                   // 租房月数
