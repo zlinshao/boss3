@@ -536,7 +536,7 @@
         params: {
           id: '',   //合同id
           house_id: '',
-          type: 3,
+          type: 2,
           //------------------小区详情--------------------//
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
@@ -1019,7 +1019,7 @@
         this.params = {
           id: this.rentContractId,   //合同id
           house_id: this.collectHouseId,
-          type: 3,
+          type: 2,
           customers: [],               //租客数组
           //-------------------合同详情--------------------//
           contract_type: '1',           // 订单性质（合同种类）
