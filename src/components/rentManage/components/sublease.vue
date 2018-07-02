@@ -396,11 +396,7 @@
                         <el-input placeholder="请输入内容" v-model="params.manage_fee"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
-                      <el-form-item label="收据编号" required>
-                        <el-input placeholder="请输入内容" v-model="params.receipt"></el-input>
-                      </el-form-item>
-                    </el-col>
+
                     <el-col :span="6">
                       <el-form-item label="尾款补齐时间" required="">
                         <el-date-picker value-format="yyyy-MM-dd" type="date" placeholder="选择日期"
