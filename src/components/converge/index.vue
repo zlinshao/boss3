@@ -600,7 +600,7 @@
       lookDetail(id) {
         this.announcementDetailDialog = true;
         this.loading3 = true;
-        this.$http.get(globalConfig.server + 'announcement/' + id).then((res) => {
+        this.$http.get(globalConfig.server + 'announcement/' + id+"?published=1").then((res) => {
           this.loading3 = false;
           if (res.data.code === '80010') {
             this.announcementDetail = res.data.data;
@@ -867,6 +867,14 @@
       -webkit-line-clamp: $n;
       line-clamp: $n;
     }
+    @mixin text_flow {
+      display: inline-block;
+      overflow: hidden;
+      white-space: nowrap;
+      -ms-word-break: break-all;
+      word-break: break-all;
+      text-overflow: ellipsis;
+    }
     $color1: #fb4699;
     $color2: #58d788;
     $color3: #6a8dfb;
@@ -903,7 +911,7 @@
           font-size: 20px;
           margin-bottom: 20px;
           margin-left: 20px;
-          @include text_overflow(1);
+          @include text_flow;
           height: 23px;
         }
       }
@@ -1124,7 +1132,7 @@
                 justify-content: space-between;
                 p {
                   margin: 0;
-                  @include text_overflow(1);
+                  @include text_flow;
                 }
               }
             }
