@@ -5,9 +5,9 @@
         <div class="tabsSearch">
           <el-form :inline="true" size="mini">
             <el-form-item>
-              <el-button class="iconfont icon-zhengchangliebiao" @click="showList('list')" :disabled="form.tag==1"
+              <el-button class="iconfont icon-zhengchangliebiao" @click="showList('list')" :disabled="form.tag==1" style="font-size: 12px;"
                          size="mini" type="primary" plain>列表</el-button>
-              <el-button class="iconfont icon-liebiaozhankai" @click="showList('fold')" :disabled="form.tag==2"
+              <el-button class="iconfont icon-liebiaozhankai" @click="showList('fold')" :disabled="form.tag==2" style="font-size: 12px;"
                          size="mini" type="primary" plain>聚合</el-button>
             </el-form-item>
             <el-form-item>
