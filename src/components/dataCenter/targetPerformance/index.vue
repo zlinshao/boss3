@@ -270,6 +270,10 @@
     methods: {
       // 导出
       exportData() {
+        this.form.export = 1;
+        this.$http.get(globalConfig.server + 'performance/index', {params: this.form}).then((res) => {
+
+        });
         // this.$http.get(globalConfig.server + 'salary/achv/export', {responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
         //   if (!res.data) {
         //     return;
@@ -467,6 +471,7 @@
       getTableData() {
         this.tableStatus = ' ';
         this.tableLoading = true;
+        this.form.export = '';
         this.$http.get(globalConfig.server + 'performance/index', {params: this.form}).then((res) => {
           this.tableLoading = false;
           this.isHigh = false;

@@ -69,12 +69,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input readonly="" v-model="form.department_name" @focus="chooseDepart('search')"
-                                placeholder="点击选择">
-                        <template slot="append">
-                          <div style="cursor: pointer;" @click="emptyDepart('search')">清空</div>
-                        </template>
-                      </el-input>
+                      <el-input v-model="form.department_name"  placeholder="请输入合同编号" clearable></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -123,13 +118,10 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-date-picker
-                        v-model="form.month"
-                        type="daterange"
-                        value-format="yyyy-MM-dd"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
-                      </el-date-picker>
+                      <el-input v-model="form.month[0]" style="width: 150px;" placeholder="起"></el-input>
+                      至
+                      <el-input v-model="form.month[1]" style="width: 150px;" placeholder="止"></el-input>
+                      年
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -143,7 +135,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="form.agency" placeholder="请选择">
+                      <el-select v-model="form.agency" placeholder="请选择" clearable>
                         <el-option key="1" label="是" value="1">是</el-option>
                         <el-option key="0" label="否" value="0">否</el-option>
                       </el-select>
@@ -243,7 +235,6 @@
           </div>
         </div>
 
-
         <div style="margin-top: 10px;">
           <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
             <el-button type="primary" size="mini" @click="">切换小组/片区</el-button>
@@ -302,10 +293,10 @@
                       label="片区"
                       prop="department_name">
                     </el-table-column>
-                    <el-table-column
-                      label="负责人"
-                      prop="leader_name">
-                    </el-table-column>
+                    <!--<el-table-column-->
+                      <!--label="负责人"-->
+                      <!--prop="leader_name">-->
+                    <!--</el-table-column>-->
                     <el-table-column
                       label="收房套数"
                       prop="leader_name">
