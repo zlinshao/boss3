@@ -29,21 +29,13 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">发布时间</div>
+                    <div class="el_col_label">部门</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-date-picker
-                        v-model="params.publish_time"
-                        type="daterange"
-                        align="right"
-                        unlink-panels
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        value-format="yyyy-MM-dd"
-                        :picker-options="pickerOptions">
-                      </el-date-picker>
+                      <el-input v-model="department" @focus="selectDepart('depart')" readonly placeholder="选择部门">
+                        <el-button slot="append" type="primary" @click="emptyDepart">清空</el-button>
+                      </el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -51,18 +43,17 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">部门</div>
+                    <div class="el_col_label">开单人</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input v-model="department" @focus="selectDepart" readonly placeholder="选择部门">
+                      <el-input v-model="staff" @focus="selectDepart('staff')" readonly placeholder="选择开单人">
                         <el-button slot="append" type="primary" @click="emptyDepart">清空</el-button>
                       </el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
               </el-col>
-
             </el-row>
             <el-row class="el_row_border">
               <el-col :span="12" v-if="activeName == 'first' ">
@@ -203,12 +194,12 @@
                     <div class="el_col_label">是否上传合同</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
-                    <e-form-item>
+                    <el-form-item>
                       <el-select v-model="params.un_upload" clearable>
                         <el-option key="0" label="否" value="0">否</el-option>
                         <el-option key="1" label="是" value="1">是</el-option>
                       </el-select>
-                    </e-form-item>
+                    </el-form-item>
                   </el-col>
                 </el-row>
               </el-col>
@@ -240,6 +231,28 @@
                         <el-option v-for="(key,index) in visit_sta" :label="key.title" :value="key.value"
                                    :key="index"></el-option>
                       </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">发布时间</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-date-picker
+                        v-model="params.publish_time"
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        value-format="yyyy-MM-dd"
+                        :picker-options="pickerOptions">
+                      </el-date-picker>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -772,6 +785,7 @@
           sign_time: [],   // 签约日期
           un_upload: '',   // 是否上传合同
           org_id: '',  // 部门
+          user_id : '',   //员工
           status: '',   // 房屋状态1:未签约， 2：已签约， 3：快到期（60天内）， 4：已结束， 5：已过期
           contract_index: '1',
           doc_status: '',
@@ -810,6 +824,7 @@
           },
         ],
         department: '',
+        staff : '',
         type: '',
         length: '',
         currentPage: 1,
@@ -946,6 +961,9 @@
 
           this.params.org_id = val[0].id;
           this.department = val[0].name;
+        }else {
+          this.params.user_id = val[0].id;
+          this.staff = val[0].name;
         }
         this.organizationDialog = false;
       },
@@ -1255,8 +1273,8 @@
           this.show = true
         })
       },
-      selectDepart() {
-        this.type = 'depart';
+      selectDepart(val) {
+        this.type = val;
         this.length = 1;
         this.organizationDialog = true;
       },
@@ -1297,6 +1315,7 @@
           sign_time: [],   // 签约日期
           un_upload: '',   // 是否上传合同
           org_id: '',  // 部门
+          user_id : '',
           status: '',   // 房屋状态1:未签约， 2：已签约， 3：快到期（60天内）， 4：已结束， 5：已过期
           contract_index: '1',
           doc_status: '',
