@@ -189,6 +189,9 @@ const DataMove =()=> import  ('../components/dataMove.vue')
 
 const BatchEnter =()=> import  ('../components/batchEnter/index')
 
+
+const AutoForm = ()=> import ('../autoForm/index')
+
 Vue.use(Router);
 
 export default new Router({
@@ -578,6 +581,15 @@ export default new Router({
       ]
     },
 
+    // {
+    //   path: '/',
+    //   component: Index,
+    //   hidden: true,
+    //   name: '',
+    //   children: [
+    //     {path: '/autoForm', component: AutoForm, name: '表单设计器', icon: "iconfont icon-shouyemenhu"},
+    //   ]
+    // },
   ]
 })
 

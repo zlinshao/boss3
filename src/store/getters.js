@@ -1,3 +1,5 @@
+import autoForm from "./modules/autoForm";
+
 /**
  * Created by Administrator on 2017/12/13 0013.
  */
@@ -13,5 +15,6 @@ const getters = {
   badgeFlag: state => state.badge.badgeFlag,
   newversion: state => state.article.newversion,
   onlineExam: state => state.onlineExam.test_paper,
+
 }
 export default getters

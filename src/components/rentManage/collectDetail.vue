@@ -1027,6 +1027,7 @@
                 </div>
                 -->
       </div>
+
       <div id="mainContent" v-if="simple">
         <el-row style="height: 100%;">
           <el-col :span="12" id="simple" class="simple_left scroll_bar"
