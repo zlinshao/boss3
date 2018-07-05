@@ -580,15 +580,15 @@ export default new Router({
         {path: '/personalSalary', component: PersonalSalary, name: '工资',},
       ]
     },
-    // {
-    //   path: '/',
-    //   component: Index,
-    //   name: '数据中心',
-    //   icon: 'iconfont icon-shuju',
-    //   children: [
-    //     {path: '/achievementData', component: AchievementData, name: '业绩数据',},
-    //   ]
-    // },
+    {
+      path: '/',
+      component: Index,
+      name: '数据中心',
+      icon: 'iconfont icon-shuju',
+      children: [
+        {path: '/achievementData', component: AchievementData, name: '业绩数据',},
+      ]
+    },
 
   ]
 })
