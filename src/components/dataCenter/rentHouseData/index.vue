@@ -284,10 +284,10 @@
                       label="片区"
                       prop="department_name">
                     </el-table-column>
-                    <el-table-column
-                      label="负责人"
-                      prop="leader_name">
-                    </el-table-column>
+                    <!--<el-table-column-->
+                      <!--label="负责人"-->
+                      <!--prop="leader_name">-->
+                    <!--</el-table-column>-->
                     <el-table-column
                       label="租房套数"
                       prop="leader_name">
