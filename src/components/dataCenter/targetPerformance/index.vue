@@ -271,22 +271,22 @@
       // 导出
       exportData() {
         this.form.export = 1;
-        this.$http.get(globalConfig.server + 'performance/index', {params: this.form}).then((res) => {
-
-        });
-        // this.$http.get(globalConfig.server + 'salary/achv/export', {responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
-        //   if (!res.data) {
-        //     return;
-        //   }
-        //   console.log(res);
-        //   let url = window.URL.createObjectURL(new Blob([res.data]));
-        //   let link = document.createElement('a');
-        //   link.style.display = 'a';
-        //   link.href = url;
-        //   link.setAttribute('download', 'excel.xlsx');
-        //   document.body.appendChild(link);
-        //   link.click();
+        // this.$http.get(globalConfig.server + 'performance/index', {params: this.form}).then((res) => {
+        //
         // });
+        this.$http.get(globalConfig.server + 'performance/index', {responseType: 'arraybuffer', params: this.form}).then((res) => { // 处理返回的文件流
+          if (!res.data) {
+            return;
+          }
+          console.log(res);
+          let url = window.URL.createObjectURL(new Blob([res.data]));
+          let link = document.createElement('a');
+          link.style.display = 'a';
+          link.href = url;
+          link.setAttribute('download', 'excel.xls');
+          document.body.appendChild(link);
+          link.click();
+        });
       },
       handleCommand(command) {
         if (command == 0) {
