@@ -16,6 +16,8 @@
             </el-button>
             <el-button class="warningItem" type="text" style="color: #409EFF">待收房源: {{houseStatus.wait_lord_at}}套
             </el-button>
+            <el-button class="warningItem" type="text" style="color: #409EFF">已出租: {{houseStatus.Lease_out}}套
+            </el-button>
           </div>
 
           <el-form :inline="true" size="mini" onsubmit="return false">
