@@ -192,6 +192,9 @@ const BatchEnter =()=> import  ('../components/batchEnter/index') //批量入账
 //数据中心
 const AchievementData =()=> import ('../components/dataCenter/index'); //业绩数据
 
+
+const AutoForm = ()=> import ('../autoForm/index')
+
 Vue.use(Router);
 
 export default new Router({
@@ -590,6 +593,15 @@ export default new Router({
       ]
     },
 
+    // {
+    //   path: '/',
+    //   component: Index,
+    //   hidden: true,
+    //   name: '',
+    //   children: [
+    //     {path: '/autoForm', component: AutoForm, name: '表单设计器', icon: "iconfont icon-shouyemenhu"},
+    //   ]
+    // },
   ]
 })
 

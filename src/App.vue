@@ -98,7 +98,7 @@
 <style lang="scss">
 
   html,body{ overflow-x: hidden;overflow-y:scroll;}
-  html,body{min-height:101%;}
+  html,body{min-height:100%;}
   html{ box-sizing: border-box;overflow:-moz-scrollbars-vertical;}
 
   body {
