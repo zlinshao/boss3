@@ -16,9 +16,6 @@
       <el-tab-pane label="问答回复管理" name="fifth">
         <ReplierManage></ReplierManage>
       </el-tab-pane>
-      <!--<el-tab-pane label="目标业绩" name="sixth">-->
-        <!--<TargetPerformance></TargetPerformance>-->
-      <!--</el-tab-pane>-->
     </el-tabs>
   </div>
 </template>
@@ -30,11 +27,10 @@
   import ContractManagement from './contractManagement/index.vue';
   import PackageManagement from './packageManagement/index.vue';
   import ReplierManage from './replierManage/index.vue';
-  import TargetPerformance from './targetPerformance/index.vue'
 
   export default {
     name: "index",
-    components: {IntegralManagement, ContractManagement, FunctionDescription, PackageManagement, ReplierManage,TargetPerformance},
+    components: {IntegralManagement, ContractManagement, FunctionDescription, PackageManagement, ReplierManage},
     data() {
       return {
         activeName: 'first'

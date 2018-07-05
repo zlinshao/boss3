@@ -187,7 +187,10 @@ const MyNaire =()=> import  ('../components/OAWork/questionnaire/myNaire/myNaire
 
 const DataMove =()=> import  ('../components/dataMove.vue')
 
-const BatchEnter =()=> import  ('../components/batchEnter/index')
+const BatchEnter =()=> import  ('../components/batchEnter/index') //批量入账
+
+//数据中心
+const AchievementData =()=> import ('../components/dataCenter/index'); //业绩数据
 
 Vue.use(Router);
 
@@ -575,6 +578,15 @@ export default new Router({
         {path: '/periodicTable', component: PeriodicTable, name: '周期表',},
         {path: '/achievement', component: Achievement, name: '业绩',},
         {path: '/personalSalary', component: PersonalSalary, name: '工资',},
+      ]
+    },
+    {
+      path: '/',
+      component: Index,
+      name: '数据中心',
+      icon: 'iconfont icon-shuju',
+      children: [
+        {path: '/achievementData', component: AchievementData, name: '业绩数据',},
       ]
     },
 
