@@ -5,7 +5,7 @@
         <el-input v-model="formItem.label"></el-input>
       </el-form-item>
       <el-form-item label="键名">
-        <el-input v-model="formItem.key" readonly></el-input>
+        <el-input v-model="formItem.key" ></el-input>
       </el-form-item>
       <el-form-item label="默认值" v-if="formItem.optionsUrl===undefined">
         <el-select v-model="formItem.value" clearable>

@@ -5,11 +5,9 @@
     </el-form-item>
 
     <el-form-item label="键名">
-      <el-input v-model="formItem.key" readonly></el-input>
+      <el-input v-model="formItem.key" ></el-input>
     </el-form-item>
-    <!--<el-form-item label="默认值">-->
-      <!--<el-checkbox v-model="formItem.value"></el-checkbox>-->
-    <!--</el-form-item>-->
+
     <el-form-item label="禁用">
       <el-switch v-model="formItem.disable"></el-switch>
     </el-form-item>

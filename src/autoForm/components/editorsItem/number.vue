@@ -4,6 +4,9 @@
       <el-form-item label="标签名">
         <el-input v-model="formItem.label"></el-input>
       </el-form-item>
+      <el-form-item label="键名">
+        <el-input v-model="formItem.key"></el-input>
+      </el-form-item>
       <el-form-item label="默认值">
         <el-input v-model="formItem.value"></el-input>
       </el-form-item>

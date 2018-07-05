@@ -1,5 +1,5 @@
 <template>
-  <el-form>
+  <el-form label-width="80px" size="mini">
     <el-form-item label="标签名">
       <el-input v-model="formItem.label"></el-input>
     </el-form-item>

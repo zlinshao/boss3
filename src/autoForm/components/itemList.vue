@@ -2,7 +2,7 @@
   <div>
     <!-- 文本 -->
     <el-popover ref="popinput" v-model="popInput">
-      <div>选择一个类型：</div>
+      <div style="margin : 5px">选择一个类型：</div>
       <el-button-group>
         <el-button size="mini" type="primary" plain
                    @click="addItem('input', {subtype:'text'})"
@@ -32,7 +32,7 @@
     </el-button>
     <!-- 单选 -->
     <el-popover ref="popradio" v-model="popRadio">
-      <div>选择数据来源：</div>
+      <div style="margin : 5px">选择数据来源：</div>
       <el-button-group>
         <el-button size="mini" type="primary" plain
                    @click="addItem('radio', {optionsUrl:''})">从服务器获取</el-button>
@@ -46,7 +46,7 @@
     </el-button>
     <!-- 多选 -->
     <el-popover ref="popcheckbox" v-model="popCheckbox">
-      <div>选择数据来源：</div>
+      <div style="margin : 5px">选择数据来源：</div>
       <el-button-group>
         <el-button size="mini" type="primary" plain
                    @click="addItem('checkbox', {optionsUrl:''})"
@@ -62,18 +62,19 @@
     </el-button>
     <!-- 下拉 -->
     <el-popover ref="popselect" v-model="popSelect">
-      <div>选择模式：</div>
+      <div style="margin : 5px">选择模式：</div>
       <el-radio-group v-model="preConfigDataSelect.mode" size="mini">
         <el-radio-button label="single">单选</el-radio-button>
         <el-radio-button label="multiple">多选</el-radio-button>
       </el-radio-group>
-      <div>数据来源：</div>
+      <div style="margin : 5px">数据来源：</div>
       <el-radio-group v-model="preConfigDataSelect.source" size="mini">
         <el-radio-button label="ajax">从服务器获取</el-radio-button>
         <el-radio-button label="custom">自定义</el-radio-button>
       </el-radio-group>
-      <div  style="float: right">
-        <el-button size="mini" plain round type="primary" @click="preAddSelect">确定</el-button>
+      <div style="margin-top: 5px">
+        <el-button size="mini" plain round type="primary"
+                   style="float: right" @click="preAddSelect">确定</el-button>
       </div>
     </el-popover>
     <el-button class="item" v-popover:popselect>
@@ -83,7 +84,7 @@
     <!-- 日期 -->
     <!-- http://element-cn.eleme.io/#/zh-CN/component/date-picker -->
     <el-popover ref="popdate" v-model="popDate">
-      <div>选择模式：</div>
+      <div style="margin : 5px">选择模式：</div>
       <el-button-group>
         <el-button size="mini" type="primary" plain
                    @click="addItem('date', {subtype:'year',label:'年份',valueFormat:'yyyy'}),popDate = false"
@@ -98,7 +99,7 @@
                    @click="addItem('date', {subtype:'datetime',label:'日期时间',valueFormat:'yyyy-MM-dd HH:mm:ss'}),popDate = false"
         >日期时间</el-button>
       </el-button-group>
-      <div>范围：</div>
+      <div style="margin : 5px">范围：</div>
       <el-button-group>
         <el-button size="mini" type="primary" plain
                    @click="addItem('date', {subtype:'daterange',label:'日期范围',valueFormat:'yyyy-MM-dd'}),popDate = false"
@@ -115,7 +116,7 @@
     <!-- 级联 -->
     <!-- https://github.com/Plortinus/element-china-area-data -->
     <el-popover ref="popcascader" v-model="popCascader">
-      <div>常用：</div>
+      <div style="margin : 5px">常用：</div>
       <el-button-group>
         <el-button size="mini" type="primary" plain
                    @click="addItem('cascader', {areaShortcut:'provinceAndCityData'}),popCascader = false"
@@ -124,7 +125,7 @@
                    @click="addItem('cascader', {areaShortcut:'regionData'}),popCascader = false"
         >省/市/区</el-button>
       </el-button-group>
-      <div>带“全部”选项：</div>
+      <div style="margin : 5px">带“全部”选项：</div>
       <el-button-group>
         <el-button size="mini" type="primary" plain
                    @click="addItem('cascader', {areaShortcut:'provinceAndCityDataPlus'}),popCascader = false"
@@ -133,7 +134,7 @@
                    @click="addItem('cascader', {areaShortcut:'regionDataPlus'}),popCascader = false"
         >省/市/区</el-button>
       </el-button-group>
-      <div>其他：</div>
+      <div style="margin : 5px">其他：</div>
       <el-button-group>
         <el-button size="mini" type="primary" plain
                    @click="addItem('cascader',{optionsUrl:'/api/cascader/options'})"
@@ -148,10 +149,10 @@
       <span>级联</span>
     </el-button>
     <!-- 富文本 -->
-    <el-button class="item" @click.native="addItem('richtext')">
-      <i class="el-icon-date"></i>
-      <span>富文本</span>
-    </el-button>
+    <!--<el-button class="item" @click.native="addItem('richtext')">-->
+      <!--<i class="el-icon-date"></i>-->
+      <!--<span>富文本</span>-->
+    <!--</el-button>-->
   </div>
 </template>
 
