@@ -5,12 +5,6 @@
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
             <el-form-item>
-              <el-input placeholder="请输入内容" v-model="form.search"
-                        @keyup.enter.native="search" size="mini" clearable>
-                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
-              </el-input>
-            </el-form-item>
-            <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
             <el-form-item>
@@ -149,65 +143,69 @@
               style="width: 100%"><!--@row-contextmenu='openContextMenu'-->
               <el-table-column
                 label="报备日期"
-                prop="department_name">
+                prop="created_at">
               </el-table-column>
               <el-table-column
                 label="补充信息"
-                prop="leader_name">
+                prop="type">
               </el-table-column>
               <el-table-column
                 label="炸单情况"
-                prop="month">
+                prop="end_type">
               </el-table-column>
               <el-table-column
                 label="是否中介单"
-                prop="month">
+                prop="is_agency">
               </el-table-column>
               <el-table-column
                 label="签约日期"
-                prop="month">
+                prop="sign_at">
               </el-table-column>
               <el-table-column
                 label="尾款时间"
-                prop="month">
+                prop="final_payment_at">
               </el-table-column>
               <el-table-column
                 label="房屋地址"
-                prop="month">
+                prop="house.name">
               </el-table-column>
               <el-table-column
                 label="房屋类型"
-                prop="month">
+                prop="house.type">
               </el-table-column>
               <el-table-column
                 label="月单价"
-                prop="month">
+                prop="month_price[0].price">
               </el-table-column>
               <el-table-column
                 label="付款方式"
-                prop="month">
+                prop="pay_way[0].pay_way">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.pay_way && scope.row.pay_way[0] && scope.row.pay_way[0].pay_way_bet">
+                    押{{scope.row.pay_way && scope.row.pay_way[0] && scope.row.pay_way[0].pay_way_bet}}
+                    付{{scope.row.pay_way && scope.row.pay_way[0] &&scope.row.pay_way[0].pay_way}}
+                  </span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="签约时长"
-                prop="month">
+                prop="sign_month">
               </el-table-column>
               <el-table-column
                 label="总金额"
-                prop="month">
+                prop="money_sum">
               </el-table-column>
               <el-table-column
                 label="租房签约人"
-                prop="month">
+                prop="staff_name">
               </el-table-column>
               <el-table-column
                 label="租房片区"
-                prop="month">
+                prop="org">
               </el-table-column>
               <el-table-column
-                label="已收定金">
-                <template slot-scope="scope">
-                  {{scope.row.memo}}
-                </template>
+                label="已收定金"
+                prop="mortgage_price">
               </el-table-column>
             </el-table>
           </div>
@@ -235,7 +233,7 @@
               <div class="myHouse">
                 <div class="blueTable">
                   <el-table
-                    :data="tableData"
+                    :data="companyTotalData"
                     :empty-text='tableStatus'
                     v-loading="tableLoading"
                     element-loading-text="拼命加载中"
@@ -271,7 +269,7 @@
               <div class="myHouse">
                 <div class="blueTable">
                   <el-table
-                    :data="tableData"
+                    :data="cityTableData"
                     :empty-text='tableStatus'
                     v-loading="tableLoading"
                     element-loading-text="拼命加载中"
@@ -284,8 +282,8 @@
                       prop="department_name">
                     </el-table-column>
                     <!--<el-table-column-->
-                      <!--label="负责人"-->
-                      <!--prop="leader_name">-->
+                    <!--label="负责人"-->
+                    <!--prop="leader_name">-->
                     <!--</el-table-column>-->
                     <el-table-column
                       label="租房套数"
@@ -355,20 +353,21 @@
         organizeType: '',
         currentStatus: '',
         cityCategory: [],
+
+        companyTotalData: [],  //公司总计
+        cityTableData: [],   //城市
       };
     },
-    mounted(){
+    mounted() {
       this.getCityCategory();
     },
     activated() {
       this.getTableData();
     },
-    watch: {
-
-    },
+    watch: {},
     methods: {
-      getCityCategory(){
-        this.dictionary(306, 1).then((res)=>{
+      getCityCategory() {
+        this.dictionary(306, 1).then((res) => {
           this.cityCategory = res.data;
         });
       },
@@ -508,25 +507,25 @@
         this.getTableData();
       },
       getTableData() {
-        // this.tableStatus = ' ';
-        // this.tableLoading = true;
-        // this.$http.get(globalConfig.server + 'performance/index', {params: this.form}).then((res) => {
-        //   this.tableLoading = false;
-        //   this.isHigh = false;
-        //   if (res.data.code === '20000') {
-        //     this.tableData = res.data.data.data;
-        //     this.totalNum = res.data.data.count;  //记录总条数
-        //     if (res.data.data.length < 1) {
-        //       this.tableStatus = '暂无数据';
-        //       this.totalNum = 0;
-        //       this.tableData = [];
-        //     }
-        //   } else {
-        //     this.tableStatus = '暂无数据';
-        //     this.totalNum = 0;
-        //     this.tableData = [];
-        //   }
-        // });
+        this.tableStatus = ' ';
+        this.tableLoading = true;
+        this.$http.get(globalConfig.server + 'performance/renter', {params: this.form}).then((res) => {
+          this.tableLoading = false;
+          this.isHigh = false;
+          if (res.data.code === '20000') {
+            this.tableData = res.data.data.data;
+            this.totalNum = res.data.data.count;  //记录总条数
+            if (res.data.data.length < 1) {
+              this.tableStatus = '暂无数据';
+              this.totalNum = 0;
+              this.tableData = [];
+            }
+          } else {
+            this.tableStatus = '暂无数据';
+            this.totalNum = 0;
+            this.tableData = [];
+          }
+        });
       },
       handleSizeChange(val) {
       },
