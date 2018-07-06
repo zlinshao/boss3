@@ -33,12 +33,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input readonly="" v-model="form.department_name" @focus="chooseDepart('search')"
-                                placeholder="点击选择">
-                        <template slot="append">
-                          <div style="cursor: pointer;" @click="emptyDepart('search')">清空</div>
-                        </template>
-                      </el-input>
+                      <el-input v-model="form.address" placeholder="请输入房屋地址" clearable></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -50,10 +45,10 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input readonly="" v-model="form.department_name" @focus="chooseDepart('search')"
+                      <el-input readonly="" v-model="sign_name" @focus="chooseStaff('search')"
                                 placeholder="点击选择">
                         <template slot="append">
-                          <div style="cursor: pointer;" @click="emptyDepart('search')">清空</div>
+                          <div style="cursor: pointer;" @click="emptyStaff('search')">清空</div>
                         </template>
                       </el-input>
                     </el-form-item>
@@ -69,7 +64,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input v-model="form.department_name"  placeholder="请输入合同编号" clearable></el-input>
+                      <el-input v-model="form.contract_number" placeholder="请输入合同编号" clearable></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -81,7 +76,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input readonly="" v-model="form.department_name" @focus="chooseDepart('search')"
+                      <el-input readonly="" v-model="org_name" @focus="chooseDepart('search')"
                                 placeholder="点击选择">
                         <template slot="append">
                           <div style="cursor: pointer;" @click="emptyDepart('search')">清空</div>
@@ -101,7 +96,7 @@
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
                       <el-date-picker
-                        v-model="form.month"
+                        v-model="form.sign_date"
                         type="daterange"
                         value-format="yyyy-MM-dd"
                         start-placeholder="开始日期"
@@ -118,9 +113,9 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input v-model="form.month[0]" style="width: 150px;" placeholder="起"></el-input>
+                      <el-input v-model="form.years[0]" style="width: 150px;" placeholder="起" clearable></el-input>
                       至
-                      <el-input v-model="form.month[1]" style="width: 150px;" placeholder="止"></el-input>
+                      <el-input v-model="form.years[1]" style="width: 150px;" placeholder="止" clearable></el-input>
                       年
                     </el-form-item>
                   </el-col>
@@ -294,8 +289,8 @@
                       prop="department_name">
                     </el-table-column>
                     <!--<el-table-column-->
-                      <!--label="负责人"-->
-                      <!--prop="leader_name">-->
+                    <!--label="负责人"-->
+                    <!--prop="leader_name">-->
                     <!--</el-table-column>-->
                     <el-table-column
                       label="收房套数"
@@ -348,23 +343,28 @@
         totalNum: 0,
         tableStatus: ' ',
         tableLoading: false,
+
         form: {
+          search: '',
           page: 1,
           limit: 12,
-          org_id: '',  //部门搜索
-          department_name: '',
-          month: [],  //时间范围
-          target_sort: '',  //排序  0 升序 1降序
-          search: '',
-          agency: '',
+          address: '',
+          sign_id: [],
+          contract_number: '',
+          org_id: [],  //收房片区
+          sign_date: [], //签约日期起止范围
+          years: [],  //收房年限
+          is_agency: '',
         },
+        sign_name: '',
+        org_name: '',
         organizationDialog: false,
         organizeType: '',
         currentStatus: '',
         cityCategory: [],
       };
     },
-    mounted(){
+    mounted() {
       this.getCityCategory();
     },
     activated() {
@@ -372,8 +372,8 @@
     },
     watch: {},
     methods: {
-      getCityCategory(){
-        this.dictionary(306, 1).then((res)=>{
+      getCityCategory() {
+        this.dictionary(306, 1).then((res) => {
           this.cityCategory = res.data;
         });
       },
@@ -454,6 +454,23 @@
         this.organizeType = 'depart';
         this.currentStatus = val;
       },
+      chooseStaff(val) {
+        this.organizationDialog = true;
+        this.organizeType = 'staff';
+        this.currentStatus = val;
+      },
+      emptyStaff(val) {
+        if (val === 'search') {
+          this.form.sign_id = '';
+          this.sign_name = '';
+        }
+      },
+      emptyDepart(val) {
+        if (val === 'search') {
+          this.form.org_id = '';
+          this.org_name = '';
+        }
+      },
       closeOrganization() {
         this.organizationDialog = false;
         this.organizeType = '';
@@ -461,23 +478,38 @@
       },
       selectMember(val) {
         if (this.currentStatus === 'search') {
-          this.form.org_id = val[0].id;
-          this.form.department_name = val[0].name;
-        } else {
-          this.achievementForm.org_id = val[0].id;
-          this.achievementForm.department_name = val[0].name;
+          if (this.organizeType === 'staff') {
+            // this.form.sign_id = val[0].id;
+            // this.sign_name = val[0].name;
+            this.form.sign_id = [];
+            this.sign_name = '';
+            let names = [];
+            if (val.length > 0) {
+              val.forEach((item) => {
+                this.form.sign_id.push(item.id);
+                names.push(item.name);
+              });
+            }
+            this.sign_name = names.join(',');
+          } else {
+            // this.form.org_id = val[0].id;
+            // this.org_name = val[0].name;
+            this.form.org_id = [];
+            this.org_name = '';
+            let names = [];
+            if (val.length > 0) {
+              val.forEach((item) => {
+                this.form.org_id.push(item.id);
+                names.push(item.name);
+              });
+            }
+            this.org_name = names.join(',');
+          }
+
         }
         this.organizeType = '';
       },
-      emptyDepart(val) {
-        if (val === 'search') {
-          this.form.department_name = '';
-          this.form.org_id = '';
-        } else {
-          this.achievementForm.department_name = '';
-          this.achievementForm.org_id = '';
-        }
-      },
+
       search() {
         this.form.page = 1;
         this.getTableData();
@@ -503,7 +535,8 @@
         //   }
         // });
       },
-      handleSizeChange(val) {},
+      handleSizeChange(val) {
+      },
       handleCurrentChange(val) {
         this.form.page = val;
         this.getTableData();
@@ -514,9 +547,15 @@
       },
       // 重置
       resetting() {
-        this.form.org_id = '';
-        this.form.department_name = '';
-        this.form.month = [];
+        this.form.address = '';
+        this.form.sign_id = [];
+        this.form.org_id = [];
+        this.form.sign_date = [];
+        this.form.contract_number = '';
+        this.form.years = [];
+        this.form.is_agency = '';
+        this.sign_name = '';
+        this.org_name = '';
       },
     },
   };
