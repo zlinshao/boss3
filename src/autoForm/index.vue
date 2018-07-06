@@ -8,8 +8,10 @@
           </el-tab-pane>
         </el-tabs>
       </el-col>
-      <el-col :span="12" style="height: 100%;background: #fdfdfd;padding: 10px">
-        <FakeForm :formConfig="formConfig"></FakeForm>
+      <el-col :span="12" style="height: 100%;background: #fdfdfd;padding: 10px;border: 1px dashed #40a0ff;">
+        <div style="overflow-y: scroll;height: 100%" class="scroll_bar">
+          <FakeForm :formConfig="formConfig"></FakeForm>
+        </div>
       </el-col>
       <el-col :span="6" style="height: 100%;background: #eef1f6;padding: 10px">
         <el-tabs v-model="activeName_">
@@ -19,6 +21,7 @@
             </div>
           </el-tab-pane>
           <el-tab-pane label="全局配置" name="second">
+            <GlobalConfigure :formConfig="formConfig"></GlobalConfigure>
           </el-tab-pane>
           <el-tab-pane label="查看JSON" name="third">
             <pre>{{formConfig}}</pre>
@@ -31,7 +34,8 @@
 
 <script>
   import ItemsList from './components/itemList'
-  import FakeForm from './components/fake-form'
+  import FakeForm from './components/fakeForm'
+  import GlobalConfigure from './components/globalConfigure'
 
   import EditorInput from './components/editorsItem/input'
   import EditorNumber from './components/editorsItem/number'
@@ -42,11 +46,14 @@
   import EditorDate from './components/editorsItem/date'
   import EditorCascader from './components/editorsItem/cascader'
   import EditorRichtext from './components/editorsItem/richtext'
+  import EditorUpload from './components/editorsItem/upload'
+  import EditorRate from './components/editorsItem/rate'
   export default {
     name: "index",
     components:{
       ItemsList,
       FakeForm,
+      GlobalConfigure,
       EditorInput,
       EditorNumber,
       EditorSwitch,
@@ -56,12 +63,12 @@
       EditorDate,
       EditorCascader,
       EditorRichtext,
-
+      EditorUpload,
+      EditorRate,
     },
     data(){
       return{
         activeName : 'first',
-        activeName_ : 'first',
         formItem : {},
       }
     },
@@ -81,8 +88,16 @@
         }
       },
       selectedItem() {
-        return this.formConfig.formItemList.find(item => item.key === this.$store.state.autoForm.itemKey)
+        return this.formConfig.formItemList.find(item => item.index === this.$store.state.autoForm.itemIndex)
       },
+      activeName_ : {
+        get() {
+          return this.$store.state.autoForm.activeName_right;
+        },
+        set(newV) {
+          this.$store.dispatch('changeActive', newV)
+        }
+      }
     },
     methods:{
       setHeight(){
@@ -92,7 +107,7 @@
       addItem(val){
         console.log(val)
         this.formConfig.formItemList.push(val)
-        this.$store.dispatch('selectItem', val.key);
+        this.$store.dispatch('selectItem', val.index);
       }
     },
   }

@@ -5,10 +5,10 @@
         <el-input v-model="formItem.label"></el-input>
       </el-form-item>
       <el-form-item label="占位文本">
-        <el-input v-model="formItem.placeholder" readonly></el-input>
+        <el-input v-model="formItem.placeholder"></el-input>
       </el-form-item>
       <el-form-item label="键名">
-        <el-input v-model="formItem.key"></el-input>
+        <el-input v-model="formItem.key" clearable></el-input>
       </el-form-item>
       <el-form-item label="格式">
         <el-input v-model="formItem.valueFormat"></el-input>

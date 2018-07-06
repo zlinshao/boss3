@@ -24,7 +24,7 @@
 
   export default {
     name: 'hello',
-    props: ['ID', 'editImage', 'isClear', 'onlyShow','noMulti'],
+    props: ['ID', 'editImage', 'isClear', 'onlyShow','noMulti','disabled'],
     data() {
       return {
         imgArray: [],
@@ -106,10 +106,9 @@
         this.editImg = imgObject;
       },
       getToken() {
-
         this.$http.get(globalConfig.server_user + 'files').then((res) => {
           this.token = res.data.data;
-          if(!this.uploader){
+          if(!this.uploader && !this.disabled){
             this.uploaderReady();
           }
         })
@@ -118,7 +117,9 @@
       getTokenMessage() {
         this.$http.get(globalConfig.server_user + 'files').then((res) => {
           this.token = res.data.data;
-          this.uploaderReady();
+          if(!this.disabled){
+            this.uploaderReady();
+          }
         })
       },
       uploaderReady() {

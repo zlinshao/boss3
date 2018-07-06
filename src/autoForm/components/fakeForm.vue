@@ -1,24 +1,24 @@
 <template>
-  <el-form class="dynamic-form fake-form" :inline="formConfig.inline" :size='formConfig.size'
-           :label-position="formConfig.labelPosition" :label-width="formConfig.labelWidth">
-    <draggable v-model="formConfig.formItemList">
-      <transition-group name="list-complete">
-        <div v-for="(item,i) in formConfig.formItemList" :key="item.key" class="draggable list-complete-item"
-             :class="{'selected': $store.state.autoForm.itemKey===item.key}" @click="select(item.key)">
-          <fake-form-item :item="item"></fake-form-item>
-          <i class="el-icon-delete" @click.stop="deleteItem(i)"></i>
-
-        </div>
-      </transition-group>
-
-    </draggable>
-
-  </el-form>
+  <div>
+    <H3 class="formTitle">{{formConfig.formName}}</H3>
+    <el-form class="dynamic-form fake-form" :inline="formConfig.inline" :size='formConfig.size'
+             :label-position="formConfig.labelPosition" :label-width="formConfig.labelWidth">
+      <draggable v-model="formConfig.formItemList">
+        <transition-group name="list-complete">
+          <div v-for="(item,i) in formConfig.formItemList" :key="item.index" class="draggable list-complete-item"
+               :class="{'selected': $store.state.autoForm.itemIndex===item.index}" @click="select(item.index)">
+            <fake-form-item :item="item"></fake-form-item>
+            <i class="el-icon-delete" @click.stop="deleteItem(i)"></i>
+          </div>
+        </transition-group>
+      </draggable>
+    </el-form>
+  </div>
 </template>
 
 <script>
 import Draggable from 'vuedraggable'
-import FakeFormItem from './fake-form-item'
+import FakeFormItem from './fakeFormItem'
 export default {
   components: { FakeFormItem, Draggable },
   props: {
@@ -28,8 +28,8 @@ export default {
     },
   },
   methods: {
-    select(key) {
-      this.$store.dispatch('selectItem', key);
+    select(index) {
+      this.$store.dispatch('selectItem', index);
     },
     deleteItem(i) {
       this.formConfig.formItemList.splice(i, 1)

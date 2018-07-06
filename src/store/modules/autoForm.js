@@ -4,22 +4,26 @@
 const autoForm = {
   state: {
     form:{
+      formName : '',
       inline: false, // 是否使用inline排版
-      labelPosition: 'right', // 标签对齐方式
       labelWidth: '80px', // 标签宽度
       size: 'small', // 尺寸
-      statusIcon: true, // 显示验证图标
       formItemList: []
     },
-    itemKey: '', // 当前选中的item
+    itemIndex: '', // 当前选中的item
+    activeName_right : 'first',
   },
   mutations: {
     UPDATE_FORM(state, view) {
       Object.assign(state.form, view)
     },
     SELECT_ITEM(state, view){
-      state.itemKey = view;
-    }
+      state.itemIndex = view;
+      state.activeName_right = 'first'
+    },
+    CHANGE_ACTIVE(state, view){
+      state.activeName_right = view;
+    },
   },
   actions: {
     updateForm({commit},view){
@@ -27,6 +31,9 @@ const autoForm = {
     },
     selectItem({commit},view){
       commit('SELECT_ITEM',view)
+    },
+    changeActive({commit},view){
+      commit('CHANGE_ACTIVE',view)
     }
   }
 };
