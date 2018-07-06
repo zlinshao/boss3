@@ -102,6 +102,17 @@ export default {
     "type": "richtext",
     "label": "内容",
     "value": '',
+  },
+  "upload":{
+    "type": "upload",
+    "label": "上传文件",
+    "domId": 'DOM_ID',
+  },
+  "rate":{
+    "type": "rate",
+    "label": "评分",
+    "value": null,
+    "showText": false,
   }
   // {
   //   "type": 'rate',

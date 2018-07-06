@@ -139,6 +139,19 @@
       <i class="el-icon-date"></i>
       <span>级联</span>
     </el-button>
+
+    <!--上传-->
+    <el-button class="item" @click.native="addItem('upload')">
+      <i class="el-icon-date"></i>
+      <span>上传</span>
+    </el-button>
+
+    <!--评分-->
+    <el-button class="item" @click.native="addItem('rate')">
+      <i class="el-icon-date"></i>
+      <span>评分</span>
+    </el-button>
+
     <!-- 富文本 -->
     <!--<el-button class="item" @click.native="addItem('richtext')">-->
       <!--<i class="el-icon-date"></i>-->
@@ -148,8 +161,8 @@
 </template>
 
 <script>
-  import guid from './guid'
-  import AVAILABEL_FORM_ITEM_LIST from './availabel-item-list'
+  import guid from '../js/guid'
+  import AVAILABEL_FORM_ITEM_LIST from '../js/availabelItemList'
   export default {
     data() {
       return {
@@ -163,12 +176,15 @@
           mode: 'multiple',
           source: 'ajax',
         },
+        itemIndex : 0,
       }
     },
     methods: {
       addItem(type, option) {
         const key = guid();
-        const newItem = {...JSON.parse(JSON.stringify(AVAILABEL_FORM_ITEM_LIST[type])), key, ...option};
+        this.itemIndex ++ ;
+        let index = this.itemIndex;
+        const newItem = {...JSON.parse(JSON.stringify(AVAILABEL_FORM_ITEM_LIST[type])), key,index,...option};
         this.$emit('add', newItem);
 
         this.popInput = false;
