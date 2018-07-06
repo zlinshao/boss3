@@ -27,7 +27,7 @@
               </el-dropdown>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="mini" @click="achievementDialog=true;">
+              <el-button type="primary" size="mini" @click="achievementDialog=true;achievementId='';">
                 新增目标业绩
               </el-button>
             </el-form-item>
