@@ -9,7 +9,12 @@
     <el-form-item label="占位文本">
       <el-input v-model="formItem.placeholder"></el-input>
     </el-form-item>
-    <el-form-item label="数据URL">
+    <el-form-item label="默认值" v-if="formItem.optionsUrl===undefined">
+      <el-cascader v-model="formItem.value" :clearable="true"
+                   :options="formItem.options||require('element-china-area-data')[formItem.areaShortcut]" ></el-cascader>
+    </el-form-item>
+
+    <el-form-item label="数据URL" v-else>
       <el-input v-model="formItem.optionsUrl"></el-input>
     </el-form-item>
     <el-form-item label="禁用">
