@@ -4,8 +4,7 @@
     <draggable v-model="formConfig.formItemList">
       <transition-group name="list-complete">
         <div v-for="(item,i) in formConfig.formItemList" :key="item.key" class="draggable list-complete-item"
-             :class="{'selected': $store.state.itemKey===item.key}" @click="select(item.key)">
-
+             :class="{'selected': $store.state.autoForm.itemKey===item.key}" @click="select(item.key)">
           <fake-form-item :item="item"></fake-form-item>
           <i class="el-icon-delete" @click.stop="deleteItem(i)"></i>
 
@@ -31,7 +30,6 @@ export default {
   methods: {
     select(key) {
       this.$store.dispatch('selectItem', key);
-      // this.$store.commit('SELECT_ITEM', key)
     },
     deleteItem(i) {
       this.formConfig.formItemList.splice(i, 1)

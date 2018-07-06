@@ -8,7 +8,7 @@
         <el-input v-model="formItem.key" readonly></el-input>
       </el-form-item>
       <el-form-item label="默认值" v-if="formItem.optionsUrl===undefined">
-        <el-select v-model="formItem.value" clearable>
+        <el-select v-model="formItem.value" clearable :multiple="formItem.multiple">
           <el-option v-for="o in formItem.options" :key="o.value" :label="o.label" :value="o.value"></el-option>
         </el-select>
       </el-form-item>

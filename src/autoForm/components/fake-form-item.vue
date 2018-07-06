@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form-item :label="item.label">
+    <el-form-item :label="item.label" :required="item.required">
       <!--文本-->
       <el-input
         v-if="item.type==='input'||item.type==='richtext'"
@@ -31,7 +31,7 @@
       <!--//- 单选-->
       <el-radio-group v-else-if="item.type==='radio'" :value="item.value">
         <component
-          :is="item.button?'el-checkbox-button':'el-checkbox'"
+          :is="item.button?'el-radio-button':'el-radio'"
           v-for="o in item.options||ajaxOptions"
           :key='o.value'
           :label="o.value"
@@ -42,7 +42,7 @@
       </el-radio-group>
 
       <!--//- 多选-->
-      <el-checkbox-group  v-else-if="item.type==='radio'" :value="item.value">
+      <el-checkbox-group  v-else-if="item.type==='checkbox'" :value="item.value">
         <component
           :is="item.button?'el-checkbox-button':'el-checkbox'"
           v-for="o in item.options||ajaxOptions"
@@ -64,8 +64,7 @@
           v-for="o in item.options"
           :key="o.value"
           :label="o.label"
-          :value="o.value"
-          disabled>
+          :value="o.value">
         </el-option>
       </el-select>
 
@@ -91,7 +90,6 @@
         :options="item.options||require('element-china-area-data')[item.areaShortcut]||[]"
         :placeholder="item.placeholder"
         :value="item.value">
-
       </el-cascader>
     </el-form-item>
   </div>
