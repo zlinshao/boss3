@@ -113,6 +113,10 @@
               <el-table-column
                 label="组长姓名"
                 prop="leader_name">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.leader_name">{{scope.row.leader_name}}</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="目标业绩(万元)"
@@ -125,7 +129,8 @@
               <el-table-column
                 label="备注">
                 <template slot-scope="scope">
-                  {{scope.row.memo}}
+                  <span v-if="scope.row.memo">{{scope.row.memo}}</span>
+                  <span v-else>暂无</span>
                 </template>
               </el-table-column>
             </el-table>
@@ -271,9 +276,6 @@
       // 导出
       exportData() {
         this.form.export = 1;
-        // this.$http.get(globalConfig.server + 'performance/index', {params: this.form}).then((res) => {
-        //
-        // });
         this.$http.get(globalConfig.server + 'performance/index', {responseType: 'arraybuffer', params: this.form}).then((res) => { // 处理返回的文件流
           if (!res.data) {
             return;
