@@ -5,12 +5,6 @@
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
             <el-form-item>
-              <el-input placeholder="请输入内容" v-model="form.search"
-                        @keyup.enter.native="search" size="mini" clearable>
-                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
-              </el-input>
-            </el-form-item>
-            <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
             <el-form-item>
@@ -240,7 +234,7 @@
               <div class="myHouse">
                 <div class="blueTable">
                   <el-table
-                    :data="tableData"
+                    :data="companyTotalData"
                     :empty-text='tableStatus'
                     v-loading="tableLoading"
                     element-loading-text="拼命加载中"
@@ -250,11 +244,11 @@
                     style="width: 100%">
                     <el-table-column
                       label="收房套数"
-                      prop="department_name">
+                      prop="count">
                     </el-table-column>
                     <el-table-column
                       label="押金支出"
-                      prop="leader_name">
+                      prop="priceSum">
                     </el-table-column>
                   </el-table>
                 </div>
@@ -276,7 +270,7 @@
               <div class="myHouse">
                 <div class="blueTable">
                   <el-table
-                    :data="tableData"
+                    :data="cityTableData"
                     :empty-text='tableStatus'
                     v-loading="tableLoading"
                     element-loading-text="拼命加载中"
@@ -362,6 +356,8 @@
         organizeType: '',
         currentStatus: '',
         cityCategory: [],
+        companyTotalData: [],  //公司总计
+        cityTableData: [],   //城市
       };
     },
     mounted() {
@@ -515,25 +511,26 @@
         this.getTableData();
       },
       getTableData() {
-        // this.tableStatus = ' ';
-        // this.tableLoading = true;
-        // this.$http.get(globalConfig.server + 'performance/index', {params: this.form}).then((res) => {
-        //   this.tableLoading = false;
-        //   this.isHigh = false;
-        //   if (res.data.code === '20000') {
-        //     this.tableData = res.data.data.data;
-        //     this.totalNum = res.data.data.count;  //记录总条数
-        //     if (res.data.data.length < 1) {
-        //       this.tableStatus = '暂无数据';
-        //       this.totalNum = 0;
-        //       this.tableData = [];
-        //     }
-        //   } else {
-        //     this.tableStatus = '暂无数据';
-        //     this.totalNum = 0;
-        //     this.tableData = [];
-        //   }
-        // });
+        this.tableStatus = ' ';
+        this.tableLoading = true;
+        this.$http.get(globalConfig.server + 'performance/lord', {params: this.form}).then((res) => {
+          this.tableLoading = false;
+          this.isHigh = false;
+          if (res.data.code === '20000') {
+            this.tableData = res.data.data.data;
+            this.companyTotalData = res.data.data.countA;
+            this.totalNum = res.data.data.count;  //记录总条数
+            if (res.data.data.length < 1) {
+              this.tableStatus = '暂无数据';
+              this.totalNum = 0;
+              this.tableData = [];
+            }
+          } else {
+            this.tableStatus = '暂无数据';
+            this.totalNum = 0;
+            this.tableData = [];
+          }
+        });
       },
       handleSizeChange(val) {
       },
