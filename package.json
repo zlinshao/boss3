@@ -16,6 +16,7 @@
     "axios": "^0.17.1",
     "dropzone": "^5.2.0",
     "echarts": "^3.8.5",
+    "element-china-area-data": "^4.0.0",
     "element-ui": "^2.2.0",
     "fastclick": "^1.0.6",
     "jquery": "^2.2.4",
