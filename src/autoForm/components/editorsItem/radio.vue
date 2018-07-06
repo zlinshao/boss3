@@ -15,6 +15,15 @@
       <el-form-item label="数据URL" v-else>
         <el-input v-model="formItem.optionsUrl"></el-input>
       </el-form-item>
+      <el-form-item label="显示边框">
+        <el-switch v-model="formItem.border"></el-switch>
+      </el-form-item>
+      <el-form-item label="按钮形状">
+        <el-switch v-model="formItem.button"></el-switch>
+      </el-form-item>
+      <el-form-item label="必填">
+        <el-switch v-model="formItem.required"></el-switch>
+      </el-form-item>
     </el-form>
 
     <EditorOptions :itemOptions="formItem.options"></EditorOptions>

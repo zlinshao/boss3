@@ -14,7 +14,7 @@
       <el-col :span="6" style="height: 100%;background: #eef1f6;padding: 10px">
         <el-tabs v-model="activeName_">
           <el-tab-pane label="组件配置" name="first">
-            <div v-if="selectedItem.type">
+            <div v-if="selectedItem && selectedItem.type">
               <component :is="`editor-${selectedItem.type}`" :formItem="selectedItem"></component>
             </div>
           </el-tab-pane>
@@ -63,7 +63,6 @@
         activeName : 'first',
         activeName_ : 'first',
         formItem : {},
-        selectedItem : {},
       }
     },
     mounted(){
@@ -81,9 +80,9 @@
           this.$store.dispatch('updateForm', newV)
         }
       },
-      currentForm() {
-        return this.$store.state.autoForm.itemKey;
-      }
+      selectedItem() {
+        return this.formConfig.formItemList.find(item => item.key === this.$store.state.autoForm.itemKey)
+      },
     },
     methods:{
       setHeight(){
@@ -93,7 +92,7 @@
       addItem(val){
         console.log(val)
         this.formConfig.formItemList.push(val)
-        this.selectedItem = val;
+        this.$store.dispatch('selectItem', val.key);
       }
     },
   }
