@@ -10,17 +10,24 @@ const autoForm = {
       size: 'small', // 尺寸
       statusIcon: true, // 显示验证图标
       formItemList: []
-    }
+    },
+    itemKey: '', // 当前选中的item
   },
   mutations: {
     UPDATE_FORM(state, view) {
       Object.assign(state.form, view)
+    },
+    SELECT_ITEM(state, view){
+      state.itemKey = view;
     }
   },
   actions: {
     updateForm({commit},view){
       commit('UPDATE_FORM',view)
     },
+    selectItem({commit},view){
+      commit('SELECT_ITEM',view)
+    }
   }
 };
 

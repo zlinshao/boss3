@@ -118,12 +118,11 @@
         lastPage_user : '',
         is_dimission :0,
         dimission :false,
+        firstOpen:true,
       }
     },
     mounted() {
-      this.currentDepartId = 1;
-      this.getDepartment(1);
-      this.getHighDepart()
+
     },
     watch:{
       dimission(val){
@@ -139,6 +138,15 @@
           this.selectMember = [];       //已选数组
           this.selectIdMember = [];     //左侧选择id
           this.checkedIdBox = [];       //已选部门id数组
+        }else {
+          if(this.firstOpen){
+            this.currentDepartId = 1;
+            this.getDepartment(1);
+            this.getHighDepart();
+          }
+          setTimeout(()=>{
+            this.firstOpen = false;
+          },100)
         }
       },
       type(val){

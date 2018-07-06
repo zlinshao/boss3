@@ -8,7 +8,9 @@
           </el-tab-pane>
         </el-tabs>
       </el-col>
-      <el-col :span="12" style="height: 100%;background: #fdfdfd;padding: 10px"></el-col>
+      <el-col :span="12" style="height: 100%;background: #fdfdfd;padding: 10px">
+        <FakeForm :formConfig="formConfig"></FakeForm>
+      </el-col>
       <el-col :span="6" style="height: 100%;background: #eef1f6;padding: 10px">
         <el-tabs v-model="activeName_">
           <el-tab-pane label="组件配置" name="first">
@@ -29,6 +31,8 @@
 
 <script>
   import ItemsList from './components/itemList'
+  import FakeForm from './components/fake-form'
+
   import EditorInput from './components/editorsItem/input'
   import EditorNumber from './components/editorsItem/number'
   import EditorSwitch from './components/editorsItem/switch'
@@ -42,6 +46,7 @@
     name: "index",
     components:{
       ItemsList,
+      FakeForm,
       EditorInput,
       EditorNumber,
       EditorSwitch,
@@ -76,6 +81,9 @@
           this.$store.dispatch('updateForm', newV)
         }
       },
+      currentForm() {
+        return this.$store.state.autoForm.itemKey;
+      }
     },
     methods:{
       setHeight(){
