@@ -625,7 +625,7 @@
             clickIndex: 'addEarlyWarningDialog',
             headIcon: 'iconfont icon-tianjiayujingjilu',
             label: '添加预警状态',
-            disabled: row.status
+            disabled: row.status != 0
           },
           {clickIndex: 'addWebInfoDialog', headIcon: 'el-icon-plus', label: '官网推送',},
           {clickIndex: 'downloadPicDialog', headIcon: 'el-icon-download', label: '图片下载',},

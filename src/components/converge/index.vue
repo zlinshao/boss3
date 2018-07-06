@@ -5,8 +5,8 @@
         <el-col :span="16">
           <div class="topLeft module" style="width: 100%;">
             <span v-for="(key,index) in hostData.data" v-if="index === 0 && hostData.data[0] !== ''">
-              <span v-for="pic in key && key.album && key.album.cover_pic">
-                <img v-for="p in pic" :src="p.uri">
+              <span v-if="key && key.album && key.album.cover_pic && key.album.cover_pic.uri">
+                <img :src="key.album.cover_pic.uri">
               </span>
             </span>
             <div class="titleShow" @click="routerDetail(key.id)" v-for="(key,index) in hostData.data"
@@ -20,9 +20,9 @@
             <div class="a">
               <h1 class="rightA module">
                 <span v-for="(key,index) in lessData.data" v-if="index === 0 && lessData.data[0] !== ''">
-                  <span v-for="pic in key && key.album && key.album.cover_pic">
-                    <img v-for="p in pic" :src="p.uri">
-                  </span>
+                  <span v-if="key && key.album && key.album.cover_pic && key.album.cover_pic.uri">
+                <img :src="key.album.cover_pic.uri">
+              </span>
                 </span>
                 <div class="titleShow" @click="routerDetail(key.id)" v-for="(key,index) in lessData.data"
                      v-if="index === 0 && lessData.data[0] !== ''">
@@ -39,9 +39,9 @@
               </h2>
               <h1 class="rightA module">
                 <span v-for="(key,index) in lowData.data" v-if="index === 0 && lowData.data[0] !== ''">
-                   <span v-for="pic in key && key.album && key.album.cover_pic">
-                    <img v-for="p in pic" :src="p.uri">
-                  </span>
+                   <span v-if="key && key.album && key.album.cover_pic && key.album.cover_pic.uri">
+                     <img :src="key.album.cover_pic.uri">
+                   </span>
                 </span>
                 <div @click="routerDetail(key.id)" class="titleShow" v-for="(key,index) in lowData.data"
                      v-if="index === 0 && lowData.data[0] !== ''">
@@ -120,8 +120,12 @@
                   </span>
                 </div>
                 <div class="titleImg">
-                  <span @click="routerDetail(key.id)" v-for="pic in key && key.album && key.album.cover_pic">
-                    <img v-for="p in pic" :src="p.uri">
+                  <!--<span @click="routerDetail(key.id)" v-for="pic in key && key.album && key.album.cover_pic">-->
+                  <!--<img v-for="p in pic" :src="p.uri">-->
+                  <!--</span>-->
+                  <span @click="routerDetail(key.id)"
+                        v-if="key && key.album && key.album.cover_pic && key.album.cover_pic.uri">
+                    <img :src="key.album.cover_pic.uri">
                   </span>
                 </div>
                 <div class="titleMain text" v-html="key.content">
@@ -137,8 +141,8 @@
                 <div class="a" @click="routerDetail(key.id)" v-for="(key,index) in newsData.data"
                      v-if="index !== 0 && newsData.data[0] !== ''">
                   <div>
-                     <span v-for="pic in key && key.album && key.album.cover_pic">
-                        <img v-for="p in pic" :src="p.uri">
+                     <span v-if="key && key.album && key.album.cover_pic && key.album.cover_pic.uri">
+                       <img :src="key.album.cover_pic.uri">
                      </span>
                   </div>
                   <div>
@@ -160,10 +164,10 @@
           <div class="elPadding">
             <div v-for="(key,index) in staffData.data" v-if="index === 0 && staffData.data[0] !== ''">
               <div class="titleImg box">
-                 <span @click="routerDetail(key.id)" v-for="pic in key && key.album && key.album.cover_pic">
-                    <img v-if="p.uri" v-for="p in pic" :src="p.uri">
-                    <img src="../../assets/images/default.png" v-else>
-                 </span>
+                <span @click="routerDetail(key.id)"
+                      v-if="key && key.album && key.album.cover_pic && key.album.cover_pic.uri">
+                  <img :src="key.album.cover_pic.uri">
+                </span>
               </div>
               <div class="headline box" @click="routerDetail(key.id)">{{key.title}}</div>
               <div class="titleTime box">
@@ -183,8 +187,8 @@
                 <div class="mainRight">
                   <div @click="routerDetail(key.id)" class="a" v-for="(key,index) in staffData.data" v-if="index !== 0">
                     <div>
-                       <span v-for="pic in key && key.album && key.album.cover_pic">
-                          <img v-for="p in pic" :src="p.uri">
+                       <span v-if="key && key.album && key.album.cover_pic && key.album.cover_pic.uri">
+                         <img :src="key.album.cover_pic.uri">
                        </span>
                     </div>
                     <div>
@@ -211,10 +215,10 @@
               <div class="elPadding box">
                 <div v-for="(key,index) in cusData.data" v-if="index === 0 && cusData.data[0] !== ''">
                   <div class="titleImg box">
-                     <span @click="routerDetail(key.id)" v-for="pic in key && key.album && key.album.cover_pic">
-                    <img v-if="p.uri" v-for="p in pic" :src="p.uri">
-                    <img src="../../assets/images/default.png" v-else>
-                  </span>
+                    <span @click="routerDetail(key.id)"
+                          v-if="key && key.album && key.album.cover_pic && key.album.cover_pic.uri">
+                      <img :src="key.album.cover_pic.uri">
+                    </span>
                   </div>
                   <div class="headline box" @click="routerDetail(key.id)">{{key.title}}</div>
                   <div class="titleTime box">
@@ -236,9 +240,9 @@
                       <div class="a" @click="routerDetail(key.id)" v-for="(key,index) in cusData.data"
                            v-if="index !== 0">
                         <div>
-                           <span v-for="pic in key && key.album && key.album.cover_pic">
-                            <img v-for="p in pic" :src="p.uri">
-                          </span>
+                           <span v-if="key && key.album && key.album.cover_pic && key.album.cover_pic.uri">
+                              <img :src="key.album.cover_pic.uri">
+                           </span>
                         </div>
                         <div>
                           <p class="headline">{{key.title}}</p>
@@ -300,9 +304,9 @@
           <div class="hotReady" v-for="(key,index) in hotData.data" v-if="index === 0 && hotData.data[0] !== ''">
             <div class="elPadding">
               <div class="titleImg box">
-                 <span @click="routerDetail(key.id)" v-for="pic in key && key.album && key.album.cover_pic">
-                    <img v-for="p in pic" :src="p.uri">
-                  </span>
+                <span @click="routerDetail(key.id)" v-if="key && key.album && key.album.cover_pic && key.album.cover_pic.uri">
+                  <img :src="key.album.cover_pic.uri">
+                </span>
               </div>
               <div class="headline box" @click="routerDetail(key.id)">{{key.title}}</div>
               <div class="titleTime box">
@@ -323,9 +327,9 @@
                 <div class="mainRight">
                   <div class="a" v-for="(key,index) in hotData.data" v-if="index !== 0" @click="routerDetail(key.id)">
                     <div>
-                       <span v-for="pic in key && key.album && key.album.cover_pic">
-                         <img v-for="p in pic" :src="p.uri">
-                       </span>
+                      <span v-if="key && key.album && key.album.cover_pic && key.album.cover_pic.uri">
+                         <img :src="key.album.cover_pic.uri">
+                      </span>
                     </div>
                     <div>
                       <p class="headline">{{key.title}}</p>
@@ -600,7 +604,7 @@
       lookDetail(id) {
         this.announcementDetailDialog = true;
         this.loading3 = true;
-        this.$http.get(globalConfig.server + 'announcement/' + id+"?published=1").then((res) => {
+        this.$http.get(globalConfig.server + 'announcement/' + id + "?published=1").then((res) => {
           this.loading3 = false;
           if (res.data.code === '80010') {
             this.announcementDetail = res.data.data;
@@ -655,9 +659,25 @@
         this.$http.get(this.urls + 'oa/portal/?dict_id=144', {
           params: this.form
         }).then((res) => {
-          let title, data = {};
+          let data = res.data && res.data.data && res.data.data.data;
+          if (data.length > 0) {
+            for (let i = 0; i < data.length; i++) {
+              let cover_pic = data[i] && data[i].album && data[i].album.cover_pic;
+              let first = true;
+              for (let key in cover_pic) {
+                if (first) {
+                  let pic = {};
+                  pic.id = data[i].id;
+                  pic.uri = cover_pic && cover_pic[key] && cover_pic[key][0] && cover_pic[key][0].uri;
+                  pic.title = data[i].title;
+                  data[i].album.cover_pic = pic;
+                }
+                first = false;
+              }
+            }
+          }
+          let title = {};
           title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].title;
-          data = res.data && res.data.data && res.data.data.data;
           this.hostData = Object.assign({}, this.hostData, {title: title, data: data});
           localStorage.setItem('convergeHostData', JSON.stringify(this.hostData));
 
@@ -665,7 +685,24 @@
           this.$http.get(this.urls + 'oa/portal/?dict_id=145', {
             params: this.form
           }).then((res) => {
-            let title, data = {};
+            let data = res.data && res.data.data && res.data.data.data;
+            if (data.length > 0) {
+              for (let i = 0; i < data.length; i++) {
+                let cover_pic = data[i] && data[i].album && data[i].album.cover_pic;
+                let first = true;
+                for (let key in cover_pic) {
+                  if (first) {
+                    let pic = {};
+                    pic.id = data[i].id;
+                    pic.uri = cover_pic && cover_pic[key] && cover_pic[key][0] && cover_pic[key][0].uri;
+                    pic.title = data[i].title;
+                    data[i].album.cover_pic = pic;
+                  }
+                  first = false;
+                }
+              }
+            }
+            let title = {};
             title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].title;
             data = res.data && res.data.data && res.data.data.data;
             this.lessData = Object.assign({}, this.lessData, {title: title, data: data});
@@ -675,7 +712,24 @@
             this.$http.get(this.urls + 'oa/portal/?dict_id=146', {
               params: this.form
             }).then((res) => {
-              let title, data = {};
+              let data = res.data && res.data.data && res.data.data.data;
+              if (data.length > 0) {
+                for (let i = 0; i < data.length; i++) {
+                  let cover_pic = data[i] && data[i].album && data[i].album.cover_pic;
+                  let first = true;
+                  for (let key in cover_pic) {
+                    if (first) {
+                      let pic = {};
+                      pic.id = data[i].id;
+                      pic.uri = cover_pic && cover_pic[key] && cover_pic[key][0] && cover_pic[key][0].uri;
+                      pic.title = data[i].title;
+                      data[i].album.cover_pic = pic;
+                    }
+                    first = false;
+                  }
+                }
+              }
+              let title = {};
               title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].title;
               data = res.data && res.data.data && res.data.data.data;
               this.lowData = Object.assign({}, this.lowData, {title: title, data: data});
@@ -685,7 +739,24 @@
               this.$http.get(this.urls + 'oa/portal/?dict_id=138', {
                 params: this.form
               }).then((res) => {
-                let title, data = {};
+                let data = res.data && res.data.data && res.data.data.data;
+                if (data.length > 0) {
+                  for (let i = 0; i < data.length; i++) {
+                    let cover_pic = data[i] && data[i].album && data[i].album.cover_pic;
+                    let first = true;
+                    for (let key in cover_pic) {
+                      if (first) {
+                        let pic = {};
+                        pic.id = data[i].id;
+                        pic.uri = cover_pic && cover_pic[key] && cover_pic[key][0] && cover_pic[key][0].uri;
+                        pic.title = data[i].title;
+                        data[i].album.cover_pic = pic;
+                      }
+                      first = false;
+                    }
+                  }
+                }
+                let title = {};
                 title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].title;
                 data = res.data && res.data.data && res.data.data.data;
                 this.newsData = Object.assign({}, this.newsData, {title: title, data: data});
@@ -695,7 +766,24 @@
                 this.$http.get(this.urls + 'oa/portal/?dict_id=139', {
                   params: this.form
                 }).then((res) => {
-                  let title, data = {};
+                  let data = res.data && res.data.data && res.data.data.data;
+                  if (data.length > 0) {
+                    for (let i = 0; i < data.length; i++) {
+                      let cover_pic = data[i] && data[i].album && data[i].album.cover_pic;
+                      let first = true;
+                      for (let key in cover_pic) {
+                        if (first) {
+                          let pic = {};
+                          pic.id = data[i].id;
+                          pic.uri = cover_pic && cover_pic[key] && cover_pic[key][0] && cover_pic[key][0].uri;
+                          pic.title = data[i].title;
+                          data[i].album.cover_pic = pic;
+                        }
+                        first = false;
+                      }
+                    }
+                  }
+                  let title = {};
                   title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].title;
                   data = res.data && res.data.data && res.data.data.data;
                   this.staffData = Object.assign({}, this.staffData, {title: title, data: data});
@@ -705,7 +793,24 @@
                   this.$http.get(this.urls + 'oa/portal/?dict_id=140', {
                     params: this.form
                   }).then((res) => {
-                    let title, data = {};
+                    let data = res.data && res.data.data && res.data.data.data;
+                    if (data.length > 0) {
+                      for (let i = 0; i < data.length; i++) {
+                        let cover_pic = data[i] && data[i].album && data[i].album.cover_pic;
+                        let first = true;
+                        for (let key in cover_pic) {
+                          if (first) {
+                            let pic = {};
+                            pic.id = data[i].id;
+                            pic.uri = cover_pic && cover_pic[key] && cover_pic[key][0] && cover_pic[key][0].uri;
+                            pic.title = data[i].title;
+                            data[i].album.cover_pic = pic;
+                          }
+                          first = false;
+                        }
+                      }
+                    }
+                    let title = {};
                     title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].title;
                     data = res.data && res.data.data && res.data.data.data;
                     this.cusData = Object.assign({}, this.cusData, {title: title, data: data});
@@ -716,7 +821,24 @@
                   this.$http.get(this.urls + 'oa/portal/?dict_id=142', {
                     params: this.form
                   }).then((res) => {
-                    let title, data = {};
+                    let data = res.data && res.data.data && res.data.data.data;
+                    if (data.length > 0) {
+                      for (let i = 0; i < data.length; i++) {
+                        let cover_pic = data[i] && data[i].album && data[i].album.cover_pic;
+                        let first = true;
+                        for (let key in cover_pic) {
+                          if (first) {
+                            let pic = {};
+                            pic.id = data[i].id;
+                            pic.uri = cover_pic && cover_pic[key] && cover_pic[key][0] && cover_pic[key][0].uri;
+                            pic.title = data[i].title;
+                            data[i].album.cover_pic = pic;
+                          }
+                          first = false;
+                        }
+                      }
+                    }
+                    let title = {};
                     title = res.data && res.data.data && res.data.data.data && res.data.data.data[0] && res.data.data.data[0].title;
                     data = res.data && res.data.data && res.data.data.data;
                     this.hotData = Object.assign({}, this.hotData, {title: title, data: data});
