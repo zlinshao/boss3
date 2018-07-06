@@ -23,7 +23,7 @@
         <div class="filter high_grade" :class="isHigh? 'highHide':''" style=" margin-top: -40px;">
           <el-form :inline="true" onsubmit="return false" :model="form" size="mini" label-width="100px">
             <div class="filterTitle">
-              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索{{form}}
             </div>
             <el-row class="el_row_border">
               <el-col :span="12">
@@ -33,12 +33,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input readonly="" v-model="form.department_name" @focus="chooseDepart('search')"
-                                placeholder="点击选择">
-                        <template slot="append">
-                          <div style="cursor: pointer;" @click="emptyDepart('search')">清空</div>
-                        </template>
-                      </el-input>
+                      <el-input v-model="form.address" placeholder="请输入房屋地址" clearable></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -50,10 +45,10 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input readonly="" v-model="form.department_name" @focus="chooseDepart('search')"
+                      <el-input readonly="" v-model="sign_name" @focus="chooseStaff('search')"
                                 placeholder="点击选择">
                         <template slot="append">
-                          <div style="cursor: pointer;" @click="emptyDepart('search')">清空</div>
+                          <div style="cursor: pointer;" @click="emptyStaff('search')">清空</div>
                         </template>
                       </el-input>
                     </el-form-item>
@@ -70,7 +65,7 @@
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
                       <el-date-picker
-                        v-model="form.month"
+                        v-model="form.report_date"
                         type="daterange"
                         value-format="yyyy-MM-dd"
                         start-placeholder="开始日期"
@@ -87,7 +82,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input readonly="" v-model="form.department_name" @focus="chooseDepart('search')"
+                      <el-input readonly="" v-model="org_name" @focus="chooseDepart('search')"
                                 placeholder="点击选择">
                         <template slot="append">
                           <div style="cursor: pointer;" @click="emptyDepart('search')">清空</div>
@@ -107,7 +102,7 @@
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
                       <el-date-picker
-                        v-model="form.month"
+                        v-model="form.sign_date"
                         type="daterange"
                         value-format="yyyy-MM-dd"
                         start-placeholder="开始日期"
@@ -124,7 +119,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="form.agency" placeholder="请选择">
+                      <el-select v-model="form.is_agency" placeholder="请选择" clearable>
                         <el-option key="1" label="是" value="1">是</el-option>
                         <el-option key="0" label="否" value="0">否</el-option>
                       </el-select>
@@ -231,6 +226,10 @@
         </div>
 
         <div style="margin-top: 10px;">
+          <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
+            <el-button type="primary" size="mini" @click="">切换小组/片区</el-button>
+            <el-button type="primary" size="mini" @click="">导出</el-button>
+          </div>
           <el-tabs type="border-card">
             <el-tab-pane label="公司总计">
               <div class="myHouse">
@@ -341,15 +340,17 @@
         tableStatus: ' ',
         tableLoading: false,
         form: {
+          search: '',  //模糊搜索
           page: 1,
           limit: 12,
-          org_id: '',  //部门搜索
-          department_name: '',
-          month: [],  //时间范围
-          target_sort: '',  //排序  0 升序 1降序
-          search: '',
-          agency: '',
+          address: '',  //房屋地址
+          sign_id: [],  //租房签约人
+          org_id: [],  //收房片区
+          sign_date: [], //签约日期起止范围
+          is_agency: '',  //是否中介单
         },
+        sign_name: '',
+        org_name: '',
         organizationDialog: false,
         organizeType: '',
         currentStatus: '',
@@ -448,6 +449,23 @@
         this.organizeType = 'depart';
         this.currentStatus = val;
       },
+      chooseStaff(val) {
+        this.organizationDialog = true;
+        this.organizeType = 'staff';
+        this.currentStatus = val;
+      },
+      emptyStaff(val) {
+        if (val === 'search') {
+          this.form.sign_id = [];
+          this.sign_name = '';
+        }
+      },
+      emptyDepart(val) {
+        if (val === 'search') {
+          this.form.org_id = [];
+          this.org_name = '';
+        }
+      },
       closeOrganization() {
         this.organizationDialog = false;
         this.organizeType = '';
@@ -455,22 +473,35 @@
       },
       selectMember(val) {
         if (this.currentStatus === 'search') {
-          this.form.org_id = val[0].id;
-          this.form.department_name = val[0].name;
-        } else {
-          this.achievementForm.org_id = val[0].id;
-          this.achievementForm.department_name = val[0].name;
+          if (this.organizeType === 'staff') {
+            // this.form.sign_id = val[0].id;
+            // this.sign_name = val[0].name;
+            this.form.sign_id = [];
+            this.sign_name = '';
+            let names = [];
+            if (val.length > 0) {
+              val.forEach((item) => {
+                this.form.sign_id.push(item.id);
+                names.push(item.name);
+              });
+            }
+            this.sign_name = names.join(',');
+          } else {
+            // this.form.org_id = val[0].id;
+            // this.org_name = val[0].name;
+            this.form.org_id = [];
+            this.org_name = '';
+            let names = [];
+            if (val.length > 0) {
+              val.forEach((item) => {
+                this.form.org_id.push(item.id);
+                names.push(item.name);
+              });
+            }
+            this.org_name = names.join(',');
+          }
         }
         this.organizeType = '';
-      },
-      emptyDepart(val) {
-        if (val === 'search') {
-          this.form.department_name = '';
-          this.form.org_id = '';
-        } else {
-          this.achievementForm.department_name = '';
-          this.achievementForm.org_id = '';
-        }
       },
       search() {
         this.form.page = 1;
@@ -509,9 +540,14 @@
       },
       // 重置
       resetting() {
-        this.form.org_id = '';
-        this.form.department_name = '';
-        this.form.month = [];
+        this.form.address = '';
+        this.form.sign_id = [];
+        this.form.org_id = [];
+        this.form.report_date = [];
+        this.form.sign_date = [];
+        this.form.is_agency = '';
+        this.sign_name = '';
+        this.org_name = '';
       },
     },
   };

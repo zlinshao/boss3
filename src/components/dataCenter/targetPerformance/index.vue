@@ -517,8 +517,4 @@
     display: flex;
     justify-content: flex-end;
   }
-
-  .main {
-    min-height: 400px;
-  }
 </style>
