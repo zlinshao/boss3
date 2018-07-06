@@ -23,7 +23,7 @@
         <div class="filter high_grade" :class="isHigh? 'highHide':''" style=" margin-top: -40px;">
           <el-form :inline="true" onsubmit="return false" :model="form" size="mini" label-width="100px">
             <div class="filterTitle">
-              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索{{form}}
+              <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
             </div>
             <el-row class="el_row_border">
               <el-col :span="12">
