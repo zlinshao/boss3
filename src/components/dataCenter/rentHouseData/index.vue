@@ -224,12 +224,13 @@
         </div>
 
         <div style="margin-top: 10px;">
-          <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
-            <el-button type="primary" size="mini" @click="">切换小组/片区</el-button>
+          <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;"
+               v-show="rentActiveName != 'first'">
+            <el-button type="primary" size="mini" @click="switchOrg">{{switchTitle}}</el-button>
             <el-button type="primary" size="mini" @click="">导出</el-button>
           </div>
-          <el-tabs type="border-card">
-            <el-tab-pane label="公司总计">
+          <el-tabs type="border-card" v-model="rentActiveName">
+            <el-tab-pane label="公司总计" name="first">
               <div class="myHouse">
                 <div class="blueTable">
                   <el-table
@@ -265,48 +266,47 @@
                 <!--</div>-->
               </div>
             </el-tab-pane>
-            <el-tab-pane v-for="item in cityCategory" :label="item.dictionary_name" :key="item.id">
+            <el-tab-pane v-for="(item,key) in cityTableData" :label="key" :key="item.id" :name="key">
               <div class="myHouse">
                 <div class="blueTable">
                   <el-table
-                    :data="cityTableData"
-                    :empty-text='tableStatus'
-                    v-loading="tableLoading"
+                    :data="item[0]"
+                    :empty-text='cityTableStatus'
+                    v-loading="cityTableLoading"
                     element-loading-text="拼命加载中"
                     element-loading-spinner="el-icon-loading"
                     element-loading-background="rgba(255, 255, 255, 0)"
-                    @row-contextmenu='openContextMenu'
                     style="width: 100%">
                     <el-table-column
                       label="片区"
-                      prop="department_name">
+                      prop="org">
                     </el-table-column>
                     <!--<el-table-column-->
                     <!--label="负责人"-->
-                    <!--prop="leader_name">-->
+                    <!--prop="leader">-->
                     <!--</el-table-column>-->
                     <el-table-column
                       label="租房套数"
-                      prop="leader_name">
+                      prop="count">
                     </el-table-column>
                     <el-table-column
                       label="租房业绩"
-                      prop="leader_name">
+                      prop="sum">
                     </el-table-column>
                   </el-table>
                 </div>
-                <!--<div class="tableBottom">-->
-                <!--<div class="left">-->
-                <!--<el-pagination-->
-                <!--@size-change="handleSizeChange"-->
-                <!--@current-change="handleCurrentChange"-->
-                <!--:current-page="form.page"-->
-                <!--:page-size="form.limit"-->
-                <!--layout="total, prev, pager, next, jumper"-->
-                <!--:total="totalNum">-->
-                <!--</el-pagination>-->
-                <!--</div>-->
-                <!--</div>-->
+                <div class="tableBottom">
+                  <div class="left">
+                    <el-pagination
+                      @size-change="handleCitySizeChange"
+                      @current-change="handleCityCurrentChange"
+                      :current-page="cityForm.page"
+                      :page-size="cityForm.limit"
+                      layout="total, prev, pager, next, jumper"
+                      :total="totalCityNum">
+                    </el-pagination>
+                  </div>
+                </div>
               </div>
             </el-tab-pane>
           </el-tabs>
@@ -340,7 +340,7 @@
         form: {
           search: '',  //模糊搜索
           page: 1,
-          limit: 12,
+          limit: 6,
           address: '',  //房屋地址
           sign_id: [],  //租房签约人
           org_id: [],  //收房片区
@@ -356,16 +356,38 @@
 
         companyTotalData: [],  //公司总计
         cityTableData: [],   //城市
+        rentActiveName: 'first',
+        cityTableStatus: ' ',
+        cityTableLoading: false,
+        switchTitle: '切换片区',
+        cityForm: {
+          page: 1,
+          form: 6,
+        },
+        totalCityNum: 0,
       };
     },
     mounted() {
       this.getCityCategory();
+      this.getTableData();
+      this.form.aggr = 'leaf';
+      this.getPolyData();
     },
     activated() {
-      this.getTableData();
+
     },
     watch: {},
     methods: {
+      switchOrg() {
+        if (this.form.aggr === 'leaf') {
+          this.form.aggr = 'third';
+          this.switchTitle = '切换小组';
+        } else {
+          this.form.aggr = 'leaf';
+          this.switchTitle = '切换片区';
+        }
+        this.getPolyData();
+      },
       getCityCategory() {
         this.dictionary(306, 1).then((res) => {
           this.cityCategory = res.data;
@@ -509,6 +531,7 @@
       getTableData() {
         this.tableStatus = ' ';
         this.tableLoading = true;
+        this.form.aggr = '';
         this.$http.get(globalConfig.server + 'performance/renter', {params: this.form}).then((res) => {
           this.tableLoading = false;
           this.isHigh = false;
@@ -527,11 +550,33 @@
           }
         });
       },
-      handleSizeChange(val) {
+      //聚合列表数据
+      getPolyData() {
+        this.cityTableStatus = ' ';
+        this.cityTableLoading = true;
+        this.$http.get(globalConfig.server + 'performance/renter', {params: this.form}).then((res) => {
+          this.cityTableLoading = false;
+          this.isHigh = false;
+          if (res.data.code === '20010') {
+            this.cityTableData = res.data.data;
+            // this.totalNum = res.data.data.count;  //记录总条数
+          } else {
+            this.cityTableStatus = '暂无数据';
+            // this.totalNum = 0;
+            this.cityTableData = [];
+          }
+        });
       },
+      handleSizeChange(val) {},
       handleCurrentChange(val) {
         this.form.page = val;
         this.getTableData();
+      },
+
+      handleCitySizeChange(val) {},
+      handleCityCurrentChange(val) {
+        this.cityForm.page = val;
+        this.getPolyData();
       },
       // 高级
       highGrade() {
