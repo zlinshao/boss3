@@ -229,7 +229,7 @@
             <el-button type="primary" size="mini" @click="switchOrg">{{switchTitle}}</el-button>
             <el-button type="primary" size="mini" @click="">导出</el-button>
           </div>
-          <el-tabs type="border-card" v-model="rentActiveName">
+          <el-tabs type="border-card" v-model="rentActiveName" @tab-click="handleClick">
             <el-tab-pane label="公司总计" name="first">
               <div class="myHouse">
                 <div class="blueTable">
@@ -270,7 +270,7 @@
               <div class="myHouse">
                 <div class="blueTable">
                   <el-table
-                    :data="item[0]"
+                    :data="item.data[cityForm.index]"
                     :empty-text='cityTableStatus'
                     v-loading="cityTableLoading"
                     element-loading-text="拼命加载中"
@@ -281,10 +281,10 @@
                       label="片区"
                       prop="org">
                     </el-table-column>
-                    <!--<el-table-column-->
-                    <!--label="负责人"-->
-                    <!--prop="leader">-->
-                    <!--</el-table-column>-->
+                    <el-table-column
+                    label="负责人"
+                    prop="leader">
+                    </el-table-column>
                     <el-table-column
                       label="租房套数"
                       prop="count">
@@ -303,7 +303,7 @@
                       :current-page="cityForm.page"
                       :page-size="cityForm.limit"
                       layout="total, prev, pager, next, jumper"
-                      :total="totalCityNum">
+                      :total="item.count">
                     </el-pagination>
                   </div>
                 </div>
@@ -362,13 +362,14 @@
         switchTitle: '切换片区',
         cityForm: {
           page: 1,
-          form: 6,
+          limit: 6,
+          index: 0,
         },
         totalCityNum: 0,
       };
     },
     mounted() {
-      this.getCityCategory();
+      // this.getCityCategory();
       this.getTableData();
       this.form.aggr = 'leaf';
       this.getPolyData();
@@ -378,6 +379,9 @@
     },
     watch: {},
     methods: {
+      handleClick(val) {
+        this.cityForm.index = 0;
+      },
       switchOrg() {
         if (this.form.aggr === 'leaf') {
           this.form.aggr = 'third';
@@ -388,11 +392,11 @@
         }
         this.getPolyData();
       },
-      getCityCategory() {
-        this.dictionary(306, 1).then((res) => {
-          this.cityCategory = res.data;
-        });
-      },
+      // getCityCategory() {
+      //   this.dictionary(306, 1).then((res) => {
+      //     this.cityCategory = res.data;
+      //   });
+      // },
       // 导出
       exportData() {
         // this.$http.get(globalConfig.server + 'salary/achv/export', {responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
@@ -575,7 +579,7 @@
 
       handleCitySizeChange(val) {},
       handleCityCurrentChange(val) {
-        this.cityForm.page = val;
+        this.cityForm.index = val-1;
         this.getPolyData();
       },
       // 高级
