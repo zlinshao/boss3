@@ -225,12 +225,13 @@
         </div>
 
         <div style="margin-top: 10px;">
-          <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
+          <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;"
+               v-show="rentActiveName != 'first'">
             <el-button type="primary" size="mini" @click="">切换小组/片区</el-button>
             <el-button type="primary" size="mini" @click="">导出</el-button>
           </div>
-          <el-tabs type="border-card">
-            <el-tab-pane label="公司总计">
+          <el-tabs type="border-card" v-model="rentActiveName" @tab-click="handleClick">
+            <el-tab-pane label="公司总计" name="first">
               <div class="myHouse">
                 <div class="blueTable">
                   <el-table
@@ -266,11 +267,12 @@
                 <!--</div>-->
               </div>
             </el-tab-pane>
-            <el-tab-pane v-for="item in cityCategory" :label="item.dictionary_name" :key="item.id">
+            <el-tab-pane v-for="(item,key) in cityTableData.data" :label="item.name" :key="key"
+                         :name="item.name">
               <div class="myHouse">
                 <div class="blueTable">
                   <el-table
-                    :data="cityTableData"
+                    :data="item"
                     :empty-text='tableStatus'
                     v-loading="tableLoading"
                     element-loading-text="拼命加载中"
@@ -282,13 +284,13 @@
                       label="片区"
                       prop="department_name">
                     </el-table-column>
-                    <!--<el-table-column-->
-                    <!--label="负责人"-->
-                    <!--prop="leader_name">-->
-                    <!--</el-table-column>-->
+                    <el-table-column
+                      label="负责人"
+                      prop="leader_name">
+                    </el-table-column>
                     <el-table-column
                       label="收房套数"
-                      prop="leader_name">
+                      prop="leader">
                     </el-table-column>
                     <el-table-column
                       label="支出押金"
@@ -296,18 +298,18 @@
                     </el-table-column>
                   </el-table>
                 </div>
-                <!--<div class="tableBottom">-->
-                <!--<div class="left">-->
-                <!--<el-pagination-->
-                <!--@size-change="handleSizeChange"-->
-                <!--@current-change="handleCurrentChange"-->
-                <!--:current-page="form.page"-->
-                <!--:page-size="form.limit"-->
-                <!--layout="total, prev, pager, next, jumper"-->
-                <!--:total="totalNum">-->
-                <!--</el-pagination>-->
-                <!--</div>-->
-                <!--</div>-->
+                <div class="tableBottom">
+                  <div class="left">
+                    <el-pagination
+                      @size-change="handleSizeChange"
+                      @current-change="handleCityCurrentChange"
+                      :current-page="cityForm.page"
+                      :page-size="cityForm.limit"
+                      layout="total, prev, pager, next, jumper"
+                      :total="cityTableData.count">
+                    </el-pagination>
+                  </div>
+                </div>
               </div>
             </el-tab-pane>
           </el-tabs>
@@ -358,13 +360,25 @@
         cityCategory: [],
         companyTotalData: [],  //公司总计
         cityTableData: [],   //城市
+        rentActiveName: 'first',
+        cityTableStatus: ' ',
+        cityTableLoading: false,
+        switchTitle: '切换片区',
+        cityForm: {
+          page: 1,
+          limit: 6,
+        },
       };
     },
     mounted() {
-      this.getCityCategory();
+      // this.getCityCategory();
+      // this.getTableData();
+      setTimeout(() => {
+        this.cityForm.aggr = 'leaf';
+        // this.getPolyData();
+      }, 0);
     },
     activated() {
-      // this.getTableData();
     },
     watch: {},
     methods: {
@@ -372,6 +386,20 @@
         this.dictionary(306, 1).then((res) => {
           this.cityCategory = res.data;
         });
+      },
+      handleClick(val) {
+        this.cityForm.page = 1;
+      },
+      switchOrg() {
+        if (this.cityForm.aggr === 'leaf') {
+          this.cityForm.aggr = 'third';
+          this.switchTitle = '切换小组';
+        } else {
+          this.cityForm.aggr = 'leaf';
+          this.switchTitle = '切换片区';
+        }
+        this.cityForm.page = 1;
+        this.getPolyData();
       },
       // 导出
       exportData() {
@@ -519,6 +547,8 @@
           if (res.data.code === '30000') {
             this.tableData = res.data.data.data;
             this.companyTotalData = res.data.data.countA;
+            this.cityTableData = res.data.data.dat;
+
             this.totalNum = res.data.data.count;  //记录总条数
             if (res.data.data.length < 1) {
               this.tableStatus = '暂无数据';
@@ -532,11 +562,32 @@
           }
         });
       },
+      //聚合列表数据
+      getPolyData() {
+        this.cityTableStatus = ' ';
+        this.cityTableLoading = true;
+        this.$http.get(globalConfig.server + 'performance/renter', {params: this.cityForm}).then((res) => {
+          this.cityTableLoading = false;
+          this.isHigh = false;
+          if (res.data.code === '20010') {
+            this.cityTableData = res.data.data;
+            // this.totalNum = res.data.data.count;  //记录总条数
+          } else {
+            this.cityTableStatus = '暂无数据';
+            // this.totalNum = 0;
+            this.cityTableData = [];
+          }
+        });
+      },
       handleSizeChange(val) {
       },
       handleCurrentChange(val) {
         this.form.page = val;
         this.getTableData();
+      },
+      handleCityCurrentChange(val) {
+        this.cityForm.page = val;
+        this.getPolyData();
       },
       // 高级
       highGrade() {
