@@ -270,7 +270,7 @@
               <div class="myHouse">
                 <div class="blueTable">
                   <el-table
-                    :data="item.data[cityForm.index]"
+                    :data="item.data[cityForm.page-1]"
                     :empty-text='cityTableStatus'
                     v-loading="cityTableLoading"
                     element-loading-text="拼命加载中"
@@ -363,7 +363,6 @@
         cityForm: {
           page: 1,
           limit: 6,
-          index: 0,
         },
         totalCityNum: 0,
       };
@@ -371,8 +370,10 @@
     mounted() {
       // this.getCityCategory();
       this.getTableData();
-      this.form.aggr = 'leaf';
-      this.getPolyData();
+      setTimeout(()=>{
+        this.cityForm.aggr = 'leaf';
+        this.getPolyData();
+      }, 0);
     },
     activated() {
 
@@ -380,16 +381,17 @@
     watch: {},
     methods: {
       handleClick(val) {
-        this.cityForm.index = 0;
+        this.cityForm.page = 1;
       },
       switchOrg() {
-        if (this.form.aggr === 'leaf') {
-          this.form.aggr = 'third';
+        if (this.cityForm.aggr === 'leaf') {
+          this.cityForm.aggr = 'third';
           this.switchTitle = '切换小组';
         } else {
-          this.form.aggr = 'leaf';
+          this.cityForm.aggr = 'leaf';
           this.switchTitle = '切换片区';
         }
+        this.cityForm.page = 1;
         this.getPolyData();
       },
       // getCityCategory() {
@@ -558,7 +560,7 @@
       getPolyData() {
         this.cityTableStatus = ' ';
         this.cityTableLoading = true;
-        this.$http.get(globalConfig.server + 'performance/renter', {params: this.form}).then((res) => {
+        this.$http.get(globalConfig.server + 'performance/renter', {params: this.cityForm}).then((res) => {
           this.cityTableLoading = false;
           this.isHigh = false;
           if (res.data.code === '20010') {
@@ -579,7 +581,7 @@
 
       handleCitySizeChange(val) {},
       handleCityCurrentChange(val) {
-        this.cityForm.index = val-1;
+        this.cityForm.page = val;
         this.getPolyData();
       },
       // 高级
