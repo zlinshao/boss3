@@ -298,7 +298,7 @@
                 <div class="tableBottom">
                   <div class="left">
                     <el-pagination
-                      @size-change="handleCitySizeChange"
+                      @size-change="handleSizeChange"
                       @current-change="handleCityCurrentChange"
                       :current-page="cityForm.page"
                       :page-size="cityForm.limit"
@@ -578,8 +578,6 @@
         this.form.page = val;
         this.getTableData();
       },
-
-      handleCitySizeChange(val) {},
       handleCityCurrentChange(val) {
         this.cityForm.page = val;
         this.getPolyData();
