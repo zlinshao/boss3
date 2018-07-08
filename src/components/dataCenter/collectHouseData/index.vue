@@ -154,19 +154,19 @@
               style="width: 100%"><!--@row-contextmenu='openContextMenu'-->
               <el-table-column
                 label="签约日期"
-                prop="department_name">
+                prop="created_at">
               </el-table-column>
               <el-table-column
                 label="补充信息"
-                prop="leader_name">
+                prop="type">
               </el-table-column>
               <el-table-column
                 label="炸单情况"
-                prop="month">
+                prop="end_type">
               </el-table-column>
               <el-table-column
                 label="是否中介单"
-                prop="month">
+                prop="is_agency">
               </el-table-column>
               <el-table-column
                 label="房屋地址"
@@ -198,7 +198,7 @@
               </el-table-column>
               <el-table-column
                 label="第一次打款时间"
-                prop="month">
+                prop="first_pay_at">
               </el-table-column>
               <el-table-column
                 label="收房合同号"
@@ -341,7 +341,7 @@
         form: {
           search: '',
           page: 1,
-          limit: 12,
+          limit: 6,
           address: '',
           sign_id: [],
           contract_number: '',
@@ -364,7 +364,7 @@
       this.getCityCategory();
     },
     activated() {
-      this.getTableData();
+      // this.getTableData();
     },
     watch: {},
     methods: {
@@ -516,7 +516,7 @@
         this.$http.get(globalConfig.server + 'performance/lord', {params: this.form}).then((res) => {
           this.tableLoading = false;
           this.isHigh = false;
-          if (res.data.code === '20000') {
+          if (res.data.code === '30000') {
             this.tableData = res.data.data.data;
             this.companyTotalData = res.data.data.countA;
             this.totalNum = res.data.data.count;  //记录总条数
