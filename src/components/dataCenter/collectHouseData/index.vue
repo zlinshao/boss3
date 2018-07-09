@@ -369,7 +369,7 @@
       setTimeout(() => {
         this.cityForm.below = 1;
         this.getPolyData();
-      }, 0);
+      }, 1);
     },
     activated() {
     },
@@ -624,5 +624,8 @@
     padding: 8px;
     display: flex;
     justify-content: flex-end;
+  }
+  .main {
+    min-height: 300px;
   }
 </style>
