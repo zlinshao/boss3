@@ -12,7 +12,7 @@
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="mini" @click="exportData">导出</el-button>
+              <el-button type="primary" size="mini" @click="exportData(1)">导出</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -242,10 +242,9 @@
 
         <div style="margin-top: 10px;">
           <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
-            <el-button type="primary" size="mini" @click="">切换小组/片区</el-button>
-            <el-button type="primary" size="mini" @click="">导出</el-button>
+            <el-button type="primary" size="mini" @click="switchOrg">{{switchTitle}}</el-button>
+            <el-button type="primary" size="mini" @click="exportData(2)">导出</el-button>
           </div>
-          <!--<el-button @click="cityForm.below = 1;getPolyData();">点我</el-button>-->
           <el-tabs type="border-card" v-model="rentActiveName" @tab-click="handleClick">
             <el-tab-pane label="公司总计" name="first">
               <div class="myHouse">
@@ -287,32 +286,32 @@
                          :name="key">
               <div class="myHouse">
                 <div class="blueTable">
-                  <!--<el-table-->
-                  <!--:data="item"-->
-                  <!--:empty-text='tableStatus'-->
-                  <!--v-loading="tableLoading"-->
-                  <!--element-loading-text="拼命加载中"-->
-                  <!--element-loading-spinner="el-icon-loading"-->
-                  <!--element-loading-background="rgba(255, 255, 255, 0)"-->
-                  <!--@row-contextmenu='openContextMenu'-->
-                  <!--style="width: 100%">-->
-                  <!--<el-table-column-->
-                  <!--label="片区"-->
-                  <!--prop="department_name">-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                  <!--label="负责人"-->
-                  <!--prop="leader_name">-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                  <!--label="收房套数"-->
-                  <!--prop="leader">-->
-                  <!--</el-table-column>-->
-                  <!--<el-table-column-->
-                  <!--label="支出押金"-->
-                  <!--prop="leader_name">-->
-                  <!--</el-table-column>-->
-                  <!--</el-table>-->
+                  <el-table
+                    :data="item.data"
+                    :empty-text='cityTableStatus'
+                    v-loading="cityTableLoading"
+                    element-loading-text="拼命加载中"
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-background="rgba(255, 255, 255, 0)"
+                    @row-contextmenu='openContextMenu'
+                    style="width: 100%">
+                    <el-table-column
+                      label="部门"
+                      prop="name">
+                    </el-table-column>
+                    <el-table-column
+                      label="负责人"
+                      prop="leader_name">
+                    </el-table-column>
+                    <el-table-column
+                      label="收房套数"
+                      prop="num">
+                    </el-table-column>
+                    <el-table-column
+                      label="支出押金"
+                      prop="price">
+                    </el-table-column>
+                  </el-table>
                 </div>
                 <div class="tableBottom">
                   <div class="left">
@@ -322,7 +321,7 @@
                       :current-page="cityForm.page"
                       :page-size="cityForm.limit"
                       layout="total, prev, pager, next, jumper"
-                      :total="cityTableData.count">
+                      :total="item.count">
                     </el-pagination>
                   </div>
                 </div>
@@ -384,6 +383,7 @@
           page: 1,
           limit: 6,
           below: '',
+          zu: '',
           sign_date: [], //签约日期起止范围
         },
         dateShow: false,
@@ -401,6 +401,7 @@
 
       this.form.sign_date = [new Date(year, month, date), new Date(year, month, date)];
       this.sign_date[0] = this.sign_date[1] = year + "-" + month1 + "-" + date;
+      this.form.sign_date = this.sign_date;
       this.getTableData();
       setTimeout(() => {
         this.cityForm.below = 1;
@@ -429,31 +430,50 @@
         this.cityForm.page = 1;
       },
       switchOrg() {
-        if (this.cityForm.aggr === 'leaf') {
-          this.cityForm.aggr = 'third';
+        if (this.cityForm.zu === 1) {
+          this.cityForm.zu = '';
           this.switchTitle = '切换小组';
         } else {
-          this.cityForm.aggr = 'leaf';
+          this.cityForm.zu = 1;
           this.switchTitle = '切换片区';
         }
         this.cityForm.page = 1;
+        this.cityForm.export = '';
         this.getPolyData();
       },
       // 导出
-      exportData() {
-        // this.$http.get(globalConfig.server + 'salary/achv/export', {responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
-        //   if (!res.data) {
-        //     return;
-        //   }
-        //   console.log(res);
-        //   let url = window.URL.createObjectURL(new Blob([res.data]));
-        //   let link = document.createElement('a');
-        //   link.style.display = 'a';
-        //   link.href = url;
-        //   link.setAttribute('download', 'excel.xlsx');
-        //   document.body.appendChild(link);
-        //   link.click();
-        // });
+      exportData(val) {
+        let header;
+        if (val === 1) {
+          // this.form.export = 1;
+          this.form.below = '';
+          this.form.zu = '';
+          header = this.$http.get(globalConfig.server + 'performance/lord', {
+            responseType: 'arraybuffer',
+            params: this.form
+          });
+        } else {
+          console.log(this.rentActiveName);
+          this.cityForm.export = this.rentActiveName;
+          this.form.below = 1;
+          header = this.$http.get(globalConfig.server + 'performance/lord', {
+            responseType: 'arraybuffer',
+            params: this.cityForm
+          });
+        }
+        header.then((res) => { // 处理返回的文件流
+          if (!res.data) {
+            return;
+          }
+          console.log(res);
+          let url = window.URL.createObjectURL(new Blob([res.data]));
+          let link = document.createElement('a');
+          link.style.display = 'a';
+          link.href = url;
+          link.setAttribute('download', 'excel.xlsx');
+          document.body.appendChild(link);
+          link.click();
+        });
       },
       //关闭右键菜单
       closeMenu() {
@@ -604,11 +624,8 @@
           this.isHigh = false;
           if (res.data.code === '30000') {
             this.cityTableData = res.data.data.dat;
-            console.log(this.cityTableData)
-            // this.totalNum = res.data.data.count;  //记录总条数
           } else {
             this.cityTableStatus = '暂无数据';
-            // this.totalNum = 0;
             this.cityTableData = [];
           }
         });
@@ -621,7 +638,7 @@
       },
       handleCityCurrentChange(val) {
         this.cityForm.page = val;
-        // this.getPolyData();
+        this.getPolyData();
       },
       // 高级
       highGrade() {
