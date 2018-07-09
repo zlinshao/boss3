@@ -216,7 +216,7 @@
 
         <div style="margin-top: 10px;">
           <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
-            <el-button type="primary" size="mini" @click="switchOrg" v-show="rentActiveName != '公司总计'">{{switchTitle}}
+            <el-button type="primary" size="mini" @click="switchOrg">{{switchTitle}}
             </el-button>
             <el-button type="primary" size="mini" @click="exportData(2)">导出</el-button>
           </div>
@@ -370,7 +370,6 @@
       // 导出
       exportData(val) {
         let header;
-
         if (val === 1) {
           this.form.export = 1;
           header = this.$http.get(globalConfig.server + 'performance/renter', {
@@ -378,7 +377,7 @@
             params: this.form
           });
         } else {
-          this.cityForm.export = this.cityForm.aggr = 1;
+          this.cityForm.export = 1;
           header = this.$http.get(globalConfig.server + 'performance/renter', {
             responseType: 'arraybuffer',
             params: this.cityForm

@@ -241,8 +241,7 @@
         </div>
 
         <div style="margin-top: 10px;">
-          <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;"
-               v-show="rentActiveName != 'first'">
+          <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
             <el-button type="primary" size="mini" @click="">切换小组/片区</el-button>
             <el-button type="primary" size="mini" @click="">导出</el-button>
           </div>
