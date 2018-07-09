@@ -5,6 +5,9 @@
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
             <el-form-item>
+              <span v-if="form.report_date && form.report_date.length>0" style="color: #409EFF;">报备日期：{{form.report_date[0]}} - {{form.report_date[1]}}</span>
+            </el-form-item>
+            <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
             <el-form-item>
@@ -313,6 +316,7 @@
           org_id: [],  //收房片区
           sign_date: [], //签约日期起止范围
           is_agency: '',  //是否中介单
+          report_date: [],
         },
         sign_name: '',
         org_name: '',
@@ -332,6 +336,13 @@
       };
     },
     mounted() {
+      let Nowdate = new Date();
+      let year = new Date(Nowdate).getFullYear();
+      let month = new Date(Nowdate).getMonth() + 1;
+      let date = new Date(Nowdate).getDate();
+      if (month < 10) month = "0" + month;
+      if (date < 10) date = "0" + date;
+      this.form.report_date[0] = this.form.report_date[1] = year + "-" + month + "-" + date;
       this.getTableData();
       setTimeout(()=>{
         this.cityForm.aggr = 'leaf';

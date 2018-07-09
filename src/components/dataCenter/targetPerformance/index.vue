@@ -4,12 +4,12 @@
       <div class="highRanking" style=" position: absolute; top: 120px; right: 20px;">
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
-            <el-form-item>
-              <el-input placeholder="组名/组长名称" v-model="form.search"
-                        @keyup.enter.native="search" size="mini" clearable>
-                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
-              </el-input>
-            </el-form-item>
+            <!--<el-form-item>-->
+              <!--<el-input placeholder="组名/组长名称" v-model="form.search"-->
+                        <!--@keyup.enter.native="search" size="mini" clearable>-->
+                <!--<el-button slot="append" icon="el-icon-search" @click="search"></el-button>-->
+              <!--</el-input>-->
+            <!--</el-form-item>-->
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
