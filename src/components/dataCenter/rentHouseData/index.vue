@@ -338,7 +338,7 @@
       setTimeout(() => {
         this.cityForm.aggr = 'leaf';
         this.getPolyData();
-      }, 0);
+      }, 10);
     },
     activated() {},
     watch: {
@@ -549,10 +549,8 @@
           this.cityTableLoading = false;
           if (res.data.code === '20010') {
             this.cityTableData = res.data.data;
-            // this.totalNum = res.data.data.count;  //记录总条数
           } else {
             this.cityTableStatus = '暂无数据';
-            // this.totalNum = 0;
             this.cityTableData = [];
           }
         });
@@ -592,7 +590,6 @@
     display: flex;
     justify-content: flex-end;
   }
-
   .main {
     min-height: 300px;
   }
