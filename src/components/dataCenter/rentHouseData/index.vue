@@ -340,8 +340,7 @@
         this.getPolyData();
       }, 0);
     },
-    activated() {
-    },
+    activated() {},
     watch: {
       "form.sign_date": {
         deep: true,
