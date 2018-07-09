@@ -5,7 +5,8 @@
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
             <el-form-item>
-              <span v-if="form.sign_date && form.sign_date.length>0" style="color: #409EFF;">签约日期：{{form.sign_date[0]}} - {{form.sign_date[1]}}</span>
+              <span v-if="sign_date.length>0" style="color: #409EFF;" v-show="!dateShow">签约日期：{{sign_date[0]}} - {{sign_date[1]}}</span>
+              <span v-if="form.sign_date && form.sign_date.length>0" style="color: #409EFF;" v-show="dateShow">签约日期：{{form.sign_date[0]}} - {{form.sign_date[1]}}</span>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
@@ -97,7 +98,8 @@
                         type="daterange"
                         value-format="yyyy-MM-dd"
                         start-placeholder="开始日期"
-                        end-placeholder="结束日期">
+                        end-placeholder="结束日期"
+                        @change="dateChange">
                       </el-date-picker>
                     </el-form-item>
                   </el-col>
@@ -160,8 +162,15 @@
                 prop="sign_at">
               </el-table-column>
               <el-table-column
-                label="补充信息"
-                prop="type">
+                label="补充信息">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.type==1">租房</span>
+                  <span v-else-if="scope.row.type==2">转租</span>
+                  <span v-else-if="scope.row.type==3">续租</span>
+                  <span v-else-if="scope.row.type==4">未收先租</span>
+                  <span v-else-if="scope.row.type==5">调租</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="炸单情况"
@@ -177,7 +186,7 @@
               </el-table-column>
               <el-table-column
                 label="房屋地址"
-                prop="month">
+                prop="address">
               </el-table-column>
               <el-table-column
                 label="签约人"
@@ -185,7 +194,7 @@
               </el-table-column>
               <el-table-column
                 label="房屋类型"
-                prop="type">
+                prop="HT">
               </el-table-column>
               <el-table-column
                 label="月单价"
@@ -237,6 +246,7 @@
             <el-button type="primary" size="mini" @click="">切换小组/片区</el-button>
             <el-button type="primary" size="mini" @click="">导出</el-button>
           </div>
+          <!--<el-button @click="cityForm.below = 1;getPolyData();">点我</el-button>-->
           <el-tabs type="border-card" v-model="rentActiveName" @tab-click="handleClick">
             <el-tab-pane label="公司总计" name="first">
               <div class="myHouse">
@@ -274,8 +284,8 @@
                 <!--</div>-->
               </div>
             </el-tab-pane>
-            <el-tab-pane v-for="(item,key) in cityTableData.data" :label="item.name" :key="key"
-                         :name="item.name">
+            <el-tab-pane v-for="(item,key) in cityTableData.data" :label="key" :key="key"
+                         :name="key">
               <div class="myHouse">
                 <div class="blueTable">
                   <!--<el-table-->
@@ -348,7 +358,6 @@
         tableLoading: false,
 
         form: {
-          search: '',
           page: 1,
           limit: 6,
           address: '',
@@ -358,8 +367,8 @@
           sign_date: [], //签约日期起止范围
           years: [],  //收房年限
           is_agency: '',
-
         },
+        sign_date: [],
         sign_name: '',
         org_name: '',
         organizationDialog: false,
@@ -376,17 +385,23 @@
           page: 1,
           limit: 6,
           below: '',
+          sign_date: [], //签约日期起止范围
         },
+        dateShow: false,
       };
     },
     mounted() {
       let Nowdate = new Date();
       let year = new Date(Nowdate).getFullYear();
-      let month = new Date(Nowdate).getMonth() + 1;
+      let month = new Date(Nowdate).getMonth();
+      let month1 = new Date(Nowdate).getMonth() + 1;
       let date = new Date(Nowdate).getDate();
       if (month < 10) month = "0" + month;
+      if (month1 < 10) month1 = "0" + month1;
       if (date < 10) date = "0" + date;
-      this.form.sign_date[0] = this.form.sign_date[1] = year + "-" + month + "-" + date;
+
+      this.form.sign_date = [new Date(year, month, date), new Date(year, month, date)];
+      this.sign_date[0] = this.sign_date[1] = year + "-" + month1 + "-" + date;
       this.getTableData();
       setTimeout(() => {
         this.cityForm.below = 1;
@@ -395,8 +410,22 @@
     },
     activated() {
     },
-    watch: {},
+    watch: {
+      // "form.sign_date": {
+      //   deep: true,
+      //   handler(val, oldVal) {
+      //     if (!val) {
+      //       this.sign_date = [];
+      //       this.form.sign_date = [];
+      //       this.dateShow = true;
+      //     }
+      //   }
+      // }
+    },
     methods: {
+      dateChange(val) {
+        this.dateShow = true;
+      },
       handleClick(val) {
         this.cityForm.page = 1;
       },
@@ -570,6 +599,7 @@
         this.cityTableStatus = ' ';
         this.cityTableLoading = true;
         this.cityForm.below = 1;
+        this.cityForm.sign_date = this.form.sign_date;
         this.$http.get(globalConfig.server + 'performance/lord', {params: this.cityForm}).then((res) => {
           this.cityTableLoading = false;
           this.isHigh = false;
