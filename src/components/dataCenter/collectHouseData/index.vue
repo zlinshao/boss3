@@ -145,7 +145,7 @@
         <div class="myHouse">
           <div class="blueTable">
             <el-table
-              :data="tableData"
+              :data="tableData.data"
               :empty-text='tableStatus'
               v-loading="tableLoading"
               element-loading-text="拼命加载中"
@@ -154,7 +154,7 @@
               style="width: 100%"><!--@row-contextmenu='openContextMenu'-->
               <el-table-column
                 label="签约日期"
-                prop="created_at">
+                prop="sign_at">
               </el-table-column>
               <el-table-column
                 label="补充信息"
@@ -167,6 +167,10 @@
               <el-table-column
                 label="是否中介单"
                 prop="is_agency">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.is_agency">是</span>
+                  <span v-else>否</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="房屋地址"
@@ -174,27 +178,27 @@
               </el-table-column>
               <el-table-column
                 label="签约人"
-                prop="month">
+                prop="pay_accountname">
               </el-table-column>
               <el-table-column
                 label="房屋类型"
-                prop="month">
+                prop="type">
               </el-table-column>
               <el-table-column
                 label="月单价"
-                prop="month">
+                prop="month_price">
               </el-table-column>
               <el-table-column
                 label="保修期"
-                prop="month">
+                prop="period">
               </el-table-column>
               <el-table-column
                 label="收房年限"
-                prop="month">
+                prop="vacancy_end_date">
               </el-table-column>
               <el-table-column
                 label="付款方式"
-                prop="month">
+                prop="pay_way">
               </el-table-column>
               <el-table-column
                 label="第一次打款时间"
@@ -202,11 +206,11 @@
               </el-table-column>
               <el-table-column
                 label="收房合同号"
-                prop="month">
+                prop="contract_number">
               </el-table-column>
               <el-table-column
                 label="收房片区"
-                prop="month">
+                prop="org_name">
               </el-table-column>
             </el-table>
           </div>
@@ -271,32 +275,32 @@
                          :name="item.name">
               <div class="myHouse">
                 <div class="blueTable">
-                  <el-table
-                    :data="item"
-                    :empty-text='tableStatus'
-                    v-loading="tableLoading"
-                    element-loading-text="拼命加载中"
-                    element-loading-spinner="el-icon-loading"
-                    element-loading-background="rgba(255, 255, 255, 0)"
-                    @row-contextmenu='openContextMenu'
-                    style="width: 100%">
-                    <el-table-column
-                      label="片区"
-                      prop="department_name">
-                    </el-table-column>
-                    <el-table-column
-                      label="负责人"
-                      prop="leader_name">
-                    </el-table-column>
-                    <el-table-column
-                      label="收房套数"
-                      prop="leader">
-                    </el-table-column>
-                    <el-table-column
-                      label="支出押金"
-                      prop="leader_name">
-                    </el-table-column>
-                  </el-table>
+                  <!--<el-table-->
+                    <!--:data="item"-->
+                    <!--:empty-text='tableStatus'-->
+                    <!--v-loading="tableLoading"-->
+                    <!--element-loading-text="拼命加载中"-->
+                    <!--element-loading-spinner="el-icon-loading"-->
+                    <!--element-loading-background="rgba(255, 255, 255, 0)"-->
+                    <!--@row-contextmenu='openContextMenu'-->
+                    <!--style="width: 100%">-->
+                    <!--<el-table-column-->
+                      <!--label="片区"-->
+                      <!--prop="department_name">-->
+                    <!--</el-table-column>-->
+                    <!--<el-table-column-->
+                      <!--label="负责人"-->
+                      <!--prop="leader_name">-->
+                    <!--</el-table-column>-->
+                    <!--<el-table-column-->
+                      <!--label="收房套数"-->
+                      <!--prop="leader">-->
+                    <!--</el-table-column>-->
+                    <!--<el-table-column-->
+                      <!--label="支出押金"-->
+                      <!--prop="leader_name">-->
+                    <!--</el-table-column>-->
+                  <!--</el-table>-->
                 </div>
                 <div class="tableBottom">
                   <div class="left">
@@ -351,6 +355,7 @@
           sign_date: [], //签约日期起止范围
           years: [],  //收房年限
           is_agency: '',
+
         },
         sign_name: '',
         org_name: '',
@@ -367,15 +372,16 @@
         cityForm: {
           page: 1,
           limit: 6,
+          below: '',
         },
       };
     },
     mounted() {
       // this.getCityCategory();
-      // this.getTableData();
+      this.getTableData();
       setTimeout(() => {
-        this.cityForm.aggr = 'leaf';
-        // this.getPolyData();
+        this.cityForm.below = 1;
+        this.getPolyData();
       }, 0);
     },
     activated() {
@@ -546,15 +552,8 @@
           this.isHigh = false;
           if (res.data.code === '30000') {
             this.tableData = res.data.data.data;
+            this.totalNum = res.data.data.data && res.data.data.data.count;
             this.companyTotalData = res.data.data.countA;
-            this.cityTableData = res.data.data.dat;
-
-            this.totalNum = res.data.data.count;  //记录总条数
-            if (res.data.data.length < 1) {
-              this.tableStatus = '暂无数据';
-              this.totalNum = 0;
-              this.tableData = [];
-            }
           } else {
             this.tableStatus = '暂无数据';
             this.totalNum = 0;
@@ -566,11 +565,13 @@
       getPolyData() {
         this.cityTableStatus = ' ';
         this.cityTableLoading = true;
-        this.$http.get(globalConfig.server + 'performance/renter', {params: this.cityForm}).then((res) => {
+        this.cityForm.below = 1;
+        this.$http.get(globalConfig.server + 'performance/lord', {params: this.cityForm}).then((res) => {
           this.cityTableLoading = false;
           this.isHigh = false;
-          if (res.data.code === '20010') {
-            this.cityTableData = res.data.data;
+          if (res.data.code === '30000') {
+            this.cityTableData = res.data.data.dat;
+            console.log(this.cityTableData)
             // this.totalNum = res.data.data.count;  //记录总条数
           } else {
             this.cityTableStatus = '暂无数据';
@@ -587,7 +588,7 @@
       },
       handleCityCurrentChange(val) {
         this.cityForm.page = val;
-        this.getPolyData();
+        // this.getPolyData();
       },
       // 高级
       highGrade() {
