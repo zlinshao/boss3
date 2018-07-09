@@ -5,13 +5,14 @@
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
             <el-form-item>
-              <span v-if="form.report_date && form.report_date.length>0" style="color: #409EFF;">报备日期：{{form.report_date[0]}} - {{form.report_date[1]}}</span>
+              <span v-if="sign_date.length>0" style="color: #409EFF;" v-show="!dateShow">签约日期：{{sign_date[0]}} - {{sign_date[1]}}</span>
+              <span v-if="form.sign_date && form.sign_date.length>0" style="color: #409EFF;" v-show="dateShow">签约日期：{{form.sign_date[0]}} - {{form.sign_date[1]}}</span>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="mini" @click="exportData">导出</el-button>
+              <el-button type="primary" size="mini" @click="exportData(1)">导出</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -57,16 +58,17 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">报备日期起止范围</div>
+                    <div class="el_col_label">签约日期起止范围</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
                       <el-date-picker
-                        v-model="form.report_date"
+                        v-model="form.sign_date"
                         type="daterange"
                         value-format="yyyy-MM-dd"
                         start-placeholder="开始日期"
-                        end-placeholder="结束日期">
+                        end-placeholder="结束日期"
+                        @change="dateChange">
                       </el-date-picker>
                     </el-form-item>
                   </el-col>
@@ -91,24 +93,6 @@
               </el-col>
             </el-row>
             <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">签约日期起止范围</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-date-picker
-                        v-model="form.sign_date"
-                        type="daterange"
-                        value-format="yyyy-MM-dd"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期">
-                      </el-date-picker>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
@@ -232,8 +216,9 @@
 
         <div style="margin-top: 10px;">
           <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
-            <el-button type="primary" size="mini" @click="switchOrg" v-show="rentActiveName != '公司总计'">{{switchTitle}}</el-button>
-            <el-button type="primary" size="mini" @click="">导出</el-button>
+            <el-button type="primary" size="mini" @click="switchOrg" v-show="rentActiveName != '公司总计'">{{switchTitle}}
+            </el-button>
+            <el-button type="primary" size="mini" @click="exportData(2)">导出</el-button>
           </div>
           <el-tabs type="border-card" v-model="rentActiveName" @tab-click="handleClick">
             <el-tab-pane v-for="(item,key) in cityTableData" :label="key" :key="item.id" :name="key">
@@ -252,8 +237,8 @@
                       prop="org">
                     </el-table-column>
                     <el-table-column
-                    label="负责人"
-                    prop="leader">
+                      label="负责人"
+                      prop="leader">
                     </el-table-column>
                     <el-table-column
                       label="租房套数"
@@ -308,7 +293,6 @@
         tableStatus: ' ',
         tableLoading: false,
         form: {
-          search: '',  //模糊搜索
           page: 1,
           limit: 6,
           address: '',  //房屋地址
@@ -316,8 +300,8 @@
           org_id: [],  //收房片区
           sign_date: [], //签约日期起止范围
           is_agency: '',  //是否中介单
-          report_date: [],
         },
+        sign_date: [],
         sign_name: '',
         org_name: '',
         organizationDialog: false,
@@ -331,29 +315,44 @@
         cityForm: {
           page: 1,
           limit: 6,
+          sign_date: [],
+          aggr: '',
         },
         totalCityNum: 0,
+        dateShow: false,
       };
     },
     mounted() {
       let Nowdate = new Date();
       let year = new Date(Nowdate).getFullYear();
-      let month = new Date(Nowdate).getMonth() + 1;
+      let month = new Date(Nowdate).getMonth();
+      let month1 = new Date(Nowdate).getMonth() + 1;
       let date = new Date(Nowdate).getDate();
       if (month < 10) month = "0" + month;
+      if (month1 < 10) month1 = "0" + month1;
       if (date < 10) date = "0" + date;
-      this.form.report_date[0] = this.form.report_date[1] = year + "-" + month + "-" + date;
+      this.form.sign_date = [new Date(year, month, date), new Date(year, month, date)];
+      this.sign_date[0] = this.sign_date[1] = year + "-" + month1 + "-" + date;
       this.getTableData();
-      setTimeout(()=>{
+      setTimeout(() => {
         this.cityForm.aggr = 'leaf';
         this.getPolyData();
       }, 0);
     },
     activated() {
-
     },
-    watch: {},
+    watch: {
+      "form.sign_date": {
+        deep: true,
+        handler(val, oldVal) {
+          this.getPolyData();
+        }
+      }
+    },
     methods: {
+      dateChange(val) {
+        this.dateShow = true;
+      },
       handleClick(val) {
         this.cityForm.page = 1;
       },
@@ -369,20 +368,35 @@
         this.getPolyData();
       },
       // 导出
-      exportData() {
-        // this.$http.get(globalConfig.server + 'salary/achv/export', {responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
-        //   if (!res.data) {
-        //     return;
-        //   }
-        //   console.log(res);
-        //   let url = window.URL.createObjectURL(new Blob([res.data]));
-        //   let link = document.createElement('a');
-        //   link.style.display = 'a';
-        //   link.href = url;
-        //   link.setAttribute('download', 'excel.xlsx');
-        //   document.body.appendChild(link);
-        //   link.click();
-        // });
+      exportData(val) {
+        let header;
+
+        if (val === 1) {
+          this.form.export = 1;
+          header = this.$http.get(globalConfig.server + 'performance/renter', {
+            responseType: 'arraybuffer',
+            params: this.form
+          });
+        } else {
+          this.cityForm.export = this.cityForm.aggr = 1;
+          header = this.$http.get(globalConfig.server + 'performance/renter', {
+            responseType: 'arraybuffer',
+            params: this.cityForm
+          });
+        }
+        header.then((res) => { // 处理返回的文件流
+          if (!res.data) {
+            return;
+          }
+          console.log(res);
+          let url = window.URL.createObjectURL(new Blob([res.data]));
+          let link = document.createElement('a');
+          link.style.display = 'a';
+          link.href = url;
+          link.setAttribute('download', 'excel.xlsx');
+          document.body.appendChild(link);
+          link.click();
+        });
       },
       //关闭右键菜单
       closeMenu() {
@@ -507,6 +521,7 @@
         this.tableStatus = ' ';
         this.tableLoading = true;
         this.form.aggr = '';
+        this.form.export = '';
         this.$http.get(globalConfig.server + 'performance/renter', {params: this.form}).then((res) => {
           this.tableLoading = false;
           this.isHigh = false;
@@ -529,9 +544,10 @@
       getPolyData() {
         this.cityTableStatus = ' ';
         this.cityTableLoading = true;
+        this.cityForm.sign_date = this.form.sign_date;
+        this.cityForm.export = '';
         this.$http.get(globalConfig.server + 'performance/renter', {params: this.cityForm}).then((res) => {
           this.cityTableLoading = false;
-          this.isHigh = false;
           if (res.data.code === '20010') {
             this.cityTableData = res.data.data;
             // this.totalNum = res.data.data.count;  //记录总条数
@@ -542,7 +558,8 @@
           }
         });
       },
-      handleSizeChange(val) {},
+      handleSizeChange(val) {
+      },
       handleCurrentChange(val) {
         this.form.page = val;
         this.getTableData();
@@ -560,7 +577,6 @@
         this.form.address = '';
         this.form.sign_id = [];
         this.form.org_id = [];
-        this.form.report_date = [];
         this.form.sign_date = [];
         this.form.is_agency = '';
         this.sign_name = '';
@@ -576,5 +592,9 @@
     padding: 8px;
     display: flex;
     justify-content: flex-end;
+  }
+
+  .main {
+    min-height: 300px;
   }
 </style>
