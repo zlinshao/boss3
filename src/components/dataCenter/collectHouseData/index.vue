@@ -246,42 +246,6 @@
             <el-button type="primary" size="mini" @click="exportData(2)">导出</el-button>
           </div>
           <el-tabs type="border-card" v-model="rentActiveName" @tab-click="handleClick">
-            <el-tab-pane label="公司总计" name="first">
-              <div class="myHouse">
-                <div class="blueTable">
-                  <el-table
-                    :data="companyTotalData"
-                    :empty-text='tableStatus'
-                    v-loading="tableLoading"
-                    element-loading-text="拼命加载中"
-                    element-loading-spinner="el-icon-loading"
-                    element-loading-background="rgba(255, 255, 255, 0)"
-                    @row-contextmenu='openContextMenu'
-                    style="width: 100%">
-                    <el-table-column
-                      label="收房套数"
-                      prop="count">
-                    </el-table-column>
-                    <el-table-column
-                      label="押金支出"
-                      prop="priceSum">
-                    </el-table-column>
-                  </el-table>
-                </div>
-                <!--<div class="tableBottom">-->
-                <!--<div class="left">-->
-                <!--<el-pagination-->
-                <!--@size-change="handleSizeChange"-->
-                <!--@current-change="handleCurrentChange"-->
-                <!--:current-page="form.page"-->
-                <!--:page-size="form.limit"-->
-                <!--layout="total, prev, pager, next, jumper"-->
-                <!--:total="totalNum">-->
-                <!--</el-pagination>-->
-                <!--</div>-->
-                <!--</div>-->
-              </div>
-            </el-tab-pane>
             <el-tab-pane v-for="(item,key) in cityTableData.data" :label="key" :key="key"
                          :name="key">
               <div class="myHouse">
@@ -354,7 +318,6 @@
         totalNum: 0,
         tableStatus: ' ',
         tableLoading: false,
-
         form: {
           page: 1,
           limit: 6,
@@ -375,7 +338,7 @@
         cityCategory: [],
         companyTotalData: [],  //公司总计
         cityTableData: [],   //城市
-        rentActiveName: 'first',
+        rentActiveName: '公司总计',
         cityTableStatus: ' ',
         cityTableLoading: false,
         switchTitle: '切换片区',
@@ -411,16 +374,12 @@
     activated() {
     },
     watch: {
-      // "form.sign_date": {
-      //   deep: true,
-      //   handler(val, oldVal) {
-      //     if (!val) {
-      //       this.sign_date = [];
-      //       this.form.sign_date = [];
-      //       this.dateShow = true;
-      //     }
-      //   }
-      // }
+      "form.sign_date": {
+        deep: true,
+        handler(val, oldVal) {
+          this.getPolyData();
+        }
+      }
     },
     methods: {
       dateChange(val) {
@@ -445,7 +404,7 @@
       exportData(val) {
         let header;
         if (val === 1) {
-          // this.form.export = 1;
+          this.form.export = 1;
           this.form.below = '';
           this.form.zu = '';
           header = this.$http.get(globalConfig.server + 'performance/lord', {
@@ -621,7 +580,6 @@
         this.cityForm.sign_date = this.form.sign_date;
         this.$http.get(globalConfig.server + 'performance/lord', {params: this.cityForm}).then((res) => {
           this.cityTableLoading = false;
-          this.isHigh = false;
           if (res.data.code === '30000') {
             this.cityTableData = res.data.data.dat;
           } else {
