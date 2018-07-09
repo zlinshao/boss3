@@ -5,6 +5,9 @@
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
             <el-form-item>
+              <span v-if="form.sign_date && form.sign_date.length>0" style="color: #409EFF;">签约日期：{{form.sign_date[0]}} - {{form.sign_date[1]}}</span>
+            </el-form-item>
+            <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
             </el-form-item>
             <el-form-item>
@@ -276,30 +279,30 @@
               <div class="myHouse">
                 <div class="blueTable">
                   <!--<el-table-->
-                    <!--:data="item"-->
-                    <!--:empty-text='tableStatus'-->
-                    <!--v-loading="tableLoading"-->
-                    <!--element-loading-text="拼命加载中"-->
-                    <!--element-loading-spinner="el-icon-loading"-->
-                    <!--element-loading-background="rgba(255, 255, 255, 0)"-->
-                    <!--@row-contextmenu='openContextMenu'-->
-                    <!--style="width: 100%">-->
-                    <!--<el-table-column-->
-                      <!--label="片区"-->
-                      <!--prop="department_name">-->
-                    <!--</el-table-column>-->
-                    <!--<el-table-column-->
-                      <!--label="负责人"-->
-                      <!--prop="leader_name">-->
-                    <!--</el-table-column>-->
-                    <!--<el-table-column-->
-                      <!--label="收房套数"-->
-                      <!--prop="leader">-->
-                    <!--</el-table-column>-->
-                    <!--<el-table-column-->
-                      <!--label="支出押金"-->
-                      <!--prop="leader_name">-->
-                    <!--</el-table-column>-->
+                  <!--:data="item"-->
+                  <!--:empty-text='tableStatus'-->
+                  <!--v-loading="tableLoading"-->
+                  <!--element-loading-text="拼命加载中"-->
+                  <!--element-loading-spinner="el-icon-loading"-->
+                  <!--element-loading-background="rgba(255, 255, 255, 0)"-->
+                  <!--@row-contextmenu='openContextMenu'-->
+                  <!--style="width: 100%">-->
+                  <!--<el-table-column-->
+                  <!--label="片区"-->
+                  <!--prop="department_name">-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                  <!--label="负责人"-->
+                  <!--prop="leader_name">-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                  <!--label="收房套数"-->
+                  <!--prop="leader">-->
+                  <!--</el-table-column>-->
+                  <!--<el-table-column-->
+                  <!--label="支出押金"-->
+                  <!--prop="leader_name">-->
+                  <!--</el-table-column>-->
                   <!--</el-table>-->
                 </div>
                 <div class="tableBottom">
@@ -377,7 +380,13 @@
       };
     },
     mounted() {
-      // this.getCityCategory();
+      let Nowdate = new Date();
+      let year = new Date(Nowdate).getFullYear();
+      let month = new Date(Nowdate).getMonth() + 1;
+      let date = new Date(Nowdate).getDate();
+      if (month < 10) month = "0" + month;
+      if (date < 10) date = "0" + date;
+      this.form.sign_date[0] = this.form.sign_date[1] = year + "-" + month + "-" + date;
       this.getTableData();
       setTimeout(() => {
         this.cityForm.below = 1;
@@ -388,11 +397,6 @@
     },
     watch: {},
     methods: {
-      getCityCategory() {
-        this.dictionary(306, 1).then((res) => {
-          this.cityCategory = res.data;
-        });
-      },
       handleClick(val) {
         this.cityForm.page = 1;
       },
