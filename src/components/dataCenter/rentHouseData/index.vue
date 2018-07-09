@@ -152,6 +152,10 @@
               <el-table-column
                 label="炸单情况"
                 prop="end_type">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.end_type">{{scope.row.end_type}}</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="是否中介单"
@@ -224,48 +228,11 @@
         </div>
 
         <div style="margin-top: 10px;">
-          <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;"
-               v-show="rentActiveName != 'first'">
-            <el-button type="primary" size="mini" @click="switchOrg">{{switchTitle}}</el-button>
+          <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
+            <el-button type="primary" size="mini" @click="switchOrg" v-show="rentActiveName != '公司总计'">{{switchTitle}}</el-button>
             <el-button type="primary" size="mini" @click="">导出</el-button>
           </div>
           <el-tabs type="border-card" v-model="rentActiveName" @tab-click="handleClick">
-            <el-tab-pane label="公司总计" name="first">
-              <div class="myHouse">
-                <div class="blueTable">
-                  <el-table
-                    :data="companyTotalData"
-                    :empty-text='tableStatus'
-                    v-loading="tableLoading"
-                    element-loading-text="拼命加载中"
-                    element-loading-spinner="el-icon-loading"
-                    element-loading-background="rgba(255, 255, 255, 0)"
-                    @row-contextmenu='openContextMenu'
-                    style="width: 100%">
-                    <el-table-column
-                      label="租房套数"
-                      prop="department_name">
-                    </el-table-column>
-                    <el-table-column
-                      label="租房业绩"
-                      prop="leader_name">
-                    </el-table-column>
-                  </el-table>
-                </div>
-                <!--<div class="tableBottom">-->
-                <!--<div class="left">-->
-                <!--<el-pagination-->
-                <!--@size-change="handleSizeChange"-->
-                <!--@current-change="handleCurrentChange"-->
-                <!--:current-page="form.page"-->
-                <!--:page-size="form.limit"-->
-                <!--layout="total, prev, pager, next, jumper"-->
-                <!--:total="totalNum">-->
-                <!--</el-pagination>-->
-                <!--</div>-->
-                <!--</div>-->
-              </div>
-            </el-tab-pane>
             <el-tab-pane v-for="(item,key) in cityTableData" :label="key" :key="item.id" :name="key">
               <div class="myHouse">
                 <div class="blueTable">
@@ -352,11 +319,8 @@
         organizationDialog: false,
         organizeType: '',
         currentStatus: '',
-        cityCategory: [],
-
-        companyTotalData: [],  //公司总计
         cityTableData: [],   //城市
-        rentActiveName: 'first',
+        rentActiveName: '公司总计',
         cityTableStatus: ' ',
         cityTableLoading: false,
         switchTitle: '切换片区',
@@ -368,7 +332,6 @@
       };
     },
     mounted() {
-      // this.getCityCategory();
       this.getTableData();
       setTimeout(()=>{
         this.cityForm.aggr = 'leaf';
@@ -394,11 +357,6 @@
         this.cityForm.page = 1;
         this.getPolyData();
       },
-      // getCityCategory() {
-      //   this.dictionary(306, 1).then((res) => {
-      //     this.cityCategory = res.data;
-      //   });
-      // },
       // 导出
       exportData() {
         // this.$http.get(globalConfig.server + 'salary/achv/export', {responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
