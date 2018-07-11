@@ -479,7 +479,7 @@
       },
       closeOrganization() {
         this.organizationDialog = false;
-        this.organizeType = '';
+        this.organizeType = '1';
         this.currentStatus = '';
       },
       selectMember(val) {

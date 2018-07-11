@@ -405,7 +405,6 @@
         this.organizationDialog = true;
         this.currentStatus = position;
         this.organizeType = type;
-        console.log(this.organizeType)
       },
       emptyDepart(val) {
         if (val === 'search') {
