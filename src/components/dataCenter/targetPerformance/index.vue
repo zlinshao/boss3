@@ -516,6 +516,7 @@
       // 重置
       resetting() {
         this.form.org_id = '';
+        this.form.staff_id = '';
         this.form.department_name = '';
         this.form.month = [];
       },
