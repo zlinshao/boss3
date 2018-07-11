@@ -10,7 +10,10 @@
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="changelist">查看报备修改记录</el-button>
+            <el-button type="primary" @click="changelist">报备修改记录</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="reportData">报备数据汇总</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -100,9 +103,10 @@
 <script>
   import RightMenu from '../../common/rightMenu.vue'
   import ReportDetail from './editReportDetail'
+
   export default {
-    components: {RightMenu,ReportDetail},
-    data () {
+    components: {RightMenu, ReportDetail},
+    data() {
       return {
         rightMenuX: 0,
         rightMenuY: 0,
@@ -111,19 +115,19 @@
         /***********/
         formInline: {
           q: '',
-          per_page_number:12,
+          per_page_number: 12,
           page: 1,
         },
 
         tableData: [],
-        totalNumber:0,
+        totalNumber: 0,
         emptyContent: ' ',
         tableLoading: false,
-        reportDetailDialog : false,
-        reportId:'',
+        reportDetailDialog: false,
+        reportId: '',
       }
     },
-    mounted(){
+    mounted() {
       this.getData();
       this.getDictionary();
     },
@@ -143,7 +147,7 @@
         });
         return dictionary_name;
       },
-      getData(){
+      getData() {
         this.emptyContent = ' ';
         this.tableLoading = true;
         this.$http.get(globalConfig.server_user + 'process', {params: this.formInline}).then((res) => {
@@ -163,7 +167,7 @@
           }
         })
       },
-      search(){
+      search() {
         this.formInline.page = 1;
         this.getData();
       },
@@ -178,7 +182,7 @@
       },
 
       //************************************************************************/
-      clickTable(row, event){
+      clickTable(row, event) {
         this.houseId = row.id;
       },
       tableRowCollectName({row, rowIndex}) {
@@ -188,19 +192,22 @@
         return '';
       },
 
-      dblClickTable(row, event){
+      dblClickTable(row, event) {
         this.reportDetailDialog = true;
         this.reportId = row.flow.id;
       },
-      closeModal(val){
+      closeModal(val) {
         this.reportDetailDialog = false;
-        if(val === 'success'){
+        if (val === 'success') {
           this.getData();
         }
       },
 
-      changelist(){
+      changelist() {
         this.$store.dispatch('toEditList')
+      },
+      reportData() {
+        this.$router.push({path: '/reportingData'});
       },
     }
   }

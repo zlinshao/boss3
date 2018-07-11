@@ -5,16 +5,14 @@
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
             <el-form-item>
-              <el-input placeholder="请输入内容" v-model="form.search"
-                        @keyup.enter.native="search" size="mini" clearable>
-                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
-              </el-input>
+              <span v-if="sign_date.length>0" style="color: #409EFF;" v-show="!dateShow">合同生成时间：{{sign_date[0]}} - {{sign_date[1]}}</span>
+              <span v-if="form.sign_date && form.sign_date.length>0" style="color: #409EFF;" v-show="dateShow">合同生成时间：{{form.sign_date[0]}} - {{form.sign_date[1]}}</span>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+              <el-button type="primary" size="mini" @click="highGrade">高级搜索</el-button>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="mini" @click="exportData">导出</el-button>
+              <el-button type="primary" size="mini" @click="exportData(1)">导出</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -33,27 +31,23 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input readonly="" v-model="form.department_name" @focus="chooseDepart('search')"
-                                placeholder="点击选择">
-                        <template slot="append">
-                          <div style="cursor: pointer;" @click="emptyDepart('search')">清空</div>
-                        </template>
-                      </el-input>
+                      <el-input v-model="form.address" placeholder="请输入房屋地址" clearable></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
               </el-col>
+
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">收房签约人</div>
+                    <div class="el_col_label">收房开单人</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input readonly="" v-model="form.department_name" @focus="chooseDepart('search')"
+                      <el-input readonly="" v-model="sign_name" @focus="openOrganization('search', 'staff')"
                                 placeholder="点击选择">
                         <template slot="append">
-                          <div style="cursor: pointer;" @click="emptyDepart('search')">清空</div>
+                          <div style="cursor: pointer;" @click="emptyOrganization('search', 'staff')">清空</div>
                         </template>
                       </el-input>
                     </el-form-item>
@@ -69,7 +63,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input v-model="form.department_name"  placeholder="请输入合同编号" clearable></el-input>
+                      <el-input v-model="form.contract_number" placeholder="请输入合同编号" clearable></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -77,14 +71,14 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">收房片区</div>
+                    <div class="el_col_label">收房片区或者负责人</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input readonly="" v-model="form.department_name" @focus="chooseDepart('search')"
+                      <el-input readonly="" v-model="org_name" @focus="openOrganization('search', '')"
                                 placeholder="点击选择">
                         <template slot="append">
-                          <div style="cursor: pointer;" @click="emptyDepart('search')">清空</div>
+                          <div style="cursor: pointer;" @click="emptyOrganization('search', '')">清空</div>
                         </template>
                       </el-input>
                     </el-form-item>
@@ -101,11 +95,12 @@
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
                       <el-date-picker
-                        v-model="form.month"
+                        v-model="form.sign_date"
                         type="daterange"
                         value-format="yyyy-MM-dd"
                         start-placeholder="开始日期"
-                        end-placeholder="结束日期">
+                        end-placeholder="结束日期"
+                        @change="dateChange">
                       </el-date-picker>
                     </el-form-item>
                   </el-col>
@@ -118,9 +113,9 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input v-model="form.month[0]" style="width: 150px;" placeholder="起"></el-input>
+                      <el-input v-model="form.years[0]" style="width: 150px;" placeholder="起" clearable></el-input>
                       至
-                      <el-input v-model="form.month[1]" style="width: 150px;" placeholder="止"></el-input>
+                      <el-input v-model="form.years[1]" style="width: 150px;" placeholder="止" clearable></el-input>
                       年
                     </el-form-item>
                   </el-col>
@@ -135,7 +130,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="form.agency" placeholder="请选择" clearable>
+                      <el-select v-model="form.is_agency" placeholder="请选择" clearable>
                         <el-option key="1" label="是" value="1">是</el-option>
                         <el-option key="0" label="否" value="0">否</el-option>
                       </el-select>
@@ -156,7 +151,7 @@
         <div class="myHouse">
           <div class="blueTable">
             <el-table
-              :data="tableData"
+              :data="tableData.data"
               :empty-text='tableStatus'
               v-loading="tableLoading"
               element-loading-text="拼命加载中"
@@ -164,60 +159,68 @@
               element-loading-background="rgba(255, 255, 255, 0)"
               style="width: 100%"><!--@row-contextmenu='openContextMenu'-->
               <el-table-column
-                label="签约日期"
-                prop="department_name">
+                label="合同生成时间"
+                prop="sign_at">
               </el-table-column>
               <el-table-column
-                label="补充信息"
-                prop="leader_name">
+                label="合同性质">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.type==1">收房</span>
+                  <span v-else-if="scope.row.type==2">续收</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="炸单情况"
-                prop="month">
+                prop="end_type">
               </el-table-column>
               <el-table-column
                 label="是否中介单"
-                prop="month">
+                prop="is_agency">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.is_agency">是</span>
+                  <span v-else>否</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="房屋地址"
-                prop="month">
+                prop="address">
               </el-table-column>
               <el-table-column
-                label="签约人"
-                prop="month">
+                label="开单人"
+                prop="pay_accountname">
               </el-table-column>
               <el-table-column
                 label="房屋类型"
-                prop="month">
+                prop="HT">
               </el-table-column>
               <el-table-column
                 label="月单价"
-                prop="month">
+                prop="month_price">
               </el-table-column>
               <el-table-column
-                label="保修期"
-                prop="month">
+                label="空置期"
+                prop="period">
               </el-table-column>
               <el-table-column
                 label="收房年限"
-                prop="month">
+                prop="vacancy_end_date">
               </el-table-column>
               <el-table-column
                 label="付款方式"
-                prop="month">
+                prop="pay_way">
               </el-table-column>
               <el-table-column
                 label="第一次打款时间"
-                prop="month">
+                prop="first_pay_at">
               </el-table-column>
               <el-table-column
                 label="收房合同号"
-                prop="month">
+                prop="contract_number">
               </el-table-column>
               <el-table-column
                 label="收房片区"
-                prop="month">
+                prop="org_name">
               </el-table-column>
             </el-table>
           </div>
@@ -235,90 +238,103 @@
           </div>
         </div>
 
-        <div style="margin-top: 10px;">
+        <div style="margin-top: 10px;" v-if="cityTableData.data">
           <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
-            <el-button type="primary" size="mini" @click="">切换小组/片区</el-button>
-            <el-button type="primary" size="mini" @click="">导出</el-button>
+            <el-button type="primary" size="mini" @click="switchOrg" v-if="rentActiveName!='公司总计'">{{switchTitle}}</el-button>
+            <el-button type="primary" size="mini" @click="exportData(2)">导出</el-button>
           </div>
-          <el-tabs type="border-card">
-            <el-tab-pane label="公司总计">
+          <el-tabs type="border-card" v-model="rentActiveName" @tab-click="handleClick">
+            <el-tab-pane v-for="(item,key) in cityTableData.data" :label="key" :key="key"
+                         :name="key" v-if="key==='公司总计'">
               <div class="myHouse">
                 <div class="blueTable">
                   <el-table
-                    :data="tableData"
-                    :empty-text='tableStatus'
-                    v-loading="tableLoading"
+                    :data="item.data"
+                    :empty-text='cityTableStatus'
+                    v-loading="cityTableLoading"
                     element-loading-text="拼命加载中"
                     element-loading-spinner="el-icon-loading"
                     element-loading-background="rgba(255, 255, 255, 0)"
                     @row-contextmenu='openContextMenu'
                     style="width: 100%">
                     <el-table-column
-                      label="收房套数"
-                      prop="department_name">
+                      label="部门"
+                      prop="name">
                     </el-table-column>
                     <el-table-column
-                      label="押金支出"
+                      label="负责人"
                       prop="leader_name">
+                      <template slot-scope="scope">
+                        -
+                      </template>
                     </el-table-column>
-                  </el-table>
-                </div>
-                <!--<div class="tableBottom">-->
-                <!--<div class="left">-->
-                <!--<el-pagination-->
-                <!--@size-change="handleSizeChange"-->
-                <!--@current-change="handleCurrentChange"-->
-                <!--:current-page="form.page"-->
-                <!--:page-size="form.limit"-->
-                <!--layout="total, prev, pager, next, jumper"-->
-                <!--:total="totalNum">-->
-                <!--</el-pagination>-->
-                <!--</div>-->
-                <!--</div>-->
-              </div>
-            </el-tab-pane>
-            <el-tab-pane v-for="item in cityCategory" :label="item.dictionary_name" :key="item.id">
-              <div class="myHouse">
-                <div class="blueTable">
-                  <el-table
-                    :data="tableData"
-                    :empty-text='tableStatus'
-                    v-loading="tableLoading"
-                    element-loading-text="拼命加载中"
-                    element-loading-spinner="el-icon-loading"
-                    element-loading-background="rgba(255, 255, 255, 0)"
-                    @row-contextmenu='openContextMenu'
-                    style="width: 100%">
-                    <el-table-column
-                      label="片区"
-                      prop="department_name">
-                    </el-table-column>
-                    <!--<el-table-column-->
-                      <!--label="负责人"-->
-                      <!--prop="leader_name">-->
-                    <!--</el-table-column>-->
                     <el-table-column
                       label="收房套数"
-                      prop="leader_name">
+                      prop="num">
                     </el-table-column>
                     <el-table-column
                       label="支出押金"
-                      prop="leader_name">
+                      prop="price">
                     </el-table-column>
                   </el-table>
                 </div>
-                <!--<div class="tableBottom">-->
-                <!--<div class="left">-->
-                <!--<el-pagination-->
-                <!--@size-change="handleSizeChange"-->
-                <!--@current-change="handleCurrentChange"-->
-                <!--:current-page="form.page"-->
-                <!--:page-size="form.limit"-->
-                <!--layout="total, prev, pager, next, jumper"-->
-                <!--:total="totalNum">-->
-                <!--</el-pagination>-->
-                <!--</div>-->
-                <!--</div>-->
+                <div class="tableBottom">
+                  <div class="left">
+                    <el-pagination
+                      @size-change="handleSizeChange"
+                      @current-change="handleCityCurrentChange"
+                      :current-page="cityForm.page"
+                      :page-size="cityForm.limit"
+                      layout="total, prev, pager, next, jumper"
+                      :total="item.count">
+                    </el-pagination>
+                  </div>
+                </div>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane v-for="(item,key) in cityTableData.data" :label="key" :key="key"
+                         :name="key"  v-if="key!=='公司总计'">
+              <div class="myHouse">
+                <div class="blueTable">
+                  <el-table
+                    :data="item.data"
+                    :empty-text='cityTableStatus'
+                    v-loading="cityTableLoading"
+                    element-loading-text="拼命加载中"
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-background="rgba(255, 255, 255, 0)"
+                    @row-contextmenu='openContextMenu'
+                    style="width: 100%">
+                    <el-table-column
+                      label="部门"
+                      prop="name">
+                    </el-table-column>
+                    <el-table-column
+                      label="负责人"
+                      prop="leader_name">
+                    </el-table-column>
+                    <el-table-column
+                      label="收房套数"
+                      prop="num">
+                    </el-table-column>
+                    <el-table-column
+                      label="支出押金"
+                      prop="price">
+                    </el-table-column>
+                  </el-table>
+                </div>
+                <div class="tableBottom">
+                  <div class="left">
+                    <el-pagination
+                      @size-change="handleSizeChange"
+                      @current-change="handleCityCurrentChange"
+                      :current-page="cityForm.page"
+                      :page-size="cityForm.limit"
+                      layout="total, prev, pager, next, jumper"
+                      :total="item.count">
+                    </el-pagination>
+                  </div>
+                </div>
               </div>
             </el-tab-pane>
           </el-tabs>
@@ -350,48 +366,119 @@
         tableLoading: false,
         form: {
           page: 1,
-          limit: 12,
-          org_id: '',  //部门搜索
-          department_name: '',
-          month: [],  //时间范围
-          target_sort: '',  //排序  0 升序 1降序
-          search: '',
-          agency: '',
+          limit: 6,
+          address: '',
+          sign_id: [],
+          staff_id: [],
+          contract_number: '',
+          org_id: [],  //收房片区
+          sign_date: [], //签约日期起止范围
+          years: [],  //收房年限
+          is_agency: '',
         },
+        sign_date: [],
+        sign_name: '',
+        org_name: '',
         organizationDialog: false,
         organizeType: '',
         currentStatus: '',
         cityCategory: [],
+        companyTotalData: [],  //公司总计
+        cityTableData: [],   //城市
+        rentActiveName: '公司总计',
+        cityTableStatus: ' ',
+        cityTableLoading: false,
+        switchTitle: '切换片区',
+        cityForm: {
+          page: 1,
+          limit: 6,
+          below: '',
+          zu: '',
+          sign_date: [], //签约日期起止范围
+        },
+        dateShow: false,
       };
     },
-    mounted(){
-      this.getCityCategory();
-    },
-    activated() {
+    mounted() {
+      let Nowdate = new Date();
+      let year = new Date(Nowdate).getFullYear();
+      let month = new Date(Nowdate).getMonth();
+      let month1 = new Date(Nowdate).getMonth() + 1;
+      let date = new Date(Nowdate).getDate();
+      if (month < 10) month = "0" + month;
+      if (month1 < 10) month1 = "0" + month1;
+      if (date < 10) date = "0" + date;
+
+      this.form.sign_date = [new Date(year, month, date), new Date(year, month, date)];
+      this.sign_date[0] = this.sign_date[1] = year + "-" + month1 + "-" + date;
+      this.form.sign_date = this.sign_date;
       this.getTableData();
+      setTimeout(() => {
+        this.cityForm.below = 1;
+        this.getPolyData();
+      }, 1);
     },
-    watch: {},
+    activated() {},
+    watch: {
+      "form.sign_date": {
+        deep: true,
+        handler(val, oldVal) {
+          this.getPolyData();
+        }
+      }
+    },
     methods: {
-      getCityCategory(){
-        this.dictionary(306, 1).then((res)=>{
-          this.cityCategory = res.data;
-        });
+      dateChange(val) {
+        this.dateShow = true;
+      },
+      handleClick(val) {
+        this.cityForm.page = 1;
+      },
+      switchOrg() {
+        if (this.cityForm.zu === 1) {
+          this.cityForm.zu = '';
+          this.switchTitle = '切换小组';
+        } else {
+          this.cityForm.zu = 1;
+          this.switchTitle = '切换片区';
+        }
+        this.cityForm.page = 1;
+        this.cityForm.export = '';
+        this.getPolyData();
       },
       // 导出
-      exportData() {
-        // this.$http.get(globalConfig.server + 'salary/achv/export', {responseType: 'arraybuffer'}).then((res) => { // 处理返回的文件流
-        //   if (!res.data) {
-        //     return;
-        //   }
-        //   console.log(res);
-        //   let url = window.URL.createObjectURL(new Blob([res.data]));
-        //   let link = document.createElement('a');
-        //   link.style.display = 'a';
-        //   link.href = url;
-        //   link.setAttribute('download', 'excel.xlsx');
-        //   document.body.appendChild(link);
-        //   link.click();
-        // });
+      exportData(val) {
+        let header;
+        if (val === 1) {
+          this.form.export = 1;
+          this.form.below = '';
+          this.form.zu = '';
+          header = this.$http.get(globalConfig.server + 'performance/lord', {
+            responseType: 'arraybuffer',
+            params: this.form
+          });
+        } else {
+          console.log(this.rentActiveName);
+          this.cityForm.export = this.rentActiveName;
+          this.form.below = 1;
+          header = this.$http.get(globalConfig.server + 'performance/lord', {
+            responseType: 'arraybuffer',
+            params: this.cityForm
+          });
+        }
+        header.then((res) => { // 处理返回的文件流
+          if (!res.data) {
+            return;
+          }
+          console.log(res);
+          let url = window.URL.createObjectURL(new Blob([res.data]));
+          let link = document.createElement('a');
+          link.style.display = 'a';
+          link.href = url;
+          link.setAttribute('download', 'excel.xlsx');
+          document.body.appendChild(link);
+          link.click();
+        });
       },
       //关闭右键菜单
       closeMenu() {
@@ -449,64 +536,99 @@
             break;
         }
       },
-      chooseDepart(val) {
+
+      emptyOrganization(position, type) {
+        if (position === 'search') {
+          if (type === 'staff') {
+            this.form.sign_id = [];
+            this.sign_name = '';
+          } else if (type === 'depart') {
+            this.form.org_id = [];
+            this.org_name = '';
+          } else {
+            this.form.staff_id = [];
+            this.form.org_id = [];
+            this.org_name = '';
+          }
+        }
+      },
+      openOrganization(position, type) {
+        //type: depart/staff ,position: search/dialog
         this.organizationDialog = true;
-        this.organizeType = 'depart';
-        this.currentStatus = val;
+        this.currentStatus = position;
+        this.organizeType = type;
       },
       closeOrganization() {
         this.organizationDialog = false;
-        this.organizeType = '';
+        this.organizeType = '1';
         this.currentStatus = '';
       },
       selectMember(val) {
-        if (this.currentStatus === 'search') {
-          this.form.org_id = val[0].id;
-          this.form.department_name = val[0].name;
+        if (this.organizeType === 'staff') {
+          this.form.sign_id = [];
+          this.form.sign_id.push(val[0].id);
+          this.sign_name = val[0].name;
         } else {
-          this.achievementForm.org_id = val[0].id;
-          this.achievementForm.department_name = val[0].name;
+          this.form.staff_id = [];
+          this.form.org_id = [];
+          if (val[0].hasOwnProperty('avatar')) {
+            //选的是人
+            this.form.staff_id.push(val[0].id);
+          } else {
+            //选的部门
+            this.form.org_id.push(val[0].id);
+          }
+          this.org_name = val[0].name;
         }
         this.organizeType = '';
       },
-      emptyDepart(val) {
-        if (val === 'search') {
-          this.form.department_name = '';
-          this.form.org_id = '';
-        } else {
-          this.achievementForm.department_name = '';
-          this.achievementForm.org_id = '';
-        }
-      },
+
       search() {
         this.form.page = 1;
         this.getTableData();
       },
       getTableData() {
-        // this.tableStatus = ' ';
-        // this.tableLoading = true;
-        // this.$http.get(globalConfig.server + 'performance/index', {params: this.form}).then((res) => {
-        //   this.tableLoading = false;
-        //   this.isHigh = false;
-        //   if (res.data.code === '20000') {
-        //     this.tableData = res.data.data.data;
-        //     this.totalNum = res.data.data.count;  //记录总条数
-        //     if (res.data.data.length < 1) {
-        //       this.tableStatus = '暂无数据';
-        //       this.totalNum = 0;
-        //       this.tableData = [];
-        //     }
-        //   } else {
-        //     this.tableStatus = '暂无数据';
-        //     this.totalNum = 0;
-        //     this.tableData = [];
-        //   }
-        // });
+        this.tableStatus = ' ';
+        this.tableLoading = true;
+        this.$http.get(globalConfig.server + 'performance/lord', {params: this.form}).then((res) => {
+          this.tableLoading = false;
+          this.isHigh = false;
+          if (res.data.code === '30000') {
+            this.tableData = res.data.data.data;
+            this.totalNum = res.data.data.data && res.data.data.data.count;
+            this.companyTotalData = res.data.data.countA;
+          } else {
+            this.tableStatus = '暂无数据';
+            this.totalNum = 0;
+            this.tableData = [];
+          }
+        });
       },
-      handleSizeChange(val) {},
+      //聚合列表数据
+      getPolyData() {
+        this.cityTableStatus = ' ';
+        this.cityTableLoading = true;
+        this.cityForm.below = 1;
+        this.cityForm.sign_date = this.form.sign_date;
+        this.$http.get(globalConfig.server + 'performance/lord', {params: this.cityForm}).then((res) => {
+          this.cityTableLoading = false;
+          if (res.data.code === '30000') {
+            this.cityTableData = res.data.data.dat;
+          } else {
+            this.cityTableStatus = '暂无数据';
+            this.cityTableData = [];
+          }
+        });
+      },
+      handleSizeChange(val) {
+      },
       handleCurrentChange(val) {
         this.form.page = val;
         this.getTableData();
+      },
+      handleCityCurrentChange(val) {
+        this.cityForm.page = val;
+        this.getPolyData();
       },
       // 高级
       highGrade() {
@@ -514,9 +636,15 @@
       },
       // 重置
       resetting() {
-        this.form.org_id = '';
-        this.form.department_name = '';
-        this.form.month = [];
+        this.form.address = '';
+        this.form.sign_id = [];
+        this.form.org_id = [];
+        this.form.sign_date = [];
+        this.form.contract_number = '';
+        this.form.years = [];
+        this.form.is_agency = '';
+        this.sign_name = '';
+        this.org_name = '';
       },
     },
   };
@@ -528,5 +656,8 @@
     padding: 8px;
     display: flex;
     justify-content: flex-end;
+  }
+  .main {
+    min-height: 300px;
   }
 </style>
