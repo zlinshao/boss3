@@ -4,14 +4,8 @@
       <div class="highRanking" style=" position: absolute; top: 120px; right: 20px;">
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
-            <!--<el-form-item>-->
-              <!--<el-input placeholder="组名/组长名称" v-model="form.search"-->
-                        <!--@keyup.enter.native="search" size="mini" clearable>-->
-                <!--<el-button slot="append" icon="el-icon-search" @click="search"></el-button>-->
-              <!--</el-input>-->
-            <!--</el-form-item>-->
             <el-form-item>
-              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+              <el-button type="primary" size="mini" @click="highGrade">高级搜索</el-button>
             </el-form-item>
             <el-form-item>
               <el-dropdown @command="handleCommand">
@@ -47,11 +41,11 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">片区</div>
+                    <div class="el_col_label">片区或负责人</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input readonly="" v-model="form.department_name" @focus="chooseDepart('search')"
+                      <el-input readonly="" v-model="form.department_name" @focus="openOrganization('search', '')"
                                 placeholder="点击选择">
                         <template slot="append">
                           <div style="cursor: pointer;" @click="emptyDepart('search')">清空</div>
@@ -173,7 +167,8 @@
             </el-col>
             <el-col :span="20">
               <el-form-item label="片区" required>
-                <el-input v-model="achievementForm.department_name" placeholder="请点击选择" @focus="chooseDepart('dialog')">
+                <el-input v-model="achievementForm.department_name" placeholder="请点击选择"
+                          @focus="openOrganization('dialog', 'depart')">
                   <template slot="append">
                     <div style="cursor: pointer;" @click="emptyDepart('dialog')">清空</div>
                   </template>
@@ -225,6 +220,7 @@
           page: 1,
           limit: 12,
           org_id: '',  //部门搜索
+          staff_id: '',
           department_name: '',
           month: [],  //时间范围
           target_sort: '',  //排序  0 升序 1降序
@@ -276,7 +272,10 @@
       // 导出
       exportData() {
         this.form.export = 1;
-        this.$http.get(globalConfig.server + 'performance/index', {responseType: 'arraybuffer', params: this.form}).then((res) => { // 处理返回的文件流
+        this.$http.get(globalConfig.server + 'performance/index', {
+          responseType: 'arraybuffer',
+          params: this.form
+        }).then((res) => { // 处理返回的文件流
           if (!res.data) {
             return;
           }
@@ -401,10 +400,21 @@
           });
         });
       },
-      chooseDepart(val) {
+      openOrganization(position, type) {
+        //type: depart/staff ,position: search/dialog
         this.organizationDialog = true;
-        this.organizeType = 'depart';
-        this.currentStatus = val;
+        this.currentStatus = position;
+        this.organizeType = type;
+      },
+      emptyDepart(val) {
+        if (val === 'search') {
+          this.form.department_name = '';
+          this.form.org_id = '';
+          this.form.staff_id = '';
+        } else {
+          this.achievementForm.department_name = '';
+          this.achievementForm.org_id = '';
+        }
       },
       closeOrganization() {
         this.organizationDialog = false;
@@ -413,23 +423,24 @@
       },
       selectMember(val) {
         if (this.currentStatus === 'search') {
-          this.form.org_id = val[0].id;
+          // this.form.org_id = val[0].id;
           this.form.department_name = val[0].name;
+          if (val[0].hasOwnProperty('avatar')) {
+            //选的是人
+            this.form.staff_id = val[0].id;
+            this.form.org_id = '';
+          } else {
+            //选的部门
+            this.form.org_id = val[0].id;
+            this.form.staff_id = '';
+          }
         } else {
           this.achievementForm.org_id = val[0].id;
           this.achievementForm.department_name = val[0].name;
         }
         this.organizeType = '';
       },
-      emptyDepart(val) {
-        if (val === 'search') {
-          this.form.department_name = '';
-          this.form.org_id = '';
-        } else {
-          this.achievementForm.department_name = '';
-          this.achievementForm.org_id = '';
-        }
-      },
+
       search() {
         this.form.page = 1;
         this.getTableData();
@@ -518,5 +529,8 @@
     padding: 8px;
     display: flex;
     justify-content: flex-end;
+  }
+  .main{
+    margin-bottom: 50px;
   }
 </style>

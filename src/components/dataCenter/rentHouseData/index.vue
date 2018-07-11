@@ -9,7 +9,7 @@
               <span v-if="form.sign_date && form.sign_date.length>0" style="color: #409EFF;" v-show="dateShow">签约日期：{{form.sign_date[0]}} - {{form.sign_date[1]}}</span>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+              <el-button type="primary" size="mini" @click="highGrade">高级搜索</el-button>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="exportData(1)">导出</el-button>
@@ -39,14 +39,14 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">租房签约人</div>
+                    <div class="el_col_label">租房片区或签约人</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input readonly="" v-model="sign_name" @focus="chooseStaff('search')"
+                      <el-input readonly="" v-model="org_name" @focus="openOrganization('search', '')"
                                 placeholder="点击选择">
                         <template slot="append">
-                          <div style="cursor: pointer;" @click="emptyStaff('search')">清空</div>
+                          <div style="cursor: pointer;" @click="emptyOrganization('search', '')">清空</div>
                         </template>
                       </el-input>
                     </el-form-item>
@@ -74,25 +74,6 @@
                   </el-col>
                 </el-row>
               </el-col>
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">收房片区</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-input readonly="" v-model="org_name" @focus="chooseDepart('search')"
-                                placeholder="点击选择">
-                        <template slot="append">
-                          <div style="cursor: pointer;" @click="emptyDepart('search')">清空</div>
-                        </template>
-                      </el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
-            <el-row class="el_row_border">
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
@@ -216,7 +197,7 @@
 
         <div style="margin-top: 10px;">
           <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
-            <el-button type="primary" size="mini" @click="switchOrg">{{switchTitle}}
+            <el-button type="primary" size="mini" @click="switchOrg" v-if="rentActiveName!='公司总计'">{{switchTitle}}
             </el-button>
             <el-button type="primary" size="mini" @click="exportData(2)">导出</el-button>
           </div>
@@ -340,7 +321,8 @@
         this.getPolyData();
       }, 10);
     },
-    activated() {},
+    activated() {
+    },
     watch: {
       "form.sign_date": {
         deep: true,
@@ -453,27 +435,27 @@
             break;
         }
       },
-      chooseDepart(val) {
-        this.organizationDialog = true;
-        this.organizeType = 'depart';
-        this.currentStatus = val;
-      },
-      chooseStaff(val) {
-        this.organizationDialog = true;
-        this.organizeType = 'staff';
-        this.currentStatus = val;
-      },
-      emptyStaff(val) {
-        if (val === 'search') {
-          this.form.sign_id = [];
-          this.sign_name = '';
+      emptyOrganization(position, type) {
+        if (position === 'search') {
+          if (type === 'staff') {
+            this.form.sign_id = [];
+            this.sign_name = '';
+          } else if (type === 'depart') {
+            this.form.org_id = [];
+            this.org_name = '';
+          } else {
+            this.form.sign_id = [];
+            this.form.org_id = [];
+            this.org_name = '';
+          }
         }
       },
-      emptyDepart(val) {
-        if (val === 'search') {
-          this.form.org_id = [];
-          this.org_name = '';
-        }
+
+      openOrganization(position, type) {
+        //type: depart/staff ,position: search/dialog
+        this.organizationDialog = true;
+        this.currentStatus = position;
+        this.organizeType = type;
       },
       closeOrganization() {
         this.organizationDialog = false;
@@ -482,32 +464,41 @@
       },
       selectMember(val) {
         if (this.currentStatus === 'search') {
-          if (this.organizeType === 'staff') {
-            // this.form.sign_id = val[0].id;
-            // this.sign_name = val[0].name;
-            this.form.sign_id = [];
-            this.sign_name = '';
-            let names = [];
-            if (val.length > 0) {
-              val.forEach((item) => {
-                this.form.sign_id.push(item.id);
-                names.push(item.name);
-              });
-            }
-            this.sign_name = names.join(',');
+          // if (this.organizeType === 'staff') {
+          //
+          //   this.form.sign_id = [];
+          //   this.sign_name = '';
+          //   let names = [];
+          //   if (val.length > 0) {
+          //     val.forEach((item) => {
+          //       this.form.sign_id.push(item.id);
+          //       names.push(item.name);
+          //     });
+          //   }
+          //   this.sign_name = names.join(',');
+          // } else {
+          //   // this.form.org_id = val[0].id;
+          //   // this.org_name = val[0].name;
+          //   this.form.org_id = [];
+          //   this.org_name = '';
+          //   let names = [];
+          //   if (val.length > 0) {
+          //     val.forEach((item) => {
+          //       this.form.org_id.push(item.id);
+          //       names.push(item.name);
+          //     });
+          //   }
+          //   this.org_name = names.join(',');
+          // }
+          this.org_name = val[0].name;
+          this.form.sign_id = [];
+          this.form.org_id = [];
+          if (val[0].hasOwnProperty('avatar')) {
+            //选的是人
+            this.form.sign_id.push(val[0].id);
           } else {
-            // this.form.org_id = val[0].id;
-            // this.org_name = val[0].name;
-            this.form.org_id = [];
-            this.org_name = '';
-            let names = [];
-            if (val.length > 0) {
-              val.forEach((item) => {
-                this.form.org_id.push(item.id);
-                names.push(item.name);
-              });
-            }
-            this.org_name = names.join(',');
+            //选的部门
+            this.form.org_id.push(val[0].id);
           }
         }
         this.organizeType = '';
@@ -590,6 +581,7 @@
     display: flex;
     justify-content: flex-end;
   }
+
   .main {
     min-height: 300px;
   }

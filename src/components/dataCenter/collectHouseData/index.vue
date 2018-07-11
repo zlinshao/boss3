@@ -5,11 +5,11 @@
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
             <el-form-item>
-              <span v-if="sign_date.length>0" style="color: #409EFF;" v-show="!dateShow">签约日期：{{sign_date[0]}} - {{sign_date[1]}}</span>
+              <span v-if="sign_date.length>0" style="color: #409EFF;" v-show="!dateShow">合同生成时间：{{sign_date[0]}} - {{sign_date[1]}}</span>
               <span v-if="form.sign_date && form.sign_date.length>0" style="color: #409EFF;" v-show="dateShow">签约日期：{{form.sign_date[0]}} - {{form.sign_date[1]}}</span>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+              <el-button type="primary" size="mini" @click="highGrade">高级搜索</el-button>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="exportData(1)">导出</el-button>
@@ -39,14 +39,14 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">收房签约人</div>
+                    <div class="el_col_label">收房片区或者开单人</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input readonly="" v-model="sign_name" @focus="chooseStaff('search')"
+                      <el-input readonly="" v-model="org_name" @focus="openOrganization('search', '')"
                                 placeholder="点击选择">
                         <template slot="append">
-                          <div style="cursor: pointer;" @click="emptyStaff('search')">清空</div>
+                          <div style="cursor: pointer;" @click="emptyOrganization('search', '')">清空</div>
                         </template>
                       </el-input>
                     </el-form-item>
@@ -70,16 +70,14 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">收房片区</div>
+                    <div class="el_col_label">是否中介单</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input readonly="" v-model="org_name" @focus="chooseDepart('search')"
-                                placeholder="点击选择">
-                        <template slot="append">
-                          <div style="cursor: pointer;" @click="emptyDepart('search')">清空</div>
-                        </template>
-                      </el-input>
+                      <el-select v-model="form.is_agency" placeholder="请选择" clearable>
+                        <el-option key="1" label="是" value="1">是</el-option>
+                        <el-option key="0" label="否" value="0">否</el-option>
+                      </el-select>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -121,23 +119,6 @@
                 </el-row>
               </el-col>
             </el-row>
-            <el-row class="el_row_border">
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">是否中介单</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-select v-model="form.is_agency" placeholder="请选择" clearable>
-                        <el-option key="1" label="是" value="1">是</el-option>
-                        <el-option key="0" label="否" value="0">否</el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
             <div class="btnOperate">
               <el-button size="mini" type="primary" @click="search">搜索</el-button>
               <el-button size="mini" type="primary" @click="resetting">重置</el-button>
@@ -158,11 +139,11 @@
               element-loading-background="rgba(255, 255, 255, 0)"
               style="width: 100%"><!--@row-contextmenu='openContextMenu'-->
               <el-table-column
-                label="签约日期"
+                label="合同生成时间"
                 prop="sign_at">
               </el-table-column>
               <el-table-column
-                label="补充信息">
+                label="合同性质">
                 <template slot-scope="scope">
                   <span v-if="scope.row.type==1">收房</span>
                   <span v-else-if="scope.row.type==2">续收</span>
@@ -186,7 +167,7 @@
                 prop="address">
               </el-table-column>
               <el-table-column
-                label="签约人"
+                label="开单人"
                 prop="pay_accountname">
               </el-table-column>
               <el-table-column
@@ -198,7 +179,7 @@
                 prop="month_price">
               </el-table-column>
               <el-table-column
-                label="保修期"
+                label="空置期"
                 prop="period">
               </el-table-column>
               <el-table-column
@@ -239,7 +220,7 @@
 
         <div style="margin-top: 10px;" v-if="cityTableData.data">
           <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
-            <el-button type="primary" size="mini" @click="switchOrg">{{switchTitle}}</el-button>
+            <el-button type="primary" size="mini" @click="switchOrg" v-if="rentActiveName!='公司总计'">{{switchTitle}}</el-button>
             <el-button type="primary" size="mini" @click="exportData(2)">导出</el-button>
           </div>
           <el-tabs type="border-card" v-model="rentActiveName" @tab-click="handleClick">
@@ -535,27 +516,27 @@
             break;
         }
       },
-      chooseDepart(val) {
-        this.organizationDialog = true;
-        this.organizeType = 'depart';
-        this.currentStatus = val;
-      },
-      chooseStaff(val) {
-        this.organizationDialog = true;
-        this.organizeType = 'staff';
-        this.currentStatus = val;
-      },
-      emptyStaff(val) {
-        if (val === 'search') {
-          this.form.sign_id = '';
-          this.sign_name = '';
+
+      emptyOrganization(position, type) {
+        if (position === 'search') {
+          if (type === 'staff') {
+            this.form.sign_id = [];
+            this.sign_name = '';
+          } else if (type === 'depart') {
+            this.form.org_id = [];
+            this.org_name = '';
+          } else {
+            this.form.sign_id = [];
+            this.form.org_id = [];
+            this.org_name = '';
+          }
         }
       },
-      emptyDepart(val) {
-        if (val === 'search') {
-          this.form.org_id = '';
-          this.org_name = '';
-        }
+      openOrganization(position, type) {
+        //type: depart/staff ,position: search/dialog
+        this.organizationDialog = true;
+        this.currentStatus = position;
+        this.organizeType = type;
       },
       closeOrganization() {
         this.organizationDialog = false;
@@ -564,34 +545,16 @@
       },
       selectMember(val) {
         if (this.currentStatus === 'search') {
-          if (this.organizeType === 'staff') {
-            // this.form.sign_id = val[0].id;
-            // this.sign_name = val[0].name;
-            this.form.sign_id = [];
-            this.sign_name = '';
-            let names = [];
-            if (val.length > 0) {
-              val.forEach((item) => {
-                this.form.sign_id.push(item.id);
-                names.push(item.name);
-              });
-            }
-            this.sign_name = names.join(',');
+          this.org_name = val[0].name;
+          this.form.sign_id = [];
+          this.form.org_id = [];
+          if (val[0].hasOwnProperty('avatar')) {
+            //选的是人
+            this.form.sign_id.push(val[0].id);
           } else {
-            // this.form.org_id = val[0].id;
-            // this.org_name = val[0].name;
-            this.form.org_id = [];
-            this.org_name = '';
-            let names = [];
-            if (val.length > 0) {
-              val.forEach((item) => {
-                this.form.org_id.push(item.id);
-                names.push(item.name);
-              });
-            }
-            this.org_name = names.join(',');
+            //选的部门
+            this.form.org_id.push(val[0].id);
           }
-
         }
         this.organizeType = '';
       },
