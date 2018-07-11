@@ -6,7 +6,7 @@
           <el-form :inline="true" onsubmit="return false" size="medium">
             <el-form-item>
               <span v-if="sign_date.length>0" style="color: #409EFF;" v-show="!dateShow">合同生成时间：{{sign_date[0]}} - {{sign_date[1]}}</span>
-              <span v-if="form.sign_date && form.sign_date.length>0" style="color: #409EFF;" v-show="dateShow">签约日期：{{form.sign_date[0]}} - {{form.sign_date[1]}}</span>
+              <span v-if="form.sign_date && form.sign_date.length>0" style="color: #409EFF;" v-show="dateShow">合同生成时间：{{form.sign_date[0]}} - {{form.sign_date[1]}}</span>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级搜索</el-button>
@@ -36,17 +36,18 @@
                   </el-col>
                 </el-row>
               </el-col>
+
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">收房片区或者开单人</div>
+                    <div class="el_col_label">收房开单人</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input readonly="" v-model="org_name" @focus="openOrganization('search', '')"
+                      <el-input readonly="" v-model="sign_name" @focus="openOrganization('search', 'staff')"
                                 placeholder="点击选择">
                         <template slot="append">
-                          <div style="cursor: pointer;" @click="emptyOrganization('search', '')">清空</div>
+                          <div style="cursor: pointer;" @click="emptyOrganization('search', 'staff')">清空</div>
                         </template>
                       </el-input>
                     </el-form-item>
@@ -70,14 +71,16 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">是否中介单</div>
+                    <div class="el_col_label">收房片区或者负责人</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="form.is_agency" placeholder="请选择" clearable>
-                        <el-option key="1" label="是" value="1">是</el-option>
-                        <el-option key="0" label="否" value="0">否</el-option>
-                      </el-select>
+                      <el-input readonly="" v-model="org_name" @focus="openOrganization('search', '')"
+                                placeholder="点击选择">
+                        <template slot="append">
+                          <div style="cursor: pointer;" @click="emptyOrganization('search', '')">清空</div>
+                        </template>
+                      </el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -114,6 +117,23 @@
                       至
                       <el-input v-model="form.years[1]" style="width: 150px;" placeholder="止" clearable></el-input>
                       年
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">是否中介单</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="form.is_agency" placeholder="请选择" clearable>
+                        <el-option key="1" label="是" value="1">是</el-option>
+                        <el-option key="0" label="否" value="0">否</el-option>
+                      </el-select>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -349,6 +369,7 @@
           limit: 6,
           address: '',
           sign_id: [],
+          staff_id: [],
           contract_number: '',
           org_id: [],  //收房片区
           sign_date: [], //签约日期起止范围
@@ -397,8 +418,7 @@
         this.getPolyData();
       }, 1);
     },
-    activated() {
-    },
+    activated() {},
     watch: {
       "form.sign_date": {
         deep: true,
@@ -526,7 +546,7 @@
             this.form.org_id = [];
             this.org_name = '';
           } else {
-            this.form.sign_id = [];
+            this.form.staff_id = [];
             this.form.org_id = [];
             this.org_name = '';
           }
@@ -544,17 +564,21 @@
         this.currentStatus = '';
       },
       selectMember(val) {
-        if (this.currentStatus === 'search') {
-          this.org_name = val[0].name;
+        if (this.organizeType === 'staff') {
           this.form.sign_id = [];
+          this.form.sign_id.push(val[0].id);
+          this.sign_name = val[0].name;
+        } else {
+          this.form.staff_id = [];
           this.form.org_id = [];
           if (val[0].hasOwnProperty('avatar')) {
             //选的是人
-            this.form.sign_id.push(val[0].id);
+            this.form.staff_id.push(val[0].id);
           } else {
             //选的部门
             this.form.org_id.push(val[0].id);
           }
+          this.org_name = val[0].name;
         }
         this.organizeType = '';
       },
