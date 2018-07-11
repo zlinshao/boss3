@@ -405,6 +405,7 @@
         this.organizationDialog = true;
         this.currentStatus = position;
         this.organizeType = type;
+        console.log(this.organizeType)
       },
       emptyDepart(val) {
         if (val === 'search') {
@@ -418,7 +419,7 @@
       },
       closeOrganization() {
         this.organizationDialog = false;
-        this.organizeType = '';
+        this.organizeType = '1';
         this.currentStatus = '';
       },
       selectMember(val) {
@@ -531,7 +532,8 @@
     display: flex;
     justify-content: flex-end;
   }
-  .main{
+
+  .main {
     margin-bottom: 50px;
   }
 </style>
