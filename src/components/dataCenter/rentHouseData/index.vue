@@ -563,7 +563,7 @@
       },
       handleCityCurrentChange(val) {
         this.cityForm.page = val;
-        this.getPolyData();
+        // this.getPolyData();
       },
       // 高级
       highGrade() {
