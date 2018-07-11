@@ -164,11 +164,8 @@
               <el-table-column
                 label="补充信息">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.type==1">租房</span>
-                  <span v-else-if="scope.row.type==2">转租</span>
-                  <span v-else-if="scope.row.type==3">续租</span>
-                  <span v-else-if="scope.row.type==4">未收先租</span>
-                  <span v-else-if="scope.row.type==5">调租</span>
+                  <span v-if="scope.row.type==1">收房</span>
+                  <span v-else-if="scope.row.type==2">续收</span>
                   <span v-else>暂无</span>
                 </template>
               </el-table-column>
@@ -240,14 +237,62 @@
           </div>
         </div>
 
-        <div style="margin-top: 10px;">
+        <div style="margin-top: 10px;" v-if="cityTableData.data">
           <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
             <el-button type="primary" size="mini" @click="switchOrg">{{switchTitle}}</el-button>
             <el-button type="primary" size="mini" @click="exportData(2)">导出</el-button>
           </div>
           <el-tabs type="border-card" v-model="rentActiveName" @tab-click="handleClick">
             <el-tab-pane v-for="(item,key) in cityTableData.data" :label="key" :key="key"
-                         :name="key">
+                         :name="key" v-if="key==='公司总计'">
+              <div class="myHouse">
+                <div class="blueTable">
+                  <el-table
+                    :data="item.data"
+                    :empty-text='cityTableStatus'
+                    v-loading="cityTableLoading"
+                    element-loading-text="拼命加载中"
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-background="rgba(255, 255, 255, 0)"
+                    @row-contextmenu='openContextMenu'
+                    style="width: 100%">
+                    <el-table-column
+                      label="部门"
+                      prop="name">
+                    </el-table-column>
+                    <el-table-column
+                      label="负责人"
+                      prop="leader_name">
+                      <template slot-scope="scope">
+                        -
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      label="收房套数"
+                      prop="num">
+                    </el-table-column>
+                    <el-table-column
+                      label="支出押金"
+                      prop="price">
+                    </el-table-column>
+                  </el-table>
+                </div>
+                <div class="tableBottom">
+                  <div class="left">
+                    <el-pagination
+                      @size-change="handleSizeChange"
+                      @current-change="handleCityCurrentChange"
+                      :current-page="cityForm.page"
+                      :page-size="cityForm.limit"
+                      layout="total, prev, pager, next, jumper"
+                      :total="item.count">
+                    </el-pagination>
+                  </div>
+                </div>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane v-for="(item,key) in cityTableData.data" :label="key" :key="key"
+                         :name="key"  v-if="key!=='公司总计'">
               <div class="myHouse">
                 <div class="blueTable">
                   <el-table

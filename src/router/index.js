@@ -191,6 +191,7 @@ const BatchEnter =()=> import  ('../components/batchEnter/index') //批量入账
 
 //数据中心
 const AchievementData =()=> import ('../components/dataCenter/index'); //业绩数据
+const ReportingData =()=> import ('../components/reportManage/reportingData/index'); //报备数据
 
 
 const AutoForm = ()=> import ('../autoForm/index')
@@ -326,7 +327,7 @@ export default new Router({
         {path: '/myNaire', component: MyNaire, name: "问卷列表"},
         {path: '/batchEnter', component: BatchEnter, name: "批量入账"},
 
-
+        {path: '/reportingData', component: ReportingData, name: "报备数据汇总"},
       ]
     },
     //快捷入口
