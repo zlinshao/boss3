@@ -240,7 +240,8 @@
 
         <div style="margin-top: 10px;" v-if="cityTableData.data">
           <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
-            <el-button type="primary" size="mini" @click="switchOrg" v-if="rentActiveName!='公司总计'">{{switchTitle}}</el-button>
+            <el-button type="primary" size="mini" @click="switchOrg" v-if="rentActiveName!='公司总计'">{{switchTitle}}
+            </el-button>
             <el-button type="primary" size="mini" @click="exportData(2)">导出</el-button>
           </div>
           <el-tabs type="border-card" v-model="rentActiveName" @tab-click="handleClick">
@@ -293,7 +294,7 @@
               </div>
             </el-tab-pane>
             <el-tab-pane v-for="(item,key) in cityTableData.data" :label="key" :key="key"
-                         :name="key"  v-if="key!=='公司总计'">
+                         :name="key" v-if="key!=='公司总计'">
               <div class="myHouse">
                 <div class="blueTable">
                   <el-table
@@ -418,7 +419,8 @@
         this.getPolyData();
       }, 1);
     },
-    activated() {},
+    activated() {
+    },
     watch: {
       "form.sign_date": {
         deep: true,
@@ -432,7 +434,10 @@
         this.dateShow = true;
       },
       handleClick(val) {
-        this.cityForm.page = 1;
+        if (this.cityForm.page > 1) {
+          this.cityForm.page = 1;
+          this.getPolyData();
+        }
       },
       switchOrg() {
         if (this.cityForm.zu === 1) {
@@ -657,6 +662,7 @@
     display: flex;
     justify-content: flex-end;
   }
+
   .main {
     min-height: 300px;
   }
