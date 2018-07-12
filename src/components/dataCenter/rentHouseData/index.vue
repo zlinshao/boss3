@@ -1,6 +1,6 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
-    <div>
+    <div id="rentHouseData">
       <div class="highRanking" style=" position: absolute; top: 120px; right: 20px;">
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
