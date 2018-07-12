@@ -204,7 +204,7 @@
               </el-table-column>
               <el-table-column
                 label="收房年限"
-                prop="vacancy_end_date">
+                prop="sign_month">
               </el-table-column>
               <el-table-column
                 label="付款方式"
