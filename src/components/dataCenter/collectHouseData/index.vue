@@ -200,7 +200,7 @@
               </el-table-column>
               <el-table-column
                 label="空置期"
-                prop="period">
+                prop="vacancy">
               </el-table-column>
               <el-table-column
                 label="收房年限"
