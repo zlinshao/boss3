@@ -1,6 +1,6 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
-    <div>
+    <div id="collectHouseData">
       <div class="highRanking" style=" position: absolute; top: 120px; right: 20px;">
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
@@ -238,7 +238,7 @@
           </div>
         </div>
 
-        <div style="margin-top: 10px;" v-if="cityTableData.data">
+        <div style="margin-top: 10px;">
           <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
             <el-button type="primary" size="mini" @click="switchOrg" v-if="rentActiveName!='公司总计'">{{switchTitle}}
             </el-button>
@@ -418,6 +418,7 @@
       }, 1);
     },
     activated() {
+
     },
     watch: {
       "form.sign_date": {
@@ -664,4 +665,5 @@
   .main {
     min-height: 300px;
   }
+
 </style>
