@@ -543,6 +543,9 @@
           this.tableLoading = false;
           this.isHigh = false;
           if (res.data.code === '20000') {
+            res.data.data.data.forEach((item)=>{
+              item.created_at = item.created_at.substring(0, 10);
+            });
             this.tableData = res.data.data.data;
             this.totalNum = res.data.data.count;  //记录总条数
             if (res.data.data.length < 1) {
