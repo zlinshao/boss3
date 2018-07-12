@@ -238,7 +238,7 @@
           </div>
         </div>
 
-        <div style="margin-top: 10px;">
+        <div style="margin-top: 10px;" v-if="cityTableData.data">
           <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
             <el-button type="primary" size="mini" @click="switchOrg" v-if="rentActiveName!='公司总计'">{{switchTitle}}
             </el-button>
