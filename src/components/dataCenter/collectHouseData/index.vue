@@ -203,7 +203,7 @@
                 prop="vacancy">
               </el-table-column>
               <el-table-column
-                label="收房年限"
+                label="收房年限(月)"
                 prop="sign_month">
               </el-table-column>
               <el-table-column
@@ -256,7 +256,6 @@
                     element-loading-text="拼命加载中"
                     element-loading-spinner="el-icon-loading"
                     element-loading-background="rgba(255, 255, 255, 0)"
-                    @row-contextmenu='openContextMenu'
                     style="width: 100%">
                     <el-table-column
                       label="部门"
@@ -304,7 +303,6 @@
                     element-loading-text="拼命加载中"
                     element-loading-spinner="el-icon-loading"
                     element-loading-background="rgba(255, 255, 255, 0)"
-                    @row-contextmenu='openContextMenu'
                     style="width: 100%">
                     <el-table-column
                       label="部门"
