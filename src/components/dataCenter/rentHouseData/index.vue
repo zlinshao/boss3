@@ -1,6 +1,6 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
-    <div>
+    <div id="rentHouseData">
       <div class="highRanking" style=" position: absolute; top: 120px; right: 20px;">
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
@@ -394,7 +394,7 @@
           let link = document.createElement('a');
           link.style.display = 'a';
           link.href = url;
-          link.setAttribute('download', 'excel.xlsx');
+          link.setAttribute('download', 'excel.xls');
           document.body.appendChild(link);
           link.click();
         });
@@ -543,6 +543,9 @@
           this.tableLoading = false;
           this.isHigh = false;
           if (res.data.code === '20000') {
+            res.data.data.data.forEach((item)=>{
+              item.created_at = item.created_at.substring(0, 10);
+            });
             this.tableData = res.data.data.data;
             this.totalNum = res.data.data.count;  //记录总条数
             if (res.data.data.length < 1) {

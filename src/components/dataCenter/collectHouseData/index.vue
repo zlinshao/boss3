@@ -1,6 +1,6 @@
 <template>
   <div @click="show=false" @contextmenu="closeMenu">
-    <div>
+    <div id="collectHouseData">
       <div class="highRanking" style=" position: absolute; top: 120px; right: 20px;">
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
@@ -200,11 +200,11 @@
               </el-table-column>
               <el-table-column
                 label="空置期"
-                prop="period">
+                prop="vacancy">
               </el-table-column>
               <el-table-column
-                label="收房年限"
-                prop="vacancy_end_date">
+                label="收房年限(月)"
+                prop="sign_month">
               </el-table-column>
               <el-table-column
                 label="付款方式"
@@ -238,9 +238,10 @@
           </div>
         </div>
 
-        <div style="margin-top: 10px;" v-if="cityTableData.data">
+        <div style="margin-top: 10px;">
           <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
-            <el-button type="primary" size="mini" @click="switchOrg" v-if="rentActiveName!='公司总计'">{{switchTitle}}</el-button>
+            <el-button type="primary" size="mini" @click="switchOrg" v-if="rentActiveName!='公司总计'">{{switchTitle}}
+            </el-button>
             <el-button type="primary" size="mini" @click="exportData(2)">导出</el-button>
           </div>
           <el-tabs type="border-card" v-model="rentActiveName" @tab-click="handleClick">
@@ -255,7 +256,6 @@
                     element-loading-text="拼命加载中"
                     element-loading-spinner="el-icon-loading"
                     element-loading-background="rgba(255, 255, 255, 0)"
-                    @row-contextmenu='openContextMenu'
                     style="width: 100%">
                     <el-table-column
                       label="部门"
@@ -293,7 +293,7 @@
               </div>
             </el-tab-pane>
             <el-tab-pane v-for="(item,key) in cityTableData.data" :label="key" :key="key"
-                         :name="key"  v-if="key!=='公司总计'">
+                         :name="key" v-if="key!=='公司总计'">
               <div class="myHouse">
                 <div class="blueTable">
                   <el-table
@@ -303,7 +303,6 @@
                     element-loading-text="拼命加载中"
                     element-loading-spinner="el-icon-loading"
                     element-loading-background="rgba(255, 255, 255, 0)"
-                    @row-contextmenu='openContextMenu'
                     style="width: 100%">
                     <el-table-column
                       label="部门"
@@ -418,7 +417,9 @@
         this.getPolyData();
       }, 1);
     },
-    activated() {},
+    activated() {
+
+    },
     watch: {
       "form.sign_date": {
         deep: true,
@@ -432,7 +433,10 @@
         this.dateShow = true;
       },
       handleClick(val) {
-        this.cityForm.page = 1;
+        if (this.cityForm.page > 1) {
+          this.cityForm.page = 1;
+          this.getPolyData();
+        }
       },
       switchOrg() {
         if (this.cityForm.zu === 1) {
@@ -475,7 +479,7 @@
           let link = document.createElement('a');
           link.style.display = 'a';
           link.href = url;
-          link.setAttribute('download', 'excel.xlsx');
+          link.setAttribute('download', 'excel.xls');
           document.body.appendChild(link);
           link.click();
         });
@@ -657,7 +661,9 @@
     display: flex;
     justify-content: flex-end;
   }
+
   .main {
     min-height: 300px;
   }
+
 </style>
