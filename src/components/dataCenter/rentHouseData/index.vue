@@ -203,6 +203,14 @@
                 prop="org">
               </el-table-column>
               <el-table-column
+                label="租房合同编号"
+                prop="contract_number">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.contract_number">{{scope.row.contract_number}}</span>
+                  <span v-else>暂无</span>
+                </template>
+              </el-table-column>
+              <el-table-column
                 label="已收定金"
                 prop="mortgage_price">
               </el-table-column>
