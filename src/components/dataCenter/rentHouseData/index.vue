@@ -5,8 +5,8 @@
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
             <el-form-item>
-              <span v-if="sign_date.length>0" style="color: #409EFF;" v-show="!dateShow">合同生成时间：{{sign_date[0]}} - {{sign_date[1]}}</span>
-              <span v-if="form.sign_date && form.sign_date.length>0" style="color: #409EFF;" v-show="dateShow">合同生成时间：{{form.sign_date[0]}} - {{form.sign_date[1]}}</span>
+              <span v-if="sign_date.length>0" style="color: #409EFF;" v-show="!dateShow">发布时间：{{sign_date[0]}} - {{sign_date[1]}}</span>
+              <span v-if="form.sign_date && form.sign_date.length>0" style="color: #409EFF;" v-show="dateShow">发布时间：{{form.sign_date[0]}} - {{form.sign_date[1]}}</span>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级搜索</el-button>
@@ -129,7 +129,7 @@
               element-loading-background="rgba(255, 255, 255, 0)"
               style="width: 100%"><!--@row-contextmenu='openContextMenu'-->
               <el-table-column
-                label="合同生成时间"
+                label="发布时间"
                 prop="created_at">
               </el-table-column>
               <el-table-column
@@ -539,9 +539,9 @@
         this.tableLoading = true;
         this.form.aggr = '';
         this.form.export = '';
+        this.isHigh = false;
         this.$http.get(globalConfig.server + 'performance/renter', {params: this.form}).then((res) => {
           this.tableLoading = false;
-          this.isHigh = false;
           if (res.data.code === '20000') {
             res.data.data.data.forEach((item)=>{
               item.created_at = item.created_at.substring(0, 10);

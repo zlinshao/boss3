@@ -5,8 +5,8 @@
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
             <el-form-item>
-              <span v-if="sign_date.length>0" style="color: #409EFF;" v-show="!dateShow">合同生成时间：{{sign_date[0]}} - {{sign_date[1]}}</span>
-              <span v-if="form.sign_date && form.sign_date.length>0" style="color: #409EFF;" v-show="dateShow">合同生成时间：{{form.sign_date[0]}} - {{form.sign_date[1]}}</span>
+              <span v-if="sign_date.length>0" style="color: #409EFF;" v-show="!dateShow">发布时间：{{sign_date[0]}} - {{sign_date[1]}}</span>
+              <span v-if="form.sign_date && form.sign_date.length>0" style="color: #409EFF;" v-show="dateShow">发布时间：{{form.sign_date[0]}} - {{form.sign_date[1]}}</span>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级搜索</el-button>
@@ -131,8 +131,9 @@
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
                       <el-select v-model="form.is_agency" placeholder="请选择" clearable>
+                        <el-option key="0" label="全部" value="0">全部</el-option>
                         <el-option key="1" label="是" value="1">是</el-option>
-                        <el-option key="0" label="否" value="0">否</el-option>
+                        <el-option key="2" label="否" value="2">否</el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -159,7 +160,7 @@
               element-loading-background="rgba(255, 255, 255, 0)"
               style="width: 100%"><!--@row-contextmenu='openContextMenu'-->
               <el-table-column
-                label="合同生成时间"
+                label="发布时间"
                 prop="sign_at">
               </el-table-column>
               <el-table-column
@@ -199,8 +200,8 @@
                 prop="month_price">
               </el-table-column>
               <el-table-column
-                label="空置期"
-                prop="vacancy">
+                label="空置期(天)"
+                prop="ready_days">
               </el-table-column>
               <el-table-column
                 label="收房年限(月)"
@@ -238,7 +239,7 @@
           </div>
         </div>
 
-        <div style="margin-top: 10px;">
+        <div style="margin-top: 10px;" v-if="cityTableData.data">
           <div style="float: right;position: relative;z-index: 1;right: 20px;top: 6px;">
             <el-button type="primary" size="mini" @click="switchOrg" v-if="rentActiveName!='公司总计'">{{switchTitle}}
             </el-button>
@@ -594,9 +595,10 @@
       getTableData() {
         this.tableStatus = ' ';
         this.tableLoading = true;
+        this.isHigh = false;
+        this.form.export = '';
         this.$http.get(globalConfig.server + 'performance/lord', {params: this.form}).then((res) => {
           this.tableLoading = false;
-          this.isHigh = false;
           if (res.data.code === '30000') {
             this.tableData = res.data.data.data;
             this.totalNum = res.data.data.data && res.data.data.data.count;
@@ -640,10 +642,23 @@
       },
       // 重置
       resetting() {
+        let Nowdate = new Date();
+        let year = new Date(Nowdate).getFullYear();
+        let month = new Date(Nowdate).getMonth();
+        let month1 = new Date(Nowdate).getMonth() + 1;
+        let date = new Date(Nowdate).getDate();
+        if (month < 10) month = "0" + month;
+        if (month1 < 10) month1 = "0" + month1;
+        if (date < 10) date = "0" + date;
+
+        this.form.sign_date = [new Date(year, month, date), new Date(year, month, date)];
+        this.sign_date[0] = this.sign_date[1] = year + "-" + month1 + "-" + date;
+        this.form.sign_date = this.sign_date;
+
         this.form.address = '';
         this.form.sign_id = [];
         this.form.org_id = [];
-        this.form.sign_date = [];
+        // this.form.sign_date = [];
         this.form.contract_number = '';
         this.form.years = [];
         this.form.is_agency = '';
