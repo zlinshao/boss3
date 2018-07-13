@@ -539,9 +539,9 @@
         this.tableLoading = true;
         this.form.aggr = '';
         this.form.export = '';
+        this.isHigh = false;
         this.$http.get(globalConfig.server + 'performance/renter', {params: this.form}).then((res) => {
           this.tableLoading = false;
-          this.isHigh = false;
           if (res.data.code === '20000') {
             res.data.data.data.forEach((item)=>{
               item.created_at = item.created_at.substring(0, 10);
