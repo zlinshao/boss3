@@ -5,52 +5,35 @@
         <el-input v-model="formItem.label"></el-input>
       </el-form-item>
       <el-form-item label="键名">
-        <el-input v-model="formItem.key" readonly></el-input>
+        <el-input v-model="formItem.key" clearable></el-input>
       </el-form-item>
       <el-form-item label="默认值" v-if="formItem.optionsUrl===undefined">
         <el-select v-model="formItem.value" clearable :multiple="formItem.multiple">
           <el-option v-for="o in formItem.options" :key="o.value" :label="o.label" :value="o.value"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="数据URL" v-else>
-        <el-input v-model="formItem.optionsUrl"></el-input>
+      <el-form-item label="默认值" v-if="formItem.optionsUrl!==undefined">
+        <el-select v-model="formItem.value" clearable :multiple="formItem.multiple">
+          <el-option v-for="o in formItem.options" :key="o.id" :label="o.dictionary_name" :value="o.id"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="数据URL" v-if="formItem.optionsUrl!==undefined">
+        <el-input v-model="formItem.optionsUrl" @blur="getDictionary"></el-input>
       </el-form-item>
       <el-form-item label="禁用">
-        <el-switch v-model="formItem.disable"></el-switch>
+        <el-switch v-model="formItem.disabled"></el-switch>
       </el-form-item>
-
       <el-form-item label="必填">
         <el-switch v-model="formItem.required"></el-switch>
       </el-form-item>
     </el-form>
     <editor-options v-if="formItem.optionsUrl===undefined" :itemOptions="formItem.options"></editor-options>
   </div>
-  <!--div-->
-    <!--el-form(v-on="$listeners" v-bind="$attrs")-->
-      <!--el-form-item(label="标签名")-->
-        <!--el-input(v-model="formItem.label")-->
-      <!--el-form-item(label="键名")-->
-        <!--el-input(:value="formItem.key" readonly)-->
-      <!--el-form-item(label="默认值" v-if="formItem.optionsUrl===undefined")-->
-        <!--el-select(v-model="formItem.value" clearable :multiple="formItem.multiple")-->
-          <!--el-option(v-for="o in formItem.options" :key="o.value" :label="o.label" :value="o.value")-->
-      <!--el-form-item(v-else label="数据URL")-->
-        <!--el-input(v-model="formItem.optionsUrl")-->
-      <!--el-form-item(label="禁用")-->
-        <!--el-checkbox(v-model="formItem.disabled")-->
-
-    <!--editor-options(v-if="formItem.optionsUrl===undefined" :itemOptions="formItem.options")-->
-
-    <!--//- wtf?-->
-    <!--//- editor-rules(:item-rules.sync="formItem.rules" :item-type="formItem.type")-->
-    <!--editor-rules(:item-rules="formItem.rules" @update:item-rules="n => formItem.rules = n" :item-type="formItem.type" :types="formItem.multiple?'required,length':'required'")-->
-
-    <!--pre {{formItem}}-->
 </template>
 
 <script>
 // import EditorRules from '../editor-rules'
-import EditorOptions from '../editor-options'
+import EditorOptions from '../editorOptions'
 export default {
   components: { EditorOptions },
   props: {
@@ -59,5 +42,12 @@ export default {
       required: true,
     }
   },
+  methods:{
+    getDictionary(){
+      this.dictionary(this.formItem.optionsUrl, 1).then((res) => {
+        this.formItem.options = res.data;
+      });
+    }
+  }
 }
 </script>

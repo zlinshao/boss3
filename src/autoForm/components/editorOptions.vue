@@ -10,13 +10,13 @@
         </el-button-group>
       </template>
       <span v-else>
-         <span>{{opt.value}}/{{opt.label}}</span>
+         <el-input size="mini" v-model="opt.value" disabled></el-input>
+         <el-input size="mini" v-model="opt.label" disabled></el-input>
       </span>
       <el-button-group>
         <el-button size="mini" round @click="opt.disabled = !opt.disabled" icon="el-icon-close"
                    :title="opt.disabled?'不可选':'可选'" :type="opt.disabled?'info':''">
         </el-button>
-
         <el-button size="mini" @click="handlePreEdit(i, opt)" icon="el-icon-edit" round></el-button>
         <el-button size="mini" @click="itemOptions.splice(i,1)" icon="el-icon-delete" round></el-button>
       </el-button-group>
@@ -30,77 +30,8 @@
         <el-button size="mini" icon="el-icon-error" @click="editingIdx=-1"></el-button>
       </el-button-group>
     </template>
-    <el-button @click="handlePreAdd" size="mini" type="primary" style="margin-top: 5px;float: right">添加选项</el-button>
+    <el-button @click="handlePreAdd" size="mini" type="primary" style="margin-top: 5px;float: right"> + 添加选项</el-button>
   </div>
-  <!--div.bowen-options-->
-
-    <!--div.c666(v-for="(opt,i) in itemOptions" :key="i")-->
-
-      <!--template(v-if="editingIdx===i")-->
-        <!--el-input(-->
-          <!--size="mini"-->
-          <!--v-model="editingOpt.value"-->
-          <!--placeholder="值")-->
-        <!--el-input(-->
-          <!--size="mini"-->
-          <!--v-model="editingOpt.label"-->
-          <!--placeholder="标签")-->
-        <!--el-button-group-->
-          <!--el-button(-->
-            <!--size="mini"-->
-            <!--icon="el-icon-success"-->
-            <!--@click="handleSave(i)")-->
-          <!--el-button(-->
-            <!--size="mini"-->
-            <!--icon="el-icon-error"-->
-            <!--@click="editingIdx=-1")-->
-
-      <!--span(v-else)-->
-        <!--//- icon-svg(:icon="'checkbox'")-->
-        <!--span {{opt.value}}/{{opt.label}}-->
-
-      <!--el-button-group-->
-        <!--el-button(-->
-          <!--size="mini"-->
-          <!--round-->
-          <!--@click="opt.disabled = !opt.disabled"-->
-          <!--:title="opt.disabled?'不可选':'可选'"-->
-          <!--:type="opt.disabled?'info':''")-->
-          <!--icon-svg(icon="disabled")-->
-        <!--el-button(-->
-          <!--size="mini"-->
-          <!--@click="handlePreEdit(i, opt)"-->
-          <!--icon="el-icon-edit"-->
-          <!--round)-->
-        <!--el-button(-->
-          <!--size="mini"-->
-          <!--@click="itemOptions.splice(i,1)"-->
-          <!--icon="el-icon-delete"-->
-          <!--round)-->
-
-    <!--template(v-if="editingIdx===-2")-->
-      <!--el-input(-->
-        <!--size="mini"-->
-        <!--v-model="editingOpt.value"-->
-        <!--placeholder="值")-->
-      <!--el-input(-->
-        <!--size="mini"-->
-        <!--v-model="editingOpt.label"-->
-        <!--placeholder="标签")-->
-      <!--el-button-group-->
-        <!--el-button(-->
-          <!--size="mini"-->
-          <!--@click="handleSave(itemOptions.length)"-->
-          <!--icon="el-icon-success")-->
-        <!--el-button(-->
-          <!--size="mini"-->
-          <!--@click="editingIdx=-1"-->
-          <!--icon="el-icon-error")-->
-
-    <!--el-button(-->
-      <!--@click="handlePreAdd"-->
-      <!--size="mini"-->
-      <!--type="primary") 添加选项-->
 </template>
 
 <script>
@@ -111,7 +42,7 @@ export default {
       this.editingIdx = -2
     },
     handlePreEdit(i, opt) {
-      this.editingIdx = i
+      this.editingIdx = i;
       this.editingOpt = { ...opt }
     },
     handleSave(i) {
