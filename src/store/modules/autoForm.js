@@ -8,9 +8,10 @@ const autoForm = {
       inline: false, // 是否使用inline排版
       labelWidth: '80px', // 标签宽度
       size: 'small', // 尺寸
-      formItemList: []
+      formItemList: [],
+      length:1
     },
-    itemIndex: '', // 当前选中的item
+    currentItem: {}, // 当前选中的item
     activeName_right : 'first',
   },
   mutations: {
@@ -18,7 +19,7 @@ const autoForm = {
       Object.assign(state.form, view)
     },
     SELECT_ITEM(state, view){
-      state.itemIndex = view;
+      state.currentItem = view;
       state.activeName_right = 'first'
     },
     CHANGE_ACTIVE(state, view){

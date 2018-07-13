@@ -18,8 +18,8 @@
               <li v-for="(item,index) in searchItems" @click="selectSearchItem(item)" :class="{'hov':active_li==index}">
                 <div style="display: flex;">
                   <div class="head">
-                    <img v-if="item.avatar" :src="item.avatar" :class="selectIdMember.indexOf(item.id)>-1?'':'gray'">
-                    <img v-else="" src="../../assets/images/head.jpg" :class="selectIdMember.indexOf(item.id)>-1?'':'gray'">
+                    <img v-if="item.avatar" :src="item.avatar">
+                    <img v-else="" src="../../assets/images/defaultHead.png">
                   </div>
                   <div class="infoBox">
                     <div class="info">{{item.name}}</div>

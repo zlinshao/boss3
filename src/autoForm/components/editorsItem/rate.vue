@@ -16,6 +16,9 @@
       <el-form-item label="必填">
         <el-switch v-model="formItem.required"></el-switch>
       </el-form-item>
+      <el-form-item label="禁用">
+        <el-switch v-model="formItem.disabled"></el-switch>
+      </el-form-item>
     </el-form>
   </div>
 </template>

@@ -17,7 +17,7 @@
         <el-input v-model="formItem.max"></el-input>
       </el-form-item>
       <el-form-item label="禁用">
-        <el-switch v-model="formItem.disable"></el-switch>
+        <el-switch v-model="formItem.disabled"></el-switch>
       </el-form-item>
       <el-form-item label="只读">
         <el-switch v-model="formItem.readonly"></el-switch>

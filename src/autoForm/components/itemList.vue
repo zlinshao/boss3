@@ -16,18 +16,18 @@
       </el-button-group>
     </el-popover>
     <el-button class="item" v-popover:popinput>
-      <i class="el-icon-date"></i>
+
       <span>文本</span>
     </el-button>
 
     <!-- 数字 -->
     <el-button class="item" @click.native="addItem('number')">
-      <i class="el-icon-date"></i>
+
       <span>数字</span>
     </el-button>
     <!-- 开关 -->
     <el-button class="item" @click.native="addItem('switch')">
-      <i class="el-icon-date"></i>
+
       <span>开关</span>
     </el-button>
     <!-- 单选 -->
@@ -41,7 +41,7 @@
       </el-button-group>
     </el-popover>
     <el-button class="item" v-popover:popradio>
-      <i class="el-icon-date"></i>
+
       <span>单选</span>
     </el-button>
     <!-- 多选 -->
@@ -57,7 +57,7 @@
       </el-button-group>
     </el-popover>
     <el-button class="item" v-popover:popcheckbox>
-      <i class="el-icon-date"></i>
+
       <span>多选</span>
     </el-button>
     <!-- 下拉 -->
@@ -78,7 +78,6 @@
       </div>
     </el-popover>
     <el-button class="item" v-popover:popselect>
-      <i class="el-icon-date"></i>
       <span>下拉</span>
     </el-button>
     <!-- 日期 -->
@@ -110,7 +109,7 @@
       </el-button-group>
     </el-popover>
     <el-button class="item" v-popover:popdate>
-      <i class="el-icon-date"></i>
+
       <span>日期</span>
     </el-button>
     <!-- 级联 -->
@@ -126,35 +125,47 @@
         >省/市/区</el-button>
       </el-button-group>
       <div style="margin : 5px">其他：</div>
-      <el-button-group>
-        <el-button size="mini" type="primary" plain
-                   @click="addItem('cascader',{optionsUrl:''})"
-        >从服务器获取</el-button>
-        <el-button size="mini" type="primary" plain
-                   @click="$message('暂不支持')"
-        >自定义</el-button>
-      </el-button-group>
+      <el-button size="mini" type="primary" plain
+                 @click="addItem('cascader',{optionsUrl:''})"
+      >从服务器获取</el-button>
+      <!--<el-button-group>-->
+
+        <!--<el-button size="mini" type="primary" plain-->
+                   <!--@click="$message('暂不支持')"-->
+        <!--&gt;自定义</el-button>-->
+      <!--</el-button-group>-->
     </el-popover>
     <el-button class="item" v-popover:popcascader>
-      <i class="el-icon-date"></i>
       <span>级联</span>
     </el-button>
 
     <!--上传-->
     <el-button class="item" @click.native="addItem('upload')">
-      <i class="el-icon-date"></i>
+
       <span>上传</span>
     </el-button>
 
     <!--评分-->
     <el-button class="item" @click.native="addItem('rate')">
-      <i class="el-icon-date"></i>
+
       <span>评分</span>
     </el-button>
+    <!--员工-->
+    <el-button class="item" @click.native="addItem('staff')">
 
+      <span>员工</span>
+    </el-button>
+    <!--部门-->
+    <el-button class="item" @click.native="addItem('depart')">
+      <span>部门</span>
+    </el-button>
+
+    <!--<el-button class="item" @click.native="addItem('change')">-->
+      <!--<span>多级下拉</span>-->
+    <!--</el-button>-->
     <!-- 富文本 -->
     <!--<el-button class="item" @click.native="addItem('richtext')">-->
-      <!--<i class="el-icon-date"></i>-->
+      <!---->
       <!--<span>富文本</span>-->
     <!--</el-button>-->
   </div>
@@ -173,17 +184,15 @@
         popDate: false,
         popCascader: false,
         preConfigDataSelect: {
-          mode: 'multiple',
+          mode: 'single',
           source: 'ajax',
         },
-        itemIndex : 0,
       }
     },
     methods: {
       addItem(type, option) {
-        const key = guid();
-        this.itemIndex ++ ;
-        let index = this.itemIndex;
+        const key = '';
+        let index = guid();
         const newItem = {...JSON.parse(JSON.stringify(AVAILABEL_FORM_ITEM_LIST[type])), key,index,...option};
         this.$emit('add', newItem);
 
@@ -200,7 +209,8 @@
           multiple: mode === 'multiple'
         };
         if (source === 'ajax') {
-          OPT.optionsUrl = ''
+          OPT.optionsUrl = '';
+          OPT.options = []
         } else {
           OPT.options = []
         }

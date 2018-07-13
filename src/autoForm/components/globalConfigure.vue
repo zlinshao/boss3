@@ -1,11 +1,11 @@
 <template>
  <div>
    <el-form  label-width="80px" size="mini">
-     <el-form-item label="内联模式">
-       <el-switch v-model="formConfig.inline"></el-switch>
-     </el-form-item>
      <el-form-item label="表单名称">
        <el-input v-model="formConfig.formName"></el-input>
+     </el-form-item>
+     <el-form-item label="内联模式">
+       <el-switch v-model="formConfig.inline"></el-switch>
      </el-form-item>
      <el-form-item label="标签宽度">
        <el-input v-model="formConfig.labelWidth"></el-input>
