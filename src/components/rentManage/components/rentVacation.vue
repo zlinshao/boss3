@@ -483,18 +483,20 @@
         contractCollectionLength: 1,  //合同收款
         rentVacationDialogVisible:false,
         params: {
+          //财务收款
           financialReceipts: [
             {
               receivable: '', //应收
               actual_receipt: '', //实收
               difference: '', //差额
-              remark: '',
+              remark: '',  //备注
             },
           ],
+          //合同收款
           contractCollection: [
             {
               receivable: '', //应收
-              remark: '',
+              remark: '',  //备注
             },
           ],
           status_type : '',
