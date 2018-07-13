@@ -5,8 +5,8 @@
         <div class="highSearch">
           <el-form :inline="true" onsubmit="return false" size="medium">
             <el-form-item>
-              <span v-if="sign_date.length>0" style="color: #409EFF;" v-show="!dateShow">合同生成时间：{{sign_date[0]}} - {{sign_date[1]}}</span>
-              <span v-if="form.sign_date && form.sign_date.length>0" style="color: #409EFF;" v-show="dateShow">合同生成时间：{{form.sign_date[0]}} - {{form.sign_date[1]}}</span>
+              <span v-if="sign_date.length>0" style="color: #409EFF;" v-show="!dateShow">发布时间：{{sign_date[0]}} - {{sign_date[1]}}</span>
+              <span v-if="form.sign_date && form.sign_date.length>0" style="color: #409EFF;" v-show="dateShow">发布时间：{{form.sign_date[0]}} - {{form.sign_date[1]}}</span>
             </el-form-item>
             <el-form-item>
               <el-button type="primary" size="mini" @click="highGrade">高级搜索</el-button>
@@ -159,7 +159,7 @@
               element-loading-background="rgba(255, 255, 255, 0)"
               style="width: 100%"><!--@row-contextmenu='openContextMenu'-->
               <el-table-column
-                label="合同生成时间"
+                label="发布时间"
                 prop="sign_at">
               </el-table-column>
               <el-table-column
@@ -200,7 +200,7 @@
               </el-table-column>
               <el-table-column
                 label="空置期"
-                prop="vacancy">
+                prop="ready_days">
               </el-table-column>
               <el-table-column
                 label="收房年限(月)"
