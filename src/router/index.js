@@ -194,6 +194,7 @@ const AchievementData =()=> import ('../components/dataCenter/index'); //业绩�
 
 
 const AutoForm = ()=> import ('../autoForm/index')
+const Preview = ()=> import ('../autoForm/Preview/preview')
 
 Vue.use(Router);
 
@@ -325,6 +326,7 @@ export default new Router({
         {path: '/beforeNaire', component: BeforeNaire, name: "我的问卷"},
         {path: '/myNaire', component: MyNaire, name: "问卷列表"},
         {path: '/batchEnter', component: BatchEnter, name: "批量入账"},
+        {path: '/preview', component: Preview, name: "预览"},
 
 
       ]

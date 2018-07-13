@@ -758,7 +758,7 @@
             let data = res.data.data;
 
             //租客信息
-            this.customersAmount = data.customers.length;
+            this.customersAmount = data.customers && data.customers.length;
             data.customers.forEach((item) => {
               this.nameArray.push(item.name);
               this.sexArray.push(String(item.sex));

@@ -18,7 +18,10 @@
       <el-input v-model="formItem.optionsUrl"></el-input>
     </el-form-item>
     <el-form-item label="禁用">
-      <el-input v-model="formItem.filterable"></el-input>
+      <el-switch v-model="formItem.disabled"></el-switch>
+    </el-form-item>
+    <el-form-item label="必填">
+      <el-switch v-model="formItem.required"></el-switch>
     </el-form-item>
   </el-form>
 </template>

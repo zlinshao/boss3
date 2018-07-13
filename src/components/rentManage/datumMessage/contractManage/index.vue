@@ -48,7 +48,7 @@
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
                       <el-input v-model="staff" @focus="selectDepart('staff')" readonly placeholder="选择开单人">
-                        <el-button slot="append" type="primary" @click="emptyDepart">清空</el-button>
+                        <el-button slot="append" type="primary" @click="emptyStaff">清空</el-button>
                       </el-input>
                     </el-form-item>
                   </el-col>
@@ -1280,7 +1280,11 @@
       },
       emptyDepart() {
         this.department = '';
-        this.params.org_id = [];
+        this.params.org_id = '';
+      },
+      emptyStaff() {
+        this.staff = '';
+        this.params.user_id = '';
       },
       closeOrganization() {
         this.organizationDialog = false
@@ -1303,6 +1307,7 @@
       resetting() {
         this.highGrade();
         this.department = '';
+        this.staff = '';
         this.params = {
           page: 1,
           limit: 12,

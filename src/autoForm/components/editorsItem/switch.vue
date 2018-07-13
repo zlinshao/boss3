@@ -9,7 +9,7 @@
     </el-form-item>
 
     <el-form-item label="禁用">
-      <el-switch v-model="formItem.disable"></el-switch>
+      <el-switch v-model="formItem.disabled"></el-switch>
     </el-form-item>
 
     <el-form-item label="必填">
