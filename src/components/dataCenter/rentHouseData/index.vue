@@ -147,6 +147,10 @@
               <el-table-column
                 label="是否中介单"
                 prop="is_agency">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.is_agency!=''">{{scope.row.is_agency}}</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="签约日期"
@@ -163,6 +167,10 @@
               <el-table-column
                 label="房屋类型"
                 prop="house.type">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.house && scope.row.house.type!=''">{{scope.row.house && scope.row.house.type}}</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="月单价"
@@ -193,6 +201,14 @@
               <el-table-column
                 label="租房片区"
                 prop="org">
+              </el-table-column>
+              <el-table-column
+                label="租房合同编号"
+                prop="contract_number">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.contract_number">{{scope.row.contract_number}}</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="已收定金"

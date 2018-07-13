@@ -174,6 +174,11 @@
               <el-table-column
                 label="炸单情况"
                 prop="end_type">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.end_type!='' && scope.row.end_type =='非炸单'">否</span>
+                  <span v-else-if="scope.row.end_type!='' && scope.row.end_type !='非炸单'">是</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="是否中介单"
@@ -216,8 +221,12 @@
                 prop="first_pay_at">
               </el-table-column>
               <el-table-column
-                label="收房合同号"
+                label="收房合同编号"
                 prop="contract_number">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.contract_number">{{scope.row.contract_number}}</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="收房片区"
