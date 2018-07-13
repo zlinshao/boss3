@@ -595,6 +595,7 @@
         this.tableStatus = ' ';
         this.tableLoading = true;
         this.isHigh = false;
+        this.form.export = '';
         this.$http.get(globalConfig.server + 'performance/lord', {params: this.form}).then((res) => {
           this.tableLoading = false;
           if (res.data.code === '30000') {

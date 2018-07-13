@@ -96,7 +96,7 @@
             <el-input type="textarea" resize="none" v-model="params.compensation" placeholder="请输入内容"></el-input>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row style="margin-top: 15px;">
           <div class="title">财务收款</div>
           <div class="describe_border">
             <el-form size="mini" :model="params" label-width="60px">
@@ -104,13 +104,13 @@
                 <el-col :span="5">
                   <el-form-item label="应收">
                     <el-input placeholder="请输入内容" v-model="params.financialReceipts[index].receivable"
-                              clearable></el-input>
+                              @change="financialChange(index)" clearable></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="5">
                   <el-form-item label="实收">
                     <el-input placeholder="请输入内容" v-model="params.financialReceipts[index].actual_receipt"
-                              clearable></el-input>
+                              @change="financialChange(index)" clearable></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="5">
@@ -144,12 +144,14 @@
               <el-row v-for="(item, index) in contractCollectionLength" :key="index">
                 <el-col :span="5">
                   <el-form-item label="应收">
-                    <el-input placeholder="请输入内容" v-model="params.contractCollection[index].receivable" clearable></el-input>
+                    <el-input placeholder="请输入内容" v-model="params.contractCollection[index].receivable"
+                              clearable></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="备注">
-                    <el-input type="textarea" :rows="1" placeholder="请输入内容" v-model="params.contractCollection[index].remark"
+                    <el-input type="textarea" :rows="1" placeholder="请输入内容"
+                              v-model="params.contractCollection[index].remark"
                               clearable></el-input>
                   </el-form-item>
                 </el-col>
@@ -631,17 +633,20 @@
       },
       collectInfo(val) {
         this.collectContractInfo = val;
-      }
+      },
     },
     mounted() {
 
     },
     methods: {
+      financialChange(key) {
+        this.params.financialReceipts[key].difference = this.params.financialReceipts[key].receivable - this.params.financialReceipts[key].actual_receipt;
+      },
       subData(type, key) {
         if (type === 'financial') {
           this.financialReceiptsLength--;
           this.params.financialReceipts.splice(key, 1);
-        }else if (type === 'contract') {
+        } else if (type === 'contract') {
           this.contractCollectionLength--;
           this.params.contractCollection.splice(key, 1);
         }
@@ -736,6 +741,20 @@
       },
       initData() {
         this.params = {
+          financialReceipts: [
+            {
+              receivable: '', //应收
+              actual_receipt: '', //实收
+              difference: '', //差额
+              remark: '',
+            },
+          ],
+          contractCollection: [
+            {
+              receivable: '', //应收
+              remark: '',
+            },
+          ],
           contract_id: this.collectContractId,
           module: '1',
           status_type: '',

@@ -102,7 +102,61 @@
             <el-input disabled type="textarea" resize="none" v-model="params.compensation"></el-input>
           </el-col>
         </el-row>
-
+        <el-row style="margin-top: 15px;">
+          <div class="title">财务收款</div>
+          <div class="describe_border">
+            <el-form size="mini" :model="params" label-width="60px">
+              <el-row v-for="(item,index) in params.financialReceipts.length" :key="index">
+                <el-col :span="5">
+                  <el-form-item label="应收">
+                    <el-input v-model="params.financialReceipts[index].receivable"
+                              @change="financialChange(index)" disabled></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                  <el-form-item label="实收">
+                    <el-input v-model="params.financialReceipts[index].actual_receipt"
+                              @change="financialChange(index)" disabled></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                  <el-form-item label="差额">
+                    <el-input v-model="params.financialReceipts[index].difference"
+                              disabled></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="备注">
+                    <el-input type="textarea" :rows="1"
+                              v-model="params.financialReceipts[index].remark" disabled></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
+        </el-row>
+        <el-row>
+          <div class="title">合同收款</div>
+          <div class="describe_border">
+            <el-form size="mini" :model="params" label-width="60px">
+              <el-row v-for="(item, index) in params.contractCollection.length" :key="index">
+                <el-col :span="5">
+                  <el-form-item label="应收">
+                    <el-input v-model="params.contractCollection[index].receivable"
+                    disabled></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="备注">
+                    <el-input type="textarea" :rows="1"
+                              v-model="params.contractCollection[index].remark"
+                              disabled></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
+        </el-row>
         <div class="title">上传照片</div>
         <div class="describe_border">
           <div class="editImg" v-if="Object.keys(editImage).length>0">
@@ -474,8 +528,24 @@
     components:{UpLoad},
     data() {
       return {
+        financialReceiptsLength: 1, //财务收款
+        contractCollectionLength: 1,  //合同收款
         vacationDetailVisible:false,
         params: {
+          financialReceipts: [
+            {
+              receivable: '', //应收
+              actual_receipt: '', //实收
+              difference: '', //差额
+              remark: '',
+            },
+          ],
+          contractCollection: [
+            {
+              receivable: '', //应收
+              remark: '',
+            },
+          ],
           contract_id : '',
           module : '',
           status_type : '',
@@ -636,6 +706,9 @@
           if(res.data.code === '20020'){
             let data = res.data.data;
             this.vacationData = res.data.data;
+            this.params.financialReceipts = data.financialReceipts || [{receivable: '', actual_receipt: '', difference: '', remark: '',}];   //财务收款
+            this.params.contractCollection = data.contractCollection || [{receivable: '', remark: '',}];  //合同收款
+
             this.params.contract_id = data.contract_id;
             this.params.module = data.module;
             this.getContractInfo(data.module,data.contract_id);
@@ -654,55 +727,55 @@
             this.params.reason = data.reason;
             this.params.compensation = data.compensation;
 
-            this.params.refund_deposit = data.details.refund_deposit || 0;
-            this.params.residual_rent = data.details.residual_rent || 0;
-            this.params.viewing_fee = data.details.viewing_fee || 0;
-            this.params.property_management_fee = data.details.property_management_fee || 0;
-            this.params.water_fee = data.details.water_fee || 0;
-            this.params.electricity_fee = data.details.electricity_fee || 0;
-            this.params.gas_fee = data.details.gas_fee || 0;
+            this.params.refund_deposit = (data.details && data.details.refund_deposit) || 0;
+            this.params.residual_rent = (data.details && data.details.residual_rent) || 0;
+            this.params.viewing_fee = (data.details && data.details.viewing_fee) || 0;
+            this.params.property_management_fee = (data.details && data.details.property_management_fee) || 0;
+            this.params.water_fee = (data.details && data.details.water_fee) || 0;
+            this.params.electricity_fee = (data.details && data.details.electricity_fee) || 0;
+            this.params.gas_fee = (data.details && data.details.gas_fee) || 0;
 
-            this.params.water_last = data.details.water_last || 0;
-            this.params.water_now = data.details.water_now || 0;
-            this.params.water_unit_price = data.details.water_unit_price || 0;
-            this.params.water_late_payment = data.details.water_late_payment || 0;
-            this.params.water_other = data.details.water_other || 0;
+            this.params.water_last = (data.details && data.details.water_last) || 0;
+            this.params.water_now = (data.details && data.details.water_now) || 0;
+            this.params.water_unit_price = (data.details && data.details.water_unit_price) || 0;
+            this.params.water_late_payment = (data.details && data.details.water_late_payment) || 0;
+            this.params.water_other = (data.details && data.details.water_other) || 0;
 
-            this.params.electricity_peak_last = data.details.electricity_peak_last || 0;
-            this.params.electricity_peak_now = data.details.electricity_peak_now || 0;
-            this.params.electricity_peak_unit_price = data.details.electricity_peak_unit_price || 0;
-            this.params.electricity_peak_late_payment = data.details.electricity_peak_late_payment || 0;
-            this.params.electricity_peak_other = data.details.electricity_peak_other || 0;
+            this.params.electricity_peak_last = (data.details && data.details.electricity_peak_last) || 0;
+            this.params.electricity_peak_now = (data.details && data.details.electricity_peak_now) || 0;
+            this.params.electricity_peak_unit_price = (data.details && data.details.electricity_peak_unit_price) || 0;
+            this.params.electricity_peak_late_payment = (data.details && data.details.electricity_peak_late_payment) || 0;
+            this.params.electricity_peak_other = (data.details && data.details.electricity_peak_other) || 0;
 
-            this.params.electricity_valley_last = data.details.electricity_valley_last || 0;
-            this.params.electricity_valley_now = data.details.electricity_valley_now || 0;
-            this.params.electricity_valley_unit_price = data.details.electricity_valley_unit_price || 0;
-            this.params.electricity_valley_late_payment = data.details.electricity_valley_late_payment || 0;
-            this.params.electricity_valley_other = data.details.electricity_valley_other || 0;
+            this.params.electricity_valley_last = (data.details && data.details.electricity_valley_last) || 0;
+            this.params.electricity_valley_now = (data.details && data.details.electricity_valley_now) || 0;
+            this.params.electricity_valley_unit_price = (data.details && data.details.electricity_valley_unit_price) || 0;
+            this.params.electricity_valley_late_payment = (data.details && data.details.electricity_valley_late_payment) || 0;
+            this.params.electricity_valley_other = (data.details && data.details.electricity_valley_other) || 0;
 
-            this.params.gas_last = data.details.gas_last || 0;
-            this.params.gas_now = data.details.gas_now || 0;
-            this.params.gas_unit_price = data.details.gas_unit_price || 0;
-            this.params.gas_late_payment = data.details.gas_late_payment || 0;
-            this.params.gas_other = data.details.gas_other || 0;
+            this.params.gas_last = (data.details && data.details.gas_last) || 0;
+            this.params.gas_now = (data.details && data.details.gas_now) || 0;
+            this.params.gas_unit_price = (data.details && data.details.gas_unit_price) || 0;
+            this.params.gas_late_payment = (data.details && data.details.gas_late_payment) || 0;
+            this.params.gas_other = (data.details && data.details.gas_other) || 0;
 
-            this.params.property_management_last = data.details.property_management_last || 0;
-            this.params.property_management_now = data.details.property_management_now || 0;
-            this.params.property_management_electricity = data.details.property_management_electricity || 0;
-            this.params.property_management_water = data.details.property_management_water || 0;
-            this.params.property_management_total_fees = data.details.property_management_total_fees || 0;
-            this.params.property_management_other = data.details.property_management_other || 0;
+            this.params.property_management_last = (data.details && data.details.property_management_last) || 0;
+            this.params.property_management_now = (data.details && data.details.property_management_now) || 0;
+            this.params.property_management_electricity = (data.details && data.details.property_management_electricity) || 0;
+            this.params.property_management_water = (data.details && data.details.property_management_water) || 0;
+            this.params.property_management_total_fees = (data.details && data.details.property_management_total_fees) || 0;
+            this.params.property_management_other = (data.details && data.details.property_management_other) || 0;
 
-            this.params.liquidated_damages = data.details.liquidated_damages || 0;
-            this.params.trash_fees = data.details.trash_fees || 0;
-            this.params.cleaning_fees = data.details.cleaning_fees || 0;
-            this.params.repair_compensation_fees = data.details.repair_compensation_fees || 0;
-            this.params.other_fees = data.details.other_fees || 0;
-            this.params.overtime_rent = data.details.overtime_rent || 0;
-            this.params.TV_fees = data.details.TV_fees || 0;
-            this.params.network_fees = data.details.network_fees || 0;
+            this.params.liquidated_damages = (data.details && data.details.liquidated_damages) || 0;
+            this.params.trash_fees = (data.details && data.details.trash_fees) || 0;
+            this.params.cleaning_fees = (data.details && data.details.cleaning_fees) || 0;
+            this.params.repair_compensation_fees = (data.details && data.details.repair_compensation_fees) || 0;
+            this.params.other_fees = (data.details && data.details.other_fees) || 0;
+            this.params.overtime_rent = (data.details && data.details.overtime_rent) || 0;
+            this.params.TV_fees = (data.details && data.details.TV_fees) || 0;
+            this.params.network_fees = (data.details && data.details.network_fees) || 0;
 
-            this.passParams.amount = data.details.total_fees;
+            this.passParams.amount = data.details && data.details.total_fees;
 
             let picObject = {};
             this.editImage = {};
@@ -736,6 +809,20 @@
 
       initData(){
         this.params = {
+          financialReceipts: [
+            {
+              receivable: '', //应收
+              actual_receipt: '', //实收
+              difference: '', //差额
+              remark: '',
+            },
+          ],
+          contractCollection: [
+            {
+              receivable: '', //应收
+              remark: '',
+            },
+          ],
           contract_id : '',
           module : '',
           status_type : '',
