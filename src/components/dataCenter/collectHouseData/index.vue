@@ -424,6 +424,7 @@
       this.getTableData();
       setTimeout(() => {
         this.cityForm.below = 1;
+        this.cityForm.zu = 1;
         this.getPolyData();
       }, 1);
     },
