@@ -131,8 +131,9 @@
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
                       <el-select v-model="form.is_agency" placeholder="请选择" clearable>
+                        <el-option key="0" label="全部" value="0">全部</el-option>
                         <el-option key="1" label="是" value="1">是</el-option>
-                        <el-option key="0" label="否" value="0">否</el-option>
+                        <el-option key="2" label="否" value="2">否</el-option>
                       </el-select>
                     </el-form-item>
                   </el-col>
@@ -641,10 +642,23 @@
       },
       // 重置
       resetting() {
+        let Nowdate = new Date();
+        let year = new Date(Nowdate).getFullYear();
+        let month = new Date(Nowdate).getMonth();
+        let month1 = new Date(Nowdate).getMonth() + 1;
+        let date = new Date(Nowdate).getDate();
+        if (month < 10) month = "0" + month;
+        if (month1 < 10) month1 = "0" + month1;
+        if (date < 10) date = "0" + date;
+
+        this.form.sign_date = [new Date(year, month, date), new Date(year, month, date)];
+        this.sign_date[0] = this.sign_date[1] = year + "-" + month1 + "-" + date;
+        this.form.sign_date = this.sign_date;
+
         this.form.address = '';
         this.form.sign_id = [];
         this.form.org_id = [];
-        this.form.sign_date = [];
+        // this.form.sign_date = [];
         this.form.contract_number = '';
         this.form.years = [];
         this.form.is_agency = '';
