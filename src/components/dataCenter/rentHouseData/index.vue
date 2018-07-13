@@ -43,10 +43,10 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-input readonly="" v-model="sign_name" @focus="openOrganization('search', '')"
+                      <el-input readonly="" v-model="sign_name" @focus="openOrganization('search', 'staff')"
                                 placeholder="点击选择">
                         <template slot="append">
-                          <div style="cursor: pointer;" @click="emptyOrganization('search', '')">清空</div>
+                          <div style="cursor: pointer;" @click="emptyOrganization('search', 'staff')">清空</div>
                         </template>
                       </el-input>
                     </el-form-item>

@@ -103,77 +103,77 @@
             <el-input type="textarea" resize="none" v-model="params.compensation" placeholder="请输入内容"></el-input>
           </el-col>
         </el-row>
-        <el-row style="margin-top: 15px;">
-          <div class="title">财务收款</div>
-          <div class="describe_border">
-            <el-form size="mini" :model="params" label-width="60px">
-              <el-row v-for="(item,index) in financialReceiptsLength" :key="index">
-                <el-col :span="5">
-                  <el-form-item label="应收">
-                    <el-input placeholder="请输入内容" v-model="params.financialReceipts[index].receivable"
-                              @change="financialChange(index)" clearable></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="5">
-                  <el-form-item label="实收">
-                    <el-input placeholder="请输入内容" v-model="params.financialReceipts[index].actual_receipt"
-                              @change="financialChange(index)" clearable></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="5">
-                  <el-form-item label="差额">
-                    <el-input placeholder="请输入内容" v-model="params.financialReceipts[index].difference"
-                              clearable></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="备注">
-                    <el-input type="textarea" :rows="1" placeholder="请输入内容"
-                              v-model="params.financialReceipts[index].remark" clearable></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="1" v-show="index!=0">
-                  <i class="el-icon-remove-outline sub_com" @click="subData('financial', index)"></i>
-                </el-col>
-              </el-row>
-              <div style="text-align: center">
-                <el-button type="text" @click="addData('financial')">
-                  <i class="el-icon-circle-plus"></i>添加财务收款变化条目
-                </el-button>
-              </div>
-            </el-form>
-          </div>
-        </el-row>
-        <el-row>
-          <div class="title">合同收款</div>
-          <div class="describe_border">
-            <el-form size="mini" :model="params" label-width="60px">
-              <el-row v-for="(item, index) in contractCollectionLength" :key="index">
-                <el-col :span="5">
-                  <el-form-item label="应收">
-                    <el-input placeholder="请输入内容" v-model="params.contractCollection[index].receivable"
-                              clearable></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                  <el-form-item label="备注">
-                    <el-input type="textarea" :rows="1" placeholder="请输入内容"
-                              v-model="params.contractCollection[index].remark"
-                              clearable></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span="1" v-show="index!=0">
-                  <i class="el-icon-remove-outline  sub_com" @click="subData('contract', index)"></i>
-                </el-col>
-              </el-row>
-              <div style="text-align: center">
-                <el-button type="text" @click="addData('contract')">
-                  <i class="el-icon-circle-plus"></i>添加合同收款变化条目
-                </el-button>
-              </div>
-            </el-form>
-          </div>
-        </el-row>
+        <!--<el-row style="margin-top: 15px;">-->
+          <!--<div class="title">财务收款</div>-->
+          <!--<div class="describe_border">-->
+            <!--<el-form size="mini" :model="params" label-width="60px">-->
+              <!--<el-row v-for="(item,index) in financialReceiptsLength" :key="index">-->
+                <!--<el-col :span="5">-->
+                  <!--<el-form-item label="应收">-->
+                    <!--<el-input placeholder="请输入内容" v-model="params.financialReceipts[index].receivable"-->
+                              <!--@change="financialChange(index)" clearable></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="5">-->
+                  <!--<el-form-item label="实收">-->
+                    <!--<el-input placeholder="请输入内容" v-model="params.financialReceipts[index].actual_receipt"-->
+                              <!--@change="financialChange(index)" clearable></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="5">-->
+                  <!--<el-form-item label="差额">-->
+                    <!--<el-input placeholder="请输入内容" v-model="params.financialReceipts[index].difference"-->
+                              <!--clearable></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item label="备注">-->
+                    <!--<el-input type="textarea" :rows="1" placeholder="请输入内容"-->
+                              <!--v-model="params.financialReceipts[index].remark" clearable></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="1" v-show="index!=0">-->
+                  <!--<i class="el-icon-remove-outline sub_com" @click="subData('financial', index)"></i>-->
+                <!--</el-col>-->
+              <!--</el-row>-->
+              <!--<div style="text-align: center">-->
+                <!--<el-button type="text" @click="addData('financial')">-->
+                  <!--<i class="el-icon-circle-plus"></i>添加财务收款变化条目-->
+                <!--</el-button>-->
+              <!--</div>-->
+            <!--</el-form>-->
+          <!--</div>-->
+        <!--</el-row>-->
+        <!--<el-row>-->
+          <!--<div class="title">合同收款</div>-->
+          <!--<div class="describe_border">-->
+            <!--<el-form size="mini" :model="params" label-width="60px">-->
+              <!--<el-row v-for="(item, index) in contractCollectionLength" :key="index">-->
+                <!--<el-col :span="5">-->
+                  <!--<el-form-item label="应收">-->
+                    <!--<el-input placeholder="请输入内容" v-model="params.contractCollection[index].receivable"-->
+                              <!--clearable></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item label="备注">-->
+                    <!--<el-input type="textarea" :rows="1" placeholder="请输入内容"-->
+                              <!--v-model="params.contractCollection[index].remark"-->
+                              <!--clearable></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="1" v-show="index!=0">-->
+                  <!--<i class="el-icon-remove-outline  sub_com" @click="subData('contract', index)"></i>-->
+                <!--</el-col>-->
+              <!--</el-row>-->
+              <!--<div style="text-align: center">-->
+                <!--<el-button type="text" @click="addData('contract')">-->
+                  <!--<i class="el-icon-circle-plus"></i>添加合同收款变化条目-->
+                <!--</el-button>-->
+              <!--</div>-->
+            <!--</el-form>-->
+          <!--</div>-->
+        <!--</el-row>-->
         <div class="title">上传照片</div>
         <div class="describe_border">
           <UpLoad :ID="'editCollectVacationId'" :editImage="editImage" :isClear="isClear" @getImg="getImg"></UpLoad>
