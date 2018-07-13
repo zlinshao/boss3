@@ -171,17 +171,21 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">合同状态</div>
+                    <div class="el_col_label">发布时间</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="params.status" clearable >
-                        <el-option key="1" label="未签约" value="1">未签约</el-option>
-                        <el-option key="2" label="已签约" value="2">已签约</el-option>
-                        <el-option key="3" label="快到期（60天内）" value="3">快到期（60天内）</el-option>
-                        <el-option key="4" label="已结束" value="4">已结束</el-option>
-                        <el-option key="5" label="已过期" value="5">已过期</el-option>
-                      </el-select>
+                      <el-date-picker
+                        v-model="params.publish_time"
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        value-format="yyyy-MM-dd"
+                        :picker-options="pickerOptions">
+                      </el-date-picker>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -238,21 +242,17 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">发布时间</div>
+                    <div class="el_col_label">合同状态</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-date-picker
-                        v-model="params.publish_time"
-                        type="daterange"
-                        align="right"
-                        unlink-panels
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        value-format="yyyy-MM-dd"
-                        :picker-options="pickerOptions">
-                      </el-date-picker>
+                      <el-select v-model="params.status" clearable >
+                        <el-option key="1" label="未签约" value="1">未签约</el-option>
+                        <el-option key="2" label="已签约" value="2">已签约</el-option>
+                        <el-option key="3" label="快到期（60天内）" value="3">快到期（60天内）</el-option>
+                        <el-option key="4" label="已结束" value="4">已结束</el-option>
+                        <el-option key="5" label="已过期" value="5">已过期</el-option>
+                      </el-select>
                     </el-form-item>
                   </el-col>
                 </el-row>
