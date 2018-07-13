@@ -199,7 +199,7 @@
                 prop="month_price">
               </el-table-column>
               <el-table-column
-                label="空置期"
+                label="空置期(天)"
                 prop="ready_days">
               </el-table-column>
               <el-table-column
@@ -594,9 +594,9 @@
       getTableData() {
         this.tableStatus = ' ';
         this.tableLoading = true;
+        this.isHigh = false;
         this.$http.get(globalConfig.server + 'performance/lord', {params: this.form}).then((res) => {
           this.tableLoading = false;
-          this.isHigh = false;
           if (res.data.code === '30000') {
             this.tableData = res.data.data.data;
             this.totalNum = res.data.data.data && res.data.data.data.count;
