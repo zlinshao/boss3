@@ -1593,7 +1593,83 @@
       </div>
 
     </div>
-
+    <el-dialog :close-on-click-modal="false" title="客户信息" :visible.sync="customerInfoDialog" width="50%">
+      <div v-for="(item, index) in customerInfo">
+        <div class="title">旧客户({{index+1}})</div>
+        <div class="form_border">
+          <el-form onsubmit="return false" size="mini" label-width="70px">
+            <el-row>
+              <el-col :span="5">
+                <el-form-item label="姓名">
+                  <div class="content">{{item.old && item.old.name}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="3.5">
+                <el-form-item label="姓别">
+                  <div class="content" v-if="item.old && item.old.sex==1">男</div>
+                  <div class="content" v-else-if="item.old && item.old.sex==0">女</div>
+                  <div class="content" v-else>暂无</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item label="手机号">
+                  <div class="content">{{item.old && item.old.phone}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item label="证件类型">
+                  <div class="content">{{item.old && item.old.idtype && item.old.idtype.dictionary_name}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5.5">
+                <el-form-item label="证件号码">
+                  <div class="content">{{item.old && item.old.idcard}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </div>
+        <div class="title">新客户({{index+1}})</div>
+        <div class="form_border">
+          <el-form onsubmit="return false" size="mini" label-width="70px">
+            <el-row>
+              <el-col :span="5">
+                <el-form-item label="姓名">
+                  <div class="content">{{item.new && item.new.name}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="3.5">
+                <el-form-item label="姓别">
+                  <div class="content" v-if="item.new && item.new.sex==1">男</div>
+                  <div class="content" v-else-if="item.new && item.new.sex==0">女</div>
+                  <div class="content" v-else>暂无</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item label="手机号">
+                  <div class="content">{{item.new && item.new.phone}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item label="证件类型">
+                  <div class="content">{{item.new && item.new.idtype && item.new.idtype.dictionary_name}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5.5">
+                <el-form-item label="证件号码">
+                  <div class="content">{{item.new && item.new.idcard}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </div>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="small" @click="customerInfoDialog=false">取 消</el-button>
+        <el-button size="small" type="primary" @click="leaseStatusPress('add')">新 增</el-button>
+        <el-button size="small" type="primary" @click="leaseStatusPress('update')">修 改</el-button>
+      </div>
+    </el-dialog>
     <Organization :organizationDialog="organizationDialog" :type="type" @close="closeOrganization"
                   @selectMember="selectMember"></Organization>
     <MemorandumRecord :memoDialog="memoDialog" is_rent="0" :selectContractId="contract_id"
@@ -1652,6 +1728,7 @@
         approveParams: {
           is_rent: 0,
           operation: '',
+          type: '',
         },
         dragPicId: '',
 
@@ -1707,6 +1784,8 @@
         agency_user_name: "",               //中介人
         agency_phone: "",                   //手机号
         needReGet: true,
+        customerInfoDialog: false,   //客户信息
+        customerInfo: [],
       }
     },
     beforeCreate() {
@@ -2268,6 +2347,34 @@
       getText(e) {
         console.log(e.target.innerText)
       },
+      leaseStatusPress(val) {
+        this.approveParams.type = val;
+        this.$http.put(globalConfig.server + 'lease/status/press/' + this.contract_id, this.approveParams).then((res) => {
+          if (res.data.code === '60610') {
+            this.$notify.success({
+              title: '成功',
+              duration: 1000,
+              message: res.data.msg,
+            });
+            this.customerInfoDialog = false;
+            this.getContractDetail();
+          } else if (res.data.code === '60690') {
+            this.$notify.warning({
+              title: '警告',
+              duration: 1000,
+              message: res.data.msg,
+            });
+            this.customerInfoDialog = true;
+            this.customerInfo = res.data.data;
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              duration: 1000,
+              message: res.data.msg,
+            });
+          }
+        });
+      },
       confirmPress(val) {
         this.approveParams.operation = val;
         this.$confirm('您确认操作吗, 是否继续?', '提示', {
@@ -2275,22 +2382,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.put(globalConfig.server + 'lease/status/press/' + this.contract_id, this.approveParams).then((res) => {
-            if (res.data.code === '60610') {
-              this.$notify.success({
-                title: '成功',
-                duration: 1000,
-                message: res.data.msg,
-              });
-              this.getContractDetail();
-            } else {
-              this.$notify.warning({
-                title: '警告',
-                duration: 1000,
-                message: res.data.msg,
-              });
-            }
-          })
+          this.leaseStatusPress();
         }).catch(() => {
           this.$notify.info({
             title: '消息',
@@ -2304,6 +2396,15 @@
 </script>
 
 <style scoped lang="scss">
+  .content {
+    padding: 0 10px;
+    min-height: 32px;
+    background: #eef3fc;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #727479;
+  }
+
   i.iconfont.icon-bianji--:hover {
     photo-shadow: 0 1px 14px 1px #909399;
     border-radius: 6px;
