@@ -220,8 +220,12 @@
       houseOwnerDialogVisible(val) {
         if (!val) {
           this.$emit('close');
-        } else {
-          // this.search();
+          this.params.name='';
+          this.params.phone='';
+          this.params.sex='';
+          this.params.idtype='';
+          this.params.idcard='';
+          this.params.type='';
         }
       }
     },
