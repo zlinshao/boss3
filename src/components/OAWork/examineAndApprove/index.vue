@@ -1,7 +1,6 @@
 <template>
   <div id="examineAndApprove">
-
-    <div class="highRanking" style=" position: absolute; top: 122px; right: 30px;z-index: 6;">
+    <div class="highRanking" style=" position: absolute; top: 122px; right: 30px;z-index: 6;" v-if="activeName!='sixth'">
       <div class="highSearch">
         <el-form :inline="true" onsubmit="return false" size="mini">
           <el-form-item>
@@ -402,7 +401,6 @@
         <!--</div>-->
         <!--</el-tab-pane>-->
       </div>
-
       <el-tab-pane label="待办事项" name="second">
         <el-badge slot="label" :is-dot="false" class="item">待办事项</el-badge>
         <div class="myTable">
@@ -708,9 +706,13 @@
         <!--</el-tab-pane>-->
         <!--</el-tabs>-->
       </el-tab-pane>
+      <!--<el-tab-pane label="全部" name="sixth">-->
+        <!--<ReportAll></ReportAll>-->
+      <!--</el-tab-pane>-->
+
     </el-tabs>
 
-    <div class="block pages">
+    <div class="block pages"  v-if="activeName!='sixth'">
       <el-pagination
         @current-change="search"
         :current-page="params.page"
@@ -755,6 +757,7 @@
 
 <script>
 
+  import ReportAll from './components/reportAll'; //全部
   import ReportDetail from '../../reportManage/components/editReportDetail'          //报备详情
 
   import Frames from './comments/frames.vue'
@@ -787,8 +790,8 @@
 
   export default {
     components: {
+      ReportAll,
       ReportDetail,
-
       Frames,
       Lisu,
       Zhusu,
@@ -1037,7 +1040,7 @@
           this.isOpen_9 = !this.isOpen_9;
         }
       },
-      dblClickTable(type) {
+        dblClickTable(type) {
         this.reportID = type.id;
         this.reportModule = true;
         switch (type) {

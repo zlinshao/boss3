@@ -104,7 +104,7 @@
                     <el-row>
                       <el-col :span="8">
                         <el-form-item label="证件类型" required="">
-                          <el-select clearable v-model="id_typeArray[item-1]" placeholder="请选择装修类型" value="">
+                          <el-select clearable v-model="id_typeArray[item-1]" placeholder="请选择证件类型" value="">
                             <el-option v-for="item in id_type_dic" :label="item.dictionary_name" :value="item.id"
                                        :key="item.id"></el-option>
                           </el-select>
