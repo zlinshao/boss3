@@ -1600,12 +1600,15 @@
         <div class="form_border">
           <el-form onsubmit="return false" size="mini" label-width="70px">
             <el-row>
-              <el-col :span="5">
+              <el-col :span="4">
                 <el-form-item label="姓名">
-                  <div class="content">{{item.old && item.old.name}}</div>
+                  <div class="content">
+                    <span v-if="item.old && item.old.name">{{item.old && item.old.name}}</span>
+                    <span v-else>暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
-              <el-col :span="3.5">
+              <el-col :span="4">
                 <el-form-item label="姓别">
                   <div class="content" v-if="item.old && item.old.sex==1">男</div>
                   <div class="content" v-else-if="item.old && item.old.sex==0">女</div>
@@ -1614,17 +1617,22 @@
               </el-col>
               <el-col :span="5">
                 <el-form-item label="手机号">
-                  <div class="content">{{item.old && item.old.phone}}</div>
+                  <div class="content">
+                    <span v-if="item.old && item.old.phone">{{item.old && item.old.phone}}</span>
+                    <span v-else>暂无</span>
+                  </div>
                 </el-form-item>
               </el-col>
               <el-col :span="5">
                 <el-form-item label="证件类型">
-                  <div class="content">{{item.old && item.old.idtype && item.old.idtype.dictionary_name}}</div>
+                  <div class="content" v-if="item.old && item.old.idtype && item.old.idtype.dictionary_name">{{item.old && item.old.idtype && item.old.idtype.dictionary_name}}</div>
+                  <div class="content" v-else>暂无</div>
                 </el-form-item>
               </el-col>
-              <el-col :span="5.5">
+              <el-col :span="6">
                 <el-form-item label="证件号码">
-                  <div class="content">{{item.old && item.old.idcard}}</div>
+                  <div class="content" v-if="item.old && item.old.idcard">{{item.old && item.old.idcard}}</div>
+                  <div class="content" v-else>暂无</div>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -1634,12 +1642,13 @@
         <div class="form_border">
           <el-form onsubmit="return false" size="mini" label-width="70px">
             <el-row>
-              <el-col :span="5">
+              <el-col :span="4">
                 <el-form-item label="姓名">
-                  <div class="content">{{item.new && item.new.name}}</div>
+                  <div class="content" v-if="item.new && item.new.name">{{item.new && item.new.name}}</div>
+                  <div class="content" v-else>暂无</div>
                 </el-form-item>
               </el-col>
-              <el-col :span="3.5">
+              <el-col :span="4">
                 <el-form-item label="姓别">
                   <div class="content" v-if="item.new && item.new.sex==1">男</div>
                   <div class="content" v-else-if="item.new && item.new.sex==0">女</div>
@@ -1648,17 +1657,20 @@
               </el-col>
               <el-col :span="5">
                 <el-form-item label="手机号">
-                  <div class="content">{{item.new && item.new.phone}}</div>
+                  <div class="content" v-if="item.new && item.new.phone">{{item.new && item.new.phone}}</div>
+                  <div class="content" v-else>暂无</div>
                 </el-form-item>
               </el-col>
               <el-col :span="5">
                 <el-form-item label="证件类型">
-                  <div class="content">{{item.new && item.new.idtype && item.new.idtype.dictionary_name}}</div>
+                  <div class="content" v-if="item.new && item.new.idtype && item.new.idtype.dictionary_name">{{item.new && item.new.idtype && item.new.idtype.dictionary_name}}</div>
+                  <div class="content" v-else>暂无</div>
                 </el-form-item>
               </el-col>
-              <el-col :span="5.5">
+              <el-col :span="6">
                 <el-form-item label="证件号码">
-                  <div class="content">{{item.new && item.new.idcard}}</div>
+                  <div class="content" v-if="item.new && item.new.idcard">{{item.new && item.new.idcard}}</div>
+                  <div class="content" v-else>暂无</div>
                 </el-form-item>
               </el-col>
             </el-row>
