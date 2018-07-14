@@ -1,71 +1,103 @@
 <template>
   <div id="mapSearchId">
-    <el-dialog :close-on-click-modal="false" title="房东信息" :visible.sync="houseOwnerDialogVisible" width="40%"
-               :before-close="closeDialog">
-      <div class="content">
-        <div class="filter-container">
-          <el-form :inline="true" onsubmit="return false" size="mini" class="demo-form-inline">
-            <el-form-item>
-              <el-input v-model="params.search" placeholder="请输入内容" class="input-with-select"
-                        @keyup.enter.native="search"
-                        clearable>
-                <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
-              </el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" size="mini" @click="addHouseOwnerDialog=true">增加房东信息</el-button>
-            </el-form-item>
+    <!--<el-dialog :close-on-click-modal="false" title="房东信息" :visible.sync="houseOwnerDialogVisible" width="40%"-->
+    <!--:before-close="closeDialog">-->
+    <!--<div class="content">-->
+    <!--<div class="filter-container">-->
+    <!--<el-form :inline="true" onsubmit="return false" size="mini" class="demo-form-inline">-->
+    <!--<el-form-item>-->
+    <!--<el-input v-model="params.search" placeholder="请输入内容" class="input-with-select"-->
+    <!--@keyup.enter.native="search"-->
+    <!--clearable>-->
+    <!--<el-button slot="append" icon="el-icon-search" @click="search"></el-button>-->
+    <!--</el-input>-->
+    <!--</el-form-item>-->
+    <!--<el-form-item>-->
+    <!--<el-button type="primary" size="mini" @click="addHouseOwnerDialog=true">增加房东信息</el-button>-->
+    <!--</el-form-item>-->
+    <!--</el-form>-->
+    <!--</div>-->
+    <!--<div class="tableList scroll_bar">-->
+    <!--<el-table-->
+    <!--:data="tableData"-->
+    <!--:empty-text='addressStatus'-->
+    <!--v-loading="addressLoading"-->
+    <!--element-loading-text="拼命加载中"-->
+    <!--element-loading-spinner="el-icon-loading"-->
+    <!--element-loading-background="rgba(255, 255, 255, 0)"-->
+    <!--@row-click="rowClick"-->
+    <!--style="width: 100%">-->
+    <!--<el-table-column width="65">-->
+    <!--<template slot-scope="scope">-->
+    <!--<el-radio v-model="radio" :label="scope.row.contract_id">-->
+    <!--<span style="display: none">1</span>-->
+    <!--</el-radio>-->
+    <!--</template>-->
+    <!--</el-table-column>-->
+    <!--<el-table-column-->
+    <!--prop="address"-->
+    <!--label="房屋地址">-->
+    <!--</el-table-column>-->
+    <!--<el-table-column-->
+    <!--prop="type"-->
+    <!--label="房屋性质">-->
+    <!--</el-table-column>-->
+    <!--</el-table>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--<div slot="footer" class="dialog-footer">-->
+    <!--<el-button size="small" @click="closeDialog">取 消</el-button>-->
+    <!--<el-button size="small" type="primary" @click="closeDialog('yes')">确 定</el-button>-->
+    <!--</div>-->
+    <!--</el-dialog>-->
+    <el-dialog :close-on-click-modal="false" title="更换房东信息" :visible.sync="houseOwnerDialogVisible" width="40%">
+      <div>
+        <div>
+          <el-form onsubmit="return false" size="mini" label-width="70px">
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="姓名" required>
+                  <el-input v-model="params.name" placeholder="请输入内容" clearable>
+                  </el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="电话" required>
+                  <el-input v-model="params.phone" placeholder="请输入内容" clearable>
+                  </el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="性别" required>
+                  <el-radio-group v-model="params.sex">
+                    <el-radio label="1">先生</el-radio>
+                    <el-radio label="2">女士</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="证件类型" required>
+                  <el-select v-model="params.idtype" placeholder="请选择证件类型">
+                    <el-option v-for="item in id_type_dic" :label="item.dictionary_name" :value="item.id"
+                               :key="item.id"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="证件号码" required>
+                  <el-input v-model="params.idcard" placeholder="请输入内容" clearable></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
           </el-form>
-        </div>
-        <div class="tableList scroll_bar">
-          <el-table
-            :data="tableData"
-            :empty-text='addressStatus'
-            v-loading="addressLoading"
-            element-loading-text="拼命加载中"
-            element-loading-spinner="el-icon-loading"
-            element-loading-background="rgba(255, 255, 255, 0)"
-            @row-click="rowClick"
-            style="width: 100%">
-            <el-table-column width="65">
-              <template slot-scope="scope">
-                <el-radio v-model="radio" :label="scope.row.contract_id">
-                  <span style="display: none">1</span>
-                </el-radio>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="address"
-              label="房屋地址">
-            </el-table-column>
-            <el-table-column
-              prop="type"
-              label="房屋性质">
-            </el-table-column>
-          </el-table>
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button size="small" @click="closeDialog">取 消</el-button>
-        <el-button size="small" type="primary" @click="closeDialog('yes')">确 定</el-button>
-      </div>
-    </el-dialog>
-    <el-dialog :close-on-click-modal="false" title="新增房东信息" :visible.sync="addHouseOwnerDialog" width="40%">
-      <div class="content">
-        <div class="filter-container">
-          <el-form :inline="true" onsubmit="return false" size="mini" class="demo-form-inline">
-            <el-form-item label="姓名">
-              <el-input v-model="params.search" placeholder="请输入内容" class="input-with-select"
-                        @keyup.enter.native="search"
-                        clearable>
-              </el-input>
-            </el-form-item>
-          </el-form>
-        </div>
-      </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button size="small" @click="addHouseOwnerDialog=false">取 消</el-button>
-        <el-button size="small" type="primary" @click="addHouseOwnerDialog=false">确 定</el-button>
+        <el-button size="small" @click="houseOwnerDialogVisible=false">取 消</el-button>
+        <el-button size="small" type="primary" @click="confirmPress('add')">新 增</el-button>
+        <el-button size="small" type="primary" @click="confirmPress('update')">修 改</el-button>
       </div>
     </el-dialog>
   </div>
@@ -74,7 +106,7 @@
 <script>
 
   export default {
-    props: ['houseOwnerDialog', 'isRent'],
+    props: ['houseOwnerDialog', 'contractId', 'module'],
     data() {
       return {
         houseOwnerDialogVisible: false,
@@ -82,18 +114,25 @@
         radio: '',
         selectedItem: [],
         params: {
-          pages: 1,
-          search: '',
-          limit: 15
+          name: '',
+          phone: '',
+          sex: '',
+          idtype: '',
+          idcard: '',
+          module: '',
+          contract_id: '',
+          type: '',
         },
         addressStatus: ' ',
         addressLoading: false,
-
+        id_type_dic: [],         //证件类型
         addHouseOwnerDialog: false,
       }
     },
-
     mounted() {
+      this.dictionary(409, 1).then((res) => {
+        this.id_type_dic = res.data;
+      });
 
     },
     watch: {
@@ -104,7 +143,7 @@
         if (!val) {
           this.$emit('close');
         } else {
-          this.search();
+          // this.search();
         }
       }
     },
@@ -157,6 +196,16 @@
         this.radio = row.contract_id;
         this.selectedItem = row;
       },
+      confirmPress(val) {
+        console.log(this.contractId)
+        this.params.module = this.module;
+        this.params.contract_id = this.contractId;
+        this.params.type = val;
+        this.$http.post(globalConfig.server + 'coreproject/custmoer', this.params).then((res) => {
+
+        });
+
+      }
     }
   }
 </script>

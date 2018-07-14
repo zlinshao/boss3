@@ -172,7 +172,7 @@
                   <div class="title" v-if="item == 1">房东信息</div>
                   <div class="title" v-else="">附属房东信息({{item - 1}})</div>
                   <div>
-                    <!--<div class="deleteNumber" @click="houseOwnerInfoDialog=true">更换房东信息</div>-->
+                    <div class="deleteNumber" @click="houseOwnerInfoDialog=true">更换房东信息</div>
                     <div v-if="(isAll || (isPc && !isDoc)) && item>1" class="deleteNumber"
                          @click="deleteCustoms(item-1)">删除
                     </div>
@@ -689,7 +689,7 @@
     <VillageModal :villageDialog="villageDialog" @close="closeVillageModal"></VillageModal>
     <Organization :organizationDialog="organizationDialog" :length="length" :type="type"
                   @close='closeModal' @selectMember="selectMember"></Organization>
-    <HouseOwnerInfo :houseOwnerDialog="houseOwnerInfoDialog" @close="houseOwnerInfoDialog=false"></HouseOwnerInfo>
+    <HouseOwnerInfo :houseOwnerDialog="houseOwnerInfoDialog" @close="houseOwnerInfoDialog=false" :contractId="collectContractId" module="1"></HouseOwnerInfo>
   </div>
 </template>
 
