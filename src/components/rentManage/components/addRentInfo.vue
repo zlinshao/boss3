@@ -77,10 +77,7 @@
                 <div style="display: flex;justify-content: space-between">
                   <div class="title" v-if="item == 1">租客信息</div>
                   <div class="title" v-else="">附属租客信息({{item - 1}})</div>
-                  <div>
-                    <!--<div class="deleteNumber" @click="">更换租客信息</div>-->
-                    <div v-if="item>1" class="deleteNumber" @click="deleteCustoms(item-1)">删除</div>
-                  </div>
+                  <div v-if="item>1" class="deleteNumber" @click="deleteCustoms(item-1)">删除</div>
                 </div>
                 <div class="form_border">
                   <el-form size="mini" :model="params" label-width="100px">

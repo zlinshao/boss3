@@ -857,6 +857,11 @@
       };
     },
     watch: {
+      houseOwnerInfoDialog(val){
+        if(!val){
+          this.getDetail();
+        }
+      },
       editHouseResourcesDialog(val) {
         this.editHouseResourcesDialogVisible = val
       },
