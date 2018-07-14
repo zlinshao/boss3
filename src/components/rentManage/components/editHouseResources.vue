@@ -206,7 +206,7 @@
                       <el-col :span="8">
                         <el-form-item label="证件类型">
                           <el-select :clearable="!isDoc || isAll" :disabled="isDoc && !isAll"
-                                     v-model="id_typeArray[item-1]" placeholder="请选择装修类型" value="">
+                                     v-model="id_typeArray[item-1]" placeholder="请选择证件类型" value="">
                             <el-option v-for="item in id_type_dic" :label="item.dictionary_name" :value="item.id"
                                        :key="item.id"></el-option>
                           </el-select>
@@ -960,8 +960,8 @@
             this.params.property_type = data.property_type ? Number(data.property_type) : '';
             this.params.house_feature = data.house_feature ? Number(data.house_feature) : '';
             //房东信息
-            this.customersAmount = data.customers.length;
-            data.customers.forEach((item) => {
+            this.customersAmount = (data.customers && data.customers.length) || 1;
+            data.customers && data.customers.forEach((item) => {
               this.nameArray.push(item.name);
               this.sexArray.push(String(item.sex));
               this.id_typeArray.push(item.idtype);
