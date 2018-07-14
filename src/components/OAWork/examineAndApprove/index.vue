@@ -1037,7 +1037,7 @@
           this.isOpen_9 = !this.isOpen_9;
         }
       },
-      dblClickTable(type) {
+        dblClickTable(type) {
         this.reportID = type.id;
         this.reportModule = true;
         switch (type) {
