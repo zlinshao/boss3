@@ -203,12 +203,12 @@
                     <div class="el_col_label">是否上传合同</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
-                    <e-form-item>
+                    <el-form-item>
                       <el-select v-model="params.un_upload" clearable>
                         <el-option key="0" label="否" value="0">否</el-option>
                         <el-option key="1" label="是" value="1">是</el-option>
                       </el-select>
-                    </e-form-item>
+                    </el-form-item>
                   </el-col>
                 </el-row>
               </el-col>
