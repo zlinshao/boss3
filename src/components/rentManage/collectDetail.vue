@@ -2362,7 +2362,6 @@
           } else if (res.data.code === '60690') {
             this.$notify.warning({
               title: '警告',
-              duration: 1000,
               message: res.data.msg,
             });
             this.customerInfoDialog = true;
