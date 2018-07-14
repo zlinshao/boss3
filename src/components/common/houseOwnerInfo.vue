@@ -201,7 +201,7 @@
         this.params.module = this.module;
         this.params.contract_id = this.contractId;
         this.params.type = val;
-        this.$http.post(globalConfig.server + 'coreproject/custmoer', this.params).then((res) => {
+        this.$http.post(globalConfig.server + 'coreproject/customer', this.params).then((res) => {
 
         });
 

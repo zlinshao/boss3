@@ -172,7 +172,7 @@
                   <div class="title" v-if="item == 1">房东信息</div>
                   <div class="title" v-else="">附属房东信息({{item - 1}})</div>
                   <div>
-                    <div class="deleteNumber" @click="houseOwnerInfoDialog=true">更换房东信息</div>
+                    <div class="deleteNumber" @click="houseOwnerInfoDialog=true" v-if="item == 1">更换房东信息</div>
                     <div v-if="(isAll || (isPc && !isDoc)) && item>1" class="deleteNumber"
                          @click="deleteCustoms(item-1)">删除
                     </div>
