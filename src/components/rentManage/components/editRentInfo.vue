@@ -117,7 +117,7 @@
                       <el-col :span="8">
                         <el-form-item label="证件类型">
                           <el-select :clearable="!isDoc || isAll" :disabled="isDoc && !isAll" v-model="id_typeArray[item-1]"
-                                     placeholder="请选择装修类型" value="">
+                                     placeholder="请选择证件类型" value="">
                             <el-option v-for="item in id_type_dic" :label="item.dictionary_name" :value="item.id"
                                        :key="item.id"></el-option>
                           </el-select>
