@@ -50,7 +50,7 @@
     <!--<el-button size="small" type="primary" @click="closeDialog('yes')">确 定</el-button>-->
     <!--</div>-->
     <!--</el-dialog>-->
-    <el-dialog :close-on-click-modal="false" title="更换房东信息" :visible.sync="houseOwnerDialogVisible" width="40%">
+    <el-dialog :close-on-click-modal="false" title="更换客户信息" :visible.sync="houseOwnerDialogVisible" width="40%">
       <div>
         <div>
           <el-form onsubmit="return false" size="mini" label-width="70px">
