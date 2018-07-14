@@ -96,6 +96,82 @@
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="houseOwnerDialogVisible=false">取 消</el-button>
+        <el-button size="small" type="primary" @click="confirmPress('')">确 定</el-button>
+      </div>
+    </el-dialog>
+    <el-dialog :close-on-click-modal="false" title="客户信息" :visible.sync="customerInfoDialog" width="50%">
+      <div v-for="(item, index) in customerInfo">
+        <div class="title">旧客户({{index+1}})</div>
+        <div class="form_border">
+          <el-form onsubmit="return false" size="mini" label-width="70px">
+            <el-row>
+              <el-col :span="5">
+                <el-form-item label="姓名">
+                  <div class="content">{{item.old && item.old.name}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="3.5">
+                <el-form-item label="姓别">
+                  <div class="content" v-if="item.old && item.old.sex==1">男</div>
+                  <div class="content" v-else-if="item.old && item.old.sex==0">女</div>
+                  <div class="content" v-else>暂无</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item label="手机号">
+                  <div class="content">{{item.old && item.old.phone}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item label="证件类型">
+                  <div class="content">{{item.old && item.old.idtype && item.old.idtype.dictionary_name}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5.5">
+                <el-form-item label="证件号码">
+                  <div class="content">{{item.old && item.old.idcard}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </div>
+        <div class="title">新客户({{index+1}})</div>
+        <div class="form_border">
+          <el-form onsubmit="return false" size="mini" label-width="70px">
+            <el-row>
+              <el-col :span="5">
+                <el-form-item label="姓名">
+                  <div class="content">{{item.new && item.new.name}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="3.5">
+                <el-form-item label="姓别">
+                  <div class="content" v-if="item.new && item.new.sex==1">男</div>
+                  <div class="content" v-else-if="item.new && item.new.sex==0">女</div>
+                  <div class="content" v-else>暂无</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item label="手机号">
+                  <div class="content">{{item.new && item.new.phone}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item label="证件类型">
+                  <div class="content">{{item.new && item.new.idtype && item.new.idtype.dictionary_name}}</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5.5">
+                <el-form-item label="证件号码">
+                  <div class="content">{{item.new && item.new.idcard}}</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </div>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="small" @click="customerInfoDialog=false">取 消</el-button>
         <el-button size="small" type="primary" @click="confirmPress('add')">新 增</el-button>
         <el-button size="small" type="primary" @click="confirmPress('update')">修 改</el-button>
       </div>
@@ -127,6 +203,8 @@
         addressLoading: false,
         id_type_dic: [],         //证件类型
         addHouseOwnerDialog: false,
+        customerInfoDialog: false,
+        customerInfo: [],
       }
     },
     mounted() {
@@ -197,15 +275,34 @@
         this.selectedItem = row;
       },
       confirmPress(val) {
-        console.log(this.contractId)
+        this.params.type = val;
         this.params.module = this.module;
         this.params.contract_id = this.contractId;
-        this.params.type = val;
         this.$http.post(globalConfig.server + 'coreproject/customer', this.params).then((res) => {
-
+          if (res.data.code === '20000') {
+            this.$notify.success({
+              title: '成功',
+              duration: 1000,
+              message: res.data.msg,
+            });
+            this.customerInfoDialog = false;
+            this.houseOwnerDialogVisible = false;
+          } else if (res.data.code === '20010') {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
+            this.customerInfoDialog = true;
+            this.customerInfo = res.data.data;
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              duration: 1000,
+              message: res.data.msg,
+            });
+          }
         });
-
-      }
+      },
     }
   }
 </script>
@@ -213,6 +310,14 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped="">
   #mapSearchId {
+    .content {
+      padding: 0 10px;
+      min-height: 32px;
+      background: #eef3fc;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #727479;
+    }
     .el-dialog__wrapper {
       .el-dialog {
         .el-dialog__body {
