@@ -1430,6 +1430,7 @@
         <el-button size="small" @click="customerInfoDialog=false">取 消</el-button>
         <el-button size="small" type="primary" @click="leaseStatusPress('add')">新 增</el-button>
         <el-button size="small" type="primary" @click="leaseStatusPress('update')">修 改</el-button>
+        <el-button size="small" type="primary" @click="leaseStatusPress('continue')">使用旧客户</el-button>
       </div>
     </el-dialog>
     <Organization :organizationDialog="organizationDialog" :type="type" @close="closeOrganization"

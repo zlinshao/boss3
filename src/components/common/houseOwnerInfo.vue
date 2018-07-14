@@ -186,6 +186,7 @@
         <el-button size="small" @click="customerInfoDialog=false">取 消</el-button>
         <el-button size="small" type="primary" @click="confirmPress('add')">新 增</el-button>
         <el-button size="small" type="primary" @click="confirmPress('update')">修 改</el-button>
+        <el-button size="small" type="primary" @click="confirmPress('continue')">使用旧客户</el-button>
       </div>
     </el-dialog>
   </div>
