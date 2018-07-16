@@ -159,7 +159,9 @@
                 <div style="display: flex;justify-content: space-between">
                   <div class="title" v-if="item == 1">房东信息</div>
                   <div class="title" v-else="">附属房东信息({{item - 1}})</div>
-                  <div v-if="item>1" class="deleteNumber" @click="deleteCustoms(item-1)">删除</div>
+                  <div>
+                    <div v-if="item>1" class="deleteNumber" @click="deleteCustoms(item-1)">删除</div>
+                  </div>
                 </div>
                 <div class="form_border">
                   <el-form size="mini" :model="params" label-width="100px">
@@ -186,7 +188,7 @@
                     <el-row>
                       <el-col :span="8">
                         <el-form-item label="证件类型" required="">
-                          <el-select clearable v-model="id_typeArray[item-1]" placeholder="请选择装修类型" value="">
+                          <el-select clearable v-model="id_typeArray[item-1]" placeholder="请选择证件类型" value="">
                             <el-option v-for="item in id_type_dic" :label="item.dictionary_name" :value="item.id"
                                        :key="item.id"></el-option>
                           </el-select>
@@ -255,7 +257,7 @@
                           </el-input>
                         </el-col>
                         <el-col :span="12">
-                          <el-input placeholder="天数"  @blur="computedEndDate" v-model="params.day">
+                          <el-input placeholder="天数" @blur="computedEndDate" v-model="params.day">
                             <template slot="append">天</template>
                           </el-input>
                         </el-col>
@@ -427,12 +429,14 @@
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="开户行" required="" v-if="params.purchase_way == 509 || params.purchase_way == 510">
+                      <el-form-item label="开户行" required=""
+                                    v-if="params.purchase_way == 509 || params.purchase_way == 510">
                         <el-input placeholder="请输入内容" v-model="params.bank"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                      <el-form-item label="支行" required="" v-if="params.purchase_way == 509 || params.purchase_way == 510">
+                      <el-form-item label="支行" required=""
+                                    v-if="params.purchase_way == 509 || params.purchase_way == 510">
                         <el-input placeholder="请输入内容" v-model="params.subbranch"></el-input>
                       </el-form-item>
                     </el-col>
@@ -575,16 +579,20 @@
                 </el-form-item>
 
                 <el-form-item label="房产证照片">
-                  <UpLoad :ID="'addHouse_property_card_new'" :isClear="isClear" :editImage="property_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'addHouse_property_card_new'" :isClear="isClear" :editImage="property_photo"
+                          @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="水卡照片">
-                  <UpLoad :ID="'addHouse_water_card_new'" :isClear="isClear" :editImage="water_card_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'addHouse_water_card_new'" :isClear="isClear" :editImage="water_card_photo"
+                          @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="电卡照片">
-                  <UpLoad :ID="'addHouse_electricity_card_new'" :isClear="isClear" :editImage="electricity_card_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'addHouse_electricity_card_new'" :isClear="isClear" :editImage="electricity_card_photo"
+                          @getImg="getImg"></UpLoad>
                 </el-form-item>
                 <el-form-item label="燃气卡照片">
-                  <UpLoad :ID="'addHouse_gas_card_new'" :isClear="isClear" :editImage="gas_card_photo" @getImg="getImg"></UpLoad>
+                  <UpLoad :ID="'addHouse_gas_card_new'" :isClear="isClear" :editImage="gas_card_photo"
+                          @getImg="getImg"></UpLoad>
                 </el-form-item>
 
                 <el-form-item label="交接单照片">
@@ -671,9 +679,9 @@
           floors: '',                  //层数
           property_type: '',           //房屋类型
           house_feature: '',           //房屋特色
-          water_card_number : '',
-          electricity_card_number : '',
-          gas_card_number : '',
+          water_card_number: '',
+          electricity_card_number: '',
+          gas_card_number: '',
           customers: [],               //房东数组
           //-------------------合同详情--------------------//
           contract_type: '1',           // 订单性质（合同种类）
@@ -730,10 +738,10 @@
           electricity_photo: [],
           gas_photo: [],
 
-          property_photo   : [],
-          water_card_photo : [],
-          electricity_card_photo : [],
-          gas_card_photo : [],
+          property_photo: [],
+          water_card_photo: [],
+          electricity_card_photo: [],
+          gas_card_photo: [],
 
           checkin_photo: [],
           auth_photo: [],
@@ -784,10 +792,10 @@
         electricity_photo: {},
         gas_photo: {},
 
-        property_photo : {},
-        water_card_photo : {},
-        electricity_card_photo : {},
-        gas_card_photo : {},
+        property_photo: {},
+        water_card_photo: {},
+        electricity_card_photo: {},
+        gas_card_photo: {},
 
         checkin_photo: {},
         auth_photo: {},
@@ -799,10 +807,10 @@
       };
     },
     watch: {
-      addHouseResourcesDialog(val){
+      addHouseResourcesDialog(val) {
         this.addHouseResourcesDialogVisible = val
       },
-      addHouseResourcesDialogVisible(val){
+      addHouseResourcesDialogVisible(val) {
         if (!val) {
           this.$emit('close');
           this.clearData();
@@ -815,7 +823,7 @@
         }
       },
       'params.purchase_way': {
-        handler(val, oldVal){
+        handler(val, oldVal) {
           this.account = '';
           this.bank = '';
           this.subbranch = '';
@@ -823,7 +831,7 @@
       },
     },
     methods: {
-      getDictionary(){
+      getDictionary() {
         this.dictionary(410, 1).then((res) => {
           this.property_type_dic = res.data;
           this.isDictionary = true
@@ -864,7 +872,7 @@
 
       },
       //获取草稿
-      getDraft(){
+      getDraft() {
         this.$http.get(globalConfig.server + 'lease/collect/draft?type=1').then((res) => {
           if (res.data.code === '61010') {
             this.nameArray = [];
@@ -897,8 +905,8 @@
             this.params.property_type = data.property_type;
             this.params.house_feature = data.house_feature;
             //房东信息
-            this.customersAmount = data.customers.length;
-            data.customers.forEach((item) => {
+            this.customersAmount = (data.customers && data.customers.length) || 1;
+            data.customers && data.customers.forEach((item) => {
               this.nameArray.push(item.name);
               this.sexArray.push(item.sex);
               this.id_typeArray.push(item.id_type);
@@ -917,8 +925,8 @@
             this.params.vacancy = data.vacancy;
             this.params.vacancy_way = data.vacancy_way;
             this.params.vacancy_other = data.vacancy_other;
-            this.params.warranty_month = data.warranty_month?data.warranty_month:0;
-            this.params.warranty_day = data.warranty_day?data.warranty_day:0;
+            this.params.warranty_month = data.warranty_month ? data.warranty_month : 0;
+            this.params.warranty_day = data.warranty_day ? data.warranty_day : 0;
             this.params.is_agency = String(data.is_agency);
             this.params.deposit = data.deposit;
             //------------月单价和付款方式-----------------------//
@@ -1014,10 +1022,10 @@
             this.imageArray(data.electricity_photo, this.params.electricity_photo);
             this.imageArray(data.gas_photo, this.params.gas_photo);
 
-            this.imageArray(data.property_photo,this.params.property_photo);
-            this.imageArray(data.water_card_photo,this.params.water_card_photo);
-            this.imageArray(data.electricity_card_photo,this.params.electricity_card_photo);
-            this.imageArray(data.gas_card_photo,this.params.gas_card_photo);
+            this.imageArray(data.property_photo, this.params.property_photo);
+            this.imageArray(data.water_card_photo, this.params.water_card_photo);
+            this.imageArray(data.electricity_card_photo, this.params.electricity_card_photo);
+            this.imageArray(data.gas_card_photo, this.params.gas_card_photo);
 
             this.imageArray(data.checkin_photo, this.params.checkin_photo);
             this.imageArray(data.auth_photo, this.params.auth_photo);
@@ -1030,7 +1038,7 @@
         })
       },
 
-      imageArray(data, array){
+      imageArray(data, array) {
         if (!Array.isArray(data)) {
           for (let key in data) {
             array.push(key)
@@ -1039,7 +1047,7 @@
       },
 
       //改变收房月数
-      changeMonth(){
+      changeMonth() {
         this.computedEndDate();
         this.periodArray[0] = this.params.month;
         this.payPeriodArray[0] = this.params.month;
@@ -1050,17 +1058,17 @@
         this.priceChangeAmount = 1;
         this.payWayChangeAmount = 1;
       },
-      vacancyWay(){
+      vacancyWay() {
         this.params.vacancy_other = '';
       },
       //调出选人组件
-      openOrganizeModal(val){
+      openOrganizeModal(val) {
         this.selectType = val;
         this.type = val === 'depart' ? 'depart' : 'staff';
         this.organizationDialog = true;
         this.length = 1;
       },
-      selectMember(val){
+      selectMember(val) {
         this.organizationDialog = false;
         if (this.selectType === 'staff') {
           this.params.staff_id = val[0].id;
@@ -1080,15 +1088,15 @@
         }
       },
 
-      closeModal(){
+      closeModal() {
         this.organizationDialog = false
       },
 
       //打开小区模态框
-      openVillageModal(){
+      openVillageModal() {
         this.villageDialog = true
       },
-      closeVillageModal(val){
+      closeVillageModal(val) {
         this.villageDialog = false;
         if (val) {
           this.params.community_id = val.id;
@@ -1098,10 +1106,10 @@
       },
 
       //增加附属租客
-      addMoreCustoms(){
+      addMoreCustoms() {
         this.customersAmount++;
       },
-      deleteCustoms(item){
+      deleteCustoms(item) {
         this.nameArray.splice(item, 1);
         this.sexArray.splice(item, 1);
         this.id_typeArray.splice(item, 1);
@@ -1111,31 +1119,31 @@
       },
 
       //月单价变化
-      addMorePriceChange(){
+      addMorePriceChange() {
         this.priceChangeAmount++;
       },
-      deletePriceChange(item){
+      deletePriceChange(item) {
         this.priceArray.splice(item, 1);
         this.periodArray.splice(item, 1);
         this.priceChangeAmount--;
       },
 
       //付款方式变化
-      addMorePayWayChange(){
+      addMorePayWayChange() {
         this.payWayChangeAmount++;
       },
-      deletePayWayChange(item){
+      deletePayWayChange(item) {
         this.payWayArray.splice(item, 1);
         this.payPeriodArray.splice(item, 1);
         this.payWayChangeAmount--;
       },
 
       //计算空置期结束时间
-      computedEndDate(){
-        this.params.day = this.params.day?this.params.day:0;
-        this.$http.get(globalConfig.server+'lease/helper/collectdates?begin_date='+this.params.begin_date+'&month='
-                        +this.params.month +'&day='+this.params.day+'&vacancy='+this.params.vacancy ).then((res) =>{
-          if(res.data.code === '69910'){
+      computedEndDate() {
+        this.params.day = this.params.day ? this.params.day : 0;
+        this.$http.get(globalConfig.server + 'lease/helper/collectdates?begin_date=' + this.params.begin_date + '&month='
+          + this.params.month + '&day=' + this.params.day + '&vacancy=' + this.params.vacancy).then((res) => {
+          if (res.data.code === '69910') {
             this.params.vacancy_end_date = res.data.data.vac_end_date;
             this.params.end_date = res.data.data.end_date;
           }
@@ -1147,7 +1155,7 @@
         let date = now.getDate();
         return year + "-" + month + "-" + date;
       },
-      getImg(val){
+      getImg(val) {
         this.isUpPic = val[2];
         if (val[0] === 'addHouse_id_card') {
           this.params.identity_photo = val[1];
@@ -1161,13 +1169,13 @@
           this.params.electricity_photo = val[1];
         } else if (val[0] === 'addHouse_gas_card') {
           this.params.gas_photo = val[1];
-        } else if(val[0] === 'addHouse_property_card_new'){
+        } else if (val[0] === 'addHouse_property_card_new') {
           this.params.property_photo = val[1];
-        } else if(val[0] === 'addHouse_water_card_new'){
+        } else if (val[0] === 'addHouse_water_card_new') {
           this.params.water_card_photo = val[1];
-        } else if(val[0] === 'addHouse_electricity_card_new'){
+        } else if (val[0] === 'addHouse_electricity_card_new') {
           this.params.electricity_card_photo = val[1];
-        } else if(val[0] === 'addHouse_gas_card_new'){
+        } else if (val[0] === 'addHouse_gas_card_new') {
           this.params.gas_card_photo = val[1];
         } else if (val[0] === 'addHouse_hand_over_card') {
           this.params.checkin_photo = val[1];
@@ -1186,14 +1194,14 @@
         }
       },
 
-      confirmAdd(val){
-        if(val===0 || val ===1){
+      confirmAdd(val) {
+        if (val === 0 || val === 1) {
           this.params.draft = val;
         }
-        if(val === 0){
-          this.params.is_submit=0;
-        }else if(val===2){
-          this.params.is_submit=1;
+        if (val === 0) {
+          this.params.is_submit = 0;
+        } else if (val === 2) {
+          this.params.is_submit = 1;
         }
         //房东
         let customItem = {};
@@ -1251,10 +1259,10 @@
           })
         }
       },
-      clearData(){
+      clearData() {
         this.isClear = false;
         this.params = {
-          is_submit:0,
+          is_submit: 0,
           id: '',      //草稿id
           draft: 0,
           type: 1,
@@ -1273,9 +1281,9 @@
           floors: '',                  //层数
           property_type: '',           //房屋类型
           house_feature: '',           //房屋特色
-          water_card_number : '',
-          electricity_card_number : '',
-          gas_card_number : '',
+          water_card_number: '',
+          electricity_card_number: '',
+          gas_card_number: '',
           customers: [],               //房东数组
           //-------------------合同详情--------------------//
           contract_type: '1',           // 订单性质（合同种类）

@@ -93,13 +93,81 @@
             <el-input type="textarea" resize="none" v-model="params.compensation" placeholder="请输入内容"></el-input>
           </el-col>
         </el-row>
-
+        <!--<el-row style="margin-top: 15px;">-->
+          <!--<div class="title">财务收款</div>-->
+          <!--<div class="describe_border">-->
+            <!--<el-form size="mini" :model="params" label-width="60px">-->
+              <!--<el-row v-for="(item,index) in financialReceiptsLength" :key="index">-->
+                <!--<el-col :span="5">-->
+                  <!--<el-form-item label="应收">-->
+                    <!--<el-input placeholder="请输入内容" v-model="params.financialReceipts[index].receivable"-->
+                              <!--@change="financialChange(index)" clearable></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="5">-->
+                  <!--<el-form-item label="实收">-->
+                    <!--<el-input placeholder="请输入内容" v-model="params.financialReceipts[index].actual_receipt"-->
+                              <!--@change="financialChange(index)" clearable></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="5">-->
+                  <!--<el-form-item label="差额">-->
+                    <!--<el-input placeholder="请输入内容" v-model="params.financialReceipts[index].difference"-->
+                              <!--clearable></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item label="备注">-->
+                    <!--<el-input type="textarea" :rows="1" placeholder="请输入内容"-->
+                              <!--v-model="params.financialReceipts[index].remark" clearable></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="1" v-show="index!=0">-->
+                  <!--<i class="el-icon-remove-outline sub_com" @click="subData('financial', index)"></i>-->
+                <!--</el-col>-->
+              <!--</el-row>-->
+              <!--<div style="text-align: center">-->
+                <!--<el-button type="text" @click="addData('financial')">-->
+                  <!--<i class="el-icon-circle-plus"></i>添加财务收款变化条目-->
+                <!--</el-button>-->
+              <!--</div>-->
+            <!--</el-form>-->
+          <!--</div>-->
+        <!--</el-row>-->
+        <!--<el-row>-->
+          <!--<div class="title">合同收款</div>-->
+          <!--<div class="describe_border">-->
+            <!--<el-form size="mini" :model="params" label-width="60px">-->
+              <!--<el-row v-for="(item, index) in contractCollectionLength" :key="index">-->
+                <!--<el-col :span="5">-->
+                  <!--<el-form-item label="应收">-->
+                    <!--<el-input placeholder="请输入内容" v-model="params.contractCollection[index].receivable"-->
+                              <!--clearable></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="8">-->
+                  <!--<el-form-item label="备注">-->
+                    <!--<el-input type="textarea" :rows="1" placeholder="请输入内容"-->
+                              <!--v-model="params.contractCollection[index].remark"-->
+                              <!--clearable></el-input>-->
+                  <!--</el-form-item>-->
+                <!--</el-col>-->
+                <!--<el-col :span="1" v-show="index!=0">-->
+                  <!--<i class="el-icon-remove-outline  sub_com" @click="subData('contract', index)"></i>-->
+                <!--</el-col>-->
+              <!--</el-row>-->
+              <!--<div style="text-align: center">-->
+                <!--<el-button type="text" @click="addData('contract')">-->
+                  <!--<i class="el-icon-circle-plus"></i>添加合同收款变化条目-->
+                <!--</el-button>-->
+              <!--</div>-->
+            <!--</el-form>-->
+          <!--</div>-->
+        <!--</el-row>-->
         <div class="title">上传照片</div>
         <div class="describe_border">
           <UpLoad :ID="'rentingVacationId'" :editImage="editImage" :isClear="isClear" @getImg="getImg"></UpLoad>
         </div>
-
-
 
         <div class="title">应退还</div>
         <div class="form_border">
@@ -390,7 +458,6 @@
           </el-form>
         </div>
 
-
         <div class="title">实际退还</div>
         <div class="describe_border">
           实际退还：{{realTotal}}
@@ -412,8 +479,26 @@
     components:{UpLoad},
     data() {
       return {
+        financialReceiptsLength: 1, //财务收款
+        contractCollectionLength: 1,  //合同收款
         rentVacationDialogVisible:false,
         params: {
+          //财务收款
+          financialReceipts: [
+            {
+              receivable: '', //应收
+              actual_receipt: '', //实收
+              difference: '', //差额
+              remark: '',  //备注
+            },
+          ],
+          //合同收款
+          contractCollection: [
+            {
+              receivable: '', //应收
+              remark: '',  //备注
+            },
+          ],
           status_type : '',
           contract_id : '',
           module : '2',
@@ -547,6 +632,37 @@
 
     },
     methods:{
+      financialChange(key) {
+        this.params.financialReceipts[key].difference = this.params.financialReceipts[key].receivable - this.params.financialReceipts[key].actual_receipt;
+      },
+      subData(type, key) {
+        if (type === 'financial') {
+          this.financialReceiptsLength--;
+          this.params.financialReceipts.splice(key, 1);
+        } else if (type === 'contract') {
+          this.contractCollectionLength--;
+          this.params.contractCollection.splice(key, 1);
+        }
+      },
+      addData(type) {
+        if (type === 'financial') {
+          let data = {
+            receivable: '', //应收
+            actual_receipt: '', //实收
+            difference: '', //差额
+            remark: '',
+          };
+          this.financialReceiptsLength++;
+          this.params.financialReceipts.push(data);
+        } else if (type === 'contract') {
+          let data1 = {
+            receivable: '', //应收
+            remark: '',
+          };
+          this.contractCollectionLength++;
+          this.params.contractCollection.push(data1);
+        }
+      },
       getDictionary(){
         this.$http.get(globalConfig.server+'setting/dictionary/328').then((res) => {
           if(res.data.code === '30010'){
@@ -609,6 +725,20 @@
       },
       clearData(){
         this.params = {
+          financialReceipts: [
+            {
+              receivable: '', //应收
+              actual_receipt: '', //实收
+              difference: '', //差额
+              remark: '',
+            },
+          ],
+          contractCollection: [
+            {
+              receivable: '', //应收
+              remark: '',
+            },
+          ],
           contract_id : this.rentContractId,
           module : '2',
           status_type : '',
@@ -680,6 +810,13 @@
 </script>
 <style lang="scss" scoped="">
   #rentVacation{
+    .sub_com {
+      color: #409eff;
+      font-size: 18px;
+      vertical-align: middle;
+      margin-left: 10px;
+      cursor: pointer;
+    }
     .el-dialog__wrapper{
       .el-dialog{
         .el-dialog__body{
