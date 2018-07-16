@@ -34,7 +34,7 @@
 
 
     <el-dialog
-      title="提示"
+      title="选择组件"
       :visible.sync="dialogVisible"
       width="30%">
       <ItemList @add="addItem_"></ItemList>
