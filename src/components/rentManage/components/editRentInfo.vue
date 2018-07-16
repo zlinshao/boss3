@@ -156,7 +156,7 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="合同编号" required>
-                        <el-input :disabled="isDoc" placeholder="请输入内容" v-model="params.contract_number"></el-input>
+                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" v-model="params.contract_number"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
