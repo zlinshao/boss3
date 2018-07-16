@@ -191,8 +191,8 @@
     },
     methods: {
       addItem(type, option) {
-        const key = '';
-        let index = guid();
+        const key = guid();
+        const index = guid();
         const newItem = {...JSON.parse(JSON.stringify(AVAILABEL_FORM_ITEM_LIST[type])), key,index,...option};
         this.$emit('add', newItem);
 

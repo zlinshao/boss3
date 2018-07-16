@@ -34,9 +34,9 @@
             <el-tab-pane label="全局配置" name="second">
               <GlobalConfigure :formConfig="formConfig"></GlobalConfigure>
             </el-tab-pane>
-            <!--<el-tab-pane label="查看JSON" name="fourth">-->
-              <!--<pre>{{formConfig}}</pre>-->
-            <!--</el-tab-pane>-->
+            <el-tab-pane label="查看JSON" name="fourth">
+              <pre>{{formConfig}}</pre>
+            </el-tab-pane>
           </el-tabs>
         </el-col>
       </el-row>
@@ -127,7 +127,6 @@
         $('#autoForm').height(height_);
       },
       addItem(val){
-        console.log(val);
         this.formConfig.formItemList.push(val);
         this.$store.dispatch('selectItem', val);
       },

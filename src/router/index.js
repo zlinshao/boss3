@@ -596,15 +596,15 @@ export default new Router({
       ]
     },
     //
-    // {
-    //   path: '/',
-    //   component: Index,
-    //   hidden: true,
-    //   name: '',
-    //   children: [
-    //     {path: '/autoForm', component: AutoForm, name: '表单设计器', icon: "iconfont icon-shouyemenhu"},
-    //   ]
-    // },
+    {
+      path: '/',
+      component: Index,
+      hidden: true,
+      name: '',
+      children: [
+        {path: '/autoForm', component: AutoForm, name: '表单设计器', icon: "iconfont icon-shouyemenhu"},
+      ]
+    },
   ]
 })
 
