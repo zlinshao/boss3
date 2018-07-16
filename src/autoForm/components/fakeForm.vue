@@ -145,8 +145,8 @@ export default {
   }
 
   .selected {
-    border: 1px dashed #40a0ffce;
-    background-color: #add8e62b;
+    border: 1px dashed #40a0ff;
+    background-color: #eaeafe;
     border-radius: 3px;
   }
 
