@@ -98,6 +98,14 @@ export default {
     "type": "change",
     "label": "多级下拉",
     "value": [],
+  },
+  "formGroup":{
+    "type": "formGroup",
+    "label": "明细",
+    "operateName": "添加更多",
+    "layout": 3,
+    "formItemList":[],
+    "value" : [],
   }
   // {
   //   "type": 'rate',

@@ -3,7 +3,7 @@
     <el-form-item :label="item.label" :required="item.required">
       <!--文本-->
       <el-input
-        v-if="item.type==='input'||item.type==='richtext'"
+        v-if="item.type==='input'"
         :disabled="true"
         :type="item.subtype||'textarea'"
         :placeholder="item.placeholder"
@@ -129,7 +129,7 @@
 
       <!--选人-->
       <el-input
-        v-else-if="item.type==='staff' || 'depart'"
+        v-else-if="item.type==='staff' || item.type==='depart'"
         disabled
         placeholder="请点击选择"
       >
@@ -137,39 +137,6 @@
       <!--变化-->
     </el-form-item>
 
-    <!--<div v-if="item.type==='change'">-->
-      <!--<div class="title">付款方式</div>-->
-      <!--<div class="form_border">-->
-        <!--<div v-for="item in payWayChangeAmount">-->
-          <!--<el-row>-->
-            <!--<el-col :span="6">-->
-              <!--<el-form-item label="付款方式" required="">-->
-                <!--<el-select clearable v-model="payWayArray[item-1]" placeholder="请选择付款方式" value="">-->
-                  <!--<el-option v-for="item in pay_way_dic" :label="item.dictionary_name" :value="item.id"-->
-                             <!--:key="item.id"></el-option>-->
-                <!--</el-select>-->
-              <!--</el-form-item>-->
-            <!--</el-col>-->
-            <!--<el-col :span="6">-->
-              <!--<el-form-item label="变化周期(月)" required="">-->
-                <!--<el-input placeholder="请输入内容" :disabled="payWayChangeAmount<2"-->
-                          <!--v-model="payPeriodArray[item-1]"></el-input>-->
-              <!--</el-form-item>-->
-            <!--</el-col>-->
-            <!--<el-col :span="6" v-if="item>1">-->
-              <!--<div class="deleteNumber">-->
-                <!--<span @click="deletePayWayChange(item-1)">删除</span>-->
-              <!--</div>-->
-            <!--</el-col>-->
-          <!--</el-row>-->
-        <!--</div>-->
-        <!--<div style="text-align: center">-->
-          <!--<el-button type="text" :disabled="!params.month" @click="addMorePayWayChange">-->
-            <!--<i class="el-icon-circle-plus"></i>添加付款方式变化条目-->
-          <!--</el-button>-->
-        <!--</div>-->
-      <!--</div>-->
-    <!--</div>-->
   </div>
 </template>
 
@@ -199,4 +166,5 @@
   .el-input, .el-select, .el-date-editor {
     width: 100%;
   }
+
 </style>
