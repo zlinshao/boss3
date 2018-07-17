@@ -11,6 +11,7 @@
             <el-col :span="18">
               <div class="personalInfo">
                 <div class="personalA">
+                  <!--@click="staffDetailDialog=true"-->
                   <p>
                     <img :src="personal.avatar" v-if="personal.avatar !== '' && personal.avatar !== null">
                     <img src="../../../assets/images/head.png" v-else>
@@ -30,7 +31,8 @@
                 <el-row>
                   <el-col :span="12" v-for="(value,index) in show_content" :key="index"
                           v-if="printScreen.indexOf(index) === -1">
-                    <el-form-item v-if="!Array.isArray(value) && value.constructor !== Object" :label="index" class="detailTitle">
+                    <el-form-item v-if="!Array.isArray(value) && value.constructor !== Object" :label="index"
+                                  class="detailTitle">
                       <div class="special" v-if="index !== '房屋类型'">{{value}}</div>
                       <div class="special" v-if="index === '房屋类型'">{{value.name}}</div>
                     </el-form-item>
@@ -73,9 +75,9 @@
                     </div>
                   </span>
                   <el-dropdown-menu slot="dropdown" trigger="click">
-                    <el-dropdown-item command="评论信息"> 评论信息 </el-dropdown-item>
-                    <el-dropdown-item command="相关信息"> 相关信息 </el-dropdown-item>
-                    <el-dropdown-item command="报备修改"> 报备修改 </el-dropdown-item>
+                    <el-dropdown-item command="评论信息"> 评论信息</el-dropdown-item>
+                    <el-dropdown-item command="相关信息"> 相关信息</el-dropdown-item>
+                    <el-dropdown-item command="报备修改"> 报备修改</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
               </div>
@@ -85,7 +87,9 @@
                      element-loading-text="拼命加载中"
                      element-loading-spinner="el-icon-loading"
                      element-loading-background="rgba(255, 255, 255, 0)">
-                  <div v-if="!isLoading && reportAboutData.length === 0" style="text-align: center;font-size: 16px;margin-top: 12px;">暂无相关信息</div>
+                  <div v-if="!isLoading && reportAboutData.length === 0"
+                       style="text-align: center;font-size: 16px;margin-top: 12px;">暂无相关信息
+                  </div>
                   <div v-for="item in reportAboutData" @click="contrast(item)" class="reportItem">
                     <div>
                       <span class="itemLabel">报备类型 : </span>
@@ -111,14 +115,17 @@
                 </div>
                 <!--评论信息-->
                 <div v-if="defaultItem === '评论信息'" style="min-height: 300px">
-                  <div v-if="commentList.length === 0" style="text-align: center;font-size: 16px;margin-top: 12px;">暂无评论</div>
+                  <div v-if="commentList.length === 0" style="text-align: center;font-size: 16px;margin-top: 12px;">
+                    暂无评论
+                  </div>
 
                   <div v-if="commentList.length !== 0">
-                    <div v-for="(value,index) in commentList"  class="reportItem" style="margin-bottom: 12px;">
+                    <div v-for="(value,index) in commentList" class="reportItem" style="margin-bottom: 12px;">
                       <div class="commentContent">
                         <div class="commentA">
                             <span class="headSculpture">
-                               <img :src="value.user.avatar" v-if="value.user.avatar !== '' && value.user.avatar !== null">
+                               <img :src="value.user.avatar"
+                                    v-if="value.user.avatar !== '' && value.user.avatar !== null">
                                <img src="../../../assets/images/head.png" v-else>
                             </span>
                           {{value.user.name}}
@@ -147,13 +154,17 @@
                      element-loading-text="拼命加载中"
                      element-loading-spinner="el-icon-loading"
                      element-loading-background="rgba(255, 255, 255, 0)">
-                  <div v-if="!changeLoading && editReportData.length < 1" style="text-align: center;font-size: 16px;margin-top: 12px;">暂无报备修改记录</div>
+                  <div v-if="!changeLoading && editReportData.length < 1"
+                       style="text-align: center;font-size: 16px;margin-top: 12px;">暂无报备修改记录
+                  </div>
                   <div v-if="editReportData.length > 0">
-                    <div v-for="(item,index) in editReportData" :class="{currentChange:changeId == item.id}" class="reportItem" style="margin-bottom: 12px;">
+                    <div v-for="(item,index) in editReportData" :class="{currentChange:changeId == item.id}"
+                         class="reportItem" style="margin-bottom: 12px;">
                       <div class="commentContent">
                         <div class="commentA">
                           <span class="headSculpture">
-                             <img :src="item.staffs.avatar" v-if="item.staffs.avatar !== '' && item.staffs.avatar !== null">
+                             <img :src="item.staffs.avatar"
+                                  v-if="item.staffs.avatar !== '' && item.staffs.avatar !== null">
                              <img src="../../../assets/images/head.png" v-else>
                           </span>
                           <span style="white-space:pre-wrap">{{item.staffs.name}}</span>
@@ -164,14 +175,16 @@
                       <div class="diffContent">
                         <div v-for="(value,key) in item.diff">
                           <div v-if="printScreen.indexOf(key) > -1">
-                            <div class="title">{{key}} : </div>
-                            <div  class="reportChange">
+                            <div class="title">{{key}} :</div>
+                            <div class="reportChange">
                               由
-                              <img v-if="value['由']&&value['由'].length>0" class="changImg" v-for="img in value['由']"  :src="img.uri"
+                              <img v-if="value['由']&&value['由'].length>0" class="changImg" v-for="img in value['由']"
+                                   :src="img.uri"
                                    data-magnify="" data-caption="图片查看器" :data-src="img.uri" alt="">
                               <span v-else>无</span>
                               变成
-                              <img v-if="value['变成']&&value['变成'].length>0" class="changImg" v-for="pic in value['变成']" :src="pic.uri"
+                              <img v-if="value['变成']&&value['变成'].length>0" class="changImg" v-for="pic in value['变成']"
+                                   :src="pic.uri"
                                    data-magnify="" data-caption="图片查看器" :data-src="pic.uri" alt="">
                               <span v-else>无</span>
                             </div>
@@ -180,28 +193,30 @@
                           <div v-else>
                             <div v-if="typeof value === 'string'">
                               <div v-if="key === '房屋类型'">
-                                <div class="title">{{key}} : </div>
+                                <div class="title">{{key}} :</div>
                                 <div class="reportChange">{{value.name}}</div>
                               </div>
                               <div v-if="key !== '房屋类型'">
-                                <div class="title">{{key}} : </div>
+                                <div class="title">{{key}} :</div>
                                 <div class="reportChange">{{value}}</div>
                               </div>
                             </div>
                             <div v-else>
-                              <div v-if="key === '定金和收款方式' || key === '补交定金和收款方式'" >
-                                <div class="title">{{key}} : </div>
+                              <div v-if="key === '定金和收款方式' || key === '补交定金和收款方式'">
+                                <div class="title">{{key}} :</div>
                                 <div class="reportChange">
                                   由
-                                  <span v-if="value['由']&&value['由'].length>0" v-for="item in value['由']">{{item}}</span>
+                                  <span v-if="value['由']&&value['由'].length>0"
+                                        v-for="item in value['由']">{{item}}</span>
                                   <span v-else>无</span>
                                   变成
-                                  <span v-if="value['变成']&&value['变成'].length>0" v-for="item in value['变成']">{{item}}</span>
+                                  <span v-if="value['变成']&&value['变成'].length>0"
+                                        v-for="item in value['变成']">{{item}}</span>
                                   <span v-else>无</span>
                                 </div>
                               </div>
                               <div v-else>
-                                <div class="title">{{key}} : </div>
+                                <div class="title">{{key}} :</div>
                                 <div class="reportChange">
                                   由
                                   <div v-if="value['由']&&value['由'].length>0" v-for="item in value['由']">
@@ -230,14 +245,14 @@
           <div v-if="!fullLoading && JSON.stringify(show_content) === '{}'" style="text-align: center">无相关记录</div>
         </el-form>
       </div>
-      <div slot="footer" class="dialog-footer" >
+      <div slot="footer" class="dialog-footer">
         <el-button v-if="!fullLoading" size="small" type="primary"
                    v-for="(value,key) in operation" :key="key" @click="commentOn(key)">
           {{value}}
         </el-button>
         <el-button size="small" type="primary" @click="openModal"
                    v-if="approvedStatus && routerLinks.indexOf(this.process.processable_type) > -1">
-        修 改
+          修 改
         </el-button>
       </div>
     </el-dialog>
@@ -280,6 +295,30 @@
       </div>
     </el-dialog>
 
+    <!--员工姓名电话及组长姓名电话-->
+    <el-dialog :close-on-click-modal="false" title="员工信息" :visible.sync="staffDetailDialog" width="30%">
+      <div class="scroll_bar" style="padding: 0;">
+        <div class="showContent" v-if="process.user" style="width: 100%;">
+          <p class="contentP">
+            <img :src="process.user.avatar" v-if="process.user.avatar !== '' && process.user.avatar !== null">
+            <img src="../../../assets/images/head.png" v-else>
+          </p>
+          <div>
+            <div class="form_border">
+              <p>姓名：{{process.user.name}}</p>
+              <p>手机号：<a>{{process.user.phone}}</a></p>
+            </div>
+            <div class="form_border">
+              <p>组长姓名：{{leader_name}}</p>
+              <p>组长手机号：<a>{{leader_phone}}</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="small" @click="staffDetailDialog = false">关&nbsp;闭</el-button>
+      </div>
+    </el-dialog>
 
     <ContrastReport :contrastDialog="contrastDialog" :selfReport="selfReport"
                     :aboutReportId="aboutReportId" @close="closeModal"></ContrastReport>
@@ -291,17 +330,19 @@
     <HouseReport :houseReport="houseReport" :processableId="processable_id"
                  :reportId="reportId" @close="closeModal"></HouseReport>
     <ContinueCollectReport :continueCollectReport="continueCollectReport" :reportDetailData="reportDetailData"
-                           :reportId="reportId" :processableId="processable_id" @close="closeModal"></ContinueCollectReport>
+                           :reportId="reportId" :processableId="processable_id"
+                           @close="closeModal"></ContinueCollectReport>
     <ContinueRentReport :continueRentReport="continueRentReport" :reportDetailData="reportDetailData"
-                           :reportId="reportId" :processableId="processable_id" @close="closeModal"></ContinueRentReport>
+                        :reportId="reportId" :processableId="processable_id" @close="closeModal"></ContinueRentReport>
     <TransRentReport :transRentReport="transRentReport" :reportDetailData="reportDetailData"
-                        :reportId="reportId" :processableId="processable_id" @close="closeModal"></TransRentReport>
+                     :reportId="reportId" :processableId="processable_id" @close="closeModal"></TransRentReport>
     <ChangeRentReport :changeRentReport="changeRentReport" :reportDetailData="reportDetailData"
-                        :reportId="reportId" :processableId="processable_id" @close="closeModal"></ChangeRentReport>
+                      :reportId="reportId" :processableId="processable_id" @close="closeModal"></ChangeRentReport>
     <RwcRentReport :rwcRentReport="rwcRentReport" :reportDetailData="reportDetailData"
-                        :reportId="reportId" :processableId="processable_id" @close="closeModal"></RwcRentReport>
+                   :reportId="reportId" :processableId="processable_id" @close="closeModal"></RwcRentReport>
     <RwcConfirmRentReport :rwcConfirmRentReport="rwcConfirmRentReport" :reportDetailData="reportDetailData"
-                        :reportId="reportId" :processableId="processable_id" @close="closeModal"></RwcConfirmRentReport>
+                          :reportId="reportId" :processableId="processable_id"
+                          @close="closeModal"></RwcConfirmRentReport>
   </div>
 </template>
 
@@ -321,36 +362,38 @@
 
   export default {
     name: "report-detail",
-    props: ['module', 'reportId','changeId'],
-    components: {UpLoad, ContrastReport,RentReport,CollectReport,HouseReport,ContinueCollectReport,
-                 ContinueRentReport,TransRentReport,ChangeRentReport,RwcRentReport,RwcConfirmRentReport},
+    props: ['module', 'reportId', 'changeId'],
+    components: {
+      UpLoad, ContrastReport, RentReport, CollectReport, HouseReport, ContinueCollectReport,
+      ContinueRentReport, TransRentReport, ChangeRentReport, RwcRentReport, RwcConfirmRentReport
+    },
     data() {
       return {
         address: globalConfig.server_user,
         fullLoading: false,
         reportVisible: false,
-        rentReport : false,
-        collectReport : false,
-        houseReport : false,
-        continueCollectReport : false,
-        continueRentReport : false,
-        transRentReport : false,
-        changeRentReport : false,
-        rwcRentReport : false,
-        rwcConfirmRentReport : false,
+        rentReport: false,
+        collectReport: false,
+        houseReport: false,
+        continueCollectReport: false,
+        continueRentReport: false,
+        transRentReport: false,
+        changeRentReport: false,
+        rwcRentReport: false,
+        rwcConfirmRentReport: false,
         show_content: {},
-        reportDetailData : {},
-        processable_id : '',
+        reportDetailData: {},
+        processable_id: '',
         operation: {},
         commentList: [],
         paging: 0,
-        printScreen: ['押金收条','款项结清截图', '特殊情况领导截图', '特殊情况截图', '特殊情况同意截图', '领导报备截图',
-                      '凭证截图', '合同照片', '截图', '领导同意截图', '房屋影像', '房屋照片', '退租交接单'],
+        printScreen: ['押金收条', '款项结清截图', '特殊情况领导截图', '特殊情况截图', '特殊情况同意截图', '领导报备截图',
+          '凭证截图', '合同照片', '截图', '领导同意截图', '房屋影像', '房屋照片', '退租交接单'],
 
         routerLinks: ['bulletin_quality', 'bulletin_collect_basic', 'bulletin_collect_continued', 'bulletin_rent_basic',
           'bulletin_rent_continued', 'bulletin_rent_trans', 'bulletin_rent_RWC', 'bulletin_RWC_confirm', 'bulletin_change',],
-        approvedStatus : false,
-        process : {},
+        approvedStatus: false,
+        process: {},
         videoSrc: '',
         personal: {},
         place: {},
@@ -377,8 +420,11 @@
         changeLoading: false,
         selfReport: {},
         aboutReportId: '',
-        editReportData : [],
-        isEdit : false,
+        editReportData: [],
+        isEdit: false,
+        staffDetailDialog: false,
+        leader_phone: '',
+        leader_name: '',
       }
     },
 
@@ -388,12 +434,12 @@
       },
       reportVisible(val) {
         if (!val) {
-          if(this.isEdit){
-            this.$emit('close','success');
-          }else {
+          if (this.isEdit) {
+            this.$emit('close', 'success');
+          } else {
             this.$emit('close');
           }
-          setTimeout(()=>{
+          setTimeout(() => {
             this.isEdit = false;
           });
           this.clearData();
@@ -405,9 +451,25 @@
       commentVisible(val) {
         if (!val) {
           this.close_();
-        }else {
+        } else {
           this.isClear = false;
         }
+      },
+      staffDetailDialog(val) {
+        if (val) {
+          if (this.process.user && this.process.user.org && this.process.user.org[0] && this.process.user.org[0].leader_id) {
+            this.$http.get(globalConfig.server + 'manager/staff/' + this.process.user.org[0].leader_id).then((res) => {
+              if (res.data.code === '10020') {
+                this.leader_phone = res.data.data.phone;
+                this.leader_name = res.data.data.name;
+              }
+            });
+          }
+        } else {
+          this.leader_phone = '';
+          this.leader_name = '';
+        }
+
       }
     },
     methods: {
@@ -569,16 +631,16 @@
         this.changeLoading = true;
         this.$http.get(globalConfig.server + 'bulletin/diff?processable_id=' + this.reportId).then((res) => {
           this.changeLoading = false;
-          if(res.data.code === '20000'){
+          if (res.data.code === '20000') {
             this.editReportData = res.data.data.data;
-          }else {
+          } else {
             this.editReportData = [];
           }
         })
       },
       //修改报备
-      openModal(){
-        switch (this.process.processable_type){
+      openModal() {
+        switch (this.process.processable_type) {
           case 'bulletin_rent_basic':
             this.rentReport = true;
             break;
@@ -622,7 +684,7 @@
         this.changeRentReport = false;
         this.rwcRentReport = false;
         this.rwcConfirmRentReport = false;
-        if(val==='success'){
+        if (val === 'success') {
           this.getProcess();
           this.getReportEditInfo();
           this.isEdit = true;
@@ -833,11 +895,11 @@
       }
     }
 
-    .diffContent{
-      .title{
+    .diffContent {
+      .title {
         margin-left: 40px;
       }
-      .reportChange{
+      .reportChange {
         padding-left: 60px;
       }
     }
@@ -899,18 +961,18 @@
         margin-right: 10px;
       }
     }
-    .currentChange{
+    .currentChange {
       background-color: #fbf0f3;
       border-left: 5px solid #fb4589;
       .itemLabel {
         color: #fb4589;
       }
     }
-    .changImg{
+    .changImg {
       width: 40px;
       height: 40px;
       border-radius: 6px;
-      vertical-align : middle;
+      vertical-align: middle;
       margin: 0 5px 5px 0;
     }
   }
