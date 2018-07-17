@@ -258,7 +258,7 @@
             <el-tab-pane v-for="(item,key) in cityTableData.data" :label="key" :key="key"
                          :name="key" v-if="key==='公司总计'">
               <div class="myHouse">
-                <div class="blueTable">
+                <div class="blueTable" v-if="item.data && item.data.length>0">
                   <el-table
                     :data="item.data"
                     :empty-text='cityTableStatus'
@@ -303,9 +303,9 @@
               </div>
             </el-tab-pane>
             <el-tab-pane v-for="(item,key) in cityTableData.data" :label="key" :key="key"
-                         :name="key" v-if="key!=='公司总计'">
+                         :name="key" v-if="key!=='公司总计'" >
               <div class="myHouse">
-                <div class="blueTable">
+                <div class="blueTable" v-if="item.data && item.data.length>0">
                   <el-table
                     :data="item.data"
                     :empty-text='cityTableStatus'
@@ -393,15 +393,15 @@
         currentStatus: '',
         cityCategory: [],
         companyTotalData: [],  //公司总计
-        cityTableData: [],   //城市
+        cityTableData: {},   //城市
         rentActiveName: '公司总计',
         cityTableStatus: ' ',
         cityTableLoading: false,
-        switchTitle: '切换片区',
+        switchTitle: '切换小组',
         cityForm: {
           page: 1,
           limit: 6,
-          below: '',
+          below: 1,
           zu: '',
           sign_date: [], //签约日期起止范围
         },
@@ -422,15 +422,9 @@
       this.sign_date[0] = this.sign_date[1] = year + "-" + month1 + "-" + date;
       this.form.sign_date = this.sign_date;
       this.getTableData();
-      setTimeout(() => {
-        this.cityForm.below = 1;
-        this.cityForm.zu = 1;
-        this.getPolyData();
-      }, 1);
+      this.getPolyData();
     },
-    activated() {
-
-    },
+    activated() {},
     watch: {
       "form.sign_date": {
         deep: true,
@@ -623,14 +617,12 @@
       getPolyData() {
         this.cityTableStatus = ' ';
         this.cityTableLoading = true;
-        this.cityForm.below = 1;
         this.cityForm.sign_date = this.form.sign_date;
         this.$http.get(globalConfig.server + 'performance/lord', {params: this.cityForm}).then((res) => {
           this.cityTableLoading = false;
           if (res.data.code === '30000') {
             this.cityTableData = res.data.data.dat;
             if (res.data.data.dat.count == 1) {
-              console.log(res.data.data.dat.data)
               if (res.data.data.dat.data && res.data.data.dat.data['公司总计'] && res.data.data.dat.data['公司总计'].data && res.data.data.dat.data['公司总计'].data.length == 0) {
                 this.cityTableStatus = '暂无数据';
               }
