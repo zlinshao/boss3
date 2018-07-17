@@ -31,9 +31,8 @@
       </el-switch>
 
       <!--//- 单选-->
-      <el-radio-group v-else-if="item.type==='radio'" :value="item.value">
+      <el-radio-group v-else-if="item.type==='radio' && item.optionsUrl" :value="item.value" v-model="item.value">
         <component
-          v-if="item.optionsUrl"
           :is="item.button?'el-radio-button':'el-radio'"
           v-for="o in item.options"
           :key='o.id'
@@ -42,8 +41,10 @@
           :disabled="item.disabled">
           {{o.dictionary_name}}
         </component>
+      </el-radio-group>
+
+      <el-radio-group v-else-if="item.type==='radio' && !item.optionsUrl" :value="item.value" v-model="item.value">
         <component
-          v-else
           :is="item.button?'el-radio-button':'el-radio'"
           v-for="o in item.options"
           :key='o.value'
@@ -55,9 +56,8 @@
       </el-radio-group>
 
       <!--//- 多选-->
-      <el-checkbox-group v-else-if="item.type==='checkbox'" :value="item.value">
+      <el-checkbox-group v-else-if="item.type==='checkbox' && item.optionsUrl" :value="item.value" v-model="item.value">
         <component
-          v-if="item.optionsUrl"
           :is="item.button?'el-checkbox-button':'el-checkbox'"
           v-for="o in item.options"
           :key='o.id'
@@ -66,8 +66,10 @@
           :disabled="item.disabled">
           {{o.dictionary_name}}
         </component>
+      </el-checkbox-group>
+
+      <el-checkbox-group v-else-if="item.type==='checkbox' && !item.optionsUrl" :value="item.value" v-model="item.value">
         <component
-          v-else
           :is="item.button?'el-checkbox-button':'el-checkbox'"
           v-for="o in item.options"
           :key='o.value'

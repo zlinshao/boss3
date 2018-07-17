@@ -160,6 +160,11 @@
       <span>部门</span>
     </el-button>
 
+    <!--明细-->
+    <el-button class="item" @click.native="addItem('formGroup')">
+      <span>明细</span>
+    </el-button>
+
     <!--<el-button class="item" @click.native="addItem('change')">-->
       <!--<span>多级下拉</span>-->
     <!--</el-button>-->
@@ -191,8 +196,8 @@
     },
     methods: {
       addItem(type, option) {
-        const key = '';
-        let index = guid();
+        const key = guid();
+        const index = guid();
         const newItem = {...JSON.parse(JSON.stringify(AVAILABEL_FORM_ITEM_LIST[type])), key,index,...option};
         this.$emit('add', newItem);
 

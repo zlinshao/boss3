@@ -1,19 +1,19 @@
 <template>
   <div>
     <el-form  label-width="80px" size="mini">
-      <el-form-item label="标签名">
+      <el-form-item label="标2签名">
         <el-input v-model="formItem.label"></el-input>
       </el-form-item>
       <el-form-item label="键名">
         <el-input v-model="formItem.key" clearable></el-input>
       </el-form-item>
       <el-form-item label="默认值" v-if="formItem.optionsUrl===undefined">
-        <el-select v-model="formItem.value" clearable>
+        <el-select v-model="formItem.value" clearable multiple>
           <el-option v-for="o in formItem.options" :key="o.value" :label="o.label" :value="o.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="默认值" v-if="formItem.optionsUrl!==undefined">
-        <el-select v-model="formItem.value" clearable :multiple="formItem.multiple">
+        <el-select v-model="formItem.value" clearable multiple>
           <el-option v-for="o in formItem.options" :key="o.id" :label="o.dictionary_name" :value="o.id"></el-option>
         </el-select>
       </el-form-item>
