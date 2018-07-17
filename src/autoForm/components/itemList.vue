@@ -160,6 +160,11 @@
       <span>部门</span>
     </el-button>
 
+    <!--明细-->
+    <el-button class="item" @click.native="addItem('formGroup')">
+      <span>明细</span>
+    </el-button>
+
     <!--<el-button class="item" @click.native="addItem('change')">-->
       <!--<span>多级下拉</span>-->
     <!--</el-button>-->
