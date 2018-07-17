@@ -6,7 +6,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="上传图片">
-                <UpLoad :ID="'upLoad_pic'" :isClear="isClear" @getImg="getImg"></UpLoad>
+                <UpLoad :ID="'upLoad_pic'" :isClear="isClear" @getImg="getImg" :editImage="editImage"></UpLoad>
               </el-form-item>
             </el-col>
           </el-row>
@@ -56,7 +56,6 @@
     },
     methods:{
       getImg(val){
-        console.log(val)
         this.formInline.payment_pic = val[1];
         this.isUpload = val[2];
       },
@@ -68,11 +67,11 @@
             let picObject = {};
             this.editImage = {};
             this.formInline.payment_pic = [];
-            if (data.payment_pic !== []) {
-              for (let key in data.payment_pic) {
-                picObject[key] = data.payment_pic[key][0].uri;
-                this.formInline.payment_pic.push(key);
-              }
+            if (data.payment_pic && data.payment_pic.length>0) {
+              data.payment_pic.forEach((item)=>{
+                picObject[item.id] = item.uri;
+                this.formInline.payment_pic.push(item.id);
+              })
             }
             this.editImage = picObject;
           }

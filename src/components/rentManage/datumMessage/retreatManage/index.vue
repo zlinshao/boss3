@@ -493,7 +493,7 @@
             clickIndex: 'edit',
             headIcon: 'el-icon-edit-outline',
             label: '修改',
-            'disabled': row.status == 3 || row.status == 4,
+            'disabled': row.status == 3 || row.status == 4 || row.status == 1,
           },
           {clickIndex: 'upload', headIcon: 'el-icon-upload', label: '上传截图凭证','disabled':row.status!=3},
           {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
