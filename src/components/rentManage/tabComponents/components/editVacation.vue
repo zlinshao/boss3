@@ -674,6 +674,7 @@
     },
     methods: {
       financialChange(key) {
+        console.log(key)
         this.params.financial_info[key].difference = this.params.financial_info[key].receivable - this.params.financial_info[key].actual_receipt;
       },
       subData(type, key) {

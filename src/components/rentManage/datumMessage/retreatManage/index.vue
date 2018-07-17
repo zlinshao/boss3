@@ -189,7 +189,7 @@
                       <span class="success_label">已完成</span>
                     </span>
                     <span v-if="scope.row.status==5">
-                      <span class="success_label">待结算</span>
+                      <span class="success_label" style="background: #e8a136;">待结算</span>
                     </span>
                   </template>
                 </el-table-column>
@@ -311,7 +311,7 @@
                       <span class="success_label">已完成</span>
                     </span>
                     <span v-if="scope.row.status==5">
-                      <span class="success_label">待结算</span>
+                      <span class="success_label" style="background: #e8a136;">待结算</span>
                     </span>
                   </template>
                 </el-table-column>
@@ -356,7 +356,7 @@
 
   export default {
     name: 'hello',
-    components: {RightMenu, EditCollectVacation, VacationDetail, AddressSearch,UploadPic},
+    components: {RightMenu, EditCollectVacation, VacationDetail, AddressSearch, UploadPic},
     data() {
       return {
         rightMenuX: 0,
@@ -446,7 +446,7 @@
         this.editCollectVacation = false;
         this.upLoadDialog = false;
         this.vacationDetail = false;
-        if(val === 'success'){
+        if (val === 'success') {
           this.isRent = this.activeName === 'first' ? 0 : 1;
           this.getData();
         }
@@ -495,7 +495,12 @@
             label: '修改',
             'disabled': row.status == 3 || row.status == 4 || row.status == 1,
           },
-          {clickIndex: 'upload', headIcon: 'el-icon-upload', label: '上传截图凭证','disabled':row.status!=3},
+          {
+            clickIndex: 'upload',
+            headIcon: 'el-icon-upload',
+            label: '上传截图凭证',
+            'disabled': row.status != 3 && row.status != 4
+          },
           {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
@@ -575,7 +580,7 @@
         }
       }
     }
-    .info_label, .orange_label,.red_label, .success_label,.yellow_label{
+    .info_label, .orange_label, .red_label, .success_label, .yellow_label {
       min-width: 70px;
     }
 
