@@ -7,7 +7,7 @@
            element-loading-spinner="el-icon-loading"
            element-loading-background="rgba(255, 255, 255, .7)">
         <div class="title">客户-信息</div>
-        <div class="table_border" >
+        <div class="table_border">
           <table class="tableDetail">
             <tr>
               <td>合同编号</td>
@@ -42,7 +42,7 @@
         <div class="title">退房信息</div>
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="100px">
-            <el-row >
+            <el-row>
               <el-col :span="8">
                 <el-form-item label="退房时间" required>
                   <el-date-picker disabled type="date" value-format="yyyy-MM-dd" v-model="params.check_time"
@@ -52,7 +52,8 @@
               <el-col :span="8">
                 <el-form-item label="退房性质" required>
                   <el-select disabled v-model="params.check_type" clearable="" placeholder="请选择退房性质" value="">
-                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :key="item.id" :value="item.id"></el-option>
+                    <el-option v-for="item in dictionary" :label="item.dictionary_name" :key="item.id"
+                               :value="item.id"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -102,73 +103,73 @@
             <el-input disabled type="textarea" resize="none" v-model="params.compensation"></el-input>
           </el-col>
         </el-row>
-        <!--<el-row style="margin-top: 15px;">-->
-          <!--<div class="title">财务收款</div>-->
-          <!--<div class="describe_border">-->
-            <!--<el-form size="mini" :model="params" label-width="60px">-->
-              <!--<el-row v-for="(item,index) in params.financialReceipts.length" :key="index">-->
-                <!--<el-col :span="5">-->
-                  <!--<el-form-item label="应收">-->
-                    <!--<el-input v-model="params.financialReceipts[index].receivable"-->
-                              <!--@change="financialChange(index)" disabled></el-input>-->
-                  <!--</el-form-item>-->
-                <!--</el-col>-->
-                <!--<el-col :span="5">-->
-                  <!--<el-form-item label="实收">-->
-                    <!--<el-input v-model="params.financialReceipts[index].actual_receipt"-->
-                              <!--@change="financialChange(index)" disabled></el-input>-->
-                  <!--</el-form-item>-->
-                <!--</el-col>-->
-                <!--<el-col :span="5">-->
-                  <!--<el-form-item label="差额">-->
-                    <!--<el-input v-model="params.financialReceipts[index].difference"-->
-                              <!--disabled></el-input>-->
-                  <!--</el-form-item>-->
-                <!--</el-col>-->
-                <!--<el-col :span="8">-->
-                  <!--<el-form-item label="备注">-->
-                    <!--<el-input type="textarea" :rows="1"-->
-                              <!--v-model="params.financialReceipts[index].remark" disabled></el-input>-->
-                  <!--</el-form-item>-->
-                <!--</el-col>-->
-              <!--</el-row>-->
-            <!--</el-form>-->
-          <!--</div>-->
-        <!--</el-row>-->
-        <!--<el-row>-->
-          <!--<div class="title">合同收款</div>-->
-          <!--<div class="describe_border">-->
-            <!--<el-form size="mini" :model="params" label-width="60px">-->
-              <!--<el-row v-for="(item, index) in params.contractCollection.length" :key="index">-->
-                <!--<el-col :span="5">-->
-                  <!--<el-form-item label="应收">-->
-                    <!--<el-input v-model="params.contractCollection[index].receivable"-->
-                    <!--disabled></el-input>-->
-                  <!--</el-form-item>-->
-                <!--</el-col>-->
-                <!--<el-col :span="8">-->
-                  <!--<el-form-item label="备注">-->
-                    <!--<el-input type="textarea" :rows="1"-->
-                              <!--v-model="params.contractCollection[index].remark"-->
-                              <!--disabled></el-input>-->
-                  <!--</el-form-item>-->
-                <!--</el-col>-->
-              <!--</el-row>-->
-            <!--</el-form>-->
-          <!--</div>-->
-        <!--</el-row>-->
+        <el-row style="margin-top: 15px;">
+          <div class="title">财务收款</div>
+          <div class="describe_border">
+            <el-form size="mini" :model="params" label-width="60px">
+              <el-row v-for="(item,index) in params.financial_info.length" :key="index">
+                <el-col :span="5">
+                  <el-form-item label="应收">
+                    <el-input v-model="params.financial_info[index].receivable"
+                              @change="financialChange(index)" disabled></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                  <el-form-item label="实收">
+                    <el-input v-model="params.financial_info[index].actual_receipt"
+                              @change="financialChange(index)" disabled></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="5">
+                  <el-form-item label="差额">
+                    <el-input v-model="params.financial_info[index].difference"
+                              disabled></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="备注">
+                    <el-input type="textarea" :rows="1"
+                              v-model="params.financial_info[index].remark" disabled></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
+        </el-row>
+        <el-row>
+          <div class="title">合同收款</div>
+          <div class="describe_border">
+            <el-form size="mini" :model="params" label-width="60px">
+              <el-row v-for="(item, index) in params.settled_info.length" :key="index">
+                <el-col :span="5">
+                  <el-form-item label="应收">
+                    <el-input v-model="params.settled_info[index].receivable"
+                              disabled></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item label="备注">
+                    <el-input type="textarea" :rows="1"
+                              v-model="params.settled_info[index].remark"
+                              disabled></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
+        </el-row>
         <div class="title">上传照片</div>
         <div class="describe_border">
           <div class="editImg" v-if="Object.keys(editImage).length>0">
             <img v-for="(val,key) in editImage" :src="val" alt="" data-magnify="" :data-src="val"
-                  style="width: 120px;  height: 120px; border-radius:6px;margin: 0 15px 15px 0">
+                 style="width: 120px;  height: 120px; border-radius:6px;margin: 0 15px 15px 0">
           </div>
         </div>
 
         <div class="title">应退还</div>
         <div class="form_border">
           <el-form size="mini" label-width="100px">
-            <el-row >
+            <el-row>
               <el-col :span="6">
                 <el-form-item label="退还押金">
                   <el-input disabled v-model="params.refund_deposit" type="number"></el-input>
@@ -196,7 +197,7 @@
               </el-col>
               <el-col :span="6">
                 <el-form-item label="预存电费">
-                  <el-input disabled v-model="params.electricity_fee"  type="number"></el-input>
+                  <el-input disabled v-model="params.electricity_fee" type="number"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
@@ -223,7 +224,7 @@
               </el-col>
               <el-col :span="4">
                 <el-form-item label="上次底数">
-                  <el-input disabled v-model="params.water_last" ></el-input>
+                  <el-input disabled v-model="params.water_last"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="4">
@@ -246,7 +247,7 @@
                   <el-input disabled v-model="params.water_other"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="2" >
+              <el-col :span="2">
                 <div class="content">
                   合计：{{waterTotal}}
                 </div>
@@ -283,7 +284,7 @@
                   <el-input disabled v-model="params.electricity_peak_other"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="2" >
+              <el-col :span="2">
                 <div class="content">
                   合计：{{elePeakTotal}}
                 </div>
@@ -320,7 +321,7 @@
                   <el-input disabled v-model="params.electricity_valley_other"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="2" >
+              <el-col :span="2">
                 <div class="content">
                   合计：{{eleValTotal}}
                 </div>
@@ -356,7 +357,7 @@
                   <el-input disabled v-model="params.gas_other"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="2" >
+              <el-col :span="2">
                 <div class="content">
                   合计：{{gasTotal}}
                 </div>
@@ -398,7 +399,7 @@
                   <el-input disabled v-model="params.property_management_other"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="2" >
+              <el-col :span="2">
                 <div class="content">
                   合计：{{managementTotal}}
                 </div>
@@ -410,7 +411,7 @@
         <div class="title">应扣其他费用</div>
         <div class="form_border">
           <el-form size="mini" :model="params" label-width="80px">
-            <el-row >
+            <el-row>
               <el-col :span="6">
                 <el-form-item label="垃圾费">
                   <el-input disabled v-model="params.trash_fees"></el-input>
@@ -487,14 +488,16 @@
               <el-col :span="12">
                 <el-form-item label="科目" required>
                   <el-select v-model="subjectId" placeholder="请选择科目" @change="getSubject">
-                    <el-option v-for="item in subjectList" :label="item.title" :key="item.id" :value="item.id"></el-option>
+                    <el-option v-for="item in subjectList" :label="item.title" :key="item.id"
+                               :value="item.id"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span="12" v-if="subjectList2.length>0">
                 <el-form-item>
                   <el-select v-model="subjectId2" placeholder="请选择科目">
-                    <el-option v-for="item in subjectList2" :label="item.title" :key="item.id" :value="item.id"></el-option>
+                    <el-option v-for="item in subjectList2" :label="item.title" :key="item.id"
+                               :value="item.id"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -504,7 +507,7 @@
             </el-form-item>
 
             <!--<el-form-item label="款项凭证">-->
-              <!--<UpLoad :ID="'fundVoucher'" :editImage="editImage" :isClear="isClear" @getImg="getImg"></UpLoad>-->
+            <!--<UpLoad :ID="'fundVoucher'" :editImage="editImage" :isClear="isClear" @getImg="getImg"></UpLoad>-->
             <!--</el-form-item>-->
           </el-form>
         </div>
@@ -523,16 +526,17 @@
 
 <script>
   import UpLoad from '../../../common/UPLOAD.vue'
+
   export default {
-    props:['vacationDetail','vacationId'],
-    components:{UpLoad},
+    props: ['vacationDetail', 'vacationId'],
+    components: {UpLoad},
     data() {
       return {
         financialReceiptsLength: 1, //财务收款
         contractCollectionLength: 1,  //合同收款
-        vacationDetailVisible:false,
+        vacationDetailVisible: false,
         params: {
-          financialReceipts: [
+          financial_info: [
             {
               receivable: '', //应收
               actual_receipt: '', //实收
@@ -540,184 +544,192 @@
               remark: '',
             },
           ],
-          contractCollection: [
+          settled_info: [
             {
               receivable: '', //应收
               remark: '',
             },
           ],
-          contract_id : '',
-          module : '',
-          status_type : '',
-          check_time : '',
-          check_type : '',
-          profit:'',
-          sublease_fee:'',
-          bank_num : '',
-          account_bank : '',
-          branch_bank : '',
-          account_name : '',
-          reason : '',
-          compensation : '',
-          image_pic : [],
+          contract_id: '',
+          module: '',
+          status_type: '',
+          check_time: '',
+          check_type: '',
+          profit: '',
+          sublease_fee: '',
+          bank_num: '',
+          account_bank: '',
+          branch_bank: '',
+          account_name: '',
+          reason: '',
+          compensation: '',
+          image_pic: [],
 
-          refund_deposit : '',
-          residual_rent : '',
-          viewing_fee : '',
-          property_management_fee : '',
-          water_fee : '',
-          electricity_fee : '',
-          gas_fee : '',
+          refund_deposit: '',
+          residual_rent: '',
+          viewing_fee: '',
+          property_management_fee: '',
+          water_fee: '',
+          electricity_fee: '',
+          gas_fee: '',
 
-          water_last : '',
-          water_now : '',
-          water_unit_price : '',
-          water_late_payment : '',
+          water_last: '',
+          water_now: '',
+          water_unit_price: '',
+          water_late_payment: '',
           water_other: '',
 
-          electricity_peak_last : '',
-          electricity_peak_now : '',
-          electricity_peak_unit_price : '',
-          electricity_peak_late_payment : '',
+          electricity_peak_last: '',
+          electricity_peak_now: '',
+          electricity_peak_unit_price: '',
+          electricity_peak_late_payment: '',
           electricity_peak_other: '',
 
-          electricity_valley_last : '',
-          electricity_valley_now : '',
-          electricity_valley_unit_price : '',
-          electricity_valley_late_payment : '',
+          electricity_valley_last: '',
+          electricity_valley_now: '',
+          electricity_valley_unit_price: '',
+          electricity_valley_late_payment: '',
           electricity_valley_other: '',
 
-          gas_last : '',
-          gas_now : '',
-          gas_unit_price : '',
-          gas_late_payment : '',
+          gas_last: '',
+          gas_now: '',
+          gas_unit_price: '',
+          gas_late_payment: '',
           gas_other: '',
 
-          property_management_last : '',
-          property_management_now : '',
-          property_management_electricity : '',
-          property_management_water : '',
-          property_management_total_fees : '',
+          property_management_last: '',
+          property_management_now: '',
+          property_management_electricity: '',
+          property_management_water: '',
+          property_management_total_fees: '',
           property_management_other: '',
 
-          liquidated_damages : '',
-          trash_fees : '',
-          cleaning_fees : '',
-          repair_compensation_fees : '',
-          other_fees : '',
-          overtime_rent : '',
-          TV_fees : '',
-          network_fees : '',
+          liquidated_damages: '',
+          trash_fees: '',
+          cleaning_fees: '',
+          repair_compensation_fees: '',
+          other_fees: '',
+          overtime_rent: '',
+          TV_fees: '',
+          network_fees: '',
         },
-        subjectId : '',
-        subjectId2 : '',
-        passParams:{
-          type : '',
-          subject : '',
-          amount : '',
+        subjectId: '',
+        subjectId2: '',
+        passParams: {
+          type: '',
+          subject: '',
+          amount: '',
         },
-        isClear : false,
-        isDictionary:false,
-        dictionary:[],
-        contractInfo :{},
-        editImage : {},
-        isLoading : false,
-        passedDialog : false,
-        subjectList : [],
-        subjectList2 : [],
-        vacationData :[],
+        isClear: false,
+        isDictionary: false,
+        dictionary: [],
+        contractInfo: {},
+        editImage: {},
+        isLoading: false,
+        passedDialog: false,
+        subjectList: [],
+        subjectList2: [],
+        vacationData: [],
       };
     },
-    computed:{
-      reimbursementTotal(){
-        return Number(this.params.refund_deposit)+Number(this.params.residual_rent)+Number(this.params.viewing_fee)
-          +Number(this.params.property_management_fee)+
-          Number(this.params.water_fee)+Number(this.params.electricity_fee)+Number(this.params.gas_fee);
+    computed: {
+      reimbursementTotal() {
+        return Number(this.params.refund_deposit) + Number(this.params.residual_rent) + Number(this.params.viewing_fee)
+          + Number(this.params.property_management_fee) +
+          Number(this.params.water_fee) + Number(this.params.electricity_fee) + Number(this.params.gas_fee);
       },
-      waterTotal(){
-        return (Number(this.params.water_now)-Number(this.params.water_last))*Number(this.params.water_unit_price)
-          +Number(this.params.water_late_payment)+Number(this.params.water_other);
+      waterTotal() {
+        return (Number(this.params.water_now) - Number(this.params.water_last)) * Number(this.params.water_unit_price)
+          + Number(this.params.water_late_payment) + Number(this.params.water_other);
       },
-      elePeakTotal(){
-        return (Number(this.params.electricity_peak_now)-Number(this.params.electricity_peak_last))*Number(this.params.electricity_peak_unit_price)
-          +Number(this.params.electricity_peak_late_payment)+Number(this.params.electricity_peak_other);
+      elePeakTotal() {
+        return (Number(this.params.electricity_peak_now) - Number(this.params.electricity_peak_last)) * Number(this.params.electricity_peak_unit_price)
+          + Number(this.params.electricity_peak_late_payment) + Number(this.params.electricity_peak_other);
       },
-      eleValTotal(){
-        return (Number(this.params.electricity_valley_now)-Number(this.params.electricity_valley_last))*Number(this.params.electricity_valley_unit_price)
-          +Number(this.params.electricity_valley_late_payment)+Number(this.params.electricity_valley_other);
+      eleValTotal() {
+        return (Number(this.params.electricity_valley_now) - Number(this.params.electricity_valley_last)) * Number(this.params.electricity_valley_unit_price)
+          + Number(this.params.electricity_valley_late_payment) + Number(this.params.electricity_valley_other);
       },
-      gasTotal(){
-        return (Number(this.params.gas_now)-Number(this.params.gas_last))*Number(this.params.gas_unit_price)
-          +Number(this.params.gas_late_payment)+Number(this.params.gas_other);
+      gasTotal() {
+        return (Number(this.params.gas_now) - Number(this.params.gas_last)) * Number(this.params.gas_unit_price)
+          + Number(this.params.gas_late_payment) + Number(this.params.gas_other);
       },
-      managementTotal(){
-        return Number(this.params.property_management_electricity)+Number(this.params.property_management_water)
-          +Number(this.params.property_management_total_fees)+Number(this.params.property_management_other);
+      managementTotal() {
+        return Number(this.params.property_management_electricity) + Number(this.params.property_management_water)
+          + Number(this.params.property_management_total_fees) + Number(this.params.property_management_other);
       },
-      otherTotal(){
-        return Number(this.params.trash_fees)+Number(this.params.cleaning_fees)+Number(this.params.repair_compensation_fees)
-          +Number(this.params.other_fees)+Number(this.params.overtime_rent)+
-          Number(this.params.TV_fees)+Number(this.params.network_fees);
+      otherTotal() {
+        return Number(this.params.trash_fees) + Number(this.params.cleaning_fees) + Number(this.params.repair_compensation_fees)
+          + Number(this.params.other_fees) + Number(this.params.overtime_rent) +
+          Number(this.params.TV_fees) + Number(this.params.network_fees);
       },
-      realTotal(){
-        return Number(this.reimbursementTotal)-Number(this.waterTotal)-Number(this.elePeakTotal)-
-          Number(this.eleValTotal)-Number(this.gasTotal)-Number(this.managementTotal)-Number(this.otherTotal)
-          -Number(this.params.sublease_fee)-Number(this.params.profit);
+      realTotal() {
+        return Number(this.reimbursementTotal) - Number(this.waterTotal) - Number(this.elePeakTotal) -
+          Number(this.eleValTotal) - Number(this.gasTotal) - Number(this.managementTotal) - Number(this.otherTotal)
+          - Number(this.params.sublease_fee) - Number(this.params.profit);
       },
     },
-    watch:{
-      vacationDetail(val){
+    watch: {
+      vacationDetail(val) {
         this.vacationDetailVisible = val
       },
-      vacationDetailVisible(val){
-        if(!val){
+      vacationDetailVisible(val) {
+        if (!val) {
           this.$emit('close');
           this.initData();
-        }else {
+        } else {
           this.isClear = true;
           this.getData();
-          if(!this.isDictionary){
+          if (!this.isDictionary) {
             this.getDictionary();
           }
         }
       },
     },
-    mounted(){
+    mounted() {
 
     },
-    methods:{
-      getDictionary(){
-        this.$http.get(globalConfig.server+'setting/dictionary/328').then((res) => {
-          if(res.data.code === '30010'){
-            this.dictionary=res.data.data;
+    methods: {
+      getDictionary() {
+        this.$http.get(globalConfig.server + 'setting/dictionary/328').then((res) => {
+          if (res.data.code === '30010') {
+            this.dictionary = res.data.data;
             this.isDictionary = true;
           }
         })
       },
       //上传图片
-      getImg(val){
+      getImg(val) {
         this.passParams.payment_pic = val[1];
       },
       //获取退房详情
-      getData(){
+      getData() {
         this.isLoading = true;
-        this.$http.get(globalConfig.server+'customer/check_out/'+this.vacationId).then((res) => {
+        this.$http.get(globalConfig.server + 'customer/check_out/' + this.vacationId).then((res) => {
           this.isLoading = false;
-          if(res.data.code === '20020'){
+          if (res.data.code === '20020') {
             let data = res.data.data;
+            if (data.details) {
+              this.financialReceiptsLength = data.details.financial_info && data.details.financial_info.length || 1;
+              this.contractCollectionLength = data.details.settled_info && data.details.settled_info.length || 1;
+              this.params.financial_info = data.details.financial_info || [{
+                receivable: '',
+                actual_receipt: '',
+                difference: '',
+                remark: '',
+              }];   //财务收款
+              this.params.settled_info = data.details.settled_info || [{receivable: '', remark: '',}];  //合同收款
+            }
             this.vacationData = res.data.data;
-            this.params.financialReceipts = data.financialReceipts || [{receivable: '', actual_receipt: '', difference: '', remark: '',}];   //财务收款
-            this.params.contractCollection = data.contractCollection || [{receivable: '', remark: '',}];  //合同收款
-
             this.params.contract_id = data.contract_id;
             this.params.module = data.module;
-            this.getContractInfo(data.module,data.contract_id);
+            this.getContractInfo(data.module, data.contract_id);
 
             this.params.check_time = data.check_time;
             this.params.check_type = data.check_type;
             this.params.status_type = data.status;
 
-            this.params.profit = data.extend_field && data.extend_field.profit? data.extend_field.profit : 0;
+            this.params.profit = data.extend_field && data.extend_field.profit ? data.extend_field.profit : 0;
             this.params.sublease_fee = data.details && data.details.sublease_fee ? data.details.sublease_fee : 0;
 
             this.params.bank_num = data.bank_num;
@@ -780,8 +792,8 @@
             let picObject = {};
             this.editImage = {};
             this.params.image_pic = [];
-            if(data.album!==[]){
-              for(let key in data.album.image_pic){
+            if (data.album !== []) {
+              for (let key in data.album.image_pic) {
                 picObject[key] = data.album.image_pic[key][0].uri;
                 this.params.image_pic.push(key)
               }
@@ -791,15 +803,15 @@
         })
       },
 
-      getContractInfo(module,id){
-        if(module == 1){
+      getContractInfo(module, id) {
+        if (module == 1) {
           this.$http.get(globalConfig.server + 'lease/collect/' + id).then((res) => {
             if (res.data.code === '61010') {
               this.contractInfo = res.data.data;
             }
           })
-        }else {
-          this.$http.get(globalConfig.server + 'lease/rent/' +id).then((res) => {
+        } else {
+          this.$http.get(globalConfig.server + 'lease/rent/' + id).then((res) => {
             if (res.data.code === '61110') {
               this.contractInfo = res.data.data;
             }
@@ -807,106 +819,110 @@
         }
       },
 
-      initData(){
+      initData() {
         this.params = {
-          financialReceipts: [
-            {
-              receivable: '', //应收
-              actual_receipt: '', //实收
-              difference: '', //差额
-              remark: '',
-            },
-          ],
-          contractCollection: [
-            {
-              receivable: '', //应收
-              remark: '',
-            },
-          ],
-          contract_id : '',
-          module : '',
-          status_type : '',
-          check_time : '',
-          check_type : '',
-          profit:'',
-          sublease_fee:'',
-          bank_num : '',
-          account_bank : '',
-          branch_bank : '',
-          account_name : '',
-          reason : '',
-          compensation : '',
-          image_pic : [],
+          financial_info: [],
+          settled_info: [],
+          contract_id: '',
+          module: '',
+          status_type: '',
+          check_time: '',
+          check_type: '',
+          profit: '',
+          sublease_fee: '',
+          bank_num: '',
+          account_bank: '',
+          branch_bank: '',
+          account_name: '',
+          reason: '',
+          compensation: '',
+          image_pic: [],
 
-          refund_deposit : '',
-          residual_rent : '',
-          viewing_fee : '',
-          property_management_fee : '',
-          water_fee : '',
-          electricity_fee : '',
-          gas_fee : '',
+          refund_deposit: '',
+          residual_rent: '',
+          viewing_fee: '',
+          property_management_fee: '',
+          water_fee: '',
+          electricity_fee: '',
+          gas_fee: '',
 
-          water_last : '',
-          water_now : '',
-          water_unit_price : '',
-          water_late_payment : '',
+          water_last: '',
+          water_now: '',
+          water_unit_price: '',
+          water_late_payment: '',
           water_other: '',
 
-          electricity_peak_last : '',
-          electricity_peak_now : '',
-          electricity_peak_unit_price : '',
-          electricity_peak_late_payment : '',
+          electricity_peak_last: '',
+          electricity_peak_now: '',
+          electricity_peak_unit_price: '',
+          electricity_peak_late_payment: '',
           electricity_peak_other: '',
 
-          electricity_valley_last : '',
-          electricity_valley_now : '',
-          electricity_valley_unit_price : '',
-          electricity_valley_late_payment : '',
+          electricity_valley_last: '',
+          electricity_valley_now: '',
+          electricity_valley_unit_price: '',
+          electricity_valley_late_payment: '',
           electricity_valley_other: '',
 
-          gas_last : '',
-          gas_now : '',
-          gas_unit_price : '',
-          gas_late_payment : '',
+          gas_last: '',
+          gas_now: '',
+          gas_unit_price: '',
+          gas_late_payment: '',
           gas_other: '',
 
-          property_management_last : '',
-          property_management_now : '',
-          property_management_electricity : '',
-          property_management_water : '',
-          property_management_total_fees : '',
+          property_management_last: '',
+          property_management_now: '',
+          property_management_electricity: '',
+          property_management_water: '',
+          property_management_total_fees: '',
           property_management_other: '',
 
-          liquidated_damages : '',
-          trash_fees : '',
-          cleaning_fees : '',
-          repair_compensation_fees : '',
-          other_fees : '',
-          overtime_rent : '',
-          TV_fees : '',
-          network_fees : '',
+          liquidated_damages: '',
+          trash_fees: '',
+          cleaning_fees: '',
+          repair_compensation_fees: '',
+          other_fees: '',
+          overtime_rent: '',
+          TV_fees: '',
+          network_fees: '',
         };
+        for (let i = 0; i < this.financialReceiptsLength; i++) {
+          let data = {
+            receivable: '', //应收
+            actual_receipt: '', //实收
+            difference: '', //差额
+            remark: '',
+          };
+          this.params.financial_info.push(data);
+        }
+        for (let i = 0; i < this.contractCollectionLength; i++) {
+          let data1 = {
+            receivable: '', //应收
+            remark: '',
+          };
+          this.params.settled_info.push(data1);
+        }
         this.isClear = false;
       },
 
-      reject(){
+      reject() {
         this.$confirm('您确定要撤回吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.put(globalConfig.server+'customer/check_out/reject/'+this.vacationId).then((res)=>{
-            if(res.data.code === '20070'){
+          this.$http.put(globalConfig.server + 'customer/check_out/reject/' + this.vacationId).then((res) => {
+            if (res.data.code === '20070') {
               this.$notify.success({
-                title:'成功！',
-                message:res.data.msg,
+                title: '成功！',
+                message: res.data.msg,
               });
               this.vacationDetailVisible = false;
-              this.$emit('close','success');
-            }else {
+              this.$emit('close', 'success');
+            } else {
               this.$notify.warning({
-                title:'警告！',
-                message:res.data.msg,
+                title: '警告！',
+                message: res.data.msg,
               })
             }
           })
@@ -914,15 +930,15 @@
 
         });
       },
-      passed(){
+      passed() {
         this.$confirm('您确定要通过审核吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           this.passedDialog = true;
-          this.$http.get(globalConfig.server+'customer/check_out/subject').then((res)=>{
-            if(res.data.code === '20080'){
+          this.$http.get(globalConfig.server + 'customer/check_out/subject').then((res) => {
+            if (res.data.code === '20080') {
               this.subjectList = res.data.data;
             }
           })
@@ -931,38 +947,38 @@
         });
       },
 
-      getSubject(){
+      getSubject() {
         this.subjectList2 = [];
         this.subjectId2 = '';
-        this.$http.get(globalConfig.server+'customer/check_out/subject?id='+this.subjectId).then((res)=>{
-          if(res.data.code === '20080'){
+        this.$http.get(globalConfig.server + 'customer/check_out/subject?id=' + this.subjectId).then((res) => {
+          if (res.data.code === '20080') {
             this.subjectList2 = res.data.data;
           }
         })
       },
 
-      confirmPass(){
-        this.passParams.subject = this.subjectId2?this.subjectId2:this.subjectId;
-        this.$http.put(globalConfig.server+'customer/check_out/status/'+this.vacationId,this.passParams).then((res)=>{
-          if(res.data.code == '20060'){
+      confirmPass() {
+        this.passParams.subject = this.subjectId2 ? this.subjectId2 : this.subjectId;
+        this.$http.put(globalConfig.server + 'customer/check_out/status/' + this.vacationId, this.passParams).then((res) => {
+          if (res.data.code == '20060') {
             this.vacationDetailVisible = false;
             this.passedDialog = false;
-            this.$emit('close','success');
+            this.$emit('close', 'success');
             this.subjectId = '';
             this.subjectId2 = '';
             this.passParams = {
-              type : '',
-              subject : '',
-              amount : '',
+              type: '',
+              subject: '',
+              amount: '',
             };
             this.$notify.success({
-              title:'成功！',
-              message:res.data.msg,
+              title: '成功！',
+              message: res.data.msg,
             });
-          }else {
+          } else {
             this.$notify.warning({
-              title:'警告！',
-              message:res.data.msg,
+              title: '警告！',
+              message: res.data.msg,
             })
           }
         })
@@ -971,7 +987,7 @@
   };
 </script>
 <style lang="scss" scoped="">
-  #rentVacation{
+  #rentVacation {
 
     .el-input.is-disabled .el-input__inner {
       background-color: #f5f7fa;
@@ -980,18 +996,17 @@
       cursor: default !important;
     }
 
-
-    .el-dialog__wrapper{
-      .el-dialog{
-        .el-dialog__body{
+    .el-dialog__wrapper {
+      .el-dialog {
+        .el-dialog__body {
           padding: 15px;
-          >div{
+          > div {
             padding-right: 10px;
             max-height: 580px;
             overflow-x: auto;
           }
 
-          .table_border{
+          .table_border {
             .tableDetail {
               width: 100%;
               border-collapse: collapse;
@@ -1012,8 +1027,8 @@
             }
           }
 
-          .form_border{
-            .total{
+          .form_border {
+            .total {
               border-top: 1px solid #dfe6fb;
               padding: 5px;
               text-align: right;
@@ -1023,7 +1038,7 @@
       }
     }
 
-    .content{
+    .content {
       padding: 0 5px;
       min-height: 30px;
       background: #f5f7fa;
