@@ -239,7 +239,7 @@
           <el-tabs type="border-card" v-model="rentActiveName" @tab-click="handleClick">
             <el-tab-pane v-for="(item,key) in cityTableData" :label="key" :key="item.id" :name="key">
               <div class="myHouse">
-                <div class="blueTable">
+                <div class="blueTable" v-if="item.data && item.data[cityForm.page-1] && item.data[cityForm.page-1].length>0">
                   <el-table
                     :data="item.data[cityForm.page-1]"
                     :empty-text='cityTableStatus'
@@ -328,12 +328,12 @@
         rentActiveName: '公司总计',
         cityTableStatus: ' ',
         cityTableLoading: false,
-        switchTitle: '切换片区',
+        switchTitle: '切换小组',
         cityForm: {
           page: 1,
           limit: 6,
           sign_date: [],
-          aggr: '',
+          aggr: 'third',
         },
         totalCityNum: 0,
         dateShow: false,
@@ -352,10 +352,7 @@
       this.sign_date[0] = this.sign_date[1] = year + "-" + month1 + "-" + date;
       this.form.sign_date = this.sign_date;
       this.getTableData();
-      setTimeout(() => {
-        this.cityForm.aggr = 'leaf';
-        this.getPolyData();
-      }, 10);
+      this.getPolyData();
     },
     activated() {
     },
