@@ -113,32 +113,32 @@
                 <el-col :span="5">
                   <el-form-item label="应收">
                     <el-input placeholder="请输入内容" v-model="params.financial_info[index].receivable"
-                              @change="financialChange(index)" clearable :disabled="!vacationData.financial"></el-input>
+                              @change="financialChange(index)" clearable :disabled="!financial"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="5">
                   <el-form-item label="实收">
                     <el-input placeholder="请输入内容" v-model="params.financial_info[index].actual_receipt"
-                              @change="financialChange(index)" clearable :disabled="!vacationData.financial"></el-input>
+                              @change="financialChange(index)" clearable :disabled="!financial"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="5">
                   <el-form-item label="差额">
                     <el-input placeholder="请输入内容" v-model="params.financial_info[index].difference"
-                              clearable :disabled="!vacationData.financial"></el-input>
+                              clearable :disabled="!financial"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="备注">
                     <el-input type="textarea" :rows="1" placeholder="请输入内容"
-                              v-model="params.financial_info[index].remark" clearable :disabled="!vacationData.financial"></el-input>
+                              v-model="params.financial_info[index].remark" clearable :disabled="!financial"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="1" v-show="index!=0">
                   <i class="el-icon-remove-outline sub_com" @click="subData('financial', index)"></i>
                 </el-col>
               </el-row>
-              <div style="text-align: center" v-if="vacationData.financial">
+              <div style="text-align: center" v-if="financial">
                 <el-button type="text" @click="addData('financial')">
                   <i class="el-icon-circle-plus"></i>添加财务收款变化条目
                 </el-button>
@@ -605,7 +605,7 @@
         contractInfo: {},
         editImage: {},
         isLoading: false,
-        vacationData: {},
+        financial: false,
       };
     },
     computed: {
@@ -659,21 +659,23 @@
           if (!this.isDictionary) {
             this.getDictionary();
           }
-          this.$nextTick(() => {
-            if (this.status == 1) {
-              $('#editCollectVacationId').css('pointer-events', 'none');
-            } else {
-              $('#editCollectVacationId').css('pointer-events', 'initial');
-            }
-          })
+          this.getPowerData();
         }
       },
     },
     activated() {
     },
     methods: {
+      getPowerData() {
+        this.$http.get(globalConfig.server + 'manager/staff/auth?name=checkout_financial').then((res) => {
+          if (res.data.code === '10090') {
+            this.financial = res.data.data;
+          } else {
+            this.financial = false;
+          }
+        });
+      },
       financialChange(key) {
-        console.log(key)
         this.params.financial_info[key].difference = this.params.financial_info[key].receivable - this.params.financial_info[key].actual_receipt;
       },
       subData(type, key) {
@@ -735,7 +737,6 @@
         this.$http.get(globalConfig.server + 'customer/check_out/' + this.vacationId).then((res) => {
           this.isLoading = false;
           if (res.data.code === '20020') {
-            this.vacationData = res.data.data
             let data = res.data.data;
             this.financialReceiptsLength = data.financial_info && data.financial_info.length || 1;
             this.contractCollectionLength = data.settled_info && data.settled_info.length || 1;
