@@ -174,6 +174,10 @@
               <el-table-column
                 label="炸单情况"
                 prop="end_type">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.end_type">{{scope.row.end_type}}</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="是否中介单"
@@ -186,18 +190,34 @@
               <el-table-column
                 label="房屋地址"
                 prop="address">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.address">{{scope.row.address}}</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="开单人"
                 prop="pay_accountname">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.pay_accountname">{{scope.row.pay_accountname}}</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="房屋类型"
                 prop="HT">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.HT">{{scope.row.HT}}</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="月单价"
                 prop="month_price">
+                <template slot-scope="scope">
+                  <span v-if="typeof scope.row.month_price=='object'">{{scope.row.month_price[0] && scope.row.month_price[0].price}}</span>
+                  <span v-else>{{scope.row.month_price}}</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="空置期(天)"
@@ -210,6 +230,10 @@
               <el-table-column
                 label="付款方式"
                 prop="pay_way">
+                <template slot-scope="scope">
+                  <span v-if="typeof scope.row.pay_way=='object' && scope.row.pay_way[0]">{{scope.row.pay_way[0].pay_way_str}},{{scope.row.pay_way[0].period}}个月</span>
+                  <span v-else>{{scope.row.pay_way}}</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="第一次打款时间"
@@ -226,6 +250,10 @@
               <el-table-column
                 label="收房片区"
                 prop="org_name">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.org_name">{{scope.row.org_name}}</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
             </el-table>
           </div>

@@ -1,6 +1,7 @@
 <template>
   <div id="examineAndApprove">
-    <div class="highRanking" style=" position: absolute; top: 122px; right: 30px;z-index: 6;" v-if="activeName!='sixth'">
+    <div class="highRanking" style=" position: absolute; top: 122px; right: 30px;z-index: 6;"
+         v-if="activeName!='sixth'">
       <div class="highSearch">
         <el-form :inline="true" onsubmit="return false" size="mini">
           <el-form-item>
@@ -595,6 +596,10 @@
                 <i class="iconfont icon-yanjing"></i>
                 <span slot="title">已读</span>
               </el-menu-item>
+              <el-menu-item index="all">
+                <i class="iconfont icon-jingjianmoshi"></i>
+                <span slot="title">全部</span>
+              </el-menu-item>
             </el-menu>
           </div>
           <div class="tableLeft">
@@ -712,7 +717,7 @@
 
     </el-tabs>
 
-    <div class="block pages"  v-if="activeName!='sixth'">
+    <div class="block pages" v-if="activeName!='sixth'">
       <el-pagination
         @current-change="search"
         :current-page="params.page"
@@ -933,7 +938,13 @@
           // 抄送我的
           case 'fifth':
             this.params.type = 4;
-            this.params.read_at = read === 'unread' ? 0 : 1;
+            if (read === 'unread') {
+              this.params.read_at = 0;
+            } else if (read === 'read') {
+              this.params.read_at = 1;
+            } else {
+              this.params.read_at = '';
+            }
             this.myData(this.params, 1);
             break;
         }
@@ -1040,7 +1051,7 @@
           this.isOpen_9 = !this.isOpen_9;
         }
       },
-        dblClickTable(type) {
+      dblClickTable(type) {
         this.reportID = type.id;
         this.reportModule = true;
         switch (type) {
@@ -1155,7 +1166,7 @@
         this.repairVisible = false;
         this.miscellaneousExpensesVisible = false;
         this.miscellaneousExpensesOfficialVisible = false;
-        if(val === 'success'){
+        if (val === 'success') {
           this.myData(this.params, this.params.page);
         }
 
