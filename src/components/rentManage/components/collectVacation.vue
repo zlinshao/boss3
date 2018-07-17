@@ -722,7 +722,7 @@
 
       },
       confirmAdd(flag) {
-        this.params.status_type = flag ? 'settled' : '';
+        this.params.status_type = flag ? '' : 'draft';
         this.$http.post(globalConfig.server + 'customer/check_out', this.params).then((res) => {
           if (res.data.code === '20010') {
             this.$notify.success({
