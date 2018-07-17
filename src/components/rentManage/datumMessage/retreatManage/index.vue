@@ -50,9 +50,10 @@
                     <el-form-item>
                       <el-select clearable v-model="params.status" placeholder="请选择退房状态" value="">
                         <el-option label="草稿" value="0"></el-option>
+                        <el-option label="待结算" value="5"></el-option>
                         <el-option label="待审核" value="1"></el-option>
                         <el-option label="已驳回" value="2"></el-option>
-                        <el-option label="待结清" value="3"></el-option>
+                        <el-option label="待付款" value="3"></el-option>
                         <el-option label="已完成" value="4"></el-option>
                       </el-select>
                     </el-form-item>
@@ -172,7 +173,7 @@
                 <el-table-column
                   label="退租状态">
                   <template slot-scope="scope">
-                    <span v-if="scope.row.status==0">
+                     <span v-if="scope.row.status==0">
                       <span class="info_label">草稿</span>
                     </span>
                     <span v-if="scope.row.status==1">
@@ -182,10 +183,13 @@
                       <span class="orange_label">已驳回</span>
                     </span>
                     <span v-if="scope.row.status==3">
-                      <span class="yellow_label">待结清</span>
+                      <span class="yellow_label">待付款</span>
                     </span>
                     <span v-if="scope.row.status==4">
                       <span class="success_label">已完成</span>
+                    </span>
+                    <span v-if="scope.row.status==5">
+                      <span class="success_label" style="background: #e8a136;">待结算</span>
                     </span>
                   </template>
                 </el-table-column>
@@ -301,10 +305,13 @@
                       <span class="orange_label">已驳回</span>
                     </span>
                     <span v-if="scope.row.status==3">
-                      <span class="yellow_label">待结清</span>
+                      <span class="yellow_label">待付款</span>
                     </span>
                     <span v-if="scope.row.status==4">
                       <span class="success_label">已完成</span>
+                    </span>
+                    <span v-if="scope.row.status==5">
+                      <span class="success_label" style="background: #e8a136;">待结算</span>
                     </span>
                   </template>
                 </el-table-column>
@@ -328,9 +335,9 @@
       </div>
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-               @clickOperate="clickEvent"></RightMenu>
+               @clickOperateMore="clickEvent"></RightMenu>
 
-    <EditCollectVacation :editCollectVacation="editCollectVacation" :vacationId="operateId"
+    <EditCollectVacation :editCollectVacation="editCollectVacation" :vacationId="operateId" :status="status"
                          @close="closeModal"></EditCollectVacation>
     <VacationDetail :vacationDetail="vacationDetail" :vacationId="operateId" @close="closeModal"></VacationDetail>
 
@@ -349,7 +356,7 @@
 
   export default {
     name: 'hello',
-    components: {RightMenu, EditCollectVacation, VacationDetail, AddressSearch,UploadPic},
+    components: {RightMenu, EditCollectVacation, VacationDetail, AddressSearch, UploadPic},
     data() {
       return {
         rightMenuX: 0,
@@ -439,7 +446,7 @@
         this.editCollectVacation = false;
         this.upLoadDialog = false;
         this.vacationDetail = false;
-        if(val === 'success'){
+        if (val === 'success') {
           this.isRent = this.activeName === 'first' ? 0 : 1;
           this.getData();
         }
@@ -486,16 +493,21 @@
             clickIndex: 'edit',
             headIcon: 'el-icon-edit-outline',
             label: '修改',
-            'disabled': row.status != 0 && row.status != 2
+            'disabled': row.status == 3 || row.status == 4 || row.status == 1,
           },
-          {clickIndex: 'upload', headIcon: 'el-icon-upload', label: '上传截图凭证','disabled':row.status<3},
+          {
+            clickIndex: 'upload',
+            headIcon: 'el-icon-upload',
+            label: '上传截图凭证',
+            'disabled': row.status != 3 && row.status != 4
+          },
           {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },
       //右键回调事件
-      clickEvent(index) {
-        switch (index) {
+      clickEvent(val) {
+        switch (val.clickIndex) {
           case 'edit':
             this.editCollectVacation = true;
             break;
@@ -568,7 +580,7 @@
         }
       }
     }
-    .info_label, .orange_label,.red_label, .success_label,.yellow_label{
+    .info_label, .orange_label, .red_label, .success_label, .yellow_label {
       min-width: 70px;
     }
 

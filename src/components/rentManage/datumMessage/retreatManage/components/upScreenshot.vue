@@ -6,7 +6,7 @@
           <el-row>
             <el-col :span="24">
               <el-form-item label="上传图片">
-                <UpLoad :ID="'upLoad_pic'" :isClear="isClear" @getImg="getImg"></UpLoad>
+                <UpLoad :ID="'upLoad_pic'" :isClear="isClear" @getImg="getImg" :editImage="editImage"></UpLoad>
               </el-form-item>
             </el-col>
           </el-row>
@@ -32,7 +32,7 @@
         formInline:{
           payment_pic:[],
         },
-
+        editImage: {},
         isClear:false,
         isUpload:false,
       };
@@ -49,6 +49,7 @@
           };
           this.isClear = false;
         }else {
+          this.getData();
           this.isClear = true;
         }
       },
@@ -58,7 +59,24 @@
         this.formInline.payment_pic = val[1];
         this.isUpload = val[2];
       },
-
+      //获取退房详情
+      getData() {
+        this.$http.get(globalConfig.server + 'customer/check_out/' + this.vacationId).then((res) => {
+          if (res.data.code === '20020') {
+            let data = res.data.data;
+            let picObject = {};
+            this.editImage = {};
+            this.formInline.payment_pic = [];
+            if (data.payment_pic && data.payment_pic.length>0) {
+              data.payment_pic.forEach((item)=>{
+                picObject[item.id] = item.uri;
+                this.formInline.payment_pic.push(item.id);
+              })
+            }
+            this.editImage = picObject;
+          }
+        })
+      },
       confirmAdd(){
         if(!this.isUpload){
           this.$http.put(globalConfig.server+'customer/check_out/status/'+this.vacationId,this.formInline).then((res)=> {

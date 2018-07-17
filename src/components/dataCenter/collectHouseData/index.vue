@@ -116,7 +116,7 @@
                       <el-input v-model="form.years[0]" style="width: 150px;" placeholder="起" clearable></el-input>
                       至
                       <el-input v-model="form.years[1]" style="width: 150px;" placeholder="止" clearable></el-input>
-                      年
+                      月
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -175,8 +175,7 @@
                 label="炸单情况"
                 prop="end_type">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.end_type!='' && scope.row.end_type =='非炸单'">否</span>
-                  <span v-else-if="scope.row.end_type!='' && scope.row.end_type !='非炸单'">是</span>
+                  <span v-if="scope.row.end_type">{{scope.row.end_type}}</span>
                   <span v-else>暂无</span>
                 </template>
               </el-table-column>
@@ -191,18 +190,34 @@
               <el-table-column
                 label="房屋地址"
                 prop="address">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.address">{{scope.row.address}}</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="开单人"
                 prop="pay_accountname">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.pay_accountname">{{scope.row.pay_accountname}}</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="房屋类型"
                 prop="HT">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.HT">{{scope.row.HT}}</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="月单价"
                 prop="month_price">
+                <template slot-scope="scope">
+                  <span v-if="typeof scope.row.month_price=='object'">{{scope.row.month_price[0] && scope.row.month_price[0].price}}</span>
+                  <span v-else>{{scope.row.month_price}}</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="空置期(天)"
@@ -215,6 +230,10 @@
               <el-table-column
                 label="付款方式"
                 prop="pay_way">
+                <template slot-scope="scope">
+                  <span v-if="typeof scope.row.pay_way=='object' && scope.row.pay_way[0]">{{scope.row.pay_way[0].pay_way_str}},{{scope.row.pay_way[0].period}}个月</span>
+                  <span v-else>{{scope.row.pay_way}}</span>
+                </template>
               </el-table-column>
               <el-table-column
                 label="第一次打款时间"
@@ -231,6 +250,10 @@
               <el-table-column
                 label="收房片区"
                 prop="org_name">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.org_name">{{scope.row.org_name}}</span>
+                  <span v-else>暂无</span>
+                </template>
               </el-table-column>
             </el-table>
           </div>
@@ -258,7 +281,7 @@
             <el-tab-pane v-for="(item,key) in cityTableData.data" :label="key" :key="key"
                          :name="key" v-if="key==='公司总计'">
               <div class="myHouse">
-                <div class="blueTable">
+                <div class="blueTable" v-if="item.data && item.data.length>0">
                   <el-table
                     :data="item.data"
                     :empty-text='cityTableStatus'
@@ -303,9 +326,9 @@
               </div>
             </el-tab-pane>
             <el-tab-pane v-for="(item,key) in cityTableData.data" :label="key" :key="key"
-                         :name="key" v-if="key!=='公司总计'">
+                         :name="key" v-if="key!=='公司总计'" >
               <div class="myHouse">
-                <div class="blueTable">
+                <div class="blueTable" v-if="item.data && item.data.length>0">
                   <el-table
                     :data="item.data"
                     :empty-text='cityTableStatus'
@@ -393,15 +416,15 @@
         currentStatus: '',
         cityCategory: [],
         companyTotalData: [],  //公司总计
-        cityTableData: [],   //城市
+        cityTableData: {},   //城市
         rentActiveName: '公司总计',
         cityTableStatus: ' ',
         cityTableLoading: false,
-        switchTitle: '切换片区',
+        switchTitle: '切换小组',
         cityForm: {
           page: 1,
           limit: 6,
-          below: '',
+          below: 1,
           zu: '',
           sign_date: [], //签约日期起止范围
         },
@@ -422,15 +445,9 @@
       this.sign_date[0] = this.sign_date[1] = year + "-" + month1 + "-" + date;
       this.form.sign_date = this.sign_date;
       this.getTableData();
-      setTimeout(() => {
-        this.cityForm.below = 1;
-        this.cityForm.zu = 1;
-        this.getPolyData();
-      }, 1);
+      this.getPolyData();
     },
-    activated() {
-
-    },
+    activated() {},
     watch: {
       "form.sign_date": {
         deep: true,
@@ -485,7 +502,6 @@
           if (!res.data) {
             return;
           }
-          console.log(res);
           let url = window.URL.createObjectURL(new Blob([res.data]));
           let link = document.createElement('a');
           link.style.display = 'a';
@@ -624,12 +640,16 @@
       getPolyData() {
         this.cityTableStatus = ' ';
         this.cityTableLoading = true;
-        this.cityForm.below = 1;
         this.cityForm.sign_date = this.form.sign_date;
         this.$http.get(globalConfig.server + 'performance/lord', {params: this.cityForm}).then((res) => {
           this.cityTableLoading = false;
           if (res.data.code === '30000') {
             this.cityTableData = res.data.data.dat;
+            if (res.data.data.dat.count == 1) {
+              if (res.data.data.dat.data && res.data.data.dat.data['公司总计'] && res.data.data.dat.data['公司总计'].data && res.data.data.dat.data['公司总计'].data.length == 0) {
+                this.cityTableStatus = '暂无数据';
+              }
+            }
           } else {
             this.cityTableStatus = '暂无数据';
             this.cityTableData = [];
