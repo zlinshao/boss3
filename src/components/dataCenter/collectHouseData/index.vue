@@ -116,7 +116,7 @@
                       <el-input v-model="form.years[0]" style="width: 150px;" placeholder="起" clearable></el-input>
                       至
                       <el-input v-model="form.years[1]" style="width: 150px;" placeholder="止" clearable></el-input>
-                      年
+                      月
                     </el-form-item>
                   </el-col>
                 </el-row>
