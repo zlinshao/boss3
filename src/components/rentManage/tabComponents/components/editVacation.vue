@@ -46,13 +46,12 @@
               <el-col :span="8">
                 <el-form-item label="退房时间" required>
                   <el-date-picker type="date" value-format="yyyy-MM-dd" v-model="params.check_time"
-                                  placeholder="选择日期" style="width: 100%;" :disabled="status==1"></el-date-picker>
+                                  placeholder="选择日期" style="width: 100%;" ></el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="退房性质" required>
-                  <el-select v-model="params.check_type" @change="clearFee" clearable placeholder="请选择退房性质"
-                             :disabled="status==1">
+                  <el-select v-model="params.check_type" @change="clearFee" clearable placeholder="请选择退房性质">
                     <el-option v-for="item in dictionary" :label="item.dictionary_name" :key="item.id"
                                :value="item.id"></el-option>
                   </el-select>
@@ -60,17 +59,17 @@
               </el-col>
               <el-col :span="8" v-if="params.check_type == 331">
                 <el-form-item label="违约盈利" required>
-                  <el-input placeholder="请输入内容" v-model="params.profit" :disabled="status==1"></el-input>
+                  <el-input placeholder="请输入内容" v-model="params.profit"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8" v-if="params.check_type == 333 || params.check_type == 582">
                 <el-form-item label="转租费" required>
-                  <el-input placeholder="请输入内容" v-model="params.sublease_fee" :disabled="status==1"></el-input>
+                  <el-input placeholder="请输入内容" v-model="params.sublease_fee"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="姓名" required>
-                  <el-input placeholder="请输入内容" v-model="params.account_name" :disabled="status==1"></el-input>
+                  <el-input placeholder="请输入内容" v-model="params.account_name"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -78,18 +77,17 @@
             <el-row>
               <el-col :span="8">
                 <el-form-item label="退款账号" required>
-                  <el-input placeholder="请输入内容" @blur="getBank" v-model="params.bank_num"
-                            :disabled="status==1"></el-input>
+                  <el-input placeholder="请输入内容" @blur="getBank" v-model="params.bank_num"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="开户行" required>
-                  <el-input placeholder="请输入内容" v-model="params.account_bank" :disabled="status==1"></el-input>
+                  <el-input placeholder="请输入内容" v-model="params.account_bank"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="8">
                 <el-form-item label="支行" required>
-                  <el-input placeholder="请输入内容" v-model="params.branch_bank" :disabled="status==1"></el-input>
+                  <el-input placeholder="请输入内容" v-model="params.branch_bank"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -115,32 +113,32 @@
                 <el-col :span="5">
                   <el-form-item label="应收">
                     <el-input placeholder="请输入内容" v-model="params.financial_info[index].receivable"
-                              @change="financialChange(index)" clearable :disabled="status==1"></el-input>
+                              @change="financialChange(index)" clearable :disabled="!vacationData.financial"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="5">
                   <el-form-item label="实收">
                     <el-input placeholder="请输入内容" v-model="params.financial_info[index].actual_receipt"
-                              @change="financialChange(index)" clearable :disabled="status==1"></el-input>
+                              @change="financialChange(index)" clearable :disabled="!vacationData.financial"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="5">
                   <el-form-item label="差额">
                     <el-input placeholder="请输入内容" v-model="params.financial_info[index].difference"
-                              clearable :disabled="status==1"></el-input>
+                              clearable :disabled="!vacationData.financial"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="备注">
                     <el-input type="textarea" :rows="1" placeholder="请输入内容"
-                              v-model="params.financial_info[index].remark" clearable :disabled="status==1"></el-input>
+                              v-model="params.financial_info[index].remark" clearable :disabled="!vacationData.financial"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="1" v-show="index!=0">
                   <i class="el-icon-remove-outline sub_com" @click="subData('financial', index)"></i>
                 </el-col>
               </el-row>
-              <div style="text-align: center">
+              <div style="text-align: center" v-if="vacationData.financial">
                 <el-button type="text" @click="addData('financial')">
                   <i class="el-icon-circle-plus"></i>添加财务收款变化条目
                 </el-button>
@@ -170,7 +168,7 @@
                   <i class="el-icon-remove-outline  sub_com" @click="subData('contract', index)"></i>
                 </el-col>
               </el-row>
-              <div style="text-align: center" v-if="status!=1">
+              <div style="text-align: center" >
                 <el-button type="text" @click="addData('contract')">
                   <i class="el-icon-circle-plus"></i>添加合同收款变化条目
                 </el-button>
@@ -607,6 +605,7 @@
         contractInfo: {},
         editImage: {},
         isLoading: false,
+        vacationData: {},
       };
     },
     computed: {
@@ -736,6 +735,7 @@
         this.$http.get(globalConfig.server + 'customer/check_out/' + this.vacationId).then((res) => {
           this.isLoading = false;
           if (res.data.code === '20020') {
+            this.vacationData = res.data.data
             let data = res.data.data;
             this.financialReceiptsLength = data.financial_info && data.financial_info.length || 1;
             this.contractCollectionLength = data.settled_info && data.settled_info.length || 1;
