@@ -104,32 +104,32 @@
                 <el-col :span="5">
                   <el-form-item label="应收">
                     <el-input placeholder="请输入内容" v-model="params.financial_info[index].receivable"
-                              @change="financialChange(index)" clearable></el-input>
+                              @change="financialChange(index)" clearable :disabled="!financial"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="5">
                   <el-form-item label="实收">
                     <el-input placeholder="请输入内容" v-model="params.financial_info[index].actual_receipt"
-                              @change="financialChange(index)" clearable></el-input>
+                              @change="financialChange(index)" clearable :disabled="!financial"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="5">
                   <el-form-item label="差额">
                     <el-input placeholder="请输入内容" v-model="params.financial_info[index].difference"
-                              clearable></el-input>
+                              clearable :disabled="!financial"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="8">
                   <el-form-item label="备注">
                     <el-input type="textarea" :rows="1" placeholder="请输入内容"
-                              v-model="params.financial_info[index].remark" clearable></el-input>
+                              v-model="params.financial_info[index].remark" clearable :disabled="!financial"></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span="1" v-show="index!=0">
                   <i class="el-icon-remove-outline sub_com" @click="subData('financial', index)"></i>
                 </el-col>
               </el-row>
-              <div style="text-align: center">
+              <div style="text-align: center" v-if="financial">
                 <el-button type="text" @click="addData('financial')">
                   <i class="el-icon-circle-plus"></i>添加财务收款变化条目
                 </el-button>
@@ -572,6 +572,7 @@
         dictionary: [],
         collectContractInfo: {},
         editImage: {},
+        financial: false,
       };
     },
     computed: {
@@ -626,6 +627,7 @@
           if (!this.isDictionary) {
             this.getDictionary();
           }
+          this.getPowerData();
         }
       },
       collectContractId(val) {
@@ -639,6 +641,15 @@
 
     },
     methods: {
+      getPowerData() {
+        this.$http.get(globalConfig.server + 'manager/staff/auth?name=checkout_financial').then((res) => {
+          if (res.data.code === '10090') {
+            this.financial = res.data.data;
+          } else {
+            this.financial = false;
+          }
+        });
+      },
       financialChange(key) {
         this.params.financial_info[key].difference = this.params.financial_info[key].receivable - this.params.financial_info[key].actual_receipt;
       },
