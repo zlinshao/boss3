@@ -485,7 +485,6 @@
           if (!res.data) {
             return;
           }
-          console.log(res);
           let url = window.URL.createObjectURL(new Blob([res.data]));
           let link = document.createElement('a');
           link.style.display = 'a';
@@ -630,6 +629,12 @@
           this.cityTableLoading = false;
           if (res.data.code === '30000') {
             this.cityTableData = res.data.data.dat;
+            if (res.data.data.dat.count == 1) {
+              console.log(res.data.data.dat.data)
+              if (res.data.data.dat.data && res.data.data.dat.data['公司总计'] && res.data.data.dat.data['公司总计'].data && res.data.data.dat.data['公司总计'].data.length == 0) {
+                this.cityTableStatus = '暂无数据';
+              }
+            }
           } else {
             this.cityTableStatus = '暂无数据';
             this.cityTableData = [];
