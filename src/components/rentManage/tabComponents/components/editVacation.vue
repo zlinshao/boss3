@@ -498,8 +498,6 @@
             </el-row>
           </el-form>
         </div>
-
-
         <div class="title">实际退还</div>
         <div class="describe_border">
           实际退还：{{realTotal}}
