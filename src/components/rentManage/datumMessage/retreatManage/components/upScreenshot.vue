@@ -32,7 +32,7 @@
         formInline:{
           payment_pic:[],
         },
-
+        editImage: {},
         isClear:false,
         isUpload:false,
       };
@@ -49,16 +49,35 @@
           };
           this.isClear = false;
         }else {
+          this.getData();
           this.isClear = true;
         }
       },
     },
     methods:{
       getImg(val){
+        console.log(val)
         this.formInline.payment_pic = val[1];
         this.isUpload = val[2];
       },
-
+      //获取退房详情
+      getData() {
+        this.$http.get(globalConfig.server + 'customer/check_out/' + this.vacationId).then((res) => {
+          if (res.data.code === '20020') {
+            let data = res.data.data;
+            let picObject = {};
+            this.editImage = {};
+            this.formInline.payment_pic = [];
+            if (data.payment_pic !== []) {
+              for (let key in data.payment_pic) {
+                picObject[key] = data.payment_pic[key][0].uri;
+                this.formInline.payment_pic.push(key);
+              }
+            }
+            this.editImage = picObject;
+          }
+        })
+      },
       confirmAdd(){
         if(!this.isUpload){
           this.$http.put(globalConfig.server+'customer/check_out/status/'+this.vacationId,this.formInline).then((res)=> {

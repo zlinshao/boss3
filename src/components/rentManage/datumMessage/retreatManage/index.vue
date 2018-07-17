@@ -50,9 +50,10 @@
                     <el-form-item>
                       <el-select clearable v-model="params.status" placeholder="请选择退房状态" value="">
                         <el-option label="草稿" value="0"></el-option>
+                        <el-option label="待结算" value="5"></el-option>
                         <el-option label="待审核" value="1"></el-option>
                         <el-option label="已驳回" value="2"></el-option>
-                        <el-option label="待结清" value="3"></el-option>
+                        <el-option label="待付款" value="3"></el-option>
                         <el-option label="已完成" value="4"></el-option>
                       </el-select>
                     </el-form-item>
@@ -334,9 +335,9 @@
       </div>
     </div>
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
-               @clickOperate="clickEvent"></RightMenu>
+               @clickOperateMore="clickEvent"></RightMenu>
 
-    <EditCollectVacation :editCollectVacation="editCollectVacation" :vacationId="operateId"
+    <EditCollectVacation :editCollectVacation="editCollectVacation" :vacationId="operateId" :status="status"
                          @close="closeModal"></EditCollectVacation>
     <VacationDetail :vacationDetail="vacationDetail" :vacationId="operateId" @close="closeModal"></VacationDetail>
 
@@ -492,16 +493,16 @@
             clickIndex: 'edit',
             headIcon: 'el-icon-edit-outline',
             label: '修改',
-            'disabled': row.status != 0 && row.status != 2
+            'disabled': row.status == 3 || row.status == 4,
           },
-          {clickIndex: 'upload', headIcon: 'el-icon-upload', label: '上传截图凭证','disabled':row.status<3},
+          {clickIndex: 'upload', headIcon: 'el-icon-upload', label: '上传截图凭证','disabled':row.status!=3},
           {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
         ];
         this.contextMenuParam(event);
       },
       //右键回调事件
-      clickEvent(index) {
-        switch (index) {
+      clickEvent(val) {
+        switch (val.clickIndex) {
           case 'edit':
             this.editCollectVacation = true;
             break;

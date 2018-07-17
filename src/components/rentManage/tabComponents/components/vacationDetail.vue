@@ -709,17 +709,15 @@
           this.isLoading = false;
           if (res.data.code === '20020') {
             let data = res.data.data;
-            if (data.details) {
-              this.financialReceiptsLength = data.details.financial_info && data.details.financial_info.length || 1;
-              this.contractCollectionLength = data.details.settled_info && data.details.settled_info.length || 1;
-              this.params.financial_info = data.details.financial_info || [{
-                receivable: '',
-                actual_receipt: '',
-                difference: '',
-                remark: '',
-              }];   //财务收款
-              this.params.settled_info = data.details.settled_info || [{receivable: '', remark: '',}];  //合同收款
-            }
+            this.financialReceiptsLength = data.financial_info && data.financial_info.length || 1;
+            this.contractCollectionLength = data.settled_info && data.settled_info.length || 1;
+            this.params.financial_info = data.financial_info || [{
+              receivable: '',
+              actual_receipt: '',
+              difference: '',
+              remark: '',
+            }];   //财务收款
+            this.params.settled_info = data.settled_info || [{receivable: '', remark: '',}];  //合同收款
             this.vacationData = res.data.data;
             this.params.contract_id = data.contract_id;
             this.params.module = data.module;

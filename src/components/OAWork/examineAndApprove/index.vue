@@ -706,9 +706,9 @@
         <!--</el-tab-pane>-->
         <!--</el-tabs>-->
       </el-tab-pane>
-      <!--<el-tab-pane label="全部" name="sixth">-->
-        <!--<ReportAll></ReportAll>-->
-      <!--</el-tab-pane>-->
+      <el-tab-pane label="全部" name="sixth">
+        <ReportAll></ReportAll>
+      </el-tab-pane>
 
     </el-tabs>
 
