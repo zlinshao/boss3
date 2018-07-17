@@ -14,7 +14,7 @@
          <el-input size="mini" v-model="opt.label" disabled></el-input>
       </span>
       <el-button-group>
-        <el-button size="mini" round @click="opt.disabled = !opt.disabled" icon="el-icon-close"
+        <el-button size="mini" round @click="opt.disabled = !opt.disabled" icon="el-icon-circle-check"
                    :title="opt.disabled?'不可选':'可选'" :type="opt.disabled?'info':''">
         </el-button>
         <el-button size="mini" @click="handlePreEdit(i, opt)" icon="el-icon-edit" round></el-button>

@@ -34,9 +34,9 @@
             <el-tab-pane label="全局配置" name="second">
               <GlobalConfigure :formConfig="formConfig"></GlobalConfigure>
             </el-tab-pane>
-            <!--<el-tab-pane label="查看JSON" name="fourth">-->
-              <!--<pre>{{formConfig}}</pre>-->
-            <!--</el-tab-pane>-->
+            <el-tab-pane label="查看JSON" name="fourth">
+              <pre>{{formConfig}}</pre>
+            </el-tab-pane>
           </el-tabs>
         </el-col>
       </el-row>
@@ -65,6 +65,7 @@
   import EditorRate from './components/editorsItem/rate'
   import EditorStaff from './components/editorsItem/staff'
   import EditorDepart from './components/editorsItem/depart'
+  import EditorFormGroup from './components/editorsItem/formGroup'
   export default {
     name: "index",
     components:{
@@ -84,7 +85,8 @@
       EditorUpload,
       EditorRate,
       EditorStaff,
-      EditorDepart
+      EditorDepart,
+      EditorFormGroup
     },
     data(){
       return{
@@ -109,8 +111,7 @@
         }
       },
       selectedItem() {
-        return JSON.stringify(this.formConfig.formItemList).indexOf(this.$store.state.autoForm.currentItem.index)>-1
-          && this.$store.state.autoForm.currentItem;
+        return this.$store.state.autoForm.currentItem;
       },
       activeName_ : {
         get() {
@@ -127,7 +128,6 @@
         $('#autoForm').height(height_);
       },
       addItem(val){
-        console.log(val);
         this.formConfig.formItemList.push(val);
         this.$store.dispatch('selectItem', val);
       },
