@@ -262,7 +262,7 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">提交开始时间</div>
+                    <div class="el_col_label">提交时间</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
