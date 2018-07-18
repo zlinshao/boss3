@@ -327,7 +327,7 @@ export default new Router({
         {path: '/beforeNaire', component: BeforeNaire, name: "我的问卷"},
         {path: '/myNaire', component: MyNaire, name: "问卷列表"},
         {path: '/batchEnter', component: BatchEnter, name: "批量入账"},
-        {path: '/preview', component: Preview, name: "预览"},
+        {path: '/preview', component: Preview, name: "预览",meta: {keepAlive: true}},
 
         {path: '/reportingData', component: ReportingData, name: "报备数据汇总"},
       ]
@@ -596,15 +596,15 @@ export default new Router({
       ]
     },
     //
-    // {
-    //   path: '/',
-    //   component: Index,
-    //   hidden: true,
-    //   name: '',
-    //   children: [
-    //     {path: '/autoForm', component: AutoForm, name: '表单设计器', icon: "iconfont icon-shouyemenhu"},
-    //   ]
-    // },
+    {
+      path: '/',
+      component: Index,
+      hidden: true,
+      name: '',
+      children: [
+        {path: '/autoForm', component: AutoForm, name: '表单设计器', icon: "iconfont icon-shouyemenhu"},
+      ]
+    },
   ]
 })
 

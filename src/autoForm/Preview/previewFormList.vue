@@ -185,8 +185,12 @@
         this.organizationDialog = true;
       },
       selectMember(val){
-        this.item.value = val[0].id;
-        this.item.valueName = val[0].name;
+
+        this.item.value = val;
+        this.item.valueName = '';
+        val.forEach((item) =>{
+          this.item.valueName += item.name + ' ';
+        })
       },
       closeModal(){
         this.organizationDialog = false;

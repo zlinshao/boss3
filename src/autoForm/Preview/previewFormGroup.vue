@@ -144,7 +144,8 @@
 
       <UpLoad
         v-else-if="item.formItemList[colIndex].type==='upload'"
-        :ID="item.formItemList[colIndex].domId">
+        :ID="item.formItemList[colIndex].domId"
+        @getImg="getImg">
       </UpLoad>
 
       <el-rate
@@ -214,6 +215,9 @@
       closeModal(){
         this.organizationDialog = false;
       },
+      getImg(val){
+        this.item.value[this.rowIndex][this.colIndex] = val[1];
+      }
 
     }
   }
