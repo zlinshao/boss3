@@ -1355,7 +1355,7 @@
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用'},
             {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职'},
-            {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
+            // {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
             // {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
           ];
         } else if (!row.is_enable && row.is_on_job) {
@@ -1364,7 +1364,7 @@
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用'},
             {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职'},
-            {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
+            // {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
           ];
         } else if (row.is_enable && !row.is_on_job) {
           this.lists = [
@@ -1372,7 +1372,7 @@
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用'},
             {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职'},
-            {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
+            // {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
           ];
         } else if (!row.is_enable && !row.is_on_job) {
           this.lists = [
@@ -1380,7 +1380,7 @@
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用'},
             {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职'},
-            {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
+            // {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
           ];
         }
         // this.lists = [
