@@ -262,6 +262,42 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
+                    <div class="el_col_label">提交开始时间</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-date-picker
+                        v-model="params.submit_start_time"
+                        type="date"
+                        placeholder="选择开始日期"
+                        value-format="yyyy-MM-dd">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">提交结束时间</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-date-picker
+                        v-model="params.submit_end_time"
+                        type="date"
+                        placeholder="选择结束日期"
+                        value-format="yyyy-MM-dd">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
                     <div class="el_col_label">是否有备忘</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
@@ -276,7 +312,7 @@
               </el-col>
             </el-row>
             <div class="btnOperate">
-              <el-button type="primary" size="mini" @click="highSearch()">搜索</el-button>
+              <el-button type="primary" size="mini" @click="highSearch">搜索</el-button>
               <el-button type="primary" size="mini" @click="resetting">重置</el-button>
               <el-button type="primary" size="mini" @click="highGrade">取消</el-button>
             </div>
@@ -813,6 +849,8 @@
           doc_status: '',
           visit_status: '',
           note: '', //有无备忘
+          submit_start_time: '', //提交开始时间
+          submit_end_time: '',  //提交结束时间
         },
         doc_sta: [
           {
@@ -1329,7 +1367,6 @@
         this.isHigh = !this.isHigh;
       },
       resetting() {
-        this.highGrade();
         this.department = '';
         this.staff = '';
         this.params = {
@@ -1350,6 +1387,8 @@
           doc_status: '',
           visit_status: '',
           note: '',
+          submit_start_time: '', //提交开始时间
+          submit_end_time: '',  //提交结束时间
         };
       }
     },

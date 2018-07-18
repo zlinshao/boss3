@@ -753,6 +753,10 @@
           } else if (res.data.code === '121290') {
             this.customerInfoDialog = true;
             this.customerInfo = res.data.data;
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg
+            });
           } else {
             this.$notify.warning({
               title: '警告',
