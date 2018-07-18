@@ -65,7 +65,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select clearable v-model="params.processable_type" placeholder="请选择跟进状态" value="">
+                      <el-select clearable v-model="params.processable_type" placeholder="请选择报备类型" value="">
                         <el-option v-for="item in processableType" :label="item.name" :value="item.key"
                                    :key="item.key"></el-option>
                       </el-select>
