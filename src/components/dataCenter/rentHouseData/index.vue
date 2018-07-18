@@ -634,7 +634,7 @@
         this.form.contract_number = '';
         this.form.sign_id = [];
         this.form.org_id = [];
-        this.form.sign_date = [];
+        // this.form.sign_date = [];
         this.form.is_agency = '';
         this.sign_name = '';
         this.org_name = '';
