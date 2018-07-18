@@ -342,6 +342,99 @@
     </el-dialog>
     <Organization :organizationDialog="organizationDialog" :type="organizeType" @close="closeOrganization"
                   @selectMember="selectMember"></Organization>
+    <el-dialog :close-on-click-modal="false" title="客户信息" :visible.sync="customerInfoDialog" width="50%">
+      <div v-for="(item, index) in customerInfo">
+        <div class="title">旧客户({{index+1}})</div>
+        <div class="form_border">
+          <el-form onsubmit="return false" size="mini" label-width="70px">
+            <el-row>
+              <el-col :span="4">
+                <el-form-item label="姓名">
+                  <div class="content">
+                    <span v-if="item.old && item.old.name">{{item.old && item.old.name}}</span>
+                    <span v-else>暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <el-form-item label="姓别">
+                  <div class="content" v-if="item.old && item.old.sex==1">男</div>
+                  <div class="content" v-else-if="item.old && item.old.sex==0">女</div>
+                  <div class="content" v-else>暂无</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item label="手机号">
+                  <div class="content">
+                    <span v-if="item.old && item.old.phone">{{item.old && item.old.phone}}</span>
+                    <span v-else>暂无</span>
+                  </div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item label="证件类型">
+                  <div class="content" v-if="item.old && item.old.idtype && item.old.idtype.dictionary_name">{{item.old
+                    && item.old.idtype && item.old.idtype.dictionary_name}}
+                  </div>
+                  <div class="content" v-else>暂无</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="证件号码">
+                  <div class="content" v-if="item.old && item.old.idcard">{{item.old && item.old.idcard}}</div>
+                  <div class="content" v-else>暂无</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </div>
+        <div class="title">新客户({{index+1}})</div>
+        <div class="form_border">
+          <el-form onsubmit="return false" size="mini" label-width="70px">
+            <el-row>
+              <el-col :span="4">
+                <el-form-item label="姓名">
+                  <div class="content" v-if="item.new && item.new.name">{{item.new && item.new.name}}</div>
+                  <div class="content" v-else>暂无</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <el-form-item label="姓别">
+                  <div class="content" v-if="item.new && item.new.sex==1">男</div>
+                  <div class="content" v-else-if="item.new && item.new.sex==0">女</div>
+                  <div class="content" v-else>暂无</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item label="手机号">
+                  <div class="content" v-if="item.new && item.new.phone">{{item.new && item.new.phone}}</div>
+                  <div class="content" v-else>暂无</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="5">
+                <el-form-item label="证件类型">
+                  <div class="content" v-if="item.new && item.new.idtype && item.new.idtype.dictionary_name">{{item.new
+                    && item.new.idtype && item.new.idtype.dictionary_name}}
+                  </div>
+                  <div class="content" v-else>暂无</div>
+                </el-form-item>
+              </el-col>
+              <el-col :span="6">
+                <el-form-item label="证件号码">
+                  <div class="content" v-if="item.new && item.new.idcard">{{item.new && item.new.idcard}}</div>
+                  <div class="content" v-else>暂无</div>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </div>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button size="small" @click="customerInfoDialog=false">取 消</el-button>
+        <el-button size="small" type="primary" @click="confirmAddConnect('update')">修 改</el-button>
+        <el-button size="small" type="primary" @click="confirmAddConnect('continue')">使用旧客户</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -353,6 +446,8 @@
     components: {Organization},
     data() {
       return {
+        customerInfoDialog: false,
+        customerInfo: [],
         addReturnvisitDialogVisible: false,
         organizationDialog: false,
         organizeType: '',
@@ -404,6 +499,7 @@
           star: null,           //星级
           remark_clause: "",  //备注条款
           is_connect: '',
+          type: '',
         },
         contractInfo: [],
         pickerOptions2: {
@@ -628,21 +724,22 @@
                   title: '成功',
                   message: res.data.msg
                 });
-                this.confirmAddConnect();
+                this.confirmAddConnect('');
               });
             }).catch(() => {
               this.$notify.info({
                 title: '提示',
                 message: '已取消提交'
               });
-              this.confirmAddConnect();
+              this.confirmAddConnect('');
             });
           } else {
-            this.confirmAddConnect();
+            this.confirmAddConnect('');
           }
         }
       },
-      confirmAddConnect() {
+      confirmAddConnect(val) {
+        this.form.type = val;
         this.$http.post(globalConfig.server + 'contract/feedback', this.form).then((res) => {
           if (res.data.code === '1212200') {
             this.$notify.success({
@@ -651,7 +748,11 @@
             });
             this.initial();
             this.$emit('close', 'success');
+            this.customerInfoDialog = false;
             this.addReturnvisitDialogVisible = false;
+          } else if (res.data.code === '121290') {
+            this.customerInfoDialog = true;
+            this.customerInfo = res.data.data;
           } else {
             this.$notify.warning({
               title: '警告',
@@ -876,6 +977,14 @@
 </script>
 <style lang="scss" scoped>
   #addCollectRepair {
+    .content {
+      padding: 0 10px;
+      min-height: 32px;
+      background: #eef3fc;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #727479;
+    }
     @mixin flex {
       display: flex;
       display: -webkit-flex;
