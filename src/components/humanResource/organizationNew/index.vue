@@ -822,6 +822,22 @@
         <el-button size="small" type="primary" @click="leaveDateConfirm">确 定</el-button>
       </span>
     </el-dialog>
+    <el-dialog :close-on-click-modal="false" title="发送离职短信" :visible.sync="sendLeaveMsgDialog" width="30%">
+      <div>
+        <el-form size="mini" onsubmit="return false;" :model="sendLeaveMsgForm" label-width="100px"
+                 style="padding: 0 20px;">
+          <el-form-item label="离职日期" required>
+            <el-date-picker v-model="sendLeaveMsgForm.date" type="date" placeholder="请选择离职日期"
+                            value-format="yyyy-MM-dd">
+            </el-date-picker>
+          </el-form-item>
+        </el-form>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="small" @click="sendLeaveMsgDialog=false">取 消</el-button>
+        <el-button size="small" type="primary" @click="sendLeaveMsgConfirm">发 送</el-button>
+      </span>
+    </el-dialog>
     <el-dialog :close-on-click-modal="false" title="复职等级" :visible.sync="selectLevelDialog" width="30%">
       <div>
         <el-form size="mini" onsubmit="return false;" :model="levelForm" label-width="100px" style="padding: 0 20px;">
@@ -888,13 +904,13 @@
     },
     data() {
       return {
+        sendLeaveMsgDialog: false, //发送离职短信模态框
         selectLeaveDateDialog: false,  //选择离职日期弹框
         selectLevelDialog: false,  //选择等级弹框
         form: {dismiss_time: ''}, //离职日期
         levelForm: {level: ''},  //等级
-        reinstatedStaffId: '',
+        sendLeaveMsgForm: {date: ''},
         branchBankCategory: [],
-        currentStaffId: '',
         isHigh: false,
         powerData: [],
         collectStatus: ' ',
@@ -1337,30 +1353,34 @@
           this.lists = [
             {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-            {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用', id: row.id},
-            {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职', id: row.id},
+            {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用'},
+            {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职'},
+            {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-kehuguanli', label: '发送离职短信'},
             // {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
           ];
         } else if (!row.is_enable && row.is_on_job) {
           this.lists = [
             {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-            {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用', id: row.id},
-            {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职', id: row.id},
+            {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用'},
+            {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职'},
+            {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-kehuguanli', label: '发送离职短信'},
           ];
         } else if (row.is_enable && !row.is_on_job) {
           this.lists = [
             {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-            {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用', id: row.id},
-            {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职', id: row.id},
+            {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用'},
+            {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职'},
+            {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-kehuguanli', label: '发送离职短信'},
           ];
         } else if (!row.is_enable && !row.is_on_job) {
           this.lists = [
             {clickIndex: 'power', headIcon: 'iconfont icon-quanxian', label: '权限', data: row},
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
-            {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用', id: row.id},
-            {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职', id: row.id},
+            {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用'},
+            {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职'},
+            {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-kehuguanli', label: '发送离职短信'},
           ];
         }
         // this.lists = [
@@ -1370,6 +1390,37 @@
         // ];
         this.contextParams(event);
       },
+      //发送离职短信
+      sendLeaveMsgConfirm() {
+        this.$confirm('此操作将发送离职短信，是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let id = [];
+          id.push(this.editId);
+          this.$http.put(globalConfig.server + 'core/customer/sms', {
+            id: id,
+            date: this.sendLeaveMsgForm.date
+          }).then((res) => {
+            if (res.data.code === '10050') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.sendLeaveMsgDialog = false;
+              this.editId = '';
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              })
+            }
+          });
+        }).catch(() => {
+
+        });
+      },
       //离职日期
       leaveDateConfirm() {
         this.$confirm('员工在职状态将会改变, 是否继续?', '提示', {
@@ -1377,7 +1428,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.put(globalConfig.server + 'manager/staff/dismiss/' + this.currentStaffId, {
+          this.$http.put(globalConfig.server + 'manager/staff/dismiss/' + this.editId, {
             type: 'is_on_job',
             dismiss_time: this.form.dismiss_time
           }).then((res) => {
@@ -1388,7 +1439,7 @@
               });
               this.getStaffData();
               this.selectLeaveDateDialog = false;
-              this.currentStaffId = '';
+              this.editId = '';
             } else {
               this.$notify.warning({
                 title: '警告',
@@ -1407,7 +1458,7 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$http.put(globalConfig.server + 'manager/staff/dismiss/' + this.reinstatedStaffId, {
+          this.$http.put(globalConfig.server + 'manager/staff/dismiss/' + this.editId, {
             type: 'is_on_job',
             level: this.levelForm.level
           }).then((res) => {
@@ -1418,7 +1469,7 @@
               });
               this.getStaffData();
               this.selectLevelDialog = false;
-              this.reinstatedStaffId = '';
+              this.editId = '';
             } else {
               this.$notify.warning({
                 title: '警告',
@@ -1436,72 +1487,77 @@
           this.addStaffDialog = true;
           this.isEdit = true;
         } else if (val.clickIndex === 'delete') {
-          this.$confirm('此操作将永久删除, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            this.deleteStaff();
-          }).catch(() => {
-            this.$notify.info({
-              title: '消息',
-              message: '已取消删除',
-            });
-          });
+          this.deleteStaff();
         } else if (val.clickIndex === 'enable') {
-          this.$confirm('员工禁用状态将会改变, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            this.$http.put(globalConfig.server + 'manager/staff/dismiss/' + val.id, {type: 'is_enable'}).then((res) => {
-              if (res.data.code === '10040') {
-                this.$notify.success({
-                  title: '成功',
-                  message: res.data.msg
-                });
-                this.getStaffData();
-              } else {
-                this.$notify.warning({
-                  title: '警告',
-                  message: res.data.msg
-                })
-              }
-            });
-          }).catch(() => {
-
-          });
+          this.enableStaff();
         } else if (val.clickIndex === 'not_on_job') {
           this.selectLevelDialog = true;
-          this.reinstatedStaffId = val.id;
           this.levelForm.level = '';
-
         } else if (val.clickIndex === 'on_job') {
           this.selectLeaveDateDialog = true;
-          this.currentStaffId = val.id;
           this.form.dismiss_time = '';
-        }
-        if (val.clickIndex === 'power') {
+        } else if (val.clickIndex === 'power') {
           this.powerModule = true;
           this.powerData = val.data;
+        } else if (val.clickIndex === 'send_leave_msg') {
+           this.sendLeaveMsgDialog = true;
         }
+
+      },
+      //禁用，启用
+      enableStaff() {
+        this.$confirm('员工禁用状态将会改变, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$http.put(globalConfig.server + 'manager/staff/dismiss/' + this.editId, {type: 'is_enable'}).then((res) => {
+            if (res.data.code === '10040') {
+              this.$notify.success({
+                title: '成功',
+                message: res.data.msg
+              });
+              this.getStaffData();
+            } else {
+              this.$notify.warning({
+                title: '警告',
+                message: res.data.msg
+              })
+            }
+          });
+        }).catch(() => {
+
+        });
       },
       //删除员工
       deleteStaff() {
-        this.$http.get(globalConfig.server + 'manager/staff/delete/' + this.editId).then((res) => {
-          if (res.data.code === '10060') {
-            this.getStaffData();
-            this.$notify.success({
-              title: '成功',
-              message: '删除成功',
-            });
-          } else {
-            this.$notify.info({
-              title: '消息',
-              message: res.data.msg
-            });
-          }
-        })
+        this.$confirm('此操作将永久删除, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+
+          this.$http.get(globalConfig.server + 'manager/staff/delete/' + this.editId).then((res) => {
+            if (res.data.code === '10060') {
+              this.getStaffData();
+              this.$notify.success({
+                title: '成功',
+                message: '删除成功',
+              });
+            } else {
+              this.$notify.info({
+                title: '消息',
+                message: res.data.msg
+              });
+            }
+          });
+        }).catch(() => {
+          this.$notify.info({
+            title: '消息',
+            message: '已取消删除',
+          });
+        });
+
       },
       //新建员工
       addStaff() {
