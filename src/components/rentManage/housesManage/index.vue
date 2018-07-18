@@ -16,6 +16,8 @@
             </el-button>
             <el-button class="warningItem" type="text" style="color: #409EFF">待收房源: {{houseStatus.wait_lord_at}}套
             </el-button>
+            <el-button class="warningItem" type="text" style="color: #409EFF">已出租: {{houseStatus.Lease_out}}套
+            </el-button>
           </div>
 
           <el-form :inline="true" size="mini" onsubmit="return false">
@@ -202,7 +204,7 @@
                 label="空置期(天)">
                 <template slot-scope="scope">
                   <span v-if="scope.row.total_ready_days">{{scope.row.total_ready_days}}</span>
-                  <span v-else="">/</span>
+                  <span v-else>/</span>
                 </template>
               </el-table-column>
               <el-table-column
@@ -210,7 +212,7 @@
                 label="当前空置时长(天)">
                 <template slot-scope="scope">
                   <span v-if="scope.row.current_ready_days">{{scope.row.current_ready_days}}</span>
-                  <span v-else="">/</span>
+                  <span v-else>/</span>
                 </template>
               </el-table-column>
               <!--<el-table-column-->
@@ -224,9 +226,8 @@
               <el-table-column
                 label="租房结束是否晚于收房">
                 <template slot-scope="scope">
-                  <span v-if="scope.row.rent_end_than_days>0">晚于{{scope.row.rent_end_than_days}}天</span>
-                  <span v-else-if="scope.row.rent_end_than_days<0">否</span>
-                  <span v-else="">/</span>
+                  <span v-if="scope.row.rent_end_than_days">{{scope.row.rent_end_than_days}}</span>
+                  <span v-else>/</span>
                 </template>
               </el-table-column>
 
@@ -623,7 +624,7 @@
             clickIndex: 'addEarlyWarningDialog',
             headIcon: 'iconfont icon-tianjiayujingjilu',
             label: '添加预警状态',
-            disabled: row.status
+            disabled: row.status != 0
           },
           {clickIndex: 'addWebInfoDialog', headIcon: 'el-icon-plus', label: '官网推送',},
           {clickIndex: 'downloadPicDialog', headIcon: 'el-icon-download', label: '图片下载',},

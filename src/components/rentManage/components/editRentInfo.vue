@@ -156,7 +156,7 @@
                     </el-col>
                     <el-col :span="6">
                       <el-form-item label="合同编号" required>
-                        <el-input :disabled="isDoc" placeholder="请输入内容" v-model="params.contract_number"></el-input>
+                        <el-input :disabled="(!isPc || isDoc) && !isAll" placeholder="请输入内容" v-model="params.contract_number"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -770,7 +770,7 @@
             this.isAll = data.auth_level == 'all';
 
             //租客信息
-            this.customersAmount = data.customers.length;
+            this.customersAmount = data.customers && data.customers.length;
             data.customers.forEach((item) => {
               this.nameArray.push(item.name);
               this.sexArray.push(String(item.sex));

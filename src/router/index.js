@@ -193,6 +193,10 @@ const BatchEnter =()=> import  ('../components/batchEnter/index') //批量入账
 const AchievementData =()=> import ('../components/dataCenter/index'); //业绩数据
 const ReportingData =()=> import ('../components/reportManage/reportingData/index'); //报备数据
 
+
+const AutoForm = ()=> import ('../autoForm/index')
+const Preview = ()=> import ('../autoForm/Preview/preview')
+
 Vue.use(Router);
 
 export default new Router({
@@ -323,6 +327,7 @@ export default new Router({
         {path: '/beforeNaire', component: BeforeNaire, name: "我的问卷"},
         {path: '/myNaire', component: MyNaire, name: "问卷列表"},
         {path: '/batchEnter', component: BatchEnter, name: "批量入账"},
+        {path: '/preview', component: Preview, name: "预览"},
 
         {path: '/reportingData', component: ReportingData, name: "报备数据汇总"},
       ]
@@ -590,7 +595,16 @@ export default new Router({
         {path: '/achievementData', component: AchievementData, name: '业绩数据',},
       ]
     },
-
+    //
+    // {
+    //   path: '/',
+    //   component: Index,
+    //   hidden: true,
+    //   name: '',
+    //   children: [
+    //     {path: '/autoForm', component: AutoForm, name: '表单设计器', icon: "iconfont icon-shouyemenhu"},
+    //   ]
+    // },
   ]
 })
 
