@@ -14,14 +14,15 @@
       <el-input
         v-else-if="item.type==='number'"
         v-model="item.value"
+        type="number"
+        placeholder="请输入数字"
         :value="item.value" :disabled="item.disabled">
       </el-input>
       <!--开关-->
       <el-checkbox
         v-else-if="item.type==='switch' && item.appearance==='checkbox'"
         :value="item.value" :disabled="item.disabled"
-        v-model="item.value"
-        >
+        v-model="item.value">
       </el-checkbox>
       <el-switch
         v-else-if="item.type==='switch'"
@@ -82,25 +83,32 @@
 
       <!--//- 下拉-->
       <el-select
-        v-else-if="item.type==='select'"
+        v-else-if="item.type==='select' && item.optionsUrl"
         :value="item.value" :disabled="item.disabled"
         :multiple="item.multiple"
         v-model="item.value">
         <el-option
-          v-if="item.optionsUrl"
           v-for="o in item.options"
           :key="o.id"
           :label="o.dictionary_name"
           :value="o.id">
         </el-option>
+      </el-select>
+
+      <el-select
+        v-else-if="item.type==='select' && !item.optionsUrl"
+        :value="item.value" :disabled="item.disabled"
+        :multiple="item.multiple"
+        v-model="item.value">
         <el-option
-          v-else
           v-for="o in item.options"
           :key="o.value"
           :label="o.label"
           :value="o.value">
         </el-option>
       </el-select>
+
+
       <!--//- 日期-->
       <el-date-picker
         v-else-if="item.type==='date'"
@@ -112,7 +120,6 @@
         :placeholder="item.placeholder"
         v-model="item.value"
         :value="item.value" :disabled="item.disabled">
-
       </el-date-picker>
 
 
@@ -126,7 +133,8 @@
 
       <UpLoad
         v-else-if="item.type==='upload'"
-        :ID="item.domId">
+        :ID="item.domId"
+        @getImg="getImg">
       </UpLoad>
 
       <el-rate
@@ -183,7 +191,9 @@
       closeModal(){
         this.organizationDialog = false;
       },
-
+      getImg(val){
+        this.item.value = val[1];
+      }
     }
   }
 </script>
