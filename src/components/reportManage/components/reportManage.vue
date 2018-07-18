@@ -287,7 +287,7 @@
 
       dblClickTable(row, event) {
         this.reportDetailDialog = true;
-        this.reportId = row.flow.id;
+        this.reportId = row.id;
       },
       closeModal(val) {
         this.reportDetailDialog = false;
