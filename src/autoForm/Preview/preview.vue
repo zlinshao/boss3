@@ -11,16 +11,19 @@
         </el-row>
         <div v-else-if="item.type === 'formGroup'">
           <div class="form_border">
-            <el-row>
-              <div class="title">{{item.label}}</div>
-              <el-col :span="24/Number(item.layout)" v-for="(formItem,index) in item.formItemList" :key="index">
+            <el-row v-for="(rowItem,rowIndex) in item.length" :key="rowIndex">
+              <div class="title" style="padding: 5px 0">
+                <span>{{item.label}}({{rowIndex}})</span>
+                <span v-if="item.length>1" style="float: right;cursor: pointer" @click="deleteFormGroupItem(item,rowIndex)">删除</span>
+              </div>
+              <el-col :span="24/Number(item.layout)" v-for="(colItem,colIndex) in item.formItemList" :key="colIndex">
                 <div>
-                  <fake-form-item :item="formItem"></fake-form-item>
+                  <FormGroup :item="item" :colIndex="colIndex" :rowIndex="rowIndex"></FormGroup>
                 </div>
               </el-col>
             </el-row>
             <div style="text-align: center">
-              <el-button type="text">
+              <el-button type="text" @click="addFormGropItem(item)">
                 + {{item.operateName}}
               </el-button>
             </div>
@@ -36,13 +39,19 @@
 
 <script>
   import FakeFormItem from './previewFormList'
+  import FormGroup from './previewFormGroup'
   export default {
     name: "preview",
-    components:{FakeFormItem},
+    components:{FakeFormItem , FormGroup},
     computed:{
-      formConfig(){
-        return this.$store.state.autoForm.form;
-      }
+      formConfig: {
+        get() {
+          return this.$store.state.autoForm.form;
+        },
+        set(newV) {
+          this.$store.dispatch('updateForm', newV)
+        }
+      },
     },
     mounted(){
       this.setHeight();
@@ -54,6 +63,14 @@
       setHeight(){
         let height_ = $(window).height() - 141;
         $('#preview').height(height_);
+      },
+      addFormGropItem(item){
+        item.length ++;
+        item.value.push([])
+      },
+      deleteFormGroupItem(item,rowIndex){
+        item.length --;
+        item.value.splice(rowIndex,1)
       },
     }
   }
