@@ -114,11 +114,11 @@
         :value="item.value">
       </el-cascader>
 
-      <UpLoad
-        v-else-if="item.type==='upload'"
-        :ID="item.domId"
-        disabled="true">
-      </UpLoad>
+      <div class="pickfiles"  v-else-if="item.type==='upload'">
+        <div class="upButton">
+          <span class="el-icon-plus"></span>
+        </div>
+      </div>
 
       <el-rate
         v-else-if="item.type==='rate'"
@@ -166,5 +166,34 @@
   .el-input, .el-select, .el-date-editor {
     width: 100%;
   }
-
+  .pickfiles {
+    display: flex;
+    display: -webkit-flex; /* Safari */
+    flex-wrap: wrap;
+    z-index: 0;
+    > div {
+      margin-right: 15px;
+      margin-top: 15px;
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+    .upButton {
+      background-color: #fbfdff;
+      border: 1px dashed #c0ccda;
+      border-radius: 6px;
+      box-sizing: border-box;
+      width: 120px;
+      height: 120px;
+      cursor: pointer;
+      line-height: 120px;
+      vertical-align: top;
+      display: inline-block;
+      text-align: center;
+    }
+    .el-icon-plus {
+      font-size: 28px;
+      color: #8c939d;
+    }
+  }
 </style>
