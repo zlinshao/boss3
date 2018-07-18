@@ -258,6 +258,23 @@
                 </el-row>
               </el-col>
             </el-row>
+            <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">是否有备忘</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-select v-model="params.note" clearable placeholder="请选择">
+                        <el-option key="1" label="无" value="1">无</el-option>
+                        <el-option key="2" label="有" value="2">有</el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
+            </el-row>
             <div class="btnOperate">
               <el-button type="primary" size="mini" @click="highSearch()">搜索</el-button>
               <el-button type="primary" size="mini" @click="resetting">重置</el-button>
@@ -795,6 +812,7 @@
           contract_index: '1',
           doc_status: '',
           visit_status: '',
+          note: '', //有无备忘
         },
         doc_sta: [
           {
@@ -1331,6 +1349,7 @@
           contract_index: '1',
           doc_status: '',
           visit_status: '',
+          note: '',
         };
       }
     },
