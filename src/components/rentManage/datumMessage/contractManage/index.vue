@@ -267,7 +267,7 @@
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
                       <el-date-picker
-                        v-model="params.submit_start_time"
+                        v-model="params.submit_time"
                         type="daterange"
                         align="right"
                         unlink-panels
@@ -281,30 +281,6 @@
                   </el-col>
                 </el-row>
               </el-col>
-              <el-col :span="12">
-                <el-row>
-                  <el-col :span="8">
-                    <div class="el_col_label">提交结束时间</div>
-                  </el-col>
-                  <el-col :span="16" class="el_col_option">
-                    <el-form-item>
-                      <el-date-picker
-                        v-model="params.submit_end_time"
-                        type="daterange"
-                        align="right"
-                        unlink-panels
-                        range-separator="至"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        value-format="yyyy-MM-dd"
-                        :picker-options="pickerOptions">
-                      </el-date-picker>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </el-col>
-            </el-row>
-            <el-row class="el_row_border">
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
@@ -859,8 +835,7 @@
           doc_status: '',
           visit_status: '',
           note: '', //有无备忘
-          submit_start_time: [], //提交开始时间
-          submit_end_time: [],  //提交结束时间
+          submit_time: [], //提交时间
         },
         doc_sta: [
           {
@@ -1397,8 +1372,7 @@
           doc_status: '',
           visit_status: '',
           note: '',
-          submit_start_time: [], //提交开始时间
-          submit_end_time: [],  //提交结束时间
+          submit_time: [],
         };
       }
     },
