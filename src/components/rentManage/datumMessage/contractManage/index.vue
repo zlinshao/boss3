@@ -268,9 +268,14 @@
                     <el-form-item>
                       <el-date-picker
                         v-model="params.submit_start_time"
-                        type="date"
-                        placeholder="选择开始日期"
-                        value-format="yyyy-MM-dd">
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        value-format="yyyy-MM-dd"
+                        :picker-options="pickerOptions">
                       </el-date-picker>
                     </el-form-item>
                   </el-col>
@@ -285,9 +290,14 @@
                     <el-form-item>
                       <el-date-picker
                         v-model="params.submit_end_time"
-                        type="date"
-                        placeholder="选择结束日期"
-                        value-format="yyyy-MM-dd">
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        value-format="yyyy-MM-dd"
+                        :picker-options="pickerOptions">
                       </el-date-picker>
                     </el-form-item>
                   </el-col>
@@ -849,8 +859,8 @@
           doc_status: '',
           visit_status: '',
           note: '', //有无备忘
-          submit_start_time: '', //提交开始时间
-          submit_end_time: '',  //提交结束时间
+          submit_start_time: [], //提交开始时间
+          submit_end_time: [],  //提交结束时间
         },
         doc_sta: [
           {
@@ -1387,8 +1397,8 @@
           doc_status: '',
           visit_status: '',
           note: '',
-          submit_start_time: '', //提交开始时间
-          submit_end_time: '',  //提交结束时间
+          submit_start_time: [], //提交开始时间
+          submit_end_time: [],  //提交结束时间
         };
       }
     },
