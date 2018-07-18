@@ -9,6 +9,7 @@
       </el-form-item>
       <el-form-item label="DOM_ID">
         <el-input v-model="formItem.domId"></el-input>
+        <div style="color: #e4303c">注意：DOM_ID必须唯一，请区分上传组件DOM_ID！</div>
       </el-form-item>
       <el-form-item label="必填">
         <el-switch v-model="formItem.required"></el-switch>

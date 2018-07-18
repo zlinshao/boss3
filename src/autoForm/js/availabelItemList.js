@@ -104,8 +104,9 @@ export default {
     "label": "明细",
     "operateName": "添加更多",
     "layout": 3,
+    "length" : 1,
     "formItemList":[],
-    "value" : [],
+    "value" : [[]],
   }
   // {
   //   "type": 'rate',
