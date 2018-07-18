@@ -246,7 +246,7 @@
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-select v-model="params.status" clearable >
+                      <el-select v-model="params.status" clearable>
                         <el-option key="1" label="未签约" value="1">未签约</el-option>
                         <el-option key="2" label="已签约" value="2">已签约</el-option>
                         <el-option key="3" label="快到期（60天内）" value="3">快到期（60天内）</el-option>
@@ -382,7 +382,8 @@
                     prop="department_name"
                     label="部门">
                     <template slot-scope="scope">
-                      <span v-if="scope.row.department && scope.row.department.name">{{scope.row.department.name}}</span>
+                      <span
+                        v-if="scope.row.department && scope.row.department.name">{{scope.row.department.name}}</span>
                       <span v-else>暂无</span>
                     </template>
                   </el-table-column>
@@ -392,7 +393,8 @@
                     <template slot-scope="scope">
                   <span v-if="scope.row.visit_status&&scope.row.visit_status.name">
                     {{scope.row.visit_status.name}}
-                    <span v-if="collectFeedback[scope.row.contract_id]">({{collectFeedback[scope.row.contract_id]}}条)</span>
+                    <span
+                      v-if="collectFeedback[scope.row.contract_id]">({{collectFeedback[scope.row.contract_id]}}条)</span>
                   </span>
                       <span v-else="">/</span>
                     </template>
@@ -521,7 +523,8 @@
                     prop="department_name"
                     label="部门">
                     <template slot-scope="scope">
-                      <span v-if="scope.row.department && scope.row.department.name">{{scope.row.department.name}}</span>
+                      <span
+                        v-if="scope.row.department && scope.row.department.name">{{scope.row.department.name}}</span>
                       <span v-else>暂无</span>
                     </template>
                   </el-table-column>
@@ -712,7 +715,8 @@
                     :addReturnInfo="addReturnInfo"
                     @close="closeModal"></AddReturnvisit>
 
-    <EditAddress :editAddressDialog="editAddressDialog" :rentContractId="contractOperateId" :collectHouseId="collectHouseId"
+    <EditAddress :editAddressDialog="editAddressDialog" :rentContractId="contractOperateId"
+                 :collectHouseId="collectHouseId"
                  :houseAddress="houseAddress" @close="closeModal"></EditAddress>
 
   </div>
@@ -725,9 +729,10 @@
   import EditHouseResources from '../../components/editHouseResources'
   import AddReturnvisit from "../../customerService/ReturnVisitManage/addReturnvisit.vue";   //添加回访
   import EditAddress from '../../components/editAddress'
+
   export default {
     name: 'hello',
-    components: {RightMenu, Organization, EditRentInfo, EditHouseResources, AddReturnvisit,EditAddress},
+    components: {RightMenu, Organization, EditRentInfo, EditHouseResources, AddReturnvisit, EditAddress},
     data() {
       return {
         rightMenuX: 0,
@@ -785,7 +790,7 @@
           sign_time: [],   // 签约日期
           un_upload: '',   // 是否上传合同
           org_id: '',  // 部门
-          user_id : '',   //员工
+          user_id: '',   //员工
           status: '',   // 房屋状态1:未签约， 2：已签约， 3：快到期（60天内）， 4：已结束， 5：已过期
           contract_index: '1',
           doc_status: '',
@@ -824,7 +829,7 @@
           },
         ],
         department: '',
-        staff : '',
+        staff: '',
         type: '',
         length: '',
         currentPage: 1,
@@ -859,8 +864,8 @@
         leaseHistoryDialog: false,
         leaseHistoryTableData: [],
 
-        collectFeedback : {},
-        rentFeedback : {},
+        collectFeedback: {},
+        rentFeedback: {},
       }
     },
     mounted() {
@@ -961,7 +966,7 @@
 
           this.params.org_id = val[0].id;
           this.department = val[0].name;
-        }else {
+        } else {
           this.params.user_id = val[0].id;
           this.staff = val[0].name;
         }
@@ -1012,10 +1017,10 @@
             });
             let collectIdArray = '';
             this.collectData.forEach((item) => {
-              collectIdArray += item.contract_id+',';
+              collectIdArray += item.contract_id + ',';
             });
             this.checkHandIn();
-            this.getReturnNumber(collectIdArray,1);
+            this.getReturnNumber(collectIdArray, 1);
 
             if (res.data.data.length < 1) {
               this.collectData = [];
@@ -1042,7 +1047,7 @@
           }
         })
       },
-      getReturnNumber(collectIdArray,type) {
+      getReturnNumber(collectIdArray, type) {
         this.$http.get(globalConfig.server + 'contract/feedback/num', {
           params: {
             contract_ids: collectIdArray,
@@ -1069,9 +1074,9 @@
 
             let collectIdArray = '';
             this.rentData.forEach((item) => {
-              collectIdArray += item.contract_id+',';
+              collectIdArray += item.contract_id + ',';
             });
-            this.getReturnNumber(collectIdArray,2);
+            this.getReturnNumber(collectIdArray, 2);
             if (res.data.data.length < 1) {
               this.collectData = [];
               this.rentStatus = '暂无数据';
@@ -1097,7 +1102,7 @@
           this.rentDatafunc();
         }
       },
-      dblClickHistoryTable(row, event){
+      dblClickHistoryTable(row, event) {
         if (this.activeName === 'first') {
           const {href} = this.$router.resolve({path: '/historyCollectDetail', query: {id: row.id}});
           window.open(href, '_blank', 'width=1920,height=1080');
@@ -1134,7 +1139,7 @@
               label: '修改租客信息',
               disabled: row.doc_status.id > 3
             },
-            {clickIndex: 'editAddressDialog',headIcon: 'el-icon-edit', label: '修改租房地址'},
+            {clickIndex: 'editAddressDialog', headIcon: 'el-icon-edit', label: '修改租房地址'},
             {clickIndex: 'lookMemorandum', headIcon: 'el-icons-fa-eye', label: '查看合同备忘', contract_id: row.contract_id},
             {clickIndex: 'addReturnvisitDialog', headIcon: 'el-icons-fa-pencil-square-o', label: '增加回访记录'},
             {
@@ -1199,8 +1204,8 @@
               this.deleteColumn('rent');
             }).catch(() => {
               this.$notify.warning({
-                title:'警告',
-                message:'已取消删除',
+                title: '警告',
+                message: '已取消删除',
               })
             });
             break;
@@ -1213,8 +1218,8 @@
               this.deleteColumn('collect');
             }).catch(() => {
               this.$notify.warning({
-                title:'警告',
-                message:'已取消删除',
+                title: '警告',
+                message: '已取消删除',
               })
             });
             break;
@@ -1222,34 +1227,34 @@
       },
 
       //删除合同
-      deleteColumn(type){
-        if(type === 'collect'){
-          this.$http.put(globalConfig.server+'lease/collect/delete/'+this.contractOperateId).then((res) => {
-            if(res.data.code === '61010'){
+      deleteColumn(type) {
+        if (type === 'collect') {
+          this.$http.put(globalConfig.server + 'lease/collect/delete/' + this.contractOperateId).then((res) => {
+            if (res.data.code === '61010') {
               this.$notify.success({
-                title:'成功',
-                message:res.data.msg,
+                title: '成功',
+                message: res.data.msg,
               });
               this.collectDatafunc();
-            }else {
+            } else {
               this.$notify.warning({
-                title:'警告',
-                message:res.data.msg,
+                title: '警告',
+                message: res.data.msg,
               })
             }
           })
-        }else {
-          this.$http.put(globalConfig.server+'lease/rent/delete/'+this.contractOperateId).then((res) => {
-            if(res.data.code === '61110'){
+        } else {
+          this.$http.put(globalConfig.server + 'lease/rent/delete/' + this.contractOperateId).then((res) => {
+            if (res.data.code === '61110') {
               this.$notify.success({
-                title:'成功',
-                message:res.data.msg,
+                title: '成功',
+                message: res.data.msg,
               });
               this.rentDatafunc();
-            }else {
+            } else {
               this.$notify.warning({
-                title:'警告',
-                message:res.data.msg,
+                title: '警告',
+                message: res.data.msg,
               })
             }
           })
@@ -1295,6 +1300,7 @@
       // tabs标签页
       handleClick(tab, event) {
         this.params.page = 1;
+        this.resetting();
         if (this.activeName == "first") {
           this.collectDatafunc();
         } else if (this.activeName == "second") {
@@ -1320,7 +1326,7 @@
           sign_time: [],   // 签约日期
           un_upload: '',   // 是否上传合同
           org_id: '',  // 部门
-          user_id : '',
+          user_id: '',
           status: '',   // 房屋状态1:未签约， 2：已签约， 3：快到期（60天内）， 4：已结束， 5：已过期
           contract_index: '1',
           doc_status: '',
