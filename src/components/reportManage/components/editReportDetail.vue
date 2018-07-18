@@ -11,8 +11,7 @@
             <el-col :span="18">
               <div class="personalInfo">
                 <div class="personalA">
-                  <!--@click="staffDetailDialog=true"-->
-                  <p>
+                  <p @click="staffDetailDialog=true">
                     <img :src="personal.avatar" v-if="personal.avatar !== '' && personal.avatar !== null">
                     <img src="../../../assets/images/head.png" v-else>
                   </p>

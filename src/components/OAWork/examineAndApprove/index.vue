@@ -596,10 +596,10 @@
                 <i class="iconfont icon-yanjing"></i>
                 <span slot="title">已读</span>
               </el-menu-item>
-              <!--<el-menu-item index="all">-->
-                <!--<i class="iconfont icon-jingjianmoshi"></i>-->
-                <!--<span slot="title">全部</span>-->
-              <!--</el-menu-item>-->
+              <el-menu-item index="all">
+                <i class="iconfont icon-jingjianmoshi"></i>
+                <span slot="title">全部</span>
+              </el-menu-item>
             </el-menu>
           </div>
           <div class="tableLeft">
@@ -711,9 +711,9 @@
         <!--</el-tab-pane>-->
         <!--</el-tabs>-->
       </el-tab-pane>
-      <!--<el-tab-pane label="全部" name="sixth">-->
-        <!--<ReportAll></ReportAll>-->
-      <!--</el-tab-pane>-->
+      <el-tab-pane label="全部" name="sixth">
+        <ReportAll></ReportAll>
+      </el-tab-pane>
 
     </el-tabs>
 
