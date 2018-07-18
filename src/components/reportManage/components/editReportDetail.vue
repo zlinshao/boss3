@@ -464,11 +464,7 @@
               }
             });
           }
-        } else {
-          this.leader_phone = '';
-          this.leader_name = '';
         }
-
       }
     },
     methods: {
@@ -623,6 +619,8 @@
         this.editReportData = [];
         this.show_content = {};
         this.defaultItem = '评论信息';
+        this.leader_phone = '';
+        this.leader_name = '';
       },
 
       // 获取相关修改记录
