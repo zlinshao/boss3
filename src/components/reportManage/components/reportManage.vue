@@ -4,7 +4,7 @@
       <div class="filter" style="text-align: right">
         <el-form :inline="true" size="mini" onsubmit="return false">
           <el-form-item>
-            <el-input placeholder="请输入房屋地址" @keyup.enter.native="search" v-model="params.q" size="mini" clearable>
+            <el-input placeholder="房屋地址/报备人" @keyup.enter.native="search" v-model="params.q" size="mini" clearable>
               <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
             </el-input>
           </el-form-item>
