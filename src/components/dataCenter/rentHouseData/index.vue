@@ -58,18 +58,11 @@
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
-                    <div class="el_col_label">签约日期起止范围</div>
+                    <div class="el_col_label">合同编号</div>
                   </el-col>
                   <el-col :span="16" class="el_col_option">
                     <el-form-item>
-                      <el-date-picker
-                        v-model="form.sign_date"
-                        type="daterange"
-                        value-format="yyyy-MM-dd"
-                        start-placeholder="开始日期"
-                        end-placeholder="结束日期"
-                        @change="dateChange">
-                      </el-date-picker>
+                      <el-input v-model="form.contract_number" placeholder="请输入合同编号" clearable></el-input>
                     </el-form-item>
                   </el-col>
                 </el-row>
@@ -93,6 +86,25 @@
               </el-col>
             </el-row>
             <el-row class="el_row_border">
+              <el-col :span="12">
+                <el-row>
+                  <el-col :span="8">
+                    <div class="el_col_label">签约日期起止范围</div>
+                  </el-col>
+                  <el-col :span="16" class="el_col_option">
+                    <el-form-item>
+                      <el-date-picker
+                        v-model="form.sign_date"
+                        type="daterange"
+                        value-format="yyyy-MM-dd"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        @change="dateChange">
+                      </el-date-picker>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+              </el-col>
               <el-col :span="12">
                 <el-row>
                   <el-col :span="8">
@@ -239,7 +251,7 @@
           <el-tabs type="border-card" v-model="rentActiveName" @tab-click="handleClick">
             <el-tab-pane v-for="(item,key) in cityTableData" :label="key" :key="item.id" :name="key">
               <div class="myHouse">
-                <div class="blueTable" v-if="item.data && item.data[cityForm.page-1] && item.data[cityForm.page-1].length>0">
+                <div class="blueTable" v-if="item.data && item.data[cityForm.page-1] && item.data[cityForm.page-1].length>=0">
                   <el-table
                     :data="item.data[cityForm.page-1]"
                     :empty-text='cityTableStatus'
@@ -317,6 +329,7 @@
           staff_id: [],  //收房负责人
           sign_date: [], //签约日期起止范围
           is_agency: '',  //是否中介单
+          contract_number: '',
         },
         sign_date: [],
         sign_name: '',
@@ -605,7 +618,20 @@
       },
       // 重置
       resetting() {
+        let Nowdate = new Date();
+        let year = new Date(Nowdate).getFullYear();
+        let month = new Date(Nowdate).getMonth();
+        let month1 = new Date(Nowdate).getMonth() + 1;
+        let date = new Date(Nowdate).getDate();
+        if (month < 10) month = "0" + month;
+        if (month1 < 10) month1 = "0" + month1;
+        if (date < 10) date = "0" + date;
+        this.form.sign_date = [new Date(year, month, date), new Date(year, month, date)];
+        this.sign_date[0] = this.sign_date[1] = year + "-" + month1 + "-" + date;
+        this.form.sign_date = this.sign_date;
+
         this.form.address = '';
+        this.form.contract_number = '';
         this.form.sign_id = [];
         this.form.org_id = [];
         this.form.sign_date = [];
