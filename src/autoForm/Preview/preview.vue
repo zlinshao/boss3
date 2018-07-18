@@ -61,7 +61,7 @@
     },
     methods:{
       setHeight(){
-        let height_ = $(window).height() - 141;
+        let height_ = $(window).height() - 165;
         $('#preview').height(height_);
       },
       addFormGropItem(item){
