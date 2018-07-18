@@ -281,7 +281,7 @@
             <el-tab-pane v-for="(item,key) in cityTableData.data" :label="key" :key="key"
                          :name="key" v-if="key==='公司总计'">
               <div class="myHouse">
-                <div class="blueTable" v-if="item.data && item.data.length>0">
+                <div class="blueTable" v-if="item.data && item.data.length>=0">
                   <el-table
                     :data="item.data"
                     :empty-text='cityTableStatus'
@@ -328,7 +328,7 @@
             <el-tab-pane v-for="(item,key) in cityTableData.data" :label="key" :key="key"
                          :name="key" v-if="key!=='公司总计'" >
               <div class="myHouse">
-                <div class="blueTable" v-if="item.data && item.data.length>0">
+                <div class="blueTable" v-if="item.data && item.data.length>=0">
                   <el-table
                     :data="item.data"
                     :empty-text='cityTableStatus'
@@ -680,7 +680,6 @@
         if (month < 10) month = "0" + month;
         if (month1 < 10) month1 = "0" + month1;
         if (date < 10) date = "0" + date;
-
         this.form.sign_date = [new Date(year, month, date), new Date(year, month, date)];
         this.sign_date[0] = this.sign_date[1] = year + "-" + month1 + "-" + date;
         this.form.sign_date = this.sign_date;

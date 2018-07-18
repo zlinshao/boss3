@@ -313,6 +313,13 @@
                   </div>
                 </el-form-item>
               </el-col>
+              <el-col :span="8">
+                <el-form-item label="签约到开始间隔时长(天)">
+                  <div class="content">
+                    {{contractInfo.diffdays}}
+                  </div>
+                </el-form-item>
+              </el-col>
             </el-row>
             <el-row>
               <el-col :span="8">
@@ -1009,6 +1016,11 @@
                     </span>
                   </div>
                 </el-form-item>
+                <el-form-item label="签约到开始间隔时长(天)">
+                  <div class="content">
+                    {{contractInfo.diffdays}}
+                  </div>
+                </el-form-item>
                 <el-form-item label="总收入金额">
                   <div class="content">{{contractInfo.money_sum}}</div>
                 </el-form-item>
@@ -1374,7 +1386,9 @@
               </el-col>
               <el-col :span="5">
                 <el-form-item label="证件类型">
-                  <div class="content" v-if="item.old && item.old.idtype && item.old.idtype.dictionary_name">{{item.old && item.old.idtype && item.old.idtype.dictionary_name}}</div>
+                  <div class="content" v-if="item.old && item.old.idtype && item.old.idtype.dictionary_name">{{item.old
+                    && item.old.idtype && item.old.idtype.dictionary_name}}
+                  </div>
                   <div class="content" v-else>暂无</div>
                 </el-form-item>
               </el-col>
@@ -1412,7 +1426,9 @@
               </el-col>
               <el-col :span="5">
                 <el-form-item label="证件类型">
-                  <div class="content" v-if="item.new && item.new.idtype && item.new.idtype.dictionary_name">{{item.new && item.new.idtype && item.new.idtype.dictionary_name}}</div>
+                  <div class="content" v-if="item.new && item.new.idtype && item.new.idtype.dictionary_name">{{item.new
+                    && item.new.idtype && item.new.idtype.dictionary_name}}
+                  </div>
                   <div class="content" v-else>暂无</div>
                 </el-form-item>
               </el-col>
