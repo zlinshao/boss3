@@ -994,6 +994,7 @@
         }
       },
       selectMember(val) {
+        console.log(val)
         if (this.type === 'depart') {
 //          this.params.org_id = [];
 //          let departNameArray = [];

@@ -1418,7 +1418,7 @@
           if(this.selectLeaveDateDialog && !this.sendLeaveMsgDialog){
             this.sendLeaveMsgForm.date = this.form.dismiss_time;
           }
-          this.$http.put(globalConfig.server + 'core/customer/sms', {
+          this.$http.post(globalConfig.server + 'core/customer/sms', {
             id: id,
             date: this.sendLeaveMsgForm.date
           }).then((res) => {
