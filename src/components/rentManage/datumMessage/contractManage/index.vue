@@ -321,7 +321,7 @@
             </el-row>
             <div class="btnOperate">
               <el-button type="primary" size="mini" @click="highSearch">搜索</el-button>
-              <el-button type="primary" size="mini" @click="resetting">重置</el-button>
+              <el-button type="primary" size="mini" @click="resetAll">重置</el-button>
               <el-button type="primary" size="mini" @click="highGrade">取消</el-button>
             </div>
           </el-form>
@@ -1006,15 +1006,33 @@
     },
     methods: {
       handleCommand(command) {
-        this.params.search = '';
-        this.params.name = '';
-        this.params.phone = '';
         if (command == 0) {
           this.searchType = '合同编号/地址';
+          if (this.params.name) {
+            this.params.search = this.params.name;
+          } else if (this.params.phone) {
+            this.params.search = this.params.phone;
+          }
+          this.params.phone = '';
+          this.params.name = '';
         } else if (command == 1) {
           this.searchType = '客户姓名';
+          if (this.params.search) {
+            this.params.name = this.params.search;
+          } else if (this.params.phone) {
+            this.params.name = this.params.phone;
+          }
+          this.params.phone = '';
+          this.params.search = '';
         } else {
           this.searchType = '手机号';
+          if (this.params.search) {
+            this.params.phone = this.params.search;
+          } else if (this.params.name) {
+            this.params.phone = this.params.name;
+          }
+          this.params.name = '';
+          this.params.search = '';
         }
       },
       closeModal(val) {
@@ -1139,7 +1157,7 @@
               this.rentFeedback = res.data.data;
             }
           }
-        })
+        });
       },
       rentDatafunc() {
         this.rentStatus = " ";
@@ -1388,31 +1406,32 @@
       highGrade() {
         this.isHigh = !this.isHigh;
       },
+      resetAll() {
+        this.params.search = '';      //模糊搜索
+        this.params.name = '';       //模糊搜索
+        this.params.phone = '';       //模糊搜索
+        this.resetting();
+      },
       resetting() {
         this.department = '';
         this.staff = '';
-        this.params = {
-          page: 1,
-          limit: 12,
-          search: '',      //模糊搜索
-          name: '',      //模糊搜索
-          phone: '',      //模糊搜索
-          publish_time: [],     //发布时间
-          lord_start_time: [],  //收房合同开始时间
-          lord_end_time: [],   //收房合同结束时间
-          renter_start_time: [], // 租房合同开始时间
-          renter_end_time: [], //租房合同结束时间
-          sign_time: [],   // 签约日期
-          un_upload: '',   // 是否上传合同
-          org_id: '',  // 部门
-          user_id: '',
-          status: '',   // 房屋状态1:未签约， 2：已签约， 3：快到期（60天内）， 4：已结束， 5：已过期
-          contract_index: '1',
-          doc_status: '',
-          visit_status: '',
-          note: '',
-          submit_time: [],
-        };
+        this.params.publish_time = [];
+        this.params.lord_start_time = [];
+        this.params.lord_end_time = [];
+        this.params.renter_start_time = [];
+        this.params.renter_end_time = [];
+        this.params.sign_time = [];
+        this.params.un_upload = '';
+        this.params.org_id = '';
+        this.params.user_id = '';
+        this.params.status = '';
+        this.params.contract_index = '1';
+        this.params.doc_status = '';
+        this.params.visit_status = '';
+        this.params.note = '';
+        this.params.submit_time = [];
+        this.isHigh = false;
+        this.search();
       }
     },
   }
