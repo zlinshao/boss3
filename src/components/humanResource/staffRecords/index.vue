@@ -4,8 +4,7 @@
       <div class="highSearch">
         <el-form :inline="true" size="mini">
           <el-form-item>
-            <el-input placeholder="请输入标题" v-model="form.keywords" size="mini" clearable
-                      @keyup.enter.native="search">
+            <el-input placeholder="请输入标题" v-model="params.search" size="mini" clearable @keyup.enter.native="search">
               <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
             </el-input>
           </el-form-item>
@@ -13,12 +12,15 @@
             <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
           </el-form-item>
           <el-form-item>
-            <el-button type="success" @click="publicArticle">发布文章</el-button>
+            <el-button type="primary" size="mini" @click="addStaffRecordDialog=true;">
+              <i class="el-icon-plus"></i>
+              新增记录
+            </el-button>
           </el-form-item>
         </el-form>
       </div>
       <div class="filter high_grade" :class="isHigh? 'highHide':''">
-        <el-form :inline="true" :model="form" size="mini" label-width="100px">
+        <el-form :inline="true" :model="params" size="mini" label-width="100px">
           <div class="filterTitle">
             <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
           </div>
@@ -26,14 +28,21 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">选择类别</div>
+                  <div class="el_col_label">入职时间</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="moduleId" clearable placeholder="请选择类别">
-                      <el-option v-for="(key,index) in dict.region" :label="key.dictionary_name" :value="key.id"
-                                 :key="index"></el-option>
-                    </el-select>
+                    <el-date-picker
+                      v-model="params.entry_time"
+                      type="daterange"
+                      align="right"
+                      unlink-panels
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期"
+                      value-format="yyyy-MM-dd"
+                      :picker-options="pickerOptions">
+                    </el-date-picker>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -41,18 +50,16 @@
             <el-col :span="12">
               <el-row>
                 <el-col :span="8">
-                  <div class="el_col_label">选择状态</div>
+                  <div class="el_col_label">部门</div>
                 </el-col>
                 <el-col :span="16" class="el_col_option">
                   <el-form-item>
-                    <el-select v-model="form.status" clearable placeholder="请选择状态">
-                      <el-option v-for="(key,index) in dict.status" :label="key.dictionary_name" :value="key.id"
-                                 :key="index"></el-option>
-                    </el-select>
+                    <el-input v-model="params.org_name" placeholder="请输入部门名称" clearable></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
             </el-col>
+
           </el-row>
           <div class="btnOperate">
             <el-button size="mini" type="primary" @click="search">搜索</el-button>
@@ -66,59 +73,57 @@
       <div class="blueTable left_table">
         <el-table
           :data="tableData"
-          :empty-text='collectStatus'
-          v-loading="collectLoading"
+          :empty-text='tableStatus'
+          v-loading="tableLoading"
           element-loading-text="拼命加载中"
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(255, 255, 255, 0)"
-          @row-contextmenu='openContextMenu'
-          @cell-dblclick='openDetail'
-          style="width: 100%">
+          @cell-dblclick='staffDetailDialog=true'
+          style="width: 100%"> <!--@row-contextmenu='openContextMenu'-->
           <el-table-column
-            prop="title"
-            label="标题">
+            prop="name"
+            label="姓名">
           </el-table-column>
           <el-table-column
-            prop="dict_ids"
-            label="类型">
+            prop="role"
+            label="岗位">
           </el-table-column>
           <el-table-column
-            prop="staffs.name"
-            label="发布人">
+            prop="org"
+            label="部门">
             <template slot-scope="scope">
-              <span v-if="scope.row.staffs && scope.row.staffs.name">{{scope.row.staffs && scope.row.staffs.name}}</span>
+              <span
+                v-if="scope.row.staffs && scope.row.staffs.name">{{scope.row.staffs && scope.row.staffs.name}}</span>
               <span v-if="!(scope.row.staffs && scope.row.staffs.name)">暂无</span>
             </template>
           </el-table-column>
           <el-table-column
             prop="create_time"
-            label="创建时间">
+            label="入职时间"
+            sortable>
           </el-table-column>
           <el-table-column
-            label="状态">
-            <template slot-scope="scope">
-              <el-button class="btnStatus" v-if="scope.row.statuss === '已发布'" type="primary" size="mini">
-                {{scope.row.statuss}}
-              </el-button>
-              <el-button class="btnStatus" v-if="scope.row.statuss === '已结束'" type="warning" size="mini">
-                {{scope.row.statuss}}
-              </el-button>
-              <el-button class="btnStatus" v-if="scope.row.statuss === '草稿'" type="info" size="mini">
-                {{scope.row.statuss}}
-              </el-button>
-              <el-tag type="success" v-if="scope.row.top !== null ">置顶</el-tag>
-              <el-tag type="warning" v-if="scope.row.fine !==null ">精华</el-tag>
-            </template>
+            label="表扬数"
+            :filters="[{text: '正序', value: '2016-05-01'}, {text: '倒序', value: '2016-05-02'}]"
+            :filter-method="filterHandler">
+          </el-table-column>
+          <el-table-column
+            label="批评数">
+          </el-table-column>
+          <el-table-column
+            label="疑惑数">
+          </el-table-column>
+          <el-table-column
+            label="其他">
           </el-table-column>
         </el-table>
       </div>
-
       <div class="block pages">
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="form.pages"
-          :page-size="form.list"
+          :current-page="params.pages"
+          :page-size="params.list"
           layout="total, prev, pager, next, jumper"
           :total="totalNum">
         </el-pagination>
@@ -128,16 +133,17 @@
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
+    <AddStaffRecord :addStaffDialog="addStaffRecordDialog" @close="addStaffRecordDialog=false"></AddStaffRecord>
   </div>
 </template>
 
 <script>
-  import RightMenu from '../../common/rightMenu.vue'    //右键
-  import Organization from '../../common/organization.vue'
-
+  import RightMenu from '../../common/rightMenu.vue';    //右键
+  import Organization from '../../common/organization.vue';  //组织架构
+  import AddStaffRecord from './components/addStaffRecord.vue';  //添加记录
   export default {
-    name: 'staff-square',
-    components: {RightMenu, Organization},
+    name: 'staff-records',
+    components: {RightMenu, Organization, AddStaffRecord},
     data() {
       return {
         urls: globalConfig.server,
@@ -147,89 +153,83 @@
         isHigh: false,
         lists: [],
         /***********/
-        dict: {
-          region: [],
-          status: [],
+        params: {
+          page: 1,
+          limit: 12,
+          search: '',   //模糊搜索
+          org_name: '',  //部门
+          entry_time: [], //入职时间
         },
-        form: {
-          list: 12,
-          dict_id: 137,
-          status: '',
-          keywords: '',
-          pages: 1,
+        // org_name: '',
+        pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
         },
+
         totalNum: 0,
         tableData: [],
-        pitch: '',
-        if_shows: '',
+        tableStatus: ' ',
+        tableLoading: false,
+        staffDetailDialog: false,
+
+        currentId: '',
         organizationDialog: false,
-        moduleId: '',
-        moduleType: 'staffSquare',
-        collectStatus: ' ',
-        collectLoading: false,
+        organizaType: '',
+
+        addStaffRecordDialog: false,   //新增记录弹框
       }
     },
     mounted() {
       this.getStaffTableData();
-      this.getDict();
     },
-    activated() {
-      let refresh = this.$route.query.refresh;
-      if (refresh) {
-        this.getStaffTableData();
-      }
-    },
-    created() {
-      this.form.pages = this.currentPage;
-    },
-    watch: {
-      moduleId(val) {
-        if (!val) {
-          this.form.dict_id = 137;
-        } else {
-          this.form.dict_id = val;
-        }
-      },
-    },
-    computed: {
-      currentPage() {
-        return this.$store.state.article.staff_page;
-      }
-    },
+    watch: {},
     methods: {
-      search(){
-        this.form.pages = 1;
-        this.getStaffTableData();
+      filterHandler(value, row, column) {
+        const property = column['property'];
+        return row[property] === value;
       },
-      getDict() {
-        this.$http.get(this.urls + 'setting/dictionary/137').then((res) => {
-          this.dict.region = res.data.data;
-        });
-        this.$http.get(this.urls + 'setting/dictionary/147').then((res) => {
-          this.dict.status = res.data.data;
-        });
+      search() {
+        this.params.page = 1;
+        this.getStaffTableData();
       },
       getStaffTableData() {
-        this.collectLoading = true;
-        this.collectStatus = ' ';
-        this.$http.get(this.urls + 'oa/portal/', {params: this.form}).then((res) => {
+        this.tableLoading = true;
+        this.tableStatus = ' ';
+        this.$http.get(this.urls + 'oa/portal/', {params: this.params}).then((res) => {
           this.isHigh = false;
-          this.collectLoading = false;
+          this.tableLoading = false;
           if (res.data.code === '80000') {
             this.tableData = res.data.data.data;
             this.totalNum = res.data.data.count;
           } else {
-            this.collectStatus = '暂无数据';
+            this.tableStatus = '暂无数据';
             this.tableData = [];
             this.totalNum = 0;
           }
         })
-      },
-      // 详情
-      openDetail(row) {
-        var data = {ids: row.id, detail: 'port'};
-        this.$store.dispatch('articleDetail', data);
-        this.$router.push({path: '/Infodetails', query: data});
       },
       // 高级
       highGrade() {
@@ -237,102 +237,28 @@
       },
       // 重置
       resetting() {
-        this.moduleId = '';
-        this.form.dict_id = 137;
-        this.form.status = '';
-        this.form.keywords = '';
+        this.params.search = '';
+        this.params.org_name = '';
+        this.params.search = '';
         this.search();
-      },
-      // 文章发布
-      publicArticle() {
-        this.$store.dispatch('deleteArticleId');
-        this.$router.push({path: '/publicArticle', query: {moduleType: this.moduleType, from: 'publicArticleBtn'}});
-        this.$store.dispatch('moduleType', this.moduleType);
       },
       handleSizeChange(val) {
         console.log(`每页 ${val} 条`);
       },
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`);
-        this.form.pages = val;
-        this.$store.dispatch('staffPage', val);
+        this.params.page = val;
         this.getStaffTableData();
       },
 
       // 右键
       openContextMenu(row, event) {
-        this.pitch = row.id;
-        console.log(row.statuss);
-        if (row.statuss !== '已发布') {
-          this.statuss = '已发布';
-          this.lists = [
-            {clickIndex: 'revise', headIcon: 'iconfont icon-bianji--', label: '编辑'},
-            {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除'},
-            {clickIndex: 'grounding', headIcon: 'iconfont icon-shangjia--', label: '上架'},
-          ];
-        } else {
-          this.statuss = '已结束';
-          if(row.top === null && row.fine === null){
-            this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'iconfont icon-xiajia--', label: '下架',},
-              {clickIndex: 'top', headIcon: 'iconfont icon-zhiding--', label: '置顶',},
-              {clickIndex: 'essence', headIcon: 'iconfont icon-jinghua--', label: '精华',},
-            ];
-          } else if(row.top !== null && row.fine === null){
-            this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'iconfont icon-xiajia--', label: '下架',top:true},
-              {clickIndex: 'top', headIcon: 'el-icon-download', label: '取消置顶',},
-              {clickIndex: 'essence', headIcon: 'iconfont icon-jinghua--', label: '精华',},
-            ];
-          } else if(row.top === null && row.fine !== null){
-            this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'iconfont icon-xiajia--', label: '下架',fine:true},
-              {clickIndex: 'top', headIcon: 'iconfont icon-zhiding--', label: '置顶',},
-              {clickIndex: 'essence', headIcon: 'iconfont icon-jinghua--', label: '取消精华',},
-            ];
-          }else{
-            this.lists = [
-              {clickIndex: 'undercarriage', headIcon: 'iconfont icon-xiajia--', label: '下架',top:true,fine:true},
-              {clickIndex: 'top', headIcon: 'el-icon-download', label: '取消置顶',},
-              {clickIndex: 'essence', headIcon: 'iconfont icon-jinghua--', label: '取消精华',},
-            ];
-          }
-
-        }
+        this.currentId = row.id;
         this.contextMenuParam(event);
       },
       // 右键回调
       clickEvent(val) {
-        switch (val.clickIndex) {
-          case 'revise':
-            this.$router.push({path: '/publicArticle', query: {ids: this.pitch, moduleType: this.moduleType}});
-            this.$store.dispatch('moduleType', this.moduleType);
-            this.$store.dispatch('articleId', this.pitch);
-            break;
-          case 'delete':
-            this.deleteInfo(this.pitch);
-            break;
-          case 'grounding':
-            var top_fine = {};
-            this.upperShelf(this.pitch, '上架', top_fine);
-            break;
-          case 'undercarriage':
-            var top_fine = {};
-            if (val.top) {
-              top_fine.top = true;
-            }
-            if (val.fine) {
-              top_fine.fine = true;
-            }
-            this.upperShelf(this.pitch, '下架', top_fine);
-            break;
-          case 'top':
-            this.top(this.pitch, '置顶');
-            break;
-          case 'essence':
-            this.essence(this.pitch, '精华');
-            break;
-        }
+
       },
       //关闭右键菜单
       closeMenu() {
@@ -356,103 +282,6 @@
       },
       closeOrganization() {
         this.organizationDialog = false;
-      },
-      // 删除
-      deleteInfo(id) {
-        this.$confirm('删除后不可恢复, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$http.get(this.urls + 'oa/portal/delete/' + id).then((res) => {
-            if (res.data.code === '80040') {
-              this.getStaffTableData();
-              this.prompt(1, res.data.msg);
-            } else {
-              this.prompt(2, res.data.msg);
-            }
-          });
-        }).catch(() => {
-          this.$notify.info({
-            title: '提示',
-            message: '已取消删除'
-          });
-        });
-      },
-
-      // 上架下架
-      upperShelf(id, title, status) {
-        this.$confirm('此操作将' + title + '文章, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$http.get(this.urls + 'oa/portal/if_show/' + id).then((res) => {
-            if (res.data.code === '80080' || res.data.code === '80010') {
-              this.getStaffTableData();
-              this.prompt(1, res.data.msg);
-              if (title === '下架') {
-                if (status.top) {
-                  this.top(id, '置顶');
-                }
-                if (status.fine) {
-                  this.essence(id, '精华');
-                }
-              }
-            } else {
-              this.prompt(2, res.data.msg);
-            }
-          });
-        }).catch(() => {
-          this.$notify.info({
-            title: '提示',
-            message: '已取消操作'
-          });
-        });
-      },
-
-      // 提示信息
-      prompt(val, info) {
-        if (val === 1) {
-          this.$notify.success({
-            title: '成功',
-            message: info,
-          });
-        } else {
-          this.$notify.info({
-            title: '提示',
-            message: info,
-          });
-        }
-      },
-
-      //置顶
-      top(id, info) {
-        this.$http.put(globalConfig.server + "oa/portal/status/" + id, {type: 'top'}).then((res) => {
-          if (res.data.code == "800100" || res.data.code == "800110") {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
-            this.getStaffTableData();
-
-            this.getDict();
-          }
-        });
-      },
-      //精华
-      essence(id, info) {
-        this.$http.put(globalConfig.server + "oa/portal/status/" + id, {type: 'fine'}).then((res) => {
-          if (res.data.code == "800100" || res.data.code == "800110") {
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg
-            });
-            this.getStaffTableData();
-
-            this.getDict();
-          }
-        });
       },
     },
   }
