@@ -1428,7 +1428,7 @@
                 message: res.data.msg
               });
               this.sendLeaveMsgDialog = false;
-              this.selectLeaveDateDialog = true;
+              this.selectLeaveDateDialog = false;
             } else {
               this.$notify.warning({
                 title: '警告',
