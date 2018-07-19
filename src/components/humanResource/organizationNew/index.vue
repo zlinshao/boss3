@@ -819,7 +819,8 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button size="small" @click="selectLeaveDateDialog=false">取 消</el-button>
-        <el-button size="small" type="primary" @click="leaveDateConfirm">确 定</el-button>
+        <el-button size="small" type="primary" @click="leaveDateConfirm">只离职</el-button>
+        <el-button size="small" type="primary" @click="sendLeaveMsgConfirm">离职并发送短信</el-button>
       </span>
     </el-dialog>
     <el-dialog :close-on-click-modal="false" title="发送离职短信" :visible.sync="sendLeaveMsgDialog" width="30%">
@@ -909,7 +910,7 @@
         selectLevelDialog: false,  //选择等级弹框
         form: {dismiss_time: ''}, //离职日期
         levelForm: {level: ''},  //等级
-        sendLeaveMsgForm: {date: ''},
+        sendLeaveMsgForm: {date: ''},  //发送离职短信 离职日期
         branchBankCategory: [],
         isHigh: false,
         powerData: [],
@@ -1068,7 +1069,22 @@
         handler(val, oldVal) {
 
         }
-      }
+      },
+      //发送离职短信
+      sendLeaveMsgDialog(val) {
+        if (!val) {
+          this.form.dismiss_time = '';
+          this.sendLeaveMsgForm.date = '';
+          this.editId = '';
+        }
+      },
+      //离职
+      selectLeaveDateDialog(val) {
+        if (!val) {
+          this.sendLeaveMsgForm.date = '';
+          this.editId = '';
+        }
+      },
     },
     methods: {
       // allowDrop(draggingNode, dropNode) {
@@ -1355,7 +1371,7 @@
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用'},
             {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职'},
-            // {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
+            {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
             // {clickIndex: 'delete', headIcon: 'el-icon-delete', label: '删除',},
           ];
         } else if (!row.is_enable && row.is_on_job) {
@@ -1364,7 +1380,7 @@
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用'},
             {clickIndex: 'not_on_job', headIcon: 'iconfont icon-kehuguanli', label: '复职'},
-            // {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
+            {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
           ];
         } else if (row.is_enable && !row.is_on_job) {
           this.lists = [
@@ -1372,7 +1388,7 @@
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'el-icons-fa-check-circle-o', label: '启用'},
             {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职'},
-            // {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
+            {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
           ];
         } else if (!row.is_enable && !row.is_on_job) {
           this.lists = [
@@ -1380,7 +1396,7 @@
             {clickIndex: 'edit', headIcon: 'el-icon-edit', label: '修改',},
             {clickIndex: 'enable', headIcon: 'iconfont icon-jinyong--', label: '禁用'},
             {clickIndex: 'on_job', headIcon: 'iconfont icon-lizhi', label: '离职'},
-            // {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
+            {clickIndex: 'send_leave_msg', headIcon: 'iconfont icon-duanxin', label: '发送离职短信'},
           ];
         }
         // this.lists = [
@@ -1392,13 +1408,16 @@
       },
       //发送离职短信
       sendLeaveMsgConfirm() {
-        this.$confirm('此操作将发送离职短信，是否继续?', '提示', {
+        this.$confirm('此操作将给该员工负责的客户发送短信，是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           let id = [];
           id.push(this.editId);
+          if(this.selectLeaveDateDialog && !this.sendLeaveMsgDialog){
+            this.sendLeaveMsgForm.date = this.form.dismiss_time;
+          }
           this.$http.put(globalConfig.server + 'core/customer/sms', {
             id: id,
             date: this.sendLeaveMsgForm.date
@@ -1409,7 +1428,6 @@
                 message: res.data.msg
               });
               this.sendLeaveMsgDialog = false;
-              this.editId = '';
             } else {
               this.$notify.warning({
                 title: '警告',
@@ -1439,7 +1457,6 @@
               });
               this.getStaffData();
               this.selectLeaveDateDialog = false;
-              this.editId = '';
             } else {
               this.$notify.warning({
                 title: '警告',
@@ -1500,7 +1517,7 @@
           this.powerModule = true;
           this.powerData = val.data;
         } else if (val.clickIndex === 'send_leave_msg') {
-           this.sendLeaveMsgDialog = true;
+          this.sendLeaveMsgDialog = true;
         }
 
       },

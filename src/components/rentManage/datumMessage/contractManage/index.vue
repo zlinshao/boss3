@@ -5,7 +5,29 @@
         <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
+              <el-dropdown @command="handleCommand">
+                <el-button type="primary" size="mini">
+                  {{searchType}}<i class="el-icon-arrow-down el-icon--right"></i>
+                </el-button>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="0">合同编号/地址</el-dropdown-item>
+                  <el-dropdown-item command="1">客户姓名</el-dropdown-item>
+                  <el-dropdown-item command="2">手机号</el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </el-form-item>
+            <el-form-item v-if="searchType=='合同编号/地址'">
               <el-input v-model="params.search" placeholder="搜索" @keyup.enter.native="search()" clearable>
+                <el-button @click="search()" slot="append" type="primary" icon="el-icon-search"></el-button>
+              </el-input>
+            </el-form-item>
+            <el-form-item v-if="searchType=='客户姓名'">
+              <el-input v-model="params.name" placeholder="搜索" @keyup.enter.native="search()" clearable>
+                <el-button @click="search()" slot="append" type="primary" icon="el-icon-search"></el-button>
+              </el-input>
+            </el-form-item>
+            <el-form-item v-if="searchType=='手机号'">
+              <el-input v-model="params.phone" placeholder="搜索" @keyup.enter.native="search()" clearable>
                 <el-button @click="search()" slot="append" type="primary" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
@@ -821,6 +843,8 @@
           page: 1,
           limit: '12',
           search: '',      //模糊搜索
+          name: '',  //客户姓名
+          phone: '', //手机号
           publish_time: [],     //发布时间
           lord_start_time: [],  //收房合同开始时间
           lord_end_time: [],   //收房合同结束时间
@@ -907,6 +931,7 @@
 
         collectFeedback: {},
         rentFeedback: {},
+        searchType: '合同编号/地址',
       }
     },
     mounted() {
@@ -980,6 +1005,18 @@
       }
     },
     methods: {
+      handleCommand(command) {
+        this.params.search = '';
+        this.params.name = '';
+        this.params.phone = '';
+        if (command == 0) {
+          this.searchType = '合同编号/地址';
+        } else if (command == 1) {
+          this.searchType = '客户姓名';
+        } else {
+          this.searchType = '手机号';
+        }
+      },
       closeModal(val) {
         this.editRentInfoDialog = false;
         this.editAddressDialog = false;
@@ -1357,7 +1394,9 @@
         this.params = {
           page: 1,
           limit: 12,
-          q: '',      //模糊搜索
+          search: '',      //模糊搜索
+          name: '',      //模糊搜索
+          phone: '',      //模糊搜索
           publish_time: [],     //发布时间
           lord_start_time: [],  //收房合同开始时间
           lord_end_time: [],   //收房合同结束时间
