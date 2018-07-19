@@ -57,6 +57,7 @@ const WechatMessage =()=> import  ('../components/wechatMessage/index.vue')     
 const IntegralManage =()=> import  ('../components/humanResource/integralManage/index.vue')
 const OrganizationNew =()=> import  ('../components/humanResource/organizationNew/index.vue')       // add by cj 组织架构
 const PersonalRecords =()=> import  ('../components/humanResource/personalRecords/index')
+const StaffRecords =()=> import  ('../components/humanResource/staffRecords/index')     // add by cj 员工档案
 
 
 //OA办公
@@ -487,6 +488,7 @@ export default new Router({
         // {path: '/organization', component: Organization, name: '组织架构',},
         {path: '/OrganizationNew', component: OrganizationNew, name: '组织架构',},
         {path: '/integralManage', component: IntegralManage, name: '积分管理',},
+        // {path: '/staffRecords', component: StaffRecords, name: '员工档案',},
         // {path: '/personalRecords', component: PersonalRecords, name: '人事报表',},
         // {path: '/achievement', component: Achievement, name: '业绩工资',},
       ]

@@ -5,29 +5,8 @@
         <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-dropdown @command="handleCommand">
-                <el-button type="primary" size="mini">
-                  {{searchType}}<i class="el-icon-arrow-down el-icon--right"></i>
-                </el-button>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="0">合同编号/地址</el-dropdown-item>
-                  <el-dropdown-item command="1">客户姓名</el-dropdown-item>
-                  <el-dropdown-item command="2">手机号</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </el-form-item>
-            <el-form-item v-if="searchType=='合同编号/地址'">
-              <el-input v-model="params.search" placeholder="搜索" @keyup.enter.native="search()" clearable>
-                <el-button @click="search()" slot="append" type="primary" icon="el-icon-search"></el-button>
-              </el-input>
-            </el-form-item>
-            <el-form-item v-if="searchType=='客户姓名'">
-              <el-input v-model="params.name" placeholder="搜索" @keyup.enter.native="search()" clearable>
-                <el-button @click="search()" slot="append" type="primary" icon="el-icon-search"></el-button>
-              </el-input>
-            </el-form-item>
-            <el-form-item v-if="searchType=='手机号'">
-              <el-input v-model="params.phone" placeholder="搜索" @keyup.enter.native="search()" clearable>
+              <el-input v-model="params.search" placeholder="合同编号/地址/客户姓名/手机号" @keyup.enter.native="search()"
+                        class="search_input" clearable>
                 <el-button @click="search()" slot="append" type="primary" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
@@ -843,8 +822,6 @@
           page: 1,
           limit: '12',
           search: '',      //模糊搜索
-          name: '',  //客户姓名
-          phone: '', //手机号
           publish_time: [],     //发布时间
           lord_start_time: [],  //收房合同开始时间
           lord_end_time: [],   //收房合同结束时间
@@ -931,7 +908,6 @@
 
         collectFeedback: {},
         rentFeedback: {},
-        searchType: '合同编号/地址',
       }
     },
     mounted() {
@@ -1005,36 +981,6 @@
       }
     },
     methods: {
-      handleCommand(command) {
-        if (command == 0) {
-          this.searchType = '合同编号/地址';
-          if (this.params.name) {
-            this.params.search = this.params.name;
-          } else if (this.params.phone) {
-            this.params.search = this.params.phone;
-          }
-          this.params.phone = '';
-          this.params.name = '';
-        } else if (command == 1) {
-          this.searchType = '客户姓名';
-          if (this.params.search) {
-            this.params.name = this.params.search;
-          } else if (this.params.phone) {
-            this.params.name = this.params.phone;
-          }
-          this.params.phone = '';
-          this.params.search = '';
-        } else {
-          this.searchType = '手机号';
-          if (this.params.search) {
-            this.params.phone = this.params.search;
-          } else if (this.params.name) {
-            this.params.phone = this.params.name;
-          }
-          this.params.name = '';
-          this.params.search = '';
-        }
-      },
       closeModal(val) {
         this.editRentInfoDialog = false;
         this.editAddressDialog = false;
@@ -1408,8 +1354,6 @@
       },
       resetAll() {
         this.params.search = '';      //模糊搜索
-        this.params.name = '';       //模糊搜索
-        this.params.phone = '';       //模糊搜索
         this.resetting();
       },
       resetting() {
@@ -1439,33 +1383,11 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped="">
+
+
   #clientContainer {
     min-height: 400px;
-    .selectButton {
-      color: #fff;
-      background: #66b1ff;
-    }
-    .tool {
-      border-bottom: 1px solid #eee;
-      display: flex;
-      padding-bottom: 10px;
-      justify-content: space-between;
-      .tool_right {
-        display: flex;
-        align-items: center;
-        div {
-          width: 100px;
-          text-align: center;
-          cursor: pointer;
-          &:first-child {
-            /*border-right: 1px solid #ccc;*/
-          }
-          i {
-            color: #409EFF;
-          }
-        }
-      }
-    }
+
     .filter {
       padding-top: 10px;
     }
