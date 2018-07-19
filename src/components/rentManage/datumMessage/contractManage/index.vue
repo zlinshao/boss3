@@ -5,7 +5,8 @@
         <div class="tabsSearch">
           <el-form :inline="true" onsubmit="return false" size="mini">
             <el-form-item>
-              <el-input v-model="params.search" placeholder="搜索" @keyup.enter.native="search()" clearable>
+              <el-input v-model="params.search" placeholder="合同编号/地址/客户姓名/手机号" @keyup.enter.native="search()"
+                        class="search_input" clearable>
                 <el-button @click="search()" slot="append" type="primary" icon="el-icon-search"></el-button>
               </el-input>
             </el-form-item>
@@ -299,7 +300,7 @@
             </el-row>
             <div class="btnOperate">
               <el-button type="primary" size="mini" @click="highSearch">搜索</el-button>
-              <el-button type="primary" size="mini" @click="resetting">重置</el-button>
+              <el-button type="primary" size="mini" @click="resetAll">重置</el-button>
               <el-button type="primary" size="mini" @click="highGrade">取消</el-button>
             </div>
           </el-form>
@@ -993,6 +994,7 @@
         }
       },
       selectMember(val) {
+        console.log(val)
         if (this.type === 'depart') {
 //          this.params.org_id = [];
 //          let departNameArray = [];
@@ -1102,7 +1104,7 @@
               this.rentFeedback = res.data.data;
             }
           }
-        })
+        });
       },
       rentDatafunc() {
         this.rentStatus = " ";
@@ -1351,29 +1353,30 @@
       highGrade() {
         this.isHigh = !this.isHigh;
       },
+      resetAll() {
+        this.params.search = '';      //模糊搜索
+        this.resetting();
+      },
       resetting() {
         this.department = '';
         this.staff = '';
-        this.params = {
-          page: 1,
-          limit: 12,
-          q: '',      //模糊搜索
-          publish_time: [],     //发布时间
-          lord_start_time: [],  //收房合同开始时间
-          lord_end_time: [],   //收房合同结束时间
-          renter_start_time: [], // 租房合同开始时间
-          renter_end_time: [], //租房合同结束时间
-          sign_time: [],   // 签约日期
-          un_upload: '',   // 是否上传合同
-          org_id: '',  // 部门
-          user_id: '',
-          status: '',   // 房屋状态1:未签约， 2：已签约， 3：快到期（60天内）， 4：已结束， 5：已过期
-          contract_index: '1',
-          doc_status: '',
-          visit_status: '',
-          note: '',
-          submit_time: [],
-        };
+        this.params.publish_time = [];
+        this.params.lord_start_time = [];
+        this.params.lord_end_time = [];
+        this.params.renter_start_time = [];
+        this.params.renter_end_time = [];
+        this.params.sign_time = [];
+        this.params.un_upload = '';
+        this.params.org_id = '';
+        this.params.user_id = '';
+        this.params.status = '';
+        this.params.contract_index = '1';
+        this.params.doc_status = '';
+        this.params.visit_status = '';
+        this.params.note = '';
+        this.params.submit_time = [];
+        this.isHigh = false;
+        this.search();
       }
     },
   }
@@ -1381,33 +1384,11 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped="">
+
+
   #clientContainer {
     min-height: 400px;
-    .selectButton {
-      color: #fff;
-      background: #66b1ff;
-    }
-    .tool {
-      border-bottom: 1px solid #eee;
-      display: flex;
-      padding-bottom: 10px;
-      justify-content: space-between;
-      .tool_right {
-        display: flex;
-        align-items: center;
-        div {
-          width: 100px;
-          text-align: center;
-          cursor: pointer;
-          &:first-child {
-            /*border-right: 1px solid #ccc;*/
-          }
-          i {
-            color: #409EFF;
-          }
-        }
-      }
-    }
+
     .filter {
       padding-top: 10px;
     }

@@ -1,0 +1,304 @@
+<template>
+  <div @click="show=false" @contextmenu="closeMenu">
+    <div class="highRanking">
+      <div class="highSearch">
+        <el-form :inline="true" size="mini">
+          <el-form-item>
+            <el-input placeholder="请输入标题" v-model="params.search" size="mini" clearable @keyup.enter.native="search">
+              <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+            </el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="highGrade">高级</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" size="mini" @click="addStaffRecordDialog=true;">
+              <i class="el-icon-plus"></i>
+              新增记录
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div class="filter high_grade" :class="isHigh? 'highHide':''">
+        <el-form :inline="true" :model="params" size="mini" label-width="100px">
+          <div class="filterTitle">
+            <i class="el-icons-fa-bars"></i>&nbsp;&nbsp;高级搜索
+          </div>
+          <el-row class="el_row_border">
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">入职时间</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-date-picker
+                      v-model="params.entry_time"
+                      type="daterange"
+                      align="right"
+                      unlink-panels
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期"
+                      value-format="yyyy-MM-dd"
+                      :picker-options="pickerOptions">
+                    </el-date-picker>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+            <el-col :span="12">
+              <el-row>
+                <el-col :span="8">
+                  <div class="el_col_label">部门</div>
+                </el-col>
+                <el-col :span="16" class="el_col_option">
+                  <el-form-item>
+                    <el-input v-model="params.org_name" placeholder="请输入部门名称" clearable></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-col>
+
+          </el-row>
+          <div class="btnOperate">
+            <el-button size="mini" type="primary" @click="search">搜索</el-button>
+            <el-button size="mini" type="primary" @click="resetting">重置</el-button>
+            <el-button size="mini" type="primary" @click="highGrade">取消</el-button>
+          </div>
+        </el-form>
+      </div>
+    </div>
+    <div class="main">
+      <div class="blueTable left_table">
+        <el-table
+          :data="tableData"
+          :empty-text='tableStatus'
+          v-loading="tableLoading"
+          element-loading-text="拼命加载中"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(255, 255, 255, 0)"
+          @cell-dblclick='staffDetailDialog=true'
+          style="width: 100%"> <!--@row-contextmenu='openContextMenu'-->
+          <el-table-column
+            prop="name"
+            label="姓名">
+          </el-table-column>
+          <el-table-column
+            prop="role"
+            label="岗位">
+          </el-table-column>
+          <el-table-column
+            prop="org"
+            label="部门">
+            <template slot-scope="scope">
+              <span
+                v-if="scope.row.staffs && scope.row.staffs.name">{{scope.row.staffs && scope.row.staffs.name}}</span>
+              <span v-if="!(scope.row.staffs && scope.row.staffs.name)">暂无</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            prop="create_time"
+            label="入职时间"
+            sortable>
+          </el-table-column>
+          <el-table-column
+            label="表扬数"
+            :filters="[{text: '正序', value: '2016-05-01'}, {text: '倒序', value: '2016-05-02'}]"
+            :filter-method="filterHandler">
+          </el-table-column>
+          <el-table-column
+            label="批评数">
+          </el-table-column>
+          <el-table-column
+            label="疑惑数">
+          </el-table-column>
+          <el-table-column
+            label="其他">
+          </el-table-column>
+        </el-table>
+      </div>
+      <div class="block pages">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="params.pages"
+          :page-size="params.list"
+          layout="total, prev, pager, next, jumper"
+          :total="totalNum">
+        </el-pagination>
+      </div>
+    </div>
+
+    <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
+               @clickOperateMore="clickEvent"></RightMenu>
+    <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
+    <AddStaffRecord :addStaffDialog="addStaffRecordDialog" @close="addStaffRecordDialog=false"></AddStaffRecord>
+  </div>
+</template>
+
+<script>
+  import RightMenu from '../../common/rightMenu.vue';    //右键
+  import Organization from '../../common/organization.vue';  //组织架构
+  import AddStaffRecord from './components/addStaffRecord.vue';  //添加记录
+  export default {
+    name: 'staff-records',
+    components: {RightMenu, Organization, AddStaffRecord},
+    data() {
+      return {
+        urls: globalConfig.server,
+        rightMenuX: 0,
+        rightMenuY: 0,
+        show: false,
+        isHigh: false,
+        lists: [],
+        /***********/
+        params: {
+          page: 1,
+          limit: 12,
+          search: '',   //模糊搜索
+          org_name: '',  //部门
+          entry_time: [], //入职时间
+        },
+        // org_name: '',
+        pickerOptions: {
+          shortcuts: [{
+            text: '最近一周',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近一个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+              picker.$emit('pick', [start, end]);
+            }
+          }, {
+            text: '最近三个月',
+            onClick(picker) {
+              const end = new Date();
+              const start = new Date();
+              start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+              picker.$emit('pick', [start, end]);
+            }
+          }]
+        },
+
+        totalNum: 0,
+        tableData: [],
+        tableStatus: ' ',
+        tableLoading: false,
+        staffDetailDialog: false,
+
+        currentId: '',
+        organizationDialog: false,
+        organizaType: '',
+
+        addStaffRecordDialog: false,   //新增记录弹框
+      }
+    },
+    mounted() {
+      this.getStaffTableData();
+    },
+    watch: {},
+    methods: {
+      filterHandler(value, row, column) {
+        const property = column['property'];
+        return row[property] === value;
+      },
+      search() {
+        this.params.page = 1;
+        this.getStaffTableData();
+      },
+      getStaffTableData() {
+        this.tableLoading = true;
+        this.tableStatus = ' ';
+        this.$http.get(this.urls + 'oa/portal/', {params: this.params}).then((res) => {
+          this.isHigh = false;
+          this.tableLoading = false;
+          if (res.data.code === '80000') {
+            this.tableData = res.data.data.data;
+            this.totalNum = res.data.data.count;
+          } else {
+            this.tableStatus = '暂无数据';
+            this.tableData = [];
+            this.totalNum = 0;
+          }
+        })
+      },
+      // 高级
+      highGrade() {
+        this.isHigh = !this.isHigh;
+      },
+      // 重置
+      resetting() {
+        this.params.search = '';
+        this.params.org_name = '';
+        this.params.search = '';
+        this.search();
+      },
+      handleSizeChange(val) {
+        console.log(`每页 ${val} 条`);
+      },
+      handleCurrentChange(val) {
+        console.log(`当前页: ${val}`);
+        this.params.page = val;
+        this.getStaffTableData();
+      },
+
+      // 右键
+      openContextMenu(row, event) {
+        this.currentId = row.id;
+        this.contextMenuParam(event);
+      },
+      // 右键回调
+      clickEvent(val) {
+
+      },
+      //关闭右键菜单
+      closeMenu() {
+        this.show = false;
+      },
+      //右键参数
+      contextMenuParam(event) {
+        let e = event || window.event;
+        this.show = false;
+        this.rightMenuX = e.clientX + document.documentElement.scrollLeft - document.documentElement.clientLeft;
+        this.rightMenuY = e.clientY + document.documentElement.scrollTop - document.documentElement.clientTop;
+        event.preventDefault();
+        event.stopPropagation();
+        this.$nextTick(() => {
+          this.show = true
+        })
+      },
+      // 组织架构
+      openOrganizationModal() {
+        this.organizationDialog = true
+      },
+      closeOrganization() {
+        this.organizationDialog = false;
+      },
+    },
+  }
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style lang="scss" scoped>
+  .el-table th {
+    text-align: left !important;
+  }
+
+  .el-table__body td {
+    text-align: left !important;
+  }
+
+  .btnStatus {
+    cursor: inherit;
+    min-width: 68px;
+  }
+</style>
