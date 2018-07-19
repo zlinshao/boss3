@@ -423,6 +423,7 @@
     methods: {
       // tabs标签页
       handleClick(tab, event) {
+        this.params.page = 1;
         if (this.activeName == "first") {
           this.is_rent = 0;
           this.getIncompleteRecordData();
