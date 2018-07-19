@@ -671,8 +671,12 @@ ul.el-menu.el-menu--inline {
 #answerExam .el-checkbox .el-checkbox__label {
   display: initial;
 }
+
 #collectHouseData .el-loading-mask,
-#rentHouseData .el-loading-mask
-{
+#rentHouseData .el-loading-mask {
   z-index: 1;
+}
+
+#clientContainer .search_input .el-input__inner {
+  min-width: 200px;
 }

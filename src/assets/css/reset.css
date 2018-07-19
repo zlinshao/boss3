@@ -431,4 +431,7 @@ ul.el-menu.el-menu--inline {
 #rentHouseData .el-loading-mask {
   z-index: 1; }
 
+#clientContainer .search_input .el-input__inner {
+  min-width: 200px; }
+
 /*# sourceMappingURL=reset.css.map */
