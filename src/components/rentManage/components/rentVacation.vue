@@ -639,7 +639,7 @@
     },
     methods: {
       getPowerData() {
-        this.$http.get(globalConfig.server + 'manager/staff/auth?name=checkout_financial').then((res) => {
+        this.$http.get(globalConfig.server + 'special/special/auth?name=checkout_financial').then((res) => {
           if (res.data.code === '10090') {
             this.financial = res.data.data;
           } else {
