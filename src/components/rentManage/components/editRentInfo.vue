@@ -793,31 +793,37 @@
             this.params.money_sum = data.money_sum;
 
             //------------月单价和付款方式-----------------------//
-            this.priceChangeAmount = data.price.length;
-            this.priceArray = [];
-            this.periodArray = [];
-            data.price.forEach((item,index) => {
-              this.priceArray.push(item.price);
-              this.periodArray.push(item.period);
-            });
+            if(data.price && Array.isArray(data.price)){
+              this.priceChangeAmount = data.price.length;
+              this.priceArray = [];
+              this.periodArray = [];
+              data.price.forEach((item,index) => {
+                this.priceArray.push(item.price);
+                this.periodArray.push(item.period);
+              });
+            }
 
-            this.payWayChangeAmount = data.pay_way.length;
-            this.payWayArray = [];
-            this.pay_way_bet = [];
-            this.payPeriodArray = [];
-            data.pay_way.forEach((item,index) => {
-              this.payWayArray.push(Number(item.pay_way));
-              this.pay_way_bet.push(Number(item.pay_way_bet));
-              this.payPeriodArray.push(item.period);
-            });
+            if(data.pay_way && Array.isArray(data.pay_way)){
+              this.payWayChangeAmount = data.pay_way.length;
+              this.payWayArray = [];
+              this.pay_way_bet = [];
+              this.payPeriodArray = [];
+              data.pay_way.forEach((item,index) => {
+                this.payWayArray.push(Number(item.pay_way));
+                this.pay_way_bet.push(Number(item.pay_way_bet));
+                this.payPeriodArray.push(item.period);
+              });
+            }
 
-            this.moneyTableChangeAmount = data.money_table.length;
-            this.moneyWayArray = [];
-            this.moneySepArray = [];
-            data.money_table.forEach((item,index) => {
-              this.moneyWayArray.push(item.money_way);
-              this.moneySepArray.push(item.money_sep);
-            });
+            if(data.money_table && Array.isArray(data.money_table)){
+              this.moneyTableChangeAmount = data.money_table.length;
+              this.moneyWayArray = [];
+              this.moneySepArray = [];
+              data.money_table.forEach((item,index) => {
+                this.moneyWayArray.push(item.money_way);
+                this.moneySepArray.push(item.money_sep);
+              });
+            }
 
             //--------------------------------------------------//
             this.params.retainage_date = data.retainage_date;
