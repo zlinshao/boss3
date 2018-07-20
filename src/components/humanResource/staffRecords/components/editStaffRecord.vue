@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :close-on-click-modal="false" title="修改部门" :visible.sync="editDepartDialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" title="修改部门" :visible.sync="editStaffRecordDialogVisible" width="30%">
       <div>
         <el-form size="mini" onsubmit="return false;" :model="params" label-width="100px">
           <el-row>
@@ -24,7 +24,7 @@
         </el-form>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="small" @click="editDepartDialogVisible=false">取 消</el-button>
+        <el-button size="small" @click="editStaffRecordDialogVisible=false">取 消</el-button>
         <el-button size="small" type="primary" @click.native="confirmEdit">确 定</el-button>
       </span>
     </el-dialog>
@@ -35,11 +35,11 @@
 <script>
   import Organization from '../../../common/organization.vue'
   export default {
-    props:['editDepartDialog','departId'],
+    props:['editStaffRecordDialog','recordId'],
     components:{Organization},
     data() {
       return {
-        editDepartDialogVisible:false,
+        editStaffRecordDialogVisible:false,
         params:{
           parent_id:'',
           name:'',
@@ -50,57 +50,19 @@
       };
     },
     watch:{
-      editDepartDialog(val){
-        this.editDepartDialogVisible = val
+      editStaffRecordDialog(val){
+        this.editStaffRecordDialogVisible = val
       },
-      editDepartDialogVisible(val){
+      editStaffRecordDialogVisible(val){
         if(!val){
-          this.$emit('close')
+          this.$emit('close');
         }
       },
-      departId(val){
-          if(val){
-              this.getDepartInfo();
-          }
-      }
     },
     methods:{
-      getDepartInfo(){
-        this.$http.get(globalConfig.server+'manager/department/'+this.departId).then((res) => {
-          if(res.data.code === '20020'){
-            this.params.name = res.data.data.name;
-            this.params.order = res.data.data.order;
-            this.params.parent_id = res.data.data.parent_id;
-            this.department = '';
-            this.$http.get(globalConfig.server+'manager/department/'+this.params.parent_id).then((res) => {
-              if(res.data.code === '20020'){
-                this.department = res.data.data.name;
-              }
-            });
-          }else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
-            });
-          }
-        });
-      },
+
       confirmEdit(){
-        this.$http.put(globalConfig.server+'manager/department/'+this.departId,this.params).then((res) => {
-          if(res.data.code === '20030'){
-            this.$emit('close','success');
-            this.closeModal();
-            this.$notify.success({
-              title: '成功',
-              message: res.data.msg,
-            });
-          }else {
-            this.$notify.warning({
-              title: '警告',
-              message: res.data.msg,
-            });
-          }
-        });
+
       },
       selectDepart(){
         this.organizationDialog = true

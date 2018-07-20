@@ -124,9 +124,6 @@
       },
 
     },
-    mounted() {
-      this.getDictionaries();
-    },
     methods: {
       getImg(val) {
         console.log(val)
@@ -190,8 +187,6 @@
         }
         this.organizationDialog = false;
       },
-      getDictionaries() {
-      },
       initial() {
           this.staffRecords=[
           {
@@ -209,21 +204,21 @@
       },
       confirmAdd() {
         //新增
-        // this.$http.post(globalConfig.server + 'manager/staff', this.params).then((res) => {
-        //   if (res.data.code === '10010') {
-        //     this.$emit('close', 'success');
-        //     this.addStaffDialogVisible = false;
-        //     this.$notify.success({
-        //       title: '成功',
-        //       message: res.data.msg,
-        //     });
-        //   } else {
-        //     this.$notify.warning({
-        //       title: '警告',
-        //       message: res.data.msg,
-        //     });
-        //   }
-        // });
+        this.$http.post(globalConfig.server + 'credit/manage/addemployee', this.staffRecords).then((res) => {
+          if (res.data.code === '10010') {
+            this.$emit('close', 'success');
+            this.addStaffDialogVisible = false;
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg,
+            });
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
+          }
+        });
       },
 
     }
