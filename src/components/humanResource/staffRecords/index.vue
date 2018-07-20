@@ -78,7 +78,7 @@
           element-loading-text="拼命加载中"
           element-loading-spinner="el-icon-loading"
           element-loading-background="rgba(255, 255, 255, 0)"
-          @cell-dblclick='staffDetailDialog=true'
+          @cell-dblclick='dblClick'
           style="width: 100%"> <!--@row-contextmenu='openContextMenu'-->
           <el-table-column
             prop="name"
@@ -203,6 +203,7 @@
         organizaType: '',
 
         addStaffRecordDialog: false,   //新增记录弹框
+        staffRecordsDetailDialog: false,
       }
     },
     mounted() {
@@ -210,6 +211,9 @@
     },
     watch: {},
     methods: {
+      dblClick(row) {
+        this.staffRecordsDetailDialog = true;
+      },
       closeModal() {
         this.addStaffRecordDialog = false;
         this.search();
@@ -224,8 +228,8 @@
       },
       getStaffTableData() {
         this.tableLoading = true;
-        this.tableStatus = ' ';
-        this.$http.get('http://192.168.20.24:8081/credit/manage/employeelist', {params: this.params}).then((res) => {
+        this.tableStatus = ' ';//http://192.168.20.24:8081/
+        this.$http.get(this.urls + 'credit/manage/employeelist', {params: this.params}).then((res) => {
           this.isHigh = false;
           this.tableLoading = false;
           if (res.data.code === '10000') {
