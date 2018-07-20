@@ -3,65 +3,65 @@
     <el-dialog :close-on-click-modal="false" title="员工档案" :visible.sync="staffRecordsDetailDialogVisible" width="50%">
       <div class="scroll_bar">
         <div class="title">基本信息</div>
-        <div class="describe_border">
-          <el-form size="small" label-width="100px">
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="员工姓名">
-                  <div class="content" v-if="workOrderDetail.create_time">{{workOrderDetail.create_time}}</div>
-                  <div class="content" v-if="!workOrderDetail.create_time">暂无</div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="入职时间">
-                  <div class="content">
-                    <span v-if="workOrderDetail.creators">{{workOrderDetail.creators.name}}</span>
-                    <span v-if="!workOrderDetail.creators">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="12">
-                <el-form-item label="部门">
-                  <div class="content">
-                    <span v-if="workOrderDetail.num">{{workOrderDetail.num}}</span>
-                    <span v-if="!workOrderDetail.num">暂无</span>
-                  </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="岗位">
-                  <div class="content" v-if="workOrderDetail.city_name">{{workOrderDetail.city_name}}</div>
-                  <div class="content" v-if="!workOrderDetail.city_name">暂无</div>
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-        </div>
-        <div class="title">跟进记录</div>
-        <div class="describe_border">
+        <!--<div class="describe_border">-->
+        <el-form size="small" label-width="100px">
           <el-row>
-            <el-col :span="3">
-              <div style="text-align: center;">
-                <span>2018.07.30</span>
-                <br/>
-                <span>珠宝学</span>
-              </div>
+            <el-col :span="12">
+              <el-form-item label="员工姓名">
+                <div class="content" v-if="workOrderDetail.create_time">{{workOrderDetail.create_time}}</div>
+                <div class="content" v-if="!workOrderDetail.create_time">暂无</div>
+              </el-form-item>
             </el-col>
-            <el-col :span="18">
-              <div class="circle praises"></div>
-              <div style="border-left: 1px solid #c0c4cc;padding-left: 20px;">
-                <div>的防护多数地方韩国房贷合同国家的发货给对方机会国家的宏观附近的返回广东客家大概几点发货高度分化格局的回复绝对符合国家地方韩国绝对符合国家地方看觉得刚觉得</div>
-                <div><img src="../../../../assets/images/news.png" alt=""></div>
-              </div>
-
-            </el-col>
-            <el-col :span="2" style="text-align: right;cursor: pointer;" @click="editStaffRecordDialog=true">
-              <i class="el-icon-edit"></i>编辑
+            <el-col :span="12">
+              <el-form-item label="入职时间">
+                <div class="content">
+                  <span v-if="workOrderDetail.creators">{{workOrderDetail.creators.name}}</span>
+                  <span v-if="!workOrderDetail.creators">暂无</span>
+                </div>
+              </el-form-item>
             </el-col>
           </el-row>
-
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="部门">
+                <div class="content">
+                  <span v-if="workOrderDetail.num">{{workOrderDetail.num}}</span>
+                  <span v-if="!workOrderDetail.num">暂无</span>
+                </div>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="岗位">
+                <div class="content" v-if="workOrderDetail.city_name">{{workOrderDetail.city_name}}</div>
+                <div class="content" v-if="!workOrderDetail.city_name">暂无</div>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        <!--</div>-->
+        <div class="title">跟进记录</div>
+        <div class="" v-for="item in detail">
+        <el-row>
+          <el-col :span="3">
+            <div style="text-align: center;">
+              <span>{{item.add_time}}</span>
+              <br/>
+              <span>{{item.add_user}}</span>
+            </div>
+          </el-col>
+          <el-col :span="18">
+            <div class="circle praises"></div>
+            <div style="border-left: 1px solid #c0c4cc;padding-left: 20px;">
+              <div>{{item.remark}}</div>
+              <div><img src="../../../../assets/images/news.png" alt=""></div>
+            </div>
+          </el-col>
+          <el-col :span="2" style="text-align: right;cursor: pointer;">
+              <span @click="editStaffRecordDialog=true">
+                <i class="el-icon-edit"></i>编辑
+              </span>
+          </el-col>
+        </el-row>
         </div>
       </div>
     </el-dialog>
@@ -71,6 +71,7 @@
 
 <script>
   import EditStaffRecord from './editStaffRecord.vue';
+
   export default {
     name: 'staffRecordsDetail',
     props: ['staffRecordsDetailDialog', 'detailId'],
@@ -90,7 +91,6 @@
         if (!val) {
           this.$emit('close');
         } else {
-          this.isClear = false;
           this.getDetail();
         }
       },
@@ -99,15 +99,15 @@
 
     },
     methods: {
-      closeModal(){
+      closeModal() {
         this.editStaffRecordDialog = false;
       },
       getDetail() {
-        // this.$http.get(globalConfig.server + 'customer/work_order/' + this.activeId).then((res) => {
-        //   if (res.data.code === "10020") {
-        //     this.workOrderDetail = res.data.data;
-        //   }
-        // });
+        this.$http.post(globalConfig.server + 'credit/manage/employeedetail', {record_id: this.detailId}).then((res) => {
+          if (res.data.code === "100100") {
+            this.detail = res.data.data;
+          }
+        });
       },
     }
   };
@@ -128,7 +128,7 @@
       border-radius: 6px;
       margin: 0 10px 10px 0;
     }
-    .circle{
+    .circle {
       width: 18px;
       height: 18px;
       border-radius: 50%;
@@ -137,16 +137,16 @@
       margin-left: -9px;
       margin-top: 10px;
     }
-    .praises{
+    .praises {
       background: #58d788;
     }
-    .criticisms{
+    .criticisms {
       background: #ff4545;
     }
-    .doubts{
+    .doubts {
       background: #FF9900;
     }
-    .others{
+    .others {
       background: #409EFF;
     }
 

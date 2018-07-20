@@ -17,9 +17,6 @@
               新增记录
             </el-button>
           </el-form-item>
-          <el-form-item>
-            <el-button type="primary" size="mini" @click="staffRecordsDetailDialog=true;">点击详情</el-button>
-          </el-form-item>
         </el-form>
       </div>
       <div class="filter high_grade" :class="isHigh? 'highHide':''">
@@ -140,7 +137,8 @@
                @clickOperateMore="clickEvent"></RightMenu>
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
     <AddStaffRecord :addStaffDialog="addStaffRecordDialog" @close="closeModal"></AddStaffRecord>
-    <StaffRecordsDetail :staffRecordsDetailDialog="staffRecordsDetailDialog" @close="staffRecordsDetailDialog=false"></StaffRecordsDetail>
+    <StaffRecordsDetail :staffRecordsDetailDialog="staffRecordsDetailDialog" :detailId="detailId"
+                        @close="staffRecordsDetailDialog=false;detailId=''"></StaffRecordsDetail>
   </div>
 </template>
 
@@ -209,6 +207,7 @@
 
         addStaffRecordDialog: false,   //新增记录弹框
         staffRecordsDetailDialog: false,
+        detailId: '',
       }
     },
     mounted() {
@@ -217,6 +216,8 @@
     watch: {},
     methods: {
       dblClick(row) {
+        console.log(row);
+        this.detailId = row.id;
         this.staffRecordsDetailDialog = true;
       },
       closeModal() {
