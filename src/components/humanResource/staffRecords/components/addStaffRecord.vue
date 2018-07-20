@@ -2,6 +2,7 @@
   <div id="addStaffRecord">
     <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="addStaffDialogVisible" width="50%">
       <div>
+        {{staffRecords}}
         <el-form size="mini" onsubmit="return false;" :model="params" label-width="100px" class="scroll_bar"
                  style="padding: 0 20px;">
           <div v-for="(item,key) in staffRecords" class="describe_border">
@@ -205,7 +206,10 @@
       },
       confirmAdd() {
         //新增
-        this.$http.post(globalConfig.server + 'credit/manage/addemployee', {data: this.staffRecords}).then((res) => {
+        let config = {
+          headers: {'Content-Type': 'multipart/form-data'}
+        };
+        this.$http.post(globalConfig.server + 'credit/manage/addemployee', {data: this.staffRecords}, config).then((res) => {
           if (res.data.code === '10010') {
             this.$emit('close', 'success');
             this.addStaffDialogVisible = false;
