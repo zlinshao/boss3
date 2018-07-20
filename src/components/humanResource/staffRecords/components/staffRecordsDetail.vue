@@ -2,21 +2,21 @@
   <div id="staffRecordsDetail">
     <el-dialog :close-on-click-modal="false" title="员工档案" :visible.sync="staffRecordsDetailDialogVisible" width="50%">
       <div class="scroll_bar">
-        <div class="title">基本信息</div>
+        <!--<div class="title">基本信息</div>-->
         <!--<div class="describe_border">-->
         <el-form size="small" label-width="100px">
           <el-row>
             <el-col :span="12">
               <el-form-item label="员工姓名">
-                <div class="content" v-if="workOrderDetail.create_time">{{workOrderDetail.create_time}}</div>
-                <div class="content" v-if="!workOrderDetail.create_time">暂无</div>
+                <!--<div class="content" v-if="workOrderDetail.create_time">{{workOrderDetail.create_time}}</div>-->
+                <!--<div class="content" v-if="!workOrderDetail.create_time">暂无</div>-->
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="入职时间">
                 <div class="content">
-                  <span v-if="workOrderDetail.creators">{{workOrderDetail.creators.name}}</span>
-                  <span v-if="!workOrderDetail.creators">暂无</span>
+                  <!--<span v-if="workOrderDetail.creators">{{workOrderDetail.creators.name}}</span>-->
+                  <!--<span v-if="!workOrderDetail.creators">暂无</span>-->
                 </div>
               </el-form-item>
             </el-col>
@@ -25,33 +25,33 @@
             <el-col :span="12">
               <el-form-item label="部门">
                 <div class="content">
-                  <span v-if="workOrderDetail.num">{{workOrderDetail.num}}</span>
-                  <span v-if="!workOrderDetail.num">暂无</span>
+                  <!--<span v-if="workOrderDetail.num">{{workOrderDetail.num}}</span>-->
+                  <!--<span v-if="!workOrderDetail.num">暂无</span>-->
                 </div>
               </el-form-item>
             </el-col>
             <el-col :span="12">
               <el-form-item label="岗位">
-                <div class="content" v-if="workOrderDetail.city_name">{{workOrderDetail.city_name}}</div>
-                <div class="content" v-if="!workOrderDetail.city_name">暂无</div>
+                <!--<div class="content" v-if="workOrderDetail.city_name">{{workOrderDetail.city_name}}</div>-->
+                <!--<div class="content" v-if="!workOrderDetail.city_name">暂无</div>-->
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
         <!--</div>-->
-        <div class="title">跟进记录</div>
+        <!--<div class="title">跟进记录</div>-->
         <div class="" v-for="item in detail">
         <el-row>
           <el-col :span="3">
             <div style="text-align: center;">
-              <span>{{item.add_time}}</span>
+              <span style="display: inline-block;width: 80%;margin-top: 8px;">{{item.add_time}}</span>
               <br/>
               <span>{{item.add_user}}</span>
             </div>
           </el-col>
           <el-col :span="18">
             <div class="circle praises"></div>
-            <div style="border-left: 1px solid #c0c4cc;padding-left: 20px;">
+            <div style="border-left: 1px solid #c0c4cc;padding-left: 20px;padding-top: 8px;">
               <div>{{item.remark}}</div>
               <div><img src="../../../../assets/images/news.png" alt=""></div>
             </div>
@@ -80,7 +80,7 @@
       return {
         staffRecordsDetailDialogVisible: false,
         editStaffRecordDialog: false,
-        workOrderDetail: {},
+        detail: {},
       };
     },
     watch: {
