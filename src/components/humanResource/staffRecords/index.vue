@@ -17,6 +17,9 @@
               新增记录
             </el-button>
           </el-form-item>
+          <!--<el-form-item>-->
+            <!--<el-button type="primary" size="mini" @click="staffRecordsDetailDialog=true;">点击详情</el-button>-->
+          <!--</el-form-item>-->
         </el-form>
       </div>
       <div class="filter high_grade" :class="isHigh? 'highHide':''">
@@ -137,6 +140,7 @@
                @clickOperateMore="clickEvent"></RightMenu>
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
     <AddStaffRecord :addStaffDialog="addStaffRecordDialog" @close="closeModal"></AddStaffRecord>
+    <StaffRecordsDetail :staffRecordsDetailDialog="staffRecordsDetailDialog" @close="staffRecordsDetailDialog=false"></StaffRecordsDetail>
   </div>
 </template>
 
@@ -144,9 +148,10 @@
   import RightMenu from '../../common/rightMenu.vue';    //右键
   import Organization from '../../common/organization.vue';  //组织架构
   import AddStaffRecord from './components/addStaffRecord.vue';  //添加记录
+  import StaffRecordsDetail from './components/staffRecordsDetail.vue';  //员工档案详情
   export default {
     name: 'staff-records',
-    components: {RightMenu, Organization, AddStaffRecord},
+    components: {RightMenu, Organization, AddStaffRecord, StaffRecordsDetail},
     data() {
       return {
         urls: globalConfig.server,
