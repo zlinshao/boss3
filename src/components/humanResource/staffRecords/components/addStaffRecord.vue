@@ -205,7 +205,6 @@
       },
       confirmAdd() {
         //新增
-
         this.$http.post(globalConfig.server + 'credit/manage/addemployee', this.staffRecords).then((res) => {
           if (res.data.code === '10010') {
             this.$emit('close', 'success');

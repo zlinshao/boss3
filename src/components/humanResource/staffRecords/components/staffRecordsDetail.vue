@@ -8,8 +8,10 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="员工姓名">
-                <!--<div class="content" v-if="workOrderDetail.create_time">{{workOrderDetail.create_time}}</div>-->
-                <!--<div class="content" v-if="!workOrderDetail.create_time">暂无</div>-->
+                <div class="content">
+                  <!--<span v-if="detail && detail.create_time">{{detail.create_time}}</span>-->
+                  <!--<span v-else>暂无</span>-->
+                </div>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -32,8 +34,10 @@
             </el-col>
             <el-col :span="12">
               <el-form-item label="岗位">
-                <!--<div class="content" v-if="workOrderDetail.city_name">{{workOrderDetail.city_name}}</div>-->
-                <!--<div class="content" v-if="!workOrderDetail.city_name">暂无</div>-->
+                <div class="content">
+                  <!--<span v-if="detail && detail.create_time">{{detail.create_time}}</span>-->
+                  <!--<span v-else>暂无</span>-->
+                </div>
               </el-form-item>
             </el-col>
           </el-row>
@@ -41,31 +45,32 @@
         <!--</div>-->
         <!--<div class="title">跟进记录</div>-->
         <div class="" v-for="item in detail">
-        <el-row>
-          <el-col :span="3">
-            <div style="text-align: center;">
-              <span style="display: inline-block;width: 80%;margin-top: 8px;">{{item.add_time}}</span>
-              <br/>
-              <span>{{item.add_user}}</span>
-            </div>
-          </el-col>
-          <el-col :span="18">
-            <div class="circle praises"></div>
-            <div style="border-left: 1px solid #c0c4cc;padding-left: 20px;padding-top: 8px;">
-              <div>{{item.remark}}</div>
-              <div><img src="../../../../assets/images/news.png" alt=""></div>
-            </div>
-          </el-col>
-          <el-col :span="2" style="text-align: right;cursor: pointer;">
-              <span @click="editStaffRecordDialog=true">
+          <el-row>
+            <el-col :span="3">
+              <div style="text-align: center;">
+                <span style="display: inline-block;width: 80%;margin-top: 8px;">{{item.add_time}}</span>
+                <br/>
+                <span>{{item.add_user}}</span>
+              </div>
+            </el-col>
+            <el-col :span="18">
+              <div class="circle praises"></div>
+              <div style="border-left: 1px solid #c0c4cc;padding-left: 20px;padding-top: 8px;">
+                <div>{{item.remark}}</div>
+                <div><img src="../../../../assets/images/news.png" alt=""></div>
+              </div>
+            </el-col>
+            <el-col :span="2" style="text-align: right;cursor: pointer;">
+              <span @click="editRecord(item)">
                 <i class="el-icon-edit"></i>编辑
               </span>
-          </el-col>
-        </el-row>
+            </el-col>
+          </el-row>
         </div>
       </div>
     </el-dialog>
-    <EditStaffRecord :editStaffRecordDialog="editStaffRecordDialog" @close="closeModal"></EditStaffRecord>
+    <EditStaffRecord :editStaffRecordDialog="editStaffRecordDialog" :record="record"
+                     @close="closeModal"></EditStaffRecord>
   </div>
 </template>
 
@@ -81,6 +86,7 @@
         staffRecordsDetailDialogVisible: false,
         editStaffRecordDialog: false,
         detail: {},
+        record: {},
       };
     },
     watch: {
@@ -99,13 +105,27 @@
 
     },
     methods: {
-      closeModal() {
+      editRecord(val) {
+        this.record = val;
+        this.editStaffRecordDialog = true;
+      },
+      closeModal(val) {
+        this.record = {};
         this.editStaffRecordDialog = false;
+        if (val == 'success') {
+          this.getDetail();
+        }
       },
       getDetail() {
         this.$http.post(globalConfig.server + 'credit/manage/employeedetail', {record_id: this.detailId}).then((res) => {
           if (res.data.code === "100100") {
             this.detail = res.data.data;
+          } else {
+            this.detail = {};
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
           }
         });
       },

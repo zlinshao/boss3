@@ -4,20 +4,16 @@
       <div>
         <el-form size="mini" onsubmit="return false;" :model="params" label-width="100px">
           <el-row>
-            <el-col :span="24">
-              <el-form-item label="上级部门">
-                <el-input placeholder="请输入内容" @focus="selectDepart" readonly="" v-model="department"></el-input>
+            <el-col :span="16">
+              <el-form-item label="描述">
+                <el-input v-model="params.remark" type="textarea" rows="2"></el-input>
               </el-form-item>
             </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="24">
-              <el-form-item label='部门名称'>
-                <el-input placeholder="请输入内容" v-model="params.name"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24">
-              <el-form-item label='排序'>
-                <el-input-number v-model="params.order"></el-input-number>
-                <span style="color: #fb435e;margin-left: 15px">注意：数值越大，排序越靠前！</span>
+              <el-form-item label="照片">
+                <UPLOAD ID="single_records" :isClear="isClear" :editImage="editImage" @getImg="getImg"></UPLOAD>
               </el-form-item>
             </el-col>
           </el-row>
@@ -28,68 +24,78 @@
         <el-button size="small" type="primary" @click.native="confirmEdit">确 定</el-button>
       </span>
     </el-dialog>
-    <Organization :organizationDialog="organizationDialog" @close="closeOrganization" @selectMember="selectMember"></Organization>
   </div>
 </template>
 
 <script>
-  import Organization from '../../../common/organization.vue'
+  import UPLOAD from '../../../common/UPLOAD.vue';
+
   export default {
-    props:['editStaffRecordDialog','recordId'],
-    components:{Organization},
+    props: ['editStaffRecordDialog', 'record'],
+    components: {UPLOAD},
     data() {
       return {
-        editStaffRecordDialogVisible:false,
-        params:{
-          parent_id:'',
-          name:'',
-          order:''
+        editStaffRecordDialogVisible: false,
+        params: {
+          detail_id: '',
+          remark: '',
+          images: []
         },
-        organizationDialog:false,
-        department:'',
+        editImage: '',
+        isClear: false,
       };
     },
-    watch:{
-      editStaffRecordDialog(val){
-        this.editStaffRecordDialogVisible = val
+    watch: {
+      editStaffRecordDialog(val) {
+        this.editStaffRecordDialogVisible = val;
       },
-      editStaffRecordDialogVisible(val){
-        if(!val){
+      editStaffRecordDialogVisible(val) {
+        if (!val) {
+          this.isClear = true;
           this.$emit('close');
+        } else {
+          this.isClear = false;
+          this.params.detail_id = this.record.detail_id;
+          this.params.remark = this.record.remark;
+          // this.params.images = this.record.images;
         }
       },
     },
-    methods:{
-
-      confirmEdit(){
-
+    methods: {
+      getImg(val) {
+        this.params.images = val[1];
       },
-      selectDepart(){
-        this.organizationDialog = true
+      confirmEdit() {
+        this.$http.post(globalConfig.server + 'credit/manage/employeeedit', this.params).then((res) => {
+          if (res.data.code === '100100') {
+            this.$emit('close', 'success');
+            this.editStaffRecordDialogVisible = false;
+            this.$notify.success({
+              title: '成功',
+              message: res.data.msg,
+            });
+          } else {
+            this.$notify.warning({
+              title: '警告',
+              message: res.data.msg,
+            });
+          }
+        });
       },
-      //关闭选人框回调
-      closeOrganization(){
-        this.organizationDialog = false;
-      },
-      selectMember(val){
-        this.params.parent_id = val[0].id;
-        this.department = val[0].name;
-        this.organizationDialog = false;
-      },
-      closeModal(){
+      closeModal() {
         this.editDepartDialogVisible = false;
         this.params = {
-          parent_id:'',
-          name:'',
-          order:''
+          detail_id: '',
+          remark: '',
+          images: []
         };
-        this.department = '';
       }
     }
   };
 </script>
 <style lang="scss" scoped="">
-  #addRentRepair{
+  #addRentRepair {
+
   }
 
 </style>
