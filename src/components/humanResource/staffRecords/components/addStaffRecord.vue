@@ -2,7 +2,8 @@
   <div id="addStaffRecord">
     <el-dialog :close-on-click-modal="false" :title="title" :visible.sync="addStaffDialogVisible" width="50%">
       <div>
-        <el-form size="mini" onsubmit="return false;" :model="params" label-width="100px" class="scroll_bar" style="padding: 0 20px;">
+        <el-form size="mini" onsubmit="return false;" :model="params" label-width="100px" class="scroll_bar"
+                 style="padding: 0 20px;">
           <div v-for="(item,key) in staffRecords" class="describe_border">
             <el-row>
               <el-col :span="8">
@@ -20,7 +21,7 @@
                 <i class="el-icon-remove-outline  sub_com" @click="subRecords(key)" v-if="key!=0"></i>
               </el-col>
             </el-row>
-            <div v-for="(value, index) in item.remarks" >
+            <div v-for="(value, index) in item.remarks">
               <div class="describe_border">
                 <el-row>
                   <el-col :span="8">
@@ -118,7 +119,7 @@
           this.initial(); //关闭弹框时清除
           this.$emit('close');
           this.isClear = true;
-        }else{
+        } else {
           this.isClear = false;
         }
       },
@@ -132,7 +133,7 @@
         let index = ID[1];
         this.staffRecords[key].remarks[index].images = val[1];
       },
-      addRecords(){
+      addRecords() {
         let data = {
           uid: '',
           name: '',
@@ -146,7 +147,7 @@
         };
         this.staffRecords.push(data);
       },
-      subRecords(key){
+      subRecords(key) {
         this.staffRecords.splice(key, 1);
       },
       addRemarks(key) {
@@ -157,7 +158,7 @@
         };
         this.staffRecords[key].remarks.push(data);
       },
-      subRemarks(key, index){
+      subRemarks(key, index) {
         this.staffRecords[key].remarks.splice(index, 1);
       },
 
@@ -188,7 +189,7 @@
         this.organizationDialog = false;
       },
       initial() {
-          this.staffRecords=[
+        this.staffRecords = [
           {
             uid: '',
             name: '',
@@ -204,7 +205,7 @@
       },
       confirmAdd() {
         //新增
-        this.$http.post(globalConfig.server + 'credit/manage/addemployee', this.staffRecords).then((res) => {
+        this.$http.post(globalConfig.server + 'credit/manage/addemployee', {data: this.staffRecords}).then((res) => {
           if (res.data.code === '10010') {
             this.$emit('close', 'success');
             this.addStaffDialogVisible = false;
