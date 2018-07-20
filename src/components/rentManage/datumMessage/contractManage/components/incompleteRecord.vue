@@ -495,6 +495,7 @@
         if (!this.params.date_range) {
           this.params.date_range = [];
         }
+        this.params.output = 0;
         this.$http.get(globalConfig.server + 'lease/note/index?is_rent=' + this.is_rent, {params: this.params}).then((res) => {
           this.incompleteLoading = false;
           this.isHigh = false;
