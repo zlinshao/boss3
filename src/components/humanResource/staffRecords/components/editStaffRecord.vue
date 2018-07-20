@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-dialog :close-on-click-modal="false" title="修改部门" :visible.sync="editStaffRecordDialogVisible" width="30%">
+    <el-dialog :close-on-click-modal="false" title="修改记录" :visible.sync="editStaffRecordDialogVisible" width="30%">
       <div>
         <el-form size="mini" onsubmit="return false;" :model="params" label-width="100px">
           <el-row>

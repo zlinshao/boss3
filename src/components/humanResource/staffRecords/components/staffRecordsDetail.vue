@@ -57,7 +57,7 @@
               </div>
 
             </el-col>
-            <el-col :span="2" style="text-align: right;cursor: pointer;" @click="">
+            <el-col :span="2" style="text-align: right;cursor: pointer;" @click="editStaffRecordDialog=true">
               <i class="el-icon-edit"></i>编辑
             </el-col>
           </el-row>
