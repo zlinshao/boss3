@@ -70,7 +70,7 @@
       </div>
     </div>
     <div class="main">
-      <div class="blueTable left_table">
+      <div class="blueTable">
         <el-table
           :data="tableData"
           :empty-text='tableStatus'
@@ -85,36 +85,39 @@
             label="姓名">
           </el-table-column>
           <el-table-column
-            prop="role"
+            prop="station"
             label="岗位">
           </el-table-column>
           <el-table-column
-            prop="org"
+            prop="department"
             label="部门">
-            <template slot-scope="scope">
-              <span
-                v-if="scope.row.staffs && scope.row.staffs.name">{{scope.row.staffs && scope.row.staffs.name}}</span>
-              <span v-if="!(scope.row.staffs && scope.row.staffs.name)">暂无</span>
-            </template>
           </el-table-column>
           <el-table-column
-            prop="create_time"
+            prop="start_time"
             label="入职时间"
             sortable>
           </el-table-column>
           <el-table-column
+            prop="praises"
             label="表扬数"
-            :filters="[{text: '正序', value: '2016-05-01'}, {text: '倒序', value: '2016-05-02'}]"
-            :filter-method="filterHandler">
+            sortable>
+          </el-table-column>
+          <!--:filters="[{text: '正序', value: '2016-05-01'}, {text: '倒序', value: '2016-05-02'}]"-->
+          <!--:filter-method="filterHandler"-->
+          <el-table-column
+            prop="criticisms"
+            label="批评数"
+            sortable>
           </el-table-column>
           <el-table-column
-            label="批评数">
+            prop="doubts"
+            label="疑惑数"
+            sortable>
           </el-table-column>
           <el-table-column
-            label="疑惑数">
-          </el-table-column>
-          <el-table-column
-            label="其他">
+            prop="others"
+            label="其他"
+            sortable>
           </el-table-column>
         </el-table>
       </div>
@@ -122,8 +125,8 @@
         <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-          :current-page="params.pages"
-          :page-size="params.list"
+          :current-page="params.page"
+          :page-size="params.limit"
           layout="total, prev, pager, next, jumper"
           :total="totalNum">
         </el-pagination>
@@ -133,7 +136,7 @@
     <RightMenu :startX="rightMenuX+'px'" :startY="rightMenuY+'px'" :list="lists" :show="show"
                @clickOperateMore="clickEvent"></RightMenu>
     <Organization :organizationDialog="organizationDialog" @close="closeOrganization"></Organization>
-    <AddStaffRecord :addStaffDialog="addStaffRecordDialog" @close="addStaffRecordDialog=false"></AddStaffRecord>
+    <AddStaffRecord :addStaffDialog="addStaffRecordDialog" @close="closeModal"></AddStaffRecord>
   </div>
 </template>
 
@@ -157,10 +160,10 @@
           page: 1,
           limit: 12,
           search: '',   //模糊搜索
-          org_name: '',  //部门
+          org_id: '',  //部门
           entry_time: [], //入职时间
         },
-        // org_name: '',
+        org_name: '',
         pickerOptions: {
           shortcuts: [{
             text: '最近一周',
@@ -207,6 +210,10 @@
     },
     watch: {},
     methods: {
+      closeModal() {
+        this.addStaffRecordDialog = false;
+        this.search();
+      },
       filterHandler(value, row, column) {
         const property = column['property'];
         return row[property] === value;
@@ -218,10 +225,10 @@
       getStaffTableData() {
         this.tableLoading = true;
         this.tableStatus = ' ';
-        this.$http.get(this.urls + 'oa/portal/', {params: this.params}).then((res) => {
+        this.$http.get('http://192.168.20.24:8081/credit/manage/employeelist', {params: this.params}).then((res) => {
           this.isHigh = false;
           this.tableLoading = false;
-          if (res.data.code === '80000') {
+          if (res.data.code === '10000') {
             this.tableData = res.data.data.data;
             this.totalNum = res.data.data.count;
           } else {
@@ -238,8 +245,8 @@
       // 重置
       resetting() {
         this.params.search = '';
-        this.params.org_name = '';
-        this.params.search = '';
+        this.params.org_id = '';
+        this.params.entry_time = [];
         this.search();
       },
       handleSizeChange(val) {
